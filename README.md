@@ -1,2 +1,5 @@
 # DrKenReid.github.io
-My Website
+Can be access via:
+DrKenReid.github.io
+or
+www.kenreid.co.uk
