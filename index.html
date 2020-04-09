@@ -28,14 +28,15 @@
     <!-- random number gen -->
 
     <script>
-        htmlSnippetStart = "<div class=\"col-12 col-sm-6 col-lg-3 single_gallery_item urbex mb-30 wow fadeInUp\" data-wow-delay=\"300ms\"><div class=\"single-portfolio-content\"><img src=\"img/bg-img/";
-        htmlSnippetEnd = ".png\" alt=\"\"><div class=\"hover-content\"><a href=\"gallery.html\" class=\"portfolio-img\">+</a></div></div></div>";
+        htmlSnippetStart = "<div class=\"col-12 col-sm-6 col-lg-3 single_gallery_item mb-30 wow fadeInUp\" data-wow-delay=\"300ms\"><div class=\"single-portfolio-content\"><img src=\"img/bg-img/";
+        htmlSnippetMid = ".png\" alt=\"\"><div class=\"hover-content\"><a href=\"img/bg-img/";
+        htmlSnippetEnd = ".png\" class=\"portfolio-img\">+</a></div></div></div>";
 
         function buildImageHTML(){
 
-            for (var i = 0; i < 12; i++) {
-                i = Math.floor(Math.random() * 389); 
-                document.writeln(htmlSnippetStart + i + htmlSnippetEnd);
+            for (var i = 0; i < 50; i++) {
+                j = Math.floor(Math.random() * 373); 
+                document.writeln(htmlSnippetStart + j + htmlSnippetMid + j + htmlSnippetEnd);
             }
         }
     </script>
@@ -80,6 +81,7 @@
                                     <li><a href="./gallery.html">Photography</a></li>
                                     <li><a href="./radio.html">Radio</a></li>
                                     <li><a href="./music.html">Music</a></li>
+                                    <li><a href="./literature.html">Literature</a></li>
                                     <li><a href="./contact.html">Contact</Contact></a></li>
                                 </ul>
                             </div>
@@ -175,23 +177,6 @@
     <!-- Gallery Area Start -->
     <div class="alime-portfolio-area section-padding-80 clearfix">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <!-- Projects Menu -->
-                    <div class="alime-projects-menu">
-                        <div class="portfolio-menu text-center">
-                            <button class="btn active" data-filter="*">All</button>
-                            <button class="btn" data-filter=".animal">Animals</button>
-                            <button class="btn" data-filter=".bw">B&W</button>
-                            <button class="btn" data-filter=".human">Human</button>
-                            <button class="btn" data-filter=".landscape">Landscape</button>
-                            <button class="btn" data-filter=".nature">Nature</button>
-                            <button class="btn" data-filter=".urbex">Urbex</button>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="row alime-portfolio">
                 <script>
@@ -200,11 +185,11 @@
                 
             </div>
 
-
-
             <div class="row">
                 <div class="col-12 text-center wow fadeInUp" data-wow-delay="700ms">
                     <a href="gallery.html" class="btn alime-btn btn-2 mt-15">View More</a>
+                    <!--- This was supposed to add more upon clicking but you can't add HTML with JS after loading, only with AJAX:--->
+                    <!---<a id="myLink" href="#" onclick="buildImageHTML()" class="btn alime-btn btn-2 mt-15">View More</a>--->
                 </div>
             </div>
         </div>
