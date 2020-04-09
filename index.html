@@ -36,7 +36,8 @@
             let usedAlready = {}
             for (var i = 0; i < 50; i++) {
                 j = Math.floor(Math.random() * 373); 
-                if(usedAlready.includes(j)){
+                alreadyThere = usedAlready.includes(j);
+                if(alreadyThere){
                     continue;
                 }
                 usedAlready.push(j);
