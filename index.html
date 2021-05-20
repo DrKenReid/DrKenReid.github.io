@@ -32,26 +32,7 @@
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- random number gen -->
 
-    <script>
-        htmlSnippetStart = "<div class=\"col-12 col-sm-6 col-lg-3 single_gallery_item mb-30 wow fadeInUp\" data-wow-delay=\"300ms\"><div class=\"single-portfolio-content\"><img src=\"img/bg-img/";
-        htmlSnippetMid = ".png\" alt=\"\"><div class=\"hover-content\"><a href=\"img/bg-img/";
-        htmlSnippetEnd = ".png\" class=\"portfolio-img\">+</a></div></div></div>";
-
-        function buildImageHTML(){
-            let usedAlready = []
-            for (var i = 0; i < 412; i++) {
-                j = Math.floor(Math.random() * 412); 
-                alreadyThere = usedAlready.includes(j);
-                if(alreadyThere){
-                    continue;
-                }
-                usedAlready.push(j);
-                document.writeln(htmlSnippetStart + j + htmlSnippetMid + j + htmlSnippetEnd);
-            }
-        }
-    </script>
 
 </head>
 
@@ -177,7 +158,7 @@
                         <div class="col-12 col-lg-8 col-xl-6">
                             <div class="welcome-text">
                                 <h2 data-animation="bounceInDown" data-delay="700ms">Welcome. <br>I'm Ken.</h2>
-                                <p data-animation="bounceInDown" data-delay="300ms">I'm a Podcaster.</p>
+                                <p data-animation="bounceInDown" data-delay="300ms">I'm a YouTuber.</p>
                             </div>
                         </div>
                     </div>
@@ -186,27 +167,7 @@
     </section>
     <!-- Welcome Area End -->
 
-    <!-- Gallery Area Start -->
-    <div class="alime-portfolio-area section-padding-80 clearfix">
-        <div class="container-fluid">
-
-            <div class="row alime-portfolio">
-                <script>
-                    buildImageHTML();
-                </script>
-                
-            </div>
-
-            <div class="row">
-                <div class="col-12 text-center wow fadeInUp" data-wow-delay="700ms">
-                    <a href="gallery.html" class="btn alime-btn btn-2 mt-15">View More</a>
-                    <!--- This was supposed to add more upon clicking but you can't add HTML with JS after loading, only with AJAX:--->
-                    <!---<a id="myLink" href="#" onclick="buildImageHTML()" class="btn alime-btn btn-2 mt-15">View More</a>--->
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Gallery Area End -->
+<br><br>   
 
     <!-- Follow Area Start -->
     <section class="follow-area clearfix">
