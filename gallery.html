@@ -39,6 +39,27 @@
         }
     </style>
 
+        <!-- random number gen -->
+
+    <script>
+        htmlSnippetStart = "<div class=\"col-12 col-sm-6 col-lg-3 single_gallery_item mb-30 wow fadeInUp\" data-wow-delay=\"300ms\"><div class=\"single-portfolio-content\"><img src=\"img/bg-img/";
+        htmlSnippetMid = ".png\" alt=\"\"><div class=\"hover-content\"><a href=\"img/bg-img/";
+        htmlSnippetEnd = ".png\" class=\"portfolio-img\">+</a></div></div></div>";
+
+        function buildImageHTML(){
+            let usedAlready = []
+            for (var i = 0; i < 418; i++) {
+                j = Math.floor(Math.random() * 418); 
+                alreadyThere = usedAlready.includes(j);
+                if(alreadyThere){
+                    continue;
+                }
+                usedAlready.push(j);
+                document.writeln(htmlSnippetStart + j + htmlSnippetMid + j + htmlSnippetEnd);
+            }
+        }
+    </script>
+
 </head>
 
 <body>
@@ -123,7 +144,8 @@
             <ol>
                 <li><a href="#achievements">-Achievements</a></li>
                 <li><a href="#themes">-Google Chrome Themes</a></li>
-                <li><a href="#gallery">-Gallery and Online Presence</a></li>
+                <li><a href="#gallery">-Gallery</a></li>
+                <li><a href="#online">-Online Presence</a></li>
             </ol>  
         </div></div>
             <div class="col-12 col-lg-6">
@@ -178,8 +200,31 @@
             </table> 
             <hr>
 
-                        <br><br>
+             <!-- Gallery Area Start -->
+    <div class="alime-portfolio-area section-padding-80 clearfix">
+        <div class="container-fluid">
             <h2><a name="gallery">Gallery</a></h2>
+
+            <div class="row alime-portfolio">
+                <script>
+                    buildImageHTML();
+                </script>
+                
+            </div>
+
+            <div class="row">
+                <div class="col-12 text-center wow fadeInUp" data-wow-delay="700ms">
+                    <a href="gallery.html" class="btn alime-btn btn-2 mt-15">View More</a>
+                    <!--- This was supposed to add more upon clicking but you can't add HTML with JS after loading, only with AJAX:--->
+                    <!---<a id="myLink" href="#" onclick="buildImageHTML()" class="btn alime-btn btn-2 mt-15">View More</a>--->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Gallery Area End -->
+
+                        <br><br>
+            <h2><a name="online">Online Presence</a></h2>
 
             <a href="https://www.dropbox.com/sh/7148rtv1icglkny/AABr6448-imP7RmY2po6B4nra?dl=0"><i>Click here to view all of my photography in original resolution on Dropbox.</i></a>
 
