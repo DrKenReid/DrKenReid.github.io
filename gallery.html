@@ -1,360 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <!-- Meta property for grabs from LinkedIn, Facebook, Twitter, etc. -->
-    <meta property="og:title" content="Ken Reid's website."/>
-    <meta property="og:description" content="Free Google Chrome themes and desktop wallpapers. Look here for his photography, podcast, research and hobbies."/>
-    <meta property="og:image" content="/img/bg-img/1.png">
-    <meta property="og:url" content="http://www.kenreid.co.uk">
-    <meta property="og:type" content="blog"/>
-    
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-134737006-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'UA-134737006-1');
-    </script>
-    <meta charset="UTF-8">
-    <meta name="description" content="">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Title -->
-    <title>Photography</title>
-
-    <!-- Favicon -->
-    <link rel="icon" href="./img/core-img/favicon.png">
-
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css">
-
-    <style>
-        img.resize {
-            max-width:25%;
-            max-height:25%;
-        }
-    </style>
-
-        <!-- random number gen -->
-
-    <script>
-        htmlSnippetStart = "<div class=\"col-12 col-sm-6 col-lg-3 single_gallery_item mb-30 wow fadeInUp\" data-wow-delay=\"300ms\"><div class=\"single-portfolio-content\"><img src=\"img/bg-img/";
-        htmlSnippetMid = ".png\" alt=\"\"><div class=\"hover-content\"><a href=\"img/bg-img/";
-        htmlSnippetEnd = ".png\" class=\"portfolio-img\">+</a></div></div></div>";
-
-        function buildImageHTML(){
-            let usedAlready = []
-            for (var i = 0; i < 418; i++) {
-                j = Math.floor(Math.random() * 418); 
-                alreadyThere = usedAlready.includes(j);
-                if(alreadyThere){
-                    continue;
-                }
-                usedAlready.push(j);
-                document.writeln(htmlSnippetStart + j + htmlSnippetMid + j + htmlSnippetEnd);
-            }
-        }
-    </script>
-
-</head>
-
-<body>
-    <!-- Preloader -->
-    <div id="preloader">
-        <div class="loader"></div>
-    </div>
-    <!-- /Preloader -->
-
-    <!-- Header Area Start -->
-    <header class="header-area">
-        <!-- Main Header Start -->
-        <div class="main-header-area">
+   <head>
+      <!-- Meta property for grabs from LinkedIn, Facebook, Twitter, etc. -->
+      <meta property="og:title" content="Ken Reid's website."/>
+      <meta property="og:description" content="Free Google Chrome themes and desktop wallpapers. Look here for his photography, podcast, research and hobbies."/>
+      <meta property="og:image" content="/img/bg-img/1.png">
+      <meta property="og:url" content="http://www.kenreid.co.uk">
+      <meta property="og:type" content="blog"/>
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-134737006-1"></script>
+      <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+         
+         gtag('config', 'UA-134737006-1');
+      </script>
+      <meta charset="UTF-8">
+      <meta name="description" content="">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <!-- Title -->
+      <title>Photography</title>
+      <!-- Favicon -->
+      <link rel="icon" href="./img/core-img/favicon.png">
+      <!-- Stylesheet -->
+      <link rel="stylesheet" href="style.css">
+      <style>
+         img.resize {
+         max-width:25%;
+         max-height:25%;
+         }
+      </style>
+      <!-- random number gen -->
+      <script>
+         htmlSnippetStart = "<div class=\"col-12 col-sm-6 col-lg-3 single_gallery_item mb-30 wow fadeInUp\" data-wow-delay=\"300ms\"><div class=\"single-portfolio-content\"><img src=\"img/bg-img/";
+         htmlSnippetMid = ".png\" alt=\"\"><div class=\"hover-content\"><a href=\"img/bg-img/";
+         htmlSnippetEnd = ".png\" class=\"portfolio-img\">+</a></div></div></div>";
+         
+         function buildImageHTML(){
+             let usedAlready = []
+             for (var i = 0; i < 418; i++) {
+                 j = Math.floor(Math.random() * 418); 
+                 alreadyThere = usedAlready.includes(j);
+                 if(alreadyThere){
+                     continue;
+                 }
+                 usedAlready.push(j);
+                 document.writeln(htmlSnippetStart + j + htmlSnippetMid + j + htmlSnippetEnd);
+             }
+         }
+      </script>
+   </head>
+   <body>
+      <!-- Preloader -->
+      <div id="preloader">
+         <div class="loader"></div>
+      </div>
+      <!-- /Preloader -->
+      <!-- Header Area Start -->
+      <header class="header-area">
+         <!-- Main Header Start -->
+         <div class="main-header-area">
             <div class="classy-nav-container breakpoint-off">
-                <div class="container">
-                    <!-- Classy Menu -->
-                    <nav class="classy-navbar justify-content-between" id="alimeNav">
-
-                        <!-- Logo -->
-                        <a class="nav-brand" href="./index.html"><img src="./img/core-img/logo.png" alt=""></a>
-
-                        <!-- Navbar Toggler -->
-                        <div class="classy-navbar-toggler">
-                            <span class="navbarToggler"><span></span><span></span><span></span></span>
+               <div class="container">
+                  <!-- Classy Menu -->
+                  <nav class="classy-navbar justify-content-between" id="alimeNav">
+                     <!-- Logo -->
+                     <a class="nav-brand" href="./index.html"><img src="./img/core-img/logo.png" alt=""></a>
+                     <!-- Navbar Toggler -->
+                     <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
+                     </div>
+                     <!-- Menu -->
+                     <div class="classy-menu">
+                        <!-- Menu Close Button -->
+                        <div class="classycloseIcon">
+                           <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
                         </div>
-
-                        <!-- Menu -->
-                        <div class="classy-menu">
-                            <!-- Menu Close Button -->
-                            <div class="classycloseIcon">
-                                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
-                            </div>
-                            <!-- Nav Start -->
-                            <div class="classynav">
-                                <ul id="nav">
-                                    <li><a href="./index.html">Home</a></li>
-                                    <li><a href="./research.html">Research</a></li>
-                                    <li class="active"><a href="./gallery.html">Photography</a></li>
-                                    <li><a href="./youtube.html">YouTube</a></li>
-                                    <li><a href="./music.html">Music</a></li>
-                                    <li><a href="./literature.html">Literature</a></li>
-                                    <li><a href="./contact.html">Contact</Contact></a></li>
-                                </ul>
-                            </div>
-                            <!-- Nav End -->
+                        <!-- Nav Start -->
+                        <div class="classynav">
+                           <ul id="nav">
+                              <li><a href="./index.html">Home</a></li>
+                              <li><a href="./research.html">Research</a></li>
+                              <li class="active"><a href="./gallery.html">Photography</a></li>
+                              <li><a href="./youtube.html">YouTube</a></li>
+                              <li><a href="./music.html">Music</a></li>
+                              <li><a href="./literature.html">Literature</a></li>
+                              <li><a href="./contact.html">Contact</Contact></a></li>
+                           </ul>
                         </div>
-                    </nav>
-                </div>
+                        <!-- Nav End -->
+                     </div>
+                  </nav>
+               </div>
             </div>
-        </div>
-    </header>
-    <!-- Header Area End -->
-
-    <!-- Breadcrumb Area Start -->
-    <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/bg-img/147.png);">
-        <div class="container h-100">
+         </div>
+      </header>
+      <!-- Header Area End -->
+      <!-- Breadcrumb Area Start -->
+      <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/bg-img/147.png);">
+         <div class="container h-100">
             <div class="row h-100 align-items-center">
-                <div class="col-12">
-                    <div class="breadcrumb-content text-center">
-                        <h2 class="page-title">Gallery</h2>
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb justify-content-center">
-                                <li class="breadcrumb-item"><a href="index.html"><i class="icon_house_alt"></i> Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Gallery</li>
-                            </ol>
-                        </nav>
-                    </div>
-                </div>
+               <div class="col-12">
+                  <div class="breadcrumb-content text-center">
+                     <h2 class="page-title">Gallery</h2>
+                     <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                           <li class="breadcrumb-item"><a href="index.html"><i class="icon_house_alt"></i> Home</a></li>
+                           <li class="breadcrumb-item active" aria-current="page">Gallery</li>
+                        </ol>
+                     </nav>
+                  </div>
+               </div>
             </div>
-        </div>
-    </section>
-    <!-- Breadcrumb Area End -->
-
-    <!-- Main Area Start -->
-    <div class="about-us-area section-padding-80-0 clearfix">
-        <div class="container">
+         </div>
+      </section>
+      <!-- Breadcrumb Area End -->
+      <!-- Main Area Start -->
+      <div class="about-us-area section-padding-80-0 clearfix">
+         <div class="container">
             <div class="row align-items-center">
-                <div class="col-12 col-lg-6">
-                    <div class="about-us-content mb-80">
-            <h1 class="wow fadeInUp" data-wow-delay="100ms">Contents</h1>
-            <br>
-            <ol>
-                <li><a href="#achievements">-Achievements</a></li>
-                <li><a href="#themes">-Google Chrome Themes</a></li>
-                <li><a href="#gallery">-Gallery</a></li>
-                <li><a href="#online">-Online Presence</a></li>
-            </ol>  
-        </div></div>
-            <div class="col-12 col-lg-6">
-                <div class="about-video-area mb-80 wow fadeInUp" data-wow-delay="100ms">
-                    <img src="img/bg-img/345.png" alt="">
-                </div>
+               <div class="col-12 col-lg-6">
+                  <div class="about-us-content mb-80">
+                     <h1 class="wow fadeInUp" data-wow-delay="100ms">Contents</h1>
+                     <br>
+                     <ol>
+                        <li><a href="#achievements">-Achievements</a></li>
+                        <li><a href="#themes">-Google Chrome Themes</a></li>
+                        <li><a href="#gallery">-Gallery</a></li>
+                        <li><a href="#online">-Online Presence</a></li>
+                     </ol>
+                  </div>
+               </div>
+               <div class="col-12 col-lg-6">
+                  <div class="about-video-area mb-80 wow fadeInUp" data-wow-delay="100ms">
+                     <img src="img/bg-img/345.png" alt="">
+                  </div>
+               </div>
+               <br><br>
+               <h2 class="wow fadeInUp" data-wow-delay="100ms"><a name="achievements">Achievements</a></h2>
+               <p class="wow fadeInUp" data-wow-delay="300ms">I'm not a professional photographer - I've never taken any classes and I'm entirely self-taught with both taking photos on my Canon EOS 60D, and in editing in Lightroom, Luminar and Photomatix. That being said - I have some achievements I'm proud of. Here are a few.</p>
+               <ol class="wow fadeInUp" data-wow-delay="500ms">
+                  <li>1) Hosted photography competitions on Gurushots with over 136 million participants. [<a href="https://gurushots.com/challenge/sadness3/details">1</a>] [<a href="https://gurushots.com/challenge/different-perspective1/details">2</a>] [<a href="https://gurushots.com/challenge/the-written-word/details">3</a>]</li>
+                  <li>2) I turned some of my shots into Google Chrome Themes, which have thousands of users [<a href="https://chrome.google.com/webstore/detail/abandoned-theme/ipbahmfkljdhmjahifjifbgnkanmnlag">4</a>] [<a href="https://chrome.google.com/webstore/detail/dark-city-theme/dcbacflflpjldgdddmhhebbnhfkpnfcd">5</a>] [<a href="https://chrome.google.com/webstore/detail/urban-vape/enohmkhpgkfimpaolelnpmoalaajgcji">6</a>].</li>
+                  <li>3) I've been the sole photographer for 3 weddings, 1 military sports event, several galas and balls and GIStandards flew me to Trento, Italy in 2013 to be the photographer for a conference [<a href="http://trueviewvisuals.com/2014/01/08/agi-smespire-awards/">7</a>] [<a href="http://www.i-locate.eu/i-locat-kick-off-meeting/#respond">8</a>] [<a href="http://www.i-locate.eu/1st-thinkshop-on-urban-planning-and-geography-at-a-human-scale/#respond">9</a>]</li>
+               </ol>
+               <br><br>
             </div>
-            <br><br>
-            <h2 class="wow fadeInUp" data-wow-delay="100ms"><a name="achievements">Achievements</a></h2>
-
-            <p class="wow fadeInUp" data-wow-delay="300ms">I'm not a professional photographer - I've never taken any classes and I'm entirely self-taught with both taking photos on my Canon EOS 60D, and in editing in Lightroom, Luminar and Photomatix. That being said - I have some achievements I'm proud of. Here are a few.</p>
-
-            <ol class="wow fadeInUp" data-wow-delay="500ms">
-                <li>1) Hosted photography competitions on Gurushots with over 136 million participants. [<a href="https://gurushots.com/challenge/sadness3/details">1</a>] [<a href="https://gurushots.com/challenge/different-perspective1/details">2</a>] [<a href="https://gurushots.com/challenge/the-written-word/details">3</a>]</li>
-                <li>2) I turned some of my shots into Google Chrome Themes, which have thousands of users [<a href="https://chrome.google.com/webstore/detail/abandoned-theme/ipbahmfkljdhmjahifjifbgnkanmnlag">4</a>] [<a href="https://chrome.google.com/webstore/detail/dark-city-theme/dcbacflflpjldgdddmhhebbnhfkpnfcd">5</a>] [<a href="https://chrome.google.com/webstore/detail/urban-vape/enohmkhpgkfimpaolelnpmoalaajgcji">6</a>].</li>
-                <li>3) I've been the sole photographer for 3 weddings, 1 military sports event, several galas and balls and GIStandards flew me to Trento, Italy in 2013 to be the photographer for a conference [<a href="http://trueviewvisuals.com/2014/01/08/agi-smespire-awards/">7</a>] [<a href="http://www.i-locate.eu/i-locat-kick-off-meeting/#respond">8</a>] [<a href="http://www.i-locate.eu/1st-thinkshop-on-urban-planning-and-geography-at-a-human-scale/#respond">9</a>]</li>
-            </ol>
-
-            <br><br>
-    </div></div></div>
-            <center>
-            <h2 class="wow fadeInUp" data-wow-delay="300ms"><a name="themes">Google Chrome Themes</a></h2>
-
-            I made some of my shots into themes for the Chrome web browser. For some reason Google doesn't provide developer front ends, so I'll list them individually, below:
-            <br><br>
-            <table>
-                <tr>
-                    <td><a href="https://chrome.google.com/webstore/detail/dublin-girl-theme/ckeljallilajpaofaoehchdfnfloedij"><img src="img/chromeDevStore/dublingirltheme.jpg" alt=""></a></td>
-                    <td><a href="https://chrome.google.com/webstore/detail/urban-vape/enohmkhpgkfimpaolelnpmoalaajgcji"><img src="img/chromeDevStore/urbanvape.jpg" alt=""></a></td>
-                    <td><a href="https://chrome.google.com/webstore/detail/airthrey-loch-theme/agclbogmcfbjhjpmbindmabfppmdmkie"><img src="img/chromeDevStore/airthreyloch.jpg" alt=""></a></td>
-                <tr>
-                </tr>
-                    <td><a href="https://chrome.google.com/webstore/detail/colour-wheel/dckhfpkclafljnmceigjndeaaeojlbid"><img src="img/chromeDevStore/colourwheel.jpg" alt=""></a></td>
-                    <td><a href="https://chrome.google.com/webstore/detail/abstract-blue/mmagnnoebnlkkjbcgnejafbcmfclaong"><img src="img/chromeDevStore/abstractblue.jpg" alt=""></a></td>
-                    <td><a href="https://chrome.google.com/webstore/detail/abandoned-theme/ipbahmfkljdhmjahifjifbgnkanmnlag"><img src="img/chromeDevStore/abandonedtheme.jpg" alt=""></a></td>
-                </tr>
-                <tr>
-                   <td><a href="https://chrome.google.com/webstore/detail/pondering-theme/mgmdhcoacahfogpmngkhpiacaagpemde"><img src="img/chromeDevStore/ponderingtheme.jpg" alt=""></a></td>
-                   <td><a href="https://chrome.google.com/webstore/detail/urban-transport-theme/cfdmblegmjmjcdocdiblimliahipppio"><img src="img/chromeDevStore/urbantransporttheme.jpg" alt=""></a></td>
-                   <td><a href="https://chrome.google.com/webstore/detail/dark-city-theme/dcbacflflpjldgdddmhhebbnhfkpnfcd"><img src="img/chromeDevStore/darkcitytheme.jpg" alt=""></a></td>
-                </tr>
-                <tr>
-                    <td><a href="https://chrome.google.com/webstore/detail/raindrops-theme/ijgfoihjlgnijagncflebobdcihloclg"><img src="img/chromeDevStore/raindropstheme.jpg" alt=""></a></td>
-                    <td><a href="https://chrome.google.com/webstore/detail/dog-roar-theme/okfagniolmjfeneihplehfpijlkpggcp"><img src="img/chromeDevStore/dogroartheme.jpg" alt=""></a></td>
-                    <td><a href="https://chrome.google.com/webstore/detail/symmetry-theme/mhbgoojdfegdhhbebhndlebjdajdojeb"><img src="img/chromeDevStore/symmetrytheme.jpg" alt=""></a></td>
-                </tr>
-                <tr>
-                    <td><a href="https://chrome.google.com/webstore/detail/falkland-hill-theme/nhggpcakhgimdbakbelfngkjanekclni"><img src="img/chromeDevStore/falklandhilltheme.jpg" alt=""></a></td>
-                    <td><a href="https://chrome.google.com/webstore/detail/the-youth-dont-age-theme/klekmmfjchbmohgbbkfiohafdndlobmg"><img src="img/chromeDevStore/theyouthdontagetheme.jpg" alt=""></a></td>
-                    <td><a href="https://chrome.google.com/webstore/detail/feeling-blue-theme/ofdmbbcckkdpboekbbdoaeabiacmihfa"><img src="img/chromeDevStore/feelingbluetheme.jpg" alt=""></a></td>
-                </tr>
-            </table> 
-            <hr>
-
-             <!-- Gallery Area Start -->
-    <div class="alime-portfolio-area section-padding-80 clearfix">
-        <div class="container-fluid">
-            <h2><a name="gallery">Gallery</a></h2>
-
-            <div class="row alime-portfolio">
-                <script>
-                    buildImageHTML();
-                </script>
-                
+         </div>
+      </div>
+      <center>
+         <h2 class="wow fadeInUp" data-wow-delay="300ms"><a name="themes">Google Chrome Themes</a></h2>
+         I made some of my shots into themes for the Chrome web browser. For some reason Google doesn't provide developer front ends, so I'll list them individually, below:
+         <br><br>
+         <table>
+            <tr>
+               <td><a href="https://chrome.google.com/webstore/detail/dublin-girl-theme/ckeljallilajpaofaoehchdfnfloedij"><img src="img/chromeDevStore/dublingirltheme.jpg" alt=""></a></td>
+               <td><a href="https://chrome.google.com/webstore/detail/urban-vape/enohmkhpgkfimpaolelnpmoalaajgcji"><img src="img/chromeDevStore/urbanvape.jpg" alt=""></a></td>
+               <td><a href="https://chrome.google.com/webstore/detail/airthrey-loch-theme/agclbogmcfbjhjpmbindmabfppmdmkie"><img src="img/chromeDevStore/airthreyloch.jpg" alt=""></a></td>
+            <tr>
+            </tr>
+            <td><a href="https://chrome.google.com/webstore/detail/colour-wheel/dckhfpkclafljnmceigjndeaaeojlbid"><img src="img/chromeDevStore/colourwheel.jpg" alt=""></a></td>
+            <td><a href="https://chrome.google.com/webstore/detail/abstract-blue/mmagnnoebnlkkjbcgnejafbcmfclaong"><img src="img/chromeDevStore/abstractblue.jpg" alt=""></a></td>
+            <td><a href="https://chrome.google.com/webstore/detail/abandoned-theme/ipbahmfkljdhmjahifjifbgnkanmnlag"><img src="img/chromeDevStore/abandonedtheme.jpg" alt=""></a></td>
+            </tr>
+            <tr>
+               <td><a href="https://chrome.google.com/webstore/detail/pondering-theme/mgmdhcoacahfogpmngkhpiacaagpemde"><img src="img/chromeDevStore/ponderingtheme.jpg" alt=""></a></td>
+               <td><a href="https://chrome.google.com/webstore/detail/urban-transport-theme/cfdmblegmjmjcdocdiblimliahipppio"><img src="img/chromeDevStore/urbantransporttheme.jpg" alt=""></a></td>
+               <td><a href="https://chrome.google.com/webstore/detail/dark-city-theme/dcbacflflpjldgdddmhhebbnhfkpnfcd"><img src="img/chromeDevStore/darkcitytheme.jpg" alt=""></a></td>
+            </tr>
+            <tr>
+               <td><a href="https://chrome.google.com/webstore/detail/raindrops-theme/ijgfoihjlgnijagncflebobdcihloclg"><img src="img/chromeDevStore/raindropstheme.jpg" alt=""></a></td>
+               <td><a href="https://chrome.google.com/webstore/detail/dog-roar-theme/okfagniolmjfeneihplehfpijlkpggcp"><img src="img/chromeDevStore/dogroartheme.jpg" alt=""></a></td>
+               <td><a href="https://chrome.google.com/webstore/detail/symmetry-theme/mhbgoojdfegdhhbebhndlebjdajdojeb"><img src="img/chromeDevStore/symmetrytheme.jpg" alt=""></a></td>
+            </tr>
+            <tr>
+               <td><a href="https://chrome.google.com/webstore/detail/falkland-hill-theme/nhggpcakhgimdbakbelfngkjanekclni"><img src="img/chromeDevStore/falklandhilltheme.jpg" alt=""></a></td>
+               <td><a href="https://chrome.google.com/webstore/detail/the-youth-dont-age-theme/klekmmfjchbmohgbbkfiohafdndlobmg"><img src="img/chromeDevStore/theyouthdontagetheme.jpg" alt=""></a></td>
+               <td><a href="https://chrome.google.com/webstore/detail/feeling-blue-theme/ofdmbbcckkdpboekbbdoaeabiacmihfa"><img src="img/chromeDevStore/feelingbluetheme.jpg" alt=""></a></td>
+            </tr>
+         </table>
+         <hr>
+         <!-- Gallery Area Start -->
+         <div class="alime-portfolio-area section-padding-80 clearfix">
+            <div class="container-fluid">
+               <h2><a name="gallery">Gallery</a></h2>
+               <div class="row alime-portfolio">
+                  <script>
+                     buildImageHTML();
+                  </script>
+               </div>
+               <div class="row">
+                  <div class="col-12 text-center wow fadeInUp" data-wow-delay="700ms">
+                     <a href="gallery.html" class="btn alime-btn btn-2 mt-15">View More</a>
+                     <!--- This was supposed to add more upon clicking but you can't add HTML with JS after loading, only with AJAX:--->
+                     <!---<a id="myLink" href="#" onclick="buildImageHTML()" class="btn alime-btn btn-2 mt-15">View More</a>--->
+                  </div>
+               </div>
             </div>
-
+         </div>
+         <!-- Gallery Area End -->
+         <br><br>
+         <h2><a name="online">Online Presence</a></h2>
+         <a href="https://www.dropbox.com/sh/7148rtv1icglkny/AABr6448-imP7RmY2po6B4nra?dl=0"><i>Click here to view all of my photography in original resolution on Dropbox.</i></a>
+         <p>You can also find my photography elsewhere:</p>
+         <!--<a href="https://www.facebook.com/gohexphotography/"><img class="resize" src="img/core-img/facebook.png"></a>-->
+         <a href="https://gurushots.com/drkenreid/photos"><img class="resize" src="img/core-img/gurushots.png"></a>
+         <a href="https://www.instagram.com/drkenreid/"><img class="resize" src="img/core-img/instagram.png"></a>
+         <br><br>
+      </center>
+      </section>
+      <!-- Main Area End -->
+      <hr>
+      <!-- Follow Area Start -->
+      <section class="follow-area clearfix">
+         <div class="container">
             <div class="row">
-                <div class="col-12 text-center wow fadeInUp" data-wow-delay="700ms">
-                    <a href="gallery.html" class="btn alime-btn btn-2 mt-15">View More</a>
-                    <!--- This was supposed to add more upon clicking but you can't add HTML with JS after loading, only with AJAX:--->
-                    <!---<a id="myLink" href="#" onclick="buildImageHTML()" class="btn alime-btn btn-2 mt-15">View More</a>--->
-                </div>
+               <div class="col-12">
+                  <div class="section-heading text-center">
+                     <h2>Follow Instagram</h2>
+                     <p><a href="https://www.instagram.com/drkenreid/">@drkenreid</a></p>
+                  </div>
+               </div>
             </div>
-        </div>
-    </div>
-    <!-- Gallery Area End -->
-
-                        <br><br>
-            <h2><a name="online">Online Presence</a></h2>
-
-            <a href="https://www.dropbox.com/sh/7148rtv1icglkny/AABr6448-imP7RmY2po6B4nra?dl=0"><i>Click here to view all of my photography in original resolution on Dropbox.</i></a>
-
-            <p>You can also find my photography elsewhere:</p>
-            <!--<a href="https://www.facebook.com/gohexphotography/"><img class="resize" src="img/core-img/facebook.png"></a>-->
-            <a href="https://gurushots.com/drkenreid/photos"><img class="resize" src="img/core-img/gurushots.png"></a>
-            <a href="https://www.instagram.com/drkenreid/"><img class="resize" src="img/core-img/instagram.png"></a>
-
-            <br><br>
-        </center>
-    </section>
-    <!-- Main Area End -->
-<hr>
-
-    <!-- Follow Area Start -->
-    <section class="follow-area clearfix">
-        <div class="container">
+         </div>
+         <!-- Instagram Feed Area -->
+         <div class="instragram-feed-area owl-carousel">
+            <!-- Single Instagram Item -->
+            <div class="single-instagram-item">
+               <img src="img/bg-img/21.png" alt="">
+               <div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">
+                  <a href="https://www.instagram.com/drkenreid/">
+                  <i class="ti-instagram" aria-hidden="true"></i>
+                  <span>drkenreid</span>
+                  </a>
+               </div>
+            </div>
+            <!-- Single Instagram Item -->
+            <div class="single-instagram-item">
+               <img src="img/bg-img/22.png" alt="">
+               <div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">
+                  <a href="https://www.instagram.com/drkenreid/">
+                  <i class="ti-instagram" aria-hidden="true"></i>
+                  <span>drkenreid</span>
+                  </a>
+               </div>
+            </div>
+            <!-- Single Instagram Item -->
+            <div class="single-instagram-item">
+               <img src="img/bg-img/23.png" alt="">
+               <div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">
+                  <a href="https://www.instagram.com/drkenreid/">
+                  <i class="ti-instagram" aria-hidden="true"></i>
+                  <span>drkenreid</span>
+                  </a>
+               </div>
+            </div>
+            <!-- Single Instagram Item -->
+            <div class="single-instagram-item">
+               <img src="img/bg-img/24.png" alt="">
+               <div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">
+                  <a href="https://www.instagram.com/drkenreid/">
+                  <i class="ti-instagram" aria-hidden="true"></i>
+                  <span>drkenreid</span>
+                  </a>
+               </div>
+            </div>
+            <!-- Single Instagram Item -->
+            <div class="single-instagram-item">
+               <img src="img/bg-img/25.png" alt="">
+               <div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">
+                  <a href="https://www.instagram.com/drkenreid/">
+                  <i class="ti-instagram" aria-hidden="true"></i>
+                  <span>drkenreid</span>
+                  </a>
+               </div>
+            </div>
+            <!-- Single Instagram Item -->
+            <div class="single-instagram-item">
+               <img src="img/bg-img/26.png" alt="">
+               <div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">
+                  <a href="https://www.instagram.com/drkenreid/">
+                  <i class="ti-instagram" aria-hidden="true"></i>
+                  <span>drkenreid</span>
+                  </a>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- Follow Area End -->
+      <!-- Footer Area Start -->
+      <footer class="footer-area">
+         <div class="container">
             <div class="row">
-                <div class="col-12">
-                    <div class="section-heading text-center">
-                        <h2>Follow Instagram</h2>
-                        <p><a href="https://www.instagram.com/drkenreid/">@drkenreid</a></p>
-                    </div>
-                </div>
+               <div class="col-12">
+                  <div class="footer-content d-flex align-items-center justify-content-between">
+                     <!-- Copywrite Text -->
+                     <div class="copywrite-text">
+                        <p>
+                           <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                           Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                           <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        </p>
+                     </div>
+                     <!-- Social Info -->
+                     <div class="social-info">
+                        <!--<a href="https://www.facebook.com/gohexphotography/"><i class="ti-facebook" aria-hidden="true"></i></a>-->
+                        <a href="https://twitter.com/drkenreid"><i class="ti-twitter-alt" aria-hidden="true"></i></a>
+                        <a href="https://www.linkedin.com/in/kennethneilreid/"><i class="ti-linkedin" aria-hidden="true"></i></a>
+                     </div>
+                  </div>
+               </div>
             </div>
-        </div>
-
-        <!-- Instagram Feed Area -->
-        <div class="instragram-feed-area owl-carousel">
-            <!-- Single Instagram Item -->
-            <div class="single-instagram-item">
-                <img src="img/bg-img/21.png" alt="">
-                <div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">
-                    <a href="https://www.instagram.com/drkenreid/">
-                        <i class="ti-instagram" aria-hidden="true"></i>
-                        <span>drkenreid</span>
-                    </a>
-                </div>
-            </div>
-            <!-- Single Instagram Item -->
-            <div class="single-instagram-item">
-                <img src="img/bg-img/22.png" alt="">
-                <div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">
-                    <a href="https://www.instagram.com/drkenreid/">
-                        <i class="ti-instagram" aria-hidden="true"></i>
-                        <span>drkenreid</span>
-                    </a>
-                </div>
-            </div>
-            <!-- Single Instagram Item -->
-            <div class="single-instagram-item">
-                <img src="img/bg-img/23.png" alt="">
-                <div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">
-                    <a href="https://www.instagram.com/drkenreid/">
-                        <i class="ti-instagram" aria-hidden="true"></i>
-                        <span>drkenreid</span>
-                    </a>
-                </div>
-            </div>
-            <!-- Single Instagram Item -->
-            <div class="single-instagram-item">
-                <img src="img/bg-img/24.png" alt="">
-                <div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">
-                    <a href="https://www.instagram.com/drkenreid/">
-                        <i class="ti-instagram" aria-hidden="true"></i>
-                        <span>drkenreid</span>
-                    </a>
-                </div>
-            </div>
-            <!-- Single Instagram Item -->
-            <div class="single-instagram-item">
-                <img src="img/bg-img/25.png" alt="">
-                <div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">
-                    <a href="https://www.instagram.com/drkenreid/">
-                        <i class="ti-instagram" aria-hidden="true"></i>
-                        <span>drkenreid</span>
-                    </a>
-                </div>
-            </div>
-            <!-- Single Instagram Item -->
-            <div class="single-instagram-item">
-                <img src="img/bg-img/26.png" alt="">
-                <div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">
-                    <a href="https://www.instagram.com/drkenreid/">
-                        <i class="ti-instagram" aria-hidden="true"></i>
-                        <span>drkenreid</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Follow Area End -->
-
-    <!-- Footer Area Start -->
-    <footer class="footer-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="footer-content d-flex align-items-center justify-content-between">
-                        <!-- Copywrite Text -->
-                        <div class="copywrite-text">
-                            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-                        </div>
-                        <!-- Social Info -->
-                        <div class="social-info">
-                            <!--<a href="https://www.facebook.com/gohexphotography/"><i class="ti-facebook" aria-hidden="true"></i></a>-->
-                            <a href="https://twitter.com/drkenreid"><i class="ti-twitter-alt" aria-hidden="true"></i></a>
-                            <a href="https://www.linkedin.com/in/kennethneilreid/"><i class="ti-linkedin" aria-hidden="true"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- Footer Area End -->
-
-    <!-- **** All JS Files ***** -->
-    <!-- jQuery 2.2.4 -->
-    <script src="js/jquery.min.js"></script>
-    <!-- Popper -->
-    <script src="js/popper.min.js"></script>
-    <!-- Bootstrap -->
-    <script src="js/bootstrap.min.js"></script>
-    <!-- All Plugins -->
-    <script src="js/alime.bundle.js"></script>
-    <!-- Active -->
-    <script src="js/default-assets/active.js"></script>
-
-</body>
-
+         </div>
+      </footer>
+      <!-- Footer Area End -->
+      <!-- **** All JS Files ***** -->
+      <!-- jQuery 2.2.4 -->
+      <script src="js/jquery.min.js"></script>
+      <!-- Popper -->
+      <script src="js/popper.min.js"></script>
+      <!-- Bootstrap -->
+      <script src="js/bootstrap.min.js"></script>
+      <!-- All Plugins -->
+      <script src="js/alime.bundle.js"></script>
+      <!-- Active -->
+      <script src="js/default-assets/active.js"></script>
+   </body>
 </html>
