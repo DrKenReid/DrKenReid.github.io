@@ -1,0 +1,16 @@
+# Build artifacts
+.sass-cache/
+*.css.map
+node_modules/
+
+# OS files
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+*.code-workspace
