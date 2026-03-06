@@ -56,8 +56,7 @@
              // Create DOM elements with lazy loading
              images.forEach(function(num) {
                  var col = document.createElement('div');
-                 col.className = 'col-12 col-sm-6 col-lg-3 single_gallery_item mb-30 wow fadeInUp';
-                 col.setAttribute('data-wow-delay', '300ms');
+                 col.className = 'col-12 col-sm-6 col-lg-3 single_gallery_item mb-30';
 
                  var wrapper = document.createElement('div');
                  wrapper.className = 'single-portfolio-content';
@@ -255,10 +254,10 @@
       <script src="js/bootstrap.min.js"></script>
       <!-- All Plugins -->
       <script src="js/alime.bundle.js"></script>
+      <!-- Build gallery before active.js so Isotope & WOW find the elements -->
+      <script>buildImageHTML();</script>
       <!-- Active -->
       <script src="js/default-assets/active.js"></script>
-      <!-- Build gallery after DOM is ready -->
-      <script>buildImageHTML();</script>
       <!-- Shared Components -->
       <script src="js/shared-components.js"></script>
       <script>

@@ -1652,6 +1652,11 @@ input:required {
   fill: currentColor;
   vertical-align: middle; }
 
+/* Gallery images: fixed aspect ratio for layout before images load */
+.single_gallery_item .single-portfolio-content img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover; }
+
 /* Responsive iframe wrapper */
 .iframe-responsive {
   position: relative;

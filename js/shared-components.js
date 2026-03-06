@@ -39,6 +39,24 @@ function renderInstagramSection(targetId) {
 
     html += '</div></section>';
     el.innerHTML = html;
+
+    // Initialize Owl Carousel on the injected element (active.js already ran)
+    if (typeof jQuery !== 'undefined' && jQuery.fn.owlCarousel) {
+        jQuery('.instragram-feed-area').owlCarousel({
+            items: 6,
+            loop: true,
+            autoplay: true,
+            smartSpeed: 1000,
+            autoplayTimeout: 3000,
+            responsive: {
+                0: { items: 2 },
+                576: { items: 3 },
+                768: { items: 4 },
+                992: { items: 5 },
+                1200: { items: 6 }
+            }
+        });
+    }
 }
 
 /**
