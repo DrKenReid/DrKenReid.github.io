@@ -144,7 +144,7 @@
               <noscript><br>Share <a rel="nofollow" href="/">book reviews</a> and ratings with Ken, and even join a <a rel="nofollow" href="/group">book club</a> on Goodreads.</noscript>
             </div>
           </div>
-          <script src="https://www.goodreads.com/review/grid_widget/42371562.Ken's%20currently-reading%20book%20montage?cover_size=medium&hide_link=&hide_title=&num_books=20&order=d&shelf=currently-reading&sort=date_added&widget_id=1586460458" async type="text/javascript" charset="utf-8"></script>
+          <!-- Goodreads script deferred to bottom -->
 
           <!-- To-Read -->
           <div id="gr_grid_widget_1586460575">
@@ -177,7 +177,7 @@
               <noscript><br>Share <a rel="nofollow" href="/">book reviews</a> and ratings with Ken, and even join a <a rel="nofollow" href="/group">book club</a> on Goodreads.</noscript>
             </div>
           </div>
-          <script src="https://www.goodreads.com/review/grid_widget/42371562.Ken's%20to-read%20book%20montage?cover_size=medium&hide_link=&hide_title=&num_books=200&order=d&shelf=to-read&sort=author&widget_id=1586460575" async type="text/javascript" charset="utf-8"></script>
+          <!-- Goodreads script deferred to bottom -->
 
           <!-- Read -->
           <div id="gr_grid_widget_1586460554">
@@ -210,7 +210,7 @@
               <noscript><br>Share <a rel="nofollow" href="/">book reviews</a> and ratings with Ken, and even join a <a rel="nofollow" href="/group">book club</a> on Goodreads.</noscript>
             </div>
           </div>
-          <script src="https://www.goodreads.com/review/grid_widget/42371562.Ken's%20read%20book%20montage?cover_size=medium&hide_link=&hide_title=&num_books=200&order=d&shelf=read&sort=author&widget_id=1586460554" async type="text/javascript" charset="utf-8"></script>
+          <!-- Goodreads script deferred to bottom -->
 
           <!-- Book Reviews -->
           <h2>Book Reviews</h2>
@@ -225,7 +225,7 @@
             <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@drkenreid" data-unique-id="drkenreid" data-embed-type="creator" style="max-width: 720px; min-width: 288px;">
               <section><a target="_blank" href="https://www.tiktok.com/@drkenreid?refer=creator_embed">@drkenreid</a></section>
             </blockquote>
-            <script async src="https://www.tiktok.com/embed.js"></script>
+            <!-- TikTok script deferred to bottom -->
           </div>
 
         </div>
@@ -250,6 +250,26 @@
   <script>
     renderInstagramSection('instagram-section');
     renderFooter('footer-section');
+  </script>
+  <script>
+    // Defer heavy third-party scripts until after page render
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        var scripts = [
+          "https://www.goodreads.com/review/grid_widget/42371562.Ken's%20currently-reading%20book%20montage?cover_size=medium&hide_link=&hide_title=&num_books=20&order=d&shelf=currently-reading&sort=date_added&widget_id=1586460458",
+          "https://www.goodreads.com/review/grid_widget/42371562.Ken's%20to-read%20book%20montage?cover_size=medium&hide_link=&hide_title=&num_books=200&order=d&shelf=to-read&sort=author&widget_id=1586460575",
+          "https://www.goodreads.com/review/grid_widget/42371562.Ken's%20read%20book%20montage?cover_size=medium&hide_link=&hide_title=&num_books=200&order=d&shelf=read&sort=author&widget_id=1586460554",
+          "https://www.tiktok.com/embed.js"
+        ];
+        scripts.forEach(function(src) {
+          var s = document.createElement('script');
+          s.src = src;
+          s.async = true;
+          s.charset = 'utf-8';
+          document.body.appendChild(s);
+        });
+      }, 100);
+    });
   </script>
 
 </body>
