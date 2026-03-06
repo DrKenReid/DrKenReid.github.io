@@ -35,26 +35,50 @@
       <!-- Gallery image builder -->
       <script>
          /**
-          * Builds gallery HTML by creating image tiles in shuffled order.
-          * Uses Fisher-Yates shuffle for uniform randomization and
-          * loading="lazy" for performance with 364 images.
+          * Gallery with incremental loading.
+          * Shuffles all 364 images once, then renders them in batches
+          * of BATCH_SIZE as the user clicks "Load More".
           */
-         function buildImageHTML(){
+         var galleryImages = [];   // Shuffled image numbers
+         var galleryIndex = 0;     // How many have been rendered so far
+         var BATCH_SIZE = 24;      // Images per batch (6 rows of 4)
+
+         /**
+          * Builds the initial batch of gallery images.
+          * Shuffles [1..364] with Fisher-Yates, then renders the first batch.
+          */
+         function buildImageHTML() {
              var container = document.getElementById('gallery-grid');
              if (!container) return;
 
              // Build array [1..364] then shuffle (Fisher-Yates)
-             var images = [];
-             for (var i = 1; i <= 364; i++) { images.push(i); }
-             for (var i = images.length - 1; i > 0; i--) {
+             for (var i = 1; i <= 364; i++) { galleryImages.push(i); }
+             for (var i = galleryImages.length - 1; i > 0; i--) {
                  var j = Math.floor(Math.random() * (i + 1));
-                 var temp = images[i];
-                 images[i] = images[j];
-                 images[j] = temp;
+                 var temp = galleryImages[i];
+                 galleryImages[i] = galleryImages[j];
+                 galleryImages[j] = temp;
              }
 
-             // Create DOM elements with lazy loading
-             images.forEach(function(num) {
+             // Render first batch
+             loadMoreImages();
+         }
+
+         /**
+          * Appends the next batch of images to the gallery grid.
+          * Integrates with Isotope if available, otherwise plain append.
+          * Hides the "Load More" button when all images are shown.
+          */
+         function loadMoreImages() {
+             var container = document.getElementById('gallery-grid');
+             if (!container) return;
+
+             var end = Math.min(galleryIndex + BATCH_SIZE, galleryImages.length);
+             var newElements = [];
+
+             for (var i = galleryIndex; i < end; i++) {
+                 var num = galleryImages[i];
+
                  var col = document.createElement('div');
                  col.className = 'col-12 col-sm-6 col-lg-3 single_gallery_item mb-30';
 
@@ -79,7 +103,32 @@
                  wrapper.appendChild(hover);
                  col.appendChild(wrapper);
                  container.appendChild(col);
-             });
+                 newElements.push(col);
+             }
+             galleryIndex = end;
+
+             // Tell Isotope about the new items (if already initialized)
+             if (typeof jQuery !== 'undefined' && jQuery.fn.isotope) {
+                 var $grid = jQuery('.alime-portfolio');
+                 if ($grid.data('isotope')) {
+                     $grid.isotope('appended', jQuery(newElements));
+                     $grid.imagesLoaded(function() {
+                         $grid.isotope('layout');
+                     });
+                 }
+             }
+
+             // Update counter text
+             var counter = document.getElementById('gallery-counter');
+             if (counter) {
+                 counter.textContent = 'Showing ' + galleryIndex + ' of ' + galleryImages.length + ' photos';
+             }
+
+             // Hide button when all images loaded
+             var btn = document.getElementById('load-more-btn');
+             if (btn && galleryIndex >= galleryImages.length) {
+                 btn.style.display = 'none';
+             }
          }
       </script>
    </head>
@@ -219,10 +268,9 @@
                <div class="row alime-portfolio" id="gallery-grid">
                </div>
                <div class="row">
-                  <div class="col-12 text-center wow fadeInUp" data-wow-delay="700ms">
-                     <a href="gallery.html" class="btn alime-btn btn-2 mt-15">View More</a>
-                     <!--- This was supposed to add more upon clicking but you can't add HTML with JS after loading, only with AJAX:--->
-                     <!---<a id="myLink" href="#" onclick="buildImageHTML()" class="btn alime-btn btn-2 mt-15">View More</a>--->
+                  <div class="col-12 text-center" style="margin-top: 15px;">
+                     <p id="gallery-counter" style="color: #636363; margin-bottom: 10px;"></p>
+                     <a id="load-more-btn" href="javascript:void(0);" onclick="loadMoreImages();" class="btn alime-btn btn-2">Load More</a>
                   </div>
                </div>
             </div>
