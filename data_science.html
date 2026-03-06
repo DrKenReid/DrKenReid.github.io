@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Ken Reid's data science portfolio — software development, CV, and collaboration links.">
+  <meta name="description" content="Dr. Ken Reid — Senior Data Scientist & AI Researcher. Publications, projects, thesis, and expertise in evolutionary computation, optimization, and machine learning.">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Data Science - Ken Reid</title>
+  <title>Data Science - Dr. Ken Reid</title>
 
   <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="Ken Reid - Data Science">
-  <meta property="og:description" content="Ken Reid's data science portfolio — software development, CV, and collaboration links.">
+  <meta property="og:title" content="Dr. Ken Reid — Data Science & AI Research">
+  <meta property="og:description" content="Senior Data Scientist with a Ph.D. in AI. Publications at GECCO, IEEE SSCI, and more. Expertise in evolutionary computation, optimization, and machine learning.">
   <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/2.png">
   <meta property="og:url" content="https://www.kenreid.co.uk/data_science.html">
   <meta property="og:type" content="website">
@@ -29,6 +29,176 @@
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Data Science Page — Custom Styles */
+    .ds-tag {
+      display: inline-block;
+      background: #252525;
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 500;
+      margin: 5px;
+      transition: all 0.3s ease;
+    }
+    .ds-tag:hover {
+      background: #444;
+      color: #fff;
+      transform: translateY(-2px);
+    }
+    .ds-pub-entry {
+      background: #fff;
+      border-radius: 8px;
+      padding: 25px 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+      border-left: 4px solid #252525;
+      transition: all 0.3s ease;
+    }
+    .ds-pub-entry:hover {
+      box-shadow: 0 5px 25px rgba(0,0,0,0.12);
+      transform: translateY(-2px);
+    }
+    .ds-pub-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #252525;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .ds-pub-authors {
+      font-size: 14px;
+      color: #636363;
+      margin-bottom: 5px;
+    }
+    .ds-pub-authors strong {
+      color: #252525;
+    }
+    .ds-pub-venue {
+      font-size: 13px;
+      color: #888;
+      font-style: italic;
+    }
+    .ds-citation-badge {
+      background: #252525;
+      color: #fff;
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: 600;
+      float: right;
+      margin-top: 5px;
+    }
+    .ds-project-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 25px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+      height: 100%;
+      transition: all 0.3s ease;
+      border-top: 3px solid #252525;
+    }
+    .ds-project-card:hover {
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      transform: translateY(-4px);
+    }
+    .ds-project-card h5 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .ds-project-card h5 a {
+      color: #252525;
+    }
+    .ds-project-card h5 a:hover {
+      color: #636363;
+    }
+    .ds-project-card p {
+      font-size: 14px;
+      color: #636363;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+    .ds-project-meta {
+      font-size: 13px;
+      color: #888;
+    }
+    .ds-project-meta .ds-lang-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .ds-project-meta .ds-stars {
+      margin-left: 15px;
+    }
+    .ds-thesis-box {
+      background: #fff;
+      border-radius: 8px;
+      padding: 35px 40px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+      border-left: 5px solid #252525;
+    }
+    .ds-thesis-box h4 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #252525;
+      margin-bottom: 15px;
+      line-height: 1.4;
+    }
+    .ds-thesis-box .ds-thesis-meta {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 15px;
+    }
+    .ds-thesis-box p {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #636363;
+    }
+    .ds-skill-group {
+      margin-bottom: 30px;
+    }
+    .ds-skill-group h5 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #252525;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .ds-skill-badge {
+      display: inline-block;
+      background: #f5f5f5;
+      color: #252525;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      margin: 4px;
+      border: 1px solid #e0e0e0;
+      transition: all 0.3s ease;
+    }
+    .ds-skill-badge:hover {
+      background: #252525;
+      color: #fff;
+      border-color: #252525;
+      transform: translateY(-2px);
+    }
+    .ds-talk-context {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #636363;
+    }
+    .ds-talk-context strong {
+      color: #252525;
+    }
+  </style>
 </head>
 <body>
 
@@ -87,7 +257,7 @@
     </div>
   </section>
 
-  <!-- About Section -->
+  <!-- 1. About -->
   <div class="about-us-area section-padding-80-0 clearfix">
     <div class="container">
       <div class="row align-items-center">
@@ -95,7 +265,7 @@
           <div class="about-us-content mb-80">
             <h3 class="wow fadeInUp" data-wow-delay="100ms">About</h3>
             <div class="line wow fadeInUp" data-wow-delay="200ms"></div>
-            <p class="wow fadeInUp" data-wow-delay="300ms">I'm Ken Reid, a Data Scientist and Software Engineer with a Ph.D. in Artificial Intelligence. My work spans financial optimisation and software engineering, where I design and build solutions across Python, Java, JavaScript, and more. I develop automated testing frameworks, improve system performance, maintain platform integrations, and translate business requirements into efficient, reliable software. I also contribute to design and code reviews, assist with delivery estimates, and oversee deployment processes.</p>
+            <p class="wow fadeInUp" data-wow-delay="300ms">I'm Ken Reid — a Senior Data Scientist at Rocket Mortgage with a Ph.D. in Artificial Intelligence from the University of Stirling. My research spans evolutionary computation, optimization, and machine learning, with publications at top venues including GECCO and IEEE SSCI. I design and build data-driven solutions across Python, Java, JavaScript, and more — from automated testing frameworks to large-scale optimization systems.</p>
           </div>
         </div>
         <div class="col-12 col-lg-6">
@@ -107,43 +277,333 @@
     </div>
   </div>
 
-  <!-- CV Section -->
-  <section class="why-choose-us-area bg-gray section-padding-80-0 clearfix">
+  <!-- 2. Research Interests -->
+  <section class="bg-gray section-padding-80 clearfix">
     <div class="container">
       <div class="row">
         <div class="col-12">
           <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
-            <h2>CV</h2>
+            <h2>Research Interests</h2>
           </div>
         </div>
       </div>
-      <iframe src="docs/ken-cv.pdf" width="100%" height="1200px" title="Ken Reid CV"></iframe>
-      <p class="text-center" style="margin-top: 15px;">
-        <a href="docs/ken-cv.pdf" download class="btn alime-btn btn-2">Download CV (PDF)</a>
-      </p>
-      <br>
+      <div class="row justify-content-center">
+        <div class="col-12 text-center wow fadeInUp" data-wow-delay="200ms">
+          <span class="ds-tag">Data Science</span>
+          <span class="ds-tag">Optimization</span>
+          <span class="ds-tag">Evolutionary Computation</span>
+          <span class="ds-tag">Generative AI</span>
+          <span class="ds-tag">Machine Learning</span>
+          <span class="ds-tag">Genetic Programming</span>
+          <span class="ds-tag">Metaheuristics</span>
+          <span class="ds-tag">Deep Learning</span>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Fun Stuff Section -->
-  <div class="about-us-area section-padding-80-0 clearfix">
+  <!-- 3. Publications -->
+  <section class="section-padding-80 clearfix">
     <div class="container">
       <div class="row">
         <div class="col-12">
           <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
-            <h2>Fun Stuff</h2>
+            <h2>Publications</h2>
+            <p style="color: #888; margin-top: -10px;">Peer-reviewed research papers and preprints</p>
           </div>
         </div>
       </div>
-      <p class="text-center">Hey — do you like Factorio?</p>
-      <div class="iframe-responsive">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/9ie01GLGB5s" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      </div>
-      <br>
-    </div>
-  </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
 
-  <!-- Let's Collaborate Section -->
+          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="100ms">
+            <span class="ds-citation-badge">50 citations</span>
+            <div class="ds-pub-title">Heuristic Hyperparameter Optimization of Deep Learning Models for Genomic Prediction</div>
+            <div class="ds-pub-authors">J Han, C Gondro, <strong>K Reid</strong>, JP Steibel</div>
+            <div class="ds-pub-venue">G3: Genes, Genomes, Genetics, 11(7), jkab032 — 2021</div>
+          </div>
+
+          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="150ms">
+            <span class="ds-citation-badge">42 citations</span>
+            <div class="ds-pub-title">An Interdisciplinary Outlook on Large Language Models for Scientific Research</div>
+            <div class="ds-pub-authors">J Boyko, J Cohen, N Fox, MH Veiga, JI Li, J Liu, B Modenesi, AH Rauch, <strong>KN Reid</strong>, et al.</div>
+            <div class="ds-pub-venue">arXiv preprint arXiv:2311.04929 — 2023</div>
+          </div>
+
+          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="200ms">
+            <span class="ds-citation-badge">13 citations</span>
+            <div class="ds-pub-title">Optimizing LLVM Pass Sequences with Shackleton: A Linear Genetic Programming Framework</div>
+            <div class="ds-pub-authors">H Peeler, SS Li, AN Sloss, <strong>KN Reid</strong>, Y Yuan, W Banzhaf</div>
+            <div class="ds-pub-venue">ACM Transactions on Architecture and Code Optimization — 2022</div>
+          </div>
+
+          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="250ms">
+            <span class="ds-citation-badge">12 citations</span>
+            <div class="ds-pub-title">A Hybrid Metaheuristic Approach to a Real World Employee Scheduling Problem</div>
+            <div class="ds-pub-authors"><strong>KN Reid</strong>, J Li, AEI Brownlee, M Kern, N Veerapen, J Swan, G Owusu</div>
+            <div class="ds-pub-venue">GECCO '19: Proceedings of the Genetic and Evolutionary Computation Conference — 2019</div>
+          </div>
+
+          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="300ms">
+            <span class="ds-citation-badge">9 citations</span>
+            <div class="ds-pub-title">The Factory Must Grow: Automation in Factorio</div>
+            <div class="ds-pub-authors"><strong>KN Reid</strong>, I Miralavy, S Kelly, W Banzhaf, C Gondro</div>
+            <div class="ds-pub-venue">GECCO '21: Proceedings of the Genetic and Evolutionary Computation Conference — 2021</div>
+          </div>
+
+          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="350ms">
+            <span class="ds-citation-badge">9 citations</span>
+            <div class="ds-pub-title">Variable Neighbourhood Search: A Case Study for a Highly-Constrained Workforce Scheduling Problem</div>
+            <div class="ds-pub-authors"><strong>KN Reid</strong>, J Li, J Swan, A McCormick, G Owusu</div>
+            <div class="ds-pub-venue">IEEE Symposium Series on Computational Intelligence (SSCI) — 2016</div>
+          </div>
+
+          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="400ms">
+            <span class="ds-citation-badge">7 citations</span>
+            <div class="ds-pub-title">Genetic Improvement in the Shackleton Framework for Optimizing LLVM Pass Sequences</div>
+            <div class="ds-pub-authors">SS Li, H Peeler, AN Sloss, <strong>KN Reid</strong>, W Banzhaf</div>
+            <div class="ds-pub-venue">GECCO '22 Companion — 2022</div>
+          </div>
+
+          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="450ms">
+            <span class="ds-citation-badge">2 citations</span>
+            <div class="ds-pub-title">Shift Scheduling and Employee Rostering: An Evolutionary Ruin &amp; Stochastic Recreate Solution</div>
+            <div class="ds-pub-authors"><strong>KN Reid</strong>, J Li, N Veerapen, J Swan, A McCormick, M Kern, G Owusu</div>
+            <div class="ds-pub-venue">CEEC 2018: Computer Science and Electronic Engineering Conference — 2018</div>
+          </div>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center wow fadeInUp" data-wow-delay="500ms" style="margin-top: 20px;">
+          <a href="https://scholar.google.com/citations?user=bwl2u00AAAAJ&hl=en" target="_blank" rel="noopener" class="btn alime-btn btn-2">View All on Google Scholar &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Doctoral Thesis -->
+  <section class="bg-gray section-padding-80 clearfix">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
+            <h2>Doctoral Thesis</h2>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <div class="ds-thesis-box wow fadeInUp" data-wow-delay="200ms">
+            <h4>Metaheuristics for Solving Real World Employee Rostering and Shift Scheduling Problems</h4>
+            <div class="ds-thesis-meta">
+              University of Stirling, Division of Computing Science and Mathematics — July 2019<br>
+              Supervised by Dr Jingpeng Li &middot; Funded by BT and EPSRC DAASE Project
+            </div>
+            <p>This thesis addresses challenging real-world employee rostering and shift scheduling problems using state-of-the-art metaheuristic techniques. Novel approaches including Variable Neighbourhood Search, Evolutionary Ruin &amp; Stochastic Recreate, and hybrid matheuristic methods combining metaheuristics with Integer Programming were developed and evaluated against real-world data provided by BT. The research demonstrates how computational optimization can solve complex, highly-constrained scheduling problems that arise in large-scale workforce management.</p>
+            <div style="margin-top: 20px;">
+              <a href="docs/KenReidThesis.pdf" target="_blank" rel="noopener" class="btn alime-btn btn-2">Read Full Thesis (PDF)</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Featured Projects -->
+  <section class="section-padding-80 clearfix">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
+            <h2>Featured Projects</h2>
+            <p style="color: #888; margin-top: -10px;">Open-source research and data science projects</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+
+        <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="100ms">
+          <div class="ds-project-card">
+            <h5><a href="https://github.com/DrKenReid/FactorioBeltProblemGECCO" target="_blank" rel="noopener">FactorioBeltProblemGECCO</a></h5>
+            <p>Factorio game interface for optimizing belt balancer layouts using evolutionary computation. Companion code for the GECCO '21 paper.</p>
+            <div class="ds-project-meta">
+              <span class="ds-lang-dot" style="background: #3572A5;"></span> Python
+              <span class="ds-lang-dot" style="background: #000080; margin-left: 10px;"></span> Lua
+              <span class="ds-stars">&#9733; 30</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="200ms">
+          <div class="ds-project-card">
+            <h5><a href="https://github.com/DrKenReid/VAE-for-Molecule-Discovery" target="_blank" rel="noopener">VAE for Molecule Discovery</a></h5>
+            <p>Variational Autoencoder for drug discovery — generating novel molecular structures using deep generative models.</p>
+            <div class="ds-project-meta">
+              <span class="ds-lang-dot" style="background: #DA5B0B;"></span> Jupyter Notebook
+              <span class="ds-stars">&#9733; 2</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="300ms">
+          <div class="ds-project-card">
+            <h5><a href="https://github.com/DrKenReid/CNN-Tutorial---X-ray-image-classifier" target="_blank" rel="noopener">CNN X-Ray Classifier</a></h5>
+            <p>Convolutional Neural Network for pneumonia detection from chest X-ray images — a deep learning tutorial for medical imaging.</p>
+            <div class="ds-project-meta">
+              <span class="ds-lang-dot" style="background: #DA5B0B;"></span> Jupyter Notebook
+              <span class="ds-stars">&#9733; 1</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="400ms">
+          <div class="ds-project-card">
+            <h5><a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" rel="noopener">GoodReads Analysis</a></h5>
+            <p>Machine learning analysis of personal reading data — visualizations, clustering, and predictive modeling on GoodReads export data.</p>
+            <div class="ds-project-meta">
+              <span class="ds-lang-dot" style="background: #DA5B0B;"></span> Jupyter Notebook
+              <span class="ds-stars">&#9733; 3</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="500ms">
+          <div class="ds-project-card">
+            <h5><a href="https://github.com/DrKenReid/Generalized-Analysis-of-Text-Data" target="_blank" rel="noopener">NLP Text Analysis Toolkit</a></h5>
+            <p>Generalized NLP pipeline — topic modeling, sentiment analysis, and text classification using modern natural language processing techniques.</p>
+            <div class="ds-project-meta">
+              <span class="ds-lang-dot" style="background: #DA5B0B;"></span> Jupyter Notebook
+              <span class="ds-stars">&#9733; 1</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="600ms">
+          <div class="ds-project-card">
+            <h5><a href="https://github.com/DrKenReid/Introductory-Data-Science" target="_blank" rel="noopener">Introductory Data Science</a></h5>
+            <p>Machine learning tutorials in Google Colab — hands-on exercises covering core data science concepts and algorithms.</p>
+            <div class="ds-project-meta">
+              <span class="ds-lang-dot" style="background: #DA5B0B;"></span> Jupyter Notebook
+              <span class="ds-stars">&#9733; 2</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-12 text-center wow fadeInUp" data-wow-delay="700ms" style="margin-top: 10px;">
+          <a href="https://github.com/DrKenReid" target="_blank" rel="noopener" class="btn alime-btn btn-2">View All on GitHub &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Featured Talk -->
+  <section class="bg-gray section-padding-80 clearfix">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
+            <h2>Featured Talk</h2>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <div class="wow fadeInUp" data-wow-delay="200ms">
+            <p class="ds-talk-context text-center" style="margin-bottom: 30px;">Presented at <strong>GECCO 2021</strong> through Michigan State University's <strong>BEACON Center for the Study of Evolution in Action</strong>. This talk accompanies the paper <em>"The Factory Must Grow: Automation in Factorio"</em> and has been viewed over <strong>21,000 times</strong>.</p>
+          </div>
+          <div class="iframe-responsive wow fadeInUp" data-wow-delay="300ms">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/9ie01GLGB5s" title="The Factory Must Grow: Automation in Factorio — GECCO 2021" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Skills & Technologies -->
+  <section class="section-padding-80 clearfix">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
+            <h2>Skills &amp; Technologies</h2>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+
+          <div class="ds-skill-group wow fadeInUp" data-wow-delay="200ms">
+            <h5>Programming Languages</h5>
+            <span class="ds-skill-badge">Python</span>
+            <span class="ds-skill-badge">Java</span>
+            <span class="ds-skill-badge">JavaScript</span>
+            <span class="ds-skill-badge">C</span>
+            <span class="ds-skill-badge">Lua</span>
+            <span class="ds-skill-badge">R</span>
+            <span class="ds-skill-badge">SQL</span>
+          </div>
+
+          <div class="ds-skill-group wow fadeInUp" data-wow-delay="300ms">
+            <h5>Data &amp; Machine Learning</h5>
+            <span class="ds-skill-badge">PySpark</span>
+            <span class="ds-skill-badge">Pandas</span>
+            <span class="ds-skill-badge">NumPy</span>
+            <span class="ds-skill-badge">Scikit-learn</span>
+            <span class="ds-skill-badge">TensorFlow</span>
+            <span class="ds-skill-badge">Jupyter</span>
+            <span class="ds-skill-badge">Google Colab</span>
+          </div>
+
+          <div class="ds-skill-group wow fadeInUp" data-wow-delay="400ms">
+            <h5>Infrastructure &amp; Tools</h5>
+            <span class="ds-skill-badge">Docker</span>
+            <span class="ds-skill-badge">Git</span>
+            <span class="ds-skill-badge">CI/CD</span>
+            <span class="ds-skill-badge">LLVM</span>
+            <span class="ds-skill-badge">Linux</span>
+          </div>
+
+          <div class="ds-skill-group wow fadeInUp" data-wow-delay="500ms">
+            <h5>Research Domains</h5>
+            <span class="ds-skill-badge">Evolutionary Computation</span>
+            <span class="ds-skill-badge">Genetic Programming</span>
+            <span class="ds-skill-badge">Metaheuristics</span>
+            <span class="ds-skill-badge">Optimization</span>
+            <span class="ds-skill-badge">Deep Learning</span>
+            <span class="ds-skill-badge">Natural Language Processing</span>
+            <span class="ds-skill-badge">Computer Vision</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Curriculum Vitae -->
+  <section class="bg-gray section-padding-80 clearfix">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
+            <h2>Curriculum Vitae</h2>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 wow fadeInUp" data-wow-delay="200ms">
+          <iframe src="docs/ken-cv.pdf" width="100%" height="1200px" title="Ken Reid CV" style="border-radius: 8px; box-shadow: 0 2px 15px rgba(0,0,0,0.06);"></iframe>
+          <p class="text-center" style="margin-top: 20px;">
+            <a href="docs/ken-cv.pdf" download class="btn alime-btn btn-2">Download CV (PDF)</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Let's Collaborate -->
   <div class="about-us-area section-padding-80-0 clearfix">
     <div class="container">
       <div class="row align-items-center">
@@ -157,13 +617,13 @@
             <h3 class="wow fadeInUp" data-wow-delay="100ms">Let's Collaborate</h3>
             <div class="line wow fadeInUp" data-wow-delay="200ms"></div>
             <p class="wow fadeInUp" data-wow-delay="300ms">
-              <a href="https://github.com/DrKenReid"><img src="./img/core-img/gh.png" style="width:1em;margin-right:.5em;" alt="GitHub icon">GitHub</a>
+              <a href="https://github.com/DrKenReid" target="_blank" rel="noopener"><img src="./img/core-img/gh.png" style="width:1em;margin-right:.5em;" alt="GitHub icon">GitHub</a>
             </p>
             <p class="wow fadeInUp" data-wow-delay="400ms">
-              <a href="https://scholar.google.com/citations?user=bwl2u00AAAAJ&hl=en"><img src="./img/core-img/scholar.png" style="width:1em;margin-right:.5em;" alt="Google Scholar icon">Google Scholar</a>
+              <a href="https://scholar.google.com/citations?user=bwl2u00AAAAJ&hl=en" target="_blank" rel="noopener"><img src="./img/core-img/scholar.png" style="width:1em;margin-right:.5em;" alt="Google Scholar icon">Google Scholar</a>
             </p>
             <p class="wow fadeInUp" data-wow-delay="500ms">
-              <a href="https://www.linkedin.com/in/kennethneilreid/"><img src="./img/core-img/li.png" style="width:1em;margin-right:.5em;" alt="LinkedIn icon">LinkedIn</a>
+              <a href="https://www.linkedin.com/in/kennethneilreid/" target="_blank" rel="noopener"><img src="./img/core-img/li.png" style="width:1em;margin-right:.5em;" alt="LinkedIn icon">LinkedIn</a>
             </p>
             <div class="wow fadeInUp" data-wow-delay="600ms" itemscope itemtype="https://schema.org/Person">
               <a itemprop="sameAs" content="https://orcid.org/0000-0001-8654-2430" href="https://orcid.org/0000-0001-8654-2430" target="orcid.widget" rel="noopener noreferrer" style="vertical-align:top;">
@@ -171,7 +631,7 @@
               </a>
             </div>
             <p class="wow fadeInUp" data-wow-delay="700ms">
-              <a href="https://www.researchgate.net/profile/Ken_Reid4/"><img src="./img/core-img/rg.png" style="width:1em;margin-right:.5em;" alt="ResearchGate icon">ResearchGate</a>
+              <a href="https://www.researchgate.net/profile/Ken_Reid4/" target="_blank" rel="noopener"><img src="./img/core-img/rg.png" style="width:1em;margin-right:.5em;" alt="ResearchGate icon">ResearchGate</a>
             </p>
           </div>
         </div>
