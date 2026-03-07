@@ -71,14 +71,6 @@ function renderFooter(targetId) {
 
     el.innerHTML = '<footer class="footer-area"><div class="container">' +
         '<div class="row"><div class="col-12">' +
-        '<div class="footer-nav text-center" style="margin-bottom: 15px;">' +
-        '<a href="./index.html" style="margin: 0 10px;">Home</a>' +
-        '<a href="./data_science.html" style="margin: 0 10px;">Data Science</a>' +
-        '<a href="./gallery.html" style="margin: 0 10px;">Photography</a>' +
-        '<a href="./music.html" style="margin: 0 10px;">Music</a>' +
-        '<a href="./literature.html" style="margin: 0 10px;">Literature</a>' +
-        '<a href="./contact.html" style="margin: 0 10px;">Contact</a>' +
-        '</div>' +
         '<div class="footer-content d-flex align-items-center justify-content-between">' +
         '<div class="copywrite-text"><p>' +
         'Copyright &copy; ' + year + ' All rights reserved | This template is made with ' +

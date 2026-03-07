@@ -50,7 +50,8 @@ body {
   font-weight: 400;
   font-size: 16px;
   position: relative;
-  z-index: auto; }
+  z-index: auto;
+  overflow-x: hidden; }
 
 h1,
 h2,
