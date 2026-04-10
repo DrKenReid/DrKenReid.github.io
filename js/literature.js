@@ -15,6 +15,7 @@ function initQuotes() {
     .then(function(data) {
       allQuotes = shuffle(data);
       showQuote(0);
+      initSwipe();
     })
     .catch(function() {});
 }
@@ -110,6 +111,27 @@ function renderReviews(reviews) {
     col.appendChild(card);
     container.appendChild(col);
   });
+}
+
+/* --- Touch/swipe support for quotes --- */
+var touchStartX = 0;
+var touchEndX = 0;
+var SWIPE_THRESHOLD = 50;
+
+function initSwipe() {
+  var el = document.getElementById('quotes');
+  if (!el) return;
+  el.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  el.addEventListener('touchend', function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    var diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > SWIPE_THRESHOLD) {
+      if (diff > 0) { nextQuote(); }
+      else { prevQuote(); }
+    }
+  }, { passive: true });
 }
 
 /* --- Utility --- */
