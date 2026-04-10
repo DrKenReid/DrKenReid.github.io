@@ -7,15 +7,26 @@
 var allQuotes = [];
 var quoteIndex = 0;
 
+var autoTimer = null;
+
 function initQuotes() {
   fetch('data/quotes.json')
     .then(function(r) { return r.json(); })
     .then(function(data) {
       allQuotes = shuffle(data);
       showQuote(0);
-      setInterval(nextQuote, 12000);
     })
     .catch(function() {});
+}
+
+function scheduleNext() {
+  if (autoTimer) clearTimeout(autoTimer);
+  var q = allQuotes[quoteIndex];
+  if (!q) return;
+  /* ~150ms per word, minimum 5s, maximum 20s */
+  var words = q.quote.split(/\s+/).length;
+  var ms = Math.min(Math.max(words * 150, 5000), 20000);
+  autoTimer = setTimeout(nextQuote, ms);
 }
 
 function showQuote(idx) {
@@ -32,15 +43,18 @@ function showQuote(idx) {
     attr.textContent = '\u2014 ' + q.author + ', ' + q.book;
     el.style.opacity = '1';
     attr.style.opacity = '1';
+    scheduleNext();
   }, 400);
 }
 
 function nextQuote() {
+  if (autoTimer) clearTimeout(autoTimer);
   quoteIndex = (quoteIndex + 1) % allQuotes.length;
   showQuote(quoteIndex);
 }
 
 function prevQuote() {
+  if (autoTimer) clearTimeout(autoTimer);
   quoteIndex = (quoteIndex - 1 + allQuotes.length) % allQuotes.length;
   showQuote(quoteIndex);
 }
