@@ -1771,18 +1771,20 @@ input:required {
    ============================== */
 
 .quote-carousel {
-  background: #252525;
+  background: #f7f7f7;
   padding: 60px 20px;
   text-align: center;
   position: relative;
-  min-height: 280px; }
+  min-height: 280px;
+  border-top: 3px solid #fc6060;
+  border-bottom: 3px solid #fc6060; }
   .quote-inner {
     max-width: 800px;
     margin: 0 auto; }
   .quote-carousel #quote-text {
     font-size: 22px;
     font-style: italic;
-    color: #e0e0e0;
+    color: #333;
     margin: 0 0 20px;
     line-height: 1.6;
     transition: opacity 0.4s ease; }
@@ -1795,16 +1797,16 @@ input:required {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.05);
     border: none;
-    color: #fff;
+    color: #333;
     font-size: 28px;
     width: 44px;
     height: 44px;
     border-radius: 50%;
     cursor: pointer;
     transition: background 0.3s; }
-    .quote-nav:hover { background: rgba(252,96,96,0.5); }
+    .quote-nav:hover { background: rgba(252,96,96,0.3); }
     .quote-nav.prev { left: 20px; }
     .quote-nav.next { right: 20px; }
   @media only screen and (max-width: 767px) {
