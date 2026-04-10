@@ -1771,7 +1771,7 @@ input:required {
    ============================== */
 
 .quote-carousel {
-  background: #1a1a2e;
+  background: #252525;
   padding: 60px 20px;
   text-align: center;
   position: relative;
@@ -1864,7 +1864,7 @@ input:required {
   display: block;
   border-radius: 8px;
   overflow: hidden;
-  background: #2d2d2d;
+  background: #252525;
   transition: transform 0.3s, box-shadow 0.3s; }
   .stats-grid a:hover {
     transform: translateY(-4px);
