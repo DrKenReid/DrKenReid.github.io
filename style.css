@@ -1940,3 +1940,91 @@ input:required {
   border-radius: 12px;
   font-size: 12px;
   font-weight: 500; }
+
+/* ==============================
+   About Page
+   ============================== */
+
+.about-photo {
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+  transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .about-photo:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 35px rgba(0,0,0,0.16); }
+
+.about-section-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #252525;
+  color: #fff;
+  font-size: 20px;
+  margin-bottom: 18px; }
+
+.about-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 35px 30px;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+  height: 100%;
+  transition: all 0.3s ease; }
+  .about-card:hover {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    transform: translateY(-4px); }
+  .about-card h5 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    color: #252525; }
+  .about-card p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #636363;
+    margin-bottom: 0; }
+  .about-card .about-link {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #252525;
+    border-bottom: 2px solid #252525;
+    transition: all 0.3s ease; }
+    .about-card .about-link:hover {
+      color: #636363;
+      border-color: #636363; }
+
+.about-hero-text {
+  font-size: 1.15em;
+  line-height: 1.9;
+  color: #636363; }
+
+.about-photo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px; }
+  .about-photo-grid .about-photo-tall {
+    grid-row: span 2; }
+  @media (max-width: 767px) {
+    .about-photo-grid {
+      grid-template-columns: 1fr; }
+    .about-photo-grid .about-photo-tall {
+      grid-row: span 1; } }
+
+/* ==============================
+   Print Stylesheet
+   ============================== */
+
+@media print {
+  #preloader, header, .breadcrumb-area, .quote-carousel,
+  #instagram-section, #footer-section, .gallery-filters,
+  #load-more-btn, .quote-nav, hr { display: none !important; }
+  body { color: #000; background: #fff; }
+  a { color: #000; text-decoration: underline; }
+  a[href]:after { content: " (" attr(href) ")"; font-size: 12px; }
+  .blog-post { max-width: 100%; }
+  .blog-post pre { white-space: pre-wrap; }
+  img { max-width: 100% !important; } }
