@@ -1774,7 +1774,12 @@ input:required {
   background: #1a1a2e;
   padding: 60px 20px;
   text-align: center;
-  position: relative; }
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px; }
   .quote-carousel #quote-text {
     font-size: 22px;
     font-style: italic;
@@ -1860,10 +1865,20 @@ input:required {
   display: block;
   border-radius: 8px;
   overflow: hidden;
+  background: #2d2d2d;
   transition: transform 0.3s, box-shadow 0.3s; }
   .stats-grid a:hover {
     transform: translateY(-4px);
     box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
   .stats-grid img {
     width: 100%;
+    height: 100%;
+    object-fit: contain;
     display: block; }
+  .stats-grid .col-12 {
+    display: flex; }
+  .stats-grid .col-12 a {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
