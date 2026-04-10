@@ -34,15 +34,14 @@ picks = [
     "Dune (Dune",
     "To Kill a Mockingbird",
     "Perdido Street Station",
-    # 4-star nuanced
-    "Man's Search for Meaning",
-    "The Great Gatsby",
     # 3-star mixed
-    "Moby-Dick or, The Whale",
-    "The Alchemist",
-    # Low-star spicy takes
-    "The Catcher in the Rye",
-    "Storm Front",
+    "The Great Gatsby",
+    "What We Owe the Future",
+    # Thoughtful / reflective
+    "White Fragility",
+    "A Little Life",
+    "Life of Pi",
+    "Name of the Wind",
 ]
 
 selected = []
