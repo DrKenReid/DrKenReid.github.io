@@ -25,13 +25,13 @@ function showQuote(idx) {
   var attr = document.getElementById('quote-attr');
   if (!el || !attr) return;
 
-  el.style.opacity = 0;
-  attr.style.opacity = 0;
+  el.style.opacity = '0';
+  attr.style.opacity = '0';
   setTimeout(function() {
     el.textContent = '\u201C' + q.quote + '\u201D';
     attr.textContent = '\u2014 ' + q.author + ', ' + q.book;
-    el.style.opacity = 1;
-    attr.style.opacity = 1;
+    el.style.opacity = '1';
+    attr.style.opacity = '1';
   }, 400);
 }
 
