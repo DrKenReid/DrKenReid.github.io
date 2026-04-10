@@ -1,0 +1,98 @@
+[
+  {
+    "title": "Babel",
+    "author": "R.F. Kuang",
+    "rating": 5,
+    "review": "The most enthralling book I've read all year. A literary marvel that made learning other languages sound magic, not just due to the fantasy nature of the story. The characters were vivid and unique, the descriptions of university echoed my own experience of wonder. A magical read.",
+    "isbn": "0063021420",
+    "isbn13": "9780063021426"
+  },
+  {
+    "title": "Stoner",
+    "author": "John  Williams",
+    "rating": 5,
+    "review": "Literature reflects upon experiences of life; real or imagined. Stoner is as depressing as all life journey's are, filled with regrets, love, friendships, foes, growth, disappointment and eventually death.\n\nI feel this is a really important book for thanatophobes like myself, because it frames death with the perspective of a life lived.",
+    "isbn": "1590171993",
+    "isbn13": "9781590171998"
+  },
+  {
+    "title": "Cobalt Red: How the Blood of the Congo Powers Our Lives",
+    "author": "Siddharth Kara",
+    "rating": 5,
+    "review": "A must read for anyone in tech, anyone in the sciences, anyone with a heart.",
+    "isbn": "1250284309",
+    "isbn13": "9781250284303"
+  },
+  {
+    "title": "Dune (Dune, #1)",
+    "author": "Frank Herbert",
+    "rating": 5,
+    "review": "A classic for good reasons.\n\nEven more enjoyable on a second read.",
+    "isbn": "059309932X",
+    "isbn13": "9780593099322"
+  },
+  {
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "rating": 5,
+    "review": "This love captures the true expression of love for one's fellow man without prejudice for lifestyle, creed or colour. The first half I thought, at first, was well written if a bit dull. By the second half I was deeply emotionally invested. I'm so glad I read this, I can easily say this is one of my favourite books.\n\nEDIT: My 2nd read to celebrate my 500th book on Goodreads: I enjoyed the entire story more this time around, with the wisdom and themes from Atticus bursting through each chapter. I look forward to my 3rd read in the future.",
+    "isbn": "0060935464",
+    "isbn13": "9780060935467"
+  },
+  {
+    "title": "Perdido Street Station (New Crobuzon, #1)",
+    "author": "China Miéville",
+    "rating": 5,
+    "review": "I don't know if I'm more impressed by the incredible imaginative designs produced by Melville's mind or the grim expression at the pointlessness of life.\n\n5/5 worth being depressed from.",
+    "isbn": "0345459407",
+    "isbn13": "9780345459404"
+  },
+  {
+    "title": "Man's Search for Meaning",
+    "author": "Viktor E. Frankl",
+    "rating": 4,
+    "review": "I feel immediately terrible for not giving a book written by a survivor of the holocaust 5*. The first half of the book which discusses the authors experience of surviving the worst that a human can endure is harrowing and so worth reading, and I would give 5*. The second half, however, was a deeply dry telling of a field of psychology.",
+    "isbn": "080701429X",
+    "isbn13": "9780807014295"
+  },
+  {
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "rating": 3,
+    "review": "I found the enigmatic character of Gatsby fascinating, but I felt that while his wealth is eventually explained, his character was still largely mystifying, and that lack of explanation left me feeling unsatisfied. Near the end of the book the main character (who is surprisingly unimportant in the story, so perhaps I should just call him the narrator and observer) begins contemplating on how the tale of Gatsby and the debacle represents America, and how beautiful the rugged land of America is. This felt rather out of place and forced in, or perhaps I missed some connection with the rest of the book.\n\nIt's a short read and while worth reading it wouldn't be something I recommend you read with immediacy.",
+    "isbn": "0743273567",
+    "isbn13": "9780743273565"
+  },
+  {
+    "title": "Moby-Dick or, The Whale",
+    "author": "Herman Melville",
+    "rating": 3,
+    "review": "A masterpiece that is exceptionally dull.",
+    "isbn": "0142437247",
+    "isbn13": "9780142437247"
+  },
+  {
+    "title": "The Alchemist",
+    "author": "Paulo Coelho",
+    "rating": 3,
+    "review": "An enjoyable tale that felt like a short story stretched a bit much.",
+    "isbn": "0062315005",
+    "isbn13": "9780062315007"
+  },
+  {
+    "title": "The Catcher in the Rye",
+    "author": "J.D. Salinger",
+    "rating": 1,
+    "review": "As a former high school student who was assigned to read this, I can confidently say that this book was just a stream of irritation for me. From the first page to the last, I found myself bored and disinterested in the story and its characters.\n\nHolden Caulfield, the protagonist of the book, is an annoying and whiny teenager who complains about everything and everyone around him. He spends the entire novel wandering around New York City, getting into pointless arguments with strangers, and complaining about how 'phony' everyone is. I found him to be insufferable and the word 'phony' is permanently tainted by how I imagine Holden's voice to sound - insufferable.\n\nThe writing style of Salinger is important for the development of literature, I don't argue that. However, the stream-of-consciousness narrative feels disjointed and rambling, with no real plot or direction. It's as if Salinger wrote the book without any real purpose or message. The characters are unlikable, the plot is non-existent, and the writing is tedious and unengaging.\n\nIf you are looking for an engaging and thought-provoking read, \"The Catcher in the Rye\" is not the book for you. It is a tedious and frustrating work that I would not recommend to anyone.",
+    "isbn": "0316769177",
+    "isbn13": "9780316769174"
+  },
+  {
+    "title": "Storm Front (The Dresden Files, #1)",
+    "author": "Jim  Butcher",
+    "rating": 2,
+    "review": "Strong ending but the MCs obsession with being proud of his old world views on women still turns my stomach.",
+    "isbn": "0451457811",
+    "isbn13": "9780451457813"
+  }
+]

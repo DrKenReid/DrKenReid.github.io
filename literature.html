@@ -5,239 +5,186 @@
   <meta name="description" content="Ken Reid's reading list — book reviews, reading statistics, and Goodreads shelves.">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Literature - Ken Reid</title>
-
-  <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="Ken Reid - Literature">
   <meta property="og:description" content="Ken Reid's reading list — book reviews, reading statistics, and Goodreads shelves.">
-  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/2.png">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/207.png">
   <meta property="og:url" content="https://www.kenreid.co.uk/literature.html">
   <meta property="og:type" content="website">
-
-  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-134737006-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-134737006-1');
-  </script>
-
-  <!-- Favicon & Manifest -->
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','UA-134737006-1');</script>
   <link rel="icon" href="./img/core-img/favicon.png">
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="manifest.json">
-
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- Goodreads grid styles -->
+  <script src="js/literature.js"></script>
   <style>
-    img.epict {
-      height: 30%;
-      width: 30%;
-    }
-    .gr_grid_book_container {
-      float: left;
-      width: 98px;
-      height: 160px;
-      padding: 0;
-      overflow: hidden;
-    }
+    .gr_grid_book_container{float:left;width:98px;height:160px;padding:0;overflow:hidden}
   </style>
 </head>
 <body>
-
-  <!-- Preloader -->
-  <div id="preloader">
-    <div class="loader"></div>
-  </div>
+  <div id="preloader"><div class="loader"></div></div>
 
   <!-- Header -->
-  <header class="header-area">
-    <div class="main-header-area">
-        <div class="classy-nav-container breakpoint-on">
-        <div class="container">
-          <nav class="classy-navbar justify-content-between" id="alimeNav">
-            <a class="nav-brand" href="./index.html"><img src="./img/core-img/logo.png" alt="Ken Reid Logo"></a>
-            <div class="classy-navbar-toggler">
-              <span class="navbarToggler"><span></span><span></span><span></span></span>
-            </div>
-            <div class="classy-menu">
-              <div class="classycloseIcon">
-                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
-              </div>
-              <div class="classynav">
-                <ul id="nav">
-                  <li><a href="./index.html">Home</a></li>
-                  <li><a href="./about.html">About</a></li>
-                  <li><a href="./data_science.html">Data Science</a></li>
-                  <li><a href="./gallery.html">Photography</a></li>
-                  <li><a href="./music.html">Music</a></li>
-                  <li class="active"><a href="./literature.html">Literature</a></li>
-                  <li><a href="./contact.html">Contact</a></li>
-                </ul>
-              </div>
-            </div>
-          </nav>
-        </div>
-      </div>
-    </div>
-  </header>
+  <header class="header-area"><div class="main-header-area"><div class="classy-nav-container breakpoint-on"><div class="container">
+    <nav class="classy-navbar justify-content-between" id="alimeNav">
+      <a class="nav-brand" href="./index.html"><img src="./img/core-img/logo.png" alt="Ken Reid Logo"></a>
+      <div class="classy-navbar-toggler"><span class="navbarToggler"><span></span><span></span><span></span></span></div>
+      <div class="classy-menu"><div class="classycloseIcon"><div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div></div>
+        <div class="classynav"><ul id="nav">
+          <li><a href="./index.html">Home</a></li>
+          <li><a href="./about.html">About</a></li>
+          <li><a href="./data_science.html">Data Science</a></li>
+          <li><a href="./gallery.html">Photography</a></li>
+          <li><a href="./music.html">Music</a></li>
+          <li class="active"><a href="./literature.html">Literature</a></li>
+          <li><a href="./contact.html">Contact</a></li>
+        </ul></div></div>
+    </nav>
+  </div></div></div></header>
 
   <!-- Breadcrumb -->
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/bg-img/207.png);">
-    <div class="container h-100">
-      <div class="row h-100 align-items-center">
-        <div class="col-12">
-          <div class="breadcrumb-content text-center">
-            <h2 class="page-title">Literature</h2>
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb justify-content-center">
-                <li class="breadcrumb-item"><a href="index.html"><i class="icon_house_alt"></i> Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Literature</li>
-              </ol>
-            </nav>
-          </div>
-        </div>
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <h2 class="page-title">Literature</h2>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Literature</li>
+        </ol></nav>
       </div>
-    </div>
+    </div></div></div>
   </section>
 
-  <!-- Reading Statistics -->
-  <div class="alime-blog-area section-padding-80-0 mb-70">
+  <!-- Favorite Quotes -->
+  <div class="quote-carousel" id="quotes">
+    <button class="quote-nav prev" onclick="prevQuote()" aria-label="Previous quote">&#8249;</button>
+    <p id="quote-text" style="opacity:0;"></p>
+    <p id="quote-attr" style="opacity:0;"></p>
+    <button class="quote-nav next" onclick="nextQuote()" aria-label="Next quote">&#8250;</button>
+  </div>
+
+  <!-- Selected Reviews -->
+  <div class="about-us-area section-padding-80-0 clearfix" id="reviews">
     <div class="container">
-      <div class="contact-area section-padding-80-50">
-        <h1 class="text-center">Goodreads Analysis</h1>
-        <p class="text-center" style="max-width: 700px; margin: 0 auto 30px;">
-          Deeper analysis of my reading data using Python — genre distributions, reading patterns, word clouds, and more.
-          <br><a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank">View the project on GitHub →</a>
-        </p>
-        <div class="text-center">
-          <div class="col-12" style="margin: 0 auto;">
-            <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank"><img loading="lazy" src="img/stats/genre-ratings.png" alt="Distribution of ratings for each primary genre" style="width: 100%; margin-bottom: 30px;"></a>
-          </div>
-          <div class="col-12" style="margin: 0 auto;">
-            <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank"><img loading="lazy" src="img/stats/reading-by-week.png" alt="Average books read by month, week, and day" style="width: 100%; margin-bottom: 30px;"></a>
-          </div>
-          <div class="col-12" style="margin: 0 auto;">
-            <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank"><img loading="lazy" src="img/stats/top_genres_pages.gif" alt="Animated chart of top genres by pages read" style="width: 100%; margin-bottom: 30px;"></a>
-          </div>
-          <div class="col-12" style="margin: 0 auto;">
-            <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank"><img loading="lazy" src="img/stats/book-titles-word-cloud.png" alt="Word cloud of book titles" style="width: 100%; margin-bottom: 30px;"></a>
-          </div>
-          <div class="col-12" style="margin: 0 auto;">
-            <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank"><img loading="lazy" src="img/stats/genre-word-cloud.png" alt="Word cloud of genres" style="width: 100%; margin-bottom: 30px;"></a>
-          </div>
-          <p style="margin-top: 15px;"><a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank">View the project on GitHub →</a></p>
-        </div>
+      <div class="text-center" style="margin-bottom: 40px;">
+        <h2 class="wow fadeInUp" data-wow-delay="100ms">Selected Reviews</h2>
+        <p class="wow fadeInUp" data-wow-delay="200ms" style="color: #636363;">Honest takes from 1,300+ books on <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank">Goodreads</a>.</p>
       </div>
+      <div class="row" id="reviews-grid"></div>
+    </div>
+  </div>
 
-      <!-- Goodreads Shelves -->
-      <div class="alime-blog-area section-padding-80-0 mb-70">
-        <div class="container">
-
-          <!-- Currently Reading -->
-          <div id="gr_grid_widget_1586460458">
-            <a style="text-decoration: none;" rel="nofollow" href="https://www.goodreads.com/review/list/42371562-ken-reid?shelf=currently-reading&utm_medium=api&utm_source=grid_widget">Currently Reading</a>
-            <div class="gr_grid_container">
-              <div class="gr_grid_book_container"><a title="The Blinding Knife (Lightbringer, #2)" rel="nofollow" href="https://www.goodreads.com/book/show/12499290-the-blinding-knife"><img alt="The Blinding Knife" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1338432693l/12499290._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Martian" rel="nofollow" href="https://www.goodreads.com/book/show/18007564-the-martian"><img alt="The Martian" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413706054l/18007564._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Dracula" rel="nofollow" href="https://www.goodreads.com/book/show/17245.Dracula"><img alt="Dracula" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387151694l/17245._SY160_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Meditations" rel="nofollow" href="https://www.goodreads.com/book/show/30659.Meditations"><img alt="Meditations" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421618636l/30659._SX98_.jpg"></a></div>
-              <br style="clear: both"><br>
-              <a class="gr_grid_branding" style="font-size: .9em; color: #382110; text-decoration: none; float: right; clear: both" rel="nofollow" href="https://www.goodreads.com/user/show/42371562-ken-reid">Ken Reid's favorite books »</a>
-              <noscript><br>Share <a rel="nofollow" href="/">book reviews</a> and ratings with Ken, and even join a <a rel="nofollow" href="/group">book club</a> on Goodreads.</noscript>
-            </div>
-          </div>
-          <!-- Goodreads script deferred to bottom -->
-
-          <!-- To-Read -->
-          <div id="gr_grid_widget_1586460575">
-            <h2>
-              <a style="text-decoration: none;" rel="nofollow" href="https://www.goodreads.com/review/list/42371562-ken-reid?shelf=to-read&utm_medium=api&utm_source=grid_widget">To-Read</a>
-            </h2>
-            <div class="gr_grid_container">
-              <div class="gr_grid_book_container"><a title="Winged Victory" rel="nofollow" href="https://www.goodreads.com/book/show/53013.Winged_Victory"><img alt="Winged Victory" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443482972l/53013._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Sword of Dragons" rel="nofollow" href="https://www.goodreads.com/book/show/25528587-the-sword-of-dragons"><img alt="The Sword of Dragons" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1431467296l/25528587._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Hamlet" rel="nofollow" href="https://www.goodreads.com/book/show/1420.Hamlet"><img alt="Hamlet" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351051208l/1420._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Way of Kings (The Stormlight Archive, #1)" rel="nofollow" href="https://www.goodreads.com/book/show/7235533-the-way-of-kings"><img alt="The Way of Kings" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388184640l/7235533._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Words of Radiance (The Stormlight Archive, #2)" rel="nofollow" href="https://www.goodreads.com/book/show/17332218-words-of-radiance"><img alt="Words of Radiance" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507307927l/17332218._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Edgedancer (The Stormlight Archive, #2.5)" rel="nofollow" href="https://www.goodreads.com/book/show/34703445-edgedancer"><img alt="Edgedancer" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1499706661l/34703445._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Dark Elf Trilogy Collector's Edition (Forgotten Realms: Dark Elf Trilogy, #1-3; Legend of Drizzt, #1-3)" rel="nofollow" href="https://www.goodreads.com/book/show/68418.The_Dark_Elf_Trilogy_Collector_s_Edition"><img alt="The Dark Elf Trilogy Collector's Edition" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388191945l/68418._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Idlewild (Idlewild, #1)" rel="nofollow" href="https://www.goodreads.com/book/show/216351.Idlewild"><img alt="Idlewild" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1303080693l/216351._SY160_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Name of the Wind (The Kingkiller Chronicle, #1)" rel="nofollow" href="https://www.goodreads.com/book/show/186074.The_Name_of_the_Wind"><img alt="The Name of the Wind" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1515589515l/186074._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Bride" rel="nofollow" href="https://www.goodreads.com/book/show/37506827-bride"><img alt="Bride" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1513192623l/37506827._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Drone" rel="nofollow" href="https://www.goodreads.com/book/show/43267218-drone"><img alt="Drone" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1545183713l/43267218._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Chrononaut" rel="nofollow" href="https://www.goodreads.com/book/show/29426987-the-chrononaut"><img alt="The Chrononaut" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1457238127l/29426987._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Keeper of the Crows" rel="nofollow" href="https://www.goodreads.com/book/show/27227265-the-keeper-of-the-crows"><img alt="The Keeper of the Crows" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1445133200l/27227265._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Wrath of Lords" rel="nofollow" href="https://www.goodreads.com/book/show/43549293-the-wrath-of-lords"><img alt="The Wrath of Lords" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1547333178l/43549293._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Will of Queens (Warden of Fál Book 4)" rel="nofollow" href="https://www.goodreads.com/book/show/44778606-the-will-of-queens"><img alt="The Will of Queens" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554313747l/44778606._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="A Sound In The Dark" rel="nofollow" href="https://www.goodreads.com/book/show/35901067-a-sound-in-the-dark"><img alt="A Sound In The Dark" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1501697004l/35901067._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The City of Thieves (Warden of Fál Book 3)" rel="nofollow" href="https://www.goodreads.com/book/show/45480566-the-city-of-thieves"><img alt="The City of Thieves" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1557098310l/45480566._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Good Omens: The Nice and Accurate Prophecies of Agnes Nutter, Witch" rel="nofollow" href="https://www.goodreads.com/book/show/12067.Good_Omens"><img alt="Good Omens: The Nice and Accurate Prophecies of Agnes Nutter, Witch" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1392528568l/12067._SY160_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Republic" rel="nofollow" href="https://www.goodreads.com/book/show/30289.The_Republic"><img alt="The Republic" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386925655l/30289._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Fight Club" rel="nofollow" href="https://www.goodreads.com/book/show/36236124-fight-club"><img alt="Fight Club" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558216416l/36236124._SX98_.jpg"></a></div>
-              <br style="clear: both"><br>
-              <a class="gr_grid_branding" style="font-size: .9em; color: #382110; text-decoration: none; float: right; clear: both" rel="nofollow" href="https://www.goodreads.com/user/show/42371562-ken-reid">Ken Reid's favorite books »</a>
-              <noscript><br>Share <a rel="nofollow" href="/">book reviews</a> and ratings with Ken, and even join a <a rel="nofollow" href="/group">book club</a> on Goodreads.</noscript>
-            </div>
-          </div>
-          <!-- Goodreads script deferred to bottom -->
-
-          <!-- Read -->
-          <div id="gr_grid_widget_1586460554">
-            <h2>
-              <a style="text-decoration: none;" rel="nofollow" href="https://www.goodreads.com/review/list/42371562-ken-reid?shelf=read&utm_medium=api&utm_source=grid_widget">Read</a>
-            </h2>
-            <div class="gr_grid_container">
-              <div class="gr_grid_book_container"><a title="Harry Potter and the Methods of Rationality" rel="nofollow" href="https://www.goodreads.com/book/show/10016013-harry-potter-and-the-methods-of-rationality"><img alt="Harry Potter and the Methods of Rationality" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1293582551l/10016013._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Comparative Programming Languages" rel="nofollow" href="https://www.goodreads.com/book/show/4278508-comparative-programming-languages"><img alt="Comparative Programming Languages" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1266631258l/4278508._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Charlotte's Web" rel="nofollow" href="https://www.goodreads.com/book/show/24178.Charlotte_s_Web"><img alt="Charlotte's Web" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1439632243l/24178._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Black Prism (Lightbringer, #1)" rel="nofollow" href="https://www.goodreads.com/book/show/7165300-the-black-prism"><img alt="The Black Prism" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327921884l/7165300._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Fellowship of the Ring (The Lord of the Rings, #1)" rel="nofollow" href="https://www.goodreads.com/book/show/34.The_Fellowship_of_the_Ring"><img alt="The Fellowship of the Ring" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1298411339l/34._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Two Towers (The Lord of the Rings, #2)" rel="nofollow" href="https://www.goodreads.com/book/show/15241.The_Two_Towers"><img alt="The Two Towers" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1298415523l/15241._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Return of the King (The Lord of the Rings, #3)" rel="nofollow" href="https://www.goodreads.com/book/show/18512.The_Return_of_the_King"><img alt="The Return of the King" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1520258755l/18512._SY160_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Hobbit, or There and Back Again" rel="nofollow" href="https://www.goodreads.com/book/show/5907.The_Hobbit_or_There_and_Back_Again"><img alt="The Hobbit, or There and Back Again" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546071216l/5907._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Modern operating systems" rel="nofollow" href="https://www.goodreads.com/book/show/1817966.Modern_operating_systems"><img alt="Modern operating systems" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1188764957l/1817966._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Art of War" rel="nofollow" href="https://www.goodreads.com/book/show/10534.The_Art_of_War"><img alt="The Art of War" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453417993l/10534._SY160_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Marx: Philosophy in an Hour" rel="nofollow" href="https://www.goodreads.com/book/show/18113998-marx"><img alt="Marx: Philosophy in an Hour" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1372077569l/18113998._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Of Mice and Men" rel="nofollow" href="https://www.goodreads.com/book/show/890.Of_Mice_and_Men"><img alt="Of Mice and Men" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511302904l/890._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The FastTrack to Human-Computer Interaction" rel="nofollow" href="https://www.goodreads.com/book/show/6712930-the-fasttrack-to-human-computer-interaction"><img alt="The FastTrack to Human-Computer Interaction" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348210968l/6712930._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Applied Operating System Concepts, Windows XP Update" rel="nofollow" href="https://www.goodreads.com/book/show/83839.Applied_Operating_System_Concepts_Windows_XP_Update"><img alt="Applied Operating System Concepts, Windows XP Update" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1171047650l/83839._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Discovering Computers 2010: Living in a Digital World, Introductory" rel="nofollow" href="https://www.goodreads.com/book/show/6763540-discovering-computers-2010"><img alt="Discovering Computers 2010: Living in a Digital World, Introductory" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1348537615l/6763540._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Romeo and Juliet" rel="nofollow" href="https://www.goodreads.com/book/show/18135.Romeo_and_Juliet"><img alt="Romeo and Juliet" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1572098085l/18135._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Liferay in Action: The Official Guide to Liferay Portal Development" rel="nofollow" href="https://www.goodreads.com/book/show/9640165-liferay-in-action"><img alt="Liferay in Action: The Official Guide to Liferay Portal Development" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347791796l/9640165._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Lovely Bones" rel="nofollow" href="https://www.goodreads.com/book/show/536.The_Lovely_Bones"><img alt="The Lovely Bones" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328517149l/536._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="Sword of Destiny (The Witcher, #0.75)" rel="nofollow" href="https://www.goodreads.com/book/show/18215192-sword-of-destiny"><img alt="Sword of Destiny" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443434136l/18215192._SX98_.jpg"></a></div>
-              <div class="gr_grid_book_container"><a title="The Last Wish (The Witcher, #0.5)" rel="nofollow" href="https://www.goodreads.com/book/show/40603587-the-last-wish"><img alt="The Last Wish" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529591917l/40603587._SX98_.jpg"></a></div>
-              <br style="clear: both"><br>
-              <a class="gr_grid_branding" style="font-size: .9em; color: #382110; text-decoration: none; float: right; clear: both" rel="nofollow" href="https://www.goodreads.com/user/show/42371562-ken-reid">Ken Reid's favorite books »</a>
-              <noscript><br>Share <a rel="nofollow" href="/">book reviews</a> and ratings with Ken, and even join a <a rel="nofollow" href="/group">book club</a> on Goodreads.</noscript>
-            </div>
-          </div>
-          <!-- Goodreads script deferred to bottom -->
-
-          <p>You can also find me on TikTok:</p>
-          <div class="text-center">
-            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@drkenreid" data-unique-id="drkenreid" data-embed-type="creator" style="max-width: 720px; min-width: 288px;">
-              <section><a target="_blank" href="https://www.tiktok.com/@drkenreid?refer=creator_embed">@drkenreid</a></section>
-            </blockquote>
-            <!-- TikTok script deferred to bottom -->
-          </div>
-
+  <!-- Reading Stats -->
+  <div class="about-us-area section-padding-80-0 clearfix" id="stats">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 40px;">
+        <h2 class="wow fadeInUp" data-wow-delay="100ms">Reading Stats</h2>
+        <p class="wow fadeInUp" data-wow-delay="200ms" style="color: #636363;">
+          Analysis of my reading data with Python.
+          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank">View on GitHub &rarr;</a>
+        </p>
+      </div>
+      <div class="row stats-grid">
+        <div class="col-12 col-md-6 mb-30 wow fadeInUp" data-wow-delay="100ms">
+          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank">
+            <img loading="lazy" src="img/stats/genre-ratings.png" alt="Distribution of ratings for each primary genre">
+          </a>
+        </div>
+        <div class="col-12 col-md-6 mb-30 wow fadeInUp" data-wow-delay="200ms">
+          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank">
+            <img loading="lazy" src="img/stats/reading-by-week.png" alt="Average books read by month, week, and day">
+          </a>
+        </div>
+        <div class="col-12 col-md-6 mb-30 wow fadeInUp" data-wow-delay="300ms">
+          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank">
+            <img loading="lazy" src="img/stats/top_genres_pages.gif" alt="Animated chart of top genres by pages read">
+          </a>
+        </div>
+        <div class="col-12 col-md-6 mb-30 wow fadeInUp" data-wow-delay="400ms">
+          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank">
+            <img loading="lazy" src="img/stats/pagesRead.png" alt="Total pages read per year">
+          </a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Instagram Feed (injected by shared-components.js) -->
+  <!-- Goodreads Shelves -->
+  <div class="about-us-area section-padding-80-0 clearfix" id="shelves">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 40px;">
+        <h2 class="wow fadeInUp" data-wow-delay="100ms">Goodreads Shelves</h2>
+      </div>
+
+      <!-- Currently Reading -->
+      <div id="gr_grid_widget_1586460458" class="mb-30">
+        <h3>Currently Reading</h3>
+        <div class="gr_grid_container">
+          <div class="gr_grid_book_container"><a title="The Blinding Knife (Lightbringer, #2)" rel="nofollow" href="https://www.goodreads.com/book/show/12499290-the-blinding-knife"><img alt="The Blinding Knife" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1338432693l/12499290._SX98_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="The Martian" rel="nofollow" href="https://www.goodreads.com/book/show/18007564-the-martian"><img alt="The Martian" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1413706054l/18007564._SX98_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="Dracula" rel="nofollow" href="https://www.goodreads.com/book/show/17245.Dracula"><img alt="Dracula" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1387151694l/17245._SY160_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="Meditations" rel="nofollow" href="https://www.goodreads.com/book/show/30659.Meditations"><img alt="Meditations" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1421618636l/30659._SX98_.jpg"></a></div>
+          <br style="clear:both">
+        </div>
+      </div>
+
+      <!-- To-Read -->
+      <div id="gr_grid_widget_1586460575" class="mb-30">
+        <h3>To-Read</h3>
+        <div class="gr_grid_container">
+          <div class="gr_grid_book_container"><a title="Winged Victory" rel="nofollow" href="https://www.goodreads.com/book/show/53013.Winged_Victory"><img alt="Winged Victory" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1443482972l/53013._SX98_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="The Way of Kings" rel="nofollow" href="https://www.goodreads.com/book/show/7235533-the-way-of-kings"><img alt="The Way of Kings" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388184640l/7235533._SX98_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="The Name of the Wind" rel="nofollow" href="https://www.goodreads.com/book/show/186074.The_Name_of_the_Wind"><img alt="The Name of the Wind" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1515589515l/186074._SX98_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="The Dark Elf Trilogy" rel="nofollow" href="https://www.goodreads.com/book/show/68418.The_Dark_Elf_Trilogy_Collector_s_Edition"><img alt="The Dark Elf Trilogy" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388191945l/68418._SX98_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="Good Omens" rel="nofollow" href="https://www.goodreads.com/book/show/12067.Good_Omens"><img alt="Good Omens" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1392528568l/12067._SY160_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="The Republic" rel="nofollow" href="https://www.goodreads.com/book/show/30289.The_Republic"><img alt="The Republic" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386925655l/30289._SX98_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="Fight Club" rel="nofollow" href="https://www.goodreads.com/book/show/36236124-fight-club"><img alt="Fight Club" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1558216416l/36236124._SX98_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="Hamlet" rel="nofollow" href="https://www.goodreads.com/book/show/1420.Hamlet"><img alt="Hamlet" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1351051208l/1420._SX98_.jpg"></a></div>
+          <br style="clear:both">
+        </div>
+      </div>
+
+      <!-- Read -->
+      <div id="gr_grid_widget_1586460554" class="mb-30">
+        <h3>Read</h3>
+        <div class="gr_grid_container">
+          <div class="gr_grid_book_container"><a title="Harry Potter and the Methods of Rationality" rel="nofollow" href="https://www.goodreads.com/book/show/10016013-harry-potter-and-the-methods-of-rationality"><img alt="HPMOR" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1293582551l/10016013._SX98_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="The Black Prism" rel="nofollow" href="https://www.goodreads.com/book/show/7165300-the-black-prism"><img alt="The Black Prism" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327921884l/7165300._SX98_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="The Fellowship of the Ring" rel="nofollow" href="https://www.goodreads.com/book/show/34.The_Fellowship_of_the_Ring"><img alt="Fellowship of the Ring" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1298411339l/34._SX98_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="The Hobbit" rel="nofollow" href="https://www.goodreads.com/book/show/5907.The_Hobbit_or_There_and_Back_Again"><img alt="The Hobbit" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1546071216l/5907._SX98_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="The Art of War" rel="nofollow" href="https://www.goodreads.com/book/show/10534.The_Art_of_War"><img alt="The Art of War" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1453417993l/10534._SY160_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="Of Mice and Men" rel="nofollow" href="https://www.goodreads.com/book/show/890.Of_Mice_and_Men"><img alt="Of Mice and Men" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1511302904l/890._SX98_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="The Last Wish" rel="nofollow" href="https://www.goodreads.com/book/show/40603587-the-last-wish"><img alt="The Last Wish" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1529591917l/40603587._SX98_.jpg"></a></div>
+          <div class="gr_grid_book_container"><a title="The Lovely Bones" rel="nofollow" href="https://www.goodreads.com/book/show/536.The_Lovely_Bones"><img alt="The Lovely Bones" border="0" loading="lazy" src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328517149l/536._SX98_.jpg"></a></div>
+          <br style="clear:both">
+        </div>
+      </div>
+
+      <div class="text-center" style="margin-top: 20px;">
+        <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" class="btn alime-btn btn-2">View full shelves on Goodreads &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Find Me -->
+  <div class="about-us-area section-padding-80-0 clearfix" id="find">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 40px;">
+        <h2 class="wow fadeInUp" data-wow-delay="100ms">Find Me</h2>
+        <div class="wow fadeInUp" data-wow-delay="200ms" style="margin-top: 20px;">
+          <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" class="btn alime-btn" style="margin: 5px;">📚 Goodreads</a>
+          <a href="https://www.tiktok.com/@drkenreid" target="_blank" class="btn alime-btn btn-2" style="margin: 5px;">🎵 TikTok</a>
+          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" class="btn alime-btn btn-2" style="margin: 5px;">📊 Analysis Repo</a>
+          <a href="https://github.com/DrKenReid/GoodReads-Quotes-PDF" target="_blank" class="btn alime-btn btn-2" style="margin: 5px;">💬 Quotes Tool</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
   <div id="instagram-section"></div>
-
-  <!-- Footer (injected by shared-components.js) -->
   <div id="footer-section"></div>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 
-  <!-- JavaScript -->
   <script src="js/jquery.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
@@ -245,29 +192,10 @@
   <script src="js/default-assets/active.js"></script>
   <script src="js/shared-components.js"></script>
   <script>
+    initQuotes();
+    initReviews();
     renderInstagramSection('instagram-section');
     renderFooter('footer-section');
   </script>
-  <script>
-    // Defer heavy third-party scripts until after page render
-    window.addEventListener('load', function() {
-      setTimeout(function() {
-        var scripts = [
-          "https://www.goodreads.com/review/grid_widget/42371562.Ken's%20currently-reading%20book%20montage?cover_size=medium&hide_link=&hide_title=&num_books=20&order=d&shelf=currently-reading&sort=date_added&widget_id=1586460458",
-          "https://www.goodreads.com/review/grid_widget/42371562.Ken's%20to-read%20book%20montage?cover_size=medium&hide_link=&hide_title=&num_books=200&order=d&shelf=to-read&sort=author&widget_id=1586460575",
-          "https://www.goodreads.com/review/grid_widget/42371562.Ken's%20read%20book%20montage?cover_size=medium&hide_link=&hide_title=&num_books=200&order=d&shelf=read&sort=author&widget_id=1586460554",
-          "https://www.tiktok.com/embed.js"
-        ];
-        scripts.forEach(function(src) {
-          var s = document.createElement('script');
-          s.src = src;
-          s.async = true;
-          s.charset = 'utf-8';
-          document.body.appendChild(s);
-        });
-      }, 100);
-    });
-  </script>
-
 </body>
 </html>
