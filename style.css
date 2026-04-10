@@ -1776,8 +1776,8 @@ input:required {
   text-align: center;
   position: relative;
   min-height: 280px;
-  border-top: 3px solid #fc6060;
-  border-bottom: 3px solid #fc6060; }
+  border-top: 3px solid #ebebeb;
+  border-bottom: 3px solid #ebebeb; }
   .quote-inner {
     max-width: 800px;
     margin: 0 auto; }
