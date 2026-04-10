@@ -1668,3 +1668,68 @@ input:required {
     width: 100%;
     height: auto;
     aspect-ratio: 16 / 9; }
+
+/* ==============================
+   Gallery Filter Buttons & Tags
+   ============================== */
+
+.gallery-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding: 0 15px; }
+
+.gallery-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 2px solid #ddd;
+  border-radius: 25px;
+  background: transparent;
+  color: #636363;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  -webkit-transition: all 300ms;
+  transition: all 300ms; }
+  .gallery-filter-btn:hover {
+    border-color: #fc6060;
+    color: #fc6060; }
+  .gallery-filter-btn.active {
+    background: #fc6060;
+    border-color: #fc6060;
+    color: #fff; }
+  .gallery-filter-btn .filter-count {
+    display: inline-block;
+    background: rgba(0,0,0,0.1);
+    border-radius: 12px;
+    padding: 1px 8px;
+    font-size: 12px;
+    min-width: 24px;
+    text-align: center; }
+  .gallery-filter-btn.active .filter-count {
+    background: rgba(255,255,255,0.25); }
+  @media only screen and (max-width: 575px) {
+    .gallery-filter-btn {
+      padding: 6px 12px;
+      font-size: 12px; } }
+
+.tag-badges {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  z-index: 5; }
+
+.tag-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 14px;
+  background: rgba(0,0,0,0.5);
+  cursor: default; }

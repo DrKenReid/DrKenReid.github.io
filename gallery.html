@@ -164,6 +164,8 @@
     <div class="alime-portfolio-area section-padding-80 clearfix">
       <div class="container-fluid">
         <h2><a name="gallery">Gallery</a></h2>
+        <p style="color: #636363; margin-bottom: 20px;">364 photos shot on a Canon EOS 60D · Click a tag to filter</p>
+        <div id="gallery-filters" class="gallery-filters text-center" style="margin-bottom: 30px;"></div>
         <div class="row alime-portfolio" id="gallery-grid"></div>
         <div class="row">
           <div class="col-12 text-center" style="margin-top: 15px;">
@@ -199,7 +201,7 @@
   <script src="js/bootstrap.min.js"></script>
   <script src="js/alime.bundle.js"></script>
   <!-- Build gallery before active.js so Isotope & WOW find the elements -->
-  <script>buildImageHTML();</script>
+  <script>initGallery();</script>
   <script src="js/default-assets/active.js"></script>
   <script src="js/shared-components.js"></script>
   <script>
