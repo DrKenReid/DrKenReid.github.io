@@ -38,7 +38,7 @@ picks = [
     "The Great Gatsby",
     "What We Owe the Future",
     # Thoughtful / reflective
-    "White Fragility",
+    "Invisible Women",
     "A Little Life",
     "Life of Pi",
     "Name of the Wind",
