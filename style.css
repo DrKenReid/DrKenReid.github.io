@@ -1807,8 +1807,8 @@ input:required {
     cursor: pointer;
     transition: background 0.3s; }
     .quote-nav:hover { background: rgba(252,96,96,0.3); }
-    .quote-nav.prev { left: 20px; }
-    .quote-nav.next { right: 20px; }
+    .quote-nav.prev { left: calc(50% - 440px); }
+    .quote-nav.next { right: calc(50% - 440px); }
   @media only screen and (max-width: 767px) {
     .quote-carousel #quote-text { font-size: 17px; }
     .quote-nav { display: none; } }
