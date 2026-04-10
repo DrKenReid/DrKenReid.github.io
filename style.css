@@ -1775,22 +1775,21 @@ input:required {
   padding: 60px 20px;
   text-align: center;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   min-height: 280px; }
+  .quote-inner {
+    max-width: 800px;
+    margin: 0 auto; }
   .quote-carousel #quote-text {
     font-size: 22px;
     font-style: italic;
     color: #e0e0e0;
-    max-width: 800px;
-    margin: 0 auto 20px;
+    margin: 0 0 20px;
     line-height: 1.6;
     transition: opacity 0.4s ease; }
   .quote-carousel #quote-attr {
     font-size: 16px;
     color: #fc6060;
+    margin: 0;
     transition: opacity 0.4s ease; }
   .quote-nav {
     position: absolute;
