@@ -2,115 +2,161 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Ken Reid's music page — Last.fm listening stats and fingerstyle guitar performances.">
+  <meta name="description" content="Ken Reid's music page — Last.fm listening stats, playlists, and fingerstyle guitar.">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Music - Ken Reid</title>
-
-  <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="Ken Reid - Music">
-  <meta property="og:description" content="Ken Reid's music page — Last.fm listening stats and fingerstyle guitar performances.">
-  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/2.png">
+  <meta property="og:description" content="Ken Reid's music page — Last.fm listening stats, playlists, and fingerstyle guitar.">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/205.png">
   <meta property="og:url" content="https://www.kenreid.co.uk/music.html">
   <meta property="og:type" content="website">
-
-  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-134737006-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-134737006-1');
-  </script>
-
-  <!-- Favicon & Manifest -->
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','UA-134737006-1');</script>
   <link rel="icon" href="./img/core-img/favicon.png">
   <meta name="theme-color" content="#000000">
   <link rel="manifest" href="manifest.json">
-
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- Preloader -->
-  <div id="preloader">
-    <div class="loader"></div>
-  </div>
+  <div id="preloader"><div class="loader"></div></div>
 
   <!-- Header -->
-  <header class="header-area">
-    <div class="main-header-area">
-        <div class="classy-nav-container breakpoint-on">
-        <div class="container">
-          <nav class="classy-navbar justify-content-between" id="alimeNav">
-            <a class="nav-brand" href="./index.html"><img src="./img/core-img/logo.png" alt="Ken Reid Logo"></a>
-            <div class="classy-navbar-toggler">
-              <span class="navbarToggler"><span></span><span></span><span></span></span>
-            </div>
-            <div class="classy-menu">
-              <div class="classycloseIcon">
-                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
-              </div>
-              <div class="classynav">
-                <ul id="nav">
-                  <li><a href="./index.html">Home</a></li>
-                  <li><a href="./about.html">About</a></li>
-                  <li><a href="./data_science.html">Data Science</a></li>
-                  <li><a href="./gallery.html">Photography</a></li>
-                  <li class="active"><a href="./music.html">Music</a></li>
-                  <li><a href="./literature.html">Literature</a></li>
-                  <li><a href="./contact.html">Contact</a></li>
-                </ul>
-              </div>
-            </div>
-          </nav>
-        </div>
-      </div>
-    </div>
-  </header>
+  <header class="header-area"><div class="main-header-area"><div class="classy-nav-container breakpoint-on"><div class="container">
+    <nav class="classy-navbar justify-content-between" id="alimeNav">
+      <a class="nav-brand" href="./index.html"><img src="./img/core-img/logo.png" alt="Ken Reid Logo"></a>
+      <div class="classy-navbar-toggler"><span class="navbarToggler"><span></span><span></span><span></span></span></div>
+      <div class="classy-menu"><div class="classycloseIcon"><div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div></div>
+        <div class="classynav"><ul id="nav">
+          <li><a href="./index.html">Home</a></li>
+          <li><a href="./about.html">About</a></li>
+          <li><a href="./data_science.html">Data Science</a></li>
+          <li><a href="./gallery.html">Photography</a></li>
+          <li class="active"><a href="./music.html">Music</a></li>
+          <li><a href="./literature.html">Literature</a></li>
+          <li><a href="./contact.html">Contact</a></li>
+        </ul></div></div>
+    </nav>
+  </div></div></div></header>
 
   <!-- Breadcrumb -->
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/bg-img/205.png);">
-    <div class="container h-100">
-      <div class="row h-100 align-items-center">
-        <div class="col-12">
-          <div class="breadcrumb-content text-center">
-            <h2 class="page-title">Music</h2>
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb justify-content-center">
-                <li class="breadcrumb-item"><a href="index.html"><i class="icon_house_alt"></i> Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Music</li>
-              </ol>
-            </nav>
-          </div>
-        </div>
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <h2 class="page-title">Music</h2>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Music</li>
+        </ol></nav>
       </div>
-    </div>
+    </div></div></div>
   </section>
 
-  <!-- Last.fm Section -->
-  <div class="alime--blog-area section-padding-80">
+  <!-- Guitar -->
+  <div class="about-us-area section-padding-80-0 clearfix" id="guitar">
     <div class="container">
-      <h1 class="text-center">Last.fm</h1>
-      <p class="text-center" style="margin-bottom: 30px;">I've been tracking my listening habits on <a href="https://www.last.fm/user/gohex">Last.fm</a> since early 2014. Check out a live summary below — I tend to listen to a lot of metal and post-rock.</p>
-      <div class="row justify-content-center">
-        <div class="col-12 col-lg-10">
-          <div class="blog-details-text">
-            <iframe src="https://lastfmstats.com/user/gohex/charts" title="Last.fm Stats" style="border: none;" width="100%" height="1500"></iframe>
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-6">
+          <div class="about-us-content mb-80">
+            <h2 class="wow fadeInUp" data-wow-delay="100ms">Fingerstyle Guitar</h2>
+            <p class="wow fadeInUp" data-wow-delay="200ms">
+              I play fingerstyle acoustic guitar — mostly covers and arrangements of video game and film soundtracks.
+              Some of my favourite artists to learn from include Andy McKee, Beyond The Guitar, and Isac Saleh.
+            </p>
+            <p class="wow fadeInUp" data-wow-delay="300ms" style="color: #636363; font-style: italic;">
+              Recordings coming soon to YouTube and TikTok.
+            </p>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="about-video-area mb-80 wow fadeInUp" data-wow-delay="100ms">
+            <img src="img/bg-img/205.png" alt="Music" style="border-radius: 8px;">
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Instagram Feed (injected by shared-components.js) -->
+  <!-- Playlists -->
+  <div class="about-us-area section-padding-80-0 clearfix" id="playlists">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 40px;">
+        <h2 class="wow fadeInUp" data-wow-delay="100ms">Playlists</h2>
+        <p class="wow fadeInUp" data-wow-delay="200ms" style="color: #636363;">Curated playlists for different moods.</p>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-sm-6 col-lg-4 mb-30 text-center wow fadeInUp" data-wow-delay="100ms">
+          <div style="background: #f7f7f7; border-radius: 8px; padding: 30px 20px;">
+            <h3 style="font-size: 40px; margin-bottom: 10px;">💪</h3>
+            <h4>Bumpin' &amp; Pumpin'</h4>
+            <p style="color: #636363; font-size: 14px; margin-bottom: 20px;">High energy. Workouts, driving, getting things done.</p>
+            <a href="https://music.youtube.com/playlist?list=PL28uJMhymELvn2fm5rtkGJcO_rwGQ6QqF" target="_blank" class="btn alime-btn btn-2">Listen on YouTube Music</a>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4 mb-30 text-center wow fadeInUp" data-wow-delay="200ms">
+          <div style="background: #f7f7f7; border-radius: 8px; padding: 30px 20px;">
+            <h3 style="font-size: 40px; margin-bottom: 10px;">📚</h3>
+            <h4>Study Music</h4>
+            <p style="color: #636363; font-size: 14px; margin-bottom: 20px;">Ambient, instrumental, focus-friendly. For deep work.</p>
+            <a href="https://music.youtube.com/playlist?list=PL28uJMhymELud3zj0IP4S7HbXVh1W1VJP" target="_blank" class="btn alime-btn btn-2">Listen on YouTube Music</a>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4 mb-30 text-center wow fadeInUp" data-wow-delay="300ms">
+          <div style="background: #f7f7f7; border-radius: 8px; padding: 30px 20px;">
+            <h3 style="font-size: 40px; margin-bottom: 10px;">🌧️</h3>
+            <h4>Depression Session</h4>
+            <p style="color: #636363; font-size: 14px; margin-bottom: 20px;">Melancholy, introspective, cathartic. For those days.</p>
+            <a href="https://music.youtube.com/playlist?list=PL28uJMhymELu2qJuY-bc4ve_FrV6OrX2x" target="_blank" class="btn alime-btn btn-2">Listen on YouTube Music</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Last.fm Stats -->
+  <div class="about-us-area section-padding-80 clearfix" id="lastfm">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 30px;">
+        <h2 class="wow fadeInUp" data-wow-delay="100ms">Listening Stats</h2>
+        <p class="wow fadeInUp" data-wow-delay="200ms" style="color: #636363;">
+          Tracking my listening habits on <a href="https://www.last.fm/user/gohex" target="_blank">Last.fm</a> since 2014.
+          Eclectic taste — Ludovico Einaudi, Alkaline Trio, Jeremy Soule, Rammstein, Andy McKee, and everything in between.
+        </p>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <iframe src="https://lastfmstats.com/user/gohex/charts" title="Last.fm Stats" style="border: none; border-radius: 8px;" width="100%" height="1500" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Find Me -->
+  <div class="about-us-area section-padding-80-0 clearfix" id="find">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 40px;">
+        <h2 class="wow fadeInUp" data-wow-delay="100ms">Find Me</h2>
+      </div>
+      <div class="row justify-content-center" style="margin-bottom: 40px;">
+        <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center wow fadeInUp" data-wow-delay="100ms">
+          <a href="https://www.last.fm/user/gohex" target="_blank" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">🎵 Last.fm</a>
+          <p style="color: #636363; font-size: 14px;">Full scrobble history since 2014. Over 30,000 tracks.</p>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center wow fadeInUp" data-wow-delay="200ms">
+          <a href="https://www.youtube.com/@kenreid" target="_blank" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">🎬 YouTube</a>
+          <p style="color: #636363; font-size: 14px;">Guitar performances and playlists.</p>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center wow fadeInUp" data-wow-delay="300ms">
+          <a href="https://www.tiktok.com/@drkenreid" target="_blank" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">🎸 TikTok</a>
+          <p style="color: #636363; font-size: 14px;">Guitar performances and music content (coming soon).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
   <div id="instagram-section"></div>
-
-  <!-- Footer (injected by shared-components.js) -->
   <div id="footer-section"></div>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 
-  <!-- JavaScript -->
   <script src="js/jquery.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
@@ -121,6 +167,5 @@
     renderInstagramSection('instagram-section');
     renderFooter('footer-section');
   </script>
-
 </body>
 </html>
