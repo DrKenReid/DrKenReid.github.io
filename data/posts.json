@@ -1,0 +1,10 @@
+[
+  {
+    "title": "Building a Photo Tagging System with CLIP",
+    "date": "2026-04-10",
+    "tags": ["data-science", "python", "photography"],
+    "excerpt": "How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute — zero API cost, running entirely on CPU.",
+    "url": "blog/photo-tagging-with-clip.html",
+    "image": "img/bg-img/1.png"
+  }
+]

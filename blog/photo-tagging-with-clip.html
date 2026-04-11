@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="How I used OpenCLIP to automatically classify 370 photos into 10 categories — zero API cost.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Building a Photo Tagging System with CLIP - Ken Reid</title>
+  <meta property="og:title" content="Building a Photo Tagging System with CLIP">
+  <meta property="og:description" content="How I used OpenCLIP to automatically classify 370 photos into 10 categories — zero API cost.">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/1.png">
+  <meta property="og:url" content="https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html">
+  <meta property="og:type" content="article">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-134737006-1"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','UA-134737006-1');</script>
+  <link rel="icon" href="../img/core-img/favicon.png">
+  <meta name="theme-color" content="#000000">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .blog-post { max-width: 780px; margin: 0 auto; }
+    .blog-post h1 { font-size: 32px; margin-bottom: 10px; }
+    .blog-post .blog-meta { color: #888; font-size: 14px; margin-bottom: 30px; }
+    .blog-post .blog-meta .blog-tag { margin-left: 4px; }
+    .blog-post p { font-size: 16px; line-height: 1.9; color: #444; margin-bottom: 20px; }
+    .blog-post h2 { font-size: 24px; margin: 40px 0 15px; }
+    .blog-post h3 { font-size: 20px; margin: 30px 0 10px; }
+    .blog-post img { max-width: 100%; border-radius: 8px; margin: 20px 0; }
+    .blog-post code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 14px; }
+    .blog-post pre { background: #252525; color: #e0e0e0; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 20px 0; }
+    .blog-post pre code { background: none; padding: 0; color: inherit; }
+    .blog-post blockquote { border-left: 4px solid #fc6060; padding: 15px 20px; margin: 20px 0; background: #f7f7f7; border-radius: 0 8px 8px 0; }
+    .blog-post blockquote p { margin: 0; font-style: italic; }
+    .blog-post ul, .blog-post ol { margin-bottom: 20px; padding-left: 25px; }
+    .blog-post li { font-size: 16px; line-height: 1.9; color: #444; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <!-- Header -->
+  <header class="header-area"><div class="main-header-area"><div class="classy-nav-container breakpoint-on"><div class="container">
+    <nav class="classy-navbar justify-content-between" id="alimeNav">
+      <a class="nav-brand" href="../index.html"><img src="../img/core-img/logo.png" alt="Ken Reid Logo"></a>
+      <div class="classy-navbar-toggler"><span class="navbarToggler"><span></span><span></span><span></span></span></div>
+      <div class="classy-menu"><div class="classycloseIcon"><div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div></div>
+        <div class="classynav"><ul id="nav">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../data_science.html">Data Science</a></li>
+          <li><a href="../gallery.html">Photography</a></li>
+          <li><a href="../music.html">Music</a></li>
+          <li><a href="../literature.html">Literature</a></li>
+          <li class="active"><a href="../blog.html">Blog</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul></div></div>
+    </nav>
+  </div></div></div></header>
+
+  <!-- Breadcrumb -->
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/bg-img/1.png);">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <h2 class="page-title">Blog</h2>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Photo Tagging with CLIP</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <!-- Post Content -->
+  <div class="about-us-area section-padding-80 clearfix">
+    <div class="container">
+      <div class="blog-post">
+        <h1>Building a Photo Tagging System with CLIP</h1>
+        <div class="blog-meta">
+          10 April 2026 &middot;
+          <span class="blog-tag">data-science</span>
+          <span class="blog-tag">python</span>
+          <span class="blog-tag">photography</span>
+        </div>
+
+        <p>My photography gallery has 370 images spanning a decade of shooting — landscapes, urban decay, wildlife, portraits, and everything in between. For years they sat in a flat grid with no way to filter or browse by subject. I wanted category tags, but manually tagging 370 photos sounded like a weekend I'd never get back.</p>
+
+        <p>Enter <a href="https://github.com/mlfoundations/open_clip" target="_blank">OpenCLIP</a> — an open-source implementation of OpenAI's CLIP model that maps images and text into the same embedding space. The idea: describe each category in plain English, encode both the descriptions and the photos, then match them by cosine similarity.</p>
+
+        <h2>The Approach</h2>
+
+        <p>I defined 10 categories, each with 3-4 descriptive text prompts:</p>
+
+        <ul>
+          <li><strong>Landscape</strong> — "a wide landscape photograph of hills and countryside"</li>
+          <li><strong>Urban</strong> — "a photograph of a city street or urban scene"</li>
+          <li><strong>Architecture</strong> — "a photograph focused on a building or architectural structure"</li>
+          <li><strong>Abandoned</strong> — "a photograph of an abandoned or derelict building"</li>
+          <li><strong>Wildlife</strong> — "a photograph of an animal or bird"</li>
+          <li><strong>Nature</strong> — "a close-up photograph of trees, flowers, or plants"</li>
+          <li><strong>Portrait</strong> — "a portrait photograph of a person"</li>
+          <li><strong>B&amp;W</strong> — "a black and white photograph"</li>
+          <li><strong>Silhouette</strong> — "a silhouette photograph with a backlit subject"</li>
+          <li><strong>Winter</strong> — "a winter photograph with snow on the ground"</li>
+        </ul>
+
+        <p>Multiple prompts per category improves accuracy — the model averages the text embeddings, giving a more robust representation than a single phrase.</p>
+
+        <h2>Results</h2>
+
+        <p>The ViT-B-32 model processed all 370 images in <strong>44 seconds</strong> on CPU. No GPU needed, no API calls, zero cost.</p>
+
+        <p>Each image gets multi-label tags (a photo can be both "landscape" and "winter"), with per-category similarity thresholds tuned to get roughly 1.3 tags per image on average. The output is a simple JSON mapping filename to tag array:</p>
+
+        <pre><code>{
+  "1": ["nature", "silhouette"],
+  "15": ["abandoned", "bw"],
+  "50": ["architecture", "bw", "urban"],
+  "300": ["wildlife"]
+}</code></pre>
+
+        <h2>Accuracy</h2>
+
+        <p>Spot-checking against my own judgement, I'd estimate 85-90% accuracy. The model handles clear cases well — a sheep in a field is "wildlife", a monochrome street scene is "bw" + "urban". Edge cases like a painted traffic cone on a street getting tagged "architecture" are the main failure mode.</p>
+
+        <p>The beauty of the approach is that re-running is trivial. Tweak a threshold, adjust a prompt, run again in under a minute.</p>
+
+        <h2>Integration</h2>
+
+        <p>The tags JSON feeds into the gallery page via JavaScript. Filter buttons with emoji and counts sit above the photo grid — click "🐾 Wildlife (78)" and the gallery filters instantly. The existing Isotope layout handles the animation.</p>
+
+        <p>The tagging script lives in the repo at <code>scripts/tag_photos.py</code> — if I add new photos, I just re-run it.</p>
+
+        <h2>What I'd Do Differently</h2>
+
+        <ul>
+          <li>A larger CLIP model (ViT-L-14) would improve accuracy on ambiguous images, at the cost of slower inference.</li>
+          <li>Adding a "creative/abstract" category would catch the lensball shots and experimental compositions that currently get shoehorned into other categories.</li>
+          <li>A manual override JSON that merges with the auto-generated tags would let me fix the obvious misses without re-running the whole pipeline.</li>
+        </ul>
+
+        <p>The full code is on <a href="https://github.com/DrKenReid/DrKenReid.github.io/blob/master/scripts/tag_photos.py" target="_blank">GitHub</a>, and you can see the result on the <a href="../gallery.html">Photography</a> page.</p>
+
+        <hr style="margin: 40px 0;">
+        <p style="text-align: center;"><a href="../blog.html">&larr; Back to all posts</a></p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/alime.bundle.js"></script>
+  <script src="../js/default-assets/active.js"></script>
+  <script src="../js/shared-components.js"></script>
+  <script>renderFooter('footer-section');</script>
+</body>
+</html>
