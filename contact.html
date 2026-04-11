@@ -169,27 +169,7 @@
               <a href="https://bsky.app/profile/drkenreid.bsky.social" target="_blank">@drkenreid.bsky.social</a>
             </p>
           </div>
-          <div class="wow fadeInUp" data-wow-delay="300ms" style="margin-bottom: 20px;">
-            <blockquote class="bluesky-embed" data-bluesky-uri="at://did:plc:ks2rxbqomt6vsae6tepl6pcm/app.bsky.feed.post/3mfcdu5m4p22b" data-bluesky-cid="bafyreifmbxspb3zalfulhxj3ulqx4qzpxy2nbhzbjkzuay7mxrneavt2ry">
-              <p lang="en">What is with the media using the word "Slammed" for most minor of criticisms. People can disagree without being SLAMMED.</p>
-              &mdash; Ken Reid (<a href="https://bsky.app/profile/drkenreid.bsky.social?ref_src=embed">@drkenreid.bsky.social</a>)
-              <a href="https://bsky.app/profile/drkenreid.bsky.social/post/3mfcdu5m4p22b?ref_src=embed">February 20, 2026</a>
-            </blockquote>
-          </div>
-          <div class="wow fadeInUp" data-wow-delay="400ms" style="margin-bottom: 20px;">
-            <blockquote class="bluesky-embed" data-bluesky-uri="at://did:plc:ks2rxbqomt6vsae6tepl6pcm/app.bsky.feed.post/3m4g6d3sxl22e" data-bluesky-cid="bafyreiadbku7x357yyrn2a6yt3fnqpbt3carr2cgp2beqp3xeop6ub72cq">
-              <p lang="en">Request: someone please find all the scenes in charmed where the cast are idle, looking around waiting. Feels like 30% of every episode. Then merge them into one super long "Charmed Idle Ambience" YouTube video.</p>
-              &mdash; Ken Reid (<a href="https://bsky.app/profile/drkenreid.bsky.social?ref_src=embed">@drkenreid.bsky.social</a>)
-              <a href="https://bsky.app/profile/drkenreid.bsky.social/post/3m4g6d3sxl22e?ref_src=embed">October 30, 2025</a>
-            </blockquote>
-          </div>
-          <div class="wow fadeInUp" data-wow-delay="500ms" style="margin-bottom: 20px;">
-            <blockquote class="bluesky-embed" data-bluesky-uri="at://did:plc:ks2rxbqomt6vsae6tepl6pcm/app.bsky.feed.post/3m3q7zgee7s2g" data-bluesky-cid="bafyreiaob63djrr53hvttlr6fmdromkgumwicpv36keohryidd3txkqism">
-              <p lang="en">Hey can we genetically modify grass so it changes colors like tree leaves in the fall?</p>
-              &mdash; Ken Reid (<a href="https://bsky.app/profile/drkenreid.bsky.social?ref_src=embed">@drkenreid.bsky.social</a>)
-              <a href="https://bsky.app/profile/drkenreid.bsky.social/post/3m3q7zgee7s2g?ref_src=embed">October 21, 2025</a>
-            </blockquote>
-          </div>
+          <div id="bsky-posts" class="wow fadeInUp" data-wow-delay="300ms"></div>
         </div>
       </div>
     </div>
@@ -226,13 +206,50 @@
   <script>
     renderInstagramSection('instagram-section');
     renderFooter('footer-section');
-    // Bluesky embed widget
-    window.addEventListener('load', function() {
-      var s = document.createElement('script');
-      s.src = 'https://embed.bsky.app/static/embed.js';
-      s.async = true;
-      document.body.appendChild(s);
-    });
+
+    /* Fetch latest Bluesky posts and render as embeds */
+    (function() {
+      var DID = 'did:plc:ks2rxbqomt6vsae6tepl6pcm';
+      var HANDLE = 'drkenreid.bsky.social';
+      var container = document.getElementById('bsky-posts');
+      if (!container) return;
+
+      fetch('https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=' + DID + '&limit=5&filter=posts_no_replies')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (!data.feed || !data.feed.length) {
+            container.innerHTML = '<p style="color:#636363;text-align:center;">No recent posts.</p>';
+            return;
+          }
+          data.feed.forEach(function(item) {
+            var post = item.post;
+            var record = post.record;
+            var rkey = post.uri.split('/').pop();
+            var date = new Date(record.createdAt);
+            var dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            var div = document.createElement('div');
+            div.style.marginBottom = '20px';
+            div.innerHTML =
+              '<blockquote class="bluesky-embed" data-bluesky-uri="' + post.uri + '" data-bluesky-cid="' + post.cid + '">' +
+                '<p lang="en">' + (record.text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</p>' +
+                '&mdash; ' + (post.author.displayName || HANDLE) +
+                ' (<a href="https://bsky.app/profile/' + HANDLE + '?ref_src=embed">@' + HANDLE + '</a>) ' +
+                '<a href="https://bsky.app/profile/' + HANDLE + '/post/' + rkey + '?ref_src=embed">' + dateStr + '</a>' +
+              '</blockquote>';
+            container.appendChild(div);
+          });
+
+          /* Load Bluesky embed widget to render the blockquotes */
+          var s = document.createElement('script');
+          s.src = 'https://embed.bsky.app/static/embed.js';
+          s.async = true;
+          document.body.appendChild(s);
+        })
+        .catch(function() {
+          container.innerHTML = '<p style="color:#636363;text-align:center;">Could not load posts. <a href="https://bsky.app/profile/' + HANDLE + '" target="_blank">View on Bluesky</a></p>';
+        });
+    })();
   </script>
 </body>
 </html>
