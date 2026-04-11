@@ -10,16 +10,6 @@
     "book": "Thinking, Fast and Slow"
   },
   {
-    "quote": "Sometimes, immersed in his books, there would come to him the awareness of all that he did not know, of all that he had not read; and the serenity for which he labored was shattered as he realized the little time he had in life to read so much, to learn what he had to know.",
-    "author": "John Williams",
-    "book": "Stoner"
-  },
-  {
-    "quote": "Who controls the past controls the future. Who controls the present controls the past.",
-    "author": "George Orwell",
-    "book": "1984"
-  },
-  {
     "quote": "Hence I have no mercy or compassion in me for a society that will crush people, and then penalize them for not being able to stand up under the weight.",
     "author": "Malcolm X",
     "book": "The Autobiography of Malcolm X"
@@ -30,19 +20,29 @@
     "book": "The Tombs of Atuan"
   },
   {
+    "quote": "War doesn't determine who's right. War determines who remains.",
+    "author": "R.F. Kuang",
+    "book": "The Poppy War"
+  },
+  {
+    "quote": "What's the point of having a voice if you're gonna be silent in those moments you shouldn't be?",
+    "author": "Angie Thomas",
+    "book": "The Hate U Give"
+  },
+  {
+    "quote": "Nothing is so painful to the human mind as a great and sudden change.",
+    "author": "Mary Shelley",
+    "book": "Frankenstein"
+  },
+  {
     "quote": "You act like mortals in all that you fear, and like immortals in all that you desire.",
     "author": "Seneca",
     "book": "On the Shortness of Life"
   },
   {
-    "quote": "It is very hard for evil to take hold of the unconsenting soul.",
-    "author": "Ursula K. Le Guin",
-    "book": "A Wizard of Earthsea"
-  },
-  {
-    "quote": "There is no God and we are his prophets.",
-    "author": "Cormac McCarthy",
-    "book": "The Road"
+    "quote": "Sometimes, immersed in his books, there would come to him the awareness of all that he did not know, of all that he had not read; and the serenity for which he labored was shattered as he realized the little time he had in life to read so much, to learn what he had to know.",
+    "author": "John Williams",
+    "book": "Stoner"
   },
   {
     "quote": "Does the walker choose the path, or the path the walker?",
