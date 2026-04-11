@@ -148,13 +148,13 @@
       <div class="text-center" style="margin-bottom: 40px;">
         <h2 class="wow fadeInUp" data-wow-delay="100ms">Find Me</h2>
       </div>
-      <div class="row justify-content-center" style="margin-bottom: 40px;">
-        <div class="col-12 col-md-4 mb-30 wow fadeInUp" data-wow-delay="100ms">
+      <div class="row justify-content-center" style="margin-bottom: 40px; display: flex; flex-wrap: wrap; align-items: stretch;">
+        <div class="col-12 col-md-4 mb-30 wow fadeInUp" data-wow-delay="100ms" style="display: flex; flex-direction: column;">
           <div class="text-center" style="margin-bottom: 15px;">
             <h4>🎵 Last.fm</h4>
             <p style="color: #636363; font-size: 14px;">Scrobbling since 2014.</p>
           </div>
-          <a href="https://www.last.fm/user/gohex" target="_blank" style="display: block; background: #f7f7f7; border-radius: 8px; padding: 25px 20px; text-decoration: none; transition: transform 0.3s, box-shadow 0.3s;" class="review-card">
+          <a href="https://www.last.fm/user/gohex" target="_blank" style="display: flex; flex-direction: column; justify-content: center; flex: 1; background: #f7f7f7; border-radius: 8px; padding: 25px 20px; text-decoration: none; transition: transform 0.3s, box-shadow 0.3s;" class="review-card">
             <div style="display: flex; justify-content: space-around; text-align: center; margin-bottom: 20px;">
               <div>
                 <div style="font-size: 28px; font-weight: 700; color: #fc6060;">49K+</div>
@@ -184,26 +184,30 @@
             </div>
           </a>
         </div>
-        <div class="col-12 col-md-4 mb-30 wow fadeInUp" data-wow-delay="200ms">
+        <div class="col-12 col-md-4 mb-30 wow fadeInUp" data-wow-delay="200ms" style="display: flex; flex-direction: column;">
           <div class="text-center" style="margin-bottom: 15px;">
             <h4>🎬 YouTube</h4>
             <p style="color: #636363; font-size: 14px;">Guitar performances and playlists.</p>
           </div>
-          <div class="iframe-responsive">
-            <iframe src="https://www.youtube-nocookie.com/embed/mhpChLZy_4Y" title="YouTube" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
-          </div>
-          <div class="text-center" style="margin-top: 10px;">
-            <a href="https://www.youtube.com/@kenreid" target="_blank" class="btn alime-btn btn-2" style="font-size: 13px;">View on YouTube</a>
+          <div style="flex: 1; display: flex; flex-direction: column;">
+            <div class="iframe-responsive" style="flex: 1;">
+              <iframe src="https://www.youtube-nocookie.com/embed/mhpChLZy_4Y" title="YouTube" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="text-center" style="margin-top: 10px;">
+              <a href="https://www.youtube.com/@kenreid" target="_blank" class="btn alime-btn btn-2" style="font-size: 13px;">View on YouTube</a>
+            </div>
           </div>
         </div>
-        <div class="col-12 col-md-4 mb-30 wow fadeInUp" data-wow-delay="300ms">
+        <div class="col-12 col-md-4 mb-30 wow fadeInUp" data-wow-delay="300ms" style="display: flex; flex-direction: column;">
           <div class="text-center" style="margin-bottom: 15px;">
             <h4>🎸 TikTok</h4>
             <p style="color: #636363; font-size: 14px;">Guitar performances and music content.</p>
           </div>
-          <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@drkenreid/video/7124441580831853866" data-video-id="7124441580831853866" style="max-width: 100%;">
-            <section><a target="_blank" href="https://www.tiktok.com/@drkenreid/video/7124441580831853866">@drkenreid</a></section>
-          </blockquote>
+          <div style="flex: 1; display: flex; flex-direction: column; max-height: 400px; overflow: hidden; border-radius: 8px;">
+            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@drkenreid/video/7124441580831853866" data-video-id="7124441580831853866" style="max-width: 100%; margin: 0;">
+              <section><a target="_blank" href="https://www.tiktok.com/@drkenreid/video/7124441580831853866">@drkenreid</a></section>
+            </blockquote>
+          </div>
           <div class="text-center" style="margin-top: 10px;">
             <a href="https://www.tiktok.com/@drkenreid" target="_blank" class="btn alime-btn btn-2" style="font-size: 13px;">View on TikTok</a>
           </div>
