@@ -680,7 +680,22 @@
     </div>
   </section>
 
-  <!-- 9. Curriculum Vitae -->
+  <!-- 9. Data Science Blog Posts -->
+  <section class="section-padding-80 clearfix" id="ds-blog">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
+            <h2>Blog</h2>
+            <p style="color: #636363;">Technical write-ups and project deep-dives. <a href="blog.html">View all posts →</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center" id="ds-blog-grid"></div>
+    </div>
+  </section>
+
+  <!-- 10. Curriculum Vitae -->
   <section class="section-padding-80 clearfix">
     <div class="container">
       <div class="row">
@@ -755,6 +770,35 @@
   <script>
     renderInstagramSection('instagram-section');
     renderFooter('footer-section');
+
+    /* Load data-science tagged blog posts */
+    fetch('data/posts.json')
+      .then(function(r) { return r.json(); })
+      .then(function(posts) {
+        var dsPosts = posts.filter(function(p) {
+          return (p.tags || []).indexOf('data-science') !== -1;
+        }).sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+        var container = document.getElementById('ds-blog-grid');
+        if (!container || !dsPosts.length) return;
+        dsPosts.forEach(function(post) {
+          var col = document.createElement('div');
+          col.className = 'col-12 col-md-6 col-lg-4 mb-30';
+          var dateStr = new Date(post.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+          var tagHtml = (post.tags || []).map(function(t) {
+            return '<span class="blog-tag">' + t + '</span>';
+          }).join(' ');
+          col.innerHTML =
+            '<a href="' + post.url + '" class="blog-card" style="display:block;">' +
+              (post.image ? '<div class="blog-card-img"><img src="' + post.image + '" alt="' + post.title + '" loading="lazy"></div>' : '') +
+              '<div class="blog-card-body">' +
+                '<div class="blog-card-date">' + dateStr + '</div>' +
+                '<h4 class="blog-card-title">' + post.title + '</h4>' +
+                '<p class="blog-card-excerpt">' + (post.excerpt || '') + '</p>' +
+                '<div class="blog-card-tags">' + tagHtml + '</div>' +
+              '</div></a>';
+          container.appendChild(col);
+        });
+      }).catch(function() {});
   </script>
 
 </body>
