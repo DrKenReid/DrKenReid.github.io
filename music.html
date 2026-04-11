@@ -149,17 +149,41 @@
         <h2 class="wow fadeInUp" data-wow-delay="100ms">Find Me</h2>
       </div>
       <div class="row justify-content-center" style="margin-bottom: 40px;">
-        <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center wow fadeInUp" data-wow-delay="100ms">
-          <a href="https://www.last.fm/user/gohex" target="_blank" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">🎵 Last.fm</a>
-          <p style="color: #636363; font-size: 14px;">Full scrobble history since 2014. Over 30,000 tracks.</p>
+        <div class="col-12 col-md-4 mb-30 wow fadeInUp" data-wow-delay="100ms">
+          <div class="text-center" style="margin-bottom: 15px;">
+            <h4>🎵 Last.fm</h4>
+            <p style="color: #636363; font-size: 14px;">Full scrobble history since 2014.</p>
+          </div>
+          <div class="iframe-responsive">
+            <iframe src="https://www.last.fm/user/gohex/embed/tracks" title="Last.fm Recent Tracks" frameborder="0" style="border-radius: 8px;" loading="lazy"></iframe>
+          </div>
+          <div class="text-center" style="margin-top: 10px;">
+            <a href="https://www.last.fm/user/gohex" target="_blank" class="btn alime-btn btn-2" style="font-size: 13px;">View on Last.fm</a>
+          </div>
         </div>
-        <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center wow fadeInUp" data-wow-delay="200ms">
-          <a href="https://www.youtube.com/@kenreid" target="_blank" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">🎬 YouTube</a>
-          <p style="color: #636363; font-size: 14px;">Guitar performances and playlists.</p>
+        <div class="col-12 col-md-4 mb-30 wow fadeInUp" data-wow-delay="200ms">
+          <div class="text-center" style="margin-bottom: 15px;">
+            <h4>🎬 YouTube</h4>
+            <p style="color: #636363; font-size: 14px;">Guitar performances and playlists.</p>
+          </div>
+          <div class="iframe-responsive">
+            <iframe src="https://www.youtube-nocookie.com/embed?listType=user_uploads&list=kenreid" title="YouTube Channel" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="text-center" style="margin-top: 10px;">
+            <a href="https://www.youtube.com/@kenreid" target="_blank" class="btn alime-btn btn-2" style="font-size: 13px;">View on YouTube</a>
+          </div>
         </div>
-        <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center wow fadeInUp" data-wow-delay="300ms">
-          <a href="https://www.tiktok.com/@drkenreid" target="_blank" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">🎸 TikTok</a>
-          <p style="color: #636363; font-size: 14px;">Guitar performances and music content (coming soon).</p>
+        <div class="col-12 col-md-4 mb-30 wow fadeInUp" data-wow-delay="300ms">
+          <div class="text-center" style="margin-bottom: 15px;">
+            <h4>🎸 TikTok</h4>
+            <p style="color: #636363; font-size: 14px;">Guitar performances and music content (coming soon).</p>
+          </div>
+          <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@drkenreid" data-unique-id="drkenreid" data-embed-type="creator" style="max-width: 100%; min-width: 200px;">
+            <section><a target="_blank" href="https://www.tiktok.com/@drkenreid">@drkenreid</a></section>
+          </blockquote>
+          <div class="text-center" style="margin-top: 10px;">
+            <a href="https://www.tiktok.com/@drkenreid" target="_blank" class="btn alime-btn btn-2" style="font-size: 13px;">View on TikTok</a>
+          </div>
         </div>
       </div>
     </div>
@@ -178,6 +202,13 @@
   <script>
     renderInstagramSection('instagram-section');
     renderFooter('footer-section');
+    // Defer TikTok embed script
+    window.addEventListener('load', function() {
+      var s = document.createElement('script');
+      s.src = 'https://www.tiktok.com/embed.js';
+      s.async = true;
+      document.body.appendChild(s);
+    });
   </script>
 </body>
 </html>
