@@ -236,6 +236,20 @@ function loadMoreImages(silent) {
     updateCounter(activeFilter);
   }
 
+  /* Re-initialize Magnific Popup for new images */
+  if (typeof jQuery !== 'undefined' && jQuery.fn.magnificPopup) {
+    jQuery('.portfolio-img').magnificPopup({
+      type: 'image',
+      gallery: {
+        enabled: true,
+        preload: [0, 2],
+        navigateByImgClick: true,
+        tPrev: 'Previous',
+        tNext: 'Next'
+      }
+    });
+  }
+
   /* Hide button when all images loaded */
   var btn = document.getElementById('load-more-btn');
   if (btn && galleryIndex >= galleryImages.length) {
