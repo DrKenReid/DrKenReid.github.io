@@ -300,8 +300,8 @@
     renderInstagramSection('instagram-section');
     renderFooter('footer-section');
 
-    /* Random quote on home page */
-    fetch('data/quotes.json')
+    /* Random quote on home page — curated selection */
+    fetch('data/quotes-home.json')
       .then(function(r) { return r.json(); })
       .then(function(quotes) {
         var q = quotes[Math.floor(Math.random() * quotes.length)];
