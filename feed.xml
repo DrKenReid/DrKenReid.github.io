@@ -7,6 +7,16 @@
     <language>en</language>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Why Most Self-Help Books Are Trash (And Which Ones Aren't)</title>
+      <link>https://www.kenreid.co.uk/blog/self-help-books.html</link>
+      <guid>https://www.kenreid.co.uk/blog/self-help-books.html</guid>
+      <pubDate>Sat, 11 Apr 2026 00:00:00 +0000</pubDate>
+      <description>The bad ones are blog posts stretched to 300 pages. The good ones cite their sources.</description>
+      <category>books</category>
+      <category>self-help</category>
+      <category>opinion</category>
+    </item>
+    <item>
       <title>Building a Photo Tagging System with CLIP</title>
       <link>https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html</link>
       <guid>https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html</guid>
