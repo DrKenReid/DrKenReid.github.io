@@ -1,5 +1,13 @@
 [
   {
+    "title": "Why Most Self-Help Books Are Trash (And Which Ones Aren't)",
+    "date": "2026-04-11",
+    "tags": ["books", "self-help", "opinion"],
+    "excerpt": "The bad ones are blog posts stretched to 300 pages. The good ones cite their sources. Here's how to tell the difference.",
+    "url": "blog/self-help-books.html",
+    "image": "img/bg-img/97.png"
+  },
+  {
     "title": "Building a Photo Tagging System with CLIP",
     "date": "2026-04-10",
     "tags": ["data-science", "python", "photography"],
