@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Rating systems are broken. 569 books, one uncomfortable data analysis.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Rating systems are broken. 569 books, one uncomfortable data analysis."og:title" content="Rating systems are broken. 569 books, one uncomfortable data analysis.">
+  <meta property="og:description" content="Rating systems are broken. 569 books, one uncomfortable data analysis.">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/97.png">
+  <meta property="og:url" content="https://www.kenreid.co.uk/blog/rating-systems.html">
+  <meta property="og:type" content="article">
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="../img/core-img/favicon.png">
+  <meta name="theme-color" content="#000000">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="canonical" href="https://www.kenreid.co.uk/blog/rating-systems.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Rating systems are broken. 569 books, one uncomfortable data analysis.",
+    "description": "Rating systems are broken. 569 books, one uncomfortable data analysis.",
+    "image": "https://www.kenreid.co.uk/img/bg-img/97.png",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk"
+    },
+    "datePublished": "2026-04-12",
+    "publisher": {
+      "@type": "Person",
+      "name": "Ken Reid"
+    },
+    "keywords": ["books", "ratings", "Goodreads", "data science", "reading"]
+  }
+  </script>
+  <style>
+    .blog-post { max-width: 780px; margin: 0 auto; }
+    .blog-post h1 { font-size: 32px; margin-bottom: 10px; }
+    .blog-post .blog-meta { color: #888; font-size: 14px; margin-bottom: 30px; }
+    .blog-post .blog-meta .blog-tag { margin-left: 4px; }
+    .blog-post p { font-size: 16px; line-height: 1.9; color: #444; margin-bottom: 20px; }
+    .blog-post h2 { font-size: 24px; margin: 40px 0 15px; }
+    .blog-post h3 { font-size: 20px; margin: 30px 0 10px; }
+    .blog-post img { max-width: 100%; border-radius: 8px; margin: 20px 0; }
+    .blog-post img.book-cover { max-width: 140px; margin: 0; border-radius: 6px; }
+    .blog-post code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 14px; }
+    .blog-post pre { background: #252525; color: #e0e0e0; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 20px 0; }
+    .blog-post pre code { background: none; padding: 0; color: inherit; }
+    .blog-post blockquote { border-left: 4px solid #fc6060; padding: 15px 20px; margin: 20px 0; background: #f7f7f7; border-radius: 0 8px 8px 0; }
+    .blog-post blockquote p { margin: 0; font-style: italic; }
+    .blog-post ul, .blog-post ol { margin-bottom: 20px; padding-left: 25px; }
+    .blog-post li { font-size: 16px; line-height: 1.9; color: #444; margin-bottom: 6px; }
+    .book-cover{max-width:140px;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.25);margin-bottom:15px}
+    .bcl{float:left;margin:8px 24px 15px 0}.bcr{float:right;margin:8px 0 15px 24px}
+    .bsec{overflow:hidden}
+    @media(max-width:575px){.book-cover{float:none!important;display:block;margin:0 auto 15px}}
+  </style>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <!-- Header -->
+  <header class="header-area"><div class="main-header-area"><div class="classy-nav-container breakpoint-on"><div class="container">
+    <nav class="classy-navbar justify-content-between" id="alimeNav">
+      <a class="nav-brand" href="../index.html"><img src="../img/core-img/logo.png" alt="Ken Reid Logo"></a>
+      <div class="classy-navbar-toggler"><span class="navbarToggler"><span></span><span></span><span></span></span></div>
+      <div class="classy-menu"><div class="classycloseIcon"><div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div></div>
+        <div class="classynav"><ul id="nav">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../data_science.html">Data Science</a></li>
+          <li><a href="../gallery.html">Photography</a></li>
+          <li><a href="../music.html">Music</a></li>
+          <li><a href="../literature.html">Literature</a></li>
+          <li class="active"><a href="../blog.html">Blog</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul></div></div>
+    </nav>
+  </div></div></div></header>
+
+  <!-- Breadcrumb -->
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/bg-img/97.png);">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <h2 class="page-title">Blog</h2>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Rating Systems</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <!-- Post Content -->
+  <div class="about-us-area section-padding-80 clearfix">
+    <div class="container">
+      <div class="blog-post">
+        <h1>Rating Systems Are Broken</h1>
+        <div class="blog-meta">
+          12 April 2026 &middot;
+          <span class="blog-tag">books</span>
+          <span class="blog-tag">opinion</span>
+          <span class="blog-tag">data-science</span>
+        </div>
+
+        <p>&ldquo;Fun read.&rdquo; Five stars.</p>
+
+        <p>That is the entirety of my review for <em>He Who Fights with Monsters 2</em> by Shirtaloon. Nine characters, full marks, job done. Meanwhile, I also gave five stars to bell hooks&rsquo; <em>Feminism Is for Everybody</em>, except that review is 2,516 characters long and covers intersectional feminism, the failures of liberal approaches to gender, and how reading the book made me uncomfortable in ways I needed to sit with. Same star rating. A 280x difference in the amount of effort I put into explaining why. Whatever those five stars are measuring, they&rsquo;re clearly not measuring the same thing twice.</p>
+
+        <p>I&rsquo;ve rated 569 books on <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank">Goodreads</a>, and I have opinions about all of them. But I recently ran my own export through some analysis scripts (because apparently this is what data scientists do for fun on a Saturday), and what I found was a bit damning. Not of the books, but of the entire concept of reducing a literary experience to a number between 1 and 5.</p>
+
+        <p>You can explore the full interactive analysis on my <a href="https://goodreads-analysis.streamlit.app/" target="_blank">Goodreads Reading Stats app</a>, but here are the highlights.</p>
+
+        <h2>My rating distribution, or: the sound of a man who can&rsquo;t commit to criticism</h2>
+
+        <img src="img/rating_distribution.png" alt="Rating distribution chart showing 42.7% of books rated 5 stars" loading="lazy">
+
+        <p>Nearly 70% of everything I&rsquo;ve ever read gets four or five stars, and my average rating is 3.98. I am, statistically speaking, a pushover. But before you judge me, consider that the average Goodreads rating across all books on the platform is something like 3.9. We&rsquo;re all pushovers. The whole system is built to make us generous, because the scale is fundamentally asymmetric: five is &ldquo;amazing&rdquo;, one is &ldquo;I want my hours back&rdquo;, and the jump from three to two feels like you&rsquo;re personally insulting someone&rsquo;s mum.</p>
+
+        <p>Nobody wants to give a three. A three on Goodreads carries the emotional weight of &ldquo;I thought this was mediocre and I don&rsquo;t respect your effort&rdquo;, when what you actually mean is &ldquo;this was fine, I read it, it exists&rdquo;. There is no &ldquo;fine&rdquo; on a five-point scale. There&rsquo;s great, good, meh, bad, and offensive. &ldquo;Fine&rdquo; falls between the cracks and usually gets rounded up to four because we&rsquo;re not monsters (well, most of us; I&rsquo;ll get to my 1-star reviews shortly).</p>
+
+        <h2>I apparently write more when I&rsquo;m angry</h2>
+
+        <img src="img/review_length_by_rating.png" alt="Chart showing 1-star reviews average 554 chars vs 5-star at 331 chars" loading="lazy">
+
+        <p>My 1-star reviews are nearly twice as long as my 5-star reviews. Displeasure, it turns out, is far more articulate than joy. When I love something, I tend to write things like &ldquo;I&rsquo;m crying, 10/10&rdquo; (my full review of <em>The Book Thief</em>, which is genuinely one of the best novels I&rsquo;ve ever read and apparently all I could muster was a numerical score inside a text review that already has a numerical score). When I hate something, I can produce a multi-paragraph forensic breakdown of exactly why, complete with quotes, structural criticism, and thinly veiled contempt.</p>
+
+        <p>My shortest 5-star reviews, for context:</p>
+        <ul>
+          <li>&ldquo;Fun read.&rdquo; (9 chars) for <em>He Who Fights with Monsters 2</em></li>
+          <li>&ldquo;Still great.&rdquo; (12 chars) for <em>He Who Fights with Monsters</em></li>
+          <li>&ldquo;What a world.&rdquo; (13 chars) for <em>The Fires of Heaven</em></li>
+          <li>&ldquo;I&rsquo;m crying, 10/10.&rdquo; (18 chars) for <em>The Book Thief</em></li>
+        </ul>
+
+        <p>And my longest 5-star reviews run past 2,000 characters on bell hooks, Huckleberry Finn, and The Glass Castle. These are thoughtful, careful pieces of writing that engage with the text critically. They are not the same kind of &ldquo;five stars&rdquo; as &ldquo;Fun read.&rdquo; and yet the system treats them identically. A chef&rsquo;s kiss and a doctoral thesis get the same gold sticker.</p>
+
+        <h2>How much do I actually agree with everyone else?</h2>
+
+        <img src="img/my_vs_community.png" alt="Scatter plot of my ratings vs community average ratings" loading="lazy">
+
+        <p>The difference in community average between my absolute favourites and the books I genuinely despised is 0.45 stars. Less than half a star. The community thinks my 1-star books are perfectly respectable 3.8-star reads. I&rsquo;m not out here hating universally panned disasters; I&rsquo;m hating books that most people thought were pretty good.</p>
+
+        <p>My biggest contrarian moments include giving 1 star to <em>Sapiens</em> (community: 4.33), <em>Surely You&rsquo;re Joking, Mr. Feynman!</em> (community: 4.26), and <em>The Primal Hunter 8</em> (community: 4.57). On the other side, I gave 5 stars to Stan Nicholls&rsquo; <em>Orcs</em> (community: 3.45) and Steinbeck&rsquo;s <em>The Pearl</em> (community: 3.57), both of which most readers found thoroughly unremarkable. Either I have eccentric taste or the star system is too blunt to capture genuine critical disagreement. Probably both.</p>
+
+        <h2>I&rsquo;m not even consistent across genres</h2>
+
+        <img src="img/genre_rating_bias.png" alt="Horizontal bar chart showing average rating by genre, fantasy highest at 4.27, horror lowest at 3.50" loading="lazy">
+
+        <p>I rate fantasy nearly a full star higher than horror. This doesn&rsquo;t mean fantasy literature is objectively superior to horror (I can feel the Stephen King fans warming up their keyboards). What it means is that I pick fantasy books I&rsquo;m predisposed to enjoy, and I pick horror books that are more likely to challenge or unsettle me. The genres I consume for comfort get higher ratings than the genres I consume for discomfort. The stars aren&rsquo;t measuring book quality; they&rsquo;re measuring my selection bias. Which is a finding that would make any data scientist wince, because selection bias is the thing we spend our entire careers trying to eliminate from datasets, and here it is sitting proudly in my own reading data.</p>
+
+        <h2>The silence is deafening</h2>
+
+        <img src="img/silent_ratings.png" alt="Chart showing 51% of 5-star books have no review text" loading="lazy">
+
+        <p>More than half of my 5-star books have absolutely no review text. I felt strongly enough to give them the highest possible rating, the literary equivalent of a standing ovation, but couldn&rsquo;t be bothered to write a single sentence about why. Meanwhile, 71% of my 1-star books have reviews. The threshold for writing isn&rsquo;t &ldquo;I need to express how much I loved this&rdquo;, it&rsquo;s &ldquo;I need to explain why this is bad.&rdquo;</p>
+
+        <p>The 5-star rating without a review is doing no work whatsoever. It&rsquo;s a gut-level thumbs up that contains no information about what made the book worthwhile, who it&rsquo;s for, or whether it&rsquo;s the kind of &ldquo;good&rdquo; that would mean anything to someone who isn&rsquo;t me. It&rsquo;s a signal with no bandwidth, like shouting &ldquo;NICE&rdquo; across a crowded room and expecting someone to know what you&rsquo;re referring to.</p>
+
+        <h2>What would actually be better?</h2>
+
+        <p>Half-star ratings would solve a lot, honestly. The jump from 3 to 4 is where most of the ambiguity lives, and a 3.5 would let people express &ldquo;I liked this but it didn&rsquo;t blow my mind&rdquo; without feeling like they&rsquo;re being stingy. Goodreads has resisted this for over a decade, presumably because simplicity drives engagement, even when that simplicity makes the data nearly useless for recommendations.</p>
+
+        <p>Genre-relative ratings would help with the bias problem. A 5-star horror novel is a fundamentally different statement from a 5-star cozy fantasy, and the current system pretends they&rsquo;re equivalent. A &ldquo;would you recommend this?&rdquo; yes/no alongside the stars would capture something the number alone can&rsquo;t: intent.</p>
+
+        <p>But honestly? The best rating is the review itself. The stars are just the emoji at the end of the sentence. If you want to know what I thought, read the words. The number is a courtesy, not a conclusion.</p>
+
+        <p>Kahneman would call the star rating a substitution heuristic: when asked a hard question (&ldquo;how good is this book?&rdquo;), we substitute an easier one (&ldquo;how did I feel when I finished it?&rdquo;). The answer is fast, intuitive, and largely disconnected from the thing it&rsquo;s supposed to measure. System 1 thinking applied to a System 2 question. We do this all the time, apparently. Even those of us who should know better, having read the book that explains exactly why we do it. And given it five stars.</p>
+
+        <p>Explore the full interactive analysis on my <a href="https://goodreads-analysis.streamlit.app/" target="_blank">Goodreads Reading Stats app</a>, or browse my <a href="../literature.html">reading stats, reviews, and quotes</a>.</p>
+
+        <hr style="margin: 40px 0;">
+        <p style="text-align: center;"><a href="../blog.html">&larr; Back to all posts</a></p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/alime.bundle.js"></script>
+  <script src="../js/lightbox.js"></script>
+  <script src="../js/default-assets/active.js"></script>
+  <script src="../js/shared-components.js"></script>
+  <script>renderFooter('footer-section');</script>
+</body>
+</html>
