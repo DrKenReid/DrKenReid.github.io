@@ -103,34 +103,36 @@
           <span class="blog-tag">photography</span>
         </div>
 
-        <p>My photography gallery has 370 images spanning a decade of shooting — landscapes, urban decay, wildlife, portraits, and everything in between. For years they sat in a flat grid with no way to filter or browse by subject. I wanted category tags, but manually tagging 370 photos sounded like a weekend I'd never get back.</p>
+        <p>My photography gallery has 370 images spanning about a decade of shooting. Landscapes, urban decay, wildlife, portraits, and a surprising number of photos of cats. For years they sat in a flat grid with no way to filter or browse by subject, which meant anyone visiting the page was essentially scrolling through a shuffled pile of everything I've ever pointed a camera at. I wanted category tags, but manually tagging 370 photos sounded like a weekend I'd never get back and would inevitably lead to inconsistency anyway (is a snowy field "landscape" or "winter"? Both? Do I care enough to decide 370 times?).</p>
 
-        <p>Enter <a href="https://github.com/mlfoundations/open_clip" target="_blank">OpenCLIP</a> — an open-source implementation of OpenAI's CLIP model that maps images and text into the same embedding space. The idea: describe each category in plain English, encode both the descriptions and the photos, then match them by cosine similarity.</p>
+        <p>So I did what any self-respecting data scientist would do: I made the computer do it.</p>
 
         <h2>The Approach</h2>
 
-        <p>I defined 10 categories, each with 3-4 descriptive text prompts:</p>
+        <p><a href="https://github.com/mlfoundations/open_clip" target="_blank">OpenCLIP</a> is an open-source implementation of OpenAI's CLIP model. The core idea is elegant: it maps images and text into the same embedding space, so you can describe what you're looking for in plain English and the model will tell you how well each image matches. No training on your own data, no labelling, no fine-tuning. You just... describe the categories and let it figure it out.</p>
+
+        <p>I defined 10 categories, each with 3-4 descriptive text prompts to give the model a richer understanding of what I meant:</p>
 
         <ul>
-          <li><strong>Landscape</strong> — "a wide landscape photograph of hills and countryside"</li>
-          <li><strong>Urban</strong> — "a photograph of a city street or urban scene"</li>
-          <li><strong>Architecture</strong> — "a photograph focused on a building or architectural structure"</li>
-          <li><strong>Abandoned</strong> — "a photograph of an abandoned or derelict building"</li>
-          <li><strong>Wildlife</strong> — "a photograph of an animal or bird"</li>
-          <li><strong>Nature</strong> — "a close-up photograph of trees, flowers, or plants"</li>
-          <li><strong>Portrait</strong> — "a portrait photograph of a person"</li>
-          <li><strong>B&amp;W</strong> — "a black and white photograph"</li>
-          <li><strong>Silhouette</strong> — "a silhouette photograph with a backlit subject"</li>
-          <li><strong>Winter</strong> — "a winter photograph with snow on the ground"</li>
+          <li><strong>Landscape</strong>: "a wide landscape photograph of hills and countryside"</li>
+          <li><strong>Urban</strong>: "a photograph of a city street or urban scene"</li>
+          <li><strong>Architecture</strong>: "a photograph focused on a building or architectural structure"</li>
+          <li><strong>Abandoned</strong>: "a photograph of an abandoned or derelict building"</li>
+          <li><strong>Wildlife</strong>: "a photograph of an animal or bird"</li>
+          <li><strong>Nature</strong>: "a close-up photograph of trees, flowers, or plants"</li>
+          <li><strong>Portrait</strong>: "a portrait photograph of a person"</li>
+          <li><strong>B&amp;W</strong>: "a black and white photograph"</li>
+          <li><strong>Silhouette</strong>: "a silhouette photograph with a backlit subject"</li>
+          <li><strong>Winter</strong>: "a winter photograph with snow on the ground"</li>
         </ul>
 
-        <p>Multiple prompts per category improves accuracy — the model averages the text embeddings, giving a more robust representation than a single phrase.</p>
+        <p>Using multiple prompts per category improves accuracy because the model averages the text embeddings, giving a more robust representation than any single phrase could. It's a simple trick but it makes a noticeable difference, especially for ambiguous categories like "nature" vs "landscape" where the boundary is fuzzy.</p>
 
         <h2>Results</h2>
 
-        <p>The ViT-B-32 model processed all 370 images in <strong>44 seconds</strong> on CPU. No GPU needed, no API calls, zero cost.</p>
+        <p>The ViT-B-32 model processed all 370 images in <strong>44 seconds</strong> on CPU. No GPU needed, no API calls, zero cost. I ran this on my laptop while making tea.</p>
 
-        <p>Each image gets multi-label tags (a photo can be both "landscape" and "winter"), with per-category similarity thresholds tuned to get roughly 1.3 tags per image on average. The output is a simple JSON mapping filename to tag array:</p>
+        <p>Each image gets multi-label tags (a photo can be both "landscape" and "winter"), with per-category similarity thresholds tuned to get roughly 1.3 tags per image on average. I went through a couple of iterations on the thresholds: too aggressive and everything got tagged "nature", too conservative and most images only got one tag. The output is a simple JSON mapping filename to tag array:</p>
 
         <pre><code>{
   "1": ["nature", "silhouette"],
@@ -141,22 +143,22 @@
 
         <h2>Accuracy</h2>
 
-        <p>Spot-checking against my own judgement, I'd estimate 85-90% accuracy. The model handles clear cases well — a sheep in a field is "wildlife", a monochrome street scene is "bw" + "urban". Edge cases like a painted traffic cone on a street getting tagged "architecture" are the main failure mode.</p>
+        <p>Spot-checking against my own judgement, I'd estimate 85-90% accuracy. The model handles clear cases well: a sheep in a field is "wildlife", a monochrome street scene is "bw" + "urban", a derelict building is "abandoned". Where it struggles is with quirky or abstract shots. A painted dalmatian traffic cone on a city street got tagged "architecture", which I can't even be mad about because it technically is sitting next to a building. A lensball photo got tagged "portrait" because the model detected what it thought was a face. It wasn't wrong exactly, it was just working with a different definition of "portrait" than I had in mind.</p>
 
-        <p>The beauty of the approach is that re-running is trivial. Tweak a threshold, adjust a prompt, run again in under a minute.</p>
+        <p>The nice thing about this approach is that re-running the whole pipeline is trivial. Tweak a threshold, adjust a prompt, run again in under a minute. If I wanted to add a "creative/abstract" category to catch those edge cases, it would take about two minutes of work.</p>
 
         <h2>Integration</h2>
 
-        <p>The tags JSON feeds into the gallery page via JavaScript. Filter buttons with emoji and counts sit above the photo grid — click "🐾 Wildlife (78)" and the gallery filters instantly. The existing Isotope layout handles the animation.</p>
+        <p>The tags JSON feeds into the gallery page via JavaScript. Filter buttons with emoji and counts sit above the photo grid: click "&#x1f43e; Wildlife (78)" and the gallery filters instantly using Isotope for the layout animation. It's satisfying in a way that only a well-animated filter transition can be.</p>
 
-        <p>The tagging script lives in the repo at <code>scripts/tag_photos.py</code> — if I add new photos, I just re-run it.</p>
+        <p>The tagging script lives in the repo at <code>scripts/tag_photos.py</code>, so if I add new photos I just re-run it and push. The whole thing is reproducible by anyone with the same dependencies installed (open_clip_torch, pillow, tqdm).</p>
 
         <h2>What I'd Do Differently</h2>
 
         <ul>
-          <li>A larger CLIP model (ViT-L-14) would improve accuracy on ambiguous images, at the cost of slower inference.</li>
-          <li>Adding a "creative/abstract" category would catch the lensball shots and experimental compositions that currently get shoehorned into other categories.</li>
-          <li>A manual override JSON that merges with the auto-generated tags would let me fix the obvious misses without re-running the whole pipeline.</li>
+          <li>A larger CLIP model (ViT-L-14) would improve accuracy on ambiguous images, at the cost of slower inference. Whether that trade-off is worth it for 370 images is debatable, but for a larger collection it probably would be.</li>
+          <li>Adding a "creative/abstract" category would catch the lensball shots and experimental compositions that currently get shoehorned into whatever category the model finds least implausible.</li>
+          <li>A manual override JSON that merges with the auto-generated tags would let me fix the obvious misses without re-running the whole pipeline. Sometimes you just want to tell the computer "no, that's a traffic cone, not architecture" and move on with your life.</li>
         </ul>
 
         <p>The full code is on <a href="https://github.com/DrKenReid/DrKenReid.github.io/blob/master/scripts/tag_photos.py" target="_blank">GitHub</a>, and you can see the result on the <a href="../gallery.html">Photography</a> page.</p>
