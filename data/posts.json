@@ -1,5 +1,13 @@
 [
   {
+    "title": "Book Ratings Are Broken",
+    "date": "2026-04-12",
+    "tags": ["books", "opinion", "data-science"],
+    "excerpt": "569 books rated, and the star system fails at all of them. A data-driven look at my own Goodreads ratings, review lengths, genre bias, and the silence problem.",
+    "url": "blog/rating-systems.html",
+    "image": "img/bg-img/97.png"
+  },
+  {
     "title": "Why Most Self-Help Books Are Trash (And Which Ones Aren't)",
     "date": "2026-04-11",
     "tags": ["books", "self-help", "opinion"],
@@ -11,7 +19,7 @@
     "title": "Building a Photo Tagging System with CLIP",
     "date": "2026-04-10",
     "tags": ["data-science", "python", "photography"],
-    "excerpt": "How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute — zero API cost, running entirely on CPU.",
+    "excerpt": "How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute, zero API cost, running entirely on CPU.",
     "url": "blog/photo-tagging-with-clip.html",
     "image": "img/bg-img/1.png"
   }
