@@ -103,7 +103,7 @@
           <span class="blog-tag">photography</span>
         </div>
 
-        <p>My photography gallery has 370 images spanning about a decade of shooting. Landscapes, urban decay, wildlife, portraits, and a surprising number of photos of cats. For years they sat in a flat grid with no way to filter or browse by subject, which meant anyone visiting the page was essentially scrolling through a shuffled pile of everything I've ever pointed a camera at. I wanted category tags, but manually tagging 370 photos sounded like a weekend I'd never get back and would inevitably lead to inconsistency anyway (is a snowy field "landscape" or "winter"? Both? Do I care enough to decide 370 times?).</p>
+        <p>My photography gallery has 370 images spanning about a decade of shooting. Landscapes, urban decay, wildlife, portraits, and a surprising number of cat photos. For years they sat in a flat grid with no way to filter or browse by subject, which meant anyone visiting the page was essentially scrolling through a shuffled pile of everything I've ever pointed a camera at. I wanted category tags, but manually tagging 370 photos sounded like a weekend I'd never get back and would inevitably lead to inconsistency anyway (is a snowy field "landscape" or "winter"? Both? Do I care enough to decide 370 times?).</p>
 
         <p>So I did what any self-respecting data scientist would do: I made the computer do it.</p>
 
@@ -149,7 +149,7 @@
 
         <h2>Integration</h2>
 
-        <p>The tags JSON feeds into the gallery page via JavaScript. Filter buttons with emoji and counts sit above the photo grid: click "&#x1f43e; Wildlife (78)" and the gallery filters instantly using Isotope for the layout animation. It's satisfying in a way that only a well-animated filter transition can be.</p>
+        <p>The gallery page loads the tags JSON via JavaScript and renders filter buttons above the photo grid. Click &ldquo;&#x1f43e; Wildlife (78)&rdquo; and the gallery filters instantly using Isotope for the layout animation. It&rsquo;s satisfying in a way that only a well-animated filter transition can be.</p>
 
         <p>The tagging script lives in the repo at <code>scripts/tag_photos.py</code>, so if I add new photos I just re-run it and push. The whole thing is reproducible by anyone with the same dependencies installed (open_clip_torch, pillow, tqdm).</p>
 
