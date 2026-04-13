@@ -270,10 +270,10 @@
   <section class="about-us-area section-padding-80-0 clearfix">
     <div class="container">
       <div class="text-center" style="margin-bottom: 40px;">
-        <h2 class="wow fadeInUp" data-wow-delay="100ms">Latest Post</h2>
+        <h2 class="wow fadeInUp" data-wow-delay="100ms">Latest Blog Posts</h2>
       </div>
       <div class="row justify-content-center">
-        <div class="col-12 col-md-8 col-lg-6" id="latest-post"></div>
+        <div class="col-12" id="latest-posts"></div>
       </div>
     </div>
   </section>
@@ -312,29 +312,35 @@
         }
       }).catch(function() {});
 
-    /* Latest blog post */
+    /* Latest 3 blog posts */
     fetch('data/posts.json')
       .then(function(r) { return r.json(); })
       .then(function(posts) {
         posts.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
-        var post = posts[0];
-        if (!post) return;
-        var container = document.getElementById('latest-post');
+        var container = document.getElementById('latest-posts');
         if (!container) return;
-        var dateStr = new Date(post.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-        var tagHtml = (post.tags || []).map(function(t) {
-          return '<span class="blog-tag">' + t + '</span>';
-        }).join(' ');
-        container.innerHTML =
-          '<a href="' + post.url + '" class="blog-card" style="display: block;">' +
-            (post.image ? '<div class="blog-card-img"><img src="' + post.image + '" alt="' + post.title + '" loading="lazy"></div>' : '') +
-            '<div class="blog-card-body">' +
-              '<div class="blog-card-date">' + dateStr + '</div>' +
-              '<h4 class="blog-card-title">' + post.title + '</h4>' +
-              '<p class="blog-card-excerpt">' + (post.excerpt || '') + '</p>' +
-              '<div class="blog-card-tags">' + tagHtml + '</div>' +
-            '</div>' +
-          '</a>';
+        var row = document.createElement('div');
+        row.className = 'row';
+        posts.slice(0, 3).forEach(function(post) {
+          var dateStr = new Date(post.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+          var tagHtml = (post.tags || []).map(function(t) {
+            return '<span class="blog-tag">' + t + '</span>';
+          }).join(' ');
+          var col = document.createElement('div');
+          col.className = 'col-12 col-md-4 mb-30';
+          col.innerHTML =
+            '<a href="' + post.url + '" class="blog-card" style="display:block;height:100%;">' +
+              (post.image ? '<div class="blog-card-img"><img src="' + post.image + '" alt="' + post.title + '" loading="lazy"></div>' : '') +
+              '<div class="blog-card-body">' +
+                '<div class="blog-card-date">' + dateStr + '</div>' +
+                '<h4 class="blog-card-title">' + post.title + '</h4>' +
+                '<p class="blog-card-excerpt">' + (post.excerpt || '') + '</p>' +
+                '<div class="blog-card-tags">' + tagHtml + '</div>' +
+              '</div>' +
+            '</a>';
+          row.appendChild(col);
+        });
+        container.appendChild(row);
       }).catch(function() {});
   </script>
 
