@@ -80,6 +80,6 @@ function renderFooter(targetId) {
         '<div class="social-info">' +
         '<a href="/feed.xml" aria-label="RSS Feed"><i class="ti-rss" aria-hidden="true"></i></a>' +
         '<a href="https://bsky.app/profile/kenreid.co.uk" aria-label="Bluesky">' + BLUESKY_SVG + '</a>' +
-        '<a href="https://www.linkedin.com/in/kennethneilreid/" aria-label="LinkedIn"><i class="ti-linkedin" aria-hidden="true"></i></a>' +
+        '<a href="https://www.linkedin.com/in/kennethneilreid" aria-label="LinkedIn"><i class="ti-linkedin" aria-hidden="true"></i></a>' +
         '</div></div></div></div></div></footer>';
 }
