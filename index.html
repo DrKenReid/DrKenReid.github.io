@@ -205,6 +205,18 @@
     </div>
   </section>
 
+  <!-- Latest Blog Posts -->
+  <section class="about-us-area section-padding-80-0 clearfix">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 40px;">
+        <h2 class="wow fadeInUp" data-wow-delay="100ms">Latest Blog Posts</h2>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12" id="latest-posts"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- Quick Links -->
   <section class="about-us-area section-padding-80-0 clearfix">
     <div class="container">
@@ -258,23 +270,28 @@
     </div>
   </section>
 
+  <!-- Bluesky Feed -->
+  <div class="about-us-area section-padding-80-0 clearfix">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+          <div class="text-center" style="margin-bottom: 30px;">
+            <h2 class="wow fadeInUp" data-wow-delay="100ms">Recent on Bluesky</h2>
+            <p class="wow fadeInUp" data-wow-delay="200ms" style="color: #636363;">
+              <a href="https://bsky.app/profile/kenreid.co.uk" target="_blank">@kenreid.co.uk</a>
+            </p>
+          </div>
+          <div id="bsky-posts" class="wow fadeInUp" data-wow-delay="300ms"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Random Quote -->
   <section class="quote-carousel" id="home-quote" style="min-height: 200px;">
     <div class="quote-inner">
       <p id="home-quote-text"></p>
       <p id="home-quote-attr"></p>
-    </div>
-  </section>
-
-  <!-- Latest Blog Post -->
-  <section class="about-us-area section-padding-80-0 clearfix">
-    <div class="container">
-      <div class="text-center" style="margin-bottom: 40px;">
-        <h2 class="wow fadeInUp" data-wow-delay="100ms">Latest Blog Posts</h2>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-12" id="latest-posts"></div>
-      </div>
     </div>
   </section>
 
@@ -342,6 +359,40 @@
         });
         container.appendChild(row);
       }).catch(function() {});
+
+    /* Bluesky feed */
+    (function() {
+      var DID = 'did:plc:ks2rxbqomt6vsae6tepl6pcm';
+      var HANDLE = 'kenreid.co.uk';
+      var container = document.getElementById('bsky-posts');
+      if (!container) return;
+      fetch('https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=' + DID + '&limit=3&filter=posts_no_replies')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (!data.feed || !data.feed.length) return;
+          data.feed.forEach(function(item) {
+            var post = item.post;
+            var record = post.record;
+            var rkey = post.uri.split('/').pop();
+            var date = new Date(record.createdAt);
+            var dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+            var div = document.createElement('div');
+            div.style.marginBottom = '20px';
+            div.innerHTML =
+              '<blockquote class="bluesky-embed" data-bluesky-uri="' + post.uri + '" data-bluesky-cid="' + post.cid + '">' +
+              '<p lang="en">' + (record.text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</p>' +
+              '&mdash; ' + (post.author.displayName || HANDLE) +
+              ' (<a href="https://bsky.app/profile/' + HANDLE + '">@' + HANDLE + '</a>) ' +
+              '<a href="https://bsky.app/profile/' + HANDLE + '/post/' + rkey + '">' + dateStr + '</a>' +
+              '</blockquote>';
+            container.appendChild(div);
+          });
+          var s = document.createElement('script');
+          s.src = 'https://embed.bsky.app/static/embed.js';
+          s.async = true;
+          document.body.appendChild(s);
+        }).catch(function() {});
+    })();
   </script>
 
 </body>
