@@ -7,14 +7,20 @@
     <language>en</language>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Snowball vs Avalanche: The Science of Paying Off Debt</title>
+      <link>https://www.kenreid.co.uk/blog/snowball-vs-avalanche.html</link>
+      <guid>https://www.kenreid.co.uk/blog/snowball-vs-avalanche.html</guid>
+      <pubDate>Tue, 14 Apr 2026 00:00:00 +0000</pubDate>
+      <description>Snowball and avalanche both work, but for different reasons. A practical guide with simulator-backed charts on interest, timing, and motivation.</description>
+      <category>nerd-stuff</category>
+    </item>
+    <item>
       <title>Book Ratings Are Broken</title>
       <link>https://www.kenreid.co.uk/blog/rating-systems.html</link>
       <guid>https://www.kenreid.co.uk/blog/rating-systems.html</guid>
       <pubDate>Sun, 12 Apr 2026 00:00:00 +0000</pubDate>
       <description>569 books rated, and the star system fails at all of them.</description>
       <category>books</category>
-      <category>opinion</category>
-      <category>data-science</category>
     </item>
     <item>
       <title>Why Most Self-Help Books Are Trash (And Which Ones Aren't)</title>
@@ -23,8 +29,6 @@
       <pubDate>Sat, 11 Apr 2026 00:00:00 +0000</pubDate>
       <description>The bad ones are blog posts stretched to 300 pages. The good ones cite their sources.</description>
       <category>books</category>
-      <category>self-help</category>
-      <category>opinion</category>
     </item>
     <item>
       <title>Building a Photo Tagging System with CLIP</title>
@@ -32,8 +36,7 @@
       <guid>https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html</guid>
       <pubDate>Thu, 10 Apr 2026 00:00:00 +0000</pubDate>
       <description>How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute — zero API cost, running entirely on CPU.</description>
-      <category>data-science</category>
-      <category>python</category>
+      <category>nerd-stuff</category>
       <category>photography</category>
     </item>
   </channel>
