@@ -16,6 +16,9 @@ function initBlog() {
 			allPosts = data.sort(function(a, b) {
 				return new Date(b.date) - new Date(a.date);
 			});
+			return hydrateReadingTimes(allPosts);
+		})
+		.then(function() {
 			buildTagFilters();
 			renderPosts();
 		})
@@ -67,10 +70,59 @@ function filterByTag(tag, btnEl) {
 }
 
 function estimateReadingMinutes(post) {
+	if (typeof post.readMinutes === 'number' && isFinite(post.readMinutes)) {
+		return Math.max(1, Math.round(post.readMinutes));
+	}
+
+	if (typeof post._readMinutes === 'number' && isFinite(post._readMinutes)) {
+		return Math.max(1, Math.round(post._readMinutes));
+	}
+
 	var text = (post.title || '') + ' ' + (post.excerpt || '');
 	var words = text.trim() ? text.trim().split(/\s+/).length : 0;
 	var minutes = Math.max(1, Math.ceil(words / 220));
 	return minutes;
+}
+
+function wordsToMinutes(wordCount) {
+	return Math.max(1, Math.ceil(wordCount / 220));
+}
+
+function countWords(text) {
+	if (!text) return 0;
+	var normalized = text.replace(/\s+/g, ' ').trim();
+	return normalized ? normalized.split(' ').length : 0;
+}
+
+function extractPostWordCount(htmlText) {
+	var parser = new DOMParser();
+	var doc = parser.parseFromString(htmlText, 'text/html');
+	var postBody = doc.querySelector('.blog-post');
+	if (!postBody) return 0;
+	return countWords(postBody.textContent || '');
+}
+
+function hydrateReadingTimes(posts) {
+	var tasks = posts.map(function(post) {
+		if (!post || !post.url) return Promise.resolve();
+
+		return fetch(post.url)
+			.then(function(response) {
+				if (!response.ok) throw new Error('HTTP ' + response.status);
+				return response.text();
+			})
+			.then(function(htmlText) {
+				var wordCount = extractPostWordCount(htmlText);
+				if (wordCount > 0) {
+					post._readMinutes = wordsToMinutes(wordCount);
+				}
+			})
+			.catch(function() {
+				// Keep fallback estimate if content cannot be fetched in local preview.
+			});
+	});
+
+	return Promise.all(tasks).then(function() { return posts; });
 }
 
 function renderPosts() {

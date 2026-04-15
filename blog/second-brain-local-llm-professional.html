@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="A practical system for project documentation, knowledge management, and local LLM workflows using a professional second brain.">
+  <meta name="keywords" content="professional second brain, local llm workflow, project documentation, knowledge management system, personal knowledge management, experiment tracking, ai-assisted workflow">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Your Professional Second Brain for Local LLM Work - Ken Reid</title>
+  <meta property="og:title" content="Your Professional Second Brain for Local LLM Work">
+  <meta property="og:description" content="A practical system for project documentation, knowledge management, and local LLM workflows that improves delivery, reviews, and project re-entry.">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/75.png">
+  <meta property="og:url" content="https://www.kenreid.co.uk/blog/second-brain-local-llm-professional.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Your Professional Second Brain for Local LLM Work">
+  <meta name="twitter:description" content="A practical system for project documentation, knowledge management, and local LLM workflows that improves delivery, reviews, and project re-entry.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/bg-img/75.png">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="../img/core-img/favicon.png">
+  <meta name="theme-color" content="#000000">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="canonical" href="https://www.kenreid.co.uk/blog/second-brain-local-llm-professional.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Your Professional Second Brain for Local LLM Work",
+    "description": "A practical system for project documentation, knowledge management, and local LLM workflows using a professional second brain.",
+    "image": "https://www.kenreid.co.uk/img/bg-img/75.png",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk"
+    },
+    "datePublished": "2026-04-15",
+    "publisher": {
+      "@type": "Person",
+      "name": "Ken Reid"
+    },
+    "keywords": ["professional second brain", "local llm workflow", "project documentation", "knowledge management", "personal knowledge management", "experiment tracking", "ai-assisted workflow"]
+  }
+  </script>
+  <style>
+    .blog-post { max-width: 780px; margin: 0 auto; }
+    .blog-post h1 { font-size: 32px; margin-bottom: 10px; }
+    .blog-post .blog-meta { color: #888; font-size: 14px; margin-bottom: 30px; }
+    .blog-post .blog-meta .blog-tag { margin-left: 4px; }
+    .blog-post p { font-size: 16px; line-height: 1.9; color: #444; margin-bottom: 20px; }
+    .blog-post h2 { font-size: 24px; margin: 40px 0 15px; }
+    .blog-post h3 { font-size: 20px; margin: 30px 0 10px; }
+    .blog-post img { max-width: 100%; border-radius: 8px; margin: 20px 0; }
+    .blog-post code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 14px; }
+    .blog-post pre { background: #252525; color: #e0e0e0; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 20px 0; }
+    .blog-post pre code { background: none; padding: 0; color: inherit; }
+    .blog-post blockquote { border-left: 4px solid #fc6060; padding: 15px 20px; margin: 20px 0; background: #f7f7f7; border-radius: 0 8px 8px 0; }
+    .blog-post blockquote p { margin: 0; font-style: italic; }
+    .blog-post ul, .blog-post ol { margin-bottom: 20px; padding-left: 25px; }
+    .blog-post li { font-size: 16px; line-height: 1.9; color: #444; margin-bottom: 6px; }
+    .blog-post ol { padding-left: 32px; }
+    .blog-post ol li { list-style: decimal; }
+    .figure-note { text-align: center; color: #6b6b6b; font-size: 13px; margin-top: -10px; margin-bottom: 18px; }
+    .callout {
+      background: #fff8f5;
+      border-left: 4px solid #fc6060;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 22px;
+      margin: 30px 0;
+    }
+    .downloads-block {
+      margin: 22px 0 28px;
+      padding: 16px 18px;
+      border: 1px solid #ededed;
+      border-radius: 10px;
+      background: #fafafa;
+    }
+    .downloads-title {
+      margin: 0 0 10px;
+      font-size: 16px;
+      color: #222;
+      font-weight: 700;
+    }
+    .downloads-note {
+      margin: 12px 0 0;
+      color: #595959;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    .downloads-note a {
+      color: #fc6060;
+      font-weight: 600;
+    }
+    .download-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .download-link {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid #e2e2e2;
+      background: #ffffff;
+      color: #303030;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .download-link:hover {
+      background: #f2f2f2;
+      color: #1f1f1f;
+    }
+    .post-cta { display: inline-block; padding: 10px 18px; border-radius: 999px; background: #fc6060; color: #fff; text-decoration: none; font-weight: 700; }
+    .post-cta:hover { color: #fff; background: #e94f4f; }
+    .related-posts { margin-top: 36px; border-top: 1px solid #eee; padding-top: 24px; }
+    .related-posts-grid .col-12 { display: flex; }
+    .related-posts-grid .blog-card { width: 100%; }
+  </style>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <header class="header-area"><div class="main-header-area"><div class="classy-nav-container breakpoint-on"><div class="container">
+    <nav class="classy-navbar justify-content-between" id="alimeNav">
+      <a class="nav-brand" href="../index.html"><img src="../img/core-img/logo.png" alt="Ken Reid Logo"></a>
+      <div class="classy-navbar-toggler"><span class="navbarToggler"><span></span><span></span><span></span></span></div>
+      <div class="classy-menu"><div class="classycloseIcon"><div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div></div>
+        <div class="classynav"><ul id="nav">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../data_science.html">Data Science</a></li>
+          <li><a href="../gallery.html">Photography</a></li>
+          <li><a href="../music.html">Music</a></li>
+          <li><a href="../literature.html">Literature</a></li>
+          <li class="active"><a href="../blog.html">Blog</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul></div></div>
+    </nav>
+  </div></div></div></header>
+
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/bg-img/75.png); background-size: cover; background-position: center center;">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <h2 class="page-title">Blog</h2>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Professional Second Brain</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <div class="about-us-area section-padding-80 clearfix">
+    <div class="container">
+      <div class="blog-post">
+        <h1>Your Professional Second Brain for Local LLM Work</h1>
+        <div class="blog-meta">
+          15 April 2026 &middot;
+          <span class="blog-tag">nerd-stuff</span>
+          <span class="blog-tag">genai</span>
+        </div>
+
+        <p>Most people hear second brain and think note-taking gimmick. In practice, it is operational memory for serious work. It is the thing that lets you stop relying on recollection and start relying on evidence.</p>
+
+        <p>For me, the biggest change came when I paired a structured second brain with a local LLM. The model was no longer generating generic advice from thin air. It was reading my project context, my decisions, and my constraints. The quality jump was immediate.</p>
+
+        <blockquote>
+          <p>A second brain is not an archive. It is a decision system you can query under pressure.</p>
+        </blockquote>
+
+        <div class="plain-english-box">
+          <h2>Quick jargon guide</h2>
+          <ul>
+            <li><strong>Second brain</strong>: an external note system for your work, so you are not relying only on your own memory.</li>
+            <li><strong>Local LLM (Large Language Model, the AI)</strong>: an AI writing and reasoning tool running on your own computer, instead of a company website or app.</li>
+            <li><strong>Operational memory</strong>: the notes, files, and records that help you make decisions and restart work quickly.</li>
+            <li><strong>Decision log</strong>: a dated file showing what you decided and why, so future-you does not have to guess.</li>
+            <li><strong>Re-entry time</strong>: how long it takes to get back up to speed after leaving a project alone for a while.</li>
+          </ul>
+        </div>
+
+        <img src="../img/bg-img/203.png" alt="Abstract image of white ball in a blue environment" loading="lazy">
+        <p class="figure-note">Your projects can be standalone, while being in the same workspace, so you can refer between them as needed.</p>
+
+        <h2>What a second brain actually is</h2>
+
+        <p>A second brain is a structured external system for storing context you need to make decisions. That context can include meeting notes, design discussions, experiment logs, messages, and snapshots of outputs.</p>
+
+        <p>If your system can quickly answer these questions, it is working:</p>
+        <ul>
+          <li>What are we trying to do?</li>
+          <li>Why did we choose this direction?</li>
+          <li>What changed since last time?</li>
+          <li>What is currently blocked?</li>
+          <li>What are the next concrete actions?</li>
+        </ul>
+
+        <p>If it cannot answer those quickly, it is probably just a notes graveyard.</p>
+
+        <h2>Why this matters professionally</h2>
+
+        <p>In real projects, work is interrupted; you context-switch; priorities move; stakeholders ask for updates on paused initiatives. A second brain, in my experience, reduces re-entry time and improves the quality of status communication.</p>
+
+        <p>And, a really nice bonus - it makes reviews far easier! Monthly and yearly self-reviews no longer start from "Uh, I literally can't remember anything I've done in a whole year" to straightforward evidence pulls from dated work trails. You've already done the work.</p>
+
+        <img src="../img/bg-img/75.png" alt="Professional workspace scene supporting project planning and delivery" loading="lazy">
+        <p class="figure-note">Professional memory systems turn project decisions into durable, reviewable artifacts.</p>
+
+        <h2>Start with structure, not tools</h2>
+
+        <p>You need a clear folder structure and consistent file roles.</p>
+
+        <h3>Example Core files per active project</h3>
+        <ul>
+          <li><strong>overview.md</strong>: problem, scope, stakeholders</li>
+          <li><strong>summary.md</strong>: current state snapshot</li>
+          <li><strong>decisions.md</strong>: dated decisions and rationale</li>
+          <li><strong>next-actions.md</strong>: explicit action list</li>
+        </ul>
+
+        <h3>Reference layout</h3>
+        <pre><code>second-brain/
+  index.md
+  current_goals.md
+  projects/
+    research-project/
+      overview.md
+      summary.md
+      decisions.md
+      next-actions.md
+      data/
+        raw/
+        processed/
+        README.md
+      experiments/
+        exp-2026-04-15.md
+    app-project/
+      overview.md
+      architecture.md
+      milestones.md
+      notes/
+        meeting-2026-04-14.md
+  reviews/
+    monthly/
+      2026-04-review.md
+    yearly/
+      2026-review.md
+</code></pre>
+
+        <div class="callout">
+          <p><strong>Rule of thumb:</strong> markdown for meaning, raw files for evidence. Keep both in the same system so claims stay auditable.</p>
+        </div>
+
+        <h2>Why local LLMs change the game</h2>
+
+        <p>Second brains used to be mostly retrieval systems for humans. In the GenAI era, they become context engines for models.</p>
+
+        <img src="../img/bg-img/290.png" alt="A signpost with ambiguous directions, both saying 'path'" loading="lazy">
+        <p class="figure-note">Local models work best when they can search through structured, living context instead of dead notes.</p>
+
+        <p>When your files are structured, a local model can do useful work quickly:</p>
+        <ul>
+          <li>draft project status updates from actual project history</li>
+          <li>surface decision inconsistencies before they become blockers</li>
+          <li>turn scattered notes into clear next-action lists</li>
+          <li>help prepare review summaries with evidence links</li>
+        </ul>
+
+        <p>Without structure, a local model is still happy to help. It will just help in the way a very confident stranger helps with directions.</p>
+
+        <p>If you want a simple way to start, <a href="https://lmstudio.ai/" target="_blank" rel="noopener">LM Studio</a> is an easy local setup. For lightweight first experiments, Llama 3.2 3B or Qwen 3.5 4B are both sensible starting points before you move to larger models.</p>
+
+        <p>Local deployment also improves privacy and cost control. Your notes stay on your machine, and frequent querying does not incur API spend.</p>
+
+        <h2>Small modifications that improve output quality</h2>
+
+        <ol>
+          <li>Add a top-level README describing scope, high-signal files, and boundaries.</li>
+          <li>Add local READMEs in complex folders with update cadence and data sensitivity.</li>
+          <li>Define style modes by project type (research, coding, planning, personal).</li>
+          <li>Use instruction files for each assistant ecosystem you use.</li>
+          <li>Keep a tiny prompt pattern log with what worked and failed.</li>
+        </ol>
+
+        <p>If you want a good external reference on writing lean, high-signal onboarding files for Claude specifically, HumanLayer's <a href="https://www.humanlayer.dev/blog/writing-a-good-claude-md" target="_blank" rel="noopener noreferrer">guide to writing a good CLAUDE.md</a> is worth reading.</p>
+
+        <h2>A practical prompt pattern</h2>
+
+        <p>When returning to a paused project, this pattern works reliably:</p>
+        <pre><code>Read overview.md, summary.md, decisions.md,
+and the last two experiment notes.
+Draft a 250-word status update with:
+1) completed work
+2) current risks
+3) next three actions.
+</code></pre>
+
+        <p>With a structured second brain, the result is usually specific, grounded, and immediately editable. Without one, it is often polished filler with fragile assumptions.</p>
+
+  <h2>Four examples where this pays off</h2>
+
+  <h3>1. Solo project restart</h3>
+  <p>You leave a personal app untouched for six weeks, come back cold, and do not remember which trade-offs were intentional versus accidental. If the project has <code>overview.md</code>, <code>summary.md</code>, <code>decisions.md</code>, and <code>next-actions.md</code>, a local model can turn that back into a useful restart brief in minutes. Instead of diff-hunting across old files and messages, you get a grounded summary of scope, unresolved questions, and the next three things worth doing.</p>
+
+  <p>Without a decision log, every restart feels like loading a Skyrim save and wondering why everyone is mad at you.</p>
+
+  <h3>2. Data science experiment tracking</h3>
+  <p>Suppose you run three model variants with different feature sets and preprocessing steps. Two weeks later, you vaguely remember that one looked promising, but not why you dropped it. If each run has a short experiment note and the major trade-offs land in <code>decisions.md</code>, the model can answer the real question: which variant was rejected, and was it accuracy, leakage risk, inference cost, or interpretability that killed it? That is far more useful than a pile of notebooks with mysterious filenames.</p>
+
+  <h3>3. Monthly review writing</h3>
+  <p>Reviews are usually painful because memory is selective and recent work crowds out older wins. A second brain fixes that by preserving dated evidence as you go. Then, instead of writing a review from memory, you ask the model to summarize completed work, decisions made, risks handled, and initiatives paused or closed. The difficult part stops being recall and becomes judgment, which is where your time should go.</p>
+
+  <h3>4. Stakeholder update under time pressure</h3>
+  <p>A paused initiative suddenly reappears and someone wants an update in ten minutes. Without a structured record, you improvise. With one, the model can draft a short status note from <code>summary.md</code>, recent notes, and decision history: what is done, what changed, what is blocked, and what happens next. That improves both speed and credibility because the output is tied back to project evidence rather than memory theatre.</p>
+
+        <h2>Key takeaways</h2>
+
+        <ol>
+          <li>A second brain is operational memory, not a note dump.</li>
+          <li>Structure and consistency matter more than tools.</li>
+          <li>Markdown plus raw evidence gives durability and auditability.</li>
+          <li>Local LLMs become useful when your context is clean and explicit.</li>
+          <li>The biggest payoff is better decisions under pressure.</li>
+        </ol>
+
+        <div class="downloads-block">
+          <p class="downloads-title">Download starter templates</p>
+          <div class="download-links">
+            <a class="download-link" href="downloads/copilot.md" download>copilot.md</a>
+            <a class="download-link" href="downloads/claude.md" download>claude.md</a>
+          </div>
+          <p class="downloads-note">Use these as a starting point on your next project. If you want to see the same systems mindset applied to practical tools and analysis work, visit <a href="../data_science.html">my data science page</a> or connect with me on <a href="https://www.linkedin.com/in/kennethneilreid" target="_blank" rel="noopener noreferrer">LinkedIn</a> and <a href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer">Bluesky</a>.</p>
+        </div>
+
+        <div class="faq-section">
+          <h2>Common questions</h2>
+
+          <details class="faq-item">
+            <summary>Do I need Obsidian or a special notes app for this?</summary>
+            <p>No. The structure matters more than the tool. A tidy folder of markdown files and raw evidence is enough to get most of the benefit.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Will this still help if I am working solo?</summary>
+            <p>Yes. Solo projects still suffer from context loss, bad handoffs to future-you, and forgotten decisions. In some ways the payoff is even more obvious when you are your own only stakeholder.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Why use a local model instead of a cloud one?</summary>
+            <p>Privacy, cost control, and convenience. If the notes stay on your machine, you can query them frequently without sending project context elsewhere or paying per prompt.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>What should I create first if my current notes are a mess?</summary>
+            <p>Start with four files: overview, summary, decisions, and next actions. That is enough structure to reduce re-entry time and produce better model outputs without a huge migration project.</p>
+          </details>
+        </div>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="snowball-vs-avalanche.html" class="blog-card">
+                <div class="blog-card-img"><img src="../blog/img/debt_total_curve.png" alt="Snowball vs Avalanche: The Science of Paying Off Debt" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">14 April 2026 · 1 min read</div>
+                  <h4 class="blog-card-title">Snowball vs Avalanche: The Science of Paying Off Debt</h4>
+                  <p class="blog-card-excerpt">Snowball and avalanche both work, but for different reasons. A practical guide with simulator-backed charts on interest, timing, and motivation.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">nerd-stuff</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="photo-tagging-with-clip.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/bg-img/1.png" alt="Building a Photo Tagging System with CLIP" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">10 April 2026 · 1 min read</div>
+                  <h4 class="blog-card-title">Building a Photo Tagging System with CLIP</h4>
+                  <p class="blog-card-excerpt">How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute, zero API cost, running entirely on CPU.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">nerd-stuff</span><span class="blog-tag">photography</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="rating-systems.html" class="blog-card">
+                <div class="blog-card-img"><img src="../blog/img/rating_distribution.png" alt="Book Ratings Are Broken" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 April 2026 · 1 min read</div>
+                  <h4 class="blog-card-title">Book Ratings Are Broken</h4>
+                  <p class="blog-card-excerpt">569 books rated, and the star system fails at all of them. A data-driven look at my own Goodreads ratings, review lengths, genre bias, and the silence problem.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">books</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <hr style="margin: 40px 0;">
+        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/alime.bundle.js"></script>
+  <script src="../js/lightbox.js"></script>
+  <script src="../js/share.js"></script>
+  <script src="../js/default-assets/active.js"></script>
+  <script src="../js/shared-components.js"></script>
+  <script>renderFooter('footer-section');</script>
+</body>
+</html>
