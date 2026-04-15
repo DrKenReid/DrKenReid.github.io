@@ -7,6 +7,15 @@
     <language>en</language>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Your Professional Second Brain for Local LLM Work</title>
+      <link>https://www.kenreid.co.uk/blog/second-brain-local-llm-professional.html</link>
+      <guid>https://www.kenreid.co.uk/blog/second-brain-local-llm-professional.html</guid>
+      <pubDate>Wed, 15 Apr 2026 00:00:00 +0000</pubDate>
+      <description>A practical system for project documentation, knowledge management, and local LLM workflows that improves delivery, reviews, and project re-entry.</description>
+      <category>nerd-stuff</category>
+      <category>genai</category>
+    </item>
+    <item>
       <title>Snowball vs Avalanche: The Science of Paying Off Debt</title>
       <link>https://www.kenreid.co.uk/blog/snowball-vs-avalanche.html</link>
       <guid>https://www.kenreid.co.uk/blog/snowball-vs-avalanche.html</guid>

@@ -1,5 +1,13 @@
 [
   {
+    "title": "Your Professional Second Brain for Local LLM Work",
+    "date": "2026-04-15",
+    "tags": ["nerd-stuff", "genai"],
+    "excerpt": "A practical system for project documentation, knowledge management, and local LLM workflows that improves delivery, reviews, and project re-entry.",
+    "url": "blog/second-brain-local-llm-professional.html",
+    "image": "img/bg-img/75.png"
+  },
+  {
     "title": "Snowball vs Avalanche: The Science of Paying Off Debt",
     "date": "2026-04-14",
     "tags": ["nerd-stuff"],
