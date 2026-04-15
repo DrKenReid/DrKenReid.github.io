@@ -63,6 +63,175 @@ function renderInstagramSection(targetId) {
  * Renders the site footer with copyright and social links.
  * @param {string} targetId - ID of the element to inject into.
  */
+var DEFAULT_POST_IMAGE = 'img/bg-img/2.png';
+
+function estimateReadingMinutes(post) {
+    var text = (post.title || '') + ' ' + (post.excerpt || '');
+    var words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    return Math.max(1, Math.ceil(words / 220));
+}
+
+function formatPostDate(dateValue) {
+    return new Date(dateValue).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+}
+
+function resolveCurrentPostFileName() {
+    var path = window.location.pathname || '';
+    var fileName = path.split('/').pop();
+    if (fileName) return fileName;
+
+    var canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) return '';
+
+    var canonicalHref = canonical.getAttribute('href') || '';
+    return canonicalHref.split('/').pop();
+}
+
+function loadBlogPosts() {
+    if (window.BLOG_POSTS && window.BLOG_POSTS.length) {
+        return Promise.resolve(window.BLOG_POSTS.slice());
+    }
+
+    return fetch('../data/posts.json').then(function(response) {
+        return response.json();
+    });
+}
+
+function renderRelatedPosts(targetId) {
+    var el = document.getElementById(targetId);
+    if (!el) return;
+
+    var currentFileName = resolveCurrentPostFileName();
+    var tagNodes = document.querySelectorAll('.blog-post .blog-meta .blog-tag');
+    var currentTags = Array.prototype.map.call(tagNodes, function(node) {
+        return (node.textContent || '').trim().toLowerCase();
+    }).filter(Boolean);
+
+    loadBlogPosts()
+        .then(function(posts) {
+            var related = posts
+                .filter(function(post) {
+                    var postFileName = (post.url || '').split('/').pop();
+                    return postFileName !== currentFileName;
+                })
+                .map(function(post) {
+                    var sharedTags = (post.tags || []).filter(function(tag) {
+                        return currentTags.indexOf(String(tag).toLowerCase()) !== -1;
+                    });
+                    return {
+                        post: post,
+                        sharedTags: sharedTags.length,
+                        dateValue: new Date(post.date).getTime()
+                    };
+                })
+                .filter(function(entry) {
+                    return entry.sharedTags > 0;
+                })
+                .sort(function(a, b) {
+                    if (b.sharedTags !== a.sharedTags) {
+                        return b.sharedTags - a.sharedTags;
+                    }
+                    return b.dateValue - a.dateValue;
+                })
+                .slice(0, 3)
+                .map(function(entry) { return entry.post; });
+
+            if (related.length < 3) {
+                posts
+                    .filter(function(post) {
+                        var postFileName = (post.url || '').split('/').pop();
+                        if (postFileName === currentFileName) return false;
+                        return !related.some(function(existing) { return existing.url === post.url; });
+                    })
+                    .sort(function(a, b) {
+                        return new Date(b.date) - new Date(a.date);
+                    })
+                    .slice(0, 3 - related.length)
+                    .forEach(function(post) {
+                        related.push(post);
+                    });
+            }
+
+            if (!related.length) {
+                el.innerHTML = '';
+                return;
+            }
+
+            el.innerHTML = '<div class="related-posts">' +
+                '<h2>Related posts</h2>' +
+                '<div class="row related-posts-grid">' +
+                related.map(function(post) {
+                    var tagHtml = (post.tags || []).map(function(tag) {
+                        return '<span class="blog-tag">' + tag + '</span>';
+                    }).join('');
+                    var imageSrc = post.image || DEFAULT_POST_IMAGE;
+                    return '<div class="col-12 col-md-6 col-lg-4 mb-30">' +
+                        '<a href="' + (post.url || '').replace(/^blog\//, '') + '" class="blog-card">' +
+                        '<div class="blog-card-img"><img src="../' + imageSrc + '" alt="' + post.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'../' + DEFAULT_POST_IMAGE + '\';"></div>' +
+                        '<div class="blog-card-body">' +
+                        '<div class="blog-card-date">' + formatPostDate(post.date) + ' · ' + estimateReadingMinutes(post) + ' min read</div>' +
+                        '<h4 class="blog-card-title">' + post.title + '</h4>' +
+                        '<p class="blog-card-excerpt">' + (post.excerpt || '') + '</p>' +
+                        '<div class="blog-card-tags">' + tagHtml + '</div>' +
+                        '</div>' +
+                        '</a>' +
+                        '</div>';
+                }).join('') +
+                '</div>' +
+                '</div>';
+        })
+        .catch(function(error) {
+            console.error('Failed to load related posts:', error);
+            el.innerHTML = '';
+        });
+}
+
+function renderBlogThanksCta() {
+    var blogPost = document.querySelector('.blog-post');
+    var relatedPosts = blogPost ? blogPost.querySelector('.related-posts') : null;
+
+    if (!blogPost || !relatedPosts || blogPost.querySelector('.blog-thanks-cta')) {
+        return;
+    }
+
+    var cta = document.createElement('section');
+    cta.className = 'blog-thanks-cta';
+    cta.setAttribute('aria-label', 'Stay connected with Ken Reid');
+    cta.innerHTML = '' +
+        '<div class="blog-thanks-cta__media">' +
+        '<div class="blog-thanks-cta__portrait">' +
+        '<img src="../img/bg-img/res.png" alt="Ken Reid writing on a whiteboard" loading="lazy">' +
+        '</div>' +
+        '</div>' +
+        '<div class="blog-thanks-cta__content">' +
+        '<span class="blog-thanks-cta__eyebrow">Thanks for reading</span>' +
+        '<h2>Follow the next post, project, or experiment</h2>' +
+        '<p>I write about systems, data science, books, photography, and practical AI. The simplest way to keep up is Bluesky or LinkedIn. If you already use a feed reader, RSS is there too.</p>' +
+        '<div class="blog-thanks-cta__actions">' +
+        '<a class="blog-thanks-cta__button blog-thanks-cta__button--primary" href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer">' + BLUESKY_SVG + '<span>Follow on Bluesky</span></a>' +
+        '<a class="blog-thanks-cta__button" href="https://www.linkedin.com/in/kennethneilreid" target="_blank" rel="noopener noreferrer">' +
+        '<i class="ti-linkedin" aria-hidden="true"></i><span>Follow on LinkedIn</span></a>' +
+        '</div>' +
+        '<p class="blog-thanks-cta__subnote">Prefer feed readers? Use <a href="https://feedly.com/i/subscription/feed%2Fhttps%3A%2F%2Fwww.kenreid.co.uk%2Ffeed.xml" target="_blank" rel="noopener noreferrer">Feedly</a> or open the <a href="../feed.xml">raw RSS feed</a>.</p>' +
+        '<div class="blog-thanks-cta__links">' +
+        '<a class="blog-thanks-cta__pill" href="../feed.xml">' +
+        '<i class="ti-rss" aria-hidden="true"></i><span>RSS feed</span></a>' +
+        '<a class="blog-thanks-cta__pill" href="https://github.com/DrKenReid" target="_blank" rel="noopener noreferrer">' +
+        '<i class="fa fa-github" aria-hidden="true"></i><span>GitHub</span></a>' +
+        '<a class="blog-thanks-cta__pill" href="../data_science.html">' +
+        '<i class="fa fa-line-chart" aria-hidden="true"></i><span>Data Science</span></a>' +
+        '<a class="blog-thanks-cta__pill" href="../contact.html">' +
+        '<i class="ti-email" aria-hidden="true"></i><span>Get in touch</span></a>' +
+        '</div>' +
+        '</div>';
+
+    blogPost.insertBefore(cta, relatedPosts);
+}
+
 function renderFooter(targetId) {
     var el = document.getElementById(targetId);
     if (!el) return;
@@ -83,3 +252,5 @@ function renderFooter(targetId) {
         '<a href="https://www.linkedin.com/in/kennethneilreid" aria-label="LinkedIn"><i class="ti-linkedin" aria-hidden="true"></i></a>' +
         '</div></div></div></div></div></footer>';
 }
+
+    renderBlogThanksCta();
