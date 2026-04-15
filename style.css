@@ -701,6 +701,7 @@ input:required {
       font-weight: 700;
       font-size: 82px;
       display: block;
+      padding-right: 0.08em;
       margin-bottom: 0;
       background: -webkit-linear-gradient(#ff9696, #ffe89e);
       -webkit-background-clip: text;
