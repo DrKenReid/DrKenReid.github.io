@@ -34,7 +34,7 @@
       "@type": "Person",
       "name": "Ken Reid"
     },
-    "keywords": ["books", "ratings", "Goodreads", "data science"]
+    "keywords": ["books", "ratings", "Goodreads"]
   }
   </script>
   <style>
@@ -57,6 +57,11 @@
     .book-cover{max-width:140px;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.25);margin-bottom:15px}
     .bcl{float:left;margin:8px 24px 15px 0}.bcr{float:right;margin:8px 0 15px 24px}
     .bsec{overflow:hidden}
+    .post-cta { display: inline-block; padding: 10px 18px; border-radius: 999px; background: #fc6060; color: #fff; text-decoration: none; font-weight: 700; }
+    .post-cta:hover { color: #fff; background: #e94f4f; }
+    .related-posts { margin-top: 36px; border-top: 1px solid #eee; padding-top: 24px; }
+    .related-posts-grid .col-12 { display: flex; }
+    .related-posts-grid .blog-card { width: 100%; }
     @media(max-width:575px){.book-cover{float:none!important;display:block;margin:0 auto 15px}}
   </style>
 </head>
@@ -104,8 +109,6 @@
         <div class="blog-meta">
           12 April 2026 &middot;
           <span class="blog-tag">books</span>
-          <span class="blog-tag">opinion</span>
-          <span class="blog-tag">data-science</span>
         </div>
 
         <p>&ldquo;Fun read.&rdquo; Five stars.</p>
@@ -217,8 +220,47 @@
 
         <p>If any of this has made you curious about your own reading data, you can export your Goodreads library and upload it to my <a href="https://goodreads-analysis.streamlit.app/" target="_blank">Goodreads Reading Stats app</a>. It&rsquo;ll show you your own rating distribution, genre biases, reading timeline, and a few other things I built while procrastinating on this blog post. It won&rsquo;t fix the rating system, but it might make you feel seen.</p>
 
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="self-help-books.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/bg-img/97.png" alt="Why Most Self-Help Books Are Trash (And Which Ones Aren't)" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">11 April 2026</div>
+                  <h4 class="blog-card-title">Why Most Self-Help Books Are Trash (And Which Ones Aren't)</h4>
+                  <p class="blog-card-excerpt">The bad ones are blog posts stretched to 300 pages. The good ones cite their sources. Here's how to tell the difference.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">books</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="snowball-vs-avalanche.html" class="blog-card">
+                <div class="blog-card-img"><img src="img/debt_total_curve.png" alt="Snowball vs Avalanche: The Science of Paying Off Debt" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">14 April 2026</div>
+                  <h4 class="blog-card-title">Snowball vs Avalanche: The Science of Paying Off Debt</h4>
+                  <p class="blog-card-excerpt">Snowball and avalanche both work, but for different reasons. A practical guide with simulator-backed charts on interest, timing, and motivation.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">nerd-stuff</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="photo-tagging-with-clip.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/bg-img/1.png" alt="Building a Photo Tagging System with CLIP" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">10 April 2026</div>
+                  <h4 class="blog-card-title">Building a Photo Tagging System with CLIP</h4>
+                  <p class="blog-card-excerpt">How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute, zero API cost, running entirely on CPU.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">nerd-stuff</span><span class="blog-tag">photography</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
         <hr style="margin: 40px 0;">
-        <p style="text-align: center;"><a href="../blog.html">&larr; Back to all posts</a></p>
+        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
       </div>
     </div>
   </div>

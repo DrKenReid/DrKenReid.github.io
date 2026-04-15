@@ -19,6 +19,44 @@
   <link rel="canonical" href="https://www.kenreid.co.uk/blog.html">
   <link rel="alternate" type="application/rss+xml" title="Ken Reid's Blog" href="https://www.kenreid.co.uk/feed.xml">
   <link rel="stylesheet" href="style.css">
+  <style>
+    #blog-filters {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    #blog-filters .gallery-filter-btn {
+      white-space: nowrap;
+    }
+    .blog-card-img {
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      border-radius: 8px 8px 0 0;
+      background: #f1f1f1;
+    }
+    .blog-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    @media (max-width: 767px) {
+      #blog-filters {
+        overflow-x: auto;
+        overflow-y: hidden;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        padding-bottom: 6px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+      }
+      #blog-filters .gallery-filter-btn {
+        flex: 0 0 auto;
+        scroll-snap-align: start;
+      }
+    }
+  </style>
   <script src="js/blog.js"></script>
 </head>
 <body>

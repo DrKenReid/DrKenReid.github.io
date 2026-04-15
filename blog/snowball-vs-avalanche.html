@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Snowball vs Avalanche debt payoff methods explained in plain English, with charts from my Debt Payoff Simulator.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Snowball vs Avalanche: The Science of Paying Off Debt - Ken Reid</title>
+  <meta property="og:title" content="Snowball vs Avalanche: The Science of Paying Off Debt">
+  <meta property="og:description" content="A practical guide to debt payoff strategy with plain-English explanations and simulator-backed charts.">
+  <meta property="og:image" content="https://www.kenreid.co.uk/blog/img/debt_total_curve.png">
+  <meta property="og:url" content="https://www.kenreid.co.uk/blog/snowball-vs-avalanche.html">
+  <meta property="og:type" content="article">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="../img/core-img/favicon.png">
+  <meta name="theme-color" content="#000000">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="canonical" href="https://www.kenreid.co.uk/blog/snowball-vs-avalanche.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Snowball vs Avalanche: The Science of Paying Off Debt",
+    "description": "A practical guide to debt payoff strategy with plain-English explanations and simulator-backed charts.",
+    "image": "https://www.kenreid.co.uk/blog/img/debt_total_curve.png",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk"
+    },
+    "datePublished": "2026-04-14",
+    "publisher": {
+      "@type": "Person",
+      "name": "Ken Reid"
+    },
+    "keywords": ["nerd-stuff", "debt-payoff", "personal-finance"]
+  }
+  </script>
+  <style>
+    .blog-post { max-width: 780px; margin: 0 auto; }
+    .blog-post h1 { font-size: 32px; margin-bottom: 10px; }
+    .blog-post .blog-meta { color: #888; font-size: 14px; margin-bottom: 30px; }
+    .blog-post .blog-meta .blog-tag { margin-left: 4px; }
+    .blog-post p { font-size: 16px; line-height: 1.9; color: #444; margin-bottom: 20px; }
+    .blog-post h2 { font-size: 24px; margin: 40px 0 15px; }
+    .blog-post h3 { font-size: 20px; margin: 30px 0 10px; }
+    .blog-post img { max-width: 100%; border-radius: 8px; margin: 20px 0; }
+    .blog-post code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 14px; }
+    .blog-post ul, .blog-post ol { margin-bottom: 20px; padding-left: 25px; }
+    .blog-post li { font-size: 16px; line-height: 1.9; color: #444; margin-bottom: 6px; }
+    .chart-note { text-align: center; color: #6c6c6c; font-size: 13px; margin-top: -8px; margin-bottom: 18px; }
+    .chart-link { display: block; border-radius: 10px; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+    .chart-link:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0,0,0,0.18); }
+    .sim-cta { text-align: center; margin: 28px 0 30px; }
+    .sim-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff5f45, #ff2f59);
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      text-decoration: none;
+      box-shadow: 0 10px 22px rgba(255, 47, 89, 0.28);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .sim-button:hover { color: #fff; transform: translateY(-2px); box-shadow: 0 14px 28px rgba(255, 47, 89, 0.35); }
+    .repo-note { text-align: center; margin: 12px 0 8px; }
+    .repo-link-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      color: #222;
+      background: #f5f5f5;
+      border: 1px solid #e7e7e7;
+      text-decoration: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+    .repo-link-icon:hover {
+      color: #111;
+      background: #efefef;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.14);
+    }
+    .repo-link-icon i { font-size: 22px; line-height: 1; }
+    .example-table, .outcome-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
+    .example-table th, .outcome-table th { background: #f7f7f7; font-weight: 700; padding: 10px 12px; text-align: left; border-bottom: 2px solid #e0e0e0; }
+    .example-table td, .outcome-table td { padding: 8px 12px; border-bottom: 1px solid #eee; color: #444; }
+    .example-table .total-row td { font-weight: 700; background: #fafafa; }
+    .outcome-table .winner td { color: #1b9e77; font-weight: 700; }
+    .checklist { list-style: none; padding-left: 0; counter-reset: checklist-step; }
+    .checklist li { counter-increment: checklist-step; padding: 10px 0 10px 44px; position: relative; border-bottom: 1px solid #f0f0f0; font-size: 16px; line-height: 1.7; color: #444; }
+    .checklist li::before { content: counter(checklist-step); position: absolute; left: 0; top: 10px; background: #fc6060; color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
+    .faq-item { border-bottom: 1px solid #eee; padding: 4px 0; }
+    .faq-item > summary { font-weight: 700; font-size: 16px; cursor: pointer; color: #222; padding: 12px 0; list-style: none; display: block; }
+    .faq-item > summary::-webkit-details-marker { display: none; }
+    .faq-item > summary::before { content: "+ "; color: #fc6060; font-weight: 900; }
+    .faq-item[open] > summary::before { content: "\2212\00a0"; }
+    .faq-item > p { margin: 4px 0 14px 0; font-size: 15px; line-height: 1.8; color: #555; }
+    .overwhelmed-box { background: #fff8f5; border-left: 4px solid #fc6060; border-radius: 0 8px 8px 0; padding: 18px 24px 12px; margin: 36px 0; }
+    .overwhelmed-box > h2 { margin-top: 4px; font-size: 22px; }
+    .post-cta { display: inline-block; padding: 10px 18px; border-radius: 999px; background: #fc6060; color: #fff; text-decoration: none; font-weight: 700; }
+    .post-cta:hover { color: #fff; background: #e94f4f; }
+    .related-posts { margin-top: 36px; border-top: 1px solid #eee; padding-top: 24px; }
+    .related-posts-grid .col-12 { display: flex; }
+    .related-posts-grid .blog-card { width: 100%; }
+  </style>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <header class="header-area"><div class="main-header-area"><div class="classy-nav-container breakpoint-on"><div class="container">
+    <nav class="classy-navbar justify-content-between" id="alimeNav">
+      <a class="nav-brand" href="../index.html"><img src="../img/core-img/logo.png" alt="Ken Reid Logo"></a>
+      <div class="classy-navbar-toggler"><span class="navbarToggler"><span></span><span></span><span></span></span></div>
+      <div class="classy-menu"><div class="classycloseIcon"><div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div></div>
+        <div class="classynav"><ul id="nav">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../data_science.html">Data Science</a></li>
+          <li><a href="../gallery.html">Photography</a></li>
+          <li><a href="../music.html">Music</a></li>
+          <li><a href="../literature.html">Literature</a></li>
+          <li class="active"><a href="../blog.html">Blog</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+        </ul></div></div>
+    </nav>
+  </div></div></div></header>
+
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../blog/img/debt_total_curve.png); background-size: cover; background-position: center center;">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <h2 class="page-title">Blog</h2>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Snowball vs Avalanche</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <div class="about-us-area section-padding-80 clearfix">
+    <div class="container">
+      <div class="blog-post">
+        <h1>The Science of Paying Off Debt Efficiently</h1>
+        <div class="blog-meta">
+          14 April 2026 &middot;
+          <span class="blog-tag">nerd-stuff</span>
+        </div>
+
+        <p>Whether you have $4,000 or $400,000 in debt, it is heavy. Taking on more debt can feel like a solution to today's problem, even if it hurts you tomorrow.</p>
+
+        <p>There are two main debt payoff methods: snowball and avalanche. Both work. The harder question is which one works for you. That is usually not a math problem. It is a psychology problem.</p>
+
+        <p>Before we get into methods, here is the plain-English version of the jargon:</p>
+        <ul>
+          <li><strong>APR (annual percentage rate)</strong>: the yearly price of borrowing money.</li>
+          <li><strong>Interest</strong>: the fee you pay for carrying debt. Higher APR means interest piles up faster.</li>
+          <li><strong>Minimum payment</strong>: the smallest amount your lender lets you pay each month.</li>
+          <li><strong>Principal</strong>: the original amount you borrowed.</li>
+        </ul>
+
+        <h2>Why paying more early saves much more later</h2>
+
+        <p>Time is not neutral. The longer debt sits there, the more expensive it gets. At 24% APR, interest is about 2% per month. On a $4,000 balance, that is around $80 in month one, and then more each month if the balance does not fall quickly.</p>
+
+        <a class="chart-link" href="img/debt_payment_power.png" data-lightbox="debt-charts" data-title="Same debt, different monthly payment" aria-label="Expand chart image">
+          <img src="img/debt_payment_power.png" alt="Paying $220/month instead of $120/month clears the same $4,000 debt roughly twice as fast, because every extra dollar also shrinks the principal that next month's interest is charged on" loading="lazy">
+        </a>
+        <p class="chart-note">$120/mo to $220/mo: <strong>56</strong> months to <strong>23</strong> months, and about <strong>$1,636</strong> less interest.</p>
+
+        <p>Waiting also costs money. If you wait four months before starting a plan, interest has extra time to compound before you make serious progress.</p>
+
+        <a class="chart-link" href="img/debt_start_delay.png" data-lightbox="debt-charts" data-title="Delaying payoff adds cost" aria-label="Expand chart image">
+          <img src="img/debt_start_delay.png" alt="Waiting just 4 months before starting a payoff plan adds hundreds of dollars in interest before serious repayment has even begun" loading="lazy">
+        </a>
+        <p class="chart-note">Start now vs wait 4 months: <strong>20</strong> months vs <strong>22</strong> months, plus about <strong>$170</strong> extra interest.</p>
+
+        <p>If you remember one thing from this post, let it be this: paying debt early does two jobs at once. It lowers what you owe now, and it lowers future interest on what you owe.</p>
+
+        <h2>Snowball: kill the smallest balance first</h2>
+
+        <p>With snowball, you sort debts from smallest balance to largest, pay the minimum on everything, and send all extra money to the smallest balance first. Once that debt is gone, you roll that full payment into the next one.</p>
+
+        <p>This is powerful because it gives visible wins quickly. Seeing one account disappear can keep your motivation alive.</p>
+
+        <p>The downside: it can cost more interest overall if your highest APR debt is not the smallest balance.</p>
+
+        <h2>Avalanche: kill the highest APR first</h2>
+
+        <p>Pay minimums on everything, then attack the debt with the highest APR. This usually saves more interest and often pays everything off faster.</p>
+
+        <p>The downside: it can feel slower because you may spend months paying down a large high-APR balance before any account disappears from your list.</p>
+
+        <a class="chart-link" href="img/debt_total_curve.png" data-lightbox="debt-charts" data-title="Debt remaining over time" aria-label="Expand chart image">
+          <img src="img/debt_total_curve.png" alt="On identical debt inputs, avalanche clears the full balance 6 months faster than snowball, with a visibly steeper decline after the first year" loading="lazy">
+        </a>
+        <p class="chart-note">Avalanche vs snowball: <strong>48</strong> months vs <strong>54</strong> months, and about <strong>$6,215</strong> less interest.</p>
+
+        <h2>Both methods work. The better one is the one you will stick to.</h2>
+
+        <p>Snowball is psychology dressed as strategy. Avalanche is math that requires discipline. Real life matters here. If quick wins keep you consistent, snowball may beat a mathematically better plan you abandon after a few months.</p>
+
+        <p>I often blend both: clear one tiny debt for momentum, then return to pure high-APR targeting.</p>
+
+        <a class="chart-link" href="img/debt_method_comparison.png" data-lightbox="debt-charts" data-title="Cost and speed comparison" aria-label="Expand chart image">
+          <img src="img/debt_method_comparison.png" alt="Side-by-side bars show avalanche costs about $6,216 less in total interest than snowball and finishes about 6 months sooner on this debt stack" loading="lazy">
+        </a>
+        <p class="chart-note">Example comparison from the same simulator inputs.</p>
+
+        <h2>Worked example: a real debt stack</h2>
+
+        <p>The charts above use this exact set of five debts. Monthly take-home: $4,219. Fixed expenses: $3,376. Combined minimums: $772/month. That leaves $200 extra to throw at debt each month.</p>
+
+        <table class="example-table" aria-label="Example debt stack inputs">
+          <thead>
+            <tr><th scope="col">Debt</th><th scope="col">Balance</th><th scope="col">APR</th><th scope="col">Min. Payment</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Store Card</td><td>$890</td><td>15.92%</td><td>$77/mo</td></tr>
+            <tr><td>Credit Card A</td><td>$14,123</td><td>28.20%</td><td>$224/mo</td></tr>
+            <tr><td>Credit Card B</td><td>$8,356</td><td>20.47%</td><td>$212/mo</td></tr>
+            <tr><td>Personal Loan</td><td>$7,287</td><td>11.25%</td><td>$193/mo</td></tr>
+            <tr><td>Medical Bill</td><td>$3,540</td><td>2.08%</td><td>$66/mo</td></tr>
+            <tr class="total-row"><td>Total</td><td>$34,196</td><td>n/a</td><td>$772/mo</td></tr>
+          </tbody>
+        </table>
+
+        <p>Running both strategies on these exact numbers:</p>
+
+        <table class="outcome-table" aria-label="Avalanche vs snowball outcome for the example debt stack">
+          <thead>
+            <tr><th scope="col">Strategy</th><th scope="col">Months</th><th scope="col">Interest paid</th><th scope="col">Total paid</th></tr>
+          </thead>
+          <tbody>
+            <tr class="winner"><td>Avalanche</td><td>48</td><td>$15,254</td><td>$49,450</td></tr>
+            <tr><td>Snowball</td><td>54</td><td>$21,470</td><td>$55,666</td></tr>
+          </tbody>
+        </table>
+
+        <p>Avalanche saves <strong>about $6,216 in interest</strong> and finishes roughly six months sooner. That is a meaningful chunk of time and money. Whether it outweighs the psychological wins of snowball is still a question only you can answer, but this makes the trade-off much easier to see.</p>
+
+        <h2>So I built a simulator</h2>
+
+        <p>Most debt calculators are too generic or too annoying to use. I wanted one where you can enter your real debts, real APRs, and actual monthly budget, then compare snowball vs avalanche directly. Every chart in this post was generated directly from the same simulation engine that powers the live app, not illustrative diagrams or filler visuals. You can <a href="https://github.com/DrKenReid/Debt-Payoff-Simulator" target="_blank" rel="noopener noreferrer">read the source code on GitHub</a> or find more tools like this on my <a href="../data_science.html">data science page</a>.</p>
+
+        <div class="sim-cta">
+          <a class="sim-button" href="https://debt-payoff-simulator.streamlit.app" target="_blank" rel="noopener noreferrer">Open Debt Payoff Simulator</a>
+        </div>
+
+        <h2>What no calculator can do for you</h2>
+
+        <ol>
+          <li><strong>1. Refinancing:</strong> It only helps if the new loan is truly cheaper and affordable.</li>
+          <li><strong>2. Emergency cash:</strong> Even a small buffer can stop new debt from replacing old debt.</li>
+          <li><strong>3. Sustainability:</strong> A tiny entertainment budget is usually better than total restriction.</li>
+          <li><strong>4. Simplicity:</strong> A simple monthly budget beats a complicated spreadsheet you never maintain.</li>
+          <li><strong>5. Timing:</strong> Extra cash early is disproportionately powerful because it also reduces future interest.</li>
+          <li><strong>6. Behavior:</strong> Being honest about needs versus wants is often where the biggest change happens.</li>
+          <li><strong>7. Scale:</strong> The biggest wins usually come from major bills (housing, transport), not tiny cuts.</li>
+        </ol>
+
+        <p><strong>The best debt plan is any plan you can actually follow.</strong> Build one, start now, and keep it boring and consistent.</p>
+
+        <div class="overwhelmed-box">
+          <h2>If you are overwhelmed, start here</h2>
+          <p>You do not need to understand all of the above to act. Four things that take less than 20 minutes total:</p>
+          <ol class="checklist">
+            <li>Write down every debt: name, current balance, APR, and minimum monthly payment.</li>
+            <li>Add up all your minimums. This is your floor, the amount you must pay each month no matter what.</li>
+            <li>Subtract all living expenses and those minimums from your monthly take-home. Whatever is left over, even a small number, is your weapon.</li>
+            <li>Choose a method. Snowball if you need visible wins to stay on track. Avalanche if saving the most money matters more. Then send that leftover amount there, every month, without renegotiating with yourself.</li>
+          </ol>
+          <div class="sim-cta" style="margin: 18px 0 6px;">
+            <a class="sim-button" href="https://debt-payoff-simulator.streamlit.app" target="_blank" rel="noopener noreferrer">Open Debt Payoff Simulator</a>
+          </div>
+        </div>
+
+        <div class="faq-section">
+          <h2>Common questions</h2>
+
+          <details class="faq-item">
+            <summary>Is snowball ever actually better than avalanche?</summary>
+            <p>Mathematically, no, avalanche always costs less. But if the quick early wins of snowball keep you consistent over two years when avalanche would lead you to disengage, snowball produces a better real-world result. The best strategy is the one you will stick to.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>How much extra should I pay each month?</summary>
+            <p>Any extra helps, and earlier is disproportionately better because it reduces the principal that future interest is charged on. Even an extra $30/month compounds meaningfully over time. The sensitivity analysis in the simulator shows exactly what each additional $50/month saves on your specific debt stack.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>What if I cannot cover my minimum payments?</summary>
+            <p>Snowball and avalanche cannot help until income exceeds minimums. You need to cut expenses, increase income, or contact creditors about hardship or forbearance programs before a strategy can take hold. The simulator will flag this and show the monthly shortfall clearly.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Should I consolidate my debts before starting?</summary>
+            <p>Only if the consolidation APR is genuinely lower than your current debts and the new monthly payment is affordable. Otherwise you are reshaping the problem without reducing it. The simulator has a dedicated balance transfer analysis tab for modelling exactly this scenario.</p>
+          </details>
+        </div>
+
+        <p class="repo-note">
+          <a class="repo-link-icon" href="https://github.com/DrKenReid/Debt-Payoff-Simulator" target="_blank" rel="noopener noreferrer" aria-label="Debt Payoff Simulator source code on GitHub" title="View source code on GitHub">
+            <i class="fa fa-github" aria-hidden="true"></i>
+          </a>
+        </p>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="photo-tagging-with-clip.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/bg-img/1.png" alt="Building a Photo Tagging System with CLIP" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">10 April 2026</div>
+                  <h4 class="blog-card-title">Building a Photo Tagging System with CLIP</h4>
+                  <p class="blog-card-excerpt">How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute, zero API cost, running entirely on CPU.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">nerd-stuff</span><span class="blog-tag">photography</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="rating-systems.html" class="blog-card">
+                <div class="blog-card-img"><img src="img/rating_distribution.png" alt="Book Ratings Are Broken" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 April 2026</div>
+                  <h4 class="blog-card-title">Book Ratings Are Broken</h4>
+                  <p class="blog-card-excerpt">569 books rated, and the star system fails at all of them. A data-driven look at my own Goodreads ratings, review lengths, genre bias, and the silence problem.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">books</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="self-help-books.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/bg-img/97.png" alt="Why Most Self-Help Books Are Trash (And Which Ones Aren't)" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">11 April 2026</div>
+                  <h4 class="blog-card-title">Why Most Self-Help Books Are Trash (And Which Ones Aren't)</h4>
+                  <p class="blog-card-excerpt">The bad ones are blog posts stretched to 300 pages. The good ones cite their sources. Here's how to tell the difference.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">books</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <hr style="margin: 40px 0;">
+        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/alime.bundle.js"></script>
+  <script src="../js/lightbox.js"></script>
+  <script src="../js/share.js"></script>
+  <script src="../js/default-assets/active.js"></script>
+  <script src="../js/shared-components.js"></script>
+  <script>renderFooter('footer-section');</script>
+</body>
+</html>

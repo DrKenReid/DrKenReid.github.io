@@ -34,7 +34,7 @@
       "@type": "Person",
       "name": "Ken Reid"
     },
-    "keywords": ["CLIP", "OpenCLIP", "photo tagging", "computer vision", "Python", "data science"]
+    "keywords": ["nerd-stuff", "photography", "CLIP", "OpenCLIP", "computer vision"]
   }
   </script>
   <style>
@@ -53,6 +53,11 @@
     .blog-post blockquote p { margin: 0; font-style: italic; }
     .blog-post ul, .blog-post ol { margin-bottom: 20px; padding-left: 25px; }
     .blog-post li { font-size: 16px; line-height: 1.9; color: #444; margin-bottom: 6px; }
+    .post-cta { display: inline-block; padding: 10px 18px; border-radius: 999px; background: #fc6060; color: #fff; text-decoration: none; font-weight: 700; }
+    .post-cta:hover { color: #fff; background: #e94f4f; }
+    .related-posts { margin-top: 36px; border-top: 1px solid #eee; padding-top: 24px; }
+    .related-posts-grid .col-12 { display: flex; }
+    .related-posts-grid .blog-card { width: 100%; }
   </style>
 </head>
 <body>
@@ -98,8 +103,7 @@
         <h1>Building a Photo Tagging System with CLIP</h1>
         <div class="blog-meta">
           10 April 2026 &middot;
-          <span class="blog-tag">data-science</span>
-          <span class="blog-tag">python</span>
+          <span class="blog-tag">nerd-stuff</span>
           <span class="blog-tag">photography</span>
         </div>
 
@@ -163,8 +167,47 @@
 
         <p>The full code is on <a href="https://github.com/DrKenReid/DrKenReid.github.io/blob/master/scripts/tag_photos.py" target="_blank">GitHub</a>, and you can see the result on the <a href="../gallery.html">Photography</a> page.</p>
 
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="snowball-vs-avalanche.html" class="blog-card">
+                <div class="blog-card-img"><img src="img/debt_total_curve.png" alt="Snowball vs Avalanche: The Science of Paying Off Debt" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">14 April 2026</div>
+                  <h4 class="blog-card-title">Snowball vs Avalanche: The Science of Paying Off Debt</h4>
+                  <p class="blog-card-excerpt">Snowball and avalanche both work, but for different reasons. A practical guide with simulator-backed charts on interest, timing, and motivation.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">nerd-stuff</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="rating-systems.html" class="blog-card">
+                <div class="blog-card-img"><img src="img/rating_distribution.png" alt="Book Ratings Are Broken" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 April 2026</div>
+                  <h4 class="blog-card-title">Book Ratings Are Broken</h4>
+                  <p class="blog-card-excerpt">569 books rated, and the star system fails at all of them. A data-driven look at my own Goodreads ratings, review lengths, genre bias, and the silence problem.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">books</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="self-help-books.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/bg-img/97.png" alt="Why Most Self-Help Books Are Trash (And Which Ones Aren't)" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">11 April 2026</div>
+                  <h4 class="blog-card-title">Why Most Self-Help Books Are Trash (And Which Ones Aren't)</h4>
+                  <p class="blog-card-excerpt">The bad ones are blog posts stretched to 300 pages. The good ones cite their sources. Here's how to tell the difference.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">books</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
         <hr style="margin: 40px 0;">
-        <p style="text-align: center;"><a href="../blog.html">&larr; Back to all posts</a></p>
+        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
       </div>
     </div>
   </div>
