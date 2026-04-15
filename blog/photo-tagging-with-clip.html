@@ -10,6 +10,10 @@
   <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/1.png">
   <meta property="og:url" content="https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html">
   <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Building a Photo Tagging System with CLIP">
+  <meta name="twitter:description" content="How I used OpenCLIP to automatically classify 370 photos into 10 categories — zero API cost.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/bg-img/1.png">
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
@@ -111,6 +115,17 @@
 
         <p>So I did what any self-respecting data scientist would do: I made the computer do it.</p>
 
+        <div class="plain-english-box">
+          <h2>Quick jargon guide</h2>
+          <ul>
+            <li><strong>CLIP</strong>: an AI model that compares a picture with a text description and scores how well they match.</li>
+            <li><strong>Embedding space</strong>: the number-based map the AI uses internally, where similar images and similar phrases end up closer together.</li>
+            <li><strong>Zero-shot</strong>: using the AI as-is, without first retraining it on my own photo collection.</li>
+            <li><strong>Threshold</strong>: the cut-off score that decides whether a tag is added or left out.</li>
+            <li><strong>Multi-label tagging</strong>: letting one image have several tags at once, rather than forcing it into just one category.</li>
+          </ul>
+        </div>
+
         <h2>The Approach</h2>
 
         <p><a href="https://github.com/mlfoundations/open_clip" target="_blank">OpenCLIP</a> is an open-source implementation of OpenAI's CLIP model. The core idea is elegant: it maps images and text into the same embedding space, so you can describe what you're looking for in plain English and the model will tell you how well each image matches. No training on your own data, no labelling, no fine-tuning. You just... describe the categories and let it figure it out.</p>
@@ -167,14 +182,49 @@
 
         <p>The full code is on <a href="https://github.com/DrKenReid/DrKenReid.github.io/blob/master/scripts/tag_photos.py" target="_blank">GitHub</a>, and you can see the result on the <a href="../gallery.html">Photography</a> page.</p>
 
+        <div class="faq-section">
+          <h2>Common questions</h2>
+
+          <details class="faq-item">
+            <summary>Did this need a GPU?</summary>
+            <p>No. I ran it on CPU and processed all 370 images in 44 seconds. A GPU would help at larger scale, but it was unnecessary for this gallery.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Why not just tag the photos manually?</summary>
+            <p>Manual tagging would have taken much longer and would likely have been inconsistent over time. The model gave me a fast first pass that I can rerun whenever I add more photos.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>How accurate was it in practice?</summary>
+            <p>Roughly 85 to 90 percent by my own spot checks. It handled obvious cases well and mostly struggled on weird, abstract, or borderline compositions.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Could this work for someone else's image collection?</summary>
+            <p>Yes, as long as the categories are described clearly. The prompts and thresholds would need tuning for a different style of photography, but the overall approach is reusable.</p>
+          </details>
+        </div>
+
         <div class="related-posts">
           <h2>Related posts</h2>
           <div class="row related-posts-grid">
             <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="snowball-vs-avalanche.html" class="blog-card">
-                <div class="blog-card-img"><img src="img/debt_total_curve.png" alt="Snowball vs Avalanche: The Science of Paying Off Debt" loading="lazy"></div>
+              <a href="second-brain-local-llm-professional.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/bg-img/75.png" alt="Your Professional Second Brain for Local LLM Work" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">14 April 2026</div>
+                  <div class="blog-card-date">15 April 2026 · 1 min read</div>
+                  <h4 class="blog-card-title">Your Professional Second Brain for Local LLM Work</h4>
+                  <p class="blog-card-excerpt">A practical system for project documentation, knowledge management, and local LLM workflows that improves delivery, reviews, and project re-entry.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">nerd-stuff</span><span class="blog-tag">genai</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="snowball-vs-avalanche.html" class="blog-card">
+                <div class="blog-card-img"><img src="../blog/img/debt_total_curve.png" alt="Snowball vs Avalanche: The Science of Paying Off Debt" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">14 April 2026 · 1 min read</div>
                   <h4 class="blog-card-title">Snowball vs Avalanche: The Science of Paying Off Debt</h4>
                   <p class="blog-card-excerpt">Snowball and avalanche both work, but for different reasons. A practical guide with simulator-backed charts on interest, timing, and motivation.</p>
                   <div class="blog-card-tags"><span class="blog-tag">nerd-stuff</span></div>
@@ -183,22 +233,11 @@
             </div>
             <div class="col-12 col-md-6 col-lg-4 mb-30">
               <a href="rating-systems.html" class="blog-card">
-                <div class="blog-card-img"><img src="img/rating_distribution.png" alt="Book Ratings Are Broken" loading="lazy"></div>
+                <div class="blog-card-img"><img src="../blog/img/rating_distribution.png" alt="Book Ratings Are Broken" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">12 April 2026</div>
+                  <div class="blog-card-date">12 April 2026 · 1 min read</div>
                   <h4 class="blog-card-title">Book Ratings Are Broken</h4>
                   <p class="blog-card-excerpt">569 books rated, and the star system fails at all of them. A data-driven look at my own Goodreads ratings, review lengths, genre bias, and the silence problem.</p>
-                  <div class="blog-card-tags"><span class="blog-tag">books</span></div>
-                </div>
-              </a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="self-help-books.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/bg-img/97.png" alt="Why Most Self-Help Books Are Trash (And Which Ones Aren't)" loading="lazy"></div>
-                <div class="blog-card-body">
-                  <div class="blog-card-date">11 April 2026</div>
-                  <h4 class="blog-card-title">Why Most Self-Help Books Are Trash (And Which Ones Aren't)</h4>
-                  <p class="blog-card-excerpt">The bad ones are blog posts stretched to 300 pages. The good ones cite their sources. Here's how to tell the difference.</p>
                   <div class="blog-card-tags"><span class="blog-tag">books</span></div>
                 </div>
               </a>

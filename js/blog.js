@@ -2,9 +2,16 @@ var allPosts = [];
 var activeTag = 'all';
 var DEFAULT_POST_IMAGE = 'img/bg-img/2.png';
 
+function loadPosts() {
+	if (window.BLOG_POSTS && window.BLOG_POSTS.length) {
+		return Promise.resolve(window.BLOG_POSTS.slice());
+	}
+
+	return fetch('data/posts.json').then(function(r) { return r.json(); });
+}
+
 function initBlog() {
-	fetch('data/posts.json')
-		.then(function(r) { return r.json(); })
+	loadPosts()
 		.then(function(data) {
 			allPosts = data.sort(function(a, b) {
 				return new Date(b.date) - new Date(a.date);

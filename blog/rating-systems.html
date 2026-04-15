@@ -10,6 +10,10 @@
   <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/97.png">
   <meta property="og:url" content="https://www.kenreid.co.uk/blog/rating-systems.html">
   <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Book Ratings Are Broken">
+  <meta name="twitter:description" content="Rating systems are broken. A data-driven look at 569 books on Goodreads.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/bg-img/97.png">
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
@@ -117,6 +121,17 @@
 
         <p>I&rsquo;ve rated 569 books on <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank">Goodreads</a>, and I have opinions about all of them. Recently ran my own export through some analysis scripts (because apparently this is what data scientists do for fun on a Saturday), and what I found was a bit damning. Not of the books, but of the entire concept of reducing a literary experience to a number between 1 and 5. You can explore the full interactive version of this analysis on my <a href="https://goodreads-analysis.streamlit.app/" target="_blank">Goodreads Reading Stats app</a>, but here are the highlights.</p>
 
+        <div class="plain-english-box">
+          <h2>Quick jargon guide</h2>
+          <ul>
+            <li><strong>Community average</strong>: the average Goodreads score from everyone who rated the book, not just me.</li>
+            <li><strong>Selection bias</strong>: my results are skewed because I usually choose books I already think I will like.</li>
+            <li><strong>Survivorship bias</strong>: long books I dislike often get abandoned, so the long books I finish look better than they really should.</li>
+            <li><strong>Genre bias</strong>: I rate some types of books more generously because I read them for different reasons.</li>
+            <li><strong>Substitution heuristic</strong>: when your brain answers a hard question with an easier one, like "how did I feel at the end?" instead of "how good was this book overall?"</li>
+          </ul>
+        </div>
+
         <h2>My rating distribution, or: &ldquo;people who like reading probably rate books highly&rdquo;</h2>
 
         <img src="img/rating_distribution.png" alt="Rating distribution" loading="lazy">
@@ -218,7 +233,31 @@
 
         <p>Probably not, though. Some books really are just fun reads.</p>
 
-        <p>If any of this has made you curious about your own reading data, you can export your Goodreads library and upload it to my <a href="https://goodreads-analysis.streamlit.app/" target="_blank">Goodreads Reading Stats app</a>. It&rsquo;ll show you your own rating distribution, genre biases, reading timeline, and a few other things I built while procrastinating on this blog post. It won&rsquo;t fix the rating system, but it might make you feel seen.</p>
+        <p>If any of this has made you curious about your own reading data, you can export your Goodreads library and upload it to my <a href="https://goodreads-analysis.streamlit.app/" target="_blank">Goodreads Reading Stats app</a>. It&rsquo;ll show you your own rating distribution, genre biases, reading timeline, and a few other things I built while procrastinating on this blog post. It won&rsquo;t fix the rating system, but it might make you feel seen. And if you want to see the source material behind this post, you can browse <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" rel="noopener noreferrer">my Goodreads profile here</a>.</p>
+
+        <div class="faq-section">
+          <h2>Common questions</h2>
+
+          <details class="faq-item">
+            <summary>Are you saying star ratings are useless?</summary>
+            <p>Not completely. They are useful as a quick emotional signal, but they are far too blunt to capture why a book worked or failed for a reader.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Why are your ratings so high overall?</summary>
+            <p>Because I usually pick books I expect to like, and I often abandon books that are clearly not for me. That pushes the average upward before the rating system even enters the picture.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Would half-stars fix the whole problem?</summary>
+            <p>No, but they would reduce some of the compression in the middle of the scale. They would make it easier to say "pretty good" without pretending that means the same thing as "excellent."</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>What is actually more useful than a star rating?</summary>
+            <p>A short review. Even two or three sentences about what worked, what failed, and who the book is for carries far more signal than a lone number.</p>
+          </details>
+        </div>
 
         <div class="related-posts">
           <h2>Related posts</h2>
@@ -227,7 +266,7 @@
               <a href="self-help-books.html" class="blog-card">
                 <div class="blog-card-img"><img src="../img/bg-img/97.png" alt="Why Most Self-Help Books Are Trash (And Which Ones Aren't)" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">11 April 2026</div>
+                  <div class="blog-card-date">11 April 2026 · 1 min read</div>
                   <h4 class="blog-card-title">Why Most Self-Help Books Are Trash (And Which Ones Aren't)</h4>
                   <p class="blog-card-excerpt">The bad ones are blog posts stretched to 300 pages. The good ones cite their sources. Here's how to tell the difference.</p>
                   <div class="blog-card-tags"><span class="blog-tag">books</span></div>
@@ -235,24 +274,24 @@
               </a>
             </div>
             <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="snowball-vs-avalanche.html" class="blog-card">
-                <div class="blog-card-img"><img src="img/debt_total_curve.png" alt="Snowball vs Avalanche: The Science of Paying Off Debt" loading="lazy"></div>
+              <a href="second-brain-local-llm-professional.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/bg-img/75.png" alt="Your Professional Second Brain for Local LLM Work" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">14 April 2026</div>
-                  <h4 class="blog-card-title">Snowball vs Avalanche: The Science of Paying Off Debt</h4>
-                  <p class="blog-card-excerpt">Snowball and avalanche both work, but for different reasons. A practical guide with simulator-backed charts on interest, timing, and motivation.</p>
-                  <div class="blog-card-tags"><span class="blog-tag">nerd-stuff</span></div>
+                  <div class="blog-card-date">15 April 2026 · 1 min read</div>
+                  <h4 class="blog-card-title">Your Professional Second Brain for Local LLM Work</h4>
+                  <p class="blog-card-excerpt">A practical system for project documentation, knowledge management, and local LLM workflows that improves delivery, reviews, and project re-entry.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">nerd-stuff</span><span class="blog-tag">genai</span></div>
                 </div>
               </a>
             </div>
             <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="photo-tagging-with-clip.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/bg-img/1.png" alt="Building a Photo Tagging System with CLIP" loading="lazy"></div>
+              <a href="snowball-vs-avalanche.html" class="blog-card">
+                <div class="blog-card-img"><img src="../blog/img/debt_total_curve.png" alt="Snowball vs Avalanche: The Science of Paying Off Debt" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">10 April 2026</div>
-                  <h4 class="blog-card-title">Building a Photo Tagging System with CLIP</h4>
-                  <p class="blog-card-excerpt">How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute, zero API cost, running entirely on CPU.</p>
-                  <div class="blog-card-tags"><span class="blog-tag">nerd-stuff</span><span class="blog-tag">photography</span></div>
+                  <div class="blog-card-date">14 April 2026 · 1 min read</div>
+                  <h4 class="blog-card-title">Snowball vs Avalanche: The Science of Paying Off Debt</h4>
+                  <p class="blog-card-excerpt">Snowball and avalanche both work, but for different reasons. A practical guide with simulator-backed charts on interest, timing, and motivation.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">nerd-stuff</span></div>
                 </div>
               </a>
             </div>
