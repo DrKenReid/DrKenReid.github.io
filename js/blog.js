@@ -70,6 +70,10 @@ function filterByTag(tag, btnEl) {
 }
 
 function estimateReadingMinutes(post) {
+	if (typeof window.estimateReadingMinutes === 'function') {
+		return window.estimateReadingMinutes(post);
+	}
+
 	if (typeof post.readMinutes === 'number' && isFinite(post.readMinutes)) {
 		return Math.max(1, Math.round(post.readMinutes));
 	}
@@ -140,35 +144,26 @@ function renderPosts() {
 	}
 
 	filtered.forEach(function(post) {
-		var col = document.createElement('div');
-		col.className = 'col-12 col-md-6 col-lg-4 mb-30';
-
-		var tagHtml = (post.tags || []).map(function(t) {
-			return '<span class="blog-tag">' + t + '</span>';
-		}).join(' ');
-
 		var dateStr = new Date(post.date).toLocaleDateString('en-GB', {
 			day: 'numeric',
 			month: 'long',
 			year: 'numeric'
 		});
 
-		var readTime = estimateReadingMinutes(post);
-		var imageSrc = post.image || DEFAULT_POST_IMAGE;
+		var col = typeof window.createBlogCardElement === 'function'
+			? window.createBlogCardElement(post, {
+				href: post.url,
+				imageSrc: post.image || DEFAULT_POST_IMAGE,
+				fallbackImage: DEFAULT_POST_IMAGE,
+				dateStr: dateStr,
+				showReadTime: true
+			})
+			: (function() {
+				var fallbackCol = document.createElement('div');
+				fallbackCol.className = 'col-12 col-md-6 col-lg-4 mb-30';
+				return fallbackCol;
+			})();
 
-		var card = document.createElement('a');
-		card.href = post.url;
-		card.className = 'blog-card';
-		card.innerHTML =
-			'<div class="blog-card-img"><img src="' + imageSrc + '" alt="' + post.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'' + DEFAULT_POST_IMAGE + '\';"></div>' +
-			'<div class="blog-card-body">' +
-			'<div class="blog-card-date">' + dateStr + ' · ' + readTime + ' min read</div>' +
-			'<h4 class="blog-card-title">' + post.title + '</h4>' +
-			'<p class="blog-card-excerpt">' + (post.excerpt || '') + '</p>' +
-			'<div class="blog-card-tags">' + tagHtml + '</div>' +
-			'</div>';
-
-		col.appendChild(card);
 		container.appendChild(col);
 	});
 

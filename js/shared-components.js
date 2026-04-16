@@ -8,6 +8,53 @@
 
 var BLUESKY_SVG = '<svg class="bluesky-icon" viewBox="0 0 568 501" xmlns="http://www.w3.org/2000/svg"><path d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.21C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.842 193.273-185.702 70.281-63.111-64.76-33.889-129.52 80.986-149.071-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.659 0 75.291 0 57.946 0-28.906 76.135-1.612 123.121 33.664z"/></svg>';
 
+function renderHeader(targetId, options) {
+    var el = document.getElementById(targetId);
+    if (!el) return;
+
+    var opts = options || {};
+    var basePath = opts.basePath || './';
+    var active = opts.active || '';
+    var hobbiesActive = active === 'hobbies';
+    var hobbiesChild = opts.hobbiesChild || '';
+
+    function isActive(key) {
+        return active === key ? ' class="active"' : '';
+    }
+
+    function isHobbyChildActive(key) {
+        return hobbiesChild === key ? ' class="active"' : '';
+    }
+
+    el.innerHTML = '<header class="header-area"><div class="main-header-area"><div class="classy-nav-container breakpoint-on"><div class="container">' +
+        '<nav class="classy-navbar justify-content-between" id="alimeNav">' +
+        '<a class="nav-brand" href="' + basePath + 'index.html"><img src="' + basePath + 'img/core-img/logo.png" alt="Ken Reid Logo"></a>' +
+        '<div class="classy-navbar-toggler"><span class="navbarToggler"><span></span><span></span><span></span></span></div>' +
+        '<div class="classy-menu"><div class="classycloseIcon"><div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div></div>' +
+        '<div class="classynav"><ul id="nav">' +
+        '<li' + isActive('home') + '><a href="' + basePath + 'index.html">Home</a></li>' +
+        '<li' + isActive('about') + '><a href="' + basePath + 'about.html">About</a></li>' +
+        '<li' + isActive('data_science') + '><a href="' + basePath + 'data_science.html">Data Science</a></li>' +
+        '<li' + (hobbiesActive ? ' class="active"' : '') + '><a href="#">Hobbies</a>' +
+        '<ul class="dropdown">' +
+        '<li' + isHobbyChildActive('gallery') + '><a href="' + basePath + 'gallery.html">Photography</a></li>' +
+        '<li' + isHobbyChildActive('music') + '><a href="' + basePath + 'music.html">Music</a></li>' +
+        '<li' + isHobbyChildActive('literature') + '><a href="' + basePath + 'literature.html">Literature</a></li>' +
+        '</ul></li>' +
+        '<li' + isActive('blog') + '><a href="' + basePath + 'blog.html">Blog</a></li>' +
+        '<li' + isActive('contact') + '><a href="' + basePath + 'contact.html">Contact</a></li>' +
+        '</ul></div></div></nav>' +
+        '</div></div></div></header>';
+
+    if (typeof jQuery !== 'undefined' && jQuery.fn.classyNav) {
+        try {
+            jQuery('#alimeNav').classyNav();
+        } catch (e) {
+            console.warn('Header nav init failed:', e);
+        }
+    }
+}
+
 /**
  * Renders the "Follow Instagram" section with 6 image tiles.
  * @param {string} targetId - ID of the element to inject into.
@@ -66,9 +113,48 @@ function renderInstagramSection(targetId) {
 var DEFAULT_POST_IMAGE = 'img/bg-img/2.png';
 
 function estimateReadingMinutes(post) {
+    if (typeof post.readMinutes === 'number' && isFinite(post.readMinutes)) {
+        return Math.max(1, Math.round(post.readMinutes));
+    }
+
+    if (typeof post._readMinutes === 'number' && isFinite(post._readMinutes)) {
+        return Math.max(1, Math.round(post._readMinutes));
+    }
+
     var text = (post.title || '') + ' ' + (post.excerpt || '');
     var words = text.trim() ? text.trim().split(/\s+/).length : 0;
     return Math.max(1, Math.ceil(words / 220));
+}
+
+function createBlogCardElement(post, options) {
+    var opts = options || {};
+    var col = document.createElement('div');
+    col.className = opts.colClass || 'col-12 col-md-6 col-lg-4 mb-30';
+
+    var dateStr = opts.dateStr || formatPostDate(post.date);
+    var tagHtml = (post.tags || []).map(function(tag) {
+        return '<span class="blog-tag">' + tag + '</span>';
+    }).join('');
+
+    var imageSrc = opts.imageSrc || post.image || DEFAULT_POST_IMAGE;
+    var href = opts.href || post.url;
+    var showReadTime = opts.showReadTime !== false;
+    var readTimeText = showReadTime ? (' · ' + estimateReadingMinutes(post) + ' min read') : '';
+
+    var card = document.createElement('a');
+    card.href = href;
+    card.className = opts.cardClass || 'blog-card';
+    card.innerHTML =
+        '<div class="blog-card-img"><img src="' + imageSrc + '" alt="' + post.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'' + (opts.fallbackImage || DEFAULT_POST_IMAGE) + '\';"></div>' +
+        '<div class="blog-card-body">' +
+        '<div class="blog-card-date">' + dateStr + readTimeText + '</div>' +
+        '<h4 class="blog-card-title">' + post.title + '</h4>' +
+        '<p class="blog-card-excerpt">' + (post.excerpt || '') + '</p>' +
+        '<div class="blog-card-tags">' + tagHtml + '</div>' +
+        '</div>';
+
+    col.appendChild(card);
+    return col;
 }
 
 function formatPostDate(dateValue) {

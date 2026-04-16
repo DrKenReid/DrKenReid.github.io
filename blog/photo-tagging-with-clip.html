@@ -41,50 +41,12 @@
     "keywords": ["nerd-stuff", "photography", "CLIP", "OpenCLIP", "computer vision"]
   }
   </script>
-  <style>
-    .blog-post { max-width: 780px; margin: 0 auto; }
-    .blog-post h1 { font-size: 32px; margin-bottom: 10px; }
-    .blog-post .blog-meta { color: #888; font-size: 14px; margin-bottom: 30px; }
-    .blog-post .blog-meta .blog-tag { margin-left: 4px; }
-    .blog-post p { font-size: 16px; line-height: 1.9; color: #444; margin-bottom: 20px; }
-    .blog-post h2 { font-size: 24px; margin: 40px 0 15px; }
-    .blog-post h3 { font-size: 20px; margin: 30px 0 10px; }
-    .blog-post img { max-width: 100%; border-radius: 8px; margin: 20px 0; }
-    .blog-post code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-size: 14px; }
-    .blog-post pre { background: #252525; color: #e0e0e0; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 20px 0; }
-    .blog-post pre code { background: none; padding: 0; color: inherit; }
-    .blog-post blockquote { border-left: 4px solid #fc6060; padding: 15px 20px; margin: 20px 0; background: #f7f7f7; border-radius: 0 8px 8px 0; }
-    .blog-post blockquote p { margin: 0; font-style: italic; }
-    .blog-post ul, .blog-post ol { margin-bottom: 20px; padding-left: 25px; }
-    .blog-post li { font-size: 16px; line-height: 1.9; color: #444; margin-bottom: 6px; }
-    .post-cta { display: inline-block; padding: 10px 18px; border-radius: 999px; background: #fc6060; color: #fff; text-decoration: none; font-weight: 700; }
-    .post-cta:hover { color: #fff; background: #e94f4f; }
-    .related-posts { margin-top: 36px; border-top: 1px solid #eee; padding-top: 24px; }
-    .related-posts-grid .col-12 { display: flex; }
-    .related-posts-grid .blog-card { width: 100%; }
-  </style>
 </head>
 <body>
   <div id="preloader"><div class="loader"></div></div>
 
   <!-- Header -->
-  <header class="header-area"><div class="main-header-area"><div class="classy-nav-container breakpoint-on"><div class="container">
-    <nav class="classy-navbar justify-content-between" id="alimeNav">
-      <a class="nav-brand" href="../index.html"><img src="../img/core-img/logo.png" alt="Ken Reid Logo"></a>
-      <div class="classy-navbar-toggler"><span class="navbarToggler"><span></span><span></span><span></span></span></div>
-      <div class="classy-menu"><div class="classycloseIcon"><div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div></div>
-        <div class="classynav"><ul id="nav">
-          <li><a href="../index.html">Home</a></li>
-          <li><a href="../about.html">About</a></li>
-          <li><a href="../data_science.html">Data Science</a></li>
-          <li><a href="../gallery.html">Photography</a></li>
-          <li><a href="../music.html">Music</a></li>
-          <li><a href="../literature.html">Literature</a></li>
-          <li class="active"><a href="../blog.html">Blog</a></li>
-          <li><a href="../contact.html">Contact</a></li>
-        </ul></div></div>
-    </nav>
-  </div></div></div></header>
+  <div id="header-section"></div>
 
   <!-- Breadcrumb -->
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/bg-img/1.png);">
@@ -262,6 +224,7 @@
   <script src="../js/share.js"></script>
   <script src="../js/default-assets/active.js"></script>
   <script src="../js/shared-components.js"></script>
-  <script>renderFooter('footer-section');</script>
+  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
 </body>
 </html>
