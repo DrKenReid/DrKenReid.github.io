@@ -5,6 +5,10 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
+    <lastBuildDate>Wed, 15 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Wed, 15 Apr 2026 00:00:00 +0000</pubDate>
+    <docs>https://www.rssboard.org/rss-specification</docs>
+    <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>Your Professional Second Brain for Local LLM Work</title>
@@ -43,7 +47,7 @@
       <title>Building a Photo Tagging System with CLIP</title>
       <link>https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html</link>
       <guid>https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html</guid>
-      <pubDate>Thu, 10 Apr 2026 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 10 Apr 2026 00:00:00 +0000</pubDate>
       <description>How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute — zero API cost, running entirely on CPU.</description>
       <category>nerd-stuff</category>
       <category>photography</category>
