@@ -205,37 +205,7 @@
   </div>
 
   <!-- Header -->
-  <header class="header-area">
-    <div class="main-header-area">
-        <div class="classy-nav-container breakpoint-on">
-        <div class="container">
-          <nav class="classy-navbar justify-content-between" id="alimeNav">
-            <a class="nav-brand" href="./index.html"><img src="./img/core-img/logo.png" alt="Ken Reid Logo"></a>
-            <div class="classy-navbar-toggler">
-              <span class="navbarToggler"><span></span><span></span><span></span></span>
-            </div>
-            <div class="classy-menu">
-              <div class="classycloseIcon">
-                <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
-              </div>
-              <div class="classynav">
-                <ul id="nav">
-                  <li><a href="./index.html">Home</a></li>
-                  <li><a href="./about.html">About</a></li>
-                  <li class="active"><a href="./data_science.html">Data Science</a></li>
-                  <li><a href="./gallery.html">Photography</a></li>
-                  <li><a href="./music.html">Music</a></li>
-                  <li><a href="./literature.html">Literature</a></li>
-                  <li><a href="./blog.html">Blog</a></li>
-                  <li><a href="./contact.html">Contact</a></li>
-                </ul>
-              </div>
-            </div>
-          </nav>
-        </div>
-      </div>
-    </div>
-  </header>
+  <div id="header-section"></div>
 
   <!-- Breadcrumb -->
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/bg-img/16.png);">
@@ -767,6 +737,7 @@
   <script src="js/default-assets/active.js"></script>
   <script src="js/shared-components.js"></script>
   <script>
+    renderHeader('header-section', { basePath: './', active: 'data_science' });
     renderInstagramSection('instagram-section');
     renderFooter('footer-section');
 
@@ -794,21 +765,16 @@
         var container = document.getElementById('ds-blog-grid');
         if (!container || !selectedPosts.length) return;
         selectedPosts.forEach(function(post) {
-          var col = document.createElement('div');
-          col.className = 'col-12 col-md-6 col-lg-4 mb-30';
           var dateStr = new Date(post.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-          var tagHtml = (post.tags || []).map(function(t) {
-            return '<span class="blog-tag">' + t + '</span>';
-          }).join(' ');
-          col.innerHTML =
-            '<a href="' + post.url + '" class="blog-card" style="display:block;">' +
-              (post.image ? '<div class="blog-card-img"><img src="' + post.image + '" alt="' + post.title + '" loading="lazy"></div>' : '') +
-              '<div class="blog-card-body">' +
-                '<div class="blog-card-date">' + dateStr + '</div>' +
-                '<h4 class="blog-card-title">' + post.title + '</h4>' +
-                '<p class="blog-card-excerpt">' + (post.excerpt || '') + '</p>' +
-                '<div class="blog-card-tags">' + tagHtml + '</div>' +
-              '</div></a>';
+          var col = typeof createBlogCardElement === 'function'
+            ? createBlogCardElement(post, {
+                colClass: 'col-12 col-md-6 col-lg-4 mb-30',
+                href: post.url,
+                imageSrc: post.image,
+                dateStr: dateStr,
+                showReadTime: false
+              })
+            : document.createElement('div');
           container.appendChild(col);
         });
       }).catch(function() {});

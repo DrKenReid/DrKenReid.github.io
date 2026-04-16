@@ -11,7 +11,8 @@
   <meta property="og:url" content="https://www.kenreid.co.uk/music.html">
   <meta property="og:type" content="website">
   <!-- TODO: Replace with GA4 Measurement ID (G-XXXXXXX) -->
-  <script><!-- Analytics removed - UA deprecated. Add GA4 here. --></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
   <link rel="icon" href="./img/core-img/favicon.png">
   <link rel="apple-touch-icon" href="./img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#000000">
@@ -23,23 +24,7 @@
   <div id="preloader"><div class="loader"></div></div>
 
   <!-- Header -->
-  <header class="header-area"><div class="main-header-area"><div class="classy-nav-container breakpoint-on"><div class="container">
-    <nav class="classy-navbar justify-content-between" id="alimeNav">
-      <a class="nav-brand" href="./index.html"><img src="./img/core-img/logo.png" alt="Ken Reid Logo"></a>
-      <div class="classy-navbar-toggler"><span class="navbarToggler"><span></span><span></span><span></span></span></div>
-      <div class="classy-menu"><div class="classycloseIcon"><div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div></div>
-        <div class="classynav"><ul id="nav">
-          <li><a href="./index.html">Home</a></li>
-          <li><a href="./about.html">About</a></li>
-          <li><a href="./data_science.html">Data Science</a></li>
-          <li><a href="./gallery.html">Photography</a></li>
-          <li class="active"><a href="./music.html">Music</a></li>
-          <li><a href="./literature.html">Literature</a></li>
-                  <li><a href="./blog.html">Blog</a></li>
-          <li><a href="./contact.html">Contact</a></li>
-        </ul></div></div>
-    </nav>
-  </div></div></div></header>
+  <div id="header-section"></div>
 
   <!-- Breadcrumb -->
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/bg-img/13.png);">
@@ -230,6 +215,7 @@
   <script src="js/default-assets/active.js"></script>
   <script src="js/shared-components.js"></script>
   <script>
+    renderHeader('header-section', { basePath: './', active: 'hobbies', hobbiesChild: 'music' });
     renderInstagramSection('instagram-section');
     renderFooter('footer-section');
     // Defer TikTok embed script
