@@ -5,7 +5,7 @@ window.BLOG_POSTS = [
     tags: ['ai', 'coding', 'education', 'career'],
     excerpt: 'Coding still matters because the value is not syntax memorization. It is learning to break down problems, reason across systems, and build reliable solutions.',
     url: 'blog/why-learn-to-code-age-of-ai.html',
-    image: 'img/bg-img/203.png'
+    image: 'img/bg-img/14.png'
   },
   {
     title: 'Your Professional Second Brain for Local LLM Work',
