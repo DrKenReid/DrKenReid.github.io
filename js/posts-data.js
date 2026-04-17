@@ -1,5 +1,13 @@
 window.BLOG_POSTS = [
   {
+    title: 'Why It Still Matters to Learn to Code in the Age of AI',
+    date: '2026-04-16',
+    tags: ['ai', 'coding', 'education', 'career'],
+    excerpt: 'Coding still matters because the value is not syntax memorization. It is learning to break down problems, reason across systems, and build reliable solutions.',
+    url: 'blog/why-learn-to-code-age-of-ai.html',
+    image: 'img/bg-img/203.png'
+  },
+  {
     title: 'Your Professional Second Brain for Local LLM Work',
     date: '2026-04-15',
     tags: ['nerd-stuff', 'genai'],

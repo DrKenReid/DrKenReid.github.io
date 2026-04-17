@@ -5,11 +5,22 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 15 Apr 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Wed, 15 Apr 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Thu, 16 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Thu, 16 Apr 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Why It Still Matters to Learn to Code in the Age of AI</title>
+      <link>https://www.kenreid.co.uk/blog/why-learn-to-code-age-of-ai.html</link>
+      <guid>https://www.kenreid.co.uk/blog/why-learn-to-code-age-of-ai.html</guid>
+      <pubDate>Thu, 16 Apr 2026 00:00:00 +0000</pubDate>
+      <description>Coding still matters because the value is not syntax memorization. It is learning to break down problems, reason across systems, and build reliable solutions.</description>
+      <category>ai</category>
+      <category>coding</category>
+      <category>education</category>
+      <category>career</category>
+    </item>
     <item>
       <title>Your Professional Second Brain for Local LLM Work</title>
       <link>https://www.kenreid.co.uk/blog/second-brain-local-llm-professional.html</link>
