@@ -5,7 +5,7 @@ window.BLOG_POSTS = [
     tags: ['books', 'accessibility', 'education', 'opinion'],
     excerpt: 'The stigma against audiobooks is rooted in bad assumptions about learning, intelligence, and what counts as reading. The research doesn\'t support any of it.',
     url: 'blog/in-defense-of-audiobooks.html',
-    image: 'img/bg-img/200.png'
+    image: 'img/bg-img/366.png'
   },
   {
     title: 'Why It Still Matters to Learn to Code in the Age of AI',
@@ -13,7 +13,7 @@ window.BLOG_POSTS = [
     tags: ['ai', 'coding', 'education', 'career'],
     excerpt: 'Coding still matters because the value is not syntax memorization. It is learning to break down problems, reason across systems, and build reliable solutions.',
     url: 'blog/why-learn-to-code-age-of-ai.html',
-    image: 'img/bg-img/366.png'
+    image: 'img/bg-img/14.png'
   },
   {
     title: 'Your Professional Second Brain for Local LLM Work',
