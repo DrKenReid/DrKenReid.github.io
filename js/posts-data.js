@@ -1,5 +1,13 @@
 window.BLOG_POSTS = [
   {
+    title: 'In Defense of Audiobooks',
+    date: '2026-04-17',
+    tags: ['books', 'accessibility', 'education', 'opinion'],
+    excerpt: 'The stigma against audiobooks is rooted in bad assumptions about learning, intelligence, and what counts as reading. The research doesn\'t support any of it.',
+    url: 'blog/in-defense-of-audiobooks.html',
+    image: 'img/bg-img/200.png'
+  },
+  {
     title: 'Why It Still Matters to Learn to Code in the Age of AI',
     date: '2026-04-16',
     tags: ['ai', 'coding', 'education', 'career'],

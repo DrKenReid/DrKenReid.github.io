@@ -5,11 +5,22 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 16 Apr 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Thu, 16 Apr 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Thu, 17 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Thu, 17 Apr 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>In Defense of Audiobooks</title>
+      <link>https://www.kenreid.co.uk/blog/in-defense-of-audiobooks.html</link>
+      <guid>https://www.kenreid.co.uk/blog/in-defense-of-audiobooks.html</guid>
+      <pubDate>Thu, 17 Apr 2026 00:00:00 +0000</pubDate>
+      <description>The stigma against audiobooks is rooted in bad assumptions about learning, intelligence, and what counts as reading. The research doesn't support any of it.</description>
+      <category>books</category>
+      <category>accessibility</category>
+      <category>education</category>
+      <category>opinion</category>
+    </item>
     <item>
       <title>Why It Still Matters to Learn to Code in the Age of AI</title>
       <link>https://www.kenreid.co.uk/blog/why-learn-to-code-age-of-ai.html</link>
