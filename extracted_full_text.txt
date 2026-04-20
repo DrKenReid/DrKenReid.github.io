@@ -1,0 +1,1069 @@
+Collecting PyPDF2
+  Downloading pypdf2-3.0.1-py3-none-any.whl.metadata (6.8 kB)
+Downloading pypdf2-3.0.1-py3-none-any.whl (232 kB)
+Installing collected packages: PyPDF2
+Successfully installed PyPDF2-3.0.1
+Collecting pdfplumber
+  Downloading pdfplumber-0.11.9-py3-none-any.whl.metadata (43 kB)
+Collecting pdfminer.six==20251230 (from pdfplumber)
+  Downloading pdfminer_six-20251230-py3-none-any.whl.metadata (4.3 kB)
+Requirement already satisfied: Pillow>=9.1 in c:\users\ken\drkenreid.github.io\.venv\lib\site-packages (from pdfplumber) (12.2.0)
+Collecting pypdfium2>=4.18.0 (from pdfplumber)
+  Downloading pypdfium2-5.7.0-py3-none-win_amd64.whl.metadata (67 kB)
+Requirement already satisfied: charset-normalizer>=2.0.0 in c:\users\ken\drkenreid.github.io\.venv\lib\site-packages (from pdfminer.six==20251230->pdfplumber) (3.4.7)
+Requirement already satisfied: cryptography>=36.0.0 in c:\users\ken\drkenreid.github.io\.venv\lib\site-packages (from pdfminer.six==20251230->pdfplumber) (46.0.7)
+Requirement already satisfied: cffi>=2.0.0 in c:\users\ken\drkenreid.github.io\.venv\lib\site-packages (from cryptography>=36.0.0->pdfminer.six==20251230->pdfplumber) (2.0.0)
+Requirement already satisfied: pycparser in c:\users\ken\drkenreid.github.io\.venv\lib\site-packages (from cffi>=2.0.0->cryptography>=36.0.0->pdfminer.six==20251230->pdfplumber) (3.0)
+Downloading pdfplumber-0.11.9-py3-none-any.whl (60 kB)
+Downloading pdfminer_six-20251230-py3-none-any.whl (6.6 MB)
+   ---------------------------------------- 6.6/6.6 MB 44.6 MB/s  0:00:00
+Downloading pypdfium2-5.7.0-py3-none-win_amd64.whl (3.7 MB)
+   ---------------------------------------- 3.7/3.7 MB 60.0 MB/s  0:00:00
+Installing collected packages: pypdfium2, pdfminer.six, pdfplumber
+  Attempting uninstall: pdfminer.six
+    Found existing installation: pdfminer.six 20260107
+    Uninstalling pdfminer.six-20260107:
+      Successfully uninstalled pdfminer.six-20260107
+
+Successfully installed pdfminer.six-20251230 pdfplumber-0.11.9 pypdfium2-5.7.0
+Basic Science and Clinical Application of the Contrast Avoidance
+Model in Generalized Anxiety Disorder
+Michelle G. Newman Sandra J. Llera
+ThePennsylvaniaStateUniversity TowsonUniversity
+Thane M. Erickson Amy Przeworski
+SeattlePacificUniversity CaseWesternReserveUniversity
+TheContrastAvoidancemodel(Newman&Llera,2011)proposesthatindividualswith
+generalized anxiety disorder (GAD) are excessively sensitive to negative emotional
+shifts(contrasts)inresponsetounpleasantevents,andthusrecruitastateofsustained
+intrapersonal negativity via worry as a defensive stance against such shifting states.
+Herewereviewthebasicsciencerelatedtoenvironmental,psychological,andbiolog-
+icalriskfactorsinthedevelopmentofsuchemotionalsensitivitiesinGAD,andpresent
+evidence supporting the position that worry and maladaptive interpersonal styles are
+employedasdefensivestrategiestoprotectagainstemotionalcontrasts.Wepresent2
+case examples to elucidate these issues, as well as to introduce specific clinical
+recommendations for targeting and treating these behaviors. Suggestions for future
+avenuesofresearcharealsodiscussed.
+Keywords:experientialavoidance,emotion,generalizedanxietydisorder,modelsofGAD
+Our understanding of generalized anxiety avoidashiftfromaneutralorpositiveaffective
+disorder(GAD)hasevolvedconsiderablyinthe state to a negative affective state, which we
+decadessinceitwasintroducedasastand-alone defineasanegativeemotionalcontrast.Below,
+disorder; however, the literature holds substan- we describe the evidence consistent with this
+tialinconsistenciesregardingtheroleofworry, newmodelwithrespecttoetiology,reactivityto
+the principal symptom of GAD. In particular, stress, attempts to self-regulate, and interper-
+severaltheorieshavepositedthatworryisused sonal behaviors of individuals with GAD. We
+as a means to avoid distressing affect (e.g., also illustrate the clinical implications of this
+Newman, Castonguay, Borkovec, & Molnar, theory through two clinical vignettes.
+2004). However, basic research has failed to
+supportthesetheoriesconsistently.Inresponse, Overview of GAD
+Newman and Llera (2011) introduced a data-
+driven theory, the Contrast Avoidance model, GAD is primarily defined by its core symp-
+whichpositsthatworryisessentiallyameansto tom of chronic and uncontrollable worry about
+anumberoftopicsmostofthedaynearlyevery
+day for at least 6 months. Associated physical
+symptomsincludefatigue,muscletension,rest-
+Michelle G. Newman, Department of Psychology and lessness, difficulty sleeping, feeling on edge,
+Psychiatry, The Pennsylvania State University; Sandra J. irritability, difficulty concentrating, and gastro-
+Llera, Department of Psychology, Towson University;
+intestinalsymptoms.Suchworrycausesatleast
+Thane M. Erickson, Department of Psychology, Seattle
+Pacific University; Amy Przeworski, Department of Psy- moderatedistressorimpairment.LifetimeGAD
+chology,CaseWesternReserveUniversity. prevalence has been estimated to be about
+Correspondence concerning this article should be ad- 14.2%withpast-yearprevalenceof4.2%(Mof-
+dressed to Michelle G. Newman, Department of Psychol-
+fitt et al., 2010).
+ogy,ThePennsylvaniaStateUniversity,371MooreBuild-
+Although GAD may be viewed as one of
+ing,UniversityPark,PA16803-3103.E-mail:mgn1@psu.
+edu the less debilitating diagnoses, studies show
+.srehsilbupdeillastifoenoronoitaicossAlacigolohcysPnaciremAehtybdethgirypocsitnemucodsihT
+.yldaorbdetanimessidebottonsidnaresulaudividniehtfoesulanosrepehtrofylelosdednetnisielcitrasihT
+JournalofPsychotherapyIntegration ©2014AmericanPsychologicalAssociation
+2014,Vol.24,No.3,155–167 1053-0479/14/$12.00 http://dx.doi.org/10.1037/a0037510
+155
+.devreser
+era
+,seigolonhcet
+ralimis
+dna
+,gniniart
+IA
+,gninim
+atad
+dna
+txet
+rof
+gnidulcni
+,sthgir
+llA
+156 NEWMAN,LLERA,ERICKSON,ANDPRZEWORSKI
+repeatedly that it is equally distressing and Risk Factors in the Development of
+impairing when compared to major depres- Emotional Problems in GAD
+sion (Kessler et al., 2002; Sanderson & An-
+drews, 2002). Comorbid disorders occur in Genetics, Neurobiology, and
+about 60% of those with GAD and are asso- Emotional Reactivity
+ciated with even greater disability and inter-
+ference as well as lower rates of remission In a review of genetic research conducted
+andhigherratesofrelapse(Bruceetal.,2005; using twins and families, studies point to a
+Newman, Przeworski, Fisher, & Borkovec, greater-than-chancegeneticinfluenceinthede-
+2010).Moreover,roleimpairmentforGADis velopmentofGAD(Schienle,Hettema,Cáceda,
+comparable to what has been reported for &Nemeroff,2011).IndividualswithGADver-
+individuals with chronic medical conditions susthosewithoutthedisorderaremorelikelyto
+(e.g.,autoimmunedisease,arthritis;Alonsoet havefirst-degreerelativeswithGAD,andiden-
+al., 2011; Kessler, Greenberg, Mickelson, tical twins have higher concordance rates of
+GAD than fraternal twins. Several factors have
+Meneades, & Wang, 2001) and greater than
+beenimplicatedinthisresearch,oneofwhichis
+what has been reported for certain chronic
+the heritable personality trait of neuroticism
+physicaldisorders(backorneckpain,chronic
+(high negative emotionality) which has been
+pain, heart disease, high blood pressure, and
+found to account for a large amount of the
+ulcers; Lee et al., 2009). GAD is also an
+geneticvarianceinGAD(Hettema,Neale,My-
+independentriskfactorforcoronaryheartdis-
+ers, Prescott, & Kendler, 2006). Another factor
+easeandprematuremortality(Barger&Syde-
+is increased activity in the amygdala (a brain
+man, 2005; Martens et al., 2010; Todaro,
+structure associated with fear responding), as
+Shen, Raffa, Tilkemeier, & Niaura, 2007).
+genetic risk for GAD predicts increased meta-
+Thus, effective detection, prevention, and
+bolic activity in this brain area (Hettema et al.,
+treatment are vitally important. It is also im-
+2012). Together, these factors implicate a pos-
+portant to note that although cognitive– sible underlying vulnerability toward negative
+behavioral therapy (CBT) for GAD is effica-
+emotionality in those with GAD.
+cious, it does not work for everyone;
+Supporting genetic findings, neurobiological
+therefore, greater understanding of this disor-
+and physiological research on individuals with
+der may improve treatment.
+GAD has identified vulnerabilities in terms of
+Individuals with GAD often report that
+boththecentralandperipheralnervoussystem.
+they have a “love-hate” relationship with
+Studies of the brain have revealed amygdalar
+worry. On the one hand, these individuals
+differences in adults with GAD, including in-
+view worry as helpful to them with respect to
+creased gray matter (Schienle, Ebner, & Scha-
+problem-solving, motivation, preparation for
+fer, 2011) and higher resting metabolic activity
+possiblecatastrophicoutcomes,andevenasa
+levels(Hettemaetal.,2012)relativetononanx-
+way to feel emotionally protected in the case ious controls, suggesting a potential for hyper-
+ofsuchoutcomes.Ontheotherhand,asnoted
+active fear responding. In addition, those with
+above, chronic worry leads to a number of GAD have higher resting sympathetic (SNS)
+significant physical, mental, and health- and lower parasympathetic nervous system
+related problems. However, given that worry (PNS)activityrelativetocontrols(e.g.,Pruneti,
+may be viewed as helpful, it is important to Lento, Fante, Carrozzo, & Fontana, 2010). To-
+determine if and how worry functions in this gether, these findings point to higher resting
+manner and to address any positive beliefs levels of emotional arousal with strong impli-
+about worry at the outset of treatment. To cations for emotional overactivity. In other
+illustratetheroleofworryasdelineatedinthe words, these studies show that people with
+ContrastAvoidancemodel,thefollowingsec- GAD are at risk for powerful emotional reac-
+tionreviewsbasicresearchfindingsthatpoint tions that may feel difficult to tolerate.
+to extreme discomfort with sharp shifts in Correspondingly, many studies have linked
+emotional states (or emotional contrasts), GAD to emotional hyperreactivity. Subjec-
+which may reinforce the use of worry as a tively, both analogue and treatment-seeking
+means to avoid such contrasts. participants with GAD report that their emo-
+.srehsilbupdeillastifoenoronoitaicossAlacigolohcysPnaciremAehtybdethgirypocsitnemucodsihT
+.yldaorbdetanimessidebottonsidnaresulaudividniehtfoesulanosrepehtrofylelosdednetnisielcitrasihT
+.devreser
+era
+,seigolonhcet
+ralimis
+dna
+,gniniart
+IA
+,gninim
+atad
+dna
+txet
+rof
+gnidulcni
+,sthgir
+llA
+CONTRASTAVOIDANCEMODELINGAD 157
+tionsfeelmoreintenseandtheyfinditharderto lack,2002),rape(Steketee&Foa,1987),com-
+recover from negative emotions than do those bat (Centers for Disease Control Vietnam Ex-
+without GAD (Mennin, Heimberg, Turk, & perienceStudy,1988),anddisaster(Shoreetal.,
+Fresco, 2005; Turk et al., 2005). Behaviorally, 1986). In one study, 52% of treatment-seeking
+they are rated as more reactive to others’ neg- individuals with GAD reported experiencing a
+ative emotions in social interactions (Erickson potentially traumatizing event, a number that
+& Newman, 2007). On a neurological level, greatly exceeded the number of nonanxious in-
+participants with GAD demonstrate hyperre- dividuals who reported a potentially traumatiz-
+sponsivityoftheamygdalatotheanticipationof ing event (21%; Roemer, Molina, & Borkovec,
+a negative event (Nitschke et al., 2009; Yassa, 1997).
+Hazlett, Stark, & Hoehn-Saric, 2012). Thus, Childhood trauma in individuals who do not
+individuals with GAD also report feeling more havePTSDisassociatedwithchronicincreased
+threatened by and less in control of their emo- autonomic and hypothalamic-pituitary-adrenal
+tions relative to both nonanxious controls and axis activation (Heim et al., 2000), which may
+persons with social anxiety disorder (Llera & be related to chronic stress and anxiety. It may
+Newman, 2010; Turk, Heimberg, Luterek, bethatchronicandone-timestressfullifeevents
+Mennin, & Fresco, 2005). change people’s world-views about life being
+Insum,researchonaffectivefactorspointsto predictable and good things happening to good
+a vulnerability to emotional hyperreactivity in people. This perspective may contribute to the
+thosewithGAD.Iftheseindividualsexperience development of discomfort with negative emo-
+negative events and subsequent emotional hy- tionalcontrastsasitmayleadtohypervigilance
+perresponding, this may be associated with to potential future negative events and the ac-
+greater sensitivity to negative emotional con- companying affective shifts.
+trasts and attempts to avoid such contrasts.
+Attachment and Parenting Style
+Temperament
+Perceived parental rejection (Brown & Whi-
+Temperamentconsistsofinnate,earlydiffer-
+teside, 2008; Cassidy, Lichtenstein-Phelps, Si-
+ences in biological, behavioral, and emotional
+brava, Thomas, & Borkovec, 2009), parental
+responsiveness to environmental stimuli and is
+coldness (Cassidy et al., 2009), harsh parental
+thoughttocontributetolateremotionregulation
+discipline, parenting characterized by strict
+difficulties and psychopathology, such as anxi-
+rules and high expectations (Shanahan, Cope-
+ety(Rothbart,2007).Onetypeoftemperament,
+land, Costello, & Angold, 2008), and parental
+behavioral inhibition, is characterized by re-
+overprotection (Beesdo, Pine, Lieb, &
+straint, distress, low threshold to novelty, and
+Wittchen, 2010; Nordahl et al., 2010) are asso-
+avoidance when exposed to novel stimuli (Ka-
+ciated with offspring GAD and worry. All of
+gan & Snidman, 1999). It is believed that be-
+these parenting styles may contribute to fre-
+haviorally inhibited children have increased
+quent and unpredictable moments of negative
+SNS activity or decreased PNS activity that
+affect in response to parent–child interactions.
+contributes to this sensitivity and the resulting
+GAD has also been associated with maternal
+arousal and negative affective states when ex-
+role-reversal and enmeshment (Cassidy et al.,
+posedtonovelstimuli.Thismayleadbehavior-
+2009).Role-reversalputsachildintheposition
+allyinhibitedchildrentoexperienceshiftsfrom
+of being the adult, providing comfort to the
+euthymic/positive to negative states as being
+parent and being responsible for the parent’s
+extreme, distressing, and difficult to control.
+welfare.Thislevelofresponsibilitymayexceed
+Environment children’sresourcesandunderminetheirdevel-
+opment, thereby leading them to experience
+GAD is associated with the experience of greaterfrequencyofsharplyincreasednegative
+negativelifeevents(Nordahl,Wells,Olsson,& affect and difficulties in regulating their emo-
+Bjerkeset, 2010), maltreatment (Moffitt et al., tion.
+2007),loss(Kendler,Hettema,Butera,Gardner, Finally, parental psychological control has
+&Prescott,2003),childhoodsexualorphysical alsobeenassociatedwithGADsymptoms(Wi-
+abuse (Safren, Gershuny, Marzol, Otto, & Pol- jsbroek,HaleIii,Raaijmakers,&Meeus,2011).
+.srehsilbupdeillastifoenoronoitaicossAlacigolohcysPnaciremAehtybdethgirypocsitnemucodsihT
+.yldaorbdetanimessidebottonsidnaresulaudividniehtfoesulanosrepehtrofylelosdednetnisielcitrasihT
+.devreser
+era
+,seigolonhcet
+ralimis
+dna
+,gniniart
+IA
+,gninim
+atad
+dna
+txet
+rof
+gnidulcni
+,sthgir
+llA
+158 NEWMAN,LLERA,ERICKSON,ANDPRZEWORSKI
+Psychological control is characterized by par- enced as overwhelming and out of control. In
+entsinvalidatingtheirchild’semotionalexperi- fact,acommonthemeforourclientswithGAD
+enceandattemptingtochangethechild’semo- is a desire to gain control over their emotions.
+tions through love withdrawal, isolation, and A recent theory in the literature was that
+shaming. Such parental behaviors may lead individualswithGADtriedtoavoidorsuppress
+childrentoexperiencedifficultyinrecognizing, their emotions by engaging in chronic worry
+expressing, and regulating their emotions, (e.g., Newman et al., 2004). This theory was
+thereby leading children to experience hyper- based on studies showing that people did not
+vigilancetotheiremotionalshiftsanddifficulty demonstrate strong increases in their negative
+inregulatingtheiremotionsinordertoreturnto emotion in response to a negative stimulus if
+a neutral state. theyhadjustbeenengagedinworry(e.g.,Bork-
+Parenting behaviors are believed to contrib- ovec & Hu, 1990). However, contrary to the
+ute to internal mental representations of inter- view that worry leads to emotional avoidance,
+personal dynamics through attachment styles. anabundanceofstudiesshowsthatworryactu-
+Attachmentisthoughttolaythefoundationfor ally creates and prolongs heightened negative
+affect regulation (Bowlby, 1973) and later in- affect in people with and without GAD (see
+terpersonal behaviors. Two anxious and inse- Newman&Llera,2011;Newman,Llera,Erick-
+cure attachment styles have been associated son, Przeworski, & Castonguay, 2013 for a
+with GAD and worry: anxious-avoidance and complete review).
+ambivalent/resistantstyles(Mickelson,Kessler, Inordertotrytounderstandwhypeoplewith
+& Shaver, 1997; Muris, Meesters, van Melick, GAD would a) view worry positively and b)
+& Zwambag, 2001). Anxious-avoidant infants continuetoengageinchronicworrydespitethe
+were rejected by their mothers and avoided impactworryhasonprolongingnegativeaffect,
+them upon reunion. Ambivalent/resistant in- Newman and Llera (2011; see also Newman et
+fants had inconsistent or intrusive parents lead- al., 2013) proposed the Contrast Avoidance
+ing infants to respond with anger, resistance, model to describe the emotional dysregulation
+anxiety, and ambivalent behavior upon a re- underlying worry maintenance. This model
+union.Bothparentalrejectionandinconsistency states that individuals with GAD have devel-
+in parental responses, as well as accompanying oped heightened sensitivity to negative emo-
+affective shifts, may cause these children to tional contrasts, and rather than attempting to
+become overly sensitive to the affective fluctu- avoid or suppress their emotions, they use
+ationsthattheyexperienceinresponsetointer- worry to actively recruit a state of heightened
+actionwithparents.Insum,avarietyofparent– andsustainednegativeemotionasawaytofeel
+child interactions may contribute to the emotionally prepared for any possible negative
+development of an aversion to emotional con- event.Thatis,theyprefertomaintainastateof
+trast. vigilance and anxiety through worry so that if
+something bad does happen, they will be less
+Overview of the Contrast Avoidance Model likely to experience a sharp increase in their
+negative emotions. This is referred to as avoid-
+As demonstrated in the aforementioned re- anceofa“negativeemotionalcontrast”because
+search, individuals with GAD tend to experi- ifpeoplearealreadyfeelingupset,theyexperi-
+encestrongemotionalreactivitytonegativelife encelessofashift(orcontrast)inthevalenceof
+events, along with greater emotional sensitivity their emotion if their feared outcome happens
+and difficulty in regulating emotions. Coupled than if they had been feeling calm or relaxed.
+with these sensitivities, individuals with GAD ForthosewithGAD,chronicworrymayleadto
+may also have increased risk factors such as feeling more in control of emotions and less
+behaviorally inhibited temperament, negative likely to be caught off-guard (albeit with the
+environmental experiences, troubling parental consequence of a chronically negative emo-
+interactions,andcorrespondinginsecureattach- tionalbaseline).Thishelpstoexplainpriorfind-
+mentstyles.Together,thesevulnerabilitiesmay ings that worrying before a negative event pre-
+lead an individual to develop extreme sensitiv- vents strong increases in negative emotion,
+itytosuddenshiftsfromneutral/positivetoneg- because those who are worried are already ex-
+ative emotional states, which may be experi- periencing negative emotion.
+.srehsilbupdeillastifoenoronoitaicossAlacigolohcysPnaciremAehtybdethgirypocsitnemucodsihT
+.yldaorbdetanimessidebottonsidnaresulaudividniehtfoesulanosrepehtrofylelosdednetnisielcitrasihT
+.devreser
+era
+,seigolonhcet
+ralimis
+dna
+,gniniart
+IA
+,gninim
+atad
+dna
+txet
+rof
+gnidulcni
+,sthgir
+llA
+CONTRASTAVOIDANCEMODELINGAD 159
+Evidence Supporting and Elaborating on contrast,itislikelythatpeoplewithGADenjoy
+the Contrast Avoidance Model thisexperienceand,asnoted,itcreatesavicious
+cycle whereby chronic worry is negatively re-
+The Contrast Avoidance model suggests that inforced.
+individualswithGADuseworryasadefensive At the same time, the Contrast Avoidance
+maneuvertoavoidtheemotionalcontrastexpe- modelalsopredictsthatwhenpeoplewithGAD
+rience associated with reactivity to life’s stres- doexperienceasharpincreaseintheirnegative
+sors. This is based on research showing that emotion, this would prompt them to begin to
+worryleadstoheightenednegativeemotionality worry as a means to maintain their negative
+that is sustained across negative emotional ex- emotion as an emotion regulation strategy. In
+posures in both GAD and nonanxious groups other words, in addition to using worry defen-
+(e.g., Llera & Newman, 2010; Llera & New- sivelytopreventthelikelihoodofexperiencing
+man, 2014). Additional findings showed that an emotional contrast, this model predicts that
+worry (compared to relaxation and neutral in- theseindividualsmightalsouseworrytomain-
+ductions)ledtostrongernegativeemotions,but tain their negative emotionality following an
+alsoledtolessofanemotionalshiftinresponse emotional contrast experience as a means to
+to a subsequent negative emotional film clip in prevent additional negative emotional contrast
+individuals with and without GAD (Llera & experiences(e.g.,anothersharpshiftinnegative
+Newman, 2010; Llera & Newman, 2014). Im- emotions).Infact,studiesshowthatphysiolog-
+portantly,allparticipantsreportedsimilarlevels icalrecoveryfromstressishamperedbyworry
+ofnegativeemotionduringtheclip.Thatworry (Radstaak, Geurts, Brosschot, Cillessen, &
+had the same effect for those with and without Kompier, 2011).
+GAD on subsequent negative emotion supports
+the causal role of worry on increased and sus- Interpersonal Behaviors and Styles
+tainednegativeaffectivity.However,thosewith
+GADactuallyreportedthatitwaseasiertocope In addition to using worry as a strategy for
+withthenegativeemotionsassociatedwithdis- emotion regulation (avoiding negative con-
+tressing films if they were already in a state of trasts),worriersandindividualswithGADcon-
+worry,whereasnonanxiousparticipantsfoundit sistently demonstrate problematic social cogni-
+easier to cope if they had been relaxed prior to tionandbehavior(Newman&Erickson,2010),
+viewing the clips (Llera & Newman, 2014). suggesting potential roles for interpersonal
+Thus, the GAD group perceived the avoidance problems in the maintenance of GAD symp-
+of negative emotional contrasts via prior worry toms—and possibly even maintenance of diffi-
+to be subjectively more protective than prior culty with negative contrasts. The available re-
+relaxation,whereasthecontrolgroupperceived searchprovidesreasonstointegratetheContrast
+the opposite. This is consistent with the Con- Avoidance model into interpersonal models of
+trast Avoidance model’s explanation that those GAD.
+with GAD may use the emotionally arousing Evidence of dysfunctional social cognition
+properties of worry as an emotional defense comes from studies showing that interpersonal
+mechanism against the experience of negative issues are the most frequent topic for worry
+contrasts. (Roemeretal.,1997),andthatindividualswith
+AnotherfindingbyLleraandNewman(2010, GAD self-reported heightened interpersonal
+2014) was that whereas worry decreased the sensitivity (Hoehn-Saric, Hazlett, & McLeod,
+likelihoodofexperiencinganegativeemotional 1993). Furthermore, individuals with GAD
+contrast, worry increased the likelihood of ex- have exhibited biased attention to threatening
+periencing a positive emotional contrast when faces(Mogg,Millar,&Bradley,2000)andthey
+participants viewed a subsequent humorous perceived confederates as attacking or control-
+clip. In other words, if people worry about a ling in a “get acquainted” interaction task (Er-
+negative event, and that event does not happen ickson & Pincus, 2005), relative to controls.
+or something good actually happens, they will Even after accounting for social anxiety and
+experience a positive shift from negative to depressive symptoms, heightened worry pre-
+neutral emotions (relief). Given that worry in- dictedperceivingothers’socialbehaviorascold
+creasesthelikelihoodofexperiencingapositive (Erickson, Newman, & Abelson, 2010).
+.srehsilbupdeillastifoenoronoitaicossAlacigolohcysPnaciremAehtybdethgirypocsitnemucodsihT
+.yldaorbdetanimessidebottonsidnaresulaudividniehtfoesulanosrepehtrofylelosdednetnisielcitrasihT
+.devreser
+era
+,seigolonhcet
+ralimis
+dna
+,gniniart
+IA
+,gninim
+atad
+dna
+txet
+rof
+gnidulcni
+,sthgir
+llA
+160 NEWMAN,LLERA,ERICKSON,ANDPRZEWORSKI
+Similarly,dysfunctionalinterpersonalbehav- iety symptoms of GAD. Integrating basic find-
+ior is common in people with GAD. These ingsontheContrastAvoidancemodelofGAD
+individuals self-report a wide variety of inter- and interpersonal processes in GAD may ad-
+personal problems (Przeworski et al., 2011). dress this question and generate treatment ap-
+Higher worry predicted both inaccuracy in es- plications. Namely, individuals with GAD may
+timating one’s social impact on strangers (Er- usearangeofinterpersonalbehaviorsasaform
+ickson&Newman,2007)andnegative(colder) of “regulation” to strategically avoid emotional
+impacts on significant others in a mixed anx- contrasts in social interactions.
+ious-depressed clinical sample (Erickson et al., Below we present two clinical cases that il-
+2010). Individuals with GAD consequently lustratethemechanismsbywhichnegativecon-
+have relatively fewer friends (Whisman, Shel- trastavoidancetendenciesmaydevelopandre-
+don, & Goering, 2000) and more family prob- inforce the use of worry as a means to prevent
+lems (Beesdo et al., 2010). Furthermore, GAD emotional shifts. Further, we also present ther-
+predictsdivorceorseparation(Whisman,2007) apeutic techniques used to address these pat-
+and low marital satisfaction, even accounting terns and reduce worry.
+for comorbid disorders (Whisman et al., 2000).
+Prospective links between interpersonal pro- GAD Client Cases
+cessesandGADsymptomsorresponsetotreat-
+ment suggest a potential role of interpersonal Case 1
+problems in the maintenance of GAD. For in-
+stance,interpersonalproblems(Crits-Christoph, Sue,a28-year-olddentalassistant,isawell-
+Gibbons, Narducci, Schamberger, & Gallop, acculturated daughter of Haitian immigrants.
+2005),partnerhostility(Zinbarg,Lee,&Yoon, She reports being prone to an anxious temper-
+2007), and personality disorders (Ansell et al., ament and worrying her whole life, with worry
+2011)predictpersistenceofGADsymptoms,as foci including concerns about extreme weather
+do interpersonal problems left untreated after (e.g.,hurricanes),thehealthoffamilymembers,
+CBT (Borkovec, Newman, Pincus, & Lytle, her risk of diabetes, and her chances of finding
+2002). However, supportive-expressive psy- a suitable husband. Sue ascribes the develop-
+chodynamic therapy to foster insight into core mentofheranxietytochildhoodexperiencesof
+negative relationship patterns led to improve- living with her mother’s chronic and relapsing
+ment only in some interpersonal problems diabetes-related problems; Sue reports that her
+(Crits-Christoph et al., 2005). Similarly, a re- mother’s health alternated unpredictably be-
+cent clinical trial augmented CBT with an In- tween “good weeks” and “bad weeks.” She
+terpersonal-EmotionalProcessing(IEP)module soughtpsychotherapyseveralmonthsafterHur-
+on exploration of clients’ current and past rela- ricane Sandy wrought significant damage to
+tionships (including the therapeutic relation- communities in Haiti, where several members
+ship), emotional processing of emotionally of her extended family reside. None was hurt
+evocative interpersonal material, and learning seriously, but the economic and emotional toll
+newinterpersonalandemotionregulationskills on these individuals was pronounced. Subse-
+to meet one’s needs. However, it did not out- quent to this stressor, Sue reported notably in-
+performCBTplussupportivelisteningoninter- creased thematic worries, muscle tension, agi-
+personal and GAD outcomes (Newman et al., tation, irritability, and insomnia, as well as
+2011). Thus, social processes seem to play an occasional worry-induced panic attacks and re-
+important role in the perpetuation of GAD current problems in her current dating relation-
+symptoms, but require additional treatment en- ship.
+hancements. Sue reported that her worry developed in
+The basic research to date lacks a coherent responsetotwomajorlifestressors—hermoth-
+explanationofhowheterogeneousinterpersonal er’s chronic and relapsing health as a result of
+problems(includingopposingstyles,e.g.,intru- diabetes, and the stress of her relatives experi-
+sive [warm-dominant] vs. socially avoidant encingHurricaneSandy.Suemayhavebecome
+[cold-submissive]; Przeworski et al., 2011) or oversensitive to the accompanying affective
+personality problems (e.g., Dyck et al., 2001) shifts and difficulties in regulating her emo-
+mightmaintaintherelativelyhomogenousanx- tional state upon periodic worsening of her
+.srehsilbupdeillastifoenoronoitaicossAlacigolohcysPnaciremAehtybdethgirypocsitnemucodsihT
+.yldaorbdetanimessidebottonsidnaresulaudividniehtfoesulanosrepehtrofylelosdednetnisielcitrasihT
+.devreser
+era
+,seigolonhcet
+ralimis
+dna
+,gniniart
+IA
+,gninim
+atad
+dna
+txet
+rof
+gnidulcni
+,sthgir
+llA
+CONTRASTAVOIDANCEMODELINGAD 161
+mother’s condition. Therefore, Sue may have Currently, Sue reports that she finds her
+learnedthatthebestwaytocopewithhermoth- worry to be distressing, but has also noted that
+er’s variable health problems was to engage in it is preferable to feeling relaxed because it
+chronic worry to avoid the sharp increase in helpshertofeelpreparedfor“theothershoeto
+negative emotion she would otherwise experi- drop.” Sue has said that because she never
+enceeverytimethingstookaturnfortheworse. knows when this could happen, she finds it
+Suealsosawtheimpactofastressfullifeevent more comforting to be in a state of vigilance
+onherrelativeswhosurvivedHurricaneSandy. even if this brings her mood down. Whenever
+In contrast to the more chronic stress of her sheallowsherselfmomentsoffeelinggood,this
+mother’s condition, this one-time and unpre- leadstoasenseofbeingemotionallyvulnerable
+dictable event may have led Sue to anticipate because“Iwilljustfeelsomuchworseifsome-
+that such devastating events could occur at any thing bad does happen.”
+timetoherlovedones,andthereforetoprefera
+chronic state of negative affect to the sudden Case 2
+affective shift that she would experience if an-
+other life stressor occurred. Peter is a 40-year-old White man of German
+As a child, Sue frequently had to take on a Americandescent.Hepresentsfortreatmentof
+caregivingrolewithherailingmother.Thisled GADsymptoms(worry,restlessness,insomnia,
+Sue to experience uncomfortable periods of feeling “keyed up,” and concentration prob-
+stress, discomfort, and anxiety because she did lems) as well as major depressive disorder. He
+nothavetheemotionalresourcestotakeonthis reportshavingbeenvulnerabletodysphoricand
+responsibility. Additionally, this relationship anxiousmoodsandworryatleastasfarbackas
+wascharacterizedbyperiodsoftimewhenSue his parents’ chronic marital conflict during his
+was appropriately in the child’s role and could preteen years. Peter witnessed his parents’ tu-
+relyonhermother’ssupportandtimeswhenthe multuous marriage that fluctuated between
+power differential shifted and Sue became the happy periods and intense arguments, often ac-
+caregiver. Sue never knew which role she companied by the threat of divorce. In order to
+would be in on a given day, creating chronic cope with these unpredictable negative periods
+and unexpected stress. Sue was sensitized to (and potentially pending divorce), Peter began
+emotional contrasts in the context of her moth- to worry about their relationship as a way to
+er’s diabetes relapses, and coped via not only “stay prepared for the worst” in order to avoid
+worry,butthroughherinterpersonalstyle.That disappointmentwhenthefightinginevitablyre-
+is, she adopted a caretaking role in relation to commenced.Asanadult,Peterhasexperienced
+her mother, constantly monitoring, checking in problemsinhisownmarriage,ashiswifefinds
+aboutbloodsugar,andstrivingtoanticipateher his negativity, worry, and interpersonal style
+mother’s needs. This behavior was intermit- problematic. Peter’s wife complains that he
+tently negatively reinforced: Sue believed it to doesn’tknowhowtoenjoytheirrelationshipor
+avert some of her mother’s blood sugar fluctu- life in general anymore.
+ation and moodiness, thereby avoiding some Like Sue, Peter developed a heightened sen-
+emotional contrasts. sitivitytoshiftsfromneutralorpositivemoods
+With her current boyfriend, Sue admits to into the sadness and anxiety that would follow
+beingtoomuch“inhisbusiness”andattention- hisparents’arguments.PerhapsforPeter,main-
+seeking, a pattern not unique to this relation- taining chronic negative arousal was the only
+ship. It is likely that she continues to employ way he could feel in control, rather than be
+problematic interpersonal behaviors such as buffeted about by emotions that shifted drasti-
+overly maternal caretaking to avoid emotional cally from happiness to dread. Peter has de-
+contrasts. This interpersonal motive keeps her scribedfeelingthatitisunwisenottoexpectthe
+vigilant to potential shifts in her boyfriend’s worst outcome, and that although he might
+mood,ratherthansimplyenjoyinggenuinevul- worry too much, “it’s a lot better than getting
+nerabilityandwarmth.Moreover,herboyfriend yanked around.” Peter complains that his wife
+sometimesviewsherattentivenessasmotivated “always wants me to wear rose-colored glasses
+by self-protection rather than genuine care, and look on the bright side,” but that this feels
+which he finds irritating. foolishtohim.Herecentlystatedthatheprefers
+.srehsilbupdeillastifoenoronoitaicossAlacigolohcysPnaciremAehtybdethgirypocsitnemucodsihT
+.yldaorbdetanimessidebottonsidnaresulaudividniehtfoesulanosrepehtrofylelosdednetnisielcitrasihT
+.devreser
+era
+,seigolonhcet
+ralimis
+dna
+,gniniart
+IA
+,gninim
+atad
+dna
+txet
+rof
+gnidulcni
+,sthgir
+llA
+162 NEWMAN,LLERA,ERICKSON,ANDPRZEWORSKI
+dreary weather over sunny days because “at behaviorthatdoesnotaddresstheseunderlying
+leastwithrainydaysyouknowwhattoexpect; emotional difficulties may be unsuccessful.
+withsunnydaysyouneverknowhowlonguntil
+therainisgonnacomeandsnatchawayanyjoy
+Treatment Implications
+you might be having.”
+In contrast to Sue’s warm or intrusive style,
+Fromatreatmentperspective,itmaybenec-
+Peterlearnedcoldandsubmissiveinterpersonal
+essary to teach individuals with GAD how to
+styles to regulate his own emotion and avoid
+manage their strong emotional reactions
+emotional contrasts. As an adolescent, Peter
+through means other than worrying. For exam-
+learnedtorespondtohisparentsbyengagingin
+ple,therapistscouldfocusonteachingstrategies cold(e.g.,distancinghimselffromfamilygath-
+thatinvolvelettinggoofcontroloveremotions, erings, asking little from parents) and submis-
+and learning to accept and tolerate emotional sive strategies (e.g., going along with parental
+vulnerability.Itmayalsobehelpfultodesensi-
+requests, not expressing his own needs). These
+tizethemtotheirphobicreactionbyconducting
+strategies were intermittently negatively rein-
+graded exposure to negative contrasts through
+forced,asstrivingnottobenoticedandappeas-
+inducing a relaxed state through progressive
+inghisparentssometimespreventedthemfrom
+muscle relaxation, diaphragmatic breathing, or
+arguing about how to parent him. In his own
+pleasant imagery and then imagining feared
+marriage, Peter’s wife complains that he tends
+outcomes. During exposure, clients’ attention
+toengageinisolatingandappeasingbehaviors,
+should be drawn to the internal experience of
+asking little of her and rarely expressing him-
+contrastfromapositivestatetoanegativestate.
+self. At first, she admired his “strong, silent”
+Thegoalofthisistoexposetheindividualnottothe nature and enjoyed being the one to select dat-
+ing activities; however, she now feels upset by feared outcome but to the internal sensations that
+his passivity, and Peter ironically has become accompanythe contrast between neutral/relaxed
+more submissive as if to prevent her from ex- and negative states. This can be accomplished
+pressing frustration. Like Sue, Peter’s interper- in a graded manner by creating a hierarchy
+sonal strategies backfire; in fact, by attempting based on strength of the contrast that an indi-
+to avoid emotional contrasts, Sue and Peter’s vidual would experience if various situations
+behaviorlikelyservestoincreasetheirsensitiv- were to occur.
+ity to and fear of such contrasts. Forexample,Peter’stherapistcollaboratively
+It is interesting that Sue and Peter present helpedhimexaminetheprosandconsofworry
+similar GAD diagnosis, but divergent interper- asawaytoavoidcontrasts,validatinghissense
+sonalhistoriesandproblems,yettheircommon thatmaintaininganegativemoodisonewayto
+sensitivity to emotional contrasts may clarify avoid such contrasts, but also giving him op-
+conceptualization. portunitiestoarticulatehowthischoicehasthe
+consequenceofsignificantlyimpairinghisqual-
+Using the Contrast Avoidance Model as a ityoflife.Amoreadaptivemeanstocopewith
+Therapeutic Framework hisemotionswouldbetoletgoofanyeffortto
+control them. She introduced the metaphor of
+As we see with Sue and Peter, clients with emotions feeling like waves and said that for
+GAD may actually prefer to be worried and some individuals, emotions feel like stormy
+anxious the majority of the time rather than seas. Peter gradually become open to the idea
+allowthemselvestofeelhappy,becauseitfeels that he could learn how to allow himself to let
+betterthanexperiencingthatmomentwhenany go of his negative/defensive stance and to ride
+happiness they have tried to cultivate is shat- out the waves of his emotions.
+tered. As such, it may be difficult for clients to Therefore,sheandPeteridentifiedsituationsthat
+let go of worry as a defensive emotional strat- often led to shifts in his emotions, such as an
+egy.Inaddition,whenthefearedeventdoesnot argument with his wife, thinking about his par-
+happen(whichisthemostlikelyoutcome),peo- ents’ marital conflict, interactions with his par-
+ple experience relief, which negatively rein- ents, and difficulties at work. Using a 0–10
+forces their chronic worry. Therefore, we pro- scale,Peterratedtheintensityofaffectiveshifts
+pose that treatment aimed at reducing worry that he experienced during each of these situa-
+.srehsilbupdeillastifoenoronoitaicossAlacigolohcysPnaciremAehtybdethgirypocsitnemucodsihT
+.yldaorbdetanimessidebottonsidnaresulaudividniehtfoesulanosrepehtrofylelosdednetnisielcitrasihT
+.devreser
+era
+,seigolonhcet
+ralimis
+dna
+,gniniart
+IA
+,gninim
+atad
+dna
+txet
+rof
+gnidulcni
+,sthgir
+llA
+CONTRASTAVOIDANCEMODELINGAD 163
+tions and created a hierarchy of situations with tional impact it would have on her, such as her
+affective contrasts. Then his therapist guided anxietythathecouldturnhisfrustrationtoward
+him through initial relaxation followed by ima- her.Next,Sueimaginedherselfallowinghimto
+ginal exposure to these situations. During each experience his negative mood without immedi-
+exposure, his therapist would ask him to de- ately taking on a mothering role (immediately
+scribe the situation in vivid detail in order to soothing him to prevent him from expressing
+evoke a strong affective response. When Peter further negativity toward her). Aside from in-
+experienced this shift from a relaxed to a neg- session imaginal exposure, Sue was also en-
+ative state, she would have him focus on his couraged to practice tolerating interpersonal
+physiological and affective experience in order negativity in real-life situations with her boy-
+to fully expose him to the experience of negative friend.
+contrast. For homework, Peter practiced these It is likely that Sue and Peter’s interpersonal
+imaginal emotional contrast-based situations behaviorshavebecomesohabitualthattheydo
+until he habituated to the affective contrast. As not realize their function as a means to avoid
+he experienced less sensitivity to contrasts in emotional contrasts. Therefore, therapy should
+these exposures, he increasingly became moti- helpSueandPeterbecomemoreawareoftheir
+vated to let go of the need to anticipate such patterns and attend to the negative relationship
+contrasts.Overtime,Peterreportedthathestill consequences (pros and cons) of interpersonal
+experiencedwavesofemotionsbutnowfeltthat regulation of emotional contrasts, as well as
+hecouldactuallyenjoymostofhislifeandthat learning alternative, underutilized social strate-
+he could simply ride out the wave without it giestobroadentheirrepertoire.IfSuecanmore
+feeling so uncomfortable. fullygrasphowherwarmbutintrusivebehavior
+In terms of interpersonal factors, we suspect comes across as self-serving and makes her
+that the reason why Interpersonal and Emo- boyfriendfeelcontrolled,thebehaviormayap-
+tional Processing Therapy for GAD was not pear less desirable; she might therefore benefit
+optimally efficacious (Newman et al., 2011) is from learning “opposite” skills such as attend-
+notbecauseofitsmethods(e.g.,exposure,skills ing to her own needs and respecting his auton-
+training,etc.),butratherbecausesuchstrategies omy. Analogously, if Peter can learn that his
+may need to explicitly target clients’ interper- cold-submissivebehaviorismorelikelytoelicit
+sonal means of avoiding emotional contrasts. irritability from his wife than to circumvent it,
+For example, in addition to affective exposure he may be more open to learning alternative
+topics, both Sue and Peter may benefit from interpersonalwarm-dominantskillssuchasdis-
+interpersonal exposures relevant to currently closing emotionally to his wife and making
+avoided interpersonal fears (e.g., imagining an directrequests.Therapistsshouldinsurethatno
+interaction in which someone is angry with interpersonal skills practiced are adopted as
+them). Thus, treatment would include learning “safety behaviors” or ways to avoid emotional
+to be experientially present and vulnerable to contrasts.
+possible emotional contrasts with significant
+others, allowing oneself to simply enjoy the Suggestions for Future Research
+interaction, while blocking use of avoidant in-
+terpersonal strategies (i.e., cold-submission for Given the relative newness of the Contrast
+Peter, intrusiveness for Sue), akin to exposure Avoidancemodel,aswellastherebeingonlya
+with ritual prevention for obsessive–compul- few direct tests of it thus far, the potential for
+sivedisorder(OCD).Exposuresshouldbechar- future research is quite vast. For example, the
+acterized by high specificity, present-focused, development of a reliable and valid measure-
+andideographic,within-sessionaffectchanges. ment tool to assess contrast avoidance as a
+For example, Sue and her therapist came up generaltendency,aswellassituationalcontrast
+with a series of exposures to address her inter- avoidance,wouldbeimportant.Suchameasure
+personal fears. For instance, subsequent to en- could also test various components of the Con-
+gaging in relaxation techniques, Sue was asked trast Avoidance model separately. Components
+to imagine her boyfriend coming home from to be tested would include discomfort with a
+work in a negative mood. This imaginal expo- negative emotional contrast, active effort to
+sure included an emphasis on the feared emo- avoid a negative emotional contrast, specific
+.srehsilbupdeillastifoenoronoitaicossAlacigolohcysPnaciremAehtybdethgirypocsitnemucodsihT
+.yldaorbdetanimessidebottonsidnaresulaudividniehtfoesulanosrepehtrofylelosdednetnisielcitrasihT
+.devreser
+era
+,seigolonhcet
+ralimis
+dna
+,gniniart
+IA
+,gninim
+atad
+dna
+txet
+rof
+gnidulcni
+,sthgir
+llA
+164 NEWMAN,LLERA,ERICKSON,ANDPRZEWORSKI
+use of worry to avoid a negative emotional Conclusion/Take Home Messages
+contrast, worry creating and prolonging neg-
+X Generalizedanxietydisorderisachronicanddebili-
+ativeemotions,preferenceforanegativestate
+tating affliction and current treatments do not work for
+to increase the probability of a positive emo- everybody.
+tional contrast, and positive emotions leading X Anewmodelproposesthatworry,thecentralfeature
+to discomfort or sense of vulnerability; Llera ofGAD,isusedasameanstocreateandsustainnegative
+emotioninanefforttoavoidasharpincreaseinnegative
+and Newman are in the process of creating
+emotion.
+suchameasure.Itwouldalsobeinterestingto X Much research on neurobiology, physiology, and
+develop a means to assess individual differ- self-reportprovidesevidenceconsistentwiththismodel.
+X Contrast avoidance may also be enacted interper-
+ences in using interpersonal strategies to
+sonallyinwaysthataremaladaptivetohealthyrelation-
+avoid emotional contrasts.
+ships. Potential etiological factors that may put an indi-
+Another avenue of future studies would be vidual at risk for the development of an aversion to an
+to examine whether the Contrast Avoidance emotionalcontrastincludegenetics,neurobiology,emo-
+tionalreactivity,negativelifeevents,trauma,attachment
+model is specific to individuals with GAD.
+andparentingstyle.
+Forexample,itispossiblethatthepreference X TreatmentsforGADmightbeimprovedbyinclud-
+foranegativeemotionalstatetoguardagainst ing techniques that help individuals become aware of
+asuddenemotionalshiftmayalsobefoundin theircontrastavoidancepatterns.
+X Once patterns are identified, future treatments
+individuals diagnosed with major depression.
+shouldimplementexposuretoanegativeemotionalcon-
+It might further be possible that depressed trastwithoutworryingandexposuretointerpersonalin-
+individuals do not necessarily use worry to teractionsusingmorevulnerableapproachstyles.
+X Futureresearchshoulddevelopvalidatedmeasures
+prevent a negative emotional contrast but use
+for contrast avoidance, examine its specificity to GAD,
+other strategies to maintain a negative emo- and test possible etiological, maintaining factors and
+tionalstate(e.g.,rumination).Futureresearch treatmentsforcontrastavoidance.
+might also test whether the model applies to
+other anxiety disorders than GAD such as References
+social anxiety disorder, posttraumatic stress
+Alonso,J.,Petukhova,M.,Vilagut,G.,Chatterji,S.,
+disorder, or panic disorder.
+Heeringa, S., Ustun, T. B., . . . Kessler, R. C.
+Additional research could examine the eti-
+(2011).Daysoutofroleduetocommonphysical
+ology of negative contrast avoidance. Vari- and mental conditions: Results from the WHO
+ables such as trauma history, preference for World Mental Health surveys. Molecular Psychi-
+negative reinforcement over positive rein- atry,16,1234–1246.doi:10.1038/mp.2010.101
+forcement, and attachment could be investi- Ansell, E. B., Pinto, A., Edelen, M. O., Markowitz,
+J. C., Sanislow, C. A., Yen, S., . . . Grilo, C. M.
+gated. Similarly, it would be helpful to iden-
+(2011). The association of personality disorders
+tify whether sensitivity to an emotional
+withtheprospective7-yearcourseofanxietydis-
+contrastanduseofworryand/orinterpersonal
+orders. Psychological Medicine, 41, 1019–1028.
+strategies to control it prospectively predicts doi:10.1017/S0033291710001777
+thedevelopmentofGAD.Additionalresearch Barger, S. D., & Sydeman, S. J. (2005). Does gen-
+might examine whether neuroticism is a gen- eralized anxiety disorder predict coronary heart
+eralvulnerabilityacrossallanxietyandmood diseaseriskfactorsindependentlyofmajordepres-
+sive disorder? Journal of Affective Disorders, 88,
+disordersbutspecificlearningexperiencesas-
+87–91.doi:10.1016/j.jad.2005.05.012
+sociated with contrast avoidance lead to the
+Beesdo,K.,Pine,D.S.,Lieb,R.,&Wittchen,H.U.
+development of GAD.
+(2010).Incidenceandriskpatternsofanxietyand
+There is also a strong need to develop fur- depressive disorders and categorization of gener-
+ther and test the treatment strategies de- alized anxiety disorder. Archives of General Psy-
+scribed here. Such treatment should be com- chiatry,67,47–57.doi:10.1001/archgenpsychiatry
+pared to standard CBT on individual .2009.177
+Borkovec, T. D., & Hu, S. (1990). The effect of
+differences in contrast avoidance and on its
+worryoncardiovascularresponsetophobicimag-
+ability to reduce GAD symptoms. It would
+ery.BehaviourResearchandTherapy,28,69–73.
+also be warranted to examine reduction of
+doi:10.1016/0005-7967(90)90056-O
+contrast avoidance as the mechanism of Borkovec, T. D., Newman, M. G., Pincus, A. L., &
+change in GAD symptoms. Lytle, R. (2002). A component analysis of cogni-
+.srehsilbupdeillastifoenoronoitaicossAlacigolohcysPnaciremAehtybdethgirypocsitnemucodsihT
+.yldaorbdetanimessidebottonsidnaresulaudividniehtfoesulanosrepehtrofylelosdednetnisielcitrasihT
+.devreser
+era
+,seigolonhcet
+ralimis
+dna
+,gniniart
+IA
+,gninim
+atad
+dna
+txet
+rof
+gnidulcni
+,sthgir
+llA
+CONTRASTAVOIDANCEMODELINGAD 165
+tive-behavioral therapy for generalized anxiety exemplar. Assessment, 12, 243–254. doi:10.1177/
+disorder and the role of interpersonal problems. 1073191105276653
+Journal of Consulting and Clinical Psychology, Heim,C.,Newport,J.,Heit,S.,Graham,Y.P.,Wil-
+70,288–298.doi:10.1037/0022-006X.70.2.288 cox,M.,Bonsall,R.,...Nemeroff,C.B.(2000).
+Bowlby,J.(1973).Attachmentandloss:Vol.2.Sep- Pituitary-adrenal and autonomic responses to
+aration.NewYork,NY:BasicBooks. stressinwomenaftersexualandphysicalabusein
+Brown,A.M.,&Whiteside,S.P.(2008).Relations childhood.JournaloftheAmericanMedicalAsso-
+among perceived parental rearing behaviors, at- ciation, 284, 592–597. doi:10.1001/jama.284.5
+tachment style, and worry in anxious children. .592
+Journal of Anxiety Disorders, 22, 263–272. doi: Hettema,J.M.,Kettenmann,B.,Ahluwalia,V.,Mc-
+10.1016/j.janxdis.2007.02.002 Carthy, C., Kates, W. R., Schmitt, J. E., . . .
+Bruce, S. E., Yonkers, K. A., Otto, M. W., Eisen, Fatouros, P. (2012). Pilot multimodal twin imag-
+J. L., Weisberg, R. B., Pagano, M., . . . Keller, ingstudyofgeneralizedanxietydisorder.Depres-
+M.B.(2005).Influenceofpsychiatriccomorbidity sion and Anxiety, 29, 202–209. doi:10.1002/da
+onrecoveryandrecurrenceingeneralizedanxiety .20901
+disorder,socialphobia,andpanicdisorder:A12- Hettema,J.M.,Neale,M.C.,Myers,J.M.,Prescott,
+year prospective study. The American Journal of C. A., & Kendler, K. S. (2006). A population-
+Psychiatry,162,1179–1187.doi:10.1176/appi.ajp basedtwinstudyoftherelationshipbetweenneu-
+.162.6.1179 roticismandinternalizingdisorders.TheAmerican
+Cassidy, J., Lichtenstein-Phelps, J., Sibrava, N. J., JournalofPsychiatry,163,857–864.doi:10.1176/
+Thomas,C.L.,&Borkovec,T.D.(2009).Gener- appi.ajp.163.5.857
+alized anxiety disorder: Connections with self- Hoehn-Saric, R., Hazlett, R. L., & McLeod, D. R.
+reportedattachment.BehaviorTherapy,40,23–38. (1993). Generalized anxiety disorder with early
+doi:10.1016/j.beth.2007.12.004 and late onset of anxiety symptoms. Comprehen-
+Centers for Disease Control. (1988). Health status sive Psychiatry, 34, 291–298. doi:10.1016/0010-
+of vietnam veterans: I. Psychosocial character- 440X(93)90013-T
+istics. Journal of the American Medical Associ- Kagan, J., & Snidman, N. (1999). Early childhood
+ation, 259, 2701–2707. doi:10.1001/jama.1988 predictors of adult anxiety disorders. Biological
+.03720180027028 Psychiatry, 46, 1536–1541. doi:10.1016/S0006-
+Crits-Christoph,P.,Gibbons,M.B.C.,Narducci,J., 3223(99)00137-7
+Schamberger, M., & Gallop, R. (2005). Interper- Kendler, K. S., Hettema, J. M., Butera, F., Gardner,
+sonalproblemsandtheoutcomeofinterpersonally C.O.,&Prescott,C.A.(2003).Lifeeventdimen-
+oriented psychodynamic treatment of GAD. Psy- sionsofloss,humiliation,entrapment,anddanger
+chotherapy:Theory,Research,Practice,Training, inthepredictionofonsetsofmajordepressionand
+42,211–224.doi:10.1037/0033-3204.42.2.211 generalizedanxiety.ArchivesofGeneralPsychia-
+Dyck,I.R.,Phillips,K.A.,Warshaw,M.G.,Dolan, try,60,789–796.doi:10.1001/archpsyc.60.8.789
+R.T.,Shea,M.T.,Stout,R.L.,...Keller,M.B. Kessler,R.C.,Berglund,P.A.,Dewit,D.J.,Ustun,
+(2001). Patterns of personality pathology in pa- T. B., Wang, P. S., & Wittchen, H. U. (2002).
+tientswithgeneralizedanxietydisorder,panicdis- Distinguishing generalized anxiety disorder from
+order with and without agoraphobia, and social major depression: Prevalence and impairment
+phobia.JournalofPersonalityDisorders,15,60– from current pure and comorbid disorders in the
+71.doi:10.1521/pedi.15.1.60.18643 USandOntario.InternationalJournalofMethods
+Erickson, T. M., Newman, M. G., & Abelson, J. L. inPsychiatricResearch,11,99–111.doi:10.1002/
+(2010,November).Discrepantperspectivesonthe mpr.128
+interpersonal characteristics of worriers based Kessler, R. C., Greenberg, P. E., Mickelson, K. D.,
+upon self vs. peer assessment. Paper presented at Meneades, L. M., & Wang, P. S. (2001). The
+the44thAnnualConventionoftheAssociationfor effectsofchronicmedicalconditionsonworkloss
+the Advancement of Behavioral and Cognitive and work cutback. Journal of Occupational and
+Therapies,SanFrancisco,CA. Environmental Medicine, 43, 218–225. doi:
+Erickson,T.M.,&Newman,M.G.(2007).Interper- 10.1097/00043764-200103000-00009
+sonalandemotionalprocessesingeneralizedanx- Lee, S., Guo, W. J., Tsang, A., He, Y. L., Huang,
+iety disorder analogues during social interaction Y. Q., Liu, Z. R., . . . Kessler, R. C. (2009).
+tasks. Behavior Therapy, 38, 364–377. doi: Impaired role functioning and treatment rates for
+10.1016/j.beth.2006.10.005 mentaldisordersandchronicphysicaldisordersin
+Erickson, T. M., & Pincus, A. L. (2005). Using metropolitan China. Psychosomatic Medicine, 71,
+Structural Analysis of Social Behavior (SASB) 886–893.doi:10.1097/PSY.0b013e3181baa65e
+measures of self- and social perception to give Llera, S. J., & Newman, M. G. (2010). Effects of
+interpersonalmeaningtosymptoms:Anxietyasan worryonphysiologicalandsubjectivereactivityto
+.srehsilbupdeillastifoenoronoitaicossAlacigolohcysPnaciremAehtybdethgirypocsitnemucodsihT
+.yldaorbdetanimessidebottonsidnaresulaudividniehtfoesulanosrepehtrofylelosdednetnisielcitrasihT
+.devreser
+era
+,seigolonhcet
+ralimis
+dna
+,gniniart
+IA
+,gninim
+atad
+dna
+txet
+rof
+gnidulcni
+,sthgir
+llA
+166 NEWMAN,LLERA,ERICKSON,ANDPRZEWORSKI
+emotional stimuli in generalized anxiety disorder Newman,M.G.,Castonguay,L.G.,Borkovec,T.D.,
+andnonanxiouscontrolparticipants.Emotion,10, & Molnar, C. (2004). Integrative psychotherapy.
+640–650.doi:10.1037/a0019351 In R. G. Heimberg, C. L. Turk,& D. S. Mennin
+Llera, S. J., & Newman, M. G. (2014). Rethinking (Eds.),Generalizedanxietydisorder:Advancesin
+the role of worry in generalized anxiety disorder: research and practice (pp. 320–350). New York,
+Evidence supporting a model of Emotional Con- NY:GuilfordPress.
+trast Avoidance. Behavior Therapy, 45, 283–299. Newman, M. G., & Erickson, T. M. (2010). Gener-
+doi:10.1016/j.beth.2013.12.011 alizedanxietydisorder.InJ.G.Beck(Ed.),Inter-
+Martens, E. J., de Jonge, P., Na, B., Cohen, B. E., personalprocessesintheanxietydisorders:Impli-
+Lett, H., & Whooley, M. A. (2010). Scared to cations for understanding psychopathology and
+death? Generalized anxiety disorder and cardio- treatment(pp.235–259).Washington,DC:Amer-
+vascular events in patients with stable coronary ican Psychological Association. doi:10.1037/
+heartdisease:TheHeartandSoulStudy.Archives 12084-009
+ofGeneralPsychiatry,67,750–758.doi:10.1001/ Newman, M. G., & Llera, S. J. (2011). A novel
+archgenpsychiatry.2010.74 theory of experiential avoidance in generalized
+Mennin, D. S., Heimberg, R. G., Turk, C. L., & anxiety disorder: A review and synthesis of re-
+Fresco,D.M.(2005).Preliminaryevidenceforan searchsupportingaContrastAvoidanceModelof
+worry. Clinical Psychology Review, 31, 371–382. emotiondysregulationmodelofgeneralizedanxi-
+doi:10.1016/j.cpr.2011.01.008
+etydisorder.BehaviourResearchandTherapy,43,
+Newman,M.G.,Llera,S.J.,Erickson,T.M.,Prze-
+1281–1310.doi:10.1016/j.brat.2004.08.008
+worski, A., & Castonguay, L. G. (2013). Worry
+Mickelson, K. D., Kessler, R. C., & Shaver, P. R.
+and generalized anxiety disorder: A review and
+(1997).Adultattachmentinanationallyrepresen-
+theoretical synthesis of research on nature, etiol-
+tative sample. Journal of Personality and Social
+ogy, and treatment. Annual Review of Clinical
+Psychology, 73, 1092–1106. doi:10.1037/0022-
+Psychology, 9, 275–297. doi:10.1146/annurev-
+3514.73.5.1092
+clinpsy-050212-185544 Moffitt,T.E.,Caspi,A.,Harrington,H.,Milne,B.J.,
+Newman, M. G., Przeworski, A., Fisher, A. J., &
+Melchior,M.,Goldberg,D.,&Poulton,R.(2007).
+Borkovec,T.D.(2010).Diagnosticcomorbidityin
+Generalized anxiety disorder and depression:
+adultswithgeneralizedanxietydisorder:Impactof
+Childhoodriskfactorsinabirthcohortfollowedto
+comorbidity on psychotherapy outcome and im-
+age32.PsychologicalMedicine,37,441–452.doi:
+pactofpsychotherapyoncomorbiddiagnoses.Be-
+10.1017/S0033291706009640
+havior Therapy, 41, 59–72. doi:10.1016/j.beth
+Moffitt, T. E., Caspi, A., Taylor, A., Kokaua, J., .2008.12.005
+Milne,B.J.,Polanczyk,G.,&Poulton,R.(2010).
+Nitschke,J.B.,Sarinopoulos,I.,Oathes,D.J.,John-
+Howcommonarecommonmentaldisorders?Ev-
+stone,T.,Whalen,P.J.,Davidson,R.J.,&Kalin,
+idence that lifetime prevalence rates are doubled
+N. H. (2009). Anticipatory activation in the
+byprospectiveversusretrospectiveascertainment.
+amygdala and anterior cingulate in generalized
+Psychological Medicine, 40, 899–909. doi:
+anxiety disorder and prediction of treatment re-
+10.1017/S0033291709991036
+sponse. American Journal of Psychiatry, 166,
+Mogg,K.,Millar,N.,&Bradley,B.P.(2000).Biases
+302–310.doi:10.1176/appi.ajp.2008.07101682
+ineyemovementstothreateningfacialexpressions
+Nordahl, H. M., Wells, A., Olsson, C. A., & Bjerk-
+ingeneralizedanxietydisorderanddepressivedis- eset, O. (2010). Association between abnormal
+order.JournalofAbnormalPsychology,109,695– psychosocial situations in childhood, generalized
+704.doi:10.1037/0021-843X.109.4.695 anxietydisorderandoppositionaldefiantdisorder.
+Muris, P., Meesters, C., van Melick, M., & Zwam- Australian and New Zealand Journal of Psychia-
+bag, L. (2001). Self-reported attachment style, at- try, 44, 852–858. doi:10.3109/00048674.2010
+tachment quality, and symptoms of anxiety and .489504
+depression in young adolescents. Personality and Pruneti,C.A.,Lento,R.M.,Fante,C.,Carrozzo,E.,
+IndividualDifferences,30,809–818.doi:10.1016/ &Fontana,F.(2010).Autonomicarousalanddif-
+S0191-8869(00)00074-X ferentialdiagnosisinclinicalpsychologyandpsy-
+Newman,M.G.,Castonguay,L.G.,Borkovec,T.D., chopathology.ItalianJournalofPsychopathology,
+Fisher,A.J.,Boswell,J.,Szkodny,L.E.,&Nor- 16,43–52.
+dberg,S.S.(2011).Arandomizedcontrolledtrial Przeworski,A.,Newman,M.G.,Pincus,A.L.,Ka-
+of cognitive-behavioral therapy for generalized soff,M.B.,Yamasaki,A.S.,Castonguay,L.G.,&
+anxiety disorder with integrated techniques from Berlin, K. S. (2011). Interpersonal pathoplasticity
+emotion-focusedandinterpersonaltherapies.Jour- in individuals with generalized anxiety disorder.
+nal of Consulting and Clinical Psychology, 79, Journal of Abnormal Psychology, 120, 286–298.
+171–181.doi:10.1037/a0022489 doi:10.1037/a0023334
+.srehsilbupdeillastifoenoronoitaicossAlacigolohcysPnaciremAehtybdethgirypocsitnemucodsihT
+.yldaorbdetanimessidebottonsidnaresulaudividniehtfoesulanosrepehtrofylelosdednetnisielcitrasihT
+.devreser
+era
+,seigolonhcet
+ralimis
+dna
+,gniniart
+IA
+,gninim
+atad
+dna
+txet
+rof
+gnidulcni
+,sthgir
+llA
+CONTRASTAVOIDANCEMODELINGAD 167
+Radstaak, M., Geurts, S. A., Brosschot, J. F., Cil- viewoftheliterature.JournalofAnxietyDisorders,
+lessen,A.H.,&Kompier,M.A.(2011).Therole 1,69–86.doi:10.1016/0887-6185(87)90024-7
+of affect and rumination in cardiovascular recov- Todaro, J. F., Shen, B. J., Raffa, S. D., Tilkemeier,
+ery from stress. International Journal of Psycho- P. L., & Niaura, R. (2007). Prevalence of anxiety
+physiology, 81, 237–244. doi:10.1016/j.ijpsycho disordersinmenandwomenwithestablishedcor-
+.2011.06.017 onary heart disease. Journal of Cardiopulmonary
+Roemer, L., Molina, S., & Borkovec, T. D. (1997). Rehabilitation and Prevention, 27, 86–91. doi:
+Aninvestigationofworrycontentamonggenerally 10.1097/01.HCR.0000265036.24157.e7
+anxious individuals. Journal of Nervous and Turk,C.L.,Heimberg,R.G.,Luterek,J.A.,Mennin,
+Mental Disease, 185, 314–319. doi:10.1097/ D.S.,&Fresco,D.M.(2005).Emotiondysregu-
+00005053-199705000-00005 lation in generalized anxiety disorder: A compar-
+Rothbart,M.K.(2007).Temperament,development, isonwithsocialanxietydisorder.CognitiveTher-
+andpersonality.CurrentDirectionsinPsycholog- apy and Research, 5, 89–106. doi:10.1007/
+ical Science, 16, 207–212. doi:10.1111/j.1467- s10608-005-1651-1
+Whisman, M. A. (2007). Marital distress and
+8721.2007.00505.x
+DSM–IV psychiatric disorders in a population-
+Safren, S. A., Gershuny, B. S., Marzol, P., Otto,
+based national survey. Journal of Abnormal Psy-
+M.W.,&Pollack,M.H.(2002).Historyofchild-
+chology, 116, 638–643. doi:10.1037/0021-843X hood abuse in panic disorder, social phobia, and
+.116.3.638
+generalized anxiety disorder. Journal of Nervous
+Whisman, M. A., Sheldon, C. T., & Goering, P.
+and Mental Disease, 190, 453–456. doi:10.1097/
+(2000). Psychiatric disorders and dissatisfaction
+00005053-200207000-00005
+withsocialrelationships:Doestypeofrelationship
+Sanderson, K., & Andrews, G. (2002). Prevalence
+matter? Journal of Abnormal Psychology, 109,
+andseverityofmentalhealth-relateddisabilityand
+803–808.doi:10.1037/0021-843X.109.4.803
+relationshiptodiagnosis.PsychiatricServices,53,
+Wijsbroek, S. A. M., Hale Iii, W. W., Raaijmakers,
+80–86.doi:10.1176/appi.ps.53.1.80
+Q.A.W.,&Meeus,W.H.J.(2011).Thedirection
+Schienle,A.,Ebner,F.,&Schäfer,A.(2011).Local-
+of effects between perceived parental behavioral
+izedgraymattervolumeabnormalitiesingeneral-
+controlandpsychologicalcontrolandadolescents’
+ized anxiety disorder. European Archives of Psy-
+self-reportedGADandSADsymptoms.European
+chiatryandClinicalNeuroscience,261,303–307.
+Child&AdolescentPsychiatry,20,361–371.doi:
+doi:10.1007/s00406-010-0147-5
+10.1007/s00787-011-0183-3
+Schienle,A.,Hettema,J.M.,Cáceda,R.,&Nemer-
+Yassa,M.A.,Hazlett,R.L.,Stark,C.E.,&Hoehn-
+off, C. B. (2011). Neurobiology and genetics of Saric,R.(2012).FunctionalMRIoftheamygdala
+generalized anxiety disorder. Psychiatric Annals, andbednucleusofthestriaterminalisduringcon-
+41,113–123.doi:10.3928/00485713-20110203-10 ditionsofuncertaintyingeneralizedanxietydisor-
+Shanahan, L., Copeland, W., Costello, E. J., & An- der. Journal of Psychiatric Research, 46, 1045–
+gold, A. (2008). Specificity of putative psychoso- 1052.doi:10.1016/j.jpsychires.2012.04.013
+cial risk factors for psychiatric disorders in chil- Zinbarg, R. E., Lee, J. E., & Yoon, K. L. (2007).
+drenandadolescents.JournalofChildPsychology Dyadic predictors of outcome in a cognitive-
+and Psychiatry, 49, 34–42. doi:10.1111/j.1469- behavioral program for patients with generalized
+7610.2007.01822.x anxiety disorder in committed relationships: A
+Shore,J.H.,Tatum,E.L.,&Vollmer,W.M.(1986). “spoonful of sugar” and a dose of non-hostile
+Psychiatric reactions to disaster: The Mount St. criticismmayhelp.BehaviourResearchandTher-
+Helens experience. American Journal of Psychia- apy,45,699–713.doi:10.1016/j.brat.2006.06.005
+try,143,590–595.
+Steketee,G.,&Foa,E.B.(1987).Rape victims: Post- ReceivedFebruary14,2014
+traumaticstressresponsesandtheirtreatment:Are- AcceptedFebruary19,2014 (cid:2)
+.srehsilbupdeillastifoenoronoitaicossAlacigolohcysPnaciremAehtybdethgirypocsitnemucodsihT
+.yldaorbdetanimessidebottonsidnaresulaudividniehtfoesulanosrepehtrofylelosdednetnisielcitrasihT
+.devreser
+era
+,seigolonhcet
+ralimis
+dna
+,gniniart
+IA
+,gninim
+atad
+dna
+txet
+rof
+gnidulcni
+,sthgir
+llA

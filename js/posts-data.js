@@ -1,8 +1,16 @@
 window.BLOG_POSTS = [
   {
+    title: 'Evolutionary Computation\'s Identity Crisis in the Age of GenAI',
+    date: '2026-04-18',
+    tags: ['ai'],
+    excerpt: 'Evolutionary Computation is having an identity crisis in the GenAI era, despite delivering major real-world wins in engineering, logistics, and constrained optimization.',
+    url: 'blog/evolutionary-computation-identity-crisis.html',
+    image: 'img/bg-img/208.png'
+  },
+  {
     title: 'In Defense of Audiobooks',
     date: '2026-04-17',
-    tags: ['books', 'accessibility', 'education', 'opinion'],
+    tags: ['books'],
     excerpt: 'The stigma against audiobooks is rooted in bad assumptions about learning, intelligence, and what counts as reading. The research doesn\'t support any of it.',
     url: 'blog/in-defense-of-audiobooks.html',
     image: 'img/bg-img/366.png'
@@ -10,7 +18,7 @@ window.BLOG_POSTS = [
   {
     title: 'Why It Still Matters to Learn to Code in the Age of AI',
     date: '2026-04-16',
-    tags: ['ai', 'coding', 'education', 'career'],
+    tags: ['ai'],
     excerpt: 'Coding still matters because the value is not syntax memorization. It is learning to break down problems, reason across systems, and build reliable solutions.',
     url: 'blog/why-learn-to-code-age-of-ai.html',
     image: 'img/bg-img/14.png'
@@ -18,7 +26,7 @@ window.BLOG_POSTS = [
   {
     title: 'Your Professional Second Brain for Local LLM Work',
     date: '2026-04-15',
-    tags: ['nerd-stuff', 'genai'],
+    tags: ['ai'],
     excerpt: 'A practical system for project documentation, knowledge management, and local LLM workflows that improves delivery, reviews, and project re-entry.',
     url: 'blog/second-brain-local-llm-professional.html',
     image: 'img/bg-img/75.png'
@@ -26,7 +34,7 @@ window.BLOG_POSTS = [
   {
     title: 'Snowball vs Avalanche: The Science of Paying Off Debt',
     date: '2026-04-14',
-    tags: ['nerd-stuff'],
+    tags: ['personal-finance'],
     excerpt: 'Snowball and avalanche both work, but for different reasons. A practical guide with simulator-backed charts on interest, timing, and motivation.',
     url: 'blog/snowball-vs-avalanche.html',
     image: 'blog/img/debt_total_curve.png'
@@ -50,7 +58,7 @@ window.BLOG_POSTS = [
   {
     title: 'Building a Photo Tagging System with CLIP',
     date: '2026-04-10',
-    tags: ['nerd-stuff', 'photography'],
+    tags: ['ai', 'photography'],
     excerpt: 'How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute, zero API cost, running entirely on CPU.',
     url: 'blog/photo-tagging-with-clip.html',
     image: 'img/bg-img/1.png'

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="description" content="Evolutionary Computation is having an identity crisis in the GenAI era, despite delivering major real-world wins in engineering, logistics, and constrained optimization.">
+	<meta name="keywords" content="evolutionary computation, genetic algorithms, machine learning, genai, optimization, reproducibility, research">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Evolutionary Computation's Identity Crisis in the Age of GenAI - Ken Reid</title>
+	<meta property="og:title" content="Evolutionary Computation's Identity Crisis in the Age of GenAI">
+	<meta property="og:description" content="Evolutionary Algorithms still solve hard, constrained, non-differentiable problems where gradient-based AI often struggles. The field's biggest challenge is now semantic, not technical.">
+	<meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/208.png">
+	<meta property="og:url" content="https://www.kenreid.co.uk/blog/evolutionary-computation-identity-crisis.html">
+	<meta property="og:type" content="article">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="Evolutionary Computation's Identity Crisis in the Age of GenAI">
+	<meta name="twitter:description" content="Evolutionary Algorithms still solve hard, constrained, non-differentiable problems where gradient-based AI often struggles. The field's biggest challenge is now semantic, not technical.">
+	<meta name="twitter:image" content="https://www.kenreid.co.uk/img/bg-img/208.png">
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+	<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+	<link rel="icon" href="../img/core-img/favicon.png">
+	<meta name="theme-color" content="#000000">
+	<link rel="stylesheet" href="../style.css">
+	<link rel="canonical" href="https://www.kenreid.co.uk/blog/evolutionary-computation-identity-crisis.html">
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "BlogPosting",
+		"headline": "Evolutionary Computation's Identity Crisis in the Age of GenAI",
+		"description": "Evolutionary Computation is having an identity crisis in the GenAI era, despite delivering major real-world wins in engineering, logistics, and constrained optimization.",
+		"image": "https://www.kenreid.co.uk/img/bg-img/208.png",
+		"author": {
+			"@type": "Person",
+			"name": "Ken Reid",
+			"url": "https://www.kenreid.co.uk"
+		},
+		"datePublished": "2026-04-18",
+		"publisher": {
+			"@type": "Person",
+			"name": "Ken Reid"
+		},
+		"keywords": ["evolutionary computation", "machine learning", "ai", "research", "reproducibility"]
+	}
+	</script>
+</head>
+<body>
+	<div id="preloader"><div class="loader"></div></div>
+
+	<div id="header-section"></div>
+
+	<section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/bg-img/208.png); background-size: cover; background-position: center center;">
+		<div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+			<div class="breadcrumb-content text-center">
+				<h2 class="page-title">Blog</h2>
+				<nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+					<li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+					<li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Evolutionary Computation</li>
+				</ol></nav>
+			</div>
+		</div></div></div>
+	</section>
+
+	<div class="about-us-area section-padding-80 clearfix">
+		<div class="container">
+			<div class="blog-post">
+				<h1>Evolutionary Computation's Identity Crisis in the Age of GenAI</h1>
+				<div class="blog-meta">
+					18 April 2026 &middot;
+					<span class="blog-tag">ai</span>
+				</div>
+
+				<p>I have spent my entire academic and professional life steeped in the world of Evolutionary Computation (EC). From grinding through my PhD and postdocs onward, I've used these algorithms to solve both massive real-world industrial and complex theoretical problems. I have seen firsthand what these systems can do.</p>
+
+				<p>Before we get into the current crisis facing the field, I have to confess my enduring love for the biology that started it all. The biological world is staggeringly complex, but the mechanisms driving that complexity are surprisingly simple. John Holland, the pioneer of genetic algorithms, realized decades ago that we could borrow evolution's trick for software: maintain a population of candidate solutions, keep the ones that work, mutate and recombine them, repeat. It seems obvious in hindsight, but simple ideas are often the most brilliant.</p>
+
+				<details class="plain-english-box" style="margin-bottom: 28px;">
+					<summary style="cursor: pointer;"><h2 style="display: inline; margin: 0;">Quick jargon guide (expand)</h2></summary>
+					<p style="margin-top: 12px;">If you are new to EC, these are the terms that matter most in this piece:</p>
+					<ul>
+						<li><strong>Metaheuristic</strong>: a high-level search strategy (like GA, PSO, SA) used when exact optimization is too expensive.</li>
+						<li><strong>Evolutionary Algorithms (EAs)</strong>: a family of metaheuristics inspired by evolution; they iteratively improve a population of candidate solutions.</li>
+						<li><strong>Combinatorial Search Space</strong>: problems made of discrete choices (routes, schedules, component sets), where combinations explode quickly.</li>
+						<li><strong>Fitness / Objective Function</strong>: the scorecard used to judge each candidate solution against the real goal.</li>
+						<li><strong>Hard Constraints</strong>: non-negotiable rules (for example: weight limits, delivery windows, safety bounds) that must be satisfied.</li>
+						<li><strong>Selection, Crossover, Mutation</strong>: selection keeps stronger candidates; crossover mixes useful parts; mutation adds variation so search does not get stuck early.</li>
+						<li><strong>Non-differentiable Objective</strong>: a goal function with no useful gradient, so gradient descent is unreliable or impossible.</li>
+						<li><strong>Multi-objective Optimization</strong>: optimizing several competing goals at once (for example: cost, speed, and reliability).</li>
+						<li><strong>Surrogate Model</strong>: a cheaper approximation of an expensive evaluator (for example, replacing some simulations with a learned predictor).</li>
+					</ul>
+				</details>
+
+				<p>Lately, if you look at the AI landscape, you could be forgiven for thinking neural networks and GenAI are the only games in town. The hype, funding, and conference mindshare all flow toward whatever has the most product momentum. Meanwhile, Evolutionary Computation is experiencing an identity crisis.</p>
+
+				<blockquote>
+					<p>While everyone's arguing about whether ChatGPT will take their job, evolutionary algorithms are quietly running the logistics that get their packages delivered.</p>
+				</blockquote>
+
+				<h2>Why EAs still matter</h2>
+
+				<p>GenAI relies heavily on gradient-based optimization in continuous spaces. But what happens when there is no useful gradient, no data to work with, or when the solution space is highly constrained and combinatorial?</p>
+
+				<p>That is where EAs shine. They do not require smooth, continuous, or differentiable landscapes, nor large amounts of labeled data. They thrive in noisy, constrained, and non-differentiable environments. Unlike the opaque behavior of large language models, evolutionary mechanisms are transparent, constraints are explicit, and engineers can inspect trade-offs directly rather than accepting a plausible but unverifiable output.</p>
+
+				<h2>The receipts: real-world impact</h2>
+
+				<p>If you want to know why I still have one foot planted in this research, look at the ROI:</p>
+
+				<p><strong>Aerospace engineering</strong>: General Electric has used genetic algorithms with fluid dynamics simulations to optimize turbine blade geometry, with reported fuel-efficiency gains in the 0.5% to 1% range, translating to very large fleet-lifetime savings.<sup><a href="#ref-1" class="cite-ref">[1]</a></sup><sup><a href="#ref-2" class="cite-ref">[2]</a></sup><sup><a href="#ref-3" class="cite-ref">[3]</a></sup></p>
+
+				<p><strong>Space exploration</strong>: NASA's ST5 X-band antenna design is a classic example where a genetic algorithm evolved non-intuitive geometries that met strict size, weight, and power constraints better than human-designed alternatives.<sup><a href="#ref-4" class="cite-ref">[4]</a></sup><sup><a href="#ref-5" class="cite-ref">[5]</a></sup></p>
+
+				<p><strong>Global logistics</strong>: large routing systems (DHL, UPS, Amazon-scale operations) use evolutionary and hybrid metaheuristics nightly to cut mileage and fuel use while obeying hard constraints such as shifts, traffic, weather, and service windows.<sup><a href="#ref-6" class="cite-ref">[6]</a></sup><sup><a href="#ref-7" class="cite-ref">[7]</a></sup><sup><a href="#ref-8" class="cite-ref">[8]</a></sup></p>
+
+				<img src="../img/bg-img/208.png" alt="Urban architecture scene used as post banner" loading="lazy">
+				<p class="figure-note">EAs impact real world logistics, research, industry and beyond.</p>
+
+				<h2>What GenAI cannot do</h2>
+
+				<p>Given the examples above, you might reasonably ask: could you not just prompt an LLM to design a turbine blade or plan a delivery route? The short answer is no, and the reasons are instructive.</p>
+
+				<p>GenAI models are fundamentally interpolation engines.<sup><a href="#ref-17" class="cite-ref">[17]</a></sup> They are trained on existing human output and generate plausible-looking responses that blend what they have seen. That is extraordinarily powerful for text, code, images, and conversation. But it is not optimization. A large language model asked to design an antenna geometry will produce something that looks like an antenna. It will not produce something that satisfies specific gain, weight, and power constraints while minimizing material cost, because it has no mechanism for enforcing hard constraints or evaluating physical feasibility.<sup><a href="#ref-18" class="cite-ref">[18]</a></sup> It can describe a solution. It cannot guarantee one.</p>
+
+				<p>EAs operate differently. They maintain a population of candidate solutions, evaluate each against a real objective function (which can include simulations, physical models, or constraint checkers), and iteratively improve through selection, mutation, and recombination.<sup><a href="#ref-19" class="cite-ref">[19]</a></sup> The constraints are not suggestions; they are enforced at every generation. The trade-offs are explicit and inspectable, not hidden inside a model's weights.</p>
+
+				<p>This is not a competition between the two. GenAI and EAs solve fundamentally different classes of problem. The issue is that funding, attention, and hiring all follow the hype, and right now the hype is entirely on one side.<sup><a href="#ref-20" class="cite-ref">[20]</a></sup> EC researchers are not losing on technical merit. They are losing on marketing.</p>
+
+				<h2>The naming problem</h2>
+
+				<p>Despite these wins, EC struggles for prestige. Some of that is just the GenAI hype cycle drowning everything else out. But some of the trouble is self-inflicted. The field suffers from what many researchers call the "Evolutionary Computation Bestiary": a flood of supposedly novel algorithms named after animals, insects, and increasingly absurd metaphors.<sup><a href="#ref-9" class="cite-ref">[9]</a></sup></p>
+
+				<p>Grey Wolf Optimizer. Whale Optimization. Cuckoo Search. Chicken Swarm. There are papers inspired by everything from amoebas to zombies. Strip away the naming and the math often reduces to familiar operators from existing metaheuristics.<sup><a href="#ref-10" class="cite-ref">[10]</a></sup><sup><a href="#ref-11" class="cite-ref">[11]</a></sup> In a landmark critique, Sorensen argued that metaheuristics can drown in scientifically hollow metaphors, from flowing water and bat behavior to imperial colonization and wolf hierarchies.<sup><a href="#ref-11" class="cite-ref">[11]</a></sup> The criticism is fair: we need more mathematics and fewer mascots.</p>
+
+                <img src="../img/bg-img/67.png" alt="A hand on a grave." loading="lazy">
+				<p class="figure-note">Zombie optimization, or something.</p>
+
+				<p>The most heavily scrutinized example is Harmony Search (HS), introduced as a novel algorithm inspired by jazz musicians improvising to find perfect harmony.<sup><a href="#ref-13" class="cite-ref">[13]</a></sup> Rigorous mathematical analysis by Weyland showed that Harmony Search is a special, and often less efficient, case of established Evolution Strategies:<sup><a href="#ref-15" class="cite-ref">[15]</a></sup><sup><a href="#ref-16" class="cite-ref">[16]</a></sup></p>
+
+				<ul>
+					<li><strong>Harmony Memory</strong> is simply a population.</li>
+					<li><strong>Improvisation</strong> corresponds to standard exploration/crossover mechanisms.</li>
+					<li><strong>Pitch Adjustment</strong> is effectively local mutation.</li>
+				</ul>
+
+				<p>Because this terminology obscured the algorithm's mechanics, the community produced a large follow-on literature disconnected from decades of prior Evolution Strategies research.<sup><a href="#ref-16" class="cite-ref">[16]</a></sup> Imagine someone reinvented the bicycle, called it the "Balanced Rotation Mobility Platform", and published 200 papers about it. That is essentially what happened here. And it is not an isolated case. The same pattern repeats across the field: familiar operators wrapped in novel metaphors, generating publications that look like progress but functionally reinvent existing work.</p>
+
+				<h2>The dialect collision</h2>
+
+				<p>The metaphor problem is internal to EC, but the fragmentation extends outward too. EC and mainstream ML often describe the same core mathematical concepts in entirely different dialects. Researchers can be tuning the exact same underlying parameters while calling them by completely different names:</p>
+
+				<table class="dialect-table">
+					<colgroup><col><col><col></colgroup>
+					<thead>
+						<tr>
+							<th>Concept</th>
+							<th>EC term</th>
+							<th>ML term</th>
+						</tr>
+					</thead>
+					<tbody>
+					<tr><td>Global objective</td><td>fitness</td><td>reward, utility, or loss</td></tr>
+					<tr><td>Search space</td><td>fitness landscape</td><td>loss surface</td></tr>
+					<tr><td>Dataset / state</td><td>population</td><td>batch or ensemble</td></tr>
+					<tr><td>Time and iteration</td><td>generations</td><td>epochs</td></tr>
+					<tr><td>Exploration</td><td>mutation</td><td>exploration noise, perturbation</td></tr>
+					<tr><td>Information sharing</td><td>crossover</td><td>parameter averaging, gradient sharing</td></tr>
+					<tr><td>Solution retention</td><td>elitism</td><td>best-model checkpointing</td></tr>
+					</tbody>
+				</table>
+
+				<p>This disconnect means literature reviews rarely cross-pollinate. Advancements in one community are frequently ignored by the other until they are independently rediscovered.</p>
+
+				<p>The problem gets worse in mathematically sophisticated subfields, and this next bit is niche, but it illustrates the point well. Quantum-Inspired Evolutionary Algorithms (QEAs), for instance, run on classical computers but borrow quantum nomenclature: qubits, superposition, rotation gates.<sup><a href="#ref-14" class="cite-ref">[14]</a></sup> In practice, these often map directly onto existing probabilistic search methods like Estimation of Distribution Algorithms (EDAs) and PBIL.<sup><a href="#ref-12" class="cite-ref">[12]</a></sup> By wrapping classical probability updates in quantum language, parts of the QEA literature become semantically isolated from the very research they are building on.</p>
+
+				<p>The cost of all this fragmentation is real. When a researcher tuning a Q-gate, a researcher tweaking Pitch Adjustment, and an ML engineer adjusting exploration noise do not realize they are studying closely related perturbation mechanisms, the broader community loses opportunities for unified progress. The illusion of rapid innovation masks what is often scientific stagnation through relabeling.</p>
+
+				<h2>EC in the GenAI era</h2>
+
+				<p>Here is what I find frustrating: the GenAI wave is not just pulling attention away from EC, it is creating exactly the kind of problems that EAs are built to solve. Neural architecture search, hyperparameter optimization, prompt engineering at scale, constrained code generation, multi-objective model selection: these are all optimization problems with messy, non-differentiable, or combinatorial search spaces. EAs should be central to the next generation of AI systems, not sidelined by them.</p>
+
+                <img src="../img/bg-img/186.png" alt="An abstract representation of machine learning." loading="lazy">
+
+				<p>Hybrid approaches are already emerging. Researchers are using LLMs as surrogate fitness evaluators, letting evolutionary search explore design spaces while a language model provides fast approximate evaluations. Others are using EAs to evolve prompts, tune retrieval-augmented generation pipelines, or search for adversarial inputs that expose model weaknesses. The combination of GenAI's generative fluency and EA's constraint-respecting optimization is genuinely powerful, and it is still early days.</p>
+
+				<p>But for EC to claim that seat at the table, the field has to get its house in order. The naming crisis and the dialect collision are not just academic annoyances. They are the reason EC papers do not show up in ML literature reviews, the reason industry labs do not consider evolutionary approaches, and the reason funding bodies see EC as a niche subdiscipline rather than a foundational tool. The technical capability is there. The communication is not.</p>
+
+				<h2>The path forward</h2>
+
+                <img src="../img/bg-img/117.png" alt="A bridge or a pier, representing a path forward." loading="lazy">
+
+				<p>Evolutionary Computation does not need another metaphor. It needs an operator-level ontology and a semantic translation layer that maps algorithm families onto fundamental mathematical components. In plainer terms: a shared vocabulary that maps what each community actually means when they use different words for the same things. That is how we compare methods honestly across communities.</p>
+
+				<p>We also need to normalize publication of negative results. If a popular algorithm fails on a class of problems, publishing that failure can save others months of wasted effort and improve collective progress.</p>
+
+				<blockquote>
+					<p>EC is uniquely equipped for non-differentiable, highly constrained, real-world optimization. Clean up the language, tighten the science, and the field does not just survive the GenAI era, it becomes foundational to what comes next.</p>
+				</blockquote>
+
+				<div class="faq-section">
+					<h2>Common questions</h2>
+
+					<details class="faq-item">
+						<summary>Are EAs obsolete now that deep learning is dominant?</summary>
+						<p>No. Deep learning dominates many perception and generation tasks, but EAs remain strong for constrained optimization, combinatorial search, and engineering design where gradients are unavailable or unreliable.</p>
+					</details>
+
+					<details class="faq-item">
+						<summary>What is the biggest practical issue in EC research today?</summary>
+						<p>Comparability and reproducibility. Inconsistent naming, weak ablation studies, and limited negative-result publication make it harder to identify genuine advances.</p>
+					</details>
+
+					<details class="faq-item">
+						<summary>Can EC and modern ML be combined effectively?</summary>
+						<p>Yes. Hybrid systems are already common, for example using learning-based surrogates with evolutionary search, or using evolutionary strategies for policy optimization in reinforcement learning settings.</p>
+					</details>
+				</div>
+
+				<details class="faq-item" id="references" style="margin-top: 32px;">
+					<summary>References</summary>
+					<ol style="margin-top: 12px; padding-left: 20px; line-height: 1.9; font-size: 0.9em;">
+						<li id="ref-1">Tong, C., Powell, D., &amp; Skolnick, M. M. (1989). Engineering design optimization using genetic algorithms. In <em>Proceedings of the 3rd International Conference on Genetic Algorithms</em>.</li>
+						<li id="ref-2">Shelton, M. L., et al. (1993). Application of a genetic algorithm to turbomachinery airfoil design. In <em>ASME Turbo Expo Proceedings</em>.</li>
+						<li id="ref-3">Oyama, A., Liou, M.-S., &amp; Obayashi, S. (2004). Transonic wing design based on evolutionary algorithms coupled with Navier-Stokes solvers. <em>AIAA Journal</em>.</li>
+						<li id="ref-4">Hornby, G. S., Lohn, J. D., &amp; Linden, D. S. (2011). Computer-automated evolution of an X-band antenna for NASA's Space Technology 5 mission. <em>Evolutionary Computation</em>, 19(1), 1-23.</li>
+						<li id="ref-5">Lohn, J. D., Hornby, G. S., &amp; Linden, D. S. (2004). Evolutionary antenna design for a NASA spacecraft. In <em>Proceedings of the Genetic and Evolutionary Computation Conference (GECCO)</em>.</li>
+						<li id="ref-6">Holland, O., Leff, J., Chappell, A., &amp; Dietrich, B. (2017). ORION: UPS's integrated on-road optimization and navigation. <em>Interfaces</em>, 47(1), 8-23.</li>
+						<li id="ref-7">Korte, B., &amp; Vygen, J. (2018). <em>Combinatorial Optimization: Theory and Algorithms</em> (6th ed.). Springer.</li>
+						<li id="ref-8">Kool, W., van Hoof, H., &amp; Welling, M. (2019). Attention, learn to solve routing problems! In <em>International Conference on Learning Representations (ICLR)</em>.</li>
+						<li id="ref-9">Campelo, F., &amp; Aranha, C. (2023). Lessons from the Evolutionary Computation Bestiary. <em>Artificial Life</em>, 29(4), 421-432. <a href="https://doi.org/10.1162/artl_a_00402" rel="noopener noreferrer" target="_blank">doi:10.1162/artl_a_00402</a></li>
+						<li id="ref-10">Camacho-Villalon, C. L., Dorigo, M., &amp; Stutzle, T. (2022). Exposing the grey wolf, moth-flame, whale, firefly, bat, and antlion algorithms: six misleading optimization techniques inspired by bestial metaphors. <em>International Transactions in Operational Research</em>, 30(6), 2945-2971. <a href="https://doi.org/10.1111/itor.13176" rel="noopener noreferrer" target="_blank">doi:10.1111/itor.13176</a></li>
+						<li id="ref-11">Sorensen, K. (2015). Metaheuristics-the metaphor exposed. <em>International Transactions in Operational Research</em>, 22(1), 3-18. <a href="https://doi.org/10.1111/itor.12001" rel="noopener noreferrer" target="_blank">doi:10.1111/itor.12001</a></li>
+						<li id="ref-12">Lones, M. A. (2019). Mitigating Metaphors: A Comprehensible Guide to Recent Nature-Inspired Algorithms. <em>SN Computer Science</em>, 1. <a href="https://doi.org/10.1007/s42979-019-0050-8" rel="noopener noreferrer" target="_blank">doi:10.1007/s42979-019-0050-8</a></li>
+						<li id="ref-13">Geem, Z. W., Kim, J. H., &amp; Loganathan, G. V. (2001). A new heuristic optimization algorithm: harmony search. <em>Simulation</em>, 76(2), 60-68.</li>
+						<li id="ref-14">Han, K. H., &amp; Kim, J. H. (2002). Quantum-inspired evolutionary algorithm for a class of combinatorial optimization. <em>IEEE Transactions on Evolutionary Computation</em>, 6(6), 580-593.</li>
+						<li id="ref-15">Weyland, D. (2010). A rigorous analysis of the harmony search algorithm.</li>
+						<li id="ref-16">Weyland, D. (2015). A critical analysis of the harmony search algorithm-How not to solve sudoku. <em>Operations Research Perspectives</em>, 2, 97-105.</li>
+						<li id="ref-17">Chollet, F. (2019). On the measure of intelligence. <em>arXiv preprint</em> arXiv:1911.01547. <a href="https://arxiv.org/abs/1911.01547" rel="noopener noreferrer" target="_blank">arXiv:1911.01547</a></li>
+						<li id="ref-18">Kambhampati, S., Valmeekam, K., et al. (2024). LLMs can't plan, but can help planning in LLM-modulo frameworks. <em>Communications of the ACM</em>. <a href="https://cacm.acm.org/research/llms-cant-plan-but-can-help-planning-in-llm-modulo-frameworks/" rel="noopener noreferrer" target="_blank">CACM article</a></li>
+						<li id="ref-19">Hornby, G. S., Globus, A., Linden, D. S., &amp; Lohn, J. D. (2006). Automated antenna design with evolutionary algorithms. In <em>Space 2006 Conference and Exposition</em>. <a href="https://ntrs.nasa.gov/citations/20060024675" rel="noopener noreferrer" target="_blank">NASA NTRS</a></li>
+						<li id="ref-20">Marcus, G. (2022). Deep learning is hitting a wall. <em>Nautilus</em>. <a href="https://nautil.us/deep-learning-is-hitting-a-wall-14467/" rel="noopener noreferrer" target="_blank">Nautilus article</a></li>
+					</ol>
+				</details>
+
+				<div class="related-posts">
+					<h2>Related posts</h2>
+					<div class="row related-posts-grid">
+						<div class="col-12 col-md-6 col-lg-4 mb-30">
+							<a href="why-learn-to-code-age-of-ai.html" class="blog-card">
+								<div class="blog-card-img"><img src="../img/bg-img/14.png" alt="Why It Still Matters to Learn to Code in the Age of AI" loading="lazy"></div>
+								<div class="blog-card-body">
+									<div class="blog-card-date">16 April 2026 · 1 min read</div>
+									<h4 class="blog-card-title">Why It Still Matters to Learn to Code in the Age of AI</h4>
+									<p class="blog-card-excerpt">Coding still matters because syntax is not the core value; systems thinking, problem framing, and verification are.</p>
+									<div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+								</div>
+							</a>
+						</div>
+						<div class="col-12 col-md-6 col-lg-4 mb-30">
+							<a href="photo-tagging-with-clip.html" class="blog-card">
+								<div class="blog-card-img"><img src="../img/bg-img/1.png" alt="Building a Photo Tagging System with CLIP" loading="lazy"></div>
+								<div class="blog-card-body">
+									<div class="blog-card-date">10 April 2026 · 1 min read</div>
+									<h4 class="blog-card-title">Building a Photo Tagging System with CLIP</h4>
+									<p class="blog-card-excerpt">A practical local AI workflow for image tagging with OpenCLIP, run on CPU with no API costs.</p>
+									<div class="blog-card-tags"><span class="blog-tag">ai</span><span class="blog-tag">photography</span></div>
+								</div>
+							</a>
+						</div>
+						<div class="col-12 col-md-6 col-lg-4 mb-30">
+							<a href="second-brain-local-llm-professional.html" class="blog-card">
+								<div class="blog-card-img"><img src="../img/bg-img/75.png" alt="Your Professional Second Brain for Local LLM Work" loading="lazy"></div>
+								<div class="blog-card-body">
+									<div class="blog-card-date">15 April 2026 · 1 min read</div>
+									<h4 class="blog-card-title">Your Professional Second Brain for Local LLM Work</h4>
+									<p class="blog-card-excerpt">A practical documentation and delivery system for local-LLM development and sustained project quality.</p>
+									<div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<hr style="margin: 40px 0;">
+				<p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+			</div>
+		</div>
+	</div>
+
+	<hr>
+	<div id="footer-section"></div>
+
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/popper.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/alime.bundle.js"></script>
+	<script src="../js/share.js"></script>
+	<script src="../js/default-assets/active.js"></script>
+	<script src="../js/shared-components.js"></script>
+	<script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+</body>
+</html>

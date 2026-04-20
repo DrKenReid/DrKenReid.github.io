@@ -5,11 +5,19 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 17 Apr 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Thu, 17 Apr 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Fri, 18 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Fri, 18 Apr 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Evolutionary Computation's Identity Crisis in the Age of GenAI</title>
+      <link>https://www.kenreid.co.uk/blog/evolutionary-computation-identity-crisis.html</link>
+      <guid>https://www.kenreid.co.uk/blog/evolutionary-computation-identity-crisis.html</guid>
+      <pubDate>Fri, 18 Apr 2026 00:00:00 +0000</pubDate>
+      <description>Evolutionary Computation is having an identity crisis in the GenAI era, despite delivering major real-world wins in engineering, logistics, and constrained optimization.</description>
+      <category>ai</category>
+    </item>
     <item>
       <title>In Defense of Audiobooks</title>
       <link>https://www.kenreid.co.uk/blog/in-defense-of-audiobooks.html</link>
@@ -17,9 +25,6 @@
       <pubDate>Thu, 17 Apr 2026 00:00:00 +0000</pubDate>
       <description>The stigma against audiobooks is rooted in bad assumptions about learning, intelligence, and what counts as reading. The research doesn't support any of it.</description>
       <category>books</category>
-      <category>accessibility</category>
-      <category>education</category>
-      <category>opinion</category>
     </item>
     <item>
       <title>Why It Still Matters to Learn to Code in the Age of AI</title>
@@ -28,9 +33,6 @@
       <pubDate>Thu, 16 Apr 2026 00:00:00 +0000</pubDate>
       <description>Coding still matters because the value is not syntax memorization. It is learning to break down problems, reason across systems, and build reliable solutions.</description>
       <category>ai</category>
-      <category>coding</category>
-      <category>education</category>
-      <category>career</category>
     </item>
     <item>
       <title>Your Professional Second Brain for Local LLM Work</title>
@@ -38,8 +40,7 @@
       <guid>https://www.kenreid.co.uk/blog/second-brain-local-llm-professional.html</guid>
       <pubDate>Wed, 15 Apr 2026 00:00:00 +0000</pubDate>
       <description>A practical system for project documentation, knowledge management, and local LLM workflows that improves delivery, reviews, and project re-entry.</description>
-      <category>nerd-stuff</category>
-      <category>genai</category>
+      <category>ai</category>
     </item>
     <item>
       <title>Snowball vs Avalanche: The Science of Paying Off Debt</title>
@@ -47,7 +48,7 @@
       <guid>https://www.kenreid.co.uk/blog/snowball-vs-avalanche.html</guid>
       <pubDate>Tue, 14 Apr 2026 00:00:00 +0000</pubDate>
       <description>Snowball and avalanche both work, but for different reasons. A practical guide with simulator-backed charts on interest, timing, and motivation.</description>
-      <category>nerd-stuff</category>
+      <category>personal-finance</category>
     </item>
     <item>
       <title>Book Ratings Are Broken</title>
@@ -71,7 +72,7 @@
       <guid>https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html</guid>
       <pubDate>Fri, 10 Apr 2026 00:00:00 +0000</pubDate>
       <description>How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute — zero API cost, running entirely on CPU.</description>
-      <category>nerd-stuff</category>
+      <category>ai</category>
       <category>photography</category>
     </item>
   </channel>
