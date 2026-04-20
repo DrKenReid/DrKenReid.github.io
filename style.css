@@ -1822,6 +1822,27 @@ input:required {
   .plain-english-box ul {
     margin-bottom: 0; }
 
+.dialect-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0 32px;
+  font-size: 0.85em;
+  table-layout: fixed; }
+  .dialect-table col {
+    width: 33.33%; }
+  .dialect-table th,
+  .dialect-table td {
+    padding: 7px 10px;
+    text-align: left;
+    border-bottom: 1px solid #eeeeee;
+    vertical-align: top;
+    word-break: break-word; }
+  .dialect-table thead tr {
+    background: #fff8f5;
+    border-bottom: 2px solid #f0d9d4; }
+  .dialect-table tbody tr:hover {
+    background: #fffdfb; }
+
 .faq-section {
   margin-top: 40px;
   padding-top: 8px; }
