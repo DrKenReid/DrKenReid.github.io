@@ -1,13 +1,5 @@
 window.BLOG_POSTS = [
   {
-    title: 'Fourteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction',
-    date: '2026-04-22',
-    tags: ['books'],
-    excerpt: 'Fourteen years since The Wise Man\'s Fear and still no Doors of Stone. A personal reflection on the Kingkiller Chronicle, the long wait, the charity debacle, and why writing at this level is genuinely hard.',
-    url: 'blog/fourteen-years-of-silence-rothfuss-doors-of-stone.html',
-    image: 'img/bg-img/109.png'
-  },
-  {
     title: 'No Idea? No Problem: A Beginner\'s Guide to Building Your Data Science Portfolio',
     date: '2026-04-20',
     tags: ['data-science'],
