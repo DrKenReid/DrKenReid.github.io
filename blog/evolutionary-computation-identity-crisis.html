@@ -134,22 +134,30 @@
 
 				<h2>The naming problem</h2>
 
-				<p>Despite these wins, EC struggles for prestige. Some of that is just the GenAI hype cycle drowning everything else out. But some of the trouble is self-inflicted. The field suffers from what many researchers call the "Evolutionary Computation Bestiary": a flood of supposedly novel algorithms named after animals, insects, and increasingly absurd metaphors.<sup><a href="#ref-9" class="cite-ref">[9]</a></sup></p>
+				<p>Despite these wins, EC struggles for prestige, and not all of that is external hype. A meaningful part is self-inflicted: the field's long-running habit of presenting familiar search mechanics as "new" algorithms by wrapping them in vivid metaphors. Campelo and Aranha call this the Evolutionary Computation Bestiary, and the label is deserved.<sup><a href="#ref-9" class="cite-ref">[9]</a></sup></p>
 
-				<p>Grey Wolf Optimizer. Whale Optimization. Cuckoo Search. Chicken Swarm. There are papers inspired by everything from amoebas to zombies. Strip away the naming and the math often reduces to familiar operators from existing metaheuristics.<sup><a href="#ref-10" class="cite-ref">[10]</a></sup><sup><a href="#ref-11" class="cite-ref">[11]</a></sup> In a landmark critique, Sorensen argued that metaheuristics can drown in scientifically hollow metaphors, from flowing water and bat behavior to imperial colonization and wolf hierarchies.<sup><a href="#ref-11" class="cite-ref">[11]</a></sup> The criticism is fair: we need more mathematics and fewer mascots.</p>
+				<p>The pattern is now well documented. Algorithms branded around wolves, whales, moths, fireflies, bats, antlions, and similar themes are often introduced with novel biological stories, but their actual update rules map onto known metaheuristic building blocks already present in earlier work.<sup><a href="#ref-10" class="cite-ref">[10]</a></sup><sup><a href="#ref-11" class="cite-ref">[11]</a></sup><sup><a href="#ref-12" class="cite-ref">[12]</a></sup> The issue is not that inspiration is bad. The issue is that metaphor can obscure mechanism.</p>
 
-                <img src="../img/bg-img/67.png" alt="A hand on a grave." loading="lazy">
-				<p class="figure-note">Zombie optimization, or something.</p>
-
-				<p>The most heavily scrutinized example is Harmony Search (HS), introduced as a novel algorithm inspired by jazz musicians improvising to find perfect harmony.<sup><a href="#ref-13" class="cite-ref">[13]</a></sup> Rigorous mathematical analysis by Weyland showed that Harmony Search is a special, and often less efficient, case of established Evolution Strategies:<sup><a href="#ref-15" class="cite-ref">[15]</a></sup><sup><a href="#ref-16" class="cite-ref">[16]</a></sup></p>
+				<p>Concrete examples repeatedly cited in critiques include:</p>
 
 				<ul>
-					<li><strong>Harmony Memory</strong> is simply a population.</li>
-					<li><strong>Improvisation</strong> corresponds to standard exploration/crossover mechanisms.</li>
-					<li><strong>Pitch Adjustment</strong> is effectively local mutation.</li>
+					<li><strong>Grey Wolf Optimizer / Whale Optimization / Firefly / Bat / Antlion variants</strong>: often presented as distinct families, but deconstructions show strong structural overlap with pre-existing attraction-repulsion, random walk, and population update templates.<sup><a href="#ref-10" class="cite-ref">[10]</a></sup></li>
+					<li><strong>Cross-paper naming inflation</strong>: identical or near-identical operators are relabeled as new domain-specific behaviors, making cross-method comparison harder than it should be.<sup><a href="#ref-11" class="cite-ref">[11]</a></sup><sup><a href="#ref-12" class="cite-ref">[12]</a></sup></li>
+					<li><strong>Bestiary expansion</strong>: the metaphor pool has expanded far beyond animal behavior into broader symbolic themes, increasing semantic noise without a matching increase in mathematical novelty.<sup><a href="#ref-9" class="cite-ref">[9]</a></sup></li>
 				</ul>
 
-				<p>Because this terminology obscured the algorithm's mechanics, the community produced a large follow-on literature disconnected from decades of prior Evolution Strategies research.<sup><a href="#ref-16" class="cite-ref">[16]</a></sup> Imagine someone reinvented the bicycle, called it the "Balanced Rotation Mobility Platform", and published 200 papers about it. That is essentially what happened here. And it is not an isolated case. The same pattern repeats across the field: familiar operators wrapped in novel metaphors, generating publications that look like progress but functionally reinvent existing work.</p>
+				<img src="../img/bg-img/67.png" alt="A hand on a grave." loading="lazy">
+				<p class="figure-note">Novel branding is easy; demonstrating operator-level novelty is the hard part.</p>
+
+				<p>Harmony Search is the canonical cautionary tale. It was introduced with a compelling music metaphor, where improvisation in a harmony memory supposedly yields novel optimization behavior.<sup><a href="#ref-13" class="cite-ref">[13]</a></sup> Later analyses by Weyland showed that, in operational terms, the method is a special case of established Evolution Strategies and can be less efficient in practice.<sup><a href="#ref-15" class="cite-ref">[15]</a></sup><sup><a href="#ref-16" class="cite-ref">[16]</a></sup></p>
+
+				<ul>
+					<li><strong>Harmony Memory</strong> corresponds to a standard population store.</li>
+					<li><strong>Improvisation</strong> maps to familiar sampling/recombination behavior.</li>
+					<li><strong>Pitch Adjustment</strong> behaves like local mutation or perturbation.</li>
+				</ul>
+
+				<p>The scientific cost is straightforward: when operator equivalence is hidden behind metaphor, researchers spend time "improving" renamed algorithms instead of accumulating comparable evidence on shared mechanisms. The result is duplicated effort, noisy benchmarks, and slower cumulative progress.<sup><a href="#ref-10" class="cite-ref">[10]</a></sup><sup><a href="#ref-11" class="cite-ref">[11]</a></sup><sup><a href="#ref-12" class="cite-ref">[12]</a></sup></p>
 
 				<h2>The dialect collision</h2>
 
