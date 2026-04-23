@@ -2081,6 +2081,12 @@ input:required {
   margin-bottom: 24px;
   padding-top: 8px;
   border-top: 1px solid #eee; }
+.figure-copyright {
+  display: block;
+  color: #aaa;
+  font-size: 11px;
+  margin-bottom: 3px;
+  letter-spacing: 0.02em; }
 .callout {
   background: #fff8f5;
   border-left: 4px solid #fc6060;
