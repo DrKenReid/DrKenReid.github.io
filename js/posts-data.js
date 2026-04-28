@@ -1,9 +1,25 @@
 window.BLOG_POSTS = [
   {
-    title: 'Fourteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction',
+    title: 'Dungeon Crawler Carl and the Strange Dignity of LitRPG',
+    date: '2026-04-25',
+    tags: ['books'],
+    excerpt: 'A book snob\'s confession: how Dungeon Crawler Carl used absurd LitRPG mechanics to deliver one of the most devastating emotional payloads in modern fantasy.',
+    url: 'blog/dungeon-crawler-carl-litrpg-dignity.html',
+    image: 'img/bg-img/141.png'
+  },
+  {
+    title: 'From Scotland to Michigan',
+    date: '2026-04-22',
+    tags: ['personal'],
+    excerpt: 'From Scotland to Michigan: a personal account of culture shock, free education, healthcare, xenophobia, weather, and what it means to belong somewhere new.',
+    url: 'blog/from-scotland-to-michigan.html',
+    image: 'img/bg-img/18.png'
+  },
+  {
+    title: 'Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction',
     date: '2026-04-22',
     tags: ['books'],
-    excerpt: 'Fourteen years since The Wise Man\'s Fear and still no Doors of Stone. A personal reflection on the Kingkiller Chronicle, the long wait, the charity debacle, and why writing at this level is genuinely hard.',
+    excerpt: 'Fifteen years since The Wise Man\'s Fear and still no Doors of Stone. A personal reflection on the Kingkiller Chronicle, the long wait, the charity debacle, and why writing at this level is genuinely hard.',
     url: 'blog/fourteen-years-of-silence-rothfuss-doors-of-stone.html',
     image: 'img/bg-img/109.png'
   },

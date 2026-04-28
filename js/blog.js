@@ -201,7 +201,7 @@ function renderPagination(current, total) {
 		return btn;
 	}
 
-	nav.appendChild(makeBtn('&laquo;', current - 1, current === 1, false));
+	nav.appendChild(makeBtn('«', current - 1, current === 1, false));
 
 	// Show page numbers with ellipsis for large ranges
 	var pages = [];
@@ -227,7 +227,7 @@ function renderPagination(current, total) {
 		}
 	});
 
-	nav.appendChild(makeBtn('&raquo;', current + 1, current === total, false));
+	nav.appendChild(makeBtn('»', current + 1, current === total, false));
 
 	var grid = document.getElementById('blog-grid');
 	if (grid && grid.parentNode) {
