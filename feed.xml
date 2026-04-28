@@ -5,17 +5,33 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 22 Apr 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Wed, 22 Apr 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Sat, 25 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Sat, 25 Apr 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>Fourteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction</title>
+      <title>Dungeon Crawler Carl and the Strange Dignity of LitRPG</title>
+      <link>https://www.kenreid.co.uk/blog/dungeon-crawler-carl-litrpg-dignity.html</link>
+      <guid>https://www.kenreid.co.uk/blog/dungeon-crawler-carl-litrpg-dignity.html</guid>
+      <pubDate>Sat, 25 Apr 2026 00:00:00 +0000</pubDate>
+      <description>A book snob's confession: how Dungeon Crawler Carl used absurd LitRPG mechanics to deliver one of the most devastating emotional payloads in modern fantasy.</description>
+      <category>books</category>
+    </item>
+    <item>
+      <title>From Scotland to Michigan</title>
+      <link>https://www.kenreid.co.uk/blog/from-scotland-to-michigan.html</link>
+      <guid>https://www.kenreid.co.uk/blog/from-scotland-to-michigan.html</guid>
+      <pubDate>Wed, 22 Apr 2026 00:00:00 +0000</pubDate>
+      <description>From Scotland to Michigan: a personal account of culture shock, free education, healthcare, xenophobia, weather, and what it means to belong somewhere new.</description>
+      <category>personal</category>
+    </item>
+    <item>
+      <title>Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction</title>
       <link>https://www.kenreid.co.uk/blog/fourteen-years-of-silence-rothfuss-doors-of-stone.html</link>
       <guid>https://www.kenreid.co.uk/blog/fourteen-years-of-silence-rothfuss-doors-of-stone.html</guid>
       <pubDate>Wed, 22 Apr 2026 00:00:00 +0000</pubDate>
-      <description>Fourteen years since The Wise Man's Fear and still no Doors of Stone. A personal reflection on the Kingkiller Chronicle, the long wait, the charity debacle, and why writing at this level is genuinely hard.</description>
+      <description>Fifteen years since The Wise Man's Fear and still no Doors of Stone. A personal reflection on the Kingkiller Chronicle, the long wait, the charity debacle, and why writing at this level is genuinely hard.</description>
       <category>books</category>
     </item>
     <item>
