@@ -20,3 +20,6 @@ _*.py
 extract*.py
 *.extracted.txt
 extracted_*.txt
+
+# Local utility scripts (not committed)
+scripts-local/
