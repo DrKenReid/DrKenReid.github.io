@@ -1,6 +1,6 @@
 window.BLOG_POSTS = [
   {
-    title: 'My Take on the Ethics of LLMs',
+    title: 'The Ethics of LLM Use (Not LLMs)',
     date: '2026-04-29',
     tags: ['ai', 'environment', 'opinion', 'data-science'],
     excerpt: 'An AI researcher\'s honest take on LLM ethics: the energy numbers, the cobalt hypocrisy, the Jevons paradox, and why telling people not to use AI on environmental grounds is a privilege position.',
