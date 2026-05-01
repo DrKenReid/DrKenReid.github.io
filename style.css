@@ -2073,7 +2073,14 @@ input:required {
   margin: 8px 0 15px 24px; }
 .bsec {
   overflow: hidden; }
-.figure-note {
+.post-disclaimer {
+  font-size: 12px;
+  color: #bbb;
+  font-style: italic;
+  margin: 4px 0 28px;
+}
+
+
   text-align: center;
   color: #6b6b6b;
   font-size: 13px;
