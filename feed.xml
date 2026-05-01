@@ -12,8 +12,8 @@
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>The Ethics of LLM Use (Not LLMs)</title>
-      <link>https://www.kenreid.co.uk/blog/my-take-on-llm-ethics.html</link>
-      <guid>https://www.kenreid.co.uk/blog/my-take-on-llm-ethics.html</guid>
+      <link>https://www.kenreid.co.uk/blog/ethics-of-llm-use-not-llms.html</link>
+      <guid>https://www.kenreid.co.uk/blog/ethics-of-llm-use-not-llms.html</guid>
       <pubDate>Wed, 29 Apr 2026 00:00:00 +0000</pubDate>
       <description>An AI researcher's honest take on LLM ethics: the energy numbers, the cobalt hypocrisy, the Jevons paradox, and why telling people not to use AI on environmental grounds is a privilege position.</description>
       <category>ai</category>
