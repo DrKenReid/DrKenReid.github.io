@@ -276,6 +276,15 @@ function renderRelatedPosts(targetId) {
         });
 }
 
+function renderPostDisclaimer() {
+    var meta = document.querySelector('.blog-post .blog-meta');
+    if (!meta || document.querySelector('.post-disclaimer')) return;
+    var p = document.createElement('p');
+    p.className = 'post-disclaimer';
+    p.textContent = 'The views expressed in this post are my own and do not represent any organisation, employer, or institution.';
+    meta.parentNode.insertBefore(p, meta.nextSibling);
+}
+
 function renderBlogThanksCta() {
     var blogPost = document.querySelector('.blog-post');
     var relatedPosts = blogPost ? blogPost.querySelector('.related-posts') : null;
@@ -339,4 +348,5 @@ function renderFooter(targetId) {
         '</div></div></div></div></div></footer>';
 }
 
+    renderPostDisclaimer();
     renderBlogThanksCta();
