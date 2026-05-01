@@ -11,7 +11,7 @@
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>My Take on the Ethics of LLMs</title>
+      <title>The Ethics of LLM Use (Not LLMs)</title>
       <link>https://www.kenreid.co.uk/blog/my-take-on-llm-ethics.html</link>
       <guid>https://www.kenreid.co.uk/blog/my-take-on-llm-ethics.html</guid>
       <pubDate>Wed, 29 Apr 2026 00:00:00 +0000</pubDate>
