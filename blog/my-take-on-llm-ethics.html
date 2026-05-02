@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="An AI researcher's honest take on LLM ethics: the energy numbers, the cobalt hypocrisy, the Jevons paradox, and why telling people not to use AI on environmental grounds is a privilege position.">
+  <meta name="keywords" content="LLM ethics, AI environment, ChatGPT energy, Jevons paradox, data centers, cobalt mining, AI access, local LLM, Llama, Mistral, Phi, nuclear power, AI water consumption">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>The Ethics of LLM Use (Not LLMs) - Ken Reid</title>
+  <meta property="og:title" content="The Ethics of LLM Use (Not LLMs)">
+  <meta property="og:description" content="An AI researcher's honest take on LLM ethics: the energy numbers, the cobalt hypocrisy, the Jevons paradox, and why telling people not to use AI on environmental grounds is a privilege position.">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/280.png">
+  <meta property="og:url" content="https://www.kenreid.co.uk/blog/my-take-on-llm-ethics.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Ethics of LLM Use (Not LLMs)">
+  <meta name="twitter:description" content="An AI researcher's honest take on LLM ethics: the energy numbers, the cobalt hypocrisy, the Jevons paradox, and why telling people not to use AI on environmental grounds is a privilege position.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/bg-img/280.png">
+  <meta name="citation_title" content="The Ethics of LLM Use (Not LLMs)">
+  <meta name="citation_author" content="Reid, Kenneth N.">
+  <meta name="citation_publication_date" content="2026/04/29">
+  <meta name="citation_online_date" content="2026/04/29">
+  <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/my-take-on-llm-ethics.html">
+  <meta name="DC.title" content="The Ethics of LLM Use (Not LLMs)">
+  <meta name="DC.creator" content="Kenneth N. Reid">
+  <meta name="DC.date" content="2026-04-29">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="../img/core-img/favicon.png">
+  <meta name="theme-color" content="#000000">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="canonical" href="https://www.kenreid.co.uk/blog/my-take-on-llm-ethics.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "The Ethics of LLM Use (Not LLMs)",
+    "description": "An AI researcher's honest take on LLM ethics: the energy numbers, the cobalt hypocrisy, the Jevons paradox, and why telling people not to use AI on environmental grounds is a privilege position.",
+    "image": "https://www.kenreid.co.uk/img/bg-img/280.png",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk"
+    },
+    "datePublished": "2026-04-29",
+    "publisher": {
+      "@type": "Person",
+      "name": "Ken Reid"
+    },
+    "keywords": ["ai", "data-science"]
+  }
+  </script>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <div id="header-section"></div>
+
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/bg-img/280.png); background-size: cover; background-position: center center;">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <h2 class="page-title">Blog</h2>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+          <li class="breadcrumb-item active" aria-current="page">LLM Ethics</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <div class="about-us-area section-padding-80 clearfix">
+    <div class="container">
+      <div class="blog-post">
+        <h1>The Ethics of LLM Use (Not LLMs)</h1>
+        <div class="blog-meta">
+          29 April 2026 &middot;
+          <span class="blog-tag">ai</span>
+          <span class="blog-tag">data-science</span>
+        </div>
+
+        <p>I studied computer science from 2009-2013, received my Bachelors in Science with Honors, then soon after I did my Ph.D. in a niche form of artificial intelligence from 2015-2019. Then I did a couple of postdocs, applying AI to various problems (genomics, satellite imagery, evolution, video games), then I started as a data scientist at the University of Michigan, right at the start of the GenAI boom. I helped bring GenAI to disparate fields of research, I warned researchers of the myriad dangers of LLMs: from use in medicine, to environmental impact, to intellectual property and plagiarism concerns, to training data often stolen from artists without consent, to educational concerns both as teachers and for students using LLMs.
+            
+        <p>No one, however, is an expert in all of AI. My Ph.D. is in a niche field of AI, but I never studied generative AI during my studies - how could I? I finished my degrees long before ever hearing of ChatGPT. </p>
+        
+        <p>I also work with AI, and <a href="https://scholar.google.com/citations?user=bwl2u00AAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">still write research in the field</a>, but ultimately I'm just another fish in a massive pond. So with my background out of the way, you know I have some, but not all, context.</p>
+        
+        <p>So, say someone posts a screenshot of ChatGPT and a stranger appears in the replies to inform them, with great moral certainty, that every query they send is boiling another bottle of water and killing another tree. The message is usually delivered from an iPhone built on cobalt mined by children in the DRC, while a 4K Netflix stream plays in another tab. I find this ignorant and hypocritical, but I'm mostly irked that the argument is being made against the consumer of a product, rather than against the systems that produced it.</p>
+
+        <p>The "AI is destroying the planet" line is not exactly wrong, but it is badly aimed. The real story is more complicated, and the conclusion is different from what the standard outrage suggests. I want to lay out where I actually stand on this, with numbers attached.</p>
+
+        <p>Conclusion up front, so you can decide whether to bother with the rest: your guilt about the environmental and ethical cost of LLMs is justified, but it is being aimed at the wrong target. The industry has deliberately structured things so that your anxiety lands on your own fingertip hitting the query button, while the actual decision-makers (hyperscalers choosing fossil fuels, regulators choosing inaction, venture capital choosing scale over sustainability) stay invisible. BP ran the same playbook when it popularized the personal "carbon footprint" in the early 2000s: a PR campaign designed to shift blame for climate change away from corporate polluters and onto the everyday choices of consumers.<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> The cartoon version of this debate keeps eyes off the people actually deciding how this gets built.</p>
+
+        <p><strong>A note on scope.</strong> This post is about the energy and water footprint of LLMs, the supply chain that feeds the hardware, and the access argument. It is not about job security for artists or any other field, the effects of LLMs on education and cognitive skills, the bias and copyright debates, how AI can be used for unethical actions, or "AI ends the world" speculation. Those are all real and worth their own posts; they are not what I'm taking on here. The framing throughout is also about <em>how</em> AI is built, governed, and powered, not whether it should exist at all.</p>
+
+        <div class="plain-english-box">
+          <h2>Quick jargon guide</h2>
+          <ul>
+            <li><strong>LLM:</strong> Large Language Model. The thing that powers ChatGPT, Claude, Llama, Gemini, etc. A statistical model trained on a huge pile of text that learns to predict the next word.</li>
+            <li><strong>Parameters:</strong> the dials inside the model. GPT-3 had 175 billion of them. GPT-4 is estimated at around 1.8 trillion. More dials usually means more capability and more memory.</li>
+            <li><strong>Training vs inference:</strong> training is the one-time, very expensive process of teaching the model. Inference is what happens every time you send a prompt. Training is a fixed cost; inference is the running cost, paid millions of times a day.</li>
+            <li><strong>Quantization:</strong> shrinking the model by storing each parameter at lower precision (e.g. 4 bits instead of 16). You lose a small amount of quality and you save roughly 72% of the memory. This is what lets a 70B model fit on a consumer graphics card.</li>
+            <li><strong>VRAM:</strong> the dedicated memory on a GPU. The hard limit on what models you can run locally. Rough rule: a 4-bit quantized model needs roughly 0.55 GB of VRAM per billion parameters.</li>
+            <li><strong>Mixture-of-Experts (MoE):</strong> an architecture where the model has a huge total parameter count but only routes each query to a small subset. DeepSeek R1 has 671B total parameters but only 37B active per query. You get frontier-class reasoning at a fraction of the compute.</li>
+            <li><strong>Jevons paradox:</strong> when something gets cheaper to use, total consumption usually goes up, not down. Coined in 1865 about coal-fired steam engines. Currently the most important idea in the AI environment debate.</li>
+          </ul>
+        </div>
+
+        <h2>Some Numbers</h2>
+
+        <p>Training costs in absolute dollars have grown. GPT-3 in 2020 cost around $4.6 million to train.<sup><a href="#ref-3" class="cite-ref">[3]</a></sup> GPT-4 in 2023 cost somewhere between $63 million and $100 million.<sup><a href="#ref-2" class="cite-ref">[2]</a></sup> The headline reads like a runaway curve.</p>
+
+        <p>Per-parameter cost is a crude proxy, but it's still a useful model. GPT-3 cost roughly $0.000026 per parameter. GPT-4, despite the eye-watering total, comes in at around $0.00005 per parameter for a model roughly ten times the size, multimodal across text, images, audio and video, with a 128k context window instead of GPT-3's 2k.<sup><a href="#ref-3" class="cite-ref">[3]</a></sup> Parameters are not units of capability, especially under MoE (more on that below), so this is not a clean efficiency metric. Per benchmark point on standard evaluations, training has gotten cheaper, not more expensive.<sup><a href="#ref-3" class="cite-ref">[3]</a></sup></p>
+
+        <p>Two things drove that. First, the Chinchilla scaling laws (DeepMind, 2022) showed that almost every model in the field was undertrained, and that compute-optimal training wants about 20 tokens per parameter.<sup><a href="#ref-4" class="cite-ref">[4]</a></sup> The field stopped bolting on more parameters and started feeding the models properly. Second, Mixture-of-Experts (see jargon section above) broke the link between total size and per-query cost. DeepSeek's V3/R1 reported around $5&ndash;6 million for the final training run on a 671B-parameter MoE model that holds its own against frontier reasoning models.<sup><a href="#ref-4" class="cite-ref">[4]</a></sup> That figure is the marginal compute cost of the final run only; total program cost (R&D, prior runs, salaries, infrastructure) is much higher. Even allowing for that, a 671B-parameter dense GPT-3-style model trained the old way would have cost hundreds of millions.</p>
+
+        <p>Capability per training dollar is going up, and the published literature is consistent on that.</p>
+
+        <h2>You can run near-cutting-edge AI on a gaming PC</h2>
+
+        <p>The other thing the doom narrative misses is what has happened at the small end. Meta's Llama 3 8B was trained on 15 trillion tokens, 1,875 tokens per parameter, almost 100x the Chinchilla-optimal ratio. Alibaba's Qwen3-0.6B pushed it to 60,000:1.<sup><a href="#ref-4" class="cite-ref">[4]</a></sup> The bet is to spend much more on training a small model so that inference, the part you pay for forever, is almost free.</p>
+
+        <p>The result is that I can sit at my desk with an Nvidia RTX 4090 (24 GB VRAM, around $1,600 new) and run a quantized Llama 3.1 70B locally. Offline. Private. No API key. No subscription. With a more modest 16 GB card like a 4070 Ti Super, you can comfortably run Phi-3 14B or Mixtral 8x7B. Even an 8 GB RTX 4060 will run Mistral 7B or Llama 3.1 8B at usable speeds.<sup><a href="#ref-5" class="cite-ref">[5]</a></sup></p>
+
+        <p>If you have a recent gaming PC, you already own infrastructure that would have been classed as a research-lab supercomputer in 2020. I have written about how I actually use this in my <a href="second-brain-local-llm-professional.html">post on running a local LLM as a professional second brain</a>. The point worth landing here is that the centralized, cloud-only, beg-OpenAI-for-access model of AI is not the only option, and it is increasingly not even the best one (security, costs, ethics, requires internet, etc.).</p>
+
+        <figure style="margin: 24px 0; text-align: center;">
+          <img src="../img/bg-img/16.png"
+               alt="Colorful syntax-highlighted code on a dark monitor screen"
+               style="max-width: 100%; height: auto; border-radius: 4px;">
+          <figcaption style="margin-top: 8px; font-size: 0.8em;">
+            <div style="color: #9a9a9a;">&copy; Ken Reid. All rights reserved.</div>
+          </figcaption>
+        </figure>
+
+        <h2>Energy, Water, AI and Netflix</h2>
+
+        <p>To be clear, I'm very much on team "let's not destroy our planet in exchange for Studio Ghibli Facebook profile pictures", but I'm also on team "let's not destroy our planet in exchange for doom-scrolling TikTok for 5 hours while bedrotting".</p>
+
+        <p>A single ChatGPT query uses somewhere between 0.001 and 0.01 kWh, emits roughly 0.7 to 4.3 grams of CO2, and consumes around 10 to 30 millilitres of water in datacenter cooling.<sup><a href="#ref-6" class="cite-ref">[6]</a></sup><sup><a href="#ref-7" class="cite-ref">[7]</a></sup><sup><a href="#ref-8" class="cite-ref">[8]</a></sup> Those numbers are probably smaller than you thought - "a whole glass of water per query" is what I saw a lot on social media: exaggeration and lying cause short term gains to a movement but long term losses, so let's look at the real numbers.</p>
+
+        <p>For context, here is what one hour of various normal digital activities looks like:</p>
+
+        <table style="width:100%; border-collapse: collapse; margin: 20px 0; font-size: 14px;">
+          <thead>
+            <tr style="background:#f6f1ea;">
+              <th style="padding:10px; text-align:left; border-bottom:1px solid #ccc;">Activity</th>
+              <th style="padding:10px; text-align:left; border-bottom:1px solid #ccc;">Energy</th>
+              <th style="padding:10px; text-align:left; border-bottom:1px solid #ccc;">CO2</th>
+              <th style="padding:10px; text-align:left; border-bottom:1px solid #ccc;">Water</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:10px; border-bottom:1px solid #eee;">1 ChatGPT query</td><td style="padding:10px; border-bottom:1px solid #eee;">~0.003 kWh</td><td style="padding:10px; border-bottom:1px solid #eee;">~3 g</td><td style="padding:10px; border-bottom:1px solid #eee;">~10&ndash;30 ml</td></tr>
+            <tr><td style="padding:10px; border-bottom:1px solid #eee;">1 hour Netflix in HD/4K</td><td style="padding:10px; border-bottom:1px solid #eee;">~0.077 kWh</td><td style="padding:10px; border-bottom:1px solid #eee;">~34 g</td><td style="padding:10px; border-bottom:1px solid #eee;">2&ndash;12 L</td></tr>
+            <tr><td style="padding:10px; border-bottom:1px solid #eee;">1 hour Zoom call</td><td style="padding:10px; border-bottom:1px solid #eee;">&mdash;<sup>*</sup></td><td style="padding:10px; border-bottom:1px solid #eee;">&mdash;<sup>*</sup></td><td style="padding:10px; border-bottom:1px solid #eee;">~1.7 L</td></tr>
+            <tr><td style="padding:10px; border-bottom:1px solid #eee;">1 hour social media scrolling</td><td style="padding:10px; border-bottom:1px solid #eee;">&mdash;<sup>*</sup></td><td style="padding:10px; border-bottom:1px solid #eee;">&mdash;<sup>*</sup></td><td style="padding:10px; border-bottom:1px solid #eee;">~430 ml</td></tr>
+            <tr><td style="padding:10px; border-bottom:1px solid #eee;">15-mile car commute</td><td style="padding:10px; border-bottom:1px solid #eee;">&mdash;<sup>*</sup></td><td style="padding:10px; border-bottom:1px solid #eee;">~6,000 g</td><td style="padding:10px; border-bottom:1px solid #eee;">&mdash;<sup>*</sup></td></tr>
+          </tbody>
+        </table>
+
+        <p style="font-size:13px; color:#636363;">Sources: Bowdoin College energy brief (2025),<sup><a href="#ref-6" class="cite-ref">[6]</a></sup> JISC National Centre for AI (May 2025),<sup><a href="#ref-7" class="cite-ref">[7]</a></sup> Online Learning Consortium (2025).<sup><a href="#ref-8" class="cite-ref">[8]</a></sup> Ranges are wide because they depend on hardware, location and grid mix. <sup>*</sup> Em dashes mark figures I couldn't pin down to a single defensible number from the sources I'd cite here: the published estimates are either too dependent on device, network and grid assumptions to give a clean value, or they don't exist at the granularity this row needs. One caveat on the comparison: the ChatGPT figure covers data center cooling only, while the Zoom and Netflix figures include user device power and network overhead. The boundaries are not identical, and a heavy LLM session (agentic loops, long reasoning chains, image generation) can run hundreds of queries per hour. The point is that a casual ChatGPT exchange is not the carbon villain it is made out to be, not that all AI use is small.</p>
+
+        <figure style="margin: 24px 0; text-align: center;">
+          <img src="../img/bg-img/101.png"
+               alt="A still loch surrounded by mountains under a moody sky"
+               style="max-width: 100%; height: auto; border-radius: 4px;">
+          <figcaption style="margin-top: 8px; font-size: 0.8em;">
+            <div style="color: #9a9a9a;">&copy; Ken Reid. All rights reserved.</div>
+            <div style="margin-top: 4px;">Freshwater is a finite resource. Data center cooling draws it at scale: most of it evaporates rather than returning to the watershed.</div>
+          </figcaption>
+        </figure>
+
+        <p>An hour of HD streaming uses the energy of roughly 26 casual ChatGPT exchanges. A one-hour Zoom call uses more cooling water than around 50 of them.<sup><a href="#ref-7" class="cite-ref">[7]</a></sup> Nobody is being scolded online for joining a Zoom or finishing a Netflix series. The outrage is highly specific to one technology, and it does not track the actual numbers. And to be clear, the point of these comparisons isn't to scold anyone for streaming or scrolling either: it's to push back on platforms (TikTok, Netflix, YouTube, Instagram) that engineer infinite scroll and autoplay to maximise watch time, and on the data center operators powering them on dirty grids. The footprint sits with the corporations designing for engagement and the utilities choosing the fuel mix, not with the user clicking play for a distraction or some entertainment.</p>
+
+        <p>Training a frontier model is expensive. GPT-3's training emitted about 500 metric tons of CO2, roughly the annual emissions of 110 average US passenger cars.<sup><a href="#ref-9" class="cite-ref">[9]</a></sup> That is a real cost, but a one-time cost, amortized over hundreds of millions of users and billions of queries, and it is dwarfed within weeks by the operational footprint of, say, global TikTok consumption.</p>
+
+        <h2>The cobalt in your hand</h2>
+
+        <p>The hidden hypocrisy is the hardware in your hand. The phone you are holding while you tweet about boycotting ChatGPT contains lithium, rare earths, and cobalt. A lot of that cobalt comes from the Democratic Republic of the Congo, much of it mined under conditions Siddharth Kara documented in <em>Cobalt Red</em> (artisanal mining, child labor, almost no safety equipment, rivers running orange, slave labor).<sup><a href="#ref-11" class="cite-ref">[11]</a></sup> Those mines feed the batteries in your phone, your laptop, your earbuds, and the GPU clusters AI runs on.</p>
+
+        <figure style="margin: 24px 0; text-align: center;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/d/dd/Child_labor%2C_Artisan_Mining_in_Kailo_Congo.jpg"
+               alt="Children working alongside adults at an artisanal mining pit in Kailo, Democratic Republic of the Congo, 2007"
+               style="max-width: 100%; height: auto; border-radius: 4px;">
+          <figcaption style="margin-top: 8px; font-size: 0.8em;">
+            <div style="color: #9a9a9a;">Photo: <a href="https://commons.wikimedia.org/wiki/File:Child_labor,_Artisan_Mining_in_Kailo_Congo.jpg" target="_blank" rel="noopener noreferrer">Julien Harneis</a>, <a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 2.0</a>, via Wikimedia Commons. Unlike most photography on this site, this image is not mine, and is freely licensed for reuse with attribution.</div>
+            <div style="margin-top: 4px;">Artisanal mining in Kailo, Democratic Republic of the Congo (2007). Children working with their parents at open pit mines extracting wolframite and cassiterite.</div>
+          </figcaption>
+        </figure>
+
+        <p>Embodied carbon is a much bigger part of the story than most coverage admits. Gupta et al. (<em>Chasing Carbon</em>, IEEE Micro 2021) showed that as facilities run on cleaner electricity, manufacturing the servers approaches and can exceed operational emissions over the device lifetime: as you decarbonize the grid, the ratio swings further toward embodied. On a dirty grid (40% gas, 15% coal) operational emissions still dominate, which is why grid composition (covered later in this post) still matters. The same logic applies to consumer hardware: estimates put the renewal of AI processors and consumer electronics at up to 2.5 million tonnes of e-waste a year by 2030, roughly the mass of 13 billion iPhone 15 Pros. Currently we recycle about 12.5% of it.<sup><a href="#ref-10" class="cite-ref">[10]</a></sup></p>
+
+        <p>I am not arguing that two wrongs make a right. I am arguing that the application of a moral argument used to criticize AI should also condemn the device you used to type the criticism. Further, I am arguing that the focus should be on systemic issues (why is your phone made from slave labor in the first place?) rather than blaming the individual for using a phone. The same goes for AI.</p>
+
+        <h2>The Jevons trap</h2>
+
+        <p>The counter to all of the above is the Jevons paradox, and I want to take it seriously because it is the strongest argument the doom side has.</p>
+
+        <p>William Stanley Jevons, in 1865, noticed that as steam engines became more efficient at burning coal, England burned more coal, not less.<sup><a href="#ref-12" class="cite-ref">[12]</a></sup> Cheaper energy unlocked new uses, more industries adopted steam, and total consumption shot up despite per-engine efficiency. The pattern repeats: more efficient cars led to more driving. Cheaper LED lighting led to more lighting. Cheaper compute led to vastly more compute.</p>
+
+        <p>It applies to AI. As models get cheaper to run, demand expands to fill the new capacity.<sup><a href="#ref-13" class="cite-ref">[13]</a></sup> Medical imaging is an instructive case. In 2016 Geoffrey Hinton famously suggested radiologists would soon be obsolete; the opposite happened. The number of radiologists has grown, and CT scan rates in US emergency rooms have roughly doubled over the last 15 years. AI is one of several factors making imaging cheaper and faster to interpret rather than the sole cause, but the broader pattern, that capacity-cheapening tech tends to expand demand rather than reduce it, holds.</p>
+
+        <p>The same pattern is showing up in software. When DeepSeek announced R1 in early 2025, the market wiped about $600 billion off Nvidia's valuation on the assumption that more efficient models would mean fewer chips needed. The valuation recovered. Cheaper inference unlocks agentic systems making thousands of recursive calls in the background. It unlocks LLMs embedded in operating systems, IDEs, search bars, browsers, every form field. Total inference is moving from billions of queries a day toward trillions.</p>
+
+        <p>So no, software efficiency alone will not save us. The 4-bit quantized 8B model on my desk is not a get-out-of-jail-free card. It just means more people will run more models more often. That is genuinely a problem the field has to confront.</p>
+
+        <p>But notice this does not land on "the individual user is the villain" -- it lands on the underlying physical infrastructure: the grid, the cooling, the silicon supply chain. We have to raise a stink about that infrastructure.</p>
+
+        <h2>The access argument</h2>
+
+        <p>Telling people not to use LLMs on environmental grounds is, very often, a position only available to people who don't need them.</p>
+
+        <p>About 92% of low-income Americans, roughly 36 million people, cannot afford a lawyer for civil matters.<sup><a href="#ref-14" class="cite-ref">[14]</a></sup> They are routinely facing landlords, debt collectors and employers who can. An LLM that helps a pro se litigant fill in housing-defense paperwork correctly is not a luxury. The Suffolk LIT Lab and Legal Aid of Eastern Missouri are already using LLMs to streamline legal-aid intake.<sup><a href="#ref-15" class="cite-ref">[15]</a></sup> The rAInbow chatbot helps domestic-abuse survivors understand the legal protections available to them.<sup><a href="#ref-14" class="cite-ref">[14]</a></sup> The early standalone "AI lawyer" products (DoNotPay being the obvious example, which paid an FTC settlement in 2024 over deceptive marketing) are not the case I am making here. The case is for LLMs as scaffolding inside properly-supervised legal-aid workflows.</p>
+
+        <p>The medical case is at least as strong. The WHO projects a global shortage of around 11 million health workers by 2030, mostly in low- and middle-income countries, where roughly 8 million people die every year from treatable conditions due to under-resourced triage.<sup><a href="#ref-16" class="cite-ref">[16]</a></sup> Penda Health in Nairobi has integrated an LLM-based decision-support tool into its records system to reduce diagnostic errors. PROMPTS, also in Kenya, uses AI over SMS to coach expectant mothers on birth preparedness.<sup><a href="#ref-16" class="cite-ref">[16]</a></sup> In the US, AI text-message interventions are being used in Diabetes Self-Management Education programs that were previously too expensive to deliver at scale.<sup><a href="#ref-17" class="cite-ref">[17]</a></sup> And translation alone, the simple ability for someone with limited English to get a clear plain-language explanation of a diagnosis, makes a real difference for people who would otherwise nod along without understanding.<sup><a href="#ref-17" class="cite-ref">[17]</a></sup></p>
+
+        <p>Then there's education. Trainee doctors at well-funded medical schools are using premium LLMs to map out diagnostic reasoning. If we tell students at underfunded institutions they shouldn't use the same tools, we have built what some researchers (correctly, I think) call epistemic exclusion: the rich keep the cognitive support, the poor are told it would be unethical of them to take it.<sup><a href="#ref-18" class="cite-ref">[18]</a></sup><sup><a href="#ref-19" class="cite-ref">[19]</a></sup></p>
+
+        <p>The pattern repeats everywhere. Wealthy law firms will burn through API tokens and will not feel one ounce of guilt about it. Tech executives will continue to use these tools to widen their advantage. If a single mom studying nursing part-time, or an immigrant trying to write a complaint to a landlord, or a teenager on free or reduced-price school lunches trying to understand calculus is told using AI is unethical, they pay for the sins of others. It's like blaming the family on a tight budget for grabbing a plastic bag at the checkout, or for buying the cheap supermarket burger because that's what fits the weekly grocery run, instead of blaming the supermarkets churning out billions of single-use bags and the industrial meat suppliers behind the cheap ground beef. Reusable bags and plant-based groceries are great if you can afford the time, money, and nearby stores to make them work; for a lot of people they aren't a real choice, and the moral weight belongs upstream with the corporations that designed the system, not with the person at the register.</p>
+
+        <p>I am not suggesting using AI for medical or legal purposes. I'm pointing out that people do every single day because they have no alternatives. Saying they shouldn't doesn't change that they do.</p>
+
+        <p>If you care about marginalized communities, the move is to push them toward locally-run open-source models like Llama, Mistral and Phi, not to talk them out of the technology entirely. They get the benefits, and the centralized cloud bill goes elsewhere.</p>
+
+        <h3>The library / community-AI model</h3>
+
+        <p>Most of the access cases above don't need every household to own a $1,600 graphics card. They need a few hours a week of supervised access to a capable open-weight model on hardware someone else has already bought and runs properly. Public libraries already do exactly this with books, internet, printers, and increasingly with maker-space tools. I propose that AI is the next obvious thing on that list.</p>
+
+        <p>The shape of it: a public library, community college, federally qualified health center, legal-aid clinic, union hall, or 2-1-1 community-resource center runs one well-spec'd machine loaded with open-weight models like Llama 3.1 70B, Mixtral, or Phi. People book time, either at a terminal in the building or via an authenticated web interface from their own device. Four things have to be right for it to work:</p>
+
+        <ul>
+          <li><strong>Hardware.</strong> A single workstation with one or two 24&ndash;48 GB GPUs covers a small branch. A regional hub serving a whole county can sit on a four- or eight-GPU server; that's tens of thousands of dollars, not millions, and well inside the equipment budget public library systems already manage. Open-weight models mean no API bill scaling per query.</li>
+          <li><strong>Staffing.</strong> One trained librarian or community-tech worker per branch, with a small central team writing prompts, vetting models, and patching the stack. The skill set is closer to a reference librarian or a benefits-navigator caseworker than a software engineer; this is teachable.</li>
+          <li><strong>Governance.</strong> The model is locally hosted, the prompts and outputs never leave the building (or leave only through end-to-end encrypted channels to the user's device), and there is a published list of what the system will and won't help with. Medical-diagnosis and binding-legal-advice use cases route to a human; drafting a letter to a landlord, summarizing a benefits or insurance denial, or explaining a diagnosis a doctor has already given are fine.</li>
+          <li><strong>Privacy.</strong> No logs of prompts beyond what's needed for abuse-handling, no training on user inputs, no third-party telemetry. Local hosting on open-weight models makes this enforceable in a way that cloud APIs cannot.</li>
+        </ul>
+
+        <p>It is not a fantasy: public libraries already lend laptops and Wi-Fi hotspots, run coding clubs, host benefits navigators and tax-prep volunteers, and underwrite the digital lives of the people who can least afford to be excluded from them. AI access on the same model is a small step from where they already are. The barrier is funding and political will, both of which sit upstream with city councils, county boards, state legislatures, and the IMLS not with end users.</p>
+
+        <p>We also need smaller, more capable models so they can run on people's phones and 5-year-old 3rd-hand laptops. That is also moving fast: Phi-3-mini, Llama 3.2 1B/3B, and Qwen3 sub-1B classes already run usefully on hardware most households already have.</p>
+
+        <h2>So where is the actual problem?</h2>
+
+        <p>The problem is the infrastructure layer, and it is mostly a regulation problem. To be clear up front: I'm not anti-data-center. We actually need them. They sit underneath cancer research, climate modelling, weather forecasting, every public-health dashboard, every hospital records system, the entire internet, university computing, scientific simulation, and yes, entertainment too. The question is not whether they exist; the question is who builds them, who pays the externalities, and what rules they are built under.</p>
+
+        <p>That distinction matters in my own back yard. In Ypsilanti and Ann Arbor right now, two huge data-center proposals are going through: a $1.2 billion University of Michigan and Los Alamos National Laboratory supercomputing facility in Ypsilanti Township, and a roughly $7 billion Oracle/OpenAI AI campus in nearby Saline Township. Local residents and township officials have pushed back hard on both: massive electricity and water draws threatening to raise residential utility rates, strain the regional grid, and stress the Huron River watershed. The fight is also about local control. Public universities like U-M are exempt from local zoning, so the Ypsilanti project can bypass township approval; in Saline, corporate developers sued to overturn the township board's initial rejection. Grassroots groups have noted that the facilities will create few permanent local jobs while the community absorbs the noise, environmental risk, and (in U-M's case) the ethical weight of hosting classified nuclear and surveillance research. None of this means the facilities shouldn't exist, instead it means the people living next to them should have a real say in how they're built, what they draw from, and what protections are non-negotiable. That fight is squarely with the developers, the universities, the utilities, and the legislators who wrote the zoning carve-outs.</p>
+
+        <figure style="margin: 24px 0; text-align: center;">
+          <img src="../img/bg-img/166.png"
+               alt="A small bird in arid, degraded habitat with sparse dying vegetation"
+               style="max-width: 100%; height: auto; border-radius: 4px;">
+          <figcaption style="margin-top: 8px; font-size: 0.8em;">
+            <div style="color: #9a9a9a;">&copy; Ken Reid. All rights reserved.</div>
+            <div style="margin-top: 4px;">The cost of infrastructure decisions. Habitat loss, water stress, and energy demand are not abstractions.</div>
+          </figcaption>
+        </figure>
+
+        <p>Data centers used 1&ndash;2% of global electricity in 2024. The IEA expects this to more than double by 2030, exceeding 1,000 TWh.<sup><a href="#ref-20" class="cite-ref">[20]</a></sup> In the US specifically, data center consumption is projected to roughly double from 183 TWh in 2024 to around 426 TWh by 2030.<sup><a href="#ref-25" class="cite-ref">[25]</a></sup> That is real load, on a real grid, and it is being added faster than zero-carbon supply.</p>
+
+        <p>Three things are going wrong simultaneously, and they are all fixable by policy rather than by yelling at end users.</p>
+
+        <p><strong>1. Tax breaks without strings.</strong> States are still bidding against each other to attract data centers with sweeping tax incentives, and almost none of those deals require "renewable additionality": a clause that says the data center must fund <em>new</em> clean energy capacity, not just plug into the existing grid and let residential rates rise to cover the upgrades.<sup><a href="#ref-21" class="cite-ref">[21]</a></sup> Singapore, Amsterdam and Dublin have moratoria and stricter performance rules. Germany has legislated efficiency requirements. New York, as of 2025, requires registration for data centers over 500 kW.<sup><a href="#ref-22" class="cite-ref">[22]</a></sup> Most of the US still doesn't.</p>
+
+        <p><strong>2. Cooling is stuck in the 1990s.</strong> Cooling is up to 50% of data center energy. Most of it is air cooling, where air handlers chill huge rooms and evaporative towers throw freshwater into the sky (around 80% of the freshwater drawn evaporates).<sup><a href="#ref-22" class="cite-ref">[22]</a></sup> Direct-to-chip liquid cooling, where coolant runs in a closed loop over the actual hot silicon, is a much better answer. Microsoft published a <em>Nature</em> life-cycle assessment showing that switching from air to cold-plate cooling cuts greenhouse emissions by 15&ndash;21%, total energy demand by 15&ndash;20%, and "blue water" use by 30&ndash;52% over a facility's lifetime.<sup><a href="#ref-23" class="cite-ref">[23]</a></sup> The technology exists, we just don't make companies use it, while incentivizing them to continue full steam (pun intended) ahead.</p>
+
+        <figure style="margin: 24px 0; text-align: center;">
+          <img src="../img/bg-img/380.png"
+               alt="Looking up at an electricity transmission pylon against the sky"
+               style="max-width: 100%; height: auto; border-radius: 4px;">
+          <figcaption style="margin-top: 8px; font-size: 0.8em;">
+            <div style="color: #9a9a9a;">&copy; Ken Reid. All rights reserved.</div>
+            <div style="margin-top: 4px;">Our grid carries power from sources we choose. Right now, 40% of data center electricity is fossil fuel. This is a choice, and it can change.</div>
+          </figcaption>
+        </figure>
+
+        <p><strong>3. The grid is dirty.</strong> Around 40% of data center electricity globally comes from natural gas, with another 15% from coal.<sup><a href="#ref-20" class="cite-ref">[20]</a></sup> Goldman Sachs estimates 60% of new data center demand over the next decade will be met by burning fossil fuels, adding roughly 220 million tonnes of CO2.<sup><a href="#ref-25" class="cite-ref">[25]</a></sup> Renewables alone won't fix this, because data centers run 24/7 and grid-scale battery storage isn't there yet. The answer for baseload is nuclear, and right now we are watching it happen the wrong way. Microsoft is restarting Three Mile Island under a private 20-year power purchase agreement. Amazon is co-locating Small Modular Reactors with Dominion Energy next to its Virginia campuses. Michigan's Palisades plant is restarting in 2026 backed by a $1.52 billion DOE Loan Programs Office guarantee to a private operator, Holtec.<sup><a href="#ref-24" class="cite-ref">[24]</a></sup> Hyperscalers get the megawatts; the public gets the construction risk and the long-term liability. The US target of quadrupling nuclear capacity from 100 GW to 400 GW by 2050 is the right scale, but ownership matters. Nuclear built by public utilities, sold at a regulated rate to whoever needs it, would serve the people paying for it, while nuclear built behind a hyperscaler's fence does not.</p>
+
+        <p>I know "support nuclear" is awkward in environmental circles, so I'll be plain. Nuclear is also one of the most misunderstood technologies in modern public debate: people are scared of it, and a lot of that fear is downstream of cultural memory of Chernobyl, Three Mile Island, and Fukushima rather than current engineering. I'm planning a separate post on the misconceptions (waste volume, radiation dose, accident statistics, weapons proliferation, water use, cost overruns) because each of those deserves more than a paragraph. For now, the short version: the problem with renewables as a sole solution is intermittency: when the wind drops or the sky clouds over, something has to fill in, and at present that something is almost always gas. Nuclear runs at full capacity around the clock regardless of weather. Its lifecycle carbon footprint, including mining, construction, and decommissioning, is comparable to wind and to utility-scale solar (IPCC AR6 medians: nuclear ~12 gCO2/kWh, onshore wind ~11, utility solar PV ~48; rooftop solar in sunny grids can come in lower).<sup><a href="#ref-26" class="cite-ref">[26]</a></sup> Measured per unit of energy produced, nuclear kills fewer people than any fossil fuel by orders of magnitude, mostly because it produces no air pollution.<sup><a href="#ref-27" class="cite-ref">[27]</a></sup> One uranium fuel pellet the size of a fingertip carries the energy of a tonne of coal.<sup><a href="#ref-28" class="cite-ref">[28]</a></sup> The waste is real, has to be managed, and is a legitimate concern, but it is small in volume and containable. Modern Gen III+/IV designs (AP1000, NuScale and similar SMRs) use passive safety: gravity, natural circulation, convection. They shut down on their own, without active intervention. Many of the reactors being restarted right now are older Gen II PWRs, so the "passively safe" claim applies most strongly to the new builds rather than the restarts. Chernobyl and Fukushima were older designs operating under conditions modern reactors are built to survive.<sup><a href="#ref-27" class="cite-ref">[27]</a></sup> Opposing nuclear while accepting a grid that burns coal is not a coherent environmental position. Opposing private hyperscaler nuclear, and demanding public nuclear instead, is.</p>
+
+        <p>The other thing worth saying out loud: renewables are not waste-free either, and the comparison is rarely apples-to-apples in public debate. Solar PV is on track to generate up to 78 million metric tons of global e-waste by 2050, and panels contain enough lead and cadmium that landfilling them risks soil and groundwater contamination, yet specialized recycling is expensive enough that landfill is still the economic default in most places.<sup><a href="#ref-32" class="cite-ref">[32]</a></sup><sup><a href="#ref-33" class="cite-ref">[33]</a></sup> Wind turbine blades are fiberglass-composite by design (you want them tough and weather-resistant for 20+ years on a tower), which is exactly what makes them notoriously hard to break down or repurpose; tens of millions of tons of decommissioned blades are accumulating in dedicated landfills.<sup><a href="#ref-34" class="cite-ref">[34]</a></sup> Utility-scale lithium-ion storage adds its own end-of-life problem: complex, energy-intensive chemical recovery, finite critical minerals, and real fire-hazard risk if handled poorly. None of this is an argument against renewables; we need them. It is an argument that "clean" is doing a lot of work in the phrase "clean energy," and that nuclear's waste story (small volume, contained, regulated, well-characterized) is not obviously worse than the renewables waste story once you account for full lifecycles. Nuclear can hold the fort until renewables are improved to the point of usability. </p>
+
+        <p>All of this needs legislators to do their jobs and to keep the resulting capacity in public hands. Your guilt shouldn't be about hitting a button, it should be about what you're doing about the people who decided to build this infrastructure, on this grid, with these incentives, and who is profiting while you carry the moral weight.</p>
+
+        <figure style="margin: 24px 0; text-align: center;">
+          <img src="../img/bg-img/316.png"
+               alt="An environmental protestor outside the Houses of Parliament holding signs calling for action on pollution and plastic"
+               style="max-width: 100%; height: auto; border-radius: 4px;">
+          <figcaption style="margin-top: 8px; font-size: 0.8em;">
+            <div style="color: #9a9a9a;">&copy; Ken Reid. All rights reserved.</div>
+            <div style="margin-top: 4px;">Protesting matters. The right target is the infrastructure layer: grids, cooling, planning regulations, and nuclear buildout. Not the person asking an LLM to help draft a cover letter.</div>
+          </figcaption>
+        </figure>
+
+        <h2>Where I actually land</h2>
+
+        <p>The cartoon "AI is going to save us" pitch is nonsense. There are real costs, real bias, real labor issues, real water and grid concerns, and a real Jevons trap that means efficiency alone won't bail us out.</p>
+
+        <p>The cartoon "using ChatGPT is killing the planet" pitch is also nonsense, and it is the more harmful of the two, because it is aimed at the people with the least leverage. It lets the actual decision-makers (utilities, regulators, hyperscaler procurement teams, planning boards) off the hook, and it tells the people who would benefit most from these tools that they are bad people for using them.</p>
+
+        <p>If you genuinely care about the environmental cost of AI, here is the move:</p>
+
+        <ul>
+          <li>Run small models locally where you can. <a href="second-brain-local-llm-professional.html">Llama 3.1 8B on your own machine</a> beats a cloud round-trip on almost every axis (privacy, latency, cost, footprint).</li>
+          <li>Pressure your representatives on data-center siting, renewable additionality, and mandatory liquid cooling. The decisions that actually move the numbers happen at planning boards and utility commissions, not on your keyboard.</li>
+          <li>Support <em>public</em> nuclear. The grid needs zero-carbon baseload, and there is no other technology that does it at scale today. Build it through public utilities at regulated rates, not behind hyperscaler fences where the public pays the construction risk and a single tenant gets the electricity.</li>
+          <li>Cut a Netflix hour before you cut a query that helps you do your job. The numbers are not close. Or even start your own plex server or run physical media (DVDs, Blu-rays, often free to borrow from libraries).</li>
+          <li>Stop telling people in worse situations than yours that one of the most useful tools available right now is morally off-limits to them. The wealthy law firm down the road is not going to feel guilty on their behalf.</li>
+          <li>Keep some perspective on scale. A single short LLM prompt uses around 0.4 Wh of electricity and 10 to 50 ml of cooling water; a heavy 70B-class prompt can hit 29 to 33 Wh.<sup><a href="#ref-29" class="cite-ref">[29]</a></sup><sup><a href="#ref-22" class="cite-ref">[22]</a></sup> A 100 g beef patty embodies roughly 1,540 litres of total water (about 77 litres even if you only count "blue" freshwater) and thousands of Wh of lifecycle energy.<sup><a href="#ref-30" class="cite-ref">[30]</a></sup><sup><a href="#ref-31" class="cite-ref">[31]</a></sup> One burger is in the same ballpark as 1,500 to 7,700 short AI queries on freshwater, and thousands of queries on energy. The aggregate AI footprint still matters because the per-query number is multiplied by hundreds of millions of users a day,<sup><a href="#ref-29" class="cite-ref">[29]</a></sup> but "AI is destroying the planet" while you eat a burger and stream Netflix is not a coherent position.</li>
+          <li>Buy circular, modular, and transparent hardware where you can. No modern high-performance device is genuinely "conflict-free" or cobalt-free; the supply chains are too tangled for that. <a href="https://www.fairphone.com/" target="_blank" rel="noopener noreferrer">Fairphone</a> is the clearest example for smartphones: they invest directly in mining conditions through the <a href="https://faircobaltalliance.org/" target="_blank" rel="noopener noreferrer">Fair Cobalt Alliance</a> and build modular devices designed to last. For everything else, refurbished and certified pre-owned (Apple Refurbished, dedicated circular-economy retailers) extends the life of devices that have already been built. For new purchases, look for brands that audit their smelters through the <a href="https://www.responsiblemineralsinitiative.org/" target="_blank" rel="noopener noreferrer">Responsible Minerals Assurance Process</a>, currently the best available check against funding armed conflict in the DRC.</li>
+        </ul>
+
+        <div class="faq-section">
+          <h2>Common questions</h2>
+
+          <details class="faq-item">
+            <summary>Aren't you just defending Big Tech?</summary>
+            <p>No. The piece argues for local open-source models, mandatory liquid cooling, renewable additionality clauses on data center subsidies, and a faster nuclear buildout. That is the opposite of "leave the hyperscalers alone." It just refuses to make individual users the villain. I'd love if AI infrastructure became a public service.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>What about the bias and copyright issues?</summary>
+            <p>Real, separate, and worth their own posts. This one is specifically about the energy/access framing because that is where the public discourse keeps getting the numbers wrong. Bias in training data and copyright in scraped corpora are different fights, and both matter.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>What about jobs, education, deepfakes, misuse, or AI doom?</summary>
+            <p>All deliberately out of scope here. This post is narrowly about the energy and water footprint, the hardware supply chain, and the access argument. Job displacement (artists, writers, coders, paralegals, radiologists, anyone), the effect of LLMs on education and cognitive skills, deliberate misuse for fraud, deepfakes, disinformation, or surveillance, and "AI ends the world" / superintelligence speculation are all real conversations &mdash; they're just not <em>this</em> conversation. Trying to cover all of them at once is how you end up with a post that says nothing well. I'll likely write on some of them separately; in the meantime, if your objection to LLMs sits in one of those buckets, this post is not aimed at it.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Is the per-query water number really that small?</summary>
+            <p>Roughly 10&ndash;30 ml per ChatGPT query, based on the Bowdoin and JISC summaries. You'd need around 50 queries to match the cooling water of a single one-hour Zoom call. Training is much heavier (GPT-3 emitted about 500 t CO2 to train), but that is a one-off cost amortized over hundreds of millions of users, a bit like comparing the cost of building a bridge vs the cost of maintaining it.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>What hardware would you actually recommend for local LLMs?</summary>
+            <p>A 16 GB card (like a 4070 Ti Super) is the sweet spot for hobbyist use; it'll run quantized Phi-3 14B or Mixtral 8x7B comfortably. A 24 GB card (4090 or similar) will run a 4-bit quantized Llama 3.1 70B and is genuinely useful for serious work. 8 GB cards will get you 7B/8B models, which are still surprisingly good.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Why are you so pro-nuclear?</summary>
+            <p>Because data centers need 24/7 zero-carbon baseload, and renewables plus current battery storage cannot supply that at the scale needed. Nuclear is the only technology with the track record and the energy density to do it. Modern designs (SMRs, Gen III+/IV) handle most of the legitimate concerns about older plants (according to what I've read, I'm not an expert in this area). The alternative, which is what we're doing now, is gas. The caveat: I'm pro <em>public</em> nuclear. Letting hyperscalers privatize restarted reactors and SMRs while the public underwrites the risk is not the answer. Public utilities, regulated rates, public ownership.</p>
+          </details>
+        </div>
+
+        <details class="faq-item" id="references" style="margin-top: 32px;">
+          <summary>References</summary>
+          <ol style="margin-top: 12px; padding-left: 20px; line-height: 1.9; font-size: 0.9em;">
+            <li id="ref-1">The fossil fuel industry invented the carbon footprint to shift blame onto consumers. <em>BMJ</em>, 383, p2553 (2023). <a href="https://www.bmj.com/content/383/bmj.p2553" target="_blank" rel="noopener noreferrer">doi:10.1136/bmj.p2553</a></li>
+            <li id="ref-2">Cottier, B., et al. (2024). The rising costs of training frontier AI models. Epoch AI. Standard reference for GPT-4 training-cost estimates ($63M&ndash;$100M range). <a href="https://epoch.ai/blog/how-much-does-it-cost-to-train-frontier-ai-models" target="_blank" rel="noopener noreferrer">epoch.ai</a></li>
+            <li id="ref-3">Maslej, N., et al. (2024). <em>Artificial Intelligence Index Report 2024</em>. Stanford Institute for Human-Centered AI (HAI). Authoritative tracking of foundation-model training costs and compute usage. <a href="https://aiindex.stanford.edu/report/" target="_blank" rel="noopener noreferrer">aiindex.stanford.edu</a></li>
+            <li id="ref-4">Hoffmann, J., et al. (2022). Training Compute-Optimal Large Language Models. <em>arXiv:2203.15556</em>. <a href="https://arxiv.org/abs/2203.15556" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2203.15556</a>. DeepSeek-AI (2024). DeepSeek-V3 Technical Report. <a href="https://arxiv.org/abs/2412.19437" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2412.19437</a>. DeepSeek-AI (2025). DeepSeek-R1: Incentivising Reasoning Capability in LLMs via Reinforcement Learning. <a href="https://arxiv.org/abs/2501.12948" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2501.12948</a>. Qwen Team (2024). Qwen2 Technical Report. <a href="https://arxiv.org/abs/2407.10671" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2407.10671</a>. Primary sources for compute-optimal training, MoE, and frontier-model training cost claims.</li>
+            <li id="ref-5">AI VRAM Requirements: How Much GPU Memory for Every Model. LocalAIMaster. <a href="https://localaimaster.com/blog/vram-requirements-2026" target="_blank" rel="noopener noreferrer">localaimaster.com</a></li>
+            <li id="ref-6">Energy and Water Consumption of Technologies. Bowdoin College. <a href="https://bowdoin.teamdynamix.com/TDClient/1814/Portal/KB/PrintArticle?ID=165627" target="_blank" rel="noopener noreferrer">bowdoin.edu</a></li>
+            <li id="ref-7">Artificial intelligence and the environment: Putting the numbers into perspective. JISC National Centre for AI, May 2025. <a href="https://nationalcentreforai.jiscinvolve.org/wp/2025/05/02/artificial-intelligence-and-the-environment-putting-the-numbers-into-perspective/" target="_blank" rel="noopener noreferrer">nationalcentreforai.jiscinvolve.org</a></li>
+            <li id="ref-8">The Real Environmental Footprint of Generative AI: What 2025 Data Tell Us. Online Learning Consortium, 2025. <a href="https://onlinelearningconsortium.org/olc-insights/2025/12/the-real-environmental-footprint-of-generative-ai/" target="_blank" rel="noopener noreferrer">onlinelearningconsortium.org</a></li>
+            <li id="ref-9">The Carbon Footprint of AI (GPT-3 training emissions ~500 t CO2). Climate Impact Partners. <a href="https://www.climateimpact.com/news-insights/insights/carbon-footprint-of-ai/" target="_blank" rel="noopener noreferrer">climateimpact.com</a></li>
+            <li id="ref-10">Gupta, U., et al. (2021). Chasing Carbon: The Elusive Environmental Footprint of Computing. <em>IEEE Micro</em>, 41(4), 44&ndash;53. Primary source for hardware embodied-carbon and the operational-vs-manufacturing split in hyperscale facilities. <a href="https://ieeexplore.ieee.org/document/9351538" target="_blank" rel="noopener noreferrer">doi:10.1109/MM.2021.3061394</a></li>
+            <li id="ref-11">Kara, S. (2023). <em>Cobalt Red: How the Blood of the Congo Powers Our Lives</em>. St. Martin's Press. Backed by primary reporting: Amnesty International (2016). <em>"This is what we die for": Human rights abuses in the Democratic Republic of the Congo power the global trade in cobalt</em>. <a href="https://www.amnesty.org/en/documents/afr62/3183/2016/en/" target="_blank" rel="noopener noreferrer">amnesty.org</a></li>
+            <li id="ref-12">Jevons, W. S. (1865). <em>The Coal Question: An Inquiry Concerning the Progress of the Nation, and the Probable Exhaustion of our Coal-Mines</em>. Macmillan, London. Original formulation of the rebound effect. <a href="https://oll.libertyfund.org/titles/jevons-the-coal-question" target="_blank" rel="noopener noreferrer">oll.libertyfund.org</a>. Modern survey: Sorrell, S. (2009). Jevons' paradox revisited: The evidence for backfire from improved energy efficiency. <em>Energy Policy</em>, 37(4), 1456&ndash;1469. <a href="https://doi.org/10.1016/j.enpol.2008.12.003" target="_blank" rel="noopener noreferrer">doi:10.1016/j.enpol.2008.12.003</a></li>
+            <li id="ref-13">Freire-Gonz&aacute;lez, J. (2020). Energy efficiency and rebound effects in energy transitions. <em>Energy Policy</em>. Theoretical framework for rebound effects. The CT-scan rebound and the Nvidia market reaction discussed in-text are widely-reported industry events rather than findings from this paper.</li>
+            <li id="ref-14">The Promise and Peril of AI Legal Services to Equalize Justice (92% civil-legal-needs gap; rAInbow). Harvard JOLT. <a href="https://jolt.law.harvard.edu/digest/the-promise-and-peril-of-ai-legal-services-to-equalize-justice" target="_blank" rel="noopener noreferrer">jolt.law.harvard.edu</a></li>
+            <li id="ref-15">Can LLMs help streamline legal aid intake? (Suffolk LIT Lab; Legal Aid of Eastern Missouri). Stanford Justice Innovation. <a href="https://justiceinnovation.law.stanford.edu/can-llms-help-streamline-legal-aid-intake/" target="_blank" rel="noopener noreferrer">justiceinnovation.law.stanford.edu</a></li>
+            <li id="ref-16">AI for social good: Making AI work for health systems (WHO 11M shortage; Penda Health; PROMPTS). J-PAL / Abdul Latif Jameel Poverty Action Lab. <a href="https://www.povertyactionlab.org/blog/12-3-25/ai-social-good-making-ai-work-health-systems" target="_blank" rel="noopener noreferrer">povertyactionlab.org</a></li>
+            <li id="ref-17">Leveraging large language models to foster equity in healthcare (DSME/S text interventions; translation/plain-language access). <em>PMC / NIH</em>. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11339521/" target="_blank" rel="noopener noreferrer">pmc.ncbi.nlm.nih.gov</a></li>
+            <li id="ref-18">Not all AI is created equal: considerations for equity in medical education. <em>PMC</em>. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12971142/" target="_blank" rel="noopener noreferrer">pmc.ncbi.nlm.nih.gov</a></li>
+            <li id="ref-19">New language-learning algorithms risk reinforcing inequalities. Ford School, University of Michigan. <a href="https://fordschool.umich.edu/news/2022/new-language-learning-algorithms-risk-reinforcing-inequalities-social-fragmentation-u-m" target="_blank" rel="noopener noreferrer">fordschool.umich.edu</a></li>
+            <li id="ref-20">Energy supply for AI (data-center share of global electricity; gas/coal mix). International Energy Agency (IEA). <a href="https://www.iea.org/reports/energy-and-ai/energy-supply-for-ai" target="_blank" rel="noopener noreferrer">iea.org</a></li>
+            <li id="ref-21">What Happens When Data Centers Come to Town? (tax incentives, renewable additionality). Ford School STPP. <a href="https://stpp.fordschool.umich.edu/sites/stpp/files/2025-07/stpp-data-centers-2025.pdf" target="_blank" rel="noopener noreferrer">fordschool.umich.edu</a></li>
+            <li id="ref-22">Li, P., et al. (2023). Making AI Less "Thirsty": Uncovering and Addressing the Secret Water Footprint of AI Models. <em>arXiv:2304.03271</em>. <a href="https://arxiv.org/abs/2304.03271" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2304.03271</a>. Jurisdictional and evaporative-loss figures corroborated by Global Action Plan (2026), <em>Not a drop to drink</em>. <a href="https://www.globalactionplan.org.uk/files/not_a_drop_to_drink_-_april_2026.pdf" target="_blank" rel="noopener noreferrer">globalactionplan.org.uk</a></li>
+            <li id="ref-23">Microsoft quantifies environmental impacts of datacenter cooling from cradle to grave in new <em>Nature</em> study (cold-plate vs air cooling LCA). Microsoft. <a href="https://news.microsoft.com/source/features/sustainability/microsoft-quantifies-environmental-impacts-of-datacenter-cooling-from-cradle-to-grave-in-new-nature-study/" target="_blank" rel="noopener noreferrer">news.microsoft.com</a></li>
+            <li id="ref-24">From Atoms to Algorithms: Nuclear Energy's Comeback in the Age of AI (Three Mile Island PPA; Amazon SMRs; Palisades restart; 100&rarr;400 GW target). Georgetown Environmental Law Review. <a href="https://www.law.georgetown.edu/environmental-law-review/blog/from-atoms-to-algorithms-nuclear-energys-comeback-in-the-age-of-ai/" target="_blank" rel="noopener noreferrer">law.georgetown.edu</a></li>
+            <li id="ref-25">Goldman Sachs (April 2024). <em>Generational growth: AI, data centers and the coming US power demand surge</em>. Global Investment Research. Primary source for the US 183&rarr;426 TWh demand projection and the 60% fossil-fuel grid ratio. <a href="https://www.goldmansachs.com/insights/articles/AI-poised-to-drive-160-increase-in-power-demand" target="_blank" rel="noopener noreferrer">goldmansachs.com</a></li>
+            <li id="ref-26">Five reasons the clean energy transition needs nuclear power (lifecycle carbon footprint comparable to wind). International Atomic Energy Agency (IAEA). <a href="https://www.iaea.org/newscenter/news/five-reasons-the-clean-energy-transition-needs-nuclear-power" target="_blank" rel="noopener noreferrer">iaea.org</a>. Lifecycle medians cross-checked against IPCC AR6 WG3 Annex III.</li>
+            <li id="ref-27">Safest sources of energy (deaths per unit of energy; nuclear vs fossil fuels). Our World in Data. <a href="https://ourworldindata.org/safest-sources-of-energy" target="_blank" rel="noopener noreferrer">ourworldindata.org</a></li>
+            <li id="ref-28">Nuclear power is the most reliable energy source and it's not even close (energy density; capacity factors). U.S. Department of Energy, Office of Nuclear Energy. <a href="https://www.energy.gov/ne/articles/nuclear-power-most-reliable-energy-source-and-its-not-even-close" target="_blank" rel="noopener noreferrer">energy.gov</a></li>
+            <li id="ref-29">Jegham, N., Abdelatti, M., Elmoubarki, L., &amp; Hendawi, A. (2025). How Hungry is AI? Benchmarking Energy, Water, and Carbon Footprint of LLM Inference. <em>arXiv:2505.09598</em>. <a href="https://arxiv.org/abs/2505.09598" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2505.09598</a>. Per-prompt energy/water for short and 70B-class long prompts; aggregate-scale framing. Husom, E. J., Goknil, A., Shar, L. K., &amp; Sen, S. (2024). The Price of Prompting: Profiling Energy Use in Large Language Models Inference. <em>arXiv:2407.16893</em>. <a href="https://arxiv.org/abs/2407.16893" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2407.16893</a>.</li>
+            <li id="ref-30">Aboagye, I. A., Valappil, G., Dutta, B., Imbeault-T&eacute;treault, H., Ominski, K. H., Cordeiro, M. R. C., Kr&ouml;bel, R., Pogue, S. J., &amp; McAllister, T. A. (2024). An assessment of the environmental sustainability of beef production in Canada. <em>Canadian Journal of Animal Science</em>, 104, 221&ndash;240. <a href="https://doi.org/10.1139/cjas-2023-0077" target="_blank" rel="noopener noreferrer">doi:10.1139/cjas-2023-0077</a>. Lifecycle energy intensity of beef production.</li>
+            <li id="ref-31">Trujillo Nava, A., Valdivia Alcal&aacute;, R., Hernandez Ort&iacute;z, J., &amp; L&oacute;pez Santiago, M. A. (2023). Estimation of the water footprint in the production of beef from European cattle in Mexico. <em>Agro Productividad</em>. <a href="https://doi.org/10.32854/agrop.v16i7.2453" target="_blank" rel="noopener noreferrer">doi:10.32854/agrop.v16i7.2453</a>. Global-average ~15,400 L/kg beef figure. Spore, T., Mekonnen, M., Neale, C., Watson, A. K., MacDonald, J. C., &amp; Erickson, G. E. (2020). Evaluation of the Water Footprint of Beef Cattle Production in Nebraska. <em>Journal of Animal Science</em>, 98, 142. <a href="https://doi.org/10.1093/jas/skaa054.248" target="_blank" rel="noopener noreferrer">doi:10.1093/jas/skaa054.248</a>. Green vs blue vs grey water split.</li>
+            <li id="ref-32">MDPI (2025). Assessing the Environmental Impact of PV Emissions and Sustainability Challenges. <em>Sustainability</em>. <a href="https://www.mdpi.com/journal/sustainability" target="_blank" rel="noopener noreferrer">mdpi.com</a>. Solar-PV end-of-life waste projections (up to ~78 Mt globally by 2050) and heavy-metal leaching risk.</li>
+            <li id="ref-33">Sunada Recycling (2025). Breaking Down the Rules: Solar Panel Disposal Regulations Simplified. Industry summary of US solar-panel disposal rules and the cost gap between specialized recycling and landfill. <a href="https://www.sunada-recycling.com/" target="_blank" rel="noopener noreferrer">sunada-recycling.com</a>.</li>
+            <li id="ref-34">Re-purposing Wind Turbine Blades: Matching Strategies and Innovation Governance Forms (2025). ResearchGate preprint. Composite-blade waste accumulation and the lack of scalable recycling pathways. <a href="https://www.researchgate.net/" target="_blank" rel="noopener noreferrer">researchgate.net</a>.</li>
+          </ol>
+        </details>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="no-idea-no-problem-data-science-portfolio.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/bg-img/19.png" alt="No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">20 April 2026 · 1 min read</div>
+                  <h4 class="blog-card-title">No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio</h4>
+                  <p class="blog-card-excerpt">A practical guide to building a data science portfolio when you have no idea where to start. Covers project types, documentation, novelty, collaboration, and working in the GenAI era.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">data-science</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="evolutionary-computation-identity-crisis.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/bg-img/208.png" alt="Evolutionary Computation's Identity Crisis in the Age of GenAI" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">18 April 2026 · 1 min read</div>
+                  <h4 class="blog-card-title">Evolutionary Computation's Identity Crisis in the Age of GenAI</h4>
+                  <p class="blog-card-excerpt">Evolutionary Computation is having an identity crisis in the GenAI era, despite delivering major real-world wins in engineering, logistics, and constrained optimization.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="why-learn-to-code-age-of-ai.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/bg-img/14.png" alt="Why It Still Matters to Learn to Code in the Age of AI" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">16 April 2026 · 1 min read</div>
+                  <h4 class="blog-card-title">Why It Still Matters to Learn to Code in the Age of AI</h4>
+                  <p class="blog-card-excerpt">Coding still matters because the value is not syntax memorization. It is learning to break down problems, reason across systems, and build reliable solutions.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <hr style="margin: 40px 0;">
+        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/alime.bundle.js"></script>
+  <script src="../js/share.js"></script>
+  <script src="../js/default-assets/active.js"></script>
+  <script src="../js/shared-components.js"></script>
+  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+</body>
+</html>
