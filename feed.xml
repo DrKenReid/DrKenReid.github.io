@@ -5,11 +5,19 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 04 May 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Sun, 04 May 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Mon, 04 May 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Mon, 04 May 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>From Scotland to Michigan</title>
+      <link>https://www.kenreid.co.uk/blog/from-scotland-to-michigan.html</link>
+      <guid>https://www.kenreid.co.uk/blog/from-scotland-to-michigan.html</guid>
+      <pubDate>Mon, 04 May 2026 00:00:00 +0000</pubDate>
+      <description>From Scotland to Michigan: a personal account of culture shock, free education, healthcare, xenophobia, weather, and what it means to belong somewhere new.</description>
+      <category>personal</category>
+    </item>
     <item>
       <title>The Ethics of LLM Use (Not LLMs)</title>
       <link>https://www.kenreid.co.uk/blog/ethics-of-llm-use-not-llms.html</link>
@@ -27,15 +35,6 @@
       <description>A book snob's confession: how Dungeon Crawler Carl used absurd LitRPG mechanics to deliver one of the most devastating emotional payloads in modern fantasy.</description>
       <category>books</category>
     </item>
-    <item>
-      <title>From Scotland to Michigan</title>
-      <link>https://www.kenreid.co.uk/blog/from-scotland-to-michigan.html</link>
-      <guid>https://www.kenreid.co.uk/blog/from-scotland-to-michigan.html</guid>
-      <pubDate>Wed, 22 Apr 2026 00:00:00 +0000</pubDate>
-      <description>From Scotland to Michigan: a personal account of culture shock, free education, healthcare, xenophobia, weather, and what it means to belong somewhere new.</description>
-      <category>personal</category>
-    </item>
-    <item>
       <title>Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction</title>
       <link>https://www.kenreid.co.uk/blog/fourteen-years-of-silence-rothfuss-doors-of-stone.html</link>
       <guid>https://www.kenreid.co.uk/blog/fourteen-years-of-silence-rothfuss-doors-of-stone.html</guid>

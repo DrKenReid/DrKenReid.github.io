@@ -158,7 +158,15 @@ function createBlogCardElement(post, options) {
 }
 
 function formatPostDate(dateValue) {
-    return new Date(dateValue).toLocaleDateString('en-GB', {
+    var date = dateValue;
+    if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+        var parts = dateValue.split('-');
+        date = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+    } else {
+        date = new Date(dateValue);
+    }
+
+    return date.toLocaleDateString('en-GB', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
@@ -211,7 +219,13 @@ function renderRelatedPosts(targetId) {
                     return {
                         post: post,
                         sharedTags: sharedTags.length,
-                        dateValue: new Date(post.date).getTime()
+                        dateValue: (function() {
+                            if (typeof post.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(post.date)) {
+                                var parts = post.date.split('-');
+                                return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])).getTime();
+                            }
+                            return new Date(post.date).getTime();
+                        })()
                     };
                 })
                 .filter(function(entry) {
@@ -234,7 +248,19 @@ function renderRelatedPosts(targetId) {
                         return !related.some(function(existing) { return existing.url === post.url; });
                     })
                     .sort(function(a, b) {
-                        return new Date(b.date) - new Date(a.date);
+                        return (function(dateValue) {
+                            if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+                                var parts = dateValue.split('-');
+                                return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+                            }
+                            return new Date(dateValue);
+                        })(b.date) - (function(dateValue) {
+                            if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+                                var parts = dateValue.split('-');
+                                return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+                            }
+                            return new Date(dateValue);
+                        })(a.date);
                     })
                     .slice(0, 3 - related.length)
                     .forEach(function(post) {
