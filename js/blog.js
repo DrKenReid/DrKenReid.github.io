@@ -5,6 +5,20 @@ var currentPage = 1;
 var POSTS_PER_PAGE = 9;
 var DEFAULT_POST_IMAGE = 'img/bg-img/2.png';
 
+function parsePostDate(dateValue) {
+	if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+		var parts = dateValue.split('-');
+		return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+	}
+	return new Date(dateValue);
+}
+
+function formatPostDate(dateValue) {
+	return parsePostDate(dateValue).toLocaleDateString('en-GB', {
+		day: 'numeric', month: 'long', year: 'numeric'
+	});
+}
+
 function loadPosts() {
 	if (window.BLOG_POSTS && window.BLOG_POSTS.length) {
 		return Promise.resolve(window.BLOG_POSTS.slice());
@@ -16,7 +30,7 @@ function initBlog() {
 	loadPosts()
 		.then(function(data) {
 			allPosts = data.sort(function(a, b) {
-				return new Date(b.date) - new Date(a.date);
+				return parsePostDate(b.date) - parsePostDate(a.date);
 			});
 			return hydrateReadingTimes(allPosts);
 		})
@@ -141,9 +155,7 @@ function renderPosts() {
 	}
 
 	pagePosts.forEach(function(post) {
-		var dateStr = new Date(post.date).toLocaleDateString('en-GB', {
-			day: 'numeric', month: 'long', year: 'numeric'
-		});
+		var dateStr = formatPostDate(post.date);
 
 		var col = typeof window.createBlogCardElement === 'function'
 			? window.createBlogCardElement(post, {
