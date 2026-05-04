@@ -17,6 +17,16 @@ window.BLOG_POSTS = [
   },
   {
     title: 'Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction',
+      {
+        title: 'From Scotland to Michigan',
+        date: '2026-04-22',
+        tags: ['personal'],
+        excerpt: 'From Scotland to Michigan: a personal account of culture shock, free education, healthcare, xenophobia, weather, and what it means to belong somewhere new.',
+        url: 'blog/from-scotland-to-michigan.html',
+        image: 'img/bg-img/18.png'
+      },
+      {
+        title: 'Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction',
     date: '2026-04-22',
     tags: ['books'],
     excerpt: 'Fifteen years since The Wise Man\'s Fear and still no Doors of Stone. A personal reflection on the Kingkiller Chronicle, the long wait, the charity debacle, and why writing at this level is genuinely hard.',

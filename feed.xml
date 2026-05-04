@@ -11,15 +11,6 @@
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>Quiet Strength: A Better Kind of Man</title>
-      <link>https://www.kenreid.co.uk/blog/quiet-strength-positive-masculinity.html</link>
-      <guid>https://www.kenreid.co.uk/blog/quiet-strength-positive-masculinity.html</guid>
-      <pubDate>Fri, 01 May 2026 00:00:00 +0000</pubDate>
-      <description>Reclaiming masculinity as quiet strength: a constructive take on what it means to be a good man today, integrating empathy, accountability, and allyship without performative toughness.</description>
-      <category>personal</category>
-      <category>opinion</category>
-    </item>
-    <item>
       <title>The Ethics of LLM Use (Not LLMs)</title>
       <link>https://www.kenreid.co.uk/blog/ethics-of-llm-use-not-llms.html</link>
       <guid>https://www.kenreid.co.uk/blog/ethics-of-llm-use-not-llms.html</guid>
