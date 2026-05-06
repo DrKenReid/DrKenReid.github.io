@@ -1,5 +1,13 @@
 ﻿[
   {
+    "title": "The Life and Death of the Early Internet",
+    "date": "2026-05-06",
+    "tags": ["personal", "tech"],
+    "excerpt": "From CRT monitors and Comet Cursor to MSN Messenger, Kazaa, Warcraft 3 forums, and Bebo: a personal history of how the early internet shaped who we are.",
+    "url": "blog/life-and-death-of-the-early-internet.html",
+    "image": "img/bg-img/375.png"
+  },
+  {
     "title": "The Ethics of LLM Use (Not LLMs)",
     "date": "2026-04-29",
     "tags": ["ai", "data-science"],
