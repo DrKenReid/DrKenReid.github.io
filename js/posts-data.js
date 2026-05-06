@@ -1,5 +1,13 @@
 window.BLOG_POSTS = [
   {
+    title: 'The Life and Death of the Early Internet',
+    date: '2026-05-06',
+    tags: ['personal', 'tech'],
+    excerpt: 'From CRT monitors and Comet Cursor to MSN Messenger, Kazaa, Warcraft 3 forums, and Bebo: a personal history of how the early internet shaped who we are.',
+    url: 'blog/life-and-death-of-the-early-internet.html',
+    image: 'img/bg-img/375.png'
+  },
+  {
     title: 'The Ethics of LLM Use (Not LLMs)',
     date: '2026-04-29',
     tags: ['ai', 'environment', 'opinion', 'data-science'],
@@ -16,17 +24,15 @@ window.BLOG_POSTS = [
     image: 'img/bg-img/141.png'
   },
   {
+    title: 'From Scotland to Michigan',
+    date: '2026-05-04',
+    tags: ['personal'],
+    excerpt: 'From Scotland to Michigan: a personal account of culture shock, free education, healthcare, xenophobia, weather, and what it means to belong somewhere new.',
+    url: 'blog/from-scotland-to-michigan.html',
+    image: 'img/bg-img/18.png'
+  },
+  {
     title: 'Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction',
-      {
-        title: 'From Scotland to Michigan',
-        date: '2026-04-22',
-        tags: ['personal'],
-        excerpt: 'From Scotland to Michigan: a personal account of culture shock, free education, healthcare, xenophobia, weather, and what it means to belong somewhere new.',
-        url: 'blog/from-scotland-to-michigan.html',
-        image: 'img/bg-img/18.png'
-      },
-      {
-        title: 'Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction',
     date: '2026-04-22',
     tags: ['books'],
     excerpt: 'Fifteen years since The Wise Man\'s Fear and still no Doors of Stone. A personal reflection on the Kingkiller Chronicle, the long wait, the charity debacle, and why writing at this level is genuinely hard.',
