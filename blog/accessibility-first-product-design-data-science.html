@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Most data science outputs are inaccessible by default. Treating accessibility as the design constraint, not the audit step, produces clearer plots, better dashboards, and more rigorous communication for everyone.">
+  <meta name="keywords" content="data science">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Accessibility-First Product Design in Data Science - Ken Reid</title>
+  <meta property="og:title" content="Accessibility-First Product Design in Data Science">
+  <meta property="og:description" content="Most data science outputs are inaccessible by default. Designing for access first produces clearer plots, better dashboards, and more rigorous communication for everyone.">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/21.png">
+  <meta property="og:url" content="https://www.kenreid.co.uk/blog/accessibility-first-product-design-data-science.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Accessibility-First Product Design in Data Science">
+  <meta name="twitter:description" content="Most data science outputs are inaccessible by default. Designing for access first produces clearer plots, better dashboards, and more rigorous communication for everyone.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/bg-img/21.png">
+  <meta name="citation_title" content="Accessibility-First Product Design in Data Science">
+  <meta name="citation_author" content="Reid, Kenneth N.">
+  <meta name="citation_publication_date" content="2026/05/07">
+  <meta name="citation_online_date" content="2026/05/07">
+  <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/accessibility-first-product-design-data-science.html">
+  <meta name="DC.title" content="Accessibility-First Product Design in Data Science">
+  <meta name="DC.creator" content="Kenneth N. Reid">
+  <meta name="DC.date" content="2026-05-07">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="../img/core-img/favicon.png">
+  <meta name="theme-color" content="#000000">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <link rel="canonical" href="https://www.kenreid.co.uk/blog/accessibility-first-product-design-data-science.html">
+  <style>
+    .blog-post details.code-example {
+      margin: 16px 0 28px;
+      border: 1px solid #e2e2e2;
+      border-radius: 8px;
+      background: #fafafa;
+      overflow: hidden;
+    }
+    .blog-post details.code-example summary {
+      cursor: pointer;
+      padding: 12px 16px;
+      font-weight: 600;
+      color: #252525;
+      list-style: none;
+    }
+    .blog-post details.code-example summary::-webkit-details-marker { display: none; }
+    .blog-post details.code-example summary::after {
+      content: "Show code";
+      float: right;
+      font-size: 12px;
+      color: #666;
+      font-weight: 500;
+    }
+    .blog-post details.code-example[open] summary::after { content: "Hide code"; }
+    .blog-post details.code-example pre {
+      margin: 0;
+      border-radius: 0;
+      border-top: 1px solid #dedede;
+    }
+    /* Plot comparison: side-by-side on desktop, stacked on mobile */
+    .plot-compare {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+    .plot-compare__panel > h3 { margin-top: 0; }
+    @media (min-width: 992px) {
+      .plot-compare {
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        width: calc(100% + 120px);
+        margin-left: -60px;
+        margin-right: -60px;
+      }
+    }
+    @media (min-width: 1200px) {
+      .plot-compare {
+        width: calc(100% + 300px);
+        margin-left: -150px;
+        margin-right: -150px;
+      }
+    }
+    /* Single plot breakout for wider display on desktop */
+    .plot-wide img { max-width: 100%; }
+    @media (min-width: 992px) {
+      .plot-wide {
+        width: calc(100% + 120px);
+        margin-left: -60px;
+        margin-right: -60px;
+      }
+    }
+    @media (min-width: 1200px) {
+      .plot-wide {
+        width: calc(100% + 300px);
+        margin-left: -150px;
+        margin-right: -150px;
+      }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Accessibility-First Product Design in Data Science",
+    "description": "Most data science outputs are inaccessible by default. Designing for access first produces clearer plots, better dashboards, and more rigorous communication for everyone.",
+    "image": "https://www.kenreid.co.uk/img/bg-img/21.png",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk"
+    },
+    "datePublished": "2026-05-07",
+    "publisher": {
+      "@type": "Person",
+      "name": "Ken Reid"
+    },
+    "keywords": ["data-science"]
+  }
+  </script>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <div id="header-section"></div>
+
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/bg-img/21.png); background-size: cover; background-position: center center;">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <h2 class="page-title">Blog</h2>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Accessibility-First Data Science</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <div class="about-us-area section-padding-80 clearfix">
+    <div class="container">
+      <div class="blog-post">
+        <h1>Accessibility-First Product Design in Data Science</h1>
+        <div class="blog-meta">
+          7 May 2026 &middot;
+          <span class="blog-tag">data-science</span>
+          <span class="blog-tag">accessibility</span>
+          <span class="blog-tag">design</span>
+          <span class="blog-tag">professionalism</span>
+        </div>
+
+        <p>Most data science outputs are inaccessible by default because we set the standard based on what we individually see, or at a minimum some careful selection of reds, greens and browns. The default <code>matplotlib</code> palette is not colour-blind safe. Default dashboard tables are not screen-reader navigable. Default conference slides use 10pt grey-on-grey labels that nobody beyond the second row can read. We treat accessibility as the audit step at the end of the project, some ticky box to tick by someone else, or ourselves (if we have time), and the result is a discipline that produces work that a substantial fraction of its audience cannot use.</p>
+
+        <p>I want to argue something stronger than &ldquo;accessibility is nice.&rdquo; I want to argue that an inaccessible plot is a failed plot because the plot exists to communicate, and a plot a chunk of your audience cannot decode is not communicating. I've said this when I was a full time researcher: it isn't science if you can't communicate your findings. 50% of science is effective communication. The same can be said about data science if you conduct analysis and have interesting findings but cannot communicate them effectively. Accessibility is the design constraint that, when you take it seriously, forces you to make better decisions about encodings, hierarchy, and content. When accessibility is built into your pipeline it's stops needing its own step and it becomes the norm.</p>
+
+        <p>Conclusion up front: when you design for access first, you make fewer charts, label them better, and remove the visual decoration that was getting in the way. The blind / colour-blind reader benefits. The dyslexic reader benefits. The executive skimming on a phone benefits. The reviewer who knows the domain benefits. Then, you benefit. Why bother doing work if your peers cannot use it?</p>
+
+        <figure>
+          <img src="../img/bg-img/19.png" alt="Clean visual composition used as a cover-style motif for accessibility-first communication" loading="lazy" style="width:100%; border-radius:8px;">
+          <p class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></p>
+        </figure>
+
+        <div class="plain-english-box">
+          <h2>Quick jargon guide</h2>
+          <ul>
+            <li><strong>CVD (colour vision deficiency):</strong> the umbrella term for what most people call &ldquo;colour blindness.&rdquo; About 8% of men and 0.5% of women of European descent have some form. Most cannot reliably distinguish certain reds and greens, but its far from the same between any two people.</li>
+            <li><strong>Redundant coding:</strong> using more than one visual channel to encode the same variable, e.g. colour <em>and</em> shape, or colour <em>and</em> line type. The point is that any single channel can fail and the reader still gets the information.</li>
+            <li><strong>Alt text:</strong> a short text description of an image, read aloud by screen readers. For a chart, good alt text describes what the chart shows and the main takeaway, not just &ldquo;chart of data.&rdquo;</li>
+            <li><strong>Screen reader:</strong> assistive software (JAWS, NVDA, VoiceOver) that reads page content aloud. Charts rendered as flat images are invisible to it; properly structured tables and labelled SVGs are not.</li>
+            <li><strong>Chart junk:</strong> Tufte&rsquo;s term for visual decoration that does not encode data: 3D bars, gradient fills, drop shadows, pictograms, busy backgrounds. Reading the chart costs the viewer effort the data did not earn.</li>
+            <li><strong>Data-ink ratio:</strong> also Tufte. The proportion of ink (or pixels) that encodes data versus decoration. Higher is better, within reason.</li>
+            <li><strong>WCAG:</strong> Web Content Accessibility Guidelines. The relevant numbers for most data work are the contrast ratios: 4.5:1 for normal text, 3:1 for large text and graphical objects.</li>
+          </ul>
+        </div>
+
+        <h2>Inaccessible is not a niche concern</h2>
+
+        <p>The first reframe I want to push is that &ldquo;accessibility&rdquo; in data science is not a small audience that you graciously serve at extra cost. It is a description of the conditions under which most of your audience actually consumes your work.</p>
+
+        <p>Your audience includes people with colour vision deficiencies; people reading printed-out greyscale copies in a meeting; people who are tired, distracted, on a phone, in a sunlit room with a glossy screen; in a Zoom call where your slide shrank to a thumbnail; domain experts who know the science but not your particular plotting library, and executives who have ten seconds before deciding whether to keep listening. The plot you optimise for &ldquo;the reader sitting in front of a 27-inch retina display in a dark office, paying full attention&rdquo; is a plot designed for just yourself.</p>
+
+        <p>This is the same argument that the visualisation research community has been making about reaching broader audiences: the assumption that everyone consumes charts as high-resolution colour images, with full attention, and with the same visualisation literacy as the author, is false, and it gatekeeps insight behind a purely visual medium.<sup><a href="#ref-2" class="cite-ref">[2]</a></sup> Designing for access is not charity. It is acknowledging the actual delivery conditions.</p>
+
+        <h2>Colour and redundant coding</h2>
+
+        <p>The cleanest example of accessibility producing better design is colour. About 1 in 12 men has some form of colour vision deficiency. If you build a scatter plot where category is encoded by colour alone, and you use any of the default red/green palettes that ship with most plotting libraries, you have built a chart that a non-trivial fraction of your readers cannot decode.</p>
+
+        <p>The standard fix is redundant coding: encode the same variable in more than one channel. Colour <em>and</em> shape on a scatter plot. Colour <em>and</em> line type on a time series. Colour <em>and</em> hatching on a bar chart. Recent work on single-cell scatter plots makes this point directly: combining colour with shape, line type, or hatched fills substantially improves accessibility for readers with CVD, and the resulting figures are more readable for everyone, not just the target group.<sup><a href="#ref-1" class="cite-ref">[1]</a></sup></p>
+
+        <p>Notice what happened there. The accessibility constraint forced an honest question: <em>what am I actually encoding with colour, and is colour the right channel for it?</em> A lot of the time the answer is &ldquo;I picked colour because that&rsquo;s what the library defaulted to.&rdquo; The fix is not just colour-blind-safe palettes (<code>Viridis</code>, <code>ColorBrewer</code>, <code>Okabe-Ito</code>); it is asking whether the variable should be on colour at all, or on position, or on shape, or whether you have too many categories on one chart and should split into small multiples.</p>
+
+        <p>I would extend redundant coding into a general principle: any time you rely on a single visual channel to carry information, you have built a brittle chart. Print it greyscale, shrink it to a slide thumbnail, view it through a colour-vision simulator, and see whether it still works. If it doesn&rsquo;t, the chart had a single point of failure.</p>
+
+        <p>Both scatter plots below use the same underlying data. Only the encoding choices differ.</p>
+
+        <div class="plot-compare">
+          <div class="plot-compare__panel">
+        <h3>The problem: colour-only encoding</h3>
+
+        <figure>
+          <img src="img/accessibility-scatter-bad.png" alt="Scatter plot with three groups encoded by red, green, and blue circles only. Under red-green colour vision deficiency, Group A and Group B appear as the same colour and become indistinguishable." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <p class="figure-note">Colour-only encoding. Group&nbsp;A (red) and Group&nbsp;B (green) look identical under deuteranopia, the most common form of CVD. The legend also relies on colour, so it offers no fallback.</p>
+        </figure>
+
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+rng = np.random.default_rng(42)
+
+GROUPS  = ["Group A", "Group B", "Group C"]
+CENTRES = [(1.0, 4.5), (3.5, 2.0), (6.0, 5.5)]
+N_PER_GROUP = 50
+SIGMA = 0.7
+
+# Tab10 red and green are the most commonly confused CVD pair (~8% of men).
+# Under deuteranopia, Group A (red) and Group B (green) map to near-identical
+# hues. The legend compounds the failure: it also relies solely on colour,
+# so it offers no independent fallback when colour cannot be decoded.
+CVD_UNSAFE = ["#d62728", "#2ca02c", "#1f77b4"]  # red, green, blue
+
+fig, ax = plt.subplots(figsize=(6, 4))
+
+for (cx, cy), color, label in zip(CENTRES, CVD_UNSAFE, GROUPS):
+    ax.scatter(
+        rng.normal(cx, SIGMA, N_PER_GROUP),
+        rng.normal(cy, SIGMA, N_PER_GROUP),
+        color=color,
+        s=50,
+        label=label,
+    )
+
+ax.set(
+    title="Model performance by group",
+    xlabel="Feature score",
+    ylabel="Outcome metric",
+)
+ax.legend(title="Group")
+
+fig.savefig("scatter_problem.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+          </div>
+          <div class="plot-compare__panel">
+        <h3>The fix: redundant coding with Okabe&ndash;Ito</h3>
+
+        <figure>
+          <img src="img/accessibility-scatter-good.png" alt="The same scatter plot data using the Okabe-Ito CVD-safe palette with distinct marker shapes: orange circles for Group A, blue squares for Group B, and teal triangles for Group C. Groups are distinguishable by colour or shape independently." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <p class="figure-note">Redundant coding with the Okabe&ndash;Ito palette and distinct markers. Each group is identified by colour <em>and</em> shape, so the chart remains legible when either channel fails.</p>
+        </figure>
+
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+rng = np.random.default_rng(42)
+
+GROUPS  = ["Group A", "Group B", "Group C"]
+CENTRES = [(1.0, 4.5), (3.5, 2.0), (6.0, 5.5)]
+N_PER_GROUP = 50
+SIGMA = 0.7
+
+# Okabe & Ito (2008): the de-facto standard CVD-safe categorical palette.
+# Distinguishable under protanopia, deuteranopia, and tritanopia,
+# and retains separation when converted to greyscale for print.
+OKABE_ITO = ["#E69F00", "#56B4E9", "#009E73"]  # orange, sky-blue, teal
+
+# Three independent visual channels carry group membership:
+#   1. Colour   (fails for some CVD types)
+#   2. Marker shape  (fails in greyscale if shapes are hard to see)
+#   3. Edge contrast  (reinforces shape at small sizes)
+# Any one channel can be lost and the remaining two still separate the groups.
+MARKERS = ["o", "s", "^"]  # circle, square, upward triangle
+
+fig, ax = plt.subplots(figsize=(6, 4), layout="constrained")
+
+for (cx, cy), color, marker, label in zip(CENTRES, OKABE_ITO, MARKERS, GROUPS):
+    ax.scatter(
+        rng.normal(cx, SIGMA, N_PER_GROUP),
+        rng.normal(cy, SIGMA, N_PER_GROUP),
+        color=color,
+        marker=marker,
+        s=55,
+        edgecolors="white",
+        linewidths=0.5,
+        label=label,
+    )
+
+# Title encodes the finding, not the chart type.
+# A reader who only skims the title still learns the main result.
+ax.set(
+    title="Group C scores highest on both dimensions",
+    xlabel="Feature score",
+    ylabel="Outcome metric",
+)
+ax.legend(title="Group")
+ax.spines[["top", "right"]].set_visible(False)
+
+fig.savefig("scatter_accessible.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+          </div>
+        </div>
+
+        <h2>Temporal data and the line-chart problem</h2>
+
+        <p>Line charts introduce an extra failure mode: the legend decode problem. When two lines cross on a time-series chart, the reader&rsquo;s eye loses track of which line is which at the intersection and has to navigate back to the legend. If the lines are distinguished only by colour, and if the reader has CVD, re-identification becomes impossible or unreliable. The redundant encoding principle applies: give the reader colour <em>and</em> line style <em>and</em> marker shape, and any single channel can fail while the remaining two still separate every pair of lines.</p>
+
+        <p>Note also the title. A title that describes the chart (&ldquo;monthly sales by product&rdquo;) is an instruction to spend cognitive effort. A title that states the finding (&ldquo;Product C declined throughout 2024; A grew steadily&rdquo;) gives the reader the answer before they engage with the chart, and lets the chart itself serve as evidence. In time-pressured contexts, readers often only read the title. Make it do the work.</p>
+
+        <div class="plot-compare">
+          <div class="plot-compare__panel">
+        <h3>The problem: colour-only line encoding</h3>
+
+        <figure>
+          <img src="img/accessibility-line-bad.png" alt="Line chart of monthly product sales with three lines distinguished only by colour: blue, orange, and green. When the lines cross in mid-year, there is no shape or style difference to help re-identify them." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <p class="figure-note">Colour-only line encoding. When A and B cross in summer, a reader with CVD has no fallback because both lines are the same hue and the legend cannot help.</p>
+        </figure>
+
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+rng = np.random.default_rng(7)
+
+MONTHS   = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+PRODUCTS = ["Product A", "Product B", "Product C"]
+
+# Simulated monthly sales: A rising, B roughly flat, C declining.
+series = [
+    np.linspace(100, 180, 12) + rng.normal(0, 4, 12),
+    np.linspace(130, 128, 12) + rng.normal(0, 4, 12),
+    np.linspace(160,  85, 12) + rng.normal(0, 4, 12),
+]
+
+# Matplotlib tab10 defaults give blue, orange, green.
+# Colour is the only distinguishing channel. When A and B cross around
+# mid-year, a reader with deuteranopia \u2014 or printing in greyscale \u2014
+# has no independent signal to re-identify the lines.
+TAB10 = ["#1f77b4", "#ff7f0e", "#2ca02c"]
+
+fig, ax = plt.subplots(figsize=(6, 4))
+
+for values, color, label in zip(series, TAB10, PRODUCTS):
+    ax.plot(MONTHS, values, color=color, linewidth=2, label=label)
+
+ax.set(
+    title="Monthly sales by product",  # describes the chart, not the finding
+    xlabel="Month",
+    ylabel="Sales (units)",
+)
+ax.legend(title="Product")
+
+fig.savefig("line_problem.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+          </div>
+          <div class="plot-compare__panel">
+        <h3>The fix: colour + line style + markers</h3>
+
+        <figure>
+          <img src="img/accessibility-line-good.png" alt="The same time series with Okabe-Ito colours, distinct line styles (solid, dashed, dash-dot), and markers at every third point. Product A rises on a solid orange line with circles; Product B is flat on a dashed blue line with squares; Product C falls on a dash-dot teal line with triangles." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <p class="figure-note">Three independent channels: colour, line style, and marker shape. Any one of them can be removed and the chart still works. The title states the pattern, so a reader who only skims the title still gets the main finding.</p>
+        </figure>
+
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+rng = np.random.default_rng(7)
+
+MONTHS   = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+PRODUCTS = ["Product A", "Product B", "Product C"]
+
+series = [
+    np.linspace(100, 180, 12) + rng.normal(0, 4, 12),
+    np.linspace(130, 128, 12) + rng.normal(0, 4, 12),
+    np.linspace(160,  85, 12) + rng.normal(0, 4, 12),
+]
+
+# Bundle per-series style into a list of dicts.
+# Adding a fourth product requires only one new entry; the plot loop is unchanged.
+# Three independent channels encode series membership:
+#   colour (Okabe-Ito), line style, and marker shape.
+# Strip any one and the other two still separate every pair of lines.
+STYLES = [
+    {"color": "#E69F00", "linestyle": "-",  "marker": "o"},  # orange, solid, circle
+    {"color": "#56B4E9", "linestyle": "--", "marker": "s"},  # sky-blue, dashed, square
+    {"color": "#009E73", "linestyle": "-.", "marker": "^"},  # teal, dash-dot, triangle
+]
+
+fig, ax = plt.subplots(figsize=(6, 4), layout="constrained")
+
+for values, style, label in zip(series, STYLES, PRODUCTS):
+    ax.plot(
+        MONTHS, values,
+        **style,
+        markevery=3,   # markers at every 3rd point: legible without crowding
+        markersize=7,
+        linewidth=2,
+        label=label,
+    )
+
+ax.set(
+    title="Product C declined throughout the year; A grew steadily",
+    xlabel="Month (2024)",
+    ylabel="Sales (units)",
+)
+ax.legend(title="Product")
+ax.spines[["top", "right"]].set_visible(False)
+
+fig.savefig("line_accessible.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+          </div>
+        </div>
+
+        <h2>The data-ink ratio and cognitive load</h2>
+
+        <p>Tufte coined the term &ldquo;chart junk&rdquo; and the prevailing view in graphical perception still backs him up: removing non-essential visual elements reduces the viewer&rsquo;s cognitive processing cost and leads to faster, more accurate interpretation.<sup><a href="#ref-5" class="cite-ref">[5]</a></sup> There is a real debate about whether some embellishment can aid memorability in casual contexts, but in contexts where data scientists usually deliver results (reports for decision-makers, dashboards under time pressure, and papers for technical readers), the standard favours high data-ink ratios and the removal of decoration.<sup><a href="#ref-3" class="cite-ref">[3]</a></sup></p>
+
+        <p>Cognitive load is also where the accessibility argument and the &ldquo;just make it cleaner&rdquo; argument fully collapse into the same argument. A reader with a CVD is parsing the chart with one fewer channel of information. A reader on a phone is parsing it through a 4-inch screen. A reader skimming is parsing it with a fraction of their attention. Any processing cost that adds no information (a 3D effect, a noisy background, a redundant gridline, or a fourteen-item legend) is a tax on getting to the answer. Strip it out and everyone reads the chart faster.</p>
+
+        <p>One concrete heuristic: every visual element on your chart should be defensible against the question &ldquo;what does this encode?&rdquo; Gridlines encode the scale. Axis labels encode units. Colour can encode category or magnitude. A drop shadow encodes nothing. A 3D extrusion encodes nothing. A logo in the corner of the plot area encodes nothing. If you cannot finish the sentence &ldquo;this element is here because it encodes...&rdquo;, the element should not be there.</p>
+
+        <p>The bar charts below use the same quarterly revenue data. The first accumulates several common forms of chart junk; the second strips them all out.</p>
+
+        <div class="plot-compare">
+          <div class="plot-compare__panel">
+        <h3>The problem: chart junk</h3>
+
+        <figure>
+          <img src="img/accessibility-bar-bad.png" alt="Bar chart of quarterly revenue with four different bar colours, a redundant legend repeating the x-axis labels, a grey background, fake drop shadows, both horizontal and vertical gridlines, and a generic title." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <p class="figure-note">Every bar is a different colour, but category is already encoded on the x-axis, so the colours add nothing. The legend repeats the axis labels. The grey background, drop shadows, and crossed gridlines all cost the reader processing time without encoding any data.</p>
+        </figure>
+
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+
+QUARTERS = ["Q1", "Q2", "Q3", "Q4"]
+REVENUES = [420, 510, 390, 580]
+
+# Four different colours for four bars whose category is already on the x-axis.
+# The colour variation encodes nothing: every bar is still "a quarter".
+# The legend below compounds this by restating what the tick labels already say.
+CHART_JUNK_COLORS = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728"]
+
+fig, ax = plt.subplots(figsize=(6, 4))
+
+ax.bar(QUARTERS, REVENUES, color=CHART_JUNK_COLORS, edgecolor="black", linewidth=1.5)
+
+ax.set_facecolor("#e8e8e8")                                # decorative background
+ax.grid(True, axis="both", linestyle="--", color="white")  # crossed gridlines add noise
+ax.set(
+    title="Sales Data Chart \u2013 2024 Quarterly Revenue Results",
+    xlabel="Quarter",
+    ylabel="Revenue ($k)",
+)
+
+# Legend that duplicates the x-axis: the reader must now parse two
+# representations of the same dimension simultaneously.
+handles = [
+    mpatches.Patch(color=c, label=q)
+    for c, q in zip(CHART_JUNK_COLORS, QUARTERS)
+]
+ax.legend(handles=handles, title="Quarter")
+
+fig.savefig("bar_problem.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+          </div>
+          <div class="plot-compare__panel">
+        <h3>The fix: high data-ink ratio</h3>
+
+        <figure>
+          <img src="img/accessibility-bar-good.png" alt="The same quarterly revenue data as a clean bar chart. All bars are a single shade of blue, axis labels are clear, gridlines are subtle and horizontal only, and the title reads: Q4 revenue reached its highest point of 2024." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <p class="figure-note">One colour (the x-axis already encodes category), no legend, subtle horizontal gridlines only, and a title that states the takeaway. Every remaining element earns its pixels.</p>
+        </figure>
+
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+
+QUARTERS = ["Q1", "Q2", "Q3", "Q4"]
+REVENUES = [420, 510, 390, 580]
+
+# Okabe-Ito blue. One colour for the whole series:
+# category is already on the x-axis, so a second colour channel adds noise.
+BAR_COLOR = "#0072B2"
+
+fig, ax = plt.subplots(figsize=(6, 4), layout="constrained")
+
+ax.bar(QUARTERS, REVENUES, color=BAR_COLOR, width=0.55)
+
+# Horizontal gridlines only, sitting behind the bars.
+# They encode the scale; they earn their pixels.
+ax.yaxis.grid(True, color="#e0e0e0", linewidth=0.8)
+ax.set_axisbelow(True)
+
+ax.set(
+    # Title encodes the finding: the reader has the answer before reading the chart.
+    title="Q4 revenue reached its highest point of 2024",
+    xlabel="Quarter (2024)",
+    ylabel="Revenue ($k)",
+)
+ax.spines[["top", "right"]].set_visible(False)
+
+fig.savefig("bar_accessible.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+          </div>
+        </div>
+
+        <h2>Colour contrast and the WCAG standard</h2>
+
+        <p>The final common failure is contrast. Data scientists routinely use grey text, grey axis labels, or light-coloured title text because it looks clean. It does look clean on a well-calibrated screen in a dark room. It fails on a projector, in daylight, in greyscale print, and for readers with reduced contrast sensitivity, a substantial fraction of any audience over forty and a near-certainty in brightly lit conference rooms.</p>
+
+        <p>WCAG 2.1 specifies a minimum contrast ratio of 4.5:1 for normal-sized text against its background (Level AA). The default grey most people reach for, around <code>#aaaaaa</code> on white, comes in at about 2.3:1. It fails by a factor of two. Getting to 4.5:1 requires something around <code>#767676</code>; getting to 7:1 (Level AAA) requires something around <code>#595959</code> or darker. Near-black on white is the simplest and most universally legible choice.</p>
+
+        <div class="plot-compare">
+          <div class="plot-compare__panel">
+        <h3>The problem: low contrast</h3>
+
+        <figure>
+          <img src="img/accessibility-contrast-bad.png" alt="Bar chart of quarterly revenue with axis labels, tick marks, and title all rendered in light grey (#aaaaaa). The chart is difficult to read in normal lighting and would fail entirely on a projector or in print." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <p class="figure-note">All text is <code>#aaaaaa</code> on white, with approximately a 2.3:1 contrast ratio. This fails WCAG Level AA (4.5:1) and is unreadable on a projector or in bright light.</p>
+        </figure>
+
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+
+QUARTERS = ["Q1", "Q2", "Q3", "Q4"]
+REVENUES = [420, 510, 390, 580]
+
+# #aaaaaa on a white (#ffffff) background.
+# Relative luminance contrast ratio \u2248 2.3:1.
+# WCAG 2.1 Level AA requires 4.5:1 for normal text.
+# This chart looks polished on a calibrated high-DPI screen in a dark room.
+# It fails on a projector, in daylight, in greyscale print, and for anyone
+# with reduced contrast sensitivity -- a substantial fraction of any audience.
+LOW_CONTRAST = "#aaaaaa"
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.bar(QUARTERS, REVENUES, color="#b0c4de", edgecolor="none")
+
+for artist in (ax.title, ax.xaxis.label, ax.yaxis.label):
+    artist.set_color(LOW_CONTRAST)
+ax.tick_params(colors=LOW_CONTRAST)
+
+ax.set(
+    title="Quarterly revenue 2024",
+    xlabel="Quarter (2024)",
+    ylabel="Revenue ($k)",
+)
+ax.spines[["top", "right"]].set_visible(False)
+
+fig.savefig("contrast_problem.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+          </div>
+          <div class="plot-compare__panel">
+        <h3>The fix: WCAG-compliant contrast</h3>
+
+        <figure>
+          <img src="img/accessibility-contrast-good.png" alt="The same quarterly revenue bar chart with all labels and title rendered in near-black (#222222). Text contrast ratio is approximately 10:1 against white, well above the WCAG minimum." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <p class="figure-note">Text in <code>#222222</code> on white: approximately 10:1 contrast ratio. Passes WCAG at every level and remains legible under poor lighting, on a projector, and in greyscale print.</p>
+        </figure>
+
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+
+QUARTERS = ["Q1", "Q2", "Q3", "Q4"]
+REVENUES = [420, 510, 390, 580]
+
+# #222222 on white (#ffffff).
+# Relative luminance contrast ratio ≈ 10.4:1.
+# Passes WCAG 2.1 Level AA (requires 4.5:1) and Level AAA (requires 7:1)
+# for normal-sized text. Survives projectors, daylight, greyscale print,
+# and low-brightness laptop screens without any special handling.
+HIGH_CONTRAST = "#222222"
+
+fig, ax = plt.subplots(figsize=(6, 4), layout="constrained")
+ax.bar(QUARTERS, REVENUES, color="#0072B2", edgecolor="none", width=0.55)
+
+ax.yaxis.grid(True, color="#e0e0e0", linewidth=0.8)
+ax.set_axisbelow(True)
+
+for artist in (ax.title, ax.xaxis.label, ax.yaxis.label):
+    artist.set_color(HIGH_CONTRAST)
+ax.tick_params(colors=HIGH_CONTRAST)
+
+ax.set(
+    title="Q4 revenue reached its highest point of 2024",
+    xlabel="Quarter (2024)",
+    ylabel="Revenue ($k)",
+)
+ax.spines[["top", "right"]].set_visible(False)
+
+fig.savefig("contrast_accessible.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+          </div>
+        </div>
+
+        <h2>Screen readers, alt text, and the visual gatekeeper problem</h2>
+
+        <p>The next big failure mode is treating a chart as a flat image. A PNG of a bar chart, embedded in a web page or a PDF, contains zero machine-readable information about the data. A screen reader announces &ldquo;image&rdquo; and moves on. A search engine can&rsquo;t index it. A reader on a slow connection sees nothing. A reader with a visual impairment is locked out entirely.</p>
+
+        <p>The accessible version of the same chart usually contains three things:</p>
+
+        <ul>
+          <li><strong>A meaningful alt text</strong> that states what the chart shows and what the takeaway is. Not &ldquo;Figure 3&rdquo; and not &ldquo;bar chart of revenue.&rdquo; Something like: &ldquo;Quarterly revenue by region, 2022&ndash;2025. EMEA grew steadily; APAC fell sharply in Q3 2024 and has not recovered.&rdquo;</li>
+          <li><strong>Structured data.</strong> A linked CSV, a properly marked-up HTML table, or an SVG with embedded data attributes. The chart is one rendering of the data; the data is the source of truth. Anyone who cannot see the chart can still use the data.</li>
+          <li><strong>A title that encodes the takeaway,</strong> not the chart type. &ldquo;Q3 2024 revenue fell sharply in APAC&rdquo; is both a title and a fallback for every reader who cannot process the visual. &ldquo;Revenue by region and quarter&rdquo; is a label.</li>
+        </ul>
+
+        <p>The visual gatekeeper problem is what happens when none of these are in place: the chart becomes a toll booth. Anyone who cannot pay with functional colour vision, a large screen, a fast connection, or no visual impairment cannot get through. The decision the chart was meant to inform proceeds without them. At scale, in dashboards used daily by organisations, papers cited widely, and slide decks that shape policy, this exclusion is not a minor UX inconvenience. It is a structural bias in who gets to participate in the conversation the data is supposed to enable.</p>
+
+        <h2>Beyond the basics: chart-type-specific pitfalls</h2>
+
+        <p>The earlier examples cover the universal traps: colour as the sole differentiator, low contrast, image-only rendering, and tooltip-only data. Each chart type adds its own failure modes. The cases below are the ones that come up most often in data science work.</p>
+
+        <h3>1. Data tables</h3>
+
+        <p>Tables are often pitched as the accessible fallback to a chart, but only if they are built as tables, not as visual approximations. The most common failure is using merged cells to imply hierarchy. Screen readers navigate linearly, announcing one header per cell. A merged top-level header breaks the row/column relationship and loses the reader's context. The fix: flatten the hierarchy so every data cell maps to exactly one column and one row header, put units in headers (not cells), and use zebra striping to help sighted readers track across rows without compromising contrast.</p>
+
+        <figure class="plot-wide">
+          <table style="width:100%; border-collapse:collapse; font-size:14px; margin: 16px 0;">
+            <caption style="text-align:left; font-weight:600; padding-bottom:8px;">Mortgage approval rate by region and quarter (2024)</caption>
+            <thead>
+              <tr style="background:#222222; color:#ffffff;">
+                <th scope="col" style="padding:8px 12px; text-align:left;">Region</th>
+                <th scope="col" style="padding:8px 12px; text-align:right;">Q1 approval rate (%)</th>
+                <th scope="col" style="padding:8px 12px; text-align:right;">Q2 approval rate (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row" style="padding:8px 12px; text-align:left;">EMEA</th><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">68.4</td><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">71.2</td></tr>
+              <tr style="background:#f5f5f5;"><th scope="row" style="padding:8px 12px; text-align:left;">APAC</th><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">55.1</td><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">52.7</td></tr>
+              <tr><th scope="row" style="padding:8px 12px; text-align:left;">Americas</th><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">63.9</td><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">66.0</td></tr>
+            </tbody>
+          </table>
+          <p class="figure-note">Flat headers, units in the column header, <code>scope</code> attributes on every <code>&lt;th&gt;</code>, decimal alignment via <code>tabular-nums</code>, and zebra striping at WCAG-compliant contrast.</p>
+        </figure>
+
+<details class="code-example"><summary>HTML example</summary>
+<pre><code class="language-html">&lt;table&gt;
+  &lt;caption&gt;Mortgage approval rate by region and quarter (2024)&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;!-- Units live in the header, not in every cell. --&gt;
+      &lt;th scope="col"&gt;Region&lt;/th&gt;
+      &lt;th scope="col"&gt;Q1 approval rate (%)&lt;/th&gt;
+      &lt;th scope="col"&gt;Q2 approval rate (%)&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;!-- scope="row" lets the screen reader announce
+           "EMEA, Q1 approval rate, 68.4" instead of just "68.4". --&gt;
+      &lt;th scope="row"&gt;EMEA&lt;/th&gt;
+      &lt;td&gt;68.4&lt;/td&gt;&lt;td&gt;71.2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th scope="row"&gt;APAC&lt;/th&gt;
+      &lt;td&gt;55.1&lt;/td&gt;&lt;td&gt;52.7&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th scope="row"&gt;Americas&lt;/th&gt;
+      &lt;td&gt;63.9&lt;/td&gt;&lt;td&gt;66.0&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;style&gt;
+  /* Tabular numerals align on the decimal without monospace fonts. */
+  td { font-variant-numeric: tabular-nums; text-align: right; }
+  /* Zebra striping at high contrast helps sighted scanning;
+     #f5f5f5 on white still passes WCAG for any text laid on it. */
+  tbody tr:nth-child(even) { background: #f5f5f5; }
+&lt;/style&gt;
+</code></pre>
+</details>
+
+        <h3>2. Bubble charts</h3>
+
+        <p>Humans estimate area poorly. Perception of bubble size scales sub-linearly with actual area: a bubble worth four times the value typically appears roughly twice as large. Overlaps compound this: small bubbles vanish behind larger ones, and hover tooltips lock out keyboard and motor-impaired users. The accessible version caps bubble count around 15, strokes every bubble with a high-contrast outline so boundaries remain visible through overlaps, and labels critical points directly on the canvas.</p>
+
+        <figure class="plot-wide">
+          <img src="img/accessibility-bubble-good.png" alt="Bubble chart of portfolio risk with fifteen semi-transparent sky-blue circles outlined in dark grey. Holdings 4, 9, and 15 are the three largest and have permanent text labels with leader lines. Title: Three holdings dominate portfolio risk." loading="lazy" style="width:100%; border-radius:8px; max-width:760px;">
+          <p class="figure-note">Fifteen bubbles, semi-transparent fill with a high-contrast stroke so every boundary is visible through overlaps, and direct labels on the three largest holdings. The title encodes the takeaway.</p>
+        </figure>
+
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+rng = np.random.default_rng(11)
+
+N = 15
+returns    = rng.uniform(0.5, 9.5, N)   # x: expected return (%)
+volatility = rng.uniform(0.5, 9.5, N)   # y: volatility (sigma %)
+capital    = rng.uniform(120, 1800, N)  # bubble area: capital allocated
+
+# Cap N around 15-20. Beyond that, area perception breaks down and overlap
+# resolution stops working even with strokes. If you have 200 points,
+# a bubble chart is the wrong chart.
+TOP_K = 3
+top_idx = np.argsort(capital)[-TOP_K:]
+
+INK   = "#222222"   # WCAG AAA stroke and label colour
+FILL  = "#56B4E9"   # Okabe-Ito sky blue
+ALPHA = 0.35        # low fill alpha so overlaps are visible
+
+fig, ax = plt.subplots(figsize=(7, 4.6), layout="constrained")
+
+# Stroke is the load-bearing channel here:
+# fills overlap and merge, but a 1.4pt dark outline never disappears.
+ax.scatter(
+    returns, volatility, s=capital,
+    facecolor=FILL, alpha=ALPHA,
+    edgecolor=INK, linewidth=1.4,
+)
+
+# Direct labels for the points that carry the takeaway.
+# Tooltip-only labelling locks out keyboard, screen reader, and print users.
+for i in top_idx:
+    ax.annotate(
+        f"Holding {i + 1}",
+        xy=(returns[i], volatility[i]),
+        xytext=(returns[i] + 0.6, volatility[i] + 0.9),
+        fontsize=10, fontweight="bold", color=INK,
+        arrowprops=dict(arrowstyle="-", color=INK, lw=0.8),
+    )
+
+ax.set(
+    title="Three holdings dominate portfolio risk",
+    xlabel="Expected return (%)",
+    ylabel="Volatility (\u03c3, %)",
+    xlim=(0, 11), ylim=(0, 11),
+)
+ax.spines[["top", "right"]].set_visible(False)
+ax.grid(True, color="#e0e0e0", linewidth=0.7)
+ax.set_axisbelow(True)
+
+fig.savefig("bubble_accessible.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+
+        <h3>3. Venn diagrams</h3>
+
+        <p>The standard Venn relies on overlapping translucent fills, and overlaps create new colours that fail two ways. The new hue often falls below WCAG contrast for any text laid on it, and CVD readers see overlaps as one of the source colours rather than a distinct third. The accessible version drops fill colour entirely, encodes set membership with distinct stroke styles (solid, dashed, dotted), and places every numeric label on a white background so strokes behind it never compromise legibility.</p>
+
+        <figure class="plot-wide">
+          <img src="img/accessibility-venn-good.png" alt="Three-set Venn diagram showing customer segment overlap. The Email subscribers circle has a solid black outline, Mobile app users has a dashed outline, and Loyalty members has a dotted outline. Each region is labelled with a count in thousands, and every number sits in a white rounded rectangle." loading="lazy" style="width:100%; border-radius:8px; max-width:680px;">
+          <p class="figure-note">No fill colours. Set membership is encoded entirely by stroke style, and each numeric label sits on a white background so the strokes behind it never compromise legibility.</p>
+        </figure>
+
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+from matplotlib_venn import venn3, venn3_circles
+
+# (A_only, B_only, A_and_B, C_only, A_and_C, B_and_C, A_and_B_and_C)
+SUBSETS = (120, 95, 35, 80, 25, 40, 30)
+LABELS  = ("Email\nsubscribers", "Mobile\napp users", "Loyalty\nmembers")
+
+INK = "#222222"   # WCAG AAA on white
+
+fig, ax = plt.subplots(figsize=(6.8, 4.6), layout="constrained")
+
+v = venn3(subsets=SUBSETS, set_labels=LABELS, ax=ax)
+
+# Strip every fill: overlap colours create new hues that fail contrast
+# checks and confuse CVD readers. The diagram is reconstructed below
+# from strokes alone.
+for region_id in ("100", "010", "110", "001", "101", "011", "111"):
+    patch = v.get_patch_by_id(region_id)
+    if patch is not None:
+        patch.set_alpha(0)
+
+# Three independent stroke styles. Any single channel could fail
+# (greyscale, low resolution, low contrast) and the other two would
+# still distinguish the sets.
+STROKE_STYLES = [(INK, "solid"), (INK, "dashed"), (INK, "dotted")]
+for circle, (color, style) in zip(
+    venn3_circles(subsets=SUBSETS, ax=ax, linewidth=2.0),
+    STROKE_STYLES,
+):
+    circle.set_edgecolor(color)
+    circle.set_linestyle(style)
+
+# Numeric labels float on a solid white pill so overlapping strokes
+# behind them never reduce contrast below WCAG.
+LABEL_BBOX = dict(
+    facecolor="white", edgecolor="none",
+    boxstyle="round,pad=0.18", alpha=0.95,
+)
+for region_id in ("100", "010", "110", "001", "101", "011", "111"):
+    label = v.get_label_by_id(region_id)
+    if label is not None:
+        label.set_fontsize(11)
+        label.set_fontweight("bold")
+        label.set_color(INK)
+        label.set_bbox(LABEL_BBOX)
+
+ax.set_title("Customer segment overlap (counts in thousands)")
+fig.savefig("venn_accessible.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+
+        <h3>4. Box plots vs violin plots</h3>
+
+        <p>Box plots compress a distribution to five summary statistics, and that compression is lossy in a way most readers do not realise: a strongly bimodal distribution and a unimodal distribution with the same quartiles produce identical box plots. Violin plots show the kernel density estimate directly, which means the reader does not have to know what an interquartile range is to see that the data has two peaks. For non-statistician audiences, including product managers, clinicians, and executives, the violin plot consistently beats the box plot on speed and accuracy of interpretation because shape is a more readable encoding than abstract summary statistics.</p>
+
+        <figure class="plot-wide">
+          <img src="img/accessibility-distribution-good.png" alt="Two side-by-side panels showing the same processing-time data for Teams A, B, and C. The left panel is a box plot in which all three teams have similar boxes and whiskers. The right panel is a violin plot of the same data: Team A is a single peak around 15 days, Team B has two clear peaks at roughly 9 and 22 days, and Team C is right-skewed with a long upper tail." loading="lazy" style="width:100%; border-radius:8px; max-width:900px;">
+          <p class="figure-note">Identical underlying data. Team B&rsquo;s bimodality, which reflects two distinct processing pathways, is invisible in the box plot and clear in the violin plot.</p>
+        </figure>
+
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+rng = np.random.default_rng(3)
+
+# Three teams with deliberately different shapes:
+# A: tight unimodal -- the case box plots represent honestly.
+# B: bimodal at ~9 and ~22 days -- the case box plots hide.
+# C: right-skewed -- the case box plots represent partially.
+team_a = rng.normal(15.0, 2.0, 220)
+team_b = np.concatenate([
+    rng.normal( 9.0, 1.5, 110),
+    rng.normal(22.0, 2.0, 110),
+])
+team_c = 10 + rng.exponential(4.0, 220)
+
+DATA   = [team_a, team_b, team_c]
+LABELS = ["Team A", "Team B", "Team C"]
+
+INK     = "#222222"
+OI_SKY  = "#56B4E9"
+OI_BLUE = "#0072B2"
+GRID    = "#e0e0e0"
+
+fig, axes = plt.subplots(1, 2, figsize=(10, 4.6),
+                         layout="constrained", sharey=True)
+
+# Box plot: shows quartiles only. Bimodality of Team B is invisible
+# because medians and IQRs match a unimodal distribution.
+axes[0].boxplot(
+    DATA, tick_labels=LABELS, patch_artist=True,
+    boxprops=dict(facecolor=OI_SKY, edgecolor=INK, linewidth=1.2),
+    medianprops=dict(color=INK, linewidth=2),
+    whiskerprops=dict(color=INK), capprops=dict(color=INK),
+    flierprops=dict(markeredgecolor=INK, marker="o", markersize=4),
+)
+axes[0].set_title("Box plot: hides distribution shape", pad=10)
+axes[0].set_ylabel("Processing time (days)")
+
+# Violin plot: density encoded directly. A non-statistician can read
+# shape without knowing what an IQR is.
+parts = axes[1].violinplot(DATA, showmedians=False, showextrema=False)
+for body in parts["bodies"]:
+    body.set_facecolor(OI_BLUE)
+    body.set_edgecolor(INK)
+    body.set_alpha(0.85)
+    body.set_linewidth(1.2)
+
+# White-on-dark median markers: high contrast, large enough at slide size.
+medians = [np.median(d) for d in DATA]
+axes[1].scatter(
+    np.arange(1, len(DATA) + 1), medians,
+    s=70, color="white", edgecolor=INK, linewidth=1.4, zorder=3,
+)
+axes[1].set_xticks(np.arange(1, len(DATA) + 1))
+axes[1].set_xticklabels(LABELS)
+axes[1].set_title("Violin plot: shape is visible", pad=10)
+
+for ax in axes:
+    ax.spines[["top", "right"]].set_visible(False)
+    ax.yaxis.grid(True, color=GRID, linewidth=0.7)
+    ax.set_axisbelow(True)
+
+fig.suptitle("Team B's bimodal distribution is invisible in a box plot",
+             fontsize=12.5, y=1.05)
+
+fig.savefig("distribution_accessible.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+
+        <h3>5. Radar (spider) charts</h3>
+
+        <p>Radar charts are inherently fragile. The perceived area of the polygon depends on the arbitrary ordering of the axes, and overlaying more than two shapes produces an illegible tangle that breaks both colour and shape encoding. Small multiples or parallel coordinates almost always communicate the same comparison more clearly. Use a radar chart only when the question truly demands it (typically: two entities, five to seven comparable metrics). Keep it to two polygons, encode each with a distinct line style, and leave the second polygon unfilled.</p>
+
+        <figure class="plot-wide">
+          <img src="img/accessibility-radar-good.png" alt="Radar chart comparing two optimisation algorithms across five metrics: convergence speed, solution quality, robustness, memory use, and wall time. Algorithm A is shown as a solid blue line with circular markers and a light blue fill at ten percent opacity. Algorithm B is shown as a thick dashed orange line with square markers and no fill. Title states: Algorithm A wins on robustness; B wins on speed and memory." loading="lazy" style="width:100%; border-radius:8px; max-width:720px;">
+          <p class="figure-note">Two algorithms, five metrics, two independent encodings (colour and line style). Algorithm B&rsquo;s polygon is unfilled so it never obscures Algorithm A&rsquo;s shape.</p>
+        </figure>
+
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+METRICS = ["Convergence\nspeed", "Solution\nquality", "Robustness",
+           "Memory\nuse", "Wall\ntime"]
+ALG_A = [0.85, 0.78, 0.92, 0.55, 0.70]
+ALG_B = [0.60, 0.88, 0.65, 0.80, 0.90]
+
+# Close the polygon by repeating the first point at the end.
+def _closed(values):
+    return values + values[:1]
+
+n = len(METRICS)
+angles = np.linspace(0, 2 * np.pi, n, endpoint=False).tolist()
+angles_closed = angles + angles[:1]
+
+INK     = "#222222"
+GRID    = "#e0e0e0"
+OI_BLUE = "#0072B2"
+OI_VERM = "#D55E00"
+
+fig, ax = plt.subplots(figsize=(6.6, 5.4),
+                       subplot_kw=dict(polar=True),
+                       layout="constrained")
+
+# Algorithm A: solid line + light fill establishes a baseline shape.
+ax.plot(angles_closed, _closed(ALG_A),
+        color=OI_BLUE, linewidth=2.2, linestyle="-",
+        marker="o", markersize=6, label="Algorithm A")
+ax.fill(angles_closed, _closed(ALG_A), color=OI_BLUE, alpha=0.10)
+
+# Algorithm B: dashed line, no fill -- prevents A's shape from being
+# obscured, which is the most common failure mode of overlaid radars.
+ax.plot(angles_closed, _closed(ALG_B),
+        color=OI_VERM, linewidth=2.2, linestyle="--",
+        marker="s", markersize=6, label="Algorithm B")
+
+ax.set_xticks(angles)
+ax.set_xticklabels(METRICS, fontsize=10)
+ax.set_yticks([0.25, 0.5, 0.75, 1.0])
+ax.set_yticklabels(["0.25", "0.50", "0.75", "1.00"],
+                   fontsize=9, color="#767676")
+ax.set_ylim(0, 1.0)
+ax.tick_params(pad=10)
+ax.spines["polar"].set_color(GRID)
+ax.grid(color=GRID, linewidth=0.7)
+
+ax.set_title("Algorithm A wins on robustness; B wins on speed and memory",
+             pad=22)
+ax.legend(loc="upper right", bbox_to_anchor=(1.28, 1.10), frameon=False)
+
+fig.savefig("radar_accessible.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+
+        <h3>6. Tree diagrams and hierarchies</h3>
+
+        <p>A tree drawn as a flat image is invisible to screen readers and unusable for keyboard navigation. Hierarchy is semantically rich, and rendering it as pixels erases all that structure. Two things rescue a tree. First, the visual: high-contrast boxes and edges, branch labels on opaque backgrounds so they survive crossing lines, and progressive disclosure for subtrees too large for one screen. Second (non-negotiably): an exposed semantic equivalent as a nested HTML list with the same structure, which screen readers can navigate and keyboard users can traverse.</p>
+
+        <figure class="plot-wide">
+          <img src="img/accessibility-tree-good.png" alt="Decision tree for risk classification. The root asks Credit score greater than or equal to 700. Yes branches to Income greater than or equal to fifty thousand pounds, which yields Low risk on yes and Medium risk on no. No branches to Debt ratio less than 0.4, which yields Medium risk on yes and High risk on no." loading="lazy" style="width:100%; border-radius:8px; max-width:880px;">
+          <p class="figure-note">High-contrast nodes, edge labels on opaque backgrounds, and leaf node meaning carried by text, not by colour alone. The semantic equivalent below is what a screen reader navigates.</p>
+        </figure>
+
+<details class="code-example"><summary>Accessible semantic equivalent (HTML)</summary>
+<pre><code class="language-html">&lt;!--
+  The visual tree is decorative. The list below is the source of truth
+  for screen readers and keyboard users: native semantics, native
+  navigation, no ARIA gymnastics required.
+--&gt;
+&lt;nav aria-label="Risk classification decision tree"&gt;
+  &lt;ul&gt;
+    &lt;li&gt;
+      Credit score &amp;ge; 700?
+      &lt;ul&gt;
+        &lt;li&gt;Yes &amp;rarr; Income &amp;ge; &amp;pound;50k?
+          &lt;ul&gt;
+            &lt;li&gt;Yes &amp;rarr; &lt;strong&gt;Low risk&lt;/strong&gt;&lt;/li&gt;
+            &lt;li&gt;No &amp;rarr; &lt;strong&gt;Medium risk&lt;/strong&gt;&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/li&gt;
+        &lt;li&gt;No &amp;rarr; Debt ratio &amp;lt; 0.4?
+          &lt;ul&gt;
+            &lt;li&gt;Yes &amp;rarr; &lt;strong&gt;Medium risk&lt;/strong&gt;&lt;/li&gt;
+            &lt;li&gt;No &amp;rarr; &lt;strong&gt;High risk&lt;/strong&gt;&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+</code></pre>
+</details>
+
+        <h3>7. Fitness landscapes and 3D surfaces</h3>
+
+        <p>Three-dimensional surface plots, used when visualising objective functions in metaheuristics or evolutionary algorithms, fail in two ways. They almost always encode elevation with a continuous colour gradient (jet, hsv, or matplotlib's old default) that is not perceptually uniform and not CVD-safe, making relative peak heights ambiguous. Static perspective also occludes peaks behind foreground features. The accessible version uses a perceptually uniform colourmap engineered for every form of CVD (cividis), overlays contour lines so geometry is encoded by line position as well as colour, and annotates the global optimum in text so the takeaway survives rendering failures.</p>
+
+        <figure class="plot-wide">
+          <img src="img/accessibility-fitness-good.png" alt="Three-dimensional surface plot of a multimodal fitness landscape using the cividis colourmap (dark blue to bright yellow). Black contour lines are overlaid on the surface and projected onto the floor of the axes. The global optimum is marked with an orange dot and an annotation reading: Global optimum at coordinates (1.39, 1.01) with fitness 3.20." loading="lazy" style="width:100%; border-radius:8px; max-width:880px;">
+          <p class="figure-note">Cividis colourmap, black isoclines on the surface and floor, and a text annotation stating the global optimum coordinates. A reader who reads only the title and annotation already has the answer.</p>
+        </figure>
+
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.mplot3d import Axes3D  # noqa: F401  (registers 3d projection)
+
+# A multimodal fitness landscape: one global optimum and three local optima.
+# This is the canonical kind of surface for evolutionary computation work.
+GRID = np.linspace(-3.5, 3.5, 220)
+X, Y = np.meshgrid(GRID, GRID)
+Z = (
+    3.2 * np.exp(-((X - 1.4) ** 2 + (Y - 1.0) ** 2) / 0.6)
+    + 2.1 * np.exp(-((X + 1.6) ** 2 + (Y - 1.2) ** 2) / 0.8)
+    + 1.4 * np.exp(-((X - 0.5) ** 2 + (Y + 1.8) ** 2) / 0.5)
+    + 0.6 * np.exp(-((X + 2.0) ** 2 + (Y + 1.5) ** 2) / 0.4)
+)
+
+# Locate the global optimum in data space so we can report it in text.
+# Visual readers see the peak; text-only readers get the same answer.
+gi, gj = np.unravel_index(np.argmax(Z), Z.shape)
+gx, gy, gz = X[gi, gj], Y[gi, gj], Z[gi, gj]
+
+INK     = "#222222"
+OI_VERM = "#D55E00"
+
+fig = plt.figure(figsize=(8.8, 5.2), layout="constrained")
+ax = fig.add_subplot(111, projection="3d")
+
+# Cividis: perceptually uniform and engineered for every common form of CVD.
+# Maps identically when converted to greyscale -- safe for print.
+surf = ax.plot_surface(
+    X, Y, Z, cmap="cividis",
+    rstride=2, cstride=2,
+    linewidth=0, antialiased=True, alpha=0.92,
+)
+
+# Floor projection: contour lines encode elevation as line geometry,
+# independent of the colourmap.
+ax.contour(X, Y, Z, levels=10, zdir="z", offset=Z.min() - 0.2,
+           colors=INK, linewidths=0.8)
+# Isoclines on the surface itself give the eye a contour map even when
+# a projector desaturates the colourmap.
+ax.contour(X, Y, Z, levels=8, colors=INK, linewidths=0.6, alpha=0.5)
+
+# Mark and *label* the global optimum. Never make the reader infer the
+# main result from the colourmap alone.
+ax.scatter([gx], [gy], [gz], color=OI_VERM, s=80,
+           edgecolor=INK, linewidth=1.2, zorder=10)
+ax.text(gx, gy, gz + 0.35,
+        f"Global optimum\n({gx:.2f}, {gy:.2f}) \u2192 {gz:.2f}",
+        color=INK, fontsize=10, fontweight="bold", ha="center")
+
+ax.set_xlabel("Parameter x")
+ax.set_ylabel("Parameter y")
+ax.set_zlabel("Fitness")
+ax.set_title("Multimodal fitness landscape with overlaid isoclines")
+ax.view_init(elev=32, azim=-58)
+
+cbar = fig.colorbar(surf, ax=ax, shrink=0.65, pad=0.08)
+cbar.set_label("Fitness")
+
+fig.savefig("fitness_accessible.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+
+        <h2>Dashboards and the failure of the data wall</h2>
+
+        <p>Dashboards are where these failures compound. A single bad chart is a missed opportunity. A dashboard of fifteen bad charts is an organisational problem.</p>
+
+        <p>The point of a dashboard is glanceable, holistic situational awareness in a time-pressured context: the user opens it, gets the bigger picture in seconds, and drills down only where something looks off. The literature on dashboards in time-critical settings is consistent that this only works when cognitive load is minimised; if the layout, encodings, or density force the user to think hard about <em>how to read the dashboard</em>, the dashboard has failed its primary purpose.<sup><a href="#ref-4" class="cite-ref">[4]</a></sup></p>
+
+        <p>The corporate failure mode is well-known: every team adds the chart they care about, nothing gets removed, the dashboard becomes a wall, and the wall is unreadable. The accessibility-first version forces a different question at each addition: <em>can the intended user, in the intended condition, get the intended insight in the intended time?</em> If not, the chart does not earn its place. The dashboard should optimise for reading speed, not for completeness of representation.</p>
+
+        <p>The same logic applies to tables. A table is a dashboard with one type of glyph. The accessible table is sortable, has proper <code>&lt;th&gt;</code> headers, has scope attributes so screen readers can announce row and column context, has units in the headers (not implied), uses consistent number formatting, and aligns numerals on the decimal point. A table that breaks any of these is one that takes longer to read and that locks out screen-reader users entirely. Most of the &ldquo;tables&rdquo; in corporate dashboards are screenshots of spreadsheets pasted into Confluence, which means they are inaccessible by construction.</p>
+
+        <h2>Where data science papers and slides go wrong</h2>
+
+        <p>Academic papers and conference slides have their own characteristic failures. Some are the same as the corporate ones, some are specific to the medium.</p>
+
+        <p>The commonest paper failure is font size. The standard figure workflow embeds a plot at 6&times;4 inches at 150 dpi, the axis labels look fine in the source notebook, and then the figure is scaled down to fit a two-column layout or a slide. The text that was 10pt in the notebook is now 6pt in print. Reviewers have complained about this in every journal for forty years and it has not stopped happening because the person making the figure is not the person trying to read it at arm&rsquo;s length in a conference room.</p>
+
+        <p>The commonest slide failure is information density. Slides prepared as reference documents, meant to be read rather than presented, get shown on a projector to a room of people who have thirty seconds to understand each one. The accessible version is not a simplified version; it is a version designed for the actual context of use, which means one message per slide, large text, and a figure that can be decoded without a legend.</p>
+
+        <p>None of these are exotic. They are the things experienced reviewers complain about in every other paper they read, and the things audiences notice in every other talk. They persist because we treat the figure as an artefact of the analysis instead of as a piece of communication that has its own production standards.</p>
+
+        <h2>A practical accessibility-first checklist</h2>
+
+        <p>If you want a working version of this, here is the checklist I run my own outputs through. It takes about five minutes per figure and it has caught a lot of mistakes.</p>
+
+        <ul>
+          <li><strong>Print it greyscale (or simulate it).</strong> If the chart breaks, your encoding relies on colour alone. Add shape, line type, or hatching.</li>
+          <li><strong>Run it through a CVD simulator.</strong> Most modern tools have one built in. If two categories collapse into the same hue under deuteranopia, the palette is wrong.</li>
+          <li><strong>Check contrast.</strong> Axis labels and legend text against background should clear WCAG 4.5:1 for normal text and 3:1 for graphical objects. Greys on white frequently fail.</li>
+          <li><strong>Set a font floor.</strong> No label below 9pt at the rendered size, ever. For slides, no label below the equivalent of 18pt at projected size. If the chart has so much information it doesn&rsquo;t fit, the chart has too much information.</li>
+          <li><strong>Write alt text that contains the takeaway.</strong> The alt text should make sense to a reader who never sees the image. &ldquo;Sales by quarter, with Q3 2024 sharply lower than Q1&ndash;Q2&rdquo; is alt text. &ldquo;Sales chart&rdquo; is not.</li>
+          <li><strong>Provide the data.</strong> A linked CSV, a properly marked-up HTML table, or an SVG with a data attribute. The chart is one rendering; the data is the source of truth.</li>
+          <li><strong>Strip non-encoding elements.</strong> Drop shadows, 3D effects, gradient fills, decorative backgrounds, and redundant gridlines all go. If you cannot say what the element encodes, it does not earn its pixels.</li>
+          <li><strong>Title with the takeaway.</strong> &ldquo;Q3 2024 sales fell 18% in APAC&rdquo; is a title. &ldquo;Sales by region and quarter&rdquo; is a description.</li>
+          <li><strong>Test the rendered context.</strong> The thumbnail. The greyscale print. The phone screen. The dark-mode dashboard. The projected slide. If the chart fails any of them, it is a chart for a single condition, not a finished output.</li>
+        </ul>
+
+        <h2>Why this is product design, not box-ticking</h2>
+
+        <p>The reason I want to call this product design rather than &ldquo;accessibility compliance&rdquo; is that compliance language frames the work as a cost: a tax on shipping, paid grudgingly, audited late. Product design language frames it as the actual job: deliver value to your users, in the conditions in which they actually consume your output, accounting for who they are.</p>
+
+        <p>Once you take the product framing seriously, accessibility stops being a separate stream. It becomes the same conversation as &ldquo;what does the user need to see in five seconds?&rdquo; and &ldquo;what is the one thing this chart is trying to say?&rdquo; and &ldquo;does the dashboard answer the question the user actually has?&rdquo; Those are good questions to ask about any data output, regardless of whether anyone in the audience uses a screen reader. They get asked more often when accessibility is the constraint.</p>
+
+        <p>I would also push back, gently, on the framing that any of this is in tension with rigour. The most rigorous figures I have seen in academic papers are also, almost always, the most accessible: clean encodings, redundant channels, large readable labels, captions that include the takeaway, and underlying data available in a supplement. The figures that look slick but communicate poorly tend to be the ones with the weakest underlying analysis. Accessibility and rigour are not competing virtues. They are the same virtue, applied to different parts of the pipeline.</p>
+
+        <p>The work data scientists produce gets used to make decisions, sometimes large ones. Anyone in the audience who cannot decode the chart is being decided about without being able to push back. That is the part that turns this from a craft argument into an ethical one. If your output is the basis for a budget, a hiring choice, a policy, or a clinical decision, every reader who is locked out of the chart is locked out of the conversation. Accessibility-first design is, among other things, the discipline of not doing that to your audience.</p>
+
+        <div class="faq-section">
+          <h2>Common questions</h2>
+
+          <details class="faq-item">
+            <summary>Isn&rsquo;t this just &ldquo;make charts simpler&rdquo;?</summary>
+            <p>Mostly, yes. The interesting bit is that &ldquo;simpler&rdquo; tends to be argued from taste, and taste arguments are easy to ignore. Accessibility gives you a non-taste reason that&rsquo;s harder to wave away: a measurable fraction of your audience cannot read the chart you just shipped. That tends to move the conversation faster than &ldquo;Tufte would not approve.&rdquo;</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>What about colour palettes: is Viridis enough?</summary>
+            <p>Viridis (and Cividis, Plasma, Inferno) is colour-blind-safe and prints reasonably in greyscale, so it&rsquo;s a strong default for sequential data. For categorical data, the Okabe&ndash;Ito 8-colour palette is the standard CVD-safe choice. ColorBrewer is the canonical reference and lets you pick palettes by data type and accessibility constraint. None of these substitute for redundant coding when you have more than a few categories.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Do interactive dashboards solve the access problem by themselves?</summary>
+            <p>No. Interactivity helps sighted users explore, but it can make screen-reader access worse, not better, because the underlying chart is often a canvas with no semantic content. The fix is the same: structured SVG, ARIA roles, proper tab order, keyboard navigation, and an exposed data table. Interactivity is a feature you add on top of an accessible base, not a substitute for one.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>How do I write good alt text for a chart?</summary>
+            <p>Three sentences at most. One says what the chart is (&ldquo;Line chart of monthly active users by platform, January 2023 to April 2026&rdquo;). One states the main pattern (&ldquo;iOS rose steadily; Android plateaued in mid-2024; Web fell after Q3 2025&rdquo;). One, optional, gives context if the takeaway needs it (&ldquo;Web decline coincides with the redesign rollout&rdquo;). Don&rsquo;t describe pixels; describe what the reader is supposed to learn.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>What about data-table accessibility specifically?</summary>
+            <p>Use real <code>&lt;th&gt;</code> headers, not bolded <code>&lt;td&gt;</code>. Set <code>scope=&quot;col&quot;</code> and <code>scope=&quot;row&quot;</code>. Put units in the headers, not in every cell. Align numbers on the decimal. Use consistent precision. If the table is sortable or filterable, make sure the controls are keyboard-accessible. Most spreadsheet exports fail half of these out of the box, which is why &ldquo;just paste the spreadsheet&rdquo; is the wrong answer.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Doesn&rsquo;t this take longer?</summary>
+            <p>Slightly, the first few times, then no. Once you have a default palette, a default chart template with sensible font sizes and grid styling, a habit of writing the takeaway as the title, and a snippet for alt text, the accessible version of the chart is the same effort as the inaccessible one. The cost is the habit change, not the per-chart work.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Where does this fit into your other writing?</summary>
+            <p>It sits next to the <a href="no-idea-no-problem-data-science-portfolio.html">portfolio piece</a>, which is about communicating your work to employers, and the <a href="second-brain-local-llm-professional.html">second brain piece</a>, which is about communicating with your future self. This one is about communicating with the actual audience the work was for. They&rsquo;re the same skill applied at different ranges.</p>
+          </details>
+        </div>
+
+        <h2 class="section-heading" id="references">References</h2>
+
+        <ol class="references">
+          <li id="ref-1">
+            Guha, T., Fertig, E. J., &amp; Deshpande, A. (2022). Generating colorblind-friendly scatter plots for single-cell data. <em>eLife</em>, 11, e82128. <a href="https://doi.org/10.7554/elife.82128" target="_blank" rel="noopener">https://doi.org/10.7554/elife.82128</a>
+          </li>
+          <li id="ref-2">
+            Lee, B., Choe, E. K., Isenberg, P., Marriott, K., &amp; Stasko, J. (2020). Reaching Broader Audiences With Data Visualization. <em>IEEE Computer Graphics and Applications</em>, 40(2), 82&ndash;90. <a href="https://doi.org/10.1109/mcg.2020.2968244" target="_blank" rel="noopener">https://doi.org/10.1109/mcg.2020.2968244</a>
+          </li>
+          <li id="ref-3">
+            Aung, T., Niyeha, D., Shagihilu, S., Mpembeni, R., Kaganda, J., Sheffel, A., &amp; Heidkamp, R. (2019). Optimizing data visualization for reproductive, maternal, newborn, child health, and nutrition (RMNCH&amp;N) policymaking: data visualization preferences and interpretation capacity among decision-makers in Tanzania. <em>Global Health Research and Policy</em>, 4. <a href="https://doi.org/10.1186/s41256-019-0095-1" target="_blank" rel="noopener">https://doi.org/10.1186/s41256-019-0095-1</a>
+          </li>
+          <li id="ref-4">
+            Patel, A. M., Baxter, W., &amp; Porat, T. (2024). Toward Guidelines for Designing Holistic Integrated Information Visualizations for Time-Critical Contexts: Systematic Review. <em>Journal of Medical Internet Research</em>, 26, e58088. <a href="https://doi.org/10.2196/58088" target="_blank" rel="noopener">https://doi.org/10.2196/58088</a>
+          </li>
+          <li id="ref-5">
+            Wang, L., Zhang, J., Weng, M., Kang, M., &amp; Su, S. (2024). Unlocking Semantic Information Representation in Bar Graph Design. <em>IEEE Transactions on Visualization and Computer Graphics</em>, 1&ndash;14. <a href="https://doi.org/10.1109/tvcg.2024.3418145" target="_blank" rel="noopener">https://doi.org/10.1109/tvcg.2024.3418145</a>
+          </li>
+        </ol>
+
+        <hr style="margin: 40px 0;">
+        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/alime.bundle.js"></script>
+  <script src="../js/lightbox.js"></script>
+  <script src="../js/share.js"></script>
+  <script src="../js/default-assets/active.js"></script>
+  <script src="../js/shared-components.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');
+hljs.highlightAll();</script>
+</body>
+</html>
+
+
