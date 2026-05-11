@@ -64,7 +64,9 @@
       display: grid;
       grid-template-columns: 1fr;
     }
-    .plot-compare__panel > h3 { margin-top: 0; }
+    .plot-compare__panel > h3,
+    .plot-compare__panel > h4 { margin-top: 0; }
+    .plot-compare__panel > h4 { font-size: 16px; font-weight: 600; margin-bottom: 10px; }
     @media (min-width: 992px) {
       .plot-compare {
         grid-template-columns: 1fr 1fr;
@@ -632,25 +634,73 @@ plt.close(fig)
 
         <p>Tables are often pitched as the accessible fallback to a chart, but only if they are built as tables, not as visual approximations. The most common failure is using merged cells to imply hierarchy. Screen readers navigate linearly, announcing one header per cell. A merged top-level header breaks the row/column relationship and loses the reader's context. The fix: flatten the hierarchy so every data cell maps to exactly one column and one row header, put units in headers (not cells), and use zebra striping to help sighted readers track across rows without compromising contrast.</p>
 
-        <figure class="plot-wide">
-          <table style="width:100%; border-collapse:collapse; font-size:14px; margin: 16px 0;">
-            <caption style="text-align:left; font-weight:600; padding-bottom:8px;">Mortgage approval rate by region and quarter (2024)</caption>
-            <thead>
-              <tr style="background:#222222; color:#ffffff;">
-                <th scope="col" style="padding:8px 12px; text-align:left;">Region</th>
-                <th scope="col" style="padding:8px 12px; text-align:right;">Q1 approval rate (%)</th>
-                <th scope="col" style="padding:8px 12px; text-align:right;">Q2 approval rate (%)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><th scope="row" style="padding:8px 12px; text-align:left;">EMEA</th><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">68.4</td><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">71.2</td></tr>
-              <tr style="background:#f5f5f5;"><th scope="row" style="padding:8px 12px; text-align:left;">APAC</th><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">55.1</td><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">52.7</td></tr>
-              <tr><th scope="row" style="padding:8px 12px; text-align:left;">Americas</th><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">63.9</td><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">66.0</td></tr>
-            </tbody>
-          </table>
-          <p class="figure-note">Flat headers, units in the column header, <code>scope</code> attributes on every <code>&lt;th&gt;</code>, decimal alignment via <code>tabular-nums</code>, and zebra striping at WCAG-compliant contrast.</p>
-        </figure>
-
+        <div class="plot-compare">
+          <div class="plot-compare__panel">
+            <h4>The problem: merged cells and missing semantics</h4>
+            <figure>
+              <table style="width:100%; border-collapse:collapse; font-size:14px; margin:16px 0;">
+                <thead>
+                  <tr style="background:#cccccc; color:#555555;">
+                    <td colspan="3" style="padding:8px 12px; text-align:left;">Mortgage approvals 2024</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:8px 12px;">Region</td>
+                    <td style="padding:8px 12px;">Rate Q1</td>
+                    <td style="padding:8px 12px;">Rate Q2</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td style="padding:8px 12px;">EMEA</td><td style="padding:8px 12px;">68.4%</td><td style="padding:8px 12px;">71.2%</td></tr>
+                  <tr><td style="padding:8px 12px;">APAC</td><td style="padding:8px 12px;">55.1%</td><td style="padding:8px 12px;">52.7%</td></tr>
+                  <tr><td style="padding:8px 12px;">Americas</td><td style="padding:8px 12px;">63.9%</td><td style="padding:8px 12px;">66.0%</td></tr>
+                </tbody>
+              </table>
+              <p class="figure-note">Merged header breaks row/column mapping. No <code>scope</code> attributes. Units embedded in every cell. No caption. No zebra striping. Low-contrast header text.</p>
+            </figure>
+<details class="code-example"><summary>HTML example</summary>
+<pre><code class="language-html">&lt;table&gt;
+  &lt;!-- Merged header: breaks row/column mapping for screen readers --&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;td colspan="3" style="background:#cccccc;"&gt;Mortgage approvals 2024&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;!-- No scope attributes; no units in headers --&gt;
+      &lt;td&gt;Region&lt;/td&gt;
+      &lt;td&gt;Rate Q1&lt;/td&gt;
+      &lt;td&gt;Rate Q2&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;!-- Units embedded in every cell; no zebra striping --&gt;
+    &lt;tr&gt;&lt;td&gt;EMEA&lt;/td&gt;&lt;td&gt;68.4%&lt;/td&gt;&lt;td&gt;71.2%&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;APAC&lt;/td&gt;&lt;td&gt;55.1%&lt;/td&gt;&lt;td&gt;52.7%&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Americas&lt;/td&gt;&lt;td&gt;63.9%&lt;/td&gt;&lt;td&gt;66.0%&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+</details>
+          </div>
+          <div class="plot-compare__panel">
+            <h4>The fix: flat headers with scope and units</h4>
+            <figure>
+              <table style="width:100%; border-collapse:collapse; font-size:14px; margin: 16px 0;">
+                <caption style="text-align:left; font-weight:600; padding-bottom:8px;">Mortgage approval rate by region and quarter (2024)</caption>
+                <thead>
+                  <tr style="background:#222222; color:#ffffff;">
+                    <th scope="col" style="padding:8px 12px; text-align:left;">Region</th>
+                    <th scope="col" style="padding:8px 12px; text-align:right;">Q1 approval rate (%)</th>
+                    <th scope="col" style="padding:8px 12px; text-align:right;">Q2 approval rate (%)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row" style="padding:8px 12px; text-align:left;">EMEA</th><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">68.4</td><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">71.2</td></tr>
+                  <tr style="background:#f5f5f5;"><th scope="row" style="padding:8px 12px; text-align:left;">APAC</th><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">55.1</td><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">52.7</td></tr>
+                  <tr><th scope="row" style="padding:8px 12px; text-align:left;">Americas</th><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">63.9</td><td style="padding:8px 12px; text-align:right; font-variant-numeric:tabular-nums;">66.0</td></tr>
+                </tbody>
+              </table>
+              <p class="figure-note">Flat headers, units in the column header, <code>scope</code> attributes on every <code>&lt;th&gt;</code>, decimal alignment via <code>tabular-nums</code>, and zebra striping at WCAG-compliant contrast.</p>
+            </figure>
 <details class="code-example"><summary>HTML example</summary>
 <pre><code class="language-html">&lt;table&gt;
   &lt;caption&gt;Mortgage approval rate by region and quarter (2024)&lt;/caption&gt;
@@ -689,15 +739,56 @@ plt.close(fig)
 &lt;/style&gt;
 </code></pre>
 </details>
+          </div>
+        </div>
 
         <h3>2. Bubble charts</h3>
 
         <p>Humans estimate area poorly. Perception of bubble size scales sub-linearly with actual area: a bubble worth four times the value typically appears roughly twice as large. Overlaps compound this: small bubbles vanish behind larger ones, and hover tooltips lock out keyboard and motor-impaired users. The accessible version caps bubble count around 15, strokes every bubble with a high-contrast outline so boundaries remain visible through overlaps, and labels critical points directly on the canvas.</p>
 
-        <figure class="plot-wide">
-          <img src="img/accessibility-bubble-good.png" alt="Bubble chart of portfolio risk with fifteen semi-transparent sky-blue circles outlined in dark grey. Holdings 4, 9, and 15 are the three largest and have permanent text labels with leader lines. Title: Three holdings dominate portfolio risk." loading="lazy" style="width:100%; border-radius:8px; max-width:760px;">
-          <p class="figure-note">Fifteen bubbles, semi-transparent fill with a high-contrast stroke so every boundary is visible through overlaps, and direct labels on the three largest holdings. The title encodes the takeaway.</p>
-        </figure>
+        <div class="plot-compare">
+          <div class="plot-compare__panel">
+            <h4>The problem: too many bubbles, jet colours, no labels</h4>
+            <figure>
+              <img src="img/accessibility-bubble-bad.png" alt="Bubble chart of 60 portfolio holdings using rainbow jet colours. Many bubbles overlap without visible boundaries. There are no labels on any point and the title reads Portfolio holdings with no finding." loading="lazy" style="width:100%; border-radius:8px;">
+              <p class="figure-note">60 bubbles, jet colours encoding nothing, no strokes on overlaps, no direct labels. The title states the chart type, not a finding.</p>
+            </figure>
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+rng = np.random.default_rng(42)
+
+N = 60  # far too many: area perception breaks down
+x    = rng.uniform(0, 10, N)
+y    = rng.uniform(0, 10, N)
+size = rng.uniform(20, 1800, N)
+
+# Jet: not perceptually uniform, not CVD-safe.
+# Colour encodes nothing here -- all points are the same type of holding --
+# but creates false salience for saturated red/yellow bubbles.
+jet_colors = plt.cm.jet(rng.uniform(0, 1, N))
+
+fig, ax = plt.subplots(figsize=(7, 4.6))
+# No stroke: overlapping bubbles have no visible boundary.
+ax.scatter(x, y, s=size, c=jet_colors, alpha=0.5)
+ax.set(
+    title="Portfolio holdings",  # generic -- no finding
+    xlabel="Return (%)",
+    ylabel="Volatility (%)",
+)
+
+fig.savefig("bubble_problem.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+          </div>
+          <div class="plot-compare__panel">
+            <h4>The fix: capped count, strokes, direct labels</h4>
+            <figure>
+              <img src="img/accessibility-bubble-good.png" alt="Bubble chart of portfolio risk with fifteen semi-transparent sky-blue circles outlined in dark grey. Holdings 4, 9, and 15 are the three largest and have permanent text labels with leader lines. Title: Three holdings dominate portfolio risk." loading="lazy" style="width:100%; border-radius:8px;">
+              <p class="figure-note">Fifteen bubbles, semi-transparent fill with a high-contrast stroke so every boundary is visible through overlaps, and direct labels on the three largest holdings.</p>
+            </figure>
 
 <details class="code-example"><summary>Python example</summary>
 <pre><code class="language-python">import matplotlib.pyplot as plt
@@ -755,15 +846,47 @@ fig.savefig("bubble_accessible.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 </code></pre>
 </details>
+          </div>
+        </div>
 
         <h3>3. Venn diagrams</h3>
 
         <p>The standard Venn relies on overlapping translucent fills, and overlaps create new colours that fail two ways. The new hue often falls below WCAG contrast for any text laid on it, and CVD readers see overlaps as one of the source colours rather than a distinct third. The accessible version drops fill colour entirely, encodes set membership with distinct stroke styles (solid, dashed, dotted), and places every numeric label on a white background so strokes behind it never compromise legibility.</p>
 
-        <figure class="plot-wide">
-          <img src="img/accessibility-venn-good.png" alt="Three-set Venn diagram showing customer segment overlap. The Email subscribers circle has a solid black outline, Mobile app users has a dashed outline, and Loyalty members has a dotted outline. Each region is labelled with a count in thousands, and every number sits in a white rounded rectangle." loading="lazy" style="width:100%; border-radius:8px; max-width:680px;">
-          <p class="figure-note">No fill colours. Set membership is encoded entirely by stroke style, and each numeric label sits on a white background so the strokes behind it never compromise legibility.</p>
-        </figure>
+        <div class="plot-compare">
+          <div class="plot-compare__panel">
+            <h4>The problem: translucent fills, CVD-unsafe colours</h4>
+            <figure>
+              <img src="img/accessibility-venn-bad.png" alt="Three-set Venn diagram with translucent red, green, and blue fills. Overlap regions create orange, purple, and teal, which are unreadable by CVD readers and fail WCAG contrast for text laid on them. Counts are rendered directly on the coloured fills without backgrounds." loading="lazy" style="width:100%; border-radius:8px;">
+              <p class="figure-note">Default matplotlib_venn fills: semitransparent red, green, blue. Overlaps create new hues that fail contrast checks and are unreadable by CVD readers. Numbers lack background boxes.</p>
+            </figure>
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+from matplotlib_venn import venn3
+
+SUBSETS = (120, 95, 35, 80, 25, 40, 30)
+LABELS  = ("Email\nsubscribers", "Mobile\napp users", "Loyalty\nmembers")
+
+fig, ax = plt.subplots(figsize=(6.8, 4.6))
+
+# Default fills: semitransparent red, green, blue.
+# Overlap regions generate orange, purple, and teal -- new hues that fail
+# WCAG contrast and are unreadable by CVD readers.
+# Numeric labels are rendered directly on coloured fills with no background.
+venn3(subsets=SUBSETS, set_labels=LABELS, ax=ax)
+
+ax.set_title("Customer segment overlap")
+fig.savefig("venn_problem.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+          </div>
+          <div class="plot-compare__panel">
+            <h4>The fix: stroke-only encoding with labelled regions</h4>
+            <figure>
+              <img src="img/accessibility-venn-good.png" alt="Three-set Venn diagram showing customer segment overlap. The Email subscribers circle has a solid black outline, Mobile app users has a dashed outline, and Loyalty members has a dotted outline. Each region is labelled with a count in thousands, and every number sits in a white rounded rectangle." loading="lazy" style="width:100%; border-radius:8px;">
+              <p class="figure-note">No fill colours. Set membership is encoded entirely by stroke style, and each numeric label sits on a white background so the strokes behind it never compromise legibility.</p>
+            </figure>
 
 <details class="code-example"><summary>Python example</summary>
 <pre><code class="language-python">import matplotlib.pyplot as plt
@@ -817,15 +940,65 @@ fig.savefig("venn_accessible.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 </code></pre>
 </details>
+          </div>
+        </div>
 
         <h3>4. Box plots vs violin plots</h3>
 
         <p>Box plots compress a distribution to five summary statistics, and that compression is lossy in a way most readers do not realise: a strongly bimodal distribution and a unimodal distribution with the same quartiles produce identical box plots. Violin plots show the kernel density estimate directly, which means the reader does not have to know what an interquartile range is to see that the data has two peaks. For non-statistician audiences, including product managers, clinicians, and executives, the violin plot consistently beats the box plot on speed and accuracy of interpretation because shape is a more readable encoding than abstract summary statistics.</p>
 
-        <figure class="plot-wide">
-          <img src="img/accessibility-distribution-good.png" alt="Two side-by-side panels showing the same processing-time data for Teams A, B, and C. The left panel is a box plot in which all three teams have similar boxes and whiskers. The right panel is a violin plot of the same data: Team A is a single peak around 15 days, Team B has two clear peaks at roughly 9 and 22 days, and Team C is right-skewed with a long upper tail." loading="lazy" style="width:100%; border-radius:8px; max-width:900px;">
-          <p class="figure-note">Identical underlying data. Team B&rsquo;s bimodality, which reflects two distinct processing pathways, is invisible in the box plot and clear in the violin plot.</p>
-        </figure>
+        <div class="plot-compare">
+          <div class="plot-compare__panel">
+            <h4>The problem: box plot hides distribution shape</h4>
+            <figure>
+              <img src="img/accessibility-distribution-bad.png" alt="Box plot of processing time for Teams A, B, and C. All three teams have similar-looking boxes and whiskers. Team B is bimodal in the underlying data but this is completely invisible from the box plot." loading="lazy" style="width:100%; border-radius:8px;">
+              <p class="figure-note">Box plot compresses distribution to five statistics. Team B is bimodal but its median and IQR are nearly identical to Team A&rsquo;s. A non-statistician (or a distracted statistician) misses it entirely.</p>
+            </figure>
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+rng = np.random.default_rng(3)
+
+team_a = rng.normal(15.0, 2.0, 220)
+team_b = np.concatenate([
+    rng.normal( 9.0, 1.5, 110),
+    rng.normal(22.0, 2.0, 110),
+])
+team_c = 10 + rng.exponential(4.0, 220)
+
+DATA   = [team_a, team_b, team_c]
+LABELS = ["Team A", "Team B", "Team C"]
+
+fig, ax = plt.subplots(figsize=(7, 4.6), layout="constrained")
+
+# Box plot: five summary statistics. Team B is bimodal at ~9 and ~22 days
+# but its median and IQR are nearly identical to Team A's -- the bimodality
+# is completely hidden from any reader who does not already know to look for it.
+ax.boxplot(
+    DATA, tick_labels=LABELS, patch_artist=True,
+    boxprops=dict(facecolor="#1f77b4", edgecolor="#444444"),
+    medianprops=dict(color="#444444", linewidth=1.5),
+    whiskerprops=dict(color="#444444"), capprops=dict(color="#444444"),
+    flierprops=dict(markeredgecolor="#444444", marker="o", markersize=3),
+)
+ax.set(
+    title="Processing time by team",  # describes the chart, not the finding
+    ylabel="Processing time (days)",
+)
+ax.spines[["top", "right"]].set_visible(False)
+
+fig.savefig("distribution_problem.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+          </div>
+          <div class="plot-compare__panel">
+            <h4>The fix: violin plot reveals distribution shape</h4>
+            <figure>
+              <img src="img/accessibility-distribution-good.png" alt="Two side-by-side panels showing the same processing-time data for Teams A, B, and C. The left panel is a box plot in which all three teams have similar boxes and whiskers. The right panel is a violin plot of the same data: Team A is a single peak around 15 days, Team B has two clear peaks at roughly 9 and 22 days, and Team C is right-skewed with a long upper tail." loading="lazy" style="width:100%; border-radius:8px;">
+              <p class="figure-note">Violin plot: kernel density estimate encoded as shape directly. Team B&rsquo;s two lobes are immediately visible without knowing what an IQR is.</p>
+            </figure>
 
 <details class="code-example"><summary>Python example</summary>
 <pre><code class="language-python">import matplotlib.pyplot as plt
@@ -848,28 +1021,15 @@ DATA   = [team_a, team_b, team_c]
 LABELS = ["Team A", "Team B", "Team C"]
 
 INK     = "#222222"
-OI_SKY  = "#56B4E9"
 OI_BLUE = "#0072B2"
 GRID    = "#e0e0e0"
 
-fig, axes = plt.subplots(1, 2, figsize=(10, 4.6),
-                         layout="constrained", sharey=True)
+fig, ax = plt.subplots(figsize=(7, 4.6), layout="constrained")
 
-# Box plot: shows quartiles only. Bimodality of Team B is invisible
-# because medians and IQRs match a unimodal distribution.
-axes[0].boxplot(
-    DATA, tick_labels=LABELS, patch_artist=True,
-    boxprops=dict(facecolor=OI_SKY, edgecolor=INK, linewidth=1.2),
-    medianprops=dict(color=INK, linewidth=2),
-    whiskerprops=dict(color=INK), capprops=dict(color=INK),
-    flierprops=dict(markeredgecolor=INK, marker="o", markersize=4),
-)
-axes[0].set_title("Box plot: hides distribution shape", pad=10)
-axes[0].set_ylabel("Processing time (days)")
-
-# Violin plot: density encoded directly. A non-statistician can read
-# shape without knowing what an IQR is.
-parts = axes[1].violinplot(DATA, showmedians=False, showextrema=False)
+# Violin plot: kernel density estimate encoded as shape directly.
+# Team B's bimodal distribution produces two visible lobes that a
+# non-statistician can read without knowing what an IQR is.
+parts = ax.violinplot(DATA, showmedians=False, showextrema=False)
 for body in parts["bodies"]:
     body.set_facecolor(OI_BLUE)
     body.set_edgecolor(INK)
@@ -878,35 +1038,83 @@ for body in parts["bodies"]:
 
 # White-on-dark median markers: high contrast, large enough at slide size.
 medians = [np.median(d) for d in DATA]
-axes[1].scatter(
+ax.scatter(
     np.arange(1, len(DATA) + 1), medians,
     s=70, color="white", edgecolor=INK, linewidth=1.4, zorder=3,
 )
-axes[1].set_xticks(np.arange(1, len(DATA) + 1))
-axes[1].set_xticklabels(LABELS)
-axes[1].set_title("Violin plot: shape is visible", pad=10)
-
-for ax in axes:
-    ax.spines[["top", "right"]].set_visible(False)
-    ax.yaxis.grid(True, color=GRID, linewidth=0.7)
-    ax.set_axisbelow(True)
-
-fig.suptitle("Team B's bimodal distribution is invisible in a box plot",
-             fontsize=12.5, y=1.05)
+ax.set_xticks(np.arange(1, len(DATA) + 1))
+ax.set_xticklabels(LABELS)
+ax.set(
+    title="Team B has two distinct processing pathways",
+    ylabel="Processing time (days)",
+)
+ax.spines[["top", "right"]].set_visible(False)
+ax.yaxis.grid(True, color=GRID, linewidth=0.7)
+ax.set_axisbelow(True)
 
 fig.savefig("distribution_accessible.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 </code></pre>
 </details>
+          </div>
+        </div>
 
         <h3>5. Radar (spider) charts</h3>
 
         <p>Radar charts are inherently fragile. The perceived area of the polygon depends on the arbitrary ordering of the axes, and overlaying more than two shapes produces an illegible tangle that breaks both colour and shape encoding. Small multiples or parallel coordinates almost always communicate the same comparison more clearly. Use a radar chart only when the question truly demands it (typically: two entities, five to seven comparable metrics). Keep it to two polygons, encode each with a distinct line style, and leave the second polygon unfilled.</p>
 
-        <figure class="plot-wide">
-          <img src="img/accessibility-radar-good.png" alt="Radar chart comparing two optimisation algorithms across five metrics: convergence speed, solution quality, robustness, memory use, and wall time. Algorithm A is shown as a solid blue line with circular markers and a light blue fill at ten percent opacity. Algorithm B is shown as a thick dashed orange line with square markers and no fill. Title states: Algorithm A wins on robustness; B wins on speed and memory." loading="lazy" style="width:100%; border-radius:8px; max-width:720px;">
-          <p class="figure-note">Two algorithms, five metrics, two independent encodings (colour and line style). Algorithm B&rsquo;s polygon is unfilled so it never obscures Algorithm A&rsquo;s shape.</p>
-        </figure>
+        <div class="plot-compare">
+          <div class="plot-compare__panel">
+            <h4>The problem: five algorithms, all filled, colour-only</h4>
+            <figure>
+              <img src="img/accessibility-radar-bad.png" alt="Radar chart with five algorithms across eight axes. All five polygons are filled with different tab10 colours. The fills overlap completely, making individual shapes unreadable. Colour is the only distinguishing channel." loading="lazy" style="width:100%; border-radius:8px;">
+              <p class="figure-note">Five algorithms, eight metrics, all filled and overlapping. Colour is the only distinguishing channel. Greyscale and CVD readers see an indistinguishable tangle.</p>
+            </figure>
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+# Five algorithms, eight metrics. Each polygon filled -- the polygons
+# block each other. Colour is the only distinguishing channel.
+METRICS = ["Speed", "Quality", "Stability", "Memory",
+           "Latency", "Scalability", "Accuracy", "Cost"]
+SCORES  = [
+    [0.7, 0.5, 0.8, 0.4, 0.9, 0.6, 0.3, 0.7],
+    [0.5, 0.8, 0.3, 0.9, 0.4, 0.7, 0.8, 0.5],
+    [0.9, 0.3, 0.7, 0.5, 0.6, 0.4, 0.9, 0.6],
+    [0.4, 0.7, 0.5, 0.6, 0.7, 0.9, 0.5, 0.8],
+    [0.6, 0.6, 0.6, 0.7, 0.5, 0.5, 0.7, 0.4],
+]
+LABELS = ["A", "B", "C", "D", "E"]
+TAB10  = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd"]
+
+n = len(METRICS)
+angles = np.linspace(0, 2 * np.pi, n, endpoint=False).tolist() + [0]
+
+fig, ax = plt.subplots(figsize=(6.6, 5.4), subplot_kw=dict(polar=True))
+for sc, color, label in zip(SCORES, TAB10, LABELS):
+    closed = sc + sc[:1]
+    ax.plot(angles, closed, color=color, linewidth=1.5, label=label)
+    ax.fill(angles, closed, color=color, alpha=0.35)
+
+ax.set_xticks(angles[:-1])
+ax.set_xticklabels(METRICS, fontsize=9)
+ax.set_yticks([0.25, 0.5, 0.75])
+ax.set_yticklabels([])
+ax.set_title("Algorithm comparison")
+ax.legend(loc="upper right", bbox_to_anchor=(1.35, 1.15), frameon=False)
+
+fig.savefig("radar_problem.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+          </div>
+          <div class="plot-compare__panel">
+            <h4>The fix: two algorithms, line style + colour, one unfilled</h4>
+            <figure>
+              <img src="img/accessibility-radar-good.png" alt="Radar chart comparing two optimisation algorithms across five metrics: convergence speed, solution quality, robustness, memory use, and wall time. Algorithm A is shown as a solid blue line with circular markers and a light blue fill at ten percent opacity. Algorithm B is shown as a thick dashed orange line with square markers and no fill. Title states: Algorithm A wins on robustness; B wins on speed and memory." loading="lazy" style="width:100%; border-radius:8px;">
+              <p class="figure-note">Two algorithms, five metrics, two independent encodings (colour and line style). Algorithm B&rsquo;s polygon is unfilled so it never obscures Algorithm A&rsquo;s shape.</p>
+            </figure>
 
 <details class="code-example"><summary>Python example</summary>
 <pre><code class="language-python">import matplotlib.pyplot as plt
@@ -964,15 +1172,76 @@ fig.savefig("radar_accessible.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 </code></pre>
 </details>
+          </div>
+        </div>
 
         <h3>6. Tree diagrams and hierarchies</h3>
 
         <p>A tree drawn as a flat image is invisible to screen readers and unusable for keyboard navigation. Hierarchy is semantically rich, and rendering it as pixels erases all that structure. Two things rescue a tree. First, the visual: high-contrast boxes and edges, branch labels on opaque backgrounds so they survive crossing lines, and progressive disclosure for subtrees too large for one screen. Second (non-negotiably): an exposed semantic equivalent as a nested HTML list with the same structure, which screen readers can navigate and keyboard users can traverse.</p>
 
-        <figure class="plot-wide">
-          <img src="img/accessibility-tree-good.png" alt="Decision tree for risk classification. The root asks Credit score greater than or equal to 700. Yes branches to Income greater than or equal to fifty thousand pounds, which yields Low risk on yes and Medium risk on no. No branches to Debt ratio less than 0.4, which yields Medium risk on yes and High risk on no." loading="lazy" style="width:100%; border-radius:8px; max-width:880px;">
-          <p class="figure-note">High-contrast nodes, edge labels on opaque backgrounds, and leaf node meaning carried by text, not by colour alone. The semantic equivalent below is what a screen reader navigates.</p>
-        </figure>
+        <div class="plot-compare">
+          <div class="plot-compare__panel">
+            <h4>The problem: colour-only leaves, no branch labels</h4>
+            <figure>
+              <img src="img/accessibility-tree-bad.png" alt="Decision tree where leaf nodes are coloured circles: green for low risk, yellow for medium, red for high. The circles contain no text. Branch edges have no Yes or No labels. Decision node text is light grey on white." loading="lazy" style="width:100%; border-radius:8px;">
+              <p class="figure-note">Red-green colour is the only signal for leaf outcomes. CVD readers see green and red as the same hue. No branch labels force the reader to track direction from memory.</p>
+            </figure>
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+from matplotlib.patches import FancyBboxPatch
+
+fig, ax = plt.subplots(figsize=(8.4, 4.8))
+ax.set_xlim(0, 10); ax.set_ylim(0, 6); ax.axis("off")
+
+# Colour-only leaf nodes: green, yellow, red.
+# Red-green CVD readers see green and red as the same hue.
+# Leaf boxes are empty -- colour is the only signal.
+LEAF_COLORS = {"low": "#2ca02c", "med": "#ffdd57", "high": "#d62728"}
+NODES = [
+    (5.0, 5.1, 2.6, 0.7, "Credit score \u2265 700?", None),
+    (2.2, 3.3, 2.4, 0.7, "Income \u2265 \u00a350k?",  None),
+    (7.8, 3.3, 2.4, 0.7, "Debt ratio &lt; 0.4?",      None),
+    (1.0, 1.4, 1.8, 0.7, "",                          "low"),
+    (3.4, 1.4, 1.8, 0.7, "",                          "med"),
+    (6.6, 1.4, 1.8, 0.7, "",                          "med"),
+    (9.0, 1.4, 1.8, 0.7, "",                          "high"),
+]
+# Edges: thin, low-contrast, NO "Yes"/"No" labels.
+EDGES = [
+    ((5.0, 4.75), (2.2, 3.65)),
+    ((5.0, 4.75), (7.8, 3.65)),
+    ((2.2, 2.95), (1.0, 1.75)),
+    ((2.2, 2.95), (3.4, 1.75)),
+    ((7.8, 2.95), (6.6, 1.75)),
+    ((7.8, 2.95), (9.0, 1.75)),
+]
+
+for x, y, w, h, text, leaf in NODES:
+    face = LEAF_COLORS.get(leaf, "#cccccc")  # grey decision nodes, low contrast
+    ax.add_patch(FancyBboxPatch(
+        (x - w/2, y - h/2), w, h,
+        boxstyle="round,pad=0.04,rounding_size=0.08",
+        linewidth=0.8, edgecolor="#999999", facecolor=face,
+    ))
+    if text:
+        ax.text(x, y, text, ha="center", va="center",
+                fontsize=10.5, color="#555555")  # low contrast
+
+for (x1, y1), (x2, y2) in EDGES:
+    ax.plot([x1, x2], [y1, y2], color="#aaaaaa", linewidth=1.0)
+
+ax.set_title("Risk decision tree", fontsize=12, color="#555555")
+fig.savefig("tree_problem.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+          </div>
+          <div class="plot-compare__panel">
+            <h4>The fix: text in every node, branch labels, high contrast</h4>
+            <figure>
+              <img src="img/accessibility-tree-good.png" alt="Decision tree for risk classification. The root asks Credit score greater than or equal to 700. Yes branches to Income greater than or equal to fifty thousand pounds, which yields Low risk on yes and Medium risk on no. No branches to Debt ratio less than 0.4, which yields Medium risk on yes and High risk on no." loading="lazy" style="width:100%; border-radius:8px;">
+              <p class="figure-note">High-contrast nodes, edge labels on opaque backgrounds, and leaf node meaning carried by text, not by colour alone.</p>
+            </figure>
 
 <details class="code-example"><summary>Accessible semantic equivalent (HTML)</summary>
 <pre><code class="language-html">&lt;!--
@@ -1003,15 +1272,61 @@ plt.close(fig)
 &lt;/nav&gt;
 </code></pre>
 </details>
+          </div>
+        </div>
 
         <h3>7. Fitness landscapes and 3D surfaces</h3>
 
         <p>Three-dimensional surface plots, used when visualising objective functions in metaheuristics or evolutionary algorithms, fail in two ways. They almost always encode elevation with a continuous colour gradient (jet, hsv, or matplotlib's old default) that is not perceptually uniform and not CVD-safe, making relative peak heights ambiguous. Static perspective also occludes peaks behind foreground features. The accessible version uses a perceptually uniform colourmap engineered for every form of CVD (cividis), overlays contour lines so geometry is encoded by line position as well as colour, and annotates the global optimum in text so the takeaway survives rendering failures.</p>
 
-        <figure class="plot-wide">
-          <img src="img/accessibility-fitness-good.png" alt="Three-dimensional surface plot of a multimodal fitness landscape using the cividis colourmap (dark blue to bright yellow). Black contour lines are overlaid on the surface and projected onto the floor of the axes. The global optimum is marked with an orange dot and an annotation reading: Global optimum at coordinates (1.39, 1.01) with fitness 3.20." loading="lazy" style="width:100%; border-radius:8px; max-width:880px;">
-          <p class="figure-note">Cividis colourmap, black isoclines on the surface and floor, and a text annotation stating the global optimum coordinates. A reader who reads only the title and annotation already has the answer.</p>
-        </figure>
+        <div class="plot-compare">
+          <div class="plot-compare__panel">
+            <h4>The problem: jet colourmap, no contours, no annotation</h4>
+            <figure>
+              <img src="img/accessibility-fitness-bad.png" alt="3D surface plot of a fitness landscape using the jet rainbow colourmap. No contour lines are present. The global optimum is not annotated. The title reads Fitness landscape with no takeaway." loading="lazy" style="width:100%; border-radius:8px;">
+              <p class="figure-note">Jet colourmap: not perceptually uniform, not CVD-safe. No contours, so elevation is colour-only. No annotation, so the global optimum must be inferred visually.</p>
+            </figure>
+<details class="code-example"><summary>Python example</summary>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
+
+GRID = np.linspace(-3.5, 3.5, 220)
+X, Y = np.meshgrid(GRID, GRID)
+Z = (
+    3.2 * np.exp(-((X - 1.4) ** 2 + (Y - 1.0) ** 2) / 0.6)
+    + 2.1 * np.exp(-((X + 1.6) ** 2 + (Y - 1.2) ** 2) / 0.8)
+    + 1.4 * np.exp(-((X - 0.5) ** 2 + (Y + 1.8) ** 2) / 0.5)
+    + 0.6 * np.exp(-((X + 2.0) ** 2 + (Y + 1.5) ** 2) / 0.4)
+)
+
+fig = plt.figure(figsize=(8.8, 5.2))
+ax = fig.add_subplot(111, projection="3d")
+
+# Jet: not perceptually uniform; saturated red creates false salience.
+# Greyscale conversion collapses multiple fitness values to the same grey.
+ax.plot_surface(X, Y, Z, cmap="jet",
+               rstride=2, cstride=2, linewidth=0, antialiased=True)
+
+# No contour lines: elevation is encoded by colour alone.
+# No annotation: the global optimum is not communicated in text.
+ax.set_xlabel("Parameter x")
+ax.set_ylabel("Parameter y")
+ax.set_zlabel("Fitness")
+ax.set_title("Fitness landscape")  # generic -- no takeaway
+ax.view_init(elev=32, azim=-58)
+
+fig.savefig("fitness_problem.png", dpi=150, bbox_inches="tight")
+plt.close(fig)
+</code></pre>
+</details>
+          </div>
+          <div class="plot-compare__panel">
+            <h4>The fix: cividis, contour lines, annotated optimum</h4>
+            <figure>
+              <img src="img/accessibility-fitness-good.png" alt="Three-dimensional surface plot of a multimodal fitness landscape using the cividis colourmap (dark blue to bright yellow). Black contour lines are overlaid on the surface and projected onto the floor of the axes. The global optimum is marked with an orange dot and an annotation reading: Global optimum at coordinates (1.39, 1.01) with fitness 3.20." loading="lazy" style="width:100%; border-radius:8px;">
+              <p class="figure-note">Cividis colourmap, black isoclines on the surface and floor, and a text annotation stating the global optimum coordinates.</p>
+            </figure>
 
 <details class="code-example"><summary>Python example</summary>
 <pre><code class="language-python">import matplotlib.pyplot as plt
@@ -1077,6 +1392,8 @@ fig.savefig("fitness_accessible.png", dpi=150, bbox_inches="tight")
 plt.close(fig)
 </code></pre>
 </details>
+          </div>
+        </div>
 
         <h2>Dashboards and the failure of the data wall</h2>
 
