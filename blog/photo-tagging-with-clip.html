@@ -65,6 +65,7 @@
   <!-- Post Content -->
   <div class="about-us-area section-padding-80 clearfix">
     <div class="container">
+      <main id="main-content">
       <div class="blog-post">
         <h1>Building a Photo Tagging System with CLIP</h1>
         <div class="blog-meta">
@@ -90,7 +91,7 @@
 
         <h2>The Approach</h2>
 
-        <p><a href="https://github.com/mlfoundations/open_clip" target="_blank">OpenCLIP</a> is an open-source implementation of OpenAI's CLIP model. The core idea is elegant: it maps images and text into the same embedding space, so you can describe what you're looking for in plain English and the model will tell you how well each image matches. No training on your own data, no labelling, no fine-tuning. You just... describe the categories and let it figure it out.</p>
+        <p><a href="https://github.com/mlfoundations/open_clip" target="_blank" rel="noopener noreferrer">OpenCLIP</a> is an open-source implementation of OpenAI's CLIP model. The core idea is elegant: it maps images and text into the same embedding space, so you can describe what you're looking for in plain English and the model will tell you how well each image matches. No training on your own data, no labelling, no fine-tuning. You just... describe the categories and let it figure it out.</p>
 
         <p>I defined 10 categories, each with 3-4 descriptive text prompts to give the model a richer understanding of what I meant:</p>
 
@@ -142,7 +143,7 @@
           <li>A manual override JSON that merges with the auto-generated tags would let me fix the obvious misses without re-running the whole pipeline. Sometimes you just want to tell the computer "no, that's a traffic cone, not architecture" and move on with your life.</li>
         </ul>
 
-        <p>The full code is on <a href="https://github.com/DrKenReid/DrKenReid.github.io/blob/master/scripts/tag_photos.py" target="_blank">GitHub</a>, and you can see the result on the <a href="../gallery.html">Photography</a> page.</p>
+        <p>The full code is on <a href="https://github.com/DrKenReid/DrKenReid.github.io/blob/master/scripts/tag_photos.py" target="_blank" rel="noopener noreferrer">GitHub</a>, and you can see the result on the <a href="../gallery.html">Photography</a> page.</p>
 
         <div class="faq-section">
           <h2>Common questions</h2>
@@ -206,6 +207,8 @@
             </div>
           </div>
         </div>
+
+      </main>
 
         <hr style="margin: 40px 0;">
         <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
