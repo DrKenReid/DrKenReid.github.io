@@ -62,14 +62,30 @@
     /* Plot comparison: side-by-side on desktop, stacked on mobile */
     .plot-compare {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+    }
+    .plot-compare__panel {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .plot-compare__panel figure {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    .plot-compare__panel details.code-example {
+      margin-top: 16px;
+    }
+    .plot-compare__panel pre {
+      overflow-x: auto;
     }
     .plot-compare__panel > h3,
     .plot-compare__panel > h4 { margin-top: 0; }
     .plot-compare__panel > h4 { font-size: 16px; font-weight: 600; margin-bottom: 10px; }
     @media (min-width: 992px) {
       .plot-compare {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 24px;
         width: calc(100% + 120px);
         margin-left: -60px;
@@ -126,6 +142,8 @@
 
   <div id="header-section"></div>
 
+  <main id="main-content">
+
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/bg-img/21.png); background-size: cover; background-position: center center;">
     <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
       <div class="breadcrumb-content text-center">
@@ -157,6 +175,25 @@
 
         <p>Conclusion up front: when you design for access first, you make fewer charts, label them better, and remove the visual decoration that was getting in the way. The blind / colour-blind reader benefits. The dyslexic reader benefits. The executive skimming on a phone benefits. The reviewer who knows the domain benefits. Then, you benefit. Why bother doing work if your peers cannot use it?</p>
 
+        <div class="plain-english-box" aria-labelledby="toc-title">
+          <h2 id="toc-title">Table of contents</h2>
+          <ul>
+            <li><a href="#inaccessible-not-niche">Inaccessible is not a niche concern</a></li>
+            <li><a href="#colour-redundant-coding">Colour and redundant coding</a></li>
+            <li><a href="#temporal-line-chart">Temporal data and the line-chart problem</a></li>
+            <li><a href="#data-ink-cognitive-load">The data-ink ratio and cognitive load</a></li>
+            <li><a href="#wcag-contrast">Colour contrast and the WCAG standard</a></li>
+            <li><a href="#dashboards-data-wall">Dashboards and the failure of the data wall</a></li>
+            <li><a href="#screen-readers-alt-text">Screen readers, alt text, and the visual gatekeeper problem</a></li>
+            <li><a href="#beyond-basics">Beyond the basics: chart-type-specific pitfalls</a></li>
+            <li><a href="#papers-and-slides">Where data science papers and slides go wrong</a></li>
+            <li><a href="#practical-checklist">A practical accessibility-first checklist</a></li>
+            <li><a href="#product-design-not-box-ticking">Why this is product design, not box-ticking</a></li>
+            <li><a href="#common-questions">Common questions</a></li>
+            <li><a href="#references">References</a></li>
+          </ul>
+        </div>
+
         <figure>
           <img src="../img/bg-img/19.png" alt="Clean visual composition used as a cover-style motif for accessibility-first communication" loading="lazy" style="width:100%; border-radius:8px;">
           <p class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></p>
@@ -175,7 +212,7 @@
           </ul>
         </div>
 
-        <h2>Inaccessible is not a niche concern</h2>
+        <h2 id="inaccessible-not-niche">Inaccessible is not a niche concern</h2>
 
         <p>The first reframe I want to push is that &ldquo;accessibility&rdquo; in data science is not a small audience that you graciously serve at extra cost. It is a description of the conditions under which most of your audience actually consumes your work.</p>
 
@@ -183,7 +220,7 @@
 
         <p>This is the same argument that the visualisation research community has been making about reaching broader audiences: the assumption that everyone consumes charts as high-resolution colour images, with full attention, and with the same visualisation literacy as the author, is false, and it gatekeeps insight behind a purely visual medium.<sup><a href="#ref-2" class="cite-ref">[2]</a></sup> Designing for access is not charity. It is acknowledging the actual delivery conditions.</p>
 
-        <h2>Colour and redundant coding</h2>
+        <h2 id="colour-redundant-coding">Colour and redundant coding</h2>
 
         <p>The cleanest example of accessibility producing better design is colour. About 1 in 12 men has some form of colour vision deficiency. If you build a scatter plot where category is encoded by colour alone, and you use any of the default red/green palettes that ship with most plotting libraries, you have built a chart that a non-trivial fraction of your readers cannot decode.</p>
 
@@ -306,7 +343,7 @@ plt.close(fig)
           </div>
         </div>
 
-        <h2>Temporal data and the line-chart problem</h2>
+        <h2 id="temporal-line-chart">Temporal data and the line-chart problem</h2>
 
         <p>Line charts introduce an extra failure mode: the legend decode problem. When two lines cross on a time-series chart, the reader&rsquo;s eye loses track of which line is which at the intersection and has to navigate back to the legend. If the lines are distinguished only by colour, and if the reader has CVD, re-identification becomes impossible or unreliable. The redundant encoding principle applies: give the reader colour <em>and</em> line style <em>and</em> marker shape, and any single channel can fail while the remaining two still separate every pair of lines.</p>
 
@@ -421,7 +458,7 @@ plt.close(fig)
           </div>
         </div>
 
-        <h2>The data-ink ratio and cognitive load</h2>
+        <h2 id="data-ink-cognitive-load">The data-ink ratio and cognitive load</h2>
 
         <p>Tufte coined the term &ldquo;chart junk&rdquo; and the prevailing view in graphical perception still backs him up: removing non-essential visual elements reduces the viewer&rsquo;s cognitive processing cost and leads to faster, more accurate interpretation.<sup><a href="#ref-5" class="cite-ref">[5]</a></sup> There is a real debate about whether some embellishment can aid memorability in casual contexts, but in contexts where data scientists usually deliver results (reports for decision-makers, dashboards under time pressure, and papers for technical readers), the standard favours high data-ink ratios and the removal of decoration.<sup><a href="#ref-3" class="cite-ref">[3]</a></sup></p>
 
@@ -519,7 +556,7 @@ plt.close(fig)
           </div>
         </div>
 
-        <h2>Colour contrast and the WCAG standard</h2>
+        <h2 id="wcag-contrast">Colour contrast and the WCAG standard</h2>
 
         <p>The final common failure is contrast. Data scientists routinely use grey text, grey axis labels, or light-coloured title text because it looks clean. It does look clean on a well-calibrated screen in a dark room. It fails on a projector, in daylight, in greyscale print, and for readers with reduced contrast sensitivity, a substantial fraction of any audience over forty and a near-certainty in brightly lit conference rooms.</p>
 
@@ -612,7 +649,17 @@ plt.close(fig)
           </div>
         </div>
 
-        <h2>Screen readers, alt text, and the visual gatekeeper problem</h2>
+        <h2 id="dashboards-data-wall">Dashboards and the failure of the data wall</h2>
+
+        <p>Dashboards are where these failures compound. A single bad chart is a missed opportunity. A dashboard of fifteen bad charts is an organisational problem.</p>
+
+        <p>The point of a dashboard is glanceable, holistic situational awareness in a time-pressured context: the user opens it, gets the bigger picture in seconds, and drills down only where something looks off. The literature on dashboards in time-critical settings is consistent that this only works when cognitive load is minimised; if the layout, encodings, or density force the user to think hard about <em>how to read the dashboard</em>, the dashboard has failed its primary purpose.<sup><a href="#ref-4" class="cite-ref">[4]</a></sup></p>
+
+        <p>The corporate failure mode is well-known: every team adds the chart they care about, nothing gets removed, the dashboard becomes a wall, and the wall is unreadable. The accessibility-first version forces a different question at each addition: <em>can the intended user, in the intended condition, get the intended insight in the intended time?</em> If not, the chart does not earn its place. The dashboard should optimise for reading speed, not for completeness of representation.</p>
+
+        <p>The same logic applies to tables. A table is a dashboard with one type of glyph. The accessible table is sortable, has proper <code>&lt;th&gt;</code> headers, has scope attributes so screen readers can announce row and column context, has units in the headers (not implied), uses consistent number formatting, and aligns numerals on the decimal point. A table that breaks any of these is one that takes longer to read and that locks out screen-reader users entirely. Most of the &ldquo;tables&rdquo; in corporate dashboards are screenshots of spreadsheets pasted into Confluence, which means they are inaccessible by construction.</p>
+
+        <h2 id="screen-readers-alt-text">Screen readers, alt text, and the visual gatekeeper problem</h2>
 
         <p>The next big failure mode is treating a chart as a flat image. A PNG of a bar chart, embedded in a web page or a PDF, contains zero machine-readable information about the data. A screen reader announces &ldquo;image&rdquo; and moves on. A search engine can&rsquo;t index it. A reader on a slow connection sees nothing. A reader with a visual impairment is locked out entirely.</p>
 
@@ -626,7 +673,7 @@ plt.close(fig)
 
         <p>The visual gatekeeper problem is what happens when none of these are in place: the chart becomes a toll booth. Anyone who cannot pay with functional colour vision, a large screen, a fast connection, or no visual impairment cannot get through. The decision the chart was meant to inform proceeds without them. At scale, in dashboards used daily by organisations, papers cited widely, and slide decks that shape policy, this exclusion is not a minor UX inconvenience. It is a structural bias in who gets to participate in the conversation the data is supposed to enable.</p>
 
-        <h2>Beyond the basics: chart-type-specific pitfalls</h2>
+        <h2 id="beyond-basics">Beyond the basics: chart-type-specific pitfalls</h2>
 
         <p>The earlier examples cover the universal traps: colour as the sole differentiator, low contrast, image-only rendering, and tooltip-only data. Each chart type adds its own failure modes. The cases below are the ones that come up most often in data science work.</p>
 
@@ -657,7 +704,7 @@ plt.close(fig)
               </table>
               <p class="figure-note">Merged header breaks row/column mapping. No <code>scope</code> attributes. Units embedded in every cell. No caption. No zebra striping. Low-contrast header text.</p>
             </figure>
-<details class="code-example"><summary>HTML example</summary>
+<details class="code-example"><summary>Markup example</summary>
 <pre><code class="language-html">&lt;table&gt;
   &lt;!-- Merged header: breaks row/column mapping for screen readers --&gt;
   &lt;thead&gt;
@@ -701,7 +748,7 @@ plt.close(fig)
               </table>
               <p class="figure-note">Flat headers, units in the column header, <code>scope</code> attributes on every <code>&lt;th&gt;</code>, decimal alignment via <code>tabular-nums</code>, and zebra striping at WCAG-compliant contrast.</p>
             </figure>
-<details class="code-example"><summary>HTML example</summary>
+<details class="code-example"><summary>Markup example</summary>
 <pre><code class="language-html">&lt;table&gt;
   &lt;caption&gt;Mortgage approval rate by region and quarter (2024)&lt;/caption&gt;
   &lt;thead&gt;
@@ -1243,7 +1290,7 @@ plt.close(fig)
               <p class="figure-note">High-contrast nodes, edge labels on opaque backgrounds, and leaf node meaning carried by text, not by colour alone.</p>
             </figure>
 
-<details class="code-example"><summary>Accessible semantic equivalent (HTML)</summary>
+<details class="code-example"><summary>Semantic example</summary>
 <pre><code class="language-html">&lt;!--
   The visual tree is decorative. The list below is the source of truth
   for screen readers and keyboard users: native semantics, native
@@ -1395,17 +1442,7 @@ plt.close(fig)
           </div>
         </div>
 
-        <h2>Dashboards and the failure of the data wall</h2>
-
-        <p>Dashboards are where these failures compound. A single bad chart is a missed opportunity. A dashboard of fifteen bad charts is an organisational problem.</p>
-
-        <p>The point of a dashboard is glanceable, holistic situational awareness in a time-pressured context: the user opens it, gets the bigger picture in seconds, and drills down only where something looks off. The literature on dashboards in time-critical settings is consistent that this only works when cognitive load is minimised; if the layout, encodings, or density force the user to think hard about <em>how to read the dashboard</em>, the dashboard has failed its primary purpose.<sup><a href="#ref-4" class="cite-ref">[4]</a></sup></p>
-
-        <p>The corporate failure mode is well-known: every team adds the chart they care about, nothing gets removed, the dashboard becomes a wall, and the wall is unreadable. The accessibility-first version forces a different question at each addition: <em>can the intended user, in the intended condition, get the intended insight in the intended time?</em> If not, the chart does not earn its place. The dashboard should optimise for reading speed, not for completeness of representation.</p>
-
-        <p>The same logic applies to tables. A table is a dashboard with one type of glyph. The accessible table is sortable, has proper <code>&lt;th&gt;</code> headers, has scope attributes so screen readers can announce row and column context, has units in the headers (not implied), uses consistent number formatting, and aligns numerals on the decimal point. A table that breaks any of these is one that takes longer to read and that locks out screen-reader users entirely. Most of the &ldquo;tables&rdquo; in corporate dashboards are screenshots of spreadsheets pasted into Confluence, which means they are inaccessible by construction.</p>
-
-        <h2>Where data science papers and slides go wrong</h2>
+        <h2 id="papers-and-slides">Where data science papers and slides go wrong</h2>
 
         <p>Academic papers and conference slides have their own characteristic failures. Some are the same as the corporate ones, some are specific to the medium.</p>
 
@@ -1415,7 +1452,7 @@ plt.close(fig)
 
         <p>None of these are exotic. They are the things experienced reviewers complain about in every other paper they read, and the things audiences notice in every other talk. They persist because we treat the figure as an artefact of the analysis instead of as a piece of communication that has its own production standards.</p>
 
-        <h2>A practical accessibility-first checklist</h2>
+        <h2 id="practical-checklist">A practical accessibility-first checklist</h2>
 
         <p>If you want a working version of this, here is the checklist I run my own outputs through. It takes about five minutes per figure and it has caught a lot of mistakes.</p>
 
@@ -1431,7 +1468,7 @@ plt.close(fig)
           <li><strong>Test the rendered context.</strong> The thumbnail. The greyscale print. The phone screen. The dark-mode dashboard. The projected slide. If the chart fails any of them, it is a chart for a single condition, not a finished output.</li>
         </ul>
 
-        <h2>Why this is product design, not box-ticking</h2>
+        <h2 id="product-design-not-box-ticking">Why this is product design, not box-ticking</h2>
 
         <p>The reason I want to call this product design rather than &ldquo;accessibility compliance&rdquo; is that compliance language frames the work as a cost: a tax on shipping, paid grudgingly, audited late. Product design language frames it as the actual job: deliver value to your users, in the conditions in which they actually consume your output, accounting for who they are.</p>
 
@@ -1442,7 +1479,7 @@ plt.close(fig)
         <p>The work data scientists produce gets used to make decisions, sometimes large ones. Anyone in the audience who cannot decode the chart is being decided about without being able to push back. That is the part that turns this from a craft argument into an ethical one. If your output is the basis for a budget, a hiring choice, a policy, or a clinical decision, every reader who is locked out of the chart is locked out of the conversation. Accessibility-first design is, among other things, the discipline of not doing that to your audience.</p>
 
         <div class="faq-section">
-          <h2>Common questions</h2>
+          <h2 id="common-questions">Common questions</h2>
 
           <details class="faq-item">
             <summary>Isn&rsquo;t this just &ldquo;make charts simpler&rdquo;?</summary>
@@ -1500,11 +1537,15 @@ plt.close(fig)
           </li>
         </ol>
 
+        <p>PS making this blog post prompted me to improve accessibility across my blogs and website generally, I hope it does the same for you, too.</p>
+
         <hr style="margin: 40px 0;">
         <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
       </div>
     </div>
   </div>
+
+  </main>
 
   <hr>
   <div id="footer-section"></div>
@@ -1520,7 +1561,81 @@ plt.close(fig)
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
 renderFooter('footer-section');
-hljs.highlightAll();</script>
+hljs.highlightAll();
+
+(function () {
+  var DESKTOP_MIN_WIDTH = 992;
+  var rafId = null;
+
+  function alignCompareButtons() {
+    var compares = document.querySelectorAll('.plot-compare');
+    var BASE_MARGIN_TOP = 16;
+
+    compares.forEach(function (compare) {
+      var panels = compare.querySelectorAll('.plot-compare__panel');
+      var detailsBlocks = [];
+      var offsets = [];
+      var maxOffset = 0;
+
+      panels.forEach(function (panel) {
+        var details = panel.querySelector('details.code-example');
+        if (details) {
+          details.style.marginTop = BASE_MARGIN_TOP + 'px';
+          detailsBlocks.push(details);
+        }
+      });
+
+      if (window.innerWidth < DESKTOP_MIN_WIDTH || detailsBlocks.length < 2) {
+        return;
+      }
+
+      detailsBlocks.forEach(function (details) {
+        var panel = details.closest('.plot-compare__panel');
+        var panelTop = panel.getBoundingClientRect().top;
+        var detailsTop = details.getBoundingClientRect().top;
+        var offset = detailsTop - panelTop;
+        offsets.push(offset);
+        if (offset > maxOffset) {
+          maxOffset = offset;
+        }
+      });
+
+      detailsBlocks.forEach(function (details, index) {
+        var delta = maxOffset - offsets[index];
+        details.style.marginTop = (BASE_MARGIN_TOP + delta).toFixed(3) + 'px';
+      });
+    });
+  }
+
+  function scheduleAlign() {
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId);
+    }
+    rafId = requestAnimationFrame(function () {
+      alignCompareButtons();
+      rafId = null;
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', scheduleAlign);
+  window.addEventListener('load', scheduleAlign);
+  window.addEventListener('resize', scheduleAlign);
+  window.addEventListener('scroll', scheduleAlign, { passive: true });
+
+  document.querySelectorAll('details.code-example').forEach(function (details) {
+    details.addEventListener('toggle', scheduleAlign);
+  });
+
+  document.querySelectorAll('.plot-compare img').forEach(function (img) {
+    if (!img.complete) {
+      img.addEventListener('load', scheduleAlign, { once: true });
+      img.addEventListener('error', scheduleAlign, { once: true });
+    }
+  });
+
+  setTimeout(scheduleAlign, 60);
+  setTimeout(scheduleAlign, 240);
+})();</script>
 </body>
 </html>
 

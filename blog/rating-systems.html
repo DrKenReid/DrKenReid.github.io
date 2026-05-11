@@ -65,6 +65,7 @@
   <!-- Post Content -->
   <div class="about-us-area section-padding-80 clearfix">
     <div class="container">
+      <main id="main-content">
       <div class="blog-post">
         <h1>Book Ratings Are Broken</h1>
         <div class="blog-meta">
@@ -76,7 +77,7 @@
 
         <p>That is the entirety of my review for <em>He Who Fights with Monsters 2</em> by Shirtaloon. Meanwhile, I also gave five stars to bell hooks&rsquo; <em>Feminism Is for Everybody</em>, except that review is 2,516 characters long and covers intersectional feminism, the failures of liberal approaches to gender, and how reading the book made me uncomfortable in ways I needed to sit with. Same star rating. A 280x difference in the amount of effort I put into explaining why. Whatever those five stars are measuring, they&rsquo;re clearly not measuring the same thing twice.</p>
 
-        <p>I&rsquo;ve rated 569 books on <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank">Goodreads</a>, and I have opinions about all of them. Recently ran my own export through some analysis scripts (because apparently this is what data scientists do for fun on a Saturday), and what I found was a bit damning. Not of the books, but of the entire concept of reducing a literary experience to a number between 1 and 5. You can explore the full interactive version of this analysis on my <a href="https://goodreads-analysis.streamlit.app/" target="_blank">Goodreads Reading Stats app</a>, but here are the highlights.</p>
+        <p>I&rsquo;ve rated 569 books on <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" rel="noopener noreferrer">Goodreads</a>, and I have opinions about all of them. Recently ran my own export through some analysis scripts (because apparently this is what data scientists do for fun on a Saturday), and what I found was a bit damning. Not of the books, but of the entire concept of reducing a literary experience to a number between 1 and 5. You can explore the full interactive version of this analysis on my <a href="https://goodreads-analysis.streamlit.app/" target="_blank" rel="noopener noreferrer">Goodreads Reading Stats app</a>, but here are the highlights.</p>
 
         <div class="plain-english-box">
           <h2>Quick jargon guide</h2>
@@ -103,7 +104,7 @@
 
         <img src="img/review_length_by_rating.png" alt="1-star reviews average 554 chars, 5-star average 331" loading="lazy">
 
-        <p style="text-align:center;color:#888;font-size:13px;">The polynomial regression from my <a href="https://goodreads-analysis.streamlit.app/" target="_blank">analysis project</a> confirms it (R&sup2; = 0.03, meaning review length explains almost nothing about rating):</p>
+        <p style="text-align:center;color:#888;font-size:13px;">The polynomial regression from my <a href="https://goodreads-analysis.streamlit.app/" target="_blank" rel="noopener noreferrer">analysis project</a> confirms it (R&sup2; = 0.03, meaning review length explains almost nothing about rating):</p>
         <img src="img/gr_review_length.png" alt="Polynomial regression of rating vs review length, R-squared 0.03" loading="lazy">
 
         <p>My 1-star reviews are nearly twice as long as my 5-star reviews. Displeasure, it turns out, makes me far more articulate than joy. When I love something, I tend to write things like &ldquo;I&rsquo;m crying, 10/10&rdquo; (my full review of <em>The Book Thief</em>, which is genuinely one of the best novels I&rsquo;ve ever read and apparently all I could muster was a numerical score inside a text review that already has a numerical score). When I hate something, I can produce a multi-paragraph breakdown of exactly why, complete with quotes, structural criticism, and not very well concealed contempt.</p>
@@ -132,10 +133,10 @@
 
         <img src="img/genre_rating_bias.png" alt="Horizontal bar chart: fantasy 4.27 avg, horror 3.50 avg" loading="lazy">
 
-        <p style="text-align:center;color:#888;font-size:13px;">The rating density curves by genre from the <a href="https://goodreads-analysis.streamlit.app/" target="_blank">analysis project</a> show this even more clearly:</p>
+        <p style="text-align:center;color:#888;font-size:13px;">The rating density curves by genre from the <a href="https://goodreads-analysis.streamlit.app/" target="_blank" rel="noopener noreferrer">analysis project</a> show this even more clearly:</p>
         <img src="img/gr_genre_ratings.png" alt="Distribution of ratings for each primary genre" loading="lazy">
 
-        <p style="text-align:center;color:#888;font-size:13px;">And here&rsquo;s how my genre consumption has shifted over time (from the <a href="https://goodreads-analysis.streamlit.app/" target="_blank">analysis project</a>):</p>
+        <p style="text-align:center;color:#888;font-size:13px;">And here&rsquo;s how my genre consumption has shifted over time (from the <a href="https://goodreads-analysis.streamlit.app/" target="_blank" rel="noopener noreferrer">analysis project</a>):</p>
         <img src="img/gr_top_genres.gif" alt="Animated bar chart race of top genres by pages read over time" loading="lazy">
 
         <p>I rate fantasy nearly a full star higher than horror. This doesn&rsquo;t mean fantasy literature is objectively superior to horror (I can feel the Stephen King fans warming up their keyboards). What it means is that I pick fantasy books I&rsquo;m predisposed to enjoy, and I pick horror books that are more likely to challenge or unsettle me. The genres I consume for comfort get higher ratings than the genres I consume for discomfort. The stars are measuring my selection bias, which is a finding that would make any data scientist wince, because selection bias is the thing we spend our entire careers trying to eliminate from datasets, and here it is sitting proudly in my own reading data. Human after all!</p>
@@ -144,7 +145,7 @@
 
         <img src="img/page_count_rating.png" alt="Books under 200 pages average 3.72 stars, 600+ average 4.28" loading="lazy">
 
-        <p>There&rsquo;s more than half a star difference between short books and long ones. The obvious interpretation is that longer books are better. The actual interpretation is that I only finish long books I&rsquo;m enjoying. A 200-page book I&rsquo;m not into, I&rsquo;ll push through and rate a 3. A 600-page book I&rsquo;m not into, I probably abandoned 200 pages in and never rated it at all. This is survivorship bias dressed up as a preference, and it would completely wreck any model trying to predict my ratings from metadata alone. (This is the kind of thing I explore in more depth in the <a href="https://goodreads-analysis.streamlit.app/" target="_blank">Goodreads Analysis app</a>, where I actually tried to build rating prediction models and the results were... humbling.)</p>
+        <p>There&rsquo;s more than half a star difference between short books and long ones. The obvious interpretation is that longer books are better. The actual interpretation is that I only finish long books I&rsquo;m enjoying. A 200-page book I&rsquo;m not into, I&rsquo;ll push through and rate a 3. A 600-page book I&rsquo;m not into, I probably abandoned 200 pages in and never rated it at all. This is survivorship bias dressed up as a preference, and it would completely wreck any model trying to predict my ratings from metadata alone. (This is the kind of thing I explore in more depth in the <a href="https://goodreads-analysis.streamlit.app/" target="_blank" rel="noopener noreferrer">Goodreads Analysis app</a>, where I actually tried to build rating prediction models and the results were... humbling.)</p>
 
         <p>Books I&rsquo;ve reread average 4.28 stars (n=50). First reads average 3.95 (n=519). That&rsquo;s a third of a star difference, and it makes perfect sense: you don&rsquo;t reread books you didn&rsquo;t like. But it also means my &ldquo;read&rdquo; shelf is contaminated with a population of books that are structurally guaranteed to be rated higher than average. Any analysis that doesn&rsquo;t account for this is working with biased data. Again, selection bias. It&rsquo;s everywhere.</p>
 
@@ -160,7 +161,7 @@
 
         <p><strong>He Who Fights with Monsters</strong> by Shirtaloon: 5 &rarr; 5 &rarr; 5 &rarr; 5 &rarr; 4 &rarr; 5 &rarr; 3 &rarr; 3 &rarr; 5 &rarr; 5. The chart above tells the story: four perfect books, a brief wobble, a mid-series dip into 3-star territory around books 7 and 8, then a full recovery. Ten data points and the pattern is obvious, but a single &ldquo;average series rating&rdquo; of 4.5 would completely hide the fact that I nearly fell off the series halfway through.</p>
 
-        <p>These are exactly the kind of patterns that a flat star average completely obscures, and exactly the kind of thing that becomes visible when you actually visualise your reading data over time. The <a href="https://goodreads-analysis.streamlit.app/" target="_blank">reading stats app</a> shows these patterns for any Goodreads export, if you&rsquo;re curious about your own.</p>
+        <p>These are exactly the kind of patterns that a flat star average completely obscures, and exactly the kind of thing that becomes visible when you actually visualise your reading data over time. The <a href="https://goodreads-analysis.streamlit.app/" target="_blank" rel="noopener noreferrer">reading stats app</a> shows these patterns for any Goodreads export, if you&rsquo;re curious about your own.</p>
 
         <h2>The silence is deafening</h2>
 
@@ -190,7 +191,7 @@
 
         <p>Probably not, though. Some books really are just fun reads.</p>
 
-        <p>If any of this has made you curious about your own reading data, you can export your Goodreads library and upload it to my <a href="https://goodreads-analysis.streamlit.app/" target="_blank">Goodreads Reading Stats app</a>. It&rsquo;ll show you your own rating distribution, genre biases, reading timeline, and a few other things I built while procrastinating on this blog post. It won&rsquo;t fix the rating system, but it might make you feel seen. And if you want to see the source material behind this post, you can browse <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" rel="noopener noreferrer">my Goodreads profile here</a>.</p>
+        <p>If any of this has made you curious about your own reading data, you can export your Goodreads library and upload it to my <a href="https://goodreads-analysis.streamlit.app/" target="_blank" rel="noopener noreferrer">Goodreads Reading Stats app</a>. It&rsquo;ll show you your own rating distribution, genre biases, reading timeline, and a few other things I built while procrastinating on this blog post. It won&rsquo;t fix the rating system, but it might make you feel seen. And if you want to see the source material behind this post, you can browse <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" rel="noopener noreferrer">my Goodreads profile here</a>.</p>
 
         <div class="faq-section">
           <h2>Common questions</h2>
@@ -254,6 +255,8 @@
             </div>
           </div>
         </div>
+
+      </main>
 
         <hr style="margin: 40px 0;">
         <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
