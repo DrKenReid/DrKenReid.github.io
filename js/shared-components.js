@@ -18,31 +18,34 @@ function renderHeader(targetId, options) {
     var hobbiesActive = active === 'hobbies';
     var hobbiesChild = opts.hobbiesChild || '';
 
-    function isActive(key) {
-        return active === key ? ' class="active"' : '';
+    function navItem(key, href, label) {
+        var isCurrent = active === key;
+        return '<li' + (isCurrent ? ' class="active"' : '') + '><a href="' + href + '"' + (isCurrent ? ' aria-current="page"' : '') + '>' + label + '</a></li>';
     }
 
     function isHobbyChildActive(key) {
         return hobbiesChild === key ? ' class="active"' : '';
     }
 
-    el.innerHTML = '<header class="header-area"><div class="main-header-area"><div class="classy-nav-container breakpoint-on"><div class="container">' +
-        '<nav class="classy-navbar justify-content-between" id="alimeNav">' +
+    el.innerHTML = '<a class="skip-link" href="#main-content">Skip to main content</a>' +
+        '<button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode"></button>' +
+        '<header class="header-area"><div class="main-header-area"><div class="classy-nav-container breakpoint-on"><div class="container">' +
+        '<nav class="classy-navbar justify-content-between" id="alimeNav" aria-label="Primary">' +
         '<a class="nav-brand" href="' + basePath + 'index.html"><img src="' + basePath + 'img/core-img/logo.png" alt="Ken Reid Logo"></a>' +
         '<div class="classy-navbar-toggler"><span class="navbarToggler"><span></span><span></span><span></span></span></div>' +
         '<div class="classy-menu"><div class="classycloseIcon"><div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div></div>' +
         '<div class="classynav"><ul id="nav">' +
-        '<li' + isActive('home') + '><a href="' + basePath + 'index.html">Home</a></li>' +
-        '<li' + isActive('about') + '><a href="' + basePath + 'about.html">About</a></li>' +
-        '<li' + isActive('data_science') + '><a href="' + basePath + 'data_science.html">Data Science</a></li>' +
+        navItem('home', basePath + 'index.html', 'Home') +
+        navItem('about', basePath + 'about.html', 'About') +
+        navItem('data_science', basePath + 'data_science.html', 'Data Science') +
         '<li' + (hobbiesActive ? ' class="active"' : '') + '><a href="#">Hobbies</a>' +
         '<ul class="dropdown">' +
-        '<li' + isHobbyChildActive('gallery') + '><a href="' + basePath + 'gallery.html">Photography</a></li>' +
-        '<li' + isHobbyChildActive('music') + '><a href="' + basePath + 'music.html">Music</a></li>' +
-        '<li' + isHobbyChildActive('literature') + '><a href="' + basePath + 'literature.html">Literature</a></li>' +
+        '<li' + isHobbyChildActive('gallery') + '><a href="' + basePath + 'gallery.html"' + (hobbiesChild === 'gallery' ? ' aria-current="page"' : '') + '>Photography</a></li>' +
+        '<li' + isHobbyChildActive('music') + '><a href="' + basePath + 'music.html"' + (hobbiesChild === 'music' ? ' aria-current="page"' : '') + '>Music</a></li>' +
+        '<li' + isHobbyChildActive('literature') + '><a href="' + basePath + 'literature.html"' + (hobbiesChild === 'literature' ? ' aria-current="page"' : '') + '>Literature</a></li>' +
         '</ul></li>' +
-        '<li' + isActive('blog') + '><a href="' + basePath + 'blog.html">Blog</a></li>' +
-        '<li' + isActive('contact') + '><a href="' + basePath + 'contact.html">Contact</a></li>' +
+        navItem('blog', basePath + 'blog.html', 'Blog') +
+        navItem('contact', basePath + 'contact.html', 'Contact') +
         '</ul></div></div></nav>' +
         '</div></div></div></header>';
 

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t&&window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches)t='dark';if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
   <meta name="description" content="Ken Reid's blog — data science, photography, books, and other things on my mind.">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Blog - Ken Reid</title>
@@ -60,12 +61,15 @@
   </style>
   <script src="js/posts-data.js"></script>
   <script src="js/blog.js"></script>
+  <script src="js/theme.js"></script>
 </head>
 <body>
   <div id="preloader"><div class="loader"></div></div>
 
   <!-- Header -->
   <div id="header-section"></div>
+
+  <main id="main-content">
 
   <!-- Breadcrumb -->
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/bg-img/97.png);">
@@ -99,6 +103,7 @@
 
   <hr>
   <div id="instagram-section"></div>
+  </main>
   <div id="footer-section"></div>
 
   <script src="js/jquery.min.js"></script>

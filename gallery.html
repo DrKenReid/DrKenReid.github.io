@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t&&window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches)t='dark';if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
   <meta name="description" content="Ken Reid's photography gallery — landscape, urban, wildlife, and abandoned photography.">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Photography - Ken Reid</title>
@@ -29,6 +30,7 @@
 
   <!-- Gallery Script -->
   <script src="js/gallery.js"></script>
+  <script src="js/theme.js"></script>
 </head>
 <body>
 
@@ -39,6 +41,8 @@
 
   <!-- Header -->
   <div id="header-section"></div>
+
+  <main id="main-content">
 
   <!-- Breadcrumb -->
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/bg-img/108.png);">
@@ -101,7 +105,7 @@
       <div class="row">
         <div class="col-12 text-center" style="margin-top: 15px;">
           <p id="gallery-counter" style="color: #636363; margin-bottom: 10px;"></p>
-          <a id="load-more-btn" href="javascript:void(0);" onclick="loadMoreImages();" class="btn alime-btn btn-2">Load More</a>
+          <button id="load-more-btn" type="button" class="btn alime-btn btn-2">Load More</button>
         </div>
       </div>
     </div>
@@ -238,6 +242,7 @@
   <div id="instagram-section"></div>
 
   <!-- Footer (injected by shared-components.js) -->
+  </main>
   <div id="footer-section"></div>
   <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 
