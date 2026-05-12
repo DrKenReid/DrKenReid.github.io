@@ -156,6 +156,24 @@ function estimateReadingMinutes(post) {
     return Math.max(1, Math.ceil(words / 220));
 }
 
+function hydratePostReadingTime(post) {
+    if (!post || !post.url) return Promise.resolve();
+    if (typeof post._readMinutes === 'number' && isFinite(post._readMinutes)) return Promise.resolve();
+    var url = post.url.replace(/^blog\//, '../');
+    return fetch(url)
+        .then(function(r) { return r.ok ? r.text() : Promise.reject(); })
+        .then(function(html) {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(html, 'text/html');
+            var body = doc.querySelector('.blog-post');
+            if (!body) return;
+            var text = (body.textContent || '').replace(/\s+/g, ' ').trim();
+            var words = text ? text.split(' ').length : 0;
+            if (words > 0) post._readMinutes = Math.max(1, Math.ceil(words / 220));
+        })
+        .catch(function() {});
+}
+
 function createBlogCardElement(post, options) {
     var opts = options || {};
     var col = document.createElement('div');
@@ -303,6 +321,8 @@ function renderRelatedPosts(targetId) {
                 return;
             }
 
+            return Promise.all(related.map(hydratePostReadingTime)).then(function() {
+
             el.innerHTML = '<div class="related-posts">' +
                 '<h2>Related posts</h2>' +
                 '<div class="row related-posts-grid">' +
@@ -325,6 +345,7 @@ function renderRelatedPosts(targetId) {
                 }).join('') +
                 '</div>' +
                 '</div>';
+            }); // end hydratePostReadingTime Promise.all
         })
         .catch(function(error) {
             console.error('Failed to load related posts:', error);
