@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t&&window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches)t='dark';if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
   <meta name="description" content="Get in touch with Ken Reid — email, social media, and more.">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Contact - Ken Reid</title>
@@ -53,6 +53,32 @@
       margin: 0;
     }
     .social-card:hover h5 { color: #fc6060; }
+    .contact-note {
+      color: #636363;
+    }
+    .contact-map-frame {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #ebebeb;
+    }
+    [data-theme="dark"] .social-card {
+      background: #242424;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.28);
+    }
+    [data-theme="dark"] .social-card:hover {
+      box-shadow: 0 10px 28px rgba(0,0,0,0.36);
+    }
+    [data-theme="dark"] .social-card h5 {
+      color: #e2e2e2;
+    }
+    [data-theme="dark"] .social-card p,
+    [data-theme="dark"] .contact-note {
+      color: #cccccc !important;
+    }
+    [data-theme="dark"] .contact-map-frame {
+      border-color: #3a3a3a;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+    }
   </style>
   <script src="js/theme.js"></script>
 </head>
@@ -83,7 +109,7 @@
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8 text-center">
           <h2 class="wow fadeInUp" data-wow-delay="100ms">Get in Touch</h2>
-          <p class="wow fadeInUp" data-wow-delay="200ms" style="color: #636363; font-size: 16px; line-height: 1.8; margin-bottom: 10px;">
+          <p class="wow fadeInUp contact-note" data-wow-delay="200ms" style="font-size: 16px; line-height: 1.8; margin-bottom: 10px;">
             I like hearing from people. Questions about my work, book recommendations, photography, or anything else on this site are all welcome.
           </p>
           <p class="wow fadeInUp" data-wow-delay="300ms" style="margin-bottom: 40px;">
@@ -154,7 +180,7 @@
         <div class="col-12 col-lg-8">
           <div class="text-center" style="margin-bottom: 30px;">
             <h2 class="wow fadeInUp" data-wow-delay="100ms">Recent on Bluesky</h2>
-            <p class="wow fadeInUp" data-wow-delay="200ms" style="color: #636363;">
+            <p class="wow fadeInUp contact-note" data-wow-delay="200ms">
               <a href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer">@kenreid.co.uk</a>
             </p>
           </div>
@@ -169,11 +195,11 @@
     <div class="container">
       <div class="text-center" style="margin-bottom: 30px;">
         <h2 class="wow fadeInUp" data-wow-delay="100ms">Based In</h2>
-        <p class="wow fadeInUp" data-wow-delay="200ms" style="color: #636363;">Ann Arbor, Michigan</p>
+        <p class="wow fadeInUp contact-note" data-wow-delay="200ms">Ann Arbor, Michigan</p>
       </div>
       <div class="row justify-content-center">
         <div class="col-12 col-lg-10">
-          <div class="wow fadeInUp" data-wow-delay="300ms" style="border-radius: 8px; overflow: hidden; border: 1px solid #ebebeb;">
+          <div class="wow fadeInUp contact-map-frame" data-wow-delay="300ms">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d94373.94377940328!2d-83.79805635!3d42.2808256!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x883cb00a21489453%3A0xcf0a394ed39dc7a7!2sAnn%20Arbor%2C%20MI!5e0!3m2!1sen!2sus!4v1" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Ann Arbor, Michigan"></iframe>
           </div>
         </div>
@@ -198,7 +224,7 @@
     renderInstagramSection('instagram-section');
     renderFooter('footer-section');
 
-    /* Fetch latest Bluesky posts and render as embeds */
+    /* Fetch latest Bluesky posts and render as cards */
     (function() {
       var DID = 'did:plc:ks2rxbqomt6vsae6tepl6pcm';
       var HANDLE = 'kenreid.co.uk';
@@ -209,36 +235,55 @@
         .then(function(r) { return r.json(); })
         .then(function(data) {
           if (!data.feed || !data.feed.length) {
-            container.innerHTML = '<p style="color:#636363;text-align:center;">No recent posts.</p>';
+            container.innerHTML = '<p class="bsky-post-meta" style="text-align:center;">No recent posts.</p>';
             return;
           }
           data.feed.forEach(function(item) {
             var post = item.post;
             var record = post.record;
+            var author = post.author || {};
             var rkey = post.uri.split('/').pop();
             var date = new Date(record.createdAt);
             var dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+            var postUrl = 'https://bsky.app/profile/' + HANDLE + '/post/' + rkey;
 
-            var div = document.createElement('div');
-            div.style.marginBottom = '20px';
-            div.innerHTML =
-              '<blockquote class="bluesky-embed" data-bluesky-uri="' + post.uri + '" data-bluesky-cid="' + post.cid + '">' +
-                '<p lang="en">' + (record.text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</p>' +
-                '&mdash; ' + (post.author.displayName || HANDLE) +
-                ' (<a href="https://bsky.app/profile/' + HANDLE + '?ref_src=embed">@' + HANDLE + '</a>) ' +
-                '<a href="https://bsky.app/profile/' + HANDLE + '/post/' + rkey + '?ref_src=embed">' + dateStr + '</a>' +
-              '</blockquote>';
-            container.appendChild(div);
+            /* Avatar */
+            var avatarHtml = author.avatar
+              ? '<a href="https://bsky.app/profile/' + HANDLE + '" target="_blank" rel="noopener noreferrer" aria-label="View @' + HANDLE + ' on Bluesky"><img class="bsky-post-avatar" src="' + author.avatar + '" alt="' + (author.displayName || HANDLE) + ' avatar" loading="lazy"></a>'
+              : '';
+
+            /* Attached images */
+            var imagesHtml = '';
+            var embed = post.embed;
+            if (embed && embed.$type === 'app.bsky.embed.images#view' && embed.images && embed.images.length) {
+              var imgs = embed.images;
+              imagesHtml = '<div class="bsky-post-images count-' + Math.min(imgs.length, 4) + '">';
+              imgs.slice(0, 4).forEach(function(img) {
+                imagesHtml += '<img class="bsky-post-img" src="' + img.thumb + '" alt="' + (img.alt || 'Post image').replace(/"/g, '&quot;') + '" loading="lazy">';
+              });
+              imagesHtml += '</div>';
+            }
+
+            var card = document.createElement('div');
+            card.className = 'bsky-post-card';
+            card.innerHTML =
+              '<div class="bsky-post-header">' +
+                avatarHtml +
+                '<div>' +
+                  '<div class="bsky-post-handle">@' + HANDLE + '</div>' +
+                  '<div class="bsky-post-date">' + dateStr + '</div>' +
+                '</div>' +
+              '</div>' +
+              '<p class="bsky-post-text">' + (record.text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>') + '</p>' +
+              imagesHtml +
+              '<div class="bsky-post-meta">' +
+                '<a class="bsky-post-view-link" href="' + postUrl + '" target="_blank" rel="noopener noreferrer">View on Bluesky &rarr;</a>' +
+              '</div>';
+            container.appendChild(card);
           });
-
-          /* Load Bluesky embed widget to render the blockquotes */
-          var s = document.createElement('script');
-          s.src = 'https://embed.bsky.app/static/embed.js';
-          s.async = true;
-          document.body.appendChild(s);
         })
         .catch(function() {
-          container.innerHTML = '<p style="color:#636363;text-align:center;">Could not load posts. <a href="https://bsky.app/profile/' + HANDLE + '" target="_blank" rel="noopener noreferrer">View on Bluesky</a></p>';
+          container.innerHTML = '<p class="bsky-post-meta" style="text-align:center;">Could not load posts. <a class="bsky-post-view-link" href="https://bsky.app/profile/' + HANDLE + '" target="_blank" rel="noopener noreferrer">View on Bluesky</a></p>';
         });
     })();
   </script>

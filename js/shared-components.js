@@ -59,7 +59,7 @@ function renderHeader(targetId, options) {
 }
 
 /**
- * Renders the "Follow Instagram" section with 6 image tiles.
+ * Renders the "Follow Instagram" section with 10 random photography tiles.
  * @param {string} targetId - ID of the element to inject into.
  */
 function renderInstagramSection(targetId) {
@@ -68,45 +68,72 @@ function renderInstagramSection(targetId) {
 
     var instagramUrl = 'https://www.instagram.com/drkenreid/';
     var handle = 'drkenreid';
-    var imageStart = 20; // Uses images 20-25
 
-    var html = '<section class="follow-area clearfix">' +
+    el.innerHTML = '<section class="follow-area clearfix">' +
         '<div class="container"><div class="row"><div class="col-12">' +
         '<div class="section-heading text-center">' +
         '<h2>Photo Highlights</h2>' +
         '<p><a href="' + instagramUrl + '">Follow @' + handle + ' on Instagram</a></p>' +
         '</div></div></div></div>' +
-        '<div class="instragram-feed-area owl-carousel">';
+        '<div class="instragram-feed-area owl-carousel"></div></section>';
 
-    for (var i = 0; i < 6; i++) {
-        html += '<div class="single-instagram-item">' +
-            '<img src="img/bg-img/' + (imageStart + i) + '.png" alt="Instagram Image ' + (i + 1) + '" loading="lazy">' +
-            '<div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">' +
-            '<a href="' + instagramUrl + '">' +
-            '<i class="ti-instagram" aria-hidden="true"></i>' +
-            '<span>' + handle + '</span></a></div></div>';
+    function shuffleCopy(items) {
+        var copy = items.slice();
+        for (var i = copy.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = copy[i];
+            copy[i] = copy[j];
+            copy[j] = temp;
+        }
+        return copy;
     }
 
-    html += '</div></section>';
-    el.innerHTML = html;
+    function getStem(filename) {
+        return filename.lastIndexOf('.') > -1 ? filename.slice(0, filename.lastIndexOf('.')) : filename;
+    }
 
-    // Initialize Owl Carousel on the injected element (active.js already ran)
-    if (typeof jQuery !== 'undefined' && jQuery.fn.owlCarousel) {
-        jQuery('.instragram-feed-area').owlCarousel({
-            items: 6,
-            loop: true,
-            autoplay: true,
-            smartSpeed: 1000,
-            autoplayTimeout: 3000,
-            responsive: {
-                0: { items: 2 },
-                576: { items: 3 },
-                768: { items: 4 },
-                992: { items: 5 },
-                1200: { items: 6 }
-            }
+    fetch('data/photography-standard-files.json').then(function(response) {
+        return response.json();
+    }).then(function(files) {
+        var sample = shuffleCopy(Array.isArray(files) ? files : []).slice(0, 10);
+        var feed = el.querySelector('.instragram-feed-area');
+        if (!feed) return;
+
+        var html = '';
+        sample.forEach(function(filename, index) {
+            var stem = getStem(filename);
+            html += '<div class="single-instagram-item">' +
+                '<img src="img/photography/' + filename + '" alt="Photography highlight ' + (index + 1) + '" loading="lazy">' +
+                '<div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">' +
+                '<a href="' + instagramUrl + '">' +
+                '<i class="ti-instagram" aria-hidden="true"></i>' +
+                '<span>' + handle + '</span></a></div></div>';
         });
-    }
+
+        feed.innerHTML = html;
+
+        if (typeof jQuery !== 'undefined' && jQuery.fn.owlCarousel) {
+            jQuery('.instragram-feed-area').owlCarousel({
+                items: 10,
+                loop: true,
+                autoplay: true,
+                smartSpeed: 1000,
+                autoplayTimeout: 3000,
+                responsive: {
+                    0: { items: 2 },
+                    576: { items: 3 },
+                    768: { items: 4 },
+                    992: { items: 5 },
+                    1200: { items: 10 }
+                }
+            });
+        }
+    }).catch(function() {
+        var feed = el.querySelector('.instragram-feed-area');
+        if (feed) {
+            feed.innerHTML = '<div class="single-instagram-item"><a href="' + instagramUrl + '" class="d-flex align-items-center justify-content-center" style="min-height: 220px; color: #fc6060; font-weight: 600;">Instagram feed unavailable</a></div>';
+        }
+    });
 }
 
 /**
@@ -356,6 +383,262 @@ function renderBlogThanksCta() {
     blogPost.insertBefore(cta, relatedPosts);
 }
 
+function autoCollapseTopJargonBox() {
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost) return;
+
+    function normalizeText(text) {
+        return (text || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function isJargonBox(box) {
+        if (!box || !box.classList || !box.classList.contains('plain-english-box')) {
+            return false;
+        }
+
+        var heading = box.querySelector('h1, h2, h3, h4, h5, h6, summary');
+        var headingText = normalizeText(heading ? heading.textContent : '').toLowerCase();
+        return /jargon|glossary|plain english/.test(headingText);
+    }
+
+    var boxes = blogPost.querySelectorAll('.plain-english-box');
+    var target = null;
+
+    Array.prototype.some.call(boxes, function(box) {
+        if (isJargonBox(box)) {
+            target = box;
+            return true;
+        }
+        return false;
+    });
+
+    if (!target) return;
+
+    if (target.tagName === 'DETAILS') {
+        target.classList.add('collapsible-jargon-box');
+        target.removeAttribute('open');
+        var existingSummary = target.querySelector(':scope > summary');
+        if (existingSummary) {
+            existingSummary.classList.add('collapsible-jargon-box__summary');
+        }
+        return;
+    }
+
+    var headingEl = target.querySelector('h1, h2, h3, h4, h5, h6');
+    var titleText = normalizeText(headingEl ? headingEl.textContent : '') || 'Quick jargon guide';
+
+    var details = document.createElement('details');
+    details.className = target.className + ' collapsible-jargon-box';
+
+    Array.prototype.forEach.call(target.attributes, function(attr) {
+        if (attr.name === 'class') return;
+        details.setAttribute(attr.name, attr.value);
+    });
+
+    var summary = document.createElement('summary');
+    summary.className = 'collapsible-jargon-box__summary';
+
+    var summaryTitle = document.createElement('span');
+    summaryTitle.className = 'collapsible-jargon-box__title';
+    summaryTitle.textContent = titleText;
+    summary.appendChild(summaryTitle);
+
+    details.appendChild(summary);
+
+    var childNodes = Array.prototype.slice.call(target.childNodes);
+    childNodes.forEach(function(node) {
+        if (headingEl && node === headingEl) return;
+        details.appendChild(node);
+    });
+
+    target.parentNode.replaceChild(details, target);
+}
+
+function applyJargonTooltips() {
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost) return;
+
+    function normalizeText(text) {
+        return (text || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function addTermAlias(definitions, term, definition) {
+        var normalizedTerm = normalizeText(term).replace(/[:：]\s*$/, '');
+        if (!normalizedTerm) return;
+        definitions[normalizedTerm.toLowerCase()] = definition;
+    }
+
+    function extractPageJargonDefinitions(container) {
+        var definitions = {};
+        var sourceBoxes = [];
+        var boxes = container.querySelectorAll('.plain-english-box');
+
+        Array.prototype.forEach.call(boxes, function(box) {
+            var heading = box.querySelector('h1, h2, h3, h4, h5, h6');
+            var headingText = normalizeText(heading ? heading.textContent : '').toLowerCase();
+            var isJargonHeading = /jargon|glossary|plain english/.test(headingText);
+            var listItems = box.querySelectorAll('li');
+            var hasDefinitionRows = Array.prototype.some.call(listItems, function(li) {
+                return !!li.querySelector('strong');
+            });
+
+            if (!isJargonHeading && !hasDefinitionRows) {
+                return;
+            }
+
+            sourceBoxes.push(box);
+
+            Array.prototype.forEach.call(listItems, function(li) {
+                var strong = li.querySelector('strong');
+                if (!strong) return;
+
+                var rawLabel = normalizeText(strong.textContent).replace(/[:：]\s*$/, '');
+                if (!rawLabel) return;
+
+                var fullLine = normalizeText(li.textContent);
+                var labelWithPunctuation = normalizeText(strong.textContent);
+                var definition = fullLine.indexOf(labelWithPunctuation) === 0
+                    ? fullLine.slice(labelWithPunctuation.length).trim()
+                    : fullLine;
+
+                definition = definition.replace(/^[:\-–—]\s*/, '').trim();
+                if (!definition) return;
+
+                addTermAlias(definitions, rawLabel, definition);
+
+                var parenMatch = rawLabel.match(/^(.+?)\s*\(([^)]+)\)$/);
+                if (parenMatch) {
+                    addTermAlias(definitions, parenMatch[1], definition);
+                    addTermAlias(definitions, parenMatch[2], definition);
+                }
+            });
+        });
+
+        return {
+            definitions: definitions,
+            sourceBoxes: sourceBoxes
+        };
+    }
+
+    var extracted = extractPageJargonDefinitions(blogPost);
+    var jargonDefinitions = extracted.definitions;
+    var sourceBoxes = extracted.sourceBoxes;
+
+    if (!Object.keys(jargonDefinitions).length) {
+        return;
+    }
+
+    // Resolve explicit lightweight jargon markers first:
+    //   <jargon key="wcag">WCAG</jargon>
+    //   <jargon>redundant coding</jargon>
+    Array.prototype.forEach.call(blogPost.querySelectorAll('jargon'), function(node) {
+        var key = normalizeText(node.getAttribute('key') || '').toLowerCase();
+        var fallback = normalizeText(node.textContent || '').toLowerCase();
+        var definition = jargonDefinitions[key] || jargonDefinitions[fallback];
+
+        var abbr = document.createElement('abbr');
+        if (definition) {
+            abbr.setAttribute('title', definition);
+        }
+        abbr.textContent = node.textContent || '';
+        node.parentNode.replaceChild(abbr, node);
+    });
+
+    var sortedTerms = Object.keys(jargonDefinitions).sort(function(a, b) {
+        return b.length - a.length;
+    });
+
+    function escapeRegex(text) {
+        return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    var jargonRegex = new RegExp('\\b(' + sortedTerms.map(escapeRegex).join('|') + ')\\b', 'gi');
+    var skipTags = {
+        ABBR: true,
+        JARGON: true,
+        A: true,
+        CODE: true,
+        PRE: true,
+        SCRIPT: true,
+        STYLE: true,
+        TEXTAREA: true
+    };
+
+    var walker = document.createTreeWalker(blogPost, NodeFilter.SHOW_TEXT, {
+        acceptNode: function(node) {
+            if (!node || !node.nodeValue || !node.nodeValue.trim()) {
+                return NodeFilter.FILTER_REJECT;
+            }
+
+            var parent = node.parentElement;
+            if (!parent) {
+                return NodeFilter.FILTER_REJECT;
+            }
+
+            while (parent) {
+                if (skipTags[parent.tagName]) {
+                    return NodeFilter.FILTER_REJECT;
+                }
+                if (sourceBoxes.indexOf(parent) !== -1) {
+                    return NodeFilter.FILTER_REJECT;
+                }
+                parent = parent.parentElement;
+            }
+
+            if (!jargonRegex.test(node.nodeValue)) {
+                jargonRegex.lastIndex = 0;
+                return NodeFilter.FILTER_REJECT;
+            }
+
+            jargonRegex.lastIndex = 0;
+            return NodeFilter.FILTER_ACCEPT;
+        }
+    });
+
+    var nodesToReplace = [];
+    var currentNode;
+    while ((currentNode = walker.nextNode())) {
+        nodesToReplace.push(currentNode);
+    }
+
+    nodesToReplace.forEach(function(node) {
+        var text = node.nodeValue;
+        var fragment = document.createDocumentFragment();
+        var lastIndex = 0;
+        var match;
+
+        jargonRegex.lastIndex = 0;
+        while ((match = jargonRegex.exec(text)) !== null) {
+            var matchedText = match[0];
+            var definition = jargonDefinitions[matchedText.toLowerCase()];
+            if (!definition) {
+                continue;
+            }
+
+            if (match.index > lastIndex) {
+                fragment.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+            }
+
+            var abbr = document.createElement('abbr');
+            abbr.setAttribute('title', definition);
+            abbr.textContent = matchedText;
+            fragment.appendChild(abbr);
+
+            lastIndex = match.index + matchedText.length;
+        }
+
+        if (lastIndex === 0) {
+            return;
+        }
+
+        if (lastIndex < text.length) {
+            fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+
+        node.parentNode.replaceChild(fragment, node);
+    });
+}
+
 function renderFooter(targetId) {
     var el = document.getElementById(targetId);
     if (!el) return;
@@ -377,5 +660,7 @@ function renderFooter(targetId) {
         '</div></div></div></div></div></footer>';
 }
 
-    renderPostDisclaimer();
-    renderBlogThanksCta();
+renderPostDisclaimer();
+renderBlogThanksCta();
+autoCollapseTopJargonBox();
+applyJargonTooltips();

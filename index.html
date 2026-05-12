@@ -3,7 +3,7 @@
 <head>
   <!-- Primary Meta Tags -->
   <meta charset="UTF-8">
-  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t&&window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches)t='dark';if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
   <meta name="description" content="Ken Reid's personal website showcasing his photography, data science projects, music, literature, and contact information.">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Ken Reid</title>
@@ -24,6 +24,37 @@
   <!-- Stylesheet -->
   <link rel="alternate" type="application/rss+xml" title="Ken Reid's Blog" href="https://www.kenreid.co.uk/feed.xml">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .home-stats-bar {
+      background: #f7f7f7;
+      padding: 40px 0;
+      border-top: 1px solid #ebebeb;
+      border-bottom: 1px solid #ebebeb;
+    }
+    .home-stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fc6060;
+    }
+    .home-stat-label {
+      font-size: 12px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .home-section-note {
+      color: #636363;
+    }
+    [data-theme="dark"] .home-stats-bar {
+      background: #202020;
+      border-top-color: #333;
+      border-bottom-color: #333;
+    }
+    [data-theme="dark"] .home-stat-label,
+    [data-theme="dark"] .home-section-note {
+      color: #b8b8b8 !important;
+    }
+  </style>
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
@@ -146,32 +177,32 @@
   </section>
 
   <!-- Stats Bar -->
-  <section class="wow fadeInUp" data-wow-delay="100ms" style="background: #f7f7f7; padding: 40px 0; border-top: 1px solid #ebebeb; border-bottom: 1px solid #ebebeb;">
+  <section class="wow fadeInUp home-stats-bar" data-wow-delay="100ms">
     <div class="container">
       <div class="row text-center">
         <div class="col-6 col-md-2">
-          <div id="blog-post-count" style="font-size: 28px; font-weight: 700; color: #fc6060;">0</div>
-          <div style="font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px;">Blog Posts</div>
+          <div id="blog-post-count" class="home-stat-value">0</div>
+          <div class="home-stat-label">Blog Posts</div>
         </div>
         <div class="col-6 col-md-2">
-          <div style="font-size: 28px; font-weight: 700; color: #fc6060;">370+</div>
-          <div style="font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px;">Photos</div>
+          <div class="home-stat-value">370+</div>
+          <div class="home-stat-label">Photos</div>
         </div>
         <div class="col-6 col-md-2">
-          <div style="font-size: 28px; font-weight: 700; color: #fc6060;">550+</div>
-          <div style="font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px;">Books Read</div>
+          <div class="home-stat-value">550+</div>
+          <div class="home-stat-label">Books Read</div>
         </div>
         <div class="col-6 col-md-2">
-          <div style="font-size: 28px; font-weight: 700; color: #fc6060;">49K+</div>
-          <div style="font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px;">Scrobbles</div>
+          <div class="home-stat-value">49K+</div>
+          <div class="home-stat-label">Scrobbles</div>
         </div>
         <div class="col-6 col-md-2">
-          <div style="font-size: 28px; font-weight: 700; color: #fc6060;">571</div>
-          <div style="font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px;">Quotes Saved</div>
+          <div class="home-stat-value">571</div>
+          <div class="home-stat-label">Quotes Saved</div>
         </div>
         <div class="col-6 col-md-2">
-          <div style="font-size: 28px; font-weight: 700; color: #fc6060;">249</div>
-          <div style="font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px;">Book Reviews</div>
+          <div class="home-stat-value">249</div>
+          <div class="home-stat-label">Book Reviews</div>
         </div>
       </div>
     </div>
@@ -249,7 +280,7 @@
         <div class="col-12 col-lg-8">
           <div class="text-center" style="margin-bottom: 30px;">
             <h2 class="wow fadeInUp" data-wow-delay="100ms">Recent on Bluesky</h2>
-            <p class="wow fadeInUp" data-wow-delay="200ms" style="color: #636363;">
+            <p class="wow fadeInUp home-section-note" data-wow-delay="200ms">
               <a href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer">@kenreid.co.uk</a>
             </p>
           </div>
@@ -353,24 +384,46 @@
           data.feed.forEach(function(item) {
             var post = item.post;
             var record = post.record;
+            var author = post.author || {};
             var rkey = post.uri.split('/').pop();
             var date = new Date(record.createdAt);
             var dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-            var div = document.createElement('div');
-            div.style.marginBottom = '20px';
-            div.innerHTML =
-              '<blockquote class="bluesky-embed" data-bluesky-uri="' + post.uri + '" data-bluesky-cid="' + post.cid + '">' +
-              '<p lang="en">' + (record.text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</p>' +
-              '&mdash; ' + (post.author.displayName || HANDLE) +
-              ' (<a href="https://bsky.app/profile/' + HANDLE + '">@' + HANDLE + '</a>) ' +
-              '<a href="https://bsky.app/profile/' + HANDLE + '/post/' + rkey + '">' + dateStr + '</a>' +
-              '</blockquote>';
-            container.appendChild(div);
+            var postUrl = 'https://bsky.app/profile/' + HANDLE + '/post/' + rkey;
+
+            /* Avatar */
+            var avatarHtml = author.avatar
+              ? '<a href="https://bsky.app/profile/' + HANDLE + '" target="_blank" rel="noopener noreferrer" aria-label="View @' + HANDLE + ' on Bluesky"><img class="bsky-post-avatar" src="' + author.avatar + '" alt="' + (author.displayName || HANDLE) + ' avatar" loading="lazy"></a>'
+              : '';
+
+            /* Attached images */
+            var imagesHtml = '';
+            var embed = post.embed;
+            if (embed && embed.$type === 'app.bsky.embed.images#view' && embed.images && embed.images.length) {
+              var imgs = embed.images;
+              imagesHtml = '<div class="bsky-post-images count-' + Math.min(imgs.length, 4) + '">';
+              imgs.slice(0, 4).forEach(function(img) {
+                imagesHtml += '<img class="bsky-post-img" src="' + img.thumb + '" alt="' + (img.alt || 'Post image').replace(/"/g, '&quot;') + '" loading="lazy">';
+              });
+              imagesHtml += '</div>';
+            }
+
+            var card = document.createElement('div');
+            card.className = 'bsky-post-card';
+            card.innerHTML =
+              '<div class="bsky-post-header">' +
+                avatarHtml +
+                '<div>' +
+                  '<div class="bsky-post-handle">@' + HANDLE + '</div>' +
+                  '<div class="bsky-post-date">' + dateStr + '</div>' +
+                '</div>' +
+              '</div>' +
+              '<p class="bsky-post-text">' + (record.text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>') + '</p>' +
+              imagesHtml +
+              '<div class="bsky-post-meta">' +
+                '<a class="bsky-post-view-link" href="' + postUrl + '" target="_blank" rel="noopener noreferrer">View on Bluesky &rarr;</a>' +
+              '</div>';
+            container.appendChild(card);
           });
-          var s = document.createElement('script');
-          s.src = 'https://embed.bsky.app/static/embed.js';
-          s.async = true;
-          document.body.appendChild(s);
         }).catch(function() {});
     })();
   </script>
