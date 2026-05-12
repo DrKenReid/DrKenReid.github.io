@@ -168,9 +168,9 @@
 					<colgroup><col><col><col></colgroup>
 					<thead>
 						<tr>
-							<th>Concept</th>
-							<th>EC term</th>
-							<th>ML term</th>
+						<th scope="col">Concept</th>
+						<th scope="col">EC term</th>
+						<th scope="col">ML term</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -266,7 +266,7 @@
   url    = {https://www.kenreid.co.uk/blog/evolutionary-computation-identity-crisis.html},
   note   = {Blog post, accessed YYYY-MM-DD}
 }</pre>
-					<button onclick="navigator.clipboard.writeText(document.getElementById('bibtex-cite').textContent).then(function(){this.textContent='Copied!';var b=this;setTimeout(function(){b.textContent='Copy BibTeX'},2000)}.bind(this))" style="margin-top:10px; padding:8px 16px; border:1px solid #ddd; border-radius:20px; background:#fff; color:#555; font-size:13px; cursor:pointer;">Copy BibTeX</button>
+					<button id="copy-bibtex-btn" style="margin-top:10px; padding:8px 16px; border:1px solid #ddd; border-radius:20px; background:#fff; color:#555; font-size:13px; cursor:pointer;">Copy BibTeX</button>
 					<p style="font-size:13px; color:#999; margin-top:12px; margin-bottom:0;">APA: Reid, K. N. (2026). Evolutionary Computation's Identity Crisis in the Age of GenAI. <em>kenreid.co.uk</em>. https://www.kenreid.co.uk/blog/evolutionary-computation-identity-crisis.html</p>
 				</div>
 
@@ -327,6 +327,34 @@
 	<script src="../js/alime.bundle.js"></script>
 	<script src="../js/share.js"></script>
 	<script src="../js/default-assets/active.js"></script>
+	<script>
+		(function(){
+			var btn=document.getElementById('copy-bibtex-btn');
+			var cite=document.getElementById('bibtex-cite');
+			if(!btn||!cite||btn.dataset.bound)return;
+			btn.addEventListener('click',function(){
+				var text=cite.textContent;
+				function setCopiedLabel(){
+					btn.textContent='Copied!';
+					setTimeout(function(){btn.textContent='Copy BibTeX';},2000);
+				}
+				if(navigator.clipboard&&navigator.clipboard.writeText){
+					navigator.clipboard.writeText(text).then(setCopiedLabel).catch(function(){});
+					return;
+				}
+				var ta=document.createElement('textarea');
+				ta.value=text;
+				ta.setAttribute('readonly','');
+				ta.style.position='absolute';
+				ta.style.left='-9999px';
+				document.body.appendChild(ta);
+				ta.select();
+				try{document.execCommand('copy');setCopiedLabel();}catch(e){}
+				document.body.removeChild(ta);
+			});
+			btn.dataset.bound='true';
+		})();
+	</script>
 	<script src="../js/shared-components.js"></script>
 	<script>renderHeader('header-section', { basePath: '../', active: 'blog' });
 renderFooter('footer-section');</script>
