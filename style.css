@@ -2140,12 +2140,28 @@ input:required {
   padding: 10px 18px;
   border-radius: 999px;
   background: #fc6060;
+  border: 1px solid #fc6060;
   color: #fff;
   text-decoration: none;
   font-weight: 700; }
-.post-cta:hover {
+.post-cta:hover,
+.post-cta:focus,
+.post-cta:active,
+.post-cta:visited {
   color: #fff;
-  background: #e94f4f; }
+  text-decoration: none;
+  background: #e94f4f;
+  border-color: #e94f4f; }
+
+[data-theme="dark"] .post-cta,
+[data-theme="dark"] .post-cta:hover,
+[data-theme="dark"] .post-cta:focus,
+[data-theme="dark"] .post-cta:active,
+[data-theme="dark"] .post-cta:visited {
+  color: #fff;
+  text-decoration: none;
+  background: #fc6060;
+  border-color: #fc6060; }
 .related-posts {
   margin-top: 36px;
   border-top: 1px solid #eee;
@@ -2906,6 +2922,45 @@ input:required {
 [data-theme="dark"] .breakpoint-on .classy-navbar .classy-menu {
   background-color: #1e1e1e; }
 
+/* ── Mobile menu: light mode ── */
+.breakpoint-on .classynav ul li a,
+.breakpoint-on .classynav > ul > li > a {
+  color: #252525; }
+
+.breakpoint-on .classynav ul li a:hover,
+.breakpoint-on .classynav ul li a:focus {
+  color: #fc6060; }
+
+.breakpoint-on .classynav > ul > li > a {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e8e8e8; }
+
+.breakpoint-on .classynav ul li .dropdown li a {
+  background-color: #fff;
+  color: #444;
+  border-bottom: 1px solid #f0f0f0; }
+
+.breakpoint-on .dd-trigger {
+  background-color: #fc6060; }
+
+/* ── Mobile menu: dark mode ── */
+[data-theme="dark"] .breakpoint-on .classynav ul li a,
+[data-theme="dark"] .breakpoint-on .classynav > ul > li > a {
+  color: #e2e2e2; }
+
+[data-theme="dark"] .breakpoint-on .classynav ul li a:hover,
+[data-theme="dark"] .breakpoint-on .classynav ul li a:focus {
+  color: #fc6060; }
+
+[data-theme="dark"] .breakpoint-on .classynav > ul > li > a {
+  background-color: #2a2a2a;
+  border-bottom: 1px solid #333; }
+
+[data-theme="dark"] .breakpoint-on .classynav ul li .dropdown li a {
+  background-color: #1e1e1e;
+  color: #ccc;
+  border-bottom: 1px solid #2a2a2a; }
+
 /* Hamburger bars */
 [data-theme="dark"] .classy-navbar-toggler .navbarToggler span {
   background-color: #e2e2e2; }
@@ -3198,6 +3253,17 @@ input:required {
   word-wrap: break-word;
   line-height: 1.4;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+  .blog-post abbr::before {
+    min-width: 200px;
+    max-width: calc(100vw - 20px);
+    left: auto;
+    right: auto;
+  }
 }
 
 .blog-post abbr::after {
@@ -3427,6 +3493,16 @@ input:required {
 
 [data-theme="dark"] .plain-english-box.collapsible-jargon-box > summary {
   color: #e2e2e2; }
+
+/* Last.fm card dark mode */
+[data-theme="dark"] .lastfm-card {
+  background: #242424 !important; }
+
+[data-theme="dark"] .lastfm-card .card-label {
+  color: #aaa !important; }
+
+[data-theme="dark"] .lastfm-card .card-bottom {
+  border-top-color: #3a3a3a !important; }
 
 [data-theme="dark"] .social-card {
   background: #242424 !important;
