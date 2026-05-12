@@ -1,8 +1,16 @@
 window.BLOG_POSTS = [
   {
+    title: 'Accessibility-First Product Design in Data Science',
+    date: '2026-05-11',
+    tags: ['data science'],
+    excerpt: 'Data science outputs are often inaccessible by default. Accessibility-first design in plots, dashboards, and tables improves understanding for everyone.',
+    url: 'blog/accessibility-first-product-design-data-science.html',
+    image: 'img/bg-img/21.png'
+  },
+  {
     title: 'The Life and Death of the Early Internet',
     date: '2026-05-06',
-    tags: ['personal', 'tech'],
+    tags: ['personal'],
     excerpt: 'From CRT monitors and Comet Cursor to MSN Messenger, Kazaa, Warcraft 3 forums, and Bebo: a personal history of how the early internet shaped who we are.',
     url: 'blog/life-and-death-of-the-early-internet.html',
     image: 'img/bg-img/375.png'
@@ -10,7 +18,7 @@ window.BLOG_POSTS = [
   {
     title: 'The Ethics of LLM Use (Not LLMs)',
     date: '2026-04-29',
-    tags: ['ai', 'environment', 'opinion', 'data-science'],
+    tags: ['ai'],
     excerpt: 'An AI researcher\'s honest take on LLM ethics: the energy numbers, the cobalt hypocrisy, the Jevons paradox, and why telling people not to use AI on environmental grounds is a privilege position.',
     url: 'blog/ethics-of-llm-use-not-llms.html',
     image: 'img/bg-img/280.png'
@@ -42,7 +50,7 @@ window.BLOG_POSTS = [
   {
     title: 'No Idea? No Problem: A Beginner\'s Guide to Building Your Data Science Portfolio',
     date: '2026-04-20',
-    tags: ['data-science'],
+    tags: ['data science'],
     excerpt: 'A practical guide to building a data science portfolio when you have no idea where to start. Covers project types, documentation, novelty, collaboration, and working in the GenAI era.',
     url: 'blog/no-idea-no-problem-data-science-portfolio.html',
     image: 'img/bg-img/19.png'
@@ -82,7 +90,7 @@ window.BLOG_POSTS = [
   {
     title: 'Snowball vs Avalanche: The Science of Paying Off Debt',
     date: '2026-04-14',
-    tags: ['personal-finance'],
+    tags: ['finance'],
     excerpt: 'Snowball and avalanche both work, but for different reasons. A practical guide with simulator-backed charts on interest, timing, and motivation.',
     url: 'blog/snowball-vs-avalanche.html',
     image: 'blog/img/debt_total_curve.png'
