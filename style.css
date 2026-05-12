@@ -2804,6 +2804,17 @@ input:required {
 [data-theme="dark"] .theme-toggle:hover {
   background: rgba(255, 255, 255, 0.2); }
 
+@media only screen and (max-width: 767px) {
+  .theme-toggle {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .theme-toggle:hover {
+    transform: translateX(-50%) scale(1.08);
+  }
+}
+
 /* ==============================
    Dark Mode (data-theme="dark")
    ============================== */
