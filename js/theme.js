@@ -3,7 +3,7 @@
  *
  * Responsibilities:
  *   - Read stored preference from localStorage on DOMContentLoaded
- *   - Fall back to prefers-color-scheme if no stored preference
+ *   - Default to dark mode when there is no stored preference
  *   - Apply data-theme="dark"|"light" to <html>
  *   - Keep the #theme-toggle button aria state in sync
  *   - Persist choice across page loads
@@ -13,6 +13,7 @@
  */
 (function () {
   var STORAGE_KEY = 'kr-theme';
+  var DEFAULT_THEME = 'dark';
 
   function stored() {
     try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
@@ -20,11 +21,6 @@
 
   function save(t) {
     try { localStorage.setItem(STORAGE_KEY, t); } catch (e) {}
-  }
-
-  function systemPrefers() {
-    return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
-      ? 'dark' : 'light';
   }
 
   function apply(theme) {
@@ -38,7 +34,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    apply(stored() || systemPrefers());
+    apply(stored() || DEFAULT_THEME);
 
     // Delegated click — works even if button is injected after this script runs
     document.addEventListener('click', function (e) {
@@ -48,12 +44,5 @@
       save(next);
       apply(next);
     });
-
-    // React to OS-level changes only when user has not stored a preference
-    if (window.matchMedia) {
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
-        if (!stored()) apply(e.matches ? 'dark' : 'light');
-      });
-    }
   });
 }());

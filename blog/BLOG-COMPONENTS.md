@@ -11,15 +11,15 @@ CSS for all components lives in `style.css`.
 <figure>
   <img src="../img/bg-img/XXX.png" alt="Description" loading="lazy"
        style="width:100%; border-radius:8px;">
-  <p class="figure-note">
-    <span class="figure-copyright">&copy; Ken Reid</span>
+  <figcaption class="figure-note">
+    <span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span>
     Caption text goes here.
-  </p>
+  </figcaption>
 </figure>
 ```
 
 **CSS classes:** `figure-note`, `figure-copyright`
-**Notes:** Copyright line renders grey and small above the caption. All bg-img photos are Ken's except `kwee.jpg`, `chaos.jpg`, `yoyo.JPG`, `nila.jpg` (cat photos). Book covers and third-party art are exempt.
+**Notes:** Use `<figcaption>` for semantic captioning. Copyright line renders grey and small above the caption. If a figure should show copyright only, omit the caption text and leave just the span inside `figure-note`. All bg-img photos are Ken's except `kwee.jpg`, `chaos.jpg`, `yoyo.JPG`, `nila.jpg` (cat photos). Book covers and third-party art are exempt.
 
 ---
 
@@ -42,7 +42,7 @@ CSS for all components lives in `style.css`.
 ```
 
 **CSS classes:** `faq-section`, `faq-item`
-**Notes:** Uses native `<details>`/`<summary>` — no JS needed. Renders with a warm tint background.
+**Notes:** Uses native `<details>`/`<summary>` — no JS needed. Renders with a warm tint background. Keep summary text plain (do not nest heading tags inside `<summary>`).
 
 ---
 
@@ -139,9 +139,162 @@ Link to another page naturally within paragraph text:
 ```html
 <a href="../data_science.html">my data science work</a>
 <a href="in-defense-of-audiobooks.html">my post on audiobooks</a>
+<a href="https://example.com" target="_blank" rel="noopener noreferrer">external source</a>
 ```
 
-**Notes:** No special class needed — blog post link underline styles are handled globally in `style.css`.
+**Notes:** No special class needed — blog post link underline styles are handled globally in `style.css`. For new-tab links, always include `rel="noopener noreferrer"`.
+
+---
+
+## 9. Audio Callout Card
+
+```html
+<div style="margin: 24px 0; padding: 18px 20px; background: #1a1a1a; border-left: 3px solid #fc6060; border-radius: 6px; display: flex; flex-direction: column; gap: 10px;">
+  <span style="font-family: monospace; font-size: 0.8em; color: #fc6060; letter-spacing: 0.08em; text-transform: uppercase;">&#9654; Label text</span>
+  <audio controls style="width: 100%; max-width: 460px; accent-color: #fc6060; display: block; margin: 0 auto;">
+    <source src="AUDIO_URL_HERE" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <p style="margin: 0; font-size: 0.85em; color: #c7c7c7; text-align: center;">
+    Add a transcript or concise summary below the player.
+  </p>
+</div>
+```
+
+**Notes:** This is the current post pattern. Keep card, accent color, and centered audio element consistent. Always include a transcript or concise summary for non-audio users.
+
+---
+
+## 10. YouTube Embed (Responsive 16:9)
+
+```html
+<figure style="margin: 24px auto; display: flex; flex-direction: column; align-items: center; text-align: center;">
+  <div style="position: relative; width: 100%; max-width: 560px; aspect-ratio: 16/9;">
+    <iframe src="https://www.youtube.com/embed/VIDEO_ID"
+            title="Video title"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 4px;"></iframe>
+  </div>
+  <figcaption style="margin-top: 8px; font-size: 0.8em; max-width: 560px;">
+    Caption and context.
+  </figcaption>
+</figure>
+```
+
+**Notes:** Use embed URLs (`/embed/VIDEO_ID`), not watch URLs. Prefer figure+caption for context.
+
+---
+
+## 11. Instagram Embed (Captioned)
+
+```html
+<figure style="margin: 32px auto; display: flex; flex-direction: column; align-items: center; text-align: center;">
+  <blockquote class="instagram-media"
+              data-instgrm-captioned
+              data-instgrm-permalink="https://www.instagram.com/p/POST_ID/"
+              data-instgrm-version="14"
+              style="background: #fff; border: 0; border-radius: 3px; box-shadow: 0 0 1px 0 rgba(0,0,0,0.5), 0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px auto; max-width: 540px; min-width: 326px; padding: 0; width: calc(100% - 2px);">
+    <a href="https://www.instagram.com/p/POST_ID/" target="_blank" rel="noopener noreferrer">View this post on Instagram</a>
+  </blockquote>
+  <figcaption style="margin-top: 8px; font-size: 0.8em; max-width: 540px;">
+    Context caption.
+  </figcaption>
+</figure>
+```
+
+**Notes:** Requires this script near page bottom:
+
+```html
+<script async src="https://www.instagram.com/embed.js"></script>
+```
+
+---
+
+## 12. Jargon Term Tooltip
+
+For technical or domain-specific terms, definitions are now pulled dynamically from the page glossary/jargon box and applied across the article.
+
+```html
+<div class="plain-english-box">
+  <h2>Quick jargon guide</h2>
+  <ul>
+    <li><strong>CVD (colour vision deficiency):</strong> Definition here.</li>
+    <li><strong>Redundant coding:</strong> Definition here.</li>
+  </ul>
+</div>
+```
+
+**CSS class:** glossary source uses `plain-english-box`; tooltip styling is automatic
+**Styling:** Matching jargon terms in `.blog-post` are wrapped with styled hover tooltips using definitions extracted from the glossary list. Dark theme compatible.
+
+**Example:**
+
+```html
+<p>The redundant coding principle forces better design decisions.</p>
+```
+
+**Notes:** 
+- No additional CSS needed — tooltip styles are globally defined in `style.css`.
+- No manual `<abbr>` wrapping needed in body copy.
+- Define terms in a glossary/jargon `plain-english-box`; matching terms in article text are handled automatically.
+- The first jargon/glossary box in a blog post is auto-collapsed by shared JS; readers can expand it on demand.
+- Existing manual `<abbr>` tags still work and are not overwritten.
+- Tooltips automatically size themselves to fit content and respect viewport boundaries.
+- Works in both light and dark themes.
+
+## 12. Styled Quote Block
+
+```html
+<blockquote style="margin: 24px 0; padding: 16px 20px; border-left: 3px solid #999; font-style: italic; color: #555;">
+  <p style="margin: 0 0 8px;">Quote text.</p>
+  <footer style="font-size: 0.85em; font-style: normal; color: #888;">&mdash; Attribution</footer>
+</blockquote>
+```
+
+**Notes:** Use this when quote styling should match existing post examples.
+
+---
+
+## 13. Code / Path Snippet in Prose
+
+```html
+<p>You filed it under <code>Music\Rock\Symphony X\Paradise Lost\</code>.</p>
+```
+
+**Notes:** For short snippets, prefer inline `<code>`. Avoid custom inline code styling per post.
+
+---
+
+## 14. Ordered and Unordered Lists
+
+```html
+<ul>
+  <li>First point</li>
+  <li>Second point</li>
+</ul>
+
+<ol>
+  <li>Step one</li>
+  <li>Step two</li>
+</ol>
+```
+
+**Notes:** Use plain semantic lists by default; rely on global typography in `style.css`.
+
+---
+
+## 15. Third-Party Media Credit / Copyright Line
+
+```html
+<figcaption style="margin-top: 8px; font-size: 0.8em;">
+  Caption text. &copy; Original rights holders, YEAR. Used here for commentary.
+</figcaption>
+```
+
+**Notes:** For non-Ken assets, include source and rights context in the caption. For Ken photos, use the Section 1 copyright span pattern.
 
 ---
 
@@ -156,11 +309,12 @@ Every published post needs an entry at the top of `BLOG_POSTS`:
   excerpt: "One or two sentence summary. Should be compelling and complete.",
   url: "blog/filename-here.html",
   image: "img/bg-img/XXX.png",
-  tags: ["tag-one", "tag-two"]
+  tags: ["data science"]
 },
 ```
 
 **Notes:**
 - `image` is the thumbnail shown on the blog listing page
-- `tags` drive the filter buttons — keep consistent (e.g. `books`, `data-science`, `personal`, `ai`, `coding`, `productivity`)
+- `tags` drive the filter buttons and must come from this set only: `data science`, `personal`, `photography`, `books`, `ai`, `finance`
+- Use as few tags as necessary for the post; most posts should only need one, and only genuinely cross-category posts should use two
 - Do NOT add unpublished posts here until Ken confirms push
