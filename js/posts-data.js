@@ -1,6 +1,6 @@
 window.BLOG_POSTS = [
   {
-    title: 'Accessibility-First Product Design in Data Science',
+    title: 'Accessibility-First Design in Data Science',
     date: '2026-05-11',
     tags: ['data science'],
     excerpt: 'Data science outputs are often inaccessible by default. Accessibility-first design in plots, dashboards, and tables improves understanding for everyone.',
