@@ -5,11 +5,20 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 11 May 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Sun, 11 May 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Tue, 12 May 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Tue, 12 May 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>ISO 8601 and the Date Cult I Happily Joined</title>
+      <link>https://www.kenreid.co.uk/blog/iso-8601-date-cult.html</link>
+      <guid>https://www.kenreid.co.uk/blog/iso-8601-date-cult.html</guid>
+      <pubDate>Tue, 12 May 2026 00:00:00 +0000</pubDate>
+      <description>A playful, half-joking ode to ISO 8601 (YYYY-MM-DD) as the only sortable, unambiguous, international date format worth using.</description>
+      <category>technology</category>
+      <category>standards</category>
+    </item>
     <item>
       <title>Accessibility-First Product Design in Data Science</title>
       <link>https://www.kenreid.co.uk/blog/accessibility-first-product-design-data-science.html</link>
