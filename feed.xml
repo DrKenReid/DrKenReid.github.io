@@ -5,11 +5,19 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 06 May 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Wed, 06 May 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Sun, 11 May 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Sun, 11 May 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Accessibility-First Product Design in Data Science</title>
+      <link>https://www.kenreid.co.uk/blog/accessibility-first-product-design-data-science.html</link>
+      <guid>https://www.kenreid.co.uk/blog/accessibility-first-product-design-data-science.html</guid>
+      <pubDate>Sun, 11 May 2026 00:00:00 +0000</pubDate>
+      <description>Most data science outputs are inaccessible by default. Treating accessibility as the design constraint, not the audit step, produces clearer plots, better dashboards, and more rigorous communication for everyone.</description>
+      <category>data-science</category>
+    </item>
     <item>
       <title>The Life and Death of the Early Internet</title>
       <link>https://www.kenreid.co.uk/blog/life-and-death-of-the-early-internet.html</link>
@@ -44,6 +52,7 @@
       <description>A book snob's confession: how Dungeon Crawler Carl used absurd LitRPG mechanics to deliver one of the most devastating emotional payloads in modern fantasy.</description>
       <category>books</category>
     </item>
+    <item>
       <title>Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction</title>
       <link>https://www.kenreid.co.uk/blog/fourteen-years-of-silence-rothfuss-doors-of-stone.html</link>
       <guid>https://www.kenreid.co.uk/blog/fourteen-years-of-silence-rothfuss-doors-of-stone.html</guid>
