@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t&&window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches)t='dark';if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
   <meta name="description" content="Ken Reid's reading list - book reviews, reading statistics, and Goodreads shelves.">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Literature - Ken Reid</title>
@@ -23,12 +24,15 @@
   <style>
     .gr_grid_book_container{float:left;width:98px;height:160px;padding:0;overflow:hidden}
   </style>
+  <script src="js/theme.js"></script>
 </head>
 <body>
   <div id="preloader"><div class="loader"></div></div>
 
   <!-- Header -->
   <div id="header-section"></div>
+
+  <main id="main-content">
 
   <!-- Breadcrumb -->
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/bg-img/207.png);">
@@ -45,12 +49,12 @@
 
   <!-- Favorite Quotes -->
   <div class="quote-carousel" id="quotes">
-    <button class="quote-nav prev" onclick="prevQuote()" aria-label="Previous quote">&#8249;</button>
+    <button id="quote-prev-btn" class="quote-nav prev" aria-label="Previous quote">&#8249;</button>
     <div class="quote-inner">
       <p id="quote-text"></p>
       <p id="quote-attr"></p>
     </div>
-    <button class="quote-nav next" onclick="nextQuote()" aria-label="Next quote">&#8250;</button>
+    <button id="quote-next-btn" class="quote-nav next" aria-label="Next quote">&#8250;</button>
   </div>
 
   <!-- Selected Reviews -->
@@ -58,7 +62,7 @@
     <div class="container">
       <div class="text-center" style="margin-bottom: 40px;">
         <h2 class="wow fadeInUp" data-wow-delay="100ms">Selected Reviews</h2>
-        <p class="wow fadeInUp" data-wow-delay="200ms" style="color: #636363;">A selection of reviews from 550+ books on <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank">Goodreads</a>. More on the <a href="blog.html" style="color: #fc6060;">blog</a>.</p>
+        <p class="wow fadeInUp" data-wow-delay="200ms" style="color: #636363;">A selection of reviews from 550+ books on <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" rel="noopener noreferrer">Goodreads</a>. More on the <a href="blog.html" style="color: #fc6060;">blog</a>.</p>
       </div>
       <div class="row" id="reviews-grid"></div>
     </div>
@@ -71,27 +75,27 @@
         <h2 class="wow fadeInUp" data-wow-delay="100ms">Reading Stats</h2>
         <p class="wow fadeInUp" data-wow-delay="200ms" style="color: #636363;">
           Analysis of my reading data with Python. I built this because Goodreads doesn't show you anything interesting about your own habits.
-          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank">View on GitHub &rarr;</a>
+          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" rel="noopener noreferrer">View on GitHub &rarr;</a>
         </p>
       </div>
       <div class="row stats-grid">
         <div class="col-12 col-md-6 mb-30 wow fadeInUp" data-wow-delay="100ms">
-          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank">
+          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" rel="noopener noreferrer">
             <img loading="lazy" src="img/stats/genre-ratings.png" alt="Distribution of ratings for each primary genre">
           </a>
         </div>
         <div class="col-12 col-md-6 mb-30 wow fadeInUp" data-wow-delay="200ms">
-          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank">
+          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" rel="noopener noreferrer">
             <img loading="lazy" src="img/stats/book-titles-word-cloud.png" alt="Word cloud of book titles">
           </a>
         </div>
         <div class="col-12 col-md-6 mb-30 wow fadeInUp" data-wow-delay="300ms">
-          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank">
+          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" rel="noopener noreferrer">
             <img loading="lazy" src="img/stats/top_genres_pages.gif" alt="Animated chart of top genres by pages read">
           </a>
         </div>
         <div class="col-12 col-md-6 mb-30 wow fadeInUp" data-wow-delay="400ms">
-          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank">
+          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" rel="noopener noreferrer">
             <img loading="lazy" src="img/stats/genre-word-cloud.png" alt="Word cloud of genres">
           </a>
         </div>
@@ -151,7 +155,7 @@
       </div>
 
       <div class="text-center" style="margin-top: 20px;">
-        <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" class="btn alime-btn btn-2">View full shelves on Goodreads &rarr;</a>
+        <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" rel="noopener noreferrer" class="btn alime-btn btn-2">View full shelves on Goodreads &rarr;</a>
       </div>
     </div>
   </div>
@@ -164,19 +168,19 @@
       </div>
       <div class="row justify-content-center" style="margin-bottom: 40px;">
         <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center wow fadeInUp" data-wow-delay="100ms">
-          <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">📚 Goodreads</a>
+          <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" rel="noopener noreferrer" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">📚 Goodreads</a>
           <p style="color: #636363; font-size: 14px;">550+ books tracked, 249 reviews, and my full reading history.</p>
         </div>
         <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center wow fadeInUp" data-wow-delay="200ms">
-          <a href="https://www.tiktok.com/@drkenreid" target="_blank" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">🎵 TikTok</a>
+          <a href="https://www.tiktok.com/@drkenreid" target="_blank" rel="noopener noreferrer" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">🎵 TikTok</a>
           <p style="color: #636363; font-size: 14px;">Book reviews and reading recommendations in short-form video.</p>
         </div>
         <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center wow fadeInUp" data-wow-delay="300ms">
-          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">📊 Analysis Repo</a>
+          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" rel="noopener noreferrer" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">📊 Analysis Repo</a>
           <p style="color: #636363; font-size: 14px;">Genre distributions, reading patterns, and visualisations from my Goodreads export.</p>
         </div>
         <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center wow fadeInUp" data-wow-delay="400ms">
-          <a href="https://github.com/DrKenReid/GoodReads-Quotes-PDF" target="_blank" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">💬 Quotes Tool</a>
+          <a href="https://github.com/DrKenReid/GoodReads-Quotes-PDF" target="_blank" rel="noopener noreferrer" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">💬 Quotes Tool</a>
           <p style="color: #636363; font-size: 14px;">571 quotes I highlighted while reading, cleaned up and formatted into a printable PDF.</p>
         </div>
       </div>
@@ -185,6 +189,7 @@
 
   <hr>
   <div id="instagram-section"></div>
+  </main>
   <div id="footer-section"></div>
 
   <script src="js/jquery.min.js"></script>
