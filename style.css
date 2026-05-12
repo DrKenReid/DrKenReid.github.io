@@ -40,6 +40,64 @@ Last Update: Feb 22, 2019
 @import url(css/font-awesome.min.css);
 @import url(css/default-assets/themify-icons.css);
 @import url(css/style.css);
+
+:root {
+  --site-focus-ring: #0b5fff;
+  --site-focus-shadow: rgba(11, 95, 255, 0.22);
+}
+
+html {
+  scroll-behavior: smooth; }
+
+body {
+  color: #252525;
+  background-color: #ffffff; }
+
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+summary:focus,
+[tabindex]:focus {
+  outline: 3px solid var(--site-focus-ring);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px var(--site-focus-shadow); }
+
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -180%);
+  z-index: 3000;
+  padding: 0.75rem 1rem;
+  border-radius: 0 0 0.75rem 0.75rem;
+  background: #0f4c81;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  box-shadow: 0 10px 28px rgba(15, 76, 129, 0.25);
+  transition: transform 0.2s ease; }
+
+.skip-link:focus {
+  transform: translate(-50%, 0);
+  color: #ffffff; }
+
+main {
+  display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto; }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important; }
+}
 /* :: 01.0 Reboot CSS */
 * {
   margin: 0;
@@ -745,7 +803,7 @@ input:required {
         .footer-content .copywrite-text p {
           font-size: 12px; } }
       .footer-content .copywrite-text p a {
-        color: #fc6060;
+        color: #c53030;
         font-weight: 400; }
         @media only screen and (max-width: 767px) {
           .footer-content .copywrite-text p a {
@@ -764,7 +822,7 @@ input:required {
         margin-right: 5px;
         font-size: 12px; } }
     .footer-content .social-info a:hover, .footer-content .social-info a:focus {
-      color: #fc6060; }
+      color: #c53030; }
 
 /* :: 10.0 Follow CSS */
 .single-instagram-item {
@@ -1881,14 +1939,18 @@ input:required {
   max-width: 780px;
   margin: 0 auto; }
 .blog-post a {
-  color: #fc6060;
+  color: #c53030;
   text-decoration: underline; }
 .blog-post a:hover {
-  color: #d94f4f;
+  color: #a52424;
   text-decoration: underline; }
 .blog-post .blog-thanks-cta a,
 .blog-post .blog-thanks-cta a:hover {
   color: inherit;
+  text-decoration: none; }
+.blog-post .post-cta,
+.blog-post .post-cta:hover {
+  color: #fff;
   text-decoration: none; }
 .blog-post .blog-thanks-cta .blog-thanks-cta__button,
 .blog-post .blog-thanks-cta .blog-thanks-cta__button:hover,
@@ -1920,7 +1982,7 @@ input:required {
   text-align: right;
   font-size: 13px;
   font-weight: 700;
-  color: #fc6060;
+  color: #c53030;
   padding-top: 2px;
   white-space: nowrap; }
 .blog-timeline li .tl-dot {
@@ -1970,7 +2032,7 @@ input:required {
   font-size: 32px;
   margin-bottom: 10px; }
 .blog-post .blog-meta {
-  color: #888;
+  color: #767676;
   font-size: 14px;
   margin-bottom: 30px; }
 .blog-post .blog-meta .blog-tag {
@@ -2022,7 +2084,7 @@ input:required {
   color: #333; }
 .blog-post blockquote footer {
   font-size: 13px;
-  color: #888;
+  color: #767676;
   font-style: normal; }
 .blog-post ul,
 .blog-post ol {
@@ -2090,7 +2152,7 @@ input:required {
   border-top: 1px solid #eee; }
 .figure-copyright {
   display: block;
-  color: #aaa;
+  color: #767676;
   font-size: 11px;
   margin-bottom: 3px;
   letter-spacing: 0.02em; }
@@ -2117,7 +2179,7 @@ input:required {
   font-size: 15px;
   line-height: 1.8; }
 .downloads-note a {
-  color: #fc6060;
+  color: #c53030;
   font-weight: 600; }
 .download-links {
   display: flex;
@@ -2321,11 +2383,11 @@ input:required {
   -webkit-transition: all 300ms;
   transition: all 300ms; }
   .gallery-filter-btn:hover {
-    border-color: #fc6060;
-    color: #fc6060; }
+    border-color: #c53030;
+    color: #c53030; }
   .gallery-filter-btn.active {
-    background: #fc6060;
-    border-color: #fc6060;
+    background: #c53030;
+    border-color: #c53030;
     color: #fff; }
   .gallery-filter-btn .filter-count {
     display: inline-block;
@@ -2390,7 +2452,7 @@ input:required {
     overflow: hidden;
     text-overflow: ellipsis; }
   .chrome-theme-card:hover span {
-    color: #fc6060; }
+    color: #c53030; }
 
 /* ==============================
    Quote Carousel
@@ -2416,7 +2478,7 @@ input:required {
     transition: opacity 0.4s ease; }
   .quote-carousel #quote-attr {
     font-size: 16px;
-    color: #fc6060;
+    color: #c53030;
     margin: 0;
     transition: opacity 0.4s ease; }
   .quote-nav {
@@ -2477,7 +2539,7 @@ input:required {
     color: #333; }
   .review-author {
     font-size: 14px;
-    color: #888;
+    color: #767676;
     margin-bottom: 12px; }
   .review-text {
     font-size: 14px;
@@ -2536,7 +2598,7 @@ input:required {
     padding: 20px; }
   .blog-card-date {
     font-size: 12px;
-    color: #888;
+    color: #767676;
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 8px; }
@@ -2547,7 +2609,7 @@ input:required {
     margin-bottom: 10px;
     line-height: 1.4; }
   .blog-card:hover .blog-card-title {
-    color: #fc6060; }
+    color: #c53030; }
   .blog-card-excerpt {
     font-size: 14px;
     color: #636363;
@@ -2560,8 +2622,8 @@ input:required {
 
 .blog-tag {
   display: inline-block;
-  background: rgba(252,96,96,0.1);
-  color: #fc6060;
+  background: rgba(197,48,48,0.1);
+  color: #c53030;
   padding: 3px 10px;
   border-radius: 12px;
   font-size: 12px;
