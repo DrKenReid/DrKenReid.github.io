@@ -1,5 +1,13 @@
 [
   {
+    "title": "The Hidden Cost of Cobalt",
+    "date": "2026-05-13",
+    "tags": ["ethics", "technology"],
+    "excerpt": "The batteries in our phones, laptops, and EVs are largely made of cobalt mined in the Democratic Republic of the Congo, often by hand and often by children. A reflection on a presentation I gave, and what we can actually do about it.",
+    "url": "blog/hidden-cost-of-cobalt-congo.html",
+    "image": "img/photography/384-thumb.jpg"
+  },
+  {
     "title": "ISO 8601 and the Date Cult I Happily Joined",
     "date": "2026-05-12",
     "tags": ["technology"],

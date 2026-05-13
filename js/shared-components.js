@@ -140,7 +140,7 @@ function renderInstagramSection(targetId) {
  * Renders the site footer with copyright and social links.
  * @param {string} targetId - ID of the element to inject into.
  */
-var DEFAULT_POST_IMAGE = 'img/bg-img/2.png';
+var DEFAULT_POST_IMAGE = 'img/photography/97.png';
 
 function estimateReadingMinutes(post) {
     if (typeof post.readMinutes === 'number' && isFinite(post.readMinutes)) {

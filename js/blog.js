@@ -3,7 +3,7 @@ var activeTags = [];
 var searchQuery = '';
 var currentPage = 1;
 var POSTS_PER_PAGE = 9;
-var DEFAULT_POST_IMAGE = 'img/bg-img/2.png';
+var DEFAULT_POST_IMAGE = 'img/photography/97.png';
 
 function parsePostDate(dateValue) {
 	if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
@@ -23,7 +23,7 @@ function loadPosts() {
 	if (window.BLOG_POSTS && window.BLOG_POSTS.length) {
 		return Promise.resolve(window.BLOG_POSTS.slice());
 	}
-	return fetch('data/posts.json').then(function(r) { return r.json(); });
+	return fetch('data/posts.json', { cache: 'no-store' }).then(function(r) { return r.json(); });
 }
 
 function initBlog() {
