@@ -1,5 +1,13 @@
 [
   {
+    "title": "How to Write a Blog, or How I Write Mine",
+    "date": "2026-05-13",
+    "tags": ["personal"],
+    "excerpt": "What I learned about writing a blog: why the word itself put me off, how I found a process, and what to do when people hate your work.",
+    "url": "blog/how-to-write-a-blog.html",
+    "image": "img/photography/252.png"
+  },
+  {
     "title": "The Hidden Cost of Cobalt",
     "date": "2026-05-13",
     "tags": ["ethics", "technology"],

@@ -5,11 +5,29 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 12 May 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Tue, 12 May 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Wed, 13 May 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Wed, 13 May 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>How to Write a Blog, or How I Write Mine</title>
+      <link>https://www.kenreid.co.uk/blog/how-to-write-a-blog.html</link>
+      <guid>https://www.kenreid.co.uk/blog/how-to-write-a-blog.html</guid>
+      <pubDate>Wed, 13 May 2026 00:00:00 +0000</pubDate>
+      <description>What I learned about writing a blog: why the word itself put me off, how I found a process, and what to do when people hate your work.</description>
+      <category>personal</category>
+      <category>writing</category>
+    </item>
+    <item>
+      <title>The Hidden Cost of Cobalt</title>
+      <link>https://www.kenreid.co.uk/blog/hidden-cost-of-cobalt-congo.html</link>
+      <guid>https://www.kenreid.co.uk/blog/hidden-cost-of-cobalt-congo.html</guid>
+      <pubDate>Wed, 13 May 2026 00:00:00 +0000</pubDate>
+      <description>The batteries in our phones, laptops, and EVs are largely made of cobalt mined in the Democratic Republic of the Congo, often by hand and often by children. A reflection on a presentation I gave, and what we can actually do about it.</description>
+      <category>ethics</category>
+      <category>technology</category>
+    </item>
     <item>
       <title>ISO 8601 and the Date Cult I Happily Joined</title>
       <link>https://www.kenreid.co.uk/blog/iso-8601-date-cult.html</link>
