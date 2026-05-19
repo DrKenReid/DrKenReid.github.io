@@ -1,5 +1,13 @@
 window.BLOG_POSTS = [
   {
+    title: 'The Prevention Paradox: Why Success Is Invisible',
+    date: '2026-05-19',
+    tags: ['personal'],
+    excerpt: 'We celebrate the people who fix disasters. We ignore the ones who prevent them. From handwashing to Y2K to road safety, the quiet work of prevention is structurally invisible &mdash; and that costs us.',
+    url: 'blog/prevention-of-failure-is-unseen.html',
+    image: 'img/photography/116.png'
+  },
+  {
     title: 'The Hidden Cost of Cobalt',
     date: '2026-05-13',
     tags: ['ethics', 'technology'],
