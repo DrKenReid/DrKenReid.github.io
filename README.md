@@ -27,6 +27,11 @@ Personal portfolio website for Ken Reid — Data Scientist, photographer, guitar
 
 Hosted on [GitHub Pages](https://pages.github.com/) with a custom domain via CNAME. Push to `main` to deploy.
 
+## License
+
+- **Website code & markup**: [Apache License 2.0](LICENSE)
+- **Photography & media assets**: [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) — All photographs and image files are copyright © Ken Reid. Use requires attribution and is limited to non-commercial purposes with no derivatives.
+
 ## Template
 
 Based on the [Alime Photography HTML Template](https://colorlib.com/wp/template/flavor/) by [Colorlib](https://colorlib.com), licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
