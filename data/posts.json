@@ -1,24 +1,16 @@
 [
   {
-    "title": "The Prevention Paradox: Why Success Is Invisible",
-    "date": "2026-05-19",
-    "tags": ["personal"],
-    "excerpt": "We celebrate the people who fix disasters. We ignore the ones who prevent them. From handwashing to Y2K to road safety, the quiet work of prevention is structurally invisible — and that costs us.",
-    "url": "blog/prevention-of-failure-is-unseen.html",
-    "image": "img/photography/116.png"
-  },
-  {
     "title": "When I Ended Up in Italy Because of Mistaken Identity",
-    "date": "2026-05-16",
+    "date": "2026-05-19",
     "tags": ["photography", "personal"],
     "excerpt": "How a mix-up over an email address sent me to the northern Italian mountains to photograph a tech event I had no business being at.",
     "url": "blog/mistaken-identity-italy.html",
-    "image": "img/photography/41.png"
+    "image": "img/photography/421.jpg"
   },
   {
-    "title": "How to Write a Blog, or How I Write Mine",
+    "title": "How to Write a Blog (or: What I Learned By Doing It)",
     "date": "2026-05-13",
-    "tags": ["personal"],
+    "tags": ["personal", "writing"],
     "excerpt": "What I learned about writing a blog: why the word itself put me off, how I found a process, and what to do when people hate your work.",
     "url": "blog/how-to-write-a-blog.html",
     "image": "img/photography/252.png"

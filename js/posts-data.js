@@ -1,11 +1,11 @@
 window.BLOG_POSTS = [
   {
-    title: 'The Prevention Paradox: Why Success Is Invisible',
+    title: 'When I Ended Up in Italy Because of Mistaken Identity',
     date: '2026-05-19',
-    tags: ['personal'],
-    excerpt: 'We celebrate the people who fix disasters. We ignore the ones who prevent them. From handwashing to Y2K to road safety, the quiet work of prevention is structurally invisible &mdash; and that costs us.',
-    url: 'blog/prevention-of-failure-is-unseen.html',
-    image: 'img/photography/116.png'
+    tags: ['photography', 'personal'],
+    excerpt: 'How a mix-up over an email address sent me to the northern Italian mountains to photograph a tech event I had no business being at.',
+    url: 'blog/mistaken-identity-italy.html',
+    image: 'img/photography/421.jpg'
   },
   {
     title: 'The Hidden Cost of Cobalt',
