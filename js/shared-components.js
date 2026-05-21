@@ -541,8 +541,22 @@ function applyJargonTooltips() {
         };
     }
 
+    // Global jargon: cross-cutting terms that benefit every post even without a page-specific glossary.
+    // Page-level definitions (in plain-english-box) always override these when the same key is defined.
+    var GLOBAL_JARGON = {
+        'ai': 'Artificial Intelligence — computer systems that can perform tasks normally requiring human intelligence, such as reasoning, learning, and problem-solving.',
+        'ml': 'Machine Learning — a type of AI where systems improve by learning patterns from data rather than following explicit rules.',
+        'llm': 'Large Language Model — an AI model trained on large amounts of text that can generate, summarise, and reason about language.',
+        'genai': 'Generative AI — AI systems that can produce original content such as text, code, or images in response to a prompt.',
+        'open source': 'software whose source code is publicly available and free to use, modify, and distribute.',
+        'api': 'Application Programming Interface — a defined way for software systems to communicate and exchange data with each other.',
+        'github': 'a web platform for hosting and sharing code repositories, built on Git version control.',
+        'python': 'a popular programming language known for its readable syntax, widely used in data science, AI, and automation.',
+        'json': 'JavaScript Object Notation — a lightweight, human-readable text format for storing and exchanging structured data.'
+    };
+
     var extracted = extractPageJargonDefinitions(blogPost);
-    var jargonDefinitions = extracted.definitions;
+    var jargonDefinitions = Object.assign({}, GLOBAL_JARGON, extracted.definitions);
     var sourceBoxes = extracted.sourceBoxes;
 
     if (!Object.keys(jargonDefinitions).length) {
@@ -573,7 +587,9 @@ function applyJargonTooltips() {
         return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
-    var jargonRegex = new RegExp('\\b(' + sortedTerms.map(escapeRegex).join('|') + ')\\b', 'gi');
+    // (?:s|es)? allows the regex to match common plural forms (e.g. "LLMs", "algorithms", "processes").
+    // match[1] captures the base term for the dictionary lookup while match[0] preserves the display form.
+    var jargonRegex = new RegExp('\\b(' + sortedTerms.map(escapeRegex).join('|') + ')(?:s|es)?\\b', 'gi');
     var skipTags = {
         ABBR: true,
         JARGON: true,
@@ -631,7 +647,9 @@ function applyJargonTooltips() {
         jargonRegex.lastIndex = 0;
         while ((match = jargonRegex.exec(text)) !== null) {
             var matchedText = match[0];
-            var definition = jargonDefinitions[matchedText.toLowerCase()];
+            // Use match[1] (base term without plural suffix) for the dictionary lookup;
+            // matchedText (match[0]) preserves the original form shown to the reader.
+            var definition = jargonDefinitions[(match[1] || matchedText).toLowerCase()];
             if (!definition) {
                 continue;
             }
