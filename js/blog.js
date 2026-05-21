@@ -4,6 +4,7 @@ var searchQuery = '';
 var currentPage = 1;
 var POSTS_PER_PAGE = 9;
 var DEFAULT_POST_IMAGE = 'img/photography/97.png';
+var BLOG_CARD_LINKS_BOUND = false;
 
 function parsePostDate(dateValue) {
 	if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
@@ -138,6 +139,7 @@ function getFilteredPosts() {
 function renderPosts() {
 	var container = document.getElementById('blog-grid');
 	if (!container) return;
+	bindOverlayCardLinks(container);
 	container.innerHTML = '';
 
 	var filtered = getFilteredPosts();
@@ -196,6 +198,33 @@ function renderPosts() {
 
 	updateCounter(filtered.length, allPosts.length);
 	renderPagination(currentPage, totalPages);
+}
+
+function bindOverlayCardLinks(container) {
+	if (BLOG_CARD_LINKS_BOUND || !container) return;
+
+	container.addEventListener('click', function(e) {
+		var card = e.target && e.target.closest ? e.target.closest('.single-post-area[data-href]') : null;
+		if (!card) return;
+
+		// Preserve default behavior for native links inside the card.
+		if (e.target.closest('a')) return;
+
+		var href = card.getAttribute('data-href');
+		if (href) window.location.href = href;
+	});
+
+	container.addEventListener('keydown', function(e) {
+		if (e.key !== 'Enter' && e.key !== ' ') return;
+		var card = e.target && e.target.closest ? e.target.closest('.single-post-area[data-href]') : null;
+		if (!card) return;
+
+		e.preventDefault();
+		var href = card.getAttribute('data-href');
+		if (href) window.location.href = href;
+	});
+
+	BLOG_CARD_LINKS_BOUND = true;
 }
 
 function updateCounter(filtered, total) {

@@ -211,7 +211,7 @@ function createBlogCardElement(post, options) {
         var wowDelay = opts.wowDelay || '100ms';
 
         col.innerHTML =
-            '<div class="single-post-area wow fadeInUpBig" data-wow-delay="' + wowDelay + '">' +
+            '<div class="single-post-area wow fadeInUpBig" data-wow-delay="' + wowDelay + '" data-href="' + href + '" role="link" tabindex="0" aria-label="Open post: ' + post.title + '">' +
             '<a href="' + href + '" class="post-thumbnail">' +
             '<img src="' + imageSrc + '" alt="' + post.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'' + fallback + '\';">' +
             '</a>' +
