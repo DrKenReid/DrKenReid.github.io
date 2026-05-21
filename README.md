@@ -34,7 +34,7 @@ Hosted on [GitHub Pages](https://pages.github.com/) with a custom domain via CNA
 
 ## Template
 
-Based on the [Alime Photography HTML Template](https://colorlib.com/wp/template/flavor/) by [Colorlib](https://colorlib.com), licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+Based on the [Alime Photography HTML Template](https://colorlib.com/wp/template/flavor/) by [Colorlib](https://colorlib.com). Premium license purchased — attribution not required.
 
 ## Links
 
