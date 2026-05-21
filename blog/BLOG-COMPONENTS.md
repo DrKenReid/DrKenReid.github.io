@@ -258,6 +258,30 @@ For technical or domain-specific terms, definitions are now pulled dynamically f
 
 ---
 
+## 13. Required End-Of-Post Sections (Auto-Guardrail)
+
+Blog posts are now protected by shared JS so required end-of-post sections are present even if omitted in the HTML draft.
+
+What is auto-handled by [js/shared-components.js](../js/shared-components.js):
+
+- Related posts section:
+  - If a post already contains `.related-posts`, it is preserved.
+  - If missing, the script creates `#related-posts-section` and renders related cards from `data/posts.json`.
+- Thanks for reading card:
+  - If `.blog-thanks-cta` already exists, it is preserved.
+  - If missing, the script injects it automatically above related posts.
+
+Recommended authoring pattern for new posts:
+
+```html
+<!-- Optional: include this placeholder where you want dynamic related posts -->
+<div id="related-posts-section"></div>
+```
+
+You can omit both the related posts markup and the thanks card entirely; they will still appear at runtime on any page with `.blog-post` and `shared-components.js` loaded.
+
+---
+
 ## 13. Code / Path Snippet in Prose
 
 ```html
@@ -295,6 +319,17 @@ For technical or domain-specific terms, definitions are now pulled dynamically f
 ```
 
 **Notes:** For non-Ken assets, include source and rights context in the caption. For Ken photos, use the Section 1 copyright span pattern.
+
+---
+
+## 16. Post Disclaimer Ribbon
+
+```html
+<p class="post-disclaimer">The views expressed in this post are my own and do not represent any organisation, employer, or institution.</p>
+```
+
+**CSS class:** `post-disclaimer`
+**Notes:** This is the sitewide legal ribbon style used on blog posts. It is injected automatically right below `.blog-meta` by shared JS, so you typically do not need to paste it manually. If JS is unavailable and you need a static fallback, place this paragraph directly under the post meta block.
 
 ---
 

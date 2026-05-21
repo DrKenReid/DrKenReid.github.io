@@ -66,6 +66,9 @@ function renderInstagramSection(targetId) {
     var el = document.getElementById(targetId);
     if (!el) return;
 
+    var onBlogPostPage = !!document.querySelector('.blog-post');
+    var assetPrefix = onBlogPostPage ? '../' : '';
+
     var instagramUrl = 'https://www.instagram.com/drkenreid/';
     var handle = 'drkenreid';
 
@@ -92,7 +95,7 @@ function renderInstagramSection(targetId) {
         return filename.lastIndexOf('.') > -1 ? filename.slice(0, filename.lastIndexOf('.')) : filename;
     }
 
-    fetch('data/photography-standard-files.json').then(function(response) {
+    fetch(assetPrefix + 'data/photography-standard-files.json').then(function(response) {
         return response.json();
     }).then(function(files) {
         var sample = shuffleCopy(Array.isArray(files) ? files : []).slice(0, 10);
@@ -103,7 +106,7 @@ function renderInstagramSection(targetId) {
         sample.forEach(function(filename, index) {
             var stem = getStem(filename);
             html += '<div class="single-instagram-item">' +
-                '<img src="img/photography/' + filename + '" alt="Photography highlight ' + (index + 1) + '" loading="lazy">' +
+                '<img src="' + assetPrefix + 'img/photography/' + filename + '" alt="Photography highlight ' + (index + 1) + '" loading="lazy">' +
                 '<div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">' +
                 '<a href="' + instagramUrl + '">' +
                 '<i class="ti-instagram" aria-hidden="true"></i>' +
@@ -134,6 +137,22 @@ function renderInstagramSection(targetId) {
             feed.innerHTML = '<div class="single-instagram-item"><a href="' + instagramUrl + '" class="d-flex align-items-center justify-content-center" style="min-height: 220px; color: #fc6060; font-weight: 600;">Instagram feed unavailable</a></div>';
         }
     });
+}
+
+function renderBlogPhotoHighlights() {
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost) return;
+
+    if (!document.getElementById('instagram-section')) {
+        var footerSection = document.getElementById('footer-section');
+        if (!footerSection || !footerSection.parentNode) return;
+
+        var container = document.createElement('div');
+        container.id = 'instagram-section';
+        footerSection.parentNode.insertBefore(container, footerSection);
+    }
+
+    renderInstagramSection('instagram-section');
 }
 
 /**
@@ -245,7 +264,7 @@ function loadBlogPosts() {
 
 function renderRelatedPosts(targetId) {
     var el = document.getElementById(targetId);
-    if (!el) return;
+    if (!el) return Promise.resolve();
 
     var currentFileName = resolveCurrentPostFileName();
     var tagNodes = document.querySelectorAll('.blog-post .blog-meta .blog-tag');
@@ -253,7 +272,7 @@ function renderRelatedPosts(targetId) {
         return (node.textContent || '').trim().toLowerCase();
     }).filter(Boolean);
 
-    loadBlogPosts()
+    return loadBlogPosts()
         .then(function(posts) {
             var related = posts
                 .filter(function(post) {
@@ -350,7 +369,28 @@ function renderRelatedPosts(targetId) {
         .catch(function(error) {
             console.error('Failed to load related posts:', error);
             el.innerHTML = '';
+            return null;
         });
+}
+
+function ensureRelatedPostsSection() {
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost) return Promise.resolve(null);
+
+    var existingRelated = blogPost.querySelector('.related-posts');
+    if (existingRelated) return Promise.resolve(existingRelated);
+
+    var mount = blogPost.querySelector('#related-posts-section');
+    if (!mount) {
+        mount = document.createElement('div');
+        mount.id = 'related-posts-section';
+        mount.setAttribute('data-auto-generated', 'related-posts');
+        blogPost.appendChild(mount);
+    }
+
+    return renderRelatedPosts('related-posts-section').then(function() {
+        return blogPost.querySelector('.related-posts') || mount;
+    });
 }
 
 function renderPostDisclaimer() {
@@ -364,9 +404,9 @@ function renderPostDisclaimer() {
 
 function renderBlogThanksCta() {
     var blogPost = document.querySelector('.blog-post');
-    var relatedPosts = blogPost ? blogPost.querySelector('.related-posts') : null;
+    var relatedPosts = blogPost ? blogPost.querySelector('.related-posts, #related-posts-section') : null;
 
-    if (!blogPost || !relatedPosts || blogPost.querySelector('.blog-thanks-cta')) {
+    if (!blogPost || blogPost.querySelector('.blog-thanks-cta')) {
         return;
     }
 
@@ -401,7 +441,23 @@ function renderBlogThanksCta() {
         '</div>' +
         '</div>';
 
-    blogPost.insertBefore(cta, relatedPosts);
+    if (relatedPosts) {
+        blogPost.insertBefore(cta, relatedPosts);
+        return;
+    }
+
+    blogPost.appendChild(cta);
+}
+
+function renderBlogPostEssentials() {
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost) return;
+
+    ensureRelatedPostsSection().then(function() {
+        renderBlogThanksCta();
+    }).catch(function() {
+        renderBlogThanksCta();
+    });
 }
 
 function autoCollapseTopJargonBox() {
@@ -700,6 +756,7 @@ function renderFooter(targetId) {
 }
 
 renderPostDisclaimer();
-renderBlogThanksCta();
+renderBlogPostEssentials();
+renderBlogPhotoHighlights();
 autoCollapseTopJargonBox();
 applyJargonTooltips();
