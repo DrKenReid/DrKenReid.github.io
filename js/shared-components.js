@@ -195,24 +195,53 @@ function hydratePostReadingTime(post) {
 
 function createBlogCardElement(post, options) {
     var opts = options || {};
+    var href = opts.href || post.url;
+    var imageSrc = opts.imageSrc || post.image || DEFAULT_POST_IMAGE;
+    var fallback = opts.fallbackImage || DEFAULT_POST_IMAGE;
+    var dateStr = opts.dateStr || formatPostDate(post.date);
+    var showReadTime = opts.showReadTime !== false;
+
+    if (opts.cardStyle === 'overlay') {
+        // New template overlay card (single-post-area style)
+        var col = document.createElement('div');
+        col.className = (opts.colClass || 'col-12 col-sm-6 col-lg-4');
+
+        var firstTag = (post.tags && post.tags.length) ? post.tags[0] : '';
+        var readTimePart = showReadTime ? ('<a href="' + href + '">' + estimateReadingMinutes(post) + ' min read</a>') : '';
+        var wowDelay = opts.wowDelay || '100ms';
+
+        col.innerHTML =
+            '<div class="single-post-area wow fadeInUpBig" data-wow-delay="' + wowDelay + '">' +
+            '<a href="' + href + '" class="post-thumbnail">' +
+            '<img src="' + imageSrc + '" alt="' + post.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'' + fallback + '\';">' +
+            '</a>' +
+            (firstTag ? '<a href="' + href + '" class="btn post-catagory">' + firstTag + '</a>' : '') +
+            '<div class="post-content">' +
+            '<div class="post-meta">' +
+            '<a href="' + href + '">' + dateStr + '</a>' +
+            readTimePart +
+            '</div>' +
+            '<a href="' + href + '" class="post-title">' + post.title + '</a>' +
+            '</div>' +
+            '</div>';
+
+        return col;
+    }
+
+    // Default card style (image on top, body below)
     var col = document.createElement('div');
     col.className = opts.colClass || 'col-12 col-md-6 col-lg-4 mb-30';
 
-    var dateStr = opts.dateStr || formatPostDate(post.date);
     var tagHtml = (post.tags || []).map(function(tag) {
         return '<span class="blog-tag">' + tag + '</span>';
     }).join('');
-
-    var imageSrc = opts.imageSrc || post.image || DEFAULT_POST_IMAGE;
-    var href = opts.href || post.url;
-    var showReadTime = opts.showReadTime !== false;
     var readTimeText = showReadTime ? (' · ' + estimateReadingMinutes(post) + ' min read') : '';
 
     var card = document.createElement('a');
     card.href = href;
     card.className = opts.cardClass || 'blog-card';
     card.innerHTML =
-        '<div class="blog-card-img"><img src="' + imageSrc + '" alt="' + post.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'' + (opts.fallbackImage || DEFAULT_POST_IMAGE) + '\';"></div>' +
+        '<div class="blog-card-img"><img src="' + imageSrc + '" alt="' + post.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'' + fallback + '\';"></div>' +
         '<div class="blog-card-body">' +
         '<div class="blog-card-date">' + dateStr + readTimeText + '</div>' +
         '<h4 class="blog-card-title">' + post.title + '</h4>' +
@@ -744,14 +773,16 @@ function renderFooter(targetId) {
         '<div class="row"><div class="col-12">' +
         '<div class="footer-content d-flex align-items-center justify-content-between">' +
         '<div class="copywrite-text"><p>' +
-        'Copyright &copy; ' + year + ' All rights reserved | This template is made with ' +
-        '<i class="fa fa-heart-o" aria-hidden="true"></i> by ' +
-        '<a href="https://colorlib.com" target="_blank" rel="noopener">Colorlib</a>' +
+        'Copyright &copy; ' + year + ' Ken Reid' +
         '</p></div>' +
         '<div class="social-info">' +
-        '<a href="/feed.xml" aria-label="RSS Feed"><i class="ti-rss" aria-hidden="true"></i></a>' +
-        '<a href="https://bsky.app/profile/kenreid.co.uk" aria-label="Bluesky">' + BLUESKY_SVG + '</a>' +
         '<a href="https://www.linkedin.com/in/kennethneilreid" aria-label="LinkedIn"><i class="ti-linkedin" aria-hidden="true"></i></a>' +
+        '<a href="https://github.com/DrKenReid" aria-label="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>' +
+        '<a href="https://www.instagram.com/drkenreid/" aria-label="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>' +
+        '<a href="https://bsky.app/profile/kenreid.co.uk" aria-label="Bluesky">' + BLUESKY_SVG + '</a>' +
+        '<a href="https://www.goodreads.com/user/show/42371562-ken-reid" aria-label="Goodreads"><i class="fa fa-book" aria-hidden="true"></i></a>' +
+        '<a href="https://www.last.fm/user/GoheX" aria-label="Last.fm"><i class="fa fa-lastfm" aria-hidden="true"></i></a>' +
+        '<a href="/feed.xml" aria-label="RSS Feed"><i class="ti-rss" aria-hidden="true"></i></a>' +
         '</div></div></div></div></div></footer>';
 }
 

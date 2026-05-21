@@ -154,11 +154,31 @@ function renderPosts() {
 		return;
 	}
 
-	pagePosts.forEach(function(post) {
+	pagePosts.forEach(function(post, i) {
 		var dateStr = formatPostDate(post.date);
+
+		// Variable column widths matching the new template's alternating masonry pattern.
+		// Groups of 9 posts fill 3 rows: large-small-small / small-small-large / small-large-small
+		var colPatterns = [
+			'col-12 col-lg-6',          // 0: large (left)
+			'col-12 col-sm-6 col-lg-3', // 1: small
+			'col-12 col-sm-6 col-lg-3', // 2: small
+			'col-12 col-sm-6 col-lg-3', // 3: small
+			'col-12 col-sm-6 col-lg-3', // 4: small
+			'col-12 col-lg-6',          // 5: large (right)
+			'col-12 col-lg-3',          // 6: small
+			'col-12 col-lg-6',          // 7: large (center)
+			'col-12 col-lg-3'           // 8: small
+		];
+		var wowDelays = ['100ms', '400ms', '700ms'];
+		var colClass = colPatterns[i % 9];
+		var wowDelay = wowDelays[i % 3];
 
 		var col = typeof window.createBlogCardElement === 'function'
 			? window.createBlogCardElement(post, {
+				cardStyle: 'overlay',
+				colClass: colClass,
+				wowDelay: wowDelay,
 				href: post.url,
 				imageSrc: post.image || DEFAULT_POST_IMAGE,
 				fallbackImage: DEFAULT_POST_IMAGE,
@@ -167,7 +187,7 @@ function renderPosts() {
 			})
 			: (function() {
 				var fallbackCol = document.createElement('div');
-				fallbackCol.className = 'col-12 col-md-6 col-lg-4 mb-30';
+				fallbackCol.className = colClass;
 				return fallbackCol;
 			})();
 
