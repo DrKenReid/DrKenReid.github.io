@@ -1,5 +1,13 @@
 window.BLOG_POSTS = [
   {
+    title: 'The Books I Recommend to Friends',
+    date: '2026-05-22',
+    tags: ['books'],
+    excerpt: 'The thirteen books I actually push on friends, grouped by the kind of friend I\'d press them into the hands of.',
+    url: 'blog/books-i-recommend-to-friends.html',
+    image: 'img/photography/430.png'
+  },
+  {
     title: 'Why Nobody Thanks the Person Who Stopped the Disaster',
     date: '2026-05-21',
     tags: ['personal'],

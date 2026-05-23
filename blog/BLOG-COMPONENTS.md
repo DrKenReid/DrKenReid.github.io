@@ -117,7 +117,7 @@ CSS for all components lives in `style.css`.
 </blockquote>
 ```
 
-**Notes:** Standard HTML blockquote, styled in `style.css` with left border and italic text.
+**Notes:** Standard HTML blockquote, styled in `style.css` with left border and italic text. In book sections wrapped by `.bsec`, blockquotes are globally cleared (`clear: both`) so quote text never overlaps floated `.book-cover` images.
 
 ---
 
