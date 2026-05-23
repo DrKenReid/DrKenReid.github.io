@@ -2186,7 +2186,12 @@ input:required {
   float: right;
   margin: 8px 0 15px 24px; }
 .bsec {
-  overflow: hidden; }
+  display: flow-root;
+  overflow: visible; }
+/* Prevent blockquotes from sliding under floated book covers in blog sections. */
+.blog-post .bsec blockquote {
+  clear: both;
+}
 .post-disclaimer {
   background: #f7f7f7;
   color: #8b8b8b;
@@ -3245,7 +3250,7 @@ input:required {
 }
 
 .blog-post abbr::before {
-  content: "i  " attr(title);
+  content: "ℹ️  " attr(title);
   position: absolute;
   bottom: 100%;
   left: 50%;
@@ -3262,14 +3267,14 @@ input:required {
   pointer-events: none;
   transition: opacity 0.2s ease-in-out;
   margin-bottom: 10px;
-  width: max-content;
-  max-width: calc(100vw - 40px);
+  width: min(420px, calc(100vw - 40px));
+  min-width: 220px;
   white-space: normal;
   word-wrap: break-word;
   line-height: 1.4;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 @media (max-width: 768px) {
