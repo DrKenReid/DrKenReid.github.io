@@ -155,6 +155,219 @@ function renderBlogPhotoHighlights() {
     renderInstagramSection('instagram-section');
 }
 
+function renderFloatingBlogShare() {
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost) return;
+    if (document.querySelector('.kr-share-rail')) return;
+
+    var canonical = document.querySelector('link[rel="canonical"]');
+    var pageUrl = canonical && canonical.getAttribute('href')
+        ? canonical.getAttribute('href')
+        : (window.location.origin + window.location.pathname);
+    var rawTitle = (function() {
+        var ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle && ogTitle.getAttribute('content')) {
+            return ogTitle.getAttribute('content').trim();
+        }
+        return document.title.replace(' - Ken Reid', '').trim();
+    })();
+
+    var shareText = rawTitle + ' by Ken Reid';
+    var encUrl = encodeURIComponent(pageUrl);
+    var encText = encodeURIComponent(shareText);
+    var encTextUrl = encodeURIComponent(shareText + ' ' + pageUrl);
+
+    var iconMap = {
+        bluesky: BLUESKY_SVG,
+        facebook: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 21v-7.5h2.55l.38-2.97H13.5V8.66c0-.86.24-1.45 1.48-1.45h1.58V4.55c-.27-.04-1.21-.12-2.31-.12-2.29 0-3.86 1.4-3.86 3.96v2.21H7.84v2.97h2.55V21h3.11z"/></svg>',
+        linkedin: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.95v5.66H9.37V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.45v6.29zM5.34 7.44a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>',
+        x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2H21l-6.52 7.45L22 22h-6.77l-4.74-6.2L4.86 22H2l7.02-8.01L2 2h6.91l4.27 5.66L18.244 2zm-1.18 18h1.85L7.04 4H5.07l11.99 16z"/></svg>',
+        threads: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.18 22h-.05C8.43 21.98 5.58 20.77 3.66 18.4 1.95 16.29 1.07 13.34 1.05 9.62v-.04c.02-3.72.9-6.67 2.61-8.78C5.58.23 8.43-.98 12.13-1h.05c2.83.02 5.21.76 7.06 2.2 1.75 1.36 2.98 3.3 3.66 5.78l-2.27.6c-1.16-4.31-4.21-6.5-9.07-6.55C8.42 1.06 6.5 2 5.21 3.58 4 5.07 3.36 7.23 3.34 10c.02 2.78.66 4.94 1.87 6.43 1.29 1.58 3.21 2.52 6.35 2.55 2.83-.02 4.7-.69 6.26-2.24.92-.91 1.49-2.02 1.71-3.31-.18-.99-.73-1.79-1.66-2.41-.74-.49-1.7-.88-2.85-1.15-.08 1.32-.42 2.39-1.02 3.18-.69.9-1.7 1.34-3 1.34h-.05c-1.07-.01-2.05-.32-2.77-.86-.83-.63-1.27-1.51-1.27-2.55 0-2.05 1.65-3.47 4.11-3.55.94-.03 1.84.07 2.66.3-.18-1.16-.55-2.07-1.11-2.71-.79-.91-2.02-1.39-3.66-1.39-1.55 0-2.83.62-3.81 1.84l-1.66-1.32c1.41-1.78 3.25-2.69 5.47-2.69 2.32 0 4.18.81 5.37 2.34.79 1.02 1.25 2.37 1.36 4.04 1.95.55 3.36 1.32 4.27 2.35.91 1.04 1.36 2.34 1.36 3.91 0 .14 0 .29-.02.43-.32 1.99-1.21 3.7-2.66 5.07-1.93 1.84-4.39 2.73-7.51 2.75zm.49-9.27c-.27 0-.55.01-.83.03-1.92.06-2.6.79-2.6 1.49 0 .55.45 1.43 2.04 1.45h.03c.96 0 1.55-.27 1.92-.86.34-.55.51-1.31.49-2.04-.34-.04-.69-.07-1.05-.07z"/></svg>',
+        copy: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>',
+        copyDone: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>'
+    };
+
+    var networks = [
+        { id: 'bluesky', label: 'Share on Bluesky', href: 'https://bsky.app/intent/compose?text=' + encTextUrl },
+        { id: 'facebook', label: 'Share on Facebook', href: 'https://www.facebook.com/sharer/sharer.php?u=' + encUrl },
+        { id: 'linkedin', label: 'Share on LinkedIn', href: 'https://www.linkedin.com/sharing/share-offsite/?url=' + encUrl },
+        { id: 'x', label: 'Share on X', href: 'https://twitter.com/intent/tweet?text=' + encText + '&url=' + encUrl },
+        { id: 'threads', label: 'Share on Threads', href: 'https://www.threads.net/intent/post?text=' + encTextUrl },
+        { id: 'copy', label: 'Copy link', href: '#' }
+    ];
+
+    function createShareButton(network) {
+        var el = document.createElement('a');
+        el.className = 'kr-share-btn';
+        el.setAttribute('data-net', network.id);
+        el.setAttribute('aria-label', network.label);
+        el.setAttribute('title', network.label);
+        el.innerHTML = iconMap[network.id];
+
+        if (network.id === 'copy') {
+            el.href = '#';
+            el.addEventListener('click', function(evt) {
+                evt.preventDefault();
+
+                function showCopiedState() {
+                    el.classList.add('is-copied');
+                    el.innerHTML = iconMap.copyDone;
+                    setTimeout(function() {
+                        el.classList.remove('is-copied');
+                        el.innerHTML = iconMap.copy;
+                    }, 1800);
+                }
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(pageUrl).then(showCopiedState).catch(function() {});
+                    return;
+                }
+
+                try {
+                    var ta = document.createElement('textarea');
+                    ta.value = pageUrl;
+                    ta.setAttribute('readonly', '');
+                    ta.style.position = 'absolute';
+                    ta.style.left = '-9999px';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                    showCopiedState();
+                } catch (err) {}
+            });
+            return el;
+        }
+
+        el.href = network.href;
+        el.target = '_blank';
+        el.rel = 'noopener noreferrer';
+        return el;
+    }
+
+    var rail = document.createElement('div');
+    rail.className = 'kr-share-rail';
+    rail.setAttribute('aria-label', 'Share this post');
+
+    var railLabel = document.createElement('div');
+    railLabel.className = 'kr-share-label';
+    railLabel.textContent = 'Share';
+    rail.appendChild(railLabel);
+
+    networks.forEach(function(network) {
+        rail.appendChild(createShareButton(network));
+    });
+    document.body.appendChild(rail);
+
+    var modal = document.createElement('div');
+    modal.className = 'kr-share-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-label', 'Share this post');
+
+    var modalHeader = document.createElement('div');
+    modalHeader.className = 'kr-share-modal-header';
+
+    var modalTitle = document.createElement('div');
+    modalTitle.className = 'kr-share-modal-title';
+    modalTitle.textContent = 'Enjoyed this? Share it.';
+    modalHeader.appendChild(modalTitle);
+
+    var closeButton = document.createElement('button');
+    closeButton.className = 'kr-share-modal-close';
+    closeButton.type = 'button';
+    closeButton.setAttribute('aria-label', 'Dismiss share prompt');
+    closeButton.innerHTML = '&times;';
+    modalHeader.appendChild(closeButton);
+
+    modal.appendChild(modalHeader);
+
+    var modalRow = document.createElement('div');
+    modalRow.className = 'kr-share-modal-row';
+    networks.forEach(function(network) {
+        modalRow.appendChild(createShareButton(network));
+    });
+    modal.appendChild(modalRow);
+    document.body.appendChild(modal);
+
+    var dismissKey = 'kr-share-dismissed:' + window.location.pathname;
+    var dismissed = false;
+    try {
+        dismissed = sessionStorage.getItem(dismissKey) === '1';
+    } catch (e) {}
+
+    function setModalVisible(visible) {
+        modal.classList.toggle('is-visible', !!visible);
+        document.body.classList.toggle('kr-share-modal-open', !!visible);
+    }
+
+    function dismissModal() {
+        setModalVisible(false);
+        dismissed = true;
+        try {
+            sessionStorage.setItem(dismissKey, '1');
+        } catch (e) {}
+    }
+
+    closeButton.addEventListener('click', dismissModal);
+    document.addEventListener('keydown', function(evt) {
+        if (evt.key === 'Escape') {
+            setModalVisible(false);
+        }
+    });
+
+    function updateShareUi() {
+        var rect = blogPost.getBoundingClientRect();
+        var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        var viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+        var isMobile = window.matchMedia('(max-width: 991px)').matches;
+
+        var postEntered = rect.top < viewportHeight * 0.7;
+        var thanksCard = blogPost.querySelector('.blog-thanks-cta');
+        var mainPostEndReached = false;
+
+        if (thanksCard) {
+            var thanksRect = thanksCard.getBoundingClientRect();
+            // Trigger right as the reader reaches the boundary before the thanks card.
+            mainPostEndReached = thanksRect.top <= viewportHeight * 0.98;
+        } else {
+            mainPostEndReached = rect.bottom < viewportHeight * 0.95;
+        }
+
+        var postPassed = mainPostEndReached && (window.scrollY || window.pageYOffset || 0) > 120;
+
+        if (isMobile) {
+            rail.classList.remove('is-visible');
+            if (!dismissed && postPassed) {
+                setModalVisible(true);
+            } else if (!postPassed) {
+                setModalVisible(false);
+            }
+            return;
+        }
+
+        setModalVisible(false);
+
+        // Keep the rail visually aligned with the right edge of the readable post width.
+        var gap = 24;
+        var railWidth = rail.offsetWidth || 40;
+        var left = rect.right + gap;
+        if (left + railWidth > viewportWidth - 8) {
+            left = Math.max(8, rect.left - gap - railWidth);
+        }
+        rail.style.left = left + 'px';
+
+        if (postEntered && !postPassed) {
+            rail.classList.add('is-visible');
+        } else {
+            rail.classList.remove('is-visible');
+        }
+    }
+
+    window.addEventListener('scroll', updateShareUi, { passive: true });
+    window.addEventListener('resize', updateShareUi);
+    updateShareUi();
+}
+
 /**
  * Renders the site footer with copyright and social links.
  * @param {string} targetId - ID of the element to inject into.
@@ -789,5 +1002,6 @@ function renderFooter(targetId) {
 renderPostDisclaimer();
 renderBlogPostEssentials();
 renderBlogPhotoHighlights();
+renderFloatingBlogShare();
 autoCollapseTopJargonBox();
 applyJargonTooltips();
