@@ -10,7 +10,7 @@
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="Ken Reid - Photography">
   <meta property="og:description" content="Ken Reid's photography gallery — landscape, urban, wildlife, and abandoned photography.">
-  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/chickens.jpg">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/chickens.webp">
   <meta property="og:url" content="https://www.kenreid.co.uk/gallery.html">
   <meta property="og:type" content="website">
 
@@ -26,10 +26,13 @@
 
   <!-- Stylesheet -->
   <link rel="canonical" href="https://www.kenreid.co.uk/gallery.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="style.min.css">
 
   <!-- Gallery Script -->
-  <script src="js/gallery.js"></script>
+  <script src="js/gallery.js" defer></script>
   <script src="js/theme.js"></script>
 </head>
 <body>
@@ -246,15 +249,15 @@
   <div id="footer-section"></div>
 
   <!-- JavaScript -->
-  <script src="js/jquery.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/alime.bundle.js"></script>
-  <script src="js/lightbox.js"></script>
+  <script src="js/jquery.min.js" defer></script>
+  <script src="js/popper.min.js" defer></script>
+  <script src="js/bootstrap.min.js" defer></script>
+  <script src="js/alime.bundle.js" defer></script>
+  <script src="js/lightbox.js" defer></script>
   <!-- Build gallery before active.js so Isotope & WOW find the elements -->
   <script>initGallery();</script>
-  <script src="js/default-assets/active.js"></script>
-  <script src="js/shared-components.js"></script>
+  <script src="js/default-assets/active.js" defer></script>
+  <script src="js/shared-components.js" defer></script>
   <script>
     renderHeader('header-section', { basePath: './', active: 'hobbies', hobbiesChild: 'gallery' });
     renderInstagramSection('instagram-section');
