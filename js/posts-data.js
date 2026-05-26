@@ -5,7 +5,7 @@ window.BLOG_POSTS = [
     tags: ['books'],
     excerpt: 'The thirteen books I actually push on friends, grouped by the kind of friend I\'d press them into the hands of.',
     url: 'blog/books-i-recommend-to-friends.html',
-    image: 'img/photography/430.png'
+    image: 'img/photography/thumb/430.webp'
   },
   {
     title: 'Why Nobody Thanks the Person Who Stopped the Disaster',
@@ -13,7 +13,7 @@ window.BLOG_POSTS = [
     tags: ['personal'],
     excerpt: 'We celebrate the people who fix disasters and take preventive work for granted. That\'s a bug in how we think, and it costs us.',
     url: 'blog/prevention-of-failure-is-unseen.html',
-    image: 'img/photography/428.png'
+    image: 'img/photography/thumb/428.webp'
   },
   {
     title: 'When I Ended Up in Italy Because of Mistaken Identity',
@@ -21,7 +21,7 @@ window.BLOG_POSTS = [
     tags: ['photography', 'personal'],
     excerpt: 'How a mix-up over an email address sent me to the northern Italian mountains to photograph a tech event I had no business being at.',
     url: 'blog/mistaken-identity-italy.html',
-    image: 'img/photography/421.jpg'
+    image: 'img/photography/thumb/421.webp'
   },
   {
     title: 'The Hidden Cost of Cobalt',
@@ -166,7 +166,7 @@ window.BLOG_POSTS = [
     tags: ['personal'],
     excerpt: 'From CRT monitors and Comet Cursor to MSN Messenger, Kazaa, Warcraft 3 forums, and Bebo: a personal history of how the early internet shaped who we are.',
     url: 'blog/life-and-death-of-the-early-internet.html',
-    image: 'img/photography/375.png'
+    image: 'img/photography/thumb/375.webp'
   },
   {
     title: 'The Ethics of LLM Use (Not LLMs)',
@@ -174,7 +174,7 @@ window.BLOG_POSTS = [
     tags: ['ai'],
     excerpt: 'An AI researcher\'s honest take on LLM ethics: the energy numbers, the cobalt hypocrisy, the Jevons paradox, and why telling people not to use AI on environmental grounds is a privilege position.',
     url: 'blog/ethics-of-llm-use-not-llms.html',
-    image: 'img/photography/280.png'
+    image: 'img/photography/thumb/280.webp'
   },
   {
     title: 'Dungeon Crawler Carl and the Strange Dignity of LitRPG',
@@ -182,7 +182,7 @@ window.BLOG_POSTS = [
     tags: ['books'],
     excerpt: 'A book snob\'s confession: how Dungeon Crawler Carl used absurd LitRPG mechanics to deliver one of the most devastating emotional payloads in modern fantasy.',
     url: 'blog/dungeon-crawler-carl-litrpg-dignity.html',
-    image: 'img/photography/141.png'
+    image: 'img/photography/thumb/141.webp'
   },
   {
     title: 'From Scotland to Michigan',
@@ -190,7 +190,7 @@ window.BLOG_POSTS = [
     tags: ['personal'],
     excerpt: 'From Scotland to Michigan: a personal account of culture shock, free education, healthcare, xenophobia, weather, and what it means to belong somewhere new.',
     url: 'blog/from-scotland-to-michigan.html',
-    image: 'img/photography/18.png'
+    image: 'img/photography/thumb/18.webp'
   },
   {
     title: 'Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction',
@@ -198,7 +198,7 @@ window.BLOG_POSTS = [
     tags: ['books'],
     excerpt: 'Fifteen years since The Wise Man\'s Fear and still no Doors of Stone. A personal reflection on the Kingkiller Chronicle, the long wait, the charity debacle, and why writing at this level is genuinely hard.',
     url: 'blog/fourteen-years-of-silence-rothfuss-doors-of-stone.html',
-    image: 'img/photography/109.png'
+    image: 'img/photography/thumb/109.webp'
   },
   {
     title: 'No Idea? No Problem: A Beginner\'s Guide to Building Your Data Science Portfolio',
@@ -206,7 +206,7 @@ window.BLOG_POSTS = [
     tags: ['data science'],
     excerpt: 'A practical guide to building a data science portfolio when you have no idea where to start. Covers project types, documentation, novelty, collaboration, and working in the GenAI era.',
     url: 'blog/no-idea-no-problem-data-science-portfolio.html',
-    image: 'img/photography/19.png'
+    image: 'img/photography/thumb/19.webp'
   },
   {
     title: 'Evolutionary Computation\'s Identity Crisis in the Age of GenAI',
@@ -214,7 +214,7 @@ window.BLOG_POSTS = [
     tags: ['ai'],
     excerpt: 'Evolutionary Computation is having an identity crisis in the GenAI era, despite delivering major real-world wins in engineering, logistics, and constrained optimization.',
     url: 'blog/evolutionary-computation-identity-crisis.html',
-    image: 'img/photography/208.png'
+    image: 'img/photography/thumb/208.webp'
   },
   {
     title: 'In Defense of Audiobooks',
@@ -222,7 +222,7 @@ window.BLOG_POSTS = [
     tags: ['books'],
     excerpt: 'The stigma against audiobooks is rooted in bad assumptions about learning, intelligence, and what counts as reading. The research doesn\'t support any of it.',
     url: 'blog/in-defense-of-audiobooks.html',
-    image: 'img/photography/366.png'
+    image: 'img/photography/thumb/366.webp'
   },
   {
     title: 'Why It Still Matters to Learn to Code in the Age of AI',
@@ -230,7 +230,7 @@ window.BLOG_POSTS = [
     tags: ['ai'],
     excerpt: 'Coding still matters because the value is not syntax memorization. It is learning to break down problems, reason across systems, and build reliable solutions.',
     url: 'blog/why-learn-to-code-age-of-ai.html',
-    image: 'img/photography/14.png'
+    image: 'img/photography/thumb/14.webp'
   },
   {
     title: 'Your Professional Second Brain for Local LLM Work',
@@ -238,7 +238,7 @@ window.BLOG_POSTS = [
     tags: ['ai'],
     excerpt: 'A practical system for project documentation, knowledge management, and local LLM workflows that improves delivery, reviews, and project re-entry.',
     url: 'blog/second-brain-local-llm-professional.html',
-    image: 'img/photography/75.png'
+    image: 'img/photography/thumb/75.webp'
   },
   {
     title: 'Snowball vs Avalanche: The Science of Paying Off Debt',
@@ -262,7 +262,7 @@ window.BLOG_POSTS = [
     tags: ['books'],
     excerpt: 'The bad ones are blog posts stretched to 300 pages. The good ones cite their sources. Here\'s how to tell the difference.',
     url: 'blog/self-help-books.html',
-    image: 'img/photography/97.png'
+    image: 'img/photography/thumb/97.webp'
   },
   {
     title: 'Building a Photo Tagging System with CLIP',
@@ -270,6 +270,6 @@ window.BLOG_POSTS = [
     tags: ['ai', 'photography'],
     excerpt: 'How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute, zero API cost, running entirely on CPU.',
     url: 'blog/photo-tagging-with-clip.html',
-    image: 'img/photography/1.png'
+    image: 'img/photography/thumb/1.webp'
   }
 ];
