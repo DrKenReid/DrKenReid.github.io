@@ -163,6 +163,10 @@
                 navigateByImgClick: true,
                 tPrev: 'Previous',
                 tNext: 'Next'
+            },
+            callbacks: {
+                open: function() { $('#theme-toggle').css('visibility', 'hidden'); },
+                close: function() { $('#theme-toggle').css('visibility', ''); }
             }
         });
     }

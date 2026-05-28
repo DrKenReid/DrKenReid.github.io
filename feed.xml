@@ -5,11 +5,23 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 25 May 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Mon, 25 May 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Wed, 27 May 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Wed, 27 May 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>The Individualization of Responsibility</title>
+      <link>https://www.kenreid.co.uk/blog/individualization-of-responsibility.html</link>
+      <guid>https://www.kenreid.co.uk/blog/individualization-of-responsibility.html</guid>
+      <pubDate>Wed, 27 May 2026 00:00:00 +0000</pubDate>
+      <description>Corporations reframe systemic crises as consumer morality plays. From plastic bags to five-minute showers, how the public ends up feeling guilty while industrial actors avoid regulation.</description>
+      <category>politics</category>
+      <category>environment</category>
+      <category>corporations</category>
+      <category>systems</category>
+      <category>regulation</category>
+    </item>
     <item>
       <title>Advice to My Younger Self</title>
       <link>https://www.kenreid.co.uk/blog/advice-to-my-younger-self.html</link>
