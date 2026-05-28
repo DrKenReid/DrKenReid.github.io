@@ -1,5 +1,13 @@
 window.BLOG_POSTS = [
   {
+    title: 'The Individualization of Responsibility',
+    date: '2026-05-27',
+    tags: ['politics', 'environment', 'corporations', 'systems', 'regulation'],
+    excerpt: 'Corporations reframe systemic crises as consumer morality plays. From plastic bags to five-minute showers, how the public ends up feeling guilty while industrial actors avoid regulation.',
+    url: 'blog/individualization-of-responsibility.html',
+    image: 'img/photography/thumb/446.webp'
+  },
+  {
     title: 'The Books I Recommend to Friends',
     date: '2026-05-22',
     tags: ['books'],

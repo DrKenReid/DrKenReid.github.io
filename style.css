@@ -200,7 +200,7 @@ ol {
 .mfp-image-holder .mfp-close,
 .mfp-iframe-holder .mfp-close {
   position: fixed;
-  z-index: 100;
+  z-index: 2001;
   color: #ffffff;
   right: 20px;
   text-align: center;
