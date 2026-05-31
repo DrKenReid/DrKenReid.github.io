@@ -106,7 +106,7 @@ function renderInstagramSection(targetId) {
         sample.forEach(function(filename, index) {
             var stem = getStem(filename);
             html += '<div class="single-instagram-item">' +
-                '<img src="' + assetPrefix + 'img/photography/' + filename + '" alt="Photography highlight ' + (index + 1) + '" loading="lazy">' +
+                '<img src="' + assetPrefix + 'img/photography/thumb/' + filename.replace(/\.(png|jpg|JPG|jpeg)$/, '.webp') + '" alt="Photography highlight ' + (index + 1) + '" loading="lazy">' +
                 '<div class="instagram-hover-content text-center d-flex align-items-center justify-content-center">' +
                 '<a href="' + instagramUrl + '">' +
                 '<i class="ti-instagram" aria-hidden="true"></i>' +
