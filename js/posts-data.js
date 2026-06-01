@@ -1,5 +1,13 @@
 window.BLOG_POSTS = [
   {
+    title: 'Iain M. Banks and The Culture',
+    date: '2026-05-30',
+    tags: ['books'],
+    excerpt: 'Smashing the world requires only a hammer; building a better one requires imagination. A reflection on Iain M. Banks&#39;s Culture series and the contrarian act of imagining a future that works.',
+    url: 'blog/the-culture-series.html',
+    image: 'img/photography/thumb/30.webp'
+  },
+  {
     title: 'The Individualization of Responsibility',
     date: '2026-05-27',
     tags: ['politics', 'environment', 'corporations', 'systems', 'regulation'],
