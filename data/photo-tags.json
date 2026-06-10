@@ -1546,5 +1546,44 @@
   ],
   "99": [
     "landscape"
+  ],
+  "chaos": [
+    "wildlife"
+  ],
+  "chickens": [
+    "wildlife"
+  ],
+  "cult_of_ISO8601": [
+    "bw"
+  ],
+  "ken1": [
+    "portrait"
+  ],
+  "ken2": [
+    "portrait"
+  ],
+  "kilts": [
+    "portrait"
+  ],
+  "kwee": [
+    "wildlife"
+  ],
+  "lions-game": [
+    "bw"
+  ],
+  "lotr": [
+    "portrait"
+  ],
+  "nila": [
+    "portrait"
+  ],
+  "res": [
+    "portrait"
+  ],
+  "the-youth-dont-age": [
+    "abandoned"
+  ],
+  "yoyo": [
+    "wildlife"
   ]
 }
