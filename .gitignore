@@ -26,4 +26,4 @@ scripts-local/
 scripts/
 
 # claude stuff
-claude/
+.claude/
