@@ -25,4 +25,4 @@ extracted_*.txt
 scripts-local/
 scripts/
 
-claude/
+.claude/
