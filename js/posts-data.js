@@ -1,5 +1,13 @@
 window.BLOG_POSTS = [
   {
+    title: 'What Was I Made For?',
+    date: '2026-06-12',
+    tags: ['personal'],
+    excerpt: 'On finite time, micro-ambition, Gandalf, Tim Minchin, and why every &#39;one day&#39; dream needs a plan or it disappears.',
+    url: 'blog/what-was-i-made-for.html',
+    image: 'img/photography/43.png'
+  },
+  {
     title: 'Iain M. Banks and The Culture',
     date: '2026-05-30',
     tags: ['books'],

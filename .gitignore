@@ -24,3 +24,5 @@ extracted_*.txt
 # Local utility scripts (not committed)
 scripts-local/
 scripts/
+
+claude/
