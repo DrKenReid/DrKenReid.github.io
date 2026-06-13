@@ -638,7 +638,7 @@ function ensureRelatedPostsSection() {
 function renderPostDisclaimer() {
     var meta = document.querySelector('.blog-post .blog-meta');
     if (!meta || document.querySelector('.post-disclaimer')) return;
-    var p = document.createElement('p');
+    var p = document.createElement('div');
     p.className = 'post-disclaimer';
     p.textContent = 'The views expressed in this post are my own and do not represent any organisation, employer, or institution.';
     meta.parentNode.insertBefore(p, meta.nextSibling);
@@ -976,6 +976,72 @@ function applyJargonTooltips() {
     });
 }
 
+function fallbackCopyText(text, callback) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'absolute';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); if (callback) callback(); } catch (e) {}
+    document.body.removeChild(ta);
+}
+
+function initCopyQuotes() {
+    document.querySelectorAll('blockquote').forEach(function(bq) {
+        if (bq.querySelector('.copy-hint')) return;
+
+        var hint = document.createElement('span');
+        hint.className = 'copy-hint';
+        hint.setAttribute('aria-hidden', 'true');
+        hint.textContent = 'Click to copy';
+        bq.appendChild(hint);
+
+        bq.addEventListener('mousemove', function(e) {
+            hint.style.left = (e.clientX + 14) + 'px';
+            hint.style.top  = (e.clientY + 14) + 'px';
+        });
+
+        bq.addEventListener('click', function(e) {
+            if (e.target.closest && e.target.closest('a')) return;
+
+            var ps = bq.querySelectorAll('p');
+            var cite = bq.querySelector('cite, footer');
+            if (!ps.length) return;
+
+            var quoteText = '“' + Array.prototype.map.call(ps, function(p) {
+                return p.textContent.trim();
+            }).join(' ') + '”';
+
+            var attribution = '';
+            if (cite) {
+                var raw = cite.textContent.trim().replace(/^[—–‒\-\s]+/, '').trim();
+                if (raw) attribution = ' — ' + raw;
+            }
+
+            var fullText = quoteText + attribution;
+
+            function showCopied() {
+                hint.textContent = 'Copied!';
+                hint.classList.add('copied');
+                setTimeout(function() {
+                    hint.textContent = 'Click to copy';
+                    hint.classList.remove('copied');
+                }, 2000);
+            }
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(fullText).then(showCopied).catch(function() {
+                    fallbackCopyText(fullText, showCopied);
+                });
+            } else {
+                fallbackCopyText(fullText, showCopied);
+            }
+        });
+    });
+}
+
 function renderFooter(targetId) {
     var el = document.getElementById(targetId);
     if (!el) return;
@@ -999,9 +1065,46 @@ function renderFooter(targetId) {
         '</div></div></div></div></div></footer>';
 }
 
+function initDropCap() {
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost) return;
+    var paragraphs = blogPost.querySelectorAll(':scope > p');
+    for (var i = 0; i < paragraphs.length; i++) {
+        var p = paragraphs[i];
+        if (p.getAttribute('style')) continue;
+        p.classList.add('drop-cap');
+
+        var node = p.firstChild;
+        if (node && node.nodeType === 3 && node.textContent.length > 2) {
+            var text = node.textContent;
+            var sentenceEnd = -1;
+            var inQuote = false;
+            for (var j = 0; j < text.length; j++) {
+                var ch = text[j];
+                if (ch === '"' || ch === '“' || ch === '”') { inQuote = !inQuote; continue; }
+                if (!inQuote && (ch === '.' || ch === '!' || ch === '?')) {
+                    sentenceEnd = j + 1;
+                    while (sentenceEnd < text.length && (text[sentenceEnd] === '"' || text[sentenceEnd] === '”')) { sentenceEnd++; }
+                    break;
+                }
+            }
+            if (sentenceEnd > 0 && sentenceEnd < text.length) {
+                var span = document.createElement('span');
+                span.className = 'lead-in';
+                span.textContent = text.slice(0, sentenceEnd);
+                node.textContent = text.slice(sentenceEnd);
+                p.insertBefore(span, node);
+            }
+        }
+        break;
+    }
+}
+
 renderPostDisclaimer();
 renderBlogPostEssentials();
 renderBlogPhotoHighlights();
 renderFloatingBlogShare();
 autoCollapseTopJargonBox();
 applyJargonTooltips();
+initCopyQuotes();
+initDropCap();
