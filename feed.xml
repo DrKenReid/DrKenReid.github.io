@@ -5,11 +5,21 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 12 Jun 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Fri, 12 Jun 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Mon, 15 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Mon, 15 Jun 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)</title>
+      <link>https://www.kenreid.co.uk/blog/optimizing-your-schedule.html</link>
+      <guid>https://www.kenreid.co.uk/blog/optimizing-your-schedule.html</guid>
+      <pubDate>Mon, 15 Jun 2026 00:00:00 +0000</pubDate>
+      <description>What an operations researcher actually means by optimizing a schedule: objectives, constraints and weightings, a values clarification grid, and a working integer-programming model of your week. Nerd mode optional.</description>
+      <category>personal</category>
+      <category>data science</category>
+      <category>advice</category>
+    </item>
     <item>
       <title>What Was I Made For?</title>
       <link>https://www.kenreid.co.uk/blog/what-was-i-made-for.html</link>
@@ -17,6 +27,7 @@
       <pubDate>Fri, 12 Jun 2026 00:00:00 +0000</pubDate>
       <description>On finite time, micro-ambition, Gandalf, Tim Minchin, and why every &apos;one day&apos; dream needs a plan or it disappears.</description>
       <category>personal</category>
+      <category>advice</category>
     </item>
     <item>
       <title>M*A*S*H in the Modern Era: Comedy, Trauma, and the 4077th</title>
@@ -80,6 +91,7 @@
       <description>What I learned about writing a blog: why the word itself put me off, how I found a process, and what to do when people hate your work.</description>
       <category>personal</category>
       <category>writing</category>
+      <category>advice</category>
     </item>
     <item>
       <title>The Hidden Cost of Cobalt</title>

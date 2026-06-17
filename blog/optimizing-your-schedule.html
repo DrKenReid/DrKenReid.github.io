@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script>(function(){try{if(localStorage.getItem('kr-nerd')==='on')document.documentElement.classList.add('nerd-mode-on');}catch(e){}})();</script>
+  <meta name="description" content="What an operations researcher actually means by optimizing a schedule: objectives, constraints and weightings, a values clarification grid, and a working integer-programming model of your week. With a nerd-mode toggle.">
+  <meta name="keywords" content="data science, personal, operations research, optimization, productivity">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Optimizing Your Schedule - Ken Reid</title>
+  <meta property="og:title" content="Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)">
+  <meta property="og:description" content="Objectives, constraints and weightings, a values clarification grid, and a working integer-programming model of your week. Nerd mode optional.">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/photography/thumb/493.webp">
+  <meta property="og:url" content="https://www.kenreid.co.uk/blog/optimizing-your-schedule.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)">
+  <meta name="twitter:description" content="Objectives, constraints and weightings, a values clarification grid, and a working integer-programming model of your week. Nerd mode optional.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/photography/thumb/493.webp">
+  <meta name="citation_title" content="Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)">
+  <meta name="citation_author" content="Reid, Kenneth N.">
+  <meta name="citation_publication_date" content="2026/06/15">
+  <meta name="citation_online_date" content="2026/06/15">
+  <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/optimizing-your-schedule.html">
+  <meta name="DC.title" content="Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)">
+  <meta name="DC.creator" content="Kenneth N. Reid">
+  <meta name="DC.date" content="2026-06-15">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="../img/core-img/favicon.png">
+  <meta name="theme-color" content="#000000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../style.min.css">
+  <link rel="canonical" href="https://www.kenreid.co.uk/blog/optimizing-your-schedule.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)",
+    "description": "What an operations researcher actually means by optimizing a schedule: objectives, constraints and weightings, a values clarification grid, and a working integer-programming model of your week.",
+    "image": "https://www.kenreid.co.uk/img/photography/thumb/493.webp",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk"
+    },
+    "datePublished": "2026-06-15",
+    "publisher": {
+      "@type": "Person",
+      "name": "Ken Reid"
+    },
+    "keywords": ["optimization", "operations research", "integer programming", "productivity", "personal", "data science"]
+  }
+  </script>
+  <script src="../js/theme.js"></script>
+  <style>
+    .blog-post figure {
+      margin: 28px auto;
+      max-width: 900px;
+    }
+    .blog-post figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+    }
+    .blog-post figcaption {
+      font-size: 0.92rem;
+      line-height: 1.5;
+      margin-top: 10px;
+      opacity: 0.9;
+    }
+
+    /* --- Nerd-only content visibility --- */
+    .nerd-only { display: none; }
+    html.nerd-mode-on .nerd-only { display: revert; }
+
+    /* --- Non-nerd content (hidden when nerd mode is on) --- */
+    .non-nerd { display: revert; }
+    html.nerd-mode-on .non-nerd { display: none; }
+
+    /* --- Code example details (shared pattern) --- */
+    .blog-post details.code-example {
+      margin: 16px 0 28px;
+      border: 1px solid #e2e2e2;
+      border-radius: 8px;
+      background: #fafafa;
+      overflow: hidden;
+    }
+    .blog-post details.code-example summary {
+      cursor: pointer;
+      padding: 12px 16px;
+      font-weight: 600;
+      color: #252525;
+      list-style: none;
+    }
+    .blog-post details.code-example summary::-webkit-details-marker { display: none; }
+    .blog-post details.code-example summary::after {
+      content: "Show code";
+      float: right;
+      font-size: 12px;
+      color: #666;
+      font-weight: 500;
+    }
+    .blog-post details.code-example[open] summary::after { content: "Hide code"; }
+    .blog-post details.code-example pre {
+      margin: 0;
+      border-radius: 0;
+      border-top: 1px solid #dedede;
+      font-size: 0.85rem;
+    }
+
+    /* --- Values grid table --- */
+    .values-grid {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 22px auto 30px;
+      font-size: 15px;
+    }
+    .values-grid th, .values-grid td {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid #e7e7e7;
+      vertical-align: top;
+    }
+    .values-grid th {
+      font-weight: 600;
+      border-bottom: 2px solid #ddd;
+    }
+    .values-grid td.score, .values-grid th.score { text-align: center; white-space: nowrap; }
+    .values-grid tbody tr:hover { background: #fafafa; }
+
+    /* --- Math display block spacing --- */
+    .math-block {
+      margin: 22px 0 8px;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+    .math-caption {
+      font-size: 0.88rem;
+      font-style: italic;
+      line-height: 1.5;
+      color: #666;
+      text-align: center;
+      margin: 0 auto 24px;
+      max-width: 560px;
+    }
+    [data-theme="dark"] .math-caption { color: #aaa; }
+
+    [data-theme="dark"] .blog-post details.code-example {
+      background: #1e1e1e;
+      border-color: #333;
+    }
+    [data-theme="dark"] .blog-post details.code-example summary { color: #e2e2e2; }
+    [data-theme="dark"] .blog-post details.code-example summary::after { color: #888; }
+    [data-theme="dark"] .blog-post details.code-example pre { border-top-color: #333; }
+    [data-theme="dark"] .values-grid th { border-bottom-color: #444; }
+    [data-theme="dark"] .values-grid th, [data-theme="dark"] .values-grid td { border-bottom-color: #333; }
+    [data-theme="dark"] .values-grid tbody tr:hover { background: #242424; }
+  </style>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <div id="header-section"></div>
+
+  <main id="main-content">
+
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/thumb/493.webp); background-size: cover; background-position: center center;">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <h2 class="page-title">Blog</h2>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Optimizing Your Schedule</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <div class="about-us-area section-padding-80 clearfix">
+    <div class="container">
+      <div class="blog-post">
+        <h1>Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)</h1>
+        <div class="blog-meta">
+          15 June 2026 &middot;
+          <span class="blog-tag">personal</span>
+          <span class="blog-tag">data science</span>
+          <span class="blog-tag">advice</span>
+        </div>
+
+        <p>Everyone wants to optimize their schedule. Or, at least, I really do, because I am privileged enough to have some time to spare, but not so much that I can easily achieve all that I want to. But before we optimize our schedule, we need to decide what are we optimizing it for? We download the apps (no shade, I love them), we colour-code the calendar (or colour in your GitHub activity), we read the book (atomic habits, the power of habit), and we never once stop to write down what we are actually trying to achieve. "Fit in more stuff" isn't realistic nor really the goal.</p>
+
+        <p>I spent a good chunk of my academic life on optimization, the mathematical kind, where &ldquo;optimize&rdquo; moves away from the generic English meaning and turns into a thing you can define precisely and then solve. And the longer I worked on it, the more I was tempted to apply my nerdy skills to my own schedule. Not that it's necessary, whatsoever or in anyway, but because it's a curiosity, it's fun, and it might help me reformulate and reconsider my priorities. You cannot optimize anything until you have said, out loud, what you want more of, what you refuse to give up, and how much each thing is actually worth to you.</p>
+
+        <p>I have made a nifty little switch below. If you are a nerdy type like me, or you are curious to see what ridiculousness I have conjured up, flip the switch on. If you'd rather just read about optimizing your own life schedule from a more philosophical and careful-consideration perspective, keep it off.</p>
+
+        <div id="nerd-toggle-container"></div>
+
+        <div class="nerd-only" style="margin: 0 0 28px; padding: 14px 20px; background: #1a1a1a; border-left: 3px solid #fc6060; border-radius: 6px; font-family: monospace; font-size: 0.85em; color: #e0e0e0; line-height: 1.8;">
+          <span style="color: #fc6060;">nerd_mode = True</span><br>
+          <span style="color: #aaa;"># Congratulations. You have opted into nerd mode.<br>
+          <span style="color: #fc6060;">assert</span> <span style="color: #e0e0e0;">len(your_excuses)</span> <span style="color: #fc6060;">==</span> <span style="color: #8ecf6e;">0</span><span style="color: #aaa;">  # required precondition</span>
+        </div>
+
+        <p>What follows works in three steps. First, a clear statement of what you actually want from your time. Second, a reckoning with the limits your week genuinely contains. Third, a practical exercise that makes both visible on one page.</p>
+
+        <details class="plain-english-box nerd-only" style="margin-bottom: 28px;">
+          <summary style="cursor: pointer;"><h2 style="display: inline; margin: 0;">Quick jargon guide (expand)</h2></summary>
+          <p style="margin-top: 12px;">The optimization terms used in this piece, briefly:</p>
+          <ul>
+            <li><strong>Objective function</strong>: the quantity the solver maximizes. Here, total weighted hours across the week.</li>
+            <li><strong>Decision variable</strong>: what the solver gets to set. Here, hours allocated to each activity.</li>
+            <li><strong>Constraint</strong>: a rule the solution must satisfy. The week summing to exactly 168 hours is one.</li>
+            <li><strong>Bound</strong>: a floor or ceiling on a variable — the minimum or maximum hours an activity can receive.</li>
+            <li><strong>Integer programming (IP)</strong>: optimization where variables must be whole numbers, not fractions.</li>
+            <li><strong>Feasible solution</strong>: any allocation that satisfies all constraints. Many exist; the solver finds the one with the best objective value.</li>
+            <li><strong>Degeneracy</strong>: when two or more feasible solutions achieve the same objective value and the solver is indifferent between them.</li>
+            <li><strong>PuLP</strong>: a Python library for writing and solving linear and integer programming models.</li>
+          </ul>
+        </details>
+
+        <h2 class="nerd-only">What are you actually trying to maximize?</h2>
+        <h2 class="non-nerd">What do you actually want?</h2>
+
+        <p class="nerd-only">Start with the goal, so we know what we are trying to achieve. In optimization this is called the <strong>objective function</strong>: the single quantity you are trying to make as large (or as small) as possible. If you say your goal is &ldquo;health, wealth, family, career, and also learning the cello,&rdquo; you have not stated an objective, you have stated a wish list, and a wish list cannot be optimized because the moment two items conflict (and they always conflict) you have no rule for deciding between them. The goal might be something like total satisfaction, or meaning, or the accumulated weight of time spent on things you will not regret. </p>
+
+        <p class="non-nerd">Start with what you actually want from your life, not the official answer you give when someone asks, but the real one. Most scheduling advice skips the step that matters: you can only move purposefully in one direction at a time. If your goal is health, family, career, learning, and also the cello, you have not stated a goal. You have stated a wish list. And a wish list has no tiebreaker: the moment two things compete, and they always compete, you have no rule for deciding which one wins. Picking one direction does not mean abandoning the others. It means knowing, in advance, which one wins when they conflict.</p>
+
+        <div class="non-nerd">
+          <p>In practice, your one goal might be something like: spend my time in a way I will not regret. Or: make sure the people I love know they come first. Or: do work that matters, sleep enough to do it well, and leave something for myself. </p>
+        </div>
+
+        <figure class="non-nerd">
+          <img src="../img/photography/thumb/397.webp" alt="Two people sitting on a log in the woods with a guitar" loading="lazy">
+          <figcaption class="figure-note">&copy; Ken Reid.</figcaption>
+        </figure>
+
+        <div class="nerd-only">
+          <p>Formally, we have a set of activities you could spend time on, indexed by \( i \). For the model running through this post, that set is:</p>
+          <div class="math-block">
+            \[
+            \begin{aligned}
+            A = \{\,&\text{relationship},\; \text{sleep},\; \text{research},\; \text{exercise},\; \text{learning}, \\
+                    &\text{leisure},\; \text{paid work},\; \text{chores},\; \text{pet-stuff}\,\}
+            \end{aligned}
+            \]
+          </div>
+          <p class="math-caption">The set \(A\) simply lists the nine activities the week can be spent on. Everything else is built on top of this list.</p>
+          <p>For each \( i \in A \) (activity in the set of activities) we choose \( x_i \) (the number of hours per week allocated to that activity). These are the <em>decision variables</em>, the dials we get to fiddle with to try different solutions to the problem. The objective is a function we want to maximize, and in the simplest useful form it is linear (the output changes in direct, exact proportion to the input). Call the thing we are maximizing &ldquo;value,&rdquo; whatever that means for you. Each hour of activity \( i \) is worth \( w_i \) units of value, and total value is the sum of all of these:</p>
+          <div class="math-block">
+            \[ \max \quad Z = \sum_{i \in A} w_i \, x_i \]
+          </div>
+          <p class="math-caption">Read it left to right: maximize \(Z\), the total value, which is the sum (that is what \(\sum\) means) over every activity \(i\) of its hours \(x_i\) multiplied by how much you value it, \(w_i\).</p>
+          <p>\( Z \) is the one number. Choosing the weights \( w_i \) is its own battle, and it is exactly the question (what is each thing worth to you?) that we will need to answer later. We now know the end of the story but not the beginning: at some point we are going to add up all of the values into a single number, \( Z \), and it will represent the quality of our solution. Now we can go deeper into how to get to the point of adding the values up.</p>
+        </div>
+
+        <h2>Defining our limits</h2>
+
+        <p>Next come the limits. A goal with no limits is a fantasy: if there were no restrictions you would simply do infinite amounts of every good thing, and the planning problem would not exist. The reason scheduling is hard, and the reason it is interesting, is that you are working inside a box you did not get to choose the size of.</p>
+
+        <p>The most ruthless restriction is: there are 168 hours in a week. One hundred and sixty-eight, allocated whether you decide on purpose or not. Every hour you spend on one thing is an hour you did not spend on another.</p>
+
+        <blockquote>
+          <p>&ldquo;All we have to decide is what to do with the time that is given us.&rdquo; &mdash; Gandalf</p>
+        </blockquote>
+
+        <p class="nerd-only">There are two flavours of limit: <strong>Hard constraints</strong> are non-negotiable: you must sleep (maybe not exactly 8 hours a night but maybe 6 minimum no matter what); school starts at 0800; your contract wants its forty hours. <strong>Soft constraints</strong> are the ones you have a bit more leeway with: working out, gardening, walking the dog, even laundry etc. I think a lot of my personal anxiety comes from wanting to treat my soft constraints like hard constraints (I wanna hit the gym 4-5x a week, realistically I'm lucky to do 1-2x). So, write these out - what are non-negotiables, which are negotiables?</p>
+
+        <p class="non-nerd">There are two kinds of limit. Some limits are something we can't reschedule or choose not to include: you will sleep; your contract wants its forty hours; the school bus arrives at half eight regardless of your plans. These cannot be moved. Writing things down forces you to ask, one by one: is this actually fixed, or just a habit I have mistaken for a law?</p>
+
+        <div class="nerd-only">
+          <p>Translating these, constraints are inequalities (or equalities) the solution has to respect. The week is an equality: every hour goes somewhere, even if &ldquo;somewhere&rdquo; is doing nothing:</p>
+          <div class="math-block">
+            \[ \sum_{i \in A} x_i = 168 \]
+          </div>
+          <p class="math-caption">The hours you spend across all activities must add up to exactly 168, the number of hours in a week.</p>
+          <p>Each activity gets a lower and upper bound. A lower bound is a floor you refuse to drop below (a minimum of family time, a minimum of sleep); an upper bound is a ceiling beyond which more hours are impossible or pointless:</p>
+          <div class="math-block">
+            \[ \ell_i \le x_i \le u_i \qquad \forall \, i \in A \]
+          </div>
+          <p class="math-caption">For every activity (\(\forall\) means &ldquo;for all&rdquo;), its hours \(x_i\) must sit between a floor \(\ell_i\) and a ceiling \(u_i\): never less than the minimum, never more than the maximum.</p>
+          <p>For our nine activities:</p>
+          <table class="values-grid" style="margin: 8px auto 22px; max-width:380px;">
+            <thead>
+              <tr><th>Activity \(i\)</th><th class="score">\(\ell_i\)</th><th class="score">\(u_i\)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>family</td><td class="score">14</td><td class="score">28</td></tr>
+              <tr><td>sleep</td><td class="score">49</td><td class="score">56</td></tr>
+              <tr><td>deep work</td><td class="score">0</td><td class="score">15</td></tr>
+              <tr><td>exercise</td><td class="score">0</td><td class="score">10</td></tr>
+              <tr><td>learning</td><td class="score">0</td><td class="score">10</td></tr>
+              <tr><td>leisure</td><td class="score">0</td><td class="score">20</td></tr>
+              <tr><td>paid work</td><td class="score">40</td><td class="score">40</td></tr>
+              <tr><td>chores</td><td class="score">7</td><td class="score">14</td></tr>
+              <tr><td>doomscrolling</td><td class="score">0</td><td class="score">168</td></tr>
+            </tbody>
+          </table>
+          <p>And because hours are lumpy (you do not schedule 3.7 hours of exercise, you schedule 3 or 4) we require the variables to be integers (also just to make this easier to think about). That means this isn't a linear program, it's an <em>integer</em> program, and it is also what lets us model genuine yes/no decisions, which we will need in a moment:</p>
+          <div class="math-block">
+            \[ x_i \in \mathbb{Z}_{\ge 0} \qquad \forall \, i \in A \]
+          </div>
+          <p class="math-caption">Every activity&rsquo;s hours must be a whole number that is zero or more. \(\mathbb{Z}_{\ge 0}\) is shorthand for the non-negative integers (0, 1, 2, 3, and so on).</p>
+        </div>
+
+        <div class="non-nerd">
+          <p>For the example running through this post, the real, unmovable limits are: sleep (the body insists on roughly seven hours a night, eight if you can manage it); paid work (forty hours, fixed by contract); chores (about an hour a day); and a minimum of family time.</p>
+          <p>Everything else is open. Exercise, learning, leisure, deep work: no fixed floor, no fixed ceiling. The question, for each of those, is how much of the remaining hours you choose to give them. That choice is where your real priorities become legible.</p>
+        </div>
+
+        <h2>Not everything counts the same</h2>
+
+        <p>We treat our to-do list as if every item carried equal weight, so we do the easy, low-value things first because they are easy, and the hard, high-value things drift to &ldquo;later,&rdquo; which is a place that does not exist. An hour with my family and an hour clearing my inbox are both, technically, an hour. They are not remotely the same hour.</p>
+
+        <p class="nerd-only">The fix is to attach a <strong>weight</strong> to each thing: a number standing for how much you actually care about it, not how urgent it feels or how loudly it pings (I'm talking to you Google Tasks). Your husband says "I miss you, I'd like to spend more time with you this week", and suddenly you modify your weightings. My weights are not your weights. The point is not to get them &ldquo;right&rdquo; in some universal sense; the point is to make them explicit, because the alternative is not having no weights, it is having invisible ones you never chose and cannot examine. Everyone is already running a weighted optimization. Most people have just never read out their own coefficients, mostly because not everyone is a nerd like we are.</p>
+
+        <p class="non-nerd">The fix is to score each thing: a number standing for how much you actually care about it, not how urgent it feels or how loudly it pings (I'm talking to you, Google Tasks). My scores are not your scores. And they're likely to change! Your husband says "I miss you, I'd like to spend more time with you this week", and suddenly you modify your scores. The point is not to get them &ldquo;right&rdquo; in some universal sense; the point is to make them explicit, because the alternative is not having no priorities, it is having invisible ones you never chose and cannot examine. Everyone is already treating some things as more important than others in how they spend their time. Most people have just never written those priorities down, and would be surprised by what they reveal, particularly the gap between what they rank highest and what actually gets the hours.</p>
+
+        <div class="non-nerd">
+          <p>For the example in this post, family scores highest (5), followed by sleep, meaningful work, and exercise (all 4). Learning and leisure come next (3). Paid work and chores appear near the bottom (1), not because they are unimportant but because their hours are largely fixed already and they do not need protecting. Doomscrolling scores negative, as an example of something not necessarily actually useful!</p>
+          <p>The specific numbers matter less than the ordering. The point is to know which things you would sacrifice last, and which ones you are currently sacrificing first.</p>
+        </div>
+
+        <figure class="non-nerd">
+          <img src="../img/photography/thumb/460.webp" alt="Two women dancing at a celebration" loading="lazy">
+          <figcaption class="figure-note">&copy; Ken Reid.</figcaption>
+        </figure>
+
+        <div class="nerd-only">
+          <p>The weights \( w_i \) are exactly the coefficients in the objective from earlier. Doubling \( w_i \) says &ldquo;an hour of this is now worth twice as much,&rdquo; and the solver will reach for it harder, up to its ceiling \( u_i \). For our model, the weights come directly from the &ldquo;Matters&rdquo; column of the values grid:</p>
+          <table class="values-grid" style="margin: 8px auto 22px; max-width:380px;">
+            <thead>
+              <tr><th>Activity \(i\)</th><th class="score">\(w_i\)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>family</td><td class="score">5</td></tr>
+              <tr><td>sleep</td><td class="score">4</td></tr>
+              <tr><td>deep work</td><td class="score">4</td></tr>
+              <tr><td>exercise</td><td class="score">4</td></tr>
+              <tr><td>learning</td><td class="score">3</td></tr>
+              <tr><td>leisure</td><td class="score">3</td></tr>
+              <tr><td>paid work</td><td class="score">1</td></tr>
+              <tr><td>chores</td><td class="score">1</td></tr>
+              <tr><td>doomscrolling</td><td class="score">&minus;1</td></tr>
+            </tbody>
+          </table>
+          <p>Weights can be negative too, for activities that actively cost you. Doomscrolling has \( w_i = -1 \), which means the optimizer, given any choice at all, drives it to its floor of zero.</p>
+        </div>
+
+        <h2>The values clarification grid</h2>
+
+        <p>So far this is abstract. Here is an exercise to help you work out your own set of values and deciding what is most important. I find this is a good exercise to do with a partner, too. It is sometimes called a <strong>values clarification grid</strong>, or a values matrix.</p>
+
+        <p>List the things you actually spend a week on, not the things you tell people you spend a week on. For each, score from 1 to 5 how much it genuinely matters to you, write one sentence about <em>why</em> it earns that score, and note roughly how many hours it currently gets. That third column is the gap between what you score 5 and what you actually fund with hours.</p>
+
+        <p>Here is a worked example. Make sure yours sums to 168.</p>
+
+        <table class="values-grid">
+          <thead>
+            <tr>
+              <th>Activity</th>
+              <th class="score">Matters (1&ndash;5)</th>
+              <th>Why it earns that score</th>
+              <th class="score">Hrs/wk now</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Family &amp; close relationships</td><td class="score">5</td><td>#1 priority</td><td class="score">~20</td></tr>
+            <tr><td>Sleep</td><td class="score">4</td><td>Essential for everything else.</td><td class="score">~57</td></tr>
+            <tr><td>Meaningful work / craft</td><td class="score">4</td><td>The work I would do even unpaid: writing, reading, thinking.</td><td class="score">~12</td></tr>
+            <tr><td>Exercise</td><td class="score">4</td><td>Compounds into everything; ignored at a slow, deferred cost.</td><td class="score">~5</td></tr>
+            <tr><td>Learning</td><td class="score">3</td><td>A core principle for my life and relationships.</td><td class="score">~3</td></tr>
+            <tr><td>Genuine rest / leisure</td><td class="score">3</td><td>Real rest, necessary for happiness. Video games, films, etc.</td><td class="score">~4</td></tr>
+            <tr><td>Paid work (fixed)</td><td class="score">1</td><td>Funds the whole operation. Valued, but already non-negotiable at 40.</td><td class="score">40</td></tr>
+            <tr><td>Chores &amp; admin</td><td class="score">1</td><td>Necessary, joyless, has a stubborn minimum that will not go to zero.</td><td class="score">~20</td></tr>
+            <tr><td>Doomscrolling</td><td class="score">&minus;1</td><td>Feels like rest, costs like a tax. Actively negative on reflection.</td><td class="score">~7</td></tr>
+          </tbody>
+        </table>
+
+        <p>Even with no further machinery, this table is useful. Look down the &ldquo;matters&rdquo; column and then across to &ldquo;hours now,&rdquo; and the mismatches jump out: things I claim to value at 4 getting two or three hours, things I value at 1 or below eating the evening. </p>
+
+        <div class="nerd-only">
+          <p>But we are going to solve it, because the grid above is, almost exactly, the input to an optimization model. The &ldquo;matters&rdquo; column is the vector of weights \( w_i \). The activities are the index set \( A \). All that is missing is the bounds (the floors and ceilings) and a constraint or two to keep the solution realistic. So let us build it.</p>
+        </div>
+
+        <figure class="non-nerd">
+          <img src="../img/photography/thumb/333.webp" alt="A strawberry cake being held up" loading="lazy">
+          <figcaption class="figure-note">&copy; Ken Reid.</figcaption>
+        </figure>
+
+        <h2 class="nerd-only">Turning the grid into a model</h2>
+
+        <div class="nerd-only">
+          <p>Here is the full thing, written out. We maximize weighted value across the week, subject to the hours adding up and every activity living inside its floor and ceiling.</p>
+
+          <div class="math-block">
+            \[
+            \begin{aligned}
+            \max_{x} \quad & \sum_{i \in A} w_i \, x_i \\[4pt]
+            \text{s.t.} \quad & \sum_{i \in A} x_i = 168 \\[2pt]
+            & \ell_i \le x_i \le u_i && \forall \, i \in A \\[2pt]
+            & x_i \in \mathbb{Z}_{\ge 0} && \forall \, i \in A
+            \end{aligned}
+            \]
+          </div>
+          <p class="math-caption">The whole model on one page. Line one is the goal: maximize total value. &ldquo;s.t.&rdquo; means &ldquo;subject to,&rdquo; and the lines below it are the rules: the week sums to 168, every activity stays within its floor and ceiling, and all hours are whole non-negative integers.</p>
+
+          <p>Now the model in code. It uses <code>PuLP</code>, a readable Python modelling library that ships with a solver, so this runs as-is with <code>pip install pulp</code>. The data is lifted straight from the grid above.</p>
+
+          <details class="code-example">
+            <summary>The model in Python (PuLP)</summary>
+<pre><code class="language-python">import pulp
+
+# --- Data, straight from the values grid -------------------------------------
+# weight = how much an hour is worth to you (the "matters" column)
+# (low, high) = the floor you won't drop below and the ceiling beyond which
+#               more hours are impossible or pointless
+activities = {
+    #                weight   low  high
+    "family":       ( 5,      14,   28),
+    "sleep":        ( 4,      49,   56),   # 7 to 8 hours a night
+    "deep_work":    ( 4,       0,   15),   # meaningful work / craft
+    "exercise":     ( 4,       0,   10),
+    "learning":     ( 3,       0,   10),
+    "leisure":      ( 3,       0,   20),   # genuine rest
+    "paid_work":    ( 1,      40,   40),   # fixed by contract
+    "chores":       ( 1,       7,   14),   # stubborn minimum
+    "doomscroll":   (-1,       0,  168),   # actively negative
+}
+
+WEEK = 168
+
+# --- Model -------------------------------------------------------------------
+m = pulp.LpProblem("optimize_my_week", pulp.LpMaximize)
+
+# Integer decision variable: hours per week on each activity
+x = {
+    name: pulp.LpVariable(name, lowBound=lo, upBound=hi, cat="Integer")
+    for name, (w, lo, hi) in activities.items()
+}
+
+# Objective: total weighted value
+m += pulp.lpSum(w * x[name] for name, (w, lo, hi) in activities.items())
+
+# The week is finite and fully allocated
+m += pulp.lpSum(x.values()) == WEEK
+
+# --- Solve -------------------------------------------------------------------
+m.solve(pulp.PULP_CBC_CMD(msg=False))
+
+print("Status:", pulp.LpStatus[m.status])
+for name in activities:
+    print(f"  {name:11s} {int(x[name].value()):>4d} h")
+print(f"Objective (weighted score, not hours): {int(pulp.value(m.objective))}")
+</code></pre>
+          </details>
+        </div>
+
+        <h2 class="nerd-only">What the solver says</h2>
+
+        <div class="nerd-only">
+          <p>Run it and the optimizer hands back a fully specified week:</p>
+
+          <details class="code-example" open>
+            <summary>Solver output</summary>
+<pre><code>Status: Optimal
+  family        28 h
+  sleep         56 h
+  deep_work     15 h
+  exercise      10 h
+  learning       0 h
+  leisure       12 h
+  paid_work     40 h
+  chores         7 h
+  doomscroll     0 h
+Objective (weighted score, not hours): 547
+</code></pre>
+          </details>
+
+          <p>The 547 is a weighted score: each activity&rsquo;s hours multiplied by its weight, summed across all nine. It has no unit and no ceiling; it exists solely to let the solver compare one allocation against another. Here is how the optimal week reshuffles against the current rough estimates from the grid:</p>
+
+          <table class="values-grid" style="margin: 16px auto 24px; max-width: 460px;">
+            <thead>
+              <tr><th>Activity</th><th class="score">Now (hrs)</th><th class="score">Solver (hrs)</th><th class="score">&Delta;</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Family</td><td class="score">&sim;20</td><td class="score">28</td><td class="score">+8</td></tr>
+              <tr><td>Sleep</td><td class="score">&sim;57</td><td class="score">56</td><td class="score">&minus;1</td></tr>
+              <tr><td>Meaningful work</td><td class="score">&sim;12</td><td class="score">15</td><td class="score">+3</td></tr>
+              <tr><td>Exercise</td><td class="score">&sim;5</td><td class="score">10</td><td class="score">+5</td></tr>
+              <tr><td>Learning</td><td class="score">&sim;3</td><td class="score">0</td><td class="score">&minus;3</td></tr>
+              <tr><td>Leisure</td><td class="score">&sim;4</td><td class="score">12</td><td class="score">+8</td></tr>
+              <tr><td>Paid work</td><td class="score">40</td><td class="score">40</td><td class="score">0</td></tr>
+              <tr><td>Chores</td><td class="score">&sim;20</td><td class="score">7</td><td class="score">&minus;13</td></tr>
+              <tr><td>Doomscrolling</td><td class="score">&sim;7</td><td class="score">0</td><td class="score">&minus;7</td></tr>
+            </tbody>
+          </table>
+
+          <p>It drove family and sleep and meaningful work to their ceilings, because those carry the most weight per hour. It zeroed out doomscrolling without sentiment, because the weight is negative and nothing forces it above its floor. It pinned chores to the stubborn minimum of seven, because they are necessary but you told it they are nearly worthless, so it spends not one hour more.</p>
+
+          <p>The casualty is <em>learning</em>: it got zero hours. The floors alone (family, sleep, work, chores) eat 110 of the 168 before anything optional happens, and once the model had funded its highest-value activities up to their ceilings, only twelve hours were left to share out. That is the model telling you what your stated priorities cost. If a week with no learning in it horrifies you, the fix is not to argue with the solver. The fix is to go back and change a weight, because you have just discovered you value learning more than you claimed to!</p>
+
+          <p>Learning and leisure carry the same weight of 3, so the solver was genuinely <em>indifferent</em> between them: it poured all twelve into leisure and left learning at nothing, but it could just as correctly have done the reverse, or split them down the middle. This is called degeneracy: the model admitting that some choices make no difference to the objective. Which, I would argue, we should implement some kind of equality preference into the objective.</p>
+        </div>
+
+        <h2 class="nerd-only">The Limits</h2>
+
+        <p class="nerd-only">The failure mode of this kind of thinking is taking it too seriously and trying to live inside a spreadsheet. Your life is not a linear program, and the places it refuses to be one are worth naming. Ultimately, these kind of solvers don't measure up to reality. If you're having a bad day, your "leisure" hours will need a serious and immediate bump up. If your sink floods and you need to clean out the kitchen cupboards due to spreading water, you can't ignore it because you don't have enough chores hours!</p>
+
+        <p class="nerd-only">Value is not linear. The first hour with my partner and the fourteenth are not worth the same, especially when other things are falling to the side. Real value has diminishing returns, and a straight line does not. The model fakes this with ceilings (it caps activities before they get silly) but that is a workaround, not the truth.</p>
+
+        <p class="nerd-only">And the world is uncertain. The model assumes you know your coefficients and your constraints with confidence, when in fact the hardest thing about a real life is that you mostly do not. Children get sick, work explodes, the long-planned thing falls through. A genuinely faithful model would be stochastic and re-solved constantly, which is just a mathematician&rsquo;s way of describing what we already do, with some success, in our heads.</p>
+
+        <p class="nerd-only">Most of all: some of the best things resist being a number at all. You cannot put a weight on love (wow, please quote this on my deathbed), or on a conversation that changes you, or on the afternoon you will think about for the rest of your life. This is nothing more than an exercise in learning a bit more about optimization and helping you consider your priorities.</p>
+
+        <h2>The point isn&rsquo;t the schedule</h2>
+
+        <p>It was everything you had to figure out in order to ask the question: what you want, what you cannot change, and what each part of your life is actually worth to you. Sit and work out your priorities, say it out loud with a partner and work through it frequently and constantly reweight and re-evaluate. </p>
+
+        <p class="non-nerd">Please do try the above table with your partner, or a friend. Sit down and really, honestly try to state what your priorities are and if you meet them or not. Specifically, think about things that are longer term goals that you haven't begun working on. Learning a language, an instrument, reading a book your friend kindly gifted you, walking your dog more, exercising for a specific goal, or quitting smoking. These long terms goals are tough to confront when we consider reality, how little time we have in week, or <a href="what-was-i-made-for.html">in a lifetime</a>. Write it down on the list. If the outcome is that you spend one hour more than zero on something that you claim is deeply important to you, you're on your way. That is true, undeniable progress. Even just 1 hour is 1 hour more than last week.</p>
+
+      </div>
+
+      <div id="related-posts-section"></div>
+
+      <hr style="margin: 40px 0;">
+      <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+    </div>
+  </div>
+
+  </main>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/alime.bundle.js"></script>
+  <script src="../js/lightbox.js"></script>
+  <script src="../js/share.js"></script>
+  <script src="../js/default-assets/active.js"></script>
+  <script src="../js/shared-components.js"></script>
+  <script src="../js/nerd-mode.js"></script>
+  <script src="../js/prism-loader.js"></script>
+  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+
+  <!-- Nerd mode: lazy-loaded KaTeX + nerd toggle (toggle wiring via nerd-mode.js) -->
+  <script>
+  (function(){
+    var katexState = 0;
+    var pending = [];
+
+    function whenKatexReady(cb){
+      if (katexState === 2) { cb(); return; }
+      pending.push(cb);
+      if (katexState === 1) return;
+      katexState = 1;
+      var css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';
+      document.head.appendChild(css);
+      var core = document.createElement('script');
+      core.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';
+      core.onload = function(){
+        var ar = document.createElement('script');
+        ar.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js';
+        ar.onload = function(){ katexState = 2; pending.forEach(function(fn){ fn(); }); pending = []; };
+        document.head.appendChild(ar);
+      };
+      document.head.appendChild(core);
+    }
+
+    var rendered = false;
+    function renderMath(){
+      if (rendered || !window.renderMathInElement) return;
+      rendered = true;
+      window.renderMathInElement(document.querySelector('.blog-post'), {
+        delimiters: [{ left: '\\[', right: '\\]', display: true }, { left: '\\(', right: '\\)', display: false }],
+        throwOnError: false
+      });
+    }
+
+    initNerdMode({
+      description: 'Off by default. Flip it on to reveal the optimization wizardry: the equations, the code, and a working model of a week you can actually run. Flip it off and this stays a plain-English essay.',
+      onChange: function(on){ if (on){ whenKatexReady(renderMath); loadPrism(['python']); } }
+    });
+  })();
+  </script>
+</body>
+</html>

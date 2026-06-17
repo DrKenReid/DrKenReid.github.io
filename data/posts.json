@@ -1,8 +1,16 @@
 [
   {
+    "title": "Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)",
+    "date": "2026-06-15",
+    "tags": ["personal", "data science", "advice"],
+    "excerpt": "What an operations researcher actually means by optimizing a schedule: objectives, constraints and weightings, a values clarification grid, and a working integer-programming model of your week. Nerd mode optional.",
+    "url": "blog/optimizing-your-schedule.html",
+    "image": "img/photography/thumb/493.webp"
+  },
+  {
     "title": "What Was I Made For?",
     "date": "2026-06-12",
-    "tags": ["personal"],
+    "tags": ["personal", "advice"],
     "excerpt": "On finite time, micro-ambition, Gandalf, Tim Minchin, and why every 'one day' dream needs a plan or it disappears.",
     "url": "blog/what-was-i-made-for.html",
     "image": "img/photography/43.png"
@@ -50,7 +58,7 @@
   {
     "title": "Why Nobody Thanks the Person Who Stopped the Disaster",
     "date": "2026-05-21",
-    "tags": ["personal"],
+    "tags": ["philosophy"],
     "excerpt": "We celebrate the people who fix disasters and take preventive work for granted. That's a bug in how we think, and it costs us.",
     "url": "blog/prevention-of-failure-is-unseen.html",
     "image": "img/photography/thumb/428.webp"
@@ -66,7 +74,7 @@
   {
     "title": "How to Write a Blog (or: What I Learned By Doing It)",
     "date": "2026-05-13",
-    "tags": ["personal", "writing"],
+    "tags": ["personal", "writing", "advice"],
     "excerpt": "What I learned about writing a blog: why the word itself put me off, how I found a process, and what to do when people hate your work.",
     "url": "blog/how-to-write-a-blog.html",
     "image": "img/photography/thumb/252.webp"
