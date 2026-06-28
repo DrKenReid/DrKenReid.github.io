@@ -1,5 +1,13 @@
 [
   {
+    "title": "What We Leave Behind",
+    "date": "2026-06-27",
+    "tags": ["personal", "philosophy", "science"],
+    "excerpt": "From the plutonium in the planet's crust to the Golden Record in interstellar space to the memory of a Tuesday coffee, a look at everything we leave behind, and why none of us ever truly vanishes.",
+    "url": "blog/what-we-leave-behind.html",
+    "image": "https://commons.wikimedia.org/wiki/Special:FilePath/The_Sounds_of_Earth_Record_Cover_-_GPN-2000-001978.jpg"
+  },
+  {
     "title": "Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)",
     "date": "2026-06-15",
     "tags": ["personal", "data science", "advice"],

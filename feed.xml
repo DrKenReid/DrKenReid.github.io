@@ -5,11 +5,21 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 15 Jun 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Mon, 15 Jun 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Sat, 27 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Sat, 27 Jun 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>What We Leave Behind</title>
+      <link>https://www.kenreid.co.uk/blog/what-we-leave-behind.html</link>
+      <guid>https://www.kenreid.co.uk/blog/what-we-leave-behind.html</guid>
+      <pubDate>Sat, 27 Jun 2026 00:00:00 +0000</pubDate>
+      <description>From the plutonium in the planet's crust to the Golden Record in interstellar space to the memory of a Tuesday coffee, a look at everything we leave behind, and why none of us ever truly vanishes.</description>
+      <category>personal</category>
+      <category>philosophy</category>
+      <category>science</category>
+    </item>
     <item>
       <title>Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)</title>
       <link>https://www.kenreid.co.uk/blog/optimizing-your-schedule.html</link>
@@ -65,6 +75,14 @@
       <pubDate>Mon, 25 May 2026 00:00:00 +0000</pubDate>
       <description>Forty things I would tell my younger self, from pensions and emergency funds to sunscreen, boundaries, and uncomfortable conversations.</description>
       <category>personal</category>
+    </item>
+    <item>
+      <title>Why Nobody Thanks the Person Who Stopped the Disaster</title>
+      <link>https://www.kenreid.co.uk/blog/prevention-of-failure-is-unseen.html</link>
+      <guid>https://www.kenreid.co.uk/blog/prevention-of-failure-is-unseen.html</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 +0000</pubDate>
+      <description>We celebrate the people who fix disasters and take preventive work for granted. That&apos;s a bug in how we think, and it costs us.</description>
+      <category>philosophy</category>
     </item>
     <item>
       <title>The Books I Recommend to Friends</title>
