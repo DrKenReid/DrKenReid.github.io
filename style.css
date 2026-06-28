@@ -1870,10 +1870,10 @@ input:required {
 .plain-english-box {
   margin: 28px 0 34px;
   padding: 20px 22px 14px;
-  border: 1px solid #f0d9d4;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #fff8f5 0%, #fffdfb 100%);
-  box-shadow: 0 12px 28px rgba(37, 37, 37, 0.06); }
+  border: 1px solid #e6e6e3;
+  border-radius: 12px;
+  background: #f7f7f6;
+  box-shadow: 0 4px 14px rgba(37, 37, 37, 0.04); }
   .plain-english-box h2,
   .plain-english-box h3 {
     margin-top: 0; }
@@ -1881,25 +1881,47 @@ input:required {
     margin-bottom: 0; }
 
 .plain-english-box.collapsible-jargon-box {
-  padding-top: 0; }
+  margin: 16px 0;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  interpolate-size: allow-keywords; }
+
+.plain-english-box.collapsible-jargon-box h2 {
+  display: none; }
+
+.plain-english-box.collapsible-jargon-box::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition: block-size 0.3s ease, content-visibility 0.3s allow-discrete; }
+
+.plain-english-box.collapsible-jargon-box[open]::details-content {
+  block-size: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  .plain-english-box.collapsible-jargon-box::details-content {
+    transition: none; } }
 
 .plain-english-box.collapsible-jargon-box > summary {
   list-style: none;
   cursor: pointer;
-  font-weight: 700;
-  color: #252525;
-  padding: 20px 0 14px;
+  font-weight: 400;
+  font-size: 0.78em;
+  color: #a3a3a3;
+  padding: 6px 0;
   display: flex;
   align-items: center;
-  gap: 8px; }
+  gap: 6px; }
 
 .plain-english-box.collapsible-jargon-box > summary::-webkit-details-marker {
   display: none; }
 
 .plain-english-box.collapsible-jargon-box > summary::before {
   content: "+";
-  color: #fc6060;
-  font-weight: 900;
+  color: #a3a3a3;
+  font-weight: 400;
   line-height: 1; }
 
 .plain-english-box.collapsible-jargon-box[open] > summary::before {
@@ -3664,12 +3686,12 @@ input:required {
   color: #cccccc; }
 
 [data-theme="dark"] .plain-english-box {
-  border-color: #4b3333;
-  background: linear-gradient(135deg, #242020 0%, #2a2523 100%);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25); }
+  border-color: #383838;
+  background: #222222;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2); }
 
 [data-theme="dark"] .plain-english-box.collapsible-jargon-box > summary {
-  color: #e2e2e2; }
+  color: #888888; }
 
 /* Last.fm card dark mode */
 [data-theme="dark"] .lastfm-card {
