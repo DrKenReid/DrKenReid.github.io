@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script>(function(){try{if(localStorage.getItem('kr-nerd')==='on')document.documentElement.classList.add('nerd-mode-on');}catch(e){}})();</script>
+  <meta name="description" content="Part II of optimizing your week. Time is not the only thing you run out of. Treating energy as a second budget, with producers and consumers, an energy-balance constraint, and a working integer-programming model of a depleted week. Nerd mode optional.">
+  <meta name="keywords" content="data science, personal, operations research, optimization, energy, productivity">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Optimizing Your Schedule II - Ken Reid</title>
+  <meta property="og:title" content="Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)">
+  <meta property="og:description" content="Part II. Time is a fixed budget; energy is a renewable one that some activities spend and others restore. A working model of a depleted week, and why rest is production, not indulgence.">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/photography/thumb/488.webp">
+  <meta property="og:url" content="https://www.kenreid.co.uk/blog/optimizing-your-schedule-ii.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)">
+  <meta name="twitter:description" content="Part II. Time is a fixed budget; energy is a renewable one that some activities spend and others restore. A working model of a depleted week.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/photography/thumb/488.webp">
+  <meta name="citation_title" content="Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)">
+  <meta name="citation_author" content="Reid, Kenneth N.">
+  <meta name="citation_publication_date" content="2026/06/30">
+  <meta name="citation_online_date" content="2026/06/30">
+  <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/optimizing-your-schedule-ii.html">
+  <meta name="DC.title" content="Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)">
+  <meta name="DC.creator" content="Kenneth N. Reid">
+  <meta name="DC.date" content="2026-06-30">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="../img/core-img/favicon.png">
+  <meta name="theme-color" content="#000000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../style.min.css">
+  <link rel="canonical" href="https://www.kenreid.co.uk/blog/optimizing-your-schedule-ii.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)",
+    "description": "Part II of optimizing your week. Time is a fixed budget; energy is a renewable one that some activities spend and others restore. A working model of a depleted week, and why rest is production, not indulgence.",
+    "image": "https://www.kenreid.co.uk/img/photography/thumb/488.webp",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk"
+    },
+    "datePublished": "2026-06-30",
+    "publisher": {
+      "@type": "Person",
+      "name": "Ken Reid"
+    },
+    "keywords": ["optimization", "operations research", "integer programming", "energy", "productivity", "personal", "data science"]
+  }
+  </script>
+  <script src="../js/theme.js"></script>
+  <style>
+    .blog-post figure {
+      margin: 28px auto;
+      max-width: 900px;
+    }
+    .blog-post figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+    }
+    .blog-post figcaption {
+      font-size: 0.92rem;
+      line-height: 1.5;
+      margin-top: 10px;
+      opacity: 0.9;
+    }
+
+    /* --- Nerd-only content visibility --- */
+    .nerd-only { display: none; }
+    html.nerd-mode-on .nerd-only { display: revert; }
+
+    /* --- Non-nerd content (hidden when nerd mode is on) --- */
+    .non-nerd { display: revert; }
+    html.nerd-mode-on .non-nerd { display: none; }
+
+    /* --- Code example details (shared pattern) --- */
+    .blog-post details.code-example {
+      margin: 16px 0 28px;
+      border: 1px solid #e2e2e2;
+      border-radius: 8px;
+      background: #fafafa;
+      overflow: hidden;
+    }
+    .blog-post details.code-example summary {
+      cursor: pointer;
+      padding: 12px 16px;
+      font-weight: 600;
+      color: #252525;
+      list-style: none;
+    }
+    .blog-post details.code-example summary::-webkit-details-marker { display: none; }
+    .blog-post details.code-example summary::after {
+      content: "Show code";
+      float: right;
+      font-size: 12px;
+      color: #666;
+      font-weight: 500;
+    }
+    .blog-post details.code-example[open] summary::after { content: "Hide code"; }
+    .blog-post details.code-example pre {
+      margin: 0;
+      border-radius: 0;
+      border-top: 1px solid #dedede;
+      font-size: 0.85rem;
+    }
+
+    /* --- Values grid table --- */
+    .values-grid {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 22px auto 30px;
+      font-size: 15px;
+    }
+    .values-grid th, .values-grid td {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid #e7e7e7;
+      vertical-align: top;
+    }
+    .values-grid th {
+      font-weight: 600;
+      border-bottom: 2px solid #ddd;
+    }
+    .values-grid td.score, .values-grid th.score { text-align: center; white-space: nowrap; }
+    .values-grid tbody tr:hover { background: #fafafa; }
+
+    /* --- Math display block spacing --- */
+    .math-block {
+      margin: 22px 0 8px;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+    .math-caption {
+      font-size: 0.88rem;
+      font-style: italic;
+      line-height: 1.5;
+      color: #666;
+      text-align: center;
+      margin: 0 auto 24px;
+      max-width: 560px;
+    }
+    [data-theme="dark"] .math-caption { color: #aaa; }
+
+    [data-theme="dark"] .blog-post details.code-example {
+      background: #1e1e1e;
+      border-color: #333;
+    }
+    [data-theme="dark"] .blog-post details.code-example summary { color: #e2e2e2; }
+    [data-theme="dark"] .blog-post details.code-example summary::after { color: #888; }
+    [data-theme="dark"] .blog-post details.code-example pre { border-top-color: #333; }
+    [data-theme="dark"] .values-grid th { border-bottom-color: #444; }
+    [data-theme="dark"] .values-grid th, [data-theme="dark"] .values-grid td { border-bottom-color: #333; }
+    [data-theme="dark"] .values-grid tbody tr:hover { background: #242424; }
+  </style>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <div id="header-section"></div>
+
+  <main id="main-content">
+
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/thumb/488.webp); background-size: cover; background-position: center center;">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <h2 class="page-title">Blog</h2>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Optimizing Your Schedule II</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <div class="about-us-area section-padding-80 clearfix">
+    <div class="container">
+      <div class="blog-post">
+        <h1>Optimizing Your Schedule II (or: When Hours Aren&rsquo;t the Thing You Run Out Of)</h1>
+        <div class="blog-meta">
+          30 June 2026 &middot;
+          <span class="blog-tag">personal</span>
+          <span class="blog-tag">data science</span>
+          <span class="blog-tag">advice</span>
+        </div>
+
+        <p>A couple of weeks ago I wrote <a href="optimizing-your-schedule.html">a piece about optimizing your week</a>: treat the seven days as a fixed budget of 168 hours, write down what you actually value, attach a weight to each thing, and let the math show you the gap between what you claim matters and what actually gets your hours. The model rested on one assumption, which I stated as if it were the only constraint that mattered: there are 168 hours in a week, and every hour you spend on one thing is an hour you did not spend on another.</p>
+
+        <p>A reader, Angela, replied with a great suggestion:</p>
+
+        <blockquote>
+          <p>&ldquo;Time is not the only constraint. For many of us, energy is also an important factor. An older person, a new parent, someone recovering from surgery, or someone living with a chronic condition may have plenty of hours but very little high-quality energy.&rdquo;</p>
+          <p style="font-size: 0.9rem; opacity: 0.85;">&mdash; <a href="https://www.threads.com/@angelacarrington/post/DaMChXND1rT" target="_blank" rel="noopener noreferrer">Angela Carrington</a>, in reply to Part I</p>
+        </blockquote>
+
+        <p>She asked me to give it some thought and write about how I would optimize a life when energy, not time, is the thing in short supply. So this is Part II. She is right that time is the easy constraint to model. Two people can hold an identical, perfectly empty Tuesday and have wildly different Tuesdays, because one of them has the energy to use it and the other does not.</p>
+
+        <p>As before, there is a switch below. Flip it on if you want the equations, the code, and a working model of a depleted week you can actually run. Leave it off and this stays a plain-English essay.</p>
+
+        <div id="nerd-toggle-container"></div>
+
+        <div class="nerd-only" style="margin: 0 0 28px; padding: 14px 20px; background: #1a1a1a; border-left: 3px solid #fc6060; border-radius: 6px; font-family: monospace; font-size: 0.85em; color: #e0e0e0; line-height: 1.8;">
+          <span style="color: #fc6060;">nerd_mode = True</span><br>
+          <span style="color: #aaa;"># Welcome back. We are adding a second resource.<br>
+          <span style="color: #fc6060;">assert</span> <span style="color: #e0e0e0;">your_energy</span> <span style="color: #fc6060;">&gt;</span> <span style="color: #8ecf6e;">0</span><span style="color: #aaa;">  # if this fails, close the laptop and go to bed</span>
+        </div>
+
+        <details class="plain-english-box nerd-only" style="margin-bottom: 28px;">
+          <summary style="cursor: pointer;"><h2 style="display: inline; margin: 0;">Quick jargon guide (expand)</h2></summary>
+          <p style="margin-top: 12px;">Building on Part I&rsquo;s glossary, the new terms here:</p>
+          <ul>
+            <li><strong>Resource constraint</strong>: a limit on something other than time that the solution must respect. The week now has two: hours and energy.</li>
+            <li><strong>Renewable resource</strong>: a quantity that is consumed and replenished within the planning window, rather than fixed. </li>
+            <li><strong>Energy balance</strong>: the requirement that energy spent across the week cannot exceed energy restored (plus any reserve you insist on keeping).</li>
+            <li><strong>Binding vs. slack constraint</strong>: a constraint is <em>binding</em> if the solution is pressed right up against it, and <em>slack</em> if there is room to spare. Part I was about time binding. This part is about energy binding instead.</li>
+            <li><strong>Shadow price</strong>: how much your objective would improve if you relaxed a binding constraint by one unit. The value of one more unit of energy, in other words.</li>
+            <li><strong>Infeasibility</strong>: the state where no allocation satisfies every constraint at once. </li>
+          </ul>
+        </details>
+
+        <h2 class="nerd-only">A week has more than one budget</h2>
+        <h2 class="non-nerd">You have more than one budget</h2>
+
+        <p class="non-nerd">Part I treated the week as a single pot of 168 hours to be divided up. BUT, we spend hours <em>through</em> energy. An hour you are rested enough to use and an hour you spend staring at the wall because you are wrung out are both, on the calendar, an hour. In Part I we defined the hours summing to 168 as our only resource constraint, but now we want to consider energy.</p>
+
+        <p class="nerd-only">Formally, nothing about Part I changes. The activity set \(A\), the decision variables \(x_i\) (hours on activity \(i\)), the weights \(w_i\), the bounds, the integrality, all stay. We are simply adding a second resource that each activity draws on or contributes to, and a constraint that this second resource also has to balance.</p>
+
+        <figure class="non-nerd">
+          <img src="../img/photography/thumb/410.webp" alt="Photograph by Ken Reid" loading="lazy">
+          <figcaption class="figure-note">&copy; Ken Reid.</figcaption>
+        </figure>
+
+        <h2>Some hours spend energy, but some hours make it!</h2>
+
+        <p>Time only ever runs in one direction: you cannot do something that gives you back an hour. But energy is two-directional. Some of what you do drains you. Some of it fills you back up. Sleep, obviously. Genuine rest. For some people, exercise, or time with the right person, or an hour of the work they love. The same activity can even flip sign depending on the week: a dinner with friends is a deposit when you are well and a withdrawal when you are flattened, or depending if that friend is someone you can truly relax around, or someone you have to mask for.</p>
+
+        <p class="non-nerd">Sleep and rest are not the indulgences left over after the real work is done. They are the activities that <em>produce the currency every other activity spends</em>. When you cut your sleep to buy back two hours for a project, you have not found two free hours. You have borrowed them, at interest, against tomorrow&rsquo;s capacity. The model in Part I could not see this, because to it sleep was just another claimant on the hours. Here, sleep is where the energy comes from.</p>
+
+        <p class="non-nerd">And the corollary, which is the one that actually changes behaviour: protecting the things that restore you is not selfish, and it is not a reward you earn after the important things are done. It is the precondition for any of the important things happening at all. You fund the producers first, or the whole budget collapses.</p>
+
+        <div class="nerd-only">
+          <p>Give each activity \(i\) an <strong>energy rate</strong> \(e_i\): the net energy it costs or returns per hour. Consumers have \(e_i &lt; 0\); producers have \(e_i &gt; 0\). For the same activity set as Part I, modelling a healthy week:</p>
+          <table class="values-grid" style="margin: 8px auto 22px; max-width:420px;">
+            <thead>
+              <tr><th>Activity \(i\)</th><th class="score">\(w_i\)</th><th class="score">\(e_i\)</th><th>role</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>family</td><td class="score">5</td><td class="score">+1</td><td>mild producer</td></tr>
+              <tr><td>sleep</td><td class="score">4</td><td class="score">+2</td><td>main producer</td></tr>
+              <tr><td>deep work</td><td class="score">4</td><td class="score">&minus;3</td><td>heavy consumer</td></tr>
+              <tr><td>exercise</td><td class="score">4</td><td class="score">&minus;2</td><td>consumer</td></tr>
+              <tr><td>learning</td><td class="score">3</td><td class="score">&minus;2</td><td>consumer</td></tr>
+              <tr><td>leisure</td><td class="score">3</td><td class="score">+2</td><td>producer</td></tr>
+              <tr><td>paid work</td><td class="score">1</td><td class="score">&minus;2</td><td>consumer</td></tr>
+              <tr><td>chores</td><td class="score">1</td><td class="score">&minus;1</td><td>consumer</td></tr>
+              <tr><td>doomscrolling</td><td class="score">&minus;1</td><td class="score">&minus;1</td><td>consumer</td></tr>
+            </tbody>
+          </table>
+          <p>Note that \(w_i\) and \(e_i\) are independent. Deep work and exercise both score 4 on value, but deep work costs more energy per hour. Doomscrolling is the worst of both worlds: negative value <em>and</em> negative energy, which is exactly why it feels like rest and isn&rsquo;t. These numbers are mine, and they are rough, and like the weights they are meant to be argued with. The point is that you now have to write down a second number for each activity, and writing it down is most of the work.</p>
+        </div>
+
+        <div class="nerd-only">
+          <p>The new constraint is an <strong>energy balance</strong>. Sum the energy across the week, and require it to come out non-negative, or better, to leave a reserve \(R\) in the bank:</p>
+          <div class="math-block">
+            \[ \sum_{i \in A} e_i \, x_i \;\ge\; R \]
+          </div>
+          <p class="math-caption">Energy produced minus energy consumed, across the whole week, must be at least \(R\). With \(R = 0\) you finish empty; with \(R &gt; 0\) you insist on ending the week with something left over.</p>
+          <p>Time is the constraint \(\sum x_i = 168\). Energy is the constraint \(\sum e_i x_i \ge R\). A week has to satisfy both at once, and which one <em>binds</em>, which one you are pressed up against with no room left, is the thing that decides what your week is allowed to look like.</p>
+        </div>
+
+        <h2>The metric changes</h2>
+
+        <p class="non-nerd">When time is what&rsquo;s scarce, the instinct is to ask of each activity: is this worth the hour? That is the right question for a busy, healthy week. But when energy is what&rsquo;s scarce, the question changes to something subtler and more useful: is this worth the <em>energy</em>? Two things can cost the same hour and wildly different amounts of you. An energy-limited week is one long, mostly unconscious triage of which activities give the most back per unit of the thing you are actually short of.</p>
+
+        <p class="non-nerd">This is why two activities you value identically can meet completely different fates in a hard week. If learning a language and a hard gym session both matter to you the same amount, but one leaves you able to function afterwards and the other puts you on the sofa for the rest of the day, then in a depleted week they are not equivalent at all, no matter what your priority list says. The cheaper-to-run one wins, not because you value it more, but because you can afford it.</p>
+
+        <p class="nerd-only">When time binds, the solver ranks activities by value per hour, which is just \(w_i\). When energy binds, the relevant ratio becomes value per unit of energy consumed, roughly \(w_i / |e_i|\) for the consumers. Deep work and exercise both have \(w_i = 4\), but deep work costs \(e_i = -3\) against exercise&rsquo;s \(-2\), so per unit of scarce energy exercise delivers more value. Hold that ratio in mind, because in a moment the solver is going to act on it without being told to, and cut exactly the activity you would least expect a &ldquo;productivity&rdquo; model to cut.</p>
+
+        <h2 class="nerd-only">The model, with energy added</h2>
+
+        <div class="nerd-only">
+          <p>Here is the whole thing. It is Part I&rsquo;s model with one extra constraint and one extra column of data:</p>
+
+          <div class="math-block">
+            \[
+            \begin{aligned}
+            \max_{x} \quad & \sum_{i \in A} w_i \, x_i \\[4pt]
+            \text{s.t.} \quad & \sum_{i \in A} x_i = 168 && \text{(time)} \\[2pt]
+            & \sum_{i \in A} e_i \, x_i \ge R && \text{(energy)} \\[2pt]
+            & \ell_i \le x_i \le u_i && \forall \, i \in A \\[2pt]
+            & x_i \in \mathbb{Z}_{\ge 0} && \forall \, i \in A
+            \end{aligned}
+            \]
+          </div>
+          <p class="math-caption">Same objective and same bounds as Part I. The new line is the energy balance. \(R\) is the dial we are going to turn: \(R = 0\) is a healthy week that just needs to break even; a large \(R\) is a depleted week that has to claw back a reserve.</p>
+
+          <p>And in code, again with <code>PuLP</code> so it runs as-is after <code>pip install pulp</code>. The only additions over Part I are the energy column and the balance constraint, with the reserve \(R\) as a single tunable knob.</p>
+
+          <details class="code-example">
+            <summary>The model in Python (PuLP)</summary>
+<pre><code class="language-python">import pulp
+
+# --- Data: Part I's values grid, plus an energy rate per hour ----------------
+# weight       = how much an hour is worth to you (the "matters" column)
+# (low, high)  = the floor you won't drop below and the pointless-beyond ceiling
+# energy       = net energy per hour: positive restores, negative drains
+activities = {
+    #               weight  low  high  energy
+    "family":      ( 5,     14,   28,   +1),
+    "sleep":       ( 4,     49,   56,   +2),   # the main regenerator
+    "deep_work":   ( 4,      0,   15,   -3),   # meaningful, but expensive
+    "exercise":    ( 4,      0,   10,   -2),
+    "learning":    ( 3,      0,   10,   -2),
+    "leisure":     ( 3,      0,   20,   +2),   # genuine rest restores
+    "paid_work":   ( 1,     40,   40,   -2),   # fixed by contract
+    "chores":      ( 1,      7,   14,   -1),
+    "doomscroll":  (-1,      0,  168,   -1),   # negative value AND negative energy
+}
+
+WEEK = 168
+RESERVE = 0          # energy left in the bank at week's end. Turn this up to deplete.
+
+# --- Model -------------------------------------------------------------------
+m = pulp.LpProblem("optimize_my_energy", pulp.LpMaximize)
+
+x = {
+    name: pulp.LpVariable(name, lowBound=lo, upBound=hi, cat="Integer")
+    for name, (w, lo, hi, e) in activities.items()
+}
+
+# Objective: total weighted value (unchanged from Part I)
+m += pulp.lpSum(w * x[name] for name, (w, lo, hi, e) in activities.items())
+
+# Constraint 1: the week is finite and fully allocated
+m += pulp.lpSum(x.values()) == WEEK
+
+# Constraint 2 (new): energy must balance, leaving RESERVE in the bank
+m += pulp.lpSum(e * x[name] for name, (w, lo, hi, e) in activities.items()) >= RESERVE
+
+# --- Solve -------------------------------------------------------------------
+m.solve(pulp.PULP_CBC_CMD(msg=False))
+
+print("Status:", pulp.LpStatus[m.status])
+for name in activities:
+    print(f"  {name:11s} {int(x[name].value()):>4d} h")
+print(f"Weighted score: {int(pulp.value(m.objective))}")
+</code></pre>
+          </details>
+        </div>
+
+        <h2 class="nerd-only">What the solver says when energy gets tight</h2>
+
+        <div class="nerd-only">
+          <p>Run it with <code>RESERVE = 0</code> and you get the Part I result. Family, sleep, and deep work pinned to their ceilings; doomscrolling at zero; objective 547. The energy constraint is satisfied with twelve units to spare, which is to say it is <em>slack</em>: it isn&rsquo;t doing anything. For a healthy week, time is the objective. That is the privilege Angela named.</p>
+
+          <p>Now make the week a hard one. Same person, same 168 hours, same values, same bounds. The only thing that changes is that you can no longer afford to finish on empty: a body recovering, a newborn, a flare-up, a stretch of grief or stress all mean you have to end the week with energy actually banked, not borrowed. Set <code>RESERVE = 50</code> and solve again. Here are the two weeks the solver returns, side by side:</p>
+
+          <table class="values-grid" style="margin: 16px auto 12px; max-width: 480px;">
+            <thead>
+              <tr>
+                <th>Activity</th>
+                <th class="score">Healthy<br><span style="font-weight:400;">(R = 0)</span></th>
+                <th class="score">Depleted<br><span style="font-weight:400;">(R = 50)</span></th>
+                <th class="score">&Delta;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>family</td><td class="score">28</td><td class="score">28</td><td class="score" style="color:#9a9a9a;">0</td></tr>
+              <tr><td>sleep</td><td class="score">56</td><td class="score">56</td><td class="score" style="color:#9a9a9a;">0</td></tr>
+              <tr style="background: rgba(240,180,60,0.13);"><td>deep work</td><td class="score">15</td><td class="score"><strong>7</strong></td><td class="score" style="color:#e05a5a; font-weight:600;">&minus;8</td></tr>
+              <tr><td>exercise</td><td class="score">10</td><td class="score">10</td><td class="score" style="color:#9a9a9a;">0</td></tr>
+              <tr><td>learning</td><td class="score">0</td><td class="score">0</td><td class="score" style="color:#9a9a9a;">0</td></tr>
+              <tr style="background: rgba(240,180,60,0.13);"><td>leisure</td><td class="score">12</td><td class="score"><strong>20</strong></td><td class="score" style="color:#3fae5f; font-weight:600;">+8</td></tr>
+              <tr><td>paid work</td><td class="score">40</td><td class="score">40</td><td class="score" style="color:#9a9a9a;">0</td></tr>
+              <tr><td>chores</td><td class="score">7</td><td class="score">7</td><td class="score" style="color:#9a9a9a;">0</td></tr>
+              <tr><td>doomscrolling</td><td class="score">0</td><td class="score">0</td><td class="score" style="color:#9a9a9a;">0</td></tr>
+              <tr><td><strong>Weighted score</strong></td><td class="score"><strong>547</strong></td><td class="score"><strong>539</strong></td><td class="score" style="color:#e05a5a;"><strong>&minus;8</strong></td></tr>
+            </tbody>
+          </table>
+          <p class="math-caption">Both weeks are 168 hours and both solve to Optimal. The energy balance is slack in the healthy week (+12 to spare) and binding in the depleted one (exactly +50, the reserve). Every hour the model moves comes out of one row and lands in another.</p>
+
+          <p>Look at what moved, and what didn&rsquo;t. It did not touch your sleep, your family, your paid work, or your chores. It reached straight for <em>deep work</em>, the meaningful work you would do even unpaid, and cut it almost in half, pouring those eight hours into leisure. The model gave them to rest because, once energy has to balance with a reserve, deep work is the most expensive thing you value, the worst ratio of value to energy among everything you care about, and so it is the first thing a constrained week sacrifices.</p>
+
+          <p>The energy-limited week does not lose the trivial things first. It loses the meaningful-but-costly things first, and it keeps going. Push the reserve to 60 and deep work falls to zero entirely, the model declining to spend a single hour on the work you love because it cannot afford the energy, even though the hours are sitting right there. Push it to 80 and the solver stops returning a schedule at all:</p>
+
+          <details class="code-example">
+            <summary>Solver output, RESERVE = 80</summary>
+<pre><code>Status: Infeasible
+</code></pre>
+          </details>
+
+          <p><em>Infeasible</em> means no arrangement of the 168 hours can satisfy every constraint at once: you cannot hold a forty-hour contract, keep the floors you set, and bank that much energy, all in the same week. The model is not broken. It is telling you that the week as specified is not survivable, and that something you labelled non-negotiable is going to have to move whether you like it or not. Cut the contract hours, drop a floor, get help with the chores, lower the reserve and accept a slower recovery. This converts &ldquo;why can&rsquo;t I keep up&rdquo; into &ldquo;here is the specific constraint that has to give,&rdquo; which is a question with useful answers.</p>
+        </div>
+
+        <h2>An energy audit</h2>
+
+        <p>Part I had you build a values grid: list what you actually spend the week on, score how much each thing matters, and note the hours it currently gets. The energy version adds one column, and it is the column that explains your worst weeks. For each activity, mark whether it gives you energy or takes it, and roughly how much, on a small scale from, say, &minus;2 to +2.</p>
+
+        <p>What's nice about doing this is it forces you to come to some realizations: sometimes activities you enjoy, or really want to do, are the biggest drains. For me, I consider exercise to be a drain on my energy but I've found the opposite: I'm often energized after working out (though I modelled it as my original below).</p>
+
+        <p>Here is the worked example, my own, the same grid from Part I with the energy column filled in.</p>
+
+        <table class="values-grid">
+          <thead>
+            <tr>
+              <th>Activity</th>
+              <th class="score">Matters (1&ndash;5)</th>
+              <th class="score">Energy (&minus;2&hellip;+2)</th>
+              <th>What the pairing tells me</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Family &amp; close relationships</td><td class="score">5</td><td class="score">+1</td><td>High value and restorative. </td></tr>
+            <tr><td>Sleep</td><td class="score">4</td><td class="score">+2</td><td>The factory that makes the currency.</td></tr>
+            <tr><td>Meaningful work / craft</td><td class="score">4</td><td class="score">&minus;3</td><td>What I value most among the costly things, so the first casualty of a low-energy week.</td></tr>
+            <tr><td>Exercise</td><td class="score">4</td><td class="score">&minus;2</td><td>Costs energy now, builds capacity later. </td></tr>
+            <tr><td>Learning</td><td class="score">3</td><td class="score">&minus;2</td><td>Valued, but expensive and easy to drop. It always goes early.</td></tr>
+            <tr><td>Genuine rest / leisure</td><td class="score">3</td><td class="score">+2</td><td>A producer, not a treat. This is a requirement to be productive.</td></tr>
+            <tr><td>Paid work (fixed)</td><td class="score">1</td><td class="score">&minus;2</td><td>Drains and can&rsquo;t be moved &mdash; which is why a bad week has so little slack.</td></tr>
+            <tr><td>Chores &amp; admin</td><td class="score">1</td><td class="score">&minus;1</td><td>Low value, low-ish drain, stubborn minimum. The grind that never restores.</td></tr>
+            <tr><td>Doomscrolling</td><td class="score">&minus;1</td><td class="score">&minus;1</td><td>Negative on both. Feels like rest, costs like a tax. The cleanest thing to cut.</td></tr>
+          </tbody>
+        </table>
+
+        <p>Two columns side by side do something one column can&rsquo;t. Run your eye down them together and the structure of a bad week appears: the high-value, high-drain rows (the craft, the learning, the exercise) are the ones that vanish when energy is short, and the negative-negative rows are the ones that expand to fill the space they leave. That is the shape of burnout, drawn in two columns. Knowing the shape is most of how you interrupt it!</p>
+
+        <div class="nerd-only">
+          <p>This grid is, again, almost exactly the model&rsquo;s input. The &ldquo;matters&rdquo; column is the weights \(w_i\); the new column is the energy rates \(e_i\); the activities are the set \(A\). The only thing the table doesn&rsquo;t show is the bounds and the reserve \(R\), and those are the two things worth playing with once you&rsquo;ve typed your own numbers in.</p>
+        </div>
+
+        <figure class="non-nerd">
+          <img src="../img/photography/thumb/222.webp" alt="Photograph by Ken Reid" loading="lazy">
+          <figcaption class="figure-note">&copy; Ken Reid.</figcaption>
+        </figure>
+
+        <h2 class="nerd-only">The limits (this model lies in new ways!)</h2>
+
+        <p class="nerd-only">Part I came with a list of ways its model failed to be reality, and adding energy adds its own failures.</p>
+
+        <p class="nerd-only">Energy is not one substance. I have modelled it as a single scalar, but anyone who has been wrung out emotionally while still physically fine, or bodily exhausted but mentally wired, knows it is at least three different budgets: physical, emotional, cognitive. A faithful model would have a separate balance for each, and an activity would draw on them in different mixes. </p>
+
+        <p class="nerd-only">The energy rates are not constants. I wrote \(e_i\) as a fixed number per activity, but the truth is the rate depends on the level: the first hour of rest restores far more than the fifth, and the tenth hour of deep work costs far more than the first. Energy, like value, has diminishing returns and worsening costs, and a linear coefficient is a polite fiction that the bounds are again papering over.</p>
+
+        <p class="nerd-only">And the regeneration rate itself is not yours to set. For an older person, someone unwell, someone recovering, the producer activities simply return less: their sleep restores less, their rest restores less, the same hours yield less energy. In the model that is a smaller \(e_i\) on the producers, which shrinks the feasible region, which is the mathematics of why the same life is so much harder for some people through no failure of theirs. That's ignoring variability and unknown error: what if you wake up and just have zero energy? It can't be predicted so how do you model it? You can't, of course. But this can help you learn about what brings your energy levels back up.</p>
+
+        <p class="nerd-only">Most of all, the thing that refills you most is often the thing you cannot schedule: the unplanned conversation, the morning the weather and your mood happen to align, the rest that only works when it isn&rsquo;t prescribed. You can only leave room for it, which the model, to its credit, does by leaving slack.</p>
+
+        <h2>The point, again, isn&rsquo;t the schedule</h2>
+
+        <p>Part I argued that the value of the exercise was not the optimized week but everything you had to admit in order to build it. The same is true here: filling in the energy column forces a confession that the reason the important thing didn&rsquo;t happen often wasn&rsquo;t time, and wasn&rsquo;t character, but a second budget we never costed and then blamed ourselves for overrunning.</p>
+
+        <p class="non-nerd">If you are one of the people Angela described, with plenty of hours and very little high-quality energy, I hope the reframing is at least a small kindness. The meaningful work that didn&rsquo;t get done this week was not a failure of will. It was the most expensive thing you value running into a budget that wouldn&rsquo;t stretch to it, and the humane response is not to push harder but to protect the producers, lower a floor you thought was fixed, and forgive the casualties. Rest is not what you do when the important things are finished. For a great many people, rest is the important thing, because it is the only thing that makes the rest of it possible.</p>
+
+        <p>Angela, thank you for the challenge, and for being right. You asked how I would optimize a life when energy is the thing that runs out, and the answer the model keeps giving is: you stop trying to win the week, you fund the things that refill you first, and you treat the work you love not as a duty you are failing but as a luxury you spend energy on when you can afford it. Some weeks you can. Some weeks one hour of it is the whole victory, and that, as I said last time, is still one hour more than none.</p>
+
+      </div>
+
+      <div id="related-posts-section"></div>
+
+      <hr style="margin: 40px 0;">
+      <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+    </div>
+  </div>
+
+  </main>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/alime.bundle.js"></script>
+  <script src="../js/lightbox.js"></script>
+  <script src="../js/share.js"></script>
+  <script src="../js/default-assets/active.js"></script>
+  <script src="../js/shared-components.js"></script>
+  <script src="../js/nerd-mode.js"></script>
+  <script src="../js/prism-loader.js"></script>
+  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+
+  <!-- Nerd mode: lazy-loaded KaTeX + nerd toggle (toggle wiring via nerd-mode.js) -->
+  <script>
+  (function(){
+    var katexState = 0;
+    var pending = [];
+
+    function whenKatexReady(cb){
+      if (katexState === 2) { cb(); return; }
+      pending.push(cb);
+      if (katexState === 1) return;
+      katexState = 1;
+      var css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';
+      document.head.appendChild(css);
+      var core = document.createElement('script');
+      core.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';
+      core.onload = function(){
+        var ar = document.createElement('script');
+        ar.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js';
+        ar.onload = function(){ katexState = 2; pending.forEach(function(fn){ fn(); }); pending = []; };
+        document.head.appendChild(ar);
+      };
+      document.head.appendChild(core);
+    }
+
+    var rendered = false;
+    function renderMath(){
+      if (rendered || !window.renderMathInElement) return;
+      rendered = true;
+      window.renderMathInElement(document.querySelector('.blog-post'), {
+        delimiters: [{ left: '\\[', right: '\\]', display: true }, { left: '\\(', right: '\\)', display: false }],
+        throwOnError: false
+      });
+    }
+
+    initNerdMode({
+      description: 'Off by default. Flip it on for the second budget: the energy rates, the balance constraint, the code, and a model of a depleted week you can run. Flip it off and this stays a plain-English essay.',
+      onChange: function(on){ if (on){ whenKatexReady(renderMath); loadPrism(['python']); } }
+    });
+  })();
+  </script>
+</body>
+</html>
