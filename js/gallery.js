@@ -187,7 +187,7 @@ function loadMoreImages(silent) {
         hover.className = 'hover-content';
 
         var link = document.createElement('a');
-        link.href = 'img/photography/' + filename;
+        link.href = 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/' + filename;
         link.className = 'portfolio-img';
         link.textContent = '+';
 
