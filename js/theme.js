@@ -25,9 +25,14 @@
 
   function apply(theme) {
     document.documentElement.setAttribute('data-theme', theme);
+    var dark = theme === 'dark';
+
+    // Keep the browser UI (mobile address bar etc.) matching the page background.
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', dark ? '#1a1a1a' : '#ffffff');
+
     var btn = document.getElementById('theme-toggle');
     if (!btn) return;
-    var dark = theme === 'dark';
     btn.setAttribute('aria-pressed', String(dark));
     btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
     btn.setAttribute('title',      dark ? 'Switch to light mode' : 'Switch to dark mode');

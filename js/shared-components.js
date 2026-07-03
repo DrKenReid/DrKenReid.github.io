@@ -116,10 +116,12 @@ function renderInstagramSection(targetId) {
         feed.innerHTML = html;
 
         if (typeof jQuery !== 'undefined' && jQuery.fn.owlCarousel) {
-            jQuery('.instragram-feed-area').owlCarousel({
+            var instagramSlider = jQuery('.instragram-feed-area');
+            instagramSlider.owlCarousel({
                 items: 10,
                 loop: true,
                 autoplay: true,
+                autoplayHoverPause: true,
                 smartSpeed: 1000,
                 autoplayTimeout: 3000,
                 responsive: {
@@ -130,6 +132,9 @@ function renderInstagramSection(targetId) {
                     1200: { items: 10 }
                 }
             });
+            if (typeof window.addCarouselPauseControl === 'function') {
+                window.addCarouselPauseControl(instagramSlider, jQuery(el).find('.follow-area'), 'photo carousel', 3000);
+            }
         }
     }).catch(function() {
         var feed = el.querySelector('.instragram-feed-area');
@@ -372,38 +377,24 @@ function renderFloatingBlogShare() {
  * Renders the site footer with copyright and social links.
  * @param {string} targetId - ID of the element to inject into.
  */
-var DEFAULT_POST_IMAGE = 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/97.png';
+var DEFAULT_POST_IMAGE = 'img/photography/hero/97.webp';
 
+/* Prefix site-relative asset paths (e.g. with '../' from a blog post page);
+   absolute URLs pass through untouched. */
+function resolveAssetPath(src, prefix) {
+    return /^https?:\/\//.test(src) ? src : prefix + src;
+}
+
+// readMinutes is precomputed into data/posts.json by scripts/generate_read_times.py;
+// the excerpt-based estimate is only a fallback for entries missing that field.
 function estimateReadingMinutes(post) {
     if (typeof post.readMinutes === 'number' && isFinite(post.readMinutes)) {
         return Math.max(1, Math.round(post.readMinutes));
     }
 
-    if (typeof post._readMinutes === 'number' && isFinite(post._readMinutes)) {
-        return Math.max(1, Math.round(post._readMinutes));
-    }
-
     var text = (post.title || '') + ' ' + (post.excerpt || '');
     var words = text.trim() ? text.trim().split(/\s+/).length : 0;
     return Math.max(1, Math.ceil(words / 220));
-}
-
-function hydratePostReadingTime(post) {
-    if (!post || !post.url) return Promise.resolve();
-    if (typeof post._readMinutes === 'number' && isFinite(post._readMinutes)) return Promise.resolve();
-    var url = post.url.replace(/^blog\//, '../');
-    return fetch(url)
-        .then(function(r) { return r.ok ? r.text() : Promise.reject(); })
-        .then(function(html) {
-            var parser = new DOMParser();
-            var doc = parser.parseFromString(html, 'text/html');
-            var body = doc.querySelector('.blog-post');
-            if (!body) return;
-            var text = (body.textContent || '').replace(/\s+/g, ' ').trim();
-            var words = text ? text.split(' ').length : 0;
-            if (words > 0) post._readMinutes = Math.max(1, Math.ceil(words / 220));
-        })
-        .catch(function() {});
 }
 
 function createBlogCardElement(post, options) {
@@ -420,18 +411,21 @@ function createBlogCardElement(post, options) {
         col.className = (opts.colClass || 'col-12 col-sm-6 col-lg-4');
 
         var firstTag = (post.tags && post.tags.length) ? post.tags[0] : '';
-        var readTimePart = showReadTime ? ('<a href="' + href + '">' + estimateReadingMinutes(post) + ' min read</a>') : '';
+        var readTimePart = showReadTime ? ('<a href="' + href + '" tabindex="-1">' + estimateReadingMinutes(post) + ' min read</a>') : '';
         var wowDelay = opts.wowDelay || '100ms';
 
+        // One tab stop per card: the title anchor. The other anchors keep their
+        // styling but leave the tab order; the card div stays mouse-clickable
+        // via data-href (bound in blog.js).
         col.innerHTML =
-            '<div class="single-post-area wow fadeInUpBig" data-wow-delay="' + wowDelay + '" data-href="' + href + '" role="link" tabindex="0" aria-label="Open post: ' + post.title + '">' +
-            '<a href="' + href + '" class="post-thumbnail">' +
-            '<img src="' + imageSrc + '" alt="' + post.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'' + fallback + '\';">' +
+            '<div class="single-post-area wow fadeInUpBig" data-wow-delay="' + wowDelay + '" data-href="' + href + '">' +
+            '<a href="' + href + '" class="post-thumbnail" tabindex="-1" aria-hidden="true">' +
+            '<img src="' + imageSrc + '" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'' + fallback + '\';">' +
             '</a>' +
-            (firstTag ? '<a href="' + href + '" class="btn post-catagory">' + firstTag + '</a>' : '') +
+            (firstTag ? '<a href="' + href + '" class="btn post-catagory" tabindex="-1">' + firstTag + '</a>' : '') +
             '<div class="post-content">' +
             '<div class="post-meta">' +
-            '<a href="' + href + '">' + dateStr + '</a>' +
+            '<a href="' + href + '" tabindex="-1">' + dateStr + '</a>' +
             readTimePart +
             '</div>' +
             '<a href="' + href + '" class="post-title">' + post.title + '</a>' +
@@ -495,10 +489,6 @@ function resolveCurrentPostFileName() {
 }
 
 function loadBlogPosts() {
-    if (window.BLOG_POSTS && window.BLOG_POSTS.length) {
-        return Promise.resolve(window.BLOG_POSTS.slice());
-    }
-
     return fetch('../data/posts.json').then(function(response) {
         return response.json();
     });
@@ -582,8 +572,6 @@ function renderRelatedPosts(targetId) {
                 return;
             }
 
-            return Promise.all(related.map(hydratePostReadingTime)).then(function() {
-
             el.innerHTML = '<div class="related-posts">' +
                 '<h2>Related posts</h2>' +
                 '<div class="row related-posts-grid">' +
@@ -591,10 +579,10 @@ function renderRelatedPosts(targetId) {
                     var tagHtml = (post.tags || []).map(function(tag) {
                         return '<span class="blog-tag">' + tag + '</span>';
                     }).join('');
-                    var imageSrc = post.image || DEFAULT_POST_IMAGE;
+                    var imageSrc = resolveAssetPath(post.image || DEFAULT_POST_IMAGE, '../');
                     return '<div class="col-12 col-md-6 col-lg-4 mb-30">' +
                         '<a href="' + (post.url || '').replace(/^blog\//, '') + '" class="blog-card">' +
-                        '<div class="blog-card-img"><img src="../' + imageSrc + '" alt="' + post.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'../' + DEFAULT_POST_IMAGE + '\';"></div>' +
+                        '<div class="blog-card-img"><img src="' + imageSrc + '" alt="' + post.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'../' + DEFAULT_POST_IMAGE + '\';"></div>' +
                         '<div class="blog-card-body">' +
                         '<div class="blog-card-date">' + formatPostDate(post.date) + ' · ' + estimateReadingMinutes(post) + ' min read</div>' +
                         '<h4 class="blog-card-title">' + post.title + '</h4>' +
@@ -606,7 +594,6 @@ function renderRelatedPosts(targetId) {
                 }).join('') +
                 '</div>' +
                 '</div>';
-            }); // end hydratePostReadingTime Promise.all
         })
         .catch(function(error) {
             console.error('Failed to load related posts:', error);
@@ -1136,6 +1123,28 @@ function initLightboxFix() {
         a.appendChild(img);
     });
 }
+
+/**
+ * Appends screen-reader-only "(opens in new tab)" text to target="_blank"
+ * links (WCAG G201). A MutationObserver covers links injected later
+ * (header, footer, thanks CTA, Bluesky feed, blog cards).
+ */
+function annotateNewTabLinks() {
+    document.querySelectorAll('a[target="_blank"]:not([data-new-tab-annotated])').forEach(function(link) {
+        link.setAttribute('data-new-tab-annotated', '1');
+        var span = document.createElement('span');
+        span.className = 'sr-only';
+        span.textContent = ' (opens in new tab)';
+        link.appendChild(span);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    annotateNewTabLinks();
+    if ('MutationObserver' in window) {
+        new MutationObserver(annotateNewTabLinks).observe(document.body, { childList: true, subtree: true });
+    }
+});
 
 renderPostDisclaimer();
 renderBlogPostEssentials();

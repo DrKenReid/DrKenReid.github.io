@@ -30,8 +30,7 @@ Last Update: Feb 22, 2019
     - 16.0 Contact CSS
 
 --------------------------------------------- */
-/* Import Fonts & All CSS */
-@import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700");
+/* Import All CSS (Poppins is loaded from each page's <head> with display=swap) */
 @import url(css/bootstrap.min.css);
 @import url(css/animate.css);
 @import url(css/default-assets/classy-nav.css);
@@ -1909,7 +1908,7 @@ input:required {
   cursor: pointer;
   font-weight: 400;
   font-size: 0.78em;
-  color: #a3a3a3;
+  color: #6b6b6b;
   padding: 6px 0;
   display: flex;
   align-items: center;
@@ -1920,7 +1919,7 @@ input:required {
 
 .plain-english-box.collapsible-jargon-box > summary::before {
   content: "+";
-  color: #a3a3a3;
+  color: #6b6b6b;
   font-weight: 400;
   line-height: 1; }
 
@@ -2906,6 +2905,7 @@ input:required {
   .about-card:hover {
     box-shadow: 0 8px 30px rgba(0,0,0,0.12);
     transform: translateY(-4px); }
+  .about-card h3,
   .about-card h5 {
     font-size: 18px;
     font-weight: 600;
@@ -3527,6 +3527,7 @@ input:required {
 
 [data-theme="dark"] .chrome-theme-card span,
 [data-theme="dark"] .review-title,
+[data-theme="dark"] .about-card h3,
 [data-theme="dark"] .about-card h5,
 [data-theme="dark"] .about-card .about-link {
   color: #e2e2e2; }
@@ -3691,7 +3692,7 @@ input:required {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2); }
 
 [data-theme="dark"] .plain-english-box.collapsible-jargon-box > summary {
-  color: #888888; }
+  color: #e2e2e2; }
 
 /* Last.fm card dark mode */
 [data-theme="dark"] .lastfm-card {
@@ -3880,3 +3881,55 @@ input:required {
     font-size: 18px;
     -webkit-line-clamp: 2;
     line-clamp: 2; } }
+
+/* :: Preloader failsafe — hides the overlay even if JS never runs */
+@keyframes preloader-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden; } }
+
+#preloader {
+  animation: preloader-failsafe 0.4s ease 4s forwards; }
+
+/* :: Carousel pause/play toggle (WCAG 2.2.2) */
+.follow-area {
+  position: relative; }
+
+.carousel-pause-btn {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 50;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.55);
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-transition-duration: 300ms;
+  transition-duration: 300ms; }
+
+.carousel-pause-btn:hover,
+.carousel-pause-btn:focus-visible {
+  background-color: #fc6060; }
+
+.carousel-pause-btn:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px; }
+
+/* Card headings demoted from h5 for a correct outline keep their size */
+.ds-project-card h3,
+.ds-skill-group h3 {
+  font-size: 20px; }
