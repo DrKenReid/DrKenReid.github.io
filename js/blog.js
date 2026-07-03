@@ -3,7 +3,7 @@ var activeTags = [];
 var searchQuery = '';
 var currentPage = 1;
 var POSTS_PER_PAGE = 9;
-var DEFAULT_POST_IMAGE = 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/97.png';
+var DEFAULT_POST_IMAGE = 'img/photography/hero/97.webp';
 var BLOG_CARD_LINKS_BOUND = false;
 
 function parsePostDate(dateValue) {
@@ -21,10 +21,7 @@ function formatPostDate(dateValue) {
 }
 
 function loadPosts() {
-	if (window.BLOG_POSTS && window.BLOG_POSTS.length) {
-		return Promise.resolve(window.BLOG_POSTS.slice());
-	}
-	return fetch('data/posts.json', { cache: 'no-store' }).then(function(r) { return r.json(); });
+	return fetch('data/posts.json').then(function(r) { return r.json(); });
 }
 
 function initBlog() {
@@ -33,9 +30,6 @@ function initBlog() {
 			allPosts = data.sort(function(a, b) {
 				return parsePostDate(b.date) - parsePostDate(a.date);
 			});
-			return hydrateReadingTimes(allPosts);
-		})
-		.then(function() {
 			buildSearchBox();
 			buildTagFilters();
 			renderPosts();
@@ -214,16 +208,8 @@ function bindOverlayCardLinks(container) {
 		if (href) window.location.href = href;
 	});
 
-	container.addEventListener('keydown', function(e) {
-		if (e.key !== 'Enter' && e.key !== ' ') return;
-		var card = e.target && e.target.closest ? e.target.closest('.single-post-area[data-href]') : null;
-		if (!card) return;
-
-		e.preventDefault();
-		var href = card.getAttribute('data-href');
-		if (href) window.location.href = href;
-	});
-
+	// Keyboard users navigate via the card's title link (the single tab stop);
+	// the click handler above is mouse convenience for the rest of the card.
 	BLOG_CARD_LINKS_BOUND = true;
 }
 
@@ -296,41 +282,12 @@ function renderPagination(current, total) {
 	}
 }
 
-// ---- Reading time helpers (unchanged) ----
+// ---- Reading time ----
+// readMinutes is precomputed into data/posts.json by scripts/generate_read_times.py;
+// the excerpt-based estimate is only a fallback for entries missing that field.
 
 function estimateReadingMinutes(post) {
 	if (typeof post.readMinutes === 'number' && isFinite(post.readMinutes)) return Math.max(1, Math.round(post.readMinutes));
-	if (typeof post._readMinutes === 'number' && isFinite(post._readMinutes)) return Math.max(1, Math.round(post._readMinutes));
 	var text = (post.title || '') + ' ' + (post.excerpt || '');
 	return Math.max(1, Math.ceil(text.trim().split(/\s+/).length / 220));
-}
-
-function wordsToMinutes(wordCount) { return Math.max(1, Math.ceil(wordCount / 220)); }
-
-function countWords(text) {
-	if (!text) return 0;
-	var normalized = text.replace(/\s+/g, ' ').trim();
-	return normalized ? normalized.split(' ').length : 0;
-}
-
-function extractPostWordCount(htmlText) {
-	var parser = new DOMParser();
-	var doc = parser.parseFromString(htmlText, 'text/html');
-	var postBody = doc.querySelector('.blog-post');
-	if (!postBody) return 0;
-	return countWords(postBody.textContent || '');
-}
-
-function hydrateReadingTimes(posts) {
-	var tasks = posts.map(function(post) {
-		if (!post || !post.url) return Promise.resolve();
-		return fetch(post.url)
-			.then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
-			.then(function(html) {
-				var wc = extractPostWordCount(html);
-				if (wc > 0) post._readMinutes = wordsToMinutes(wc);
-			})
-			.catch(function() {});
-	});
-	return Promise.all(tasks).then(function() { return posts; });
 }

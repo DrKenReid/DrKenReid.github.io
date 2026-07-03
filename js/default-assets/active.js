@@ -7,11 +7,38 @@
     // :: 1.0 Preloader Active Code
     // ****************************
 
-    alime_window.on('load', function () {
-        $('#preloader').fadeOut('1000', function () {
+    // Dismiss once the DOM is ready rather than window 'load', so content
+    // isn't hidden behind the preloader while images finish downloading.
+    // (style.css also has a keyframe failsafe in case JS never runs.)
+    $(function () {
+        $('#preloader').fadeOut(400, function () {
             $(this).remove();
         });
     });
+
+    // Accessible pause/play toggle for auto-playing owl carousels (WCAG 2.2.2).
+    window.addCarouselPauseControl = function (carousel, container, label, resumeTimeout) {
+        if (!carousel || !carousel.length || !container || !container.length) return;
+        var btn = $('<button type="button" class="carousel-pause-btn" aria-pressed="false"></button>')
+            .attr('aria-label', 'Pause ' + label)
+            .attr('title', 'Pause ' + label)
+            .html('<i class="ti-control-pause" aria-hidden="true"></i>');
+        btn.on('click', function () {
+            var paused = btn.attr('aria-pressed') === 'true';
+            if (paused) {
+                carousel.trigger('play.owl.autoplay', [resumeTimeout]);
+            } else {
+                carousel.trigger('stop.owl.autoplay');
+            }
+            btn.attr('aria-pressed', String(!paused))
+                .attr('aria-label', (paused ? 'Pause ' : 'Play ') + label)
+                .attr('title', (paused ? 'Pause ' : 'Play ') + label)
+                .html(paused
+                    ? '<i class="ti-control-pause" aria-hidden="true"></i>'
+                    : '<i class="ti-control-play" aria-hidden="true"></i>');
+        });
+        container.append(btn);
+    };
 
     // ****************************
     // :: 2.0 ClassyNav Active Code
@@ -31,11 +58,14 @@
             items: 1,
             loop: true,
             autoplay: true,
+            autoplayHoverPause: true,
             smartSpeed: 1000,
             autoplayTimeout: 10000,
             nav: true,
             navText: [('<i class="ti-arrow-left"></i>'), ('<i class="ti-arrow-right"></i>')]
         })
+
+        window.addCarouselPauseControl(welcomeSlider, $('.welcome-area'), 'slideshow', 10000);
 
         welcomeSlider.on('translate.owl.carousel', function () {
             var layer = $("[data-animation]");
@@ -68,33 +98,8 @@
     // :: 4.0 Instragram Slides Active Code
     // ************************************
 
-    if ($.fn.owlCarousel) {
-        var instagramFeedSlider = $('.instragram-feed-area');
-        instagramFeedSlider.owlCarousel({
-            items: 6,
-            loop: true,
-            autoplay: true,
-            smartSpeed: 1000,
-            autoplayTimeout: 3000,
-            responsive: {
-                0: {
-                    items: 2
-                },
-                576: {
-                    items: 3
-                },
-                768: {
-                    items: 4
-                },
-                992: {
-                    items: 5
-                },
-                1200: {
-                    items: 6
-                }
-            }
-        })
-    }
+    // The Instagram strip is injected (and its carousel initialised) by
+    // shared-components.js after this script runs, so no init happens here.
 
     // *********************************
     // :: 5.0 Masonary Gallery Active Code
@@ -207,8 +212,8 @@
     // *********************************
     // :: 14.0 Prevent Default 'a' Click
     // *********************************
-    $('a[href="#"]').on('click', function ($) {
-        $.preventDefault();
+    $('a[href="#"]').on('click', function (e) {
+        e.preventDefault();
     });
 
 })(jQuery);
