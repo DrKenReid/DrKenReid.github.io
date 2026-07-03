@@ -5,11 +5,21 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 30 Jun 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Tue, 30 Jun 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Thu, 02 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Thu, 02 Jul 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Frodo, Sam, and love.</title>
+      <link>https://www.kenreid.co.uk/blog/frodo-sam-and-love.html</link>
+      <guid>https://www.kenreid.co.uk/blog/frodo-sam-and-love.html</guid>
+      <pubDate>Thu, 02 Jul 2026 00:00:00 +0000</pubDate>
+      <description>A queer-friendly reading of Frodo and Sam: not a hidden romance, but male friendship deep enough for tears, touch, and total trust. Insisting that tenderness must be romance rebuilds the exact wall this story tears down. (Gimli and Legolas, on the other hand...)</description>
+      <category>books</category>
+      <category>philosophy</category>
+      <category>personal</category>
+    </item>
     <item>
       <title>Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)</title>
       <link>https://www.kenreid.co.uk/blog/optimizing-your-schedule-ii.html</link>

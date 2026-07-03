@@ -1,5 +1,13 @@
 [
   {
+    "title": "Frodo, Sam, and love.",
+    "date": "2026-07-02",
+    "tags": ["books", "philosophy", "personal"],
+    "excerpt": "A queer-friendly reading of Frodo and Sam: not a hidden romance, but male friendship deep enough for tears, touch, and total trust. Insisting that tenderness must be romance rebuilds the exact wall this story tears down. (Gimli and Legolas, on the other hand...)",
+    "url": "blog/frodo-sam-and-love.html",
+    "image": "https://www.john-howe.com/portfolio/gallery/data/media/21/134-End-of-the-Third-port.jpg"
+  },
+  {
     "title": "Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)",
     "date": "2026-06-30",
     "tags": ["personal", "data science", "advice"],
