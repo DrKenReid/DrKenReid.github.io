@@ -3,7 +3,7 @@ var activeTags = [];
 var searchQuery = '';
 var currentPage = 1;
 var POSTS_PER_PAGE = 9;
-var DEFAULT_POST_IMAGE = 'img/photography/97.png';
+var DEFAULT_POST_IMAGE = 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/97.png';
 var BLOG_CARD_LINKS_BOUND = false;
 
 function parsePostDate(dateValue) {

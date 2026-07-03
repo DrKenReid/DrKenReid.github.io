@@ -372,7 +372,7 @@ function renderFloatingBlogShare() {
  * Renders the site footer with copyright and social links.
  * @param {string} targetId - ID of the element to inject into.
  */
-var DEFAULT_POST_IMAGE = 'img/photography/97.png';
+var DEFAULT_POST_IMAGE = 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/97.png';
 
 function estimateReadingMinutes(post) {
     if (typeof post.readMinutes === 'number' && isFinite(post.readMinutes)) {

@@ -37,7 +37,7 @@
     "tags": ["personal", "advice"],
     "excerpt": "On finite time, micro-ambition, Gandalf, Tim Minchin, and why every 'one day' dream needs a plan or it disappears.",
     "url": "blog/what-was-i-made-for.html",
-    "image": "img/photography/43.png"
+    "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/43.png"
   },
   {
     "title": "M*A*S*H in the Modern Era: Comedy, Trauma, and the 4077th",
@@ -109,7 +109,7 @@
     "tags": ["ethics", "technology"],
     "excerpt": "The batteries in our phones, laptops, and EVs are largely made of cobalt mined in the Democratic Republic of the Congo, often by hand and often by children. A reflection on a presentation I gave, and what we can actually do about it.",
     "url": "blog/hidden-cost-of-cobalt-congo.html",
-    "image": "img/photography/384-thumb.jpg"
+    "image": "img/photography/thumb/384.webp"
   },
   {
     "title": "ISO 8601 and the Date Cult I Happily Joined",
