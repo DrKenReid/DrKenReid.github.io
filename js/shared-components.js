@@ -385,16 +385,14 @@ function resolveAssetPath(src, prefix) {
     return /^https?:\/\//.test(src) ? src : prefix + src;
 }
 
-// readMinutes is precomputed into data/posts.json by scripts/generate_read_times.py;
-// the excerpt-based estimate is only a fallback for entries missing that field.
+// readMinutes is precomputed into data/posts.json by scripts/generate_read_times.py.
+// Returns null when absent (e.g. a stale cached posts.json) — callers hide the
+// read time rather than show a wrong guess.
 function estimateReadingMinutes(post) {
     if (typeof post.readMinutes === 'number' && isFinite(post.readMinutes)) {
         return Math.max(1, Math.round(post.readMinutes));
     }
-
-    var text = (post.title || '') + ' ' + (post.excerpt || '');
-    var words = text.trim() ? text.trim().split(/\s+/).length : 0;
-    return Math.max(1, Math.ceil(words / 220));
+    return null;
 }
 
 function createBlogCardElement(post, options) {
@@ -411,7 +409,8 @@ function createBlogCardElement(post, options) {
         col.className = (opts.colClass || 'col-12 col-sm-6 col-lg-4');
 
         var firstTag = (post.tags && post.tags.length) ? post.tags[0] : '';
-        var readTimePart = showReadTime ? ('<a href="' + href + '" tabindex="-1">' + estimateReadingMinutes(post) + ' min read</a>') : '';
+        var readMins = estimateReadingMinutes(post);
+        var readTimePart = (showReadTime && readMins) ? ('<a href="' + href + '" tabindex="-1">' + readMins + ' min read</a>') : '';
         var wowDelay = opts.wowDelay || '100ms';
 
         // One tab stop per card: the title anchor. The other anchors keep their
@@ -442,7 +441,8 @@ function createBlogCardElement(post, options) {
     var tagHtml = (post.tags || []).map(function(tag) {
         return '<span class="blog-tag">' + tag + '</span>';
     }).join('');
-    var readTimeText = showReadTime ? (' · ' + estimateReadingMinutes(post) + ' min read') : '';
+    var defaultCardMins = estimateReadingMinutes(post);
+    var readTimeText = (showReadTime && defaultCardMins) ? (' · ' + defaultCardMins + ' min read') : '';
 
     var card = document.createElement('a');
     card.href = href;
@@ -580,11 +580,12 @@ function renderRelatedPosts(targetId) {
                         return '<span class="blog-tag">' + tag + '</span>';
                     }).join('');
                     var imageSrc = resolveAssetPath(post.image || DEFAULT_POST_IMAGE, '../');
+                    var relatedMins = estimateReadingMinutes(post);
                     return '<div class="col-12 col-md-6 col-lg-4 mb-30">' +
                         '<a href="' + (post.url || '').replace(/^blog\//, '') + '" class="blog-card">' +
                         '<div class="blog-card-img"><img src="' + imageSrc + '" alt="' + post.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'../' + DEFAULT_POST_IMAGE + '\';"></div>' +
                         '<div class="blog-card-body">' +
-                        '<div class="blog-card-date">' + formatPostDate(post.date) + ' · ' + estimateReadingMinutes(post) + ' min read</div>' +
+                        '<div class="blog-card-date">' + formatPostDate(post.date) + (relatedMins ? ' · ' + relatedMins + ' min read' : '') + '</div>' +
                         '<h4 class="blog-card-title">' + post.title + '</h4>' +
                         '<p class="blog-card-excerpt">' + (post.excerpt || '') + '</p>' +
                         '<div class="blog-card-tags">' + tagHtml + '</div>' +

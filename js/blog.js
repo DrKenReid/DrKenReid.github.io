@@ -283,11 +283,11 @@ function renderPagination(current, total) {
 }
 
 // ---- Reading time ----
-// readMinutes is precomputed into data/posts.json by scripts/generate_read_times.py;
-// the excerpt-based estimate is only a fallback for entries missing that field.
+// readMinutes is precomputed into data/posts.json by scripts/generate_read_times.py.
+// Returns null when absent so callers hide the read time instead of guessing.
+// (shared-components.js declares the same function later and takes precedence.)
 
 function estimateReadingMinutes(post) {
 	if (typeof post.readMinutes === 'number' && isFinite(post.readMinutes)) return Math.max(1, Math.round(post.readMinutes));
-	var text = (post.title || '') + ' ' + (post.excerpt || '');
-	return Math.max(1, Math.ceil(text.trim().split(/\s+/).length / 220));
+	return null;
 }
