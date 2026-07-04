@@ -114,7 +114,7 @@
           <h2>Quick jargon guide</h2>
           <ul>
             <li><strong>ISO 8601:</strong> the international standard for date and time formats. The bit everyone means when they say &ldquo;ISO date&rdquo; is <code>YYYY-MM-DD</code>: four-digit year, hyphen, two-digit month, hyphen, two-digit day.</li>
-            <li><strong>Lexicographic sorting:</strong> sorting by character order, the way a computer sorts filenames. If your date format sorts correctly as plain text, it also sorts correctly chronologically. ISO 8601 has this property. Almost no other format does.</li>
+            <li><strong>Lexicographic sorting:</strong> sorting by character order, the way a computer sorts filenames. If your date format sorts correctly as plain text, it also sorts correctly chronologically. </li>
             <li><strong>Ambiguity:</strong> the gap between what a string says and what it means. <code>03/04/05</code> is ambiguous in three directions. <code>2005-03-04</code> is ambiguous in zero.</li>
           </ul>
         </div>
@@ -136,11 +136,11 @@
 
         <p>The case for ISO 8601 is almost embarrassingly practical. There are three arguments, and they all matter at the same time:</p>
 
-        <p><strong>1. It sorts correctly as plain text.</strong> This is the main one for me as a data scientist often dealing with messy data. Drop a folder of files named <code>2024-01-03_notes.md</code>, <code>2024-11-12_notes.md</code>, <code>2025-02-04_notes.md</code> into any file manager on any operating system and they line up in chronological order with zero configuration. No regex, no parsing, no &ldquo;sort by date modified&rdquo; that lies to you when you copy the folder. The string <em>is</em> the chronology. This is the single feature that, once you experience it, you can never go back from.</p>
+        <p><strong>1. It sorts correctly as plain text.</strong> This is the main one for me as a data scientist often dealing with messy data. Drop a folder of files named <code>2024-01-03_notes.md</code>, <code>2024-11-12_notes.md</code>, <code>2025-02-04_notes.md</code> into any file manager on any operating system and they line up in chronological order with zero configuration. No regex, no parsing, no &ldquo;sort by date modified&rdquo; that lies to you when you copy the folder. </p>
 
-        <p><strong>2. It is unambiguous.</strong> <code>2026-05-12</code> can only mean one day. You do not need to know who wrote it, what country they were in, or which spreadsheet locale was active at the time. The format encodes its own decoding key.</p>
+        <p><strong>2. It is unambiguous.</strong> <code>2026-05-12</code> can only mean one day. You do not need to know who wrote it, what country they were in, or which spreadsheet locale was active at the time. </p>
 
-        <p><strong>3. It is international.</strong> ISO 8601 is the agreed standard. Every major database, every programming language, every log file, every API timestamp, every <code>git log</code>: they all already use it under the hood. We humans are the only ones still arguing about it on the surface.</p>
+        <p><strong>3. It is international.</strong> ISO 8601 is the agreed standard, and every machine you interact with already uses it under the hood.</p>
 
         <p>Notice that none of these arguments are aesthetic. I am not telling you ISO 8601 is prettier (although it is). I am telling you that it is the only date format that does not actively fight the systems you are putting it into.</p>
 
@@ -155,7 +155,7 @@
           <p class="threads-fallback">If the embed does not load, <a href="https://www.threads.com/@hey.erc/post/DXuWFoHDgwW" target="_blank" rel="noopener noreferrer">view on Threads</a>.</p>
         </div>
 
-        <p><code>DD/MM/YYYY</code> is locally sensible and globally fragile. It is what most of Europe uses and what I grew up with. The logic is fine: small to large, day to month to year, like writing an address from the house number out. The problem is that the first half of the year is indistinguishable from the American format. <code>05/06/2026</code> is either the 5th of June or May 6th, and the only way to tell is to ask the author, who is now on holiday. The worst part is that everyone assumes its in the format they're used to, so I often read that as DD/MM/YYYY while my colleague would see MM/DD/YYYY, causing a month difference. It's infuriating.</p>
+        <p><code>DD/MM/YYYY</code> is locally sensible and globally fragile. It is what most of Europe uses and what I grew up with. The logic is fine: small to large, day to month to year, like writing an address from the house number out. The problem is that the first half of the year is indistinguishable from the American format. <code>05/06/2026</code> is either the 5th of June or May 6th, and the only way to tell is to ask the author, who is now on holiday. It's infuriating.</p>
 
         <div class="threads-embed-wrap">
           <blockquote class="text-post-media" data-text-post-permalink="https://www.threads.com/@canyon.ecco/post/DXuBSiSjvrG" data-text-post-version="0">
@@ -164,7 +164,7 @@
           <p class="threads-fallback">If the embed does not load, <a href="https://www.threads.com/@canyon.ecco/post/DXuBSiSjvrG" target="_blank" rel="noopener noreferrer">view on Threads</a>.</p>
         </div>
 
-        <p>Month names (<code>12 May 2026</code>, <code>May 12, 2026</code>) solve the ambiguity at the cost of throwing away machine-readability and adding language-specific ceremony. Lovely on a wedding invitation. Useless in a filename.</p>
+        <p>Month names (<code>12 May 2026</code>, <code>May 12, 2026</code>) solve the ambiguity at the cost of throwing away machine-readability and adding language-specific ceremony. </p>
 
         <div class="threads-embed-wrap">
           <blockquote class="text-post-media" data-text-post-permalink="https://www.threads.com/@glen.lancaster/post/DXurPCoETBf" data-text-post-version="0">
@@ -205,9 +205,7 @@
 
         <h2>Good standards disappear</h2>
 
-        <p>Here is the slightly sincere bit, the half of this post that is not joking.</p>
-
-        <p>Standards are civilisation&rsquo;s hidden infrastructure. The ones we notice are the broken ones: the power socket that does not fit, the dongle you cannot find, the file your colleague cannot open. The ones that work disappear into smoothness. You do not think about <abbr title="The International System of Units">SI units</abbr> when a recipe calls for 200 grams of flour. You do not think about USB-C when your phone charges. You do not think about TCP/IP at all, ever, which is exactly the point.</p>
+        <p>Standards are civilisation&rsquo;s hidden infrastructure. The ones we notice: the power socket that does not fit, the dongle you cannot find, the file your colleague cannot open. The ones that work disappear. You do not think about <abbr title="The International System of Units">SI units</abbr> when a recipe calls for 200 grams of flour. You do not think about USB-C when your phone charges. You do not think about TCP/IP at all, unless you're a CS geek.</p>
 
         <p>ISO 8601 is one of the good ones. It works so consistently that you stop seeing it. <code>git log</code> dates, <code>kubectl</code> timestamps, every JSON API in the wild, every database <code>created_at</code> column: they are all already speaking it. The only place the format is still <em>visible</em> is the human layer, where we cling to regional habits out of muscle memory.</p>
 

@@ -94,9 +94,9 @@
         
         <p>So, say someone posts a screenshot of ChatGPT and a stranger appears in the replies to inform them, with great moral certainty, that every query they send is boiling another bottle of water and killing another tree. The message is usually delivered from an iPhone built on cobalt mined by children in the DRC, while a 4K Netflix stream plays in another tab. I find this ignorant and hypocritical, but I'm mostly irked that the argument is being made against the consumer of a product, rather than against the systems that produced it.</p>
 
-        <p>The "AI is destroying the planet" line is not exactly wrong, but it is badly aimed. The real story is more complicated, and the conclusion is different from what the standard outrage suggests. I want to lay out where I actually stand on this, with numbers attached.</p>
+        <p>The "AI is destroying the planet" line is not exactly wrong, but it is badly aimed. The real story is more complicated, and the conclusion is different from what the standard outrage suggests. </p>
 
-        <p>Conclusion up front, so you can decide whether to bother with the rest: your guilt about the environmental and ethical cost of LLMs is justified, but it is being aimed at the wrong target. The industry has deliberately structured things so that your anxiety falls on your own fingertip hitting the query button, while the actual decision-makers (hyperscalers choosing fossil fuels, regulators choosing inaction, venture capital choosing scale over sustainability) stay invisible. BP ran the same playbook when it popularized the personal "carbon footprint" in the early 2000s: a PR campaign designed to shift blame for climate change away from corporate polluters and onto the everyday choices of consumers.<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> The cartoon version of this debate keeps eyes off the people actually deciding how this gets built.</p>
+        <p>Conclusion up front, so you can decide whether to bother with the rest: your guilt about the environmental and ethical cost of LLMs is justified, but it is being aimed at the wrong target. The industry has deliberately structured things so that your anxiety falls on your own fingertip hitting the query button, while the actual decision-makers (hyperscalers choosing fossil fuels, regulators choosing inaction, venture capital choosing scale over sustainability) stay invisible. BP ran the same playbook when it popularized the personal "carbon footprint" in the early 2000s: a PR campaign designed to shift blame for climate change away from corporate polluters and onto the everyday choices of consumers.<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> </p>
 
         <p><strong>A note on scope.</strong> This post is about the energy and water footprint of LLMs, the supply chain that feeds the hardware, and the access argument. It is not about job security for artists or any other field, the effects of LLMs on education and cognitive skills, the bias and copyright debates, how AI can be used for unethical actions, or "AI ends the world" speculation. Those are all real and worth their own posts; they are not what I'm taking on here. The framing throughout is also about <em>how</em> AI is built, governed, and powered, not whether it should exist at all.</p>
 
@@ -202,7 +202,7 @@
 
         <h2>The Jevons trap</h2>
 
-        <p>The counter to all of the above is the Jevons paradox, and I want to take it seriously because it is the strongest argument the doom side has.</p>
+        <p>The counter to all of the above is the Jevons paradox.</p>
 
         <p>William Stanley Jevons, in 1865, noticed that as steam engines became more efficient at burning coal, England burned more coal, not less.<sup><a href="#ref-12" class="cite-ref">[12]</a></sup> Cheaper energy unlocked new uses, more industries adopted steam, and total consumption shot up despite per-engine efficiency. The pattern repeats: more efficient cars led to more driving. Cheaper LED lighting led to more lighting. Cheaper compute led to vastly more compute.</p>
 
@@ -210,7 +210,7 @@
 
         <p>The same pattern is showing up in software. When DeepSeek announced R1 in early 2025, the market wiped about $600 billion off Nvidia's valuation on the assumption that more efficient models would mean fewer chips needed. The valuation recovered. Cheaper inference unlocks agentic systems making thousands of recursive calls in the background. It unlocks LLMs embedded in operating systems, IDEs, search bars, browsers, every form field. Total inference is moving from billions of queries a day toward trillions.</p>
 
-        <p>So no, software efficiency alone will not save us. The 4-bit quantized 8B model on my desk is not a get-out-of-jail-free card. It just means more people will run more models more often. That is genuinely a problem the field has to confront.</p>
+        <p>So no, software efficiency alone will not save us. The 4-bit quantized 8B model on my desk is not a get-out-of-jail-free card. It just means more people will run more models more often.</p>
 
         <p>But notice this does not point to "the individual user is the villain" -- it points to the underlying physical infrastructure: the grid, the cooling, the silicon supply chain. We have to raise a stink about that infrastructure.</p>
 
@@ -218,7 +218,7 @@
 
         <p>Telling people not to use LLMs on environmental grounds is, very often, a position only available to people who don't need them.</p>
 
-        <p>About 92% of low-income Americans, roughly 36 million people, cannot afford a lawyer for civil matters.<sup><a href="#ref-14" class="cite-ref">[14]</a></sup> They are routinely facing landlords, debt collectors and employers who can. An LLM that helps a pro se litigant fill in housing-defense paperwork correctly is not a luxury. The Suffolk LIT Lab and Legal Aid of Eastern Missouri are already using LLMs to streamline legal-aid intake.<sup><a href="#ref-15" class="cite-ref">[15]</a></sup> The rAInbow chatbot helps domestic-abuse survivors understand the legal protections available to them.<sup><a href="#ref-14" class="cite-ref">[14]</a></sup> The early standalone "AI lawyer" products (DoNotPay being the obvious example, which paid an FTC settlement in 2024 over deceptive marketing) are not the case I am making here. The case is for LLMs as scaffolding inside properly-supervised legal-aid workflows.</p>
+        <p>About 92% of low-income Americans, roughly 36 million people, cannot afford a lawyer for civil matters.<sup><a href="#ref-14" class="cite-ref">[14]</a></sup> They are routinely facing landlords, debt collectors and employers who can. An LLM that helps a pro se litigant fill in housing-defense paperwork correctly is not a luxury. The Suffolk LIT Lab and Legal Aid of Eastern Missouri are already using LLMs to streamline legal-aid intake.<sup><a href="#ref-15" class="cite-ref">[15]</a></sup> The rAInbow chatbot helps domestic-abuse survivors understand the legal protections available to them.<sup><a href="#ref-14" class="cite-ref">[14]</a></sup> The early standalone "AI lawyer" products (DoNotPay being the obvious example, which paid an FTC settlement in 2024 over deceptive marketing) are not the case I am making here.</p>
 
         <p>The medical case is at least as strong. The WHO projects a global shortage of around 11 million health workers by 2030, mostly in low- and middle-income countries, where roughly 8 million people die every year from treatable conditions due to under-resourced triage.<sup><a href="#ref-16" class="cite-ref">[16]</a></sup> Penda Health in Nairobi has integrated an LLM-based decision-support tool into its records system to reduce diagnostic errors. PROMPTS, also in Kenya, uses AI over SMS to coach expectant mothers on birth preparedness.<sup><a href="#ref-16" class="cite-ref">[16]</a></sup> In the US, AI text-message interventions are being used in Diabetes Self-Management Education programs that were previously too expensive to deliver at scale.<sup><a href="#ref-17" class="cite-ref">[17]</a></sup> And translation alone, the simple ability for someone with limited English to get a clear plain-language explanation of a diagnosis, makes a real difference for people who would otherwise nod along without understanding.<sup><a href="#ref-17" class="cite-ref">[17]</a></sup></p>
 
@@ -265,8 +265,6 @@
 
         <p>Data centers used 1&ndash;2% of global electricity in 2024. The IEA expects this to more than double by 2030, exceeding 1,000 TWh.<sup><a href="#ref-20" class="cite-ref">[20]</a></sup> In the US specifically, data center consumption is projected to roughly double from 183 TWh in 2024 to around 426 TWh by 2030.<sup><a href="#ref-25" class="cite-ref">[25]</a></sup> That is real load, on a real grid, and it is being added faster than zero-carbon supply.</p>
 
-        <p>Three things are going wrong simultaneously, and they are all fixable by policy rather than by yelling at end users.</p>
-
         <p><strong>1. Tax breaks without strings.</strong> States are still bidding against each other to attract data centers with sweeping tax incentives, and almost none of those deals require "renewable additionality": a clause that says the data center must fund <em>new</em> clean energy capacity, not just plug into the existing grid and let residential rates rise to cover the upgrades.<sup><a href="#ref-21" class="cite-ref">[21]</a></sup> Singapore, Amsterdam and Dublin have moratoria and stricter performance rules. Germany has legislated efficiency requirements. New York, as of 2025, requires registration for data centers over 500 kW.<sup><a href="#ref-22" class="cite-ref">[22]</a></sup> Most of the US still doesn't.</p>
 
         <p><strong>2. Cooling is stuck in the 1990s.</strong> Cooling is up to 50% of data center energy. Most of it is air cooling, where air handlers chill huge rooms and evaporative towers throw freshwater into the sky (around 80% of the freshwater drawn evaporates).<sup><a href="#ref-22" class="cite-ref">[22]</a></sup> Direct-to-chip liquid cooling, where coolant runs in a closed loop over the actual hot silicon, is a much better answer. Microsoft published a <em>Nature</em> life-cycle assessment showing that switching from air to cold-plate cooling cuts greenhouse emissions by 15&ndash;21%, total energy demand by 15&ndash;20%, and "blue water" use by 30&ndash;52% over a facility's lifetime.<sup><a href="#ref-23" class="cite-ref">[23]</a></sup> The technology exists, we just don't make companies use it, while incentivizing them to continue full steam (pun intended) ahead.</p>
@@ -299,7 +297,7 @@
           </figcaption>
         </figure>
 
-        <h2>Where I actually land</h2>
+        <h2>My Actual Opinion</h2>
 
         <p>The cartoon "AI is going to save us" pitch is nonsense. There are real costs, real bias, real labor issues, real water and grid concerns, and a real Jevons trap that means efficiency alone won't bail us out.</p>
 

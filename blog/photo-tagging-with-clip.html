@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
-  <meta name="description" content="How I used OpenCLIP to automatically classify 370 photos into 10 categories — zero API cost.">
+  <meta name="description" content="How I used OpenCLIP to automatically classify 500+ photos into 10 categories — zero API cost.">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Building a Photo Tagging System with CLIP - Ken Reid</title>
   <meta property="og:title" content="Building a Photo Tagging System with CLIP">
-  <meta property="og:description" content="How I used OpenCLIP to automatically classify 370 photos into 10 categories — zero API cost.">
+  <meta property="og:description" content="How I used OpenCLIP to automatically classify 500+ photos into 10 categories — zero API cost.">
   <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/chickens.webp">
   <meta property="og:url" content="https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html">
   <meta property="og:type" content="article">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Building a Photo Tagging System with CLIP">
-  <meta name="twitter:description" content="How I used OpenCLIP to automatically classify 370 photos into 10 categories — zero API cost.">
+  <meta name="twitter:description" content="How I used OpenCLIP to automatically classify 500+ photos into 10 categories — zero API cost.">
   <meta name="twitter:image" content="https://www.kenreid.co.uk/img/bg-img/chickens.webp">
   <meta name="citation_title" content="Building a Photo Tagging System with CLIP">
   <meta name="citation_author" content="Reid, Kenneth N.">
@@ -38,7 +38,7 @@
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Building a Photo Tagging System with CLIP",
-    "description": "How I used OpenCLIP to automatically classify 370 photos into 10 categories — zero API cost.",
+    "description": "How I used OpenCLIP to automatically classify 500+ photos into 10 categories — zero API cost.",
     "image": "https://www.kenreid.co.https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/1.png",
     "author": {
       "@type": "Person",
@@ -87,9 +87,9 @@
           <span class="blog-tag">photography</span>
         </div>
 
-        <p>My photography gallery has 370 images spanning about a decade of shooting. Landscapes, urban decay, wildlife, portraits, and a surprising number of cat photos. For years they sat in a flat grid with no way to filter or browse by subject, which meant anyone visiting the page was essentially scrolling through a shuffled pile of everything I've ever pointed a camera at. I wanted category tags, but manually tagging 370 photos sounded like a weekend I'd never get back and would inevitably lead to inconsistency anyway (is a snowy field "landscape" or "winter"? Both? Do I care enough to decide 370 times?).</p>
+        <p>My photography gallery has 500+ images spanning about a decade of shooting. Landscapes, urban decay, wildlife, portraits, and a surprising number of cat photos. For years they sat in a flat grid with no way to filter or browse by subject, which meant anyone visiting the page was essentially scrolling through a shuffled pile of everything I've ever pointed a camera at. I wanted category tags, but manually tagging 500+ photos sounded like a weekend I'd never get back and would inevitably lead to inconsistency anyway (is a snowy field "landscape" or "winter"? Both? Do I care enough to decide 500+ times?).</p>
 
-        <p>So I did what any self-respecting data scientist would do: I made the computer do it.</p>
+        <p>So I did what any self-respecting nerd would do: I made the computer do it.</p>
 
         <div class="plain-english-box">
           <h2>Quick jargon guide</h2>
@@ -125,7 +125,7 @@
 
         <h2>Results</h2>
 
-        <p>The ViT-B-32 model processed all 370 images in <strong>44 seconds</strong> on CPU. No GPU needed, no API calls, zero cost. I ran this on my laptop while making tea.</p>
+        <p>The ViT-B-32 model processed all 500+ images in <strong>44 seconds</strong> on CPU. No GPU needed, no API calls, zero cost. I ran this on my computer while making coffee.</p>
 
         <p>Each image gets multi-label tags (a photo can be both "landscape" and "winter"), with per-category similarity thresholds tuned to get roughly 1.3 tags per image on average. I went through a couple of iterations on the thresholds: too aggressive and everything got tagged "nature", too conservative and most images only got one tag. The output is a simple JSON mapping filename to tag array:</p>
 
@@ -151,7 +151,7 @@
         <h2>What I'd Do Differently</h2>
 
         <ul>
-          <li>A larger CLIP model (ViT-L-14) would improve accuracy on ambiguous images, at the cost of slower inference. Whether that trade-off is worth it for 370 images is debatable, but for a larger collection it probably would be.</li>
+          <li>A larger CLIP model (ViT-L-14) would improve accuracy on ambiguous images, at the cost of slower inference. Whether that trade-off is worth it for 500+ images is debatable, but for a larger collection it probably would be.</li>
           <li>Adding a "creative/abstract" category would catch the lensball shots and experimental compositions that currently get shoehorned into whatever category the model finds least implausible.</li>
           <li>A manual override JSON that merges with the auto-generated tags would let me fix the obvious misses without re-running the whole pipeline. Sometimes you just want to tell the computer "no, that's a traffic cone, not architecture" and move on with your life.</li>
         </ul>
@@ -163,7 +163,7 @@
 
           <details class="faq-item">
             <summary>Did this need a GPU?</summary>
-            <p>No. I ran it on CPU and processed all 370 images in 44 seconds. A GPU would help at larger scale, but it was unnecessary for this gallery.</p>
+            <p>No. I ran it on CPU and processed all 500+ images in 44 seconds. A GPU would help at larger scale, but it was unnecessary for this gallery.</p>
           </details>
 
           <details class="faq-item">
