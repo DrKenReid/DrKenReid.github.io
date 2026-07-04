@@ -5,11 +5,20 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 02 Jul 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Thu, 02 Jul 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Sat, 04 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Sat, 04 Jul 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Why You Aren't a "Visual Learner"</title>
+      <link>https://www.kenreid.co.uk/blog/why-you-arent-a-visual-learner.html</link>
+      <guid>https://www.kenreid.co.uk/blog/why-you-arent-a-visual-learner.html</guid>
+      <pubDate>Sat, 04 Jul 2026 00:00:00 +0000</pubDate>
+      <description>Everyone took the quiz and got a label. Decades of cognitive psychology say the label does nothing: matching teaching to 'learning styles' doesn't improve learning, and believing it quietly limits you. What works instead is effortful, unglamorous, and the same for everyone.</description>
+      <category>philosophy</category>
+      <category>science</category>
+    </item>
     <item>
       <title>Frodo, Sam, and love.</title>
       <link>https://www.kenreid.co.uk/blog/frodo-sam-and-love.html</link>
