@@ -113,7 +113,7 @@
 
 				<p>GenAI relies heavily on gradient-based optimization in continuous spaces. But what happens when there is no useful gradient, no data to work with, or when the solution space is highly constrained and combinatorial?</p>
 
-				<p>That is where EAs shine. They do not require smooth, continuous, or differentiable landscapes, nor large amounts of labeled data. They thrive in noisy, constrained, and non-differentiable environments. Unlike the opaque behavior of large language models, evolutionary mechanisms are transparent, constraints are explicit, and engineers can inspect trade-offs directly rather than accepting a plausible but unverifiable output.</p>
+				<p>That is where EAs shine. They need neither smooth, differentiable landscapes nor large amounts of labeled data, and they thrive in noisy, constrained environments. Unlike the opaque behavior of large language models, evolutionary mechanisms are transparent, constraints are explicit, and engineers can inspect trade-offs directly rather than accepting a plausible but unverifiable output.</p>
 
 				<h2>The receipts: real-world impact</h2>
 
@@ -132,15 +132,15 @@
 
 				<p>Given the examples above, you might reasonably ask: could you not just prompt an LLM to design a turbine blade or plan a delivery route? The short answer is no, and the reasons are instructive.</p>
 
-				<p>GenAI models are fundamentally interpolation engines.<sup><a href="#ref-17" class="cite-ref">[17]</a></sup> They are trained on existing human output and generate plausible-looking responses that blend what they have seen. That is extraordinarily powerful for text, code, images, and conversation. But it is not optimization. A large language model asked to design an antenna geometry will produce something that looks like an antenna. It will not produce something that satisfies specific gain, weight, and power constraints while minimizing material cost, because it has no mechanism for enforcing hard constraints or evaluating physical feasibility.<sup><a href="#ref-18" class="cite-ref">[18]</a></sup> It can describe a solution. It cannot guarantee one.</p>
+				<p>GenAI models are fundamentally interpolation engines.<sup><a href="#ref-17" class="cite-ref">[17]</a></sup> They are trained on existing human output and generate plausible-looking responses that blend what they have seen. That is extraordinarily powerful for text, code, images, and conversation. But it is not optimization. A large language model asked to design an antenna geometry will produce something that looks like an antenna. It will not produce something that satisfies specific gain, weight, and power constraints while minimizing material cost, because it has no mechanism for enforcing hard constraints or evaluating physical feasibility.<sup><a href="#ref-18" class="cite-ref">[18]</a></sup> </p>
 
-				<p>EAs operate differently. They maintain a population of candidate solutions, evaluate each against a real objective function (which can include simulations, physical models, or constraint checkers), and iteratively improve through selection, mutation, and recombination.<sup><a href="#ref-19" class="cite-ref">[19]</a></sup> The constraints are not suggestions; they are enforced at every generation. The trade-offs are explicit and inspectable, not hidden inside a model's weights.</p>
+				<p>EAs operate differently. Each candidate in the population is evaluated against a real objective function (which can include simulations, physical models, or constraint checkers), and the search improves iteratively through selection, mutation, and recombination.<sup><a href="#ref-19" class="cite-ref">[19]</a></sup> The constraints are not suggestions; they are enforced at every generation.</p>
 
 				<p>This is not a competition between the two. GenAI and EAs solve fundamentally different classes of problem. The issue is that funding, attention, and hiring all follow the hype, and right now the hype is entirely on one side.<sup><a href="#ref-20" class="cite-ref">[20]</a></sup> EC researchers are not losing on technical merit. They are losing on marketing.</p>
 
 				<h2>The naming problem</h2>
 
-				<p>Despite these wins, EC struggles for prestige, and not all of that is external hype. A meaningful part is self-inflicted: the field's long-running habit of presenting familiar search mechanics as "new" algorithms by wrapping them in vivid metaphors. Campelo and Aranha call this the Evolutionary Computation Bestiary, and the label is deserved.<sup><a href="#ref-9" class="cite-ref">[9]</a></sup></p>
+				<p>Despite these wins, EC struggles for prestige, and not all of that is external hype. A meaningful part is self-inflicted: the field's long-running habit of presenting familiar search mechanics as "new" algorithms by wrapping them in vivid metaphors. Campelo and Aranha call this the Evolutionary Computation Bestiary, and the label is accurate.<sup><a href="#ref-9" class="cite-ref">[9]</a></sup></p>
 
 				<p>The pattern is now well documented. Algorithms branded around wolves, whales, moths, fireflies, bats, antlions, and similar themes are often introduced with novel biological stories, but their actual update rules map onto known metaheuristic building blocks already present in earlier work.<sup><a href="#ref-10" class="cite-ref">[10]</a></sup><sup><a href="#ref-11" class="cite-ref">[11]</a></sup><sup><a href="#ref-12" class="cite-ref">[12]</a></sup> The issue is not that inspiration is bad. The issue is that metaphor can obscure mechanism.</p>
 
@@ -203,7 +203,7 @@
 
 				<p>Hybrid approaches are already emerging. Researchers are using LLMs as surrogate fitness evaluators, letting evolutionary search explore design spaces while a language model provides fast approximate evaluations. Others are using EAs to evolve prompts, tune retrieval-augmented generation pipelines, or search for adversarial inputs that expose model weaknesses. The combination of GenAI's generative fluency and EA's constraint-respecting optimization is genuinely powerful, and it is still early days.</p>
 
-				<p>But for EC to claim that seat at the table, the field has to get its house in order. The naming crisis and the dialect collision are not just academic annoyances. They are the reason EC papers do not show up in ML literature reviews, the reason industry labs do not consider evolutionary approaches, and the reason funding bodies see EC as a niche subdiscipline rather than a foundational tool. The technical capability is there. The communication is not.</p>
+				<p>But for EC to claim that seat at the table, the field has to get its house in order. The naming crisis and the dialect collision are not just academic annoyances. They are the reason EC papers do not show up in ML literature reviews, the reason industry labs do not consider evolutionary approaches, and the reason funding bodies see EC as a niche subdiscipline rather than a foundational tool. None of that reflects the quality of the underlying science; it reflects how the field communicates it.</p>
 
 				<h2>The path forward</h2>
 

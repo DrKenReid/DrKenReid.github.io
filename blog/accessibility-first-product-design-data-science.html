@@ -222,7 +222,7 @@
 
         <p>An inaccessible plot is a failed plot because the plot exists to communicate, and a plot a chunk of your audience cannot decode is not communicating. I've said this when I was a full-time researcher: it isn't science if you can't communicate your findings. Effective communication is part of the work, and the same applies to data science if you conduct analysis and have interesting findings but cannot communicate them clearly. Accessibility is the design constraint that, when you take it seriously, forces better decisions about encodings, hierarchy, and content. When accessibility is built into your pipeline, it stops needing its own step and becomes the norm.</p>
 
-        <p>When you design for access first, you make fewer charts, label them better, and remove the visual decoration that was getting in the way. Designing for access benefits readers navigating colour vision deficiency, dyslexia, attention-regulation differences, or temporary cognitive load constraints such as fatigue and post-concussion recovery; it also helps the executive skimming on a phone, the reviewer who knows the domain, and ultimately you. Why bother doing work if your peers cannot use it?</p>
+        <p>When you design for access first, you make fewer charts, label them better, and remove the visual decoration that was getting in the way. The beneficiaries go far beyond any single label - the next section is about how broad that audience really is - and ultimately they include you. Why bother doing work if your peers cannot use it?</p>
 
         <div class="plain-english-box" aria-labelledby="toc-title">
           <h2 id="toc-title">Table of contents</h2>
@@ -1535,9 +1535,9 @@ plt.close(fig)
           <li><strong>Check contrast.</strong> Axis labels and legend text against background should clear <jargon key="wcag">WCAG</jargon> 4.5:1 for normal text and 3:1 for graphical objects. Greys on white frequently fail.</li>
           <li><strong>Set a font floor.</strong> No label below 9pt at the rendered size, ever. For slides, no label below the equivalent of 18pt at projected size. If the chart has so much information it doesn&rsquo;t fit, the chart has too much information.</li>
           <li><strong>Write <jargon key="alt text">alt text</jargon> that contains the takeaway.</strong> The alt text should make sense to a reader who never sees the image. &ldquo;Sales by quarter, with Q3 2024 sharply lower than Q1&ndash;Q2&rdquo; is alt text. &ldquo;Sales chart&rdquo; is not.</li>
-          <li><strong>Provide the data.</strong> A linked CSV, a properly marked-up HTML table, or an SVG with a data attribute. The chart is one rendering; the data is the source of truth.</li>
+          <li><strong>Provide the data.</strong> A linked CSV, a properly marked-up HTML table, or an SVG with a data attribute. The chart is just one view of the underlying numbers.</li>
           <li><strong>Strip non-encoding elements.</strong> Drop shadows, 3D effects, gradient fills, decorative backgrounds, and redundant gridlines all go. If you cannot say what the element encodes, it does not earn its pixels.</li>
-          <li><strong>Title with the takeaway.</strong> &ldquo;Q3 2024 sales fell 18% in APAC&rdquo; is a title. &ldquo;Sales by region and quarter&rdquo; is a description.</li>
+          <li><strong>Title with the takeaway.</strong> &ldquo;Variant A cut error rates by a third&rdquo; is a title. &ldquo;Error rate by month and variant&rdquo; is a description.</li>
           <li><strong>Test the rendered context.</strong> The thumbnail. The greyscale print. The phone screen. The dark-mode dashboard. The projected slide. If the chart fails any of them, it is a chart for a single condition, not a finished output.</li>
         </ul>
 
