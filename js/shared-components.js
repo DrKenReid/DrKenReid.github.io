@@ -731,15 +731,84 @@ function renderPrevNextNav() {
     }).catch(function() {});
 }
 
+/**
+ * giscus comments (GitHub Discussions-backed), blog posts only.
+ * Requires the giscus app to be installed on the repo:
+ * https://github.com/apps/giscus — until then the widget shows an
+ * error banner only in the comments section; the rest of the page is
+ * unaffected. Theme follows the site's dark/light toggle.
+ */
+function renderGiscusComments() {
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost || document.getElementById('giscus-comments')) return;
+
+    var section = document.createElement('section');
+    section.id = 'giscus-comments';
+    section.className = 'giscus-comments';
+    section.setAttribute('aria-label', 'Comments');
+    section.innerHTML = '<h2>Comments</h2>';
+
+    function giscusTheme() {
+        return document.documentElement.getAttribute('data-theme') === 'dark'
+            ? 'dark' : 'light';
+    }
+
+    var script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    var config = {
+        'data-repo': 'DrKenReid/DrKenReid.github.io',
+        'data-repo-id': 'MDEwOlJlcG9zaXRvcnkyMjg0MTkzNDU=',
+        'data-category': 'Announcements',
+        'data-category-id': 'DIC_kwDODZ1nEc4DAtHj',
+        'data-mapping': 'pathname',
+        'data-strict': '0',
+        'data-reactions-enabled': '1',
+        'data-emit-metadata': '0',
+        'data-input-position': 'bottom',
+        'data-theme': giscusTheme(),
+        'data-lang': 'en',
+        'data-loading': 'lazy'
+    };
+    for (var key in config) {
+        script.setAttribute(key, config[key]);
+    }
+    section.appendChild(script);
+
+    // After related posts if present, otherwise at the end of the article.
+    var related = blogPost.querySelector('.related-posts, #related-posts-section');
+    if (related && related.parentNode === blogPost && related.nextSibling) {
+        blogPost.insertBefore(section, related.nextSibling);
+    } else {
+        blogPost.appendChild(section);
+    }
+
+    // Keep the widget in sync with the site theme toggle.
+    document.addEventListener('click', function(e) {
+        if (!(e.target.closest && e.target.closest('#theme-toggle'))) return;
+        setTimeout(function() {
+            var frame = document.querySelector('iframe.giscus-frame');
+            if (!frame || !frame.contentWindow) return;
+            frame.contentWindow.postMessage(
+                { giscus: { setConfig: { theme: giscusTheme() } } },
+                'https://giscus.app'
+            );
+        }, 50);
+    });
+}
+
 function renderBlogPostEssentials() {
     var blogPost = document.querySelector('.blog-post');
     if (!blogPost) return;
 
     ensureRelatedPostsSection().then(function() {
         renderBlogThanksCta();
+        renderGiscusComments();
         return renderPrevNextNav();
     }).catch(function() {
         renderBlogThanksCta();
+        renderGiscusComments();
         renderPrevNextNav();
     });
 }
