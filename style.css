@@ -4066,6 +4066,162 @@ input:required {
 .social-card:hover {
   transform: translateY(-4px); }
 
+/* Editorial serif for post prose (Lora loaded from each post's head).
+   UI components inside posts stay Poppins. */
+.blog-post p,
+.blog-post li,
+.blog-post blockquote {
+  font-family: 'Lora', Georgia, 'Times New Roman', serif;
+  font-size: 17px; }
+
+.blog-post figcaption {
+  font-family: 'Lora', Georgia, serif;
+  font-style: italic; }
+
+.blog-post figcaption .figure-copyright {
+  font-style: normal; }
+
+.blog-post .blog-meta,
+.blog-post .post-disclaimer,
+.blog-post .blog-tag,
+.blog-post .faq-item summary,
+.blog-post .blog-thanks-cta p,
+.blog-post .blog-thanks-cta span,
+.blog-post .related-posts p,
+.blog-post .blog-card-excerpt,
+.blog-post .blog-card-date,
+.blog-post .post-pagination-label,
+.blog-post .post-pagination-title,
+.blog-post .giscus-comments,
+.blog-post .plain-english-box li {
+  font-family: 'Poppins', sans-serif; }
+
+.blog-post .blog-card-excerpt {
+  font-size: 14px; }
+
+.blog-post .plain-english-box li {
+  font-size: 15px; }
+
+/* ------------------------------------------------------------------
+   Recovered rules that existed only in the old hand-edited
+   style.min.css and were never back-ported to this file. Restored
+   2026-07-07 when the min file became a build artifact.
+   ------------------------------------------------------------------ */
+
+/* Centered pull-quote style (replaces the older left-border look) */
+blockquote,
+[data-theme="dark"] blockquote {
+  border-left: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important; }
+
+blockquote {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 8px 16px;
+  margin: 32px auto; }
+
+blockquote::before,
+blockquote::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background-color: #fc6060;
+  flex-shrink: 0;
+  transition: width 300ms ease-in-out; }
+
+blockquote:hover::before,
+blockquote:hover::after {
+  width: 100%; }
+
+blockquote p {
+  margin: 12px 0;
+  color: inherit !important;
+  font-style: italic; }
+
+blockquote cite,
+blockquote footer {
+  display: block;
+  font-style: normal;
+  font-size: 0.85em;
+  opacity: 0.8;
+  margin-bottom: 4px; }
+
+/* Click-to-copy tooltip on quotes (positioned by shared-components.js) */
+.copy-hint {
+  position: fixed;
+  z-index: 9999;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #fc6060;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 200ms ease, visibility 0s ease 200ms;
+  white-space: nowrap; }
+
+.copy-hint.copied {
+  color: #5cb85c; }
+
+blockquote:hover .copy-hint {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 200ms ease, visibility 0s ease 0s; }
+
+/* Drop cap + small-caps lead-in on the first post paragraph */
+.blog-post > p.drop-cap::first-letter {
+  float: left;
+  font-size: 4em;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  margin-right: 0.08em;
+  color: inherit; }
+
+.lead-in {
+  text-transform: uppercase;
+  letter-spacing: 0.08em; }
+
+.related-posts a {
+  text-decoration: none; }
+
+/* Share rail: brand colors on hover */
+.kr-share-btn[data-net="bluesky"]:hover,
+.kr-share-btn[data-net="bluesky"]:focus-visible {
+  border-color: #1185fe;
+  color: #1185fe; }
+
+.kr-share-btn[data-net="facebook"]:hover,
+.kr-share-btn[data-net="facebook"]:focus-visible {
+  border-color: #1877f2;
+  color: #1877f2; }
+
+.kr-share-btn[data-net="linkedin"]:hover,
+.kr-share-btn[data-net="linkedin"]:focus-visible {
+  border-color: #0a66c2;
+  color: #0a66c2; }
+
+.kr-share-btn[data-net="x"]:hover,
+.kr-share-btn[data-net="x"]:focus-visible,
+.kr-share-btn[data-net="threads"]:hover,
+.kr-share-btn[data-net="threads"]:focus-visible {
+  border-color: #000000;
+  color: #000000; }
+
+.kr-share-btn[data-net="copy"]:hover,
+.kr-share-btn[data-net="copy"]:focus-visible {
+  border-color: #fc6060;
+  color: #fc6060; }
+
 /* Previous/next post navigation (injected by shared-components.js) */
 .blog-post .post-pagination-link,
 .blog-post .post-pagination-link:hover,
