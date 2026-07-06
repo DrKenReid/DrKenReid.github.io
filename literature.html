@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="style.min.css">
   <script src="js/literature.js"></script>
+  <script src="js/bookwall.js"></script>
   <style>
     .gr_grid_book_container{float:left;width:98px;height:160px;padding:0;overflow:hidden}
   </style>
@@ -114,6 +115,19 @@
           </a>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Book Wall -->
+  <div class="about-us-area section-padding-80-0 clearfix" id="bookshelf">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 28px;">
+        <span class="section-eyebrow">Every book</span>
+        <h2 class="wow fadeInUp" data-wow-delay="100ms">The Bookshelf</h2>
+        <p style="margin-top: 10px;"><span id="book-wall-count"></span> from my Goodreads history, filterable by my rating. Click a cover for the review page.</p>
+      </div>
+      <div id="book-wall-filters" class="gallery-filters text-center" style="margin-bottom: 26px;"></div>
+      <div id="book-wall-grid" class="book-wall"></div>
     </div>
   </div>
 
