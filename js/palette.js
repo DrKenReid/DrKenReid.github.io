@@ -14,6 +14,7 @@
         { title: 'About', sub: 'Who I am', url: 'about.html' },
         { title: 'Data Science', sub: 'Projects & publications', url: 'data_science.html' },
         { title: 'Photography', sub: '490+ photos', url: 'gallery.html' },
+        { title: 'Photo Map', sub: 'Photographs by place', url: 'map.html' },
         { title: 'Music', sub: 'Guitar & listening stats', url: 'music.html' },
         { title: 'Literature', sub: 'Reviews & reading stats', url: 'literature.html' },
         { title: 'Blog', sub: 'All posts', url: 'blog.html' },

@@ -1,0 +1,23 @@
+{
+  "_help": "Regions for map.html. Add photo stems (the number before .webp in img/photography/thumb/) to a region's photos array, or add new regions with lat/lng. Coarse locations are fine — the map clusters by region, not exact spots.",
+  "regions": [
+    {
+      "name": "Stirling, Scotland",
+      "lat": 56.1381,
+      "lng": -3.956,
+      "photos": ["11"]
+    },
+    {
+      "name": "Michigan, USA",
+      "lat": 42.7325,
+      "lng": -84.5555,
+      "photos": []
+    },
+    {
+      "name": "Trento, Italy",
+      "lat": 46.0748,
+      "lng": 11.1217,
+      "photos": []
+    }
+  ]
+}
