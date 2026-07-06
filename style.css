@@ -4014,6 +4014,17 @@ input:required {
   .post-pagination-next {
     margin-left: 0; } }
 
+/* giscus comments section (injected by shared-components.js) */
+.giscus-comments {
+  margin: 48px 0 24px; }
+
+.giscus-comments h2 {
+  font-size: 24px;
+  margin-bottom: 20px; }
+
+[data-theme="dark"] .giscus-comments h2 {
+  color: #d0d0d0; }
+
 /* Print stylesheet: blog posts print as clean articles */
 @media print {
   #header-section,
@@ -4027,6 +4038,7 @@ input:required {
   .related-posts,
   #related-posts-section,
   .post-pagination,
+  .giscus-comments,
   .post-disclaimer,
   .copy-hint,
   .follow-area,
