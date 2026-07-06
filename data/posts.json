@@ -35,7 +35,11 @@
     "excerpt": "A reply to Part I: time is not the only budget. Energy is a second, renewable resource that some activities spend and others restore. A working model of a depleted week, and why rest is production, not indulgence.",
     "url": "blog/optimizing-your-schedule-ii.html",
     "image": "img/photography/thumb/488.webp",
-    "readMinutes": 16
+    "readMinutes": 16,
+    "series": {
+      "name": "Optimizing Your Schedule",
+      "part": 2
+    }
   },
   {
     "title": "What We Leave Behind",
@@ -61,7 +65,11 @@
     "excerpt": "What an operations researcher actually means by optimizing a schedule: objectives, constraints and weightings, a values clarification grid, and a working integer-programming model of your week. Nerd mode optional.",
     "url": "blog/optimizing-your-schedule.html",
     "image": "img/photography/thumb/493.webp",
-    "readMinutes": 19
+    "readMinutes": 19,
+    "series": {
+      "name": "Optimizing Your Schedule",
+      "part": 1
+    }
   },
   {
     "title": "What Was I Made For?",

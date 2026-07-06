@@ -953,12 +953,60 @@ function initCitePreviews() {
     window.addEventListener('scroll', function() { tip.classList.remove('is-visible'); }, { passive: true });
 }
 
+/**
+ * Series banner: posts with a "series" field in posts.json get a box
+ * under the meta line listing every part, current one highlighted.
+ */
+function renderSeriesNav() {
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost || document.querySelector('.kr-series')) return;
+
+    var currentFileName = resolveCurrentPostFileName();
+
+    loadBlogPosts().then(function(posts) {
+        var current = null;
+        for (var i = 0; i < posts.length; i++) {
+            if ((posts[i].url || '').split('/').pop() === currentFileName) {
+                current = posts[i];
+                break;
+            }
+        }
+        if (!current || !current.series || !current.series.name) return;
+
+        var parts = posts.filter(function(p) {
+            return p.series && p.series.name === current.series.name;
+        }).sort(function(a, b) { return (a.series.part || 0) - (b.series.part || 0); });
+        if (parts.length < 2) return;
+
+        var box = document.createElement('nav');
+        box.className = 'kr-series';
+        box.setAttribute('aria-label', 'Article series');
+        box.innerHTML = '<span class="kr-series-label">Series · ' + current.series.name + '</span>' +
+            '<ol class="kr-series-parts">' +
+            parts.map(function(p) {
+                var isCurrent = p.url === current.url;
+                var href = (p.url || '').replace(/^blog\//, '');
+                var label = 'Part ' + p.series.part + ': ' + p.title;
+                return '<li' + (isCurrent ? ' class="current" aria-current="page"' : '') + '>' +
+                    (isCurrent ? label : '<a href="' + href + '">' + label + '</a>') + '</li>';
+            }).join('') + '</ol>';
+
+        var meta = blogPost.querySelector('.post-disclaimer') || blogPost.querySelector('.blog-meta');
+        if (meta && meta.parentNode) {
+            meta.parentNode.insertBefore(box, meta.nextSibling);
+        } else {
+            blogPost.insertBefore(box, blogPost.firstChild);
+        }
+    }).catch(function() {});
+}
+
 function renderBlogPostEssentials() {
     var blogPost = document.querySelector('.blog-post');
     if (!blogPost) return;
 
     renderReadingProgress();
     renderPostToc();
+    renderSeriesNav();
     initCitePreviews();
 
     ensureRelatedPostsSection().then(function() {
