@@ -206,6 +206,10 @@ function loadMoreImages(silent) {
         link.href = 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/' + filename;
         link.className = 'portfolio-img';
         link.textContent = '+';
+        link.setAttribute('data-caption', tags.map(function(t) {
+            var cat = CATEGORIES[t];
+            return cat ? cat.label : t;
+        }).join(' · '));
 
         if (tags.length) {
             var badgeWrap = document.createElement('div');
@@ -251,6 +255,16 @@ function loadMoreImages(silent) {
     if (typeof jQuery !== 'undefined' && jQuery.fn.magnificPopup) {
         jQuery('.portfolio-img').magnificPopup({
             type: 'image',
+            mainClass: 'kr-lightbox mfp-fade',
+            closeOnContentClick: false,
+            image: {
+                titleSrc: function(item) {
+                    var caption = item.el.attr('data-caption') || '';
+                    var stem = (item.el.attr('href') || '').split('/').pop().replace(/\.\w+$/, '');
+                    return caption + (caption ? ' <span class="kr-lightbox-num">#' + stem + '</span>'
+                                              : '<span class="kr-lightbox-num">#' + stem + '</span>');
+                }
+            },
             gallery: {enabled: true, preload: [0, 2], navigateByImgClick: true, tPrev: 'Previous', tNext: 'Next'}
         });
     }
