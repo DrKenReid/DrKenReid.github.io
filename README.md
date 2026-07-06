@@ -7,8 +7,10 @@ Personal portfolio website for Ken Reid — Data Scientist, photographer, guitar
 ## Pages
 
 - **Home** — Introduction and overview
+- **About** — Background and interests
+- **Blog** — Essays on data science, books, music, and life
 - **Data Science** — Professional bio, CV, and collaboration links
-- **Photography** — Gallery of 364 photos with lazy loading, Chrome themes, and achievements
+- **Photography** — Gallery of 490+ photos with lazy loading, Chrome themes, and achievements
 - **Music** — Last.fm listening stats and guitar performances
 - **Literature** — Reading statistics, Goodreads shelves, and book reviews
 - **Contact** — Email and social links
