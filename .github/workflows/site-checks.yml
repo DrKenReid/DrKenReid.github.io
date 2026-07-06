@@ -1,0 +1,28 @@
+name: Site checks
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Links, metadata, JSON-LD, a11y basics, feed.xml, sitemap.xml,
+      # posts.json integrity. Exits nonzero on any ERROR-level finding.
+      - name: Site audit
+        run: python .github/scripts/audit_site.py
+
+      # style.min.css is generated from style.css by minify_css.py
+      # (inline imports, prune unused rules, swap subset fonts).
+      # Fails when the committed file does not match a fresh build —
+      # including when new HTML starts using a class that was pruned.
+      - name: CSS build is current
+        run: python .github/scripts/minify_css.py --check
