@@ -42,10 +42,17 @@
     apply(stored() || DEFAULT_THEME);
 
     // Delegated click — works even if button is injected after this script runs
+    var switchTimer = null;
     document.addEventListener('click', function (e) {
       var btn = e.target.closest ? e.target.closest('#theme-toggle') : null;
       if (!btn) return;
       var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      // Cross-fade the swap (CSS scopes transitions to .theme-switching)
+      document.documentElement.classList.add('theme-switching');
+      if (switchTimer) clearTimeout(switchTimer);
+      switchTimer = setTimeout(function () {
+        document.documentElement.classList.remove('theme-switching');
+      }, 350);
       save(next);
       apply(next);
     });
