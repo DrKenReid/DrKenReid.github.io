@@ -245,7 +245,7 @@ For technical or domain-specific terms, definitions are now pulled dynamically f
 - Tooltips automatically size themselves to fit content and respect viewport boundaries.
 - Works in both light and dark themes.
 
-## 12. Styled Quote Block
+## 13. Styled Quote Block
 
 ```html
 <blockquote style="margin: 24px 0; padding: 16px 20px; border-left: 3px solid #999; font-style: italic; color: #555;">
@@ -258,7 +258,7 @@ For technical or domain-specific terms, definitions are now pulled dynamically f
 
 ---
 
-## 13. Required End-Of-Post Sections (Auto-Guardrail)
+## 14. Required End-Of-Post Sections (Auto-Guardrail)
 
 Blog posts are now protected by shared JS so required end-of-post sections are present even if omitted in the HTML draft.
 
@@ -282,7 +282,7 @@ You can omit both the related posts markup and the thanks card entirely; they wi
 
 ---
 
-## 13. Code / Path Snippet in Prose
+## 15. Code / Path Snippet in Prose
 
 ```html
 <p>You filed it under <code>Music\Rock\Symphony X\Paradise Lost\</code>.</p>
@@ -292,7 +292,7 @@ You can omit both the related posts markup and the thanks card entirely; they wi
 
 ---
 
-## 14. Ordered and Unordered Lists
+## 16. Ordered and Unordered Lists
 
 ```html
 <ul>
@@ -310,7 +310,7 @@ You can omit both the related posts markup and the thanks card entirely; they wi
 
 ---
 
-## 15. Third-Party Media Credit / Copyright Line
+## 17. Third-Party Media Credit / Copyright Line
 
 ```html
 <figcaption style="margin-top: 8px; font-size: 0.8em;">
@@ -322,7 +322,7 @@ You can omit both the related posts markup and the thanks card entirely; they wi
 
 ---
 
-## 16. Post Disclaimer Ribbon
+## 18. Post Disclaimer Ribbon
 
 ```html
 <p class="post-disclaimer">The views expressed in this post are my own and do not represent any organisation, employer, or institution.</p>
@@ -333,23 +333,25 @@ You can omit both the related posts markup and the thanks card entirely; they wi
 
 ---
 
-## Posts Data Entry (`js/posts-data.js`)
+## Posts Data Entry (`data/posts.json`)
 
-Every published post needs an entry at the top of `BLOG_POSTS`:
+Every published post needs an entry at the top of `data/posts.json`:
 
-```js
+```json
 {
-  title: "Post Title Here",
-  date: "2026-04-23",
-  excerpt: "One or two sentence summary. Should be compelling and complete.",
-  url: "blog/filename-here.html",
-  image: "img/bg-img/XXX.png",
-  tags: ["data science"]
-},
+  "title": "Post Title Here",
+  "date": "2026-04-23",
+  "excerpt": "One or two sentence summary. Should be compelling and complete.",
+  "url": "blog/filename-here.html",
+  "image": "img/bg-img/XXX.png",
+  "tags": ["data science"],
+  "readMinutes": 6
+}
 ```
 
 **Notes:**
 - `image` is the thumbnail shown on the blog listing page
-- `tags` drive the filter buttons and must come from this set only: `data science`, `personal`, `photography`, `books`, `ai`, `finance`
+- `readMinutes` is generated — run `scripts/generate_read_times.py` after adding the entry rather than writing it by hand
+- The filter buttons on `blog.html` are built dynamically from whatever tags appear here, so a typo silently creates a new filter button. Reuse tags already in use: `data science`, `personal`, `photography`, `books`, `ai`, `finance`, `philosophy`, `advice`, `science`, `technology`, `television`, `writing` (this list is enforced by `scripts/audit_site.py`)
 - Use as few tags as necessary for the post; most posts should only need one, and only genuinely cross-category posts should use two
 - Do NOT add unpublished posts here until Ken confirms push
