@@ -29,6 +29,19 @@ u ul var video wbr svg path circle rect line g text""".split())
 
 SEL_TOKEN = re.compile(r"([.#])(-?[A-Za-z_][\w-]*)")
 
+# Class names that JS libraries build by string concatenation at runtime
+# ('mfp-arrow-' + direction, 'mfp-' + type + '-holder', ...) — they never
+# appear as whole tokens in any source file, so the corpus scan cannot
+# see them. Extend this list when styling runtime-generated classes.
+RUNTIME_TOKENS = {
+    "mfp-arrow-left", "mfp-arrow-right", "mfp-image-holder", "mfp-iframe-holder",
+    "mfp-inline-holder", "mfp-ajax-holder", "mfp-s-ready", "mfp-s-error",
+    "mfp-s-loading", "mfp-ready", "mfp-removing", "mfp-wrap", "mfp-container",
+    "mfp-content", "mfp-figure", "mfp-img", "mfp-bg", "mfp-close", "mfp-counter",
+    "mfp-title", "mfp-bottom-bar", "mfp-preloader", "mfp-arrow", "mfp-hide",
+    "mfp-align-top", "mfp-auto-cursor", "mfp-prevent-close", "mfp-zoom",
+}
+
 
 def split_selectors(group):
     """Split a selector group on commas, ignoring commas inside quotes,
@@ -98,6 +111,8 @@ def collect_usage():
             for m in re.finditer(r"<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>",
                                  text, re.DOTALL | re.IGNORECASE):
                 scan_strings(m.group(1))
+    classes |= RUNTIME_TOKENS
+    ids |= RUNTIME_TOKENS
     return classes, ids
 
 
