@@ -4222,6 +4222,51 @@ blockquote:hover .copy-hint {
   border-color: #fc6060;
   color: #fc6060; }
 
+/* ------------------------------------------------------------------
+   Micro-interactions
+   ------------------------------------------------------------------ */
+
+/* Nav: underline grows in on hover (desktop only; mirrors the active
+   indicator, which uses ::before — dropdown arrows own ::after) */
+@media only screen and (min-width: 992px) {
+  .classynav > ul > li > a {
+    position: relative;
+    z-index: 1; }
+
+  .classynav > ul > li > a::before {
+    width: calc(100% - 40px);
+    height: 2px;
+    background-color: #fc6060;
+    position: absolute;
+    bottom: 7px;
+    left: 50%;
+    z-index: 1;
+    content: '';
+    transform: translateX(-50%) scaleX(0);
+    transform-origin: center;
+    transition: transform 0.25s ease; }
+
+  .classynav > ul > li:hover > a::before,
+  .classynav > ul > li > a:focus-visible::before,
+  .classynav > ul > li.active > a::before {
+    transform: translateX(-50%) scaleX(1); } }
+
+/* Theme toggle: brief cross-fade while colors swap (class added by theme.js) */
+html.theme-switching,
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, fill 0.25s ease !important;
+  transition-delay: 0s !important; }
+
+/* Lazy images fade in instead of popping (classes added by shared-components.js) */
+.img-lazy-fade {
+  opacity: 0;
+  transition: opacity 0.45s ease; }
+
+.img-lazy-fade.img-loaded {
+  opacity: 1; }
+
 /* Previous/next post navigation (injected by shared-components.js) */
 .blog-post .post-pagination-link,
 .blog-post .post-pagination-link:hover,

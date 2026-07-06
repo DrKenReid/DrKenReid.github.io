@@ -1270,6 +1270,66 @@ function annotateNewTabLinks() {
 }
 
 /**
+ * Homepage stats count up on first scroll into view. Parses the
+ * rendered text ("49.7K+", "490+", "571"), animates from zero, and
+ * restores the exact original string at the end. Skipped entirely for
+ * prefers-reduced-motion.
+ */
+function initCountUpStats() {
+    var els = document.querySelectorAll('.home-stat-value');
+    if (!els.length || !('IntersectionObserver' in window)) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    function animateStat(el) {
+        var text = (el.textContent || '').trim();
+        var m = text.match(/^(\d+(?:\.\d+)?)(K?)(\+?)$/);
+        if (!m) return;
+        var target = parseFloat(m[1]);
+        var suffix = m[2] + m[3];
+        var decimals = (m[1].split('.')[1] || '').length;
+        var start = null;
+        var DURATION = 1100;
+        function step(ts) {
+            if (start === null) start = ts;
+            var t = Math.min(1, (ts - start) / DURATION);
+            var eased = 1 - Math.pow(1 - t, 3);
+            el.textContent = (target * eased).toFixed(decimals) + suffix;
+            if (t < 1) {
+                requestAnimationFrame(step);
+            } else {
+                el.textContent = m[1] + suffix;
+            }
+        }
+        requestAnimationFrame(step);
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (!entry.isIntersecting) return;
+            observer.unobserve(entry.target);
+            animateStat(entry.target);
+        });
+    }, { threshold: 0.6 });
+
+    els.forEach(function(el) { observer.observe(el); });
+}
+
+/**
+ * Fade lazily-loaded images in instead of letting them pop. The class
+ * is only added from JS to images that have not finished loading, so
+ * nothing is ever hidden when JS is unavailable.
+ */
+function initLazyImageFade() {
+    document.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+        if (img.complete) return;
+        img.classList.add('img-lazy-fade');
+        function reveal() { img.classList.add('img-loaded'); }
+        img.addEventListener('load', reveal, { once: true });
+        img.addEventListener('error', reveal, { once: true });
+    });
+}
+
+/**
  * Live stats from data/lastfm.json (refreshed weekly by a GitHub
  * Action). Elements opt in with data-lastfm="scrobbles"; the static
  * number in the HTML is the fallback if the fetch fails.
@@ -1294,6 +1354,8 @@ function updateLastfmStats() {
 document.addEventListener('DOMContentLoaded', function() {
     annotateNewTabLinks();
     updateLastfmStats();
+    initCountUpStats();
+    initLazyImageFade();
     if ('MutationObserver' in window) {
         new MutationObserver(annotateNewTabLinks).observe(document.body, { childList: true, subtree: true });
     }
