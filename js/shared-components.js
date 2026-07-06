@@ -1554,8 +1554,8 @@ function renderNowStrip() {
 
     var items = [];
 
-    function addItem(order, label, title, sub, href) {
-        items.push({ order: order, label: label, title: title, sub: sub, href: href });
+    function addItem(order, icon, label, title, sub, href) {
+        items.push({ order: order, icon: icon, label: label, title: title, sub: sub, href: href });
     }
 
     function draw() {
@@ -1565,9 +1565,12 @@ function renderNowStrip() {
             '<div class="kr-now">' + items.map(function(it) {
                 return '<a class="kr-now-item" href="' + it.href + '"' +
                     (/^https?:/.test(it.href) ? ' target="_blank" rel="noopener noreferrer"' : '') + '>' +
+                    '<span class="kr-now-icon" aria-hidden="true">' + it.icon + '</span>' +
+                    '<span class="kr-now-body">' +
                     '<span class="kr-now-label">' + it.label + '</span>' +
                     '<span class="kr-now-title">' + it.title + '</span>' +
                     (it.sub ? '<span class="kr-now-sub">' + it.sub + '</span>' : '') +
+                    '</span>' +
                     '</a>';
             }).join('') + '</div>';
     }
@@ -1583,11 +1586,11 @@ function renderNowStrip() {
         if (now && now.reading && now.reading.length) {
             var book = now.reading[0];
             var extra = now.reading.length > 1 ? ' (+' + (now.reading.length - 1) + ' more)' : '';
-            addItem(1, 'Reading', esc(book.title.replace(/\s*\(.*?\)\s*$/, '')),
+            addItem(1, '📖', 'Reading', esc(book.title.replace(/\s*\(.*?\)\s*$/, '')),
                 esc(book.author) + extra, book.link || 'literature.html');
         }
         if (now && now.track && now.track.name) {
-            addItem(2, now.track.nowPlaying ? 'Now playing' : 'Last played',
+            addItem(2, '🎧', now.track.nowPlaying ? 'Now playing' : 'Last played',
                 esc(now.track.name), esc(now.track.artist), now.track.url || 'music.html');
         }
     }).catch(function() {}).then(done, done);
@@ -1604,7 +1607,7 @@ function renderNowStrip() {
                 var text = rec.text.replace(/\s+/g, ' ').trim();
                 if (text.length > 92) text = text.slice(0, 92).replace(/\s\S*$/, '') + '…';
                 var rkey = (p.post.uri || '').split('/').pop();
-                addItem(3, 'On Bluesky', esc(text), '@kenreid.co.uk',
+                addItem(3, BLUESKY_SVG, 'On Bluesky', esc(text), '@kenreid.co.uk',
                     'https://bsky.app/profile/kenreid.co.uk/post/' + rkey);
                 break;
             }
@@ -1612,7 +1615,7 @@ function renderNowStrip() {
 
     fetch('data/posts.json').then(function(r) { return r.json(); }).then(function(posts) {
         if (posts && posts.length) {
-            addItem(4, 'Latest post', esc(posts[0].title), formatPostDate(posts[0].date), posts[0].url || 'blog.html');
+            addItem(4, '✍️', 'Latest post', esc(posts[0].title), formatPostDate(posts[0].date), posts[0].url || 'blog.html');
         }
     }).catch(function() {}).then(done, done);
 }
