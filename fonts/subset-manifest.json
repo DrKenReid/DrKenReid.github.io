@@ -1,0 +1,31 @@
+{
+  "FontAwesome": [
+    "fa-book",
+    "fa-github",
+    "fa-instagram",
+    "fa-lastfm",
+    "fa-line-chart"
+  ],
+  "themify": [
+    "ti-arrow-left",
+    "ti-arrow-right",
+    "ti-comments",
+    "ti-control-pause",
+    "ti-control-play",
+    "ti-cup",
+    "ti-email",
+    "ti-heart",
+    "ti-instagram",
+    "ti-linkedin",
+    "ti-music-alt",
+    "ti-pencil-alt",
+    "ti-rss",
+    "ti-server",
+    "ti-star",
+    "ti-world"
+  ],
+  "ElegantIcons": [
+    "arrow_carrot-up",
+    "icon_house_alt"
+  ]
+}
