@@ -1268,8 +1268,31 @@ function annotateNewTabLinks() {
     });
 }
 
+/**
+ * Live stats from data/lastfm.json (refreshed weekly by a GitHub
+ * Action). Elements opt in with data-lastfm="scrobbles"; the static
+ * number in the HTML is the fallback if the fetch fails.
+ */
+function updateLastfmStats() {
+    var els = document.querySelectorAll('[data-lastfm="scrobbles"]');
+    if (!els.length) return;
+
+    var onBlogPostPage = !!document.querySelector('.blog-post');
+    var assetPrefix = onBlogPostPage ? '../' : '';
+
+    fetch(assetPrefix + 'data/lastfm.json').then(function(response) {
+        return response.json();
+    }).then(function(data) {
+        var n = data && data.scrobbles;
+        if (typeof n !== 'number' || !isFinite(n) || n <= 0) return;
+        var text = n >= 1000 ? (Math.floor(n / 100) / 10) + 'K+' : String(n);
+        els.forEach(function(el) { el.textContent = text; });
+    }).catch(function() {});
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     annotateNewTabLinks();
+    updateLastfmStats();
     if ('MutationObserver' in window) {
         new MutationObserver(annotateNewTabLinks).observe(document.body, { childList: true, subtree: true });
     }
