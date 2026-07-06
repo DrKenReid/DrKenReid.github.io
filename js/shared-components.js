@@ -749,9 +749,15 @@ function renderGiscusComments() {
     section.setAttribute('aria-label', 'Comments');
     section.innerHTML = '<h2>Comments</h2>';
 
+    // Custom giscus themes matching the site palette (css/giscus-*.css).
+    // giscus only accepts absolute https URLs here, so the production
+    // domain is hardcoded; local previews get the stock themes.
     function giscusTheme() {
-        return document.documentElement.getAttribute('data-theme') === 'dark'
-            ? 'dark' : 'light';
+        var mode = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            return mode;
+        }
+        return 'https://www.kenreid.co.uk/css/giscus-' + mode + '.css';
     }
 
     var script = document.createElement('script');
