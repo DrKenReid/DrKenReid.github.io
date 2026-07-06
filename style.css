@@ -3711,6 +3711,7 @@ input:required {
 [data-theme="dark"] .social-card:hover {
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.36); }
 
+[data-theme="dark"] .social-card h3,
 [data-theme="dark"] .social-card h5 {
   color: #e2e2e2 !important; }
 
@@ -3944,6 +3945,126 @@ input:required {
 
 [data-theme="dark"] .theme-img-dark {
   display: block; }
+
+/* ==============================
+   2026-07 visual refresh
+   ============================== */
+
+/* Hero: gradient scrim so text reads over any photo */
+.single-welcome-slide.bg-overlay::after {
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.42) 42%, rgba(0, 0, 0, 0.14) 72%, rgba(0, 0, 0, 0.05) 100%);
+  background-color: transparent; }
+
+.single-welcome-slide .welcome-text h2 {
+  filter: drop-shadow(0 3px 16px rgba(0, 0, 0, 0.45)); }
+
+.single-welcome-slide .welcome-text p {
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.6;
+  max-width: 32em;
+  margin-bottom: 36px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85), 0 2px 18px rgba(0, 0, 0, 0.55); }
+
+@media (max-width: 767px) {
+  .single-welcome-slide .welcome-text p {
+    font-size: 16px; } }
+
+/* Hero CTA: outline that fills on hover */
+.welcome-text .alime-btn {
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+
+.welcome-text .alime-btn:hover,
+.welcome-text .alime-btn:focus {
+  background-color: #fc6060;
+  border-color: #fc6060;
+  color: #ffffff; }
+
+/* Hero carousel arrows: only surface on hover/focus */
+.welcome-slides .owl-prev,
+.welcome-slides .owl-next {
+  opacity: 0;
+  transition: opacity 0.3s ease; }
+
+.welcome-area:hover .owl-prev,
+.welcome-area:hover .owl-next,
+.welcome-slides .owl-prev:focus,
+.welcome-slides .owl-next:focus {
+  opacity: 1; }
+
+/* Section eyebrow kicker (matches the thanks-CTA overline) */
+.section-eyebrow {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fc6060;
+  margin-bottom: 8px; }
+
+/* Tag pills: outlined, red reserved for interaction */
+.blog-tag {
+  background: transparent;
+  border: 1px solid rgba(197, 48, 48, 0.4);
+  padding: 2px 9px; }
+
+[data-theme="dark"] .blog-tag {
+  background: transparent;
+  border-color: rgba(252, 96, 96, 0.45); }
+
+/* Unified card treatment: 12px radius, hairline border, lift on hover */
+.blog-card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; }
+
+.blog-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.16); }
+
+[data-theme="dark"] .blog-card {
+  border-color: rgba(255, 255, 255, 0.07); }
+
+[data-theme="dark"] .blog-card:hover {
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5); }
+
+.blog-card-img {
+  overflow: hidden; }
+
+.blog-card-img img {
+  transition: transform 0.45s ease; }
+
+.blog-card:hover .blog-card-img img {
+  transform: scale(1.04); }
+
+.single-post-area {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; }
+
+.single-post-area:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.2); }
+
+.single-post-area .post-thumbnail {
+  display: block;
+  overflow: hidden; }
+
+.single-post-area .post-thumbnail img {
+  transition: transform 0.45s ease; }
+
+.single-post-area:hover .post-thumbnail img {
+  transform: scale(1.04); }
+
+.bsky-post-card {
+  border-radius: 12px; }
+
+.social-card {
+  border-radius: 12px !important; }
+
+.social-card:hover {
+  transform: translateY(-4px); }
 
 /* Previous/next post navigation (injected by shared-components.js) */
 .blog-post .post-pagination-link,

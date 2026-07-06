@@ -75,6 +75,7 @@ function renderInstagramSection(targetId) {
     el.innerHTML = '<section class="follow-area clearfix">' +
         '<div class="container"><div class="row"><div class="col-12">' +
         '<div class="section-heading text-center">' +
+        '<span class="section-eyebrow">Photography</span>' +
         '<h2>Photo Highlights</h2>' +
         '<p><a href="' + instagramUrl + '">Follow @' + handle + ' on Instagram</a></p>' +
         '</div></div></div></div>' +

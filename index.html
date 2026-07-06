@@ -38,13 +38,14 @@
     .home-stat-value {
       font-size: 28px;
       font-weight: 700;
-      color: #fc6060;
+      color: #252525;
     }
     .home-stat-label {
       font-size: 12px;
-      color: #666;
+      font-weight: 600;
+      color: #fc6060;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
     }
     .home-section-note {
       color: #636363;
@@ -54,7 +55,9 @@
       border-top-color: #333;
       border-bottom-color: #333;
     }
-    [data-theme="dark"] .home-stat-label,
+    [data-theme="dark"] .home-stat-value {
+      color: #f0f0f0;
+    }
     [data-theme="dark"] .home-section-note {
       color: #b8b8b8 !important;
     }
@@ -174,7 +177,8 @@
       <div class="row align-items-center">
         <div class="col-12 col-lg-8 offset-lg-2">
           <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
-            <h2>About Me</h2>
+            <span class="section-eyebrow">Welcome</span>
+        <h2>About Me</h2>
           </div>
           <p class="text-center wow fadeInUp" data-wow-delay="200ms" style="font-size: 1.1em; line-height: 1.8; color: #636363;">Thanks for checking out my site. I'm from Scotland, now living in MI, USA. I build software and solve data problems, publish research papers, and recently started a master's in Organizational Leadership. I also take photos, play guitar, and read a lot of well written and awful books.</p>
         </div>
@@ -218,6 +222,7 @@
   <section class="about-us-area section-padding-80-0 clearfix">
     <div class="container">
       <div class="text-center" style="margin-bottom: 40px;">
+        <span class="section-eyebrow">From the blog</span>
         <h2 class="wow fadeInUp" data-wow-delay="100ms">Latest Blog Posts</h2>
       </div>
       <div class="row justify-content-center">
@@ -230,6 +235,7 @@
   <section class="about-us-area section-padding-80-0 clearfix">
     <div class="container">
       <div class="text-center" style="margin-bottom: 40px;">
+        <span class="section-eyebrow">Around the site</span>
         <h2 class="wow fadeInUp" data-wow-delay="100ms">Explore</h2>
       </div>
       <div class="row">
@@ -285,7 +291,8 @@
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
           <div class="text-center" style="margin-bottom: 30px;">
-            <h2 class="wow fadeInUp" data-wow-delay="100ms">Recent on Bluesky</h2>
+            <span class="section-eyebrow">Social</span>
+        <h2 class="wow fadeInUp" data-wow-delay="100ms">Recent on Bluesky</h2>
             <p class="wow fadeInUp home-section-note" data-wow-delay="200ms">
               <a href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer">@kenreid.co.uk</a>
             </p>
