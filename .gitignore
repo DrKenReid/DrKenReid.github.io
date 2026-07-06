@@ -28,4 +28,4 @@ scripts/
 # ...but the CI/build scripts under .github/scripts ARE committed
 !.github/scripts/
 
-.claude/
+PUBLISHING.md
