@@ -1095,9 +1095,14 @@ function initLightboxFix() {
     var SKIP_SELECTORS = '.blog-card-img, .related-posts, .related-posts-grid, .blog-photo-highlights, .blog-thanks-cta';
 
     function toFullSrc(src) {
-        return src
-            .replace(/\/thumb\/(\d+)\.webp$/, '/$1.png')
-            .replace(/-thumb\.(jpg|jpeg)$/, '.$1');
+        // Full-size photography lives in the photos-v1 GitHub release, not
+        // the repo (same source gallery.js uses) — /img/photography/N.png
+        // does not exist and 404s.
+        var m = src.match(/\/thumb\/(\d+)\.webp$/);
+        if (m) {
+            return 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/' + m[1] + '.png';
+        }
+        return src.replace(/-thumb\.(jpg|jpeg)$/, '.$1');
     }
 
     blogPost.querySelectorAll('img').forEach(function(img) {
