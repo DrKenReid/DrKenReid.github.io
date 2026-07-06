@@ -679,14 +679,68 @@ function renderBlogThanksCta() {
     blogPost.appendChild(cta);
 }
 
+/**
+ * Chronological previous/next links between posts, driven by
+ * data/posts.json order (newest first). Inserted just before the
+ * thanks CTA / related posts block.
+ */
+function renderPrevNextNav() {
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost || document.querySelector('.post-pagination')) return Promise.resolve();
+
+    var currentFileName = resolveCurrentPostFileName();
+
+    return loadBlogPosts().then(function(posts) {
+        var idx = -1;
+        for (var i = 0; i < posts.length; i++) {
+            if ((posts[i].url || '').split('/').pop() === currentFileName) {
+                idx = i;
+                break;
+            }
+        }
+        if (idx === -1) return;
+
+        // posts.json is ordered newest-first
+        var newer = idx > 0 ? posts[idx - 1] : null;
+        var older = idx < posts.length - 1 ? posts[idx + 1] : null;
+        if (!newer && !older) return;
+
+        function link(post, cls, arrow, label) {
+            if (!post) return '<span class="post-pagination-spacer"></span>';
+            var href = (post.url || '').replace(/^blog\//, '');
+            return '<a href="' + href + '" class="post-pagination-link ' + cls + '">' +
+                '<span class="post-pagination-label">' + arrow + ' ' + label + '</span>' +
+                '<span class="post-pagination-title">' + post.title + '</span>' +
+                '</a>';
+        }
+
+        var nav = document.createElement('nav');
+        nav.className = 'post-pagination';
+        nav.setAttribute('aria-label', 'Post navigation');
+        nav.innerHTML =
+            link(older, 'post-pagination-prev', '&larr;', 'Older') +
+            link(newer, 'post-pagination-next', '&rarr;', 'Newer');
+
+        var anchor = blogPost.querySelector('.blog-thanks-cta') ||
+            blogPost.querySelector('.related-posts, #related-posts-section');
+        if (anchor) {
+            blogPost.insertBefore(nav, anchor);
+        } else {
+            blogPost.appendChild(nav);
+        }
+    }).catch(function() {});
+}
+
 function renderBlogPostEssentials() {
     var blogPost = document.querySelector('.blog-post');
     if (!blogPost) return;
 
     ensureRelatedPostsSection().then(function() {
         renderBlogThanksCta();
+        return renderPrevNextNav();
     }).catch(function() {
         renderBlogThanksCta();
+        renderPrevNextNav();
     });
 }
 
