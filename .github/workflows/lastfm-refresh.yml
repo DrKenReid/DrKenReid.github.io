@@ -1,8 +1,8 @@
-name: Refresh Last.fm stats
+name: Refresh live data
 
 on:
   schedule:
-    - cron: "0 6 * * 1"   # Mondays 06:00 UTC
+    - cron: "0 6 * * *"   # daily 06:00 UTC
   workflow_dispatch:
 
 permissions:
@@ -18,19 +18,21 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Fetch scrobble count
+      # Scrobble count + recent track (Last.fm) and currently-reading
+      # (Goodreads RSS) -> data/lastfm.json + data/now.json
+      - name: Fetch live data
         env:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
-        run: python .github/scripts/refresh_lastfm.py
+        run: python .github/scripts/refresh_now.py
 
       - name: Commit if changed
         run: |
-          if git diff --quiet data/lastfm.json; then
+          if git diff --quiet data/lastfm.json data/now.json; then
             echo "No change."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/lastfm.json
-          git commit -m "Update Last.fm scrobble count"
+          git add data/lastfm.json data/now.json
+          git commit -m "Refresh live data (Last.fm, Goodreads)"
           git push

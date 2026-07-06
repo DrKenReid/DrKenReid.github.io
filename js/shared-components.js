@@ -1488,6 +1488,82 @@ function initLazyImageFade() {
 }
 
 /**
+ * "Now" strip: what Ken is reading / listening to / posting right now.
+ * Reading + listening come from data/now.json (refreshed daily by a
+ * GitHub Action); the latest Bluesky post is fetched from the public
+ * API; the latest blog post comes from posts.json. Items that fail to
+ * load are simply omitted.
+ */
+function renderNowStrip() {
+    var mount = document.getElementById('now-strip');
+    if (!mount) return;
+
+    var items = [];
+
+    function addItem(order, label, title, sub, href) {
+        items.push({ order: order, label: label, title: title, sub: sub, href: href });
+    }
+
+    function draw() {
+        if (!items.length) return;
+        items.sort(function(a, b) { return a.order - b.order; });
+        mount.innerHTML = '<span class="section-eyebrow">Now</span>' +
+            '<div class="kr-now">' + items.map(function(it) {
+                return '<a class="kr-now-item" href="' + it.href + '"' +
+                    (/^https?:/.test(it.href) ? ' target="_blank" rel="noopener noreferrer"' : '') + '>' +
+                    '<span class="kr-now-label">' + it.label + '</span>' +
+                    '<span class="kr-now-title">' + it.title + '</span>' +
+                    (it.sub ? '<span class="kr-now-sub">' + it.sub + '</span>' : '') +
+                    '</a>';
+            }).join('') + '</div>';
+    }
+
+    function esc(s) {
+        return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    var pending = 3;
+    function done() { if (--pending === 0) draw(); }
+
+    fetch('data/now.json').then(function(r) { return r.json(); }).then(function(now) {
+        if (now && now.reading && now.reading.length) {
+            var book = now.reading[0];
+            var extra = now.reading.length > 1 ? ' (+' + (now.reading.length - 1) + ' more)' : '';
+            addItem(1, 'Reading', esc(book.title.replace(/\s*\(.*?\)\s*$/, '')),
+                esc(book.author) + extra, book.link || 'literature.html');
+        }
+        if (now && now.track && now.track.name) {
+            addItem(2, now.track.nowPlaying ? 'Now playing' : 'Last played',
+                esc(now.track.name), esc(now.track.artist), now.track.url || 'music.html');
+        }
+    }).catch(function() {}).then(done, done);
+
+    fetch('https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=kenreid.co.uk&limit=8&filter=posts_no_replies')
+        .then(function(r) { return r.json(); })
+        .then(function(feed) {
+            var posts = (feed && feed.feed) || [];
+            for (var i = 0; i < posts.length; i++) {
+                var p = posts[i];
+                if (p.reason) continue; // skip reposts
+                var rec = p.post && p.post.record;
+                if (!rec || !rec.text) continue;
+                var text = rec.text.replace(/\s+/g, ' ').trim();
+                if (text.length > 92) text = text.slice(0, 92).replace(/\s\S*$/, '') + '…';
+                var rkey = (p.post.uri || '').split('/').pop();
+                addItem(3, 'On Bluesky', esc(text), '@kenreid.co.uk',
+                    'https://bsky.app/profile/kenreid.co.uk/post/' + rkey);
+                break;
+            }
+        }).catch(function() {}).then(done, done);
+
+    fetch('data/posts.json').then(function(r) { return r.json(); }).then(function(posts) {
+        if (posts && posts.length) {
+            addItem(4, 'Latest post', esc(posts[0].title), formatPostDate(posts[0].date), posts[0].url || 'blog.html');
+        }
+    }).catch(function() {}).then(done, done);
+}
+
+/**
  * Live stats from data/lastfm.json (refreshed weekly by a GitHub
  * Action). Elements opt in with data-lastfm="scrobbles"; the static
  * number in the HTML is the fallback if the fetch fails.
@@ -1512,6 +1588,7 @@ function updateLastfmStats() {
 document.addEventListener('DOMContentLoaded', function() {
     annotateNewTabLinks();
     updateLastfmStats();
+    renderNowStrip();
     initCountUpStats();
     initLazyImageFade();
     if ('MutationObserver' in window) {
