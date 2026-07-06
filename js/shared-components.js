@@ -799,9 +799,167 @@ function renderGiscusComments() {
     });
 }
 
+/**
+ * Thin reading-progress bar under the header on blog posts.
+ */
+function renderReadingProgress() {
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost || document.querySelector('.kr-progress-bar')) return;
+
+    var bar = document.createElement('div');
+    bar.className = 'kr-progress-bar';
+    bar.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(bar);
+
+    function update() {
+        var rect = blogPost.getBoundingClientRect();
+        var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        var total = rect.height - viewportHeight;
+        var done = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 1;
+        bar.style.transform = 'scaleX(' + done + ')';
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+}
+
+/**
+ * Sticky table of contents with scroll-spy, for posts with enough
+ * sections to justify one. Rides the left gutter on wide screens,
+ * mirroring the share rail on the right. Headings without ids get
+ * slugs generated here.
+ */
+function renderPostToc() {
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost || document.querySelector('.kr-toc')) return;
+
+    var SKIP = '.faq-section, .related-posts, .blog-thanks-cta, .giscus-comments, .plain-english-box, .post-pagination';
+    var headings = Array.prototype.filter.call(blogPost.querySelectorAll('h2'), function(h) {
+        if (h.closest(SKIP)) return false;
+        var text = (h.textContent || '').trim();
+        return text && text !== 'Common questions' && text !== 'Related posts';
+    });
+    if (headings.length < 4) return;
+
+    var used = {};
+    headings.forEach(function(h) {
+        if (h.id) { used[h.id] = true; return; }
+        var slug = (h.textContent || '').toLowerCase()
+            .replace(/['’"“”]/g, '')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .slice(0, 60) || 'section';
+        var candidate = slug;
+        var i = 2;
+        while (used[candidate] || document.getElementById(candidate)) {
+            candidate = slug + '-' + i++;
+        }
+        used[candidate] = true;
+        h.id = candidate;
+    });
+
+    var toc = document.createElement('nav');
+    toc.className = 'kr-toc';
+    toc.setAttribute('aria-label', 'Table of contents');
+    toc.innerHTML = '<div class="kr-toc-label">Contents</div>' +
+        headings.map(function(h) {
+            return '<a href="#' + h.id + '">' + (h.textContent || '').trim() + '</a>';
+        }).join('');
+    document.body.appendChild(toc);
+
+    // Scroll-spy: highlight the section currently at the top of the viewport.
+    var links = toc.querySelectorAll('a');
+    function setActive(id) {
+        Array.prototype.forEach.call(links, function(a) {
+            a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+    }
+    if ('IntersectionObserver' in window) {
+        var current = headings[0].id;
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) current = entry.target.id;
+            });
+            setActive(current);
+        }, { rootMargin: '0px 0px -70% 0px', threshold: 0 });
+        headings.forEach(function(h) { observer.observe(h); });
+    }
+
+    // Position in the left gutter, mirroring the share rail's approach.
+    function updateToc() {
+        var isWide = window.matchMedia('(min-width: 1240px)').matches;
+        if (!isWide) { toc.classList.remove('is-visible'); return; }
+        var rect = blogPost.getBoundingClientRect();
+        var gap = 28;
+        var width = toc.offsetWidth || 200;
+        var left = rect.left - gap - width;
+        if (left < 8) { toc.classList.remove('is-visible'); return; }
+        toc.style.left = left + 'px';
+        var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        var entered = rect.top < viewportHeight * 0.5;
+        var ended = rect.bottom < viewportHeight * 0.6;
+        toc.classList.toggle('is-visible', entered && !ended);
+    }
+    window.addEventListener('scroll', updateToc, { passive: true });
+    window.addEventListener('resize', updateToc);
+    updateToc();
+}
+
+/**
+ * Citation hover previews: hovering or focusing a [n] reference shows
+ * the full citation in a floating card instead of forcing a jump.
+ */
+function initCitePreviews() {
+    var refs = document.querySelectorAll('.blog-post a.cite-ref');
+    if (!refs.length) return;
+
+    var tip = document.createElement('div');
+    tip.className = 'cite-preview';
+    tip.setAttribute('role', 'tooltip');
+    document.body.appendChild(tip);
+    var hideTimer = null;
+
+    function show(anchor) {
+        var href = anchor.getAttribute('href') || '';
+        if (href.charAt(0) !== '#') return;
+        var target = document.getElementById(href.slice(1));
+        if (!target) return;
+        tip.innerHTML = target.innerHTML;
+        var rect = anchor.getBoundingClientRect();
+        tip.classList.add('is-visible');
+        var width = Math.min(420, (window.innerWidth || 1000) - 24);
+        tip.style.maxWidth = width + 'px';
+        var tipRect = tip.getBoundingClientRect();
+        var left = Math.max(12, Math.min(rect.left - tipRect.width / 2, (window.innerWidth || 1000) - tipRect.width - 12));
+        var top = rect.top - tipRect.height - 10;
+        if (top < 12) top = rect.bottom + 10;
+        tip.style.left = left + 'px';
+        tip.style.top = top + 'px';
+    }
+
+    function scheduleHide() {
+        hideTimer = setTimeout(function() { tip.classList.remove('is-visible'); }, 150);
+    }
+
+    Array.prototype.forEach.call(refs, function(a) {
+        a.addEventListener('mouseenter', function() { clearTimeout(hideTimer); show(a); });
+        a.addEventListener('mouseleave', scheduleHide);
+        a.addEventListener('focus', function() { clearTimeout(hideTimer); show(a); });
+        a.addEventListener('blur', scheduleHide);
+    });
+    tip.addEventListener('mouseenter', function() { clearTimeout(hideTimer); });
+    tip.addEventListener('mouseleave', scheduleHide);
+    window.addEventListener('scroll', function() { tip.classList.remove('is-visible'); }, { passive: true });
+}
+
 function renderBlogPostEssentials() {
     var blogPost = document.querySelector('.blog-post');
     if (!blogPost) return;
+
+    renderReadingProgress();
+    renderPostToc();
+    initCitePreviews();
 
     ensureRelatedPostsSection().then(function() {
         renderBlogThanksCta();
