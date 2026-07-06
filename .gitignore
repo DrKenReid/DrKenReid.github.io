@@ -24,5 +24,7 @@ extracted_*.txt
 # Local utility scripts (not committed)
 scripts-local/
 scripts/
+# ...but the CI/build scripts under .github/scripts ARE committed
+!.github/scripts/
 
 .claude/
