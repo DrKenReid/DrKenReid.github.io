@@ -95,6 +95,19 @@ function buildFilterButtons() {
     });
 }
 
+var masonryRelayoutTimer = null;
+function scheduleMasonryRelayout() {
+    if (masonryRelayoutTimer) clearTimeout(masonryRelayoutTimer);
+    masonryRelayoutTimer = setTimeout(function() {
+        if (typeof jQuery !== 'undefined' && jQuery.fn.isotope) {
+            var $grid = jQuery('.alime-portfolio');
+            if ($grid.data('isotope')) {
+                $grid.isotope('layout');
+            }
+        }
+    }, 150);
+}
+
 function filterGallery(filter, btnEl) {
     activeFilter = filter;
     var buttons = document.querySelectorAll('.gallery-filter-btn');
@@ -176,6 +189,9 @@ function loadMoreImages(silent) {
         img.src = 'img/photography/thumb/' + stem + '.webp';
         img.alt = tags.length ? tags.join(', ') + ' photography' : 'Gallery photo ' + stem;
         img.loading = 'lazy';
+        // Natural-height masonry: every late lazy-load changes tile height,
+        // so nudge isotope to re-layout (debounced).
+        img.addEventListener('load', scheduleMasonryRelayout);
         img.onerror = function() {
             var tile = this.closest('.single_gallery_item');
             if (tile && tile.parentNode) {
