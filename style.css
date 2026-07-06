@@ -2583,10 +2583,12 @@ input:required {
     gap: 24px; }
 }
 
-/* Gallery images: fixed aspect ratio for layout before images load */
+/* Gallery images: natural aspect ratios; isotope masonry handles layout
+   (relayout on image load lives in gallery.js) */
 .single_gallery_item .single-portfolio-content img {
-  aspect-ratio: 4 / 3;
-  object-fit: cover; }
+  width: 100%;
+  height: auto;
+  display: block; }
 
 /* Responsive iframe wrapper */
 .iframe-responsive {
