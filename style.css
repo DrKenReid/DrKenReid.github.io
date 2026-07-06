@@ -3933,3 +3933,14 @@ input:required {
 .ds-project-card h3,
 .ds-skill-group h3 {
   font-size: 20px; }
+
+/* Theme-aware images: pair a .theme-img-light and .theme-img-dark element;
+   the one matching the active theme is shown */
+.theme-img-dark {
+  display: none; }
+
+[data-theme="dark"] .theme-img-light {
+  display: none; }
+
+[data-theme="dark"] .theme-img-dark {
+  display: block; }
