@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="style.min.css">
   <script defer src="js/theme.js"></script>
+  <script defer src="js/palette.js"></script>
 </head>
 <body>
   <div id="preloader"><div class="loader"></div></div>
@@ -40,6 +41,26 @@
           <h2>Page Not Found</h2>
           <p style="color: #636363; font-size: 16px; line-height: 1.8; margin: 20px 0 30px;">The page you're looking for doesn't exist, was moved, or I broke something. <a href="./contact.html">Please let me know!</a></p>
           <a href="./index.html" class="btn alime-btn btn-2">Back to Home</a>
+
+          <figure style="margin: 48px auto 0; max-width: 640px;">
+            <img id="lost-photo" src="" alt="" style="display: none; width: 100%; border-radius: 12px;">
+            <figcaption id="lost-photo-caption" style="display: none; margin-top: 10px; font-size: 0.9rem; opacity: 0.85;">
+              Since you're lost anyway, here's a random photo I took. <a href="./gallery.html">There are 490+ more.</a>
+            </figcaption>
+          </figure>
+          <script>
+            fetch('data/photography-standard-files.json').then(function(r) { return r.json(); }).then(function(files) {
+              if (!Array.isArray(files) || !files.length) return;
+              var pick = files[Math.floor(Math.random() * files.length)];
+              var img = document.getElementById('lost-photo');
+              img.src = 'img/photography/thumb/' + pick.replace(/\.(png|jpg|JPG|jpeg)$/, '.webp');
+              img.alt = 'A random photograph from the gallery';
+              img.onload = function() {
+                img.style.display = 'block';
+                document.getElementById('lost-photo-caption').style.display = 'block';
+              };
+            }).catch(function() {});
+          </script>
         </div>
       </div>
     </div>

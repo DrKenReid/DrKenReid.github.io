@@ -38,6 +38,15 @@ function initGallery() {
         galleryImages = Array.isArray(results[1]) ? results[1].slice().sort(compareFileNames) : [];
         buildFilterButtons();
         buildImageHTML();
+
+        // Deep link: gallery.html?tag=wildlife applies that filter
+        try {
+            var wanted = new URLSearchParams(window.location.search).get('tag');
+            if (wanted && CATEGORIES[wanted]) {
+                var btn = document.querySelector('.gallery-filter-btn[data-filter=".' + wanted + '"]');
+                if (btn) btn.click();
+            }
+        } catch (e) {}
     }).catch(function() {
         photoTags = photoTags || {};
         galleryImages = Object.keys(photoTags).sort(compareFileNames);
