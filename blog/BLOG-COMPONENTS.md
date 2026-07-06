@@ -354,4 +354,6 @@ Every published post needs an entry at the top of `data/posts.json`:
 - `readMinutes` is generated — run `scripts/generate_read_times.py` after adding the entry rather than writing it by hand
 - The filter buttons on `blog.html` are built dynamically from whatever tags appear here, so a typo silently creates a new filter button. Reuse tags already in use: `data science`, `personal`, `photography`, `books`, `ai`, `finance`, `philosophy`, `advice`, `science`, `technology`, `television`, `writing` (this list is enforced by `scripts/audit_site.py`)
 - Use as few tags as necessary for the post; most posts should only need one, and only genuinely cross-category posts should use two
+- Multi-part posts may add `"series": {"name": "Series Name", "part": 1}` — every post sharing that series name gets an automatic parts banner under its meta line
+- Related-posts sections are baked by `scripts/generate_related_posts.py` (TF-IDF over post text); rerun it after publishing so other posts can recommend the new one
 - Do NOT add unpublished posts here until Ken confirms push
