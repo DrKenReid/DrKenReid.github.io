@@ -5,55 +5,229 @@
       "name": "University of Stirling",
       "lat": 56.1451,
       "lng": -3.9204,
-      "photos": ["9", "11", "12", "18", "19", "41", "58", "59", "60", "61", "137", "161", "268", "317", "370", "372", "462"]
+      "photos": [
+        "9",
+        "11",
+        "12",
+        "18",
+        "19",
+        "41",
+        "58",
+        "59",
+        "60",
+        "61",
+        "137",
+        "161",
+        "268",
+        "317",
+        "370",
+        "372",
+        "462"
+      ]
     },
     {
       "name": "Loch Ard, Scotland",
       "lat": 56.1855,
       "lng": -4.4756,
-      "photos": ["2", "8"]
+      "photos": [
+        "2",
+        "8"
+      ]
     },
     {
       "name": "Birnie Loch, Fife, Scotland",
       "lat": 56.3065,
       "lng": -3.144,
-      "photos": ["3"]
+      "photos": [
+        "3"
+      ]
     },
     {
       "name": "Bangour Village Hospital, West Lothian",
       "lat": 55.914,
       "lng": -3.569,
-      "photos": ["5"]
+      "photos": [
+        "5"
+      ]
     },
     {
       "name": "Aberdeen, Scotland",
       "lat": 57.1497,
       "lng": -2.0943,
-      "photos": ["10"]
+      "photos": [
+        "10",
+        "27",
+        "34",
+        "42",
+        "43",
+        "44"
+      ]
     },
     {
       "name": "Ipswich, England",
       "lat": 52.0567,
       "lng": 1.1482,
-      "photos": ["4"]
+      "photos": [
+        "4"
+      ]
     },
     {
       "name": "Dublin, Ireland",
       "lat": 53.3498,
       "lng": -6.2603,
-      "photos": ["7"]
+      "photos": [
+        "7"
+      ]
     },
     {
       "name": "East Lansing, Michigan",
       "lat": 42.7369,
       "lng": -84.4839,
-      "photos": ["1"]
+      "photos": [
+        "1"
+      ]
     },
     {
       "name": "Trento, Italy",
       "lat": 46.0748,
       "lng": 11.1217,
-      "photos": []
+      "photos": [
+        "421",
+        "422",
+        "423",
+        "424"
+      ]
+    },
+    {
+      "name": "Lake Geneva, Switzerland",
+      "lat": 46.37,
+      "lng": 6.52,
+      "photos": [
+        "6"
+      ]
+    },
+    {
+      "name": "Ochil Hills, Stirling",
+      "lat": 56.175,
+      "lng": -3.85,
+      "photos": [
+        "431"
+      ]
+    },
+    {
+      "name": "Lansing Zoo, Michigan",
+      "lat": 42.7166,
+      "lng": -84.5262,
+      "photos": [
+        "439",
+        "440",
+        "441",
+        "442",
+        "443",
+        "444",
+        "445",
+        "446",
+        "447"
+      ]
+    },
+    {
+      "name": "Chicago, Illinois",
+      "lat": 41.8781,
+      "lng": -87.6298,
+      "photos": [
+        "477",
+        "478",
+        "479",
+        "480"
+      ]
+    },
+    {
+      "name": "Glenwood Springs, Colorado",
+      "lat": 39.5505,
+      "lng": -107.3248,
+      "photos": [
+        "481",
+        "482",
+        "483",
+        "484",
+        "485",
+        "486",
+        "487",
+        "488",
+        "489",
+        "490",
+        "491",
+        "492",
+        "493",
+        "494",
+        "495",
+        "496",
+        "497",
+        "498",
+        "499"
+      ]
+    },
+    {
+      "name": "Glenrothes, Fife",
+      "lat": 56.198,
+      "lng": -3.178,
+      "photos": [
+        "419",
+        "425",
+        "451",
+        "461"
+      ]
+    },
+    {
+      "name": "Peterborough, England",
+      "lat": 52.5695,
+      "lng": -0.2405,
+      "photos": [
+        "39",
+        "46"
+      ]
+    },
+    {
+      "name": "Czechia",
+      "lat": 49.82,
+      "lng": 15.47,
+      "photos": [
+        "272",
+        "274",
+        "276",
+        "277",
+        "278"
+      ]
+    },
+    {
+      "name": "Athens, Greece",
+      "lat": 37.9838,
+      "lng": 23.7275,
+      "photos": [
+        "62",
+        "89",
+        "90",
+        "371"
+      ]
+    },
+    {
+      "name": "Las Vegas, Nevada",
+      "lat": 36.1699,
+      "lng": -115.1398,
+      "photos": [
+        "97",
+        "98",
+        "159",
+        "163",
+        "174",
+        "177",
+        "180",
+        "181",
+        "213",
+        "214",
+        "221",
+        "223"
+      ]
     }
   ]
 }
