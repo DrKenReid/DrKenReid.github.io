@@ -2,16 +2,52 @@
   "_help": "Regions for map.html. Add photo stems (the number before .webp in img/photography/thumb/) to a region's photos array, or add new regions with lat/lng. Coarse locations are fine — the map clusters by region, not exact spots.",
   "regions": [
     {
-      "name": "Stirling, Scotland",
-      "lat": 56.1381,
-      "lng": -3.956,
-      "photos": ["11"]
+      "name": "University of Stirling",
+      "lat": 56.1451,
+      "lng": -3.9204,
+      "photos": ["9", "11", "12", "18", "19", "41", "58", "59", "60", "61", "137", "161", "268", "317", "370", "372", "462"]
     },
     {
-      "name": "Michigan, USA",
-      "lat": 42.7325,
-      "lng": -84.5555,
-      "photos": []
+      "name": "Loch Ard, Scotland",
+      "lat": 56.1855,
+      "lng": -4.4756,
+      "photos": ["2", "8"]
+    },
+    {
+      "name": "Birnie Loch, Fife, Scotland",
+      "lat": 56.3065,
+      "lng": -3.144,
+      "photos": ["3"]
+    },
+    {
+      "name": "Bangour Village Hospital, West Lothian",
+      "lat": 55.914,
+      "lng": -3.569,
+      "photos": ["5"]
+    },
+    {
+      "name": "Aberdeen, Scotland",
+      "lat": 57.1497,
+      "lng": -2.0943,
+      "photos": ["10"]
+    },
+    {
+      "name": "Ipswich, England",
+      "lat": 52.0567,
+      "lng": 1.1482,
+      "photos": ["4"]
+    },
+    {
+      "name": "Dublin, Ireland",
+      "lat": 53.3498,
+      "lng": -6.2603,
+      "photos": ["7"]
+    },
+    {
+      "name": "East Lansing, Michigan",
+      "lat": 42.7369,
+      "lng": -84.4839,
+      "photos": ["1"]
     },
     {
       "name": "Trento, Italy",
