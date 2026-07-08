@@ -836,18 +836,17 @@ function renderReadingProgress() {
  * mirroring the share rail on the right. Headings without ids get
  * slugs generated here.
  */
-function renderPostToc() {
-    var blogPost = document.querySelector('.blog-post');
-    if (!blogPost || document.querySelector('.kr-toc')) return;
+var POST_SECTION_SKIP = '.faq-section, .related-posts, .blog-thanks-cta, .giscus-comments, .plain-english-box, .post-pagination';
 
-    var SKIP = '.faq-section, .related-posts, .blog-thanks-cta, .giscus-comments, .plain-english-box, .post-pagination';
-    var headings = Array.prototype.filter.call(blogPost.querySelectorAll('h2'), function(h) {
-        if (h.closest(SKIP)) return false;
+function collectSectionHeadings(blogPost) {
+    return Array.prototype.filter.call(blogPost.querySelectorAll('h2'), function(h) {
+        if (h.closest(POST_SECTION_SKIP)) return false;
         var text = (h.textContent || '').trim();
         return text && text !== 'Common questions' && text !== 'Related posts';
     });
-    if (headings.length < 4) return;
+}
 
+function ensureHeadingIds(headings) {
     var used = {};
     headings.forEach(function(h) {
         if (h.id) { used[h.id] = true; return; }
@@ -864,6 +863,35 @@ function renderPostToc() {
         used[candidate] = true;
         h.id = candidate;
     });
+}
+
+/**
+ * Hover-revealed # links on section headings for sharing anchors.
+ */
+function renderHeadingAnchors() {
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost || document.querySelector('.kr-hlink')) return;
+    var headings = collectSectionHeadings(blogPost);
+    if (!headings.length) return;
+    ensureHeadingIds(headings);
+    headings.forEach(function(h) {
+        var a = document.createElement('a');
+        a.className = 'kr-hlink';
+        a.href = '#' + h.id;
+        a.textContent = '#';
+        a.setAttribute('aria-label', 'Link to this section');
+        a.title = 'Link to this section';
+        h.appendChild(a);
+    });
+}
+
+function renderPostToc() {
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost || document.querySelector('.kr-toc')) return;
+
+    var headings = collectSectionHeadings(blogPost);
+    if (headings.length < 4) return;
+    ensureHeadingIds(headings);
 
     var toc = document.createElement('nav');
     toc.className = 'kr-toc';
@@ -1012,6 +1040,7 @@ function renderBlogPostEssentials() {
 
     renderReadingProgress();
     renderPostToc();
+    renderHeadingAnchors();
     renderSeriesNav();
     initCitePreviews();
 
