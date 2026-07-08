@@ -161,18 +161,22 @@
         });
       }
 
+      // Permalink: scroll to and highlight #q-N. Runs on load and on
+      // hash changes (following a permalink while already on the page).
+      function highlightTarget() {
+        if (!/^#q-\d+$/.test(location.hash)) return;
+        var target = document.getElementById(location.hash.slice(1));
+        if (!target) return;
+        target.scrollIntoView({ block: 'center' });
+        target.classList.add('is-target');
+        setTimeout(function () { target.classList.remove('is-target'); }, 2600);
+      }
+      window.addEventListener('hashchange', highlightTarget);
+
       fetch('data/quotes-all.json').then(function (r) { return r.json(); }).then(function (data) {
         quotes = data || [];
         render('');
-        // Permalink: scroll to and highlight #q-N
-        if (/^#q-\d+$/.test(location.hash)) {
-          var target = document.getElementById(location.hash.slice(1));
-          if (target) {
-            target.scrollIntoView({ block: 'center' });
-            target.classList.add('is-target');
-            setTimeout(function () { target.classList.remove('is-target'); }, 2600);
-          }
-        }
+        highlightTarget();
       }).catch(function () { wall.innerHTML = ''; });
     }());
   </script>
