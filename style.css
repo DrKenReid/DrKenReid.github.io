@@ -4667,6 +4667,290 @@ html[data-theme="dark"] {
   border-color: rgba(252, 96, 96, 0.5);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45); }
 
+/* Anchor jumps must clear the 70px fixed header */
+[id] {
+  scroll-margin-top: 92px; }
+
+/* Focus ring in the brand family (template default was blue) */
+:root {
+  --site-focus-ring: #fc6060;
+  --site-focus-shadow: rgba(252, 96, 96, 0.28); }
+
+/* Blockquote copy affordance on touch devices: the hover-following
+   hint never appears without a pointer, so show it statically */
+@media (hover: none) {
+  blockquote .copy-hint {
+    position: static;
+    display: block;
+    opacity: 0.75;
+    visibility: visible;
+    pointer-events: none;
+    margin-top: 8px;
+    transition: none; } }
+
+/* Lightbox preloader: spinner instead of bare text */
+.mfp-preloader {
+  font-size: 0;
+  width: 44px;
+  height: 44px;
+  margin: -22px auto 0; }
+
+.mfp-preloader::after {
+  content: '';
+  display: block;
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #fc6060;
+  border-radius: 50%;
+  animation: kr-spin 0.9s linear infinite; }
+
+@keyframes kr-spin {
+  to {
+    transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .mfp-preloader::after {
+    animation-duration: 2.5s; } }
+
+/* Inline code chips in posts (pre blocks keep their own styling) */
+.blog-post p code,
+.blog-post li code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+  font-size: 0.82em;
+  padding: 1px 7px;
+  border-radius: 5px;
+  background: rgba(197, 48, 48, 0.07);
+  border: 1px solid rgba(197, 48, 48, 0.16);
+  color: #b03434; }
+
+[data-theme="dark"] .blog-post p code,
+[data-theme="dark"] .blog-post li code {
+  background: rgba(252, 96, 96, 0.1);
+  border-color: rgba(252, 96, 96, 0.2);
+  color: #ff9d9d; }
+
+/* Prose links: sweeping underline on hover */
+.blog-post p a:not(.cite-ref):not(.post-cta),
+.blog-post li a:not(.cite-ref) {
+  text-decoration: none;
+  background-image:
+    linear-gradient(rgba(197, 48, 48, 0.35), rgba(197, 48, 48, 0.35)),
+    linear-gradient(#c53030, #c53030);
+  background-size: 100% 1px, 0% 2px;
+  background-position: 0 100%, 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.25s ease; }
+
+.blog-post p a:not(.cite-ref):not(.post-cta):hover,
+.blog-post li a:not(.cite-ref):hover {
+  background-size: 100% 1px, 100% 2px; }
+
+[data-theme="dark"] .blog-post p a:not(.cite-ref):not(.post-cta),
+[data-theme="dark"] .blog-post li a:not(.cite-ref) {
+  background-image:
+    linear-gradient(rgba(252, 96, 96, 0.4), rgba(252, 96, 96, 0.4)),
+    linear-gradient(#fc6060, #fc6060); }
+
+/* External-link marker in prose */
+.blog-post p a[href^="http"]:not([href*="kenreid.co.uk"]):not(.cite-ref)::after,
+.blog-post li a[href^="http"]:not([href*="kenreid.co.uk"])::after {
+  content: '\2197';
+  font-size: 0.72em;
+  margin-left: 2px;
+  vertical-align: text-top;
+  opacity: 0.65; }
+
+/* End-of-article mark (injected by shared-components.js) */
+.kr-fin {
+  text-align: center;
+  font-size: 19px;
+  color: #fc6060;
+  opacity: 0.75;
+  margin: 36px 0 8px; }
+
+/* Consecutive plain figures pair up on wide screens */
+@media (min-width: 768px) {
+  .blog-post figure:not([style]):has(+ figure:not([style])),
+  .blog-post figure:not([style]) + figure:not([style]) {
+    display: inline-block;
+    vertical-align: top;
+    width: calc(50% - 10px);
+    margin: 10px 4px; } }
+
+/* Alternating section tint for page rhythm */
+.bg-tint {
+  background: #fafafa; }
+
+[data-theme="dark"] .bg-tint {
+  background: #1f1f1f; }
+
+/* Logo settles in once per load */
+@media (prefers-reduced-motion: no-preference) {
+  .nav-brand img {
+    animation: kr-brand-in 0.9s ease; } }
+
+@keyframes kr-brand-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px); }
+  to {
+    opacity: 1;
+    transform: none; } }
+
+/* Mobile collapsible table of contents (renderPostToc) */
+.kr-toc-mobile {
+  display: none;
+  margin: 20px 0 24px;
+  border: 1px solid rgba(127, 127, 127, 0.25);
+  border-radius: 10px;
+  overflow: hidden; }
+
+@media (max-width: 1239px) {
+  .kr-toc-mobile {
+    display: block; } }
+
+.kr-toc-mobile summary {
+  cursor: pointer;
+  padding: 11px 16px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fc6060;
+  list-style: none; }
+
+.kr-toc-mobile summary::after {
+  content: '+';
+  float: right;
+  font-size: 15px; }
+
+.kr-toc-mobile[open] summary::after {
+  content: '\2212'; }
+
+.kr-toc-mobile nav {
+  padding: 4px 16px 12px; }
+
+.kr-toc-mobile nav a {
+  display: block;
+  padding: 6px 0 6px 12px;
+  border-left: 2px solid rgba(127, 127, 127, 0.3);
+  font-family: 'Poppins', sans-serif;
+  font-size: 13.5px;
+  color: #767676;
+  text-decoration: none; }
+
+.kr-toc-mobile nav a:hover {
+  color: #c53030; }
+
+[data-theme="dark"] .kr-toc-mobile nav a {
+  color: #9a9a9a; }
+
+[data-theme="dark"] .kr-toc-mobile nav a:hover {
+  color: #fc6060; }
+
+/* Three-column footer (renderFooter) */
+.kr-footer {
+  padding-top: 52px; }
+
+.kr-footer-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.8fr 1.2fr;
+  gap: 36px;
+  padding-bottom: 30px; }
+
+@media (max-width: 767px) {
+  .kr-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 26px; } }
+
+.kr-footer-brand {
+  font-family: 'Poppins', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px; }
+
+.kr-footer-brand span {
+  color: #fc6060; }
+
+.kr-footer-tagline {
+  font-size: 13.5px;
+  color: #9a9a9a;
+  max-width: 300px;
+  margin-bottom: 14px; }
+
+.kr-footer-heading {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fc6060;
+  margin-bottom: 12px; }
+
+.kr-footer-nav {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  columns: 2;
+  column-gap: 24px; }
+
+.kr-footer-nav a {
+  display: block;
+  padding: 4px 0;
+  font-size: 13.5px;
+  color: #b8b8b8;
+  text-decoration: none;
+  transition: color 0.2s ease; }
+
+.kr-footer-nav a:hover {
+  color: #fc6060; }
+
+.kr-footer-posts {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+
+.kr-footer-posts li {
+  padding: 5px 0; }
+
+.kr-footer-posts a {
+  display: block;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: #d6d6d6;
+  text-decoration: none; }
+
+.kr-footer-posts a:hover {
+  color: #fc6060; }
+
+.kr-footer-posts span {
+  font-size: 11px;
+  color: #7a7a7a; }
+
+.kr-footer-hint {
+  margin-top: 14px;
+  font-size: 12px;
+  color: #8a8a8a; }
+
+.kr-footer-hint .kr-palette-kbd {
+  display: inline-block;
+  color: #b8b8b8; }
+
+.kr-footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 16px 0;
+  text-align: center; }
+
+.kr-footer-bottom p {
+  margin: 0;
+  font-size: 12.5px;
+  color: #8a8a8a; }
+
+.kr-footer-bottom a {
+  color: #b8b8b8; }
+
 /* Heading anchor links on posts (injected by shared-components.js) */
 .kr-hlink {
   margin-left: 10px;

@@ -734,6 +734,15 @@ function renderPrevNextNav() {
         } else {
             blogPost.appendChild(nav);
         }
+
+        // End-of-article mark just above the navigation
+        if (!blogPost.querySelector('.kr-fin')) {
+            var fin = document.createElement('div');
+            fin.className = 'kr-fin';
+            fin.setAttribute('aria-hidden', 'true');
+            fin.textContent = '⁂';
+            nav.parentNode.insertBefore(fin, nav);
+        }
     }).catch(function() {});
 }
 
@@ -898,14 +907,33 @@ function renderPostToc() {
     if (headings.length < 4) return;
     ensureHeadingIds(headings);
 
+    var linksHtml = headings.map(function(h) {
+        return '<a href="#' + h.id + '">' + (h.textContent || '').trim() + '</a>';
+    }).join('');
+
     var toc = document.createElement('nav');
     toc.className = 'kr-toc';
     toc.setAttribute('aria-label', 'Table of contents');
-    toc.innerHTML = '<div class="kr-toc-label">Contents</div>' +
-        headings.map(function(h) {
-            return '<a href="#' + h.id + '">' + (h.textContent || '').trim() + '</a>';
-        }).join('');
+    toc.innerHTML = '<div class="kr-toc-label">Contents</div>' + linksHtml;
     document.body.appendChild(toc);
+
+    // Narrow screens get a collapsible Contents block under the meta
+    // line instead of the side rail.
+    if (!document.querySelector('.kr-toc-mobile')) {
+        var mobileToc = document.createElement('details');
+        mobileToc.className = 'kr-toc-mobile';
+        mobileToc.innerHTML = '<summary>Contents</summary><nav aria-label="Table of contents">' + linksHtml + '</nav>';
+        var anchorEl = blogPost.querySelector('.kr-series') ||
+            blogPost.querySelector('.post-disclaimer') ||
+            blogPost.querySelector('.blog-meta');
+        if (anchorEl && anchorEl.parentNode) {
+            anchorEl.parentNode.insertBefore(mobileToc, anchorEl.nextSibling);
+        }
+        mobileToc.addEventListener('click', function(e) {
+            var a = e.target.closest && e.target.closest('a');
+            if (a) mobileToc.removeAttribute('open');
+        });
+    }
 
     // Scroll-spy: highlight the section currently at the top of the viewport.
     var links = toc.querySelectorAll('a');
@@ -1405,22 +1433,56 @@ function renderFooter(targetId) {
     if (!el) return;
 
     var year = new Date().getFullYear();
+    var onBlogPostPage = !!document.querySelector('.blog-post');
+    var prefix = onBlogPostPage ? '../' : './';
 
-    el.innerHTML = '<footer class="footer-area"><div class="container">' +
-        '<div class="row"><div class="col-12">' +
-        '<div class="footer-content d-flex align-items-center justify-content-between">' +
-        '<div class="copywrite-text"><p>' +
-        'Copyright &copy; ' + year + ' Ken Reid' +
-        '</p></div>' +
-        '<div class="social-info">' +
+    var NAV_LINKS = [
+        ['About', 'about.html'], ['Data Science', 'data_science.html'],
+        ['Photography', 'gallery.html'], ['Photo Map', 'map.html'],
+        ['Music', 'music.html'], ['Literature', 'literature.html'],
+        ['Quote Wall', 'quotes.html'], ['Blog', 'blog.html'], ['Contact', 'contact.html']
+    ];
+
+    var socials =
         '<a href="https://www.linkedin.com/in/kennethneilreid" aria-label="LinkedIn"><i class="ti-linkedin" aria-hidden="true"></i></a>' +
         '<a href="https://github.com/DrKenReid" aria-label="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>' +
         '<a href="https://www.instagram.com/drkenreid/" aria-label="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>' +
         '<a href="https://bsky.app/profile/kenreid.co.uk" aria-label="Bluesky">' + BLUESKY_SVG + '</a>' +
         '<a href="https://www.goodreads.com/user/show/42371562-ken-reid" aria-label="Goodreads"><i class="fa fa-book" aria-hidden="true"></i></a>' +
         '<a href="https://www.last.fm/user/GoheX" aria-label="Last.fm"><i class="fa fa-lastfm" aria-hidden="true"></i></a>' +
-        '<a href="/feed.xml" aria-label="RSS Feed"><i class="ti-rss" aria-hidden="true"></i></a>' +
-        '</div></div></div></div></div></footer>';
+        '<a href="/feed.xml" aria-label="RSS Feed"><i class="ti-rss" aria-hidden="true"></i></a>';
+
+    el.innerHTML = '<footer class="footer-area kr-footer"><div class="container">' +
+        '<div class="kr-footer-grid">' +
+        '<div class="kr-footer-col">' +
+        '<div class="kr-footer-brand">Ken<span>.</span></div>' +
+        '<p class="kr-footer-tagline">Data scientist, photographer, guitarist, and avid reader. Scottish-built, Michigan-based.</p>' +
+        '<div class="social-info">' + socials + '</div>' +
+        '</div>' +
+        '<div class="kr-footer-col"><div class="kr-footer-heading">Explore</div><ul class="kr-footer-nav">' +
+        NAV_LINKS.map(function(l) {
+            return '<li><a href="' + prefix + l[1] + '">' + l[0] + '</a></li>';
+        }).join('') + '</ul></div>' +
+        '<div class="kr-footer-col"><div class="kr-footer-heading">Latest writing</div>' +
+        '<ul class="kr-footer-posts" id="kr-footer-posts"><li>&hellip;</li></ul>' +
+        '<p class="kr-footer-hint">Press <span class="kr-palette-kbd">Ctrl K</span> to search everything.</p>' +
+        '</div>' +
+        '</div>' +
+        '<div class="kr-footer-bottom"><p>Copyright &copy; ' + year + ' Ken Reid &middot; <a href="' + prefix + 'index.html">kenreid.co.uk</a> &middot; <a href="/feed.xml">RSS</a></p></div>' +
+        '</div></footer>';
+
+    fetch(prefix + 'data/posts.json').then(function(r) { return r.json(); }).then(function(posts) {
+        var ul = document.getElementById('kr-footer-posts');
+        if (!ul || !posts || !posts.length) return;
+        ul.innerHTML = posts.slice(0, 3).map(function(p) {
+            var href = onBlogPostPage ? (p.url || '').replace(/^blog\//, '') : prefix + (p.url || '');
+            return '<li><a href="' + href + '">' + p.title + '</a>' +
+                '<span>' + formatPostDate(p.date) + '</span></li>';
+        }).join('');
+    }).catch(function() {
+        var ul = document.getElementById('kr-footer-posts');
+        if (ul) ul.innerHTML = '';
+    });
 }
 
 function initDropCap() {
