@@ -163,7 +163,10 @@
         document.body.classList.add('kr-palette-open');
         input.value = '';
         render('');
-        setTimeout(function () { input.focus(); }, 20);
+        // Focus synchronously: mobile browsers only raise the soft
+        // keyboard when focus happens inside the user gesture.
+        input.focus();
+        setTimeout(function () { input.focus(); }, 30);
     }
 
     function close() {
@@ -198,6 +201,7 @@
             var li = document.createElement('li');
             li.innerHTML = '<a href="#" class="kr-palette-hint" role="button" aria-label="Search the site (Ctrl+K)">' +
                 '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>' +
+                '<span class="kr-palette-word">Search</span>' +
                 '<span class="kr-palette-kbd">Ctrl K</span></a>';
             li.querySelector('a').addEventListener('click', function (e) {
                 e.preventDefault();
