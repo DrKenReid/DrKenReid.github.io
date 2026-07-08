@@ -8,6 +8,7 @@
 (function () {
     var books = [];
     var activeRating = 0;   // 0 = all
+    var searchQuery = '';
 
     function coverUrl(isbn) {
         // default=false makes OpenLibrary 404 on missing covers instead of
@@ -27,8 +28,10 @@
     function renderWall() {
         var grid = document.getElementById('book-wall-grid');
         if (!grid) return;
+        var q = searchQuery.trim().toLowerCase();
         var subset = books.filter(function (b) {
-            return activeRating === 0 || b.r === activeRating;
+            if (activeRating !== 0 && b.r !== activeRating) return false;
+            return !q || (b.t + ' ' + b.a).toLowerCase().indexOf(q) !== -1;
         });
         grid.innerHTML = subset.map(function (b) {
             return '<a class="book-wall-item" href="' + goodreadsUrl(b) + '" target="_blank" rel="noopener noreferrer"' +
@@ -68,6 +71,17 @@
     document.addEventListener('DOMContentLoaded', function () {
         var grid = document.getElementById('book-wall-grid');
         if (!grid) return;
+        var search = document.getElementById('book-wall-search');
+        var debounce = null;
+        if (search) {
+            search.addEventListener('input', function () {
+                clearTimeout(debounce);
+                debounce = setTimeout(function () {
+                    searchQuery = search.value;
+                    renderWall();
+                }, 120);
+            });
+        }
         // Skeleton covers while books.json + cover images arrive
         grid.innerHTML = new Array(18).fill('<span class="book-wall-item kr-skeleton"></span>').join('');
         fetch('data/books.json').then(function (r) { return r.json(); }).then(function (data) {

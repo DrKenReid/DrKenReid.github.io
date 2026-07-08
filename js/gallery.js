@@ -243,7 +243,7 @@ function loadMoreImages(silent) {
             var caption = document.createElement('div');
             caption.className = 'kr-tile-caption';
             caption.innerHTML = (tagLabels ? '<span class="kr-tile-tags">' + tagLabels + '</span>' : '') +
-                (place ? '<span class="kr-tile-place">' + place + '</span>' : '');
+                (place ? '<a class="kr-tile-place" href="map.html?region=' + encodeURIComponent(place) + '" title="See this place on the photo map">' + place + '</a>' : '');
             hover.appendChild(caption);
         }
 
