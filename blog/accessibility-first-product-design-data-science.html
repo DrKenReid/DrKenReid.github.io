@@ -278,7 +278,7 @@
         </div>
 
         <figure>
-          <img src="../img/photography/thumb/19.webp" alt="Clean visual composition used as a cover-style motif for accessibility-first communication" loading="lazy" style="width:100%; border-radius:8px;">
+          <img src="../img/photography/thumb/19.webp" alt="Clean visual composition used as a cover-style motif for accessibility-first communication" loading="lazy" style="width:100%; border-radius:8px;" width="400" height="266">
           <p class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></p>
         </figure>
 
@@ -304,7 +304,7 @@
         <p>This is the same argument that the visualisation research community has been making about reaching broader audiences: the assumption that everyone consumes charts as high-resolution colour images, with full attention, and with the same visualisation literacy as the author, is false, and it gatekeeps insight behind a purely visual medium.<sup><a href="#ref-2" class="cite-ref">[2]</a></sup> Designing for access is not a <i>charitable</i> deed; it is acknowledging the basic requirements for usable visualisations.</p>
 
         <figure>
-          <img src="../img/photography/thumb/388.webp" alt="Photography image used as an interlude before the colour and redundant coding section" loading="lazy" style="width:100%; border-radius:8px;">
+          <img src="../img/photography/thumb/388.webp" alt="Photography image used as an interlude before the colour and redundant coding section" loading="lazy" style="width:100%; border-radius:8px;" width="400" height="265">
           <p class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></p>
         </figure>
 
@@ -323,7 +323,7 @@
         <h3>The problem: colour-only encoding</h3>
 
         <figure>
-          <img src="img/accessibility-scatter-bad.png" alt="Scatter plot with three groups encoded by red, green, and blue circles only. Under red-green colour vision deficiency, Group A and Group B appear as the same colour and become indistinguishable." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <img src="img/accessibility-scatter-bad.png" alt="Scatter plot with three groups encoded by red, green, and blue circles only. Under red-green colour vision deficiency, Group A and Group B appear as the same colour and become indistinguishable." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="975" height="675">
           <p class="figure-note">Colour-only encoding. Group&nbsp;A (red) and Group&nbsp;B (green) look identical under deuteranopia, the most common form of CVD. The legend also relies on colour, so it offers no fallback.</p>
         </figure>
 
@@ -371,7 +371,7 @@ plt.close(fig)
         <h3>The fix: redundant coding with Okabe&ndash;Ito</h3>
 
         <figure>
-          <img src="img/accessibility-scatter-good.png" alt="The same scatter plot data using the Okabe-Ito CVD-safe palette with distinct marker shapes: orange circles for Group A, blue squares for Group B, and teal triangles for Group C. Groups are distinguishable by colour or shape independently." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <img src="img/accessibility-scatter-good.png" alt="The same scatter plot data using the Okabe-Ito CVD-safe palette with distinct marker shapes: orange circles for Group A, blue squares for Group B, and teal triangles for Group C. Groups are distinguishable by colour or shape independently." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="975" height="675">
           <p class="figure-note">Redundant coding with the Okabe&ndash;Ito palette and distinct markers. Each group is identified by colour <em>and</em> shape, so the chart remains legible when either channel fails.</p>
         </figure>
 
@@ -440,7 +440,7 @@ plt.close(fig)
         <h3>The problem: colour-only line encoding</h3>
 
         <figure>
-          <img src="img/accessibility-line-bad.png" alt="Line chart of monthly product sales with three lines distinguished only by colour: blue, orange, and green. When the lines cross in mid-year, there is no shape or style difference to help re-identify them." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <img src="img/accessibility-line-bad.png" alt="Line chart of monthly product sales with three lines distinguished only by colour: blue, orange, and green. When the lines cross in mid-year, there is no shape or style difference to help re-identify them." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="975" height="675">
           <p class="figure-note">Colour-only line encoding. When A and B cross in summer, a reader with CVD has no fallback because both lines are the same hue and the legend cannot help.</p>
         </figure>
 
@@ -487,7 +487,7 @@ plt.close(fig)
         <h3>The fix: colour + line style + markers</h3>
 
         <figure>
-          <img src="img/accessibility-line-good.png" alt="The same time series with Okabe-Ito colours, distinct line styles (solid, dashed, dash-dot), and markers at every third point. Product A rises on a solid orange line with circles; Product B is flat on a dashed blue line with squares; Product C falls on a dash-dot teal line with triangles." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <img src="img/accessibility-line-good.png" alt="The same time series with Okabe-Ito colours, distinct line styles (solid, dashed, dash-dot), and markers at every third point. Product A rises on a solid orange line with circles; Product B is flat on a dashed blue line with squares; Product C falls on a dash-dot teal line with triangles." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="975" height="675">
           <p class="figure-note">Three independent channels: colour, line style, and marker shape. Any one of them can be removed and the chart still works. The title states the pattern, so a reader who only skims the title still gets the main finding.</p>
         </figure>
 
@@ -559,7 +559,7 @@ plt.close(fig)
         <h3>The problem: <jargon key="chart junk">chart junk</jargon></h3>
 
         <figure>
-          <img src="img/accessibility-bar-bad.png" alt="Bar chart of quarterly revenue with four different bar colours, a redundant legend repeating the x-axis labels, a grey background, fake drop shadows, both horizontal and vertical gridlines, and a generic title." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <img src="img/accessibility-bar-bad.png" alt="Bar chart of quarterly revenue with four different bar colours, a redundant legend repeating the x-axis labels, a grey background, fake drop shadows, both horizontal and vertical gridlines, and a generic title." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="975" height="675">
           <p class="figure-note">Every bar is a different colour, but category is already encoded on the x-axis, so the colours add nothing. The legend repeats the axis labels. The grey background, drop shadows, and crossed gridlines all cost the reader processing time without encoding any data.</p>
         </figure>
 
@@ -604,7 +604,7 @@ plt.close(fig)
         <h3>The fix: high <jargon key="data-ink ratio">data-ink ratio</jargon></h3>
 
         <figure>
-          <img src="img/accessibility-bar-good.png" alt="The same quarterly revenue data as a clean bar chart. All bars are a single shade of blue, axis labels are clear, gridlines are subtle and horizontal only, and the title reads: Q4 revenue reached its highest point of 2024." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <img src="img/accessibility-bar-good.png" alt="The same quarterly revenue data as a clean bar chart. All bars are a single shade of blue, axis labels are clear, gridlines are subtle and horizontal only, and the title reads: Q4 revenue reached its highest point of 2024." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="975" height="675">
           <p class="figure-note">One colour (the x-axis already encodes category), no legend, subtle horizontal gridlines only, and a title that states the takeaway. Every remaining element earns its pixels.</p>
         </figure>
 
@@ -653,7 +653,7 @@ plt.close(fig)
         <h3>The problem: low contrast</h3>
 
         <figure>
-          <img src="img/accessibility-contrast-bad.png" alt="Line chart of monthly model error rates for three experiment variants. Labels, axis text, and legend are all in light grey, and all three series are very similar pale greys, making the chart hard to read." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <img src="img/accessibility-contrast-bad.png" alt="Line chart of monthly model error rates for three experiment variants. Labels, axis text, and legend are all in light grey, and all three series are very similar pale greys, making the chart hard to read." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="1037" height="651">
           <p class="figure-note">Low-contrast text and line colours create ambiguity about which series is improving. This is still plausible in real dashboards, but already hard to decode quickly in presentation conditions.</p>
         </figure>
 
@@ -696,7 +696,7 @@ plt.close(fig)
         <h3>The fix: WCAG-compliant contrast</h3>
 
         <figure>
-          <img src="img/accessibility-contrast-good.png" alt="The same monthly error-rate line chart with near-black text and high-separation series colours. Labels and legend are clear and each trend is easy to distinguish at a glance." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;">
+          <img src="img/accessibility-contrast-good.png" alt="The same monthly error-rate line chart with near-black text and high-separation series colours. Labels and legend are clear and each trend is easy to distinguish at a glance." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="1074" height="690">
           <p class="figure-note">Near-black text and higher-separation line colours make all three trends immediately legible. The key takeaway is visible without zooming.</p>
         </figure>
 
@@ -892,7 +892,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The problem: too many bubbles, jet colours, no labels</h4>
             <figure>
-              <img src="img/accessibility-bubble-bad.png" alt="Bubble chart of 60 portfolio holdings using rainbow jet colours. Many bubbles overlap without visible boundaries. There are no labels on any point and the title reads Portfolio holdings with no finding." loading="lazy" style="width:100%; border-radius:8px;">
+              <img src="img/accessibility-bubble-bad.png" alt="Bubble chart of 60 portfolio holdings using rainbow jet colours. Many bubbles overlap without visible boundaries. There are no labels on any point and the title reads Portfolio holdings with no finding." loading="lazy" style="width:100%; border-radius:8px;" width="918" height="661">
               <p class="figure-note">60 bubbles, jet colours encoding nothing, no strokes on overlaps, no direct labels. The title states the chart type, not a finding.</p>
             </figure>
 <details class="code-example"><summary>Python example</summary>
@@ -928,7 +928,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The fix: capped count, strokes, direct labels</h4>
             <figure>
-              <img src="img/accessibility-bubble-good.png" alt="Bubble chart of portfolio risk with fifteen semi-transparent sky-blue circles outlined in dark grey. Holdings 4, 9, and 15 are the three largest and have permanent text labels with leader lines. Title: Three holdings dominate portfolio risk." loading="lazy" style="width:100%; border-radius:8px;">
+              <img src="img/accessibility-bubble-good.png" alt="Bubble chart of portfolio risk with fifteen semi-transparent sky-blue circles outlined in dark grey. Holdings 4, 9, and 15 are the three largest and have permanent text labels with leader lines. Title: Three holdings dominate portfolio risk." loading="lazy" style="width:100%; border-radius:8px;" width="1067" height="707">
               <p class="figure-note">Fifteen bubbles, semi-transparent fill with a high-contrast stroke so every boundary is visible through overlaps, and direct labels on the three largest holdings.</p>
             </figure>
 
@@ -999,7 +999,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The problem: translucent fills, CVD-unsafe colours</h4>
             <figure>
-              <img src="img/accessibility-venn-bad.png" alt="Three-set Venn diagram with translucent red, green, and blue fills. Overlap regions create orange, purple, and teal, which are unreadable by CVD readers and fail WCAG contrast for text laid on them. Counts are rendered directly on the coloured fills without backgrounds." loading="lazy" style="width:100%; border-radius:8px;">
+              <img src="img/accessibility-venn-bad.png" alt="Three-set Venn diagram with translucent red, green, and blue fills. Overlap regions create orange, purple, and teal, which are unreadable by CVD readers and fail WCAG contrast for text laid on them. Counts are rendered directly on the coloured fills without backgrounds." loading="lazy" style="width:100%; border-radius:8px;" width="663" height="622">
               <p class="figure-note">Default matplotlib_venn fills: semitransparent red, green, blue. Overlaps create new hues that fail contrast checks and are unreadable by CVD readers. Numbers lack background boxes.</p>
             </figure>
 <details class="code-example"><summary>Python example</summary>
@@ -1026,7 +1026,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The fix: stroke-only encoding with labelled regions</h4>
             <figure>
-              <img src="img/accessibility-venn-good.png" alt="Three-set Venn diagram showing customer segment overlap. The Email subscribers circle has a solid black outline, Mobile app users has a dashed outline, and Loyalty members has a dotted outline. Each region is labelled with a count in thousands, and every number sits in a white rounded rectangle." loading="lazy" style="width:100%; border-radius:8px;">
+              <img src="img/accessibility-venn-good.png" alt="Three-set Venn diagram showing customer segment overlap. The Email subscribers circle has a solid black outline, Mobile app users has a dashed outline, and Loyalty members has a dotted outline. Each region is labelled with a count in thousands, and every number sits in a white rounded rectangle." loading="lazy" style="width:100%; border-radius:8px;" width="713" height="707">
               <p class="figure-note">No fill colours. Set membership is encoded entirely by stroke style, and each numeric label sits on a white background so the strokes behind it never compromise legibility.</p>
             </figure>
 
@@ -1093,7 +1093,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The problem: box plot hides distribution shape</h4>
             <figure>
-              <img src="img/accessibility-distribution-bad.png" alt="Box plot of processing time for Teams A, B, and C. All three teams have similar-looking boxes and whiskers. Team B is bimodal in the underlying data but this is completely invisible from the box plot." loading="lazy" style="width:100%; border-radius:8px;">
+              <img src="img/accessibility-distribution-bad.png" alt="Box plot of processing time for Teams A, B, and C. All three teams have similar-looking boxes and whiskers. Team B is bimodal in the underlying data but this is completely invisible from the box plot." loading="lazy" style="width:100%; border-radius:8px;" width="1067" height="707">
               <p class="figure-note">Box plot compresses distribution to five statistics. Team B is bimodal but its median and IQR are nearly identical to Team A&rsquo;s. A non-statistician (or a distracted statistician) misses it entirely.</p>
             </figure>
 <details class="code-example"><summary>Python example</summary>
@@ -1138,7 +1138,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The fix: violin plot reveals distribution shape</h4>
             <figure>
-              <img src="img/accessibility-distribution-good.png" alt="Two side-by-side panels showing the same processing-time data for Teams A, B, and C. The left panel is a box plot in which all three teams have similar boxes and whiskers. The right panel is a violin plot of the same data: Team A is a single peak around 15 days, Team B has two clear peaks at roughly 9 and 22 days, and Team C is right-skewed with a long upper tail." loading="lazy" style="width:100%; border-radius:8px;">
+              <img src="img/accessibility-distribution-good.png" alt="Two side-by-side panels showing the same processing-time data for Teams A, B, and C. The left panel is a box plot in which all three teams have similar boxes and whiskers. The right panel is a violin plot of the same data: Team A is a single peak around 15 days, Team B has two clear peaks at roughly 9 and 22 days, and Team C is right-skewed with a long upper tail." loading="lazy" style="width:100%; border-radius:8px;" width="1067" height="707">
               <p class="figure-note">Violin plot: kernel density estimate encoded as shape directly. Team B&rsquo;s two lobes are immediately visible without knowing what an IQR is.</p>
             </figure>
 
@@ -1209,7 +1209,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The problem: five algorithms, all filled, colour-only</h4>
             <figure>
-              <img class="radar-plot-img" src="img/accessibility-radar-bad.png" alt="Radar chart with five algorithms across eight axes. All five polygons are filled with different tab10 colours. The fills overlap completely, making individual shapes unreadable. Colour is the only distinguishing channel." loading="lazy">
+              <img class="radar-plot-img" src="img/accessibility-radar-bad.png" alt="Radar chart with five algorithms across eight axes. All five polygons are filled with different tab10 colours. The fills overlap completely, making individual shapes unreadable. Colour is the only distinguishing channel." loading="lazy" width="929" height="787">
               <p class="figure-note">Five algorithms, eight metrics, all filled and overlapping. Colour is the only distinguishing channel. Greyscale and CVD readers see an indistinguishable tangle.</p>
             </figure>
 <details class="code-example"><summary>Python example</summary>
@@ -1254,7 +1254,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The fix: two algorithms, line style + colour, one unfilled</h4>
             <figure>
-              <img class="radar-plot-img" src="img/accessibility-radar-good.png" alt="Radar chart comparing two optimisation algorithms across five metrics: convergence speed, solution quality, robustness, memory use, and wall time. Algorithm A is shown as a solid blue line with circular markers and a light blue fill at ten percent opacity. Algorithm B is shown as a thick dashed orange line with square markers and no fill. Title states: Algorithm A wins on robustness; B wins on speed and memory." loading="lazy">
+              <img class="radar-plot-img" src="img/accessibility-radar-good.png" alt="Radar chart comparing two optimisation algorithms across five metrics: convergence speed, solution quality, robustness, memory use, and wall time. Algorithm A is shown as a solid blue line with circular markers and a light blue fill at ten percent opacity. Algorithm B is shown as a thick dashed orange line with square markers and no fill. Title states: Algorithm A wins on robustness; B wins on speed and memory." loading="lazy" width="909" height="827">
               <p class="figure-note">Two algorithms, five metrics, two independent encodings (colour and line style). Algorithm B&rsquo;s polygon is unfilled so it never obscures Algorithm A&rsquo;s shape.</p>
             </figure>
 
@@ -1325,7 +1325,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The problem: colour-only leaves, no branch labels</h4>
             <figure>
-              <img class="tree-plot-img" src="img/accessibility-tree-bad.png" alt="Decision tree where leaf nodes are coloured circles: green for low risk, yellow for medium, red for high. The circles contain no text. Branch edges have no Yes or No labels. Decision node text is light grey on white." loading="lazy">
+              <img class="tree-plot-img" src="img/accessibility-tree-bad.png" alt="Decision tree where leaf nodes are coloured circles: green for low risk, yellow for medium, red for high. The circles contain no text. Branch edges have no Yes or No labels. Decision node text is light grey on white." loading="lazy" width="1006" height="620">
               <p class="figure-note">Red-green colour is the only signal for leaf outcomes. CVD readers see green and red as the same hue. No branch labels force the reader to track direction from memory.</p>
             </figure>
 <details class="code-example"><summary>Python example</summary>
@@ -1381,7 +1381,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The fix: text in every node, branch labels, high contrast</h4>
             <figure>
-              <img class="tree-plot-img" src="img/accessibility-tree-good.png" alt="Decision tree for risk classification. The root asks Credit score greater than or equal to 700. Yes branches to Income greater than or equal to fifty thousand pounds, which yields Low risk on yes and Medium risk on no. No branches to Debt ratio less than 0.4, which yields Medium risk on yes and High risk on no." loading="lazy">
+              <img class="tree-plot-img" src="img/accessibility-tree-good.png" alt="Decision tree for risk classification. The root asks Credit score greater than or equal to 700. Yes branches to Income greater than or equal to fifty thousand pounds, which yields Low risk on yes and Medium risk on no. No branches to Debt ratio less than 0.4, which yields Medium risk on yes and High risk on no." loading="lazy" width="1277" height="737">
               <p class="figure-note">High-contrast nodes, edge labels on opaque backgrounds, and leaf node meaning carried by text, not by colour alone.</p>
             </figure>
 
@@ -1425,7 +1425,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The problem: jet colourmap, no contours, no annotation</h4>
             <figure>
-              <img class="fitness-plot-img" src="img/accessibility-fitness-bad.png" alt="3D surface plot of a fitness landscape using the jet rainbow colourmap. No contour lines are present. The global optimum is not annotated. The title reads Fitness landscape with no takeaway." loading="lazy">
+              <img class="fitness-plot-img" src="img/accessibility-fitness-bad.png" alt="3D surface plot of a fitness landscape using the jet rainbow colourmap. No contour lines are present. The global optimum is not annotated. The title reads Fitness landscape with no takeaway." loading="lazy" width="1320" height="780">
               <p class="figure-note">Jet colourmap: not perceptually uniform, not CVD-safe. No contours, so elevation is colour-only. No annotation, so the global optimum must be inferred visually.</p>
             </figure>
 <details class="code-example"><summary>Python example</summary>
@@ -1466,7 +1466,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The fix: cividis, contour lines, annotated optimum</h4>
             <figure>
-              <img class="fitness-plot-img" src="img/accessibility-fitness-good.png" alt="Three-dimensional surface plot of a multimodal fitness landscape using the cividis colourmap (dark blue to bright yellow). Black contour lines are overlaid on the surface and projected onto the floor of the axes. The global optimum is marked with an orange dot and an annotation reading: Global optimum at coordinates (1.39, 1.01) with fitness 3.20." loading="lazy">
+              <img class="fitness-plot-img" src="img/accessibility-fitness-good.png" alt="Three-dimensional surface plot of a multimodal fitness landscape using the cividis colourmap (dark blue to bright yellow). Black contour lines are overlaid on the surface and projected onto the floor of the axes. The global optimum is marked with an orange dot and an annotation reading: Global optimum at coordinates (1.39, 1.01) with fitness 3.20." loading="lazy" width="1320" height="780">
               <p class="figure-note">Cividis colourmap, black isoclines on the surface and floor, and a text annotation stating the global optimum coordinates.</p>
             </figure>
 
@@ -1555,7 +1555,7 @@ plt.close(fig)
         <p>These aren't rare; they are the things experienced reviewers complain about in every other paper they read, and the things audiences notice in every other talk. They persist because we treat the figure as an artefact of the analysis instead of as a piece of communication that has its own production standards.</p>
 
         <figure>
-          <img src="../img/photography/thumb/149.webp" alt="Audience-view perspective of presentation materials, reinforcing readability and slide legibility in real viewing conditions" loading="lazy" style="width:100%; border-radius:8px;">
+          <img src="../img/photography/thumb/149.webp" alt="Audience-view perspective of presentation materials, reinforcing readability and slide legibility in real viewing conditions" loading="lazy" style="width:100%; border-radius:8px;" width="400" height="266">
           <p class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></p>
         </figure>
 
@@ -1576,7 +1576,7 @@ plt.close(fig)
         </ul>
 
         <figure>
-          <img src="../img/photography/thumb/302.webp" alt="Photograph reinforcing practical, real-world viewing contexts for accessibility checks" loading="lazy" style="width:100%; border-radius:8px;">
+          <img src="../img/photography/thumb/302.webp" alt="Photograph reinforcing practical, real-world viewing contexts for accessibility checks" loading="lazy" style="width:100%; border-radius:8px;" width="400" height="266">
           <p class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></p>
         </figure>
 
@@ -1668,7 +1668,7 @@ plt.close(fig)
           <div class="row related-posts-grid">
             <div class="col-12 col-md-6 col-lg-4 mb-30">
               <a href="no-idea-no-problem-data-science-portfolio.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/19.webp" alt="No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio" loading="lazy"></div>
+                <div class="blog-card-img"><img src="../img/photography/thumb/19.webp" alt="No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio" loading="lazy" width="400" height="266"></div>
                 <div class="blog-card-body">
                   <div class="blog-card-date">20 April 2026 · 11 min read</div>
                   <h4 class="blog-card-title">No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio</h4>
@@ -1679,7 +1679,7 @@ plt.close(fig)
             </div>
             <div class="col-12 col-md-6 col-lg-4 mb-30">
               <a href="optimizing-your-schedule-ii.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/488.webp" alt="Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)" loading="lazy"></div>
+                <div class="blog-card-img"><img src="../img/photography/thumb/488.webp" alt="Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)" loading="lazy" width="400" height="266"></div>
                 <div class="blog-card-body">
                   <div class="blog-card-date">30 June 2026 · 16 min read</div>
                   <h4 class="blog-card-title">Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)</h4>
@@ -1690,7 +1690,7 @@ plt.close(fig)
             </div>
             <div class="col-12 col-md-6 col-lg-4 mb-30">
               <a href="optimizing-your-schedule.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/493.webp" alt="Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)" loading="lazy"></div>
+                <div class="blog-card-img"><img src="../img/photography/thumb/493.webp" alt="Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)" loading="lazy" width="400" height="266"></div>
                 <div class="blog-card-body">
                   <div class="blog-card-date">15 June 2026 · 19 min read</div>
                   <h4 class="blog-card-title">Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)</h4>
