@@ -1881,6 +1881,14 @@ function initLightboxZoom() {
     }, { passive: true });
 }
 
+// Offline reading: cache visited pages + core assets (see sw.js)
+if ('serviceWorker' in navigator &&
+    (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+    window.addEventListener('load', function() {
+        try { navigator.serviceWorker.register('/sw.js'); } catch (e) {}
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     initSectionReveals();
     initLightboxZoom();
