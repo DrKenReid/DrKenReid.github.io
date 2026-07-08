@@ -173,11 +173,50 @@
         }
       });
 
+      var regionsByName = {};
+
+      // Popup thumbs open the site lightbox as a gallery of the whole
+      // region (falls back to the plain link when jQuery/magnific are
+      // unavailable).
+      function openRegionLightbox(regionName, startStem) {
+        var region = regionsByName[regionName];
+        if (!region || typeof jQuery === 'undefined' || !jQuery.fn.magnificPopup) return false;
+        var items = region.photos.map(function (stem) {
+          return {
+            src: RELEASE + stem + '.png',
+            title: region.name + ' <span class="kr-lightbox-num">#' + stem + '</span>'
+          };
+        });
+        var index = Math.max(0, region.photos.indexOf(startStem));
+        jQuery.magnificPopup.open({
+          items: items,
+          type: 'image',
+          mainClass: 'kr-lightbox mfp-fade',
+          closeOnContentClick: false,
+          image: {
+            titleSrc: function (item) { return item.data.title; }
+          },
+          gallery: { enabled: true, preload: [0, 2], navigateByImgClick: true, tPrev: 'Previous', tNext: 'Next' }
+        }, index);
+        return true;
+      }
+
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('.kr-map-grid a, a.kr-map-more');
+        if (!a) return;
+        var popup = a.closest('.kr-map-popup');
+        if (!popup) return;
+        if (openRegionLightbox(popup.getAttribute('data-region'), a.getAttribute('data-stem'))) {
+          e.preventDefault();
+        }
+      });
+
       fetch('data/photo-locations.json').then(function (r) { return r.json(); }).then(function (data) {
         var regions = (data.regions || []).filter(function (r) { return r.photos && r.photos.length; });
         if (!regions.length) return;
         var bounds = [];
         regions.forEach(function (region) {
+          regionsByName[region.name] = region;
           bounds.push([region.lat, region.lng]);
           var size = Math.max(34, Math.min(52, 30 + region.photos.length));
           var marker = L.marker([region.lat, region.lng], {
@@ -191,15 +230,18 @@
           }).addTo(map);
 
           var shown = region.photos.slice(0, 9);
-          var html = '<div class="kr-map-popup"><div class="kr-map-region">' + region.name +
+          var html = '<div class="kr-map-popup" data-region="' + region.name + '">' +
+              '<div class="kr-map-region">' + region.name +
               ' · ' + region.photos.length + ' photo' + (region.photos.length === 1 ? '' : 's') + '</div>' +
               '<div class="kr-map-grid">' +
               shown.map(function (stem) {
-                  return '<a href="' + RELEASE + stem + '.png" target="_blank" rel="noopener noreferrer">' +
+                  return '<a href="' + RELEASE + stem + '.png" data-stem="' + stem + '" target="_blank" rel="noopener noreferrer">' +
                       '<img src="img/photography/thumb/' + stem + '.webp" alt="Photo ' + stem + ' taken in ' + region.name + '" loading="lazy"></a>';
               }).join('') +
               '</div>' +
-              (region.photos.length > 9 ? '<div style="margin-top:6px;font-size:12px;">+' + (region.photos.length - 9) + ' more</div>' : '') +
+              (region.photos.length > 9
+                  ? '<a href="#" class="kr-map-more" data-stem="' + region.photos[9] + '" style="display:inline-block;margin-top:6px;font-size:12px;">View all ' + region.photos.length + ' &rarr;</a>'
+                  : '') +
               '</div>';
           marker.bindPopup(html, { minWidth: 290 });
         });
