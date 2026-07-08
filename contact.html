@@ -243,10 +243,16 @@
       var HANDLE = 'kenreid.co.uk';
       var container = document.getElementById('bsky-posts');
       if (!container) return;
+      container.innerHTML = [1, 2, 3].map(function() {
+        return '<div class="bsky-post-card"><span class="kr-skel-bar" style="width:35%;"></span>' +
+               '<span class="kr-skel-bar" style="width:92%;"></span>' +
+               '<span class="kr-skel-bar" style="width:78%;"></span></div>';
+      }).join('');
 
       fetch('https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=' + DID + '&limit=5&filter=posts_no_replies')
         .then(function(r) { return r.json(); })
         .then(function(data) {
+          container.innerHTML = '';
           if (!data.feed || !data.feed.length) {
             container.innerHTML = '<p class="bsky-post-meta" style="text-align:center;">No recent posts.</p>';
             return;
