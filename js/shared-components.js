@@ -45,6 +45,7 @@ function renderHeader(targetId, options) {
         '<li' + (hobbiesActive ? ' class="active"' : '') + '><a href="#">Hobbies</a>' +
         '<ul class="dropdown">' +
         '<li' + isHobbyChildActive('gallery') + '><a href="' + basePath + 'gallery.html"' + (hobbiesChild === 'gallery' ? ' aria-current="page"' : '') + '>Photography</a></li>' +
+        '<li' + isHobbyChildActive('map') + '><a href="' + basePath + 'map.html"' + (hobbiesChild === 'map' ? ' aria-current="page"' : '') + '>Photo Map</a></li>' +
         '<li' + isHobbyChildActive('music') + '><a href="' + basePath + 'music.html"' + (hobbiesChild === 'music' ? ' aria-current="page"' : '') + '>Music</a></li>' +
         '<li' + isHobbyChildActive('literature') + '><a href="' + basePath + 'literature.html"' + (hobbiesChild === 'literature' ? ' aria-current="page"' : '') + '>Literature</a></li>' +
         '</ul></li>' +
@@ -1727,13 +1728,21 @@ function updateLastfmStats() {
  * dance under prefers-reduced-motion (CSS keeps those visible).
  */
 function initSectionReveals() {
-    var els = document.querySelectorAll('.wow');
-    if (!els.length) return;
-    if (!('IntersectionObserver' in window) ||
-        (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-        els.forEach(function(el) { el.classList.add('kr-revealed'); });
+    var reduced = !('IntersectionObserver' in window) ||
+        (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+    if (reduced) {
+        document.querySelectorAll('.wow').forEach(function(el) { el.classList.add('kr-revealed'); });
+        if ('MutationObserver' in window) {
+            new MutationObserver(function() {
+                document.querySelectorAll('.wow:not(.kr-revealed)').forEach(function(el) {
+                    el.classList.add('kr-revealed');
+                });
+            }).observe(document.body, { childList: true, subtree: true });
+        }
         return;
     }
+
     var observer = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
             if (!entry.isIntersecting) return;
@@ -1744,7 +1753,23 @@ function initSectionReveals() {
             observer.unobserve(el);
         });
     }, { rootMargin: '0px 0px -8% 0px' });
-    els.forEach(function(el) { observer.observe(el); });
+
+    function watch(el) {
+        if (!el.hasAttribute('data-kr-observed')) {
+            el.setAttribute('data-kr-observed', '1');
+            observer.observe(el);
+        }
+    }
+    document.querySelectorAll('.wow').forEach(watch);
+
+    // Dynamically injected content (blog grid, related posts, feeds)
+    // also uses .wow — watch for additions or those elements stay at
+    // opacity 0 forever.
+    if ('MutationObserver' in window) {
+        new MutationObserver(function() {
+            document.querySelectorAll('.wow:not([data-kr-observed])').forEach(watch);
+        }).observe(document.body, { childList: true, subtree: true });
+    }
 }
 
 /**
