@@ -45,7 +45,7 @@ function renderHeader(targetId, options) {
         '<li' + (hobbiesActive ? ' class="active"' : '') + '><a href="#">Hobbies</a>' +
         '<ul class="dropdown">' +
         '<li' + isHobbyChildActive('gallery') + '><a href="' + basePath + 'gallery.html"' + (hobbiesChild === 'gallery' ? ' aria-current="page"' : '') + '>Photography</a></li>' +
-        '<li' + isHobbyChildActive('map') + '><a href="' + basePath + 'map.html"' + (hobbiesChild === 'map' ? ' aria-current="page"' : '') + '>Photo Map</a></li>' +
+        '<li class="kr-nav-sub' + (hobbiesChild === 'map' ? ' active' : '') + '"><a href="' + basePath + 'map.html"' + (hobbiesChild === 'map' ? ' aria-current="page"' : '') + '>Photo Map</a></li>' +
         '<li' + isHobbyChildActive('music') + '><a href="' + basePath + 'music.html"' + (hobbiesChild === 'music' ? ' aria-current="page"' : '') + '>Music</a></li>' +
         '<li' + isHobbyChildActive('literature') + '><a href="' + basePath + 'literature.html"' + (hobbiesChild === 'literature' ? ' aria-current="page"' : '') + '>Literature</a></li>' +
         '</ul></li>' +
