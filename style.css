@@ -4579,6 +4579,94 @@ html[data-theme="dark"] {
   font-size: 10.5px;
   color: rgba(255, 255, 255, 0.75); }
 
+/* Quote wall (quotes.html) */
+.kr-quote-search {
+  width: 100%;
+  max-width: 420px;
+  padding: 11px 18px;
+  border: 1px solid #dcdcdc;
+  border-radius: 24px;
+  background: #ffffff;
+  color: #252525;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease; }
+
+.kr-quote-search:focus {
+  border-color: #fc6060; }
+
+[data-theme="dark"] .kr-quote-search {
+  background: #222222;
+  border-color: #3a3a3a;
+  color: #e2e2e2; }
+
+.kr-quote-wall {
+  column-count: 3;
+  column-gap: 16px;
+  padding-bottom: 60px; }
+
+@media (max-width: 991px) {
+  .kr-quote-wall {
+    column-count: 2; } }
+
+@media (max-width: 575px) {
+  .kr-quote-wall {
+    column-count: 1; } }
+
+.kr-quote-card {
+  position: relative;
+  break-inside: avoid;
+  margin-bottom: 16px;
+  padding: 18px 20px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  background: #ffffff;
+  cursor: copy;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
+
+.kr-quote-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(252, 96, 96, 0.5);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12); }
+
+.kr-quote-card p {
+  font-family: 'Lora', Georgia, serif;
+  font-style: italic;
+  font-size: 15.5px;
+  line-height: 1.7;
+  margin: 0 0 10px; }
+
+.kr-quote-card footer {
+  font-size: 12px;
+  color: #8a8a8a; }
+
+.kr-quote-copied {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5cb85c;
+  opacity: 0;
+  transition: opacity 0.2s ease; }
+
+.kr-quote-card.is-copied {
+  border-color: #5cb85c; }
+
+.kr-quote-card.is-copied .kr-quote-copied {
+  opacity: 1; }
+
+[data-theme="dark"] .kr-quote-card {
+  background: #222222;
+  border-color: rgba(255, 255, 255, 0.07); }
+
+[data-theme="dark"] .kr-quote-card:hover {
+  border-color: rgba(252, 96, 96, 0.5);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45); }
+
 /* Heading anchor links on posts (injected by shared-components.js) */
 .kr-hlink {
   margin-left: 10px;

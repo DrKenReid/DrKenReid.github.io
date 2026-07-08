@@ -17,6 +17,7 @@
         { title: 'Photo Map', sub: 'Photographs by place', url: 'map.html' },
         { title: 'Music', sub: 'Guitar & listening stats', url: 'music.html' },
         { title: 'Literature', sub: 'Reviews & reading stats', url: 'literature.html' },
+        { title: 'Quote Wall', sub: '571 saved passages', url: 'quotes.html' },
         { title: 'Blog', sub: 'All posts', url: 'blog.html' },
         { title: 'Contact', sub: 'Get in touch', url: 'contact.html' }
     ];
