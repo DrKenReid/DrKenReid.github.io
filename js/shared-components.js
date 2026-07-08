@@ -1667,6 +1667,39 @@ function renderNowStrip() {
 }
 
 /**
+ * 30-day scrobble sparkline under the homepage stat, once
+ * data/lastfm-history.json has accumulated at least two days.
+ */
+function initScrobbleSparkline() {
+    var stat = document.querySelector('[data-lastfm="scrobbles"]');
+    if (!stat || !stat.parentNode) return;
+
+    fetch('data/lastfm-history.json').then(function(r) { return r.json(); }).then(function(history) {
+        if (!Array.isArray(history) || history.length < 2) return;
+        var points = history.slice(-30);
+        var values = points.map(function(p) { return p.n; });
+        var min = Math.min.apply(null, values);
+        var max = Math.max.apply(null, values);
+        var range = Math.max(1, max - min);
+        var W = 84, H = 20, PAD = 2;
+        var coords = values.map(function(v, i) {
+            var x = PAD + (i / (values.length - 1)) * (W - PAD * 2);
+            var y = H - PAD - ((v - min) / range) * (H - PAD * 2);
+            return x.toFixed(1) + ',' + y.toFixed(1);
+        }).join(' ');
+        var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('class', 'kr-sparkline');
+        svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+        svg.setAttribute('width', W);
+        svg.setAttribute('height', H);
+        svg.setAttribute('aria-hidden', 'true');
+        svg.innerHTML = '<polyline points="' + coords + '" fill="none" stroke="#fc6060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+        var label = stat.parentNode.querySelector('.home-stat-label');
+        stat.parentNode.insertBefore(svg, label ? label.nextSibling : null);
+    }).catch(function() {});
+}
+
+/**
  * Live stats from data/lastfm.json (refreshed weekly by a GitHub
  * Action). Elements opt in with data-lastfm="scrobbles"; the static
  * number in the HTML is the fallback if the fetch fails.
@@ -1763,6 +1796,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initLightboxZoom();
     annotateNewTabLinks();
     updateLastfmStats();
+    initScrobbleSparkline();
     renderNowStrip();
     initCountUpStats();
     initLazyImageFade();

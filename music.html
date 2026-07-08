@@ -126,6 +126,18 @@
     </div>
   </div>
 
+  <!-- Top Albums (Last.fm, refreshed daily) -->
+  <div class="about-us-area section-padding-80-0 clearfix">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 28px;">
+        <span class="section-eyebrow">Heavy rotation</span>
+        <h2 class="wow fadeInUp" data-wow-delay="100ms">Top Albums</h2>
+        <p style="margin-top: 8px; font-size: 14px;">What I've had on repeat over the last three months, straight from Last.fm.</p>
+      </div>
+      <div id="album-wall" class="album-wall"></div>
+    </div>
+  </div>
+
   <!-- Last.fm Stats -->
   <div class="about-us-area section-padding-80 clearfix" id="lastfm">
     <div class="container">
@@ -232,6 +244,7 @@
   <script src="js/lightbox.js"></script>
   <script src="js/default-assets/active.js"></script>
   <script src="js/shared-components.js"></script>
+  <script src="js/albums.js"></script>
   <script>
     renderHeader('header-section', { basePath: './', active: 'hobbies', hobbiesChild: 'music' });
     renderInstagramSection('instagram-section');
