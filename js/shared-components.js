@@ -1468,7 +1468,10 @@ function renderFooter(targetId) {
         '<p class="kr-footer-hint">Press <span class="kr-palette-kbd">Ctrl K</span> to search everything.</p>' +
         '</div>' +
         '</div>' +
-        '<div class="kr-footer-bottom"><p>Copyright &copy; ' + year + ' Ken Reid &middot; <a href="' + prefix + 'index.html">kenreid.co.uk</a> &middot; <a href="/feed.xml">RSS</a></p></div>' +
+        '<div class="kr-footer-bottom">' +
+        '<p>Copyright &copy; ' + year + ' Ken Reid. Photographs &copy; Ken Reid, all rights reserved.</p>' +
+        '<p><a href="' + prefix + 'map.html">Photo Map</a> &middot; <a href="' + prefix + 'quotes.html">Quotes</a> &middot; <a href="/feed.xml">RSS</a></p>' +
+        '</div>' +
         '</div></footer>';
 
     fetch(prefix + 'data/posts.json').then(function(r) { return r.json(); }).then(function(posts) {
