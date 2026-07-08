@@ -68,6 +68,17 @@ function bindLoadMoreButton() {
             loadMoreImages();
         });
         btn.dataset.bound = 'true';
+        // Infinite scroll: auto-load the next batch as the button nears
+        // the viewport (button stays as a no-JS/observer fallback).
+        if ('IntersectionObserver' in window) {
+            new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting && galleryIndex < galleryImages.length) {
+                        loadMoreImages();
+                    }
+                });
+            }, { rootMargin: '600px 0px' }).observe(btn);
+        }
     }
 }
 
