@@ -4679,6 +4679,7 @@ a.kr-tile-place:hover {
   position: absolute;
   top: 10px;
   right: 12px;
+  pointer-events: none;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -5755,6 +5756,44 @@ body.kr-palette-open {
 
 [data-theme="dark"] .giscus-comments h2 {
   color: #d0d0d0; }
+
+/* giscus has no live updates (static Discussions embed), so offer a
+   one-click re-mount to pull in new comments and reactions. */
+.kr-comments-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px; }
+
+.kr-comments-head h2 {
+  margin-bottom: 20px; }
+
+.kr-comments-refresh {
+  border: none;
+  background: none;
+  padding: 4px 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #8a8a8a;
+  cursor: pointer;
+  transition: color 0.2s ease; }
+
+.kr-comments-refresh:hover,
+.kr-comments-refresh:focus-visible {
+  color: #fc6060; }
+
+.kr-comments-refresh .kr-refresh-icon {
+  display: inline-block;
+  margin-right: 4px; }
+
+.kr-comments-refresh.is-spinning .kr-refresh-icon {
+  animation: kr-refresh-spin 0.8s ease; }
+
+@keyframes kr-refresh-spin {
+  to {
+    transform: rotate(360deg); } }
 
 /* Print stylesheet: blog posts print as clean articles */
 @media print {

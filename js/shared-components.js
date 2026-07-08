@@ -761,7 +761,14 @@ function renderGiscusComments() {
     section.id = 'giscus-comments';
     section.className = 'giscus-comments';
     section.setAttribute('aria-label', 'Comments');
-    section.innerHTML = '<h2>Comments</h2>';
+    section.innerHTML =
+        '<div class="kr-comments-head">' +
+            '<h2>Comments</h2>' +
+            '<button type="button" class="kr-comments-refresh" title="Reload to show new comments and reactions">' +
+                '<span class="kr-refresh-icon" aria-hidden="true">&#x21bb;</span>Refresh' +
+            '</button>' +
+        '</div>' +
+        '<div class="kr-comments-body"></div>';
 
     // Custom giscus themes matching the site palette (css/giscus-*.css).
     // giscus only accepts absolute https URLs here, so the production
@@ -774,28 +781,43 @@ function renderGiscusComments() {
         return 'https://www.kenreid.co.uk/css/giscus-' + mode + '.css';
     }
 
-    var script = document.createElement('script');
-    script.src = 'https://giscus.app/client.js';
-    script.async = true;
-    script.crossOrigin = 'anonymous';
-    var config = {
-        'data-repo': 'DrKenReid/DrKenReid.github.io',
-        'data-repo-id': 'MDEwOlJlcG9zaXRvcnkyMjg0MTkzNDU=',
-        'data-category': 'Announcements',
-        'data-category-id': 'DIC_kwDODZ1nEc4DAtHj',
-        'data-mapping': 'pathname',
-        'data-strict': '0',
-        'data-reactions-enabled': '1',
-        'data-emit-metadata': '0',
-        'data-input-position': 'bottom',
-        'data-theme': giscusTheme(),
-        'data-lang': 'en',
-        'data-loading': 'lazy'
-    };
-    for (var key in config) {
-        script.setAttribute(key, config[key]);
+    // giscus is a static embed of GitHub Discussions — nothing pushes
+    // new comments/reactions to an open page. mountGiscus() is reused
+    // by the Refresh button to re-fetch the whole widget on demand.
+    function mountGiscus() {
+        var body = section.querySelector('.kr-comments-body');
+        body.innerHTML = '';
+        var script = document.createElement('script');
+        script.src = 'https://giscus.app/client.js';
+        script.async = true;
+        script.crossOrigin = 'anonymous';
+        var config = {
+            'data-repo': 'DrKenReid/DrKenReid.github.io',
+            'data-repo-id': 'MDEwOlJlcG9zaXRvcnkyMjg0MTkzNDU=',
+            'data-category': 'Announcements',
+            'data-category-id': 'DIC_kwDODZ1nEc4DAtHj',
+            'data-mapping': 'pathname',
+            'data-strict': '0',
+            'data-reactions-enabled': '1',
+            'data-emit-metadata': '0',
+            'data-input-position': 'bottom',
+            'data-theme': giscusTheme(),
+            'data-lang': 'en',
+            'data-loading': 'lazy'
+        };
+        for (var key in config) {
+            script.setAttribute(key, config[key]);
+        }
+        body.appendChild(script);
     }
-    section.appendChild(script);
+    mountGiscus();
+
+    section.querySelector('.kr-comments-refresh').addEventListener('click', function() {
+        var btn = this;
+        btn.classList.add('is-spinning');
+        setTimeout(function() { btn.classList.remove('is-spinning'); }, 850);
+        mountGiscus();
+    });
 
     // After related posts if present, otherwise at the end of the article.
     var related = blogPost.querySelector('.related-posts, #related-posts-section');
