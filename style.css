@@ -4518,6 +4518,67 @@ html[data-theme="dark"] {
   color: rgba(255, 255, 255, 0.75);
   line-height: 1.4; }
 
+/* Scrobble sparkline under the homepage stat */
+.kr-sparkline {
+  display: block;
+  margin: 8px auto 0;
+  opacity: 0.85; }
+
+/* Album wall on the music page (js/albums.js) */
+.album-wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+  gap: 12px;
+  padding-bottom: 60px; }
+
+.album-wall-item {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(127, 127, 127, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease; }
+
+.album-wall-item:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35);
+  z-index: 2; }
+
+.album-wall-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block; }
+
+.album-wall-meta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 22px 8px 7px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.82));
+  opacity: 0;
+  transition: opacity 0.25s ease; }
+
+.album-wall-item:hover .album-wall-meta {
+  opacity: 1; }
+
+.album-wall-name {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
+
+.album-wall-artist {
+  display: block;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.75); }
+
 /* Heading anchor links on posts (injected by shared-components.js) */
 .kr-hlink {
   margin-left: 10px;

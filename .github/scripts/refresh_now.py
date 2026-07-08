@@ -2,9 +2,12 @@
 """Refresh live-ish data for the site (runs daily in CI).
 
 Writes:
-  data/lastfm.json  — total scrobble count (homepage stat)
-  data/now.json     — most recent track + Goodreads currently-reading,
-                      rendered into the homepage "Now" strip
+  data/lastfm.json          — total scrobble count (homepage stat)
+  data/now.json             — most recent track + Goodreads currently-reading
+  data/lastfm-history.json  — daily scrobble counts (last 90 days, feeds
+                              the homepage sparkline as it accumulates)
+  data/topalbums.json       — Last.fm top albums, 3-month window (music
+                              page album wall)
 
 Requires LASTFM_API_KEY in the environment. Goodreads needs no key
 (public RSS). The Bluesky item in the strip is fetched client-side from
@@ -71,6 +74,43 @@ def fetch_goodreads():
     return books[:3]
 
 
+def fetch_top_albums(key):
+    data = json.loads(get(
+        "https://ws.audioscrobbler.com/2.0/"
+        f"?method=user.gettopalbums&user={LASTFM_USER}&api_key={key}"
+        "&format=json&period=3month&limit=24"))
+    albums = []
+    for a in data.get("topalbums", {}).get("album", []):
+        images = {i.get("size"): i.get("#text") for i in a.get("image", [])}
+        img = images.get("extralarge") or images.get("large") or ""
+        if not img:
+            continue
+        albums.append({
+            "name": a.get("name", ""),
+            "artist": (a.get("artist") or {}).get("name", ""),
+            "url": a.get("url", ""),
+            "img": img,
+            "plays": int(a.get("playcount") or 0),
+        })
+    return albums
+
+
+def update_history(playcount, today):
+    path = ROOT / "data" / "lastfm-history.json"
+    history = []
+    if path.exists():
+        try:
+            history = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            history = []
+    history = [h for h in history if h.get("d") != today]
+    history.append({"d": today, "n": playcount})
+    history = sorted(history, key=lambda h: h["d"])[-90:]
+    path.write_text(json.dumps(history, separators=(",", ":")) + "\n",
+                    encoding="utf-8", newline="\n")
+    return len(history)
+
+
 def main():
     key = os.environ.get("LASTFM_API_KEY")
     if not key:
@@ -83,6 +123,11 @@ def main():
 
     playcount, track = fetch_lastfm(key)
     books = fetch_goodreads()
+    try:
+        albums = fetch_top_albums(key)
+    except Exception as e:
+        print(f"top albums fetch failed ({e}) — keeping previous file")
+        albums = None
     today = date.today().isoformat()
 
     (ROOT / "data" / "lastfm.json").write_text(json.dumps(
@@ -93,9 +138,16 @@ def main():
         {"track": track, "reading": books, "updated": today},
         indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
 
-    print(f"scrobbles: {playcount:,}")
+    if albums is not None:
+        (ROOT / "data" / "topalbums.json").write_text(json.dumps(
+            {"albums": albums, "period": "3month", "updated": today},
+            indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+
+    days = update_history(playcount, today)
+    print(f"scrobbles: {playcount:,} (history: {days} days)")
     print(f"recent track: {track}")
     print(f"reading: {[b['title'][:40] for b in books]}")
+    print(f"top albums: {len(albums) if albums else 'kept previous'}")
     return 0
 
 
