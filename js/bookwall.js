@@ -66,11 +66,14 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        if (!document.getElementById('book-wall-grid')) return;
+        var grid = document.getElementById('book-wall-grid');
+        if (!grid) return;
+        // Skeleton covers while books.json + cover images arrive
+        grid.innerHTML = new Array(18).fill('<span class="book-wall-item kr-skeleton"></span>').join('');
         fetch('data/books.json').then(function (r) { return r.json(); }).then(function (data) {
             books = data || [];
             renderFilters();
             renderWall();
-        }).catch(function () {});
+        }).catch(function () { grid.innerHTML = ''; });
     });
 }());

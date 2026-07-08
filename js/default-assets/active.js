@@ -186,9 +186,9 @@
     // ***********************
     // :: 11.0 WOW Active Code
     // ***********************
-    if (alime_window.width() > 767) {
-        new WOW().init();
-    }
+    // Replaced by the IntersectionObserver reveal in shared-components.js
+    // (initSectionReveals) — smoother, works on mobile, honors
+    // prefers-reduced-motion, and never leaves content invisible.
 
     // ****************************
     // :: 12.0 Jarallax Active Code

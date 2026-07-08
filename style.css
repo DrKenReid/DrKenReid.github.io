@@ -4426,6 +4426,56 @@ html[data-theme="dark"] {
   .kr-scroll-cue {
     animation: none; } }
 
+/* Scroll reveals (WOW.js replacement — initSectionReveals). Hidden
+   state is gated on .kr-js so no-JS readers always see content, and on
+   motion preference so reduced-motion users never wait for reveals. */
+@media (prefers-reduced-motion: no-preference) {
+  .kr-js .wow {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 0.65s ease, transform 0.65s ease; }
+
+  .kr-js .wow.fadeInUpBig {
+    transform: translateY(56px); }
+
+  .kr-js .wow.kr-revealed {
+    opacity: 1;
+    transform: none; } }
+
+/* Loading skeletons for async sections */
+.kr-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(127, 127, 127, 0.12);
+  border-radius: 8px;
+  color: transparent !important; }
+
+.kr-skeleton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.09), transparent);
+  animation: kr-shimmer 1.4s infinite; }
+
+@keyframes kr-shimmer {
+  to {
+    transform: translateX(100%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-skeleton::after {
+    animation: none; } }
+
+.kr-skel-bar {
+  display: block;
+  height: 12px;
+  border-radius: 6px;
+  background: rgba(127, 127, 127, 0.16);
+  margin: 4px 0; }
+
 /* Heading anchor links on posts (injected by shared-components.js) */
 .kr-hlink {
   margin-left: 10px;
