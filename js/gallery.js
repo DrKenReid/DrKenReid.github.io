@@ -2,6 +2,7 @@ var galleryImages=[];
 var galleryIndex=0;
 var BATCH_SIZE=24;
 var photoTags={};
+var photoPlaces={};
 var activeFilter='*';
 
 var CATEGORIES={
@@ -32,10 +33,15 @@ function initGallery() {
     bindLoadMoreButton();
     Promise.all([
         fetch('data/photo-tags.json').then(function(r) { return r.json(); }),
-        fetch('data/photography-files.json').then(function(r) { return r.json(); })
+        fetch('data/photography-files.json').then(function(r) { return r.json(); }),
+        fetch('data/photo-locations.json').then(function(r) { return r.json(); }).catch(function() { return {}; })
     ]).then(function(results) {
         photoTags = results[0] || {};
         galleryImages = Array.isArray(results[1]) ? results[1].slice().sort(compareFileNames) : [];
+        photoPlaces = {};
+        ((results[2] || {}).regions || []).forEach(function(region) {
+            (region.photos || []).forEach(function(stem) { photoPlaces[String(stem)] = region.name; });
+        });
         buildFilterButtons();
         buildImageHTML();
 
@@ -215,23 +221,19 @@ function loadMoreImages(silent) {
         link.href = 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/' + filename;
         link.className = 'portfolio-img';
         link.textContent = '+';
-        link.setAttribute('data-caption', tags.map(function(t) {
+        var tagLabels = tags.map(function(t) {
             var cat = CATEGORIES[t];
             return cat ? cat.label : t;
-        }).join(' · '));
+        }).join(' · ');
+        var place = photoPlaces[String(stem)] || '';
+        link.setAttribute('data-caption', tagLabels + (place ? (tagLabels ? ' — ' : '') + place : ''));
 
-        if (tags.length) {
-            var badgeWrap = document.createElement('div');
-            badgeWrap.className = 'tag-badges';
-            tags.forEach(function(tag) {
-                var badge = document.createElement('span');
-                badge.className = 'tag-badge tag-' + tag;
-                var cat = CATEGORIES[tag];
-                badge.textContent = cat ? cat.emoji : tag;
-                badge.title = cat ? cat.label : tag;
-                badgeWrap.appendChild(badge);
-            });
-            hover.appendChild(badgeWrap);
+        if (tagLabels || place) {
+            var caption = document.createElement('div');
+            caption.className = 'kr-tile-caption';
+            caption.innerHTML = (tagLabels ? '<span class="kr-tile-tags">' + tagLabels + '</span>' : '') +
+                (place ? '<span class="kr-tile-place">' + place + '</span>' : '');
+            hover.appendChild(caption);
         }
 
         hover.appendChild(link);
@@ -274,7 +276,7 @@ function loadMoreImages(silent) {
                                               : '<span class="kr-lightbox-num">#' + stem + '</span>');
                 }
             },
-            gallery: {enabled: true, preload: [0, 2], navigateByImgClick: true, tPrev: 'Previous', tNext: 'Next'}
+            gallery: {enabled: true, preload: [0, 2], navigateByImgClick: false, tPrev: 'Previous', tNext: 'Next'}
         });
     }
 
