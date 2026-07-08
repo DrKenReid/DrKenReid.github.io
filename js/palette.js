@@ -96,6 +96,12 @@
     function render(query) {
         items = collectResults(query);
         active = 0;
+        var live = overlay.querySelector('.kr-palette-live');
+        if (live) {
+            live.textContent = items.length
+                ? items.length + ' result' + (items.length === 1 ? '' : 's')
+                : 'No results';
+        }
         if (!items.length) {
             list.innerHTML = '<div class="kr-palette-empty">No matches. Try a post title, page, or photo tag.</div>';
             return;
@@ -123,9 +129,10 @@
         overlay = document.createElement('div');
         overlay.className = 'kr-palette-overlay';
         overlay.innerHTML =
-            '<div class="kr-palette" role="dialog" aria-label="Site search">' +
-            '<input type="text" class="kr-palette-input" placeholder="Search posts, pages, photos…" aria-label="Search site">' +
-            '<div class="kr-palette-list"></div>' +
+            '<div class="kr-palette" role="dialog" aria-modal="true" aria-label="Site search">' +
+            '<input type="text" class="kr-palette-input" placeholder="Search posts, pages, photos…" aria-label="Search site" role="combobox" aria-expanded="true" aria-autocomplete="list">' +
+            '<div class="kr-palette-list" role="listbox"></div>' +
+            '<div class="kr-palette-live sr-only" aria-live="polite"></div>' +
             '<div class="kr-palette-foot"><span>&uarr;&darr; navigate</span><span>&crarr; open</span><span>esc close</span></div>' +
             '</div>';
         document.body.appendChild(overlay);
@@ -139,7 +146,12 @@
         input.addEventListener('keydown', function (e) {
             if (e.key === 'ArrowDown') { e.preventDefault(); setActive(active + 1); }
             else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(active - 1); }
-            else if (e.key === 'Enter') {
+            else if (e.key === 'Tab') {
+                // Focus trap: the input is the palette's single focus
+                // stop; arrows move the selection.
+                e.preventDefault();
+                setActive(active + (e.shiftKey ? -1 : 1));
+            } else if (e.key === 'Enter') {
                 e.preventDefault();
                 var el = list.querySelectorAll('.kr-palette-item')[active];
                 if (el) window.location.href = el.getAttribute('href');

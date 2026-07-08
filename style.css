@@ -31,6 +31,7 @@ Last Update: Feb 22, 2019
 
 --------------------------------------------- */
 /* Import All CSS (Poppins is loaded from each page's <head> with display=swap) */
+@import url(css/local-fonts.css);
 @import url(css/bootstrap.min.css);
 @import url(css/animate.css);
 @import url(css/default-assets/classy-nav.css);
@@ -4516,7 +4517,13 @@ html[data-theme="dark"] {
   display: block;
   font-size: 10.5px;
   color: rgba(255, 255, 255, 0.75);
-  line-height: 1.4; }
+  line-height: 1.4;
+  pointer-events: auto;
+  text-decoration: none; }
+
+a.kr-tile-place:hover {
+  color: #fc6060;
+  text-decoration: underline; }
 
 /* Scrobble sparkline under the homepage stat */
 .kr-sparkline {
@@ -4640,6 +4647,33 @@ html[data-theme="dark"] {
 .kr-quote-card footer {
   font-size: 12px;
   color: #8a8a8a; }
+
+.kr-quote-link {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #8a8a8a;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, color 0.2s ease; }
+
+.kr-quote-card:hover .kr-quote-link,
+.kr-quote-link:focus {
+  opacity: 0.9; }
+
+.kr-quote-link:hover {
+  color: #fc6060; }
+
+@media (hover: none) {
+  .kr-quote-link {
+    opacity: 0.45; } }
+
+.kr-quote-card.is-target {
+  border-color: #fc6060;
+  box-shadow: 0 0 0 3px rgba(252, 96, 96, 0.25); }
 
 .kr-quote-copied {
   position: absolute;

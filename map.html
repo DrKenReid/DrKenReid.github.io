@@ -16,9 +16,6 @@
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
   <link rel="icon" href="./img/core-img/favicon.png">
   <meta name="theme-color" content="#1a1a1a">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="style.min.css">
   <link rel="stylesheet" href="js/vendor/leaflet/leaflet.css">
   <link rel="canonical" href="https://www.kenreid.co.uk/map.html">
@@ -244,8 +241,18 @@
                   : '') +
               '</div>';
           marker.bindPopup(html, { minWidth: 290 });
+          region._marker = marker;
         });
-        map.fitBounds(bounds, { padding: [60, 60], maxZoom: 6 });
+
+        var wanted = null;
+        try { wanted = new URLSearchParams(window.location.search).get('region'); } catch (e) {}
+        var target = wanted && regionsByName[wanted];
+        if (target && target._marker) {
+          map.setView([target.lat, target.lng], 9);
+          setTimeout(function () { target._marker.openPopup(); }, 350);
+        } else {
+          map.fitBounds(bounds, { padding: [60, 60], maxZoom: 6 });
+        }
       }).catch(function () {});
     }());
   </script>

@@ -16,9 +16,6 @@
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
   <link rel="icon" href="./img/core-img/favicon.png">
   <meta name="theme-color" content="#1a1a1a">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap">
   <link rel="stylesheet" href="style.min.css">
   <link rel="canonical" href="https://www.kenreid.co.uk/quotes.html">
   <script type="application/ld+json">
@@ -102,7 +99,9 @@
           return (x.q + ' ' + x.a + ' ' + x.b).toLowerCase().indexOf(q) !== -1;
         }) : quotes;
         wall.innerHTML = subset.map(function (x, i) {
-          return '<div class="kr-quote-card" data-i="' + quotes.indexOf(x) + '" tabindex="0" role="button" aria-label="Copy quote">' +
+          var idx = quotes.indexOf(x);
+          return '<div class="kr-quote-card" id="q-' + idx + '" data-i="' + idx + '" tabindex="0" role="button" aria-label="Copy quote">' +
+            '<a class="kr-quote-link" href="#q-' + idx + '" aria-label="Copy link to this quote" title="Copy link to this quote">#</a>' +
             '<p>' + esc(x.q) + '</p>' +
             '<footer>&mdash; ' + esc(x.a) + (x.b ? ', <em>' + esc(x.b) + '</em>' : '') + '</footer>' +
             '<span class="kr-quote-copied" aria-hidden="true">Copied</span>' +
@@ -127,8 +126,26 @@
       }
 
       wall.addEventListener('click', function (e) {
-        var card = e.target.closest && e.target.closest('.kr-quote-card');
-        if (card) copyCard(card);
+        var link = e.target.closest && e.target.closest('.kr-quote-link');
+        if (link) {
+          e.preventDefault();
+          e.stopPropagation();
+          var url = location.origin + location.pathname + link.getAttribute('href');
+          var card = link.closest('.kr-quote-card');
+          history.replaceState(null, '', link.getAttribute('href'));
+          function done() {
+            card.classList.add('is-copied');
+            setTimeout(function () { card.classList.remove('is-copied'); }, 1400);
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(done).catch(function () { fallbackCopyText(url, done); });
+          } else {
+            fallbackCopyText(url, done);
+          }
+          return;
+        }
+        var card2 = e.target.closest && e.target.closest('.kr-quote-card');
+        if (card2) copyCard(card2);
       });
       wall.addEventListener('keydown', function (e) {
         if (e.key !== 'Enter' && e.key !== ' ') return;
@@ -147,6 +164,15 @@
       fetch('data/quotes-all.json').then(function (r) { return r.json(); }).then(function (data) {
         quotes = data || [];
         render('');
+        // Permalink: scroll to and highlight #q-N
+        if (/^#q-\d+$/.test(location.hash)) {
+          var target = document.getElementById(location.hash.slice(1));
+          if (target) {
+            target.scrollIntoView({ block: 'center' });
+            target.classList.add('is-target');
+            setTimeout(function () { target.classList.remove('is-target'); }, 2600);
+          }
+        }
       }).catch(function () { wall.innerHTML = ''; });
     }());
   </script>
