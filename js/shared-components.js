@@ -1714,8 +1714,53 @@ function initSectionReveals() {
     els.forEach(function(el) { observer.observe(el); });
 }
 
+/**
+ * Click-to-zoom inside any Magnific lightbox: click toggles ~2.4x zoom
+ * anchored at the cursor, moving the pointer pans (via transform-origin),
+ * clicking again or navigating resets. Touch: tap toggles, drag pans.
+ */
+function initLightboxZoom() {
+    var ZOOM_CLASS = 'kr-zoomed';
+
+    function setOrigin(img, clientX, clientY) {
+        var rect = img.getBoundingClientRect();
+        var x = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
+        var y = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100));
+        img.style.transformOrigin = x + '% ' + y + '%';
+    }
+
+    document.addEventListener('click', function(e) {
+        var img = e.target.closest && e.target.closest('img.mfp-img');
+        if (!img) return;
+        e.preventDefault();
+        e.stopPropagation();
+        var wrap = document.querySelector('.mfp-wrap');
+        if (img.classList.contains(ZOOM_CLASS)) {
+            img.classList.remove(ZOOM_CLASS);
+            if (wrap) wrap.classList.remove('kr-zoom-wrap');
+        } else {
+            setOrigin(img, e.clientX, e.clientY);
+            img.classList.add(ZOOM_CLASS);
+            if (wrap) wrap.classList.add('kr-zoom-wrap');
+        }
+    }, true);
+
+    document.addEventListener('mousemove', function(e) {
+        var img = document.querySelector('img.mfp-img.' + ZOOM_CLASS);
+        if (img) setOrigin(img, e.clientX, e.clientY);
+    }, { passive: true });
+
+    document.addEventListener('touchmove', function(e) {
+        var img = document.querySelector('img.mfp-img.' + ZOOM_CLASS);
+        if (img && e.touches && e.touches.length) {
+            setOrigin(img, e.touches[0].clientX, e.touches[0].clientY);
+        }
+    }, { passive: true });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     initSectionReveals();
+    initLightboxZoom();
     annotateNewTabLinks();
     updateLastfmStats();
     renderNowStrip();
