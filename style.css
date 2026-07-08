@@ -4300,6 +4300,31 @@ html.theme-switching *::after {
   z-index: 4000;
   pointer-events: none; }
 
+/* On mobile the top edge fights the browser chrome and the fixed
+   header — dock the bar to the header's underside instead */
+@media (max-width: 991px) {
+  .kr-progress-bar {
+    top: 70px; } }
+
+/* The header's 500ms transition was meant for the sticky background
+   swap, but it applied to ALL properties — so when mobile browser
+   chrome collapses and the fixed header's box is recomputed, the
+   header visibly glides. Scope it to color only. */
+.header-area,
+.main-header-area {
+  transition-property: background-color; }
+
+/* Nothing on this site scrolls sideways on purpose; stray overflow
+   (off-canvas nav, iOS quirks) must not create a horizontal scrollbar */
+html,
+body {
+  overflow-x: hidden; }
+
+@supports (overflow: clip) {
+  html,
+  body {
+    overflow-x: clip; } }
+
 /* Sticky table of contents (injected by shared-components.js) */
 .kr-toc {
   position: fixed;
