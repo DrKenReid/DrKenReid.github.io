@@ -4513,15 +4513,30 @@ html[data-theme="dark"] {
   color: #ffffff;
   line-height: 1.4; }
 
-.kr-tile-caption .kr-tile-place {
+/* Beat the theme's .single-portfolio-content .hover-content a rule,
+   which styles every overlay anchor as the centered red "+" circle. */
+.single-portfolio-content .hover-content a.kr-tile-place {
+  position: static;
   display: block;
+  width: auto;
+  height: auto;
+  margin: 0;
+  border-radius: 0;
+  background: none;
+  text-align: left;
   font-size: 10.5px;
   color: rgba(255, 255, 255, 0.75);
   line-height: 1.4;
   pointer-events: auto;
   text-decoration: none; }
 
-a.kr-tile-place:hover {
+.single-portfolio-content:hover .hover-content a.kr-tile-place,
+.single-portfolio-content:focus .hover-content a.kr-tile-place {
+  margin-top: 0; }
+
+.single-portfolio-content .hover-content a.kr-tile-place:hover,
+.single-portfolio-content .hover-content a.kr-tile-place:focus {
+  background: none;
   color: #fc6060;
   text-decoration: underline; }
 
