@@ -1,5 +1,17 @@
 [
   {
+    "title": "Hosting a Photography Portfolio on GitHub for Free",
+    "date": "2026-07-06",
+    "tags": [
+      "photography",
+      "technology"
+    ],
+    "excerpt": "GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.",
+    "url": "blog/hosting-photography-on-github-for-free.html",
+    "image": "img/photography/thumb/387.webp",
+    "readMinutes": 8
+  },
+  {
     "title": "Why You Aren't a \"Visual Learner\"",
     "date": "2026-07-04",
     "tags": [
@@ -9,7 +21,7 @@
     "excerpt": "Everyone took the quiz and got a label. Decades of cognitive psychology say the label does nothing: matching teaching to 'learning styles' doesn't improve learning, and believing it quietly limits you. What works instead is effortful, unglamorous, and the same for everyone.",
     "url": "blog/why-you-arent-a-visual-learner.html",
     "image": "img/photography/thumb/366.webp",
-    "readMinutes": 8
+    "readMinutes": 9
   },
   {
     "title": "Frodo, Sam, and love.",
@@ -92,7 +104,7 @@
     "excerpt": "A modern look at M*A*S*H: how a Korean War sitcom from the 1970s remains one of the sharpest critiques of bureaucracy, war, and trauma in television history.",
     "url": "blog/mash-modern-perspective.html",
     "image": "https://commons.wikimedia.org/wiki/Special:FilePath/MASH_cast_1972.JPG",
-    "readMinutes": 15
+    "readMinutes": 16
   },
   {
     "title": "Iain M. Banks and The Culture",
@@ -159,7 +171,7 @@
     "excerpt": "How a mix-up over an email address sent me to the northern Italian mountains to photograph a tech event I had no business being at.",
     "url": "blog/mistaken-identity-italy.html",
     "image": "img/photography/thumb/421.webp",
-    "readMinutes": 4
+    "readMinutes": 5
   },
   {
     "title": "How to Write a Blog (or: What I Learned By Doing It)",
@@ -206,7 +218,7 @@
     "excerpt": "Data science outputs are often inaccessible by default. Accessibility-first design in plots, dashboards, and tables improves understanding for everyone.",
     "url": "blog/accessibility-first-product-design-data-science.html",
     "image": "img/photography/thumb/21.webp",
-    "readMinutes": 42
+    "readMinutes": 43
   },
   {
     "title": "The Life and Death of the Early Internet",
@@ -228,7 +240,7 @@
     "excerpt": "An AI researcher's honest take on LLM ethics: the energy numbers, the cobalt hypocrisy, the Jevons paradox, and why telling people not to use AI on environmental grounds is a privilege position.",
     "url": "blog/ethics-of-llm-use-not-llms.html",
     "image": "img/photography/thumb/280.webp",
-    "readMinutes": 34
+    "readMinutes": 33
   },
   {
     "title": "Dungeon Crawler Carl and the Strange Dignity of LitRPG",
@@ -239,7 +251,7 @@
     "excerpt": "A book snob's confession: how Dungeon Crawler Carl used absurd LitRPG mechanics to deliver one of the most devastating emotional payloads in modern fantasy.",
     "url": "blog/dungeon-crawler-carl-litrpg-dignity.html",
     "image": "img/photography/thumb/141.webp",
-    "readMinutes": 22
+    "readMinutes": 23
   },
   {
     "title": "From Scotland to Michigan",
@@ -294,7 +306,7 @@
     "excerpt": "The stigma against audiobooks is rooted in bad assumptions about learning, intelligence, and what counts as reading. The research doesn't support any of it.",
     "url": "blog/in-defense-of-audiobooks.html",
     "image": "img/photography/thumb/366.webp",
-    "readMinutes": 13
+    "readMinutes": 12
   },
   {
     "title": "Why It Still Matters to Learn to Code in the Age of AI",
@@ -316,7 +328,7 @@
     "excerpt": "A practical system for project documentation, knowledge management, and local LLM workflows that improves delivery, reviews, and project re-entry.",
     "url": "blog/second-brain-local-llm-professional.html",
     "image": "img/photography/thumb/75.webp",
-    "readMinutes": 7
+    "readMinutes": 8
   },
   {
     "title": "Snowball vs Avalanche: The Science of Paying Off Debt",
@@ -338,7 +350,7 @@
     "excerpt": "569 books rated, and the star system fails at all of them. A data-driven look at my own Goodreads ratings, review lengths, genre bias, and the silence problem.",
     "url": "blog/rating-systems.html",
     "image": "blog/img/rating_distribution.png",
-    "readMinutes": 13
+    "readMinutes": 12
   },
   {
     "title": "Why Most Self-Help Books Are Trash (And Which Ones Aren't)",

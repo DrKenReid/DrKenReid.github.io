@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+  <meta name="description" content="GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.">
+  <meta name="keywords" content="photography">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Hosting a Photography Portfolio on GitHub for Free - Ken Reid</title>
+  <meta property="og:title" content="Hosting a Photography Portfolio on GitHub for Free">
+  <meta property="og:description" content="GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.">
+  <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/387.png">
+  <meta property="og:url" content="https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Hosting a Photography Portfolio on GitHub for Free">
+  <meta name="twitter:description" content="GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.">
+  <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/387.png">
+  <meta name="citation_title" content="Hosting a Photography Portfolio on GitHub for Free">
+  <meta name="citation_author" content="Reid, Kenneth N.">
+  <meta name="citation_publication_date" content="2026/07/06">
+  <meta name="citation_online_date" content="2026/07/06">
+  <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html">
+  <meta name="DC.title" content="Hosting a Photography Portfolio on GitHub for Free">
+  <meta name="DC.creator" content="Kenneth N. Reid">
+  <meta name="DC.date" content="2026-07-06">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="../img/core-img/favicon.png">
+  <meta name="theme-color" content="#1a1a1a">
+  <link rel="stylesheet" href="../style.min.css">
+  <link rel="canonical" href="https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Hosting a Photography Portfolio on GitHub for Free",
+    "description": "GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.",
+    "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/387.png",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk"
+    },
+    "datePublished": "2026-07-06",
+    "publisher": {
+      "@type": "Person",
+      "name": "Ken Reid"
+    },
+    "keywords": ["photography", "github", "web development", "hosting"]
+  }
+  </script>
+  <script defer src="../js/theme.js"></script>
+  <script defer src="../js/palette.js"></script>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <div id="header-section"></div>
+
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/387.webp); background-size: cover; background-position: center center;">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <h2 class="page-title">Blog</h2>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Hosting Photography on GitHub for Free</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <div class="about-us-area section-padding-80 clearfix">
+    <div class="container">
+      <main id="main-content">
+      <div class="blog-post">
+        <h1>Hosting a Photography Portfolio on GitHub for Free</h1>
+        <div class="blog-meta">
+          6 July 2026 &middot;
+          <span class="blog-tag">photography</span>
+        </div>
+
+        <p>My <a href="../gallery.html">photography gallery</a> currently serves 515 full-resolution photos, about 1.5&nbsp;GB of images, to anyone who clicks on them. My monthly hosting bill for this is zero. </p>
+
+        <p>The catch is that GitHub Pages, which hosts this entire site, has a hard rule: a published site may be no larger than 1&nbsp;GB. My photo collection is bigger than my entire allowance, ignoring all the blog content, and the rest of this website. This post is about GitHub <strong>releases</strong>.</p>
+
+        <div class="plain-english-box">
+          <h2>Quick jargon guide</h2>
+          <ul>
+            <li><strong>GitHub Pages:</strong> GitHub's free static-site hosting — push HTML to a repository and it becomes a website. It's what serves the page you're reading.</li>
+            <li><strong>Repository (repo):</strong> a project folder tracked by git, holding every file and the full history of every change ever made to it.</li>
+            <li><strong>Release:</strong> a snapshot of a repository at a point in time, to which you can attach downloadable files ("release assets") — normally installers and binaries, in this post something else entirely.</li>
+            <li><strong>Git LFS:</strong> Large File Storage, GitHub's official add-on for versioning big files. Solves repo bloat by charging you money instead.</li>
+            <li><strong>Egress:</strong> cloud-billing jargon for data leaving a provider's servers — i.e. what it costs when someone downloads your photo. The line item that quietly dominates image hosting bills.</li>
+            <li><strong>Manifest:</strong> a plain list of files (here, a JSON file naming every photo) that a page reads so it knows what exists without asking a server to enumerate anything.</li>
+            <li><strong>WebP:</strong> a modern image format that compresses far smaller than JPEG or PNG at similar quality — ideal for thumbnails.</li>
+            <li><strong>CLIP:</strong> an OpenAI model that matches images against text descriptions, which makes it a free, automatic photo-tagger.</li>
+          </ul>
+        </div>
+
+        <h2>Hitting the wall</h2>
+
+        <p>When I first added my photography to this site, I exported the photos and committed them to the repository like any other asset. It worked, for a good few years. Then at some random point well past the 1GB limit, GitHub let me know, politely but firmly, that this was no longer going to fly.</p>
+
+        <p>Worse, the damage outlives the mistake. Git never forgets: even after I removed the full-size photos from the site, every committed version of every photo remains in the repository's history. My <code>.git</code> pack sits at 4.91&nbsp;GiB to this day, a monument to the months when I treated a version control system like a hard drive. (You can scrub history with tools like <code>git filter-repo</code>, but every clone, fork, and local copy has to be reconciled with the rewrite, and for a personal site it has so far been easier to live with the scar tissue.)</p>
+
+        <p>So the problem statement became: keep the site on GitHub Pages, keep the photos at full resolution, pay nothing, and stay under 1&nbsp;GB. The numbers to beat, for the curious:</p>
+
+        <ul>
+          <li><strong>1 GB</strong> &mdash; maximum size of a published GitHub Pages site (and the recommended ceiling for the repository itself).</li>
+          <li><strong>100 MB</strong> &mdash; maximum size of any single file pushed to a repository.</li>
+          <li><strong>100 GB/month</strong> &mdash; the soft bandwidth guideline for Pages sites.</li>
+          <li><strong>2 GiB</strong> &mdash; maximum size of a single <em>release asset</em>, with no documented cap on the total size of a release.</li>
+        </ul>
+
+        <h2>So: releases are a free bucket</h2>
+
+        <p>GitHub releases exist so projects can attach compiled binaries to a version tag: you tag <code>v1.0</code>, you upload the installers, users download them. But strip away the intent and a release is just an object store bolted onto your repository. Files up to 2&nbsp;GiB each, no total-size cap in the documentation, served from GitHub's download infrastructure rather than your Pages allowance, and addressable by a clean, predictable URL:</p>
+
+        <p style="overflow-x:auto;"><code>https://github.com/&lt;user&gt;/&lt;repo&gt;/releases/download/&lt;tag&gt;/&lt;filename&gt;</code></p>
+
+        <p>So my full-size photos live in a release called <code>photos-v1</code>, attached to this very website's repository. Uploading is two commands with the <a href="https://cli.github.com/" target="_blank" rel="noopener noreferrer">gh CLI</a>:</p>
+
+        <p style="overflow-x:auto;"><code>gh release create photos-v1 --title "Full-size photography" --notes "Gallery originals"</code><br>
+        <code>gh release upload photos-v1 photos/*.png</code></p>
+
+        <p>That release now holds all 515 originals, 1.55&nbsp;GB of them, which is to say: <strong>the "attachment" stapled to my repository is bigger than the entire website is allowed to be.</strong> GitHub is fine with this. Releases are a supported distribution mechanism for a repository's files, and these are, quite literally, the files this repository's site is built around.</p>
+
+        <h2>The full pipeline</h2>
+
+        <p>The release solves storage, but you can't lazily browse a 1.5&nbsp;GB folder from a phone. The other half of the architecture is the oldest idea in web galleries: thumbnails for browsing, originals on demand. Here's the whole pipeline, which is a handful of small Python scripts I run locally when I add photos:</p>
+
+        <ol>
+          <li><strong>Normalise filenames.</strong> Every photo becomes a number: <code>417.png</code>. No <code>IMG_20250612_final_FINAL(2).jpg</code>. Numeric names make the manifest trivial and the URLs boring, and boring URLs are the ones that keep working.</li>
+          <li><strong>Generate thumbnails.</strong> Each original gets a compressed WebP thumbnail (<code>img/photography/thumb/417.webp</code>). These <em>do</em> live in the repository, all 492 of them, because collectively they're small enough to sit comfortably inside the Pages budget. This is the only image data the site itself hosts.</li>
+          <li><strong>Auto-tag with CLIP.</strong> A local script runs every photo through OpenAI's CLIP model to classify it (landscape, urban, wildlife, winter&hellip;) and writes the results to a JSON file. I wrote about this in <a href="photo-tagging-with-clip.html">its own post</a>; those tags drive the gallery's filter buttons, and I never manually categorise anything.</li>
+          <li><strong>Write a manifest.</strong> A JSON list of every filename in the release. The gallery page fetches this instead of asking the GitHub API, so the site works even when the API is rate-limiting.</li>
+          <li><strong>Upload the originals</strong> to the release with <code>gh release upload</code>, and commit the thumbnails plus the two JSON files.</li>
+        </ol>
+
+        <p>At view time, the gallery JavaScript loads the manifest, renders thumbnails in batches of 24 as you scroll, and each lightbox link points at the release URL for the original. The visitor's browser talks to GitHub's release servers directly; my Pages bandwidth only ever carries the thumbnails.</p>
+
+        <figure>
+          <img src="../img/photography/thumb/387.webp" alt="Ferris wheel lit up at night in Edinburgh, Scotland" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+          <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> This thumbnail weighs a few dozen kilobytes and comes from my repository. Click-through to the original in the gallery, and GitHub's release servers hand you the full-size file at no cost to my hosting budget.</figcaption>
+        </figure>
+
+        <h2>Why not the "proper" solutions?</h2>
+
+        <p><strong>Git LFS</strong> is GitHub's own answer to large files, and it would have been the natural choice, except the free tier is a single gigabyte of storage and a similarly small monthly bandwidth allowance, after which you're buying data packs. It solves the repository-bloat problem while replacing "free" with "subscription".</p>
+
+        <p><strong>Object storage</strong> (S3, Cloudflare R2, Backblaze B2) is a good answer and I'd use it for anything commercial. But it means an account, a bucket policy, a billing alarm, and a second system to maintain for a personal site whose entire ethos is "one repository contains everything". My gallery's originals sit next to the code that serves them, in the same repo, behind the same login, and I'm lazy in odd ways.</p>
+
+        <p><strong>Photo platforms</strong> solve a different problem &mdash; community and discovery &mdash; and charge accordingly. For raw hosting, here's the rough landscape as of mid-2026 (prices drift; check before you commit):</p>
+
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; margin:16px 0;">
+            <thead>
+              <tr style="border-bottom:2px solid #999;">
+                <th style="text-align:left; padding:8px;">Option</th>
+                <th style="text-align:left; padding:8px;">Rough cost for ~1.5 GB + modest traffic</th>
+                <th style="text-align:left; padding:8px;">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #99999955;">
+                <td style="padding:8px;">Flickr Pro</td>
+                <td style="padding:8px;">~$70&ndash;90/year</td>
+                <td style="padding:8px;">Unlimited storage, but your portfolio lives on their site, in their design.</td>
+              </tr>
+              <tr style="border-bottom:1px solid #99999955;">
+                <td style="padding:8px;">SmugMug</td>
+                <td style="padding:8px;">~$100+/year</td>
+                <td style="padding:8px;">Polished portfolio hosting; genuinely good, genuinely not free.</td>
+              </tr>
+              <tr style="border-bottom:1px solid #99999955;">
+                <td style="padding:8px;">Amazon S3 + egress</td>
+                <td style="padding:8px;">Pennies for storage, ~$0.09/GB served</td>
+                <td style="padding:8px;">The bandwidth line item is the one that surprises people.</td>
+              </tr>
+              <tr style="border-bottom:1px solid #99999955;">
+                <td style="padding:8px;">Cloudflare R2</td>
+                <td style="padding:8px;">~Free at this scale</td>
+                <td style="padding:8px;">Free egress and a generous free tier; the strongest alternative. Still a second account and billing surface.</td>
+              </tr>
+              <tr>
+                <td style="padding:8px;">GitHub release</td>
+                <td style="padding:8px;">$0</td>
+                <td style="padding:8px;">Everything in one repo. You're reading the case study.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>The caveats</h2>
+
+        <ul>
+          <li><strong>No contract.</strong> GitHub documents release assets as a distribution feature; they don't promise it as a CDN. If your traffic looked like abuse, they'd be within their rights to object. A personal portfolio's click-through traffic is nowhere near that territory, but a startup's image backend would be.</li>
+          <li><strong>Public means public.</strong> Release assets on a public repo are accessible to anyone with the URL. Fine for a portfolio, since a portfolio's job is to be seen; wrong for anything private.</li>
+          <li><strong>URLs are tied to the repo.</strong> Rename your account or repository and every deep link changes. Choose boring, stable names.</li>
+          <li><strong>No image processing.</strong> S3-with-a-CDN setups can resize on the fly. Here, every size you serve is a size you generated yourself. I need exactly two: thumbnail and original.</li>
+          <li><strong>Don't commit the originals, ever.</strong> The release replaces the repo for full-size files, it doesn't supplement it. Learn from my 4.91&nbsp;GiB of permanently embarrassing git history.</li>
+        </ul>
+
+        <h2>Constraints make better sites</h2>
+
+        <p>The 1&nbsp;GB limit made the gallery <em>better</em>. Being forced to split hot data (thumbnails, manifest, tags) from cold data (originals) is just good architecture, the same shape as any cache-and-archive system. The gallery loads fast on bad connections because it physically cannot ship the heavy files up front.</p>
+
+        <p>Total infrastructure: one repository, one release, three JSON files, and a few local Python scripts. Total cost: nothing. The photos are backed up, versioned adjacent to the site that shows them, and served by one of the most reliable download infrastructures on the internet.</p>
+
+        <div class="faq-section">
+          <h2>Common questions</h2>
+
+          <details class="faq-item">
+            <summary>Is this against GitHub's terms of service?</summary>
+            <p>Releases are for distributing a repository's files, and these are the files this repository's website is built from, so I'm comfortable it's within both the letter and spirit. What the terms do prohibit is using releases as a general-purpose CDN for content unrelated to the repo, or serving traffic at a scale that disrupts the service. Host your portfolio, not your startup's user uploads.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>What happens if GitHub kills the loophole?</summary>
+            <p>Then I run one script to re-upload 515 files somewhere else (probably Cloudflare R2) and change one URL prefix in one JavaScript file. </p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Why PNG originals instead of JPEG or WebP?</summary>
+            <p>Honestly, PNG is a lossless container I trust for archival, and storage is (see above) free. </p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Could I do this without the command line?</summary>
+            <p>Yes — releases can be created and files uploaded entirely through GitHub's web interface (Releases &rarr; Draft a new release &rarr; drag files in). The CLI just stops being optional somewhere around your fiftieth photo.</p>
+          </details>
+        </div>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="photo-tagging-with-clip.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/1.webp" alt="Building a Photo Tagging System with CLIP" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">10 April 2026 · 6 min read</div>
+                  <h4 class="blog-card-title">Building a Photo Tagging System with CLIP</h4>
+                  <p class="blog-card-excerpt">How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute, zero API cost, running entirely on CPU.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span><span class="blog-tag">photography</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="iso-8601-date-cult.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/100.webp" alt="ISO 8601 and the Date Cult I Happily Joined" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 May 2026 · 8 min read</div>
+                  <h4 class="blog-card-title">ISO 8601 and the Date Cult I Happily Joined</h4>
+                  <p class="blog-card-excerpt">An ode to ISO 8601 (YYYY-MM-DD) as the only sortable, unambiguous, international date format worth using.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="no-idea-no-problem-data-science-portfolio.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/19.webp" alt="No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">20 April 2026 · 11 min read</div>
+                  <h4 class="blog-card-title">No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio</h4>
+                  <p class="blog-card-excerpt">A practical guide to building a data science portfolio when you have no idea where to start. Covers project types, documentation, novelty, collaboration, and working in the GenAI era.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">data science</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+        <hr style="margin: 40px 0;">
+        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/alime.bundle.js"></script>
+  <script src="../js/lightbox.js"></script>
+  <script src="../js/share.js"></script>
+  <script src="../js/default-assets/active.js"></script>
+  <script src="../js/shared-components.js"></script>
+  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+</body>
+</html>
