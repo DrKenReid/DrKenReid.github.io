@@ -5,11 +5,20 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Sat, 04 Jul 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Sat, 04 Jul 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Mon, 06 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Mon, 06 Jul 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Hosting a Photography Portfolio on GitHub for Free</title>
+      <link>https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html</link>
+      <guid>https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html</guid>
+      <pubDate>Mon, 06 Jul 2026 00:00:00 +0000</pubDate>
+      <description>GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</description>
+      <category>photography</category>
+      <category>technology</category>
+    </item>
     <item>
       <title>Why You Aren't a "Visual Learner"</title>
       <link>https://www.kenreid.co.uk/blog/why-you-arent-a-visual-learner.html</link>
