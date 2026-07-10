@@ -139,6 +139,38 @@
           <li><strong>Upload the originals</strong> to the release with <code>gh release upload</code>, and commit the thumbnails plus the two JSON files.</li>
         </ol>
 
+        <p>Since step 2 is where the actual "optimisation" happens, here it is in full &mdash; this is the entire thumbnail pipeline, and it hasn't needed to change in years:</p>
+
+<pre><code class="language-python">from pathlib import Path
+
+from PIL import Image
+from tqdm import tqdm
+
+PHOTOS = Path("img/photography")
+THUMBS = PHOTOS / "thumb"
+WIDTH = 400
+QUALITY = 80
+
+THUMBS.mkdir(exist_ok=True)
+photos = sorted(PHOTOS.glob("*.png"))
+
+before = after = 0
+for photo in tqdm(photos):
+    img = Image.open(photo).convert("RGB")
+    height = round(img.height * WIDTH / img.width)
+    thumb = img.resize((WIDTH, height), Image.LANCZOS)
+
+    out = THUMBS / (photo.stem + ".webp")
+    thumb.save(out, "WEBP", quality=QUALITY)
+
+    before += photo.stat().st_size
+    after += out.stat().st_size
+
+print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
+      f"({1 - after/before:.0%} saved)")</code></pre>
+
+        <p>Three choices doing the work. <code>LANCZOS</code> is the slowest and best-looking of Pillow's resampling filters &mdash; at thumbnail sizes the difference from the default is visible, and the extra seconds are irrelevant for a batch job. <code>convert("RGB")</code> drops the alpha channel the PNGs carry but the thumbnails don't need. And WebP at quality 80 is the sweet spot where artefacts stop being visible at 400px before the bytes stop shrinking. Net effect: a ~3&nbsp;MB PNG becomes a ~17&nbsp;KB thumbnail, and the whole gallery's browsing layer &mdash; all 492 thumbnails &mdash; weighs 8&nbsp;MB, less than three originals.</p>
+
         <p>At view time, the gallery JavaScript loads the manifest, renders thumbnails in batches of 24 as you scroll, and each lightbox link points at the release URL for the original. The visitor's browser talks to GitHub's release servers directly; my Pages bandwidth only ever carries the thumbnails.</p>
 
         <figure>
@@ -288,10 +320,12 @@
   <script src="../js/bootstrap.min.js"></script>
   <script src="../js/alime.bundle.js"></script>
   <script src="../js/lightbox.js"></script>
+  <script src="../js/prism-loader.js"></script>
   <script src="../js/share.js"></script>
   <script src="../js/default-assets/active.js"></script>
   <script src="../js/shared-components.js"></script>
   <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
-renderFooter('footer-section');</script>
+renderFooter('footer-section');
+loadPrism(['python']);</script>
 </body>
 </html>
