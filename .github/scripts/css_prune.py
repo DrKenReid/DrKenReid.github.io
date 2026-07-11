@@ -40,6 +40,9 @@ RUNTIME_TOKENS = {
     "mfp-content", "mfp-figure", "mfp-img", "mfp-bg", "mfp-close", "mfp-counter",
     "mfp-title", "mfp-bottom-bar", "mfp-preloader", "mfp-arrow", "mfp-hide",
     "mfp-align-top", "mfp-auto-cursor", "mfp-prevent-close", "mfp-zoom",
+    # Authoring helpers used by unpublished drafts: keep so drafts preview
+    # correctly before their classes join the tracked corpus.
+    "theme-img-light", "theme-img-dark",
 }
 
 
