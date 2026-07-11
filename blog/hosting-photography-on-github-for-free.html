@@ -88,13 +88,13 @@
         <div class="plain-english-box">
           <h2>Quick jargon guide</h2>
           <ul>
-            <li><strong>GitHub Pages:</strong> GitHub's free static-site hosting — push HTML to a repository and it becomes a website. It's what serves the page you're reading.</li>
+            <li><strong>GitHub Pages:</strong> GitHub's free static-site hosting, push HTML to a repository and it becomes a website. It's what serves the page you're reading.</li>
             <li><strong>Repository (repo):</strong> a project folder tracked by git, holding every file and the full history of every change ever made to it.</li>
-            <li><strong>Release:</strong> a snapshot of a repository at a point in time, to which you can attach downloadable files ("release assets") — normally installers and binaries, in this post something else entirely.</li>
+            <li><strong>Release:</strong> a snapshot of a repository at a point in time, to which you can attach downloadable files ("release assets"), normally installers and binaries, in this post something else entirely.</li>
             <li><strong>Git LFS:</strong> Large File Storage, GitHub's official add-on for versioning big files. Solves repo bloat by charging you money instead.</li>
-            <li><strong>Egress:</strong> cloud-billing jargon for data leaving a provider's servers — i.e. what it costs when someone downloads your photo. The line item that quietly dominates image hosting bills.</li>
+            <li><strong>Egress:</strong> cloud-billing jargon for data leaving a provider's servers, i.e. what it costs when someone downloads your photo. The line item that quietly dominates image hosting bills.</li>
             <li><strong>Manifest:</strong> a plain list of files (here, a JSON file naming every photo) that a page reads so it knows what exists without asking a server to enumerate anything.</li>
-            <li><strong>WebP:</strong> a modern image format that compresses far smaller than JPEG or PNG at similar quality — ideal for thumbnails.</li>
+            <li><strong>WebP:</strong> a modern image format that compresses far smaller than JPEG or PNG at similar quality, ideal for thumbnails.</li>
             <li><strong>CLIP:</strong> an OpenAI model that matches images against text descriptions, which makes it a free, automatic photo-tagger.</li>
           </ul>
         </div>
@@ -108,10 +108,10 @@
         <p>So the problem statement became: keep the site on GitHub Pages, keep the photos at full resolution, pay nothing, and stay under 1&nbsp;GB. The numbers to beat, for the curious:</p>
 
         <ul>
-          <li><strong>1 GB</strong> &mdash; maximum size of a published GitHub Pages site (and the recommended ceiling for the repository itself).</li>
-          <li><strong>100 MB</strong> &mdash; maximum size of any single file pushed to a repository.</li>
-          <li><strong>100 GB/month</strong> &mdash; the soft bandwidth guideline for Pages sites.</li>
-          <li><strong>2 GiB</strong> &mdash; maximum size of a single <em>release asset</em>, with no documented cap on the total size of a release.</li>
+          <li><strong>1 GB</strong>, maximum size of a published GitHub Pages site (and the recommended ceiling for the repository itself).</li>
+          <li><strong>100 MB</strong>, maximum size of any single file pushed to a repository.</li>
+          <li><strong>100 GB/month</strong>, the soft bandwidth guideline for Pages sites.</li>
+          <li><strong>2 GiB</strong>, maximum size of a single <em>release asset</em>, with no documented cap on the total size of a release.</li>
         </ul>
 
         <h2>So: releases are a free bucket</h2>
@@ -139,7 +139,7 @@
           <li><strong>Upload the originals</strong> to the release with <code>gh release upload</code>, and commit the thumbnails plus the two JSON files.</li>
         </ol>
 
-        <p>Since step 2 is where the actual "optimisation" happens, here it is in full &mdash; this is the entire thumbnail pipeline, and it hasn't needed to change in years:</p>
+        <p>Since step 2 is where the actual "optimisation" happens, here it is in full, this is the entire thumbnail pipeline, and it hasn't needed to change in years:</p>
 
 <pre><code class="language-python">from pathlib import Path
 
@@ -169,7 +169,7 @@ for photo in tqdm(photos):
 print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
       f"({1 - after/before:.0%} saved)")</code></pre>
 
-        <p>Three choices doing the work. <code>LANCZOS</code> is the slowest and best-looking of Pillow's resampling filters &mdash; at thumbnail sizes the difference from the default is visible, and the extra seconds are irrelevant for a batch job. <code>convert("RGB")</code> drops the alpha channel the PNGs carry but the thumbnails don't need. And WebP at quality 80 is the sweet spot where artefacts stop being visible at 400px before the bytes stop shrinking. Net effect: a ~3&nbsp;MB PNG becomes a ~17&nbsp;KB thumbnail, and the whole gallery's browsing layer &mdash; all 492 thumbnails &mdash; weighs 8&nbsp;MB, less than three originals.</p>
+        <p>Three choices doing the work. <code>LANCZOS</code> is the slowest and best-looking of Pillow's resampling filters, at thumbnail sizes the difference from the default is visible, and the extra seconds are irrelevant for a batch job. <code>convert("RGB")</code> drops the alpha channel the PNGs carry but the thumbnails don't need. And WebP at quality 80 is the sweet spot where artefacts stop being visible at 400px before the bytes stop shrinking. Net effect: a ~3&nbsp;MB PNG becomes a ~17&nbsp;KB thumbnail, and the whole gallery's browsing layer, all 492 thumbnails, weighs 8&nbsp;MB, less than three originals.</p>
 
         <p>At view time, the gallery JavaScript loads the manifest, renders thumbnails in batches of 24 as you scroll, and each lightbox link points at the release URL for the original. The visitor's browser talks to GitHub's release servers directly; my Pages bandwidth only ever carries the thumbnails.</p>
 
@@ -184,7 +184,7 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
 
         <p><strong>Object storage</strong> (S3, Cloudflare R2, Backblaze B2) is a good answer and I'd use it for anything commercial. But it means an account, a bucket policy, a billing alarm, and a second system to maintain for a personal site whose entire ethos is "one repository contains everything". My gallery's originals sit next to the code that serves them, in the same repo, behind the same login, and I'm lazy in odd ways.</p>
 
-        <p><strong>Photo platforms</strong> solve a different problem &mdash; community and discovery &mdash; and charge accordingly. For raw hosting, here's the rough landscape as of mid-2026 (prices drift; check before you commit):</p>
+        <p><strong>Photo platforms</strong> solve a different problem, community and discovery, and charge accordingly. For raw hosting, here's the rough landscape as of mid-2026 (prices drift; check before you commit):</p>
 
         <div style="overflow-x:auto;">
           <table style="width:100%; border-collapse:collapse; margin:16px 0;">
@@ -261,7 +261,7 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
 
           <details class="faq-item">
             <summary>Could I do this without the command line?</summary>
-            <p>Yes — releases can be created and files uploaded entirely through GitHub's web interface (Releases &rarr; Draft a new release &rarr; drag files in). The CLI just stops being optional somewhere around your fiftieth photo.</p>
+            <p>Yes, releases can be created and files uploaded entirely through GitHub's web interface (Releases &rarr; Draft a new release &rarr; drag files in). The CLI just stops being optional somewhere around your fiftieth photo.</p>
           </details>
         </div>
 

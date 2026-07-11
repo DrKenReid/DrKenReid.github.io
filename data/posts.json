@@ -1,5 +1,17 @@
 [
   {
+    "title": "What 50,000 Scrobbles Say About Me",
+    "date": "2026-07-06",
+    "tags": [
+      "personal",
+      "music"
+    ],
+    "excerpt": "Fifteen years of Last.fm data - what I listen to when I'm feeling joyful, depressed, doing work, working out or studying.",
+    "url": "blog/what-50000-scrobbles-say-about-me.html",
+    "image": "img/photography/thumb/13.webp",
+    "readMinutes": 8
+  },
+  {
     "title": "Hosting a Photography Portfolio on GitHub for Free",
     "date": "2026-07-06",
     "tags": [
@@ -9,7 +21,7 @@
     "excerpt": "GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.",
     "url": "blog/hosting-photography-on-github-for-free.html",
     "image": "img/photography/thumb/387.webp",
-    "readMinutes": 8
+    "readMinutes": 10
   },
   {
     "title": "Why You Aren't a \"Visual Learner\"",

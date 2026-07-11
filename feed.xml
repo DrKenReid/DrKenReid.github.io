@@ -11,6 +11,15 @@
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>What 50,000 Scrobbles Say About Me</title>
+      <link>https://www.kenreid.co.uk/blog/what-50000-scrobbles-say-about-me.html</link>
+      <guid>https://www.kenreid.co.uk/blog/what-50000-scrobbles-say-about-me.html</guid>
+      <pubDate>Mon, 06 Jul 2026 00:00:00 +0000</pubDate>
+      <description>Fifteen years of Last.fm data - what I listen to when I'm feeling joyful, depressed, doing work, working out or studying.</description>
+      <category>personal</category>
+      <category>music</category>
+    </item>
+    <item>
       <title>Hosting a Photography Portfolio on GitHub for Free</title>
       <link>https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html</link>
       <guid>https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html</guid>

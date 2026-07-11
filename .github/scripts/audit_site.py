@@ -26,7 +26,8 @@ from urllib.parse import unquote, urlparse
 ROOT = Path(__file__).resolve().parents[2]
 SITE = "https://www.kenreid.co.uk"
 ALLOWED_TAGS = {"data science", "personal", "photography", "books", "ai", "finance",
-                "philosophy", "advice", "science", "technology", "television", "writing"}
+                "philosophy", "advice", "science", "technology", "television", "writing",
+                "music"}
 
 # Per-post opt-in scripts that are legitimate additions to the canonical include set.
 OPTIONAL_POST_SCRIPTS = {"../js/nerd-mode.js", "../js/prism-loader.js"}
