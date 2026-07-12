@@ -92,7 +92,7 @@
             <li><strong>Repository (repo):</strong> a project folder tracked by git, holding every file and the full history of every change ever made to it.</li>
             <li><strong>Release:</strong> a snapshot of a repository at a point in time, to which you can attach downloadable files ("release assets"), normally installers and binaries, in this post something else entirely.</li>
             <li><strong>Git LFS:</strong> Large File Storage, GitHub's official add-on for versioning big files. Solves repo bloat by charging you money instead.</li>
-            <li><strong>Egress:</strong> cloud-billing jargon for data leaving a provider's servers, i.e. what it costs when someone downloads your photo. The line item that quietly dominates image hosting bills.</li>
+            <li><strong>Egress:</strong> cloud-billing jargon for data leaving a provider's servers, i.e. what it costs when someone downloads your photo. The line item that ends up dominating image hosting bills.</li>
             <li><strong>Manifest:</strong> a plain list of files (here, a JSON file naming every photo) that a page reads so it knows what exists without asking a server to enumerate anything.</li>
             <li><strong>WebP:</strong> a modern image format that compresses far smaller than JPEG or PNG at similar quality, ideal for thumbnails.</li>
             <li><strong>CLIP:</strong> an OpenAI model that matches images against text descriptions, which makes it a free, automatic photo-tagger.</li>
@@ -256,7 +256,7 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
 
           <details class="faq-item">
             <summary>Why PNG originals instead of JPEG or WebP?</summary>
-            <p>Honestly, PNG is a lossless container I trust for archival, and storage is (see above) free. </p>
+            <p>PNG is a lossless container I trust for archival, and storage is (see above) free. </p>
           </details>
 
           <details class="faq-item">
@@ -280,6 +280,17 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
               </a>
             </div>
             <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="why-i-love-latex.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/16.webp" alt="Why I Love LaTeX" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 July 2026 · 8 min read</div>
+                  <h4 class="blog-card-title">Why I Love LaTeX</h4>
+                  <p class="blog-card-excerpt">I wrote my thesis, my papers, and my CV in LaTeX, and I'd have it no other way.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
               <a href="iso-8601-date-cult.html" class="blog-card">
                 <div class="blog-card-img"><img src="../img/photography/thumb/100.webp" alt="ISO 8601 and the Date Cult I Happily Joined" loading="lazy"></div>
                 <div class="blog-card-body">
@@ -287,17 +298,6 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
                   <h4 class="blog-card-title">ISO 8601 and the Date Cult I Happily Joined</h4>
                   <p class="blog-card-excerpt">An ode to ISO 8601 (YYYY-MM-DD) as the only sortable, unambiguous, international date format worth using.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
-                </div>
-              </a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="no-idea-no-problem-data-science-portfolio.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/19.webp" alt="No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio" loading="lazy"></div>
-                <div class="blog-card-body">
-                  <div class="blog-card-date">20 April 2026 · 11 min read</div>
-                  <h4 class="blog-card-title">No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio</h4>
-                  <p class="blog-card-excerpt">A practical guide to building a data science portfolio when you have no idea where to start. Covers project types, documentation, novelty, collaboration, and working in the GenAI era.</p>
-                  <div class="blog-card-tags"><span class="blog-tag">data science</span></div>
                 </div>
               </a>
             </div>
