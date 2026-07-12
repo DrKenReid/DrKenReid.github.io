@@ -5,14 +5,31 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 06 Jul 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Mon, 06 Jul 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Sun, 12 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>What 50,000 Scrobbles Say About Me</title>
-      <link>https://www.kenreid.co.uk/blog/what-50000-scrobbles-say-about-me.html</link>
+      <title>The Abandoned Places I Photograph</title>
+      <link>https://www.kenreid.co.uk/blog/abandoned-places-i-photograph.html</link>
+      <guid>https://www.kenreid.co.uk/blog/abandoned-places-i-photograph.html</guid>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
+      <description>Why I photograph abandoned places and the ethics of pointing a camera at decay.</description>
+      <category>photography</category>
+      <category>personal</category>
+    </item>
+    <item>
+      <title>Why I Love LaTeX</title>
+      <link>https://www.kenreid.co.uk/blog/why-i-love-latex.html</link>
+      <guid>https://www.kenreid.co.uk/blog/why-i-love-latex.html</guid>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
+      <description>I wrote my thesis, my papers, and my CV in LaTeX, and I'd have it no other way.</description>
+      <category>technology</category>
+      <category>writing</category>
+    </item>
+    <item>
+      <title>What 50,000 Scrobbles Say About Me</title>      <link>https://www.kenreid.co.uk/blog/what-50000-scrobbles-say-about-me.html</link>
       <guid>https://www.kenreid.co.uk/blog/what-50000-scrobbles-say-about-me.html</guid>
       <pubDate>Mon, 06 Jul 2026 00:00:00 +0000</pubDate>
       <description>Fifteen years of Last.fm data - what I listen to when I'm feeling joyful, depressed, doing work, working out or studying.</description>

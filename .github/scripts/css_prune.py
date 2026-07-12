@@ -42,7 +42,7 @@ RUNTIME_TOKENS = {
     "mfp-align-top", "mfp-auto-cursor", "mfp-prevent-close", "mfp-zoom",
     # Authoring helpers used by unpublished drafts: keep so drafts preview
     # correctly before their classes join the tracked corpus.
-    "theme-img-light", "theme-img-dark",
+    "theme-img-light", "theme-img-dark", "latex-logo",
 }
 
 

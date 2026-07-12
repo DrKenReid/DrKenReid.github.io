@@ -4540,6 +4540,24 @@ html[data-theme="dark"] {
   color: #fc6060;
   text-decoration: underline; }
 
+/* Typeset LaTeX wordmark (raised A, dropped E), built by an inline
+   script in the LaTeX posts. Serif on purpose: the logo wants it. */
+.latex-logo {
+  font-family: "Lora", Georgia, "Times New Roman", serif; }
+
+.latex-logo .a {
+  font-size: 0.75em;
+  vertical-align: 0.27em;
+  margin-left: -0.36em;
+  margin-right: -0.15em;
+  text-transform: uppercase; }
+
+.latex-logo .e {
+  vertical-align: -0.22em;
+  margin-left: -0.12em;
+  margin-right: -0.09em;
+  text-transform: uppercase; }
+
 /* Scrobble sparkline under the homepage stat */
 .kr-sparkline {
   display: block;

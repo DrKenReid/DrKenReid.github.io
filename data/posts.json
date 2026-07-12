@@ -1,5 +1,29 @@
 [
   {
+    "title": "The Abandoned Places I Photograph",
+    "date": "2026-07-12",
+    "tags": [
+      "photography",
+      "personal"
+    ],
+    "excerpt": "Why I photograph abandoned places and the ethics of pointing a camera at decay.",
+    "url": "blog/abandoned-places-i-photograph.html",
+    "image": "img/photography/thumb/135.webp",
+    "readMinutes": 9
+  },
+  {
+    "title": "Why I Love LaTeX",
+    "date": "2026-07-12",
+    "tags": [
+      "technology",
+      "writing"
+    ],
+    "excerpt": "I wrote my thesis, my papers, and my CV in LaTeX, and I'd have it no other way.",
+    "url": "blog/why-i-love-latex.html",
+    "image": "img/photography/thumb/16.webp",
+    "readMinutes": 8
+  },
+  {
     "title": "What 50,000 Scrobbles Say About Me",
     "date": "2026-07-06",
     "tags": [
@@ -9,7 +33,7 @@
     "excerpt": "Fifteen years of Last.fm data - what I listen to when I'm feeling joyful, depressed, doing work, working out or studying.",
     "url": "blog/what-50000-scrobbles-say-about-me.html",
     "image": "img/photography/thumb/13.webp",
-    "readMinutes": 8
+    "readMinutes": 9
   },
   {
     "title": "Hosting a Photography Portfolio on GitHub for Free",
@@ -30,7 +54,7 @@
       "philosophy",
       "science"
     ],
-    "excerpt": "Everyone took the quiz and got a label. Decades of cognitive psychology say the label does nothing: matching teaching to 'learning styles' doesn't improve learning, and believing it quietly limits you. What works instead is effortful, unglamorous, and the same for everyone.",
+    "excerpt": "Everyone took the quiz and got a label. Decades of cognitive psychology say the label does nothing: matching teaching to 'learning styles' doesn't improve learning, and believing it limits you. What works instead is effortful, unglamorous, and the same for everyone.",
     "url": "blog/why-you-arent-a-visual-learner.html",
     "image": "img/photography/thumb/366.webp",
     "readMinutes": 9
@@ -249,7 +273,7 @@
     "tags": [
       "ai"
     ],
-    "excerpt": "An AI researcher's honest take on LLM ethics: the energy numbers, the cobalt hypocrisy, the Jevons paradox, and why telling people not to use AI on environmental grounds is a privilege position.",
+    "excerpt": "An AI researcher's unvarnished take on LLM ethics: the energy numbers, the cobalt hypocrisy, the Jevons paradox, and why telling people not to use AI on environmental grounds is a privilege position.",
     "url": "blog/ethics-of-llm-use-not-llms.html",
     "image": "img/photography/thumb/280.webp",
     "readMinutes": 33

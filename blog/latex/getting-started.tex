@@ -1,0 +1,55 @@
+% Getting started with LaTeX - the whole document, no hidden parts.
+% Compile me anywhere: Overleaf, TeX Live, MiKTeX.
+\documentclass[11pt]{article}
+
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+
+\title{Getting Started with \LaTeX}
+\author{Ken Reid \\ \texttt{kenreid.co.uk}}
+\date{July 2026}
+
+\begin{document}
+\maketitle
+
+\section{How this works}
+You are reading a PDF that was generated from about forty lines of
+plain text. Headings are numbered automatically, spacing and fonts
+follow a professional standard, and nothing on this page was nudged
+into place by hand. Change the text, recompile, and the layout takes
+care of itself.
+
+\section{Mathematics, the party trick}
+Notation that word processors fight you over is native here:
+\[
+  \hat{\theta} \;=\; \arg\max_{\theta} \sum_{i=1}^{n} \log p(x_i \mid \theta)
+\]
+Inline mathematics like $e^{i\pi} + 1 = 0$ sits comfortably in a
+sentence, and equation numbering, when you want it, is automatic.
+
+\section{Structure for free}
+Lists and tables stay consistent across a whole thesis:
+\begin{itemize}
+  \item Sections, figures, and equations number themselves.
+  \item Cross-references update when things move.
+  \item Bibliographies format themselves from a reference file.
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{lcc}
+  \toprule
+  Tool     & Learning curve & Ceiling \\
+  \midrule
+  Word     & flat           & low     \\
+  Markdown & flat           & medium  \\
+  \LaTeX{} & steep          & none    \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\section{Your move}
+Open this file in Overleaf, change something, and press recompile.
+That is the entire barrier to entry.
+
+\end{document}
