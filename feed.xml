@@ -11,6 +11,14 @@
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Reading This Site Offline</title>
+      <link>https://www.kenreid.co.uk/blog/reading-this-site-offline.html</link>
+      <guid>https://www.kenreid.co.uk/blog/reading-this-site-offline.html</guid>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
+      <description>This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.</description>
+      <category>technology</category>
+    </item>
+    <item>
       <title>The Abandoned Places I Photograph</title>
       <link>https://www.kenreid.co.uk/blog/abandoned-places-i-photograph.html</link>
       <guid>https://www.kenreid.co.uk/blog/abandoned-places-i-photograph.html</guid>
