@@ -39,6 +39,10 @@ VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input",
         "link", "meta", "param", "source", "track", "wbr"}
 
 
+PROSE_EXCLUDED = {"blockquote", "cite", "footer", "code", "pre", "script",
+                  "style", "h1", "h2", "h3", "h4", "h5", "h6", "title", "q"}
+
+
 class PageParser(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
@@ -52,6 +56,12 @@ class PageParser(HTMLParser):
         self.jsonld = []         # (text, line)
         self.scripts = []        # src list
         self.noindex = False
+        self.alts = []           # alt strings on real imgs
+        self.ext_nodims = []     # (src, line) external imgs without width+height
+        self.fig_in_list = []    # lines where <figure> is a direct child of ul/ol
+        self.prose = []          # (text, line) outside PROSE_EXCLUDED tags
+        self._stack = []
+        self._excl = 0
         self._in_title = False
         self._in_jsonld = False
         self._jsonld_buf = []
@@ -60,6 +70,16 @@ class PageParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
         line = self.getpos()[0]
+        if tag == "figure" and self._stack and self._stack[-1][0] in ("ul", "ol"):
+            self.fig_in_list.append(line)
+        if tag not in VOID:
+            cls = a.get("class") or ""
+            excluded = (tag in PROSE_EXCLUDED or "references" in cls
+                        or "figure-note" in cls
+                        or (a.get("id") or "").startswith("ref-"))
+            self._stack.append((tag, excluded))
+            if excluded:
+                self._excl += 1
         if "id" in a:
             self.ids.append((a["id"], line))
         if tag == "a" and a.get("href"):
@@ -68,6 +88,12 @@ class PageParser(HTMLParser):
             src = a.get("src") or a.get("srcset")
             if src:
                 self.images.append((tag, src, a.get("alt"), a.get("loading"), line))
+            if tag == "img":
+                if a.get("alt"):
+                    self.alts.append((a["alt"].strip(), line))
+                if src and src.startswith(("http://", "https://")) and \
+                        not (a.get("width") and a.get("height")):
+                    self.ext_nodims.append((src, line))
         if tag == "link":
             if a.get("rel") == "canonical":
                 self.canonical = a.get("href")
@@ -97,12 +123,21 @@ class PageParser(HTMLParser):
         if tag == "script" and self._in_jsonld:
             self._in_jsonld = False
             self.jsonld.append(("".join(self._jsonld_buf), self._jsonld_line))
+        if tag not in VOID and any(t == tag for t, _x in self._stack):
+            while self._stack:
+                popped, was_excl = self._stack.pop()
+                if was_excl:
+                    self._excl = max(0, self._excl - 1)
+                if popped == tag:
+                    break
 
     def handle_data(self, data):
         if self._in_title:
             self.title = (self.title or "") + data
         if self._in_jsonld:
             self._jsonld_buf.append(data)
+        elif self._excl == 0 and data.strip():
+            self.prose.append((data, self.getpos()[0]))
 
 
 def tracked_html():
@@ -142,11 +177,21 @@ def resolve_local(page: Path, url: str):
     return (page.parent / path).resolve()
 
 
+def tracked_files():
+    out = subprocess.run(["git", "ls-files"], cwd=ROOT,
+                         capture_output=True, text=True).stdout
+    return set(out.split())
+
+
+BANNED_PROSE = re.compile(r"\b(?:quiet(?:ly|er|est)?|honest(?:ly)?)\b", re.I)
+
+
 def main():
     include_drafts = "--include-drafts" in sys.argv
     pages = tracked_html()
     if include_drafts:
         pages = sorted(set(pages) | set(ROOT.glob("*.html")) | set((ROOT / "blog").glob("*.html")))
+    tracked = tracked_files()
 
     problems = []           # (severity, file, line, code, message)
     page_info = {}
@@ -178,15 +223,39 @@ def main():
             else:
                 seen[i] = line
 
-        # --- links / images resolve ---
+        # --- links / images resolve (and must be git-tracked: a file that
+        # exists locally but is untracked 404s in production) ---
+        page_is_tracked = rel in tracked
+        def check_target(url, line, what="target"):
+            local = resolve_local(page, url)
+            if local is None:
+                return
+            if not local.exists():
+                add("ERROR", page, line, "broken-link", f"missing {what}: {url}")
+            elif page_is_tracked:
+                try:
+                    relp = local.resolve().relative_to(ROOT).as_posix()
+                except ValueError:
+                    relp = None
+                if relp and relp not in tracked:
+                    add("ERROR", page, line, "untracked-ref",
+                        f"{what} exists locally but is not tracked by git: {url}")
+
         for url, line in p.links + [(u, l) for (_t, u, _a, _lz, l) in p.images]:
             shape = check_url_shape(url)
             if shape:
                 add("ERROR", page, line, "bad-url", f"{shape}: {url[:120]}")
                 continue
-            local = resolve_local(page, url)
-            if local is not None and not local.exists():
-                add("ERROR", page, line, "broken-link", f"missing target: {url}")
+            if url.startswith(SITE + "/"):
+                url = urlparse(url).path
+            check_target(url, line)
+
+        # inline style backgrounds: url(...) references the parser can't see
+        for m in re.finditer(r"url\((['\"]?)([^)'\"]+)\1\)", text):
+            u = m.group(2)
+            if is_external(u) or u.startswith("data:"):
+                continue
+            check_target(u, text[:m.start()].count("\n") + 1, what="background")
 
         # --- same-page fragments ---
         idset = set(seen)
@@ -198,6 +267,39 @@ def main():
         for tag, src, alt, loading, line in p.images:
             if tag == "img" and alt is None:
                 add("WARN", page, line, "no-alt", f"img missing alt: {src[:80]}")
+
+        # --- duplicated alt text (screen readers hear it N times) ---
+        alt_first = {}
+        alt_seen = {}
+        for alt, line in p.alts:
+            if len(alt) < 9:
+                continue
+            alt_seen[alt] = alt_seen.get(alt, 0) + 1
+            alt_first.setdefault(alt, line)
+        for alt, n in alt_seen.items():
+            if n >= 3:
+                add("WARN", page, alt_first[alt], "dup-alt",
+                    f"alt text repeated {n}x: '{alt[:70]}'")
+
+        # --- external images without dimensions cause layout shift ---
+        for src, line in p.ext_nodims:
+            add("WARN", page, line, "ext-img-dims",
+                f"external img without width/height: {src[:90]}")
+
+        # --- figures may not be direct children of lists ---
+        for line in p.fig_in_list:
+            add("ERROR", page, line, "figure-in-list",
+                "figure is a direct child of ul/ol (invalid HTML)")
+
+        # --- blog prose style rules (banned words, em dashes) ---
+        if is_post and not is_redirect:
+            for chunk, line in p.prose:
+                for m in BANNED_PROSE.finditer(chunk):
+                    add("WARN", page, line, "banned-word",
+                        f"'{m.group(0)}' in prose (banned as AI tell)")
+                if "—" in chunk:
+                    add("WARN", page, line, "em-dash",
+                        f"em dash in prose: ...{chunk.strip()[:60]}...")
 
         # --- headings ---
         if not is_redirect:
@@ -243,12 +345,17 @@ def main():
                         add("ERROR", page, 0, "bad-og-image", f"og:image file missing: {og_img}")
 
         # --- JSON-LD ---
+        jsonld_headline = None
+        jsonld_date = None
         for raw, line in p.jsonld:
             try:
                 data = json.loads(raw)
             except json.JSONDecodeError as e:
                 add("ERROR", page, line, "jsonld-parse", f"invalid JSON-LD: {e}")
                 continue
+            if isinstance(data, dict):
+                jsonld_headline = data.get("headline") or jsonld_headline
+                jsonld_date = data.get("datePublished") or jsonld_date
             def walk(node):
                 if isinstance(node, dict):
                     for k, v in node.items():
@@ -266,6 +373,26 @@ def main():
                     for v in node:
                         walk(v)
             walk(data)
+
+        # --- one fact, many places: dates and headlines must agree ---
+        if is_post and not is_redirect:
+            cit = (p.metas.get("citation_publication_date") or "").replace("/", "-")
+            dc = p.metas.get("DC.date") or ""
+            dates = {k: v for k, v in
+                     (("citation", cit), ("DC.date", dc), ("JSON-LD", jsonld_date or ""))
+                     if v}
+            if len(set(dates.values())) > 1:
+                add("WARN", page, 0, "date-mismatch",
+                    "publication dates disagree: " +
+                    ", ".join(f"{k}={v}" for k, v in dates.items()))
+            page_info[page].page_date = next(iter(set(dates.values())), None) \
+                if len(set(dates.values())) == 1 else None
+            def _norm_title(s):
+                return (s or "").strip().replace("’", "'").replace("‘", "'")                     .replace("“", '"').replace("”", '"')
+            cit_title = _norm_title(p.metas.get("citation_title"))
+            if jsonld_headline and cit_title and _norm_title(jsonld_headline) != cit_title:
+                add("WARN", page, 0, "headline-mismatch",
+                    f"JSON-LD headline '{jsonld_headline[:50]}' != title '{cit_title[:50]}'")
 
         # --- blog post script includes ---
         if is_post and not is_redirect:
@@ -317,6 +444,10 @@ def main():
             add("ERROR", loc, 0, "posts-date", f"bad date '{post.get('date')}' ({url})")
         if "readMinutes" not in post:
             add("WARN", loc, 0, "posts-readtime", f"missing readMinutes ({url})")
+        page_date = getattr(page_info.get(ROOT / url), "page_date", None)
+        if page_date and post.get("date") and page_date != post["date"]:
+            add("WARN", loc, 0, "posts-date-mismatch",
+                f"posts.json date {post['date']} != page date {page_date} ({url})")
 
     # --- feed.xml ---
     feed_path = ROOT / "feed.xml"

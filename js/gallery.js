@@ -1,61 +1,63 @@
-var galleryImages=[];
-var galleryIndex=0;
-var BATCH_SIZE=24;
-var photoTags={};
-var photoPlaces={};
-var activeFilter='*';
+/**
+ * gallery.js — photo grid with CLIP-tag filters.
+ *
+ * Data: photo-tags.json (stem -> tags), photography-files.json (master list),
+ * photo-locations.json (region names for tile captions).
+ *
+ * Filtering rebuilds the grid from a filtered list and keeps batching
+ * (review 6d) instead of force-loading every photo so Isotope can hide
+ * them. Filter buttons come from the shared renderFilterBar (3a/2e).
+ */
+var galleryAll = [];
+var galleryView = [];
+var galleryIndex = 0;
+var BATCH_SIZE = 24;
+var photoTags = {};
+var photoPlaces = {};
+var activeCat = '*';
 
-var CATEGORIES={
-    landscape:{label:'Landscape',emoji:'🏞️'},
-    urban:{label:'Urban',emoji:'🏙️'},
-    architecture:{label:'Architecture',emoji:'🏛️'},
-    abandoned:{label:'Abandoned',emoji:'🏚️'},
-    wildlife:{label:'Wildlife',emoji:'🐾'},
-    nature:{label:'Nature',emoji:'🌿'},
-    portrait:{label:'Portrait',emoji:'👤'},
-    bw:{label:'B&W',emoji:'⬛'},
-    silhouette:{label:'Silhouette',emoji:'🌅'},
-    winter:{label:'Winter',emoji:'❄️'}
+var CATEGORIES = {
+    landscape: {label: 'Landscape', emoji: '🏞️'},
+    urban: {label: 'Urban', emoji: '🏙️'},
+    architecture: {label: 'Architecture', emoji: '🏛️'},
+    abandoned: {label: 'Abandoned', emoji: '🏚️'},
+    wildlife: {label: 'Wildlife', emoji: '🐾'},
+    nature: {label: 'Nature', emoji: '🌿'},
+    portrait: {label: 'Portrait', emoji: '👤'},
+    bw: {label: 'B&W', emoji: '⬛'},
+    silhouette: {label: 'Silhouette', emoji: '🌅'},
+    winter: {label: 'Winter', emoji: '❄️'}
 };
 
 function compareFileNames(a, b) {
     return b.localeCompare(a, undefined, {numeric: true, sensitivity: 'base'});
 }
 
-function resolveFallbackFilename(stem) {
-    if (/^\d+$/.test(stem)) {
-        return stem + '.png';
-    }
-    return stem + '.png';
+function stemOf(filename) {
+    var dot = filename.lastIndexOf('.');
+    return dot > -1 ? filename.slice(0, dot) : filename;
 }
 
 function initGallery() {
     bindLoadMoreButton();
     Promise.all([
-        fetch('data/photo-tags.json').then(function(r) { return r.json(); }),
-        fetch('data/photography-files.json').then(function(r) { return r.json(); }),
-        fetch('data/photo-locations.json').then(function(r) { return r.json(); }).catch(function() { return {}; })
+        fetch('/data/photo-tags.json').then(function(r) { return r.json(); }),
+        fetch('/data/photography-files.json').then(function(r) { return r.json(); }),
+        fetch('/data/photo-locations.json').then(function(r) { return r.json(); }).catch(function() { return {}; })
     ]).then(function(results) {
         photoTags = results[0] || {};
-        galleryImages = Array.isArray(results[1]) ? results[1].slice().sort(compareFileNames) : [];
+        galleryAll = Array.isArray(results[1]) ? results[1].slice().sort(compareFileNames) : [];
         photoPlaces = {};
         ((results[2] || {}).regions || []).forEach(function(region) {
             (region.photos || []).forEach(function(stem) { photoPlaces[String(stem)] = region.name; });
         });
+        galleryView = galleryAll;
         buildFilterButtons();
         buildImageHTML();
-
-        // Deep link: gallery.html?tag=wildlife applies that filter
-        try {
-            var wanted = new URLSearchParams(window.location.search).get('tag');
-            if (wanted && CATEGORIES[wanted]) {
-                var btn = document.querySelector('.gallery-filter-btn[data-filter=".' + wanted + '"]');
-                if (btn) btn.click();
-            }
-        } catch (e) {}
     }).catch(function() {
         photoTags = photoTags || {};
-        galleryImages = Object.keys(photoTags).sort(compareFileNames);
+        galleryAll = Object.keys(photoTags).sort(compareFileNames);
+        galleryView = galleryAll;
         buildFilterButtons();
         buildImageHTML();
     });
@@ -68,12 +70,10 @@ function bindLoadMoreButton() {
             loadMoreImages();
         });
         btn.dataset.bound = 'true';
-        // Infinite scroll: auto-load the next batch as the button nears
-        // the viewport (button stays as a no-JS/observer fallback).
         if ('IntersectionObserver' in window) {
             new IntersectionObserver(function(entries) {
                 entries.forEach(function(entry) {
-                    if (entry.isIntersecting && galleryIndex < galleryImages.length) {
+                    if (entry.isIntersecting && galleryIndex < galleryView.length) {
                         loadMoreImages();
                     }
                 });
@@ -84,16 +84,7 @@ function bindLoadMoreButton() {
 
 function buildFilterButtons() {
     var container = document.getElementById('gallery-filters');
-    if (!container) return;
-
-    var allBtn = document.createElement('button');
-    allBtn.className = 'btn gallery-filter-btn active';
-    allBtn.setAttribute('data-filter', '*');
-    allBtn.textContent = 'All';
-    allBtn.onclick = function() {
-        filterGallery('*', this);
-    };
-    container.appendChild(allBtn);
+    if (!container || typeof renderFilterBar !== 'function') return;
 
     var counts = {};
     Object.keys(photoTags).forEach(function(key) {
@@ -102,23 +93,32 @@ function buildFilterButtons() {
         });
     });
 
-    var cats = Object.keys(CATEGORIES);
-    cats.sort(function(a, b) {
-        return (counts[b] || 0) - (counts[a] || 0);
+    var items = Object.keys(CATEGORIES)
+        .filter(function(cat) { return counts[cat]; })
+        .sort(function(a, b) { return counts[b] - counts[a]; })
+        .map(function(cat) {
+            return {
+                key: cat,
+                label: '<span aria-hidden="true">' + CATEGORIES[cat].emoji + '</span> ' + CATEGORIES[cat].label,
+                count: counts[cat]
+            };
+        });
+
+    container.setAttribute('aria-label', 'Filter photos by subject');
+    var bar = renderFilterBar(container, items, {
+        multi: false,
+        onChange: function(activeKeys) {
+            filterGallery(activeKeys.length ? activeKeys[0] : '*');
+        }
     });
 
-    cats.forEach(function(cat) {
-        if (!counts[cat]) return;
-        var btn = document.createElement('button');
-        btn.className = 'btn gallery-filter-btn';
-        btn.setAttribute('data-filter', '.' + cat);
-        btn.innerHTML = CATEGORIES[cat].emoji + ' ' + CATEGORIES[cat].label +
-            ' <span class="filter-count">' + counts[cat] + '</span>';
-        btn.onclick = function() {
-            filterGallery('.' + cat, this);
-        };
-        container.appendChild(btn);
-    });
+    // Deep link: gallery.html?tag=wildlife applies that filter
+    try {
+        var wanted = new URLSearchParams(window.location.search).get('tag');
+        if (wanted && CATEGORIES[wanted] && counts[wanted]) {
+            bar.setActive([wanted]);
+        }
+    } catch (e) {}
 }
 
 var masonryRelayoutTimer = null;
@@ -134,54 +134,35 @@ function scheduleMasonryRelayout() {
     }, 150);
 }
 
-function filterGallery(filter, btnEl) {
-    activeFilter = filter;
-    var buttons = document.querySelectorAll('.gallery-filter-btn');
-    buttons.forEach(function(b) {
-        b.classList.remove('active');
+/* Rebuild the grid from the filtered list, batched (6d): no more
+   force-loading the entire archive so Isotope can hide most of it. */
+function filterGallery(cat) {
+    activeCat = cat;
+    galleryView = cat === '*' ? galleryAll : galleryAll.filter(function(filename) {
+        var tags = photoTags[String(stemOf(filename))] || [];
+        return tags.indexOf(cat) !== -1;
     });
-    btnEl.classList.add('active');
+    galleryIndex = 0;
 
-    if (filter !== '*' && galleryIndex < galleryImages.length) {
-        while (galleryIndex < galleryImages.length) {
-            loadMoreImages(true);
-        }
-    }
-
+    var container = document.getElementById('gallery-grid');
+    if (container) container.innerHTML = '';
     if (typeof jQuery !== 'undefined' && jQuery.fn.isotope) {
         var $grid = jQuery('.alime-portfolio');
-        if ($grid.data('isotope')) {
-            $grid.isotope({filter: filter});
-            updateCounter(filter);
-            return;
-        }
+        if ($grid.data('isotope')) $grid.isotope('reloadItems');
     }
-
-    var items = document.querySelectorAll('.single_gallery_item');
-    items.forEach(function(item) {
-        if (filter === '*' || item.classList.contains(filter.replace('.', ''))) {
-            item.style.display = '';
-        } else {
-            item.style.display = 'none';
-        }
-    });
-    updateCounter(filter);
+    var btn = document.getElementById('load-more-btn');
+    if (btn) btn.style.display = '';
+    loadMoreImages();
 }
 
-function updateCounter(filter) {
+function updateCounter() {
     var counter = document.getElementById('gallery-counter');
     if (!counter) return;
-
-    if (filter === '*') {
-        counter.textContent = 'Showing ' + galleryIndex + ' of ' + galleryImages.length + ' photos';
+    if (activeCat === '*') {
+        counter.textContent = 'Showing ' + galleryIndex + ' of ' + galleryView.length + ' photos';
     } else {
-        var cat = filter.replace('.', '');
-        var count = 0;
-        Object.keys(photoTags).forEach(function(k) {
-            if (photoTags[k].indexOf(cat) !== -1) count++;
-        });
-        var catInfo = CATEGORIES[cat] || {label: cat, emoji: ''};
-        counter.textContent = catInfo.emoji + ' ' + count + ' ' + catInfo.label + ' photos';
+        var catInfo = CATEGORIES[activeCat] || {label: activeCat, emoji: ''};
+        counter.textContent = 'Showing ' + galleryIndex + ' of ' + galleryView.length + ' ' + catInfo.label + ' photos';
     }
 }
 
@@ -189,7 +170,7 @@ function buildImageHTML() {
     var container = document.getElementById('gallery-grid');
     if (!container) return;
     var totalEl = document.getElementById('gallery-total-count');
-    if (totalEl) totalEl.textContent = galleryImages.length;
+    if (totalEl) totalEl.textContent = galleryAll.length;
     loadMoreImages();
 }
 
@@ -197,12 +178,12 @@ function loadMoreImages(silent) {
     var container = document.getElementById('gallery-grid');
     if (!container) return;
 
-    var end = Math.min(galleryIndex + BATCH_SIZE, galleryImages.length);
+    var end = Math.min(galleryIndex + BATCH_SIZE, galleryView.length);
     var newElements = [];
 
     for (var i = galleryIndex; i < end; i++) {
-        var filename = galleryImages[i];
-        var stem = filename.lastIndexOf('.') > -1 ? filename.slice(0, filename.lastIndexOf('.')) : filename;
+        var filename = galleryView[i];
+        var stem = stemOf(filename);
         var tags = photoTags[String(stem)] || [];
 
         var col = document.createElement('div');
@@ -211,17 +192,21 @@ function loadMoreImages(silent) {
         var wrapper = document.createElement('div');
         wrapper.className = 'single-portfolio-content';
 
+        var tagLabels = tags.map(function(t) {
+            var cat = CATEGORIES[t];
+            return cat ? cat.label : t;
+        }).join(' · ');
+        var place = photoPlaces[String(stem)] || '';
+
         var img = document.createElement('img');
-        img.src = 'img/photography/thumb/' + stem + '.webp';
-        img.alt = tags.length ? tags.join(', ') + ' photography' : 'Gallery photo ' + stem;
+        img.src = '/img/photography/thumb/' + stem + '.webp';
+        img.alt = 'Photograph ' + stem + (tagLabels ? ' (' + tagLabels + ')' : '') + (place ? ', taken near ' + place : '');
         img.loading = 'lazy';
-        // Natural-height masonry: every late lazy-load changes tile height,
-        // so nudge isotope to re-layout (debounced).
-        img.addEventListener('load', scheduleMasonryRelayout);
         img.onerror = function() {
             var tile = this.closest('.single_gallery_item');
             if (tile && tile.parentNode) {
                 tile.parentNode.removeChild(tile);
+                scheduleMasonryRelayout();
             }
         };
 
@@ -229,14 +214,12 @@ function loadMoreImages(silent) {
         hover.className = 'hover-content';
 
         var link = document.createElement('a');
-        link.href = 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/' + filename;
+        link.href = (typeof KR_RELEASE !== 'undefined'
+            ? KR_RELEASE
+            : 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/') + filename;
         link.className = 'portfolio-img';
         link.textContent = '+';
-        var tagLabels = tags.map(function(t) {
-            var cat = CATEGORIES[t];
-            return cat ? cat.label : t;
-        }).join(' · ');
-        var place = photoPlaces[String(stem)] || '';
+        link.setAttribute('aria-label', 'View photograph ' + stem + ' full size');
         link.setAttribute('data-caption', tagLabels + (place ? (tagLabels ? ' — ' : '') + place : ''));
 
         if (tagLabels || place) {
@@ -261,9 +244,8 @@ function loadMoreImages(silent) {
         var $grid = jQuery('.alime-portfolio');
         if ($grid.data('isotope')) {
             $grid.isotope('appended', jQuery(newElements));
-            if (activeFilter !== '*') {
-                $grid.isotope({filter: activeFilter});
-            }
+            // One relayout per batch once its images have loaded (7f),
+            // instead of a debounced relayout per image.
             $grid.imagesLoaded(function() {
                 $grid.isotope('layout');
             });
@@ -271,7 +253,7 @@ function loadMoreImages(silent) {
     }
 
     if (!silent) {
-        updateCounter(activeFilter);
+        updateCounter();
     }
 
     if (typeof jQuery !== 'undefined' && jQuery.fn.magnificPopup) {
@@ -292,7 +274,7 @@ function loadMoreImages(silent) {
     }
 
     var btn = document.getElementById('load-more-btn');
-    if (btn && galleryIndex >= galleryImages.length) {
+    if (btn && galleryIndex >= galleryView.length) {
         btn.style.display = 'none';
     }
 }

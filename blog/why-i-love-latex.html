@@ -34,6 +34,7 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
+    "mainEntityOfPage": "https://www.kenreid.co.uk/blog/why-i-love-latex.html",
     "headline": "Why I Love LaTeX",
     "description": "I wrote my thesis, my papers, and my CV in LaTeX, and I'd have it no other way.",
     "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/16.png",
@@ -50,6 +51,17 @@
     "keywords": ["latex", "typesetting", "writing", "academia", "plain text"]
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.kenreid.co.uk/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.kenreid.co.uk/blog.html" },
+      { "@type": "ListItem", "position": 3, "name": "Why I Love LaTeX", "item": "https://www.kenreid.co.uk/blog/why-i-love-latex.html" }
+    ]
+  }
+  </script>
   <script defer src="../js/theme.js"></script>
   <script defer src="../js/palette.js"></script>
 </head>
@@ -61,7 +73,7 @@
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/16.webp); background-size: cover; background-position: center center;">
     <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
       <div class="breadcrumb-content text-center">
-        <h2 class="page-title">Blog</h2>
+        <p class="page-title">Blog</p>
         <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
           <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
           <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
@@ -97,7 +109,7 @@
 
         <h2>The separation that changes everything</h2>
 
-        <p>LaTeX's founding idea is that <em>what you're saying</em> and <em>how it looks</em> are different jobs, done best by different parties. You handle the words and the structure: this is a chapter, this is a definition, this deserves emphasis. Design is handled through clearly defined rules that generally effect the whole document at once: spacing, hyphenation, figure placement, the numbering of every section, equation, and reference. In Word, this is a standard experience:</p>
+        <p>LaTeX's founding idea is that <em>what you're saying</em> and <em>how it looks</em> are different jobs, done best by different parties. You handle the words and the structure: this is a chapter, this is a definition, this deserves emphasis. Design is handled through clearly defined rules that generally affect the whole document at once: spacing, hyphenation, figure placement, the numbering of every section, equation, and reference. In Word, this is a standard experience:</p>
 
         <figure style="margin: 24px auto; max-width: 500px;">
           <img src="img/word-one-pixel-meme.jpeg" alt="Anakin and Padme meme: 'Moving an image in MS Word by 1 pixel', 'This won't mess the whole document up, right?', and the meme's own panels are broken and misaligned as the answer." loading="lazy" style="width:100%; border-radius:8px;">
@@ -136,7 +148,7 @@ optimise \emph{for}.
 
         <h2>The Output</h2>
 
-        <p>LaTeX documents <em>look right</em>, obbvious once you've compared them side by side with the alternative: the line spacing, the justified text with proper hyphenation, the kerning, the ligatures, mathematics set the way mathematics should look, without the nightmare-inducing Word equation editor. Knuth built the underlying engine, TeX, because he was (rightly) offended by how his own books were being typeset, and that offence, refined over decades, is now free software! When my thesis came back from the binders it looked like a real book, because by every standard that matters it was typeset like one. .</p>
+        <p>LaTeX documents <em>look right</em>, obvious once you've compared them side by side with the alternative: the line spacing, the justified text with proper hyphenation, the kerning, the ligatures, mathematics set the way mathematics should look, without the nightmare-inducing Word equation editor. Knuth built the underlying engine, TeX, because he was (rightly) offended by how his own books were being typeset, and that offence, refined over decades, is now free software! When my thesis came back from the binders it looked like a real book, because by every standard that matters it was typeset like one.</p>
 
         <h2>Getting started</h2>
 
@@ -250,17 +262,6 @@ Notation that word processors fight you over is native here:
           <h2>Related posts</h2>
           <div class="row related-posts-grid">
             <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="hosting-photography-on-github-for-free.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/387.webp" alt="Hosting a Photography Portfolio on GitHub for Free" loading="lazy"></div>
-                <div class="blog-card-body">
-                  <div class="blog-card-date">6 July 2026 · 10 min read</div>
-                  <h4 class="blog-card-title">Hosting a Photography Portfolio on GitHub for Free</h4>
-                  <p class="blog-card-excerpt">GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</p>
-                  <div class="blog-card-tags"><span class="blog-tag">photography</span><span class="blog-tag">technology</span></div>
-                </div>
-              </a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
               <a href="how-to-write-a-blog.html" class="blog-card">
                 <div class="blog-card-img"><img src="../img/photography/thumb/252.webp" alt="How to Write a Blog (or: What I Learned By Doing It)" loading="lazy"></div>
                 <div class="blog-card-body">
@@ -272,12 +273,23 @@ Notation that word processors fight you over is native here:
               </a>
             </div>
             <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="reading-this-site-offline.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/62.webp" alt="Reading This Site Offline" loading="lazy"></div>
+              <a href="hosting-photography-on-github-for-free.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/387.webp" alt="Hosting a Photography Portfolio on GitHub for Free" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">12 July 2026 · 6 min read</div>
-                  <h4 class="blog-card-title">Reading This Site Offline</h4>
-                  <p class="blog-card-excerpt">This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.</p>
+                  <div class="blog-card-date">6 July 2026 · 10 min read</div>
+                  <h4 class="blog-card-title">Hosting a Photography Portfolio on GitHub for Free</h4>
+                  <p class="blog-card-excerpt">GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">photography</span><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="self-hosting-your-fonts.html" class="blog-card">
+                <div class="blog-card-img"><img src="../blog/img/fonts/fonts-og.png" alt="Self-Hosting Your Fonts" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 July 2026 · 5 min read</div>
+                  <h4 class="blog-card-title">Self-Hosting Your Fonts</h4>
+                  <p class="blog-card-excerpt">No Google Fonts, no third-party requests, and icon fonts subset from 75 KB down to 1.5 KB. Here's how, and why it's worth an afternoon.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
                 </div>
               </a>

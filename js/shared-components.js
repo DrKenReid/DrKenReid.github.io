@@ -655,7 +655,7 @@ function renderBlogThanksCta() {
     cta.innerHTML = '' +
         '<div class="blog-thanks-cta__media">' +
         '<div class="blog-thanks-cta__portrait">' +
-        '<img src="../img/bg-img/res.png" alt="Ken Reid writing on a whiteboard" loading="lazy">' +
+        '<img src="../img/bg-img/res-cta.webp" alt="Ken Reid writing on a whiteboard" loading="lazy">' +
         '</div>' +
         '</div>' +
         '<div class="blog-thanks-cta__content">' +
@@ -1768,7 +1768,7 @@ function initScrobbleSparkline() {
     if (!stat || !stat.parentNode) return;
 
     fetch('data/lastfm-history.json').then(function(r) { return r.json(); }).then(function(history) {
-        if (!Array.isArray(history) || history.length < 2) return;
+        if (!Array.isArray(history) || history.length < 7) return;
         var points = history.slice(-30);
         var values = points.map(function(p) { return p.n; });
         var min = Math.min.apply(null, values);
@@ -1788,7 +1788,8 @@ function initScrobbleSparkline() {
         svg.setAttribute('aria-hidden', 'true');
         svg.innerHTML = '<polyline points="' + coords + '" fill="none" stroke="#fc6060" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
         var label = stat.parentNode.querySelector('.home-stat-label');
-        stat.parentNode.insertBefore(svg, label ? label.nextSibling : null);
+        if (!label) return; // homepage stats bar only
+        stat.parentNode.insertBefore(svg, label.nextSibling);
     }).catch(function() {});
 }
 
@@ -1908,6 +1909,138 @@ function initLightboxZoom() {
     }, { passive: true });
 }
 
+/**
+ * Shared constants + small helpers (site-review batch, 2026-07-13).
+ */
+
+// Full-size originals live in the photos-v1 GitHub release (3c)
+var KR_RELEASE = 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/';
+
+// One HTML escaper for every page that builds markup from data (3f)
+function krEscapeHtml(s) {
+    return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+// One copy-to-clipboard with fallback for every page (3f)
+function krCopyText(text, done) {
+    function fallback() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+        if (done) done(ok);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { if (done) done(true); }, fallback);
+    } else {
+        fallback();
+    }
+}
+
+/**
+ * Shared Magnific lightbox opener used by gallery and map (3c).
+ * items: [{src, title}], index: starting slide.
+ */
+function openKrLightbox(items, index) {
+    if (typeof jQuery === 'undefined' || !jQuery.magnificPopup) return false;
+    jQuery.magnificPopup.open({
+        items: items,
+        type: 'image',
+        mainClass: 'kr-lightbox mfp-fade',
+        image: { verticalFit: true },
+        gallery: { enabled: true, preload: [0, 2], navigateByImgClick: true }
+    }, index || 0);
+    return true;
+}
+
+/**
+ * Shared filter bar builder (3a) with proper toggle semantics (2e).
+ * items: [{key, label, count}], opts: { multi, allLabel, onChange(activeKeys[]) }.
+ * Renders buttons with aria-pressed; "All" clears. Returns { setActive }.
+ */
+function renderFilterBar(container, items, opts) {
+    var o = opts || {};
+    var active = [];
+    var allLabel = o.allLabel || 'All';
+
+    function emit() { if (o.onChange) o.onChange(active.slice()); }
+
+    function refresh() {
+        var btns = container.querySelectorAll('button[data-filter-key]');
+        for (var i = 0; i < btns.length; i++) {
+            var key = btns[i].getAttribute('data-filter-key');
+            var on = key === '*' ? active.length === 0 : active.indexOf(key) !== -1;
+            btns[i].classList.toggle('active', on);
+            btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+        }
+    }
+
+    function onClick(e) {
+        var btn = e.target.closest('button[data-filter-key]');
+        if (!btn) return;
+        var key = btn.getAttribute('data-filter-key');
+        if (key === '*') {
+            active = [];
+        } else if (o.multi) {
+            var at = active.indexOf(key);
+            if (at === -1) active.push(key); else active.splice(at, 1);
+        } else {
+            active = active.length === 1 && active[0] === key ? [] : [key];
+        }
+        refresh();
+        emit();
+    }
+
+    var html = '<button type="button" class="btn gallery-filter-btn active" data-filter-key="*" aria-pressed="true">' +
+        krEscapeHtml(allLabel) + '</button>';
+    for (var i = 0; i < items.length; i++) {
+        var it = items[i];
+        html += '<button type="button" class="btn gallery-filter-btn" data-filter-key="' + krEscapeHtml(it.key) + '" aria-pressed="false">' +
+            (it.label || krEscapeHtml(it.key)) +
+            (it.count != null ? ' <span class="filter-count">(' + it.count + ')</span>' : '') +
+            '</button>';
+    }
+    container.innerHTML = html;
+    container.setAttribute('role', 'group');
+    if (!container.getAttribute('aria-label')) container.setAttribute('aria-label', 'Filters');
+    container.addEventListener('click', onClick);
+
+    return {
+        setActive: function (keys) { active = (keys || []).slice(); refresh(); emit(); }
+    };
+}
+
+/**
+ * Click-to-load embed facades (7a). Markup:
+ *   <button class="kr-embed-facade" data-embed-src="..." data-embed-height="315"
+ *           data-embed-title="...">…</button>
+ * On click the button is replaced with the real iframe.
+ */
+function initEmbedFacades() {
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.kr-embed-facade');
+        if (!btn) return;
+        var iframe = document.createElement('iframe');
+        iframe.src = btn.getAttribute('data-embed-src');
+        iframe.title = btn.getAttribute('data-embed-title') || 'Embedded content';
+        iframe.width = '100%';
+        iframe.height = btn.getAttribute('data-embed-height') || '315';
+        iframe.style.border = 'none';
+        iframe.style.borderRadius = '8px';
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+        iframe.setAttribute('allowfullscreen', '');
+        btn.parentNode.replaceChild(iframe, btn);
+        iframe.focus();
+    });
+}
+
 // Offline reading: cache visited pages + core assets (see sw.js)
 if ('serviceWorker' in navigator &&
     (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
@@ -1925,6 +2058,7 @@ document.addEventListener('DOMContentLoaded', function() {
     renderNowStrip();
     initCountUpStats();
     initLazyImageFade();
+    initEmbedFacades();
     if ('MutationObserver' in window) {
         new MutationObserver(annotateNewTabLinks).observe(document.body, { childList: true, subtree: true });
     }

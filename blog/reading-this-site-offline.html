@@ -34,6 +34,7 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
+    "mainEntityOfPage": "https://www.kenreid.co.uk/blog/reading-this-site-offline.html",
     "headline": "Reading This Site Offline",
     "description": "This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.",
     "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/62.png",
@@ -50,6 +51,17 @@
     "keywords": ["service worker", "offline", "web development", "pwa", "static sites"]
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.kenreid.co.uk/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.kenreid.co.uk/blog.html" },
+      { "@type": "ListItem", "position": 3, "name": "Reading This Site Offline", "item": "https://www.kenreid.co.uk/blog/reading-this-site-offline.html" }
+    ]
+  }
+  </script>
   <script defer src="../js/theme.js"></script>
   <script defer src="../js/palette.js"></script>
 </head>
@@ -61,7 +73,7 @@
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/62.webp); background-size: cover; background-position: center center;">
     <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
       <div class="breadcrumb-content text-center">
-        <h2 class="page-title">Blog</h2>
+        <p class="page-title">Blog</p>
         <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
           <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
           <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
@@ -172,7 +184,7 @@ caches.match(req).then(function (hit) {
 
           <details class="faq-item">
             <summary>Why not use Workbox or a PWA framework?</summary>
-            <p>Workbox is excellent and I'd reach for it on a complex app. </p>
+            <p>Workbox is excellent and I'd reach for it on a complex app. For a hundred-line worker on a static site, the abstraction would outweigh the logic: more configuration than code, and one more dependency to keep updated forever.</p>
           </details>
 
           <details class="faq-item">
@@ -196,6 +208,17 @@ caches.match(req).then(function (hit) {
               </a>
             </div>
             <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="self-hosting-your-fonts.html" class="blog-card">
+                <div class="blog-card-img"><img src="../blog/img/fonts/fonts-og.png" alt="Self-Hosting Your Fonts" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 July 2026 · 5 min read</div>
+                  <h4 class="blog-card-title">Self-Hosting Your Fonts</h4>
+                  <p class="blog-card-excerpt">No Google Fonts, no third-party requests, and icon fonts subset from 75 KB down to 1.5 KB. Here's how, and why it's worth an afternoon.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
               <a href="why-i-love-latex.html" class="blog-card">
                 <div class="blog-card-img"><img src="../img/photography/thumb/16.webp" alt="Why I Love LaTeX" loading="lazy"></div>
                 <div class="blog-card-body">
@@ -203,17 +226,6 @@ caches.match(req).then(function (hit) {
                   <h4 class="blog-card-title">Why I Love LaTeX</h4>
                   <p class="blog-card-excerpt">I wrote my thesis, my papers, and my CV in LaTeX, and I'd have it no other way.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
-                </div>
-              </a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="iso-8601-date-cult.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/100.webp" alt="ISO 8601 and the Date Cult I Happily Joined" loading="lazy"></div>
-                <div class="blog-card-body">
-                  <div class="blog-card-date">12 May 2026 · 8 min read</div>
-                  <h4 class="blog-card-title">ISO 8601 and the Date Cult I Happily Joined</h4>
-                  <p class="blog-card-excerpt">An ode to ISO 8601 (YYYY-MM-DD) as the only sortable, unambiguous, international date format worth using.</p>
-                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
                 </div>
               </a>
             </div>

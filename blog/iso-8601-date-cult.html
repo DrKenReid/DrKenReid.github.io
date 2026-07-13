@@ -111,7 +111,7 @@
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/100.webp); background-size: cover; background-position: center center;">
     <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
       <div class="breadcrumb-content text-center">
-        <h2 class="page-title">Blog</h2>
+        <p class="page-title">Blog</p>
         <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
           <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
           <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
@@ -137,7 +137,7 @@
         <p>One day I saw <code>YYYY-MM-DD</code>, and the scales fell from my eyes.</p>
 
         <figure>
-          <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZTgxZXhtMDA0N3Uyb3p3b3JwaWVla2hybXBrMDUwcTVycWNkbmFxOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/hyyV7pnbE0FqLNBAzs/giphy.gif" alt="Nooooo reaction GIF" loading="lazy" style="width:100%; border-radius:8px; max-width:640px; display:block; margin:18px auto 8px;">
+          <img src="../img/ext/nooo-reaction.webp" alt="Nooooo reaction GIF" loading="lazy" style="width:100%; border-radius:8px; max-width:640px; display:block; margin:18px auto 8px;" width="480" height="400">
           <figcaption class="figure-note">When you receive an email with a file with the name &quot;historic-records-12.05.09.xlsx&quot;</figcaption>
         </figure>
 
@@ -295,6 +295,8 @@
 
       </div>
 
+        
+
         <div class="related-posts">
           <h2>Related posts</h2>
           <div class="row related-posts-grid">
@@ -334,7 +336,7 @@
           </div>
         </div>
 
-      <hr style="margin: 40px 0;">
+        <hr style="margin: 40px 0;">
       <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
     </div>
   </div>
@@ -352,7 +354,24 @@
   <script src="../js/share.js"></script>
   <script src="../js/default-assets/active.js"></script>
   <script src="../js/shared-components.js"></script>
-  <script async src="https://www.threads.net/embed.js"></script>
+  <script>
+    // Load the Threads embed script only when the first embed nears the viewport
+    (function () {
+      var first = document.querySelector('.text-post-media, blockquote[data-text-post-permalink], .threads-embed');
+      function load() {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.threads.net/embed.js';
+        document.body.appendChild(s);
+      }
+      if (!first) { return; }
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries, obs) {
+          if (entries.some(function (e) { return e.isIntersecting; })) { load(); obs.disconnect(); }
+        }, { rootMargin: '800px 0px' }).observe(first);
+      } else { load(); }
+    }());
+  </script>
   <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
 renderFooter('footer-section');</script>
 </body>

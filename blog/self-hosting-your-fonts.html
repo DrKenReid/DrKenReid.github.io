@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+  <meta name="description" content="This site serves its own fonts: no Google Fonts, no third-party requests, and icon fonts subset from 75 KB down to 1.5 KB. Here's how, and why it's worth an afternoon.">
+  <meta name="keywords" content="technology">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Self-Hosting Your Fonts - Ken Reid</title>
+  <meta property="og:title" content="Self-Hosting Your Fonts">
+  <meta property="og:description" content="This site serves its own fonts: no Google Fonts, no third-party requests, and icon fonts subset from 75 KB down to 1.5 KB. Here's how, and why it's worth an afternoon.">
+  <meta property="og:image" content="https://www.kenreid.co.uk/blog/img/fonts/fonts-og.png">
+  <meta property="og:url" content="https://www.kenreid.co.uk/blog/self-hosting-your-fonts.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Self-Hosting Your Fonts">
+  <meta name="twitter:description" content="This site serves its own fonts: no Google Fonts, no third-party requests, and icon fonts subset from 75 KB down to 1.5 KB. Here's how, and why it's worth an afternoon.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/blog/img/fonts/fonts-og.png">
+  <meta name="citation_title" content="Self-Hosting Your Fonts">
+  <meta name="citation_author" content="Reid, Kenneth N.">
+  <meta name="citation_publication_date" content="2026/07/12">
+  <meta name="citation_online_date" content="2026/07/12">
+  <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/self-hosting-your-fonts.html">
+  <meta name="DC.title" content="Self-Hosting Your Fonts">
+  <meta name="DC.creator" content="Kenneth N. Reid">
+  <meta name="DC.date" content="2026-07-12">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="../img/core-img/favicon.png">
+  <meta name="theme-color" content="#1a1a1a">
+  <link rel="stylesheet" href="../style.min.css">
+  <link rel="canonical" href="https://www.kenreid.co.uk/blog/self-hosting-your-fonts.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Self-Hosting Your Fonts",
+    "description": "This site serves its own fonts: no Google Fonts, no third-party requests, and icon fonts subset from 75 KB down to 1.5 KB. Here's how, and why it's worth an afternoon.",
+    "image": "https://www.kenreid.co.uk/blog/img/fonts/fonts-og.png",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk"
+    },
+    "datePublished": "2026-07-12",
+    "publisher": {
+      "@type": "Person",
+      "name": "Ken Reid"
+    },
+    "keywords": ["fonts", "web performance", "privacy", "typography", "web development"]
+  }
+  </script>
+  <script defer src="../js/theme.js"></script>
+  <script defer src="../js/palette.js"></script>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <div id="header-section"></div>
+
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/fonts/fonts-hero.webp); background-size: cover; background-position: center center;">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <p class="page-title">Blog</p>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Self-Hosting Your Fonts</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <div class="about-us-area section-padding-80 clearfix">
+    <div class="container">
+      <main id="main-content">
+      <div class="blog-post">
+        <h1>Self-Hosting Your Fonts</h1>
+        <div class="blog-meta">
+          12 July 2026 &middot;
+          <span class="blog-tag">technology</span>
+        </div>
+
+        <p>The text you're reading is set in Poppins (no, not Mary Poppins), the serifs in the pull quotes are Lora, and until recently both arrived from Google's servers, the way fonts arrive on roughly half the web. Now they're served from this site itself: twelve small font files sitting in the repository next to the photos. This post is just a brief rundown on how and why I did this, and how I shrank three icon fonts by about 97% with a Python script. Part of the series on <a href="../blog.html">how this site is built</a>.</p>
+
+        <div class="plain-english-box">
+          <h2>Quick jargon guide</h2>
+          <ul>
+            <li><strong>Web font:</strong> a font file the browser downloads with the page, so visitors see your chosen typeface rather than whatever their device has installed.</li>
+            <li><strong>WOFF2:</strong> the modern compressed format for web fonts. Universally supported, roughly a third the size of older formats.</li>
+            <li><strong>@font-face:</strong> the CSS rule that tells the browser "this family name maps to this font file". Self-hosting is mostly writing these by hand.</li>
+            <li><strong>Icon font:</strong> a font whose "letters" are pictures (the GitHub logo, a house, an arrow). A common way to ship icons before SVG took over.</li>
+            <li><strong>Subsetting:</strong> deleting every glyph from a font that your site doesn't use. A font with 700 icons of which you use 5 can lose the other 695.</li>
+            <li><strong>Unicode range:</strong> the span of characters a font file covers. Serving just the Latin range is itself a subset: no Cyrillic or Vietnamese glyphs for a site written in English.</li>
+          </ul>
+        </div>
+
+        <h2>The why</h2>
+
+        <p>Well, mainly because I wanted to learn about fonts. I think they're interesting: they communicate tone, a certain visual 'feel' that goes beyond the words on the page, they have interest accessibility benefits and they have some fascinating history. But, the technical reasons are: <strong>Privacy:</strong> every page view against Google Fonts tells Google's servers a visitor's IP address requested your page, and in 2022 a German court found exactly that arrangement violated the GDPR. Serving fonts yourself means your readers talk to nobody but you. <strong>Reliability and speed:</strong> a third-party font server is one more thing that can be slow, blocked (Google is unreachable in some countries), or discontinued. Self-hosted fonts arrive over the same connection as everything else. <strong>Ownership:</strong> the same philosophy as the rest of this site. Fewer moving parts owned by other people.</p>
+
+        <p>The counterargument used to be caching: the theory that everyone has Google's copy of Poppins cached already, so linking to it is free. That theory died in 2020 when browsers partitioned their caches per site for privacy reasons. Every site now downloads its own copy regardless, so the shared-cache benefit is actually negative, since you download it repeatedly.</p>
+
+        <h2>The how</h2>
+
+        <p>Google Fonts provides them, of course. Download the family, keep the WOFF2 versions of the weights you actually use, and write an <code>@font-face</code> block per file:</p>
+
+<pre><code class="language-css">@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/vendor/poppins-400.woff2") format("woff2");
+}</code></pre>
+
+        <p>This site carries seven weights of Poppins and five faces of Lora (the italics matter for pull quotes), Latin subset only, for a grand total of about 244 KB, less than a single photograph thumbnail-and-hero pair. The <code>font-display: swap</code> line is the one non-obvious part: it tells the browser to show text immediately in a fallback font and swap when the real one arrives, rather than showing nothing. Neat, right? Invisible text while a font loads is way more irritating than a brief flash of the wrong font that most people won't see.</p>
+
+        <figure style="margin: 30px 0;">
+          <img class="theme-img-light" src="img/fonts/specimen-poppins-light.webp" alt="Type specimen of Poppins: six weights from Thin 100 to Bold 700, each set as a pangram, with the full alphabet and numerals below" width="1000" height="801" loading="lazy" style="width:100%; border-radius:8px;">
+          <img class="theme-img-dark" src="img/fonts/specimen-poppins-dark.webp" alt="Type specimen of Poppins: six weights from Thin 100 to Bold 700, each set as a pangram, with the full alphabet and numerals below" width="1000" height="801" loading="lazy" style="width:100%; border-radius:8px;">
+          <figcaption class="figure-note">Poppins, rendered from the same woff2 files this page just loaded. Seven weights, 54&nbsp;KB all told.</figcaption>
+        </figure>
+
+        <figure style="margin: 30px 0;">
+          <img class="theme-img-light" src="img/fonts/specimen-lora-light.webp" alt="Type specimen of Lora: regular, medium, and semibold weights with their italics, each set as a pangram, with the full alphabet and numerals below" width="1000" height="598" loading="lazy" style="width:100%; border-radius:8px;">
+          <img class="theme-img-dark" src="img/fonts/specimen-lora-dark.webp" alt="Type specimen of Lora: regular, medium, and semibold weights with their italics, each set as a pangram, with the full alphabet and numerals below" width="1000" height="598" loading="lazy" style="width:100%; border-radius:8px;">
+          <figcaption class="figure-note">Lora's five faces. The italics earn their bytes in the pull quotes.</figcaption>
+        </figure>
+
+        <h2>The fun part: subsetting icon fonts</h2>
+
+        <p>The site's template arrived with three icon fonts (FontAwesome, Themify, ElegantIcons), each carrying hundreds of icons. A count of what the site actually uses came to: five FontAwesome icons, sixteen Themify icons, and two ElegantIcons. </p>
+
+        <p>Using the <code>fontTools</code> library, a Python script scans every page and script on the site for icon class names (<code>fa-github</code>, <code>ti-arrow-up</code>, and so on), parses each vendor stylesheet to map those class names to the character codes inside the font, and then writes a new font containing only those characters. The results are satisfying in a way few optimisations are:</p>
+
+<pre><code class="language-python"># Original -> subset (woff/woff2)
+# FontAwesome   75.4 KB -> 1.5 KB   (5 icons kept,  ~98% smaller)
+# Themify       54.8 KB -> 2.7 KB   (16 icons kept, ~95% smaller)
+# ElegantIcons  62.2 KB -> 1.2 KB   (2 icons kept,  ~98% smaller)</code></pre>
+
+        <p>The subset files live alongside the originals, and the CSS build swaps the font sources to the subsets at minification time, so the originals remain on hand for the day a new icon appears. That day is the obvious failure mode (use a new icon, forget to re-subset, icon renders as an empty box), which is why the script also writes a manifest of what's included. I have some checks in place to make sure this goes smoothly, and that will be in another blog on how "my website has a test suite". </p>
+
+        <h2>A note on SVG icons</h2>
+
+        <p>Would SVG icons be more modern than icon fonts? Yes, and a fresh site should use them. But the template came with icon fonts wired into everything, and three kilobytes of subset font is not a problem worth a rewrite. So, why not optimise the thing you have.</p>
+
+        <div class="faq-section">
+          <h2>Common questions</h2>
+
+          <details class="faq-item">
+            <summary>Is self-hosting Google's fonts legal?</summary>
+            <p>Yes. Fonts on Google Fonts are under open licences, mostly the SIL Open Font License, which explicitly permits serving them yourself. </p>
+          </details>
+
+          <details class="faq-item">
+            <summary>How much faster is it, really?</summary>
+            <p>Modest and consistent: you save a DNS lookup and TLS handshake to a third domain, which is tens to a couple of hundred milliseconds on first visit. The bigger wins are the icon subsets (about 190 KB of fonts became 5 KB) and immunity to the third party ever being slow. </p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Do I need all those weights?</summary>
+            <p>Almost certainly not, and this site is mildly guilty: seven weights of Poppins is what the template's CSS references, so seven weights it is. </p>
+          </details>
+
+          <details class="faq-item">
+            <summary>What about variable fonts?</summary>
+            <p>A variable font packs every weight into one file and would replace my seven Poppins files with one. It's the right choice for a new build; I keep the static weights because they're what the download offered and the total is already small. </p>
+          </details>
+        </div>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="hosting-photography-on-github-for-free.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/387.webp" alt="Hosting a Photography Portfolio on GitHub for Free" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">6 July 2026 · 10 min read</div>
+                  <h4 class="blog-card-title">Hosting a Photography Portfolio on GitHub for Free</h4>
+                  <p class="blog-card-excerpt">GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">photography</span><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="reading-this-site-offline.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/62.webp" alt="Reading This Site Offline" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 July 2026 · 6 min read</div>
+                  <h4 class="blog-card-title">Reading This Site Offline</h4>
+                  <p class="blog-card-excerpt">This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="why-i-love-latex.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/16.webp" alt="Why I Love LaTeX" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 July 2026 · 8 min read</div>
+                  <h4 class="blog-card-title">Why I Love LaTeX</h4>
+                  <p class="blog-card-excerpt">I wrote my thesis, my papers, and my CV in LaTeX, and I'd have it no other way.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+        <hr style="margin: 40px 0;">
+        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/alime.bundle.js"></script>
+  <script src="../js/lightbox.js"></script>
+  <script src="../js/prism-loader.js"></script>
+  <script src="../js/share.js"></script>
+  <script src="../js/default-assets/active.js"></script>
+  <script src="../js/shared-components.js"></script>
+  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');
+loadPrism(['python']);</script>
+</body>
+</html>

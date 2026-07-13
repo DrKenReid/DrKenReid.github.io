@@ -34,6 +34,7 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
+    "mainEntityOfPage": "https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html",
     "headline": "Hosting a Photography Portfolio on GitHub for Free",
     "description": "GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.",
     "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/387.png",
@@ -50,6 +51,17 @@
     "keywords": ["photography", "github", "web development", "hosting"]
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.kenreid.co.uk/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.kenreid.co.uk/blog.html" },
+      { "@type": "ListItem", "position": 3, "name": "Hosting a Photography Portfolio on GitHub for Free", "item": "https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html" }
+    ]
+  }
+  </script>
   <script defer src="../js/theme.js"></script>
   <script defer src="../js/palette.js"></script>
 </head>
@@ -61,7 +73,7 @@
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/387.webp); background-size: cover; background-position: center center;">
     <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
       <div class="breadcrumb-content text-center">
-        <h2 class="page-title">Blog</h2>
+        <p class="page-title">Blog</p>
         <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
           <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
           <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
@@ -133,7 +145,7 @@
 
         <ol>
           <li><strong>Normalise filenames.</strong> Every photo becomes a number: <code>417.png</code>. No <code>IMG_20250612_final_FINAL(2).jpg</code>. Numeric names make the manifest trivial and the URLs boring, and boring URLs are the ones that keep working.</li>
-          <li><strong>Generate thumbnails.</strong> Each original gets a compressed WebP thumbnail (<code>img/photography/thumb/417.webp</code>). These <em>do</em> live in the repository, all 492 of them, because collectively they're small enough to sit comfortably inside the Pages budget. This is the only image data the site itself hosts.</li>
+          <li><strong>Generate thumbnails.</strong> Each original gets a compressed WebP thumbnail (<code>img/photography/thumb/417.webp</code>). These <em>do</em> live in the repository, 492 of them (a couple dozen originals are heroes and duplicates that never got gallery thumbnails), because collectively they're small enough to sit comfortably inside the Pages budget. This is the only image data the site itself hosts.</li>
           <li><strong>Auto-tag with CLIP.</strong> A local script runs every photo through OpenAI's CLIP model to classify it (landscape, urban, wildlife, winter&hellip;) and writes the results to a JSON file. I wrote about this in <a href="photo-tagging-with-clip.html">its own post</a>; those tags drive the gallery's filter buttons, and I never manually categorise anything.</li>
           <li><strong>Write a manifest.</strong> A JSON list of every filename in the release. The gallery page fetches this instead of asking the GitHub API, so the site works even when the API is rate-limiting.</li>
           <li><strong>Upload the originals</strong> to the release with <code>gh release upload</code>, and commit the thumbnails plus the two JSON files.</li>
@@ -274,8 +286,19 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
                 <div class="blog-card-body">
                   <div class="blog-card-date">10 April 2026 · 6 min read</div>
                   <h4 class="blog-card-title">Building a Photo Tagging System with CLIP</h4>
-                  <p class="blog-card-excerpt">How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute, zero API cost, running entirely on CPU.</p>
+                  <p class="blog-card-excerpt">How I used OpenCLIP to automatically classify 500+ photos into 10 categories in under a minute, zero API cost, running entirely on CPU.</p>
                   <div class="blog-card-tags"><span class="blog-tag">ai</span><span class="blog-tag">photography</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="self-hosting-your-fonts.html" class="blog-card">
+                <div class="blog-card-img"><img src="../blog/img/fonts/fonts-og.png" alt="Self-Hosting Your Fonts" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 July 2026 · 5 min read</div>
+                  <h4 class="blog-card-title">Self-Hosting Your Fonts</h4>
+                  <p class="blog-card-excerpt">No Google Fonts, no third-party requests, and icon fonts subset from 75 KB down to 1.5 KB. Here's how, and why it's worth an afternoon.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
                 </div>
               </a>
             </div>
@@ -287,17 +310,6 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
                   <h4 class="blog-card-title">Reading This Site Offline</h4>
                   <p class="blog-card-excerpt">This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
-                </div>
-              </a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="why-i-love-latex.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/16.webp" alt="Why I Love LaTeX" loading="lazy"></div>
-                <div class="blog-card-body">
-                  <div class="blog-card-date">12 July 2026 · 8 min read</div>
-                  <h4 class="blog-card-title">Why I Love LaTeX</h4>
-                  <p class="blog-card-excerpt">I wrote my thesis, my papers, and my CV in LaTeX, and I'd have it no other way.</p>
-                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
                 </div>
               </a>
             </div>

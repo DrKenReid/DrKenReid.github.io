@@ -11,6 +11,14 @@
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Self-Hosting Your Fonts</title>
+      <link>https://www.kenreid.co.uk/blog/self-hosting-your-fonts.html</link>
+      <guid>https://www.kenreid.co.uk/blog/self-hosting-your-fonts.html</guid>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
+      <description>No Google Fonts, no third-party requests, and icon fonts subset from 75 KB down to 1.5 KB. Here's how, and why it's worth an afternoon.</description>
+      <category>technology</category>
+    </item>
+    <item>
       <title>Reading This Site Offline</title>
       <link>https://www.kenreid.co.uk/blog/reading-this-site-offline.html</link>
       <guid>https://www.kenreid.co.uk/blog/reading-this-site-offline.html</guid>
@@ -123,7 +131,7 @@
       <title>Iain M. Banks and The Culture</title>
       <link>https://www.kenreid.co.uk/blog/the-culture-series.html</link>
       <guid>https://www.kenreid.co.uk/blog/the-culture-series.html</guid>
-      <pubDate>Sat, 30 May 2026 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 01 Jun 2026 00:00:00 +0000</pubDate>
       <description>Smashing the world requires only a hammer; building a better one requires an imagination. A reflection on Iain M. Banks's Culture series and the fierce contrarian act of imagining a future that works.</description>
       <category>books</category>
       <category>science-fiction</category>
@@ -145,7 +153,7 @@
       <link>https://www.kenreid.co.uk/blog/advice-to-my-younger-self.html</link>
       <guid>https://www.kenreid.co.uk/blog/advice-to-my-younger-self.html</guid>
       <pubDate>Mon, 25 May 2026 00:00:00 +0000</pubDate>
-      <description>Forty things I would tell my younger self, from pensions and emergency funds to sunscreen, boundaries, and uncomfortable conversations.</description>
+      <description>Fifty things I would tell my younger self, from pensions and emergency funds to sunscreen, boundaries, and uncomfortable conversations.</description>
       <category>personal</category>
     </item>
     <item>
@@ -320,7 +328,7 @@
       <link>https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html</link>
       <guid>https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html</guid>
       <pubDate>Fri, 10 Apr 2026 00:00:00 +0000</pubDate>
-      <description>How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute — zero API cost, running entirely on CPU.</description>
+      <description>How I used OpenCLIP to automatically classify 500+ photos into 10 categories in under a minute — zero API cost, running entirely on CPU.</description>
       <category>ai</category>
       <category>photography</category>
     </item>
