@@ -48,6 +48,10 @@ CHECKS = [
         ("footer latest posts", "document.querySelectorAll('.kr-footer-posts a').length >= 1"),
         ("progress bar", "!!document.querySelector('.kr-progress-bar')"),
     ]),
+    ("series-how-this-site-is-built.html", [
+        ("series parts render", "document.querySelectorAll('#series-grid .blog-card').length >= 4"),
+        ("part chips", "document.querySelectorAll('#series-grid .kr-series-chip').length >= 4"),
+    ]),
     ("quotes.html", [
         ("quote cards", "document.querySelectorAll('.kr-quote-card').length >= 500"),
     ]),

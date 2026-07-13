@@ -498,6 +498,20 @@ def main():
     except ET.ParseError as e:
         add("ERROR", "sitemap.xml", 0, "sitemap-parse", f"XML parse error: {e}")
 
+    # --- style.css: raw icon codepoints in content ---
+    # The icon subsetter keys on fa-*/ti-*/icon_* class names; a bare
+    # PUA codepoint in a content property bypasses it, so the glyph is
+    # missing from the subset font and renders as nothing (this is how
+    # the breadcrumb separators silently vanished).
+    css_path = ROOT / "style.css"
+    if css_path.exists():
+        for i, line in enumerate(css_path.read_text(encoding="utf-8").splitlines(), 1):
+            if re.search(r"content:\s*['\"]\\[efEF][0-9a-fA-F]{3}", line):
+                add("ERROR", "style.css", i, "raw-icon-codepoint",
+                    "icon glyph referenced by codepoint in CSS content — "
+                    "the subset font won't include it; use an icon class "
+                    "or a plain text character")
+
     # --- report ---
     order = {"ERROR": 0, "WARN": 1, "INFO": 2}
     problems.sort(key=lambda x: (order[x[0]], x[1], x[2]))

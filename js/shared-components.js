@@ -23,6 +23,7 @@ function renderHeader(targetId, options) {
     var active = opts.active || '';
     var hobbiesActive = active === 'hobbies';
     var hobbiesChild = opts.hobbiesChild || '';
+    var blogChild = opts.blogChild || '';
 
     function navItem(key, href, label) {
         var isCurrent = active === key;
@@ -52,7 +53,13 @@ function renderHeader(targetId, options) {
         '<li' + isHobbyChildActive('literature') + '><a href="' + basePath + 'literature.html"' + (hobbiesChild === 'literature' ? ' aria-current="page"' : '') + '>Literature</a></li>' +
         '<li class="kr-nav-sub' + (hobbiesChild === 'quotes' ? ' active' : '') + '"><a href="' + basePath + 'quotes.html"' + (hobbiesChild === 'quotes' ? ' aria-current="page"' : '') + '>Quote Wall</a></li>' +
         '</ul></li>' +
-        navItem('blog', basePath + 'blog.html', 'Blog') +
+        '<li' + (active === 'blog' ? ' class="active"' : '') + '><a href="' + basePath + 'blog.html"' + (active === 'blog' && !blogChild ? ' aria-current="page"' : '') + '>Blog</a>' +
+        '<ul class="dropdown kr-nav-dd-wide">' +
+        '<li><a href="' + basePath + 'blog.html">All Blogs</a></li>' +
+        '<li class="kr-nav-divider" role="separator" aria-hidden="true"></li>' +
+        '<li' + (blogChild === 'series-site' ? ' class="active"' : '') + '><a href="' + basePath + 'series-how-this-site-is-built.html"' + (blogChild === 'series-site' ? ' aria-current="page"' : '') + '>How This Site Is Built</a></li>' +
+        '<li' + (blogChild === 'series-schedule' ? ' class="active"' : '') + '><a href="' + basePath + 'series-optimizing-your-schedule.html"' + (blogChild === 'series-schedule' ? ' aria-current="page"' : '') + '>Optimizing Your Schedule</a></li>' +
+        '</ul></li>' +
         navItem('contact', basePath + 'contact.html', 'Contact') +
         '</ul></div></div></nav>' +
         '</div></div></div></header>';
@@ -1047,6 +1054,55 @@ function initCitePreviews() {
 }
 
 /**
+ * Series landing pages live at /series-<slug>.html; the slug mirrors
+ * the heading-id slugger so names map to files predictably.
+ */
+function seriesPageHref(name) {
+    var slug = (name || '').toLowerCase()
+        .replace(/['’"“”]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    return '/series-' + slug + '.html';
+}
+
+/**
+ * Series landing page: a container with id="series-page" and a
+ * data-series name gets every part rendered as a card, in part order.
+ */
+function renderSeriesPage() {
+    var host = document.getElementById('series-page');
+    var grid = document.getElementById('series-grid');
+    if (!host || !grid) return;
+    var name = host.getAttribute('data-series');
+
+    loadBlogPosts().then(function(posts) {
+        var parts = posts.filter(function(p) {
+            return p.series && p.series.name === name;
+        }).sort(function(a, b) { return (a.series.part || 0) - (b.series.part || 0); });
+        if (!parts.length) return;
+
+        grid.innerHTML = '';
+        parts.forEach(function(p) {
+            var col = createBlogCardElement(p);
+            var imgWrap = col.querySelector('.blog-card-img');
+            if (imgWrap) {
+                var chip = document.createElement('span');
+                chip.className = 'kr-series-chip';
+                chip.textContent = 'Part ' + p.series.part;
+                imgWrap.appendChild(chip);
+            }
+            grid.appendChild(col);
+        });
+
+        var count = document.getElementById('series-count');
+        if (count) {
+            var mins = parts.reduce(function(s, p) { return s + (p.readMinutes || 0); }, 0);
+            count.textContent = parts.length + ' parts · ' + mins + ' minutes all told';
+        }
+    }).catch(function() {});
+}
+
+/**
  * Series banner: posts with a "series" field in posts.json get a box
  * under the meta line listing every part, current one highlighted.
  */
@@ -1074,7 +1130,7 @@ function renderSeriesNav() {
         var box = document.createElement('nav');
         box.className = 'kr-series';
         box.setAttribute('aria-label', 'Article series');
-        box.innerHTML = '<span class="kr-series-label">Series · ' + current.series.name + '</span>' +
+        box.innerHTML = '<a class="kr-series-label" href="' + seriesPageHref(current.series.name) + '">Series · ' + current.series.name + '</a>' +
             '<ol class="kr-series-parts">' +
             parts.map(function(p) {
                 var isCurrent = p.url === current.url;
