@@ -1,15 +1,15 @@
 {
   "track": {
-    "name": "Night Prowler",
-    "artist": "Carpenter Brut",
-    "url": "https://www.last.fm/music/Carpenter+Brut/_/Night+Prowler",
+    "name": "Smoke And Mirrors",
+    "artist": "Symphony X",
+    "url": "https://www.last.fm/music/Symphony+X/_/Smoke+And+Mirrors",
     "nowPlaying": false
   },
   "reading": [
     {
-      "title": "Beware of Chicken 2 (Beware of Chicken, #2)",
-      "author": "CasualFarmer",
-      "link": "https://www.goodreads.com/review/show/8741826322?utm_medium=api&utm_source=rss"
+      "title": "The Captain (The Last Horizon, #1)",
+      "author": "Will Wight",
+      "link": "https://www.goodreads.com/review/show/6250022192?utm_medium=api&utm_source=rss"
     },
     {
       "title": "DBT Made Simple: A Step-by-Step Guide to Dialectical Behavior Therapy (The New Harbinger Made Simple Series)",
@@ -22,5 +22,5 @@
       "link": "https://www.goodreads.com/review/show/5348470770?utm_medium=api&utm_source=rss"
     }
   ],
-  "updated": "2026-07-07"
+  "updated": "2026-07-13"
 }
