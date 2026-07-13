@@ -875,31 +875,28 @@
     renderInstagramSection('instagram-section');
     renderFooter('footer-section');
 
-    /* Load a random set of relevant blog posts */
+    /* List every published data-science-related post, newest first */
     fetch('data/posts.json')
       .then(function(r) { return r.json(); })
       .then(function(posts) {
-        var relevantTags = ['ai'];
-        var relevantPosts = posts
-          .map(function(post) {
+        var relevantTags = ['data science', 'ai'];
+        var extraUrls = ['blog/what-50000-scrobbles-say-about-me.html'];
+        var selectedPosts = posts
+          .filter(function(post) {
             var tags = (post.tags || []).map(function(t) { return String(t).toLowerCase(); });
-            var score = tags.filter(function(tag) {
+            var tagged = tags.some(function(tag) {
               return relevantTags.indexOf(tag) !== -1;
-            }).length;
-            return { post: post, score: score };
+            });
+            return tagged || extraUrls.indexOf(post.url) !== -1;
           })
-          .filter(function(entry) { return entry.score > 0; })
-          .map(function(entry) { return entry.post; });
+          .sort(function(a, b) { return b.date < a.date ? -1 : 1; });
 
-        var shuffled = relevantPosts.slice().sort(function() {
-          return Math.random() - 0.5;
-        });
-
-        var selectedPosts = shuffled.slice(0, 3);
         var container = document.getElementById('ds-blog-grid');
         if (!container || !selectedPosts.length) return;
         selectedPosts.forEach(function(post) {
-          var dateStr = new Date(post.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+          var dateStr = typeof formatPostDate === 'function'
+            ? formatPostDate(post.date)
+            : new Date(post.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
           var col = typeof createBlogCardElement === 'function'
             ? createBlogCardElement(post, {
                 colClass: 'col-12 col-md-6 col-lg-4 mb-30',

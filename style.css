@@ -1717,8 +1717,9 @@ input:required {
     border: none !important;
     border-radius: 10px; }
 
-/* Bluesky SVG icon in social links */
-.bluesky-icon {
+/* Bluesky / Substack SVG icons in social links */
+.bluesky-icon,
+.substack-icon {
   width: 1em;
   height: 1em;
   fill: currentColor;
@@ -2012,7 +2013,9 @@ input:required {
 .blog-post .blog-thanks-cta .blog-thanks-cta__button i,
 .blog-post .blog-thanks-cta .blog-thanks-cta__pill i,
 .blog-post .blog-thanks-cta .blog-thanks-cta__button .bluesky-icon,
-.blog-post .blog-thanks-cta .blog-thanks-cta__pill .bluesky-icon {
+.blog-post .blog-thanks-cta .blog-thanks-cta__pill .bluesky-icon,
+.blog-post .blog-thanks-cta .blog-thanks-cta__button .substack-icon,
+.blog-post .blog-thanks-cta .blog-thanks-cta__pill .substack-icon {
   color: inherit;
   fill: currentColor;
 }
@@ -5015,6 +5018,11 @@ hr:has(+ #footer-section) {
 
 .kr-footer .social-info .bluesky-icon {
   width: 15px;
+  height: 13px;
+  fill: currentColor; }
+
+.kr-footer .social-info .substack-icon {
+  width: 13px;
   height: 13px;
   fill: currentColor; }
 
