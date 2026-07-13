@@ -1060,10 +1060,13 @@ input:required {
         font-weight: 400; }
         .breadcrumb-content .breadcrumb .breadcrumb-item a:hover, .breadcrumb-content .breadcrumb .breadcrumb-item a:focus {
           color: #fc6060; }
+    /* Plain-text chevron: the FontAwesome \f105 glyph is not in the
+       subset font (subsetting keys on fa-* class names, not raw
+       codepoints in CSS content), so it rendered as nothing. */
     .breadcrumb-content .breadcrumb .breadcrumb-item + .breadcrumb-item::before {
-      content: '\f105';
-      color: #ffffff;
-      font-family: "FontAwesome"; }
+      content: '›';
+      color: rgba(255, 255, 255, 0.7);
+      font-family: inherit; }
 
 .breadcrumb-area.blog {
   height: 550px; }
@@ -5688,6 +5691,40 @@ body.kr-palette-open {
   text-transform: uppercase;
   color: #fc6060;
   margin-bottom: 8px; }
+
+a.kr-series-label:hover,
+a.kr-series-label:focus {
+  color: #c53030;
+  text-decoration: underline; }
+
+/* Series landing pages: part chip needs a positioned ancestor */
+.kr-series-page .blog-card-img {
+  position: relative; }
+
+/* Divider between "All Blogs" and the series entries in the Blog dropdown */
+.classynav ul li .dropdown li.kr-nav-divider {
+  height: 0;
+  min-height: 0;
+  line-height: 0;
+  margin: 6px 12px;
+  padding: 0;
+  background: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  list-style: none;
+  overflow: hidden; }
+
+[data-theme="dark"] .classynav ul li .dropdown li.kr-nav-divider {
+  border-top-color: rgba(255, 255, 255, 0.14); }
+
+/* Blog dropdown needs room for full series titles on one line */
+.classynav ul li .dropdown.kr-nav-dd-wide {
+  width: 260px; }
+
+/* Mobile menu: link blocks sit flush, so margins around the divider
+   expose the panel background as a thick bar — collapse to the line */
+@media (max-width: 991px) {
+  .classynav ul li .dropdown li.kr-nav-divider {
+    margin: 0; } }
 
 .kr-series-parts {
   margin: 0;
