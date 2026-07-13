@@ -642,10 +642,10 @@ input:required {
       .classy-nav-container .classy-navbar .classynav ul li.cn-dropdown-item ul li a:focus, .classy-nav-container .classy-navbar .classynav ul li.cn-dropdown-item ul li a:hover, .classy-nav-container .classy-navbar .classynav ul li.megamenu-item ul li a:focus, .classy-nav-container .classy-navbar .classynav ul li.megamenu-item ul li a:hover {
         color: #fc6060; }
 
-.classynav ul li.active a {
+.classynav > ul > li.active > a {
   position: relative;
   z-index: 1; }
-  .classynav ul li.active a::before {
+  .classynav > ul > li.active > a::before {
     width: calc(100% - 40px);
     height: 2px;
     background-color: #fc6060;
@@ -657,11 +657,17 @@ input:required {
     left: 50%;
     transform: translateX(-50%); }
     @media only screen and (min-width: 768px) and (max-width: 991px) {
-      .classynav ul li.active a::before {
+      .classynav > ul > li.active > a::before {
         display: none; } }
     @media only screen and (max-width: 767px) {
-      .classynav ul li.active a::before {
+      .classynav > ul > li.active > a::before {
         display: none; } }
+
+/* Active child inside the Hobbies dropdown: colour, not the underline bar
+   (the bar's ::before collides with kr-nav-sub's arrow ::before) */
+.classy-nav-container .classy-navbar .classynav ul li.cn-dropdown-item ul li.active > a,
+[data-theme="dark"] .classy-nav-container .classy-navbar .classynav ul li.cn-dropdown-item ul li.active > a {
+  color: #fc6060; }
 
 .classynav ul li.has-down > a::after,
 .classynav ul li.has-down.active > a::after,
