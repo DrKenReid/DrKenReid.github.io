@@ -237,7 +237,18 @@
         <h2 class="wow fadeInUp" data-wow-delay="100ms">Latest Blog Posts</h2>
       </div>
       <div class="row justify-content-center">
-        <div class="col-12" id="latest-posts"></div>
+        <div class="col-12 col-lg-7" id="latest-posts"></div>
+        <div class="col-12 col-lg-5 mb-30">
+          <div class="wow fadeInUp kr-blog-promo" data-wow-delay="200ms" style="background-image: url(img/bg-img/ken-train.webp);" role="img" aria-label="Ken Reid on a train, lit by the window">
+            <div class="kr-blog-promo__content">
+              <span class="section-eyebrow">The blog</span>
+              <h3>Writing to find out <span style="white-space: nowrap;">what I think</span></h3>
+              <p>Data science, books, photography, music, moving countries: whatever I'm currently thinking through ends up written down here, with citations where I can find them.</p>
+              <a class="btn alime-btn btn-2" href="blog.html">Browse all posts</a>
+              <p class="kr-blog-promo__sub">Or get new posts <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">by email</a>.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -382,7 +393,7 @@
           var dateStr = parsePostDate(post.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
           var col = typeof createBlogCardElement === 'function'
             ? createBlogCardElement(post, {
-                colClass: 'col-12 col-md-4 mb-30',
+                colClass: 'col-12 mb-30',
                 href: post.url,
                 imageSrc: post.image,
                 dateStr: dateStr,
