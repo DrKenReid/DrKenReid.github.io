@@ -3920,7 +3920,11 @@ input:required {
 
 /* :: Carousel pause/play toggle (WCAG 2.2.2) */
 .follow-area {
-  position: relative; }
+  position: relative;
+  padding: 60px 0 30px; }
+
+.follow-area .section-heading {
+  margin-bottom: 34px; }
 
 .carousel-pause-btn {
   position: absolute;
@@ -5987,3 +5991,487 @@ body.kr-palette-open {
   .plain-english-box,
   .faq-section {
     page-break-inside: avoid; } }
+
+/* ============================================================
+   Site-review batch (2026-07-13): shared tokens & components
+   ============================================================ */
+
+/* Brand tokens (3b) */
+:root {
+  --kr-accent: #fc6060;
+  --kr-muted: #636363; }
+
+/* Muted body copy used across content pages (3b) */
+.kr-body-text {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #636363; }
+
+[data-theme="dark"] .kr-body-text {
+  color: #a8a8a8; }
+
+/* Photo captions (about pets etc.) (3b) */
+.kr-caption {
+  text-align: center;
+  margin-top: 12px;
+  font-weight: 600;
+  color: #252525; }
+
+.kr-caption--sm {
+  margin-top: 8px;
+  font-size: 14px; }
+
+[data-theme="dark"] .kr-caption {
+  color: #ddd; }
+
+/* Explore/social cards: complete the class so inline styles can go (3b) */
+.social-card {
+  display: block;
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 25px 15px;
+  text-align: center;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease; }
+
+.social-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); }
+
+.social-card h3 {
+  font-size: 16px;
+  margin: 10px 0 6px;
+  color: #252525; }
+
+.social-card p {
+  font-size: 12.5px;
+  color: #636363;
+  margin: 0; }
+
+[data-theme="dark"] .social-card {
+  background: #242424; }
+
+[data-theme="dark"] .social-card h3 {
+  color: #e2e2e2; }
+
+[data-theme="dark"] .social-card p {
+  color: #a8a8a8; }
+
+/* Homepage stats bar as a definition list (2g): keep value above label */
+.home-stats-bar dl {
+  margin: 0; }
+
+.home-stats-bar .home-stat {
+  display: flex;
+  flex-direction: column-reverse; }
+
+.home-stats-bar dd {
+  margin: 0; }
+
+/* Click-to-load embed facade (7a) */
+.kr-embed-facade {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 220px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  background: linear-gradient(135deg, #2a2a2a, #171717);
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 24px; }
+
+.kr-embed-facade:hover .kr-embed-facade__play {
+  transform: scale(1.08);
+  background: #fc6060; }
+
+.kr-embed-facade__play {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: rgba(252, 96, 96, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background 0.15s ease; }
+
+.kr-embed-facade__play::after {
+  content: '';
+  border-style: solid;
+  border-width: 11px 0 11px 18px;
+  border-color: transparent transparent transparent #fff;
+  margin-left: 4px; }
+
+.kr-embed-facade__title {
+  font-weight: 600;
+  font-size: 15px; }
+
+.kr-embed-facade__note {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65); }
+
+[data-theme="dark"] .kr-embed-facade {
+  border-color: #333; }
+
+/* Static map card on contact (7e) */
+.kr-static-map {
+  display: block;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden; }
+
+.kr-static-map img {
+  width: 100%;
+  display: block; }
+
+.kr-static-map figcaption {
+  font-size: 11px;
+  color: #888;
+  text-align: right;
+  margin-top: 4px; }
+
+/* Bottom-of-page cross-link strip (8a / 9c) */
+.kr-next-stop {
+  text-align: center;
+  margin: 40px 0 10px; }
+
+.kr-next-stop p {
+  color: #636363;
+  font-size: 15px;
+  margin-bottom: 16px; }
+
+[data-theme="dark"] .kr-next-stop p {
+  color: #a8a8a8; }
+
+/* lastfmstats iframe: responsive height (6a) */
+.kr-lastfm-frame {
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  height: 1500px; }
+
+@media only screen and (max-width: 767px) {
+  .kr-lastfm-frame {
+    height: 760px; } }
+
+.social-card__emoji {
+  font-size: 36px;
+  margin-bottom: 10px; }
+
+.social-card {
+  height: 100%; }
+
+/* Coverless currently-reading tile (literature, review 1c) */
+.kr-book-tile a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  width: 92px;
+  height: 150px;
+  padding: 10px 8px;
+  background: #f0eeea;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-decoration: none;
+  text-align: center; }
+
+.kr-book-tile__title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #252525;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden; }
+
+.kr-book-tile__author {
+  font-size: 10px;
+  color: #6b6b6b; }
+
+[data-theme="dark"] .kr-book-tile a {
+  background: #242424;
+  border-color: #333; }
+
+[data-theme="dark"] .kr-book-tile__title {
+  color: #ddd; }
+
+/* Compact filter buttons on small screens (6g) */
+@media only screen and (max-width: 575px) {
+  .gallery-filters .gallery-filter-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    margin: 3px 2px; } }
+
+/* Quote wall: baked cards (review 5a/2a/6b) */
+.kr-quote-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 180px; }
+
+.kr-quote-copy {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: transparent;
+  color: #6b6b6b;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  opacity: 0.7; }
+
+.kr-quote-card:hover .kr-quote-copy,
+.kr-quote-copy:focus-visible {
+  opacity: 1;
+  color: #fc6060;
+  border-color: #fc6060; }
+
+[data-theme="dark"] .kr-quote-copy {
+  border-color: #444;
+  color: #a5a5a5; }
+
+/* Gallery achievement cards (round 2) */
+.kr-fact-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 16px 18px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #636363;
+  transition: transform 0.2s ease, box-shadow 0.2s ease; }
+
+.kr-fact-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08); }
+
+.kr-fact-card__emoji {
+  font-size: 26px;
+  line-height: 1.2;
+  flex: 0 0 auto; }
+
+.kr-fact-note {
+  font-size: 12px;
+  color: #8a8a8a;
+  margin: 6px 4px 0; }
+
+[data-theme="dark"] .kr-fact-card {
+  background: #242424;
+  color: #a8a8a8; }
+
+.mb-15 { margin-bottom: 15px; }
+
+/* Blog batch (2026-07-13): shared post classes replacing inline styles */
+.blog-post .post-img {
+  max-width: 760px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 18px auto 8px;
+  border-radius: 8px; }
+
+.blog-post .book-cover--left {
+  float: left;
+  margin: 8px 24px 15px 0; }
+
+.blog-post .book-cover--right {
+  float: right;
+  margin: 8px 0 15px 24px; }
+
+.trigger-warning {
+  color: #b00020;
+  font-weight: 700; }
+
+[data-theme="dark"] .trigger-warning {
+  color: #ff8a80; }
+
+/* Dark-background chart images read as deliberate cards in light mode */
+.blog-post img.chart-dark {
+  background: #1d1d1f;
+  padding: 10px;
+  border-radius: 8px;
+  box-sizing: border-box; }
+
+/* Music Find Me cards (round 4): uniform panels, pinned buttons */
+.kr-findme-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #f7f7f7;
+  border-radius: 10px;
+  padding: 24px 22px;
+  text-align: center; }
+
+.kr-findme-card h3 {
+  font-size: 20px;
+  margin-bottom: 4px; }
+
+.kr-findme-card__sub {
+  font-size: 13.5px;
+  color: #6b6b6b;
+  margin-bottom: 18px; }
+
+.kr-findme-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column; }
+
+.kr-findme-card__body .kr-embed-facade {
+  flex: 1;
+  min-height: 200px; }
+
+.kr-findme-stats {
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+  margin-bottom: 6px; }
+
+.kr-findme-stats > div {
+  display: flex;
+  flex-direction: column; }
+
+.kr-findme-stat {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fc6060; }
+
+.kr-findme-label {
+  font-size: 11px;
+  color: #6b6b6b;
+  text-transform: uppercase;
+  letter-spacing: 1px; }
+
+.kr-findme-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  flex: 1;
+  align-content: flex-start; }
+
+.kr-findme-chips span {
+  background: rgba(252, 96, 96, 0.1);
+  color: #c53030;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px; }
+
+.kr-findme-card__btn {
+  margin-top: 18px;
+  align-self: center; }
+
+[data-theme="dark"] .kr-findme-card {
+  background: #242424; }
+
+[data-theme="dark"] .kr-findme-card__sub,
+[data-theme="dark"] .kr-findme-label {
+  color: #a5a5a5; }
+
+[data-theme="dark"] .kr-findme-chips span {
+  color: #fc9a9a; }
+
+/* Blog series shelf (option 1) */
+.kr-series-shelf {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 26px; }
+
+.kr-series-shelf__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #c53030;
+  margin-right: 4px; }
+
+[data-theme="dark"] .kr-series-shelf__label {
+  color: #fc6060; }
+
+.kr-series-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f7f7f7;
+  border: 1px solid #e6e6e6;
+  border-radius: 999px;
+  padding: 6px 18px 6px 6px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  text-align: left; }
+
+.kr-series-card img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover; }
+
+.kr-series-card__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3; }
+
+.kr-series-card__text strong {
+  font-size: 13.5px;
+  color: #252525; }
+
+.kr-series-card__text span {
+  font-size: 11px;
+  color: #6b6b6b; }
+
+.kr-series-card:hover {
+  border-color: #fc6060;
+  transform: translateY(-1px); }
+
+.kr-series-card.active {
+  background: #fc6060;
+  border-color: #fc6060; }
+
+.kr-series-card.active .kr-series-card__text strong,
+.kr-series-card.active .kr-series-card__text span {
+  color: #fff; }
+
+[data-theme="dark"] .kr-series-card {
+  background: #242424;
+  border-color: #333; }
+
+[data-theme="dark"] .kr-series-card__text strong {
+  color: #e2e2e2; }
+
+[data-theme="dark"] .kr-series-card.active {
+  background: #fc6060;
+  border-color: #fc6060; }
+
+[data-theme="dark"] .kr-series-card.active .kr-series-card__text strong,
+[data-theme="dark"] .kr-series-card.active .kr-series-card__text span {
+  color: #fff; }
+
+/* Part chip on series post cards (anchored to the thumbnail) */
+.post-thumbnail {
+  position: relative;
+  display: block; }
+
+.kr-series-chip {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  background: #fc6060;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  pointer-events: none; }

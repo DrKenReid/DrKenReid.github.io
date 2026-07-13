@@ -1,5 +1,20 @@
 [
   {
+    "title": "Self-Hosting Your Fonts",
+    "date": "2026-07-12",
+    "tags": [
+      "technology"
+    ],
+    "excerpt": "No Google Fonts, no third-party requests, and icon fonts subset from 75 KB down to 1.5 KB. Here's how, and why it's worth an afternoon.",
+    "url": "blog/self-hosting-your-fonts.html",
+    "image": "blog/img/fonts/fonts-og.png",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 5
+    },
+    "readMinutes": 5
+  },
+  {
     "title": "Reading This Site Offline",
     "date": "2026-07-12",
     "tags": [
@@ -8,7 +23,11 @@
     "excerpt": "This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.",
     "url": "blog/reading-this-site-offline.html",
     "image": "img/photography/thumb/62.webp",
-    "readMinutes": 6
+    "readMinutes": 6,
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 4
+    }
   },
   {
     "title": "The Abandoned Places I Photograph",
@@ -56,7 +75,11 @@
     "excerpt": "GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.",
     "url": "blog/hosting-photography-on-github-for-free.html",
     "image": "img/photography/thumb/387.webp",
-    "readMinutes": 10
+    "readMinutes": 10,
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 3
+    }
   },
   {
     "title": "Why You Aren't a \"Visual Learner\"",
@@ -111,7 +134,7 @@
     "excerpt": "From the plutonium in the planet's crust to the Golden Record in interstellar space to the memory of a Tuesday coffee, a look at everything we leave behind, and why none of us ever truly vanishes.",
     "url": "blog/what-we-leave-behind.html",
     "image": "img/bg-img/voyager-golden-record.jpg",
-    "readMinutes": 17
+    "readMinutes": 18
   },
   {
     "title": "Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)",
@@ -139,8 +162,8 @@
     ],
     "excerpt": "On finite time, micro-ambition, Gandalf, Tim Minchin, and why every 'one day' dream needs a plan or it disappears.",
     "url": "blog/what-was-i-made-for.html",
-    "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/43.png",
-    "readMinutes": 15
+    "image": "img/photography/thumb/43.webp",
+    "readMinutes": 16
   },
   {
     "title": "M*A*S*H in the Modern Era: Comedy, Trauma, and the 4077th",
@@ -155,7 +178,7 @@
   },
   {
     "title": "Iain M. Banks and The Culture",
-    "date": "2026-05-30",
+    "date": "2026-06-01",
     "tags": [
       "books"
     ],
@@ -181,7 +204,7 @@
     "tags": [
       "personal"
     ],
-    "excerpt": "Forty things I would tell my younger self, from pensions and emergency funds to sunscreen, boundaries, and uncomfortable conversations.",
+    "excerpt": "Fifty things I would tell my younger self, from pensions and emergency funds to sunscreen, boundaries, and uncomfortable conversations.",
     "url": "blog/advice-to-my-younger-self.html",
     "image": "img/photography/thumb/445.webp",
     "readMinutes": 16
@@ -231,7 +254,11 @@
     "excerpt": "What I learned about writing a blog: why the word itself put me off, how I found a process, and what to do when people hate your work.",
     "url": "blog/how-to-write-a-blog.html",
     "image": "img/photography/thumb/252.webp",
-    "readMinutes": 11
+    "readMinutes": 11,
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 2
+    }
   },
   {
     "title": "The Hidden Cost of Cobalt",
@@ -375,7 +402,7 @@
     "excerpt": "A practical system for project documentation, knowledge management, and local LLM workflows that improves delivery, reviews, and project re-entry.",
     "url": "blog/second-brain-local-llm-professional.html",
     "image": "img/photography/thumb/75.webp",
-    "readMinutes": 8
+    "readMinutes": 7
   },
   {
     "title": "Snowball vs Avalanche: The Science of Paying Off Debt",
@@ -417,9 +444,13 @@
       "ai",
       "photography"
     ],
-    "excerpt": "How I used OpenCLIP to automatically classify 370 photos into 10 categories in under a minute, zero API cost, running entirely on CPU.",
+    "excerpt": "How I used OpenCLIP to automatically classify 500+ photos into 10 categories in under a minute, zero API cost, running entirely on CPU.",
     "url": "blog/photo-tagging-with-clip.html",
     "image": "img/photography/thumb/1.webp",
-    "readMinutes": 6
+    "readMinutes": 6,
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 1
+    }
   }
 ]

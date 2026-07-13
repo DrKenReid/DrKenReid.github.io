@@ -34,7 +34,7 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Rating systems are broken. A data-driven look at 569 books on Goodreads.",
+    "headline": "Book Ratings Are Broken",
     "description": "Rating systems are broken. A data-driven look at 569 books on Goodreads.",
     "image": "https://www.kenreid.co.uk/img/bg-img/lions-game.webp",
     "author": {
@@ -98,7 +98,7 @@
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../blog/img/rating_distribution_banner.png); background-size: cover; background-position: center center;">
     <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
       <div class="breadcrumb-content text-center">
-        <h2 class="page-title">Blog</h2>
+        <p class="page-title">Blog</p>
         <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
           <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
           <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
@@ -138,7 +138,7 @@
 
         <h2>My rating distribution, or: &ldquo;people who like reading probably rate books highly&rdquo;</h2>
 
-        <img src="img/rating_distribution.png" alt="Rating distribution" loading="lazy" width="1200" height="600">
+        <img class="chart-dark" src="img/rating_distribution.png" alt="Rating distribution" loading="lazy" width="1200" height="600">
 
         <p>Nearly 70% of everything I&rsquo;ve ever read gets four or five stars, and my average rating is 3.98. I am, statistically speaking, a pushover. But before you judge me, consider that the average Goodreads rating across all books on the platform is something like 3.9, so I guess we&rsquo;re all pushovers. The whole system is built to make us generous, because the scale is fundamentally asymmetric: five is &ldquo;amazing&rdquo;, one is &ldquo;I want my hours back&rdquo;, and the jump from three to two feels like you&rsquo;re insulting someone&rsquo;s mum.</p>
 
@@ -148,10 +148,10 @@
 
         <h2>I apparently write more when I&rsquo;m angry</h2>
 
-        <img src="img/review_length_by_rating.png" alt="1-star reviews average 554 chars, 5-star average 331" loading="lazy" width="1200" height="600">
+        <img class="chart-dark" src="img/review_length_by_rating.png" alt="1-star reviews average 554 chars, 5-star average 331" loading="lazy" width="1200" height="600">
 
         <p style="text-align:center;color:#888;font-size:13px;">The polynomial regression from my analysis project confirms it (R&sup2; = 0.03, meaning review length explains almost nothing about rating):</p>
-        <img src="img/gr_review_length.png" alt="Polynomial regression of rating vs review length, R-squared 0.03" loading="lazy" width="1184" height="784">
+        <img class="chart-dark" src="img/gr_review_length.png" alt="Polynomial regression of rating vs review length, R-squared 0.03" loading="lazy" width="1184" height="784">
 
         <p>My 1-star reviews are nearly twice as long as my 5-star reviews. Displeasure, it turns out, makes me far more articulate than joy. When I love something, I tend to write things like &ldquo;I&rsquo;m crying, 10/10&rdquo; (a numerical score inside a text review that already has a numerical score). When I hate something, I can produce a multi-paragraph breakdown of exactly why, complete with quotes, structural criticism, and not very well concealed contempt - I might be a tad cynical.</p>
 
@@ -167,7 +167,7 @@
 
         <h2>How much do I actually agree with everyone else?</h2>
 
-        <img src="img/my_vs_community.png" alt="Scatter plot: my ratings vs community average" loading="lazy" width="1200" height="750">
+        <img class="chart-dark" src="img/my_vs_community.png" alt="Scatter plot: my ratings vs community average" loading="lazy" width="1200" height="750">
 
         <p>The difference in community average between my absolute favourites and the books I genuinely despised is 0.45 stars. Less than half a star. The community thinks my 1-star books are perfectly respectable 3.8-star reads. I&rsquo;m not out here hating universally panned disasters; I&rsquo;m hating books that most people thought were pretty good.</p>
 
@@ -177,19 +177,19 @@
 
         <h2>I&rsquo;m not even consistent across genres</h2>
 
-        <img src="img/genre_rating_bias.png" alt="Horizontal bar chart: fantasy 4.27 avg, horror 3.50 avg" loading="lazy" width="1200" height="750">
+        <img class="chart-dark" src="img/genre_rating_bias.png" alt="Horizontal bar chart: fantasy 4.27 avg, horror 3.50 avg" loading="lazy" width="1200" height="750">
 
         <p style="text-align:center;color:#888;font-size:13px;">The rating density curves by genre from the analysis project show this even more clearly:</p>
-        <img src="img/gr_genre_ratings.png" alt="Distribution of ratings for each primary genre" loading="lazy" width="1023" height="710">
+        <img class="chart-dark" src="img/gr_genre_ratings.png" alt="Distribution of ratings for each primary genre" loading="lazy" width="1023" height="710">
 
         <p style="text-align:center;color:#888;font-size:13px;">And here&rsquo;s how my genre consumption has shifted over time:</p>
-        <img src="img/gr_top_genres.gif" alt="Animated bar chart race of top genres by pages read over time" loading="lazy" width="1000" height="600">
+        <img class="chart-dark" src="img/gr_top_genres.webp" alt="Animated bar chart race of top genres by pages read over time" loading="lazy" width="1000" height="600">
 
         <p>I rate fantasy nearly a full star higher than horror. This doesn&rsquo;t mean fantasy literature is objectively superior to horror (I can feel the Stephen King fans warming up their keyboards). What it means is that I pick fantasy books I&rsquo;m predisposed to enjoy, and I pick horror books that are more likely to challenge or unsettle me. The genres I consume for comfort get higher ratings than the genres I consume for discomfort. The stars are measuring my selection bias, which is a finding that would make any data scientist wince, because selection bias is the thing we spend our entire careers trying to eliminate from datasets, and here it is sitting proudly in my own reading data. Human after all!</p>
 
         <h2>The longer the book, the more I like it</h2>
 
-        <img src="img/page_count_rating.png" alt="Books under 200 pages average 3.72 stars, 600+ average 4.28" loading="lazy" width="1200" height="600">
+        <img class="chart-dark" src="img/page_count_rating.png" alt="Books under 200 pages average 3.72 stars, 600+ average 4.28" loading="lazy" width="1200" height="600">
 
         <p>There&rsquo;s more than half a star difference between short books and long ones. The obvious interpretation is that longer books are better. The actual interpretation is that I only finish long books I&rsquo;m enjoying. A 200-page book I&rsquo;m not into, I&rsquo;ll push through and rate a 3. A 600-page book I&rsquo;m not into, I probably abandoned 200 pages in and never rated it at all. This is survivorship bias dressed up as a preference, and it would completely wreck any model trying to predict my ratings from metadata alone. (This is the kind of thing I explore in more depth in the <a href="https://goodreads-analysis.streamlit.app/" target="_blank" rel="noopener noreferrer">Goodreads Analysis app</a>, where I actually tried to build rating prediction models and the results were... humbling.)</p>
 
@@ -197,7 +197,7 @@
 
         <h2>What happens when you rate a 10-book series</h2>
 
-        <img src="img/hwfwm_drift.png" alt="Line chart: He Who Fights with Monsters ratings across 10 books, dipping mid-series" loading="lazy" width="1500" height="600">
+        <img class="chart-dark" src="img/hwfwm_drift.png" alt="Line chart: He Who Fights with Monsters ratings across 10 books, dipping mid-series" loading="lazy" width="1500" height="600">
 
         <p>When you read a long series, your ratings tell a story of their own.</p>
 
@@ -211,7 +211,7 @@
 
         <h2>The silence is deafening</h2>
 
-        <img src="img/silent_ratings.png" alt="51% of 5-star books have no review text" loading="lazy" width="1200" height="600">
+        <img class="chart-dark" src="img/silent_ratings.png" alt="51% of 5-star books have no review text" loading="lazy" width="1200" height="600">
 
         <p>More than half of my 5-star books have absolutely no review text. I felt strongly enough to give them the highest possible rating, the literary equivalent of a standing ovation, but couldn&rsquo;t be bothered to write a single sentence about why. Meanwhile, 71% of my 1-star books have reviews: apparently the threshold for writing is &ldquo;I need to explain why this is bad.&rdquo;</p>
 
@@ -229,7 +229,7 @@
 
         <h2>The reading continues</h2>
 
-        <img src="img/cumulative_pages.png" alt="Cumulative pages read over time by year, showing 2024 as the peak reading year with 100 books" loading="lazy" width="1184" height="790">
+        <img class="chart-dark" src="img/cumulative_pages.png" alt="Cumulative pages read over time by year, showing 2024 as the peak reading year with 100 books" loading="lazy" width="1184" height="790">
 
         <p>I&rsquo;m not going to stop rating books. The system is broken but it&rsquo;s the one we have, and there&rsquo;s something satisfying about the closure of assigning a number, even a flawed one. What I can do is get better at the part that actually matters: writing about why. Those 125 books I loved enough to award full marks but not enough to spend two minutes explaining are a lot of lost context, and it&rsquo;s context that future-me (and anyone browsing my Goodreads) would benefit from having.</p>
 
@@ -289,12 +289,12 @@
               </a>
             </div>
             <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="fifteen-years-of-silence-rothfuss-doors-of-stone.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/109.webp" alt="Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction" loading="lazy"></div>
+              <a href="dungeon-crawler-carl-litrpg-dignity.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/141.webp" alt="Dungeon Crawler Carl and the Strange Dignity of LitRPG" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">22 April 2026 · 13 min read</div>
-                  <h4 class="blog-card-title">Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction</h4>
-                  <p class="blog-card-excerpt">Fifteen years since The Wise Man's Fear and still no Doors of Stone. A personal reflection on the Kingkiller Chronicle, the long wait, the charity debacle, and why writing at this level is genuinely hard.</p>
+                  <div class="blog-card-date">25 April 2026 · 23 min read</div>
+                  <h4 class="blog-card-title">Dungeon Crawler Carl and the Strange Dignity of LitRPG</h4>
+                  <p class="blog-card-excerpt">A book snob's confession: how Dungeon Crawler Carl used absurd LitRPG mechanics to deliver one of the most devastating emotional payloads in modern fantasy.</p>
                   <div class="blog-card-tags"><span class="blog-tag">books</span></div>
                 </div>
               </a>

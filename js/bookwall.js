@@ -84,7 +84,7 @@
         }
         // Skeleton covers while books.json + cover images arrive
         grid.innerHTML = new Array(18).fill('<span class="book-wall-item kr-skeleton"></span>').join('');
-        fetch('data/books.json').then(function (r) { return r.json(); }).then(function (data) {
+        fetch('/data/books.json').then(function (r) { return r.json(); }).then(function (data) {
             books = data || [];
             renderFilters();
             renderWall();

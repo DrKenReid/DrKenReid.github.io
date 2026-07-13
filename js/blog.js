@@ -1,5 +1,6 @@
 var allPosts = [];
 var activeTags = [];
+var activeSeries = '';
 var searchQuery = '';
 var currentPage = 1;
 var POSTS_PER_PAGE = 9;
@@ -21,7 +22,7 @@ function formatPostDate(dateValue) {
 }
 
 function loadPosts() {
-	return fetch('data/posts.json').then(function(r) { return r.json(); });
+	return fetch('/data/posts.json').then(function(r) { return r.json(); });
 }
 
 function initBlog() {
@@ -31,6 +32,7 @@ function initBlog() {
 				return parsePostDate(b.date) - parsePostDate(a.date);
 			});
 			buildSearchBox();
+			buildSeriesShelf();
 			buildTagFilters();
 			renderPosts();
 		})
@@ -53,9 +55,48 @@ function buildSearchBox() {
 	});
 }
 
+
+function buildSeriesShelf() {
+	var shelf = document.getElementById('series-shelf');
+	if (!shelf) return;
+	var series = {};
+	allPosts.forEach(function(p) {
+		if (p.series && p.series.name) {
+			(series[p.series.name] = series[p.series.name] || []).push(p);
+		}
+	});
+	var names = Object.keys(series);
+	if (!names.length) { shelf.style.display = 'none'; return; }
+
+	var html = '<span class="kr-series-shelf__label">Series</span>';
+	names.forEach(function(name) {
+		var parts = series[name].slice().sort(function(a, b) { return a.series.part - b.series.part; });
+		var cover = parts[0].image || DEFAULT_POST_IMAGE;
+		html += '<button type="button" class="kr-series-card" data-series="' + name.replace(/"/g, '&quot;') + '" aria-pressed="false">' +
+			'<img src="' + cover + '" alt="" loading="lazy">' +
+			'<span class="kr-series-card__text"><strong>' + name + '</strong>' +
+			'<span>' + parts.length + ' part' + (parts.length === 1 ? '' : 's') + '</span></span>' +
+			'</button>';
+	});
+	shelf.innerHTML = html;
+	shelf.addEventListener('click', function(e) {
+		var card = e.target.closest ? e.target.closest('.kr-series-card') : null;
+		if (!card) return;
+		var name = card.getAttribute('data-series');
+		activeSeries = activeSeries === name ? '' : name;
+		shelf.querySelectorAll('.kr-series-card').forEach(function(c) {
+			var on = c.getAttribute('data-series') === activeSeries;
+			c.classList.toggle('active', on);
+			c.setAttribute('aria-pressed', on ? 'true' : 'false');
+		});
+		currentPage = 1;
+		renderPosts();
+	});
+}
+
 function buildTagFilters() {
 	var container = document.getElementById('blog-filters');
-	if (!container) return;
+	if (!container || typeof renderFilterBar !== 'function') return;
 
 	var counts = {};
 	allPosts.forEach(function(p) {
@@ -64,59 +105,30 @@ function buildTagFilters() {
 		});
 	});
 
-	var allBtn = document.createElement('button');
-	allBtn.className = 'btn gallery-filter-btn active';
-	allBtn.setAttribute('data-tag', 'all');
-	allBtn.textContent = 'All (' + allPosts.length + ')';
-	allBtn.onclick = function() { toggleTag('all', this); };
-	container.appendChild(allBtn);
-
-	var tags = Object.keys(counts).sort(function(a, b) {
+	var items = Object.keys(counts).sort(function(a, b) {
 		return counts[b] - counts[a];
+	}).map(function(tag) {
+		return { key: tag, label: tag, count: counts[tag] };
 	});
 
-	tags.forEach(function(tag) {
-		var btn = document.createElement('button');
-		btn.className = 'btn gallery-filter-btn';
-		btn.setAttribute('data-tag', tag);
-		btn.textContent = tag + ' (' + counts[tag] + ')';
-		btn.onclick = function() { toggleTag(tag, this); };
-		container.appendChild(btn);
+	container.setAttribute('aria-label', 'Filter posts by tag');
+	renderFilterBar(container, items, {
+		multi: true,
+		allLabel: 'All (' + allPosts.length + ')',
+		onChange: function(activeKeys) {
+			activeTags = activeKeys;
+			currentPage = 1;
+			renderPosts();
+		}
 	});
-}
-
-function toggleTag(tag, btnEl) {
-	if (tag === 'all') {
-		activeTags = [];
-		document.querySelectorAll('.gallery-filter-btn').forEach(function(b) {
-			b.classList.remove('active');
-		});
-		btnEl.classList.add('active');
-	} else {
-		// Deactivate "All" button
-		var allBtn = document.querySelector('.gallery-filter-btn[data-tag="all"]');
-		if (allBtn) allBtn.classList.remove('active');
-
-		var idx = activeTags.indexOf(tag);
-		if (idx !== -1) {
-			activeTags.splice(idx, 1);
-			btnEl.classList.remove('active');
-		} else {
-			activeTags.push(tag);
-			btnEl.classList.add('active');
-		}
-
-		// If nothing selected, revert to All
-		if (activeTags.length === 0) {
-			if (allBtn) allBtn.classList.add('active');
-		}
-	}
-
-	currentPage = 1;
-	renderPosts();
 }
 
 function getFilteredPosts() {
+	if (activeSeries) {
+		return allPosts.filter(function(p) {
+			return p.series && p.series.name === activeSeries;
+		}).sort(function(a, b) { return a.series.part - b.series.part; });
+	}
 	return allPosts.filter(function(p) {
 		var matchesTag = activeTags.length === 0
 			|| activeTags.some(function(t) { return (p.tags || []).indexOf(t) !== -1; });
@@ -187,6 +199,16 @@ function renderPosts() {
 				return fallbackCol;
 			})();
 
+		if (post.series && post.series.name) {
+			var chipHost = col.querySelector('.post-thumbnail') || col.querySelector('.single-post-area') || col.firstElementChild;
+			if (chipHost) {
+				var chip = document.createElement('span');
+				chip.className = 'kr-series-chip';
+				chip.textContent = 'Part ' + post.series.part;
+				chip.title = post.series.name;
+				chipHost.appendChild(chip);
+			}
+		}
 		container.appendChild(col);
 	});
 

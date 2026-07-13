@@ -1,15 +1,15 @@
-var allQuotes=[];var quoteIndex=0;var autoTimer=null;function initQuotes(){bindQuoteButtons();initSwipe();fetch('data/quotes.json').then(function(r){return r.json();}).then(function(data){allQuotes=shuffle(data);showQuote(0);}).catch(function(){});}function bindQuoteButtons(){var prev=document.getElementById('quote-prev-btn');var next=document.getElementById('quote-next-btn');if(prev&&!prev.dataset.bound){prev.addEventListener('click',prevQuote);prev.dataset.bound='true';}if(next&&!next.dataset.bound){next.addEventListener('click',nextQuote);next.dataset.bound='true';}}
+var allQuotes=[];var quoteIndex=0;var autoTimer=null;function initQuotes(){bindQuoteButtons();initSwipe();fetch('/data/quotes.json').then(function(r){return r.json();}).then(function(data){allQuotes=shuffle(data);showQuote(0);}).catch(function(){});}function bindQuoteButtons(){var prev=document.getElementById('quote-prev-btn');var next=document.getElementById('quote-next-btn');if(prev&&!prev.dataset.bound){prev.addEventListener('click',prevQuote);prev.dataset.bound='true';}if(next&&!next.dataset.bound){next.addEventListener('click',nextQuote);next.dataset.bound='true';}}
 function scheduleNext(){if(autoTimer)clearTimeout(autoTimer);var q=allQuotes[quoteIndex];if(!q)return;var words=q.quote.split(/\s+/).length;var ms=Math.min(Math.max(words*150,5000),20000);autoTimer=setTimeout(nextQuote,ms);}
 function showQuote(idx){var q=allQuotes[idx];if(!q)return;var el=document.getElementById('quote-text');var attr=document.getElementById('quote-attr');if(!el||!attr)return;el.style.opacity='0';attr.style.opacity='0';setTimeout(function(){el.textContent='\u201C'+q.quote+'\u201D';attr.textContent='\u2014 '+q.author+', '+q.book;el.style.opacity='1';attr.style.opacity='1';scheduleNext();},400);}
 function nextQuote(){if(!allQuotes.length)return;if(autoTimer)clearTimeout(autoTimer);quoteIndex=(quoteIndex+1)%allQuotes.length;showQuote(quoteIndex);}
 function prevQuote(){if(!allQuotes.length)return;if(autoTimer)clearTimeout(autoTimer);quoteIndex=(quoteIndex-1+allQuotes.length)%allQuotes.length;showQuote(quoteIndex);}
-function initReviews(){fetch('data/reviews.json').then(function(r){return r.json();}).then(function(data){renderReviews(data);}).catch(function(){});}
+function initReviews(){fetch('/data/reviews.json').then(function(r){return r.json();}).then(function(data){renderReviews(data);}).catch(function(){});}
 function renderReviews(reviews){var container=document.getElementById('reviews-grid');if(!container)return;reviews.forEach(function(r){var col=document.createElement('div');col.className='col-12 col-md-6 col-lg-4 mb-30';var stars='';for(var i=0;i<5;i++){stars+=i<r.rating?'\u2605':'\u2606';}
 var text=r.review;var truncated=false;if(text.length>300){text=text.substring(0,300).replace(/\s+\S*$/,'')+'...';truncated=true;}
 text=text.replace(/\n/g,'<br>');var isbn=r.isbn13||r.isbn||'';var coverUrl=isbn?'https://covers.openlibrary.org/b/isbn/'+isbn+'-L.jpg':'';var card=document.createElement('div');card.className='review-card';card.innerHTML=(coverUrl?'<div class="review-cover"><img src="'+coverUrl+'" alt="Book cover: '+r.title+' by '+r.author+'" loading="lazy" onerror="this.parentElement.style.display=\'none\'"></div>':'')+
 '<div class="review-body">'+
 '<div class="review-stars">'+stars+'</div>'+
-'<h4 class="review-title">'+r.title+'</h4>'+
+'<h3 class="review-title">'+r.title+'</h3>'+
 '<p class="review-author">'+r.author+'</p>'+
 '<p class="review-text">'+text+'</p>'+
 '</div>';col.appendChild(card);container.appendChild(col);});}

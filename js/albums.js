@@ -8,7 +8,7 @@
         var grid = document.getElementById('album-wall');
         if (!grid) return;
         grid.innerHTML = new Array(12).fill('<span class="album-wall-item kr-skeleton"></span>').join('');
-        fetch('data/topalbums.json').then(function (r) { return r.json(); }).then(function (data) {
+        fetch('/data/topalbums.json').then(function (r) { return r.json(); }).then(function (data) {
             var albums = (data && data.albums) || [];
             if (!albums.length) { grid.innerHTML = ''; return; }
             grid.innerHTML = albums.map(function (a) {

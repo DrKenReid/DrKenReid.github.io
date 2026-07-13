@@ -65,8 +65,12 @@ def fetch_goodreads():
         title = field("title")
         author = field("author_name")
         link = field("link")
+        img = field("book_image_url") or field("book_medium_image_url")
         if title:
-            books.append({"title": title, "author": author, "link": link})
+            book = {"title": title, "author": author, "link": link}
+            if img:
+                book["img"] = img
+            books.append(book)
     return books[:3]
 
 

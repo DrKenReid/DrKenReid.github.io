@@ -10,27 +10,31 @@
   <meta property="og:description" content="An interactive map of where Ken Reid's photographs were taken — Scotland, Michigan, and everywhere in between.">
   <meta property="og:image" content="https://www.kenreid.co.uk/img/photography/hero/1.webp">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Photo Map - Ken Reid">
+  <meta name="twitter:description" content="An interactive map of the places Ken Reid has photographed, from Scotland to Michigan.">
   <meta property="og:url" content="https://www.kenreid.co.uk/map.html">
   <meta property="og:type" content="website">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
-  <link rel="icon" href="./img/core-img/favicon.png">
+  <link rel="icon" href="/img/core-img/favicon.png">
+  <link rel="apple-touch-icon" href="/img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
-  <link rel="stylesheet" href="style.min.css">
-  <link rel="stylesheet" href="js/vendor/leaflet/leaflet.css">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/style.min.css">
+  <link rel="stylesheet" href="/js/vendor/leaflet/leaflet.css">
   <link rel="canonical" href="https://www.kenreid.co.uk/map.html">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Photo Map — Ken Reid",
+    "name": "Photo Map - Ken Reid",
     "url": "https://www.kenreid.co.uk/map.html",
     "about": "Photography locations",
     "author": {"@type": "Person", "name": "Ken Reid", "url": "https://www.kenreid.co.uk"}
   }
   </script>
-  <script defer src="js/theme.js"></script>
-  <script defer src="js/palette.js"></script>
+  <script defer src="/js/theme.js"></script>
+  <script defer src="/js/palette.js"></script>
   <style>
     #photo-map {
       height: 72vh;
@@ -99,13 +103,13 @@
 
   <main id="main-content">
 
-  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/photography/hero/100.webp); background-size: cover; background-position: center center;">
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/100.webp); background-size: cover; background-position: center center;">
     <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
       <div class="breadcrumb-content text-center">
         <h1 class="page-title">Photo Map</h1>
         <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
-          <li class="breadcrumb-item"><a href="./index.html"><i class="icon_house_alt"></i> Home</a></li>
-          <li class="breadcrumb-item"><a href="./gallery.html">Photography</a></li>
+          <li class="breadcrumb-item"><a href="/index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="/gallery.html">Photography</a></li>
           <li class="breadcrumb-item active" aria-current="page">Map</li>
         </ol></nav>
       </div>
@@ -117,10 +121,16 @@
       <div class="text-center" style="margin-bottom: 28px;">
         <span class="section-eyebrow">Where</span>
         <h2>Photographs by Place</h2>
-        <p style="max-width: 560px; margin: 12px auto 0;">Click a marker to see photos taken there. This map grows as I geotag the archive — <a href="./gallery.html">the full gallery</a> has everything regardless of place.</p>
+        <p style="max-width: 560px; margin: 12px auto 0;">Click a marker to see photos taken there. This map grows as I geotag the archive — <a href="/gallery.html">the full gallery</a> has everything regardless of place.</p>
       </div>
       <div id="photo-map" aria-label="Map of photograph locations"></div>
     </div>
+  </div>
+
+  <div class="kr-next-stop">
+    <p>Every photo here lives in the <a href="/gallery.html">full gallery</a>; the stories behind the abandoned ones are on <a href="/blog/abandoned-places-i-photograph.html">the blog</a>.</p>
+    <a href="/gallery.html" class="btn alime-btn btn-2">Browse the gallery</a>
+    <a href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer" class="btn alime-btn" style="margin-left: 10px;">Follow on Bluesky</a>
   </div>
 
   </main>
@@ -128,15 +138,15 @@
   <hr>
   <div id="footer-section"></div>
 
-  <script src="js/jquery.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/alime.bundle.js"></script>
-  <script src="js/default-assets/active.js"></script>
-  <script src="js/shared-components.js"></script>
-  <script src="js/vendor/leaflet/leaflet.js"></script>
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/popper.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/alime.bundle.js"></script>
+  <script src="/js/default-assets/active.js"></script>
+  <script src="/js/shared-components.js"></script>
+  <script src="/js/vendor/leaflet/leaflet.js"></script>
   <script>
-    renderHeader('header-section', { basePath: './', active: 'hobbies', hobbiesChild: 'map' });
+    renderHeader('header-section', { basePath: '/', active: 'hobbies', hobbiesChild: 'map' });
     renderFooter('footer-section');
 
     (function () {
@@ -150,9 +160,13 @@
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         }
       };
-      var RELEASE = 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/';
+      var RELEASE = typeof KR_RELEASE !== 'undefined' ? KR_RELEASE : 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/';
 
-      var map = L.map('photo-map', { scrollWheelZoom: true }).setView([50, -30], 3);
+      var map = L.map('photo-map', { scrollWheelZoom: false }).setView([50, -30], 3);
+      // Wheel zoom only after deliberate interaction, so the page scroll
+      // is not hijacked on the way down (review 6c).
+      map.on('click focus', function () { map.scrollWheelZoom.enable(); });
+      map.on('mouseout', function () { map.scrollWheelZoom.disable(); });
       var currentTiles = null;
 
       function applyTiles() {
@@ -177,25 +191,14 @@
       // unavailable).
       function openRegionLightbox(regionName, startStem) {
         var region = regionsByName[regionName];
-        if (!region || typeof jQuery === 'undefined' || !jQuery.fn.magnificPopup) return false;
+        if (!region || typeof openKrLightbox !== 'function') return false;
         var items = region.photos.map(function (stem) {
           return {
             src: RELEASE + stem + '.png',
             title: region.name + ' <span class="kr-lightbox-num">#' + stem + '</span>'
           };
         });
-        var index = Math.max(0, region.photos.indexOf(startStem));
-        jQuery.magnificPopup.open({
-          items: items,
-          type: 'image',
-          mainClass: 'kr-lightbox mfp-fade',
-          closeOnContentClick: false,
-          image: {
-            titleSrc: function (item) { return item.data.title; }
-          },
-          gallery: { enabled: true, preload: [0, 2], navigateByImgClick: false, tPrev: 'Previous', tNext: 'Next' }
-        }, index);
-        return true;
+        return openKrLightbox(items, Math.max(0, region.photos.indexOf(startStem)));
       }
 
       document.addEventListener('click', function (e) {
@@ -208,7 +211,7 @@
         }
       });
 
-      fetch('data/photo-locations.json').then(function (r) { return r.json(); }).then(function (data) {
+      fetch('/data/photo-locations.json').then(function (r) { return r.json(); }).then(function (data) {
         var regions = (data.regions || []).filter(function (r) { return r.photos && r.photos.length; });
         if (!regions.length) return;
         var bounds = [];
@@ -219,21 +222,34 @@
           var marker = L.marker([region.lat, region.lng], {
             icon: L.divIcon({
               className: '',
-              html: '<div class="kr-map-marker" style="width:' + size + 'px;height:' + size + 'px;">' + region.photos.length + '</div>',
+              html: '<div class="kr-map-marker" role="button" tabindex="0" aria-label="' +
+                  region.name + ', ' + region.photos.length + ' photos" style="width:' + size + 'px;height:' + size + 'px;">' + region.photos.length + '</div>',
               iconSize: [size, size],
               iconAnchor: [size / 2, size / 2]
             }),
+            keyboard: true,
             title: region.name
           }).addTo(map);
+          marker.on('add', function () {
+            var el = marker.getElement && marker.getElement();
+            if (!el) return;
+            el.addEventListener('keydown', function (ev) {
+              if (ev.key === 'Enter' || ev.key === ' ') {
+                ev.preventDefault();
+                marker.openPopup();
+              }
+            });
+          });
 
           var shown = region.photos.slice(0, 9);
-          var html = '<div class="kr-map-popup" data-region="' + region.name + '">' +
-              '<div class="kr-map-region">' + region.name +
+          var safeName = typeof krEscapeHtml === 'function' ? krEscapeHtml(region.name) : region.name;
+          var html = '<div class="kr-map-popup" data-region="' + safeName + '">' +
+              '<div class="kr-map-region">' + safeName +
               ' · ' + region.photos.length + ' photo' + (region.photos.length === 1 ? '' : 's') + '</div>' +
               '<div class="kr-map-grid">' +
               shown.map(function (stem) {
                   return '<a href="' + RELEASE + stem + '.png" data-stem="' + stem + '" target="_blank" rel="noopener noreferrer">' +
-                      '<img src="img/photography/thumb/' + stem + '.webp" alt="Photo ' + stem + ' taken in ' + region.name + '" loading="lazy"></a>';
+                      '<img src="/img/photography/thumb/' + stem + '.webp" alt="Photo ' + stem + ' taken in ' + safeName + '" loading="lazy"></a>';
               }).join('') +
               '</div>' +
               (region.photos.length > 9

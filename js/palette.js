@@ -32,6 +32,7 @@
     var active = 0;
     var posts = null;
     var postsLoading = false;
+    var places = null;
 
     function score(query, text) {
         if (!text) return 0;
@@ -89,6 +90,18 @@
             }
         });
 
+        (places || []).forEach(function (pl) {
+            if (!q) return;
+            var s = score(q, pl.name) * 0.9;
+            if (s > 0) {
+                results.push({
+                    score: s, kind: 'Place', title: pl.name,
+                    sub: pl.count + ' photo' + (pl.count === 1 ? '' : 's') + ' on the map',
+                    href: prefix + 'map.html?region=' + encodeURIComponent(pl.name)
+                });
+            }
+        });
+
         results.sort(function (a, b) { return b.score - a.score; });
         return results.slice(0, 10);
     }
@@ -103,7 +116,7 @@
                 : 'No results';
         }
         if (!items.length) {
-            list.innerHTML = '<div class="kr-palette-empty">No matches. Try a post title, page, or photo tag.</div>';
+            list.innerHTML = '<div class="kr-palette-empty">No matches. Try a post title, page, photo tag, or place.</div>';
             return;
         }
         list.innerHTML = items.map(function (r, i) {
@@ -171,6 +184,15 @@
                 .then(function (r) { return r.json(); })
                 .then(function (data) { posts = data; render(input.value); })
                 .catch(function () { posts = []; });
+            fetch(prefix + 'data/photo-locations.json')
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    places = (data.regions || []).map(function (rg) {
+                        return { name: rg.name, count: (rg.photos || []).length };
+                    });
+                    render(input.value);
+                })
+                .catch(function () { places = []; });
         }
         overlay.classList.add('is-open');
         document.body.classList.add('kr-palette-open');

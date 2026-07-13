@@ -12,6 +12,8 @@
   <meta property="og:description" content="Senior Data Scientist with a Ph.D. in AI. Publications at GECCO, IEEE SSCI, and more. Expertise in evolutionary computation, optimization, and machine learning.">
   <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/ken1.webp">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Data Science - Ken Reid">
+  <meta name="twitter:description" content="Senior Data Scientist with a Ph.D. in AI. Publications, open-source projects, interactive tools, and a downloadable CV.">
   <meta property="og:url" content="https://www.kenreid.co.uk/data_science.html">
   <meta property="og:type" content="website">
 
@@ -20,14 +22,14 @@
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
 
   <!-- Favicon & Manifest -->
-  <link rel="icon" href="./img/core-img/favicon.png">
-  <link rel="apple-touch-icon" href="./img/core-img/apple-touch-icon.png">
+  <link rel="icon" href="/img/core-img/favicon.png">
+  <link rel="apple-touch-icon" href="/img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="/manifest.json">
 
   <!-- Stylesheet -->
   <link rel="canonical" href="https://www.kenreid.co.uk/data_science.html">
-  <link rel="stylesheet" href="style.min.css">
+  <link rel="stylesheet" href="/style.min.css">
 
   <style>
     /* Data Science Page — Custom Styles */
@@ -48,23 +50,17 @@
       transform: translateY(-2px);
     }
     .ds-pub-entry {
-      background: #fff;
-      border-radius: 8px;
-      padding: 25px 30px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 15px rgba(0,0,0,0.06);
-      border-left: 4px solid #252525;
-      transition: all 0.3s ease;
+      padding: 16px 2px;
+      border-bottom: 1px solid #ececec;
     }
-    .ds-pub-entry:hover {
-      box-shadow: 0 5px 25px rgba(0,0,0,0.12);
-      transform: translateY(-2px);
+    .ds-pub-entry:first-of-type {
+      border-top: 1px solid #ececec;
     }
     .ds-pub-title {
-      font-size: 17px;
+      font-size: 15px;
       font-weight: 600;
       color: #252525;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
       line-height: 1.4;
     }
     .ds-pub-title a {
@@ -77,22 +73,30 @@
       text-decoration: underline;
     }
     .ds-pub-authors {
-      font-size: 14px;
+      display: inline;
+      font-size: 12.5px;
       color: #636363;
-      margin-bottom: 5px;
+      margin-bottom: 3px;
     }
     .ds-pub-authors strong {
       color: #252525;
     }
     .ds-pub-venue {
-      font-size: 13px;
-      color: #888;
+      display: inline;
+      font-size: 12px;
+    }
+    .ds-pub-venue::before {
+      content: '\00B7 ';
+      margin: 0 2px;
+      color: #6b6b6b;
       font-style: italic;
     }
     .ds-citation-badge {
-      background: #252525;
-      color: #fff;
-      padding: 4px 12px;
+      background: transparent;
+      color: #fc6060;
+      padding: 2px 0;
+      font-size: 12px;
+      font-weight: 600;
       border-radius: 15px;
       font-size: 12px;
       font-weight: 600;
@@ -102,10 +106,10 @@
     .ds-project-card {
       background: #fff;
       border-radius: 8px;
-      padding: 25px;
-      margin-bottom: 30px;
-      box-shadow: 0 2px 15px rgba(0,0,0,0.06);
-      height: 100%;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      height: calc(100% - 20px);
       transition: all 0.3s ease;
       border-top: 3px solid #252525;
     }
@@ -113,26 +117,30 @@
       box-shadow: 0 8px 30px rgba(0,0,0,0.12);
       transform: translateY(-4px);
     }
-    .ds-project-card h5 {
-      font-size: 16px;
+    .ds-project-card h3 {
+      font-size: 14.5px;
       font-weight: 600;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
-    .ds-project-card h5 a {
+    .ds-project-card h3 a {
       color: #252525;
     }
-    .ds-project-card h5 a:hover {
+    .ds-project-card h3 a:hover {
       color: #636363;
     }
     .ds-project-card p {
-      font-size: 14px;
+      font-size: 12.5px;
       color: #636363;
-      margin-bottom: 15px;
-      line-height: 1.6;
+      margin-bottom: 10px;
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
     .ds-project-meta {
-      font-size: 13px;
-      color: #888;
+      font-size: 11.5px;
+      color: #6b6b6b;
     }
     .ds-project-meta .ds-lang-dot {
       display: inline-block;
@@ -161,7 +169,7 @@
     }
     .ds-thesis-box .ds-thesis-meta {
       font-size: 14px;
-      color: #888;
+      color: #6b6b6b;
       margin-bottom: 15px;
     }
     .ds-thesis-box p {
@@ -172,7 +180,7 @@
     .ds-skill-group {
       margin-bottom: 30px;
     }
-    .ds-skill-group h5 {
+    .ds-skill-group h3 {
       font-size: 15px;
       font-weight: 600;
       color: #252525;
@@ -214,7 +222,10 @@
       background: #fc6060;
       color: #ffffff;
     }
-    [data-theme="dark"] .ds-pub-entry,
+    [data-theme="dark"] .ds-pub-entry {
+      border-color: #2e2e2e;
+    }
+    [data-theme="dark"] .ds-pub-entry-unused,
     [data-theme="dark"] .ds-project-card,
     [data-theme="dark"] .ds-thesis-box {
       background: #242424;
@@ -226,13 +237,13 @@
     }
     [data-theme="dark"] .ds-pub-title,
     [data-theme="dark"] .ds-pub-authors strong,
-    [data-theme="dark"] .ds-project-card h5 a,
+    [data-theme="dark"] .ds-project-card h3 a,
     [data-theme="dark"] .ds-thesis-box h4,
-    [data-theme="dark"] .ds-skill-group h5,
+    [data-theme="dark"] .ds-skill-group h3,
     [data-theme="dark"] .ds-talk-context strong {
       color: #e2e2e2;
     }
-    [data-theme="dark"] .ds-project-card h5 a:hover {
+    [data-theme="dark"] .ds-project-card h3 a:hover {
       color: #ff8080;
     }
     [data-theme="dark"] .ds-pub-title a:hover,
@@ -251,8 +262,8 @@
       color: #b2b2b2;
     }
     [data-theme="dark"] .ds-citation-badge {
-      background: #fc6060;
-      color: #ffffff;
+      background: transparent;
+      color: #fc6060;
     }
     [data-theme="dark"] .ds-skill-badge {
       background: #2a2a2a;
@@ -264,9 +275,289 @@
       color: #ffffff;
       border-color: #fc6060;
     }
+    .ds-tag--sm {
+      font-size: 11px;
+      padding: 4px 12px;
+      margin: 2px;
+    }
+    .ds-btn-sm {
+      font-size: 13px !important;
+      padding: 4px 12px !important;
+      display: inline-flex;
+      align-items: center;
+      line-height: 1.4;
+    }
+    .ds-src-link {
+      margin-left: 15px;
+      font-size: 13px;
+      color: #636363;
+      padding: 6px 4px;
+    }
+    .ds-subtitle {
+      color: #6b6b6b;
+      margin-top: -10px;
+    }
+    [data-theme="dark"] .ds-subtitle,
+    [data-theme="dark"] .ds-src-link {
+      color: #a5a5a5;
+    }
+    .ds-cite-pill {
+      display: inline-block;
+      background: #252525;
+      color: #fff;
+      padding: 5px 16px;
+      border-radius: 15px;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .ds-cite-pill:hover {
+      background: #fc6060;
+      color: #fff;
+    }
+    .ds-cta-btn i {
+      margin-right: 6px;
+    }
+    .ds-project-card--link {
+      position: relative;
+    }
+    .ds-project-card--link h3 a::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+    }
+    .ds-project-card--link:hover h3 a {
+      color: #fc6060;
+    }
+    [data-theme="dark"] .ds-skill-group h3 {
+      color: #e2e2e2;
+    }
+    [data-theme="dark"] .ds-cite-pill {
+      background: #3a3a3a;
+    }
+    [data-theme="dark"] .ds-cite-pill:hover {
+      background: #fc6060;
+    }
+    .ds-panel {
+      background: #fff;
+      border-radius: 8px;
+      padding: 30px 32px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+      border-top: 3px solid #fc6060;
+      width: 100%;
+    }
+    .ds-panel__title {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .ds-panel__divider {
+      border: 0;
+      border-top: 1px solid #eee;
+      margin: 28px 0;
+    }
+    [data-theme="dark"] .ds-panel__divider {
+      border-top-color: #333;
+    }
+    .ds-panel__tags .ds-tag {
+      margin: 0 6px 10px 0;
+      display: inline-block;
+    }
+    .ds-panel .ds-skill-group {
+      margin-bottom: 22px;
+    }
+    .ds-panel .ds-skill-group:last-child {
+      margin-bottom: 0;
+    }
+    [data-theme="dark"] .ds-panel {
+      background: #242424;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.28);
+    }
+    [data-theme="dark"] .ds-panel__title {
+      color: #e2e2e2;
+      border-bottom-color: #333;
+    }
+    .ds-col-head h2 {
+      font-size: 26px;
+      margin-bottom: 6px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #fc6060;
+      display: inline-block;
+    }
+    .ds-col-head {
+      margin-bottom: 22px;
+    }
+    .ds-col-head .ds-subtitle {
+      margin-top: 10px;
+    }
+    .ds-pub-more summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 14px 2px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fc6060;
+    }
+    .ds-pub-more summary::-webkit-details-marker {
+      display: none;
+    }
+    .ds-pub-more summary:hover .ds-pub-more__label {
+      text-decoration: underline;
+    }
+    .ds-try-btn {
+      position: relative;
+      z-index: 1;
+      margin-top: 4px;
+    }
+    .ds-text-link {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fc6060;
+    }
+    .ds-text-link:hover {
+      text-decoration: underline;
+      color: #fc6060;
+    }
+    .ds-thesis-abstract {
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: #6b6b6b;
+      margin: 10px 0 10px;
+    }
+    [data-theme="dark"] .ds-thesis-abstract {
+      color: #a5a5a5;
+    }
   </style>
-  <script defer src="js/theme.js"></script>
-  <script defer src="js/palette.js"></script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Publications by Kenneth N. Reid",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "ScholarlyArticle",
+        "headline": "Temporal Coupling Between Linguistic Arousal and Heart Rate Variability During Emotional Sharing",
+        "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&sortby=pubdate&citation_for_view=bwl2u00AAAAJ:9ZlFYXVOiuMC",
+        "author": "MH Veiga, KN Reid, B Modenesi, J Boyko, N Fox, T Richter, D Kwon, A Omid, et al.",
+        "datePublished": "2026",
+        "isPartOf": "Google Scholar listing"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "ScholarlyArticle",
+        "headline": "BatchPlanet: Batch access and processing of PlanetScope imagery for spatiotemporal analysis in R",
+        "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:Wp0gIr-vW9MC",
+        "author": "Y Song, AR Bevington, KN Reid, J Zhu, Y Liu, K Zhu",
+        "datePublished": "2026",
+        "isPartOf": "The Journal of Open Source Software 11(119):9268"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "ScholarlyArticle",
+        "headline": "An interdisciplinary outlook on large language models for scientific research",
+        "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:M3ejUd6NZC8C",
+        "author": "J Boyko, J Cohen, N Fox, MH Veiga, JI Li, J Liu, B Modenesi, AH Rauch, et al.",
+        "datePublished": "2023",
+        "isPartOf": "arXiv preprint arXiv:2311.04929"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "item": {
+        "@type": "ScholarlyArticle",
+        "headline": "Genetic improvement in the Shackleton framework for optimizing LLVM pass sequences",
+        "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:KlAtU1dfN6UC",
+        "author": "SS Li, H Peeler, AN Sloss, KN Reid, W Banzhaf",
+        "datePublished": "2022",
+        "isPartOf": "Proceedings of the Genetic and Evolutionary Computation Conference Companion"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 5,
+      "item": {
+        "@type": "ScholarlyArticle",
+        "headline": "Optimizing LLVM Pass Sequences with Shackleton: A Linear Genetic Programming Framework",
+        "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:3fE2CSJIrl8C",
+        "author": "H Peeler, SS Li, AN Sloss, KN Reid, Y Yuan, W Banzhaf",
+        "datePublished": "2022",
+        "isPartOf": "Google Scholar listing"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 6,
+      "item": {
+        "@type": "ScholarlyArticle",
+        "headline": "The Factory Must Grow: Automation in Factorio",
+        "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:8k81kl-MbHgC",
+        "author": "KN Reid, I Miralavy, S Kelly, W Banzhaf, C Gondro",
+        "datePublished": "2021",
+        "isPartOf": "GECCO '21: Proceedings of the Genetic and Evolutionary Computation Conference"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 7,
+      "item": {
+        "@type": "ScholarlyArticle",
+        "headline": "Heuristic hyperparameter optimization of deep learning models for genomic prediction",
+        "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:hqOjcs7Dif8C",
+        "author": "J Han, C Gondro, K Reid, JP Steibel",
+        "datePublished": "2021",
+        "isPartOf": "G3 11(7), jkab032"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 8,
+      "item": {
+        "@type": "ScholarlyArticle",
+        "headline": "A hybrid metaheuristic approach to a real world employee scheduling problem",
+        "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:roLk4NBRz8UC",
+        "author": "KN Reid, J Li, A Brownlee, M Kern, N Veerapen, J Swan, G Owusu",
+        "datePublished": "2019",
+        "isPartOf": "Proceedings of the Genetic and Evolutionary Computation Conference, 1311-1318"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 9,
+      "item": {
+        "@type": "ScholarlyArticle",
+        "headline": "Shift Scheduling and Employee Rostering: An Evolutionary Ruin & Stochastic Recreate Solution",
+        "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:Se3iqnhoufwC",
+        "author": "KN Reid, J Li, N Veerapen, J Swan, A McCormick, M Kern, G Owusu",
+        "datePublished": "2018",
+        "isPartOf": "2018 10th Computer Science and Electronic Engineering (CEEC), 19-23"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 10,
+      "item": {
+        "@type": "ScholarlyArticle",
+        "headline": "Variable Neighbourhood Search: A Case Study for a Highly-Constrained Workforce Scheduling Problem",
+        "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:u5HHmVD_uO8C",
+        "author": "KN Reid, J Li, J Swan, A McCormick, G Owusu",
+        "datePublished": "2016",
+        "isPartOf": "IEEE SSCI 2016"
+      }
+    }
+  ]
+}
+  </script>
+  <script defer src="/js/theme.js"></script>
+  <script defer src="/js/palette.js"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -295,7 +586,7 @@
   <main id="main-content">
 
   <!-- Breadcrumb -->
-  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/photography/hero/16.webp);">
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/16.webp);">
     <div class="container h-100">
       <div class="row h-100 align-items-center">
         <div class="col-12">
@@ -303,7 +594,7 @@
             <h1 class="page-title">Data Science</h1>
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb justify-content-center">
-                <li class="breadcrumb-item"><a href="index.html"><i class="icon_house_alt"></i> Home</a></li>
+                <li class="breadcrumb-item"><a href="/index.html"><i class="icon_house_alt"></i> Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Data Science</li>
               </ol>
             </nav>
@@ -319,280 +610,219 @@
       <div class="row align-items-center">
         <div class="col-12 col-lg-6">
           <div class="about-us-content mb-80">
-            <h3 class="wow fadeInUp" data-wow-delay="100ms">About</h3>
+            <h2 class="wow fadeInUp" data-wow-delay="100ms">About</h2>
             <div class="line wow fadeInUp" data-wow-delay="200ms"></div>
             <p class="wow fadeInUp" data-wow-delay="300ms">I'm Ken Reid — a Senior Data Scientist at Rocket Mortgage with a Ph.D. in Artificial Intelligence from the University of Stirling. My research spans evolutionary computation, optimization, and machine learning, with publications at top venues including GECCO and IEEE SSCI. I design and build data-driven solutions across Python, Java, JavaScript, and more — from automated testing frameworks to large-scale optimization systems. I'm currently pursuing a master's degree in Organizational Leadership, pairing the technical side of my work with the people side of leading teams.</p>
           </div>
         </div>
         <div class="col-12 col-lg-6">
           <div class="about-video-area mb-80 wow fadeInUp" data-wow-delay="100ms">
-            <img src="img/photography/thumb/56.webp" alt="Data Science illustration" width="400" height="266">
+            <img src="/img/photography/thumb/56.webp" alt="" width="400" height="266">
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 2. Research Interests -->
-  <section class="bg-gray section-padding-80 clearfix">
+  <!-- Quick professional actions (review 10a / 9a) -->
+  <section class="clearfix" style="padding-bottom: 60px;">
     <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
-            <h2>Research Interests</h2>
-          </div>
-        </div>
-      </div>
       <div class="row justify-content-center">
-        <div class="col-12 text-center wow fadeInUp" data-wow-delay="200ms">
-          <span class="ds-tag">Data Science</span>
-          <span class="ds-tag">Optimization</span>
-          <span class="ds-tag">Evolutionary Computation</span>
-          <span class="ds-tag">Generative AI</span>
-          <span class="ds-tag">Machine Learning</span>
-          <span class="ds-tag">Genetic Programming</span>
-          <span class="ds-tag">Metaheuristics</span>
-          <span class="ds-tag">Deep Learning</span>
+        <div class="col-12 text-center wow fadeInUp" data-wow-delay="100ms">
+          <a href="/docs/ken-cv.pdf" download class="btn alime-btn btn-2 ds-cta-btn"><i class="ti-download" aria-hidden="true"></i> Download Resume</a>
+          <a href="mailto:ken@kenreid.co.uk?subject=Work%20enquiry" class="btn alime-btn btn-2 ds-cta-btn" style="margin-left: 10px;"><i class="ti-email" aria-hidden="true"></i> Email Me</a>
+          <a href="https://www.linkedin.com/in/kennethneilreid" target="_blank" rel="noopener noreferrer" class="btn alime-btn btn-2 ds-cta-btn" style="margin-left: 10px;"><i class="ti-linkedin" aria-hidden="true"></i> LinkedIn</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 3. Publications -->
-  <section class="section-padding-80 clearfix">
+  <!-- 2. Research Interests + Keywords -->
+  <section class="bg-gray section-padding-80 clearfix">
     <div class="container">
-      <div class="row">
+      <div class="row justify-content-center">
         <div class="col-12">
-          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
-            <h2>Publications</h2>
-            <p style="color: #888; margin-top: -10px;">Peer-reviewed research papers and preprints (Google Scholar: 167 citations)</p>
+          <div class="ds-panel wow fadeInUp" data-wow-delay="100ms">
+            <h2 class="ds-panel__title">Research Interests</h2>
+            <div class="ds-panel__tags">
+              <span class="ds-tag">Data Science</span>
+              <span class="ds-tag">Optimization</span>
+              <span class="ds-tag">Evolutionary Computation</span>
+              <span class="ds-tag">Generative AI</span>
+              <span class="ds-tag">Machine Learning</span>
+              <span class="ds-tag">Genetic Programming</span>
+              <span class="ds-tag">Metaheuristics</span>
+              <span class="ds-tag">Deep Learning</span>
+            </div>
+            <hr class="ds-panel__divider">
+            <h2 class="ds-panel__title">Keywords</h2>
+            <div class="ds-panel__tags">
+              <span class="ds-skill-badge">Python</span>
+              <span class="ds-skill-badge">Java</span>
+              <span class="ds-skill-badge">SQL</span>
+              <span class="ds-skill-badge">R</span>
+              <span class="ds-skill-badge">Lua</span>
+              <span class="ds-skill-badge">Pandas</span>
+              <span class="ds-skill-badge">NumPy</span>
+              <span class="ds-skill-badge">Scikit-learn</span>
+              <span class="ds-skill-badge">TensorFlow</span>
+              <span class="ds-skill-badge">Jupyter</span>
+              <span class="ds-skill-badge">LEAP & DEAP</span>
+              <span class="ds-skill-badge">Hyperparameter Tuning</span>
+              <span class="ds-skill-badge">Docker & Kubernetes</span>
+              <span class="ds-skill-badge">Git</span>
+              <span class="ds-skill-badge">Linux</span>
+            </div>
           </div>
         </div>
       </div>
-      <div class="row justify-content-center">
-        <div class="col-12 col-lg-10">
+    </div>
+  </section>
 
+  <!-- 3. Publications | Thesis & Featured Talk (two-column on wide screens) -->
+  <section class="section-padding-80 clearfix">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-xl-7 mb-30">
+          <div class="ds-col-head wow fadeInUp" data-wow-delay="100ms">
+            <h2>Publications</h2>
+            <p class="ds-subtitle" style="margin-top: -4px;"><a href="https://scholar.google.com/citations?user=bwl2u00AAAAJ&hl=en" target="_blank" rel="noopener" class="ds-cite-pill">167 citations on Google Scholar</a></p>
+          </div>
           <div class="ds-pub-entry wow fadeInUp" data-wow-delay="100ms">
             <div class="ds-pub-title"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;sortby=pubdate&amp;citation_for_view=bwl2u00AAAAJ:9ZlFYXVOiuMC" target="_blank" rel="noopener">Temporal Coupling Between Linguistic Arousal and Heart Rate Variability During Emotional Sharing</a></div>
             <div class="ds-pub-authors">MH Veiga, KN Reid, B Modenesi, J Boyko, N Fox, T Richter, D Kwon, A Omid, et al.</div>
             <div class="ds-pub-venue">Google Scholar listing — 2026</div>
           </div>
-
           <div class="ds-pub-entry wow fadeInUp" data-wow-delay="130ms">
             <div class="ds-pub-title"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:Wp0gIr-vW9MC" target="_blank" rel="noopener">BatchPlanet: Batch access and processing of PlanetScope imagery for spatiotemporal analysis in R</a></div>
             <div class="ds-pub-authors">Y Song, AR Bevington, KN Reid, J Zhu, Y Liu, K Zhu</div>
             <div class="ds-pub-venue">The Journal of Open Source Software 11(119):9268 — 2026</div>
           </div>
-
           <div class="ds-pub-entry wow fadeInUp" data-wow-delay="160ms">
             <span class="ds-citation-badge">54 citations</span>
             <div class="ds-pub-title"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:M3ejUd6NZC8C" target="_blank" rel="noopener">An interdisciplinary outlook on large language models for scientific research</a></div>
             <div class="ds-pub-authors">J Boyko, J Cohen, N Fox, MH Veiga, JI Li, J Liu, B Modenesi, AH Rauch, et al.</div>
             <div class="ds-pub-venue">arXiv preprint arXiv:2311.04929 — 2023</div>
           </div>
-
           <div class="ds-pub-entry wow fadeInUp" data-wow-delay="190ms">
             <span class="ds-citation-badge">7 citations</span>
             <div class="ds-pub-title"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:KlAtU1dfN6UC" target="_blank" rel="noopener">Genetic improvement in the Shackleton framework for optimizing LLVM pass sequences</a></div>
             <div class="ds-pub-authors">SS Li, H Peeler, AN Sloss, KN Reid, W Banzhaf</div>
             <div class="ds-pub-venue">Proceedings of the Genetic and Evolutionary Computation Conference Companion — 2022</div>
           </div>
-
           <div class="ds-pub-entry wow fadeInUp" data-wow-delay="220ms">
             <span class="ds-citation-badge">14 citations</span>
             <div class="ds-pub-title"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:3fE2CSJIrl8C" target="_blank" rel="noopener">Optimizing LLVM Pass Sequences with Shackleton: A Linear Genetic Programming Framework</a></div>
             <div class="ds-pub-authors">H Peeler, SS Li, AN Sloss, KN Reid, Y Yuan, W Banzhaf</div>
             <div class="ds-pub-venue">Google Scholar listing — 2022</div>
           </div>
-
-          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="250ms">
-            <div class="ds-pub-title"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:kNdYIx-mwKoC" target="_blank" rel="noopener">Benchmarking of the Shackleton Genetic Programming Framework for LLVM Compiler Optimization</a></div>
-            <div class="ds-pub-authors">WB Stella Li, Hannah Peeler, Kenneth Reid, Yuan Yuan, Andrew Sloss</div>
-            <div class="ds-pub-venue">Google Scholar listing — 2021</div>
-          </div>
-
-          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="280ms">
+          <details class="ds-pub-more">
+            <summary><span class="ds-pub-more__label">Show 5 earlier papers (2016&ndash;2021)</span></summary>
+            <div class="ds-pub-entry wow fadeInUp" data-wow-delay="280ms">
             <span class="ds-citation-badge">9 citations</span>
             <div class="ds-pub-title"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:8k81kl-MbHgC" target="_blank" rel="noopener">The Factory Must Grow: Automation in Factorio</a></div>
             <div class="ds-pub-authors">KN Reid, I Miralavy, S Kelly, W Banzhaf, C Gondro</div>
             <div class="ds-pub-venue">GECCO '21: Proceedings of the Genetic and Evolutionary Computation Conference — 2021</div>
           </div>
-
-          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="310ms">
+            <div class="ds-pub-entry wow fadeInUp" data-wow-delay="310ms">
             <span class="ds-citation-badge">58 citations</span>
             <div class="ds-pub-title"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:hqOjcs7Dif8C" target="_blank" rel="noopener">Heuristic hyperparameter optimization of deep learning models for genomic prediction</a></div>
             <div class="ds-pub-authors">J Han, C Gondro, K Reid, JP Steibel</div>
             <div class="ds-pub-venue">G3 11(7), jkab032 — 2021</div>
           </div>
-
-          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="340ms">
-            <div class="ds-pub-title"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:Zph67rFs4hoC" target="_blank" rel="noopener">The Factory Must Grow: Automation in Factorio</a></div>
-            <div class="ds-pub-authors">CG Kenneth N. Reid, Iliya Miralavy, Stephen Kelly, Wolfgang Banzhaf</div>
-            <div class="ds-pub-venue">arXiv preprint version — 2021</div>
-          </div>
-
-          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="370ms">
-            <span class="ds-citation-badge">1 citation</span>
-            <div class="ds-pub-title"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:UebtZRa9Y70C" target="_blank" rel="noopener">Metaheuristics For Solving Real World Employee Rostering and Shift Scheduling Problems</a></div>
-            <div class="ds-pub-authors">KN Reid</div>
-            <div class="ds-pub-venue">University of Stirling — 2019</div>
-          </div>
-
-          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="400ms">
+            <div class="ds-pub-entry wow fadeInUp" data-wow-delay="400ms">
             <span class="ds-citation-badge">13 citations</span>
             <div class="ds-pub-title"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:roLk4NBRz8UC" target="_blank" rel="noopener">A hybrid metaheuristic approach to a real world employee scheduling problem</a></div>
             <div class="ds-pub-authors">KN Reid, J Li, A Brownlee, M Kern, N Veerapen, J Swan, G Owusu</div>
             <div class="ds-pub-venue">Proceedings of the Genetic and Evolutionary Computation Conference, 1311-1318 — 2019</div>
           </div>
-
-          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="430ms">
+            <div class="ds-pub-entry wow fadeInUp" data-wow-delay="430ms">
             <span class="ds-citation-badge">2 citations</span>
             <div class="ds-pub-title"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:Se3iqnhoufwC" target="_blank" rel="noopener">Shift Scheduling and Employee Rostering: An Evolutionary Ruin &amp; Stochastic Recreate Solution</a></div>
             <div class="ds-pub-authors">KN Reid, J Li, N Veerapen, J Swan, A McCormick, M Kern, G Owusu</div>
             <div class="ds-pub-venue">2018 10th Computer Science and Electronic Engineering (CEEC), 19-23 — 2018</div>
           </div>
-
-          <div class="ds-pub-entry wow fadeInUp" data-wow-delay="460ms">
+            <div class="ds-pub-entry wow fadeInUp" data-wow-delay="460ms">
             <span class="ds-citation-badge">9 citations</span>
             <div class="ds-pub-title"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:u5HHmVD_uO8C" target="_blank" rel="noopener">Variable Neighbourhood Search: A Case Study for a Highly-Constrained Workforce Scheduling Problem</a></div>
             <div class="ds-pub-authors">KN Reid, J Li, J Swan, A McCormick, G Owusu</div>
             <div class="ds-pub-venue">IEEE SSCI 2016 — 2016</div>
           </div>
-
+          </details>
+          <div class="text-center wow fadeInUp" data-wow-delay="200ms" style="margin-top: 24px;">
+            <a href="https://scholar.google.com/citations?user=bwl2u00AAAAJ&hl=en" target="_blank" rel="noopener" class="btn alime-btn btn-2">View All on Google Scholar &rarr;</a>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-12 text-center wow fadeInUp" data-wow-delay="500ms" style="margin-top: 20px;">
-          <a href="https://scholar.google.com/citations?user=bwl2u00AAAAJ&hl=en" target="_blank" rel="noopener" class="btn alime-btn btn-2">View All on Google Scholar &rarr;</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. Doctoral Thesis -->
-  <section class="bg-gray section-padding-80 clearfix">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
+        <div class="col-12 col-xl-5 mb-30">
+          <div class="ds-col-head wow fadeInUp" data-wow-delay="100ms">
             <h2>Doctoral Thesis</h2>
           </div>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-12 col-lg-10">
-          <div class="ds-thesis-box wow fadeInUp" data-wow-delay="200ms">
-            <h4>Metaheuristics for Solving Real World Employee Rostering and Shift Scheduling Problems</h4>
-            <div class="ds-thesis-meta">
-              University of Stirling, Division of Computing Science and Mathematics — July 2019<br>
-              Supervised by Dr Jingpeng Li &middot; Funded by BT and EPSRC DAASE Project
-            </div>
-            <p>This thesis addresses challenging real-world employee rostering and shift scheduling problems using state-of-the-art metaheuristic techniques. Novel approaches including Variable Neighbourhood Search, Evolutionary Ruin &amp; Stochastic Recreate, and hybrid matheuristic methods combining metaheuristics with Integer Programming were developed and evaluated against real-world data provided by BT. The research demonstrates how computational optimization can solve complex, highly-constrained scheduling problems that arise in large-scale workforce management.</p>
-            <div style="margin-top: 20px;">
-              <a href="docs/KenReidThesis.pdf" target="_blank" rel="noopener" class="btn alime-btn btn-2">Read Full Thesis (PDF)</a>
+          <div class="ds-pub-entry">
+            <div class="ds-pub-title">Metaheuristics for Solving Real World Employee Rostering and Shift Scheduling Problems</div>
+            <div class="ds-pub-authors">University of Stirling &middot; July 2019 &middot; Supervised by Dr Jingpeng Li &middot; Funded by BT and the EPSRC DAASE Project</div>
+            <p class="ds-thesis-abstract">Real-world employee rostering and shift scheduling, solved with state-of-the-art metaheuristics: Variable Neighbourhood Search, Evolutionary Ruin &amp; Stochastic Recreate, and hybrid matheuristics combining metaheuristics with Integer Programming, evaluated against real-world data provided by BT.</p>
+            <a href="/docs/KenReidThesis.pdf" target="_blank" rel="noopener" class="ds-text-link">Read the full thesis (PDF) &rarr;</a>
+          </div>
+          <div class="ds-col-head wow fadeInUp" data-wow-delay="100ms" style="margin-top: 40px;">
+            <h2>Featured Talk</h2>
+          </div>
+          <div class="ds-pub-entry">
+            <div class="ds-pub-title">&ldquo;The Factory Must Grow: Automation in Factorio&rdquo;</div>
+            <div class="ds-pub-authors">Seminar for the BEACON Center for the Study of Evolution in Action, Michigan State University &middot; 21,000+ views</div>
+            <div style="margin-top: 12px;">
+              <button type="button" class="kr-embed-facade" data-embed-src="https://www.youtube-nocookie.com/embed/9ie01GLGB5s" data-embed-height="300" data-embed-title="The Factory Must Grow: Automation in Factorio — BEACON Center seminar"><span class="kr-embed-facade__play" aria-hidden="true"></span><span class="kr-embed-facade__title">Watch the seminar</span><span class="kr-embed-facade__note">Click to load the YouTube player</span></button>
             </div>
           </div>
+          
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. Interactive Tools -->
-  <section class="section-padding-80 clearfix">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
-            <h2>Interactive Tools</h2>
-            <p style="color: #888; margin-top: -10px;">Try these data-driven web apps — no setup required</p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-
-        <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="100ms">
-          <div class="ds-project-card" style="border-top: 3px solid #1b9e77;">
-            <h3><a href="https://drkenreid-steam-stats-visualized.streamlit.app/" target="_blank" rel="noopener">🎮 Steam Stats Visualized</a></h3>
-            <p>Paste your Steam profile and get your gaming life roasted. Gaming personality, head-to-head comparisons, achievement stats, account value estimation, genre breakdown, and downloadable summary cards.</p>
-            <div style="margin-bottom: 12px;">
-              <span class="ds-tag" style="font-size: 11px; padding: 4px 12px; margin: 2px;">Plotly</span>
-              <span class="ds-tag" style="font-size: 11px; padding: 4px 12px; margin: 2px;">Steam API</span>
-              <span class="ds-tag" style="font-size: 11px; padding: 4px 12px; margin: 2px;">Streamlit</span>
-            </div>
-            <div style="display: flex; align-items: center;">
-              <a href="https://drkenreid-steam-stats-visualized.streamlit.app/" target="_blank" rel="noopener" class="btn alime-btn btn-2" style="font-size: 13px; padding: 4px 12px; display: inline-flex; align-items: center; line-height: 1.4;">Try it &rarr;</a>
-              <a href="https://github.com/DrKenReid/steam-stats-visualized" target="_blank" rel="noopener" style="margin-left: 15px; font-size: 13px; color: #636363;">View Source</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="200ms">
-          <div class="ds-project-card" style="border-top: 3px solid #e74c3c;">
-            <h3><a href="https://goodreads-analysis.streamlit.app/" target="_blank" rel="noopener">📚 GoodReads Reading Stats</a></h3>
-            <p>Upload your GoodReads export and discover your reading personality, genre breakdown, rating analysis, fun page facts, and a quotes collection tool with themed PDF/HTML/Markdown export.</p>
-            <div style="margin-bottom: 12px;">
-              <span class="ds-tag" style="font-size: 11px; padding: 4px 12px; margin: 2px;">Plotly</span>
-              <span class="ds-tag" style="font-size: 11px; padding: 4px 12px; margin: 2px;">NLP</span>
-              <span class="ds-tag" style="font-size: 11px; padding: 4px 12px; margin: 2px;">Streamlit</span>
-            </div>
-            <div style="display: flex; align-items: center;">
-              <a href="https://goodreads-analysis.streamlit.app/" target="_blank" rel="noopener" class="btn alime-btn btn-2" style="font-size: 13px; padding: 4px 12px; display: inline-flex; align-items: center; line-height: 1.4;">Try it &rarr;</a>
-              <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" rel="noopener" style="margin-left: 15px; font-size: 13px; color: #636363;">View Source</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="300ms">
-          <div class="ds-project-card" style="border-top: 3px solid #3498db;">
-            <h3><a href="https://debt-payoff-simulator.streamlit.app" target="_blank" rel="noopener">💳 Debt Payoff Simulator</a></h3>
-            <p>Compare Avalanche vs Snowball debt repayment strategies with interactive charts. Balance transfer analysis, sensitivity modeling, bi-weekly payments, and customizable summary cards.</p>
-            <div style="margin-bottom: 12px;">
-              <span class="ds-tag" style="font-size: 11px; padding: 4px 12px; margin: 2px;">Plotly</span>
-              <span class="ds-tag" style="font-size: 11px; padding: 4px 12px; margin: 2px;">Financial Modeling</span>
-              <span class="ds-tag" style="font-size: 11px; padding: 4px 12px; margin: 2px;">Streamlit</span>
-            </div>
-            <div style="display: flex; align-items: center;">
-              <a href="https://debt-payoff-simulator.streamlit.app" target="_blank" rel="noopener" class="btn alime-btn btn-2" style="font-size: 13px; padding: 4px 12px; display: inline-flex; align-items: center; line-height: 1.4;">Try it &rarr;</a>
-              <a href="https://github.com/DrKenReid/Debt-Payoff-Simulator" target="_blank" rel="noopener" style="margin-left: 15px; font-size: 13px; color: #636363;">View Source</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-md-6 wow fadeInUp" data-wow-delay="400ms">
-          <div class="ds-project-card" style="border-top: 3px solid #E50914;">
-            <h3><a href="https://github.com/DrKenReid/Letterboxd-Roasted" target="_blank" rel="noopener">🔥 Letterboxd Roasted</a></h3>
-            <p>Upload your Letterboxd data export and get absolutely roasted. Film personality types, data-driven roast commentary, multi-user comparison, contrarian scores, and shareable summary cards.</p>
-            <div style="margin-bottom: 12px;">
-              <span class="ds-tag" style="font-size: 11px; padding: 4px 12px; margin: 2px;">Plotly</span>
-              <span class="ds-tag" style="font-size: 11px; padding: 4px 12px; margin: 2px;">TMDb API</span>
-              <span class="ds-tag" style="font-size: 11px; padding: 4px 12px; margin: 2px;">Streamlit</span>
-            </div>
-            <div style="display: flex; align-items: center;">
-              <a href="https://letterboxd-roasted.streamlit.app/" target="_blank" rel="noopener" class="btn alime-btn btn-2" style="font-size: 13px; padding: 4px 12px; display: inline-flex; align-items: center; line-height: 1.4;">Try it &rarr;</a>
-              <a href="https://github.com/DrKenReid/Letterboxd-Roasted" target="_blank" rel="noopener" style="margin-left: 15px; font-size: 13px; color: #636363;">View Source</a>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   </section>
 
-  <!-- 6. Portfolio Projects -->
+  <!-- 4. Portfolio Projects -->
   <section class="bg-gray section-padding-80 clearfix">
     <div class="container">
       <div class="row">
         <div class="col-12">
           <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
             <h2>Portfolio</h2>
-            <p style="color: #888; margin-top: -10px;">Data science & research projects on GitHub</p>
+            <p class="ds-subtitle">Projects and interactive tools &mdash; the first four run in the browser, no setup</p>
           </div>
         </div>
       </div>
       <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="100ms">
+          <div class="ds-project-card ds-project-card--link">
+            <h3><a href="https://github.com/DrKenReid/steam-stats-visualized" target="_blank" rel="noopener">🎮 Steam Stats Visualized</a></h3>
+            <p>Paste your Steam profile and get your gaming life roasted. Gaming personality, head-to-head comparisons, achievement stats, account value estimation, genre breakdown, and downloadable summary cards.</p>
+            <a href="https://drkenreid-steam-stats-visualized.streamlit.app/" target="_blank" rel="noopener" class="btn alime-btn btn-2 ds-btn-sm ds-try-btn">Try it on Streamlit &rarr;</a>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="200ms">
+          <div class="ds-project-card ds-project-card--link">
+            <h3><a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" rel="noopener">📚 GoodReads Reading Stats</a></h3>
+            <p>Upload your GoodReads export and discover your reading personality, genre breakdown, rating analysis, fun page facts, and a quotes collection tool with themed PDF/HTML/Markdown export.</p>
+            <a href="https://goodreads-analysis.streamlit.app/" target="_blank" rel="noopener" class="btn alime-btn btn-2 ds-btn-sm ds-try-btn">Try it on Streamlit &rarr;</a>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="300ms">
+          <div class="ds-project-card ds-project-card--link">
+            <h3><a href="https://github.com/DrKenReid/Debt-Payoff-Simulator" target="_blank" rel="noopener">💳 Debt Payoff Simulator</a></h3>
+            <p>Compare Avalanche vs Snowball debt repayment strategies with interactive charts. Balance transfer analysis, sensitivity modeling, bi-weekly payments, and customizable summary cards.</p>
+            <a href="https://debt-payoff-simulator.streamlit.app" target="_blank" rel="noopener" class="btn alime-btn btn-2 ds-btn-sm ds-try-btn">Try it on Streamlit &rarr;</a>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="400ms">
+          <div class="ds-project-card ds-project-card--link">
+            <h3><a href="https://github.com/DrKenReid/Letterboxd-Roasted" target="_blank" rel="noopener">🔥 Letterboxd Roasted</a></h3>
+            <p>Upload your Letterboxd data export and get absolutely roasted. Film personality types, data-driven roast commentary, multi-user comparison, contrarian scores, and shareable summary cards.</p>
+            <a href="https://letterboxd-roasted.streamlit.app/" target="_blank" rel="noopener" class="btn alime-btn btn-2 ds-btn-sm ds-try-btn">Try it on Streamlit &rarr;</a>
+          </div>
+        </div>
 
-        <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="100ms">
-          <div class="ds-project-card">
+
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="100ms">
+          <div class="ds-project-card ds-project-card--link">
             <h3><a href="https://github.com/DrKenReid/EasyViewerPDF" target="_blank" rel="noopener">EasyViewerPDF</a></h3>
             <p>Electron desktop app for PDF workflows: split documents into pages and compare multiple pages side by side in a malleable, keyboard-accessible grid.</p>
             <div class="ds-project-meta">
@@ -602,8 +832,8 @@
           </div>
         </div>
 
-        <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="100ms">
-          <div class="ds-project-card">
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="100ms">
+          <div class="ds-project-card ds-project-card--link">
             <h3><a href="https://github.com/DrKenReid/FactorioBeltProblemGECCO" target="_blank" rel="noopener">FactorioBeltProblemGECCO</a></h3>
             <p>Factorio game interface for optimizing belt balancer layouts using evolutionary computation. Companion code for the GECCO '21 paper.</p>
             <div class="ds-project-meta">
@@ -614,8 +844,8 @@
           </div>
         </div>
 
-        <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="200ms">
-          <div class="ds-project-card">
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="200ms">
+          <div class="ds-project-card ds-project-card--link">
             <h3><a href="https://github.com/DrKenReid/VAE-for-Molecule-Discovery" target="_blank" rel="noopener">VAE for Molecule Discovery</a></h3>
             <p>Variational Autoencoder for drug discovery — generating novel molecular structures using deep generative models.</p>
             <div class="ds-project-meta">
@@ -624,8 +854,8 @@
           </div>
         </div>
 
-        <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="300ms">
-          <div class="ds-project-card">
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="300ms">
+          <div class="ds-project-card ds-project-card--link">
             <h3><a href="https://github.com/DrKenReid/CNN-Tutorial---X-ray-image-classifier" target="_blank" rel="noopener">CNN X-Ray Classifier</a></h3>
             <p>Convolutional Neural Network for pneumonia detection from chest X-ray images — a deep learning tutorial for medical imaging.</p>
             <div class="ds-project-meta">
@@ -634,8 +864,8 @@
           </div>
         </div>
 
-        <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="400ms">
-          <div class="ds-project-card">
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="400ms">
+          <div class="ds-project-card ds-project-card--link">
             <h3><a href="https://github.com/DrKenReid/Generalized-Analysis-of-Text-Data" target="_blank" rel="noopener">NLP Text Analysis Toolkit</a></h3>
             <p>Generalized NLP pipeline — topic modeling, sentiment analysis, and text classification using modern natural language processing techniques.</p>
             <div class="ds-project-meta">
@@ -644,8 +874,8 @@
           </div>
         </div>
 
-        <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="500ms">
-          <div class="ds-project-card">
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="500ms">
+          <div class="ds-project-card ds-project-card--link">
             <h3><a href="https://github.com/DrKenReid/SimulatedAnnealingExample" target="_blank" rel="noopener">Simulated Annealing</a></h3>
             <p>Interactive Google Colab demonstration of Simulated Annealing — reconstructing a target string with visualized convergence, temperature decay, and acceptance probability.</p>
             <div class="ds-project-meta">
@@ -654,8 +884,8 @@
           </div>
         </div>
 
-        <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="600ms">
-          <div class="ds-project-card">
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="600ms">
+          <div class="ds-project-card ds-project-card--link">
             <h3><a href="https://github.com/DrKenReid/Introductory-Data-Science" target="_blank" rel="noopener">Introductory Data Science</a></h3>
             <p>Hands-on machine learning tutorials in Google Colab — covering classification, regression, unsupervised learning, MLPs, CNNs, and RNNs.</p>
             <div class="ds-project-meta">
@@ -664,8 +894,8 @@
           </div>
         </div>
 
-        <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="700ms">
-          <div class="ds-project-card">
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="700ms">
+          <div class="ds-project-card ds-project-card--link">
             <h3><a href="https://github.com/DrKenReid/Debt-Payoff-Simulator" target="_blank" rel="noopener">Debt Payoff Simulator</a></h3>
             <p>Python simulator for comparing debt payoff strategies — avalanche vs snowball methods with financial data analysis and visualizations.</p>
             <div class="ds-project-meta">
@@ -674,8 +904,8 @@
           </div>
         </div>
 
-        <div class="col-12 col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="800ms">
-          <div class="ds-project-card">
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="800ms">
+          <div class="ds-project-card ds-project-card--link">
             <h3><a href="https://github.com/DrKenReid/global-temperature-analysis" target="_blank" rel="noopener">Global Temperature Analysis</a></h3>
             <p>Data pipeline using R, SQL Server, and Tableau to analyze long-term global temperature trends and climate patterns.</p>
             <div class="ds-project-meta">
@@ -694,104 +924,14 @@
     </div>
   </section>
 
-  <!-- 7. Featured Talk -->
-  <section class="section-padding-80 clearfix">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
-            <h2>Featured Talk</h2>
-          </div>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-12 col-lg-10">
-          <div class="wow fadeInUp" data-wow-delay="200ms">
-            <p class="ds-talk-context text-center" style="margin-bottom: 30px;">Presented through Michigan State University's <strong>BEACON Center for the Study of Evolution in Action</strong>. This talk accompanies the paper <em>"The Factory Must Grow: Automation in Factorio"</em> and has been viewed over <strong>21,000 times</strong>.</p>
-          </div>
-          <figure class="wow fadeInUp" data-wow-delay="300ms" style="margin: 24px auto; display: flex; flex-direction: column; align-items: center; text-align: center;">
-            <div style="position: relative; width: 100%; max-width: 760px; aspect-ratio: 16/9;">
-              <iframe src="https://www.youtube.com/embed/9ie01GLGB5s"
-                      title="The Factory Must Grow: Automation in Factorio — GECCO 2021"
-                    loading="lazy"
-                    referrerpolicy="strict-origin-when-cross-origin"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowfullscreen
-                      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 4px;"></iframe>
-            </div>
-            <figcaption style="margin-top: 8px; font-size: 0.8em; max-width: 760px;">
-              &ldquo;The Factory Must Grow: Automation in Factorio&rdquo;, presented at GECCO 2021.
-            </figcaption>
-          </figure>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 8. Skills & Technologies -->
-  <section class="bg-gray section-padding-80 clearfix">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
-            <h2>Skills &amp; Technologies</h2>
-          </div>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-12 col-lg-10">
-
-          <div class="ds-skill-group wow fadeInUp" data-wow-delay="200ms">
-            <h3>Programming Languages</h3>
-            <span class="ds-skill-badge">Python</span>
-            <span class="ds-skill-badge">Java</span>
-            <span class="ds-skill-badge">SQL</span>
-            <span class="ds-skill-badge">R</span>
-            <span class="ds-skill-badge">Lua</span>
-          </div>
-
-          <div class="ds-skill-group wow fadeInUp" data-wow-delay="300ms">
-            <h3>Data &amp; Machine Learning</h3>
-            <span class="ds-skill-badge">Pandas</span>
-            <span class="ds-skill-badge">NumPy</span>
-            <span class="ds-skill-badge">Scikit-learn</span>
-            <span class="ds-skill-badge">TensorFlow</span>
-            <span class="ds-skill-badge">Jupyter</span>
-            <span class="ds-skill-badge">LEAP & DEAP</span>
-            <span class="ds-skill-badge">Hyperparameter Tuning</span>
-          </div>
-
-          <div class="ds-skill-group wow fadeInUp" data-wow-delay="400ms">
-            <h3>Infrastructure &amp; Tools</h3>
-            <span class="ds-skill-badge">Docker & Kubernetes</span>
-            <span class="ds-skill-badge">Git</span>
-            <span class="ds-skill-badge">Linux</span>
-          </div>
-
-          <div class="ds-skill-group wow fadeInUp" data-wow-delay="500ms">
-            <h3>Research Domains</h3>
-            <span class="ds-skill-badge">Evolutionary Computation</span>
-            <span class="ds-skill-badge">Genetic Programming</span>
-            <span class="ds-skill-badge">Metaheuristics</span>
-            <span class="ds-skill-badge">Optimization</span>
-            <span class="ds-skill-badge">Deep Learning</span>
-            <span class="ds-skill-badge">Natural Language Processing</span>
-            <span class="ds-skill-badge">Computer Vision</span>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 9. Data Science Blog Posts -->
+  <!-- 5. Data Science Blog Posts -->
   <section class="section-padding-80 clearfix" id="ds-blog">
     <div class="container">
       <div class="row">
         <div class="col-12">
           <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
             <h2>Blog</h2>
-            <p style="color: #636363;">Technical write-ups and project deep-dives. <a href="blog.html">View all posts →</a></p>
+            <p class="ds-subtitle">Technical write-ups and project deep-dives. <a href="/blog.html">View all posts →</a></p>
           </div>
         </div>
       </div>
@@ -799,55 +939,36 @@
     </div>
   </section>
 
-  <!-- 10. Curriculum Vitae -->
-  <section class="section-padding-80 clearfix">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
-            <h2>Resume</h2>
-          </div>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-12 col-lg-10 wow fadeInUp" data-wow-delay="200ms">
-          <p class="text-center" style="margin-top: 20px;">
-            <a href="docs/ken-cv.pdf" download class="btn alime-btn btn-2">Download Resume (PDF)</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 10. Let's Collaborate -->
+  <!-- 6. Let's Collaborate -->
   <div class="about-us-area section-padding-80-0 clearfix">
     <div class="container">
       <div class="row align-items-center">
         <div class="col-12 col-lg-6">
           <div class="about-video-area mb-80 wow fadeInUp" data-wow-delay="100ms">
-            <img src="img/photography/thumb/25.webp" alt="Collaboration" loading="lazy" width="400" height="266">
+            <img src="/img/photography/thumb/25.webp" alt="" loading="lazy" width="400" height="266">
           </div>
         </div>
         <div class="col-12 col-lg-6">
           <div class="about-us-content mb-80">
-            <h3 class="wow fadeInUp" data-wow-delay="100ms">Let's Collaborate</h3>
+            <h2 class="wow fadeInUp" data-wow-delay="100ms">Let's Collaborate</h2>
             <div class="line wow fadeInUp" data-wow-delay="200ms"></div>
+            <p class="kr-body-text wow fadeInUp" data-wow-delay="250ms">The fastest route is email: <a href="mailto:ken@kenreid.co.uk?subject=Work%20enquiry">ken@kenreid.co.uk</a>, or the <a href="/contact.html">contact page</a>. New posts on data science land in the <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">free newsletter</a>. Profiles, for the diligent:</p>
             <p class="wow fadeInUp" data-wow-delay="300ms">
-              <a href="https://github.com/DrKenReid" target="_blank" rel="noopener"><img src="./img/core-img/gh.png" style="width:1em;margin-right:.5em;" alt="GitHub icon" loading="lazy" width="16" height="16">GitHub</a>
+              <a href="https://github.com/DrKenReid" target="_blank" rel="noopener"><img src="/img/core-img/gh.png" style="width:1em;margin-right:.5em;" alt="GitHub icon" loading="lazy" width="16" height="16">GitHub</a>
             </p>
             <p class="wow fadeInUp" data-wow-delay="400ms">
-              <a href="https://scholar.google.com/citations?user=bwl2u00AAAAJ&hl=en" target="_blank" rel="noopener"><img src="./img/core-img/scholar.png" style="width:1em;margin-right:.5em;" alt="Google Scholar icon" loading="lazy" width="256" height="256">Google Scholar</a>
+              <a href="https://scholar.google.com/citations?user=bwl2u00AAAAJ&hl=en" target="_blank" rel="noopener"><img src="/img/core-img/scholar.png" style="width:1em;margin-right:.5em;" alt="Google Scholar icon" loading="lazy" width="256" height="256">Google Scholar</a>
             </p>
             <p class="wow fadeInUp" data-wow-delay="500ms">
-              <a href="https://www.linkedin.com/in/kennethneilreid" target="_blank" rel="noopener"><img src="./img/core-img/li.png" style="width:1em;margin-right:.5em;" alt="LinkedIn icon" loading="lazy" width="16" height="16">LinkedIn</a>
+              <a href="https://www.linkedin.com/in/kennethneilreid" target="_blank" rel="noopener"><img src="/img/core-img/li.png" style="width:1em;margin-right:.5em;" alt="LinkedIn icon" loading="lazy" width="16" height="16">LinkedIn</a>
             </p>
             <p class="wow fadeInUp" data-wow-delay="600ms" itemscope itemtype="https://schema.org/Person">
               <a itemprop="sameAs" content="https://orcid.org/0000-0001-8654-2430" href="https://orcid.org/0000-0001-8654-2430" target="orcid.widget" rel="noopener noreferrer" style="vertical-align:top;">
-                <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon" loading="lazy">ORCID iD
+                <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon" loading="lazy" width="16" height="16">ORCID iD
               </a>
             </p>
             <p class="wow fadeInUp" data-wow-delay="700ms">
-              <a href="https://www.researchgate.net/profile/Ken_Reid4/" target="_blank" rel="noopener"><img src="./img/core-img/rg.png" style="width:1em;margin-right:.5em;" alt="ResearchGate icon" loading="lazy" width="16" height="16">ResearchGate</a>
+              <a href="https://www.researchgate.net/profile/Ken_Reid4/" target="_blank" rel="noopener"><img src="/img/core-img/rg.png" style="width:1em;margin-right:.5em;" alt="ResearchGate icon" loading="lazy" width="16" height="16">ResearchGate</a>
             </p>
           </div>
         </div>
@@ -863,20 +984,20 @@
   <div id="footer-section"></div>
 
   <!-- JavaScript -->
-  <script src="js/jquery.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/alime.bundle.js"></script>
-  <script src="js/lightbox.js"></script>
-  <script src="js/default-assets/active.js"></script>
-  <script src="js/shared-components.js"></script>
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/popper.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/alime.bundle.js"></script>
+  <script src="/js/lightbox.js"></script>
+  <script src="/js/default-assets/active.js"></script>
+  <script src="/js/shared-components.js"></script>
   <script>
-    renderHeader('header-section', { basePath: './', active: 'data_science' });
+    renderHeader('header-section', { basePath: '/', active: 'data_science' });
     renderInstagramSection('instagram-section');
     renderFooter('footer-section');
 
     /* List every published data-science-related post, newest first */
-    fetch('data/posts.json')
+    fetch('/data/posts.json')
       .then(function(r) { return r.json(); })
       .then(function(posts) {
         var relevantTags = ['data science', 'ai'];
