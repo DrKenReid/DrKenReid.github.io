@@ -8,18 +8,25 @@
       "plays": 15
     },
     {
+      "name": "Dopamine (Split Brain Version)",
+      "artist": "Madelline",
+      "url": "https://www.last.fm/music/Madelline/Dopamine+(Split+Brain+Version)",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/4415ed4c7fafb84cdbfb0cad3cbd5028.jpg",
+      "plays": 5
+    },
+    {
       "name": "ECLESIA",
       "artist": "Naïka",
       "url": "https://www.last.fm/music/Na%C3%AFka/ECLESIA",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/e6c40e9652aac25010b8094263138aa2.jpg",
-      "plays": 9
+      "plays": 5
     },
     {
       "name": "Get Behind Me Satan",
       "artist": "The White Stripes",
       "url": "https://www.last.fm/music/The+White+Stripes/Get+Behind+Me+Satan",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/f4bd9ed207184af23b8199fb41c8eba2.jpg",
-      "plays": 6
+      "plays": 5
     },
     {
       "name": "The Secretary's Daughter",
@@ -29,17 +36,24 @@
       "plays": 4
     },
     {
-      "name": "Dopamine (Split Brain Version)",
-      "artist": "Madelline",
-      "url": "https://www.last.fm/music/Madelline/Dopamine+(Split+Brain+Version)",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/4415ed4c7fafb84cdbfb0cad3cbd5028.jpg",
-      "plays": 4
+      "name": "it boy",
+      "artist": "bbno$",
+      "url": "https://www.last.fm/music/bbno$/it+boy",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/2d056ba6d08b6e5bcf62de5b578b99be.jpg",
+      "plays": 3
     },
     {
       "name": "The E.N.D. (The Energy Never Dies)",
       "artist": "Black Eyed Peas",
       "url": "https://www.last.fm/music/Black+Eyed+Peas/The+E.N.D.+(The+Energy+Never+Dies)",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/c1c93f40047046c1bce56e8fad76f3e1.png",
+      "plays": 3
+    },
+    {
+      "name": "Trilogy",
+      "artist": "Carpenter Brut",
+      "url": "https://www.last.fm/music/Carpenter+Brut/Trilogy",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/d0c1914b6840db8f0bdeb105944e7933.jpg",
       "plays": 3
     },
     {
@@ -64,10 +78,10 @@
       "plays": 3
     },
     {
-      "name": "Icky Thump",
-      "artist": "The White Stripes",
-      "url": "https://www.last.fm/music/The+White+Stripes/Icky+Thump",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/32f153b85b0f477fc7b672aa04db055d.jpg",
+      "name": "Is This It",
+      "artist": "The Strokes",
+      "url": "https://www.last.fm/music/The+Strokes/Is+This+It",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/80f256e56b1043cdbb99da3ac4dd69a0.png",
       "plays": 3
     },
     {
@@ -99,13 +113,6 @@
       "plays": 2
     },
     {
-      "name": "it boy",
-      "artist": "bbno$",
-      "url": "https://www.last.fm/music/bbno$/it+boy",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/2d056ba6d08b6e5bcf62de5b578b99be.jpg",
-      "plays": 2
-    },
-    {
       "name": "1-800",
       "artist": "bbno$ & Ironmouse",
       "url": "https://www.last.fm/music/bbno$+&+Ironmouse/1-800",
@@ -113,17 +120,17 @@
       "plays": 2
     },
     {
+      "name": "Burning Sands",
+      "artist": "Boom Kitty",
+      "url": "https://www.last.fm/music/Boom+Kitty/Burning+Sands",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/caa7ed94df9552df2f0c4c811453eebf.jpg",
+      "plays": 2
+    },
+    {
       "name": "Leather Terror",
       "artist": "Carpenter Brut",
       "url": "https://www.last.fm/music/Carpenter+Brut/Leather+Terror",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/81c89a3bfac3fa2b098fb6fd62b11c1d.jpg",
-      "plays": 2
-    },
-    {
-      "name": "Trilogy",
-      "artist": "Carpenter Brut",
-      "url": "https://www.last.fm/music/Carpenter+Brut/Trilogy",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/d0c1914b6840db8f0bdeb105944e7933.jpg",
       "plays": 2
     },
     {
@@ -135,5 +142,5 @@
     }
   ],
   "period": "3month",
-  "updated": "2026-07-07"
+  "updated": "2026-07-13"
 }
