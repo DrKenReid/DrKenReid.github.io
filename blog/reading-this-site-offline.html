@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+  <meta name="description" content="This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.">
+  <meta name="keywords" content="technology">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Reading This Site Offline - Ken Reid</title>
+  <meta property="og:title" content="Reading This Site Offline">
+  <meta property="og:description" content="This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.">
+  <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/62.png">
+  <meta property="og:url" content="https://www.kenreid.co.uk/blog/reading-this-site-offline.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Reading This Site Offline">
+  <meta name="twitter:description" content="This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.">
+  <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/62.png">
+  <meta name="citation_title" content="Reading This Site Offline">
+  <meta name="citation_author" content="Reid, Kenneth N.">
+  <meta name="citation_publication_date" content="2026/07/12">
+  <meta name="citation_online_date" content="2026/07/12">
+  <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/reading-this-site-offline.html">
+  <meta name="DC.title" content="Reading This Site Offline">
+  <meta name="DC.creator" content="Kenneth N. Reid">
+  <meta name="DC.date" content="2026-07-12">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="../img/core-img/favicon.png">
+  <meta name="theme-color" content="#1a1a1a">
+  <link rel="stylesheet" href="../style.min.css">
+  <link rel="canonical" href="https://www.kenreid.co.uk/blog/reading-this-site-offline.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Reading This Site Offline",
+    "description": "This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.",
+    "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/62.png",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk"
+    },
+    "datePublished": "2026-07-12",
+    "publisher": {
+      "@type": "Person",
+      "name": "Ken Reid"
+    },
+    "keywords": ["service worker", "offline", "web development", "pwa", "static sites"]
+  }
+  </script>
+  <script defer src="../js/theme.js"></script>
+  <script defer src="../js/palette.js"></script>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <div id="header-section"></div>
+
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/62.webp); background-size: cover; background-position: center center;">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <h2 class="page-title">Blog</h2>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Reading This Site Offline</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <div class="about-us-area section-padding-80 clearfix">
+    <div class="container">
+      <main id="main-content">
+      <div class="blog-post">
+        <h1>Reading This Site Offline</h1>
+        <div class="blog-meta">
+          12 July 2026 &middot;
+          <span class="blog-tag">technology</span>
+        </div>
+
+        <p>This site learned a small trick recently: it works without the internet. I implemented it out of curiosity on how it would be done, but I'm glad I did. If someone tries to read one of my blogs while on a plane, now they can, so long as it was preloaded. Read a few posts over breakfast, open the site again, and the pages you visited are still there, styled, functional. If the connection dies mid-browse, it will still work. Nice, right?</p>
+
+        <p>This is done via a <strong>service worker</strong>, and this post walks through mine: ~100 lines of code, no framework, no build step, in keeping with <a href="hosting-photography-on-github-for-free.html">this site's general philosophy</a> of doing things with the smallest possible amount of infrastructure. If you run a static site anywhere (GitHub Pages included), this is a good philosophy, in my opinion.</p>
+
+        <div class="plain-english-box">
+          <h2>Quick jargon guide</h2>
+          <ul>
+            <li><strong>Service worker:</strong> a small script the browser installs alongside your site and runs in the background. It sits between your pages and the network, and can answer requests itself, including when there is no network.</li>
+            <li><strong>Cache (the browser kind):</strong> a local store of responses the service worker can save and replay. Lives on the visitor's device, controlled by your code.</li>
+            <li><strong>Network-first:</strong> a strategy: try the internet, fall back to the cache. Fresh when online, functional when not.</li>
+            <li><strong>Stale-while-revalidate:</strong> the inverted strategy: answer instantly from cache, then fetch a new copy in the background for next time. Fast always, fresh eventually, annoying when you are refreshing a page for an update, though.</li>
+            <li><strong>Precache:</strong> the short list of files saved at install time, before you've visited anything, the skeleton the site can't render without.</li>
+            <li><strong>Cache invalidation:</strong> famously one of the two hard problems in computer science. A service worker is a machine for having this problem on purpose.</li>
+            <li><strong>giscus:</strong> the comment system under my posts. It stores every comment as a GitHub Discussion and loads in an embedded frame from giscus.app, so the conversation lives on GitHub rather than on this site.</li>
+          </ul>
+        </div>
+
+        <h2>Two strategies</h2>
+
+        <p>Everything the worker does comes down to one decision, made per request: <em>who do you trust more, the network or the cache?</em> </p>
+
+        <p><strong>Pages get network-first.</strong> HTML is where mistakes live: a typo fixed, a broken link repaired, a post updated. When you're online I always want you reading the newest deploy, so the worker tries the network, saves a copy of whatever comes back, and only reaches for that copy when the fetch fails:</p>
+
+<pre><code class="language-js">// HTML: network-first
+fetch(req).then(function (res) {
+  var copy = res.clone();
+  caches.open(PAGES_CACHE).then(function (c) { c.put(req, copy); });
+  return res;
+}).catch(function () {
+  return caches.match(req).then(function (hit) {
+    return hit || caches.match('./offline.html');
+  });
+});</code></pre>
+
+        <p>The chain reads as a 'politeness ranking': fresh page if possible, your cached copy if not, and a dedicated offline page as the final backup. Every page you visit while online becomes a page you own while offline, the cache is your personal reading history.</p>
+
+        <p><strong>Assets get stale-while-revalidate.</strong> CSS, JavaScript, fonts, thumbnails, these change rarely and block rendering while they load, so the priorities invert. The worker answers from cache immediately and refreshes in the background:</p>
+
+<pre><code class="language-js">// Assets: stale-while-revalidate
+caches.match(req).then(function (hit) {
+  var fetching = fetch(req).then(function (res) {
+    if (res && res.status === 200) {
+      var copy = res.clone();
+      caches.open(ASSETS_CACHE).then(function (c) {
+        c.put(req, copy);
+        if (req.destination === 'image') trimCache(ASSETS_CACHE, IMG_LIMIT);
+      });
+    }
+    return res;
+  }).catch(function () { return hit; });
+  return hit || fetching;
+});</code></pre>
+
+        <p>Worst case, you see a stylesheet that's one visit out of date. In exchange, repeat visits render instantly, offline or not. That <code>trimCache</code> call is the one piece of housekeeping, meaning that image caches are capped at 200 entries, oldest evicted first, so browsing my whole <a href="../gallery.html">gallery</a> doesn't fill up your phone!</p>
+
+        <h2>What I deliberately don't cache</h2>
+
+        <p>The worker ignores anything cross-origin; the full-size photographs stay on GitHub's release servers, caching those would mean warehousing megabytes per photo on your device for a click-through you probably won't repeat. Comments are <i>giscus</i>, which lives in an iframe and belongs to GitHub; offline, it simply doesn't appear, which is the correct behaviour. Analytics likewise gets no offline resurrection, if the network can't see you, neither should it.</p>
+
+        <p><strong>Offline mode should preserve the reading, not fake the internet.</strong> The precache reflects the same idea: it's just the offline page, the stylesheet, the core scripts, and <code>posts.json</code> (so the blog index still works), so about eleven files, everything else earns its place in your cache by you actually opening it.</p>
+
+        <figure>
+          <img src="../img/photography/thumb/62.webp" alt="A moody grey sea under heavy clouds, distant fish-farm pens near a rocky headland" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+          <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+        </figure>
+
+        <h2>The footguns</h2>
+
+        <p>I'm not really a website developer or designer, beyond hobbyist endeavors like this website and a couple of landing pages for research labs I worked in, so much of this section is just what I learned while, well, learning this stuff. Service workers have a deserved reputation for one specific misery: <em>the cache that would not die.</em> Ship a worker with a careless cache-first strategy and your visitors can be pinned to an old version of your site for days: including, delightfully, an old version of the service worker itself. The classic developer experience is editing a file, refreshing, seeing no change, and spending an hour debugging to find it's actually working as intended and you just turn off your monitor for a break and see your sad reflection staring back at yourself. Ahem, anyway.</p>
+
+        <p>I'll also admit what this isn't: it isn't a full progressive web app. There's no install banner, no background sync. Those are all possible and all, for a site whose job is being read, beside the point.</p>
+
+        <h2>Try it</h2>
+
+        <p>Open a few posts, then turn on airplane mode and keep clicking. The pages you visited load; the search on the blog index still filters; the pages you didn't visit hand you a courteous offline page instead of a browser error. Turn the network back on and the whole arrangement dissolves back into an ordinary website. Much like an IT worker, if it's doing the job correctly, you won't even notice it's there. </p>
+
+        <div class="faq-section">
+          <h2>Common questions</h2>
+
+          <details class="faq-item">
+            <summary>Why not just cache the entire site up front?</summary>
+            <p>Precaching everything downloads megabytes a first-time visitor never asked for, most of which they'll never read. As much as I'd like all my visitors to read all my website, most just swing by for something that interests them, then off they go.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Does this let the site track me offline?</summary>
+            <p>No, rather the opposite. The caches live in your browser, managed by your browser, and I have no visibility into them whatsoever. Offline visits send me nothing: no analytics, no logs, no signal you exist. It's the most private way to read the site.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Why not use Workbox or a PWA framework?</summary>
+            <p>Workbox is excellent and I'd reach for it on a complex app. </p>
+          </details>
+
+          <details class="faq-item">
+            <summary>How do updates reach me if I'm serving from cache?</summary>
+            <p>Pages are network-first, so any online visit gets the latest deploy automatically, the cache only speaks when the network can't. </p>
+          </details>
+        </div>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="hosting-photography-on-github-for-free.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/387.webp" alt="Hosting a Photography Portfolio on GitHub for Free" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">6 July 2026 · 10 min read</div>
+                  <h4 class="blog-card-title">Hosting a Photography Portfolio on GitHub for Free</h4>
+                  <p class="blog-card-excerpt">GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">photography</span><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="why-i-love-latex.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/16.webp" alt="Why I Love LaTeX" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 July 2026 · 8 min read</div>
+                  <h4 class="blog-card-title">Why I Love LaTeX</h4>
+                  <p class="blog-card-excerpt">I wrote my thesis, my papers, and my CV in LaTeX, and I'd have it no other way.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="iso-8601-date-cult.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/100.webp" alt="ISO 8601 and the Date Cult I Happily Joined" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 May 2026 · 8 min read</div>
+                  <h4 class="blog-card-title">ISO 8601 and the Date Cult I Happily Joined</h4>
+                  <p class="blog-card-excerpt">An ode to ISO 8601 (YYYY-MM-DD) as the only sortable, unambiguous, international date format worth using.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+        <hr style="margin: 40px 0;">
+        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/alime.bundle.js"></script>
+  <script src="../js/lightbox.js"></script>
+  <script src="../js/prism-loader.js"></script>
+  <script src="../js/share.js"></script>
+  <script src="../js/default-assets/active.js"></script>
+  <script src="../js/shared-components.js"></script>
+  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');
+loadPrism();</script>
+</body>
+</html>

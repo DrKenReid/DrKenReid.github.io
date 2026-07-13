@@ -1,5 +1,16 @@
 [
   {
+    "title": "Reading This Site Offline",
+    "date": "2026-07-12",
+    "tags": [
+      "technology"
+    ],
+    "excerpt": "This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.",
+    "url": "blog/reading-this-site-offline.html",
+    "image": "img/photography/thumb/62.webp",
+    "readMinutes": 6
+  },
+  {
     "title": "The Abandoned Places I Photograph",
     "date": "2026-07-12",
     "tags": [
