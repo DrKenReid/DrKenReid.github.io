@@ -27,12 +27,13 @@ jobs:
 
       - name: Commit if changed
         run: |
-          if git diff --quiet data/lastfm.json data/now.json; then
+          FILES="data/lastfm.json data/now.json data/lastfm-history.json data/topalbums.json"
+          if git diff --quiet $FILES; then
             echo "No change."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/lastfm.json data/now.json
+          git add $FILES
           git commit -m "Refresh live data (Last.fm, Goodreads)"
           git push

@@ -56,11 +56,7 @@ def fetch_lastfm(key):
 
 
 def fetch_goodreads():
-    try:
-        xml = get(GOODREADS_RSS).decode("utf-8", errors="replace")
-    except Exception as e:
-        print(f"goodreads fetch failed ({e}) — keeping empty list")
-        return []
+    xml = get(GOODREADS_RSS).decode("utf-8", errors="replace")
     books = []
     for item in re.findall(r"<item>(.*?)</item>", xml, re.DOTALL):
         def field(tag):
@@ -111,6 +107,13 @@ def update_history(playcount, today):
     return len(history)
 
 
+def load_json(path, default):
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return default
+
+
 def main():
     key = os.environ.get("LASTFM_API_KEY")
     if not key:
@@ -121,33 +124,65 @@ def main():
         print("LASTFM_API_KEY not set — aborting without changes.")
         return 1
 
-    playcount, track = fetch_lastfm(key)
-    books = fetch_goodreads()
+    data_dir = ROOT / "data"
+    today = date.today().isoformat()
+    failures = []
+
+    # Each source fails independently: a failed fetch keeps that source's
+    # previous values and never blocks the others from updating.
+    prev_lastfm = load_json(data_dir / "lastfm.json", {})
+    prev_now = load_json(data_dir / "now.json", {})
+
+    lastfm_ok = True
+    try:
+        playcount, track = fetch_lastfm(key)
+    except Exception as e:
+        lastfm_ok = False
+        failures.append(f"lastfm ({e})")
+        print(f"::warning::Last.fm fetch failed ({e}) — keeping previous scrobbles/track")
+        playcount = prev_lastfm.get("scrobbles")
+        track = prev_now.get("track")
+
+    try:
+        books = fetch_goodreads()
+    except Exception as e:
+        failures.append(f"goodreads ({e})")
+        print(f"::warning::Goodreads fetch failed ({e}) — keeping previous reading list")
+        books = prev_now.get("reading") or []
+
     try:
         albums = fetch_top_albums(key)
     except Exception as e:
-        print(f"top albums fetch failed ({e}) — keeping previous file")
+        failures.append(f"top albums ({e})")
+        print(f"::warning::Top-albums fetch failed ({e}) — keeping previous file")
         albums = None
-    today = date.today().isoformat()
 
-    (ROOT / "data" / "lastfm.json").write_text(json.dumps(
-        {"scrobbles": playcount, "user": LASTFM_USER, "updated": today},
-        indent=2) + "\n", encoding="utf-8", newline="\n")
+    if len(failures) == 3:
+        print("Every source failed — leaving all files untouched.")
+        return 1
 
-    (ROOT / "data" / "now.json").write_text(json.dumps(
+    if playcount is not None:
+        (data_dir / "lastfm.json").write_text(json.dumps(
+            {"scrobbles": playcount, "user": LASTFM_USER, "updated": today},
+            indent=2) + "\n", encoding="utf-8", newline="\n")
+
+    (data_dir / "now.json").write_text(json.dumps(
         {"track": track, "reading": books, "updated": today},
         indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
 
     if albums is not None:
-        (ROOT / "data" / "topalbums.json").write_text(json.dumps(
+        (data_dir / "topalbums.json").write_text(json.dumps(
             {"albums": albums, "period": "3month", "updated": today},
             indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
 
-    days = update_history(playcount, today)
-    print(f"scrobbles: {playcount:,} (history: {days} days)")
+    if lastfm_ok:
+        days = update_history(playcount, today)
+        print(f"scrobbles: {playcount:,} (history: {days} days)")
     print(f"recent track: {track}")
     print(f"reading: {[b['title'][:40] for b in books]}")
-    print(f"top albums: {len(albums) if albums else 'kept previous'}")
+    print(f"top albums: {len(albums) if albums is not None else 'kept previous'}")
+    if failures:
+        print(f"partial refresh — failed: {', '.join(failures)}")
     return 0
 
 
