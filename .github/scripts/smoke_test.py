@@ -80,6 +80,11 @@ def main():
                 failures.append(f"{path}: navigation failed: {e}")
                 continue
             page.wait_for_timeout(3500)
+            # Reveal-on-scroll content (initSectionReveals) only appears
+            # once it crosses the viewport line; nudge the page like a
+            # reader would. A truly-broken reveal stays hidden regardless.
+            page.evaluate("window.scrollBy(0, 700)")
+            page.wait_for_timeout(900)
             for name, expr in assertions:
                 try:
                     ok = page.evaluate(f"() => {expr}")
