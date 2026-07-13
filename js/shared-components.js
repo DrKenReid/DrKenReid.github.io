@@ -50,6 +50,7 @@ function renderHeader(targetId, options) {
         '<li class="kr-nav-sub' + (hobbiesChild === 'map' ? ' active' : '') + '"><a href="' + basePath + 'map.html"' + (hobbiesChild === 'map' ? ' aria-current="page"' : '') + '>Photo Map</a></li>' +
         '<li' + isHobbyChildActive('music') + '><a href="' + basePath + 'music.html"' + (hobbiesChild === 'music' ? ' aria-current="page"' : '') + '>Music</a></li>' +
         '<li' + isHobbyChildActive('literature') + '><a href="' + basePath + 'literature.html"' + (hobbiesChild === 'literature' ? ' aria-current="page"' : '') + '>Literature</a></li>' +
+        '<li class="kr-nav-sub' + (hobbiesChild === 'quotes' ? ' active' : '') + '"><a href="' + basePath + 'quotes.html"' + (hobbiesChild === 'quotes' ? ' aria-current="page"' : '') + '>Quote Wall</a></li>' +
         '</ul></li>' +
         navItem('blog', basePath + 'blog.html', 'Blog') +
         navItem('contact', basePath + 'contact.html', 'Contact') +
