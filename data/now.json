@@ -1,9 +1,9 @@
 {
   "track": {
-    "name": "Smoke And Mirrors",
-    "artist": "Symphony X",
-    "url": "https://www.last.fm/music/Symphony+X/_/Smoke+And+Mirrors",
-    "nowPlaying": false
+    "name": "Mary On A Cross",
+    "artist": "First to Eleven",
+    "url": "https://www.last.fm/music/First+to+Eleven/_/Mary+On+A+Cross",
+    "nowPlaying": true
   },
   "reading": [
     {
@@ -25,5 +25,5 @@
       "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1701688704l/394535._SY75_.jpg"
     }
   ],
-  "updated": "2026-07-13"
+  "updated": "2026-07-14"
 }
