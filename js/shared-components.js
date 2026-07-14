@@ -1785,7 +1785,8 @@ function renderNowStrip() {
                 esc(book.author) + extra, book.link || 'literature.html');
         }
         if (now && now.track && now.track.name) {
-            addItem(2, '🎧', now.track.nowPlaying ? 'Now playing' : 'Last played',
+            var eq = '<span class="kr-eq" aria-hidden="true"><span></span><span></span><span></span></span>';
+            addItem(2, '🎧', (now.track.nowPlaying ? 'Now playing' : 'Last played') + eq,
                 esc(now.track.name), esc(now.track.artist), now.track.url || 'music.html');
         }
     }).catch(function() {}).then(done, done);
