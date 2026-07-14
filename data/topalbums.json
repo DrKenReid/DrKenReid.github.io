@@ -99,6 +99,13 @@
       "plays": 2
     },
     {
+      "name": "Traces of Silver",
+      "artist": "Andrew White",
+      "url": "https://www.last.fm/music/Andrew+White/Traces+of+Silver",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/60bf2188df9c7445c8180fa6cd6e5393.jpg",
+      "plays": 2
+    },
+    {
       "name": "Cure",
       "artist": "Anna Marx",
       "url": "https://www.last.fm/music/Anna+Marx/Cure",
@@ -132,15 +139,8 @@
       "url": "https://www.last.fm/music/Carpenter+Brut/Leather+Terror",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/81c89a3bfac3fa2b098fb6fd62b11c1d.jpg",
       "plays": 2
-    },
-    {
-      "name": "Far Cry 5 Presents: Into the Flames (Original Game Soundtrack)",
-      "artist": "Dan Romer",
-      "url": "https://www.last.fm/music/Dan+Romer/Far+Cry+5+Presents:+Into+the+Flames+(Original+Game+Soundtrack)",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/8bc566258d41f77277147a01c3bf90ad.jpg",
-      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-07-13"
+  "updated": "2026-07-14"
 }
