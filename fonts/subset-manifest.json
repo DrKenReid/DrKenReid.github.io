@@ -9,21 +9,26 @@
   "themify": [
     "ti-arrow-left",
     "ti-arrow-right",
+    "ti-book",
+    "ti-camera",
     "ti-comments",
     "ti-control-pause",
     "ti-control-play",
     "ti-cup",
     "ti-download",
     "ti-email",
+    "ti-headphone",
     "ti-heart",
     "ti-instagram",
     "ti-linkedin",
     "ti-music-alt",
     "ti-pencil",
     "ti-pencil-alt",
+    "ti-quote-left",
     "ti-rss",
     "ti-server",
-    "ti-star"
+    "ti-star",
+    "ti-write"
   ],
   "ElegantIcons": [
     "arrow_carrot-up",

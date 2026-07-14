@@ -49,6 +49,15 @@
     [data-theme="dark"] .home-stat-label {
       color: #fc6060;
     }
+    .home-stat-icon {
+      display: block;
+      font-size: 17px;
+      color: #a8a8a8;
+      margin-bottom: 10px;
+    }
+    [data-theme="dark"] .home-stat-icon {
+      color: #6d6d6d;
+    }
     .home-section-note {
       color: #636363;
     }
@@ -198,30 +207,41 @@
   <!-- Stats Bar -->
   <section class="wow fadeInUp home-stats-bar" data-wow-delay="100ms">
     <div class="container">
-      <dl class="row text-center">
-        <div class="col-6 col-md-2 home-stat">
+      <dl class="row text-center justify-content-center">
+        <div class="col-6 col-md-auto home-stat">
           <dt class="home-stat-label">Blog Posts</dt>
-          <dd id="blog-post-count" class="home-stat-value">36</dd>
+          <dd id="blog-post-count" class="home-stat-value">37</dd>
+          <i class="ti-pencil-alt home-stat-icon" aria-hidden="true"></i>
         </div>
-        <div class="col-6 col-md-2 home-stat">
+        <div class="col-6 col-md-auto home-stat">
+          <dt class="home-stat-label">Words Written</dt>
+          <dd id="word-count" class="home-stat-value">106K+</dd>
+          <i class="ti-write home-stat-icon" aria-hidden="true"></i>
+        </div>
+        <div class="col-6 col-md-auto home-stat">
           <dt class="home-stat-label">Photos</dt>
           <dd id="photo-count" class="home-stat-value">490+</dd>
+          <i class="ti-camera home-stat-icon" aria-hidden="true"></i>
         </div>
-        <div class="col-6 col-md-2 home-stat">
+        <div class="col-6 col-md-auto home-stat">
           <dt class="home-stat-label">Books Read</dt>
           <dd class="home-stat-value">550+</dd>
+          <i class="ti-book home-stat-icon" aria-hidden="true"></i>
         </div>
-        <div class="col-6 col-md-2 home-stat">
+        <div class="col-6 col-md-auto home-stat">
           <dt class="home-stat-label">Scrobbles</dt>
           <dd class="home-stat-value" data-lastfm="scrobbles">49.7K+</dd>
+          <i class="ti-headphone home-stat-icon" aria-hidden="true"></i>
         </div>
-        <div class="col-6 col-md-2 home-stat">
+        <div class="col-6 col-md-auto home-stat">
           <dt class="home-stat-label">Quotes Saved</dt>
           <dd id="quote-count" class="home-stat-value">571</dd>
+          <i class="ti-quote-left home-stat-icon" aria-hidden="true"></i>
         </div>
-        <div class="col-6 col-md-2 home-stat">
+        <div class="col-6 col-md-auto home-stat">
           <dt class="home-stat-label">Book Reviews</dt>
           <dd class="home-stat-value">249</dd>
+          <i class="ti-star home-stat-icon" aria-hidden="true"></i>
         </div>
       </dl>
     </div>
@@ -390,6 +410,11 @@
         var blogPostCount = document.getElementById('blog-post-count');
         if (blogPostCount) {
           blogPostCount.textContent = posts.length;
+        }
+        var wordCount = document.getElementById('word-count');
+        if (wordCount) {
+          var totalWords = posts.reduce(function(sum, p) { return sum + (p.words || 0); }, 0);
+          if (totalWords >= 1000) wordCount.textContent = Math.floor(totalWords / 1000) + 'K+';
         }
         /* Live counts for photos and quotes (1d) */
         fetch('/data/photography-files.json').then(function(r) { return r.json(); }).then(function(files) {
