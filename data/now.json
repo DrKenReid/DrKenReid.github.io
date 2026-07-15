@@ -1,9 +1,9 @@
 {
   "track": {
-    "name": "Mary On A Cross",
-    "artist": "First to Eleven",
-    "url": "https://www.last.fm/music/First+to+Eleven/_/Mary+On+A+Cross",
-    "nowPlaying": true
+    "name": "Everywhere",
+    "artist": "Michelle Branch",
+    "url": "https://www.last.fm/music/Michelle+Branch/_/Everywhere",
+    "nowPlaying": false
   },
   "reading": [
     {
@@ -25,5 +25,5 @@
       "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1701688704l/394535._SY75_.jpg"
     }
   ],
-  "updated": "2026-07-14"
+  "updated": "2026-07-15"
 }
