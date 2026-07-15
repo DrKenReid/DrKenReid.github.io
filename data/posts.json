@@ -13,8 +13,8 @@
       "name": "How This Site Is Built",
       "part": 6
     },
-    "readMinutes": 5,
-    "words": 1012
+    "readMinutes": 6,
+    "words": 1141
   },
   {
     "title": "Self-Hosting Your Fonts",
@@ -30,7 +30,7 @@
       "part": 5
     },
     "readMinutes": 6,
-    "words": 1181
+    "words": 1182
   },
   {
     "title": "Reading This Site Offline",
@@ -46,7 +46,7 @@
       "name": "How This Site Is Built",
       "part": 4
     },
-    "words": 1310
+    "words": 1311
   },
   {
     "title": "The Abandoned Places I Photograph",
@@ -59,7 +59,7 @@
     "url": "blog/abandoned-places-i-photograph.html",
     "image": "img/photography/thumb/135.webp",
     "readMinutes": 9,
-    "words": 1944
+    "words": 1937
   },
   {
     "title": "Why I Love LaTeX",
@@ -102,7 +102,7 @@
       "name": "How This Site Is Built",
       "part": 3
     },
-    "words": 2026
+    "words": 2030
   },
   {
     "title": "Why You Aren't a \"Visual Learner\"",
@@ -505,6 +505,6 @@
       "name": "How This Site Is Built",
       "part": 1
     },
-    "words": 1195
+    "words": 1180
   }
 ]
