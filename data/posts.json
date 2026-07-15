@@ -1,5 +1,22 @@
 [
   {
+    "title": "Putting My Photos on a Map",
+    "date": "2026-07-14",
+    "tags": [
+      "technology",
+      "photography"
+    ],
+    "excerpt": "239 of my photographs plotted on an interactive world map, this is how the photo map works.",
+    "url": "blog/putting-my-photos-on-a-map.html",
+    "image": "img/photography/thumb/63.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 6
+    },
+    "readMinutes": 5,
+    "words": 1012
+  },
+  {
     "title": "Self-Hosting Your Fonts",
     "date": "2026-07-12",
     "tags": [
