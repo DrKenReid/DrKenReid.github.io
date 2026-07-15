@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+  <meta name="description" content="239 of my photographs plotted on an interactive world map, this is how the photo map works.">
+  <meta name="keywords" content="technology, photography">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Putting My Photos on a Map - Ken Reid</title>
+  <meta property="og:title" content="Putting My Photos on a Map">
+  <meta property="og:description" content="239 of my photographs plotted on an interactive world map, this is how the photo map works.">
+  <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/63.png">
+  <meta property="og:url" content="https://www.kenreid.co.uk/blog/putting-my-photos-on-a-map.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Putting My Photos on a Map">
+  <meta name="twitter:description" content="239 of my photographs plotted on an interactive world map, this is how the photo map works.">
+  <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/63.png">
+  <meta name="citation_title" content="Putting My Photos on a Map">
+  <meta name="citation_author" content="Reid, Kenneth N.">
+  <meta name="citation_publication_date" content="2026/07/14">
+  <meta name="citation_online_date" content="2026/07/14">
+  <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/putting-my-photos-on-a-map.html">
+  <meta name="DC.title" content="Putting My Photos on a Map">
+  <meta name="DC.creator" content="Kenneth N. Reid">
+  <meta name="DC.date" content="2026-07-14">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="../img/core-img/favicon.png">
+  <meta name="theme-color" content="#1a1a1a">
+  <link rel="stylesheet" href="../style.min.css">
+  <link rel="canonical" href="https://www.kenreid.co.uk/blog/putting-my-photos-on-a-map.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Putting My Photos on a Map",
+    "description": "239 of my photographs plotted on an interactive world map, this is how the photo map works.",
+    "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/63.png",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk"
+    },
+    "datePublished": "2026-07-14",
+    "publisher": {
+      "@type": "Person",
+      "name": "Ken Reid"
+    },
+    "keywords": ["maps", "leaflet", "photography", "geotagging", "web development"]
+  }
+  </script>
+  <script defer src="../js/theme.js"></script>
+  <script defer src="../js/palette.js"></script>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <div id="header-section"></div>
+
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/63.webp); background-size: cover; background-position: center center;">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <p class="page-title">Blog</p>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Putting My Photos on a Map</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <div class="about-us-area section-padding-80 clearfix">
+    <div class="container">
+      <main id="main-content">
+      <div class="blog-post">
+        <h1>Putting My Photos on a Map</h1>
+        <div class="blog-meta">
+          14 July 2026 &middot;
+          <span class="blog-tag">technology</span>
+          <span class="blog-tag">photography</span>
+        </div>
+
+        <p>My photography spans two countries I've lived in and a handful I've visited, and a plain grid of thumbnails hides that storytelling, sadly. So, I decided to try my hand with <a href="../map.html">a photo map</a>: an interactive world map where each marker is a place I've photographed. Click a marker and you get a popup of thumbnails; click a thumbnail and the whole region opens as a full-screen slideshow. This is the how to, as part of the series on <a href="../series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+        <div class="plain-english-box">
+          <h2>Quick jargon guide</h2>
+          <ul>
+            <li><strong>Leaflet:</strong> the standard open-source JavaScript library for interactive maps. It draws the map, handles panning and zooming, and places markers; it's the engine under a huge share of the web's non-Google maps.</li>
+            <li><strong>Tile server:</strong> where the actual map imagery comes from. Maps are served as a grid of small square images ("tiles") drawn on demand as you pan and zoom.</li>
+            <li><strong>Geotagging:</strong> attaching a location to a photo, either automatically (phones embed GPS in the file) or by hand (me, squinting at a map, going "that was definitely Falkirk").</li>
+            <li><strong>Marker / popup:</strong> the pin on the map and the bubble that opens when you click it.</li>
+            <li><strong>Deep link:</strong> a URL that opens the page in a specific state, like the map already zoomed to one region.</li>
+          </ul>
+        </div>
+
+        <h2>The data</h2>
+
+        <p>The obvious way to geotag photos is to read the GPS coordinates cameras embed in their files. My photos mostly don't have any: they come from a real camera without GPS, not a phone, and even when coordinates exist I strip metadata from published files, usually due to not being super careful about backing up my photos over the years, so some of these are screenshots from websites I put them (GuruShots!). So the map's data is a single hand-maintained JSON file: a list of 29 named regions, each with one latitude/longitude pair and the list of photo numbers taken there, 239 photos placed so far.</p>
+
+<pre><code class="language-js">{
+  "name": "Falkirk",
+  "lat": 56.0011, "lng": -3.7835,
+  "photos": ["135", "141", "197", "..."]
+}</code></pre>
+
+        <p>Placing photos by hand sounds like a chore and mildly is but it's not awful either. A region pin says "around Falkirk", never "this street, this house, this ruin", which matters both for <a href="abandoned-places-i-photograph.html">the abandoned places</a> (some locations shouldn't be advertised) and for anywhere near where people live. And meaning: "University of Stirling" and "Ochil Hills" are how I think about where photos were taken, not coordinates. </p>
+
+        <h2>The map</h2>
+
+        <p>The mapping library is <a href="https://leafletjs.com/" target="_blank" rel="noopener noreferrer">Leaflet</a>, and in keeping with <a href="self-hosting-your-fonts.html">house policy</a> the library itself is served from this site, not a CDN. The tiles (the map imagery) are external however, coming from CARTO's free basemaps. There are two tile styles, a light one and a dark one, and the map swaps between them when you toggle the site's theme.</p>
+
+        <figure>
+          <img src="../img/photography/thumb/63.webp" alt="A brown dog sitting on a mossy woodland bank, surveying the path below" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+          <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+        </figure>
+
+        <h2>Markers, popups, and the slideshow</h2>
+
+        <p>Each region renders as one circular marker showing its photo count, its size scaled gently with the number (34 to 52 pixels, so Falkirk's 28 photos read bigger than Dublin's one without turning into a bubble chart). I skipped marker-clustering plugins entirely: hand-curated regions <em>are</em> the clustering, done once, with better names than any algorithm would pick.</p>
+
+        <p>Clicking a marker opens a popup with the region's name and up to nine thumbnails; clicking any thumbnail opens the region's <em>entire</em> photo set as a lightbox slideshow, starting from the one you picked. The thumbnails are the same small WebP files the <a href="../gallery.html">gallery</a> uses, and the slideshow pulls the full-resolution originals from <a href="hosting-photography-on-github-for-free.html">the GitHub release where they live</a>. The map also cooperates with the rest of the site: gallery photos with a known place show a location label linking to the map pre-zoomed on that region, via a small <code>?region=</code> parameter in the URL, so the command palette / search function (CTRL + K) can show you places on the map when you search for, say, "East Lansing".</p>
+
+        <h2>If you want one of these</h2>
+
+        <p>The real hurdle isn't the code, it's the data. Leaflet's tutorial gets a map with markers running super quickly; deciding where 239 photos were taken took considerably longer, spread over batches (my git history contains the commit "Geotag batch: Falkirk, Falkland, Lansing added; 63 more photos placed", which tells you how it actually went). Start coarse: a dozen regions, big radii, photos you're sure about. I'll add more when I'm running low on bigger ideas to add to the site!</p>
+
+        <p>If your photos <em>do</em> have GPS data (phone photographers, this is you), your version of the data file can be generated by a script reading the coordinates, snapping them to a sensible grid, and naming clusters after the nearest town. Consider still doing the naming pass by hand; "Grandma's village" beats "cluster_17" forever. And whatever you do, check what location data you're publishing before you publish it: the same GPS metadata that makes the map easy also tells the internet where you sleep.</p>
+
+        <div class="faq-section">
+          <h2>Common questions</h2>
+
+          <details class="faq-item">
+            <summary>Why not just use the tags in the gallery for places?</summary>
+            <p>The gallery's tags describe what's <em>in</em> a photo (wildlife, architecture, silhouette) and are <a href="photo-tagging-with-clip.html">generated by a vision model</a>; places are about where I was standing, which no model can see. The two systems complement each other: tags answer "show me the wildlife", the map answers "show me Scotland".</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Is relying on free map tiles safe?</summary>
+            <p>It's a dependency, like any third party. CARTO's free tier is intended for exactly this scale, and if it ever went away, Leaflet doesn't care where tiles come from: OpenStreetMap's own servers, another provider, or self-hosted tiles all slot into the same line of code. The data file, which is the part with my work in it, is mine and portable.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>How precise are the pins?</summary>
+            <p>Deliberately imprecise.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Does the map work offline?</summary>
+            <p>Partially. The page and its data are cached by the site's <a href="reading-this-site-offline.html">service worker</a>, but tiles come from a third party the worker deliberately ignores, so offline you'd get markers floating on grey.</p>
+          </details>
+        </div>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="hosting-photography-on-github-for-free.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/387.webp" alt="Hosting a Photography Portfolio on GitHub for Free" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">6 July 2026 · 10 min read</div>
+                  <h4 class="blog-card-title">Hosting a Photography Portfolio on GitHub for Free</h4>
+                  <p class="blog-card-excerpt">GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">photography</span><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="abandoned-places-i-photograph.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/135.webp" alt="The Abandoned Places I Photograph" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 July 2026 · 9 min read</div>
+                  <h4 class="blog-card-title">The Abandoned Places I Photograph</h4>
+                  <p class="blog-card-excerpt">Why I photograph abandoned places and the ethics of pointing a camera at decay.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">photography</span><span class="blog-tag">personal</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="photo-tagging-with-clip.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/1.webp" alt="Building a Photo Tagging System with CLIP" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">10 April 2026 · 6 min read</div>
+                  <h4 class="blog-card-title">Building a Photo Tagging System with CLIP</h4>
+                  <p class="blog-card-excerpt">How I used OpenCLIP to automatically classify 500+ photos into 10 categories in under a minute, zero API cost, running entirely on CPU.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span><span class="blog-tag">photography</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+        <hr style="margin: 40px 0;">
+        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/alime.bundle.js"></script>
+  <script src="../js/lightbox.js"></script>
+  <script src="../js/prism-loader.js"></script>
+  <script src="../js/share.js"></script>
+  <script src="../js/default-assets/active.js"></script>
+  <script src="../js/shared-components.js"></script>
+  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');
+loadPrism();</script>
+</body>
+</html>
