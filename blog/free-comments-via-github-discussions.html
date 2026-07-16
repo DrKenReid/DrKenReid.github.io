@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+  <meta name="description" content="How giscus gives a static site free comments with no database, no ads, and no tracking.">
+  <meta name="keywords" content="technology">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Free Comments via GitHub Discussions - Ken Reid</title>
+  <meta property="og:title" content="Free Comments via GitHub Discussions">
+  <meta property="og:description" content="How giscus gives a static site free comments with no database, no ads, and no tracking.">
+  <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/409.png">
+  <meta property="og:url" content="https://www.kenreid.co.uk/blog/free-comments-via-github-discussions.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Comments via GitHub Discussions">
+  <meta name="twitter:description" content="How giscus gives a static site free comments with no database, no ads, and no tracking.">
+  <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/409.png">
+  <meta name="citation_title" content="Free Comments via GitHub Discussions">
+  <meta name="citation_author" content="Reid, Kenneth N.">
+  <meta name="citation_publication_date" content="2026/07/15">
+  <meta name="citation_online_date" content="2026/07/15">
+  <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/free-comments-via-github-discussions.html">
+  <meta name="DC.title" content="Free Comments via GitHub Discussions">
+  <meta name="DC.creator" content="Kenneth N. Reid">
+  <meta name="DC.date" content="2026-07-15">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="../img/core-img/favicon.png">
+  <meta name="theme-color" content="#1a1a1a">
+  <link rel="stylesheet" href="../style.min.css">
+  <link rel="canonical" href="https://www.kenreid.co.uk/blog/free-comments-via-github-discussions.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Free Comments via GitHub Discussions",
+    "description": "How giscus gives a static site free comments with no database, no ads, and no tracking.",
+    "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/409.png",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk"
+    },
+    "datePublished": "2026-07-15",
+    "publisher": {
+      "@type": "Person",
+      "name": "Ken Reid"
+    },
+    "keywords": ["comments", "giscus", "github", "static sites", "blogging"]
+  }
+  </script>
+  <script defer src="../js/theme.js"></script>
+  <script defer src="../js/palette.js"></script>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <div id="header-section"></div>
+
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/409.webp); background-size: cover; background-position: center center;">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <p class="page-title">Blog</p>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Free Comments via GitHub Discussions</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <div class="about-us-area section-padding-80 clearfix">
+    <div class="container">
+      <main id="main-content">
+      <div class="blog-post">
+        <h1>Free Comments via GitHub Discussions</h1>
+        <div class="blog-meta">
+          15 July 2026 &middot;
+          <span class="blog-tag">technology</span>
+        </div>
+
+        <p>Scroll to the bottom of this post and you'll find a comments section. That shouldn't be possible: this is a static site, a folder of HTML files with no server, no database, nowhere to <em>put</em> a comment. The trick is a wonderful little disguise: every comment thread on this blog is a GitHub Discussion, courtesy of a small open-source tool called <a href="https://giscus.app/" target="_blank" rel="noopener noreferrer">giscus</a>. This post details what it is, its setup, and its trade-offs, as part of the series on <a href="../series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+        <div class="plain-english-box">
+          <h2>Quick jargon guide</h2>
+          <ul>
+            <li><strong>giscus:</strong> a free, open-source widget that displays a GitHub Discussion as a comment section on any web page.</li>
+            <li><strong>GitHub Discussions:</strong> forum-style threads attached to a GitHub repository, normally used by software projects for Q&amp;A.</li>
+            <li><strong>iframe:</strong> a page embedded inside another page. The comments you see are technically a small giscus page shown in a window within mine.</li>
+            <li><strong>Static site:</strong> a website that is only files, with no server-side code, which is why it can't store comments itself.</li>
+            <li><strong>Widget/embed:</strong> third-party functionality you add with a script tag. </li>
+          </ul>
+        </div>
+
+        <h2>How it works</h2>
+
+        <p>My blog's repository has Discussions enabled, with a category set aside for comments. When you visit a post, a script builds the comments section and giscus looks up a discussion whose title matches the page's path: for this post, <code>/blog/free-comments-via-github-discussions.html</code>. If someone has commented before, the thread exists and gets displayed. If nobody has, giscus shows an empty comment box, and the discussion is created automatically the first time someone posts.</p>
+
+        <p>Commenting requires a GitHub account, which is the design's biggest filter and, depending on your audience, either a bug or a feature. For a blog like mine, whose readers skew technical, it's mostly a feature: sign-in deters drive-by spam so effectively that I do no spam moderation at all. For a blog aimed at a general audience it wouldn't be the best solution, and something like a hosted comments service (or no comments, with an email link) might fit better.</p>
+
+        <h2>The setup</h2>
+
+        <p>Enable Discussions on the repository (a checkbox in settings) and create a category for comments; giscus recommends the Announcements type, so that only the widget and maintainers can open new threads, keeping the category from becoming a second inbox. Install the giscus app on the repository from GitHub's app directory. Then the <a href="https://giscus.app/" target="_blank" rel="noopener noreferrer">giscus website</a> generates your embed code: you tell it the repository, category, and how pages should map to discussions (I use the page path), and it produces a script tag with everything encoded as attributes.</p>
+
+        <p>Most sites paste that script tag into their template and are done. Mine goes through the shared components file, which builds it dynamically on every post page. Ez pz.</p>
+
+        <figure>
+          <img src="../img/photography/thumb/409.webp" alt="Green leafy branches in front of sunlight sparkling off out-of-focus water" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+          <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+        </figure>
+
+        <h2>The details</h2>
+
+        <p><strong>Matching the site's theme.</strong> giscus ships with stock light and dark themes, but it also accepts a custom stylesheet URL, so this site serves its own <code>giscus-dark.css</code> and <code>giscus-light.css</code> and the comments render like part of the page rather than a bolted-on box. The fiddly bit is the theme toggle: when you switch the site between dark and light, a message gets posted into the giscus iframe telling it to swap stylesheets too, so the comments change theme in step with everything around them.</p>
+
+        <p><strong>Lazy loading.</strong> The widget loads only when you scroll near it, so readers who never reach the bottom never fetch it. Comments are the last thing on the page both location wise and in load time!</p>
+
+        <p><strong>A refresh button.</strong> The embed is static once loaded: if someone comments while you have the page open, nothing updates. A small refresh control re-mounts the widget on demand.</p>
+
+        <h2>The trade-offs</h2>
+
+        <p>If GitHub discontinued Discussions, or giscus vanished, my comment sections would go blank (the data would survive, in the discussions themselves, and giscus being open source means it could be self-hosted). Comments also don't work offline, and they're invisible to readers with JavaScript off; my <a href="reading-this-site-offline.html">offline post</a> covers why the service worker deliberately leaves them alone. This is fine for a personal blog: comments are a nice-to-have on top of the writing, not the point of it.</p>
+
+        <p>What's nice is there are no ads injected next to your readers' words, no tracking scripts profiling them, no database to secure, and moderation through tools (GitHub's) that are already set up and hosted for you. The comparison is with Disqus, the long-time default, is pretty clear: disqus is filled with ads, and filled with tracking scripts etc. I know which one I prefer!</p>
+
+        <div class="faq-section">
+          <h2>Common questions</h2>
+
+          <details class="faq-item">
+            <summary>Can you delete or moderate comments?</summary>
+            <p>Yes, with GitHub's own moderation: I can edit, hide, or delete comments in the underlying discussion, lock threads, and block users, the same tools every open-source project uses. In practice the sign-in requirement means I've needed no moderation whatsoever.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>What do commenters give up by signing in with GitHub?</summary>
+            <p>Their comment is public on GitHub, attached to their GitHub identity, same as commenting on any open-source project. giscus itself doesn't track visitors or run analytics; readers who never comment send GitHub nothing beyond the iframe request itself.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>What about utterances, the issues-based version?</summary>
+            <p>utterances is giscus's older sibling that stores comments in GitHub Issues instead of Discussions. It works, but issues are a worse fit (no threading, no reactions-as-votes, and your bug tracker fills with comment threads). giscus is the same idea in a more sensible place.</p>
+          </details>
+        </div>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="reading-this-site-offline.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/62.webp" alt="Reading This Site Offline" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 July 2026 · 6 min read</div>
+                  <h4 class="blog-card-title">Reading This Site Offline</h4>
+                  <p class="blog-card-excerpt">This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="hosting-photography-on-github-for-free.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/387.webp" alt="Hosting a Photography Portfolio on GitHub for Free" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">6 July 2026 · 10 min read</div>
+                  <h4 class="blog-card-title">Hosting a Photography Portfolio on GitHub for Free</h4>
+                  <p class="blog-card-excerpt">GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">photography</span><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="self-hosting-your-fonts.html" class="blog-card">
+                <div class="blog-card-img"><img src="../blog/img/fonts/fonts-og.png" alt="Self-Hosting Your Fonts" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 July 2026 · 6 min read</div>
+                  <h4 class="blog-card-title">Self-Hosting Your Fonts</h4>
+                  <p class="blog-card-excerpt">No Google Fonts, no third-party requests, and icon fonts subset from 75 KB down to 1.5 KB. Here's how, and why it's worth an afternoon.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+        <hr style="margin: 40px 0;">
+        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/alime.bundle.js"></script>
+  <script src="../js/lightbox.js"></script>
+  <script src="../js/share.js"></script>
+  <script src="../js/default-assets/active.js"></script>
+  <script src="../js/shared-components.js"></script>
+  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+</body>
+</html>

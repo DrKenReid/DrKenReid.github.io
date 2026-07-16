@@ -1,5 +1,21 @@
 [
   {
+    "title": "Free Comments via GitHub Discussions",
+    "date": "2026-07-15",
+    "tags": [
+      "technology"
+    ],
+    "excerpt": "How giscus gives a static site free comments with no database, no ads, and no tracking.",
+    "url": "blog/free-comments-via-github-discussions.html",
+    "image": "img/photography/thumb/409.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 7
+    },
+    "readMinutes": 5,
+    "words": 908
+  },
+  {
     "title": "Putting My Photos on a Map",
     "date": "2026-07-14",
     "tags": [
@@ -331,8 +347,8 @@
     "excerpt": "Data science outputs are often inaccessible by default. Accessibility-first design in plots, dashboards, and tables improves understanding for everyone.",
     "url": "blog/accessibility-first-product-design-data-science.html",
     "image": "img/photography/thumb/21.webp",
-    "readMinutes": 43,
-    "words": 9258
+    "readMinutes": 42,
+    "words": 9183
   },
   {
     "title": "The Life and Death of the Early Internet",

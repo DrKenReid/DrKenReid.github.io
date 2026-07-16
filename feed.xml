@@ -5,11 +5,19 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 14 Jul 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Wed, 15 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Wed, 15 Jul 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Free Comments via GitHub Discussions</title>
+      <link>https://www.kenreid.co.uk/blog/free-comments-via-github-discussions.html</link>
+      <guid>https://www.kenreid.co.uk/blog/free-comments-via-github-discussions.html</guid>
+      <pubDate>Wed, 15 Jul 2026 00:00:00 +0000</pubDate>
+      <description>How giscus gives a static site free comments with no database, no ads, and no tracking.</description>
+      <category>technology</category>
+    </item>
     <item>
       <title>Putting My Photos on a Map</title>
       <link>https://www.kenreid.co.uk/blog/putting-my-photos-on-a-map.html</link>
