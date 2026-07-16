@@ -935,6 +935,9 @@ function renderHeadingAnchors() {
 function renderPostToc() {
     var blogPost = document.querySelector('.blog-post');
     if (!blogPost || document.querySelector('.kr-toc')) return;
+    // Posts opt out with data-no-toc on .blog-post (e.g. layouts whose
+    // wide figures collide with the side rail).
+    if (blogPost.hasAttribute('data-no-toc')) return;
 
     var headings = collectSectionHeadings(blogPost);
     if (headings.length < 4) return;
