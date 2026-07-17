@@ -1,5 +1,18 @@
 [
   {
+    "title": "My Teacher Said I Shouldn't Go To University",
+    "date": "2026-07-16",
+    "tags": [
+      "personal",
+      "advice"
+    ],
+    "excerpt": "My high school music teacher told me not to aim for university: I was 'more suited to manual labour'.",
+    "url": "blog/my-teacher-said-i-shouldnt-go-to-university.html",
+    "image": "img/photography/thumb/113.webp",
+    "readMinutes": 9,
+    "words": 1884
+  },
+  {
     "title": "Free Comments via GitHub Discussions",
     "date": "2026-07-15",
     "tags": [
@@ -13,7 +26,7 @@
       "part": 7
     },
     "readMinutes": 5,
-    "words": 908
+    "words": 1023
   },
   {
     "title": "Putting My Photos on a Map",
@@ -46,7 +59,7 @@
       "part": 5
     },
     "readMinutes": 6,
-    "words": 1182
+    "words": 1179
   },
   {
     "title": "Reading This Site Offline",
@@ -62,7 +75,7 @@
       "name": "How This Site Is Built",
       "part": 4
     },
-    "words": 1311
+    "words": 1308
   },
   {
     "title": "The Abandoned Places I Photograph",
@@ -220,7 +233,7 @@
     "url": "blog/mash-modern-perspective.html",
     "image": "https://commons.wikimedia.org/wiki/Special:FilePath/MASH_cast_1972.JPG",
     "readMinutes": 16,
-    "words": 3326
+    "words": 3340
   },
   {
     "title": "Iain M. Banks and The Culture",
