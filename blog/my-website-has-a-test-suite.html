@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+  <meta name="description" content="A 532-line Python script audits every page of this site for broken links, bad metadata, and missing alt text, and CI runs it on every push. Here's why a personal blog has a test suite.">
+  <meta name="keywords" content="technology">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>My Website Has a Test Suite - Ken Reid</title>
+  <meta property="og:title" content="My Website Has a Test Suite">
+  <meta property="og:description" content="A 532-line Python script audits every page of this site for broken links, bad metadata, and missing alt text, and CI runs it on every push. Here's why a personal blog has a test suite.">
+  <meta property="og:image" content="https://www.kenreid.co.uk/blog/img/test-suite/test-suite-og.jpg">
+  <meta property="og:url" content="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="My Website Has a Test Suite">
+  <meta name="twitter:description" content="A 532-line Python script audits every page of this site for broken links, bad metadata, and missing alt text, and CI runs it on every push. Here's why a personal blog has a test suite.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/blog/img/test-suite/test-suite-og.jpg">
+  <meta name="citation_title" content="My Website Has a Test Suite">
+  <meta name="citation_author" content="Reid, Kenneth N.">
+  <meta name="citation_publication_date" content="2026/07/17">
+  <meta name="citation_online_date" content="2026/07/17">
+  <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">
+  <meta name="DC.title" content="My Website Has a Test Suite">
+  <meta name="DC.creator" content="Kenneth N. Reid">
+  <meta name="DC.date" content="2026-07-17">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="../img/core-img/favicon.png">
+  <meta name="theme-color" content="#1a1a1a">
+  <link rel="stylesheet" href="../style.min.css">
+  <link rel="canonical" href="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "My Website Has a Test Suite",
+    "description": "A 532-line Python script audits every page of this site for broken links, bad metadata, and missing alt text, and CI runs it on every push. Here's why a personal blog has a test suite.",
+    "image": "https://www.kenreid.co.uk/blog/img/test-suite/test-suite-og.jpg",
+    "author": {
+      "@type": "Person",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk"
+    },
+    "datePublished": "2026-07-17",
+    "publisher": {
+      "@type": "Person",
+      "name": "Ken Reid"
+    },
+    "keywords": ["testing", "continuous integration", "static sites", "web development", "python"]
+  }
+  </script>
+  <script defer src="../js/theme.js"></script>
+  <script defer src="../js/palette.js"></script>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <div id="header-section"></div>
+
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/4.webp); background-size: cover; background-position: center center;">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <p class="page-title">Blog</p>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+          <li class="breadcrumb-item active" aria-current="page">My Website Has a Test Suite</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <div class="about-us-area section-padding-80 clearfix">
+    <div class="container">
+      <main id="main-content">
+      <div class="blog-post">
+        <h1>My Website Has a Test Suite</h1>
+        <div class="blog-meta">
+          17 July 2026 &middot;
+          <span class="blog-tag">technology</span>
+        </div>
+
+        <p>Deprecations, external dependency shutdowns, infrastructure changes, data changes and shifting standards. Websites rot: each broken piece sits there for months until a reader (or worse, a potential employer) finds it before you do. I got tired of discovering this stuff by accident, so I gave it a test suite.</p>
+
+        <p>This post covers a static audit script that reads every page like a very pedantic proofreader, and a headless browser test that loads the site like a very terminal focused nerd. These both run automatically on every push.</p>
+
+        <div class="plain-english-box">
+          <h2>Quick jargon guide</h2>
+          <ul>
+            <li><strong>CI (continuous integration):</strong> a robot that runs your checks every time you change the code, so a mistake is caught minutes after you make it instead of months later.</li>
+            <li><strong>GitHub Actions:</strong> GitHub's built-in CI. You describe jobs in a small text file; GitHub runs them on their machines for free whenever you push.</li>
+            <li><strong>Static audit:</strong> checks that read the HTML files as text, without a browser: do the links point at real files, do the pages have descriptions, and so on.</li>
+            <li><strong>Headless browser:</strong> a real browser running invisibly, controlled by a script. It executes the JavaScript and renders the page, catching what text-reading can't.</li>
+            <li><strong>Alt text:</strong> the written description attached to an image, read aloud by screen readers. Missing alt text is the most common accessibility failure on the web.</li>
+            <li><strong>Smoke test:</strong> the minimum useful test: turn it on, see if smoke comes out. For a website: load the page, check the important things actually appeared.</li>
+          </ul>
+        </div>
+
+        <h2>The proofreader</h2>
+
+        <p>The first half is <code>audit_site.py</code>, a Python script with no dependencies beyond the standard library. It asks git for every tracked HTML file, parses each one, and complains about everything it doesn't like. It requires <strong>zero errors, zero warnings</strong>, on every page, on every commit.</p>
+
+        <p>What it checks, roughly in order of how often it has saved me:</p>
+
+        <ul>
+          <li><strong>Broken links and images.</strong> Every internal link and image source is resolved to an actual file on disk. A renamed page or a missing thumbnail fails the audit immediately.</li>
+          <li><strong>Metadata.</strong> Every page needs a description of sensible length, a canonical URL that matches its filename, and the social preview tags that make links look respectable when shared. The audit also validates that the preview image actually exists (this caused me so many issues trying to understand how social media sites grab images).</li>
+          <li><strong>Structured data.</strong> Each blog post carries a machine-readable summary for search engines. The audit parses every one and checks each URL inside it, because invalid structured data fails silently in the real world.</li>
+          <li><strong>Accessibility basics.</strong> Images without alt text, duplicate element ids, missing or multiple h1 headings, and skipped heading levels all get flagged for accessibility requirements I set.</li>
+          <li><strong>The data files.</strong> The blog listing is driven by a JSON file: every entry must point at a real page and a real image, every date must be well-formed, and every tag must come from a fixed allowed list. That last one exists because the tag buttons are generated dynamically, so a typo like "phtography" wouldn't error; it would just mint a brand-new filter button and display it.</li>
+          <li><strong>The feeds.</strong> The RSS feed and the sitemap are parsed and reconciled against the post list, so publishing a post without wiring it up everywhere gets caught. Not much point in publishing a new blog that isn't shown anywhere!</li>
+        </ul>
+
+        <figure>
+          <img src="../img/photography/thumb/4.webp" alt="Two wrecked wooden fishing boats rotting on a tidal mudflat under a heavy grey sky" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+          <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> </figcaption>
+        </figure>
+
+        <h2>Headless smoke tests</h2>
+
+        <p>The audit reads files; it cannot tell you whether the page actually <em>works</em>. This site injects its header, footer, comments, and related posts with JavaScript, and it animates sections into view as you scroll. A one-character mistake in that JavaScript can leave a page technically valid and completely blank, and the audit wouldn't catch it.</p>
+
+        <p>So the second half is a smoke test built on <a href="https://playwright.dev/" target="_blank" rel="noopener noreferrer">Playwright</a>, which drives a real, invisible Chromium. The script serves the repository over a local web server, loads six representative pages, waits a few seconds for the JavaScript and animations to settle, and then asserts on what a visitor would actually see:</p>
+
+<pre><code class="language-python"># A few of the checks, one page each:
+# index.html   - hero present, live-stats skeletons cleared, blog cards visible
+# blog.html    - at least 3 post cards and 3 tag filter buttons rendered
+# gallery.html - at least 12 photos in the grid
+# a blog post  - body text visible (opacity != 0), table of contents built
+# quotes.html  - at least 500 quote cards
+# map.html     - the map initialised with at least 10 markers</code></pre>
+
+        <p>The site reveals sections with a fade-in animation, which means a JavaScript failure doesn't remove content, it leaves content sitting in the page at opacity zero: present in the HTML, invisible to humans. That is the failure a static checker can never catch. The check is a Python tuple holding a line of JavaScript, evaluated inside the live page:</p>
+
+<pre><code class="language-python">("post body visible",
+ "(() => { const p = document.querySelector('.blog-post > p');"
+ "  return p &amp;&amp; getComputedStyle(p).opacity !== '0'; })()"),</code></pre>
+
+        <p>The test also collects console errors, ignoring the third-party noise (analytics, embeds) and failing on anything from my own code.</p>
+
+        <h2>The robot that runs it all</h2>
+
+        <p>Both halves run in GitHub Actions on every push. The workflow has two jobs: one installs Python and runs the audit plus a check that the minified stylesheet is up to date (the CSS build is <a href="hosting-photography-on-github-for-free.html">its own story</a>); the other installs Playwright and runs the smoke tests. If either fails, I get an email and a red X on the commit within a few minutes. A local pre-commit hook runs the fast checks too, so most mistakes never even reach GitHub.</p>
+
+        <p>Is this overkill for a personal site? No: it's <em>because</em> the site is a hobby that I need automation. Nobody is paid to notice when this site breaks (or, you know, paid for writing blogs, creating the site, etc.). There is no QA department, no on-call rota, just me, and I would rather spend my evenings writing posts than manually clicking every link on fifty pages. The test suite is what lets a one-person site behave like it has staff.</p>
+
+        <p>The suite also enforces my rules on me. Zero errors and zero warnings sounds strict, but a clean baseline means any non-zero number is news.</p>
+
+        <h2>What it still misses</h2>
+
+        <p>The audit checks that every referenced image exists <em>on disk</em>. It does not check that the image is committed to git. I published a post whose hero image existed on my machine but had never been committed, every local check passed, and the live site served a grey void where a seascape should have been. A reader (fine: me) spotted it and fixed it later that day, but that's not great when I already had a few dozen readers.</p>
+
+        <p>Each gap you find becomes the next check you write. The fix here is a rule that any local file referenced by a tracked page must itself be tracked, which is one more function in the audit script. Here is that check as it runs today (lightly trimmed):</p>
+
+<pre><code class="language-python">def check_target(url, line, what="target"):
+    local = resolve_local(page, url)
+    if local is None:
+        return  # external URL, checked elsewhere
+    if not local.exists():
+        add("ERROR", page, line, "broken-link", f"missing {what}: {url}")
+    elif page_is_tracked:
+        relp = local.resolve().relative_to(ROOT).as_posix()
+        if relp not in tracked:
+            add("ERROR", page, line, "untracked-ref",
+                f"{what} exists locally but is not tracked by git: {url}")</code></pre>
+
+        <p>Fittingly, that check fired while I was preparing this very post: the hero image at the top of this page existed on my machine and had never been committed. Test suites are never finished, only extended.</p>
+
+        <div class="faq-section">
+          <h2>Common questions</h2>
+
+          <details class="faq-item">
+            <summary>Isn't this what link checkers and Lighthouse already do?</summary>
+            <p>Partly, and I'd recommend either over nothing. The difference is specificity: a generic tool doesn't know that my tags come from an allowed list, that my posts share a canonical script set, or that my feed must mirror my posts file. The checks that catch real mistakes are the ones that encode <em>your</em> site's requirements.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>How long did this take to build?</summary>
+            <p>The first version of the audit was ten minutes: parse the HTML, resolve the links, print complaints. Everything else accreted one check at a time, usually after some error broke the live page. </p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Does CI like this cost anything?</summary>
+            <p>At most a couple of dollars a month for my little site.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Where would you start on an existing site?</summary>
+            <p>Broken internal links, missing alt text, and missing page descriptions, in that order. </p>
+          </details>
+        </div>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="hosting-photography-on-github-for-free.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/387.webp" alt="Hosting a Photography Portfolio on GitHub for Free" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">6 July 2026 · 10 min read</div>
+                  <h4 class="blog-card-title">Hosting a Photography Portfolio on GitHub for Free</h4>
+                  <p class="blog-card-excerpt">GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">photography</span><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="free-comments-via-github-discussions.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/409.webp" alt="Free Comments via GitHub Discussions" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">15 July 2026 · 5 min read</div>
+                  <h4 class="blog-card-title">Free Comments via GitHub Discussions</h4>
+                  <p class="blog-card-excerpt">How giscus gives a static site free comments with no database, no ads, and no tracking.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="reading-this-site-offline.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/62.webp" alt="Reading This Site Offline" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 July 2026 · 6 min read</div>
+                  <h4 class="blog-card-title">Reading This Site Offline</h4>
+                  <p class="blog-card-excerpt">This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+        <hr style="margin: 40px 0;">
+        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/alime.bundle.js"></script>
+  <script src="../js/lightbox.js"></script>
+  <script src="../js/prism-loader.js"></script>
+  <script src="../js/share.js"></script>
+  <script src="../js/default-assets/active.js"></script>
+  <script src="../js/shared-components.js"></script>
+  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');
+loadPrism(['python']);</script>
+</body>
+</html>

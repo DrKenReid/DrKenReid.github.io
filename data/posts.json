@@ -1,5 +1,21 @@
 [
   {
+    "title": "My Website Has a Test Suite",
+    "date": "2026-07-17",
+    "tags": [
+      "technology"
+    ],
+    "excerpt": "A Python audit script and headless browser smoke tests run on every push. Here's why a personal blog has a test suite.",
+    "url": "blog/my-website-has-a-test-suite.html",
+    "image": "img/photography/thumb/4.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 8
+    },
+    "readMinutes": 7,
+    "words": 1534
+  },
+  {
     "title": "My Teacher Said I Shouldn't Go To University",
     "date": "2026-07-16",
     "tags": [
@@ -10,7 +26,7 @@
     "url": "blog/my-teacher-said-i-shouldnt-go-to-university.html",
     "image": "img/photography/thumb/113.webp",
     "readMinutes": 9,
-    "words": 1884
+    "words": 1958
   },
   {
     "title": "Free Comments via GitHub Discussions",
@@ -43,7 +59,7 @@
       "part": 6
     },
     "readMinutes": 6,
-    "words": 1141
+    "words": 1138
   },
   {
     "title": "Self-Hosting Your Fonts",
@@ -59,7 +75,7 @@
       "part": 5
     },
     "readMinutes": 6,
-    "words": 1179
+    "words": 1186
   },
   {
     "title": "Reading This Site Offline",
@@ -88,7 +104,7 @@
     "url": "blog/abandoned-places-i-photograph.html",
     "image": "img/photography/thumb/135.webp",
     "readMinutes": 9,
-    "words": 1937
+    "words": 1954
   },
   {
     "title": "Why I Love LaTeX",
@@ -144,7 +160,7 @@
     "url": "blog/why-you-arent-a-visual-learner.html",
     "image": "img/photography/thumb/366.webp",
     "readMinutes": 9,
-    "words": 1806
+    "words": 1801
   },
   {
     "title": "Frodo, Sam, and love.",
@@ -433,7 +449,7 @@
     "url": "blog/no-idea-no-problem-data-science-portfolio.html",
     "image": "img/photography/thumb/19.webp",
     "readMinutes": 11,
-    "words": 2268
+    "words": 2282
   },
   {
     "title": "Evolutionary Computation's Identity Crisis in the Age of GenAI",
@@ -481,7 +497,7 @@
     "url": "blog/second-brain-local-llm-professional.html",
     "image": "img/photography/thumb/75.webp",
     "readMinutes": 7,
-    "words": 1521
+    "words": 1533
   },
   {
     "title": "Snowball vs Avalanche: The Science of Paying Off Debt",
@@ -492,8 +508,8 @@
     "excerpt": "Snowball and avalanche both work, but for different reasons. A practical guide with simulator-backed charts on interest, timing, and motivation.",
     "url": "blog/snowball-vs-avalanche.html",
     "image": "blog/img/debt_total_curve.png",
-    "readMinutes": 6,
-    "words": 1303
+    "readMinutes": 7,
+    "words": 1333
   },
   {
     "title": "Book Ratings Are Broken",
