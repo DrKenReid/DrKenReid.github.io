@@ -5,11 +5,20 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 15 Jul 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Wed, 15 Jul 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Thu, 16 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Thu, 16 Jul 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>My Teacher Said I Shouldn't Go To University</title>
+      <link>https://www.kenreid.co.uk/blog/my-teacher-said-i-shouldnt-go-to-university.html</link>
+      <guid>https://www.kenreid.co.uk/blog/my-teacher-said-i-shouldnt-go-to-university.html</guid>
+      <pubDate>Thu, 16 Jul 2026 00:00:00 +0000</pubDate>
+      <description>My high school music teacher told me not to aim for university: I was 'more suited to manual labour'.</description>
+      <category>personal</category>
+      <category>advice</category>
+    </item>
     <item>
       <title>Free Comments via GitHub Discussions</title>
       <link>https://www.kenreid.co.uk/blog/free-comments-via-github-discussions.html</link>
