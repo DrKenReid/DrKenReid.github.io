@@ -1,17 +1,11 @@
 {
   "track": {
-    "name": "Everywhere",
-    "artist": "Michelle Branch",
-    "url": "https://www.last.fm/music/Michelle+Branch/_/Everywhere",
+    "name": "Controversy - Milkman",
+    "artist": "TheMilkmanMusic",
+    "url": "https://www.last.fm/music/TheMilkmanMusic/_/Controversy+-+Milkman",
     "nowPlaying": false
   },
   "reading": [
-    {
-      "title": "The Captain (The Last Horizon, #1)",
-      "author": "Will Wight",
-      "link": "https://www.goodreads.com/review/show/6250022192?utm_medium=api&utm_source=rss",
-      "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677783694l/123165953._SY75_.jpg"
-    },
     {
       "title": "DBT Made Simple: A Step-by-Step Guide to Dialectical Behavior Therapy (The New Harbinger Made Simple Series)",
       "author": "Sheri Van Dijk",
@@ -23,7 +17,13 @@
       "author": "Cormac McCarthy",
       "link": "https://www.goodreads.com/review/show/5348470770?utm_medium=api&utm_source=rss",
       "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1701688704l/394535._SY75_.jpg"
+    },
+    {
+      "title": "Project Hail Mary",
+      "author": "Andy Weir",
+      "link": "https://www.goodreads.com/review/show/3983722265?utm_medium=api&utm_source=rss",
+      "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1764703833l/54493401._SY75_.jpg"
     }
   ],
-  "updated": "2026-07-16"
+  "updated": "2026-07-17"
 }

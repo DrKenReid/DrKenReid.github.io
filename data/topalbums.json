@@ -8,17 +8,17 @@
       "plays": 15
     },
     {
-      "name": "Dopamine (Split Brain Version)",
-      "artist": "Madelline",
-      "url": "https://www.last.fm/music/Madelline/Dopamine+(Split+Brain+Version)",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/4415ed4c7fafb84cdbfb0cad3cbd5028.jpg",
-      "plays": 5
-    },
-    {
       "name": "ECLESIA",
       "artist": "Naïka",
       "url": "https://www.last.fm/music/Na%C3%AFka/ECLESIA",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/e6c40e9652aac25010b8094263138aa2.jpg",
+      "plays": 6
+    },
+    {
+      "name": "Dopamine (Split Brain Version)",
+      "artist": "Madelline",
+      "url": "https://www.last.fm/music/Madelline/Dopamine+(Split+Brain+Version)",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/4415ed4c7fafb84cdbfb0cad3cbd5028.jpg",
       "plays": 5
     },
     {
@@ -113,6 +113,13 @@
       "plays": 2
     },
     {
+      "name": "Barbie The Album",
+      "artist": "Ava Max",
+      "url": "https://www.last.fm/music/Ava+Max/Barbie+The+Album",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/75f2e0e43c8a8b0bffee8c47bcc1c845.png",
+      "plays": 2
+    },
+    {
       "name": "True (Bonus Edition)",
       "artist": "Avicii",
       "url": "https://www.last.fm/music/Avicii/True+(Bonus+Edition)",
@@ -142,5 +149,5 @@
     }
   ],
   "period": "3month",
-  "updated": "2026-07-16"
+  "updated": "2026-07-17"
 }
