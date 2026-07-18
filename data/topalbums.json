@@ -57,6 +57,13 @@
       "plays": 3
     },
     {
+      "name": "Far Cry 5 Presents: Into the Flames (Original Game Soundtrack)",
+      "artist": "Dan Romer",
+      "url": "https://www.last.fm/music/Dan+Romer/Far+Cry+5+Presents:+Into+the+Flames+(Original+Game+Soundtrack)",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/8bc566258d41f77277147a01c3bf90ad.jpg",
+      "plays": 3
+    },
+    {
       "name": "High Valley Demos",
       "artist": "Fey Fili",
       "url": "https://www.last.fm/music/Fey+Fili/High+Valley+Demos",
@@ -64,10 +71,31 @@
       "plays": 3
     },
     {
+      "name": "Beat Saber (Original Game Soundtrack)",
+      "artist": "Jaroslav Beck",
+      "url": "https://www.last.fm/music/Jaroslav+Beck/Beat+Saber+(Original+Game+Soundtrack)",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/070f7c8133e30d9c0cc25efc4fdb6462.jpg",
+      "plays": 3
+    },
+    {
+      "name": "Divenire (Deluxe Edition)",
+      "artist": "Ludovico Einaudi",
+      "url": "https://www.last.fm/music/Ludovico+Einaudi/Divenire+(Deluxe+Edition)",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/44d6abcfd8aed5439223f0e88d8e4626.jpg",
+      "plays": 3
+    },
+    {
       "name": "Lost in Paradïse, Pt. 2",
       "artist": "Naïka",
       "url": "https://www.last.fm/music/Na%C3%AFka/Lost+in+Parad%C3%AFse,+Pt.+2",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/4b5f3428e37c52495018260ada112051.jpg",
+      "plays": 3
+    },
+    {
+      "name": "El Camino",
+      "artist": "The Black Keys",
+      "url": "https://www.last.fm/music/The+Black+Keys/El+Camino",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/99052cb9c4304f33a104995426c52db8.png",
       "plays": 3
     },
     {
@@ -118,36 +146,8 @@
       "url": "https://www.last.fm/music/Ava+Max/Barbie+The+Album",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/75f2e0e43c8a8b0bffee8c47bcc1c845.png",
       "plays": 2
-    },
-    {
-      "name": "True (Bonus Edition)",
-      "artist": "Avicii",
-      "url": "https://www.last.fm/music/Avicii/True+(Bonus+Edition)",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/a0c65b8ccca195beff7eb803661e7e1a.png",
-      "plays": 2
-    },
-    {
-      "name": "1-800",
-      "artist": "bbno$ & Ironmouse",
-      "url": "https://www.last.fm/music/bbno$+&+Ironmouse/1-800",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/880b94bc5613637576f3562b2c2e95cf.jpg",
-      "plays": 2
-    },
-    {
-      "name": "Burning Sands",
-      "artist": "Boom Kitty",
-      "url": "https://www.last.fm/music/Boom+Kitty/Burning+Sands",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/caa7ed94df9552df2f0c4c811453eebf.jpg",
-      "plays": 2
-    },
-    {
-      "name": "Leather Terror",
-      "artist": "Carpenter Brut",
-      "url": "https://www.last.fm/music/Carpenter+Brut/Leather+Terror",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/81c89a3bfac3fa2b098fb6fd62b11c1d.jpg",
-      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-07-17"
+  "updated": "2026-07-18"
 }
