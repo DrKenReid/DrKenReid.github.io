@@ -74,6 +74,16 @@ function renderHeader(targetId, options) {
 }
 
 /**
+ * Path prefix from the current page back to the site root.
+ * Published posts live in blog/ (one level deep); drafts preview from
+ * blog/drafts/ (two levels deep) and need the extra hop.
+ */
+function siteRootPrefix() {
+    if ((window.location.pathname || '').indexOf('/blog/drafts/') !== -1) return '../../';
+    return document.querySelector('.blog-post') ? '../' : '';
+}
+
+/**
  * Renders the "Follow Instagram" section with 10 random photography tiles.
  * @param {string} targetId - ID of the element to inject into.
  */
@@ -81,8 +91,7 @@ function renderInstagramSection(targetId) {
     var el = document.getElementById(targetId);
     if (!el) return;
 
-    var onBlogPostPage = !!document.querySelector('.blog-post');
-    var assetPrefix = onBlogPostPage ? '../' : '';
+    var assetPrefix = siteRootPrefix();
 
     var instagramUrl = 'https://www.instagram.com/drkenreid/';
     var handle = 'drkenreid';
@@ -505,7 +514,7 @@ function resolveCurrentPostFileName() {
 }
 
 function loadBlogPosts() {
-    return fetch('../data/posts.json').then(function(response) {
+    return fetch(siteRootPrefix() + 'data/posts.json').then(function(response) {
         return response.json();
     });
 }
@@ -592,14 +601,15 @@ function renderRelatedPosts(targetId) {
                 '<h2>Related posts</h2>' +
                 '<div class="row related-posts-grid">' +
                 related.map(function(post) {
+                    var rootPrefix = siteRootPrefix();
                     var tagHtml = (post.tags || []).map(function(tag) {
                         return '<span class="blog-tag">' + tag + '</span>';
                     }).join('');
-                    var imageSrc = resolveAssetPath(post.image || DEFAULT_POST_IMAGE, '../');
+                    var imageSrc = resolveAssetPath(post.image || DEFAULT_POST_IMAGE, rootPrefix);
                     var relatedMins = estimateReadingMinutes(post);
                     return '<div class="col-12 col-md-6 col-lg-4 mb-30">' +
-                        '<a href="' + (post.url || '').replace(/^blog\//, '') + '" class="blog-card">' +
-                        '<div class="blog-card-img"><img src="' + imageSrc + '" alt="' + post.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'../' + DEFAULT_POST_IMAGE + '\';"></div>' +
+                        '<a href="' + rootPrefix + (post.url || '') + '" class="blog-card">' +
+                        '<div class="blog-card-img"><img src="' + imageSrc + '" alt="' + post.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'' + rootPrefix + DEFAULT_POST_IMAGE + '\';"></div>' +
                         '<div class="blog-card-body">' +
                         '<div class="blog-card-date">' + formatPostDate(post.date) + (relatedMins ? ' · ' + relatedMins + ' min read' : '') + '</div>' +
                         '<h4 class="blog-card-title">' + post.title + '</h4>' +
@@ -659,10 +669,11 @@ function renderBlogThanksCta() {
     var cta = document.createElement('section');
     cta.className = 'blog-thanks-cta';
     cta.setAttribute('aria-label', 'Stay connected with Ken Reid');
+    var rootPrefix = siteRootPrefix();
     cta.innerHTML = '' +
         '<div class="blog-thanks-cta__media">' +
         '<div class="blog-thanks-cta__portrait">' +
-        '<img src="../img/bg-img/res-cta.webp" alt="Ken Reid writing on a whiteboard" loading="lazy">' +
+        '<img src="' + rootPrefix + 'img/bg-img/res-cta.webp" alt="Ken Reid writing on a whiteboard" loading="lazy">' +
         '</div>' +
         '</div>' +
         '<div class="blog-thanks-cta__content">' +
@@ -675,15 +686,15 @@ function renderBlogThanksCta() {
         '<a class="blog-thanks-cta__button" href="https://www.linkedin.com/in/kennethneilreid" target="_blank" rel="noopener noreferrer">' +
         '<i class="ti-linkedin" aria-hidden="true"></i><span>Follow on LinkedIn</span></a>' +
         '</div>' +
-        '<p class="blog-thanks-cta__subnote">Prefer feed readers? Use <a href="https://feedly.com/i/subscription/feed%2Fhttps%3A%2F%2Fwww.kenreid.co.uk%2Ffeed.xml" target="_blank" rel="noopener noreferrer">Feedly</a> or open the <a href="../feed.xml">raw RSS feed</a>.</p>' +
+        '<p class="blog-thanks-cta__subnote">Prefer feed readers? Use <a href="https://feedly.com/i/subscription/feed%2Fhttps%3A%2F%2Fwww.kenreid.co.uk%2Ffeed.xml" target="_blank" rel="noopener noreferrer">Feedly</a> or open the <a href="' + rootPrefix + 'feed.xml">raw RSS feed</a>.</p>' +
         '<div class="blog-thanks-cta__links">' +
-        '<a class="blog-thanks-cta__pill" href="../feed.xml">' +
+        '<a class="blog-thanks-cta__pill" href="' + rootPrefix + 'feed.xml">' +
         '<i class="ti-rss" aria-hidden="true"></i><span>RSS feed</span></a>' +
         '<a class="blog-thanks-cta__pill" href="https://github.com/DrKenReid" target="_blank" rel="noopener noreferrer">' +
         '<i class="fa fa-github" aria-hidden="true"></i><span>GitHub</span></a>' +
-        '<a class="blog-thanks-cta__pill" href="../data_science.html">' +
+        '<a class="blog-thanks-cta__pill" href="' + rootPrefix + 'data_science.html">' +
         '<i class="fa fa-line-chart" aria-hidden="true"></i><span>Data Science</span></a>' +
-        '<a class="blog-thanks-cta__pill" href="../contact.html">' +
+        '<a class="blog-thanks-cta__pill" href="' + rootPrefix + 'contact.html">' +
         '<i class="ti-email" aria-hidden="true"></i><span>Get in touch</span></a>' +
         '</div>' +
         '</div>';
@@ -1518,8 +1529,7 @@ function renderFooter(targetId) {
     if (!el) return;
 
     var year = new Date().getFullYear();
-    var onBlogPostPage = !!document.querySelector('.blog-post');
-    var prefix = onBlogPostPage ? '../' : './';
+    var prefix = siteRootPrefix() || './';
 
     var NAV_LINKS = [
         ['About', 'about.html'], ['Data Science', 'data_science.html'],
@@ -1564,7 +1574,7 @@ function renderFooter(targetId) {
         var ul = document.getElementById('kr-footer-posts');
         if (!ul || !posts || !posts.length) return;
         ul.innerHTML = posts.slice(0, 3).map(function(p) {
-            var href = onBlogPostPage ? (p.url || '').replace(/^blog\//, '') : prefix + (p.url || '');
+            var href = prefix + (p.url || '');
             return '<li><a href="' + href + '">' + p.title + '</a>' +
                 '<span>' + formatPostDate(p.date) + '</span></li>';
         }).join('');
@@ -1862,10 +1872,7 @@ function updateLastfmStats() {
     var els = document.querySelectorAll('[data-lastfm="scrobbles"]');
     if (!els.length) return;
 
-    var onBlogPostPage = !!document.querySelector('.blog-post');
-    var assetPrefix = onBlogPostPage ? '../' : '';
-
-    fetch(assetPrefix + 'data/lastfm.json').then(function(response) {
+    fetch(siteRootPrefix() + 'data/lastfm.json').then(function(response) {
         return response.json();
     }).then(function(data) {
         var n = data && data.scrobbles;
