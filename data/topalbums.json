@@ -12,7 +12,7 @@
       "artist": "Naïka",
       "url": "https://www.last.fm/music/Na%C3%AFka/ECLESIA",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/e6c40e9652aac25010b8094263138aa2.jpg",
-      "plays": 6
+      "plays": 9
     },
     {
       "name": "Dopamine (Split Brain Version)",
@@ -29,10 +29,10 @@
       "plays": 5
     },
     {
-      "name": "The Secretary's Daughter",
-      "artist": "Benjamin Monday",
-      "url": "https://www.last.fm/music/Benjamin+Monday/The+Secretary%27s+Daughter",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/3b6f5c7f074f5ee0d37416a0f7869688.jpg",
+      "name": "High Valley Demos",
+      "artist": "Fey Fili",
+      "url": "https://www.last.fm/music/Fey+Fili/High+Valley+Demos",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/01d34ed523f8706f4e2bb3270294dc62.jpg",
       "plays": 4
     },
     {
@@ -40,6 +40,13 @@
       "artist": "bbno$",
       "url": "https://www.last.fm/music/bbno$/it+boy",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/2d056ba6d08b6e5bcf62de5b578b99be.jpg",
+      "plays": 3
+    },
+    {
+      "name": "The Secretary's Daughter",
+      "artist": "Benjamin Monday",
+      "url": "https://www.last.fm/music/Benjamin+Monday/The+Secretary%27s+Daughter",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/3b6f5c7f074f5ee0d37416a0f7869688.jpg",
       "plays": 3
     },
     {
@@ -64,31 +71,10 @@
       "plays": 3
     },
     {
-      "name": "High Valley Demos",
-      "artist": "Fey Fili",
-      "url": "https://www.last.fm/music/Fey+Fili/High+Valley+Demos",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/01d34ed523f8706f4e2bb3270294dc62.jpg",
-      "plays": 3
-    },
-    {
       "name": "Beat Saber (Original Game Soundtrack)",
       "artist": "Jaroslav Beck",
       "url": "https://www.last.fm/music/Jaroslav+Beck/Beat+Saber+(Original+Game+Soundtrack)",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/070f7c8133e30d9c0cc25efc4fdb6462.jpg",
-      "plays": 3
-    },
-    {
-      "name": "Divenire (Deluxe Edition)",
-      "artist": "Ludovico Einaudi",
-      "url": "https://www.last.fm/music/Ludovico+Einaudi/Divenire+(Deluxe+Edition)",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/44d6abcfd8aed5439223f0e88d8e4626.jpg",
-      "plays": 3
-    },
-    {
-      "name": "Lost in Paradïse, Pt. 2",
-      "artist": "Naïka",
-      "url": "https://www.last.fm/music/Na%C3%AFka/Lost+in+Parad%C3%AFse,+Pt.+2",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/4b5f3428e37c52495018260ada112051.jpg",
       "plays": 3
     },
     {
@@ -106,18 +92,18 @@
       "plays": 3
     },
     {
-      "name": "Is This It",
-      "artist": "The Strokes",
-      "url": "https://www.last.fm/music/The+Strokes/Is+This+It",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/80f256e56b1043cdbb99da3ac4dd69a0.png",
-      "plays": 3
-    },
-    {
       "name": "The Anthem",
       "artist": "Zedd",
       "url": "https://www.last.fm/music/Zedd/The+Anthem",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/bb4268a5ebd04ae785e7d104008f6151.jpg",
       "plays": 3
+    },
+    {
+      "name": "BLOOD",
+      "artist": "Altan urag",
+      "url": "https://www.last.fm/music/Altan+urag/BLOOD",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/7c4308c52c474044bf5beb425b2f3c50.jpg",
+      "plays": 2
     },
     {
       "name": "Stellaris (Original Game Soundtrack)",
@@ -146,8 +132,22 @@
       "url": "https://www.last.fm/music/Ava+Max/Barbie+The+Album",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/75f2e0e43c8a8b0bffee8c47bcc1c845.png",
       "plays": 2
+    },
+    {
+      "name": "True (Bonus Edition)",
+      "artist": "Avicii",
+      "url": "https://www.last.fm/music/Avicii/True+(Bonus+Edition)",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/a0c65b8ccca195beff7eb803661e7e1a.png",
+      "plays": 2
+    },
+    {
+      "name": "1-800",
+      "artist": "bbno$ & Ironmouse",
+      "url": "https://www.last.fm/music/bbno$+&+Ironmouse/1-800",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/880b94bc5613637576f3562b2c2e95cf.jpg",
+      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-07-18"
+  "updated": "2026-07-19"
 }
