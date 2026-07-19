@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and break it with the sliders.">
+ <meta name="keywords" content="ai">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Ant Colony, Live - Ken Reid</title>
+ <meta property="og:title" content="Ant Colony, Live">
+ <meta property="og:description" content="An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and break it with the sliders.">
+ <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/290.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/ant-colony-live.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Ant Colony, Live">
+ <meta name="twitter:description" content="An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and break it with the sliders.">
+ <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/290.png">
+ <meta name="citation_title" content="Ant Colony, Live">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/07/19">
+ <meta name="citation_online_date" content="2026/07/19">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/ant-colony-live.html">
+ <meta name="DC.title" content="Ant Colony, Live">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-07-19">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/ant-colony-live.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "Ant Colony, Live",
+ "description": "An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and break it with the sliders.",
+ "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/290.png",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-07-19",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["ant colony optimization", "swarm intelligence", "stigmergy", "interactive", "optimization"]
+ }
+ </script>
+ <style>
+   /* Scoped tokens for the ACO widget. Light values here, dark overrides below.
+      Series: s1 = ants, s2 = colony's chosen route, s3 = pheromone, s4 = food. */
+   .aco-viz{
+     --viz-s1:#2a78d6; --viz-s2:#1baf7a; --viz-s3:#eda100; --viz-s4:#d64550;
+     --viz-ink:#2b2b2b; --viz-muted:#767676; --viz-grid:#e1e0d9; --viz-surface:#ffffff;
+     --viz-border:rgba(0,0,0,0.12); --viz-cell:rgba(0,0,0,0.03);
+     background:var(--viz-surface); border:1px solid var(--viz-border); border-radius:10px;
+     padding:16px; margin:26px 0;
+   }
+   [data-theme="dark"] .aco-viz{
+     --viz-s1:#3987e5; --viz-s2:#199e70; --viz-s3:#f0b429; --viz-s4:#e5687a;
+     --viz-ink:#e8e8e8; --viz-muted:#9e9e9e; --viz-grid:#2c2c2a; --viz-surface:#1f1f1f;
+     --viz-border:rgba(255,255,255,0.12); --viz-cell:rgba(255,255,255,0.05);
+   }
+   .aco-viz canvas{ width:100%; display:block; border-radius:6px; touch-action:none; cursor:grab; }
+   .aco-viz canvas:active{ cursor:grabbing; }
+   .aco-viz canvas.aco-chart{ margin-top:14px; touch-action:auto; cursor:default; }
+   .aco-toolbar{ display:flex; flex-wrap:wrap; gap:8px 10px; align-items:center; margin-top:14px; font-size:0.85em; color:var(--viz-ink); }
+   .aco-toolbar label{ display:flex; align-items:center; gap:7px; margin:0 0 0 8px; font-weight:600; }
+   .aco-toolbar select{ background:var(--viz-surface); color:var(--viz-ink); border:1px solid var(--viz-border); border-radius:6px; padding:5px 8px; font-family:inherit; font-size:1em; font-weight:400; cursor:pointer; }
+   .aco-btn{ background:var(--viz-s3); color:#1a1a1a; border:none; border-radius:6px; padding:6px 16px; font-size:0.9em; cursor:pointer; font-family:inherit; }
+   .aco-btn.secondary{ background:transparent; color:var(--viz-ink); border:1px solid var(--viz-border); }
+   #acoRun{ min-width:76px; }
+   .aco-status{ font-size:0.85em; color:var(--viz-muted); margin-left:auto; }
+   .aco-sliders{ display:flex; flex-wrap:wrap; gap:8px 28px; margin-top:12px; font-size:0.85em; color:var(--viz-ink); }
+   .aco-sliders label{ display:flex; align-items:center; gap:8px; margin:0; font-weight:400; }
+   .aco-sliders input[type=range]{ width:110px; accent-color:var(--viz-s3); }
+   .aco-sliders .val{ min-width:2.8em; color:var(--viz-muted); font-variant-numeric:tabular-nums; }
+   .aco-stats{ display:grid; grid-template-columns:repeat(auto-fit,minmax(116px,1fr)); gap:8px; margin-top:14px; }
+   .aco-stat{ background:var(--viz-cell); border:1px solid var(--viz-border); border-radius:8px; padding:7px 10px; display:flex; flex-direction:column; gap:2px; min-width:0; }
+   .aco-stat-lbl{ font-size:0.66em; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--viz-muted); white-space:nowrap; }
+   .aco-stat-val{ font-size:0.95em; font-weight:600; color:var(--viz-ink); font-variant-numeric:tabular-nums; }
+   .aco-swatch{ width:9px; height:9px; border-radius:2px; display:inline-block; vertical-align:-1px; margin-right:4px; }
+   .aco-note{ font-size:0.78em; color:var(--viz-muted); margin:12px 0 0; }
+ </style>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/290.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">Blog</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">Ant Colony, Live</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+ <main id="main-content">
+ <div class="blog-post">
+ <h1>Ant Colony, Live</h1>
+ <div class="blog-meta">
+ 19 July 2026 &middot;
+ <span class="blog-tag">ai</span>
+ </div>
+
+ <p>This search strategy is about something strange and, to me, a fascinating trick we have learned from observing and being inspired by nature: a shortest path found by thousands of blind agents, not one of which has any idea what it's doing.</p>
+
+ <noscript><p><strong>The interactive parts of this post require JavaScript.</strong> The prose will still make sense, but the demo will be sadly inert.</p></noscript>
+
+ <p>Real ants find the shortest route between nest and food with no map, no memory to speak of, and no leader. Each ant follows two dumb rules: wander, biased toward the smell of pheromone, and drop pheromone as you walk. And yet the colony reliably solves a problem no individual ant could even represent. The intelligence isn't of the ants, it's <em>emergent</em>.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Ant Colony Optimization (ACO):</strong> an optimiser inspired by foraging ants, where many simple agents build solutions and reinforce good ones with virtual "pheromone".</li>
+ <li><strong>Stigmergy:</strong> coordination through the environment rather than direct communication. Ants don't talk; they edit a shared chemical map, and the map tells the next ant what to do.</li>
+ <li><strong>Pheromone:</strong> a virtual scent deposited on good path segments. It marks routes that worked, biasing future ants toward them.</li>
+ <li><strong>Evaporation:</strong> pheromone fading over time. Without it, early mistakes get locked in forever; it's the colony's way of forgetting.</li>
+ <li><strong>Exploration vs exploitation:</strong> the balance between following strong trails (exploit) and trying new paths (explore). A tunable weight.</li>
+ <li><strong>Emergence:</strong> a behavior exhibited in colonies or groups of organisms that provides solutions without any individual understanding the problem.</li>
+ </ul>
+ </div>
+
+ <h2>How dumb agents get smart together</h2>
+
+ <p>Many ants set out at random. Shorter routes get walked end-to-end faster, so an ant on a short route completes more trips in the same time, so it lays pheromone more often per unit time. The short route therefore accumulates scent faster than long ones. The next wave of ants, biased toward scent, is more likely to pick it, which lays yet more scent, which biases yet more ants. A positive feedback loop amplifies whatever's working.</p>
+
+ <p>Left unchecked, that loop would be a disaster: the first route to get lucky would snowball and lock in, good or not. Which is why evaporation is essential. Scent fades, so a route has to keep <em>proving itself</em> to stay attractive; a stale trail to a mediocre route decays away and frees the colony to find something better. Reinforcement finds good solutions; forgetting stops the colony being stuck with the first trail. Marco Dorigo formalised all this in the early 1990s<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>, and it turned out to be competitive on routing problems (think Amazon deliveries, Google maps, etc.)
+
+ <h2>Watch the trail form</h2>
+
+ <p>Below, a colony is foraging on a small map. Watch the pheromone (the glow on the paths) start uniform and noisy, then sharpen, as one route out-competes the others and the colony pours itself onto it as an emergent behavior.</p>
+
+ <div class="aco-viz" id="aco-demo">
+   <canvas id="acoCanvas" height="360" role="img" aria-label="Animated ant colony optimisation demo: ants forage across a network of nodes between a nest and a food source, laying pheromone that glows on the shortest route as it emerges"></canvas>
+   <div class="aco-toolbar">
+     <button class="aco-btn" id="acoRun" type="button">Pause</button>
+     <button class="aco-btn secondary" id="acoTrails" type="button">Clear trails</button>
+     <label>Map <select id="acoMapSel">
+       <option value="scatter" selected>Random scatter</option>
+       <option value="bridge">Double bridge</option>
+       <option value="grid">City grid</option>
+       <option value="ring">Ring road</option>
+       <option value="maze">Maze</option>
+       <option value="web">Spider web</option>
+     </select></label>
+     <button class="aco-btn secondary" id="acoMap" type="button">Shuffle</button>
+     <span class="aco-status" id="acoStatus"></span>
+   </div>
+   <div class="aco-sliders">
+     <label>Evaporation <input type="range" id="acoEvap" min="0" max="100" value="30"> <span class="val" id="acoEvapVal"></span></label>
+     <label>Colony size <input type="range" id="acoColony" min="10" max="140" step="10" value="60"> <span class="val" id="acoColonyVal"></span></label>
+     <label>Exploration <input type="range" id="acoExplore" min="0" max="100" value="20"> <span class="val" id="acoExploreVal"></span></label>
+   </div>
+   <div class="aco-stats">
+     <div class="aco-stat"><span class="aco-stat-lbl"><span class="aco-swatch" style="background:var(--viz-s2);"></span>Colony's route</span><span class="aco-stat-val" id="acoConsensus">&hellip;</span></div>
+     <div class="aco-stat"><span class="aco-stat-lbl">Best found</span><span class="aco-stat-val" id="acoBest">&hellip;</span></div>
+     <div class="aco-stat"><span class="aco-stat-lbl">Trips</span><span class="aco-stat-val" id="acoTrips">0</span></div>
+     <div class="aco-stat"><span class="aco-stat-lbl">Foraging rate</span><span class="aco-stat-val" id="acoRate">&ndash;</span></div>
+     <div class="aco-stat"><span class="aco-stat-lbl">Pheromone focus</span><span class="aco-stat-val" id="acoFocus">0%</span></div>
+   </div>
+   <canvas id="acoChart" class="aco-chart" height="120" role="img" aria-label="Live charts: average and best route length as a multiple of the optimum, and pheromone focus, both over time"></canvas>
+   <p class="aco-note"><strong>Drag anywhere on the map</strong> to move the food to the nearest node and watch the colony re-route. Pheromone (the amber glow) is the shared memory; the green line is the route the colony currently agrees on. Route numbers are multiples of the shortest possible path, so 1.00&times; is perfect; pheromone focus is how much of the smell sits on a few trails, and it climbs as the colony commits. <em>Double bridge</em> is the classic lab experiment (two routes, one shorter); <em>City grid</em> offers many equally good routes, so watch the colony break the tie and commit to one anyway; in the <em>Maze</em>, watch evaporation erase the trails that lead into dead ends; and in the <em>Spider web</em>, the colony discovers that the fast way around is through the middle.</p>
+ </div>
+
+ <h2>Break it with the sliders</h2>
+
+ <p><strong>Turn evaporation off.</strong> The colony commits, hard and early, to whatever route happened to get the first head start, and then it's stuck there forever even when a shorter path is sitting right next to it. This is premature convergence. A colony that can't forget can't improve.</p>
+
+ <p><strong>Turn evaporation up to maximum.</strong> Now the opposite: trails vanish before they can build, the colony never commits to anything, and the ants wander like it's the first minute forever. Memory that's too short is as useless as memory that's too long. The sweet spot between them is key - interesting thought, right?</p>
+
+ <p><strong>Crank exploration.</strong> Push the ants to ignore the trails and strike out on their own, and watch a fascinating trade: the colony becomes slow to lock onto the best route but much better at noticing when the world changes (drag the food and see). Low exploration is fast and brittle; high exploration is slow and adaptive. </p>
+
+ <h2>Why "no one is in charge"</h2>
+
+ <p>The thing I most want you to take from watching this is the absence at the centre. There is no queen ant in charge. There is no scout ant specialized in picking up distant scents that knows the route. If you interrogated every single ant, none could tell you the solution, because the solution isn't stored in any ant: it's stored in the environment, in the pattern of scent, edited a little by each passing insect and read a little by the next. Intelligence, here, is a property of the <em>system</em>, not any of its parts.</p>
+
+ <p>Starlings do it in the sky, neurons do it in your skull, markets do it (imperfectly), and it's the reason I find swarm methods fascinating. We're used to thinking capability requires a capable agent: a smart ant, a smart boss, a smart model. Stigmergy says no. Get the local rules and the shared medium right, and competence can emerge from a crowd of things too simple to hold it individually. The same process that finds the food can also stampede a colony, or a market, or a comment section, straight off a cliff -- emergence is not the same as wisdom. </p>
+
+ <p>Anyway. Go drag the food around and watch a thing with no mind change its mind. </p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Do real ants actually do this?</summary>
+ <p>The core process is real and was studied in actual ants (the classic double-bridge experiments showed colonies converging on the shorter branch via pheromone). The algorithm is still a simplification: real ant navigation also uses visual landmarks, path integration, and multiple pheromone types. As with the genetic algorithm, ACO borrows the idea as a metaphor; it's a faithful teacher of stigmergy and a loose model of entomology.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Is ant colony optimization actually used for anything?</summary>
+ <p>Yes, mostly on routing and scheduling: network routing, vehicle routing, and various assignment problems, often hybridised with local search. It's rarely the outright best tool for a given problem (No Free Lunch), but it's competitive on dynamic problems where the environment keeps changing, because the evaporation-and-reinforcement loop naturally re-adapts, which is what you can watch when you drag the food.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Dorigo, M., Maniezzo, V., &amp; Colorni, A. (1996). Ant system: Optimization by a colony of cooperating agents. <em>IEEE Transactions on Systems, Man, and Cybernetics, Part B</em>, 26(1), 29&ndash;41. <a href="https://doi.org/10.1109/3477.484436" target="_blank" rel="noopener">https://doi.org/10.1109/3477.484436</a>
+          </li>
+        </ol>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="evolutionary-computation-identity-crisis.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/208.webp" alt="Evolutionary Computation's Identity Crisis in the Age of GenAI" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">18 April 2026 · 12 min read</div>
+                  <h4 class="blog-card-title">Evolutionary Computation's Identity Crisis in the Age of GenAI</h4>
+                  <p class="blog-card-excerpt">Evolutionary Computation is having an identity crisis in the GenAI era, despite delivering major real-world wins in engineering, logistics, and constrained optimization.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="ethics-of-llm-use-not-llms.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/280.webp" alt="The Ethics of LLM Use (Not LLMs)" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">29 April 2026 · 33 min read</div>
+                  <h4 class="blog-card-title">The Ethics of LLM Use (Not LLMs)</h4>
+                  <p class="blog-card-excerpt">An AI researcher's unvarnished take on LLM ethics: the energy numbers, the cobalt hypocrisy, the Jevons paradox, and why telling people not to use AI on environmental grounds is a privilege position.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="optimizing-your-schedule.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/493.webp" alt="Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">15 June 2026 · 19 min read</div>
+                  <h4 class="blog-card-title">Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)</h4>
+                  <p class="blog-card-excerpt">What an operations researcher actually means by optimizing a schedule: objectives, constraints and weightings, a values clarification grid, and a working integer-programming model of your week. Nerd mode optional.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">personal</span><span class="blog-tag">data science</span><span class="blog-tag">advice</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ </div>
+ </div>
+ </div>
+
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/popper.min.js"></script>
+ <script src="../js/bootstrap.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/share.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+
+ <script>
+ /* ============================================================
+    Ant Colony, Live — the interactive demo for this post.
+    No dependencies. Renders to <canvas>, reads its colours from the CSS
+    custom properties on .aco-viz, so the site's light/dark toggle restyles
+    it live. Ants forage from a nest to a food node across a mesh of nodes,
+    depositing pheromone on completed routes and following it probabilistically.
+    ============================================================ */
+ (function () {
+   'use strict';
+   var wrap = document.getElementById('aco-demo');
+   if (!wrap) return;
+   var cv = document.getElementById('acoCanvas');
+
+   function mulberry32(seed) {
+     var a = seed >>> 0;
+     return function () {
+       a |= 0; a = (a + 0x6D2B79F5) | 0;
+       var t = Math.imul(a ^ (a >>> 15), 1 | a);
+       t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+     };
+   }
+   function vizColors(el) {
+     var cs = getComputedStyle(el);
+     function v(n) { return cs.getPropertyValue(n).trim(); }
+     return { s1: v('--viz-s1'), s2: v('--viz-s2'), s3: v('--viz-s3'), s4: v('--viz-s4'),
+              ink: v('--viz-ink'), muted: v('--viz-muted'), grid: v('--viz-grid'), surface: v('--viz-surface') };
+   }
+   var chart = document.getElementById('acoChart');
+   var W = 0, H = 0, ctx = null, WC = 0, HC = 0, ctxC = null;
+   function fitOne(canvas) {
+     var dpr = window.devicePixelRatio || 1;
+     var w = canvas.clientWidth || 600, h = parseInt(canvas.getAttribute('height'), 10);
+     canvas.style.height = h + 'px';
+     canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+     var g = canvas.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+     return { g: g, w: w, h: h };
+   }
+   function fitCanvas() {
+     var m = fitOne(cv); ctx = m.g; W = m.w; H = m.h;
+     var c = fitOne(chart); ctxC = c.g; WC = c.w; HC = c.h;
+   }
+
+   // ---- tunables ----
+   var NODES = 24, K_NEIGH = 4;
+   var TAU0 = 0.4, TAU_MIN = 0.03, Q = 0.5, BETA = 3.0;
+   var SPEED = 235;            // px/sec that an ant travels
+   var MAX_HOPS = 60;   // generous: maze corridors take many hops to wander
+
+   // ---- state ----
+   var seed = 20260719, rng;
+   var nodes, edges, edgeIdx, adj, tau, eta, elen; // graph
+   var nest, food, optimalLen;
+   var ants = [], colony = 60;
+   var best = Infinity, bestPath = null;
+   var running = true, raf = null, lastT = 0, dragging = false;
+
+   // live stats: completed trips, smoothed foraging rate, and a rolling
+   // sample buffer feeding the two mini charts under the map
+   var trips = 0, tripEma = null, rateEma = 0, tripsAcc = 0, sampleAcc = 0;
+   var samples = [], MAX_SAMPLES = 240, SAMPLE_DT = 0.25;
+
+   // control refs
+   var runBtn = document.getElementById('acoRun');
+   var trailBtn = document.getElementById('acoTrails');
+   var mapBtn = document.getElementById('acoMap');
+   var evapS = document.getElementById('acoEvap'), evapV = document.getElementById('acoEvapVal');
+   var colonyS = document.getElementById('acoColony'), colonyV = document.getElementById('acoColonyVal');
+   var exploreS = document.getElementById('acoExplore'), exploreV = document.getElementById('acoExploreVal');
+   var statusEl = document.getElementById('acoStatus');
+   var consEl = document.getElementById('acoConsensus'), bestEl = document.getElementById('acoBest');
+   var mapSel = document.getElementById('acoMapSel');
+   var tripsEl = document.getElementById('acoTrips'), rateEl = document.getElementById('acoRate'), focusEl = document.getElementById('acoFocus');
+
+   function ekey(a, b) { return a < b ? a + '_' + b : b + '_' + a; }
+   function dist(i, j) { var dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y; return Math.hypot(dx, dy); }
+   function px(i) { return nodes[i].x * W; }
+   function py(i) { return nodes[i].y * H; }
+
+   // ---- map layouts ----
+   // Each builder returns { nodes: [{x,y}...], pairs: [[a,b]...], nest, food }
+   // in normalised 0-1 coordinates; materialise() turns that into the live graph.
+   function buildScatter() {
+     var pts = [];
+     // scatter points, rejecting ones that crowd an existing node
+     var tries = 0;
+     while (pts.length < NODES && tries < 4000) {
+       tries++;
+       var p = { x: 0.06 + rng() * 0.88, y: 0.08 + rng() * 0.84 };
+       var ok = true;
+       for (var q = 0; q < pts.length; q++) { if (Math.hypot(p.x - pts[q].x, p.y - pts[q].y) < 0.10) { ok = false; break; } }
+       if (ok) pts.push(p);
+     }
+     var N = pts.length;
+     function d2(i, j) { return Math.hypot(pts[i].x - pts[j].x, pts[i].y - pts[j].y); }
+     var eset = {};
+     function addEdge(a, b) { if (a === b) return; var k = ekey(a, b); if (!eset[k]) eset[k] = [a, b]; }
+     // k nearest neighbours
+     for (var i = 0; i < N; i++) {
+       var order = [];
+       for (var j = 0; j < N; j++) if (j !== i) order.push([d2(i, j), j]);
+       order.sort(function (u, v) { return u[0] - v[0]; });
+       for (var n = 0; n < Math.min(K_NEIGH, order.length); n++) addEdge(i, order[n][1]);
+     }
+     // Prim MST over the complete graph to guarantee connectivity
+     var inTree = new Array(N).fill(false), minD = new Array(N).fill(Infinity), par = new Array(N).fill(-1);
+     minD[0] = 0;
+     for (var s = 0; s < N; s++) {
+       var u = -1, bd = Infinity;
+       for (var a = 0; a < N; a++) if (!inTree[a] && minD[a] < bd) { bd = minD[a]; u = a; }
+       if (u < 0) break;
+       inTree[u] = true;
+       if (par[u] >= 0) addEdge(u, par[u]);
+       for (var b = 0; b < N; b++) { if (!inTree[b]) { var d = d2(u, b); if (d < minD[b]) { minD[b] = d; par[b] = u; } } }
+     }
+     // nest = leftmost node, food = rightmost node (far apart)
+     var nst = 0, fd = 0;
+     for (var w = 0; w < N; w++) { if (pts[w].x < pts[nst].x) nst = w; if (pts[w].x > pts[fd].x) fd = w; }
+     return { nodes: pts, pairs: Object.keys(eset).map(function (k) { return eset[k]; }), nest: nst, food: fd };
+   }
+   function buildBridge() {
+     // the classic double-bridge experiment: two routes, one ~30% shorter,
+     // plus one rung so ants can defect mid-route
+     return {
+       nodes: [
+         { x: 0.05, y: 0.52 },                                     // 0 nest
+         { x: 0.28, y: 0.66 }, { x: 0.52, y: 0.70 }, { x: 0.76, y: 0.64 },   // short (lower) branch
+         { x: 0.16, y: 0.30 }, { x: 0.33, y: 0.16 }, { x: 0.52, y: 0.12 },   // long (upper) branch
+         { x: 0.71, y: 0.16 }, { x: 0.86, y: 0.30 },
+         { x: 0.95, y: 0.52 }                                      // 9 food
+       ],
+       pairs: [[0, 1], [1, 2], [2, 3], [3, 9], [0, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 9], [2, 6]],
+       nest: 0, food: 9
+     };
+   }
+   function buildGrid() {
+     // city blocks: every left-to-right route has the same length, so the
+     // colony has to break the tie and commit to one of many equal bests
+     var COLS = 7, ROWS = 5, pts = [], pairs = [];
+     for (var r = 0; r < ROWS; r++) {
+       for (var c = 0; c < COLS; c++) {
+         pts.push({ x: 0.08 + c * (0.84 / (COLS - 1)), y: 0.10 + r * (0.80 / (ROWS - 1)) });
+         var i = r * COLS + c;
+         if (c > 0) pairs.push([i - 1, i]);
+         if (r > 0) pairs.push([i - COLS, i]);
+       }
+     }
+     return { nodes: pts, pairs: pairs, nest: 2 * COLS, food: 2 * COLS + (COLS - 1) };
+   }
+   function buildRing() {
+     // one loop, two ways round; the bottom arc is drawn tighter so it's shorter
+     var N = 14, pts = [], pairs = [];
+     for (var i = 0; i < N; i++) {
+       var th = (i / N) * Math.PI * 2;
+       var ry = Math.sin(th) > 0 ? 0.28 : 0.38;   // canvas y grows downward: sin>0 is the lower arc
+       pts.push({ x: 0.5 + 0.44 * Math.cos(th), y: 0.5 + ry * Math.sin(th) });
+       pairs.push([i, (i + 1) % N]);
+     }
+     return { nodes: pts, pairs: pairs, nest: N / 2, food: 0 };
+   }
+   function buildMaze() {
+     // recursive-backtracker maze over a grid of corridors, then a few walls
+     // knocked out so there is more than one way through (a perfect maze has
+     // exactly one route, which gives the colony nothing to choose between);
+     // the dead ends are the point: watch evaporation clean them up
+     var COLS = 9, ROWS = 5;
+     function idx(c2, r2) { return r2 * COLS + c2; }
+     var pts = [];
+     for (var r = 0; r < ROWS; r++) for (var c = 0; c < COLS; c++)
+       pts.push({ x: 0.06 + c * (0.88 / (COLS - 1)), y: 0.10 + r * (0.80 / (ROWS - 1)) });
+     var visited = new Array(COLS * ROWS).fill(false);
+     var start = idx(0, Math.floor(ROWS / 2));
+     var pairs = [], stack = [start];
+     visited[start] = true;
+     while (stack.length) {
+       var cur = stack[stack.length - 1];
+       var cc = cur % COLS, cr = Math.floor(cur / COLS);
+       var nbs = [];
+       if (cc > 0 && !visited[cur - 1]) nbs.push(cur - 1);
+       if (cc < COLS - 1 && !visited[cur + 1]) nbs.push(cur + 1);
+       if (cr > 0 && !visited[cur - COLS]) nbs.push(cur - COLS);
+       if (cr < ROWS - 1 && !visited[cur + COLS]) nbs.push(cur + COLS);
+       if (!nbs.length) { stack.pop(); continue; }
+       var nxt = nbs[Math.floor(rng() * nbs.length)];
+       visited[nxt] = true; pairs.push([cur, nxt]); stack.push(nxt);
+     }
+     var eset = {}, extra = 0, guard = 0;
+     pairs.forEach(function (e) { eset[ekey(e[0], e[1])] = true; });
+     while (extra < 5 && guard++ < 500) {
+       var kc = Math.floor(rng() * (COLS - 1)), kr = Math.floor(rng() * (ROWS - 1));
+       var a = idx(kc, kr), b2 = rng() < 0.5 ? a + 1 : a + COLS;
+       var k = ekey(a, b2);
+       if (!eset[k]) { eset[k] = true; pairs.push([a, b2]); extra++; }
+     }
+     return { nodes: pts, pairs: pairs, nest: start, food: idx(COLS - 1, Math.floor(ROWS / 2)) };
+   }
+   function buildWeb() {
+     // two concentric rings joined by spokes, hub in the middle: the shortest
+     // route cuts straight through the centre rather than around the rim
+     var SPOKES = 8, RY = [0.24, 0.38], RX = [0.28, 0.44];
+     var pts = [{ x: 0.5, y: 0.5 }], pairs = [];   // node 0 is the hub
+     for (var k = 0; k < 2; k++) {
+       for (var s = 0; s < SPOKES; s++) {
+         var th = (s / SPOKES) * Math.PI * 2;
+         pts.push({ x: 0.5 + RX[k] * Math.cos(th), y: 0.5 + RY[k] * Math.sin(th) });
+         var me = 1 + k * SPOKES + s;
+         pairs.push([me, 1 + k * SPOKES + ((s + 1) % SPOKES)]);   // around the ring
+         // inward spoke; only alternate inner nodes reach the hub, which keeps
+         // its branching low enough for the colony to find the through-route
+         if (k === 1) pairs.push([me, me - SPOKES]);
+         else if (s % 2 === 0) pairs.push([me, 0]);
+       }
+     }
+     return { nodes: pts, pairs: pairs, nest: 1 + SPOKES + SPOKES / 2, food: 1 + SPOKES };
+   }
+   var MAPS = { scatter: buildScatter, bridge: buildBridge, grid: buildGrid, ring: buildRing, maze: buildMaze, web: buildWeb };
+
+   function materialise(layout) {
+     nodes = layout.nodes;
+     edges = []; edgeIdx = {}; elen = []; tau = []; eta = [];
+     layout.pairs.forEach(function (e) {
+       var k = ekey(e[0], e[1]);
+       if (edgeIdx[k] !== undefined) return;
+       edgeIdx[k] = edges.length; edges.push(e);
+       var L = dist(e[0], e[1]); elen.push(L); eta.push(1 / L); tau.push(TAU0);
+     });
+     adj = []; for (var v = 0; v < nodes.length; v++) adj.push([]);
+     edges.forEach(function (e, id) { adj[e[0]].push({ to: e[1], e: id }); adj[e[1]].push({ to: e[0], e: id }); });
+     nest = layout.nest; food = layout.food;
+   }
+
+   function buildGraph() {
+     rng = mulberry32(seed);
+     materialise(MAPS[mapSel.value]());
+     recomputeOptimal();
+     best = Infinity; bestPath = null;
+     resetStats();
+     resetAnts();
+   }
+
+   function recomputeOptimal() {
+     // Dijkstra from nest, weight = edge length
+     var N = nodes.length, D = new Array(N).fill(Infinity), done = new Array(N).fill(false);
+     D[nest] = 0;
+     for (var s = 0; s < N; s++) {
+       var u = -1, bd = Infinity;
+       for (var a = 0; a < N; a++) if (!done[a] && D[a] < bd) { bd = D[a]; u = a; }
+       if (u < 0) break; done[u] = true;
+       adj[u].forEach(function (nb) { var nd = D[u] + elen[nb.e]; if (nd < D[nb.to]) D[nb.to] = nd; });
+     }
+     optimalLen = D[food];
+   }
+
+   // ---- ant behaviour ----
+   function params() {
+     var x = parseInt(exploreS.value, 10) / 100;   // 0 exploit .. 1 explore
+     return { alpha: 4.0 - 3.4 * x, eps: 0.03 + 0.25 * x };
+   }
+   function decide(i, prev, visited, p) {
+     var cand = [];
+     for (var n = 0; n < adj[i].length; n++) { var nb = adj[i][n]; if (nb.to !== prev) cand.push(nb); }
+     if (cand.length === 0) { for (var m = 0; m < adj[i].length; m++) cand.push(adj[i][m]); }
+     if (cand.length === 0) return null;
+     var unv = cand.filter(function (c) { return !visited.has(c.to) || c.to === food; });
+     var pool = unv.length ? unv : cand;
+     if (rng() < p.eps) return pool[Math.floor(rng() * pool.length)];
+     var sum = 0, w = new Array(pool.length);
+     for (var q = 0; q < pool.length; q++) { w[q] = Math.pow(tau[pool[q].e], p.alpha) * Math.pow(eta[pool[q].e], BETA); sum += w[q]; }
+     if (sum <= 0) return pool[Math.floor(rng() * pool.length)];
+     var r = rng() * sum, acc = 0;
+     for (var z = 0; z < pool.length; z++) { acc += w[z]; if (r <= acc) return pool[z]; }
+     return pool[pool.length - 1];
+   }
+   function spawn(ant) {
+     ant = ant || {};
+     ant.from = nest; ant.visited = new Set([nest]); ant.path = [nest];
+     var p = params(), d = decide(nest, -1, ant.visited, p);
+     if (!d) { ant.dead = true; return ant; }
+     ant.to = d.to; ant.e = d.e; ant.progress = 0; ant.dead = false;
+     ant.visited.add(d.to); ant.path.push(d.to);
+     return ant;
+   }
+   function resetAnts() { ants = []; for (var i = 0; i < colony; i++) ants.push(spawn()); }
+
+   function stripLoops(path) {
+     // Remove revisit loops so pheromone rewards the direct route an ant found,
+     // not its wandering. pos[n] tracks where n last entered `out`; the identity
+     // check guards against stale positions left behind by earlier truncations.
+     var pos = {}, out = [];
+     for (var i = 0; i < path.length; i++) {
+       var node = path[i];
+       if (pos[node] !== undefined && out[pos[node]] === node) {
+         out.length = pos[node] + 1;          // loop: cut back to the first visit
+       } else {
+         pos[node] = out.length; out.push(node);
+       }
+     }
+     return out;
+   }
+   function pathLen(path) { var L = 0; for (var i = 0; i + 1 < path.length; i++) L += elen[edgeIdx[ekey(path[i], path[i + 1])]]; return L; }
+   function deposit(path) {
+     var L = pathLen(path); if (L <= 0) return;
+     var add = Q / L;
+     for (var i = 0; i + 1 < path.length; i++) tau[edgeIdx[ekey(path[i], path[i + 1])]] += add;
+     if (L < best) { best = L; bestPath = path.slice(); }
+     trips++; tripsAcc++;
+     var r = L / optimalLen;
+     tripEma = tripEma === null ? r : tripEma * 0.92 + r * 0.08;
+   }
+
+   // 0 = pheromone spread evenly over every edge, 1 = all of it on one edge
+   // (1 minus the normalised Shannon entropy of the pheromone distribution)
+   function pheromoneFocus() {
+     var sum = 0, i;
+     for (i = 0; i < tau.length; i++) sum += tau[i];
+     if (!(sum > 0)) return 0;
+     var Hx = 0;
+     for (i = 0; i < tau.length; i++) { var p = tau[i] / sum; if (p > 0) Hx -= p * Math.log(p); }
+     var Hmax = Math.log(tau.length);
+     return Hmax > 0 ? Math.max(0, Math.min(1, 1 - Hx / Hmax)) : 0;
+   }
+
+   function resetStats() {
+     trips = 0; tripEma = null; rateEma = 0; tripsAcc = 0; sampleAcc = 0; samples = [];
+   }
+
+   function stepSim(dt) {
+     var p = params();
+     for (var i = 0; i < ants.length; i++) {
+       var ant = ants[i];
+       if (ant.dead) { spawn(ant); continue; }
+       var epx = Math.hypot(px(ant.to) - px(ant.from), py(ant.to) - py(ant.from)) || 1;
+       ant.progress += SPEED * dt / epx;
+       while (ant.progress >= 1 && !ant.dead) {
+         ant.progress -= 1;
+         var node = ant.to;
+         if (node === food) { deposit(stripLoops(ant.path)); spawn(ant); break; }
+         if (ant.path.length > MAX_HOPS) { spawn(ant); break; }
+         var d = decide(node, ant.from, ant.visited, p);
+         if (!d) { spawn(ant); break; }
+         ant.from = node; ant.to = d.to; ant.e = d.e; ant.visited.add(d.to); ant.path.push(d.to);
+       }
+     }
+     // evaporation
+     var rho = (parseInt(evapS.value, 10) / 100) * 0.05;
+     if (rho > 0) for (var e = 0; e < tau.length; e++) { tau[e] *= (1 - rho); if (tau[e] < TAU_MIN) tau[e] = TAU_MIN; }
+     // sample the chart series every quarter-second of sim time
+     sampleAcc += dt;
+     if (sampleAcc >= SAMPLE_DT) {
+       rateEma = rateEma * 0.7 + (tripsAcc / sampleAcc) * 0.3;
+       tripsAcc = 0; sampleAcc = 0;
+       samples.push({ avg: tripEma, best: isFinite(best) ? best / optimalLen : null, focus: pheromoneFocus() });
+       if (samples.length > MAX_SAMPLES) samples.shift();
+     }
+   }
+
+   function consensusPath() {
+     // Greedy pheromone-following walk with backtracking: at each node take the
+     // strongest-smelling unvisited edge; back up on dead ends. This is "what the
+     // colony currently believes", not necessarily the best route found.
+     var p = params(), visited = new Set([nest]), path = [nest], guard = 0;
+     while (path.length && guard++ < nodes.length * 4) {
+       var cur = path[path.length - 1];
+       if (cur === food) return path;
+       var pick = null, bw = -1;
+       for (var n = 0; n < adj[cur].length; n++) {
+         var nb = adj[cur][n];
+         if (visited.has(nb.to)) continue;
+         var w = Math.pow(tau[nb.e], p.alpha) * Math.pow(eta[nb.e], BETA);
+         if (w > bw) { bw = w; pick = nb; }
+       }
+       if (pick) { visited.add(pick.to); path.push(pick.to); }
+       else path.pop(); // dead end: backtrack
+     }
+     return null;
+   }
+
+   function draw() {
+     var c = vizColors(wrap);
+     ctx.clearRect(0, 0, W, H);
+     // base structure
+     ctx.lineWidth = 1; ctx.strokeStyle = c.grid;
+     for (var e = 0; e < edges.length; e++) {
+       ctx.beginPath(); ctx.moveTo(px(edges[e][0]), py(edges[e][0])); ctx.lineTo(px(edges[e][1]), py(edges[e][1])); ctx.stroke();
+     }
+     // pheromone glow
+     var maxT = TAU_MIN; for (var t = 0; t < tau.length; t++) if (tau[t] > maxT) maxT = tau[t];
+     for (var g = 0; g < edges.length; g++) {
+       var a = (tau[g] - TAU_MIN) / (maxT - TAU_MIN + 1e-6);
+       if (a <= 0.015) continue;
+       ctx.globalAlpha = 0.12 + 0.72 * a; ctx.strokeStyle = c.s3; ctx.lineWidth = 1 + 5.5 * a;
+       ctx.beginPath(); ctx.moveTo(px(edges[g][0]), py(edges[g][0])); ctx.lineTo(px(edges[g][1]), py(edges[g][1])); ctx.stroke();
+     }
+     ctx.globalAlpha = 1;
+     // colony's current consensus route
+     var cons = consensusPath();
+     if (cons) {
+       ctx.strokeStyle = c.s2; ctx.lineWidth = 3; ctx.globalAlpha = 0.85; ctx.lineJoin = 'round';
+       ctx.beginPath(); ctx.moveTo(px(cons[0]), py(cons[0]));
+       for (var k = 1; k < cons.length; k++) ctx.lineTo(px(cons[k]), py(cons[k]));
+       ctx.stroke(); ctx.globalAlpha = 1;
+     }
+     // nodes
+     for (var v = 0; v < nodes.length; v++) {
+       ctx.beginPath(); ctx.arc(px(v), py(v), 3.2, 0, Math.PI * 2); ctx.fillStyle = c.muted; ctx.fill();
+     }
+     // ants
+     for (var i = 0; i < ants.length; i++) {
+       var ant = ants[i]; if (ant.dead) continue;
+       var x = px(ant.from) + (px(ant.to) - px(ant.from)) * ant.progress;
+       var y = py(ant.from) + (py(ant.to) - py(ant.from)) * ant.progress;
+       ctx.beginPath(); ctx.arc(x, y, 2.3, 0, Math.PI * 2); ctx.fillStyle = c.s1; ctx.fill();
+     }
+     // nest + food markers
+     drawMarker(nest, c.ink, 'N', c.surface);
+     drawMarker(food, c.s4, 'F', c.surface);
+     // readouts
+     if (cons) consEl.textContent = (pathLen(cons) / optimalLen).toFixed(2) + '×';
+     else consEl.textContent = '…';
+     bestEl.textContent = isFinite(best) ? (best / optimalLen).toFixed(2) + '×' : '…';
+     var lastFocus = samples.length ? samples[samples.length - 1].focus : pheromoneFocus();
+     tripsEl.textContent = String(trips);
+     rateEl.textContent = rateEma >= 0.5 ? Math.round(rateEma) + ' trips/s' : '–';
+     focusEl.textContent = Math.round(lastFocus * 100) + '%';
+     drawChart(c);
+   }
+
+   function drawChart(c) {
+     ctxC.clearRect(0, 0, WC, HC);
+     var gap = 20, paneW = (WC - gap) / 2, GUT = 28;
+     var top = 22, bottom = HC - 8, plotH = bottom - top;
+     ctxC.font = '600 9px Poppins, sans-serif';
+     ctxC.textAlign = 'left';
+
+     // pane 1: trip length as a multiple of the optimum
+     var yMax = 1.6;
+     samples.forEach(function (s) {
+       if (s.avg && s.avg > yMax) yMax = s.avg;
+     });
+     yMax = Math.min(3.5, Math.ceil(yMax * 2) / 2);   // snap up to a half, cap the scale
+     function y1(v) { return bottom - ((v - 1) / (yMax - 1)) * plotH; }
+     var plotW = paneW - GUT, step = plotW / (MAX_SAMPLES - 1);
+     ctxC.fillStyle = c.muted;
+     ctxC.fillText('TRIP LENGTH', 0, 9);
+     if (paneW > 220) {   // legend, skipped when the pane is too narrow for it
+       ctxC.fillStyle = c.s1; ctxC.fillRect(paneW - 82, 4, 10, 3);
+       ctxC.fillStyle = c.muted; ctxC.fillText('avg', paneW - 68, 9);
+       ctxC.fillStyle = c.s2; ctxC.fillRect(paneW - 42, 4, 10, 3);
+       ctxC.fillStyle = c.muted; ctxC.fillText('best', paneW - 28, 9);
+     }
+     for (var gv = 1; gv <= yMax + 0.001; gv += 0.5) {
+       var gy = y1(gv);
+       ctxC.strokeStyle = c.grid; ctxC.lineWidth = 1;
+       ctxC.beginPath(); ctxC.moveTo(GUT, gy); ctxC.lineTo(paneW, gy); ctxC.stroke();
+       ctxC.fillStyle = c.muted; ctxC.textAlign = 'right';
+       ctxC.fillText(gv.toFixed(1) + '×', GUT - 5, gy + 3);
+       ctxC.textAlign = 'left';
+     }
+     function series(key, color) {
+       ctxC.strokeStyle = color; ctxC.lineWidth = 1.6; ctxC.lineJoin = 'round'; ctxC.beginPath();
+       var started = false;
+       for (var i = 0; i < samples.length; i++) {
+         var v = samples[i][key];
+         if (v == null) { continue; }
+         var x = GUT + i * step, yy = Math.max(top, y1(v));
+         if (!started) { ctxC.moveTo(x, yy); started = true; } else ctxC.lineTo(x, yy);
+       }
+       if (started) ctxC.stroke();
+     }
+     series('avg', c.s1);
+     series('best', c.s2);
+
+     // pane 2: pheromone focus, 0-100%
+     var x0 = paneW + gap, px0 = x0 + GUT, plotW2 = WC - px0;
+     function y2(v) { return bottom - v * plotH; }
+     ctxC.fillStyle = c.muted;
+     ctxC.fillText('PHEROMONE FOCUS', x0, 9);
+     [0, 0.5, 1].forEach(function (gv) {
+       var gy = y2(gv);
+       ctxC.strokeStyle = c.grid; ctxC.lineWidth = 1;
+       ctxC.beginPath(); ctxC.moveTo(px0, gy); ctxC.lineTo(WC, gy); ctxC.stroke();
+       ctxC.fillStyle = c.muted; ctxC.textAlign = 'right';
+       ctxC.fillText(Math.round(gv * 100) + '%', px0 - 5, gy + 3);
+       ctxC.textAlign = 'left';
+     });
+     if (samples.length > 1) {
+       var step2 = plotW2 / (MAX_SAMPLES - 1);
+       ctxC.beginPath();
+       for (var j = 0; j < samples.length; j++) {
+         var xx = px0 + j * step2, fy = y2(samples[j].focus);
+         if (j === 0) ctxC.moveTo(xx, fy); else ctxC.lineTo(xx, fy);
+       }
+       ctxC.strokeStyle = c.s3; ctxC.lineWidth = 1.6; ctxC.stroke();
+       // subtle fill under the focus line
+       ctxC.lineTo(px0 + (samples.length - 1) * step2, bottom);
+       ctxC.lineTo(px0, bottom);
+       ctxC.closePath();
+       ctxC.globalAlpha = 0.12; ctxC.fillStyle = c.s3; ctxC.fill(); ctxC.globalAlpha = 1;
+     }
+   }
+   function drawMarker(i, color, letter, ring) {
+     ctx.beginPath(); ctx.arc(px(i), py(i), 8, 0, Math.PI * 2);
+     ctx.fillStyle = color; ctx.fill();
+     ctx.lineWidth = 2; ctx.strokeStyle = ring; ctx.stroke();
+     ctx.fillStyle = ring; ctx.font = '700 10px Poppins, sans-serif';
+     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+     ctx.fillText(letter, px(i), py(i) + 0.5);
+     ctx.textAlign = 'start'; ctx.textBaseline = 'alphabetic';
+   }
+
+   function loop(ts) {
+     if (!running) return;
+     if (!lastT) lastT = ts;
+     var dt = Math.min(0.05, (ts - lastT) / 1000); lastT = ts;
+     stepSim(dt); draw();
+     raf = requestAnimationFrame(loop);
+   }
+   function start() { if (running) { lastT = 0; raf = requestAnimationFrame(loop); } }
+
+   // ---- interaction: drag the food to the nearest node ----
+   function nearestNode(cx, cy) {
+     var bi = -1, bd = Infinity;
+     for (var i = 0; i < nodes.length; i++) { var d = Math.hypot(px(i) - cx, py(i) - cy); if (d < bd) { bd = d; bi = i; } }
+     return bi;
+   }
+   function moveFood(cx, cy) {
+     var i = nearestNode(cx, cy);
+     if (i === nest || i === food || i < 0) return;
+     food = i; recomputeOptimal(); best = Infinity; bestPath = null;
+     if (!running) draw();
+   }
+   function evtXY(ev) { var r = cv.getBoundingClientRect(); return [ev.clientX - r.left, ev.clientY - r.top]; }
+   cv.addEventListener('pointerdown', function (ev) { dragging = true; cv.setPointerCapture(ev.pointerId); var p = evtXY(ev); moveFood(p[0], p[1]); ev.preventDefault(); });
+   cv.addEventListener('pointermove', function (ev) { if (!dragging) return; var p = evtXY(ev); moveFood(p[0], p[1]); });
+   cv.addEventListener('pointerup', function () { dragging = false; });
+   cv.addEventListener('pointercancel', function () { dragging = false; });
+
+   // ---- controls ----
+   runBtn.addEventListener('click', function () {
+     running = !running; runBtn.textContent = running ? 'Pause' : 'Play';
+     statusEl.textContent = running ? '' : 'Paused.';
+     if (running) start(); else if (raf) cancelAnimationFrame(raf);
+   });
+   trailBtn.addEventListener('click', function () { for (var e = 0; e < tau.length; e++) tau[e] = TAU0; best = Infinity; bestPath = null; resetStats(); if (!running) draw(); });
+   mapBtn.addEventListener('click', function () { seed += 7; buildGraph(); if (!running) draw(); });
+   mapSel.addEventListener('change', function () {
+     // only the procedurally generated maps can reshuffle
+     mapBtn.style.display = (mapSel.value === 'scatter' || mapSel.value === 'maze') ? '' : 'none';
+     buildGraph();
+     if (!running) draw();
+   });
+   function setEvap() { evapV.textContent = evapS.value + '%'; }
+   function setExplore() { exploreV.textContent = exploreS.value + '%'; }
+   function setColony() { colonyV.textContent = colonyS.value; var n = parseInt(colonyS.value, 10); if (n !== colony) { colony = n; resetAnts(); } if (!running) draw(); }
+   evapS.addEventListener('input', setEvap);
+   exploreS.addEventListener('input', setExplore);
+   colonyS.addEventListener('input', setColony);
+
+   window.addEventListener('resize', function () { fitCanvas(); if (!running) draw(); });
+   new MutationObserver(function () { draw(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+   // ---- init ----
+   fitCanvas();
+   colony = parseInt(colonyS.value, 10);
+   setEvap(); setExplore(); setColony();
+   buildGraph();
+   draw();
+   start();
+ })();
+ </script>
+</body>
+</html>
