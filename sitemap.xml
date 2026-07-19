@@ -15,6 +15,7 @@
   <url><loc>https://www.kenreid.co.uk/blog.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.kenreid.co.uk/series-how-this-site-is-built.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.kenreid.co.uk/series-optimizing-your-schedule.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.kenreid.co.uk/blog/ant-colony-live.html</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.kenreid.co.uk/blog/my-teacher-said-i-shouldnt-go-to-university.html</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.kenreid.co.uk/blog/free-comments-via-github-discussions.html</loc><changefreq>yearly</changefreq><priority>0.8</priority></url>

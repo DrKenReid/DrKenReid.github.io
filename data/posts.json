@@ -1,10 +1,25 @@
 [
   {
+    "title": "Ant Colony, Live",
+    "date": "2026-07-19",
+    "tags": [
+      "ai",
+      "data science"
+    ],
+    "category": "Data & AI",
+    "excerpt": "An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and break it with the sliders.",
+    "url": "blog/ant-colony-live.html",
+    "image": "img/photography/thumb/290.webp",
+    "readMinutes": 6,
+    "words": 1209
+  },
+  {
     "title": "My Website Has a Test Suite",
     "date": "2026-07-17",
     "tags": [
       "technology"
     ],
+    "category": "Technology",
     "excerpt": "A Python audit script and headless browser smoke tests run on every push. Here's why a personal blog has a test suite.",
     "url": "blog/my-website-has-a-test-suite.html",
     "image": "img/photography/thumb/4.webp",
@@ -22,6 +37,7 @@
       "personal",
       "advice"
     ],
+    "category": "Personal",
     "excerpt": "My high school music teacher told me not to aim for university: I was 'more suited to manual labour'.",
     "url": "blog/my-teacher-said-i-shouldnt-go-to-university.html",
     "image": "img/photography/thumb/113.webp",
@@ -34,6 +50,7 @@
     "tags": [
       "technology"
     ],
+    "category": "Technology",
     "excerpt": "How giscus gives a static site free comments with no database, no ads, and no tracking.",
     "url": "blog/free-comments-via-github-discussions.html",
     "image": "img/photography/thumb/409.webp",
@@ -51,6 +68,7 @@
       "technology",
       "photography"
     ],
+    "category": "Technology",
     "excerpt": "239 of my photographs plotted on an interactive world map, this is how the photo map works.",
     "url": "blog/putting-my-photos-on-a-map.html",
     "image": "blog/img/map/photo-map-dark.webp",
@@ -67,6 +85,7 @@
     "tags": [
       "technology"
     ],
+    "category": "Technology",
     "excerpt": "No Google Fonts, no third-party requests, and icon fonts subset from 75 KB down to 1.5 KB. Here's how, and why it's worth an afternoon.",
     "url": "blog/self-hosting-your-fonts.html",
     "image": "blog/img/fonts/fonts-og.png",
@@ -83,6 +102,7 @@
     "tags": [
       "technology"
     ],
+    "category": "Technology",
     "excerpt": "This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.",
     "url": "blog/reading-this-site-offline.html",
     "image": "img/photography/thumb/62.webp",
@@ -100,6 +120,7 @@
       "photography",
       "personal"
     ],
+    "category": "Photography",
     "excerpt": "Why I photograph abandoned places and the ethics of pointing a camera at decay.",
     "url": "blog/abandoned-places-i-photograph.html",
     "image": "img/photography/thumb/135.webp",
@@ -113,6 +134,7 @@
       "technology",
       "writing"
     ],
+    "category": "Technology",
     "excerpt": "I wrote my thesis, my papers, and my CV in LaTeX, and I'd have it no other way.",
     "url": "blog/why-i-love-latex.html",
     "image": "img/photography/thumb/16.webp",
@@ -126,6 +148,7 @@
       "personal",
       "music"
     ],
+    "category": "Personal",
     "excerpt": "Fifteen years of Last.fm data - what I listen to when I'm feeling joyful, depressed, doing work, working out or studying.",
     "url": "blog/what-50000-scrobbles-say-about-me.html",
     "image": "img/photography/thumb/13.webp",
@@ -139,6 +162,7 @@
       "photography",
       "technology"
     ],
+    "category": "Photography",
     "excerpt": "GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.",
     "url": "blog/hosting-photography-on-github-for-free.html",
     "image": "img/photography/thumb/387.webp",
@@ -156,6 +180,7 @@
       "philosophy",
       "science"
     ],
+    "category": "Ideas",
     "excerpt": "Everyone took the quiz and got a label. Decades of cognitive psychology say the label does nothing: matching teaching to 'learning styles' doesn't improve learning, and believing it limits you. What works instead is effortful, unglamorous, and the same for everyone.",
     "url": "blog/why-you-arent-a-visual-learner.html",
     "image": "img/photography/thumb/366.webp",
@@ -170,6 +195,7 @@
       "philosophy",
       "personal"
     ],
+    "category": "Books & Media",
     "excerpt": "A queer-friendly reading of Frodo and Sam: not a hidden romance, but male friendship deep enough for tears, touch, and total trust. Insisting that tenderness must be romance rebuilds the exact wall this story tears down. (Gimli and Legolas, on the other hand...)",
     "url": "blog/frodo-sam-and-love.html",
     "image": "img/bg-img/end-of-the-third-age.jpg",
@@ -184,6 +210,7 @@
       "data science",
       "advice"
     ],
+    "category": "Data & AI",
     "excerpt": "A reply to Part I: time is not the only budget. Energy is a second, renewable resource that some activities spend and others restore. A working model of a depleted week, and why rest is production, not indulgence.",
     "url": "blog/optimizing-your-schedule-ii.html",
     "image": "img/photography/thumb/488.webp",
@@ -202,6 +229,7 @@
       "philosophy",
       "science"
     ],
+    "category": "Ideas",
     "excerpt": "From the plutonium in the planet's crust to the Golden Record in interstellar space to the memory of a Tuesday coffee, a look at everything we leave behind, and why none of us ever truly vanishes.",
     "url": "blog/what-we-leave-behind.html",
     "image": "img/bg-img/voyager-golden-record.jpg",
@@ -216,6 +244,7 @@
       "data science",
       "advice"
     ],
+    "category": "Data & AI",
     "excerpt": "What an operations researcher actually means by optimizing a schedule: objectives, constraints and weightings, a values clarification grid, and a working integer-programming model of your week. Nerd mode optional.",
     "url": "blog/optimizing-your-schedule.html",
     "image": "img/photography/thumb/493.webp",
@@ -233,6 +262,7 @@
       "personal",
       "advice"
     ],
+    "category": "Personal",
     "excerpt": "On finite time, micro-ambition, Gandalf, Tim Minchin, and why every 'one day' dream needs a plan or it disappears.",
     "url": "blog/what-was-i-made-for.html",
     "image": "img/photography/thumb/43.webp",
@@ -245,6 +275,7 @@
     "tags": [
       "television"
     ],
+    "category": "Books & Media",
     "excerpt": "A modern look at M*A*S*H: how a Korean War sitcom from the 1970s remains one of the sharpest critiques of bureaucracy, war, and trauma in television history.",
     "url": "blog/mash-modern-perspective.html",
     "image": "https://commons.wikimedia.org/wiki/Special:FilePath/MASH_cast_1972.JPG",
@@ -257,6 +288,7 @@
     "tags": [
       "books"
     ],
+    "category": "Books & Media",
     "excerpt": "Smashing the world requires only a hammer; building a better one requires imagination. A reflection on Iain M. Banks's Culture series and the contrarian act of imagining a future that works.",
     "url": "blog/the-culture-series.html",
     "image": "img/photography/thumb/30.webp",
@@ -269,6 +301,7 @@
     "tags": [
       "philosophy"
     ],
+    "category": "Ideas",
     "excerpt": "Corporations reframe systemic crises as consumer morality plays. From plastic bags to five-minute showers, how the public ends up feeling guilty while industrial actors avoid regulation.",
     "url": "blog/individualization-of-responsibility.html",
     "image": "img/photography/thumb/316.webp",
@@ -281,6 +314,7 @@
     "tags": [
       "personal"
     ],
+    "category": "Personal",
     "excerpt": "Fifty things I would tell my younger self, from pensions and emergency funds to sunscreen, boundaries, and uncomfortable conversations.",
     "url": "blog/advice-to-my-younger-self.html",
     "image": "img/photography/thumb/445.webp",
@@ -293,6 +327,7 @@
     "tags": [
       "books"
     ],
+    "category": "Books & Media",
     "excerpt": "The thirteen books I actually push on friends, grouped by the kind of friend I'd press them into the hands of.",
     "url": "blog/books-i-recommend-to-friends.html",
     "image": "img/photography/thumb/430.webp",
@@ -305,6 +340,7 @@
     "tags": [
       "philosophy"
     ],
+    "category": "Ideas",
     "excerpt": "We celebrate the people who fix disasters and take preventive work for granted. That's a bug in how we think, and it costs us.",
     "url": "blog/prevention-of-failure-is-unseen.html",
     "image": "img/photography/thumb/428.webp",
@@ -318,6 +354,7 @@
       "photography",
       "personal"
     ],
+    "category": "Personal",
     "excerpt": "How a mix-up over an email address sent me to the northern Italian mountains to photograph a tech event I had no business being at.",
     "url": "blog/mistaken-identity-italy.html",
     "image": "img/photography/thumb/421.webp",
@@ -332,6 +369,7 @@
       "writing",
       "advice"
     ],
+    "category": "Personal",
     "excerpt": "What I learned about writing a blog: why the word itself put me off, how I found a process, and what to do when people hate your work.",
     "url": "blog/how-to-write-a-blog.html",
     "image": "img/photography/thumb/252.webp",
@@ -349,6 +387,7 @@
       "philosophy",
       "technology"
     ],
+    "category": "Ideas",
     "excerpt": "The batteries in our phones, laptops, and EVs are largely made of cobalt mined in the Democratic Republic of the Congo, often by hand and often by children. A reflection on a presentation I gave, and what we can actually do about it.",
     "url": "blog/hidden-cost-of-cobalt-congo.html",
     "image": "img/photography/thumb/384.webp",
@@ -361,6 +400,7 @@
     "tags": [
       "technology"
     ],
+    "category": "Technology",
     "excerpt": "An ode to ISO 8601 (YYYY-MM-DD) as the only sortable, unambiguous, international date format worth using.",
     "url": "blog/iso-8601-date-cult.html",
     "image": "img/photography/thumb/100.webp",
@@ -373,6 +413,7 @@
     "tags": [
       "data science"
     ],
+    "category": "Data & AI",
     "excerpt": "Data science outputs are often inaccessible by default. Accessibility-first design in plots, dashboards, and tables improves understanding for everyone.",
     "url": "blog/accessibility-first-product-design-data-science.html",
     "image": "img/photography/thumb/21.webp",
@@ -385,6 +426,7 @@
     "tags": [
       "personal"
     ],
+    "category": "Personal",
     "excerpt": "From CRT monitors and Comet Cursor to MSN Messenger, Kazaa, Warcraft 3 forums, and Bebo: a personal history of how the early internet shaped who we are.",
     "url": "blog/life-and-death-of-the-early-internet.html",
     "image": "img/photography/thumb/375.webp",
@@ -397,6 +439,7 @@
     "tags": [
       "ai"
     ],
+    "category": "Data & AI",
     "excerpt": "An AI researcher's unvarnished take on LLM ethics: the energy numbers, the cobalt hypocrisy, the Jevons paradox, and why telling people not to use AI on environmental grounds is a privilege position.",
     "url": "blog/ethics-of-llm-use-not-llms.html",
     "image": "img/photography/thumb/280.webp",
@@ -409,6 +452,7 @@
     "tags": [
       "books"
     ],
+    "category": "Books & Media",
     "excerpt": "A book snob's confession: how Dungeon Crawler Carl used absurd LitRPG mechanics to deliver one of the most devastating emotional payloads in modern fantasy.",
     "url": "blog/dungeon-crawler-carl-litrpg-dignity.html",
     "image": "img/photography/thumb/141.webp",
@@ -421,6 +465,7 @@
     "tags": [
       "personal"
     ],
+    "category": "Personal",
     "excerpt": "From Scotland to Michigan: a personal account of culture shock, free education, healthcare, xenophobia, weather, and what it means to belong somewhere new.",
     "url": "blog/from-scotland-to-michigan.html",
     "image": "img/photography/thumb/18.webp",
@@ -433,6 +478,7 @@
     "tags": [
       "books"
     ],
+    "category": "Books & Media",
     "excerpt": "Fifteen years since The Wise Man's Fear and still no Doors of Stone. A personal reflection on the Kingkiller Chronicle, the long wait, the charity debacle, and why writing at this level is genuinely hard.",
     "url": "blog/fifteen-years-of-silence-rothfuss-doors-of-stone.html",
     "image": "img/photography/thumb/109.webp",
@@ -445,6 +491,7 @@
     "tags": [
       "data science"
     ],
+    "category": "Data & AI",
     "excerpt": "A practical guide to building a data science portfolio when you have no idea where to start. Covers project types, documentation, novelty, collaboration, and working in the GenAI era.",
     "url": "blog/no-idea-no-problem-data-science-portfolio.html",
     "image": "img/photography/thumb/19.webp",
@@ -457,6 +504,7 @@
     "tags": [
       "ai"
     ],
+    "category": "Data & AI",
     "excerpt": "Evolutionary Computation is having an identity crisis in the GenAI era, despite delivering major real-world wins in engineering, logistics, and constrained optimization.",
     "url": "blog/evolutionary-computation-identity-crisis.html",
     "image": "img/photography/thumb/208.webp",
@@ -469,6 +517,7 @@
     "tags": [
       "books"
     ],
+    "category": "Books & Media",
     "excerpt": "The stigma against audiobooks is rooted in bad assumptions about learning, intelligence, and what counts as reading. The research doesn't support any of it.",
     "url": "blog/in-defense-of-audiobooks.html",
     "image": "img/photography/thumb/366.webp",
@@ -481,6 +530,7 @@
     "tags": [
       "ai"
     ],
+    "category": "Data & AI",
     "excerpt": "Coding still matters because the value is not syntax memorization. It is learning to break down problems, reason across systems, and build reliable solutions.",
     "url": "blog/why-learn-to-code-age-of-ai.html",
     "image": "img/photography/thumb/14.webp",
@@ -493,6 +543,7 @@
     "tags": [
       "ai"
     ],
+    "category": "Data & AI",
     "excerpt": "A practical system for project documentation, knowledge management, and local LLM workflows that improves delivery, reviews, and project re-entry.",
     "url": "blog/second-brain-local-llm-professional.html",
     "image": "img/photography/thumb/75.webp",
@@ -505,6 +556,7 @@
     "tags": [
       "finance"
     ],
+    "category": "Money",
     "excerpt": "Snowball and avalanche both work, but for different reasons. A practical guide with simulator-backed charts on interest, timing, and motivation.",
     "url": "blog/snowball-vs-avalanche.html",
     "image": "blog/img/debt_total_curve.png",
@@ -517,6 +569,7 @@
     "tags": [
       "books"
     ],
+    "category": "Books & Media",
     "excerpt": "569 books rated, and the star system fails at all of them. A data-driven look at my own Goodreads ratings, review lengths, genre bias, and the silence problem.",
     "url": "blog/rating-systems.html",
     "image": "blog/img/rating_distribution.png",
@@ -529,6 +582,7 @@
     "tags": [
       "books"
     ],
+    "category": "Books & Media",
     "excerpt": "The bad ones are blog posts stretched to 300 pages. The good ones cite their sources. Here's how to tell the difference.",
     "url": "blog/self-help-books.html",
     "image": "img/photography/thumb/97.webp",
@@ -542,6 +596,7 @@
       "ai",
       "photography"
     ],
+    "category": "Data & AI",
     "excerpt": "How I used OpenCLIP to automatically classify 500+ photos into 10 categories in under a minute, zero API cost, running entirely on CPU.",
     "url": "blog/photo-tagging-with-clip.html",
     "image": "img/photography/thumb/1.webp",
