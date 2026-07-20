@@ -85,6 +85,12 @@
    .aco-stat-val{ font-size:0.95em; font-weight:600; color:var(--viz-ink); font-variant-numeric:tabular-nums; }
    .aco-swatch{ width:9px; height:9px; border-radius:2px; display:inline-block; vertical-align:-1px; margin-right:4px; }
    .aco-note{ font-size:0.78em; color:var(--viz-muted); margin:12px 0 0; }
+   @media (max-width: 520px){
+     .aco-viz{ padding:12px; }
+     .aco-sliders{ gap:10px 0; }
+     .aco-sliders label{ width:100%; }
+     .aco-sliders input[type=range]{ flex:1; width:auto; }
+   }
  </style>
  <script defer src="../js/theme.js"></script>
  <script defer src="../js/palette.js"></script>
@@ -305,17 +311,22 @@ renderFooter('footer-section');</script>
    }
    var chart = document.getElementById('acoChart');
    var W = 0, H = 0, ctx = null, WC = 0, HC = 0, ctxC = null;
-   function fitOne(canvas) {
+   function fitOne(canvas, h) {
      var dpr = window.devicePixelRatio || 1;
-     var w = canvas.clientWidth || 600, h = parseInt(canvas.getAttribute('height'), 10);
+     var w = canvas.clientWidth || 600;
      canvas.style.height = h + 'px';
      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
      var g = canvas.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
      return { g: g, w: w, h: h };
    }
    function fitCanvas() {
-     var m = fitOne(cv); ctx = m.g; W = m.w; H = m.h;
-     var c = fitOne(chart); ctxC = c.g; WC = c.w; HC = c.h;
+     // heights track the width: a squat wide map on desktop, closer to square
+     // on phones so the node layout keeps room to breathe; the chart panes go
+     // side by side when there's space and stack when there isn't
+     var w = cv.clientWidth || 600;
+     var mapH = Math.round(Math.max(250, Math.min(360, w * 0.55)));
+     var m = fitOne(cv, mapH); ctx = m.g; W = m.w; H = m.h;
+     var c = fitOne(chart, w < 480 ? 220 : 120); ctxC = c.g; WC = c.w; HC = c.h;
    }
 
    // ---- tunables ----
@@ -704,33 +715,44 @@ renderFooter('footer-section');</script>
 
    function drawChart(c) {
      ctxC.clearRect(0, 0, WC, HC);
-     var gap = 20, paneW = (WC - gap) / 2, GUT = 28;
-     var top = 22, bottom = HC - 8, plotH = bottom - top;
      ctxC.font = '600 9px Poppins, sans-serif';
      ctxC.textAlign = 'left';
+     if (WC < 480) {   // stacked panes on narrow screens
+       var half = (HC - 14) / 2;
+       drawTripPane(c, 0, 0, WC, half);
+       drawFocusPane(c, 0, half + 14, WC, half);
+     } else {
+       var gap = 20, paneW = (WC - gap) / 2;
+       drawTripPane(c, 0, 0, paneW, HC);
+       drawFocusPane(c, paneW + gap, 0, paneW, HC);
+     }
+   }
 
-     // pane 1: trip length as a multiple of the optimum
+   var GUT = 28;   // left gutter inside each chart pane for axis labels
+   function drawTripPane(c, x, y, w, h) {
+     // trip length as a multiple of the optimum
+     var top = y + 22, bottom = y + h - 8, plotH = bottom - top;
+     var px0 = x + GUT, right = x + w, step = (right - px0) / (MAX_SAMPLES - 1);
      var yMax = 1.6;
      samples.forEach(function (s) {
        if (s.avg && s.avg > yMax) yMax = s.avg;
      });
      yMax = Math.min(3.5, Math.ceil(yMax * 2) / 2);   // snap up to a half, cap the scale
      function y1(v) { return bottom - ((v - 1) / (yMax - 1)) * plotH; }
-     var plotW = paneW - GUT, step = plotW / (MAX_SAMPLES - 1);
      ctxC.fillStyle = c.muted;
-     ctxC.fillText('TRIP LENGTH', 0, 9);
-     if (paneW > 220) {   // legend, skipped when the pane is too narrow for it
-       ctxC.fillStyle = c.s1; ctxC.fillRect(paneW - 82, 4, 10, 3);
-       ctxC.fillStyle = c.muted; ctxC.fillText('avg', paneW - 68, 9);
-       ctxC.fillStyle = c.s2; ctxC.fillRect(paneW - 42, 4, 10, 3);
-       ctxC.fillStyle = c.muted; ctxC.fillText('best', paneW - 28, 9);
+     ctxC.fillText('TRIP LENGTH', x, y + 9);
+     if (w > 220) {   // legend, skipped when the pane is too narrow for it
+       ctxC.fillStyle = c.s1; ctxC.fillRect(right - 82, y + 4, 10, 3);
+       ctxC.fillStyle = c.muted; ctxC.fillText('avg', right - 68, y + 9);
+       ctxC.fillStyle = c.s2; ctxC.fillRect(right - 42, y + 4, 10, 3);
+       ctxC.fillStyle = c.muted; ctxC.fillText('best', right - 28, y + 9);
      }
      for (var gv = 1; gv <= yMax + 0.001; gv += 0.5) {
        var gy = y1(gv);
        ctxC.strokeStyle = c.grid; ctxC.lineWidth = 1;
-       ctxC.beginPath(); ctxC.moveTo(GUT, gy); ctxC.lineTo(paneW, gy); ctxC.stroke();
+       ctxC.beginPath(); ctxC.moveTo(px0, gy); ctxC.lineTo(right, gy); ctxC.stroke();
        ctxC.fillStyle = c.muted; ctxC.textAlign = 'right';
-       ctxC.fillText(gv.toFixed(1) + '×', GUT - 5, gy + 3);
+       ctxC.fillText(gv.toFixed(1) + '×', px0 - 5, gy + 3);
        ctxC.textAlign = 'left';
      }
      function series(key, color) {
@@ -739,37 +761,39 @@ renderFooter('footer-section');</script>
        for (var i = 0; i < samples.length; i++) {
          var v = samples[i][key];
          if (v == null) { continue; }
-         var x = GUT + i * step, yy = Math.max(top, y1(v));
-         if (!started) { ctxC.moveTo(x, yy); started = true; } else ctxC.lineTo(x, yy);
+         var sx = px0 + i * step, sy = Math.max(top, y1(v));
+         if (!started) { ctxC.moveTo(sx, sy); started = true; } else ctxC.lineTo(sx, sy);
        }
        if (started) ctxC.stroke();
      }
      series('avg', c.s1);
      series('best', c.s2);
+   }
 
-     // pane 2: pheromone focus, 0-100%
-     var x0 = paneW + gap, px0 = x0 + GUT, plotW2 = WC - px0;
+   function drawFocusPane(c, x, y, w, h) {
+     // pheromone focus, 0-100%
+     var top = y + 22, bottom = y + h - 8, plotH = bottom - top;
+     var px0 = x + GUT, right = x + w, step = (right - px0) / (MAX_SAMPLES - 1);
      function y2(v) { return bottom - v * plotH; }
      ctxC.fillStyle = c.muted;
-     ctxC.fillText('PHEROMONE FOCUS', x0, 9);
+     ctxC.fillText('PHEROMONE FOCUS', x, y + 9);
      [0, 0.5, 1].forEach(function (gv) {
        var gy = y2(gv);
        ctxC.strokeStyle = c.grid; ctxC.lineWidth = 1;
-       ctxC.beginPath(); ctxC.moveTo(px0, gy); ctxC.lineTo(WC, gy); ctxC.stroke();
+       ctxC.beginPath(); ctxC.moveTo(px0, gy); ctxC.lineTo(right, gy); ctxC.stroke();
        ctxC.fillStyle = c.muted; ctxC.textAlign = 'right';
        ctxC.fillText(Math.round(gv * 100) + '%', px0 - 5, gy + 3);
        ctxC.textAlign = 'left';
      });
      if (samples.length > 1) {
-       var step2 = plotW2 / (MAX_SAMPLES - 1);
        ctxC.beginPath();
        for (var j = 0; j < samples.length; j++) {
-         var xx = px0 + j * step2, fy = y2(samples[j].focus);
-         if (j === 0) ctxC.moveTo(xx, fy); else ctxC.lineTo(xx, fy);
+         var fx = px0 + j * step, fy = y2(samples[j].focus);
+         if (j === 0) ctxC.moveTo(fx, fy); else ctxC.lineTo(fx, fy);
        }
        ctxC.strokeStyle = c.s3; ctxC.lineWidth = 1.6; ctxC.stroke();
        // subtle fill under the focus line
-       ctxC.lineTo(px0 + (samples.length - 1) * step2, bottom);
+       ctxC.lineTo(px0 + (samples.length - 1) * step, bottom);
        ctxC.lineTo(px0, bottom);
        ctxC.closePath();
        ctxC.globalAlpha = 0.12; ctxC.fillStyle = c.s3; ctxC.fill(); ctxC.globalAlpha = 1;
