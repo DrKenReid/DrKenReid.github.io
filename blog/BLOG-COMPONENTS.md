@@ -333,7 +333,45 @@ You can omit both the related posts markup and the thanks card entirely; they wi
 
 ---
 
-## Posts Data Entry (`data/posts.json`)
+## 19. Interactive Canvas Demos ("Live" Posts)
+
+Reference implementation: `blog/ant-colony-live.html` (published, mobile-verified).
+Older pattern: `blog/drafts/simulated-annealing-live.html`.
+
+**Architecture (copy from the reference, don't reinvent):**
+- Seeded RNG via `mulberry32(seed)` so runs are reproducible; never `Math.random()`.
+- All colors come from CSS custom properties on the widget root
+  (`--viz-s1..s4`, `--viz-ink`, `--viz-muted`, `--viz-grid`, `--viz-surface`,
+  `--viz-border`, `--viz-cell`) with a `[data-theme="dark"]` override block,
+  read at draw time via `getComputedStyle`. A `MutationObserver` on
+  `documentElement`'s `data-theme` attribute redraws on theme toggle.
+- `fitCanvas` handles devicePixelRatio and re-runs on window resize.
+
+**Responsive rules (the ant-colony post got these wrong at first; don't repeat it):**
+- NEVER give a canvas a fixed rendered height. Compute height from measured
+  width, e.g. main viz `h = max(250, min(360, w * 0.55))` so phones get a
+  taller aspect instead of a squashed strip. The HTML `height` attribute is
+  only a no-JS fallback.
+- Multi-pane charts drawn side by side on desktop must STACK vertically below
+  ~480px width, with the canvas height increased to compensate. Draw panes
+  with rect-parameterized functions (`drawPane(x, y, w, h)`) so both layouts
+  share one code path.
+- Sliders: full-width rows on phones (`label{width:100%}` +
+  `input[type=range]{flex:1}` inside a `@media (max-width:520px)` block).
+  Desktop slider width ~110px.
+- Main canvas gets `touch-action:none` ONLY if it has drag interaction;
+  chart/readout canvases keep `touch-action:auto` so the page still scrolls.
+- Stat readouts go in a CSS grid of cards
+  (`repeat(auto-fit, minmax(116px, 1fr))`) so they reflow on their own.
+
+**Verification before publish (all mandatory):**
+- Playwright at 360px, 390px, and 1000px viewports: zero console errors, no
+  horizontal overflow (`document.documentElement.scrollWidth <= viewport`),
+  and the demo functionally converges (assert on a readout value, not just
+  "it rendered").
+- Light AND dark theme screenshots.
+- `smoke_test.py` auto-discovers any `blog/*.html` containing `<canvas` and
+  runs a 360px-wide check in CI, so a regression here fails the build.
 
 Every published post needs an entry at the top of `data/posts.json`:
 

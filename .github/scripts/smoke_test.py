@@ -62,6 +62,60 @@ CHECKS = [
 ]
 
 
+def interactive_posts():
+    """Blog posts with a <canvas> demo. Auto-discovered so future
+    interactive posts (simulated annealing, genetic algorithms, ...)
+    get the mobile check without anyone remembering to add them."""
+    posts = []
+    for f in sorted((ROOT / "blog").glob("*.html")):
+        if "<canvas" in f.read_text(encoding="utf-8", errors="replace"):
+            posts.append(f"blog/{f.name}")
+    return posts
+
+
+def check_mobile(page, path, failures, console_errors):
+    """Interactive demos must scale to phone width: no horizontal
+    overflow, no console errors, and every visible canvas both fits the
+    viewport and keeps a usable height (a squashed or zero-height canvas
+    renders 'successfully' and is still broken)."""
+    console_errors.clear()
+    page.set_viewport_size({"width": 360, "height": 780})
+    try:
+        page.goto(f"http://127.0.0.1:{PORT}/{path}",
+                  wait_until="domcontentloaded", timeout=30000)
+    except Exception as e:
+        failures.append(f"{path} @360px: navigation failed: {e}")
+        return
+    page.wait_for_timeout(3500)
+    checks = [
+        ("no horizontal overflow",
+         "document.documentElement.scrollWidth <= 362"),
+        ("canvases fit viewport",
+         "Array.from(document.querySelectorAll('canvas'))"
+         ".every(c => c.getBoundingClientRect().width <= 362)"),
+        ("canvases keep usable height",
+         "Array.from(document.querySelectorAll('canvas'))"
+         ".filter(c => c.getBoundingClientRect().width > 0)"
+         ".every(c => c.getBoundingClientRect().height >= 100)"),
+    ]
+    for name, expr in checks:
+        try:
+            ok = page.evaluate(f"() => {expr}")
+        except Exception as e:
+            ok = False
+            name += f" (evaluate error: {e})"
+        status = "ok" if ok else "FAIL"
+        print(f"{status:4} {path} @360px :: {name}")
+        if not ok:
+            failures.append(f"{path} @360px: {name}")
+    own_errors = [e for e in console_errors
+                  if not any(n in e for n in NOISE)]
+    if own_errors:
+        for e in own_errors[:3]:
+            print(f"FAIL {path} @360px :: console error: {e[:140]}")
+        failures.append(f"{path} @360px: console errors")
+
+
 def main():
     handler = partial(SimpleHTTPRequestHandler, directory=str(ROOT))
     server = ThreadingHTTPServer(("127.0.0.1", PORT), handler)
@@ -105,6 +159,10 @@ def main():
                 for e in own_errors[:3]:
                     print(f"FAIL {path} :: console error: {e[:140]}")
                 failures.append(f"{path}: console errors")
+
+        # Phone-width pass over every interactive (canvas) post.
+        for path in interactive_posts():
+            check_mobile(page, path, failures, console_errors)
         browser.close()
     server.shutdown()
 
