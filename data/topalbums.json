@@ -50,13 +50,6 @@
       "plays": 3
     },
     {
-      "name": "The E.N.D. (The Energy Never Dies)",
-      "artist": "Black Eyed Peas",
-      "url": "https://www.last.fm/music/Black+Eyed+Peas/The+E.N.D.+(The+Energy+Never+Dies)",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/c1c93f40047046c1bce56e8fad76f3e1.png",
-      "plays": 3
-    },
-    {
       "name": "Trilogy",
       "artist": "Carpenter Brut",
       "url": "https://www.last.fm/music/Carpenter+Brut/Trilogy",
@@ -82,13 +75,6 @@
       "artist": "The Black Keys",
       "url": "https://www.last.fm/music/The+Black+Keys/El+Camino",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/99052cb9c4304f33a104995426c52db8.png",
-      "plays": 3
-    },
-    {
-      "name": "First Impressions of Earth",
-      "artist": "The Strokes",
-      "url": "https://www.last.fm/music/The+Strokes/First+Impressions+of+Earth",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/f41698e47228486ac81690028794f18d.png",
       "plays": 3
     },
     {
@@ -146,8 +132,15 @@
       "url": "https://www.last.fm/music/bbno$+&+Ironmouse/1-800",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/880b94bc5613637576f3562b2c2e95cf.jpg",
       "plays": 2
+    },
+    {
+      "name": "The E.N.D. (The Energy Never Dies)",
+      "artist": "Black Eyed Peas",
+      "url": "https://www.last.fm/music/Black+Eyed+Peas/The+E.N.D.+(The+Energy+Never+Dies)",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/c1c93f40047046c1bce56e8fad76f3e1.png",
+      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-07-20"
+  "updated": "2026-07-21"
 }
