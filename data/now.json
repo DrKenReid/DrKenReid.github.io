@@ -7,6 +7,12 @@
   },
   "reading": [
     {
+      "title": "Reborn as a Demonic Tree (Reborn as a Demonic Tree #1)",
+      "author": "Xkarnation",
+      "link": "https://www.goodreads.com/review/show/6575325203?utm_medium=api&utm_source=rss",
+      "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1693933813l/192553534._SY75_.jpg"
+    },
+    {
       "title": "DBT Made Simple: A Step-by-Step Guide to Dialectical Behavior Therapy (The New Harbinger Made Simple Series)",
       "author": "Sheri Van Dijk",
       "link": "https://www.goodreads.com/review/show/8735438391?utm_medium=api&utm_source=rss",
@@ -17,13 +23,7 @@
       "author": "Cormac McCarthy",
       "link": "https://www.goodreads.com/review/show/5348470770?utm_medium=api&utm_source=rss",
       "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1701688704l/394535._SY75_.jpg"
-    },
-    {
-      "title": "Project Hail Mary",
-      "author": "Andy Weir",
-      "link": "https://www.goodreads.com/review/show/3983722265?utm_medium=api&utm_source=rss",
-      "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1764703833l/54493401._SY75_.jpg"
     }
   ],
-  "updated": "2026-07-21"
+  "updated": "2026-07-22"
 }
