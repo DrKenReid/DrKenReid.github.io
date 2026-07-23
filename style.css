@@ -4574,12 +4574,6 @@ html[data-theme="dark"] {
   margin-right: -0.09em;
   text-transform: uppercase; }
 
-/* Scrobble sparkline under the homepage stat */
-.kr-sparkline {
-  display: block;
-  margin: 8px auto 0;
-  opacity: 0.85; }
-
 /* Album wall on the music page (js/albums.js) */
 .album-wall {
   display: grid;
