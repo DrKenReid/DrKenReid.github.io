@@ -1,5 +1,23 @@
 [
   {
+    "title": "A Blog Engine in One JSON File",
+    "date": "2026-07-26",
+    "tags": [
+      "technology",
+      "writing"
+    ],
+    "category": "Technology",
+    "excerpt": "No database, no CMS, no Jekyll: this blog's search, tag filters, pagination, read times, and related posts all hang off one JSON file and two Python scripts.",
+    "url": "blog/blog-engine-in-one-json-file.html",
+    "image": "img/photography/thumb/71.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 9
+    },
+    "readMinutes": 6,
+    "words": 1301
+  },
+  {
     "title": "Ant Colony, Live",
     "date": "2026-07-19",
     "tags": [
@@ -10,8 +28,8 @@
     "excerpt": "An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and break it with the sliders.",
     "url": "blog/ant-colony-live.html",
     "image": "img/photography/thumb/290.webp",
-    "readMinutes": 6,
-    "words": 1209
+    "readMinutes": 7,
+    "words": 1342
   },
   {
     "title": "My Website Has a Test Suite",
@@ -27,8 +45,8 @@
       "name": "How This Site Is Built",
       "part": 8
     },
-    "readMinutes": 7,
-    "words": 1534
+    "readMinutes": 8,
+    "words": 1549
   },
   {
     "title": "My Teacher Said I Shouldn't Go To University",
@@ -125,7 +143,7 @@
     "url": "blog/abandoned-places-i-photograph.html",
     "image": "img/photography/thumb/135.webp",
     "readMinutes": 9,
-    "words": 1954
+    "words": 1937
   },
   {
     "title": "Why I Love LaTeX",
@@ -139,7 +157,7 @@
     "url": "blog/why-i-love-latex.html",
     "image": "img/photography/thumb/16.webp",
     "readMinutes": 8,
-    "words": 1576
+    "words": 1569
   },
   {
     "title": "What 50,000 Scrobbles Say About Me",
@@ -171,7 +189,7 @@
       "name": "How This Site Is Built",
       "part": 3
     },
-    "words": 2030
+    "words": 2034
   },
   {
     "title": "Why You Aren't a \"Visual Learner\"",
@@ -418,7 +436,7 @@
     "url": "blog/accessibility-first-product-design-data-science.html",
     "image": "img/photography/thumb/21.webp",
     "readMinutes": 42,
-    "words": 9183
+    "words": 9159
   },
   {
     "title": "The Life and Death of the Early Internet",
@@ -509,7 +527,7 @@
     "url": "blog/evolutionary-computation-identity-crisis.html",
     "image": "img/photography/thumb/208.webp",
     "readMinutes": 12,
-    "words": 2539
+    "words": 2543
   },
   {
     "title": "In Defense of Audiobooks",

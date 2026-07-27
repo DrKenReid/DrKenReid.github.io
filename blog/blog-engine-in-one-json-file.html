@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="No database, no CMS, no Jekyll: this blog's search, tag filters, pagination, read times, and related posts all hang off one JSON file and two Python scripts.">
+ <meta name="keywords" content="technology, writing">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>A Blog Engine in One JSON File - Ken Reid</title>
+ <meta property="og:title" content="A Blog Engine in One JSON File">
+ <meta property="og:description" content="No database, no CMS, no Jekyll: this blog's search, tag filters, pagination, read times, and related posts all hang off one JSON file and two Python scripts.">
+ <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/71.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/blog-engine-in-one-json-file.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="A Blog Engine in One JSON File">
+ <meta name="twitter:description" content="No database, no CMS, no Jekyll: this blog's search, tag filters, pagination, read times, and related posts all hang off one JSON file and two Python scripts.">
+ <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/71.png">
+ <meta name="citation_title" content="A Blog Engine in One JSON File">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/07/26">
+ <meta name="citation_online_date" content="2026/07/26">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/blog-engine-in-one-json-file.html">
+ <meta name="DC.title" content="A Blog Engine in One JSON File">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-07-26">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/blog-engine-in-one-json-file.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "A Blog Engine in One JSON File",
+ "description": "No database, no CMS, no Jekyll: this blog's search, tag filters, pagination, read times, and related posts all hang off one JSON file and two Python scripts.",
+ "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/71.png",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-07-26",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["static sites", "json", "blogging", "web development", "tf-idf"]
+ }
+ </script>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/71.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">Blog</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">A Blog Engine in One JSON File</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+ <main id="main-content">
+ <div class="blog-post">
+ <h1>A Blog Engine in One JSON File</h1>
+ <div class="blog-meta">
+ 26 July 2026 &middot;
+ <span class="blog-tag">technology</span>
+ <span class="blog-tag">writing</span>
+ </div>
+
+ <p>The <a href="../blog.html">blog listing on this site</a> has live search, tag filters with counts, pagination, read-time estimates, and a "related posts" section under every article. I refused to use a blogging platform (Wordpress, Blogger), and frankly felt too lazy to implement a database. The entire engine is one JSON file, about three hundred lines of plain JavaScript, and two Python scripts I run when publishing. This post explains the arrangement, because I think it's the sweet spot for a personal blog, and it's a chapter in the larger story of <a href="../series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>JSON:</strong> a plain-text format for structured data, readable by both humans and every programming language. </li>
+ <li><strong>CMS (content management system):</strong> software like WordPress that stores your posts in a database and assembles pages on demand. </li>
+ <li><strong>Static site generator:</strong> a tool (Jekyll, Hugo) that compiles text files into HTML at build time.</li>
+ <li><strong>TF-IDF:</strong> a classic text-analysis technique that scores how characteristic a word is for a document: words frequent in this post but rare elsewhere define what it's about.</li>
+ <li><strong>Cosine similarity:</strong> a measure of how alike two documents are, computed from their word scores. </li>
+ </ul>
+ </div>
+
+ <h2>The single source of truth</h2>
+
+ <p>Everything hangs off <code>data/posts.json</code>: a flat list, one entry per post, currently dozens of them. An entry is exactly this:</p>
+
+<pre><code class="language-json">{
+  "title": "My Website Has a Test Suite",
+  "date": "2026-07-17",
+  "tags": ["technology"],
+  "category": "Technology",
+  "excerpt": "A Python audit script and headless browser smoke tests run on every push. Here's why a personal blog has a test suite.",
+  "url": "blog/my-website-has-a-test-suite.html",
+  "image": "img/photography/thumb/4.webp",
+  "series": { "name": "How This Site Is Built", "part": 8 },
+  "readMinutes": 7,
+  "words": 1534
+}</code></pre>
+
+ <p>Publishing a post means writing the HTML page and adding one entry to this file. The same file then feeds many things: the blog listing, the search index, the tag buttons, the footer's "latest writing" list, the site-wide command palette, the "next/previous post" links, and the related-posts scoring. One file, many consumers, no synchronisation problems, because there is nothing to synchronise. Laziness can force some ingenuity, I like to tell myself.</p>
+
+ <h2>The front end</h2>
+
+ <p>The listing page fetches the JSON, sorts by date, and renders cards nine to a page. Search is an ordinary text input that filters as you type, matching against title, excerpt, and tags. The tag buttons aren't hardcoded anywhere: the script counts how often each tag appears across all posts and renders one button per tag, labelled with its count, sorted by popularity. Click two tags and you get posts matching either; click "All" and you're back to everything.</p>
+
+ <p>Because tag buttons are generated from the data, a typo in the JSON doesn't produce an error, it produces a new button: misspell "photography" once and the blog begins offering a "phtography" filter containing one post. The fix is more careful typing, but it's also <a href="my-website-has-a-test-suite.html">a test suite</a>: my audit script holds the list of allowed tags, and anything outside it fails the build. This does mean adding a tag has an extra step, but so far my tags are broad so I've had no issues.</p>
+
+ <figure>
+ <img src="../img/photography/thumb/71.webp" alt="Pine branches with small cones catching low sun, seen through a chain-link fence" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+ </figure>
+
+ <h2>The publish-time scripts</h2>
+
+ <p><strong>Read times</strong> are computed. A Python script extracts the body text of each post (only the article region, ignoring scripts and navigation), counts the words, and divides by 220 words per minute, rounding up. The result is baked into the JSON as <code>readMinutes</code>. I picked 220 because it's a middle-of-the-road adult reading speed; the exact number is just an estimate so people know what they're getting into, I doubt many people time it!</p>
+
+<pre><code class="language-python">WORDS_PER_MINUTE = 220
+
+post["readMinutes"] = max(1, -(-words // WORDS_PER_MINUTE))  # ceil division
+post["words"] = words</code></pre>
+
+ <p><strong>Related posts</strong> are great for keeping visitors interested. A second script reads the full text of every post and builds TF-IDF vectors: each post becomes a list of scored words, where words common in that post but rare across the blog score highest. The title counts double, since it's the strongest signal of what a post is about. Related candidates are ranked by cosine similarity, with a small bonus of 0.06 per shared tag, and the top three get baked into the page as static HTML. The whole ranking is four lines of code:</p>
+
+<pre><code class="language-python"># how alike is this candidate's vocabulary to the current post's?
+# 0.0 = nothing in common, 1.0 = identical word profile
+sim = cosine(vectors[current_url], vectors[url])
+
+# how many tags do the two posts share? (usually 0 or 1)
+shared = len(current_tags.intersection(post.get('tags', [])))
+
+# final score: word similarity plus 0.06 per shared tag.
+# the date rides along as a tiebreaker, newer post wins
+ranked.append((sim + TAG_BOOST * shared, post.get('date', ''), post))
+
+# ... every candidate scored, then: sort and keep the best three
+return [post for _score, _date, post in ranked[:3]]</code></pre>
+
+ <p>The related posts you see under this article were chosen when it was published, by a script that read every post on the site. Doing that in the browser would mean shipping the full text of dozens of posts to every visitor. Doing it at publish time costs the visitor nothing, and the recommendations reflect content, not just matching tags. When any post is published, the script re-bakes every page, so older posts learn about newer ones.</p>
+
+ <h2>Why not Jekyll?</h2>
+
+ <p>GitHub Pages has Jekyll built in, and for most people starting a blog I'd recommend it without hesitation. This site actually predates its blog by a good margin: it began as a simple portfolio back in 2012 or so, then grew into a photography portfolio built from an HTML template, and bolting a static site generator onto an existing hand-crafted site means converting everything to its conventions. And, also importantly, I like doing this. It's a fun project that I learn from, and provides me with more context of the modern web than my 2010 class on portlets, XSLT and DOM.</p>
+
+ <p>But, that means that each post is a full HTML file. I have tricks up my sleeve for making it easier, which I describe throughout this series, and for the few dozen blogs I've written so far it's been worth it. Ask me again at 500.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Doesn't editing JSON by hand invite mistakes?</summary>
+ <p>Constantly, which is why <a href="my-website-has-a-test-suite.html">the audit script</a> validates every field.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why not compute related posts by tags alone?</summary>
+ <p>Tags are coarse: this blog has dozens of posts and 13 allowed tags, so "personal" matches half the site. TF-IDF looks at the actual words, so a post about Scottish hospitals finds other posts about Scotland and photography rather than three random "personal" entries. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>What happens when the JSON and the HTML disagree?</summary>
+ <p>The JSON wins, because everything visitors see (cards, search, links) comes from it. The <a href="my-website-has-a-test-suite.html">audit</a> exists to make disagreement impossible in practice: a post page without a JSON entry is invisible, and a JSON entry without a page fails the build.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Could I copy this approach?</summary>
+ <p>Yes, read more of this series to grab snippets and check out my github repo!</p>
+ </details>
+ </div>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="my-website-has-a-test-suite.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/4.webp" alt="My Website Has a Test Suite" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">17 July 2026 · 7 min read</div>
+                  <h4 class="blog-card-title">My Website Has a Test Suite</h4>
+                  <p class="blog-card-excerpt">A Python audit script and headless browser smoke tests run on every push. Here's why a personal blog has a test suite.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="hosting-photography-on-github-for-free.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/387.webp" alt="Hosting a Photography Portfolio on GitHub for Free" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">6 July 2026 · 10 min read</div>
+                  <h4 class="blog-card-title">Hosting a Photography Portfolio on GitHub for Free</h4>
+                  <p class="blog-card-excerpt">GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">photography</span><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="why-i-love-latex.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/16.webp" alt="Why I Love LaTeX" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 July 2026 · 8 min read</div>
+                  <h4 class="blog-card-title">Why I Love LaTeX</h4>
+                  <p class="blog-card-excerpt">I wrote my thesis, my papers, and my CV in LaTeX, and I'd have it no other way.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ </main>
+
+ <hr style="margin: 40px 0;">
+ <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+ </div>
+ </div>
+ </div>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/popper.min.js"></script>
+ <script src="../js/bootstrap.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/prism-loader.js"></script>
+ <script src="../js/share.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');
+loadPrism(['json', 'python']);</script>
+</body>
+</html>
