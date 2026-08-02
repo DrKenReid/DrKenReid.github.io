@@ -1,5 +1,18 @@
 [
   {
+    "title": "The Paradox of Tolerance",
+    "date": "2026-08-02",
+    "tags": [
+      "philosophy"
+    ],
+    "category": "Ideas",
+    "excerpt": "Nazi salutes at Glasgow Green, a mile from the statue honouring Glaswegians who fought Franco. Karl Popper saw this coming in 1945: unlimited tolerance destroys itself. What the paradox actually says, what it doesn't, and why it matters in Scotland right now.",
+    "url": "blog/the-paradox-of-tolerance.html",
+    "image": "blog/img/tolerance/la-pasionaria-hero.webp",
+    "readMinutes": 14,
+    "words": 3003
+  },
+  {
     "title": "The Fermi Paradox - Why are we alone in space?",
     "date": "2026-07-28",
     "tags": [
@@ -10,8 +23,8 @@
     "excerpt": "The galaxy is old and vast and should be teeming, and it is silent. A tour of the Fermi paradox's unsettling answers through the science fiction that dramatises them, from Liu Cixin's dark forest to Banks's Culture.",
     "url": "blog/the-fermi-paradox-and-the-great-silence.html",
     "image": "img/photography/thumb/357.webp",
-    "readMinutes": 22,
-    "words": 4815
+    "readMinutes": 23,
+    "words": 4947
   },
   {
     "title": "A Blog Engine in One JSON File",
@@ -157,7 +170,7 @@
     "url": "blog/abandoned-places-i-photograph.html",
     "image": "img/photography/thumb/135.webp",
     "readMinutes": 9,
-    "words": 1937
+    "words": 1943
   },
   {
     "title": "Why I Love LaTeX",
@@ -325,7 +338,7 @@
     "url": "blog/the-culture-series.html",
     "image": "img/photography/thumb/30.webp",
     "readMinutes": 15,
-    "words": 3178
+    "words": 3175
   },
   {
     "title": "The Individualization of Responsibility",
@@ -364,7 +377,7 @@
     "url": "blog/books-i-recommend-to-friends.html",
     "image": "img/photography/thumb/430.webp",
     "readMinutes": 15,
-    "words": 3124
+    "words": 3121
   },
   {
     "title": "Why Nobody Thanks the Person Who Stopped the Disaster",
@@ -489,7 +502,7 @@
     "url": "blog/dungeon-crawler-carl-litrpg-dignity.html",
     "image": "img/photography/thumb/141.webp",
     "readMinutes": 23,
-    "words": 4845
+    "words": 4842
   },
   {
     "title": "From Scotland to Michigan",
@@ -606,7 +619,7 @@
     "url": "blog/rating-systems.html",
     "image": "blog/img/rating_distribution.png",
     "readMinutes": 12,
-    "words": 2618
+    "words": 2633
   },
   {
     "title": "Why Most Self-Help Books Are Trash (And Which Ones Aren't)",
