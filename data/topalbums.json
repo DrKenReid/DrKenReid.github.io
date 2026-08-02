@@ -1,18 +1,18 @@
 {
   "albums": [
     {
-      "name": "Infinite Requiem (Deoksoon)",
-      "artist": "LUNEKT",
-      "url": "https://www.last.fm/music/LUNEKT/Infinite+Requiem+(Deoksoon)",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/d3c0b224f59d9360b067adaeee01b788.jpg",
-      "plays": 6
-    },
-    {
       "name": "Dopamine (Split Brain Version)",
       "artist": "Madelline",
       "url": "https://www.last.fm/music/Madelline/Dopamine+(Split+Brain+Version)",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/4415ed4c7fafb84cdbfb0cad3cbd5028.jpg",
       "plays": 6
+    },
+    {
+      "name": "Infinite Requiem (Deoksoon)",
+      "artist": "LUNEKT",
+      "url": "https://www.last.fm/music/LUNEKT/Infinite+Requiem+(Deoksoon)",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/d3c0b224f59d9360b067adaeee01b788.jpg",
+      "plays": 5
     },
     {
       "name": "ECLESIA",
@@ -41,20 +41,6 @@
       "url": "https://www.last.fm/music/Zedd/The+Anthem",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/bb4268a5ebd04ae785e7d104008f6151.jpg",
       "plays": 4
-    },
-    {
-      "name": "it boy",
-      "artist": "bbno$",
-      "url": "https://www.last.fm/music/bbno$/it+boy",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/2d056ba6d08b6e5bcf62de5b578b99be.jpg",
-      "plays": 3
-    },
-    {
-      "name": "1-800",
-      "artist": "bbno$ & Ironmouse",
-      "url": "https://www.last.fm/music/bbno$+&+Ironmouse/1-800",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/880b94bc5613637576f3562b2c2e95cf.jpg",
-      "plays": 3
     },
     {
       "name": "The Secretary's Daughter",
@@ -99,13 +85,6 @@
       "plays": 3
     },
     {
-      "name": "El Camino",
-      "artist": "The Black Keys",
-      "url": "https://www.last.fm/music/The+Black+Keys/El+Camino",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/99052cb9c4304f33a104995426c52db8.png",
-      "plays": 3
-    },
-    {
       "name": "BLOOD",
       "artist": "Altan urag",
       "url": "https://www.last.fm/music/Altan+urag/BLOOD",
@@ -146,8 +125,29 @@
       "url": "https://www.last.fm/music/Avicii/True+(Bonus+Edition)",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/a0c65b8ccca195beff7eb803661e7e1a.png",
       "plays": 2
+    },
+    {
+      "name": "it boy",
+      "artist": "bbno$",
+      "url": "https://www.last.fm/music/bbno$/it+boy",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/2d056ba6d08b6e5bcf62de5b578b99be.jpg",
+      "plays": 2
+    },
+    {
+      "name": "1-800",
+      "artist": "bbno$ & Ironmouse",
+      "url": "https://www.last.fm/music/bbno$+&+Ironmouse/1-800",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/880b94bc5613637576f3562b2c2e95cf.jpg",
+      "plays": 2
+    },
+    {
+      "name": "The E.N.D. (The Energy Never Dies)",
+      "artist": "Black Eyed Peas",
+      "url": "https://www.last.fm/music/Black+Eyed+Peas/The+E.N.D.+(The+Energy+Never+Dies)",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/c1c93f40047046c1bce56e8fad76f3e1.png",
+      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-08-01"
+  "updated": "2026-08-02"
 }
