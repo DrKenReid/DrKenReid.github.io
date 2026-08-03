@@ -1,5 +1,22 @@
 [
   {
+    "title": "Ctrl+K for a Static Site",
+    "date": "2026-08-03",
+    "tags": [
+      "technology"
+    ],
+    "category": "Technology",
+    "excerpt": "Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. 217 lines of vanilla JavaScript, no library, and the whole thing is in the post to steal.",
+    "url": "blog/ctrl-k-for-a-static-site.html",
+    "image": "img/photography/thumb/46.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 10
+    },
+    "readMinutes": 12,
+    "words": 2425
+  },
+  {
     "title": "The Paradox of Tolerance",
     "date": "2026-08-02",
     "tags": [
@@ -476,7 +493,7 @@
     "url": "blog/life-and-death-of-the-early-internet.html",
     "image": "img/photography/thumb/375.webp",
     "readMinutes": 23,
-    "words": 4954
+    "words": 4951
   },
   {
     "title": "The Ethics of LLM Use (Not LLMs)",

@@ -5,11 +5,19 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 02 Aug 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Sun, 02 Aug 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Mon, 03 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Mon, 03 Aug 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Ctrl+K for a Static Site</title>
+      <link>https://www.kenreid.co.uk/blog/ctrl-k-for-a-static-site.html</link>
+      <guid>https://www.kenreid.co.uk/blog/ctrl-k-for-a-static-site.html</guid>
+      <pubDate>Mon, 03 Aug 2026 00:00:00 +0000</pubDate>
+      <description>Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. 217 lines of vanilla JavaScript, no library, and the whole thing is in the post to steal.</description>
+      <category>technology</category>
+    </item>
     <item>
       <title>The Paradox of Tolerance</title>
       <link>https://www.kenreid.co.uk/blog/the-paradox-of-tolerance.html</link>

@@ -1,15 +1,14 @@
 /**
  * palette.js — site-wide command palette (Ctrl/Cmd+K, or '/').
  *
- * Fuzzy search across pages, blog posts (data/posts.json), and photo
- * tags (deep-links to gallery.html?tag=...). Vanilla JS, builds its DOM
- * on first open, loaded with defer on every page.
+ * Fuzzy search across pages, blog posts (data/posts.json), photo tags,
+ * and map places (deep links to gallery.html?tag=... and map.html?region=...).
+ * Vanilla JS, builds its DOM on first open, loaded with defer on every page.
  */
-(function () {
-    var onBlogPostPage = /\/blog\//.test(window.location.pathname);
-    var prefix = onBlogPostPage ? '../' : './';
+(() => {
+    const prefix = /\/blog\//.test(window.location.pathname) ? '../' : './';
 
-    var PAGES = [
+    const PAGES = [
         { title: 'Home', sub: 'Intro and latest posts', url: 'index.html' },
         { title: 'About', sub: 'Who I am', url: 'about.html' },
         { title: 'Data Science', sub: 'Projects & publications', url: 'data_science.html' },
@@ -22,32 +21,31 @@
         { title: 'Contact', sub: 'Get in touch', url: 'contact.html' }
     ];
 
-    var PHOTO_TAGS = ['wildlife', 'portrait', 'bw', 'architecture', 'abandoned',
+    const PHOTO_TAGS = ['wildlife', 'portrait', 'bw', 'architecture', 'abandoned',
         'urban', 'nature', 'silhouette', 'landscape', 'winter'];
 
-    var overlay = null;
-    var input = null;
-    var list = null;
-    var items = [];
-    var active = 0;
-    var posts = null;
-    var postsLoading = false;
-    var places = null;
+    let overlay = null;
+    let input = null;
+    let list = null;
+    let items = [];
+    let active = 0;
+    let posts = null;
+    let places = null;
+    let indexRequested = false;
 
+    // Score ladder: exact 120, prefix 100, word boundary 80, anywhere 60,
+    // letters-in-the-right-order 25, no match 0.
     function score(query, text) {
         if (!text) return 0;
-        var q = query.toLowerCase();
-        var t = text.toLowerCase();
+        const q = query.toLowerCase();
+        const t = text.toLowerCase();
         if (t === q) return 120;
-        if (t.indexOf(q) === 0) return 100;
-        var idx = t.indexOf(q);
-        if (idx !== -1) {
-            return t.charAt(idx - 1) === ' ' ? 80 : 60;
-        }
-        // subsequence match
-        var ti = 0;
-        for (var qi = 0; qi < q.length; qi++) {
-            ti = t.indexOf(q.charAt(qi), ti);
+        const idx = t.indexOf(q);
+        if (idx === 0) return 100;
+        if (idx > 0) return t[idx - 1] === ' ' ? 80 : 60;
+        let ti = 0;
+        for (const ch of q) {
+            ti = t.indexOf(ch, ti);
             if (ti === -1) return 0;
             ti++;
         }
@@ -55,86 +53,56 @@
     }
 
     function collectResults(query) {
-        var results = [];
-        var q = query.trim();
+        const q = query.trim();
+        const results = [];
+        const add = (s, kind, title, sub, href) => {
+            if (s > 0) results.push({ score: s, kind, title, sub, href });
+        };
 
-        PAGES.forEach(function (p) {
-            var s = q ? Math.max(score(q, p.title), score(q, p.sub) * 0.5) : 10;
-            if (s > 0) results.push({ score: s, kind: 'Page', title: p.title, sub: p.sub, href: prefix + p.url });
-        });
-
-        (posts || []).forEach(function (p) {
-            if (!q) return;
-            var s = Math.max(
-                score(q, p.title),
-                score(q, (p.tags || []).join(' ')) * 0.8,
-                score(q, p.excerpt || '') * 0.4
-            );
-            if (s > 0) {
-                results.push({
-                    score: s, kind: 'Post', title: p.title,
-                    sub: (p.tags || []).join(' · '),
-                    href: prefix + (p.url || '')
-                });
+        // With an empty query the palette shows the pages as a menu.
+        for (const p of PAGES) {
+            add(q ? Math.max(score(q, p.title), score(q, p.sub) * 0.5) : 10,
+                'Page', p.title, p.sub, prefix + p.url);
+        }
+        if (q) {
+            for (const p of posts || []) {
+                const tags = (p.tags || []).join(' ');
+                add(Math.max(score(q, p.title), score(q, tags) * 0.8, score(q, p.excerpt || '') * 0.4),
+                    'Post', p.title, (p.tags || []).join(' · '), prefix + (p.url || ''));
             }
-        });
-
-        PHOTO_TAGS.forEach(function (t) {
-            if (!q) return;
-            var s = score(q, t) * 0.9;
-            if (s > 0) {
-                results.push({
-                    score: s, kind: 'Photos', title: t.charAt(0).toUpperCase() + t.slice(1) + ' photos',
-                    sub: 'Gallery filter', href: prefix + 'gallery.html?tag=' + t
-                });
+            for (const t of PHOTO_TAGS) {
+                add(score(q, t) * 0.9, 'Photos', `${t[0].toUpperCase()}${t.slice(1)} photos`,
+                    'Gallery filter', `${prefix}gallery.html?tag=${t}`);
             }
-        });
-
-        (places || []).forEach(function (pl) {
-            if (!q) return;
-            var s = score(q, pl.name) * 0.9;
-            if (s > 0) {
-                results.push({
-                    score: s, kind: 'Place', title: pl.name,
-                    sub: pl.count + ' photo' + (pl.count === 1 ? '' : 's') + ' on the map',
-                    href: prefix + 'map.html?region=' + encodeURIComponent(pl.name)
-                });
+            for (const pl of places || []) {
+                add(score(q, pl.name) * 0.9, 'Place', pl.name,
+                    `${pl.count} photo${pl.count === 1 ? '' : 's'} on the map`,
+                    `${prefix}map.html?region=${encodeURIComponent(pl.name)}`);
             }
-        });
-
-        results.sort(function (a, b) { return b.score - a.score; });
-        return results.slice(0, 10);
+        }
+        return results.sort((a, b) => b.score - a.score).slice(0, 10);
     }
 
     function render(query) {
         items = collectResults(query);
         active = 0;
-        var live = overlay.querySelector('.kr-palette-live');
-        if (live) {
-            live.textContent = items.length
-                ? items.length + ' result' + (items.length === 1 ? '' : 's')
-                : 'No results';
-        }
-        if (!items.length) {
-            list.innerHTML = '<div class="kr-palette-empty">No matches. Try a post title, page, photo tag, or place.</div>';
-            return;
-        }
-        list.innerHTML = items.map(function (r, i) {
-            return '<a href="' + r.href + '" class="kr-palette-item' + (i === 0 ? ' active' : '') + '" data-i="' + i + '">' +
-                '<span class="kr-palette-kind">' + r.kind + '</span>' +
-                '<span class="kr-palette-text"><span class="kr-palette-title">' + r.title + '</span>' +
-                (r.sub ? '<span class="kr-palette-sub">' + r.sub + '</span>' : '') + '</span>' +
-                '</a>';
-        }).join('');
+        overlay.querySelector('.kr-palette-live').textContent =
+            items.length ? `${items.length} result${items.length === 1 ? '' : 's'}` : 'No results';
+        list.innerHTML = items.length
+            ? items.map((r, i) =>
+                `<a href="${r.href}" class="kr-palette-item${i === 0 ? ' active' : ''}" data-i="${i}">` +
+                `<span class="kr-palette-kind">${r.kind}</span>` +
+                `<span class="kr-palette-text"><span class="kr-palette-title">${r.title}</span>` +
+                (r.sub ? `<span class="kr-palette-sub">${r.sub}</span>` : '') +
+                '</span></a>').join('')
+            : '<div class="kr-palette-empty">No matches. Try a post title, page, photo tag, or place.</div>';
     }
 
     function setActive(i) {
-        var els = list.querySelectorAll('.kr-palette-item');
+        const els = list.querySelectorAll('.kr-palette-item');
         if (!els.length) return;
         active = (i + els.length) % els.length;
-        Array.prototype.forEach.call(els, function (el, j) {
-            el.classList.toggle('active', j === active);
-        });
+        els.forEach((el, j) => el.classList.toggle('active', j === active));
         els[active].scrollIntoView({ block: 'nearest' });
     }
 
@@ -152,104 +120,98 @@
         input = overlay.querySelector('.kr-palette-input');
         list = overlay.querySelector('.kr-palette-list');
 
-        overlay.addEventListener('mousedown', function (e) {
+        overlay.addEventListener('mousedown', (e) => {
             if (e.target === overlay) close();
         });
-        input.addEventListener('input', function () { render(input.value); });
-        input.addEventListener('keydown', function (e) {
+        input.addEventListener('input', () => render(input.value));
+        input.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowDown') { e.preventDefault(); setActive(active + 1); }
             else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(active - 1); }
             else if (e.key === 'Tab') {
-                // Focus trap: the input is the palette's single focus
-                // stop; arrows move the selection.
+                // Focus trap: the input is the palette's single focus stop;
+                // Tab moves the selection instead of leaving the dialog.
                 e.preventDefault();
                 setActive(active + (e.shiftKey ? -1 : 1));
             } else if (e.key === 'Enter') {
                 e.preventDefault();
-                var el = list.querySelectorAll('.kr-palette-item')[active];
-                if (el) window.location.href = el.getAttribute('href');
-            } else if (e.key === 'Escape') { close(); }
+                if (items[active]) window.location.href = items[active].href;
+            } else if (e.key === 'Escape') close();
         });
-        list.addEventListener('mousemove', function (e) {
-            var el = e.target.closest ? e.target.closest('.kr-palette-item') : null;
-            if (el) setActive(parseInt(el.getAttribute('data-i'), 10));
+        list.addEventListener('mousemove', (e) => {
+            const el = e.target.closest('.kr-palette-item');
+            if (el) setActive(Number(el.dataset.i));
+        });
+    }
+
+    function loadIndex() {
+        if (indexRequested) return;
+        indexRequested = true;
+        const grab = (url, apply) => fetch(prefix + url)
+            .then((r) => r.json())
+            .then((data) => { apply(data); render(input.value); })
+            .catch(() => { /* source stays empty; pages still work */ });
+        grab('data/posts.json', (data) => { posts = data; });
+        grab('data/photo-locations.json', (data) => {
+            places = (data.regions || []).map((r) => ({ name: r.name, count: (r.photos || []).length }));
         });
     }
 
     function open() {
         if (!overlay) build();
-        if (!posts && !postsLoading) {
-            postsLoading = true;
-            fetch(prefix + 'data/posts.json')
-                .then(function (r) { return r.json(); })
-                .then(function (data) { posts = data; render(input.value); })
-                .catch(function () { posts = []; });
-            fetch(prefix + 'data/photo-locations.json')
-                .then(function (r) { return r.json(); })
-                .then(function (data) {
-                    places = (data.regions || []).map(function (rg) {
-                        return { name: rg.name, count: (rg.photos || []).length };
-                    });
-                    render(input.value);
-                })
-                .catch(function () { places = []; });
-        }
+        loadIndex();
         overlay.classList.add('is-open');
         document.body.classList.add('kr-palette-open');
         input.value = '';
         render('');
-        // Focus synchronously: mobile browsers only raise the soft
-        // keyboard when focus happens inside the user gesture.
+        // Focus synchronously: mobile browsers only raise the soft keyboard
+        // when focus happens inside the user gesture.
         input.focus();
-        setTimeout(function () { input.focus(); }, 30);
+        setTimeout(() => input.focus(), 30);
     }
 
     function close() {
-        if (!overlay) return;
         overlay.classList.remove('is-open');
         document.body.classList.remove('kr-palette-open');
     }
 
-    function isOpen() {
-        return overlay && overlay.classList.contains('is-open');
-    }
+    const isOpen = () => Boolean(overlay) && overlay.classList.contains('is-open');
 
-    document.addEventListener('keydown', function (e) {
-        if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+    document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
             e.preventDefault();
-            isOpen() ? close() : open();
-            return;
-        }
-        if (e.key === '/' && !isOpen()) {
-            var t = e.target;
-            var typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+            if (isOpen()) close(); else open();
+        } else if (e.key === '/' && !isOpen()) {
+            const t = e.target;
+            const typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
             if (!typing) { e.preventDefault(); open(); }
+        } else if (e.key === 'Escape' && isOpen()) {
+            close();
         }
-        if (e.key === 'Escape' && isOpen()) close();
     });
 
-    // Nav hint (injected once the header exists)
-    document.addEventListener('DOMContentLoaded', function () {
-        var tryInsert = function () {
-            var nav = document.getElementById('nav');
-            if (!nav || document.querySelector('.kr-palette-hint')) return !!nav;
-            var li = document.createElement('li');
+    // Nav hint: the header is injected by shared-components.js, so wait
+    // for #nav to exist before appending the Search pill.
+    document.addEventListener('DOMContentLoaded', () => {
+        const tryInsert = () => {
+            const nav = document.getElementById('nav');
+            if (!nav || document.querySelector('.kr-palette-hint')) return Boolean(nav);
+            const li = document.createElement('li');
             li.innerHTML = '<a href="#" class="kr-palette-hint" role="button" aria-label="Search the site (Ctrl+K)">' +
                 '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>' +
                 '<span class="kr-palette-word">Search</span>' +
                 '<span class="kr-palette-kbd">Ctrl K</span></a>';
-            li.querySelector('a').addEventListener('click', function (e) {
+            li.querySelector('a').addEventListener('click', (e) => {
                 e.preventDefault();
                 open();
             });
             nav.appendChild(li);
             return true;
         };
-        if (!tryInsert() && 'MutationObserver' in window) {
-            var mo = new MutationObserver(function () {
+        if (!tryInsert()) {
+            const mo = new MutationObserver(() => {
                 if (tryInsert()) mo.disconnect();
             });
             mo.observe(document.body, { childList: true, subtree: true });
         }
     });
-}());
+})();

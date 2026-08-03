@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. 217 lines of vanilla JavaScript, no library.">
+ <meta name="keywords" content="technology">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Ctrl+K for a Static Site - Ken Reid</title>
+ <meta property="og:title" content="Ctrl+K for a Static Site">
+ <meta property="og:description" content="Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. 217 lines of vanilla JavaScript, no library.">
+ <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/46.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/ctrl-k-for-a-static-site.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Ctrl+K for a Static Site">
+ <meta name="twitter:description" content="Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. 217 lines of vanilla JavaScript, no library.">
+ <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/46.png">
+ <meta name="citation_title" content="Ctrl+K for a Static Site">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/08/03">
+ <meta name="citation_online_date" content="2026/08/03">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/ctrl-k-for-a-static-site.html">
+ <meta name="DC.title" content="Ctrl+K for a Static Site">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-08-03">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/ctrl-k-for-a-static-site.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "Ctrl+K for a Static Site",
+ "description": "Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. 217 lines of vanilla JavaScript, no library.",
+ "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/46.png",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-08-03",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["command palette", "search", "javascript", "keyboard shortcuts", "web development"]
+ }
+ </script>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/46.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">Blog</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">Ctrl+K for a Static Site</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+ <main id="main-content">
+ <div class="blog-post">
+ <h1>Ctrl+K for a Static Site</h1>
+ <div class="blog-meta">
+ 3 August 2026 &middot;
+ <span class="blog-tag">technology</span>
+ </div>
+
+ <p>Try it now, if you're on a keyboard: press <strong>Ctrl+K</strong> (Cmd+K on a Mac), or just <strong>/</strong>. A search box appears over the page. Type "abandoned" and you'll get the blog post about ruins and the gallery filtered to abandoned buildings; type "map" and you're one Enter away from <a href="../map.html">the photo map</a>. Every page, every post, and every photo tag on this site is reachable from that box, from anywhere. It's the interface programmers know from their editors, transplanted onto a personal website, and this post explains how little it took: 217 lines of vanilla JavaScript, no search service, no library. Part of the series on <a href="../series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Command palette:</strong> a keyboard-summoned search box that finds and jumps to anything. Popularised by code editors; now in Slack, Notion, GitHub, and (as of some point) here.</li>
+ <li><strong>Fuzzy matching:</strong> matching that forgives imprecision: "phto" still finds "photography", because the letters appear in order.</li>
+ <li><strong>Focus trap:</strong> keeping keyboard focus inside a dialog while it's open, so Tab doesn't wander off into the page behind it. </li>
+ <li><strong>Deep link:</strong> a URL that opens a page in a specific state, like the gallery pre-filtered to one tag.</li>
+ </ul>
+ </div>
+
+ <h2>What it searches, and what it doesn't</h2>
+
+ <p>The index has three sources, in descending order of hardcoded-ness. First, the site's ten pages, written directly into the script with a subtitle each ("490+ photos", "571 saved passages"); they change a few times a year, so a hardcoded list is simply correct. Second, every blog post, fetched from <a href="blog-engine-in-one-json-file.html">the same JSON file</a> that runs the blog listing, so the palette knows each post's title, tags, and excerpt without any separate index to maintain; publish a post, and the palette knows it. Third, the gallery's ten photo tags, each deep-linking to the gallery pre-filtered, which is what makes "wildlife" a destination rather than a word.</p>
+
+ <p>The palette doesn't search <em>inside</em> post text, and it doesn't index the 571 quotes or 490 photos individually. Full-text search of a static site is doable (ship an index file, use a library like Lunr) but the index grows with every word you write, and I certainly wouldn't want paragraph-level results on a personal site. Titles, tags, and excerpts answer "take me to the thing I half-remember". The quote wall also gets one entry, not 571.</p>
+
+ <figure>
+ <img src="../img/photography/thumb/46.webp" alt="A woman walking briskly across a sunlit historic plaza, bag over one shoulder" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> Getting somewhere directly.</figcaption>
+ </figure>
+
+ <h2>Fuzzy</h2>
+
+ <p>Real fuzzy-search libraries use sophisticated string mathematics. Mine uses a five-tier ladder: an exact match scores 120, a match at the start of the text 100, a match at a word boundary 80, a match anywhere 60, and letters-in-the-right-order (the "phto" case) 25. Each source gets a weighting on top (a title match beats a tag match beats an excerpt match), everything above zero is sorted, and the top ten render. </p>
+
+ <p>Arrow keys move the selection and wrap at the ends; Tab is trapped so focus can't escape the dialog; Escape closes; a screen-reader announcement reports the result count as you type; and the input is focused synchronously on opening, because mobile keyboards only appear if the focus happens inside the user's gesture. </p>
+
+ <h2>Why bother, on a site this small?</h2>
+
+ <p>Part of the answer is who visits: this site's readers skew technical, their muscle memory already knows Ctrl+K. Part is that the palette compounds with the site's growth: at ten pages it's a nicety, at <a href="../blog.html">46 posts</a> it's the fastest way to find anything, and every post published makes it slightly more useful at zero marginal cost. And part of it, in the spirit of candour that runs through this series: it's the kind of detail that's simply pleasing to have on one's own website. It scratches an itch for me, and it was fun to implement.</p>
+
+ <p>One keydown listener for the shortcut, a dialog built on first open (not before; most visitors never press it), a scoring function, and a list that re-renders per keystroke. Resist the URL that offers to do it for you as a hosted service; for a site whose whole index fits in one JSON fetch, the dependency would outweigh the feature.</p>
+
+
+ <h2>Take the code</h2>
+
+ <p>The whole thing is below, copy-paste ready. The JavaScript is the complete <code>js/palette.js</code> from this site: swap the <code>PAGES</code> array for your own pages, point the two <code>fetch</code> calls at whatever JSON you have (or delete them, along with the sources they feed), and it will run on any static site with no build step. The CSS is the full set of palette styles, dark theme included; the <code>[data-theme="dark"]</code> selectors assume a theme attribute on <code>&lt;html&gt;</code>, so adapt those to however your site handles dark mode.</p>
+
+ <details class="code-example"><summary>The JavaScript (js/palette.js, 217 lines)</summary>
+<pre><code class="language-javascript">/**
+ * palette.js — site-wide command palette (Ctrl/Cmd+K, or '/').
+ *
+ * Fuzzy search across pages, blog posts (data/posts.json), photo tags,
+ * and map places (deep links to gallery.html?tag=... and map.html?region=...).
+ * Vanilla JS, builds its DOM on first open, loaded with defer on every page.
+ */
+(() =&gt; {
+    const prefix = /\/blog\//.test(window.location.pathname) ? '../' : './';
+
+    const PAGES = [
+        { title: 'Home', sub: 'Intro and latest posts', url: 'index.html' },
+        { title: 'About', sub: 'Who I am', url: 'about.html' },
+        { title: 'Data Science', sub: 'Projects &amp; publications', url: 'data_science.html' },
+        { title: 'Photography', sub: '490+ photos', url: 'gallery.html' },
+        { title: 'Photo Map', sub: 'Photographs by place', url: 'map.html' },
+        { title: 'Music', sub: 'Guitar &amp; listening stats', url: 'music.html' },
+        { title: 'Literature', sub: 'Reviews &amp; reading stats', url: 'literature.html' },
+        { title: 'Quote Wall', sub: '571 saved passages', url: 'quotes.html' },
+        { title: 'Blog', sub: 'All posts', url: 'blog.html' },
+        { title: 'Contact', sub: 'Get in touch', url: 'contact.html' }
+    ];
+
+    const PHOTO_TAGS = ['wildlife', 'portrait', 'bw', 'architecture', 'abandoned',
+        'urban', 'nature', 'silhouette', 'landscape', 'winter'];
+
+    let overlay = null;
+    let input = null;
+    let list = null;
+    let items = [];
+    let active = 0;
+    let posts = null;
+    let places = null;
+    let indexRequested = false;
+
+    // Score ladder: exact 120, prefix 100, word boundary 80, anywhere 60,
+    // letters-in-the-right-order 25, no match 0.
+    function score(query, text) {
+        if (!text) return 0;
+        const q = query.toLowerCase();
+        const t = text.toLowerCase();
+        if (t === q) return 120;
+        const idx = t.indexOf(q);
+        if (idx === 0) return 100;
+        if (idx &gt; 0) return t[idx - 1] === ' ' ? 80 : 60;
+        let ti = 0;
+        for (const ch of q) {
+            ti = t.indexOf(ch, ti);
+            if (ti === -1) return 0;
+            ti++;
+        }
+        return 25;
+    }
+
+    function collectResults(query) {
+        const q = query.trim();
+        const results = [];
+        const add = (s, kind, title, sub, href) =&gt; {
+            if (s &gt; 0) results.push({ score: s, kind, title, sub, href });
+        };
+
+        // With an empty query the palette shows the pages as a menu.
+        for (const p of PAGES) {
+            add(q ? Math.max(score(q, p.title), score(q, p.sub) * 0.5) : 10,
+                'Page', p.title, p.sub, prefix + p.url);
+        }
+        if (q) {
+            for (const p of posts || []) {
+                const tags = (p.tags || []).join(' ');
+                add(Math.max(score(q, p.title), score(q, tags) * 0.8, score(q, p.excerpt || '') * 0.4),
+                    'Post', p.title, (p.tags || []).join(' · '), prefix + (p.url || ''));
+            }
+            for (const t of PHOTO_TAGS) {
+                add(score(q, t) * 0.9, 'Photos', `${t[0].toUpperCase()}${t.slice(1)} photos`,
+                    'Gallery filter', `${prefix}gallery.html?tag=${t}`);
+            }
+            for (const pl of places || []) {
+                add(score(q, pl.name) * 0.9, 'Place', pl.name,
+                    `${pl.count} photo${pl.count === 1 ? '' : 's'} on the map`,
+                    `${prefix}map.html?region=${encodeURIComponent(pl.name)}`);
+            }
+        }
+        return results.sort((a, b) =&gt; b.score - a.score).slice(0, 10);
+    }
+
+    function render(query) {
+        items = collectResults(query);
+        active = 0;
+        overlay.querySelector('.kr-palette-live').textContent =
+            items.length ? `${items.length} result${items.length === 1 ? '' : 's'}` : 'No results';
+        list.innerHTML = items.length
+            ? items.map((r, i) =&gt;
+                `&lt;a href="${r.href}" class="kr-palette-item${i === 0 ? ' active' : ''}" data-i="${i}"&gt;` +
+                `&lt;span class="kr-palette-kind"&gt;${r.kind}&lt;/span&gt;` +
+                `&lt;span class="kr-palette-text"&gt;&lt;span class="kr-palette-title"&gt;${r.title}&lt;/span&gt;` +
+                (r.sub ? `&lt;span class="kr-palette-sub"&gt;${r.sub}&lt;/span&gt;` : '') +
+                '&lt;/span&gt;&lt;/a&gt;').join('')
+            : '&lt;div class="kr-palette-empty"&gt;No matches. Try a post title, page, photo tag, or place.&lt;/div&gt;';
+    }
+
+    function setActive(i) {
+        const els = list.querySelectorAll('.kr-palette-item');
+        if (!els.length) return;
+        active = (i + els.length) % els.length;
+        els.forEach((el, j) =&gt; el.classList.toggle('active', j === active));
+        els[active].scrollIntoView({ block: 'nearest' });
+    }
+
+    function build() {
+        overlay = document.createElement('div');
+        overlay.className = 'kr-palette-overlay';
+        overlay.innerHTML =
+            '&lt;div class="kr-palette" role="dialog" aria-modal="true" aria-label="Site search"&gt;' +
+            '&lt;input type="text" class="kr-palette-input" placeholder="Search posts, pages, photos…" aria-label="Search site" role="combobox" aria-expanded="true" aria-autocomplete="list"&gt;' +
+            '&lt;div class="kr-palette-list" role="listbox"&gt;&lt;/div&gt;' +
+            '&lt;div class="kr-palette-live sr-only" aria-live="polite"&gt;&lt;/div&gt;' +
+            '&lt;div class="kr-palette-foot"&gt;&lt;span&gt;&amp;uarr;&amp;darr; navigate&lt;/span&gt;&lt;span&gt;&amp;crarr; open&lt;/span&gt;&lt;span&gt;esc close&lt;/span&gt;&lt;/div&gt;' +
+            '&lt;/div&gt;';
+        document.body.appendChild(overlay);
+        input = overlay.querySelector('.kr-palette-input');
+        list = overlay.querySelector('.kr-palette-list');
+
+        overlay.addEventListener('mousedown', (e) =&gt; {
+            if (e.target === overlay) close();
+        });
+        input.addEventListener('input', () =&gt; render(input.value));
+        input.addEventListener('keydown', (e) =&gt; {
+            if (e.key === 'ArrowDown') { e.preventDefault(); setActive(active + 1); }
+            else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(active - 1); }
+            else if (e.key === 'Tab') {
+                // Focus trap: the input is the palette's single focus stop;
+                // Tab moves the selection instead of leaving the dialog.
+                e.preventDefault();
+                setActive(active + (e.shiftKey ? -1 : 1));
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (items[active]) window.location.href = items[active].href;
+            } else if (e.key === 'Escape') close();
+        });
+        list.addEventListener('mousemove', (e) =&gt; {
+            const el = e.target.closest('.kr-palette-item');
+            if (el) setActive(Number(el.dataset.i));
+        });
+    }
+
+    function loadIndex() {
+        if (indexRequested) return;
+        indexRequested = true;
+        const grab = (url, apply) =&gt; fetch(prefix + url)
+            .then((r) =&gt; r.json())
+            .then((data) =&gt; { apply(data); render(input.value); })
+            .catch(() =&gt; { /* source stays empty; pages still work */ });
+        grab('data/posts.json', (data) =&gt; { posts = data; });
+        grab('data/photo-locations.json', (data) =&gt; {
+            places = (data.regions || []).map((r) =&gt; ({ name: r.name, count: (r.photos || []).length }));
+        });
+    }
+
+    function open() {
+        if (!overlay) build();
+        loadIndex();
+        overlay.classList.add('is-open');
+        document.body.classList.add('kr-palette-open');
+        input.value = '';
+        render('');
+        // Focus synchronously: mobile browsers only raise the soft keyboard
+        // when focus happens inside the user gesture.
+        input.focus();
+        setTimeout(() =&gt; input.focus(), 30);
+    }
+
+    function close() {
+        overlay.classList.remove('is-open');
+        document.body.classList.remove('kr-palette-open');
+    }
+
+    const isOpen = () =&gt; Boolean(overlay) &amp;&amp; overlay.classList.contains('is-open');
+
+    document.addEventListener('keydown', (e) =&gt; {
+        if ((e.ctrlKey || e.metaKey) &amp;&amp; e.key.toLowerCase() === 'k') {
+            e.preventDefault();
+            if (isOpen()) close(); else open();
+        } else if (e.key === '/' &amp;&amp; !isOpen()) {
+            const t = e.target;
+            const typing = t &amp;&amp; (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+            if (!typing) { e.preventDefault(); open(); }
+        } else if (e.key === 'Escape' &amp;&amp; isOpen()) {
+            close();
+        }
+    });
+
+    // Nav hint: the header is injected by shared-components.js, so wait
+    // for #nav to exist before appending the Search pill.
+    document.addEventListener('DOMContentLoaded', () =&gt; {
+        const tryInsert = () =&gt; {
+            const nav = document.getElementById('nav');
+            if (!nav || document.querySelector('.kr-palette-hint')) return Boolean(nav);
+            const li = document.createElement('li');
+            li.innerHTML = '&lt;a href="#" class="kr-palette-hint" role="button" aria-label="Search the site (Ctrl+K)"&gt;' +
+                '&lt;svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"&gt;&lt;path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/&gt;&lt;/svg&gt;' +
+                '&lt;span class="kr-palette-word"&gt;Search&lt;/span&gt;' +
+                '&lt;span class="kr-palette-kbd"&gt;Ctrl K&lt;/span&gt;&lt;/a&gt;';
+            li.querySelector('a').addEventListener('click', (e) =&gt; {
+                e.preventDefault();
+                open();
+            });
+            nav.appendChild(li);
+            return true;
+        };
+        if (!tryInsert()) {
+            const mo = new MutationObserver(() =&gt; {
+                if (tryInsert()) mo.disconnect();
+            });
+            mo.observe(document.body, { childList: true, subtree: true });
+        }
+    });
+})();</code></pre>
+ </details>
+
+ <details class="code-example"><summary>The CSS (147 lines)</summary>
+<pre><code class="language-css">/* Command palette (Ctrl/Cmd+K — js/palette.js) */
+.kr-palette-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 6000;
+  background: rgba(10, 10, 10, 0.55);
+  backdrop-filter: blur(3px);
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 12vh 16px 0; }
+
+.kr-palette-overlay.is-open {
+  display: flex; }
+
+body.kr-palette-open {
+  overflow: hidden; }
+
+.kr-palette {
+  width: 100%;
+  max-width: 560px;
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
+  border-radius: 14px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+  overflow: hidden; }
+
+.kr-palette-input {
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  padding: 18px 20px;
+  font-size: 17px;
+  font-family: "Poppins", sans-serif;
+  color: #252525;
+  border-bottom: 1px solid #ececec;
+  box-shadow: none !important; }
+
+.kr-palette-list {
+  max-height: 46vh;
+  overflow-y: auto;
+  padding: 8px; }
+
+.kr-palette-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-decoration: none; }
+
+.kr-palette-item.active {
+  background: rgba(252, 96, 96, 0.1); }
+
+.kr-palette-kind {
+  flex-shrink: 0;
+  width: 52px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #999; }
+
+.kr-palette-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0; }
+
+.kr-palette-title {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: #252525;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; }
+
+.kr-palette-item.active .kr-palette-title {
+  color: #c53030; }
+
+.kr-palette-sub {
+  font-size: 12px;
+  color: #8a8a8a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; }
+
+.kr-palette-empty {
+  padding: 24px 16px;
+  text-align: center;
+  font-size: 14px;
+  color: #8a8a8a; }
+
+.kr-palette-foot {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  padding: 10px;
+  border-top: 1px solid #ececec;
+  font-size: 11px;
+  color: #9a9a9a; }
+
+[data-theme="dark"] .kr-palette {
+  background: #222222;
+  border-color: #3a3a3a; }
+
+[data-theme="dark"] .kr-palette-input {
+  color: #e2e2e2;
+  border-bottom-color: #333; }
+
+[data-theme="dark"] .kr-palette-item.active {
+  background: rgba(252, 96, 96, 0.14); }
+
+[data-theme="dark"] .kr-palette-title {
+  color: #e2e2e2; }
+
+[data-theme="dark"] .kr-palette-item.active .kr-palette-title {
+  color: #fc6060; }
+
+[data-theme="dark"] .kr-palette-foot {
+  border-top-color: #333; }
+
+/* Nav hint pill */
+.kr-palette-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px; }
+
+.kr-palette-kbd {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  border: 1px solid currentColor;
+  border-radius: 5px;
+  padding: 1px 6px;
+  opacity: 0.75; }
+
+.kr-palette-word {
+  display: none; }
+
+/* In the mobile hamburger menu the hint becomes a plain "Search" item
+   (keyboard shortcut label makes no sense on touch) */
+@media (max-width: 991px) {
+  .kr-palette-kbd {
+    display: none; }
+  .kr-palette-word {
+    display: inline; } }</code></pre>
+ </details>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Why Ctrl+K and not Ctrl+F?</summary>
+ <p>Ctrl+F belongs to the browser, and hijacking it is hostile: someone searching within the page they're reading should get exactly that. Ctrl+K is the established palette convention (editors, Slack, GitHub), and the bare <strong>/</strong> covers the other established convention (Wikipedia, YouTube). Never take shortcuts the browser already spent on something people use.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Does it work on phones?</summary>
+ <p>Yes, via a search button in the navigation rather than a keyboard shortcut, with the same dialog underneath. Palettes are a keyboard-first idea, so on touch it's simply a decent search box, which is fine: the feature degrades into usefulness rather than absence.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why not index the full text of posts?</summary>
+ <p>Cost-benefit: a full-text index of 46 posts is a few hundred kilobytes shipped to everyone, to serve queries that title-and-excerpt matching already answers. If the blog someday holds hundreds of posts and I'm personally failing to find things, a pre-built Lunr index is the upgrade path. The palette's job today is navigation, not research.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Is 217 lines really the whole thing?</summary>
+ <p>The whole behaviour, yes: shortcut, dialog, scoring, keyboard navigation, accessibility announcements. The styling is another 147 lines of CSS, included above. Most of what feels substantial about a palette is borrowed: the pages already exist, the posts file already exists, and the deep links already work. It's a thin, fast layer over structure the site already had, which is the recurring theme of every post in this series.</p>
+ </details>
+ </div>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="blog-engine-in-one-json-file.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/71.webp" alt="A Blog Engine in One JSON File" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">26 July 2026 · 6 min read</div>
+                  <h4 class="blog-card-title">A Blog Engine in One JSON File</h4>
+                  <p class="blog-card-excerpt">No database, no CMS, no Jekyll: this blog's search, tag filters, pagination, read times, and related posts all hang off one JSON file and two Python scripts.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="my-website-has-a-test-suite.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/4.webp" alt="My Website Has a Test Suite" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">17 July 2026 · 8 min read</div>
+                  <h4 class="blog-card-title">My Website Has a Test Suite</h4>
+                  <p class="blog-card-excerpt">A Python audit script and headless browser smoke tests run on every push. Here's why a personal blog has a test suite.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="putting-my-photos-on-a-map.html" class="blog-card">
+                <div class="blog-card-img"><img src="../blog/img/map/photo-map-dark.webp" alt="Putting My Photos on a Map" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">14 July 2026 · 6 min read</div>
+                  <h4 class="blog-card-title">Putting My Photos on a Map</h4>
+                  <p class="blog-card-excerpt">239 of my photographs plotted on an interactive world map, this is how the photo map works.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">photography</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ </main>
+
+ <hr style="margin: 40px 0;">
+ <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+ </div>
+ </div>
+ </div>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/popper.min.js"></script>
+ <script src="../js/bootstrap.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/share.js"></script>
+ <script src="../js/prism-loader.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');
+loadPrism();</script>
+</body>
+</html>
