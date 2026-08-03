@@ -1,6 +1,13 @@
 {
   "albums": [
     {
+      "name": "Is This It",
+      "artist": "The Strokes",
+      "url": "https://www.last.fm/music/The+Strokes/Is+This+It",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/c7a4e1700ae85d9910bbe59887a8c771.jpg",
+      "plays": 7
+    },
+    {
       "name": "Dopamine (Split Brain Version)",
       "artist": "Madelline",
       "url": "https://www.last.fm/music/Madelline/Dopamine+(Split+Brain+Version)",
@@ -33,13 +40,6 @@
       "artist": "Fey Fili",
       "url": "https://www.last.fm/music/Fey+Fili/High+Valley+Demos",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/01d34ed523f8706f4e2bb3270294dc62.jpg",
-      "plays": 4
-    },
-    {
-      "name": "The Anthem",
-      "artist": "Zedd",
-      "url": "https://www.last.fm/music/Zedd/The+Anthem",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/bb4268a5ebd04ae785e7d104008f6151.jpg",
       "plays": 4
     },
     {
@@ -82,6 +82,13 @@
       "artist": "Symphony X",
       "url": "https://www.last.fm/music/Symphony+X/Paradise+Lost",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/24ec316ccff54fc51889fdf8e8f29ce3.png",
+      "plays": 3
+    },
+    {
+      "name": "The Anthem",
+      "artist": "Zedd",
+      "url": "https://www.last.fm/music/Zedd/The+Anthem",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/bb4268a5ebd04ae785e7d104008f6151.jpg",
       "plays": 3
     },
     {
@@ -139,15 +146,8 @@
       "url": "https://www.last.fm/music/bbno$+&+Ironmouse/1-800",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/880b94bc5613637576f3562b2c2e95cf.jpg",
       "plays": 2
-    },
-    {
-      "name": "The E.N.D. (The Energy Never Dies)",
-      "artist": "Black Eyed Peas",
-      "url": "https://www.last.fm/music/Black+Eyed+Peas/The+E.N.D.+(The+Energy+Never+Dies)",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/c1c93f40047046c1bce56e8fad76f3e1.png",
-      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-08-02"
+  "updated": "2026-08-03"
 }
