@@ -100,13 +100,38 @@
 
  <p>Open Graph: five tags giving the post's title, description, preview image, address, and type. When someone pastes your link into a group chat or a social feed, the platform reads these tags to build the preview card. Without them, your link renders as bare blue text or, worse, a card assembled from whatever the scraper found first. With them, every share has a title, summary sentence, and one of <a href="../gallery.html">my photographs</a> at full card width. Twitter's near-identical tag family sits alongside for the platforms that read that instead.</p>
 
+<pre><code class="language-html">&lt;meta property="og:title" content="The Invisible Half of a Blog Post"&gt;
+&lt;meta property="og:description" content="Every post on this blog carries around forty lines
+      of metadata nobody reads: social preview cards, structured data, feeds, citation tags."&gt;
+&lt;meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/78.png"&gt;
+&lt;meta property="og:url" content="https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html"&gt;
+&lt;meta property="og:type" content="article"&gt;</code></pre>
+
  <p>The description gets written by a human (me), because it's the sentence that decides whether a stranger clicks. And the image tag points at a full-resolution photo, not a thumbnail, because preview scrapers resize down gracefully and up horribly.</p>
 
  <h2>The librarian's copy</h2>
 
  <p>Below the social tags sits a block of JSON-LD: the same facts (headline, author, date, image) restated in schema.org's vocabulary, which is the format Google actually parses for rich results. Where the Open Graph tags talk to chat apps, this block talks to crawlers, and it's how I explain that this page is an article by me.</p>
 
+<pre><code class="language-html">&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "The Invisible Half of a Blog Post",
+  "author": { "@type": "Person", "name": "Ken Reid", "url": "https://www.kenreid.co.uk" },
+  "datePublished": "2026-08-04",
+  "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/78.png"
+}
+&lt;/script&gt;</code></pre>
+
  <p>Each post carries citation tags (the format Google Scholar reads) and Dublin Core tags (the library world's metadata standard). I spent years in academia, the tags cost six lines, and if someone ever does want to cite <a href="what-50000-scrobbles-say-about-me.html">the scrobbles post</a> in their media-studies dissertation, their reference manager will fill every field correctly. It's courteous and costs me nothing but a couple of seconds, and might give another citation or two to my Google Scholar account!</p>
+
+<pre><code class="language-html">&lt;meta name="citation_title" content="The Invisible Half of a Blog Post"&gt;
+&lt;meta name="citation_author" content="Reid, Kenneth N."&gt;
+&lt;meta name="citation_publication_date" content="2026/08/04"&gt;
+&lt;meta name="DC.title" content="The Invisible Half of a Blog Post"&gt;
+&lt;meta name="DC.creator" content="Kenneth N. Reid"&gt;
+&lt;meta name="DC.date" content="2026-08-04"&gt;</code></pre>
 
  <figure>
  <img src="../img/photography/thumb/78.webp" alt="A four-pane skylight in a dark wooden attic roof, bright sky showing through" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
@@ -117,7 +142,20 @@
 
  <p>Two XML files round out every publish. The sitemap is a list of every page, so crawlers miss nothing. The RSS feed is how readers with feed readers (a small, excellent demographic) get new posts delivered without visiting, and it's essential infrastructure here. RSS predates the social platforms and will outlive several of them.</p>
 
+<pre><code class="language-xml">&lt;!-- feed.xml --&gt;
+&lt;item&gt;
+  &lt;title&gt;The Invisible Half of a Blog Post&lt;/title&gt;
+  &lt;link&gt;https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html&lt;/link&gt;
+  &lt;pubDate&gt;Tue, 04 Aug 2026 00:00:00 +0000&lt;/pubDate&gt;
+&lt;/item&gt;
+
+&lt;!-- sitemap.xml --&gt;
+&lt;url&gt;&lt;loc&gt;https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html&lt;/loc&gt;
+     &lt;changefreq&gt;yearly&lt;/changefreq&gt;&lt;priority&gt;0.8&lt;/priority&gt;&lt;/url&gt;</code></pre>
+
  <p>Each post also declares a canonical URL: the www and non-www versions of your site, plus any URL with tracking junk appended, all count as <em>different pages</em> to a search engine, splitting your modest search presence into fragments. One tag per page declares the official address and the fragments reunite.</p>
+
+<pre><code class="language-html">&lt;link rel="canonical" href="https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html"&gt;</code></pre>
 
  <h2>The real problem is discipline</h2>
 
@@ -205,9 +243,11 @@
  <script src="../js/alime.bundle.js"></script>
  <script src="../js/lightbox.js"></script>
  <script src="../js/share.js"></script>
+ <script src="../js/prism-loader.js"></script>
  <script src="../js/default-assets/active.js"></script>
  <script src="../js/shared-components.js"></script>
  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
-renderFooter('footer-section');</script>
+renderFooter('footer-section');
+loadPrism();</script>
 </body>
 </html>

@@ -14,8 +14,8 @@
       "name": "How This Site Is Built",
       "part": 11
     },
-    "readMinutes": 5,
-    "words": 916
+    "readMinutes": 6,
+    "words": 1161
   },
   {
     "title": "Ctrl+K for a Static Site",
@@ -108,7 +108,7 @@
       "part": 8
     },
     "readMinutes": 8,
-    "words": 1572
+    "words": 1570
   },
   {
     "title": "My Teacher Said I Shouldn't Go To University",
@@ -186,12 +186,12 @@
     "excerpt": "This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.",
     "url": "blog/reading-this-site-offline.html",
     "image": "img/photography/thumb/62.webp",
-    "readMinutes": 7,
+    "readMinutes": 6,
     "series": {
       "name": "How This Site Is Built",
       "part": 4
     },
-    "words": 1324
+    "words": 1308
   },
   {
     "title": "The Abandoned Places I Photograph",
@@ -205,7 +205,7 @@
     "url": "blog/abandoned-places-i-photograph.html",
     "image": "img/photography/thumb/135.webp",
     "readMinutes": 9,
-    "words": 1943
+    "words": 1954
   },
   {
     "title": "Why I Love LaTeX",
@@ -219,7 +219,7 @@
     "url": "blog/why-i-love-latex.html",
     "image": "img/photography/thumb/16.webp",
     "readMinutes": 8,
-    "words": 1571
+    "words": 1569
   },
   {
     "title": "What 50,000 Scrobbles Say About Me",
@@ -498,7 +498,7 @@
     "url": "blog/accessibility-first-product-design-data-science.html",
     "image": "img/photography/thumb/21.webp",
     "readMinutes": 42,
-    "words": 9159
+    "words": 9153
   },
   {
     "title": "The Life and Death of the Early Internet",
@@ -511,7 +511,7 @@
     "url": "blog/life-and-death-of-the-early-internet.html",
     "image": "img/photography/thumb/375.webp",
     "readMinutes": 23,
-    "words": 4951
+    "words": 4954
   },
   {
     "title": "The Ethics of LLM Use (Not LLMs)",
@@ -563,7 +563,7 @@
     "url": "blog/fifteen-years-of-silence-rothfuss-doors-of-stone.html",
     "image": "img/photography/thumb/109.webp",
     "readMinutes": 13,
-    "words": 2744
+    "words": 2755
   },
   {
     "title": "No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio",
