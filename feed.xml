@@ -5,11 +5,20 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 03 Aug 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Mon, 03 Aug 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Tue, 04 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Tue, 04 Aug 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>The Invisible Half of a Blog Post</title>
+      <link>https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html</link>
+      <guid>https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html</guid>
+      <pubDate>Tue, 04 Aug 2026 00:00:00 +0000</pubDate>
+      <description>Every post on this blog carries around forty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.</description>
+      <category>technology</category>
+      <category>writing</category>
+    </item>
     <item>
       <title>Ctrl+K for a Static Site</title>
       <link>https://www.kenreid.co.uk/blog/ctrl-k-for-a-static-site.html</link>

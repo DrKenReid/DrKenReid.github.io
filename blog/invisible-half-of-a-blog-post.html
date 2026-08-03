@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="Every post on this blog carries around forty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags.">
+ <meta name="keywords" content="technology, writing">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>The Invisible Half of a Blog Post - Ken Reid</title>
+ <meta property="og:title" content="The Invisible Half of a Blog Post">
+ <meta property="og:description" content="Every post on this blog carries around forty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags.">
+ <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/78.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="The Invisible Half of a Blog Post">
+ <meta name="twitter:description" content="Every post on this blog carries around forty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags.">
+ <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/78.png">
+ <meta name="citation_title" content="The Invisible Half of a Blog Post">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/08/04">
+ <meta name="citation_online_date" content="2026/08/04">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html">
+ <meta name="DC.title" content="The Invisible Half of a Blog Post">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-08-04">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "The Invisible Half of a Blog Post",
+ "description": "Every post on this blog carries around forty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags.",
+ "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/78.png",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-08-04",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["metadata", "seo", "open graph", "rss", "structured data"]
+ }
+ </script>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/78.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">Blog</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">The Invisible Half of a Blog Post</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+ <main id="main-content">
+ <div class="blog-post">
+ <h1>The Invisible Half of a Blog Post</h1>
+ <div class="blog-meta">
+ 4 August 2026 &middot;
+ <span class="blog-tag">technology</span>
+ <span class="blog-tag">writing</span>
+ </div>
+
+ <p>When I publish a post here, the words are roughly half the file. The other half is metadata: forty-odd lines in the page's head, plus entries in two site-wide XML files. Skipping it all would change nothing about the reading experience, but it's necessary and is checked by <a href="my-website-has-a-test-suite.html">a machine</a>. This post describes it. Part of the series on <a href="../series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Metadata:</strong> data about the page rather than in it: its title, summary, author, date, and preview image, written in machine-readable form.</li>
+ <li><strong>Open Graph:</strong> the tag family (invented by Facebook, used by everyone) that controls the card shown when your link is shared in a chat or feed.</li>
+ <li><strong>Canonical URL:</strong> a tag declaring "this address is the one true home of this page", so search engines don't treat variants as duplicates.</li>
+ <li><strong>JSON-LD / structured data:</strong> a machine-readable summary of the page (this is an article, by this person, on this date) in a format search engines parse directly.</li>
+ <li><strong>RSS feed:</strong> a site-wide XML file listing recent posts, so feed readers can check for new writing without visiting.</li>
+ <li><strong>Sitemap:</strong> a plain list of every page you'd like search engines to know about.</li>
+ </ul>
+ </div>
+
+ <h2>The card in the chat window</h2>
+
+ <p>Open Graph: five tags giving the post's title, description, preview image, address, and type. When someone pastes your link into a group chat or a social feed, the platform reads these tags to build the preview card. Without them, your link renders as bare blue text or, worse, a card assembled from whatever the scraper found first. With them, every share has a title, summary sentence, and one of <a href="../gallery.html">my photographs</a> at full card width. Twitter's near-identical tag family sits alongside for the platforms that read that instead.</p>
+
+ <p>The description gets written by a human (me), because it's the sentence that decides whether a stranger clicks. And the image tag points at a full-resolution photo, not a thumbnail, because preview scrapers resize down gracefully and up horribly.</p>
+
+ <h2>The librarian's copy</h2>
+
+ <p>Below the social tags sits a block of JSON-LD: the same facts (headline, author, date, image) restated in schema.org's vocabulary, which is the format Google actually parses for rich results. Where the Open Graph tags talk to chat apps, this block talks to crawlers, and it's how I explain that this page is an article by me.</p>
+
+ <p>Each post carries citation tags (the format Google Scholar reads) and Dublin Core tags (the library world's metadata standard). I spent years in academia, the tags cost six lines, and if someone ever does want to cite <a href="what-50000-scrobbles-say-about-me.html">the scrobbles post</a> in their media-studies dissertation, their reference manager will fill every field correctly. It's courteous and costs me nothing but a couple of seconds, and might give another citation or two to my Google Scholar account!</p>
+
+ <figure>
+ <img src="../img/photography/thumb/78.webp" alt="A four-pane skylight in a dark wooden attic roof, bright sky showing through" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> The part of the structure you only notice when the light comes through it.</figcaption>
+ </figure>
+
+ <h2>The site-wide ledgers</h2>
+
+ <p>Two XML files round out every publish. The sitemap is a list of every page, so crawlers miss nothing. The RSS feed is how readers with feed readers (a small, excellent demographic) get new posts delivered without visiting, and it's essential infrastructure here. RSS predates the social platforms and will outlive several of them.</p>
+
+ <p>Each post also declares a canonical URL: the www and non-www versions of your site, plus any URL with tracking junk appended, all count as <em>different pages</em> to a search engine, splitting your modest search presence into fragments. One tag per page declares the official address and the fragments reunite.</p>
+
+ <h2>The real problem is discipline</h2>
+
+ <p>Nothing above is hard. The hard part is that it's forty lines of near-identical boilerplate on every post, and near-identical is the operative curse: copy the head from the last post, forget to change the og:image, and next week your post about cats is shared around wearing a photograph of a dog. </p>
+
+ <p>So: automate the checking, not necessarily the writing. My audit script validates every page's metadata (descriptions present and sensibly sized, canonical matching the filename, preview images existing, JSON-LD parsing, feed and sitemap complete) on every push. The forty lines stay correct because a robot reads them. Without that, my genuine recommendation would be to keep <em>less</em> metadata: only what you can maintain, because wrong metadata is worse than none.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>What's the minimum set worth having?</summary>
+ <p>Title, description, canonical, and the Open Graph tags with a real image. That covers search snippets and share cards, which is where the visible benefit lives. Add RSS if you post regularly; it's one generated file and your most loyal readers will use it. Everything beyond that is diminishing returns done for craft.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Does any of this improve search ranking?</summary>
+ <p>Mostly no, and be suspicious of anyone selling otherwise. Metadata doesn't make a page rank higher; it makes the page <em>present correctly</em> wherever it appears: the right snippet, the right card, the right attribution. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>How do I check what my links look like when shared?</summary>
+ <p>Paste the URL into a private chat with yourself and see what unfurls. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why not generate all this with a static site generator?</summary>
+ <p>A generator absolutely would, from a few front-matter fields, and it's a fine reason to use one. This site is hand-built by choice (<a href="blog-engine-in-one-json-file.html">a decision explained elsewhere</a>), so the equivalent is a checked template: same output, different division of labour between me and the machines.</p>
+ </details>
+ </div>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="blog-engine-in-one-json-file.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/71.webp" alt="A Blog Engine in One JSON File" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">26 July 2026 · 7 min read</div>
+                  <h4 class="blog-card-title">A Blog Engine in One JSON File</h4>
+                  <p class="blog-card-excerpt">No database, no CMS, no Jekyll: this blog's search, tag filters, pagination, read times, and related posts all hang off one JSON file and two Python scripts.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="my-website-has-a-test-suite.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/4.webp" alt="My Website Has a Test Suite" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">17 July 2026 · 8 min read</div>
+                  <h4 class="blog-card-title">My Website Has a Test Suite</h4>
+                  <p class="blog-card-excerpt">A Python audit script and headless browser smoke tests run on every push. Here's why a personal blog has a test suite.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="why-i-love-latex.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/16.webp" alt="Why I Love LaTeX" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 July 2026 · 8 min read</div>
+                  <h4 class="blog-card-title">Why I Love LaTeX</h4>
+                  <p class="blog-card-excerpt">I wrote my thesis, my papers, and my CV in LaTeX, and I'd have it no other way.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ </div>
+ </main>
+
+ <hr style="margin: 40px 0;">
+ <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+ </div>
+ </div>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/popper.min.js"></script>
+ <script src="../js/bootstrap.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/share.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+</body>
+</html>

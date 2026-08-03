@@ -1,5 +1,23 @@
 [
   {
+    "title": "The Invisible Half of a Blog Post",
+    "date": "2026-08-04",
+    "tags": [
+      "technology",
+      "writing"
+    ],
+    "category": "Technology",
+    "excerpt": "Every post on this blog carries around forty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.",
+    "url": "blog/invisible-half-of-a-blog-post.html",
+    "image": "img/photography/thumb/78.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 11
+    },
+    "readMinutes": 5,
+    "words": 916
+  },
+  {
     "title": "Ctrl+K for a Static Site",
     "date": "2026-08-03",
     "tags": [
@@ -14,7 +32,7 @@
       "part": 10
     },
     "readMinutes": 12,
-    "words": 2425
+    "words": 2538
   },
   {
     "title": "The Paradox of Tolerance",
@@ -58,8 +76,8 @@
       "name": "How This Site Is Built",
       "part": 9
     },
-    "readMinutes": 6,
-    "words": 1301
+    "readMinutes": 7,
+    "words": 1322
   },
   {
     "title": "Ant Colony, Live",
@@ -90,7 +108,7 @@
       "part": 8
     },
     "readMinutes": 8,
-    "words": 1549
+    "words": 1572
   },
   {
     "title": "My Teacher Said I Shouldn't Go To University",
@@ -121,7 +139,7 @@
       "part": 7
     },
     "readMinutes": 5,
-    "words": 1023
+    "words": 1025
   },
   {
     "title": "Putting My Photos on a Map",
@@ -139,7 +157,7 @@
       "part": 6
     },
     "readMinutes": 6,
-    "words": 1138
+    "words": 1154
   },
   {
     "title": "Self-Hosting Your Fonts",
@@ -156,7 +174,7 @@
       "part": 5
     },
     "readMinutes": 6,
-    "words": 1186
+    "words": 1202
   },
   {
     "title": "Reading This Site Offline",
@@ -168,12 +186,12 @@
     "excerpt": "This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.",
     "url": "blog/reading-this-site-offline.html",
     "image": "img/photography/thumb/62.webp",
-    "readMinutes": 6,
+    "readMinutes": 7,
     "series": {
       "name": "How This Site Is Built",
       "part": 4
     },
-    "words": 1308
+    "words": 1324
   },
   {
     "title": "The Abandoned Places I Photograph",
@@ -201,7 +219,7 @@
     "url": "blog/why-i-love-latex.html",
     "image": "img/photography/thumb/16.webp",
     "readMinutes": 8,
-    "words": 1569
+    "words": 1571
   },
   {
     "title": "What 50,000 Scrobbles Say About Me",
