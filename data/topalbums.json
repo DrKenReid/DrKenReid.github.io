@@ -15,13 +15,6 @@
       "plays": 6
     },
     {
-      "name": "Infinite Requiem (Deoksoon)",
-      "artist": "LUNEKT",
-      "url": "https://www.last.fm/music/LUNEKT/Infinite+Requiem+(Deoksoon)",
-      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/d3c0b224f59d9360b067adaeee01b788.jpg",
-      "plays": 5
-    },
-    {
       "name": "ECLESIA",
       "artist": "Naïka",
       "url": "https://www.last.fm/music/Na%C3%AFka/ECLESIA",
@@ -40,6 +33,13 @@
       "artist": "Fey Fili",
       "url": "https://www.last.fm/music/Fey+Fili/High+Valley+Demos",
       "img": "https://lastfm.freetls.fastly.net/i/u/300x300/01d34ed523f8706f4e2bb3270294dc62.jpg",
+      "plays": 4
+    },
+    {
+      "name": "Infinite Requiem (Deoksoon)",
+      "artist": "LUNEKT",
+      "url": "https://www.last.fm/music/LUNEKT/Infinite+Requiem+(Deoksoon)",
+      "img": "https://lastfm.freetls.fastly.net/i/u/300x300/d3c0b224f59d9360b067adaeee01b788.jpg",
       "plays": 4
     },
     {
@@ -149,5 +149,5 @@
     }
   ],
   "period": "3month",
-  "updated": "2026-08-03"
+  "updated": "2026-08-04"
 }
