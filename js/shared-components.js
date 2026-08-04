@@ -59,6 +59,7 @@ function renderHeader(targetId, options) {
         '<li class="kr-nav-divider" role="separator" aria-hidden="true"></li>' +
         '<li' + (blogChild === 'series-site' ? ' class="active"' : '') + '><a href="' + basePath + 'series-how-this-site-is-built.html"' + (blogChild === 'series-site' ? ' aria-current="page"' : '') + '>How This Site Is Built</a></li>' +
         '<li' + (blogChild === 'series-schedule' ? ' class="active"' : '') + '><a href="' + basePath + 'series-optimizing-your-schedule.html"' + (blogChild === 'series-schedule' ? ' aria-current="page"' : '') + '>Optimizing Your Schedule</a></li>' +
+        '<li' + (blogChild === 'series-algorithms' ? ' class="active"' : '') + '><a href="' + basePath + 'series-algorithms-live.html"' + (blogChild === 'series-algorithms' ? ' aria-current="page"' : '') + '>Algorithms, Live</a></li>' +
         '</ul></li>' +
         navItem('contact', basePath + 'contact.html', 'Contact') +
         '</ul></div></div></nav>' +
@@ -1111,7 +1112,7 @@ function renderSeriesPage() {
         var count = document.getElementById('series-count');
         if (count) {
             var mins = parts.reduce(function(s, p) { return s + (p.readMinutes || 0); }, 0);
-            count.textContent = parts.length + ' parts · ' + mins + ' minutes all told';
+            count.textContent = parts.length + (parts.length === 1 ? ' part · ' : ' parts · ') + mins + (mins === 1 ? ' minute all told' : ' minutes all told');
         }
     }).catch(function() {});
 }

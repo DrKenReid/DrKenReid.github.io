@@ -212,6 +212,9 @@ def main():
         rel = page.relative_to(ROOT).as_posix()
         if rel in EXEMPT_PAGES:
             continue
+        if rel.startswith("blog/downloads/"):
+            # download artifacts (standalone demo files), not site pages
+            continue
         is_post = rel.startswith("blog/") and not p.noindex
         is_redirect = "http-equiv=\"refresh\"" in text or "http-equiv='refresh'" in text
 
@@ -489,6 +492,8 @@ def main():
             if info is None or info.noindex:
                 continue
             if rel in ("404.html", "google1473b6928dc28ce6.html"):
+                continue
+            if rel.startswith("blog/downloads/"):
                 continue
             candidates = {f"{SITE}/{rel}"}
             if rel == "index.html":

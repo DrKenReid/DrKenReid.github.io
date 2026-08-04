@@ -1,5 +1,22 @@
 [
   {
+    "title": "Evolution, Live: Genetic Algorithms",
+    "date": "2026-08-04",
+    "tags": [
+      "ai"
+    ],
+    "category": "Data & AI",
+    "excerpt": "A genetic algorithm evolving a solution live in your browser: populations, crossover, mutation, and selection as sliders you can break. Fifty translucent triangles evolve the alphabet, and you supply the selection pressure.",
+    "url": "blog/evolution-live.html",
+    "image": "img/photography/thumb/204.webp",
+    "series": {
+      "name": "Algorithms, Live",
+      "part": 2
+    },
+    "readMinutes": 17,
+    "words": 3529
+  },
+  {
     "title": "The Invisible Half of a Blog Post",
     "date": "2026-08-04",
     "tags": [
@@ -90,6 +107,10 @@
     "excerpt": "An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and break it with the sliders.",
     "url": "blog/ant-colony-live.html",
     "image": "img/photography/thumb/290.webp",
+    "series": {
+      "name": "Algorithms, Live",
+      "part": 1
+    },
     "readMinutes": 7,
     "words": 1342
   },

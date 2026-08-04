@@ -11,6 +11,14 @@
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Evolution, Live: Genetic Algorithms</title>
+      <link>https://www.kenreid.co.uk/blog/evolution-live.html</link>
+      <guid>https://www.kenreid.co.uk/blog/evolution-live.html</guid>
+      <pubDate>Tue, 04 Aug 2026 00:00:00 +0000</pubDate>
+      <description>A genetic algorithm evolving a solution live in your browser: populations, crossover, mutation, and selection as sliders you can break. Fifty translucent triangles evolve the alphabet, and you supply the selection pressure.</description>
+      <category>ai</category>
+    </item>
+    <item>
       <title>The Invisible Half of a Blog Post</title>
       <link>https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html</link>
       <guid>https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html</guid>

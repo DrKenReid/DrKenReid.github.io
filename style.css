@@ -2362,10 +2362,12 @@ input:required {
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   margin-bottom: 15px; }
-.bcl {
+.blog-post img.book-cover--left,
+.book-cover--left {
   float: left;
   margin: 8px 24px 15px 0; }
-.bcr {
+.blog-post img.book-cover--right,
+.book-cover--right {
   float: right;
   margin: 8px 0 15px 24px; }
 .bsec {
