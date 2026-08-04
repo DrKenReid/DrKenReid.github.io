@@ -144,7 +144,7 @@
         <div class="plain-english-box">
           <h2>Quick jargon guide</h2>
           <ul>
-            <li><strong>ISO 8601:</strong> the international standard for date and time formats. The bit everyone means when they say &ldquo;ISO date&rdquo; is <code>YYYY-MM-DD</code>: four-digit year, hyphen, two-digit month, hyphen, two-digit day.</li>
+            <li><strong>ISO 8601:</strong> the international standard for date and time formats. The bit everyone means when they say "ISO date" is <code>YYYY-MM-DD</code>: four-digit year, hyphen, two-digit month, hyphen, two-digit day.</li>
             <li><strong>Lexicographic sorting:</strong> sorting by character order, the way a computer sorts filenames. If your date format sorts correctly as plain text, it also sorts correctly chronologically. </li>
             <li><strong>Ambiguity:</strong> the gap between what a string says and what it means. <code>03/04/05</code> is ambiguous in three directions. <code>2005-03-04</code> is ambiguous in zero.</li>
           </ul>
@@ -167,7 +167,7 @@
 
         <p>The case for ISO 8601 is almost embarrassingly practical. There are three arguments, and they all matter at the same time:</p>
 
-        <p><strong>1. It sorts correctly as plain text.</strong> This is the main one for me as a data scientist often dealing with messy data. Drop a folder of files named <code>2024-01-03_notes.md</code>, <code>2024-11-12_notes.md</code>, <code>2025-02-04_notes.md</code> into any file manager on any operating system and they line up in chronological order with zero configuration. No regex, no parsing, no &ldquo;sort by date modified&rdquo; that lies to you when you copy the folder. </p>
+        <p><strong>1. It sorts correctly as plain text.</strong> This is the main one for me as a data scientist often dealing with messy data. Drop a folder of files named <code>2024-01-03_notes.md</code>, <code>2024-11-12_notes.md</code>, <code>2025-02-04_notes.md</code> into any file manager on any operating system and they line up in chronological order with zero configuration. No regex, no parsing, no "sort by date modified" that lies to you when you copy the folder. </p>
 
         <p><strong>2. It is unambiguous.</strong> <code>2026-05-12</code> can only mean one day. You do not need to know who wrote it, what country they were in, or which spreadsheet locale was active at the time. </p>
 
@@ -177,7 +177,7 @@
 
         <h2>The cursed alternatives</h2>
 
-        <p><code>MM/DD/YYYY</code> is, with respect to my American friends, imperial nonsense. It puts the units in middle-endian order: medium, small, large. There is no other context in which we write numbers like this. Nobody says it is half-past forty-five seven. The format exists because of how Americans <em>say</em> dates aloud (&ldquo;May twelfth, twenty twenty-six&rdquo;), which is a fine reason to speak that way and a terrible reason to write that way.</p>
+        <p><code>MM/DD/YYYY</code> is, with respect to my American friends, imperial nonsense. It puts the units in middle-endian order: medium, small, large. There is no other context in which we write numbers like this. Nobody says it is half-past forty-five seven. The format exists because of how Americans <em>say</em> dates aloud ("May twelfth, twenty twenty-six"), which is a fine reason to speak that way and a terrible reason to write that way.</p>
 
         <div class="threads-embed-wrap">
           <blockquote class="text-post-media" data-text-post-permalink="https://www.threads.com/@hey.erc/post/DXuWFoHDgwW" data-text-post-version="0">
@@ -221,11 +221,11 @@
           <li>You're writing code in Python and a pandas <code>read_csv</code> guesses wrong about a date column and silently rotates 12 months of your data by 30 days.</li>
           <li>Two analysts in two countries email a spreadsheet back and forth and one of them is now using June where the other meant January.</li>
           <li>You have to look at a CSV from 2017 and figure out whether the day Excel parsed it on was a Tuesday in your locale or theirs.</li>
-          <li>A backup script orders files by name and you discover, six months too late, that &ldquo;newest&rdquo; meant alphabetical.</li>
+          <li>A backup script orders files by name and you discover, six months too late, that "newest" meant alphabetical.</li>
           <li>A medical record, a court filing, or a customs form rides on which of two interpretations the recipient picked.</li>
         </ul>
 
-        <p>None of these are hypothetical and are problems happening daily as seen on many public news stories in the last decade. The fix is &ldquo;use the format that does not have this problem.&rdquo;</p>
+        <p>None of these are hypothetical and are problems happening daily as seen on many public news stories in the last decade. The fix is "use the format that does not have this problem."</p>
 
         <div class="threads-embed-wrap">
           <blockquote class="text-post-media" data-text-post-permalink="https://www.threads.com/@crock.stagram/post/DXuvCXnErUq" data-text-post-version="0">
@@ -236,7 +236,7 @@
 
         <h2>Good standards disappear</h2>
 
-        <p>Standards are civilisation&rsquo;s hidden infrastructure. The ones we notice: the power socket that does not fit, the dongle you cannot find, the file your colleague cannot open. The ones that work disappear. You do not think about <abbr title="The International System of Units">SI units</abbr> when a recipe calls for 200 grams of flour. You do not think about USB-C when your phone charges. You do not think about TCP/IP at all, unless you're a CS geek.</p>
+        <p>Standards are civilisation's hidden infrastructure. The ones we notice: the power socket that does not fit, the dongle you cannot find, the file your colleague cannot open. The ones that work disappear. You do not think about <abbr title="The International System of Units">SI units</abbr> when a recipe calls for 200 grams of flour. You do not think about USB-C when your phone charges. You do not think about TCP/IP at all, unless you're a CS geek.</p>
 
         <p>ISO 8601 is one of the good ones. It works so consistently that you stop seeing it. <code>git log</code> dates, <code>kubectl</code> timestamps, every JSON API in the wild, every database <code>created_at</code> column: they are all already speaking it. The only place the format is still <em>visible</em> is the human layer, where we cling to regional habits out of muscle memory.</p>
 
@@ -274,12 +274,12 @@
 
           <details class="faq-item">
             <summary>What about American date format? Is there any defence?</summary>
-            <p>The defence is &ldquo;it matches how Americans say dates aloud,&rdquo; which is a fine reason to speak that way and a poor reason to write or store data that way. For spoken English, write what feels natural. For filenames, spreadsheets, logs, and anything that will outlive the conversation: ISO 8601.</p>
+            <p>The defence is "it matches how Americans say dates aloud," which is a fine reason to speak that way and a poor reason to write or store data that way. For spoken English, write what feels natural. For filenames, spreadsheets, logs, and anything that will outlive the conversation: ISO 8601.</p>
           </details>
 
           <details class="faq-item">
             <summary>What if my organisation uses a different format?</summary>
-            <p>Use the organisation&rsquo;s format in shared documents and use ISO 8601 in everything you own: filenames, personal notes, your own scripts, your own backups. The win is mostly personal. You can be a discreet cultist; the standard will not mind.</p>
+            <p>Use the organisation's format in shared documents and use ISO 8601 in everything you own: filenames, personal notes, your own scripts, your own backups. The win is mostly personal. You can be a discreet cultist; the standard will not mind.</p>
           </details>
 
           <details class="faq-item">
