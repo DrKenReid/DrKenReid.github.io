@@ -1,5 +1,22 @@
 [
   {
+    "title": "Simulated Annealing, Live",
+    "date": "2026-08-05",
+    "tags": [
+      "ai"
+    ],
+    "category": "Data & AI",
+    "excerpt": "An interactive introduction to simulated annealing: watch a ball escape local minima as you control the temperature, then race four algorithms live on the Travelling Salesman Problem in your browser.",
+    "url": "blog/simulated-annealing-live.html",
+    "image": "img/photography/thumb/69.webp",
+    "series": {
+      "name": "Algorithms, Live",
+      "part": 3
+    },
+    "readMinutes": 28,
+    "words": 6106
+  },
+  {
     "title": "Evolution, Live: Genetic Algorithms",
     "date": "2026-08-04",
     "tags": [
@@ -14,7 +31,7 @@
       "part": 2
     },
     "readMinutes": 17,
-    "words": 3529
+    "words": 3650
   },
   {
     "title": "The Invisible Half of a Blog Post",
@@ -112,7 +129,7 @@
       "part": 1
     },
     "readMinutes": 7,
-    "words": 1342
+    "words": 1335
   },
   {
     "title": "My Website Has a Test Suite",
@@ -160,7 +177,7 @@
       "part": 7
     },
     "readMinutes": 5,
-    "words": 1025
+    "words": 1023
   },
   {
     "title": "Putting My Photos on a Map",
@@ -226,7 +243,7 @@
     "url": "blog/abandoned-places-i-photograph.html",
     "image": "img/photography/thumb/135.webp",
     "readMinutes": 9,
-    "words": 1954
+    "words": 1937
   },
   {
     "title": "Why I Love LaTeX",
@@ -597,7 +614,7 @@
     "url": "blog/no-idea-no-problem-data-science-portfolio.html",
     "image": "img/photography/thumb/19.webp",
     "readMinutes": 11,
-    "words": 2282
+    "words": 2286
   },
   {
     "title": "Evolutionary Computation's Identity Crisis in the Age of GenAI",
@@ -610,7 +627,7 @@
     "url": "blog/evolutionary-computation-identity-crisis.html",
     "image": "img/photography/thumb/208.webp",
     "readMinutes": 12,
-    "words": 2543
+    "words": 2542
   },
   {
     "title": "In Defense of Audiobooks",
