@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="Dark mode is easy; dark mode without a white flash is more difficult.">
+ <meta name="keywords" content="technology">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Dark Mode That Doesn't Flash - Ken Reid</title>
+ <meta property="og:title" content="Dark Mode That Doesn't Flash">
+ <meta property="og:description" content="Dark mode is easy; dark mode without a white flash is more difficult.">
+ <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/20.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/dark-mode-that-doesnt-flash.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Dark Mode That Doesn't Flash">
+ <meta name="twitter:description" content="Dark mode is easy; dark mode without a white flash is more difficult.">
+ <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/20.png">
+ <meta name="citation_title" content="Dark Mode That Doesn't Flash">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/08/06">
+ <meta name="citation_online_date" content="2026/08/06">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/dark-mode-that-doesnt-flash.html">
+ <meta name="DC.title" content="Dark Mode That Doesn't Flash">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-08-06">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/dark-mode-that-doesnt-flash.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "Dark Mode That Doesn't Flash",
+ "description": "Dark mode is easy; dark mode without a white flash is more difficult.",
+ "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/20.png",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-08-06",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["dark mode", "css", "javascript", "web development", "user experience"]
+ }
+ </script>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/20.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">Blog</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">Dark Mode That Doesn't Flash</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+ <main id="main-content">
+ <div class="blog-post">
+ <h1>Dark Mode That Doesn't Flash</h1>
+ <div class="blog-meta">
+ 6 August 2026 &middot;
+ <span class="blog-tag">technology</span>
+ </div>
+
+ <p>I cannot stand light mode for pretty much anything. Many of my hobbies, my full time job, my masters and my honorary research position all require screentime. Wearing anti-glare glasses helps, but light mode just burns my retinas actively. So, one of the first things I did when making my website an active project rather than a passive one, was adding dark mode. What the tutorials tend to skip for "adding dark mode" is you pick dark mode, you click a link, and the next page blasts you with a white screen for a quarter of a second before remembering your choice. In a dark room, at night, that flash is scorching, and it happens way too often, even on big-name sites. This post covers how this site's theme system avoids it. Part of the series on <a href="../series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>FOUC / theme flash:</strong> "flash of unstyled content", the brief moment a page renders wrong (here: bright white) before correcting itself.</li>
+ <li><strong>localStorage:</strong> a small key-value store in the browser, per site, that survives across visits. Where the theme choice lives.</li>
+ <li><strong>data attribute:</strong> a custom label on an HTML element, like <code>data-theme="dark"</code> on the page's root. CSS rules can target it.</li>
+ <li><strong>Render-blocking:</strong> code the browser must run before it paints anything. Usually a dirty word; here it's the fix.</li>
+ <li><strong>iframe:</strong> a page embedded in another page. This site's comments are one, and they have opinions about their own colours that I had to navigate around.</li>
+ </ul>
+ </div>
+
+ <h2>The process</h2>
+
+ <p>The site's theme is a single attribute on the root element: <code>&lt;html data-theme="dark"&gt;</code> or <code>&lt;html data-theme="light"&gt;</code>. The stylesheet's light styles are the defaults, and dark mode is a set of override rules scoped to that attribute. These are the first two rules of this site's, verbatim:</p>
+
+<pre><code class="language-css">body {
+  color: #252525;
+  background-color: #ffffff; }
+
+[data-theme="dark"] body {
+  background-color: #1a1a1a;
+  color: #e2e2e2; }</code></pre>
+
+ <p>The toggle button in the header flips the attribute, saves the choice to localStorage under a key (<code>kr-theme</code>), and everything restyles instantly, no reload. A brief cross-fade class softens the swap, and the browser's <code>theme-color</code> meta tag (which tints the address bar on phones) is updated to match. All of that is a 60-line JavaScript file.</p>
+
+ <details class="code-example"><summary>The whole toggle (js/theme.js, 60 lines)</summary>
+<pre><code class="language-javascript">/**
+ * theme.js — Site-wide dark/light mode toggle.
+ *
+ * Responsibilities:
+ *   - Read stored preference from localStorage on DOMContentLoaded
+ *   - Default to dark mode when there is no stored preference
+ *   - Apply data-theme="dark"|"light" to &lt;html&gt;
+ *   - Keep the #theme-toggle button aria state in sync
+ *   - Persist choice across page loads
+ *
+ * Flash-of-wrong-theme (FODT) prevention is handled by a tiny inline
+ * script injected into every page's &lt;head&gt; (see the kr-theme check).
+ */
+(function () {
+  var STORAGE_KEY = 'kr-theme';
+  var DEFAULT_THEME = 'dark';
+
+  function stored() {
+    try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
+  }
+
+  function save(t) {
+    try { localStorage.setItem(STORAGE_KEY, t); } catch (e) {}
+  }
+
+  function apply(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    var dark = theme === 'dark';
+
+    // Keep the browser UI (mobile address bar etc.) matching the page background.
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', dark ? '#1a1a1a' : '#ffffff');
+
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.setAttribute('aria-pressed', String(dark));
+    btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+    btn.setAttribute('title',      dark ? 'Switch to light mode' : 'Switch to dark mode');
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    apply(stored() || DEFAULT_THEME);
+
+    // Delegated click — works even if button is injected after this script runs
+    var switchTimer = null;
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest ? e.target.closest('#theme-toggle') : null;
+      if (!btn) return;
+      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      // Cross-fade the swap (CSS scopes transitions to .theme-switching)
+      document.documentElement.classList.add('theme-switching');
+      if (switchTimer) clearTimeout(switchTimer);
+      switchTimer = setTimeout(function () {
+        document.documentElement.classList.remove('theme-switching');
+      }, 350);
+      save(next);
+      apply(next);
+    });
+  });
+}());</code></pre>
+ </details>
+
+ <h2>The hard part</h2>
+
+ <p>The flash happens because of an ordering problem. The browser starts painting your page as soon as it has the HTML and CSS; your theme JavaScript, if it's a normal script loaded politely at the end, runs <em>after</em> that first paint. So the sequence in dark mode is: paint the default (light) page, run the script, discover the visitor wanted dark, restyle. Well, that's no good.</p>
+
+ <p>The fix is to cheat the ordering. The very first thing in this site's <code>&lt;head&gt;</code>, before the stylesheet, before anything, is this inline script (unsquashed here for reading; the shipped version is one line):</p>
+
+<pre><code class="language-html">&lt;script&gt;
+(function () {
+  var t;
+  try { t = localStorage.getItem('kr-theme'); } catch (e) {}
+  if (!t) t = 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+})();
+&lt;/script&gt;</code></pre>
+
+ <p>Inline scripts in the head are render-blocking: the browser stops and runs them before painting a single pixel. Normally that's why performance guides tell you never to put scripts there. I broke the rules here because I made sure it's super efficient (it runs in well under a millisecond) and by doing the one job that must happen before paint: stamping the saved theme onto the root element to prevent harming the corneas of my few thousand readers (although the idea of my code having the power to burn eyeballs across the globe is kind of cool sounding). By the time the browser paints, the attribute is already correct, and there is nothing to flash. The <code>try/catch</code> is for browsers that block localStorage entirely; they get the default, which on this site is dark, on the fact that a light flash in a dark room is worse than a dark flash in a bright one.</p>
+
+ <figure>
+ <img src="../img/photography/thumb/20.webp" alt="Old wooden floorboards in near darkness, low light catching the grain, black and white" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+ </figure>
+
+ <h2>The extras: images and iframes</h2>
+
+ <p><strong>Images with backgrounds don't theme themselves.</strong> My <a href="what-50000-scrobbles-say-about-me.html">post about music listening data</a> includes charts rendered as images, with axis labels and backgrounds that only look right on the right theme. The fix is low-tech and bulletproof: export the chart twice, once per theme, put both in the page, and let three CSS rules choose:</p>
+
+<pre><code class="language-html">&lt;img class="theme-img-light" src="chart-light.png" alt="Top artists chart"&gt;
+&lt;img class="theme-img-dark" src="chart-dark.png" alt="Top artists chart"&gt;
+
+/* in the stylesheet */
+.theme-img-dark { display: none; }
+[data-theme="dark"] .theme-img-light { display: none; }
+[data-theme="dark"] .theme-img-dark { display: block; }</code></pre>
+
+ <p>Two images, one visible at a time, swapping instantly with the toggle. It costs a second download for the chart a visitor actually views, which for the occasional plot is nothing. (For photographs none of this applies; a photo is a photo on any background, I don't use frames in photos of dark or white)</p>
+
+ <p><strong>Iframes are other people's pages.</strong> The comments section is an embedded giscus frame (the free-comments-via-GitHub-Discussions setup has <a href="free-comments-via-github-discussions.html">a post of its own</a>), and my CSS cannot reach inside it. giscus's answer is a message-passing API: when the toggle flips, the site posts a message into the frame telling it which stylesheet to use, and the comments swap themes in step with the page around them. Every embedded widget needs this conversation, which is one more argument for embedding as few widgets as possible.</p>
+
+<pre><code class="language-javascript">// runs after the toggle is clicked; giscusTheme() returns the stylesheet for the new mode
+var frame = document.querySelector('iframe.giscus-frame');
+frame.contentWindow.postMessage(
+  { giscus: { setConfig: { theme: giscusTheme() } } },
+  'https://giscus.app'
+);</code></pre>
+
+ <h2>Respect the choice, remember the choice</h2>
+
+ <p>The remaining design decision is what to do for a first-time visitor with no saved preference. The fashionable answer is to read the operating system's setting via a media query, and it's a good answer. This site instead defaults everyone to dark and makes the toggle obvious, partly because the photography looks better on dark, partly because the site had dark-first visuals long before it had a toggle, but mostly because I hate light theme and I force it upon everyone by default, because I care about your optical health, but you can opt into the pain if you prefer.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Why not the pure-CSS route with prefers-color-scheme?</summary>
+ <p>A media query alone gives you automatic theming with zero JavaScript, and if you don't want a manual toggle it's the simplest answer. The moment you add a toggle (and users do ask for one; OS setting and site preference differ), you need somewhere to store the override and something to apply it before paint, and you're back to the inline script.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Does the render-blocking script hurt performance?</summary>
+ <p>Technically yes, in reality no. It's a few dozen bytes reading one localStorage key; the cost is microseconds. The rule against render-blocking scripts is about network fetches and heavy work, not about five lines of inline code doing the job that must precede painting.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why one data attribute instead of a CSS class?</summary>
+ <p>Near-total taste. An attribute reads as "this page has one theme state" while classes invite accumulating several. It also keeps theme selectors visually distinct from styling classes in the stylesheet, which after a few hundred override rules matters more than I expected.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>How much CSS did dark mode actually take?</summary>
+ <p>More than the tutorials imply: this site's dark theme is hundreds of override rules accumulated over time, because a template built light-first has hardcoded colours everywhere. Building theme-aware from day one (ideally with colour variables) is dramatically less work than retrofitting.</p>
+ </details>
+ </div>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="ctrl-k-for-a-static-site.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/46.webp" alt="Ctrl+K for a Static Site" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">3 August 2026 · 12 min read</div>
+                  <h4 class="blog-card-title">Ctrl+K for a Static Site</h4>
+                  <p class="blog-card-excerpt">Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. 217 lines of vanilla JavaScript, no library, and the whole thing is in the post to steal.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="free-comments-via-github-discussions.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/409.webp" alt="Free Comments via GitHub Discussions" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">15 July 2026 · 5 min read</div>
+                  <h4 class="blog-card-title">Free Comments via GitHub Discussions</h4>
+                  <p class="blog-card-excerpt">How giscus gives a static site free comments with no database, no ads, and no tracking.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="reading-this-site-offline.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/62.webp" alt="Reading This Site Offline" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 July 2026 · 6 min read</div>
+                  <h4 class="blog-card-title">Reading This Site Offline</h4>
+                  <p class="blog-card-excerpt">This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ </main>
+
+ <hr style="margin: 40px 0;">
+ <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+ </div>
+ </div>
+ </div>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/popper.min.js"></script>
+ <script src="../js/bootstrap.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/prism-loader.js"></script>
+ <script src="../js/share.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');
+loadPrism();</script>
+</body>
+</html>

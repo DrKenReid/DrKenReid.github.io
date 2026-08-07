@@ -1,5 +1,22 @@
 [
   {
+    "title": "Dark Mode That Doesn't Flash",
+    "date": "2026-08-06",
+    "tags": [
+      "technology"
+    ],
+    "category": "Technology",
+    "excerpt": "Dark mode is easy; dark mode without a white flash is more difficult. How this site stamps the theme before the first paint, and drags every chart and iframe along with it.",
+    "url": "blog/dark-mode-that-doesnt-flash.html",
+    "image": "img/photography/thumb/20.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 12
+    },
+    "readMinutes": 7,
+    "words": 1534
+  },
+  {
     "title": "Simulated Annealing, Live",
     "date": "2026-08-05",
     "tags": [
@@ -437,7 +454,7 @@
     "url": "blog/advice-to-my-younger-self.html",
     "image": "img/photography/thumb/445.webp",
     "readMinutes": 16,
-    "words": 3482
+    "words": 3456
   },
   {
     "title": "The Books I Recommend to Friends",
