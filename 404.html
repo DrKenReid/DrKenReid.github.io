@@ -12,6 +12,7 @@
   <link rel="icon" href="/img/core-img/favicon.png">
   <link rel="apple-touch-icon" href="/img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
+  <link rel="preload" as="image" href="/img/photography/hero/15.webp">
   <link rel="stylesheet" href="/style.min.css">
   <script defer src="/js/theme.js"></script>
   <script defer src="/js/palette.js"></script>
@@ -36,10 +37,42 @@
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8 text-center">
           <h2>Page Not Found</h2>
-          <p style="color: #636363; font-size: 16px; line-height: 1.8; margin: 20px 0 30px;">The page you're looking for doesn't exist, was moved, or I broke something. <a href="/contact.html">Please let me know!</a></p>
-          <a href="/index.html" class="btn alime-btn btn-2">Back to Home</a>
+          <p style="color: #636363; font-size: 16px; line-height: 1.8; margin: 20px 0 24px;">The page you're looking for doesn't exist, was moved, or I broke something. <a href="/contact.html">Please let me know!</a></p>
 
-          <figure style="margin: 48px auto 0; max-width: 640px;">
+          <form action="/blog.html" method="get" role="search" style="max-width: 420px; margin: 0 auto 14px;">
+            <input type="search" name="q" placeholder="Search the blog instead..." aria-label="Search the blog"
+                   style="width: 100%; padding: 12px 22px; border: 1px solid #ddd; border-radius: 999px; font-size: 15px; outline: none;">
+          </form>
+          <p class="kr-muted" style="font-size: 13px; margin-bottom: 26px;">or press <span class="kr-palette-kbd">Ctrl K</span> to search everything on the site</p>
+          <a href="/index.html" class="btn alime-btn btn-2">Back to Home</a>
+          <a href="/blog.html" class="btn alime-btn btn-2" style="margin-left: 8px;">Browse the Blog</a>
+        </div>
+      </div>
+
+      <div class="text-center" style="margin: 60px 0 26px;">
+        <h3>Or read something new</h3>
+      </div>
+      <div class="row justify-content-center" id="lost-latest"></div>
+      <script>
+        fetch('/data/posts.json').then(function(r) { return r.json(); }).then(function(posts) {
+          var host = document.getElementById('lost-latest');
+          if (!host || !Array.isArray(posts) || !posts.length) return;
+          host.innerHTML = posts.slice(0, 3).map(function(p) {
+            return '<div class="col-12 col-md-6 col-lg-4 mb-30">' +
+              '<a href="/' + (p.url || '') + '" class="blog-card">' +
+              '<div class="blog-card-img"><img src="/' + p.image + '" alt="' + p.title + '" loading="lazy"></div>' +
+              '<div class="blog-card-body">' +
+              '<div class="blog-card-date">' + p.date + (p.readMinutes ? ' · ' + p.readMinutes + ' min read' : '') + '</div>' +
+              '<h3 class="blog-card-title">' + p.title + '</h3>' +
+              '<p class="blog-card-excerpt">' + (p.excerpt || '') + '</p>' +
+              '</div></a></div>';
+          }).join('');
+        }).catch(function() {});
+      </script>
+
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8 text-center">
+          <figure style="margin: 34px auto 0; max-width: 640px;">
             <img id="lost-photo" alt="" style="display: none; width: 100%; border-radius: 12px;">
             <figcaption id="lost-photo-caption" style="display: none; margin-top: 10px; font-size: 0.9rem; opacity: 0.85;">
               Since you're lost anyway, here's a random photo I took. <a href="/gallery.html">There are 490+ more.</a>

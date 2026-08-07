@@ -74,8 +74,11 @@ class PageParser(HTMLParser):
             self.fig_in_list.append(line)
         if tag not in VOID:
             cls = a.get("class") or ""
+            # "story" marks fiction, where em dashes in dialogue and
+            # words like "quiet" are craft, not style violations.
             excluded = (tag in PROSE_EXCLUDED or "references" in cls
                         or "figure-note" in cls
+                        or "story" in cls.split()
                         or (a.get("id") or "").startswith("ref-"))
             self._stack.append((tag, excluded))
             if excluded:
@@ -143,7 +146,8 @@ class PageParser(HTMLParser):
 def tracked_html():
     out = subprocess.run(["git", "ls-files", "*.html"], cwd=ROOT,
                          capture_output=True, text=True).stdout
-    return [ROOT / p for p in out.split() if p]
+    # skip tracked files deleted from the worktree (deletion not yet committed)
+    return [f for f in (ROOT / p for p in out.split() if p) if f.exists()]
 
 
 def is_external(url):
@@ -184,6 +188,11 @@ def tracked_files():
 
 
 BANNED_PROSE = re.compile(r"\b(?:quiet(?:ly|er|est)?|honest(?:ly)?)\b", re.I)
+
+# House style: straight ' and " in prose. Verbatim book passages
+# (quotes.html, the quote-wall JSON) keep their original typography
+# and are not audited here.
+CURLY_PROSE = re.compile(r"[‘’“”]")
 
 
 def main():
@@ -303,6 +312,9 @@ def main():
                 if "—" in chunk:
                     add("WARN", page, line, "em-dash",
                         f"em dash in prose: ...{chunk.strip()[:60]}...")
+                if CURLY_PROSE.search(chunk):
+                    add("WARN", page, line, "curly-quote",
+                        f"curly quote/apostrophe in prose (use straight ' \"): ...{chunk.strip()[:60]}...")
 
         # --- headings ---
         if not is_redirect:
@@ -322,6 +334,9 @@ def main():
             desc = p.metas.get("description", "")
             if not desc:
                 add("ERROR", page, 0, "no-desc", "missing meta description")
+            elif CURLY_PROSE.search(desc):
+                add("WARN", page, 0, "curly-quote",
+                    "curly quote/apostrophe in meta description (use straight ' \")")
             elif len(desc) < 50:
                 add("WARN", page, 0, "short-desc", f"description only {len(desc)} chars")
             elif len(desc) > 165:

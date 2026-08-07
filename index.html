@@ -26,6 +26,7 @@
 
   <!-- Stylesheet -->
   <link rel="alternate" type="application/rss+xml" title="Ken Reid's Blog" href="https://www.kenreid.co.uk/feed.xml">
+  <link rel="preload" as="image" href="/img/bg-img/res.webp">
   <link rel="stylesheet" href="/style.min.css">
   <style>
     .home-stats-bar {
@@ -94,6 +95,7 @@
       "https://www.instagram.com/drkenreid/",
       "https://www.youtube.com/@kenreid",
       "https://www.tiktok.com/@drkenreid",
+      "https://cyberspace.online/drkenreid",
       "https://www.goodreads.com/user/show/42371562-ken-reid",
       "https://www.last.fm/user/gohex"
     ]
@@ -130,6 +132,11 @@
                 <h2 data-animation="bounceInDown" data-delay="700ms">Hi, I'm Ken.</h2>
                 <p data-animation="bounceInDown" data-delay="300ms">Data Scientist, photographer, guitarist, and avid reader.</p>
                 <a href="/data_science.html" class="btn alime-btn mt-30" data-animation="bounceInDown" data-delay="500ms">See My Work</a>
+                <a class="kr-hero-latest" href="/blog.html" hidden>
+                  <span class="kr-hero-latest__tag">New post</span>
+                  <span class="kr-hero-latest__title"></span>
+                  <span aria-hidden="true">&rarr;</span>
+                </a>
               </div>
             </div>
           </div>
@@ -204,6 +211,31 @@
     </div>
   </section>
 
+  <!-- Latest Blog Posts -->
+  <section class="about-us-area section-padding-80-0 clearfix">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 40px;">
+        <span class="section-eyebrow">From the blog</span>
+        <h2 class="wow fadeInUp" data-wow-delay="100ms">Latest Blog Posts</h2>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-7" id="latest-posts"></div>
+        <div class="col-12 col-lg-5 mb-30">
+          <div class="wow fadeInUp kr-blog-promo" data-wow-delay="200ms" style="background-image: url(/img/bg-img/ken-train.webp);">
+            <span class="sr-only">Background photo: Ken Reid on a train, lit by the window.</span>
+            <div class="kr-blog-promo__content">
+              <span class="section-eyebrow">The blog</span>
+              <h3>Writing to find out <span style="white-space: nowrap;">what I think</span></h3>
+              <p>Data science, books, photography, music, moving countries: whatever I'm currently thinking through ends up written down here, with citations where I can find them.</p>
+              <a class="btn alime-btn btn-2" href="/blog.html">Browse all posts</a>
+              <p class="kr-blog-promo__sub">Or get new posts <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">by email</a>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Stats Bar -->
   <section class="wow fadeInUp home-stats-bar" data-wow-delay="100ms">
     <div class="container">
@@ -251,31 +283,6 @@
   <section class="kr-now-area">
     <div class="container">
       <div id="now-strip" class="text-center"></div>
-    </div>
-  </section>
-
-  <!-- Latest Blog Posts -->
-  <section class="about-us-area section-padding-80-0 clearfix">
-    <div class="container">
-      <div class="text-center" style="margin-bottom: 40px;">
-        <span class="section-eyebrow">From the blog</span>
-        <h2 class="wow fadeInUp" data-wow-delay="100ms">Latest Blog Posts</h2>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-12 col-lg-7" id="latest-posts"></div>
-        <div class="col-12 col-lg-5 mb-30">
-          <div class="wow fadeInUp kr-blog-promo" data-wow-delay="200ms" style="background-image: url(/img/bg-img/ken-train.webp);">
-            <span class="sr-only">Background photo: Ken Reid on a train, lit by the window.</span>
-            <div class="kr-blog-promo__content">
-              <span class="section-eyebrow">The blog</span>
-              <h3>Writing to find out <span style="white-space: nowrap;">what I think</span></h3>
-              <p>Data science, books, photography, music, moving countries: whatever I'm currently thinking through ends up written down here, with citations where I can find them.</p>
-              <a class="btn alime-btn btn-2" href="/blog.html">Browse all posts</a>
-              <p class="kr-blog-promo__sub">Or get new posts <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">by email</a>.</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -425,6 +432,15 @@
           var el = document.getElementById('quote-count');
           if (el && Array.isArray(qs)) el.textContent = qs.length;
         }).catch(function() {});
+        // The owl carousel clones the slide for looping, so populate every
+        // copy of the chip, not just the original by id.
+        if (posts.length) {
+          document.querySelectorAll('.kr-hero-latest').forEach(function(hero) {
+            hero.href = '/' + (posts[0].url || 'blog.html');
+            hero.querySelector('.kr-hero-latest__title').textContent = posts[0].title;
+            hero.hidden = false;
+          });
+        }
         var container = document.getElementById('latest-posts');
         if (!container) return;
         var row = document.createElement('div');

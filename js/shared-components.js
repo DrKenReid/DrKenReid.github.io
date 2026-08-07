@@ -13,6 +13,7 @@ document.documentElement.classList.add('kr-js');
 var BLUESKY_SVG = '<svg class="bluesky-icon" viewBox="0 0 568 501" xmlns="http://www.w3.org/2000/svg"><path d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.21C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.842 193.273-185.702 70.281-63.111-64.76-33.889-129.52 80.986-149.071-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.659 0 75.291 0 57.946 0-28.906 76.135-1.612 123.121 33.664z"/></svg>';
 
 var SUBSTACK_SVG = '<svg class="substack-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.539 24V10.812H1.46zM22.539 0H1.46v2.836h21.08V0z"/></svg>';
+var CYBERSPACE_SVG = '<svg class="cyberspace-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M2 3h20v18H2V3zm2 2v14h16V5H4zm4.2 2 5 5-5 5-1.4-1.4 3.6-3.6-3.6-3.6L8.2 7zm5.3 8.3H18v2h-4.5v-2z"/></svg>';
 
 function renderHeader(targetId, options) {
     var el = document.getElementById(targetId);
@@ -60,6 +61,7 @@ function renderHeader(targetId, options) {
         '<li' + (blogChild === 'series-site' ? ' class="active"' : '') + '><a href="' + basePath + 'series-how-this-site-is-built.html"' + (blogChild === 'series-site' ? ' aria-current="page"' : '') + '>How This Site Is Built</a></li>' +
         '<li' + (blogChild === 'series-schedule' ? ' class="active"' : '') + '><a href="' + basePath + 'series-optimizing-your-schedule.html"' + (blogChild === 'series-schedule' ? ' aria-current="page"' : '') + '>Optimizing Your Schedule</a></li>' +
         '<li' + (blogChild === 'series-algorithms' ? ' class="active"' : '') + '><a href="' + basePath + 'series-algorithms-live.html"' + (blogChild === 'series-algorithms' ? ' aria-current="page"' : '') + '>Algorithms, Live</a></li>' +
+        '<li' + (blogChild === 'series-ethics' ? ' class="active"' : '') + '><a href="' + basePath + 'series-everyday-ethics.html"' + (blogChild === 'series-ethics' ? ' aria-current="page"' : '') + '>Everyday Ethics</a></li>' +
         '</ul></li>' +
         navItem('contact', basePath + 'contact.html', 'Contact') +
         '</ul></div></div></nav>' +
@@ -77,11 +79,23 @@ function renderHeader(targetId, options) {
 /**
  * Path prefix from the current page back to the site root.
  * Published posts live in blog/ (one level deep); drafts preview from
- * blog/drafts/ (two levels deep) and need the extra hop.
+ * blog/drafts/ (two levels deep) and need the extra hop. Series drafts
+ * may sit one folder deeper still (blog/drafts/<series>/), so the
+ * drafts prefix is computed from the actual depth below drafts/.
  */
 function siteRootPrefix() {
-    if ((window.location.pathname || '').indexOf('/blog/drafts/') !== -1) return '../../';
-    return document.querySelector('.blog-post') ? '../' : '';
+    var path = window.location.pathname || '';
+    var draftsAt = path.indexOf('/blog/drafts/') !== -1 ? '/blog/drafts/' :
+        (path.indexOf('/writing/drafts/') !== -1 ? '/writing/drafts/' : null);
+    if (draftsAt) {
+        var below = path.slice(path.indexOf(draftsAt) + draftsAt.length);
+        var extra = below.split('/').length - 1;
+        var prefix = '../../';
+        while (extra-- > 0) prefix += '../';
+        return prefix;
+    }
+    if (path.indexOf('/writing/') !== -1) return '../';
+    return document.querySelector('.blog-post, .story-post') ? '../' : '';
 }
 
 /**
@@ -97,7 +111,7 @@ function renderInstagramSection(targetId) {
     var instagramUrl = 'https://www.instagram.com/drkenreid/';
     var handle = 'drkenreid';
 
-    el.innerHTML = '<section class="follow-area clearfix">' +
+    el.innerHTML = '<section class="follow-area clearfix" aria-label="Photography highlights">' +
         '<div class="container"><div class="row"><div class="col-12">' +
         '<div class="section-heading text-center">' +
         '<span class="section-eyebrow">Photography</span>' +
@@ -187,7 +201,7 @@ function renderBlogPhotoHighlights() {
 }
 
 function renderFloatingBlogShare() {
-    var blogPost = document.querySelector('.blog-post');
+    var blogPost = document.querySelector('.blog-post, .story-post');
     if (!blogPost) return;
     if (document.querySelector('.kr-share-rail')) return;
 
@@ -278,6 +292,7 @@ function renderFloatingBlogShare() {
 
     var rail = document.createElement('div');
     rail.className = 'kr-share-rail';
+    rail.setAttribute('role', 'complementary');
     rail.setAttribute('aria-label', 'Share this post');
 
     var railLabel = document.createElement('div');
@@ -353,18 +368,7 @@ function renderFloatingBlogShare() {
         var isMobile = window.matchMedia('(max-width: 991px)').matches;
 
         var postEntered = rect.top < viewportHeight * 0.7;
-        var thanksCard = blogPost.querySelector('.blog-thanks-cta');
-        var mainPostEndReached = false;
-
-        if (thanksCard) {
-            var thanksRect = thanksCard.getBoundingClientRect();
-            // Trigger right as the reader reaches the boundary before the thanks card.
-            mainPostEndReached = thanksRect.top <= viewportHeight * 0.98;
-        } else {
-            mainPostEndReached = rect.bottom < viewportHeight * 0.95;
-        }
-
-        var postPassed = mainPostEndReached && (window.scrollY || window.pageYOffset || 0) > 120;
+        var postPassed = postMainEndPassed(blogPost);
 
         if (isMobile) {
             rail.classList.remove('is-visible');
@@ -477,7 +481,7 @@ function createBlogCardElement(post, options) {
         '<div class="blog-card-img"><img src="' + imageSrc + '" alt="' + post.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'' + fallback + '\';"></div>' +
         '<div class="blog-card-body">' +
         '<div class="blog-card-date">' + dateStr + readTimeText + '</div>' +
-        '<h4 class="blog-card-title">' + post.title + '</h4>' +
+        '<h3 class="blog-card-title">' + post.title + '</h3>' +
         '<p class="blog-card-excerpt">' + (post.excerpt || '') + '</p>' +
         '<div class="blog-card-tags">' + tagHtml + '</div>' +
         '</div>';
@@ -613,7 +617,7 @@ function renderRelatedPosts(targetId) {
                         '<div class="blog-card-img"><img src="' + imageSrc + '" alt="' + post.title + '" loading="lazy" onerror="this.onerror=null;this.src=\'' + rootPrefix + DEFAULT_POST_IMAGE + '\';"></div>' +
                         '<div class="blog-card-body">' +
                         '<div class="blog-card-date">' + formatPostDate(post.date) + (relatedMins ? ' · ' + relatedMins + ' min read' : '') + '</div>' +
-                        '<h4 class="blog-card-title">' + post.title + '</h4>' +
+                        '<h3 class="blog-card-title">' + post.title + '</h3>' +
                         '<p class="blog-card-excerpt">' + (post.excerpt || '') + '</p>' +
                         '<div class="blog-card-tags">' + tagHtml + '</div>' +
                         '</div>' +
@@ -651,17 +655,24 @@ function ensureRelatedPostsSection() {
 }
 
 function renderPostDisclaimer() {
-    var meta = document.querySelector('.blog-post .blog-meta');
-    if (!meta || document.querySelector('.post-disclaimer')) return;
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost || document.querySelector('.post-disclaimer')) return;
     var p = document.createElement('div');
     p.className = 'post-disclaimer';
     p.textContent = 'The views expressed in this post are my own and do not represent any organisation, employer, or institution.';
-    meta.parentNode.insertBefore(p, meta.nextSibling);
+    // Lives at the end of the article (fine print, not a headline): before
+    // the related-posts block when one is baked in, else appended last.
+    var anchor = blogPost.querySelector('.related-posts, #related-posts-section');
+    if (anchor) {
+        blogPost.insertBefore(p, anchor);
+    } else {
+        blogPost.appendChild(p);
+    }
 }
 
 function renderBlogThanksCta() {
-    var blogPost = document.querySelector('.blog-post');
-    var relatedPosts = blogPost ? blogPost.querySelector('.related-posts, #related-posts-section') : null;
+    var blogPost = document.querySelector('.blog-post, .story-post');
+    var relatedPosts = blogPost ? blogPost.querySelector('.related-posts, #related-posts-section, .more-stories') : null;
 
     if (!blogPost || blogPost.querySelector('.blog-thanks-cta')) {
         return;
@@ -670,34 +681,20 @@ function renderBlogThanksCta() {
     var cta = document.createElement('section');
     cta.className = 'blog-thanks-cta';
     cta.setAttribute('aria-label', 'Stay connected with Ken Reid');
-    var rootPrefix = siteRootPrefix();
+    // The coffee button is a native replica of the Buy Me a Coffee widget
+    // (their colours and cup, the site's font, no third-party script): the
+    // official script renders via document.write, which browsers ignore
+    // outside initial page parse, so it cannot work in this injected CTA.
     cta.innerHTML = '' +
-        '<div class="blog-thanks-cta__media">' +
-        '<div class="blog-thanks-cta__portrait">' +
-        '<img src="' + rootPrefix + 'img/bg-img/res-cta.webp" alt="Ken Reid writing on a whiteboard" loading="lazy">' +
-        '</div>' +
-        '</div>' +
-        '<div class="blog-thanks-cta__content">' +
-        '<span class="blog-thanks-cta__eyebrow">Thanks for reading</span>' +
-        '<h2>Follow the next post, project, or experiment</h2>' +
-        '<p>I write about systems, data science, books, photography, and practical AI. The simplest way to keep up is the free email newsletter; Bluesky and LinkedIn work too, and if you use a feed reader, RSS is there.</p>' +
         '<div class="blog-thanks-cta__actions">' +
-        '<a class="blog-thanks-cta__button" href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">' + SUBSTACK_SVG + '<span>Subscribe by email</span></a>' +
-        '<a class="blog-thanks-cta__button" href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer">' + BLUESKY_SVG + '<span>Follow on Bluesky</span></a>' +
-        '<a class="blog-thanks-cta__button" href="https://www.linkedin.com/in/kennethneilreid" target="_blank" rel="noopener noreferrer">' +
-        '<i class="ti-linkedin" aria-hidden="true"></i><span>Follow on LinkedIn</span></a>' +
-        '</div>' +
-        '<p class="blog-thanks-cta__subnote">Prefer feed readers? Use <a href="https://feedly.com/i/subscription/feed%2Fhttps%3A%2F%2Fwww.kenreid.co.uk%2Ffeed.xml" target="_blank" rel="noopener noreferrer">Feedly</a> or open the <a href="' + rootPrefix + 'feed.xml">raw RSS feed</a>.</p>' +
-        '<div class="blog-thanks-cta__links">' +
-        '<a class="blog-thanks-cta__pill" href="' + rootPrefix + 'feed.xml">' +
-        '<i class="ti-rss" aria-hidden="true"></i><span>RSS feed</span></a>' +
-        '<a class="blog-thanks-cta__pill" href="https://github.com/DrKenReid" target="_blank" rel="noopener noreferrer">' +
-        '<i class="fa fa-github" aria-hidden="true"></i><span>GitHub</span></a>' +
-        '<a class="blog-thanks-cta__pill" href="' + rootPrefix + 'data_science.html">' +
-        '<i class="fa fa-line-chart" aria-hidden="true"></i><span>Data Science</span></a>' +
-        '<a class="blog-thanks-cta__pill" href="' + rootPrefix + 'contact.html">' +
-        '<i class="ti-email" aria-hidden="true"></i><span>Get in touch</span></a>' +
-        '</div>' +
+        '<a class="btn alime-btn btn-2 kr-cta-btn" href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">' + SUBSTACK_SVG + '<span>Subscribe by email</span></a>' +
+        '<a class="btn alime-btn btn-2 kr-cta-btn" href="https://buymeacoffee.com/drkenreid" target="_blank" rel="noopener noreferrer">' +
+        '<svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true" focusable="false">' +
+        '<path d="M6.1 7.9h11.8l-1.45 11.6a2.2 2.2 0 0 1-2.18 1.9H9.73a2.2 2.2 0 0 1-2.18-1.9Z" fill="#ffffff" stroke="#0D0C22" stroke-width="1.3" stroke-linejoin="round"/>' +
+        '<path d="M6.55 11.5h10.9l-.42 3.4c-1.55.85-2.6-.55-4.13-.1-1.4.4-2.3 1.15-3.55.7-.7-.25-1.55-.75-2.4-.6Z" fill="#FFDD00"/>' +
+        '<rect x="4.9" y="4.4" width="14.2" height="2.7" rx="1.35" fill="#FFDD00" stroke="#0D0C22" stroke-width="1.3"/>' +
+        '</svg>' +
+        '<span>Buy me a coffee</span></a>' +
         '</div>';
 
     if (relatedPosts) {
@@ -777,7 +774,7 @@ function renderPrevNextNav() {
  * unaffected. Theme follows the site's dark/light toggle.
  */
 function renderGiscusComments() {
-    var blogPost = document.querySelector('.blog-post');
+    var blogPost = document.querySelector('.blog-post, .story-post');
     if (!blogPost || document.getElementById('giscus-comments')) return;
 
     var section = document.createElement('section');
@@ -842,8 +839,8 @@ function renderGiscusComments() {
         mountGiscus();
     });
 
-    // After related posts if present, otherwise at the end of the article.
-    var related = blogPost.querySelector('.related-posts, #related-posts-section');
+    // After related posts / more stories if present, otherwise at the end of the article.
+    var related = blogPost.querySelector('.related-posts, #related-posts-section, .more-stories');
     if (related && related.parentNode === blogPost && related.nextSibling) {
         blogPost.insertBefore(section, related.nextSibling);
     } else {
@@ -868,7 +865,7 @@ function renderGiscusComments() {
  * Thin reading-progress bar under the header on blog posts.
  */
 function renderReadingProgress() {
-    var blogPost = document.querySelector('.blog-post');
+    var blogPost = document.querySelector('.blog-post, .story-post');
     if (!blogPost || document.querySelector('.kr-progress-bar')) return;
 
     var bar = document.createElement('div');
@@ -944,6 +941,23 @@ function renderHeadingAnchors() {
     });
 }
 
+/**
+ * True once the reader has scrolled past the end of the main post body
+ * (the boundary just above the thanks card). The share rail and the
+ * contents rail both retire at this moment so the gutters clear together.
+ */
+function postMainEndPassed(blogPost) {
+    var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    var thanksCard = blogPost.querySelector('.blog-thanks-cta');
+    var endReached;
+    if (thanksCard) {
+        endReached = thanksCard.getBoundingClientRect().top <= viewportHeight * 0.98;
+    } else {
+        endReached = blogPost.getBoundingClientRect().bottom < viewportHeight * 0.95;
+    }
+    return endReached && (window.scrollY || window.pageYOffset || 0) > 120;
+}
+
 function renderPostToc() {
     var blogPost = document.querySelector('.blog-post');
     if (!blogPost || document.querySelector('.kr-toc')) return;
@@ -972,7 +986,6 @@ function renderPostToc() {
         mobileToc.className = 'kr-toc-mobile';
         mobileToc.innerHTML = '<summary>Contents</summary><nav aria-label="Table of contents">' + linksHtml + '</nav>';
         var anchorEl = blogPost.querySelector('.kr-series') ||
-            blogPost.querySelector('.post-disclaimer') ||
             blogPost.querySelector('.blog-meta');
         if (anchorEl && anchorEl.parentNode) {
             anchorEl.parentNode.insertBefore(mobileToc, anchorEl.nextSibling);
@@ -1013,8 +1026,8 @@ function renderPostToc() {
         toc.style.left = left + 'px';
         var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
         var entered = rect.top < viewportHeight * 0.5;
-        var ended = rect.bottom < viewportHeight * 0.6;
-        toc.classList.toggle('is-visible', entered && !ended);
+        // Retire in step with the share rail on the other side of the page.
+        toc.classList.toggle('is-visible', entered && !postMainEndPassed(blogPost));
     }
     window.addEventListener('scroll', updateToc, { passive: true });
     window.addEventListener('resize', updateToc);
@@ -1081,6 +1094,23 @@ function seriesPageHref(name) {
 }
 
 /**
+ * posts.json "series" may be a single {name, part} object or an array of
+ * them (a post can belong to more than one series). Normalise to an array.
+ */
+function postSeriesList(p) {
+    if (!p || !p.series) return [];
+    return Array.isArray(p.series) ? p.series : [p.series];
+}
+
+function postSeriesEntry(p, name) {
+    var list = postSeriesList(p);
+    for (var i = 0; i < list.length; i++) {
+        if (list[i] && list[i].name === name) return list[i];
+    }
+    return null;
+}
+
+/**
  * Series landing page: a container with id="series-page" and a
  * data-series name gets every part rendered as a card, in part order.
  */
@@ -1092,8 +1122,10 @@ function renderSeriesPage() {
 
     loadBlogPosts().then(function(posts) {
         var parts = posts.filter(function(p) {
-            return p.series && p.series.name === name;
-        }).sort(function(a, b) { return (a.series.part || 0) - (b.series.part || 0); });
+            return postSeriesEntry(p, name);
+        }).sort(function(a, b) {
+            return (postSeriesEntry(a, name).part || 0) - (postSeriesEntry(b, name).part || 0);
+        });
         if (!parts.length) return;
 
         grid.innerHTML = '';
@@ -1103,7 +1135,7 @@ function renderSeriesPage() {
             if (imgWrap) {
                 var chip = document.createElement('span');
                 chip.className = 'kr-series-chip';
-                chip.textContent = 'Part ' + p.series.part;
+                chip.textContent = 'Part ' + postSeriesEntry(p, name).part;
                 imgWrap.appendChild(chip);
             }
             grid.appendChild(col);
@@ -1135,32 +1167,106 @@ function renderSeriesNav() {
                 break;
             }
         }
-        if (!current || !current.series || !current.series.name) return;
+        if (!current) return;
+        var seriesList = postSeriesList(current).filter(function(s) { return s && s.name; });
+        if (!seriesList.length) return;
 
-        var parts = posts.filter(function(p) {
-            return p.series && p.series.name === current.series.name;
-        }).sort(function(a, b) { return (a.series.part || 0) - (b.series.part || 0); });
-        if (parts.length < 2) return;
+        // A post can belong to more than one series; stack one banner per series
+        var anchor = blogPost.querySelector('.blog-meta');
+        seriesList.forEach(function(entry) {
+            var parts = posts.filter(function(p) {
+                return postSeriesEntry(p, entry.name);
+            }).sort(function(a, b) {
+                return (postSeriesEntry(a, entry.name).part || 0) - (postSeriesEntry(b, entry.name).part || 0);
+            });
+            if (parts.length < 2) return;
 
-        var box = document.createElement('nav');
-        box.className = 'kr-series';
-        box.setAttribute('aria-label', 'Article series');
-        box.innerHTML = '<a class="kr-series-label" href="' + seriesPageHref(current.series.name) + '">Series · ' + current.series.name + '</a>' +
-            '<ol class="kr-series-parts">' +
-            parts.map(function(p) {
-                var isCurrent = p.url === current.url;
-                var href = (p.url || '').replace(/^blog\//, '');
-                var label = 'Part ' + p.series.part + ': ' + p.title;
-                return '<li' + (isCurrent ? ' class="current" aria-current="page"' : '') + '>' +
-                    (isCurrent ? label : '<a href="' + href + '">' + label + '</a>') + '</li>';
-            }).join('') + '</ol>';
+            var box = document.createElement('nav');
+            box.className = 'kr-series';
+            box.setAttribute('aria-label', 'Article series: ' + entry.name);
+            box.innerHTML = '<a class="kr-series-label" href="' + seriesPageHref(entry.name) + '">Series · ' + entry.name + '</a>' +
+                '<ol class="kr-series-parts">' +
+                parts.map(function(p) {
+                    var isCurrent = p.url === current.url;
+                    var href = (p.url || '').replace(/^blog\//, '');
+                    var label = 'Part ' + postSeriesEntry(p, entry.name).part + ': ' + p.title;
+                    return '<li' + (isCurrent ? ' class="current" aria-current="page"' : '') + '>' +
+                        (isCurrent ? label : '<a href="' + href + '">' + label + '</a>') + '</li>';
+                }).join('') + '</ol>';
 
-        var meta = blogPost.querySelector('.post-disclaimer') || blogPost.querySelector('.blog-meta');
-        if (meta && meta.parentNode) {
-            meta.parentNode.insertBefore(box, meta.nextSibling);
-        } else {
-            blogPost.insertBefore(box, blogPost.firstChild);
+            if (anchor && anchor.parentNode) {
+                anchor.parentNode.insertBefore(box, anchor.nextSibling);
+            } else {
+                blogPost.insertBefore(box, blogPost.firstChild);
+            }
+            anchor = box; // subsequent banners stack after this one
+        });
+    }).catch(function() {});
+}
+
+/**
+ * Small RSS icon link appended to the post meta line (the visible title
+ * lives in the hero banner; the in-content h1 is screen-reader-only).
+ */
+function renderTitleRssLink() {
+    var meta = document.querySelector('.blog-post .blog-meta');
+    if (!meta || meta.querySelector('.kr-title-rss')) return;
+    var a = document.createElement('a');
+    a.className = 'kr-title-rss';
+    a.href = siteRootPrefix() + 'feed.xml';
+    a.setAttribute('aria-label', 'RSS feed');
+    a.title = 'RSS feed';
+    a.innerHTML = '<i class="ti-rss" aria-hidden="true"></i>';
+    meta.appendChild(a);
+}
+
+/**
+ * Adds "N min read" to the meta line from posts.json (published posts
+ * only; drafts are not listed and keep the plain date).
+ */
+function renderMetaReadTime() {
+    var meta = document.querySelector('.blog-post .blog-meta');
+    if (!meta || meta.querySelector('.kr-meta-mins')) return;
+    var currentFileName = resolveCurrentPostFileName();
+    loadBlogPosts().then(function(posts) {
+        for (var i = 0; i < posts.length; i++) {
+            if ((posts[i].url || '').split('/').pop() !== currentFileName) continue;
+            var mins = posts[i].readMinutes;
+            if (!mins) return;
+            var span = document.createElement('span');
+            span.className = 'kr-meta-mins';
+            span.textContent = mins + ' min read · ';
+            var tag = meta.querySelector('.blog-tag');
+            meta.insertBefore(span, tag || null);
+            return;
         }
+    }).catch(function() {});
+}
+
+/**
+ * "Part N" series chips on related-post cards (both baked and
+ * runtime-rendered), matching the listing and series pages.
+ */
+function renderRelatedSeriesChips() {
+    var cards = document.querySelectorAll('.related-posts .blog-card');
+    if (!cards.length) return;
+    loadBlogPosts().then(function(posts) {
+        var byFile = {};
+        posts.forEach(function(p) {
+            byFile[(p.url || '').split('/').pop()] = p;
+        });
+        Array.prototype.forEach.call(cards, function(card) {
+            var imgWrap = card.querySelector('.blog-card-img');
+            if (!imgWrap || imgWrap.querySelector('.kr-series-chip')) return;
+            var file = (card.getAttribute('href') || '').split('/').pop().split('#')[0];
+            var entry = postSeriesList(byFile[file])[0];
+            if (!entry || !entry.name) return;
+            var chip = document.createElement('span');
+            chip.className = 'kr-series-chip';
+            chip.textContent = 'Part ' + entry.part;
+            chip.title = entry.name;
+            imgWrap.appendChild(chip);
+        });
     }).catch(function() {});
 }
 
@@ -1168,6 +1274,8 @@ function renderBlogPostEssentials() {
     var blogPost = document.querySelector('.blog-post');
     if (!blogPost) return;
 
+    renderTitleRssLink();
+    renderMetaReadTime();
     renderReadingProgress();
     renderPostToc();
     renderHeadingAnchors();
@@ -1175,6 +1283,7 @@ function renderBlogPostEssentials() {
     initCitePreviews();
 
     ensureRelatedPostsSection().then(function() {
+        renderRelatedSeriesChips();
         renderBlogThanksCta();
         renderGiscusComments();
         return renderPrevNextNav();
@@ -1182,6 +1291,71 @@ function renderBlogPostEssentials() {
         renderBlogThanksCta();
         renderGiscusComments();
         renderPrevNextNav();
+    });
+}
+
+/**
+ * "More stories" cards at the end of a short story, drawn from
+ * data/stories.json (never from blog posts.json — fiction stays with
+ * fiction). Resolves once the section is in the DOM (or skipped).
+ */
+function renderMoreStories() {
+    var storyPost = document.querySelector('.story-post');
+    if (!storyPost || storyPost.querySelector('.more-stories')) return Promise.resolve();
+
+    var currentFileName = resolveCurrentPostFileName();
+    var rootPrefix = siteRootPrefix();
+    return fetch(rootPrefix + 'data/stories.json')
+        .then(function(r) { return r.json(); })
+        .then(function(stories) {
+            var others = (Array.isArray(stories) ? stories : []).filter(function(s) {
+                return (s.url || '').split('/').pop() !== currentFileName;
+            }).slice(0, 3);
+            if (!others.length) return;
+
+            var section = document.createElement('div');
+            section.className = 'related-posts more-stories';
+            section.innerHTML = '<h2>More stories</h2>' +
+                '<div class="row related-posts-grid">' +
+                others.map(function(s) {
+                    var tagHtml = (s.tags || []).map(function(tag) {
+                        return '<span class="blog-tag">' + tag + '</span>';
+                    }).join('');
+                    var mins = estimateReadingMinutes(s);
+                    return '<div class="col-12 col-md-6 col-lg-4 mb-30">' +
+                        '<a href="' + rootPrefix + (s.url || '') + '" class="blog-card">' +
+                        '<div class="blog-card-img"><img src="' + resolveAssetPath(s.image || DEFAULT_POST_IMAGE, rootPrefix) + '" alt="' + s.title + '" loading="lazy"></div>' +
+                        '<div class="blog-card-body">' +
+                        '<div class="blog-card-date">' + formatPostDate(s.date) + (mins ? ' · ' + mins + ' min read' : '') + '</div>' +
+                        '<h3 class="blog-card-title">' + s.title + '</h3>' +
+                        '<p class="blog-card-excerpt">' + (s.excerpt || '') + '</p>' +
+                        '<div class="blog-card-tags">' + tagHtml + '</div>' +
+                        '</div></a></div>';
+                }).join('') +
+                '</div>';
+            storyPost.appendChild(section);
+        })
+        .catch(function() {});
+}
+
+/**
+ * The story-page counterpart of renderBlogPostEssentials. Stories get the
+ * reading progress bar, share rail, More Stories cards, thanks CTA, and
+ * comments — and deliberately NOT the disclaimer, TOC, jargon tooltips,
+ * related blog posts, series nav, or prev/next (all essay furniture).
+ */
+function renderStoryPostEssentials() {
+    var storyPost = document.querySelector('.story-post');
+    if (!storyPost) return;
+
+    renderReadingProgress();
+
+    renderMoreStories().then(function() {
+        renderBlogThanksCta();
+        renderGiscusComments();
+    }).catch(function() {
+        renderBlogThanksCta();
+        renderGiscusComments();
     });
 }
 
@@ -1379,7 +1553,15 @@ function applyJargonTooltips() {
         PRE: true,
         SCRIPT: true,
         STYLE: true,
-        TEXTAREA: true
+        TEXTAREA: true,
+        // Headings never get tooltip underlines; a dotted term inside a
+        // title reads as accidental formatting.
+        H1: true,
+        H2: true,
+        H3: true,
+        H4: true,
+        H5: true,
+        H6: true
     };
 
     var walker = document.createTreeWalker(blogPost, NodeFilter.SHOW_TEXT, {
@@ -1544,6 +1726,7 @@ function renderFooter(targetId) {
         '<a href="https://github.com/DrKenReid" aria-label="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>' +
         '<a href="https://www.instagram.com/drkenreid/" aria-label="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a>' +
         '<a href="https://bsky.app/profile/kenreid.co.uk" aria-label="Bluesky">' + BLUESKY_SVG + '</a>' +
+        '<a href="https://cyberspace.online/drkenreid" aria-label="Cyberspace">' + CYBERSPACE_SVG + '</a>' +
         '<a href="https://drkenreid.substack.com" aria-label="Substack newsletter">' + SUBSTACK_SVG + '</a>' +
         '<a href="https://www.goodreads.com/user/show/42371562-ken-reid" aria-label="Goodreads"><i class="fa fa-book" aria-hidden="true"></i></a>' +
         '<a href="https://www.last.fm/user/GoheX" aria-label="Last.fm"><i class="fa fa-lastfm" aria-hidden="true"></i></a>' +
@@ -1567,7 +1750,7 @@ function renderFooter(targetId) {
         '</div>' +
         '<div class="kr-footer-bottom">' +
         '<p>Copyright &copy; ' + year + ' Ken Reid. Photographs &copy; Ken Reid, all rights reserved.</p>' +
-        '<p><a href="' + prefix + 'map.html">Photo Map</a> &middot; <a href="' + prefix + 'quotes.html">Quotes</a> &middot; <a href="/feed.xml">RSS</a></p>' +
+        '<p><a href="' + prefix + 'map.html">Photo Map</a> &middot; <a href="' + prefix + 'quotes.html">Quotes</a> &middot; <a href="/feed.xml">RSS</a> &middot; <a href="' + prefix + 'privacy.html">Privacy</a></p>' +
         '</div>' +
         '</div></footer>';
 
@@ -1607,6 +1790,19 @@ function initDropCap() {
                     while (sentenceEnd < text.length && (text[sentenceEnd] === '"' || text[sentenceEnd] === '”')) { sentenceEnd++; }
                     break;
                 }
+            }
+            // Cap the small-caps lead-in at five words; a long opening
+            // sentence otherwise renders whole lines of capitals on
+            // narrow viewports.
+            var words = 0, wordCap = -1;
+            for (var w = 1; w < text.length; w++) {
+                if (/\s/.test(text[w]) && !/\s/.test(text[w - 1])) {
+                    words++;
+                    if (words === 5) { wordCap = w; break; }
+                }
+            }
+            if (wordCap > 0 && (sentenceEnd < 0 || wordCap < sentenceEnd)) {
+                sentenceEnd = wordCap;
             }
             if (sentenceEnd > 0 && sentenceEnd < text.length) {
                 var span = document.createElement('span');
@@ -1788,7 +1984,7 @@ function renderNowStrip() {
         return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
-    var pending = 3;
+    var pending = 4;
     function done() { if (--pending === 0) draw(); }
 
     fetch('data/now.json').then(function(r) { return r.json(); }).then(function(now) {
@@ -1826,6 +2022,14 @@ function renderNowStrip() {
     fetch('data/posts.json').then(function(r) { return r.json(); }).then(function(posts) {
         if (posts && posts.length) {
             addItem(4, '✍️', 'Latest post', esc(posts[0].title), formatPostDate(posts[0].date), posts[0].url || 'blog.html');
+        }
+    }).catch(function() {}).then(done, done);
+
+    // Latest short story — silently absent while stories.json is empty
+    fetch('data/stories.json').then(function(r) { return r.json(); }).then(function(stories) {
+        if (Array.isArray(stories) && stories.length) {
+            addItem(5, '📜', 'Latest story', esc(stories[0].title),
+                formatPostDate(stories[0].date), stories[0].url || 'writing.html');
         }
     }).catch(function() {}).then(done, done);
 }
@@ -2099,6 +2303,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 renderPostDisclaimer();
 renderBlogPostEssentials();
+renderStoryPostEssentials();
 renderBlogPhotoHighlights();
 renderFloatingBlogShare();
 autoCollapseTopJargonBox();

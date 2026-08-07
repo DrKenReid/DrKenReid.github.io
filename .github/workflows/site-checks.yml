@@ -40,7 +40,7 @@ jobs:
 
       - name: Install Playwright
         run: |
-          pip install playwright
+          pip install -r .github/scripts/requirements.txt
           playwright install --with-deps chromium
 
       - name: Smoke tests

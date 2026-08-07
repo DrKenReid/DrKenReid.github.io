@@ -91,7 +91,9 @@ def collect_usage():
     out = subprocess.run(
         ["git", "ls-files", "*.html", "blog/*.md", "js/*.js"],
         cwd=ROOT, capture_output=True, text=True).stdout
-    files = [ROOT / p for p in out.splitlines() if p]
+    # tracked but deleted from the worktree (deletion not yet committed)
+    # must not crash the build
+    files = [f for f in (ROOT / p for p in out.splitlines() if p) if f.exists()]
     def scan_strings(text):
         """Every word token inside any string literal counts as a possible
         class/id — catches className assignments, classList calls, and

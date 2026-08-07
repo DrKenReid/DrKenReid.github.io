@@ -25,6 +25,22 @@ function loadPosts() {
 	return fetch('/data/posts.json').then(function(r) { return r.json(); });
 }
 
+/* posts.json "series" may be one {name, part} object or an array of them
+   (a post can belong to more than one series). Same helpers as
+   shared-components.js, duplicated because this file loads first. */
+function postSeriesList(p) {
+	if (!p || !p.series) return [];
+	return Array.isArray(p.series) ? p.series : [p.series];
+}
+
+function postSeriesEntry(p, name) {
+	var list = postSeriesList(p);
+	for (var i = 0; i < list.length; i++) {
+		if (list[i] && list[i].name === name) return list[i];
+	}
+	return null;
+}
+
 function initBlog() {
 	loadPosts()
 		.then(function(data) {
@@ -46,6 +62,12 @@ function buildSearchBox() {
 	if (!input) return;
 	input.id = 'blog-search';
 	input.placeholder = 'Search ' + allPosts.length + ' posts...';
+	// Support /blog.html?q=term handoffs (e.g. from the 404 page's search box)
+	var preset = (new URLSearchParams(window.location.search).get('q') || '').trim();
+	if (preset) {
+		input.value = preset;
+		searchQuery = preset.toLowerCase();
+	}
 	input.addEventListener('focus', function() { this.style.borderColor = '#fc6060'; });
 	input.addEventListener('blur', function() { this.style.borderColor = '#ddd'; });
 	input.addEventListener('input', function() {
@@ -61,16 +83,20 @@ function buildSeriesShelf() {
 	if (!shelf) return;
 	var series = {};
 	allPosts.forEach(function(p) {
-		if (p.series && p.series.name) {
-			(series[p.series.name] = series[p.series.name] || []).push(p);
-		}
+		postSeriesList(p).forEach(function(s) {
+			if (s && s.name) {
+				(series[s.name] = series[s.name] || []).push(p);
+			}
+		});
 	});
 	var names = Object.keys(series);
 	if (!names.length) { shelf.style.display = 'none'; return; }
 
 	var html = '<span class="kr-series-shelf__label">Series</span>';
 	names.forEach(function(name) {
-		var parts = series[name].slice().sort(function(a, b) { return a.series.part - b.series.part; });
+		var parts = series[name].slice().sort(function(a, b) {
+			return postSeriesEntry(a, name).part - postSeriesEntry(b, name).part;
+		});
 		var cover = parts[0].image || DEFAULT_POST_IMAGE;
 		html += '<button type="button" class="kr-series-card" data-series="' + name.replace(/"/g, '&quot;') + '" aria-pressed="false">' +
 			'<img src="' + cover + '" alt="" loading="lazy">' +
@@ -126,8 +152,10 @@ function buildTagFilters() {
 function getFilteredPosts() {
 	if (activeSeries) {
 		return allPosts.filter(function(p) {
-			return p.series && p.series.name === activeSeries;
-		}).sort(function(a, b) { return a.series.part - b.series.part; });
+			return postSeriesEntry(p, activeSeries);
+		}).sort(function(a, b) {
+			return postSeriesEntry(a, activeSeries).part - postSeriesEntry(b, activeSeries).part;
+		});
 	}
 	return allPosts.filter(function(p) {
 		var matchesTag = activeTags.length === 0
@@ -199,13 +227,14 @@ function renderPosts() {
 				return fallbackCol;
 			})();
 
-		if (post.series && post.series.name) {
+		var chipSeries = activeSeries ? postSeriesEntry(post, activeSeries) : postSeriesList(post)[0];
+		if (chipSeries && chipSeries.name) {
 			var chipHost = col.querySelector('.post-thumbnail') || col.querySelector('.single-post-area') || col.firstElementChild;
 			if (chipHost) {
 				var chip = document.createElement('span');
 				chip.className = 'kr-series-chip';
-				chip.textContent = 'Part ' + post.series.part;
-				chip.title = post.series.name;
+				chip.textContent = 'Part ' + chipSeries.part;
+				chip.title = chipSeries.name;
 				chipHost.appendChild(chip);
 			}
 		}

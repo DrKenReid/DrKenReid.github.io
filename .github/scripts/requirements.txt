@@ -1,0 +1,16 @@
+# Python dependencies for the committed automation in .github/scripts/.
+#
+#   pip install -r .github/scripts/requirements.txt
+#
+# audit_site.py, minify_css.py, css_prune.py, generate_quote_wall.py and
+# refresh_now.py are standard library only and need nothing from this file.
+
+# smoke_test.py - headless render checks, also installed by site-checks.yml.
+# The browser itself is a separate download:  playwright install chromium
+playwright>=1.59
+
+# subset_icon_fonts.py - subsets the icon fonts to the glyphs actually used.
+# fontTools writes the .woff2 flavour through brotli, so it is a hard
+# requirement here, not an optional speed-up.
+fonttools>=4.62
+brotli>=1.2

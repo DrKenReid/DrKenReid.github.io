@@ -95,6 +95,10 @@
     "excerpt": "Nazi salutes at Glasgow Green, a mile from the statue honouring Glaswegians who fought Franco. Karl Popper saw this coming in 1945: unlimited tolerance destroys itself. What the paradox actually says, what it doesn't, and why it matters in Scotland right now.",
     "url": "blog/the-paradox-of-tolerance.html",
     "image": "blog/img/tolerance/la-pasionaria-hero.webp",
+    "series": {
+      "name": "Everyday Ethics",
+      "part": 4
+    },
     "readMinutes": 14,
     "words": 3003
   },
@@ -440,6 +444,10 @@
     "excerpt": "Corporations reframe systemic crises as consumer morality plays. From plastic bags to five-minute showers, how the public ends up feeling guilty while industrial actors avoid regulation.",
     "url": "blog/individualization-of-responsibility.html",
     "image": "img/photography/thumb/316.webp",
+    "series": {
+      "name": "Everyday Ethics",
+      "part": 3
+    },
     "readMinutes": 13,
     "words": 2790
   },
@@ -479,6 +487,10 @@
     "excerpt": "We celebrate the people who fix disasters and take preventive work for granted. That's a bug in how we think, and it costs us.",
     "url": "blog/prevention-of-failure-is-unseen.html",
     "image": "img/photography/thumb/428.webp",
+    "series": {
+      "name": "Everyday Ethics",
+      "part": 2
+    },
     "readMinutes": 14,
     "words": 3024
   },
@@ -526,6 +538,10 @@
     "excerpt": "The batteries in our phones, laptops, and EVs are largely made of cobalt mined in the Democratic Republic of the Congo, often by hand and often by children. A reflection on a presentation I gave, and what we can actually do about it.",
     "url": "blog/hidden-cost-of-cobalt-congo.html",
     "image": "img/photography/thumb/384.webp",
+    "series": {
+      "name": "Everyday Ethics",
+      "part": 1
+    },
     "readMinutes": 18,
     "words": 3804
   },

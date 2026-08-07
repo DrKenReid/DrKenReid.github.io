@@ -47,12 +47,14 @@
       var btn = e.target.closest ? e.target.closest('#theme-toggle') : null;
       if (!btn) return;
       var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      // Cross-fade the swap (CSS scopes transitions to .theme-switching)
+      // Cross-fade the swap (CSS scopes transitions to .theme-switching);
+      // kept slow so the full-page luminance change is gentle on
+      // photosensitive users
       document.documentElement.classList.add('theme-switching');
       if (switchTimer) clearTimeout(switchTimer);
       switchTimer = setTimeout(function () {
         document.documentElement.classList.remove('theme-switching');
-      }, 350);
+      }, 1100);
       save(next);
       apply(next);
     });
