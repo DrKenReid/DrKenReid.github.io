@@ -57,6 +57,7 @@ function renderHeader(targetId, options) {
         '<li' + (active === 'blog' ? ' class="active"' : '') + '><a href="' + basePath + 'blog.html"' + (active === 'blog' && !blogChild ? ' aria-current="page"' : '') + '>Blog</a>' +
         '<ul class="dropdown kr-nav-dd-wide">' +
         '<li><a href="' + basePath + 'blog.html">All Blogs</a></li>' +
+        '<li' + (blogChild === 'series-index' ? ' class="active"' : '') + '><a href="' + basePath + 'series.html"' + (blogChild === 'series-index' ? ' aria-current="page"' : '') + '>All Series</a></li>' +
         '<li class="kr-nav-divider" role="separator" aria-hidden="true"></li>' +
         '<li' + (blogChild === 'series-site' ? ' class="active"' : '') + '><a href="' + basePath + 'series-how-this-site-is-built.html"' + (blogChild === 'series-site' ? ' aria-current="page"' : '') + '>How This Site Is Built</a></li>' +
         '<li' + (blogChild === 'series-schedule' ? ' class="active"' : '') + '><a href="' + basePath + 'series-optimizing-your-schedule.html"' + (blogChild === 'series-schedule' ? ' aria-current="page"' : '') + '>Optimizing Your Schedule</a></li>' +

@@ -92,6 +92,15 @@ function buildSeriesShelf() {
 	var names = Object.keys(series);
 	if (!names.length) { shelf.style.display = 'none'; return; }
 
+	// Most recently updated series first (dates are YYYY-MM-DD, so string
+	// comparison is chronological)
+	function latestDate(name) {
+		return series[name].reduce(function(m, p) {
+			return p.date > m ? p.date : m;
+		}, '');
+	}
+	names.sort(function(a, b) { return latestDate(b).localeCompare(latestDate(a)); });
+
 	var html = '<span class="kr-series-shelf__label">Series</span>';
 	names.forEach(function(name) {
 		var parts = series[name].slice().sort(function(a, b) {
@@ -104,10 +113,14 @@ function buildSeriesShelf() {
 			'<span>' + parts.length + ' part' + (parts.length === 1 ? '' : 's') + '</span></span>' +
 			'</button>';
 	});
+	html += '<a class="kr-series-card kr-series-card--all" href="/series.html">' +
+		'<span class="kr-series-card__text"><strong>All series</strong>' +
+		'<span>' + names.length + ' and counting &rarr;</span></span>' +
+		'</a>';
 	shelf.innerHTML = html;
 	shelf.addEventListener('click', function(e) {
 		var card = e.target.closest ? e.target.closest('.kr-series-card') : null;
-		if (!card) return;
+		if (!card || card.classList.contains('kr-series-card--all')) return;
 		var name = card.getAttribute('data-series');
 		activeSeries = activeSeries === name ? '' : name;
 		shelf.querySelectorAll('.kr-series-card').forEach(function(c) {

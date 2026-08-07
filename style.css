@@ -6476,6 +6476,16 @@ a.kr-series-label:focus {
   font-size: 11px;
   color: #6b6b6b; }
 
+/* "All series" link at the end of the blog shelf: same card chrome,
+   no cover image, accent text */
+.kr-series-card--all {
+  text-decoration: none; }
+  .kr-series-card--all .kr-series-card__text strong {
+    color: #c53030; }
+
+[data-theme="dark"] .kr-series-card--all .kr-series-card__text strong {
+  color: #fc6060; }
+
 [data-theme="dark"] .kr-series-card__text span {
   color: #9e9e9e; }
 

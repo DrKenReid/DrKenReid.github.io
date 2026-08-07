@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+  <meta name="description" content="Every blog series on kenreid.co.uk in one place, most recently updated first: interactive algorithms, how this site is built, everyday ethics, and more.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Series - Ken Reid</title>
+  <meta property="og:title" content="Series - Ken Reid">
+  <meta property="og:description" content="Every blog series on kenreid.co.uk in one place, most recently updated first: interactive algorithms, how this site is built, everyday ethics, and more.">
+  <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/290.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Series - Ken Reid">
+  <meta name="twitter:description" content="Every blog series on kenreid.co.uk in one place, most recently updated first: interactive algorithms, how this site is built, everyday ethics, and more.">
+  <meta property="og:url" content="https://www.kenreid.co.uk/series.html">
+  <meta property="og:type" content="website">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="/img/core-img/favicon.png">
+  <link rel="apple-touch-icon" href="/img/core-img/apple-touch-icon.png">
+  <meta name="theme-color" content="#1a1a1a">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="preload" as="image" href="/img/photography/hero/290.webp">
+  <link rel="stylesheet" href="/style.min.css">
+  <link rel="canonical" href="https://www.kenreid.co.uk/series.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Series - Ken Reid",
+    "url": "https://www.kenreid.co.uk/series.html",
+    "about": "Index of all blog series",
+    "author": {"@type": "Person", "name": "Ken Reid", "url": "https://www.kenreid.co.uk"}
+  }
+  </script>
+  <script defer src="/js/theme.js"></script>
+  <script defer src="/js/palette.js"></script>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <div id="header-section"></div>
+
+  <main id="main-content">
+
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/290.webp); background-size: cover; background-position: center center;">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <h1 class="page-title">Series</h1>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="/index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="/blog.html">Blog</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Series</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <div class="about-us-area section-padding-80 clearfix">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 36px;">
+        <span class="section-eyebrow">The collections</span>
+        <h2>Every Series</h2>
+        <p class="kr-muted" style="max-width: 640px; margin: 12px auto 0;">Some ideas take more than one post. These are the multi-part runs, most recently updated first; each card leads to the full series page.</p>
+      </div>
+      <div class="row justify-content-center" id="series-index-grid"></div>
+    </div>
+  </div>
+
+  <div class="kr-next-stop">
+    <p>Prefer to wander? Every post lives on <a href="/blog.html">the blog</a>, series and strays alike.</p>
+    <a href="/blog.html" class="btn alime-btn btn-2">Browse all posts</a>
+  </div>
+
+  </main>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/popper.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/alime.bundle.js"></script>
+  <script src="/js/default-assets/active.js"></script>
+  <script src="/js/shared-components.js"></script>
+  <script>
+    renderHeader('header-section', { basePath: '/', active: 'blog', blogChild: 'series-index' });
+    renderFooter('footer-section');
+
+    /* Series index: built from posts.json, most recently updated first. */
+    loadBlogPosts().then(function(posts) {
+      var grid = document.getElementById('series-index-grid');
+      if (!grid || !Array.isArray(posts)) return;
+      var map = {};
+      posts.forEach(function(p) {
+        postSeriesList(p).forEach(function(s) {
+          if (s && s.name) (map[s.name] = map[s.name] || []).push(p);
+        });
+      });
+      var names = Object.keys(map).sort(function(a, b) {
+        function latest(n) {
+          return map[n].reduce(function(m, p) { return p.date > m ? p.date : m; }, '');
+        }
+        return latest(b).localeCompare(latest(a));
+      });
+      grid.innerHTML = names.map(function(name) {
+        var parts = map[name].slice().sort(function(a, b) {
+          return (postSeriesEntry(a, name).part || 0) - (postSeriesEntry(b, name).part || 0);
+        });
+        var latest = map[name].slice().sort(function(a, b) { return b.date.localeCompare(a.date); })[0];
+        var mins = parts.reduce(function(s, p) { return s + (p.readMinutes || 0); }, 0);
+        var cover = '/' + (parts[0].image || 'img/photography/hero/97.webp');
+        return '<div class="col-12 col-md-6 col-lg-4 mb-30">' +
+          '<a href="' + seriesPageHref(name) + '" class="blog-card">' +
+          '<div class="blog-card-img"><img src="' + cover + '" alt="" loading="lazy">' +
+          '<span class="kr-series-chip">' + parts.length + ' parts</span></div>' +
+          '<div class="blog-card-body">' +
+          '<div class="blog-card-date">Updated ' + formatPostDate(latest.date) + ' &middot; ' + mins + ' min all told</div>' +
+          '<h3 class="blog-card-title">' + name + '</h3>' +
+          '<p class="blog-card-excerpt">Latest: ' + latest.title + '</p>' +
+          '</div></a></div>';
+      }).join('');
+    }).catch(function() {});
+  </script>
+</body>
+</html>
