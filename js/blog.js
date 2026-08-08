@@ -1,6 +1,9 @@
 var allPosts = [];
 var activeTags = [];
 var activeSeries = '';
+var sortKey = 'date';
+var sortDir = -1;
+var popularViews = {};
 var searchQuery = '';
 var currentPage = 1;
 var POSTS_PER_PAGE = 9;
@@ -50,7 +53,13 @@ function initBlog() {
 			buildSearchBox();
 			buildSeriesShelf();
 			buildTagFilters();
+			buildSortPanel();
+			initToolbar();
 			renderPosts();
+			fetch('/data/popular.json').then(function(r) { return r.json(); }).then(function(pop) {
+				(Array.isArray(pop) ? pop : []).forEach(function(e) { popularViews[e.url] = e.views; });
+				if (sortKey === 'popularity') renderPosts();
+			}).catch(function() {});
 		})
 		.catch(function(e) {
 			console.error('Failed to load posts:', e);
@@ -101,7 +110,7 @@ function buildSeriesShelf() {
 	}
 	names.sort(function(a, b) { return latestDate(b).localeCompare(latestDate(a)); });
 
-	var html = '<span class="kr-series-shelf__label">Series</span>';
+	var html = '<a class="kr-series-shelf__label" href="/series.html" title="All series">Series:</a>';
 	names.forEach(function(name) {
 		var parts = series[name].slice().sort(function(a, b) {
 			return postSeriesEntry(a, name).part - postSeriesEntry(b, name).part;
@@ -113,14 +122,10 @@ function buildSeriesShelf() {
 			'<span>' + parts.length + ' part' + (parts.length === 1 ? '' : 's') + '</span></span>' +
 			'</button>';
 	});
-	html += '<a class="kr-series-card kr-series-card--all" href="/series.html">' +
-		'<span class="kr-series-card__text"><strong>All series</strong>' +
-		'<span>' + names.length + ' and counting &rarr;</span></span>' +
-		'</a>';
 	shelf.innerHTML = html;
 	shelf.addEventListener('click', function(e) {
 		var card = e.target.closest ? e.target.closest('.kr-series-card') : null;
-		if (!card || card.classList.contains('kr-series-card--all')) return;
+		if (!card) return;
 		var name = card.getAttribute('data-series');
 		activeSeries = activeSeries === name ? '' : name;
 		shelf.querySelectorAll('.kr-series-card').forEach(function(c) {
@@ -157,9 +162,97 @@ function buildTagFilters() {
 		onChange: function(activeKeys) {
 			activeTags = activeKeys;
 			currentPage = 1;
+			updateToolbarLabels();
 			renderPosts();
 		}
 	});
+}
+
+var SORT_OPTIONS = [
+	{ key: 'date', label: 'Date', defaultDir: -1 },
+	{ key: 'popularity', label: 'Popularity', defaultDir: -1 },
+	{ key: 'title', label: 'Title', defaultDir: 1 },
+	{ key: 'minutes', label: 'Read time', defaultDir: -1 }
+];
+
+function sortPosts(list) {
+	var key = sortKey, dir = sortDir;
+	return list.slice().sort(function(a, b) {
+		if (key === 'popularity') {
+			var pv = (popularViews[a.url] || 0) - (popularViews[b.url] || 0);
+			return dir * pv || (parsePostDate(b.date) - parsePostDate(a.date));
+		}
+		if (key === 'title') return dir * a.title.localeCompare(b.title);
+		if (key === 'minutes') {
+			return dir * ((a.readMinutes || 0) - (b.readMinutes || 0)) ||
+				(parsePostDate(b.date) - parsePostDate(a.date));
+		}
+		return dir * (parsePostDate(a.date) - parsePostDate(b.date));
+	});
+}
+
+function currentSortOption() {
+	for (var i = 0; i < SORT_OPTIONS.length; i++) {
+		if (SORT_OPTIONS[i].key === sortKey) return SORT_OPTIONS[i];
+	}
+	return SORT_OPTIONS[0];
+}
+
+function updateToolbarLabels() {
+	var f = document.getElementById('kr-filter-toggle');
+	var s = document.getElementById('kr-sort-toggle');
+	if (f) f.innerHTML = 'Filter' + (activeTags.length ? ' (' + activeTags.length + ')' : '') + ' \u25BE';
+	if (s) s.innerHTML = 'Sort: ' + currentSortOption().label + ' ' + (sortDir < 0 ? '\u2193' : '\u2191');
+}
+
+function buildSortPanel() {
+	var panel = document.getElementById('blog-sort');
+	if (!panel) return;
+	panel.setAttribute('aria-label', 'Sort posts');
+	panel.innerHTML = '';
+	SORT_OPTIONS.forEach(function(opt) {
+		var btn = document.createElement('button');
+		btn.type = 'button';
+		btn.className = 'btn gallery-filter-btn' + (opt.key === sortKey ? ' active' : '');
+		btn.textContent = opt.label + (opt.key === sortKey ? ' ' + (sortDir < 0 ? '\u2193' : '\u2191') : '');
+		btn.onclick = function() {
+			if (sortKey === opt.key) {
+				sortDir = -sortDir;              // second click reverses
+			} else {
+				sortKey = opt.key;
+				sortDir = opt.defaultDir;
+			}
+			currentPage = 1;
+			buildSortPanel();
+			updateToolbarLabels();
+			renderPosts();
+		};
+		panel.appendChild(btn);
+	});
+}
+
+function initToolbar() {
+	var pairs = [
+		['kr-filter-toggle', 'blog-filters', 'kr-sort-toggle', 'blog-sort'],
+		['kr-sort-toggle', 'blog-sort', 'kr-filter-toggle', 'blog-filters']
+	];
+	pairs.forEach(function(cfg) {
+		var btn = document.getElementById(cfg[0]);
+		var panel = document.getElementById(cfg[1]);
+		var otherBtn = document.getElementById(cfg[2]);
+		var otherPanel = document.getElementById(cfg[3]);
+		if (!btn || !panel) return;
+		btn.addEventListener('click', function() {
+			var open = panel.hidden;
+			panel.hidden = !open;
+			btn.setAttribute('aria-expanded', String(open));
+			if (open && otherPanel && !otherPanel.hidden) {
+				otherPanel.hidden = true;
+				if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+			}
+		});
+	});
+	updateToolbarLabels();
 }
 
 function getFilteredPosts() {
@@ -170,7 +263,7 @@ function getFilteredPosts() {
 			return postSeriesEntry(a, activeSeries).part - postSeriesEntry(b, activeSeries).part;
 		});
 	}
-	return allPosts.filter(function(p) {
+	return sortPosts(allPosts.filter(function(p) {
 		var matchesTag = activeTags.length === 0
 			|| activeTags.some(function(t) { return (p.tags || []).indexOf(t) !== -1; });
 
@@ -180,7 +273,7 @@ function getFilteredPosts() {
 			|| (p.tags || []).some(function(t) { return t.toLowerCase().indexOf(searchQuery) !== -1; });
 
 		return matchesTag && matchesSearch;
-	});
+	}));
 }
 
 function renderPosts() {

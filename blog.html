@@ -111,7 +111,12 @@
         <a class="btn alime-btn btn-2" href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe by email</a>
       </div>
       <div id="series-shelf" class="kr-series-shelf" aria-label="Post series"></div>
-      <div id="blog-filters" class="gallery-filters text-center" style="margin-bottom:32px;"></div>
+      <div class="kr-blog-toolbar text-center" style="margin-bottom:14px;">
+        <button type="button" id="kr-filter-toggle" class="btn gallery-filter-btn" aria-expanded="false" aria-controls="blog-filters">Filter &#9662;</button>
+        <button type="button" id="kr-sort-toggle" class="btn gallery-filter-btn" aria-expanded="false" aria-controls="blog-sort">Sort: Date &darr;</button>
+      </div>
+      <div id="blog-filters" class="gallery-filters text-center kr-collapse" style="margin-bottom:20px;" hidden></div>
+      <div id="blog-sort" class="gallery-filters text-center kr-collapse" style="margin-bottom:20px;" hidden></div>
       <p id="blog-counter" style="display:none;"></p>
       <div class="row" id="blog-grid"></div>
       <div class="kr-subscribe-row">

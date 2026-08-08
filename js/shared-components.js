@@ -56,13 +56,12 @@ function renderHeader(targetId, options) {
         '</ul></li>' +
         '<li' + (active === 'blog' ? ' class="active"' : '') + '><a href="' + basePath + 'blog.html"' + (active === 'blog' && !blogChild ? ' aria-current="page"' : '') + '>Blog</a>' +
         '<ul class="dropdown kr-nav-dd-wide">' +
-        '<li><a href="' + basePath + 'blog.html">All Blogs</a></li>' +
-        '<li' + (blogChild === 'series-index' ? ' class="active"' : '') + '><a href="' + basePath + 'series.html"' + (blogChild === 'series-index' ? ' aria-current="page"' : '') + '>All Series</a></li>' +
-        '<li class="kr-nav-divider" role="separator" aria-hidden="true"></li>' +
-        '<li' + (blogChild === 'series-site' ? ' class="active"' : '') + '><a href="' + basePath + 'series-how-this-site-is-built.html"' + (blogChild === 'series-site' ? ' aria-current="page"' : '') + '>How This Site Is Built</a></li>' +
-        '<li' + (blogChild === 'series-schedule' ? ' class="active"' : '') + '><a href="' + basePath + 'series-optimizing-your-schedule.html"' + (blogChild === 'series-schedule' ? ' aria-current="page"' : '') + '>Optimizing Your Schedule</a></li>' +
-        '<li' + (blogChild === 'series-algorithms' ? ' class="active"' : '') + '><a href="' + basePath + 'series-algorithms-live.html"' + (blogChild === 'series-algorithms' ? ' aria-current="page"' : '') + '>Algorithms, Live</a></li>' +
-        '<li' + (blogChild === 'series-ethics' ? ' class="active"' : '') + '><a href="' + basePath + 'series-everyday-ethics.html"' + (blogChild === 'series-ethics' ? ' aria-current="page"' : '') + '>Everyday Ethics</a></li>' +
+        '<li class="kr-nav-group-label kr-nav-label-blogs"><a href="' + basePath + 'blog.html">Blogs</a></li>' +
+        '<li class="kr-nav-group-label' + (blogChild === 'series-index' ? ' active' : '') + '"><a href="' + basePath + 'series.html"' + (blogChild === 'series-index' ? ' aria-current="page"' : '') + '>Series</a></li>' +
+        '<li class="kr-nav-series' + (blogChild === 'series-site' ? ' active' : '') + '"><a href="' + basePath + 'series-how-this-site-is-built.html"' + (blogChild === 'series-site' ? ' aria-current="page"' : '') + '>How This Site Is Built</a></li>' +
+        '<li class="kr-nav-series' + (blogChild === 'series-schedule' ? ' active' : '') + '"><a href="' + basePath + 'series-optimizing-your-schedule.html"' + (blogChild === 'series-schedule' ? ' aria-current="page"' : '') + '>Optimizing Your Schedule</a></li>' +
+        '<li class="kr-nav-series' + (blogChild === 'series-algorithms' ? ' active' : '') + '"><a href="' + basePath + 'series-algorithms-live.html"' + (blogChild === 'series-algorithms' ? ' aria-current="page"' : '') + '>Algorithms, Live</a></li>' +
+        '<li class="kr-nav-series' + (blogChild === 'series-ethics' ? ' active' : '') + '"><a href="' + basePath + 'series-everyday-ethics.html"' + (blogChild === 'series-ethics' ? ' aria-current="page"' : '') + '>Everyday Ethics</a></li>' +
         '</ul></li>' +
         navItem('contact', basePath + 'contact.html', 'Contact') +
         '</ul></div></div></nav>' +
@@ -75,6 +74,24 @@ function renderHeader(targetId, options) {
             console.warn('Header nav init failed:', e);
         }
     }
+
+    // Three most recent posts, slotted under the "Blogs" label once
+    // posts.json arrives (the header itself renders synchronously).
+    loadBlogPosts().then(function(posts) {
+        var label = document.querySelector('.kr-nav-dd-wide .kr-nav-label-blogs');
+        if (!label || !Array.isArray(posts) || !posts.length) return;
+        var anchor = label;
+        posts.slice(0, 3).forEach(function(p) {
+            var li = document.createElement('li');
+            li.className = 'kr-nav-series kr-nav-recent';
+            var a = document.createElement('a');
+            a.href = basePath + (p.url || 'blog.html');
+            a.textContent = p.title;
+            li.appendChild(a);
+            anchor.parentNode.insertBefore(li, anchor.nextSibling);
+            anchor = li;
+        });
+    }).catch(function() {});
 }
 
 /**
