@@ -99,13 +99,6 @@
       "plays": 2
     },
     {
-      "name": "Stellaris (Original Game Soundtrack)",
-      "artist": "Andreas Waldetoft",
-      "url": "https://www.last.fm/music/Andreas+Waldetoft/Stellaris+(Original+Game+Soundtrack)",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/f627d5efa2b1fbaa2d52269040c14bc2.jpg",
-      "plays": 2
-    },
-    {
       "name": "Traces of Silver",
       "artist": "Andrew White",
       "url": "https://www.last.fm/music/Andrew+White/Traces+of+Silver",
@@ -146,8 +139,22 @@
       "url": "https://www.last.fm/music/bbno$+&+Ironmouse/1-800",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/880b94bc5613637576f3562b2c2e95cf.jpg",
       "plays": 2
+    },
+    {
+      "name": "Wide Open Light",
+      "artist": "Ben Harper",
+      "url": "https://www.last.fm/music/Ben+Harper/Wide+Open+Light",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/3ca0e57373046ff8dd309aeea94e2485.jpg",
+      "plays": 2
+    },
+    {
+      "name": "The E.N.D. (The Energy Never Dies)",
+      "artist": "Black Eyed Peas",
+      "url": "https://www.last.fm/music/Black+Eyed+Peas/The+E.N.D.+(The+Energy+Never+Dies)",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/c1c93f40047046c1bce56e8fad76f3e1.png",
+      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-08-07"
+  "updated": "2026-08-08"
 }
