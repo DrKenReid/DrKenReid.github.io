@@ -56,8 +56,8 @@ function renderHeader(targetId, options) {
         '</ul></li>' +
         '<li' + (active === 'blog' ? ' class="active"' : '') + '><a href="' + basePath + 'blog.html"' + (active === 'blog' && !blogChild ? ' aria-current="page"' : '') + '>Blog</a>' +
         '<ul class="dropdown kr-nav-dd-wide">' +
-        '<li class="kr-nav-group-label kr-nav-label-blogs"><a href="' + basePath + 'blog.html">Blogs</a></li>' +
-        '<li class="kr-nav-group-label' + (blogChild === 'series-index' ? ' active' : '') + '"><a href="' + basePath + 'series.html"' + (blogChild === 'series-index' ? ' aria-current="page"' : '') + '>Series</a></li>' +
+        '<li class="kr-nav-group-label kr-nav-label-blogs">Recent <a href="' + basePath + 'blog.html">Blogs</a></li>' +
+        '<li class="kr-nav-group-label' + (blogChild === 'series-index' ? ' active' : '') + '">Recent <a href="' + basePath + 'series.html"' + (blogChild === 'series-index' ? ' aria-current="page"' : '') + '>Series</a></li>' +
         '<li class="kr-nav-series' + (blogChild === 'series-site' ? ' active' : '') + '"><a href="' + basePath + 'series-how-this-site-is-built.html"' + (blogChild === 'series-site' ? ' aria-current="page"' : '') + '>How This Site Is Built</a></li>' +
         '<li class="kr-nav-series' + (blogChild === 'series-schedule' ? ' active' : '') + '"><a href="' + basePath + 'series-optimizing-your-schedule.html"' + (blogChild === 'series-schedule' ? ' aria-current="page"' : '') + '>Optimizing Your Schedule</a></li>' +
         '<li class="kr-nav-series' + (blogChild === 'series-algorithms' ? ' active' : '') + '"><a href="' + basePath + 'series-algorithms-live.html"' + (blogChild === 'series-algorithms' ? ' aria-current="page"' : '') + '>Algorithms, Live</a></li>' +

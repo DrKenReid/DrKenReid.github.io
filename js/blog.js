@@ -110,7 +110,7 @@ function buildSeriesShelf() {
 	}
 	names.sort(function(a, b) { return latestDate(b).localeCompare(latestDate(a)); });
 
-	var html = '<a class="kr-series-shelf__label" href="/series.html" title="All series">Series:</a>';
+	var html = '<span class="kr-series-shelf__label">Recent <a href="/series.html" title="All series">Series</a>:</span>';
 	names.forEach(function(name) {
 		var parts = series[name].slice().sort(function(a, b) {
 			return postSeriesEntry(a, name).part - postSeriesEntry(b, name).part;
