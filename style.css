@@ -2097,26 +2097,34 @@ input:required {
   }
 }
 /* Timeline list */
+/* Timeline geometry is driven by these four values so the rail, the dots and
+   the year column can never drift apart. The year column must be wider than
+   the widest label (a range like "2009-2013" measures 70px) or flex min-width
+   pushes the dots right by a variable amount and the rail stops lining up. */
 .blog-timeline {
+  --tl-pad: 25px;
+  --tl-year: 74px;
+  --tl-gap: 20px;
+  --tl-dot: 16px;
   list-style: none;
-  padding: 0;
+  padding: 0 0 0 var(--tl-pad);
   margin: 20px 0 30px;
   position: relative; }
 .blog-timeline::before {
   content: '';
   position: absolute;
-  left: 68px;
+  left: calc(var(--tl-pad) + var(--tl-year) + var(--tl-gap) + var(--tl-dot) / 2 - 1px);
   top: 0;
   bottom: 0;
   width: 2px;
   background: #f0d9d4; }
 .blog-timeline li {
   display: flex;
-  gap: 20px;
+  gap: var(--tl-gap);
   margin-bottom: 24px;
   position: relative; }
 .blog-timeline li .tl-year {
-  flex: 0 0 60px;
+  flex: 0 0 var(--tl-year);
   text-align: right;
   font-size: 13px;
   font-weight: 700;
@@ -2124,7 +2132,7 @@ input:required {
   padding-top: 2px;
   white-space: nowrap; }
 .blog-timeline li .tl-dot {
-  flex: 0 0 16px;
+  flex: 0 0 var(--tl-dot);
   position: relative;
   display: flex;
   justify-content: center;
@@ -4022,6 +4030,63 @@ input:required {
 .blog-post figcaption .figure-copyright {
   font-style: normal; }
 
+/* Figure sizing and caption metrics. These lived only in an inline <style>
+   block in 10 posts, so the other 27 posts using <figure> rendered without the
+   max-width or the rounded corners. */
+.blog-post figure {
+  margin: 28px auto;
+  max-width: 900px; }
+
+.blog-post figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block; }
+
+.blog-post figcaption,
+.blog-post .figure-note {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  margin-top: 10px;
+  opacity: 0.9; }
+
+/* Light-mode base for code-example blocks. The dark overrides were already in
+   this file (see [data-theme="dark"] above, which outranks these on
+   specificity), but the light ones existed only inline in 3 of the 7 posts
+   that use the component, so the other 4 rendered unstyled in light mode. */
+.blog-post details.code-example {
+  margin: 16px 0 28px;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  background: #fafafa;
+  overflow: hidden; }
+
+.blog-post details.code-example summary {
+  cursor: pointer;
+  padding: 12px 16px;
+  font-weight: 600;
+  color: #252525;
+  list-style: none; }
+
+.blog-post details.code-example summary::-webkit-details-marker {
+  display: none; }
+
+.blog-post details.code-example summary::after {
+  content: "Show code";
+  float: right;
+  font-size: 12px;
+  color: #666;
+  font-weight: 500; }
+
+.blog-post details.code-example[open] summary::after {
+  content: "Hide code"; }
+
+.blog-post details.code-example pre {
+  margin: 0;
+  border-radius: 0;
+  border-top: 1px solid #dedede;
+  font-size: 0.85rem; }
+
 .blog-post .blog-meta,
 .blog-post .post-disclaimer,
 .blog-post .blog-tag,
@@ -4755,13 +4820,16 @@ html[data-theme="dark"] {
   opacity: 0.75;
   margin: 36px 0 8px; }
 
-/* Consecutive plain figures pair up on wide screens */
+/* Consecutive plain figures pair up on wide screens.
+   Width leaves room for the whitespace text node that sits between two
+   inline-block siblings: at calc(50% - 10px) the pair came to 781px in a
+   780px column and wrapped, so the figures stacked instead of pairing. */
 @media (min-width: 768px) {
   .blog-post figure:not([style]):has(+ figure:not([style])),
   .blog-post figure:not([style]) + figure:not([style]) {
     display: inline-block;
     vertical-align: top;
-    width: calc(50% - 10px);
+    width: calc(50% - 14px);
     margin: 10px 4px; } }
 
 /* Alternating section tint for page rhythm */
