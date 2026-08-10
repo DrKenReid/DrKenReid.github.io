@@ -231,7 +231,7 @@
 
         <p>Everyone wants to optimize their schedule. Or, at least, I really do, because I am privileged enough to have some time to spare, but not so much that I can easily achieve all that I want to. But before we optimize our schedule, we need to decide what are we optimizing it for? We download the apps (no shade, I love them), we colour-code the calendar (or colour in your GitHub activity), we read the book (atomic habits, the power of habit), and we never once stop to write down what we are actually trying to achieve. "Fit in more stuff" isn't realistic nor really the goal.</p>
 
-        <p>I spent a good chunk of my academic life on optimization, the mathematical kind, where "optimize" moves away from the generic English meaning and turns into a thing you can define precisely and then solve. And the longer I worked on it, the more I was tempted to apply my nerdy skills to my own schedule. Not that it's necessary, whatsoever or in anyway, but because it's a curiosity, it's fun, and it might help me reformulate and reconsider my priorities. You cannot optimize anything until you have said, out loud, what you want more of, what you refuse to give up, and how much each thing is actually worth to you.</p>
+        <p>I spent a good chunk of my academic life on optimization, the mathematical kind, where "optimize" moves away from the generic English meaning and turns into a thing you can define formally and then solve. And the longer I worked on it, the more I was tempted to apply my nerdy skills to my own schedule. Not that it's necessary, whatsoever or in anyway, but because it's a curiosity, it's fun, and it might help me reformulate and reconsider my priorities. You cannot optimize anything until you have said, out loud, what you want more of, what you refuse to give up, and how much each thing is actually worth to you.</p>
 
         <p>I have made a nifty little switch below. If you are a nerdy type like me, or you are curious to see what ridiculousness I have conjured up, flip the switch on. If you'd rather just read about optimizing your own life schedule from a more philosophical and careful-consideration perspective, keep it off.</p>
 
@@ -243,7 +243,7 @@
           <span style="color: #fc6060;">assert</span> <span style="color: #e0e0e0;">len(your_excuses)</span> <span style="color: #fc6060;">==</span> <span style="color: #8ecf6e;">0</span><span style="color: #aaa;">  # required precondition</span>
         </div>
 
-        <p>What follows works in three steps. First, a clear statement of what you actually want from your time. Second, a reckoning with the limits your week genuinely contains. Third, a practical exercise that makes both visible on one page.</p>
+        <p>What follows works in three steps. First, a clear statement of what you actually want from your time. Second, a reckoning with the limits your week contains. Third, a practical exercise that makes both visible on one page.</p>
 
         <details class="plain-english-box nerd-only" style="margin-bottom: 28px;">
           <summary style="cursor: pointer;"><h2 style="display: inline; margin: 0;">Quick jargon guide (expand)</h2></summary>
@@ -251,7 +251,7 @@
           <ul>
             <li><strong>Objective function</strong>: the quantity the solver maximizes. Here, total weighted hours across the week.</li>
             <li><strong>Decision variable</strong>: what the solver gets to set. Here, hours allocated to each activity.</li>
-            <li><strong>Constraint</strong>: a rule the solution must satisfy. The week summing to exactly 168 hours is one.</li>
+            <li><strong>Constraint</strong>: a rule the solution must satisfy. The week summing to 168 hours is one.</li>
             <li><strong>Bound</strong>: a floor or ceiling on a variable, the minimum or maximum hours an activity can receive.</li>
             <li><strong>Integer programming (IP)</strong>: optimization where variables must be whole numbers, not fractions.</li>
             <li><strong>Feasible solution</strong>: any allocation that satisfies all constraints. Many exist; the solver finds the one with the best objective value.</li>
@@ -287,12 +287,12 @@
             \]
           </div>
           <p class="math-caption">The set \(A\) simply lists the nine activities the week can be spent on. Everything else is built on top of this list.</p>
-          <p>For each \( i \in A \) (activity in the set of activities) we choose \( x_i \) (the number of hours per week allocated to that activity). These are the <em>decision variables</em>, the dials we get to fiddle with to try different solutions to the problem. The objective is a function we want to maximize, and in the simplest useful form it is linear (the output changes in direct, exact proportion to the input). Call the thing we are maximizing "value," whatever that means for you. Each hour of activity \( i \) is worth \( w_i \) units of value, and total value is the sum of all of these:</p>
+          <p>For each \( i \in A \) (activity in the set of activities) we choose \( x_i \) (the number of hours per week allocated to that activity). These are the <em>decision variables</em>, the dials we get to fiddle with to try different solutions to the problem. The objective is a function we want to maximize, and in the simplest useful form it is linear (the output changes in direct proportion to the input). Call the thing we are maximizing "value," whatever that means for you. Each hour of activity \( i \) is worth \( w_i \) units of value, and total value is the sum of all of these:</p>
           <div class="math-block">
             \[ \max \quad Z = \sum_{i \in A} w_i \, x_i \]
           </div>
           <p class="math-caption">Read it left to right: maximize \(Z\), the total value, which is the sum (that is what \(\sum\) means) over every activity \(i\) of its hours \(x_i\) multiplied by how much you value it, \(w_i\).</p>
-          <p>\( Z \) is the one number. Choosing the weights \( w_i \) is its own battle, and it is exactly the question (what is each thing worth to you?) that we will need to answer later. We now know the end of the story but not the beginning: at some point we are going to add up all of the values into a single number, \( Z \), and it will represent the quality of our solution. Now we can go deeper into how to get to the point of adding the values up.</p>
+          <p>\( Z \) is the one number. Choosing the weights \( w_i \) is its own battle, and it is the question (what is each thing worth to you?) that we will need to answer later. We now know the end of the story but not the beginning: at some point we are going to add up all of the values into a single number, \( Z \), and it will represent the quality of our solution. Now we can go deeper into how to get to the point of adding the values up.</p>
         </div>
 
         <h2>Defining our limits</h2>
@@ -305,7 +305,7 @@
           <p>"All we have to decide is what to do with the time that is given us." &mdash; Gandalf</p>
         </blockquote>
 
-        <p class="nerd-only">There are two flavours of limit: <strong>Hard constraints</strong> are non-negotiable: you must sleep (maybe not exactly 8 hours a night but maybe 6 minimum no matter what); school starts at 0800; your contract wants its forty hours. <strong>Soft constraints</strong> are the ones you have a bit more leeway with: working out, gardening, walking the dog, even laundry etc. I think a lot of my personal anxiety comes from wanting to treat my soft constraints like hard constraints (I wanna hit the gym 4-5x a week, realistically I'm lucky to do 1-2x). So, write these out - what are non-negotiables, which are negotiables?</p>
+        <p class="nerd-only">There are two flavours of limit: <strong>Hard constraints</strong> are non-negotiable: you must sleep (maybe not 8 hours a night but maybe 6 minimum no matter what); school starts at 0800; your contract wants its forty hours. <strong>Soft constraints</strong> are the ones you have a bit more leeway with: working out, gardening, walking the dog, even laundry etc. I think a lot of my personal anxiety comes from wanting to treat my soft constraints like hard constraints (I wanna hit the gym 4-5x a week, realistically I'm lucky to do 1-2x). So, write these out - what are non-negotiables, which are negotiables?</p>
 
         <p class="non-nerd">There are two kinds of limit. Some limits are something we can't reschedule or choose not to include: you will sleep; your contract wants its forty hours; the school bus arrives at half eight regardless of your plans. These cannot be moved. Writing things down forces you to ask, one by one: is this actually fixed, or just a habit I have mistaken for a law?</p>
 
@@ -314,7 +314,7 @@
           <div class="math-block">
             \[ \sum_{i \in A} x_i = 168 \]
           </div>
-          <p class="math-caption">The hours you spend across all activities must add up to exactly 168, the number of hours in a week.</p>
+          <p class="math-caption">The hours you spend across all activities must add up to 168, the number of hours in a week.</p>
           <p>Each activity gets a lower and upper bound. A lower bound is a floor you refuse to drop below (a minimum of family time, a minimum of sleep); an upper bound is a ceiling beyond which more hours are impossible or pointless:</p>
           <div class="math-block">
             \[ \ell_i \le x_i \le u_i \qquad \forall \, i \in A \]
@@ -368,7 +368,7 @@
         </figure>
 
         <div class="nerd-only">
-          <p>The weights \( w_i \) are exactly the coefficients in the objective from earlier. Doubling \( w_i \) says "an hour of this is now worth twice as much," and the solver will reach for it harder, up to its ceiling \( u_i \). For our model, the weights come directly from the "Matters" column of the values grid:</p>
+          <p>The weights \( w_i \) are the coefficients in the objective from earlier. Doubling \( w_i \) says "an hour of this is now worth twice as much," and the solver will reach for it harder, up to its ceiling \( u_i \). For our model, the weights come directly from the "Matters" column of the values grid:</p>
           <table class="values-grid" style="margin: 8px auto 22px; max-width:380px;">
             <thead>
               <tr><th>Activity \(i\)</th><th class="score">\(w_i\)</th></tr>
@@ -392,7 +392,7 @@
 
         <p>So far this is abstract. Here is an exercise to help you work out your own set of values and deciding what is most important. I find this is a good exercise to do with a partner, too. It is sometimes called a <strong>values clarification grid</strong>, or a values matrix.</p>
 
-        <p>List the things you actually spend a week on, not the things you tell people you spend a week on. For each, score from 1 to 5 how much it genuinely matters to you, write one sentence about <em>why</em> it earns that score, and note roughly how many hours it currently gets. That third column is the gap between what you score 5 and what you actually fund with hours.</p>
+        <p>List the things you actually spend a week on, not the things you tell people you spend a week on. For each, score from 1 to 5 how much it matters to you, write one sentence about <em>why</em> it earns that score, and note roughly how many hours it currently gets. That third column is the gap between what you score 5 and what you actually fund with hours.</p>
 
         <p>Here is a worked example. Make sure yours sums to 168.</p>
 
@@ -421,7 +421,7 @@
         <p>Even with no further machinery, this table is useful. Look down the "matters" column and then across to "hours now," and the mismatches jump out: things I claim to value at 4 getting two or three hours, things I value at 1 or below eating the evening. </p>
 
         <div class="nerd-only">
-          <p>But we are going to solve it, because the grid above is, almost exactly, the input to an optimization model. The "matters" column is the vector of weights \( w_i \). The activities are the index set \( A \). All that is missing is the bounds (the floors and ceilings) and a constraint or two to keep the solution realistic. So let us build it.</p>
+          <p>But we are going to solve it, because the grid above is, near enough, the input to an optimization model. The "matters" column is the vector of weights \( w_i \). The activities are the index set \( A \). All that is missing is the bounds (the floors and ceilings) and a constraint or two to keep the solution realistic. So let us build it.</p>
         </div>
 
         <figure class="non-nerd">
@@ -541,16 +541,16 @@ Objective (weighted score, not hours): 547
 
           <p>The casualty is <em>learning</em>: it got zero hours. The floors alone (family, sleep, work, chores) eat 110 of the 168 before anything optional happens, and once the model had funded its highest-value activities up to their ceilings, only twelve hours were left to share out. That is the model telling you what your stated priorities cost. If a week with no learning in it horrifies you, the fix is not to argue with the solver. The fix is to go back and change a weight, because you have just discovered you value learning more than you claimed to!</p>
 
-          <p>Learning and leisure carry the same weight of 3, so the solver was genuinely <em>indifferent</em> between them: it poured all twelve into leisure and left learning at nothing, but it could just as correctly have done the reverse, or split them down the middle. This is called degeneracy: the model admitting that some choices make no difference to the objective. Which, I would argue, we should implement some kind of equality preference into the objective.</p>
+          <p>Learning and leisure carry the same weight of 3, so the solver was <em>indifferent</em> between them: it poured all twelve into leisure and left learning at nothing, but it could just as correctly have done the reverse, or split them down the middle. This is called degeneracy: the model admitting that some choices make no difference to the objective. Which, I would argue, we should implement some kind of equality preference into the objective.</p>
         </div>
 
         <h2 class="nerd-only">The Limits</h2>
 
-        <p class="nerd-only">The failure mode of this kind of thinking is taking it too seriously and trying to live inside a spreadsheet. Your life is not a linear program, and the places it refuses to be one are worth naming. Ultimately, these kind of solvers don't measure up to reality. If you're having a bad day, your "leisure" hours will need a serious and immediate bump up. If your sink floods and you need to clean out the kitchen cupboards due to spreading water, you can't ignore it because you don't have enough chores hours!</p>
+        <p class="nerd-only">The failure mode of this kind of thinking is taking it too seriously and trying to live inside a spreadsheet. Your life is not a linear program, and the places it refuses to be one need naming. Ultimately, these kind of solvers don't measure up to reality. If you're having a bad day, your "leisure" hours will need a serious and immediate bump up. If your sink floods and you need to clean out the kitchen cupboards due to spreading water, you can't ignore it because you don't have enough chores hours!</p>
 
         <p class="nerd-only">Value is not linear. The first hour with my partner and the fourteenth are not worth the same, especially when other things are falling to the side. Real value has diminishing returns, and a straight line does not. The model fakes this with ceilings (it caps activities before they get silly) but that is a workaround, not the truth.</p>
 
-        <p class="nerd-only">And the world is uncertain. The model assumes you know your coefficients and your constraints with confidence, when in fact the hardest thing about a real life is that you mostly do not. Children get sick, work explodes, the long-planned thing falls through. A genuinely faithful model would be stochastic and re-solved constantly, which is just a mathematician's way of describing what we already do, with some success, in our heads.</p>
+        <p class="nerd-only">And the world is uncertain. The model assumes you know your coefficients and your constraints with confidence, when in fact the hardest thing about a real life is that you mostly do not. Children get sick, work explodes, the long-planned thing falls through. A faithful model would be stochastic and re-solved constantly, which is just a mathematician's way of describing what we already do, with some success, in our heads.</p>
 
         <p class="nerd-only">Most of all: some of the best things resist being a number at all. You cannot put a weight on love (wow, please quote this on my deathbed), or on a conversation that changes you, or on the afternoon you will think about for the rest of your life. This is nothing more than an exercise in learning a bit more about optimization and helping you consider your priorities.</p>
 

@@ -99,7 +99,7 @@
 
  <h2>The single source of truth</h2>
 
- <p>Everything hangs off <code>data/posts.json</code>: a flat list, one entry per post, currently dozens of them. An entry is exactly this:</p>
+ <p>Everything hangs off <code>data/posts.json</code>: a flat list, one entry per post, currently dozens of them. An entry is just this:</p>
 
 <pre><code class="language-json">{
   "title": "My Website Has a Test Suite",
@@ -129,7 +129,7 @@
 
  <h2>The publish-time scripts</h2>
 
- <p><strong>Read times</strong> are computed. A Python script extracts the body text of each post (only the article region, ignoring scripts and navigation), counts the words, and divides by 220 words per minute, rounding up. The result is baked into the JSON as <code>readMinutes</code>. I picked 220 because it's a middle-of-the-road adult reading speed; the exact number is just an estimate so people know what they're getting into, I doubt many people time it!</p>
+ <p><strong>Read times</strong> are computed. A Python script extracts the body text of each post (only the article region, ignoring scripts and navigation), counts the words, and divides by 220 words per minute, rounding up. The result is baked into the JSON as <code>readMinutes</code>. I picked 220 because it's a middle-of-the-road adult reading speed; the number is just an estimate so people know what they're getting into, I doubt many people time it!</p>
 
 <pre><code class="language-python">WORDS_PER_MINUTE = 220
 

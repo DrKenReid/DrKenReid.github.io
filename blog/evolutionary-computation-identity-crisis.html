@@ -128,7 +128,7 @@
 					<summary style="cursor: pointer;"><h2 style="display: inline; margin: 0;">Quick jargon guide (expand)</h2></summary>
 					<p style="margin-top: 12px;">If you are new to EC, these are the terms that matter most in this piece:</p>
 					<ul>
-						<li><strong>Metaheuristic</strong>: a high-level search strategy (like GA, PSO, SA) used when exact optimization is too expensive.</li>
+						<li><strong>Metaheuristic</strong>: a high-level search strategy (like GA, PSO, SA) used when provably optimal methods are too expensive.</li>
 						<li><strong>Evolutionary Algorithms (EAs)</strong>: a family of metaheuristics inspired by evolution; they iteratively improve a population of candidate solutions.</li>
 						<li><strong>Combinatorial Search Space</strong>: problems made of discrete choices (routes, schedules, component sets), where combinations explode quickly.</li>
 						<li><strong>Fitness / Objective Function</strong>: the scorecard used to judge each candidate solution against the real goal.</li>
@@ -169,7 +169,7 @@
 
 				<p>Given the examples above, you might reasonably ask: could you not just prompt an LLM to design a turbine blade or plan a delivery route? The short answer is no, and the reasons are instructive.</p>
 
-				<p>GenAI models are fundamentally interpolation engines.<sup><a href="#ref-17" class="cite-ref">[17]</a></sup> They are trained on existing human output and generate plausible-looking responses that blend what they have seen. That is extraordinarily powerful for text, code, images, and conversation. But it is not optimization. A large language model asked to design an antenna geometry will produce something that looks like an antenna. It will not produce something that satisfies specific gain, weight, and power constraints while minimizing material cost, because it has no mechanism for enforcing hard constraints or evaluating physical feasibility.<sup><a href="#ref-18" class="cite-ref">[18]</a></sup> </p>
+				<p>GenAI models are fundamentally interpolation engines.<sup><a href="#ref-17" class="cite-ref">[17]</a></sup> They are trained on existing human output and generate plausible-looking responses that blend what they have seen. That is extraordinarily powerful for text, code, images, and conversation. But it is not optimization. A large language model asked to design an antenna geometry will produce something that looks like an antenna. It will not produce something that satisfies specific gain, weight, and power constraints while minimizing material cost, because it has no way to enforce hard constraints or evaluate physical feasibility.<sup><a href="#ref-18" class="cite-ref">[18]</a></sup> </p>
 
 				<p>EAs operate differently. Each candidate in the population is evaluated against a real objective function (which can include simulations, physical models, or constraint checkers), and the search improves iteratively through selection, mutation, and recombination.<sup><a href="#ref-19" class="cite-ref">[19]</a></sup> The constraints are not suggestions; they are enforced at every generation.</p>
 
@@ -179,7 +179,7 @@
 
 				<p>Despite these wins, EC struggles for prestige, and not all of that is external hype. A meaningful part is self-inflicted: the field's long-running habit of presenting familiar search mechanics as "new" algorithms by wrapping them in vivid metaphors. Campelo and Aranha call this the Evolutionary Computation Bestiary, and the label is accurate.<sup><a href="#ref-9" class="cite-ref">[9]</a></sup></p>
 
-				<p>The pattern is now well documented. Algorithms branded around wolves, whales, moths, fireflies, bats, antlions, and similar themes are often introduced with novel biological stories, but their actual update rules map onto known metaheuristic building blocks already present in earlier work.<sup><a href="#ref-10" class="cite-ref">[10]</a></sup><sup><a href="#ref-11" class="cite-ref">[11]</a></sup><sup><a href="#ref-12" class="cite-ref">[12]</a></sup> The issue is not that inspiration is bad. The issue is that metaphor can obscure mechanism.</p>
+				<p>The pattern is now well documented. Algorithms branded around wolves, whales, moths, fireflies, bats, antlions, and similar themes are often introduced with novel biological stories, but their actual update rules map onto known metaheuristic building blocks already present in earlier work.<sup><a href="#ref-10" class="cite-ref">[10]</a></sup><sup><a href="#ref-11" class="cite-ref">[11]</a></sup><sup><a href="#ref-12" class="cite-ref">[12]</a></sup> The issue is not that inspiration is bad. The issue is that metaphor can obscure how an algorithm works.</p>
 
 				<p>Concrete examples repeatedly cited in critiques include:</p>
 
@@ -204,7 +204,7 @@
 
 				<h2>The dialect collision</h2>
 
-				<p>The metaphor problem is internal to EC, but the fragmentation extends outward too. EC and mainstream ML often describe the same core mathematical concepts in entirely different dialects. Researchers can be tuning the exact same underlying parameters while calling them by completely different names:</p>
+				<p>The metaphor problem is internal to EC, but the fragmentation extends outward too. EC and mainstream ML often describe the same core mathematical concepts in entirely different dialects. Researchers can be tuning the same underlying parameters while calling them by completely different names:</p>
 
 				<table class="dialect-table">
 					<colgroup><col><col><col></colgroup>
@@ -234,11 +234,11 @@
 
 				<h2>EC in the GenAI era</h2>
 
-				<p>Here is what I find frustrating: the GenAI wave is not just pulling attention away from EC, it is creating exactly the kind of problems that EAs are built to solve. Neural architecture search, hyperparameter optimization, prompt engineering at scale, constrained code generation, multi-objective model selection: these are all optimization problems with messy, non-differentiable, or combinatorial search spaces. EAs should be central to the next generation of AI systems, not sidelined by them.</p>
+				<p>Here is what I find frustrating: the GenAI wave is not just pulling attention away from EC, it is creating the kind of problems that EAs are built to solve. Neural architecture search, hyperparameter optimization, prompt engineering at scale, constrained code generation, multi-objective model selection: these are all optimization problems with messy, non-differentiable, or combinatorial search spaces. EAs should be central to the next generation of AI systems, not sidelined by them.</p>
 
                 <img src="../img/photography/thumb/186.webp" alt="An abstract representation of machine learning." loading="lazy" width="400" height="266">
 
-				<p>Hybrid approaches are already emerging. Researchers are using LLMs as surrogate fitness evaluators, letting evolutionary search explore design spaces while a language model provides fast approximate evaluations. Others are using EAs to evolve prompts, tune retrieval-augmented generation pipelines, or search for adversarial inputs that expose model weaknesses. The combination of GenAI's generative fluency and EA's constraint-respecting optimization is genuinely powerful, and it is still early days.</p>
+				<p>Hybrid approaches are already emerging. Researchers are using LLMs as surrogate fitness evaluators, letting evolutionary search explore design spaces while a language model provides fast approximate evaluations. Others are using EAs to evolve prompts, tune retrieval-augmented generation pipelines, or search for adversarial inputs that expose model weaknesses. The combination of GenAI's generative fluency and EA's constraint-respecting optimization is powerful, and it is still early days.</p>
 
 				<p>But for EC to claim that seat at the table, the field has to get its house in order. The naming crisis and the dialect collision are not just academic annoyances. They are the reason EC papers do not show up in ML literature reviews, the reason industry labs do not consider evolutionary approaches, and the reason funding bodies see EC as a niche subdiscipline rather than a foundational tool. None of that reflects the quality of the underlying science; it reflects how the field communicates it.</p>
 

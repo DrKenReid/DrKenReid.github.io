@@ -302,7 +302,7 @@
               <tr><td>doomscrolling</td><td class="score">&minus;1</td><td class="score">&minus;1</td><td>consumer</td></tr>
             </tbody>
           </table>
-          <p>Note that \(w_i\) and \(e_i\) are independent. Deep work and exercise both score 4 on value, but deep work costs more energy per hour. Doomscrolling is the worst of both worlds: negative value <em>and</em> negative energy, which is exactly why it feels like rest and isn't. These numbers are mine, and they are rough, and like the weights they are meant to be argued with. The point is that you now have to write down a second number for each activity, and writing it down is most of the work.</p>
+          <p>Note that \(w_i\) and \(e_i\) are independent. Deep work and exercise both score 4 on value, but deep work costs more energy per hour. Doomscrolling is the worst of both worlds: negative value <em>and</em> negative energy, which is why it feels like rest and isn't. These numbers are mine, and they are rough, and like the weights they are meant to be argued with. The point is that you now have to write down a second number for each activity, and writing it down is most of the work.</p>
         </div>
 
         <div class="nerd-only">
@@ -320,7 +320,7 @@
 
         <p class="non-nerd">This is why two activities you value identically can meet completely different fates in a hard week. If learning a language and a hard gym session both matter to you the same amount, but one leaves you able to function afterwards and the other puts you on the sofa for the rest of the day, then in a depleted week they are not equivalent at all, no matter what your priority list says. The cheaper-to-run one wins, not because you value it more, but because you can afford it.</p>
 
-        <p class="nerd-only">When time binds, the solver ranks activities by value per hour, which is just \(w_i\). When energy binds, the relevant ratio becomes value per unit of energy consumed, roughly \(w_i / |e_i|\) for the consumers. Deep work and exercise both have \(w_i = 4\), but deep work costs \(e_i = -3\) against exercise's \(-2\), so per unit of scarce energy exercise delivers more value. Hold that ratio in mind, because in a moment the solver is going to act on it without being told to, and cut exactly the activity you would least expect a "productivity" model to cut.</p>
+        <p class="nerd-only">When time binds, the solver ranks activities by value per hour, which is just \(w_i\). When energy binds, the relevant ratio becomes value per unit of energy consumed, roughly \(w_i / |e_i|\) for the consumers. Deep work and exercise both have \(w_i = 4\), but deep work costs \(e_i = -3\) against exercise's \(-2\), so per unit of scarce energy exercise delivers more value. Hold that ratio in mind, because in a moment the solver is going to act on it without being told to, and cut the activity you would least expect a "productivity" model to cut.</p>
 
         <h2 class="nerd-only">The model, with energy added</h2>
 
@@ -423,7 +423,7 @@ print(f"Weighted score: {int(pulp.value(m.objective))}")
               <tr><td><strong>Weighted score</strong></td><td class="score"><strong>547</strong></td><td class="score"><strong>539</strong></td><td class="score" style="color:#e05a5a;"><strong>&minus;8</strong></td></tr>
             </tbody>
           </table>
-          <p class="math-caption">Both weeks are 168 hours and both solve to Optimal. The energy balance is slack in the healthy week (+12 to spare) and binding in the depleted one (exactly +50, the reserve). Every hour the model moves comes out of one row and lands in another.</p>
+          <p class="math-caption">Both weeks are 168 hours and both solve to Optimal. The energy balance is slack in the healthy week (+12 to spare) and binding in the depleted one (+50, the reserve). Every hour the model moves comes out of one row and lands in another.</p>
 
           <p>Look at what moved, and what didn't. It did not touch your sleep, your family, your paid work, or your chores. It reached straight for <em>deep work</em>, the meaningful work you would do even unpaid, and cut it almost in half, pouring those eight hours into leisure. The model gave them to rest because, once energy has to balance with a reserve, deep work is the most expensive thing you value, the worst ratio of value to energy among everything you care about, and so it is the first thing a constrained week sacrifices.</p>
 
@@ -471,7 +471,7 @@ print(f"Weighted score: {int(pulp.value(m.objective))}")
         <p>Two columns side by side do something one column can't. Run your eye down them together and the structure of a bad week appears: the high-value, high-drain rows (the craft, the learning, the exercise) are the ones that vanish when energy is short, and the negative-negative rows are the ones that expand to fill the space they leave. That is the shape of burnout, drawn in two columns. Knowing the shape is most of how you interrupt it!</p>
 
         <div class="nerd-only">
-          <p>This grid is, again, almost exactly the model's input. The "matters" column is the weights \(w_i\); the new column is the energy rates \(e_i\); the activities are the set \(A\). The only thing the table doesn't show is the bounds and the reserve \(R\), and those are the two things worth playing with once you've typed your own numbers in.</p>
+          <p>This grid is, again, near enough the model's input. The "matters" column is the weights \(w_i\); the new column is the energy rates \(e_i\); the activities are the set \(A\). The only thing the table doesn't show is the bounds and the reserve \(R\), and those are the two things worth playing with once you've typed your own numbers in.</p>
         </div>
 
         <figure class="non-nerd">

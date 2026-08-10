@@ -139,7 +139,7 @@
         <p style="overflow-x:auto;"><code>gh release create photos-v1 --title "Full-size photography" --notes "Gallery originals"</code><br>
         <code>gh release upload photos-v1 photos/*.png</code></p>
 
-        <p>That release now holds all 515 originals, 1.55&nbsp;GB of them, which is to say: <strong>the "attachment" stapled to my repository is bigger than the entire website is allowed to be.</strong> GitHub is fine with this. Releases are a supported distribution mechanism for a repository's files, and these are, quite literally, the files this repository's site is built around.</p>
+        <p>That release now holds all 515 originals, 1.55&nbsp;GB of them, which is to say: <strong>the "attachment" stapled to my repository is bigger than the entire website is allowed to be.</strong> GitHub is fine with this. Releases are a supported way to distribute a repository's files, and these are, quite literally, the files this repository's site is built around.</p>
 
         <h2>The full pipeline</h2>
 
@@ -218,7 +218,7 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
               <tr style="border-bottom:1px solid #99999955;">
                 <td style="padding:8px;">SmugMug</td>
                 <td style="padding:8px;">~$100+/year</td>
-                <td style="padding:8px;">Polished portfolio hosting; genuinely good, genuinely not free.</td>
+                <td style="padding:8px;">Polished portfolio hosting; really good, really not free.</td>
               </tr>
               <tr style="border-bottom:1px solid #99999955;">
                 <td style="padding:8px;">Amazon S3 + egress</td>
@@ -245,7 +245,7 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
           <li><strong>No contract.</strong> GitHub documents release assets as a distribution feature; they don't promise it as a CDN. If your traffic looked like abuse, they'd be within their rights to object. A personal portfolio's click-through traffic is nowhere near that territory, but a startup's image backend would be.</li>
           <li><strong>Public means public.</strong> Release assets on a public repo are accessible to anyone with the URL. Fine for a portfolio, since a portfolio's job is to be seen; wrong for anything private.</li>
           <li><strong>URLs are tied to the repo.</strong> Rename your account or repository and every deep link changes. Choose boring, stable names.</li>
-          <li><strong>No image processing.</strong> S3-with-a-CDN setups can resize on the fly. Here, every size you serve is a size you generated yourself. I need exactly two: thumbnail and original.</li>
+          <li><strong>No image processing.</strong> S3-with-a-CDN setups can resize on the fly. Here, every size you serve is a size you generated yourself. I need two: thumbnail and original.</li>
           <li><strong>Don't commit the originals, ever.</strong> The release replaces the repo for full-size files, it doesn't supplement it. Learn from my 4.91&nbsp;GiB of permanently embarrassing git history.</li>
         </ul>
 

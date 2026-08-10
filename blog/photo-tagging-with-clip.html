@@ -175,7 +175,7 @@
 
         <h2>Accuracy</h2>
 
-        <p>Spot-checking against my own judgement, I'd estimate 85-90% accuracy. The model handles clear cases well: a sheep in a field is "wildlife", a monochrome street scene is "bw" + "urban", a derelict building is "abandoned". Where it struggles is with quirky or abstract shots. A painted dalmatian traffic cone on a city street got tagged "architecture", which I can't even be mad about because it technically is sitting next to a building. A lensball photo got tagged "portrait" because the model detected what it thought was a face. It wasn't wrong exactly, it was just working with a different definition of "portrait" than I had in mind.</p>
+        <p>Spot-checking against my own judgement, I'd estimate 85-90% accuracy. The model handles clear cases well: a sheep in a field is "wildlife", a monochrome street scene is "bw" + "urban", a derelict building is "abandoned". Where it struggles is with quirky or abstract shots. A painted dalmatian traffic cone on a city street got tagged "architecture", which I can't even be mad about because it technically is sitting next to a building. A lensball photo got tagged "portrait" because the model detected what it thought was a face. It wasn't wrong, it was just working with a different definition of "portrait" than I had in mind.</p>
 
         <p>The nice thing about this approach is that re-running the whole pipeline is trivial. Tweak a threshold, adjust a prompt, run again in under a minute. If I wanted to add a "creative/abstract" category to catch those edge cases, it would take about two minutes of work.</p>
 

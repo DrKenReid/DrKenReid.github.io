@@ -108,7 +108,7 @@
 
  <h2>Fuzzy</h2>
 
- <p>Real fuzzy-search libraries use sophisticated string mathematics. Mine uses a five-tier ladder: an exact match scores 120, a match at the start of the text 100, a match at a word boundary 80, a match anywhere 60, and letters-in-the-right-order (the "phto" case) 25. Each source gets a weighting on top (a title match beats a tag match beats an excerpt match), everything above zero is sorted, and the top ten render. </p>
+ <p>Real fuzzy-search libraries use sophisticated string mathematics. Mine uses a five-tier ladder: a whole-string match scores 120, a match at the start of the text 100, a match at a word boundary 80, a match anywhere 60, and letters-in-the-right-order (the "phto" case) 25. Each source gets a weighting on top (a title match beats a tag match beats an excerpt match), everything above zero is sorted, and the top ten render. </p>
 
  <p>Arrow keys move the selection and wrap at the ends; Tab is trapped so focus can't escape the dialog; Escape closes; a screen-reader announcement reports the result count as you type; and the input is focused synchronously on opening, because mobile keyboards only appear if the focus happens inside the user's gesture. </p>
 
@@ -498,7 +498,7 @@ body.kr-palette-open {
 
  <details class="faq-item">
  <summary>Why Ctrl+K and not Ctrl+F?</summary>
- <p>Ctrl+F belongs to the browser, and hijacking it is hostile: someone searching within the page they're reading should get exactly that. Ctrl+K is the established palette convention (editors, Slack, GitHub), and the bare <strong>/</strong> covers the other established convention (Wikipedia, YouTube). Never take shortcuts the browser already spent on something people use.</p>
+ <p>Ctrl+F belongs to the browser, and hijacking it is hostile: someone searching within the page they're reading should get that. Ctrl+K is the established palette convention (editors, Slack, GitHub), and the bare <strong>/</strong> covers the other established convention (Wikipedia, YouTube). Never take shortcuts the browser already spent on something people use.</p>
  </details>
 
  <details class="faq-item">
