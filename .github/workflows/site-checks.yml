@@ -27,6 +27,18 @@ jobs:
       - name: CSS build is current
         run: python .github/scripts/minify_css.py --check
 
+      # data/posts.json carries a words/readMinutes pair per post, used for
+      # the read-time badge and the homepage word total. Drifts silently
+      # whenever a post is edited without rerunning the generator.
+      - name: Read times are current
+        run: python .github/scripts/generate_read_times.py --check
+
+      # Related-posts blocks are baked into each post's HTML by TF-IDF over
+      # body text, so editing a post can change what its neighbours should
+      # recommend. Checks the baked block matches a fresh ranking.
+      - name: Related posts are current
+        run: python .github/scripts/generate_related_posts.py --check
+
   # Headless render checks: JS-built UI must actually appear (catches
   # bugs the static audit cannot, e.g. content stuck at opacity 0).
   smoke:

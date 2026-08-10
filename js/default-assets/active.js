@@ -1,22 +1,29 @@
+/**
+ * active.js
+ *
+ * Page-specific jQuery plugin inits, and nothing else. Everything that runs
+ * on every page (preloader, navigation, sticky header, parallax heroes,
+ * scroll-to-top, href="#" guard) now lives in js/site.js, which is vanilla
+ * and dependency-free.
+ *
+ * This file is only loaded by pages that genuinely need a jQuery plugin out
+ * of js/alime.bundle.js:
+ *   - owlCarousel  : the homepage welcome slider, and the photo strip
+ *                    shared-components.js injects
+ *   - isotope      : the gallery masonry grid
+ *   - magnificPopup: the image lightboxes (js/lightbox.js, js/gallery.js)
+ *
+ * Removed as dead rather than ported: the .video-play-btn iframe popup
+ * (replaced by the kr-embed facade), the .search-btn / .search-form toggle
+ * and the .portfolio-menu isotope filter (no such markup on the site), and
+ * the Bootstrap tooltip init (no data-toggle attribute anywhere).
+ */
 (function ($) {
     'use strict';
 
-    var alime_window = $(window);
-
-    // ****************************
-    // :: 1.0 Preloader Active Code
-    // ****************************
-
-    // Dismiss once the DOM is ready rather than window 'load', so content
-    // isn't hidden behind the preloader while images finish downloading.
-    // (style.css also has a keyframe failsafe in case JS never runs.)
-    $(function () {
-        $('#preloader').fadeOut(400, function () {
-            $(this).remove();
-        });
-    });
-
     // Accessible pause/play toggle for auto-playing owl carousels (WCAG 2.2.2).
+    // Called from here for the welcome slider and from shared-components.js
+    // for the photo strip.
     window.addCarouselPauseControl = function (carousel, container, label, resumeTimeout) {
         if (!carousel || !carousel.length || !container || !container.length) return;
         var btn = $('<button type="button" class="carousel-pause-btn" aria-pressed="false"></button>')
@@ -40,16 +47,8 @@
         container.append(btn);
     };
 
-    // ****************************
-    // :: 2.0 ClassyNav Active Code
-    // ****************************
-
-    if ($.fn.classyNav) {
-        $('#alimeNav').classyNav();
-    }
-
     // *********************************
-    // :: 3.0 Welcome Slides Active Code
+    // :: Welcome slides (index.html)
     // *********************************
 
     if ($.fn.owlCarousel) {
@@ -94,28 +93,16 @@
         });
     }
 
-    // ************************************
-    // :: 4.0 Instragram Slides Active Code
-    // ************************************
-
-    // The Instagram strip is injected (and its carousel initialised) by
+    // The photo strip is injected (and its carousel initialised) by
     // shared-components.js after this script runs, so no init happens here.
 
     // *********************************
-    // :: 5.0 Masonary Gallery Active Code
+    // :: Masonry gallery (gallery.html)
     // *********************************
 
     if ($.fn.imagesLoaded) {
         $('.alime-portfolio').imagesLoaded(function () {
-            // filter items on button click
-            $('.portfolio-menu').on('click', 'button', function () {
-                var filterValue = $(this).attr('data-filter');
-                $grid.isotope({
-                    filter: filterValue
-                });
-            });
-            // init Isotope
-            var $grid = $('.alime-portfolio').isotope({
+            $('.alime-portfolio').isotope({
                 itemSelector: '.single_gallery_item',
                 percentPosition: true,
                 masonry: {
@@ -125,41 +112,11 @@
         });
     }
 
-    // ***********************************
-    // :: 6.0 Portfolio Button Active Code
-    // ***********************************
-    
-    $('.portfolio-menu button.btn').on('click', function () {
-        $('.portfolio-menu button.btn').removeClass('active');
-        $(this).addClass('active');
-    })
-
-    // ********************************
-    // :: 7.0 Search Button Active Code
-    // ********************************
-    $('.search-btn').on('click', function () {
-        $('.search-form').toggleClass('search-form-active');
-    })
-
-    // ************************
-    // :: 8.0 Stick Active Code
-    // ************************
-
-    alime_window.on('scroll', function () {
-        if (alime_window.scrollTop() > 0) {
-            $('.main-header-area').addClass('sticky');
-        } else {
-            $('.main-header-area').removeClass('sticky');
-        }
-    });
-
     // *********************************
-    // :: 9.0 Magnific Popup Active Code
+    // :: Image lightboxes
     // *********************************
+
     if ($.fn.magnificPopup) {
-        $('.video-play-btn').magnificPopup({
-            type: 'iframe'
-        });
         $('.portfolio-img').magnificPopup({
             type: 'image',
             gallery: {
@@ -175,45 +132,5 @@
             }
         });
     }
-
-    // **************************
-    // :: 10.0 Tooltip Active Code
-    // **************************
-    if ($.fn.tooltip) {
-        $('[data-toggle="tooltip"]').tooltip();
-    }
-
-    // ***********************
-    // :: 11.0 WOW Active Code
-    // ***********************
-    // Replaced by the IntersectionObserver reveal in shared-components.js
-    // (initSectionReveals) — smoother, works on mobile, honors
-    // prefers-reduced-motion, and never leaves content invisible.
-
-    // ****************************
-    // :: 12.0 Jarallax Active Code
-    // ****************************
-    if ($.fn.jarallax) {
-        $('.jarallax').jarallax({
-            speed: 0.5
-        });
-    }
-
-    // ****************************
-    // :: 13.0 Scrollup Active Code
-    // ****************************
-    if ($.fn.scrollUp) {
-        alime_window.scrollUp({
-            scrollSpeed: 1000,
-            scrollText: '<i class="arrow_carrot-up"</i>'
-        });
-    }
-
-    // *********************************
-    // :: 14.0 Prevent Default 'a' Click
-    // *********************************
-    $('a[href="#"]').on('click', function (e) {
-        e.preventDefault();
-    });
 
 })(jQuery);

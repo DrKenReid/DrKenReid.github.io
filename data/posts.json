@@ -1,5 +1,18 @@
 [
   {
+    "title": "50 Blogs: An Infographic",
+    "date": "2026-08-08",
+    "tags": [
+      "personal"
+    ],
+    "category": "Personal",
+    "excerpt": "Fifty posts in: an infographic the site drew about itself, and what it taught me. Words written, what gets read versus what I love writing, and the 135 drafts waiting their turn.",
+    "url": "blog/50-blogs-an-infographic.html",
+    "image": "img/photography/thumb/30.webp",
+    "readMinutes": 11,
+    "words": 2288
+  },
+  {
     "title": "Dark Mode That Doesn't Flash",
     "date": "2026-08-06",
     "tags": [
@@ -13,8 +26,8 @@
       "name": "How This Site Is Built",
       "part": 12
     },
-    "readMinutes": 7,
-    "words": 1534
+    "readMinutes": 8,
+    "words": 1645
   },
   {
     "title": "Simulated Annealing, Live",
@@ -31,7 +44,7 @@
       "part": 3
     },
     "readMinutes": 28,
-    "words": 6106
+    "words": 6101
   },
   {
     "title": "Evolution, Live: Genetic Algorithms",
@@ -58,7 +71,7 @@
       "writing"
     ],
     "category": "Technology",
-    "excerpt": "Every post on this blog carries around forty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.",
+    "excerpt": "Every post on this blog carries around eighty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.",
     "url": "blog/invisible-half-of-a-blog-post.html",
     "image": "img/photography/thumb/78.webp",
     "series": {
@@ -83,7 +96,7 @@
       "part": 10
     },
     "readMinutes": 12,
-    "words": 2538
+    "words": 2550
   },
   {
     "title": "The Paradox of Tolerance",
@@ -100,7 +113,7 @@
       "part": 4
     },
     "readMinutes": 14,
-    "words": 3003
+    "words": 3001
   },
   {
     "title": "The Fermi Paradox - Why are we alone in space?",
@@ -114,7 +127,7 @@
     "url": "blog/the-fermi-paradox-and-the-great-silence.html",
     "image": "img/photography/thumb/357.webp",
     "readMinutes": 23,
-    "words": 4947
+    "words": 4940
   },
   {
     "title": "A Blog Engine in One JSON File",
@@ -132,7 +145,7 @@
       "part": 9
     },
     "readMinutes": 7,
-    "words": 1322
+    "words": 1321
   },
   {
     "title": "Ant Colony, Live",
@@ -167,7 +180,7 @@
       "part": 8
     },
     "readMinutes": 8,
-    "words": 1570
+    "words": 1592
   },
   {
     "title": "My Teacher Said I Shouldn't Go To University",
@@ -181,7 +194,7 @@
     "url": "blog/my-teacher-said-i-shouldnt-go-to-university.html",
     "image": "img/photography/thumb/113.webp",
     "readMinutes": 9,
-    "words": 1958
+    "words": 1954
   },
   {
     "title": "Free Comments via GitHub Discussions",
@@ -198,7 +211,7 @@
       "part": 7
     },
     "readMinutes": 5,
-    "words": 1023
+    "words": 1018
   },
   {
     "title": "Putting My Photos on a Map",
@@ -216,7 +229,7 @@
       "part": 6
     },
     "readMinutes": 6,
-    "words": 1154
+    "words": 1153
   },
   {
     "title": "Self-Hosting Your Fonts",
@@ -233,7 +246,7 @@
       "part": 5
     },
     "readMinutes": 6,
-    "words": 1202
+    "words": 1201
   },
   {
     "title": "Reading This Site Offline",
@@ -250,7 +263,7 @@
       "name": "How This Site Is Built",
       "part": 4
     },
-    "words": 1308
+    "words": 1303
   },
   {
     "title": "The Abandoned Places I Photograph",
@@ -264,7 +277,7 @@
     "url": "blog/abandoned-places-i-photograph.html",
     "image": "img/photography/thumb/135.webp",
     "readMinutes": 9,
-    "words": 1937
+    "words": 1936
   },
   {
     "title": "Why I Love LaTeX",
@@ -278,7 +291,7 @@
     "url": "blog/why-i-love-latex.html",
     "image": "img/photography/thumb/16.webp",
     "readMinutes": 8,
-    "words": 1569
+    "words": 1567
   },
   {
     "title": "What 50,000 Scrobbles Say About Me",
@@ -292,7 +305,7 @@
     "url": "blog/what-50000-scrobbles-say-about-me.html",
     "image": "img/photography/thumb/13.webp",
     "readMinutes": 9,
-    "words": 1928
+    "words": 1937
   },
   {
     "title": "Hosting a Photography Portfolio on GitHub for Free",
@@ -310,7 +323,7 @@
       "name": "How This Site Is Built",
       "part": 3
     },
-    "words": 2034
+    "words": 2026
   },
   {
     "title": "Why You Aren't a \"Visual Learner\"",
@@ -324,7 +337,7 @@
     "url": "blog/why-you-arent-a-visual-learner.html",
     "image": "img/photography/thumb/366.webp",
     "readMinutes": 9,
-    "words": 1801
+    "words": 1799
   },
   {
     "title": "Frodo, Sam, and love.",
@@ -339,7 +352,7 @@
     "url": "blog/frodo-sam-and-love.html",
     "image": "img/bg-img/end-of-the-third-age.jpg",
     "readMinutes": 12,
-    "words": 2574
+    "words": 2567
   },
   {
     "title": "Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)",
@@ -358,7 +371,7 @@
       "name": "Optimizing Your Schedule",
       "part": 2
     },
-    "words": 3506
+    "words": 3503
   },
   {
     "title": "What We Leave Behind",
@@ -372,8 +385,8 @@
     "excerpt": "From the plutonium in the planet's crust to the Golden Record in interstellar space to the memory of a Tuesday coffee, a look at everything we leave behind, and why none of us ever truly vanishes.",
     "url": "blog/what-we-leave-behind.html",
     "image": "img/bg-img/voyager-golden-record.jpg",
-    "readMinutes": 18,
-    "words": 3741
+    "readMinutes": 17,
+    "words": 3731
   },
   {
     "title": "Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)",
@@ -392,7 +405,7 @@
       "name": "Optimizing Your Schedule",
       "part": 1
     },
-    "words": 4018
+    "words": 4007
   },
   {
     "title": "What Was I Made For?",
@@ -406,7 +419,7 @@
     "url": "blog/what-was-i-made-for.html",
     "image": "img/photography/thumb/43.webp",
     "readMinutes": 16,
-    "words": 3304
+    "words": 3302
   },
   {
     "title": "M*A*S*H in the Modern Era: Comedy, Trauma, and the 4077th",
@@ -419,7 +432,7 @@
     "url": "blog/mash-modern-perspective.html",
     "image": "https://commons.wikimedia.org/wiki/Special:FilePath/MASH_cast_1972.JPG",
     "readMinutes": 16,
-    "words": 3340
+    "words": 3339
   },
   {
     "title": "Iain M. Banks and The Culture",
@@ -432,7 +445,7 @@
     "url": "blog/the-culture-series.html",
     "image": "img/photography/thumb/30.webp",
     "readMinutes": 15,
-    "words": 3175
+    "words": 3173
   },
   {
     "title": "The Individualization of Responsibility",
@@ -449,7 +462,7 @@
       "part": 3
     },
     "readMinutes": 13,
-    "words": 2790
+    "words": 2789
   },
   {
     "title": "Advice to My Younger Self",
@@ -462,7 +475,7 @@
     "url": "blog/advice-to-my-younger-self.html",
     "image": "img/photography/thumb/445.webp",
     "readMinutes": 16,
-    "words": 3456
+    "words": 3455
   },
   {
     "title": "The Books I Recommend to Friends",
@@ -492,7 +505,7 @@
       "part": 2
     },
     "readMinutes": 14,
-    "words": 3024
+    "words": 3020
   },
   {
     "title": "When I Ended Up in Italy Because of Mistaken Identity",
@@ -520,12 +533,12 @@
     "excerpt": "What I learned about writing a blog: why the word itself put me off, how I found a process, and what to do when people hate your work.",
     "url": "blog/how-to-write-a-blog.html",
     "image": "img/photography/thumb/252.webp",
-    "readMinutes": 11,
+    "readMinutes": 10,
     "series": {
       "name": "How This Site Is Built",
       "part": 2
     },
-    "words": 2203
+    "words": 2200
   },
   {
     "title": "The Hidden Cost of Cobalt",
@@ -543,7 +556,7 @@
       "part": 1
     },
     "readMinutes": 18,
-    "words": 3804
+    "words": 3800
   },
   {
     "title": "ISO 8601 and the Date Cult I Happily Joined",
@@ -569,7 +582,7 @@
     "url": "blog/accessibility-first-product-design-data-science.html",
     "image": "img/photography/thumb/21.webp",
     "readMinutes": 42,
-    "words": 9153
+    "words": 9152
   },
   {
     "title": "The Life and Death of the Early Internet",
@@ -582,7 +595,7 @@
     "url": "blog/life-and-death-of-the-early-internet.html",
     "image": "img/photography/thumb/375.webp",
     "readMinutes": 23,
-    "words": 4954
+    "words": 4948
   },
   {
     "title": "The Ethics of LLM Use (Not LLMs)",
@@ -595,7 +608,7 @@
     "url": "blog/ethics-of-llm-use-not-llms.html",
     "image": "img/photography/thumb/280.webp",
     "readMinutes": 33,
-    "words": 7204
+    "words": 7193
   },
   {
     "title": "Dungeon Crawler Carl and the Strange Dignity of LitRPG",
@@ -607,8 +620,8 @@
     "excerpt": "A book snob's confession: how Dungeon Crawler Carl used absurd LitRPG mechanics to deliver one of the most devastating emotional payloads in modern fantasy.",
     "url": "blog/dungeon-crawler-carl-litrpg-dignity.html",
     "image": "img/photography/thumb/141.webp",
-    "readMinutes": 23,
-    "words": 4842
+    "readMinutes": 22,
+    "words": 4833
   },
   {
     "title": "From Scotland to Michigan",
@@ -621,7 +634,7 @@
     "url": "blog/from-scotland-to-michigan.html",
     "image": "img/photography/thumb/18.webp",
     "readMinutes": 17,
-    "words": 3611
+    "words": 3604
   },
   {
     "title": "Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction",
@@ -647,7 +660,7 @@
     "url": "blog/no-idea-no-problem-data-science-portfolio.html",
     "image": "img/photography/thumb/19.webp",
     "readMinutes": 11,
-    "words": 2286
+    "words": 2279
   },
   {
     "title": "Evolutionary Computation's Identity Crisis in the Age of GenAI",
@@ -660,7 +673,7 @@
     "url": "blog/evolutionary-computation-identity-crisis.html",
     "image": "img/photography/thumb/208.webp",
     "readMinutes": 12,
-    "words": 2542
+    "words": 2543
   },
   {
     "title": "In Defense of Audiobooks",
@@ -673,7 +686,7 @@
     "url": "blog/in-defense-of-audiobooks.html",
     "image": "img/photography/thumb/366.webp",
     "readMinutes": 12,
-    "words": 2612
+    "words": 2611
   },
   {
     "title": "Why It Still Matters to Learn to Code in the Age of AI",
@@ -686,7 +699,7 @@
     "url": "blog/why-learn-to-code-age-of-ai.html",
     "image": "img/photography/thumb/14.webp",
     "readMinutes": 8,
-    "words": 1634
+    "words": 1633
   },
   {
     "title": "Your Professional Second Brain for Local LLM Work",
@@ -712,7 +725,7 @@
     "url": "blog/snowball-vs-avalanche.html",
     "image": "blog/img/debt_total_curve.png",
     "readMinutes": 7,
-    "words": 1333
+    "words": 1328
   },
   {
     "title": "Book Ratings Are Broken",
@@ -725,7 +738,7 @@
     "url": "blog/rating-systems.html",
     "image": "blog/img/rating_distribution.png",
     "readMinutes": 12,
-    "words": 2633
+    "words": 2628
   },
   {
     "title": "Why Most Self-Help Books Are Trash (And Which Ones Aren't)",
@@ -738,7 +751,7 @@
     "url": "blog/self-help-books.html",
     "image": "img/photography/thumb/97.webp",
     "readMinutes": 10,
-    "words": 2070
+    "words": 2068
   },
   {
     "title": "Building a Photo Tagging System with CLIP",
@@ -756,6 +769,6 @@
       "name": "How This Site Is Built",
       "part": 1
     },
-    "words": 1180
+    "words": 1179
   }
 ]

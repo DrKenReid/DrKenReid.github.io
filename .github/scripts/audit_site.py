@@ -12,6 +12,8 @@ Checks:
   sitemap    sitemap.xml covers all published indexable pages, no ghosts
   posts      posts.json urls/images exist, tags in allowed set, readMinutes
   scripts    blog post script includes match the canonical set
+  head       blog post heads carry the canonical elements (keywords, icons,
+             manifest, BlogPosting + BreadcrumbList JSON-LD)
 """
 
 import json
@@ -19,6 +21,7 @@ import re
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
+from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlparse
@@ -50,6 +53,8 @@ class PageParser(HTMLParser):
         self.links = []          # (href, line)
         self.images = []         # (src, alt_or_None, loading, line)
         self.metas = {}          # name/property -> content
+        self.link_rels = set()   # rel values seen on <link>
+        self.jsonld_types = set()  # @type values in ld+json blocks
         self.canonical = None
         self.title = None
         self.headings = []       # (level, line)
@@ -98,6 +103,7 @@ class PageParser(HTMLParser):
                         not (a.get("width") and a.get("height")):
                     self.ext_nodims.append((src, line))
         if tag == "link":
+            self.link_rels.update((a.get("rel") or "").split())
             if a.get("rel") == "canonical":
                 self.canonical = a.get("href")
             elif a.get("href") and not (a.get("href") or "").startswith("http"):
@@ -371,6 +377,9 @@ def main():
             except json.JSONDecodeError as e:
                 add("ERROR", page, line, "jsonld-parse", f"invalid JSON-LD: {e}")
                 continue
+            for node in (data if isinstance(data, list) else [data]):
+                if isinstance(node, dict) and isinstance(node.get("@type"), str):
+                    p.jsonld_types.add(node["@type"])
             if isinstance(data, dict):
                 jsonld_headline = data.get("headline") or jsonld_headline
                 jsonld_date = data.get("datePublished") or jsonld_date
@@ -420,7 +429,6 @@ def main():
     post_pages = [pg for pg in pages if pg.parent.name == "blog" and pg in page_info
                   and getattr(page_info[pg], "is_post", False)]
     if post_pages:
-        from collections import Counter
         sigs = Counter()
         for pg in post_pages:
             sig = tuple(s for s in page_info[pg].scripts
@@ -439,6 +447,35 @@ def main():
                 if extra:
                     bits.append("extra: " + ", ".join(sorted(extra)))
                 add("WARN", pg, 0, "script-drift", "; ".join(bits))
+
+    # --- head element drift across posts ---
+    # Post heads are hand-copied from whichever post was open at the time,
+    # so elements get silently dropped (BreadcrumbList, the manifest and
+    # apple-touch-icon links and keywords all went missing this way). Only
+    # features that are the same for every post are compared; per-post
+    # values (title, description, og:image, canonical, citation_*, preload,
+    # the Lora link, MathJax/Prism) are deliberately not in the signature.
+    # python .github/scripts/generate_post_head.py --fix inserts what's missing.
+    if post_pages:
+        for pg in post_pages:
+            info = page_info[pg]
+            sig = tuple(name for name, present in (
+                ("keywords", "keywords" in info.metas),
+                ("theme-color", "theme-color" in info.metas),
+                ("icon", "icon" in info.link_rels),
+                ("apple-touch-icon", "apple-touch-icon" in info.link_rels),
+                ("manifest", "manifest" in info.link_rels),
+                ("jsonld-BlogPosting", "BlogPosting" in info.jsonld_types),
+                ("jsonld-BreadcrumbList", "BreadcrumbList" in info.jsonld_types),
+            ) if present)
+            page_info[pg].head_sig = sig
+        head_sigs = Counter(page_info[pg].head_sig for pg in post_pages)
+        canonical_head = head_sigs.most_common(1)[0][0]
+        for pg in post_pages:
+            missing = set(canonical_head) - set(page_info[pg].head_sig)
+            if missing:
+                add("WARN", pg, 0, "head-drift",
+                    "missing: " + ", ".join(sorted(missing)))
 
     # --- posts.json ---
     posts_path = ROOT / "data" / "posts.json"

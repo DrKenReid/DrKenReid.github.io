@@ -5,11 +5,178 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 06 Aug 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Thu, 06 Aug 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Sat, 08 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Sat, 08 Aug 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>50 Blogs: An Infographic</title>
+      <link>https://www.kenreid.co.uk/blog/50-blogs-an-infographic.html</link>
+      <guid>https://www.kenreid.co.uk/blog/50-blogs-an-infographic.html</guid>
+      <pubDate>Sat, 08 Aug 2026 00:00:00 +0000</pubDate>
+      <description>Fifty posts in: an infographic the site drew about itself, and what it taught me. Words written, what gets read versus what I love writing, and the 135 drafts waiting their turn.</description>
+      <category>personal</category>
+      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/50-blogs-an-infographic.html">View it on the site</a> to play with it.</em></p>
+ <h1>50 Blogs: An Infographic</h1>
+ <div class="blog-meta">
+ 8 August 2026 &middot;
+ <span class="blog-tag">personal</span>
+ </div>
+
+   <div class="fifty-party fifty-viz" style="background:none; border:none; padding:0; margin:0 0 20px;">
+     <span class="fifty-bunting" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+     <button type="button" class="fifty-again" id="fifty-again">Throw the confetti again</button>
+   </div>
+
+ <p>This is post number fifty. That felt like the kind of milestone that deserved a party, and since this is a data science blog at heart, the party includes confetti, a banner and a bunch of unnecessary plots.</p>
+
+ <p>Everything below is drawn live in your browser from the same JSON file that runs the blog itself, so the infographic *should* stay up to date. If you are reading this long after publication and the numbers have crept past fifty, you can consider this post "blog emeritus".</p>
+
+ <p>Fifty is also the first point where the archive is big enough to start exhibiting some shape, behaviors and such. So between the charts I have tried to be straight with myself about what this blog turned into: what I enjoy writing about most, what people read, and the discovery that, uh, they're not always teh same thing.</p>
+
+ 
+
+ <div class="fifty-tiles-wrap">
+ <div class="fifty-tiles" id="fiftyTiles" aria-label="Headline statistics">
+   <div class="fifty-tile"><span class="num" id="tilePosts">50</span><span class="lbl">Posts published</span></div>
+   <div class="fifty-tile"><span class="num" id="tileWords">137,985</span><span class="lbl">Words written</span></div>
+   <div class="fifty-tile"><span class="num" id="tileHours">10.9</span><span class="lbl">Hours of reading</span></div>
+   <div class="fifty-tile"><span class="num">135</span><span class="lbl">Drafts waiting</span></div>
+ </div>
+ </div>
+
+ <p>One hundred and thirty-eight thousand words. That's kind of crazy. That's a decent-sized novel and a half, mostly about whatever my brain wouldn't let go of and I didn't want to bore my wife or colleagues with (or at least not more than I already had). The fourth tile is the one that I have mixed feelings about: I like having so many draft ideas, some just bullet points or a few scattered paragraphs, it makes it easier to choose a topic I feel like when I have 15 minutes to write. But it also means my drafts just grow and grow, and I already know there are about 5 blogs I wrote out, went to revise, decided I didn't like them and deleted them. So I sometimes wonder how many drafts won't make it to the end, but I suppose that just comes with the process.</p>
+
+ <h2>The publishing rhythm</h2>
+
+ <p>I started in April: an opening sprint, a spring lull while I travelled to Colorado, and then July happened. Admittedly, a lot of my posts are shorter format, or reuse code I wrote years ago for demonstration purposes, making fifteen blogs in one month less crazy than it sounds. August is only a week old, but I don't think it'll grow much looking at my calendar.</p>
+
+ 
+
+ <p>Zoom in: this is every day since the first post, one cell per day. GitHub feel.</p>
+
+ <p>Mondays are the most common publishing day, which makes sense, because I like to write at the weekend mostly then try to publish when I think people are more likely to click while bored on a commute or during a lunch break. 12 July, when four posts went out in one day, was not intentional. I had planned to publish 1 and draft the others but I accidentally had them in the queue for publishing, thankfully they were mostly done.</p>
+
+ 
+
+ <h2>Tags and what they say about me</h2>
+
+ <p>Tags are categories of a sort, and the totals appear to be something of a personality test. Technology and personal are tied at the top, which fits thematically about what this site is: half machine and half diary. Books outnumbering television which appears once doesn't surprise me: I read a lot more than I watch TV or movies.</p>
+
+ <p>I started this blog assuming it would be somewhere I could talk vaguely about whatever I feel like, but would probably end up just being a professional portfolio of some kind. I've since learned that the posts I am most eager to write, and proudest of afterwards, are the discursive ones: the philosophy and the social questions. They're the most fun, encourage the most discussion with friends and people who read them.</p>
+
+ <p>The clearest evidence is that <a href="https://www.kenreid.co.uk/series-everyday-ethics.html">Everyday Ethics</a> became a series retroactively. I wrote four essays about responsibility, prevention, tolerance, and supply chains over three months without once noticing they were the same project, and only recognized that once I hit blog 50. I've added other blogs into series, and made pages dedicated to series now, too. I think this is healthy: some topics deserve returning to, or expanding upon, or link nicely together so readers might enjoy them in a specific order. </p>
+
+ 
+
+ <p>The same tags get more interesting when you spread them over time. April was books and AI, May and June drifted personal, and July was the month the technology tag ate the blog, because that was the month I rebuilt half the site and wrote about what I did (and more are in drafts!). This wasn't planned at all: topics tend to come and go on whims.</p>
+
+ 
+
+ <h2>Tags by hours</h2>
+
+ <p>There is one more way to slice the tags: by reading time instead of post count. Counted this way the leaderboard flips: technology has the most posts but they are quick reads. The personal essays are where the hours actually live, with books close behind.</p>
+
+ 
+
+ <h2>Fifty dots</h2>
+
+ <p>Every post on this site is a dot. Time on X, word count on Y, and its main tag for the colour. The band between one and three thousand words is my default length it seems. The dot at the top is the accessibility post at 9,158 words. The one scraping the floor is a 900-word story about ending up in Italy through mistaken identity. </p>
+
+ <p>The first twenty-five posts have a median of 2,755 words. The second twenty-five have 1,936. I am expressing brevity over time, unintentionally. </p>
+
+ 
+
+ <h2>The pile of words</h2>
+
+  
+
+ <h2>What gets read</h2>
+
+ <p>These are all-time page views from analytics for the most-read posts, and lets address the Cthaeh in the room: one post about a fantasy novel that has not been published in fifteen years has collected more readers than everything else on this site combined, several times over. Yeah, one post went viral, so my stats are a bit iffy.</p>
+
+ <p>I wrote it in one long sitting. The 9,153-word accessibility chapter I laboured over doesn't even crack the top five in views (reminds me of my thesis now that I think of it). There is a lesson in there about audiences, and I am choosing not to learn it, because I will just continue to write whatever I feel like regardless.</p>
+
+ 
+
+ <p>Every post with tracked views, positioned by how many words I wrote against how many people read them. The vertical axis is logarithmic (because of the Rothfuss article). If effort predicted readership this would be a rising diagonal line. It is not a rising diagonal line.</p>
+
+ 
+
+ <p>A footnote for fellow data people: the Rothfuss number is actually two numbers. I renamed that post once ("fourteen years of silence" became "fifteen years of silence", I somehow failed to count and published before realizing my mistake), and its old address kept collecting readers for months. The figure above merges both.</p>
+
+ <h2>Elsewhere on the internet</h2>
+
+ <p>There is also a readership I can only see from a distance. On Reddit, there is a  discussion thread about the Rothfuss blog, and it has now been viewed 300,000 times.</p>
+
+ <p>For scale, that is roughly eight times every page view this site has ever recorded, across all fifty posts and every other page, combined. The most-read thing connected to this blog is a forum thread about the blog. Shows how often people read a headline and discuss it on social media, and how few actually click the source material.</p>
+
+ <p>A decent share of the twenty-eight thousand almost certainly walked over from there, which makes my biggest referrer a comment section full of people waiting for a book.</p>
+
+ <h2>The small print</h2>
+
+ <p>Across the 118 days between the first post and the fiftieth, the blog averaged 1,169 published words per day, counting the days I wrote nothing. I think this is largely due to the fact I write some every day, or at least edit, and when I write I tend to write a lot, perhaps an entire draft, and create a couple other drafts I have for ideas for future posts at once. </p>
+
+ <p>Titles run from 16 characters ("Ant Colony, Live") to the 105-character Rothfuss monument, and only two of the fifty end in question marks, so apparently I prefer telling to asking.</p>
+
+   <div class="fifty-wrapped" id="fiftyWrapped" aria-label="Fifty posts in numbers">
+     <div class="wrap-card wide" style="--accent:var(--viz-s1)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="wrap-num" data-count="236">236</span><span class="wrap-lbl">jargon terms explained</span><span class="wrap-sub">across 44 plain-English boxes</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s2)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span><span class="wrap-num" data-count="180">180</span><span class="wrap-lbl">images</span><span class="wrap-sub">3.6 a post, on average</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s3)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span><span class="wrap-num" data-count="102">102</span><span class="wrap-lbl">sources cited</span><span class="wrap-sub">linked 139 times in the text</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s4)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="wrap-num" data-count="161">161</span><span class="wrap-lbl">questions answered</span><span class="wrap-sub">in the FAQ block at the foot</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-c3)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><span class="wrap-num" data-count="97">97</span><span class="wrap-lbl">passages quoted</span><span class="wrap-sub">books, papers and songs</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s1)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg></span><span class="wrap-num" data-count="209">209</span><span class="wrap-lbl">outbound links</span><span class="wrap-sub">the audit checks every one</span></div>
+     <div class="wrap-card wide" style="--accent:var(--viz-s2)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg></span><span class="wrap-num" data-count="2760">2,760</span><span class="wrap-lbl">words in the average post</span><span class="wrap-sub">the shortest ran 900, the longest 9,158</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s3)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span><span class="wrap-num" data-count="42">42</span><span class="wrap-lbl">minutes</span><span class="wrap-sub">the longest single read</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s4)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg></span><span class="wrap-num" data-count="12">12</span><span class="wrap-lbl">days</span><span class="wrap-sub">my longest silence</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-c3)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><span class="wrap-num">Mon</span><span class="wrap-lbl">favourite publish day</span><span class="wrap-sub">written at the weekend, posted for the commute</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s1)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span><span class="wrap-num" data-count="42" data-suffix="%">42%</span><span class="wrap-lbl">belong to a series</span><span class="wrap-sub">21 of the fifty</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s2)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg></span><span class="wrap-num" data-count="5">5</span><span class="wrap-lbl">days in a row</span><span class="wrap-sub">my longest unbroken run</span></div>
+   </div>
+
+ 
+
+ <h2>What I've learned doing this</h2>
+
+ <p>What I love writing and what gets read are different. The views chart is ruled by a post about a fantasy novel, and the essays I care most about live in its shadow.</p>
+
+ <p>The mailbag tells the other half of it. The one email about a non-Rothfuss post was about the most discursive thing on this site, from a reader on another continent who found it by googling an idea (also neat that I come up on a Google search!). Search traffic arrives in crowds for the topical stuff, and the philosophical stuff gets found by one person at a time, but they actually write in and discuss the ideas with me. That was so nice.</p>
+
+ <p>Volume was never the goal: I'd rather have a few people engage than thousands who don't.</p>
+
+ <p>So the next fifty will lean harder into the discursive essays, because I enjoy it. The drafts folder is stacked with cognitive biases, ethics, and questions about meaning, far more than gadgets and code. The technology posts will keep coming, because rebuilding this site is apparently a hobby I document compulsively (twelve parts and counting).</p>
+
+ <h2>The queue</h2>
+
+ <p>About those 135 drafts: they range from nearly finished essays to single sentences I clearly believed were profound at the time (even if on second read they're awful!).</p>
+
+ <p>Four of them are planned as entire series, and the queue leans discursive: biases, ethics, meaning, and the occasional myth that needs debunking. At the current pace the queue would last well over a year without a single new idea arriving, and new ideas arrive weekly, so the realistic projection is that the drafts folder will continue to outgrow published posts.</p>
+
+ <h2>The mailbag</h2>
+
+ <p>The best part of the Rothfuss emails is that the two most thoughtful Rothfuss letters take opposite sides. One reader argued, carefully and at length, that a fandom's broken trust should carry consequences, that admiration and trust are different things, and that the charity chapter still stings years later.</p>
+
+ <p>Another wrote that anyone who has wrestled a long, enormous endeavour knows how daunting it must be, and that the entitled anger aimed at the author misses how fortunate we are to have the first two books at all.</p>
+
+ <p>One reader in India googled "the individualization of responsibility", stayed to say the site was organised enough to borrow from someday, and promised to cite the post on WhatsApp to friends and family. Loved waking up to that email. He also has <a href="https://medium.com/@thequippingquill" target="_blank" rel="noopener">his own blog</a>, which is a great read!</p>
+
+ <p>Another, an Austrian living in Germany, checks the web every so often for a Doors of Stone release date (in vain, as they put it, till date), landed on the Rothfuss piece instead, and then read half the M*A*S*H post before remembering they had never seen M*A*S*H but kept reading anyway. How nice is that?</p>
+
+ <h2>Thank you</h2>
+
+ <p style="text-align:center; margin:30px 0;">
+   <button type="button" id="fiftyRandom" class="btn alime-btn btn-2">Read a random post</button>
+ </p>
+
+ <p>Fifty posts in, people are reading: subscribing by email, arriving from search engines at two in the morning, following the RSS feed, leaving comments, and sending the occasional message that starts "I read your post about..." and makes my whole day.</p>
+
+ <p>Being read turns thinking out loud into a conversation, and I am grateful for every one of you, from the person who has read all fifty to the twenty-eight thousand who came for Rothfuss and left.</p>
+
+ <p>Thank you for reading. Here is to the next fifty!</p>
+
+ ]]></content:encoded>
+    </item>
     <item>
       <title>Dark Mode That Doesn&#x27;t Flash</title>
       <link>https://www.kenreid.co.uk/blog/dark-mode-that-doesnt-flash.html</link>
@@ -51,7 +218,7 @@
 
  <p>The toggle button in the header flips the attribute, saves the choice to localStorage under a key (<code>kr-theme</code>), and everything restyles instantly, no reload. A brief cross-fade class softens the swap, and the browser's <code>theme-color</code> meta tag (which tints the address bar on phones) is updated to match. All of that is a 60-line JavaScript file.</p>
 
- <details class="code-example"><summary>The whole toggle (js/theme.js, 60 lines)</summary>
+ <details class="code-example"><summary>The whole toggle (js/theme.js, 62 lines)</summary>
 <pre><code class="language-javascript">/**
  * theme.js — Site-wide dark/light mode toggle.
  *
@@ -1897,7 +2064,7 @@ frame.contentWindow.postMessage(
       <link>https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html</link>
       <guid>https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html</guid>
       <pubDate>Tue, 04 Aug 2026 00:00:00 +0000</pubDate>
-      <description>Every post on this blog carries around forty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.</description>
+      <description>Every post on this blog carries around eighty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.</description>
       <category>technology</category>
       <category>writing</category>
       <content:encoded><![CDATA[
@@ -1908,7 +2075,7 @@ frame.contentWindow.postMessage(
  <span class="blog-tag">writing</span>
  </div>
 
- <p>When I publish a post here, the words are roughly half the file. The other half is metadata: forty-odd lines in the page's head, plus entries in two site-wide XML files. Skipping it all would change nothing about the reading experience, but it's necessary and is checked by <a href="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">a machine</a>. This post describes it. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
+ <p>When I publish a post here, the words are roughly half the file. The other half is metadata: eighty-odd lines in the page's head, plus entries in two site-wide XML files. Skipping it all would change nothing about the reading experience, but it's necessary and is checked by <a href="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">a machine</a>. This post describes it. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
 
  <div class="plain-english-box">
  <h2>Quick jargon guide</h2>
@@ -1927,7 +2094,7 @@ frame.contentWindow.postMessage(
  <p>Open Graph: five tags giving the post's title, description, preview image, address, and type. When someone pastes your link into a group chat or a social feed, the platform reads these tags to build the preview card. Without them, your link renders as bare blue text or, worse, a card assembled from whatever the scraper found first. With them, every share has a title, summary sentence, and one of <a href="https://www.kenreid.co.uk/gallery.html">my photographs</a> at full card width. Twitter's near-identical tag family sits alongside for the platforms that read that instead.</p>
 
 <pre><code class="language-html">&lt;meta property="og:title" content="The Invisible Half of a Blog Post"&gt;
-&lt;meta property="og:description" content="Every post on this blog carries around forty lines
+&lt;meta property="og:description" content="Every post on this blog carries around eighty lines
       of metadata nobody reads: social preview cards, structured data, feeds, citation tags."&gt;
 &lt;meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/78.png"&gt;
 &lt;meta property="og:url" content="https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html"&gt;
@@ -1985,9 +2152,9 @@ frame.contentWindow.postMessage(
 
  <h2>The real problem is discipline</h2>
 
- <p>Nothing above is hard. The hard part is that it's forty lines of near-identical boilerplate on every post, and near-identical is the operative curse: copy the head from the last post, forget to change the og:image, and next week your post about cats is shared around wearing a photograph of a dog. </p>
+ <p>Nothing above is hard. The hard part is that it's eighty lines of near-identical boilerplate on every post, and near-identical is the operative curse: copy the head from the last post, forget to change the og:image, and next week your post about cats is shared around wearing a photograph of a dog. </p>
 
- <p>So: automate the checking, not necessarily the writing. My audit script validates every page's metadata (descriptions present and sensibly sized, canonical matching the filename, preview images existing, JSON-LD parsing, feed and sitemap complete) on every push. The forty lines stay correct because a robot reads them. Without that, my genuine recommendation would be to keep <em>less</em> metadata: only what you can maintain, because wrong metadata is worse than none.</p>
+ <p>So: automate the checking, not necessarily the writing. My audit script validates every page's metadata (descriptions present and sensibly sized, canonical matching the filename, preview images existing, JSON-LD parsing, feed and sitemap complete) on every push. Those eighty lines stay correct because a robot reads them. Without that, my genuine recommendation would be to keep <em>less</em> metadata: only what you can maintain, because wrong metadata is worse than none.</p>
 
  <div class="faq-section">
  <h2>Common questions</h2>
@@ -2047,7 +2214,7 @@ frame.contentWindow.postMessage(
 
  <p>The index has three sources, in descending order of hardcoded-ness. First, the site's ten pages, written directly into the script with a subtitle each ("490+ photos", "571 saved passages"); they change a few times a year, so a hardcoded list is simply correct. Second, every blog post, fetched from <a href="https://www.kenreid.co.uk/blog/blog-engine-in-one-json-file.html">the same JSON file</a> that runs the blog listing, so the palette knows each post's title, tags, and excerpt without any separate index to maintain; publish a post, and the palette knows it. Third, the gallery's ten photo tags, each deep-linking to the gallery pre-filtered, which is what makes "wildlife" a destination rather than a word.</p>
 
- <p>The palette doesn't search <em>inside</em> post text, and it doesn't index the 571 quotes or 490 photos individually. Full-text search of a static site is doable (ship an index file, use a library like Lunr) but the index grows with every word you write, and I certainly wouldn't want paragraph-level results on a personal site. Titles, tags, and excerpts answer "take me to the thing I half-remember". The quote wall also gets one entry, not 571.</p>
+ <p>The palette doesn't search <em>inside</em> post text, and it doesn't index the 571 quotes or 492 photos individually. Full-text search of a static site is doable (ship an index file, use a library like Lunr) but the index grows with every word you write, and I certainly wouldn't want paragraph-level results on a personal site. Titles, tags, and excerpts answer "take me to the thing I half-remember". The quote wall also gets one entry, not 571.</p>
 
  <figure>
  <img src="https://www.kenreid.co.uk/img/photography/thumb/46.webp" alt="A woman walking briskly across a sunlit historic plaza, bag over one shoulder" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
@@ -2062,7 +2229,7 @@ frame.contentWindow.postMessage(
 
  <h2>Why bother, on a site this small?</h2>
 
- <p>Part of the answer is who visits: this site's readers skew technical, their muscle memory already knows Ctrl+K. Part is that the palette compounds with the site's growth: at ten pages it's a nicety, at <a href="https://www.kenreid.co.uk/blog.html">46 posts</a> it's the fastest way to find anything, and every post published makes it slightly more useful at zero marginal cost. And part of it, in the spirit of candour that runs through this series: it's the kind of detail that's simply pleasing to have on one's own website. It scratches an itch for me, and it was fun to implement.</p>
+ <p>Part of the answer is who visits: this site's readers skew technical, their muscle memory already knows Ctrl+K. Part is that the palette compounds with the site's growth: at ten pages it's a nicety, at <a href="https://www.kenreid.co.uk/blog.html">50 posts</a> it's the fastest way to find anything, and every post published makes it slightly more useful at zero marginal cost. And part of it, in the spirit of candour that runs through this series: it's the kind of detail that's simply pleasing to have on one's own website. It scratches an itch for me, and it was fun to implement.</p>
 
  <p>One keydown listener for the shortcut, a dialog built on first open (not before; most visitors never press it), a scoring function, and a list that re-renders per keystroke. Resist the URL that offers to do it for you as a hosted service; for a site whose whole index fits in one JSON fetch, the dependency would outweigh the feature.</p>
 
@@ -2916,8 +3083,8 @@ body.kr-palette-open {
   "url": "blog/my-website-has-a-test-suite.html",
   "image": "img/photography/thumb/4.webp",
   "series": { "name": "How This Site Is Built", "part": 8 },
-  "readMinutes": 7,
-  "words": 1534
+  "readMinutes": 8,
+  "words": 1570
 }</code></pre>
 
  <p>Publishing a post means writing the HTML page and adding one entry to this file. The same file then feeds many things: the blog listing, the search index, the tag buttons, the footer's "latest writing" list, the site-wide command palette, the "next/previous post" links, and the related-posts scoring. One file, many consumers, no synchronisation problems, because there is nothing to synchronise. Laziness can force some ingenuity, I like to tell myself.</p>
@@ -3139,7 +3306,7 @@ return [post for _score, _date, post in ranked[:3]]</code></pre>
 
         <p>The audit reads files; it cannot tell you whether the page actually <em>works</em>. This site injects its header, footer, comments, and related posts with JavaScript, and it animates sections into view as you scroll. A one-character mistake in that JavaScript can leave a page technically valid and completely blank, and the audit wouldn't catch it.</p>
 
-        <p>So the second half is a smoke test built on <a href="https://playwright.dev/" target="_blank" rel="noopener noreferrer">Playwright</a>, which drives a real, invisible Chromium. The script serves the repository over a local web server, loads six representative pages, waits a few seconds for the JavaScript and animations to settle, and then asserts on what a visitor would actually see:</p>
+        <p>So the second half is a smoke test built on <a href="https://playwright.dev/" target="_blank" rel="noopener noreferrer">Playwright</a>, which drives a real, invisible Chromium. The script serves the repository over a local web server, loads seven representative pages, waits a few seconds for the JavaScript and animations to settle, and then asserts on what a visitor would actually see:</p>
 
 <pre><code class="language-python"># A few of the checks, one page each:
 # index.html   - hero present, live-stats skeletons cleared, blog cards visible
@@ -3159,7 +3326,7 @@ return [post for _score, _date, post in ranked[:3]]</code></pre>
 
         <h2>The robot that runs it all</h2>
 
-        <p>Both halves run in GitHub Actions on every push. The workflow has two jobs: one installs Python and runs the audit plus a check that the minified stylesheet is up to date (the CSS build is <a href="https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html">its own story</a>); the other installs Playwright and runs the smoke tests. If either fails, I get an email and a red X on the commit within a few minutes. A local pre-commit hook runs the fast checks too, so most mistakes never even reach GitHub.</p>
+        <p>Both halves run in GitHub Actions on every push. The workflow has two jobs: one installs Python and runs the audit plus three build checks: that the minified stylesheet is up to date (the CSS build is <a href="https://www.kenreid.co.uk/blog/self-hosting-your-fonts.html">its own story</a>), that every post's read time matches its current word count, and that the baked related-posts blocks still match a fresh ranking; the other installs Playwright and runs the smoke tests. If either fails, I get an email and a red X on the commit within a few minutes. A local pre-commit hook runs the CSS check too, so most mistakes never even reach GitHub.</p>
 
         <p>Is this overkill for a personal site? No: it's <em>because</em> the site is a hobby that I need automation. Nobody is paid to notice when this site breaks (or, you know, paid for writing blogs, creating the site, etc.). There is no QA department, no on-call rota, just me, and I would rather spend my evenings writing posts than manually clicking every link on fifty pages. The test suite is what lets a one-person site behave like it has staff.</p>
 
@@ -4560,97 +4727,6 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
       <description>Everyone took the quiz and got a label. Decades of cognitive psychology say the label does nothing: matching teaching to &#x27;learning styles&#x27; doesn&#x27;t improve learning, and believing it limits you. What works instead is effortful, unglamorous, and the same for everyone.</description>
       <category>philosophy</category>
       <category>science</category>
-      <content:encoded><![CDATA[
-        <h1>Why You Aren't a "Visual Learner"</h1>
-        <div class="blog-meta">
-          4 July 2026 &middot;
-          <span class="blog-tag">philosophy</span>
-          <span class="blog-tag">science</span>
-        </div>
-
-        <p>At some point, probably in a classroom with the lights half-off and an overhead projector humming, somebody handed you a quiz that sorted you into one of four boxes: Visual, Aural, Read/Write, or Kinesthetic. You got your label assigned to you and you may still remember it. People bring up their learning style the way they bring up their Myers-Briggs type or their Hogwarts house (ew, J.K. Rowling reference), except this one comes with institutional backing: schools teach it, teacher training repeats it, and somewhere between sixty and ninety percent of educators across multiple countries believe it, depending on which survey you read. Sigh.</p>
-
-        <p>There is no good scientific evidence that teaching to a student's preferred learning style improves their learning. Not weak evidence. Not mixed evidence. When the claim has been tested properly, it fails.<sup><a href="#ref-1" class="cite-ref">[1]</a></sup></p>
-
-        <p>I believed this one too, when I was younger. It is a collective illusion that nearly all of us bought into, because it flatters us, because it sounds like science, and because it contains just enough truth to be convincing. The myth does real damage and the way it survives tells you something about how bad ideas persist generally in society.</p>
-
-        <div class="plain-english-box">
-          <h2>Quick jargon guide</h2>
-          <ul>
-            <li><strong>Learning styles:</strong> the claim that each person has a fixed way their brain best absorbs information, and that teaching should be matched to it. This is the idea under examination, and it is distinct from merely having preferences.</li>
-            <li><strong>VARK:</strong> the most popular learning styles framework, sorting people into Visual, Aural, Read/Write, and Kinesthetic (movement and touch). Usually administered as a short self-report quiz.</li>
-            <li><strong>Modality:</strong> the channel information arrives through: pictures, speech, text, or physical activity.</li>
-            <li><strong>Meshing hypothesis:</strong> the testable core of the learning styles claim: that instruction works better when its modality is matched ("meshed") with the learner's style. This is the part the evidence fails to support.</li>
-            <li><strong>Dual coding:</strong> combining words with relevant visuals. Helps essentially everyone, not just "visual learners."</li>
-            <li><strong>Active recall:</strong> deliberately retrieving information from memory (self-testing, explaining from a closed book) rather than re-reading or re-watching it. Also called retrieval practice.</li>
-            <li><strong>Spaced repetition:</strong> revisiting material over widening intervals instead of cramming it in one sitting.</li>
-          </ul>
-        </div>
-
-        <h2>The intuitive trap</h2>
-
-        <p>Humans love a categorisation instrument. We are the species that invented the personality quiz, the enneagram, and the sorting hat: a short test that returns a diagnosis of who you really are. "Kinesthetic learner" feels like a personalised readout of your brain's wiring, delivered with the authority of an acronym, that will unlock your magical learning capabilities like an episode of Limitless. It explains your struggles (no wonder algebra was hard, it was taught wrong <em>for you</em>) and it costs nothing to adopt.</p>
-
-        <p>And, crucially, there is a grain of truth there. People do have preferences about how they take in information. I would rather read documentation than watch a tutorial video at a fixed pace, and if you have opinions about that sentence, you have preferences too. Preferences are real, measurable, and worth accommodating where it is easy to do so, if only because comfortable students are less miserable.<sup><a href="#ref-2" class="cite-ref">[2]</a></sup></p>
-
-        <p>The myth is what happens when a preference gets promoted into a claim about cognitive architecture: not "I like diagrams" but "my brain learns through diagrams, and text mostly bounces off." Those are radically different claims. The first is a fact about your tastes while the second is a testable hypothesis about memory and cognition, and it is the one that turns out to be false. What learners prefer and what actually helps them learn are, inconveniently, not the same thing, and learners are surprisingly bad judges of the difference.<sup><a href="#ref-3" class="cite-ref">[3]</a></sup></p>
-
-        <figure>
-          <img src="https://www.kenreid.co.uk/img/photography/thumb/93.webp" alt="A double-exposure portrait of a face blended with a landscape of trees and light" loading="lazy" width="400" height="266">
-          <figcaption class="figure-note">&copy; Ken Reid. A head full of images. </figcaption>
-        </figure>
-
-        <h2>The evidence deficit</h2>
-
-        <p>The learning styles claim has a proper name in the literature: the meshing hypothesis. It says that instruction is more effective when its modality is matched, or meshed, with the learner's style; the visual learner taught with diagrams should outperform the same visual learner taught with text. This is a perfectly testable claim, and to test it you need a specific kind of experiment: classify learners by style, randomly assign them to different instructional formats, then give everyone the <em>same</em> test. If the hypothesis is right, you get a crossover: visual learners do best with visual instruction, verbal learners do best with verbal instruction. Doesn't that sound neat?</p>
-
-        <p>In 2008, the Association for Psychological Science commissioned four cognitive psychologists, Pashler, McDaniel, Rohrer, and Bjork, to review the entire literature. Their conclusion is remarkable for how little it hedges: virtually no studies exist with a design capable of testing the claim, and among the ones that do, several found results that flatly contradict it. Their words, not mine:</p>
-
-        <blockquote>
-          <p>At present, there is no adequate evidence base to justify incorporating learning-styles assessments into general educational practice.</p>
-          <cite>Pashler, McDaniel, Rohrer, &amp; Bjork, <em>Psychological Science in the Public Interest</em><sup><a href="#ref-1" class="cite-ref">[1]</a></sup></cite>
-        </blockquote>
-
-        <p>For a multi-billion-pound industry of assessments, workshops, and curriculum redesign, the empirical foundation simply is not there.</p>
-
-        <p>Once you see why, it feels obvious. Most of what we learn is not stored as sights or sounds but as meaning. When you learn what the French Revolution was, you are not filing away a picture or a soundtrack; you are building a structure of causes, actors, and consequences that you can express in any modality. The best way to teach something is therefore dictated by the <em>content</em>, not by the student. Geometry wants spatial representation. A new language has to be met in use, whether spoken, written, or signed. You cannot learn to drive from a book, however much you like reading, and no amount of interpretive movement will get a kinesthetic learner through a Shakespearean sonnet. Notice that none of this pins a subject to one sense: blind mathematicians work through geometry by touch and description, and signed languages are acquired as completely as spoken ones. The knowledge is the structure, not the channel it happened to arrive through. Good teachers already know this, which is why they were teaching maps with maps and music with sound long before anyone sold them an inventory for it.<sup><a href="#ref-2" class="cite-ref">[2]</a></sup></p>
-
-        <h2>What the myth costs</h2>
-
-        <p>If learning styles were merely wrong, they would be a harmless piece of astrology for the staff room. The problem is that the belief has teeth, and I have watched them bite from both sides of the classroom.</p>
-
-        <figure>
-          <img src="https://www.kenreid.co.uk/img/photography/thumb/473.webp" alt="Black-and-white photograph of adult students in a classroom, one deep in thought and another taking notes on a tablet" loading="lazy" width="400" height="264">
-          <figcaption class="figure-note">&copy; Ken Reid.</figcaption>
-        </figure>
-
-        <p>The damage on the student side is the self-limiting belief. A student who has decided they are a kinesthetic learner now owns a ready-made explanation for every struggle: the algebra is not hard, the delivery is wrong. The label converts "this is difficult and I need to work at it" into "this was not made for people like me," which is a much more comfortable thought and a much more corrosive one. It writes off entire subjects, and entire formats, as other people's territory. The wider version of this worry shows up in the literature too: when education is guided by what learners prefer rather than what works, the learners lose, because preference and benefit frequently point in different directions.<sup><a href="#ref-3" class="cite-ref">[3]</a></sup> I wrote about a cousin of this fallacy in <a href="https://www.kenreid.co.uk/blog/in-defense-of-audiobooks.html">my defence of audiobooks</a>: the assumption that the format something arrives in determines how well a brain can absorb it.</p>
-
-        <p>During my years teaching at universities, learning styles came up in teaching development the way fire safety comes up in an office induction, as settled procedure rather than open question. Colleagues and I were encouraged to consider the mix of learning styles in the room, and dutiful educators everywhere spend real hours building four versions of material because a framework told them their students needed it. Those hours are far from free, when most teachers were also full time researchers, part time mentors and supervisors, and expected to review theses and papers on top. Every hour spent adapting a lesson into modalities comes out of the budget for things with actual evidence behind them: better examples, better feedback, better practice problems. Multiply that across every school and university that takes the framework seriously and the bill for a false idea becomes enormous.</p>
-
-        <h2>What actually works</h2>
-
-        <p>The good news is that dismantling the myth does not leave a crater; cognitive science has replacements with actual evidence behind them, and they share a theme: they are for everyone.</p>
-
-        <p><strong>Dual coding.</strong> Combining words with relevant visuals improves learning across the board, because verbal and visual channels reinforce each other. Note what this does to the myth: diagrams are not a service for the visual-learner minority, they help essentially everybody, just as clear verbal explanation helps essentially everybody. The lesson is "use both," not "sort your students."</p>
-
-        <p><strong>Active recall.</strong> Retrieving information from memory, by testing yourself, closing the book and explaining the idea aloud, or doing problems without the worked example in view, strengthens memory far more than re-reading or re-watching ever will. </p>
-
-        <p><strong>Spaced repetition.</strong> Returning to material over widening intervals beats massed cramming so reliably that it is one of the oldest and most replicated results in the field. Just ask musicians learning a piece.</p>
-
-        <p>The techniques that work are effortful, mildly unpleasant, and identical for all four VARK letters. The learning styles myth offered the opposite: a personalised shortcut, a reason why learning felt hard that was not your fault and could be fixed by someone else changing their slides. I understand why that sold. But real learning is often frustrating when it is working, and no personality quiz can negotiate you out of that. </p>
-
-        <h2 class="section-heading" id="references">References</h2>
-
-        <ol class="references">
-          <li id="ref-1">Pashler, H., McDaniel, M., Rohrer, D., &amp; Bjork, R. (2008). Learning styles: Concepts and evidence. <em>Psychological Science in the Public Interest, 9</em>(3), 105&ndash;119. <a href="https://doi.org/10.1111/j.1539-6053.2009.01038.x" target="_blank" rel="noopener">https://doi.org/10.1111/j.1539-6053.2009.01038.x</a></li>
-          <li id="ref-2">Riener, C., &amp; Willingham, D. T. (2010). The myth of learning styles. <em>Change: The Magazine of Higher Learning, 42</em>(5), 32&ndash;35. <a href="https://doi.org/10.1080/00091383.2010.503139" target="_blank" rel="noopener">https://doi.org/10.1080/00091383.2010.503139</a></li>
-          <li id="ref-3">Kirschner, P. A., &amp; van Merri&euml;nboer, J. J. G. (2013). Do learners really know best? Urban legends in education. <em>Educational Psychologist, 48</em>(3), 169&ndash;183. <a href="https://doi.org/10.1080/00461520.2013.804395" target="_blank" rel="noopener">https://doi.org/10.1080/00461520.2013.804395</a></li>
-        </ol>
-
-        
-
-      ]]></content:encoded>
     </item>
     <item>
       <title>Frodo, Sam, and love.</title>

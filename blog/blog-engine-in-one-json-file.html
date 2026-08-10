@@ -27,7 +27,9 @@
  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
  <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
  <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
  <link rel="preload" as="image" href="../img/photography/hero/71.webp">
  <link rel="stylesheet" href="../style.min.css">
  <link rel="canonical" href="https://www.kenreid.co.uk/blog/blog-engine-in-one-json-file.html">
@@ -49,6 +51,32 @@
  "name": "Ken Reid"
  },
  "keywords": ["static sites", "json", "blogging", "web development", "tf-idf"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "A Blog Engine in One JSON File",
+       "item": "https://www.kenreid.co.uk/blog/blog-engine-in-one-json-file.html"
+     }
+   ]
  }
  </script>
  <script defer src="../js/theme.js"></script>
@@ -110,8 +138,8 @@
   "url": "blog/my-website-has-a-test-suite.html",
   "image": "img/photography/thumb/4.webp",
   "series": { "name": "How This Site Is Built", "part": 8 },
-  "readMinutes": 7,
-  "words": 1534
+  "readMinutes": 8,
+  "words": 1570
 }</code></pre>
 
  <p>Publishing a post means writing the HTML page and adding one entry to this file. The same file then feeds many things: the blog listing, the search index, the tag buttons, the footer's "latest writing" list, the site-wide command palette, the "next/previous post" links, and the related-posts scoring. One file, many consumers, no synchronisation problems, because there is nothing to synchronise. Laziness can force some ingenuity, I like to tell myself.</p>
@@ -188,17 +216,6 @@ return [post for _score, _date, post in ranked[:3]]</code></pre>
           <h2>Related posts</h2>
           <div class="row related-posts-grid">
             <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="invisible-half-of-a-blog-post.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/78.webp" alt="The Invisible Half of a Blog Post" loading="lazy"></div>
-                <div class="blog-card-body">
-                  <div class="blog-card-date">4 August 2026 · 6 min read</div>
-                  <h3 class="blog-card-title">The Invisible Half of a Blog Post</h3>
-                  <p class="blog-card-excerpt">Every post on this blog carries around forty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.</p>
-                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
-                </div>
-              </a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
               <a href="my-website-has-a-test-suite.html" class="blog-card">
                 <div class="blog-card-img"><img src="../img/photography/thumb/4.webp" alt="My Website Has a Test Suite" loading="lazy"></div>
                 <div class="blog-card-body">
@@ -206,6 +223,17 @@ return [post for _score, _date, post in ranked[:3]]</code></pre>
                   <h3 class="blog-card-title">My Website Has a Test Suite</h3>
                   <p class="blog-card-excerpt">A Python audit script and headless browser smoke tests run on every push. Here's why a personal blog has a test suite.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="invisible-half-of-a-blog-post.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/78.webp" alt="The Invisible Half of a Blog Post" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">4 August 2026 · 6 min read</div>
+                  <h3 class="blog-card-title">The Invisible Half of a Blog Post</h3>
+                  <p class="blog-card-excerpt">Every post on this blog carries around eighty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
                 </div>
               </a>
             </div>
@@ -235,12 +263,10 @@ return [post for _score, _date, post in ranked[:3]]</code></pre>
  <div id="footer-section"></div>
 
  <script src="../js/jquery.min.js"></script>
- <script src="../js/popper.min.js"></script>
- <script src="../js/bootstrap.min.js"></script>
  <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
  <script src="../js/lightbox.js"></script>
  <script src="../js/prism-loader.js"></script>
- <script src="../js/share.js"></script>
  <script src="../js/default-assets/active.js"></script>
  <script src="../js/shared-components.js"></script>
  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });

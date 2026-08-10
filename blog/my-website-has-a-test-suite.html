@@ -27,7 +27,9 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
   <link rel="icon" href="../img/core-img/favicon.png">
+  <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
+  <link rel="manifest" href="../manifest.json">
   <link rel="preload" as="image" href="../img/photography/hero/4.webp">
   <link rel="stylesheet" href="../style.min.css">
   <link rel="canonical" href="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">
@@ -49,6 +51,32 @@
       "name": "Ken Reid"
     },
     "keywords": ["testing", "continuous integration", "static sites", "web development", "python"]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.kenreid.co.uk/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": "https://www.kenreid.co.uk/blog.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "My Website Has a Test Suite",
+        "item": "https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html"
+      }
+    ]
   }
   </script>
   <script defer src="../js/theme.js"></script>
@@ -123,7 +151,7 @@
 
         <p>The audit reads files; it cannot tell you whether the page actually <em>works</em>. This site injects its header, footer, comments, and related posts with JavaScript, and it animates sections into view as you scroll. A one-character mistake in that JavaScript can leave a page technically valid and completely blank, and the audit wouldn't catch it.</p>
 
-        <p>So the second half is a smoke test built on <a href="https://playwright.dev/" target="_blank" rel="noopener noreferrer">Playwright</a>, which drives a real, invisible Chromium. The script serves the repository over a local web server, loads six representative pages, waits a few seconds for the JavaScript and animations to settle, and then asserts on what a visitor would actually see:</p>
+        <p>So the second half is a smoke test built on <a href="https://playwright.dev/" target="_blank" rel="noopener noreferrer">Playwright</a>, which drives a real, invisible Chromium. The script serves the repository over a local web server, loads seven representative pages, waits a few seconds for the JavaScript and animations to settle, and then asserts on what a visitor would actually see:</p>
 
 <pre><code class="language-python"># A few of the checks, one page each:
 # index.html   - hero present, live-stats skeletons cleared, blog cards visible
@@ -143,7 +171,7 @@
 
         <h2>The robot that runs it all</h2>
 
-        <p>Both halves run in GitHub Actions on every push. The workflow has two jobs: one installs Python and runs the audit plus a check that the minified stylesheet is up to date (the CSS build is <a href="hosting-photography-on-github-for-free.html">its own story</a>); the other installs Playwright and runs the smoke tests. If either fails, I get an email and a red X on the commit within a few minutes. A local pre-commit hook runs the fast checks too, so most mistakes never even reach GitHub.</p>
+        <p>Both halves run in GitHub Actions on every push. The workflow has two jobs: one installs Python and runs the audit plus three build checks: that the minified stylesheet is up to date (the CSS build is <a href="self-hosting-your-fonts.html">its own story</a>), that every post's read time matches its current word count, and that the baked related-posts blocks still match a fresh ranking; the other installs Playwright and runs the smoke tests. If either fails, I get an email and a red X on the commit within a few minutes. A local pre-commit hook runs the CSS check too, so most mistakes never even reach GitHub.</p>
 
         <p>Is this overkill for a personal site? No: it's <em>because</em> the site is a hobby that I need automation. Nobody is paid to notice when this site breaks (or, you know, paid for writing blogs, creating the site, etc.). There is no QA department, no on-call rota, just me, and I would rather spend my evenings writing posts than manually clicking every link on fifty pages. The test suite is what lets a one-person site behave like it has staff.</p>
 
@@ -213,7 +241,7 @@
                 <div class="blog-card-body">
                   <div class="blog-card-date">4 August 2026 · 6 min read</div>
                   <h3 class="blog-card-title">The Invisible Half of a Blog Post</h3>
-                  <p class="blog-card-excerpt">Every post on this blog carries around forty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.</p>
+                  <p class="blog-card-excerpt">Every post on this blog carries around eighty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
                 </div>
               </a>
@@ -244,12 +272,10 @@
   <div id="footer-section"></div>
 
   <script src="../js/jquery.min.js"></script>
-  <script src="../js/popper.min.js"></script>
-  <script src="../js/bootstrap.min.js"></script>
   <script src="../js/alime.bundle.js"></script>
+  <script src="../js/site.js"></script>
   <script src="../js/lightbox.js"></script>
   <script src="../js/prism-loader.js"></script>
-  <script src="../js/share.js"></script>
   <script src="../js/default-assets/active.js"></script>
   <script src="../js/shared-components.js"></script>
   <script>renderHeader('header-section', { basePath: '../', active: 'blog' });

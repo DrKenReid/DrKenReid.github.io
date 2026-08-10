@@ -27,7 +27,9 @@
  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
  <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
  <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
  <link rel="preload" as="image" href="../img/photography/hero/46.webp">
  <link rel="stylesheet" href="../style.min.css">
  <link rel="canonical" href="https://www.kenreid.co.uk/blog/ctrl-k-for-a-static-site.html">
@@ -49,6 +51,32 @@
  "name": "Ken Reid"
  },
  "keywords": ["command palette", "search", "javascript", "keyboard shortcuts", "web development"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "Ctrl+K for a Static Site",
+       "item": "https://www.kenreid.co.uk/blog/ctrl-k-for-a-static-site.html"
+     }
+   ]
  }
  </script>
  <script defer src="../js/theme.js"></script>
@@ -99,7 +127,7 @@
 
  <p>The index has three sources, in descending order of hardcoded-ness. First, the site's ten pages, written directly into the script with a subtitle each ("490+ photos", "571 saved passages"); they change a few times a year, so a hardcoded list is simply correct. Second, every blog post, fetched from <a href="blog-engine-in-one-json-file.html">the same JSON file</a> that runs the blog listing, so the palette knows each post's title, tags, and excerpt without any separate index to maintain; publish a post, and the palette knows it. Third, the gallery's ten photo tags, each deep-linking to the gallery pre-filtered, which is what makes "wildlife" a destination rather than a word.</p>
 
- <p>The palette doesn't search <em>inside</em> post text, and it doesn't index the 571 quotes or 490 photos individually. Full-text search of a static site is doable (ship an index file, use a library like Lunr) but the index grows with every word you write, and I certainly wouldn't want paragraph-level results on a personal site. Titles, tags, and excerpts answer "take me to the thing I half-remember". The quote wall also gets one entry, not 571.</p>
+ <p>The palette doesn't search <em>inside</em> post text, and it doesn't index the 571 quotes or 492 photos individually. Full-text search of a static site is doable (ship an index file, use a library like Lunr) but the index grows with every word you write, and I certainly wouldn't want paragraph-level results on a personal site. Titles, tags, and excerpts answer "take me to the thing I half-remember". The quote wall also gets one entry, not 571.</p>
 
  <figure>
  <img src="../img/photography/thumb/46.webp" alt="A woman walking briskly across a sunlit historic plaza, bag over one shoulder" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
@@ -114,7 +142,7 @@
 
  <h2>Why bother, on a site this small?</h2>
 
- <p>Part of the answer is who visits: this site's readers skew technical, their muscle memory already knows Ctrl+K. Part is that the palette compounds with the site's growth: at ten pages it's a nicety, at <a href="../blog.html">46 posts</a> it's the fastest way to find anything, and every post published makes it slightly more useful at zero marginal cost. And part of it, in the spirit of candour that runs through this series: it's the kind of detail that's simply pleasing to have on one's own website. It scratches an itch for me, and it was fun to implement.</p>
+ <p>Part of the answer is who visits: this site's readers skew technical, their muscle memory already knows Ctrl+K. Part is that the palette compounds with the site's growth: at ten pages it's a nicety, at <a href="../blog.html">50 posts</a> it's the fastest way to find anything, and every post published makes it slightly more useful at zero marginal cost. And part of it, in the spirit of candour that runs through this series: it's the kind of detail that's simply pleasing to have on one's own website. It scratches an itch for me, and it was fun to implement.</p>
 
  <p>One keydown listener for the shortcut, a dialog built on first open (not before; most visitors never press it), a scoring function, and a list that re-renders per keystroke. Resist the URL that offers to do it for you as a hosted service; for a site whose whole index fits in one JSON fetch, the dependency would outweigh the feature.</p>
 
@@ -524,7 +552,7 @@ body.kr-palette-open {
               <a href="dark-mode-that-doesnt-flash.html" class="blog-card">
                 <div class="blog-card-img"><img src="../img/photography/thumb/20.webp" alt="Dark Mode That Doesn't Flash" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">6 August 2026 · 7 min read</div>
+                  <div class="blog-card-date">6 August 2026 · 8 min read</div>
                   <h3 class="blog-card-title">Dark Mode That Doesn't Flash</h3>
                   <p class="blog-card-excerpt">Dark mode is easy; dark mode without a white flash is more difficult. How this site stamps the theme before the first paint, and drags every chart and iframe along with it.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
@@ -568,11 +596,9 @@ body.kr-palette-open {
  <div id="footer-section"></div>
 
  <script src="../js/jquery.min.js"></script>
- <script src="../js/popper.min.js"></script>
- <script src="../js/bootstrap.min.js"></script>
  <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
  <script src="../js/lightbox.js"></script>
- <script src="../js/share.js"></script>
  <script src="../js/prism-loader.js"></script>
  <script src="../js/default-assets/active.js"></script>
  <script src="../js/shared-components.js"></script>

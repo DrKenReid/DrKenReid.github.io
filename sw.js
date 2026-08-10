@@ -11,7 +11,7 @@
  * Bump VERSION to invalidate old caches.
  */
 
-var VERSION = 'kr-v5';
+var VERSION = 'kr-v6';
 var PAGES_CACHE = VERSION + '-pages';
 var ASSETS_CACHE = VERSION + '-assets';
 var IMG_LIMIT = 200;
@@ -19,9 +19,8 @@ var IMG_LIMIT = 200;
 var PRECACHE = [
   './offline.html',
   './style.min.css',
+  './js/site.js',
   './js/jquery.min.js',
-  './js/popper.min.js',
-  './js/bootstrap.min.js',
   './js/alime.bundle.js',
   './js/theme.js',
   './js/palette.js',

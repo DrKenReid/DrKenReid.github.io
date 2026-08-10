@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<!-- DRAFT (2026-08-08). NOT in posts.json until publish. On publish: paths ../ -> ../,
+     add posts.json entry (tag: personal), feed/sitemap/read-times per PUBLISHING.md.
+     Charts draw live from data/posts.json + data/popular.json, so they stay current
+     after publish; the draft-count stat tile is a hardcoded snapshot. -->
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="Fifty posts in: an infographic the site drew about itself, and what it taught me. Words written, what gets read versus what I love writing, and the 135 drafts waiting their turn.">
+ <meta name="keywords" content="personal">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>50 Blogs: An Infographic - Ken Reid</title>
+ <meta property="og:title" content="50 Blogs: An Infographic">
+ <meta property="og:description" content="Fifty posts in: an infographic the site drew about itself, and what it taught me. Words written, what gets read versus what I love writing, and the 135 drafts waiting their turn.">
+ <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/30.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/50-blogs-an-infographic.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="50 Blogs: An Infographic">
+ <meta name="twitter:description" content="Fifty posts in: an infographic the site drew about itself, and what it taught me. What gets read versus what I love writing, and the 135 drafts waiting their turn.">
+ <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/30.png">
+ <meta name="citation_title" content="50 Blogs: An Infographic">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/08/08">
+ <meta name="citation_online_date" content="2026/08/08">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/50-blogs-an-infographic.html">
+ <meta name="DC.title" content="50 Blogs: An Infographic">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-08-08">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="../img/photography/hero/30.webp">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/50-blogs-an-infographic.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "50 Blogs: An Infographic",
+ "description": "Fifty posts in: an infographic the site drew about itself, and what it taught me. Words written, what gets read versus what I love writing, and the 135 drafts waiting their turn.",
+ "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/30.png",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-08-08",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["blogging", "data visualization", "milestone", "personal"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "50 Blogs: An Infographic",
+       "item": "https://www.kenreid.co.uk/blog/50-blogs-an-infographic.html"
+     }
+   ]
+ }
+ </script>
+ <style>
+   /* Scoped tokens for the infographic. One hue per chart (all charts here are
+      single-series): s1 bars, s2 the cumulative line, s4 the most-read bars. */
+   .fifty-viz, .fifty-wrapped{
+     --viz-s1:#2a78d6; --viz-s2:#1baf7a; --viz-s3:#eda100; --viz-s4:#d64550;
+     --viz-ink:#2b2b2b; --viz-muted:#666666; --viz-grid:#e1e0d9; --viz-surface:#ffffff;
+     --viz-border:rgba(0,0,0,0.12); --viz-cell:rgba(0,0,0,0.03);
+     background:var(--viz-surface); border:1px solid var(--viz-border); border-radius:10px;
+     padding:16px; margin:26px 0;
+   }
+   [data-theme="dark"] .fifty-viz, [data-theme="dark"] .fifty-wrapped{
+     --viz-s1:#3987e5; --viz-s2:#199e70; --viz-s3:#f0b429; --viz-s4:#e5687a;
+     --viz-ink:#e8e8e8; --viz-muted:#9e9e9e; --viz-grid:#2c2c2a; --viz-surface:#1f1f1f;
+     --viz-border:rgba(255,255,255,0.12); --viz-cell:rgba(255,255,255,0.05);
+   }
+   .fifty-viz, .fifty-wrapped{ --viz-c3:#9061d9; }
+   [data-theme="dark"] .fifty-viz, [data-theme="dark"] .fifty-wrapped{ --viz-c3:#9a6fe0; }
+   .fifty-viz canvas{ width:100%; display:block; touch-action:auto; }
+   .fifty-legend{ display:flex; flex-wrap:wrap; gap:6px 16px; margin:0 0 10px; font-size:0.78em; color:var(--viz-ink); }
+   .fifty-legend span{ display:inline-flex; align-items:center; gap:6px; }
+   .fifty-legend i{ width:10px; height:10px; border-radius:3px; display:inline-block; }
+   .fifty-viz-note{ font-size:0.78em; color:var(--viz-muted); margin:10px 0 0; }
+   .fifty-tiles{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin:26px 0; }
+   .fifty-tile{ background:var(--viz-cell); border:1px solid var(--viz-border); border-radius:10px; padding:16px 14px; text-align:center; }
+   .fifty-tile .num{ display:block; font-size:1.9em; font-weight:700; color:var(--viz-ink); font-variant-numeric:tabular-nums; line-height:1.15; }
+   .fifty-tile .lbl{ display:block; font-size:0.68em; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--viz-muted); margin-top:4px; }
+   .fifty-tiles-wrap{
+     --viz-ink:#2b2b2b; --viz-muted:#666666; --viz-border:rgba(0,0,0,0.12); --viz-cell:rgba(0,0,0,0.03);
+   }
+   [data-theme="dark"] .fifty-tiles-wrap{
+     --viz-ink:#e8e8e8; --viz-muted:#9e9e9e; --viz-border:rgba(255,255,255,0.12); --viz-cell:rgba(255,255,255,0.05);
+   }
+   .fifty-tip{ position:fixed; z-index:60; pointer-events:none; background:var(--tip-bg,#252525); color:var(--tip-ink,#ffffff);
+     font-size:12.5px; line-height:1.45; padding:6px 10px; border-radius:6px; box-shadow:0 4px 14px rgba(0,0,0,0.25);
+     opacity:0; transition:opacity 0.12s ease; max-width:260px; }
+   [data-theme="dark"] .fifty-tip{ --tip-bg:#f2f2f2; --tip-ink:#1a1a1a; }
+   /* --- Wrapped-style stat cards ---------------------------------------
+      A bento grid: two wide cards carry the headline numbers, the rest fill
+      in around them. Each card tints itself from --accent, which is one of
+      the chart tokens, so the whole block re-themes with everything else. */
+   .fifty-wrapped{ display:grid; grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+     gap:12px; margin:26px 0; }
+   .wrap-card{ position:relative; overflow:hidden; isolation:isolate;
+     border:1px solid var(--viz-border); border-radius:14px; padding:18px 16px 16px;
+     background:var(--viz-surface); transition:transform 0.18s ease, box-shadow 0.18s ease; }
+   .wrap-card::before{ content:''; position:absolute; inset:0; z-index:-1;
+     background:var(--accent); opacity:0.10; }
+   .wrap-card::after{ content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+     background:var(--accent); }
+   .wrap-card:hover{ transform:translateY(-3px); box-shadow:0 8px 22px rgba(0,0,0,0.13); }
+   .wrap-num{ display:block; font-size:2.3em; font-weight:800; line-height:1.05;
+     color:var(--accent); font-variant-numeric:tabular-nums; letter-spacing:-0.02em; }
+   .wrap-lbl{ display:block; margin-top:6px; font-size:0.78em; font-weight:700;
+     color:var(--viz-ink); line-height:1.3; }
+   /* the sub-line used to be flat grey and read as small print; it now sits in
+      a tinted chip with a leading dot so it looks deliberate */
+   .wrap-sub{ display:inline-block; margin-top:9px; font-size:0.7em; line-height:1.35;
+     color:var(--viz-ink); opacity:0.9; padding:4px 10px 4px 8px; border-radius:999px;
+     background:var(--viz-cell); border:1px solid var(--viz-border); }
+   .wrap-sub::before{ content:''; display:inline-block; width:5px; height:5px;
+     border-radius:50%; background:var(--accent); margin-right:6px; vertical-align:1px; }
+   .wrap-chip{ display:inline-flex; align-items:center; justify-content:center;
+     width:30px; height:30px; border-radius:9px; margin-bottom:10px;
+     background:var(--accent); color:#fff; }
+   .wrap-ico{ width:17px; height:17px; }
+   /* the wide cards only span two columns once there are two to span */
+   @media (min-width:560px){
+     .wrap-card.wide{ grid-column:span 2; }
+     .wrap-card.wide .wrap-num{ font-size:3em; }
+   }
+   @media (prefers-reduced-motion: reduce){
+     .wrap-card{ transition:none; }
+     .wrap-card:hover{ transform:none; }
+   }
+
+   /* Gradient key for the views scatter. The bar is a plain CSS gradient
+      built from the same tokens the canvas interpolates, so the two cannot
+      drift apart when the theme changes. */
+   .fifty-ramp{ align-items:center; gap:8px; }
+   .fifty-ramp b{ font-weight:600; color:var(--viz-muted); font-size:0.92em; }
+   .fifty-ramp span.bar{ display:inline-block; width:96px; height:9px; border-radius:5px;
+     border:1px solid var(--viz-border); }
+
+   /* --- Milestone decorations ------------------------------------------
+      Ornamental only. The bunting is aria-hidden, the confetti canvas is
+      pointer-events:none and removes itself once the burst finishes, and
+      every moving part stops under prefers-reduced-motion. Colours reuse
+      the chart palette so the party matches the data. */
+   .fifty-party{ display:flex; align-items:center; justify-content:space-between;
+     gap:14px; flex-wrap:wrap; margin:0 0 20px; }
+   .fifty-bunting{ display:flex; gap:5px; flex:1 1 220px; min-width:0; overflow:hidden; }
+   .fifty-bunting i{ width:0; height:0; flex:0 0 auto;
+     border-left:11px solid transparent; border-right:11px solid transparent;
+     border-top:19px solid var(--flag,#2a78d6); border-radius:2px;
+     transform-origin:50% 0; animation:fifty-sway 3.4s ease-in-out infinite; }
+   .fifty-bunting i:nth-child(5n+1){ --flag:var(--viz-s1); }
+   .fifty-bunting i:nth-child(5n+2){ --flag:var(--viz-s2); animation-delay:-0.5s; }
+   .fifty-bunting i:nth-child(5n+3){ --flag:var(--viz-s3); animation-delay:-1.1s; }
+   .fifty-bunting i:nth-child(5n+4){ --flag:var(--viz-s4); animation-delay:-1.7s; }
+   .fifty-bunting i:nth-child(5n+5){ --flag:var(--viz-c3); animation-delay:-2.3s; }
+   @keyframes fifty-sway{ 0%,100%{ transform:rotate(-7deg); } 50%{ transform:rotate(7deg); } }
+   .fifty-again{ flex:0 0 auto; font:inherit; font-size:0.8em; cursor:pointer;
+     padding:6px 13px; border-radius:999px; background:transparent;
+     border:1px solid var(--viz-border); color:var(--viz-muted); }
+   .fifty-again:hover, .fifty-again:focus-visible{ color:var(--viz-ink);
+     border-color:var(--viz-s1); }
+   .fifty-confetti{ position:fixed; inset:0; width:100%; height:100%;
+     pointer-events:none; z-index:9998; }
+   @media (prefers-reduced-motion: reduce){
+     .fifty-bunting i{ animation:none; transform:none; }
+   }
+ </style>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <main id="main-content">
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/30.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">50 Blogs: An Infographic</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">50 Blogs: An Infographic</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+ <div class="blog-post">
+ <h1>50 Blogs: An Infographic</h1>
+ <div class="blog-meta">
+ 8 August 2026 &middot;
+ <span class="blog-tag">personal</span>
+ </div>
+
+   <div class="fifty-party fifty-viz" style="background:none; border:none; padding:0; margin:0 0 20px;">
+     <span class="fifty-bunting" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+     <button type="button" class="fifty-again" id="fifty-again">Throw the confetti again</button>
+   </div>
+
+ <p>This is post number fifty. That felt like the kind of milestone that deserved a party, and since this is a data science blog at heart, the party includes confetti, a banner and a bunch of unnecessary plots.</p>
+
+ <p>Everything below is drawn live in your browser from the same JSON file that runs the blog itself, so the infographic *should* stay up to date. If you are reading this long after publication and the numbers have crept past fifty, you can consider this post "blog emeritus".</p>
+
+ <p>Fifty is also the first point where the archive is big enough to start exhibiting some shape, behaviors and such. So between the charts I have tried to be straight with myself about what this blog turned into: what I enjoy writing about most, what people read, and the discovery that, uh, they're not always teh same thing.</p>
+
+ <noscript><p><strong>The charts on this page require JavaScript.</strong> The prose will still make sense, but you will have to take my word for the shapes.</p></noscript>
+
+ <div class="fifty-tiles-wrap">
+ <div class="fifty-tiles" id="fiftyTiles" aria-label="Headline statistics">
+   <div class="fifty-tile"><span class="num" id="tilePosts">50</span><span class="lbl">Posts published</span></div>
+   <div class="fifty-tile"><span class="num" id="tileWords">137,985</span><span class="lbl">Words written</span></div>
+   <div class="fifty-tile"><span class="num" id="tileHours">10.9</span><span class="lbl">Hours of reading</span></div>
+   <div class="fifty-tile"><span class="num">135</span><span class="lbl">Drafts waiting</span></div>
+ </div>
+ </div>
+
+ <p>One hundred and thirty-eight thousand words. That's kind of crazy. That's a decent-sized novel and a half, mostly about whatever my brain wouldn't let go of and I didn't want to bore my wife or colleagues with (or at least not more than I already had). The fourth tile is the one that I have mixed feelings about: I like having so many draft ideas, some just bullet points or a few scattered paragraphs, it makes it easier to choose a topic I feel like when I have 15 minutes to write. But it also means my drafts just grow and grow, and I already know there are about 5 blogs I wrote out, went to revise, decided I didn't like them and deleted them. So I sometimes wonder how many drafts won't make it to the end, but I suppose that just comes with the process.</p>
+
+ <h2>The publishing rhythm</h2>
+
+ <p>I started in April: an opening sprint, a spring lull while I travelled to Colorado, and then July happened. Admittedly, a lot of my posts are shorter format, or reuse code I wrote years ago for demonstration purposes, making fifteen blogs in one month less crazy than it sounds. August is only a week old, but I don't think it'll grow much looking at my calendar.</p>
+
+ <div class="fifty-viz">
+   <canvas id="chartMonths" height="240" role="img" aria-label="Bar chart of posts published per month, April to August 2026: 12, 11, 6, 15, then 6 so far in August"></canvas>
+   <p class="fifty-viz-note">Posts published per month. Hover a bar for the count.</p>
+ </div>
+
+ <p>Zoom in: this is every day since the first post, one cell per day. GitHub feel.</p>
+
+ <p>Mondays are the most common publishing day, which makes sense, because I like to write at the weekend mostly then try to publish when I think people are more likely to click while bored on a commute or during a lunch break. 12 July, when four posts went out in one day, was not intentional. I had planned to publish 1 and draft the others but I accidentally had them in the queue for publishing, thankfully they were mostly done.</p>
+
+ <div class="fifty-viz">
+   <canvas id="chartCalendar" height="190" role="img" aria-label="Calendar heatmap of publishing days from April to August 2026, one cell per day, with darker cells for days with more posts; Mondays are the most frequent publishing day and 12 July had four posts"></canvas>
+   <p class="fifty-viz-note">One cell per day. Hover a cell for the date and post; click a filled cell to read that day's post.</p>
+ </div>
+
+ <h2>Tags and what they say about me</h2>
+
+ <p>Tags are categories of a sort, and the totals appear to be something of a personality test. Technology and personal are tied at the top, which fits thematically about what this site is: half machine and half diary. Books outnumbering television which appears once doesn't surprise me: I read a lot more than I watch TV or movies.</p>
+
+ <p>I started this blog assuming it would be somewhere I could talk vaguely about whatever I feel like, but would probably end up just being a professional portfolio of some kind. I've since learned that the posts I am most eager to write, and proudest of afterwards, are the discursive ones: the philosophy and the social questions. They're the most fun, encourage the most discussion with friends and people who read them.</p>
+
+ <p>The clearest evidence is that <a href="../series-everyday-ethics.html">Everyday Ethics</a> became a series retroactively. I wrote four essays about responsibility, prevention, tolerance, and supply chains over three months without once noticing they were the same project, and only recognized that once I hit blog 50. I've added other blogs into series, and made pages dedicated to series now, too. I think this is healthy: some topics deserve returning to, or expanding upon, or link nicely together so readers might enjoy them in a specific order. </p>
+
+ <div class="fifty-viz">
+   <canvas id="chartTags" height="360" role="img" aria-label="Horizontal bar chart of posts per tag: technology and personal 13 each, books 9, ai 8, philosophy 7, then advice, data science and photography at 5, writing 4, science 3, and one each for music, television and finance"></canvas>
+   <p class="fifty-viz-note">Posts per tag; a post can carry more than one. Hover for counts.</p>
+ </div>
+
+ <p>The same tags get more interesting when you spread them over time. April was books and AI, May and June drifted personal, and July was the month the technology tag ate the blog, because that was the month I rebuilt half the site and wrote about what I did (and more are in drafts!). This wasn't planned at all: topics tend to come and go on whims.</p>
+
+ <div class="fifty-viz">
+   <div class="fifty-legend" aria-hidden="true"><span><i style="background:var(--viz-s1)"></i>technology</span><span><i style="background:var(--viz-s2)"></i>personal</span><span><i style="background:var(--viz-c3)"></i>books</span><span><i style="background:var(--viz-s4)"></i>ai</span><span><i style="background:var(--viz-muted); opacity:0.55;"></i>everything else</span></div>
+   <canvas id="chartDrift" height="240" role="img" aria-label="Stacked bar chart of posts per month split by headline tag: April leans books and AI, May and June lean personal, and July is dominated by technology posts"></canvas>
+   <p class="fifty-viz-note">Posts per month by headline tag; a post with several tags counts once, under its first big tag. Hover a segment for details.</p>
+ </div>
+
+ <h2>Tags by hours</h2>
+
+ <p>There is one more way to slice the tags: by reading time instead of post count. Counted this way the leaderboard flips: technology has the most posts but they are quick reads. The personal essays are where the hours actually live, with books close behind.</p>
+
+ <div class="fifty-viz">
+   <canvas id="chartTagMins" height="220" role="img" aria-label="Horizontal bar chart of total reading minutes per tag: personal 180 minutes, books 135, ai 118, technology 107, philosophy 98, data science 95"></canvas>
+   <p class="fifty-viz-note">Total minutes of reading per tag, top six. Hover for the totals.</p>
+ </div>
+
+ <h2>Fifty dots</h2>
+
+ <p>Every post on this site is a dot. Time on X, word count on Y, and its main tag for the colour. The band between one and three thousand words is my default length it seems. The dot at the top is the accessibility post at 9,158 words. The one scraping the floor is a 900-word story about ending up in Italy through mistaken identity. </p>
+
+ <p>The first twenty-five posts have a median of 2,755 words. The second twenty-five have 1,936. I am expressing brevity over time, unintentionally. </p>
+
+ <div class="fifty-viz">
+   <div class="fifty-legend" id="dotsLegend"></div>
+   <canvas id="chartDots" height="300" role="img" aria-label="Scatter plot of all fifty posts. Horizontal axis is publication date from April to August 2026, vertical axis is word count from 900 to 9,158. Each dot is coloured by the post's main tag. Most posts sit between two and three thousand words across the whole period."></canvas>
+   <p class="fifty-viz-note">Each dot is a post: when it went up, how long it ran, and what it was about. Hover for the title; click to read it.</p>
+ </div>
+
+ <h2>The pile of words</h2>
+
+  <div class="fifty-viz">
+   <canvas id="chartWords" height="260" role="img" aria-label="Line chart of cumulative words written across the fifty posts, rising from zero to roughly 138 thousand. The horizontal axis is time, evenly spaced from April to August 2026 with a rule at the start of each month, so the slope shows writing pace and flat stretches are gaps between posts"></canvas>
+   <p class="fifty-viz-note">Cumulative words across all posts, oldest to newest. The axis is time now, so the rules fall a month apart and the slope is words per day: steep where I was writing, flat where I was not. Hover to trace the climb.</p>
+ </div>
+
+ <h2>What gets read</h2>
+
+ <p>These are all-time page views from analytics for the most-read posts, and lets address the Cthaeh in the room: one post about a fantasy novel that has not been published in fifteen years has collected more readers than everything else on this site combined, several times over. Yeah, one post went viral, so my stats are a bit iffy.</p>
+
+ <p>I wrote it in one long sitting. The 9,153-word accessibility chapter I laboured over doesn't even crack the top five in views (reminds me of my thesis now that I think of it). There is a lesson in there about audiences, and I am choosing not to learn it, because I will just continue to write whatever I feel like regardless.</p>
+
+ <div class="fifty-viz">
+   <canvas id="chartViews" height="300" role="img" aria-label="Horizontal bar chart of all-time views for the five most-read posts, led by the Patrick Rothfuss post at roughly 28 thousand views, far ahead of the rest"></canvas>
+   <p class="fifty-viz-note">All-time views for the top five posts (Google Analytics, since mid-2020 across earlier versions of the site). Hover for the numbers.</p>
+ </div>
+
+ <p>Every post with tracked views, positioned by how many words I wrote against how many people read them. The vertical axis is logarithmic (because of the Rothfuss article). If effort predicted readership this would be a rising diagonal line. It is not a rising diagonal line.</p>
+
+ <div class="fifty-viz">
+   <div class="fifty-legend fifty-ramp" id="viewsRamp"></div>
+   <canvas id="chartScatter" height="280" role="img" aria-label="Scatter plot of word count against all-time views on a logarithmic axis for the ten tracked posts, showing no relationship between length and readership. Dot colour also runs with views, from blue at the quietest post to red at the busiest, and the Rothfuss post sits far above all others"></canvas>
+   <p class="fifty-viz-note">Words written against all-time views (log scale), for the ten posts with view data. Colour runs with views too, so the busiest posts read hot. Hover for the post; click to read it.</p>
+ </div>
+
+ <p>A footnote for fellow data people: the Rothfuss number is actually two numbers. I renamed that post once ("fourteen years of silence" became "fifteen years of silence", I somehow failed to count and published before realizing my mistake), and its old address kept collecting readers for months. The figure above merges both.</p>
+
+ <h2>Elsewhere on the internet</h2>
+
+ <p>There is also a readership I can only see from a distance. On Reddit, there is a  discussion thread about the Rothfuss blog, and it has now been viewed 300,000 times.</p>
+
+ <p>For scale, that is roughly eight times every page view this site has ever recorded, across all fifty posts and every other page, combined. The most-read thing connected to this blog is a forum thread about the blog. Shows how often people read a headline and discuss it on social media, and how few actually click the source material.</p>
+
+ <p>A decent share of the twenty-eight thousand almost certainly walked over from there, which makes my biggest referrer a comment section full of people waiting for a book.</p>
+
+ <h2>The small print</h2>
+
+ <p>Across the 118 days between the first post and the fiftieth, the blog averaged 1,169 published words per day, counting the days I wrote nothing. I think this is largely due to the fact I write some every day, or at least edit, and when I write I tend to write a lot, perhaps an entire draft, and create a couple other drafts I have for ideas for future posts at once. </p>
+
+ <p>Titles run from 16 characters ("Ant Colony, Live") to the 105-character Rothfuss monument, and only two of the fifty end in question marks, so apparently I prefer telling to asking.</p>
+
+   <div class="fifty-wrapped" id="fiftyWrapped" aria-label="Fifty posts in numbers">
+     <div class="wrap-card wide" style="--accent:var(--viz-s1)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="wrap-num" data-count="236">236</span><span class="wrap-lbl">jargon terms explained</span><span class="wrap-sub">across 44 plain-English boxes</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s2)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span><span class="wrap-num" data-count="180">180</span><span class="wrap-lbl">images</span><span class="wrap-sub">3.6 a post, on average</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s3)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span><span class="wrap-num" data-count="102">102</span><span class="wrap-lbl">sources cited</span><span class="wrap-sub">linked 139 times in the text</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s4)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="wrap-num" data-count="161">161</span><span class="wrap-lbl">questions answered</span><span class="wrap-sub">in the FAQ block at the foot</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-c3)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><span class="wrap-num" data-count="97">97</span><span class="wrap-lbl">passages quoted</span><span class="wrap-sub">books, papers and songs</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s1)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg></span><span class="wrap-num" data-count="209">209</span><span class="wrap-lbl">outbound links</span><span class="wrap-sub">the audit checks every one</span></div>
+     <div class="wrap-card wide" style="--accent:var(--viz-s2)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg></span><span class="wrap-num" data-count="2760">2,760</span><span class="wrap-lbl">words in the average post</span><span class="wrap-sub">the shortest ran 900, the longest 9,158</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s3)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span><span class="wrap-num" data-count="42">42</span><span class="wrap-lbl">minutes</span><span class="wrap-sub">the longest single read</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s4)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg></span><span class="wrap-num" data-count="12">12</span><span class="wrap-lbl">days</span><span class="wrap-sub">my longest silence</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-c3)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><span class="wrap-num">Mon</span><span class="wrap-lbl">favourite publish day</span><span class="wrap-sub">written at the weekend, posted for the commute</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s1)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span><span class="wrap-num" data-count="42" data-suffix="%">42%</span><span class="wrap-lbl">belong to a series</span><span class="wrap-sub">21 of the fifty</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s2)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg></span><span class="wrap-num" data-count="5">5</span><span class="wrap-lbl">days in a row</span><span class="wrap-sub">my longest unbroken run</span></div>
+   </div>
+
+ <div class="fifty-viz">
+   <div class="fifty-legend" aria-hidden="true"><span><i style="background:var(--viz-s1)"></i>How This Site Is Built</span><span><i style="background:var(--viz-s2)"></i>Everyday Ethics</span><span><i style="background:var(--viz-c3)"></i>Algorithms, Live</span><span><i style="background:var(--viz-s4)"></i>Optimizing Your Schedule</span><span><i style="background:var(--viz-muted); opacity:0.55;"></i>standalone</span></div>
+   <canvas id="chartDonut" height="240" role="img" aria-label="Donut chart of the fifty posts by series membership: twelve in How This Site Is Built, four in Everyday Ethics, three in Algorithms Live, two in Optimizing Your Schedule, and twenty-nine standalone posts"></canvas>
+   <p class="fifty-viz-note">The fifty posts by series membership. Hover a segment for the count.</p>
+ </div>
+
+ <h2>What I've learned doing this</h2>
+
+ <p>What I love writing and what gets read are different. The views chart is ruled by a post about a fantasy novel, and the essays I care most about live in its shadow.</p>
+
+ <p>The mailbag tells the other half of it. The one email about a non-Rothfuss post was about the most discursive thing on this site, from a reader on another continent who found it by googling an idea (also neat that I come up on a Google search!). Search traffic arrives in crowds for the topical stuff, and the philosophical stuff gets found by one person at a time, but they actually write in and discuss the ideas with me. That was so nice.</p>
+
+ <p>Volume was never the goal: I'd rather have a few people engage than thousands who don't.</p>
+
+ <p>So the next fifty will lean harder into the discursive essays, because I enjoy it. The drafts folder is stacked with cognitive biases, ethics, and questions about meaning, far more than gadgets and code. The technology posts will keep coming, because rebuilding this site is apparently a hobby I document compulsively (twelve parts and counting).</p>
+
+ <h2>The queue</h2>
+
+ <p>About those 135 drafts: they range from nearly finished essays to single sentences I clearly believed were profound at the time (even if on second read they're awful!).</p>
+
+ <p>Four of them are planned as entire series, and the queue leans discursive: biases, ethics, meaning, and the occasional myth that needs debunking. At the current pace the queue would last well over a year without a single new idea arriving, and new ideas arrive weekly, so the realistic projection is that the drafts folder will continue to outgrow published posts.</p>
+
+ <h2>The mailbag</h2>
+
+ <p>The best part of the Rothfuss emails is that the two most thoughtful Rothfuss letters take opposite sides. One reader argued, carefully and at length, that a fandom's broken trust should carry consequences, that admiration and trust are different things, and that the charity chapter still stings years later.</p>
+
+ <p>Another wrote that anyone who has wrestled a long, enormous endeavour knows how daunting it must be, and that the entitled anger aimed at the author misses how fortunate we are to have the first two books at all.</p>
+
+ <p>One reader in India googled "the individualization of responsibility", stayed to say the site was organised enough to borrow from someday, and promised to cite the post on WhatsApp to friends and family. Loved waking up to that email. He also has <a href="https://medium.com/@thequippingquill" target="_blank" rel="noopener">his own blog</a>, which is a great read!</p>
+
+ <p>Another, an Austrian living in Germany, checks the web every so often for a Doors of Stone release date (in vain, as they put it, till date), landed on the Rothfuss piece instead, and then read half the M*A*S*H post before remembering they had never seen M*A*S*H but kept reading anyway. How nice is that?</p>
+
+ <h2>Thank you</h2>
+
+ <p style="text-align:center; margin:30px 0;">
+   <button type="button" id="fiftyRandom" class="btn alime-btn btn-2">Read a random post</button>
+ </p>
+
+ <p>Fifty posts in, people are reading: subscribing by email, arriving from search engines at two in the morning, following the RSS feed, leaving comments, and sending the occasional message that starts "I read your post about..." and makes my whole day.</p>
+
+ <p>Being read turns thinking out loud into a conversation, and I am grateful for every one of you, from the person who has read all fifty to the twenty-eight thousand who came for Rothfuss and left.</p>
+
+ <p>Thank you for reading. Here is to the next fifty!</p>
+
+ </div>
+ </div>
+ </div>
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+
+ <script>
+ /* ============================================================
+    50 Blogs: An Infographic — charts drawn live from data/posts.json and
+    data/popular.json. No libraries. Colours come from the CSS custom
+    properties on each .fifty-viz block so the theme toggle restyles
+    everything; a MutationObserver redraws on switch. One hue per chart
+    (every chart is single-series), values labeled directly in ink.
+    ============================================================ */
+ (function () {
+   'use strict';
+   var charts = [];   // each: { canvas, draw(), bars: [...] for hover }
+   var tip = null;
+
+   function vizColors(el) {
+     var cs = getComputedStyle(el.closest('.fifty-viz'));
+     function v(n) { return cs.getPropertyValue(n).trim(); }
+     return { s1: v('--viz-s1'), s2: v('--viz-s2'), s3: v('--viz-s3'), s4: v('--viz-s4'), c3: v('--viz-c3'),
+              ink: v('--viz-ink'), muted: v('--viz-muted'), grid: v('--viz-grid'), surface: v('--viz-surface') };
+   }
+
+   function fit(canvas, h) {
+     var dpr = window.devicePixelRatio || 1;
+     var w = canvas.clientWidth || 600;
+     canvas.style.height = h + 'px';
+     canvas.width = Math.round(w * dpr);
+     canvas.height = Math.round(h * dpr);
+     var g = canvas.getContext('2d');
+     g.setTransform(dpr, 0, 0, dpr, 0, 0);
+     return { g: g, w: w, h: h };
+   }
+
+   function fmt(n) { return n.toLocaleString('en-GB'); }
+
+   function toRgb(col) {
+     col = (col || '').trim();
+     if (col.charAt(0) === '#') {
+       var h = col.slice(1);
+       if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+       return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+     }
+     var m = col.match(/(\d+)[,\s]+(\d+)[,\s]+(\d+)/);
+     return m ? [+m[1], +m[2], +m[3]] : [128, 128, 128];
+   }
+
+   /* Sequential ramp across three palette stops. t is 0..1 on the same log
+      scale the y axis uses, so colour and height reinforce each other. */
+   function rampAt(stops, t) {
+     t = Math.max(0, Math.min(1, t));
+     var seg = t * (stops.length - 1);
+     var i = Math.min(stops.length - 2, Math.floor(seg));
+     var k = seg - i;
+     var a = toRgb(stops[i]), b = toRgb(stops[i + 1]);
+     return 'rgb(' + Math.round(a[0] + (b[0] - a[0]) * k) + ',' +
+                     Math.round(a[1] + (b[1] - a[1]) * k) + ',' +
+                     Math.round(a[2] + (b[2] - a[2]) * k) + ')';
+   }
+
+   function fmtDate(d) {
+     var dt = new Date(d + 'T00:00:00');
+     return dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+   }
+
+   function ensureTip() {
+     if (tip) return tip;
+     tip = document.createElement('div');
+     tip.className = 'fifty-tip';
+     document.body.appendChild(tip);
+     return tip;
+   }
+
+   function showTip(html, x, y) {
+     var t = ensureTip();
+     t.innerHTML = html;
+     t.style.opacity = '1';
+     var pad = 14;
+     var r = t.getBoundingClientRect();
+     var left = Math.min(x + pad, window.innerWidth - r.width - 8);
+     var top = y - r.height - pad;
+     if (top < 8) top = y + pad;
+     t.style.left = left + 'px';
+     t.style.top = top + 'px';
+   }
+
+   function hideTip() { if (tip) tip.style.opacity = '0'; }
+
+   function hitFor(chart, ev) {
+     var r = chart.canvas.getBoundingClientRect();
+     var x = ev.clientX - r.left, y = ev.clientY - r.top;
+     for (var i = 0; i < chart.bars.length; i++) {
+       var b = chart.bars[i];
+       if (b.wedge) {
+         var dx = x - b.cx, dy = y - b.cy;
+         var dist = Math.sqrt(dx * dx + dy * dy);
+         if (dist < b.r0 || dist > b.r1) continue;
+         var ang = Math.atan2(dy, dx);
+         if (ang < -Math.PI / 2) ang += Math.PI * 2;   // start angle is -90deg
+         if (ang >= b.a0 && ang <= b.a1) return b;
+         continue;
+       }
+       if (x >= b.x - 4 && x <= b.x + b.w + 4 && y >= b.y - 4 && y <= b.y + b.h + 4) return b;
+     }
+     return null;
+   }
+
+   function hover(chart) {
+     var cv = chart.canvas;
+     cv.addEventListener('pointermove', function (ev) {
+       var hit = hitFor(chart, ev);
+       if (hit) showTip(hit.tip, ev.clientX, ev.clientY); else hideTip();
+       cv.style.cursor = (hit && hit.url) ? 'pointer' : 'default';
+     });
+     cv.addEventListener('pointerleave', hideTip);
+     cv.addEventListener('click', function (ev) {
+       var hit = hitFor(chart, ev);
+       if (hit && hit.url) window.location.href = hit.url;
+     });
+   }
+
+   var MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+   function monthLabel(ym) {
+     var p = ym.split('-');
+     return MONTH_NAMES[parseInt(p[1], 10) - 1] + ' ' + p[0].slice(2);
+   }
+
+   /* ---- vertical bars: posts per month ---- */
+   function drawMonths(chart, months) {
+     var f = fit(chart.canvas, 240), g = f.g, W = f.w, H = f.h;
+     var c = vizColors(chart.canvas);
+     g.clearRect(0, 0, W, H);
+     chart.bars = [];
+     var keys = Object.keys(months).sort();
+     var max = 0;
+     keys.forEach(function (k) { if (months[k] > max) max = months[k]; });
+     var padL = 8, padR = 8, padT = 26, padB = 26;
+     var plotW = W - padL - padR, plotH = H - padT - padB;
+     var slot = plotW / keys.length;
+     var barW = Math.min(64, slot * 0.55);
+     g.font = '600 11px Poppins, sans-serif';
+     keys.forEach(function (k, i) {
+       var v = months[k];
+       var bh = Math.max(3, (v / max) * plotH);
+       var x = padL + slot * i + (slot - barW) / 2;
+       var y = padT + plotH - bh;
+       g.fillStyle = c.s1;
+       g.beginPath();
+       if (g.roundRect) g.roundRect(x, y, barW, bh, [4, 4, 0, 0]); else g.rect(x, y, barW, bh);
+       g.fill();
+       g.fillStyle = c.ink;
+       g.textAlign = 'center';
+       g.fillText(String(v), x + barW / 2, y - 7);
+       g.fillStyle = c.muted;
+       g.fillText(monthLabel(k), x + barW / 2, H - 8);
+       chart.bars.push({ x: x, y: y, w: barW, h: bh, tip: '<strong>' + monthLabel(k) + '</strong><br>' + v + ' post' + (v === 1 ? '' : 's') });
+     });
+     // baseline
+     g.strokeStyle = c.grid; g.lineWidth = 1;
+     g.beginPath(); g.moveTo(padL, padT + plotH + 0.5); g.lineTo(W - padR, padT + plotH + 0.5); g.stroke();
+   }
+
+   /* ---- horizontal bars, generic (tags + views) ---- */
+   function drawHBars(chart, rows, colorKey, valueFmt) {
+     var rowH = 26, padT = 6, padB = 6;
+     var h = padT + padB + rows.length * rowH;
+     var f = fit(chart.canvas, h), g = f.g, W = f.w;
+     var c = vizColors(chart.canvas);
+     g.clearRect(0, 0, W, h);
+     chart.bars = [];
+     var max = 0;
+     rows.forEach(function (r) { if (r.value > max) max = r.value; });
+     var labelW = Math.min(150, W * 0.32);
+     var valueW = 62;
+     var plotW = W - labelW - valueW - 14;
+     g.font = '600 11.5px Poppins, sans-serif';
+     rows.forEach(function (r, i) {
+       var y = padT + i * rowH;
+       var bh = 13;
+       var by = y + (rowH - bh) / 2;
+       var bw = Math.max(3, (r.value / max) * plotW);
+       g.fillStyle = c.ink;
+       g.textAlign = 'right';
+       g.fillText(r.label, labelW, by + bh - 3);
+       g.fillStyle = c[colorKey];
+       g.beginPath();
+       if (g.roundRect) g.roundRect(labelW + 8, by, bw, bh, [0, 4, 4, 0]); else g.rect(labelW + 8, by, bw, bh);
+       g.fill();
+       g.fillStyle = c.muted;
+       g.textAlign = 'left';
+       g.fillText(valueFmt(r.value), labelW + 8 + bw + 6, by + bh - 3);
+       chart.bars.push({ x: labelW + 8, y: by, w: bw, h: bh, tip: '<strong>' + r.tipLabel + '</strong><br>' + r.tipValue });
+     });
+   }
+
+   /* ---- calendar heatmap: one cell per day ---- */
+   function drawCalendar(chart, byDay, first, last) {
+     var cv = chart.canvas;
+     var W = cv.clientWidth || 600;
+     var c0 = new Date(first.getTime());
+     c0.setDate(c0.getDate() - ((c0.getDay() + 6) % 7));   // back to Monday
+     var weeks = Math.ceil(((last - c0) / 86400000 + 1) / 7);
+     var gutterL = 34, gutterT = 18, gutterR = 34, gap = 2;
+     var cell = Math.max(8, Math.min(17, (W - gutterL - gutterR - gap * weeks) / weeks));
+     var h = gutterT + 7 * (cell + gap) + 8;
+     var f = fit(cv, Math.round(h)), g = f.g;
+     var c = vizColors(cv);
+     g.clearRect(0, 0, f.w, f.h);
+     chart.bars = [];
+     g.font = '600 9px Poppins, sans-serif';
+     // weekday labels + row totals
+     var dayNames = ['Mon', '', 'Wed', '', 'Fri', '', 'Sun'];
+     var rowTotals = [0, 0, 0, 0, 0, 0, 0];
+     Object.keys(byDay).forEach(function (k) {
+       var d = new Date(k + 'T12:00:00');
+       rowTotals[(d.getDay() + 6) % 7] += byDay[k].length;
+     });
+     for (var row = 0; row < 7; row++) {
+       var ry = gutterT + row * (cell + gap);
+       if (dayNames[row]) {
+         g.fillStyle = c.muted; g.textAlign = 'right';
+         g.fillText(dayNames[row], gutterL - 6, ry + cell - 3);
+       }
+       g.fillStyle = c.muted; g.textAlign = 'left';
+       g.fillText(String(rowTotals[row]), gutterL + weeks * (cell + gap) + 6, ry + cell - 3);
+     }
+     var lastMonth = -1;
+     for (var wk = 0; wk < weeks; wk++) {
+       for (var dow = 0; dow < 7; dow++) {
+         var d = new Date(c0.getTime());
+         d.setDate(d.getDate() + wk * 7 + dow);
+         if (d < first || d > last) continue;
+         var key = d.toISOString().slice(0, 10);
+         var postsHere = byDay[key] || [];
+         var n = postsHere.length;
+         var x = gutterL + wk * (cell + gap);
+         var y = gutterT + dow * (cell + gap);
+         if (dow === 0 && d.getMonth() !== lastMonth) {
+           lastMonth = d.getMonth();
+           g.fillStyle = c.muted; g.textAlign = 'left';
+           g.fillText(MONTH_NAMES[lastMonth], x, gutterT - 7);
+         }
+         if (n === 0) {
+           g.globalAlpha = 1; g.fillStyle = c.grid;
+           g.globalAlpha = 0.45;
+         } else {
+           g.fillStyle = c.s1;
+           g.globalAlpha = n === 1 ? 0.45 : n === 2 ? 0.72 : 1;
+         }
+         g.beginPath();
+         if (g.roundRect) g.roundRect(x, y, cell, cell, 3); else g.rect(x, y, cell, cell);
+         g.fill();
+         g.globalAlpha = 1;
+         var nice = d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+         var tipHtml = n === 0
+           ? '<strong>' + nice + '</strong><br>No post'
+           : '<strong>' + nice + '</strong><br>' + postsHere.map(function (q) { return q.title; }).join('<br>');
+         chart.bars.push({ x: x, y: y, w: cell, h: cell, tip: tipHtml,
+           url: n ? '../' + postsHere[0].url : null });
+       }
+     }
+   }
+
+   /* ---- strip plot: every post as a dot by word count ---- */
+   function drawDots(chart, posts) {
+     var probeW = chart.canvas.clientWidth || 600;
+     var f = fit(chart.canvas, probeW < 520 ? 250 : 300), g = f.g, W = f.w, H = f.h;
+     var c = vizColors(chart.canvas);
+     g.clearRect(0, 0, W, H);
+     chart.bars = [];
+     var padL = 40, padR = 14, padT = 14, padB = 30;
+     var plotW = W - padL - padR, plotH = H - padT - padB;
+
+     // y: words. x: publication date.
+     var maxW = 0, tMin = Infinity, tMax = -Infinity;
+     posts.forEach(function (p) {
+       if ((p.words || 0) > maxW) maxW = p.words;
+       var t = new Date(p.date + 'T00:00:00').getTime();
+       if (t < tMin) tMin = t; if (t > tMax) tMax = t;
+     });
+     var scaleMax = Math.ceil(maxW / 1000) * 1000;
+     var span = Math.max(1, tMax - tMin);
+
+     function xOf(dateStr) {
+       var t = new Date(dateStr + 'T00:00:00').getTime();
+       return padL + ((t - tMin) / span) * plotW;
+     }
+     function yOf(words) {
+       return padT + plotH - ((words || 0) / scaleMax) * plotH;
+     }
+
+     // horizontal gridlines + word labels every 2k
+     g.font = '600 10px Poppins, sans-serif';
+     for (var gv = 0; gv <= scaleMax; gv += 2000) {
+       var gy = yOf(gv);
+       g.strokeStyle = c.grid; g.lineWidth = 1;
+       g.beginPath(); g.moveTo(padL, gy + 0.5); g.lineTo(padL + plotW, gy + 0.5); g.stroke();
+       g.fillStyle = c.muted; g.textAlign = 'right'; g.textBaseline = 'middle';
+       g.fillText(gv === 0 ? '0' : (gv / 1000) + 'k', padL - 6, gy);
+     }
+     g.textBaseline = 'alphabetic';
+
+     // month ticks along the bottom
+     var months = [];
+     var cur = new Date(tMin); cur.setDate(1);
+     while (cur.getTime() <= tMax) {
+       if (cur.getTime() >= tMin) months.push(new Date(cur.getTime()));
+       cur.setMonth(cur.getMonth() + 1);
+     }
+     g.textAlign = 'center'; g.fillStyle = c.muted;
+     months.forEach(function (m) {
+       var mx = padL + ((m.getTime() - tMin) / span) * plotW;
+       if (mx < padL - 2 || mx > padL + plotW + 2) return;
+       g.strokeStyle = c.grid; g.lineWidth = 1;
+       g.beginPath(); g.moveTo(mx + 0.5, padT); g.lineTo(mx + 0.5, padT + plotH); g.stroke();
+       g.fillText(m.toLocaleDateString('en-GB', { month: 'short' }), mx, H - 10);
+     });
+
+     // colour by the post's first tag; the five commonest get a hue, rest grey
+     var order = chart.tagOrder || [];
+     var hues = [c.s1, c.s2, c.s3, c.s4, c.c3];
+     function colourFor(p) {
+       var t = (p.tags && p.tags[0]) || '';
+       var i = order.indexOf(t);
+       return i >= 0 && i < hues.length ? hues[i] : c.muted;
+     }
+
+     posts.forEach(function (p) {
+       var x = xOf(p.date), y = yOf(p.words);
+       g.beginPath(); g.arc(x, y, 5, 0, Math.PI * 2);
+       g.globalAlpha = 0.85;
+       g.fillStyle = colourFor(p);
+       g.fill();
+       g.globalAlpha = 1;
+       g.lineWidth = 1.5; g.strokeStyle = c.surface; g.stroke();
+       chart.bars.push({ x: x - 7, y: y - 7, w: 14, h: 14,
+         tip: '<strong>' + p.title + '</strong><br>' + fmt(p.words || 0) + ' words &middot; '
+              + (p.readMinutes || 0) + ' min read<br>' + fmtDate(p.date)
+              + ((p.tags && p.tags.length) ? ' &middot; ' + p.tags.join(', ') : ''),
+         url: '../' + p.url });
+     });
+
+     g.fillStyle = c.muted; g.textAlign = 'left';
+     g.fillText('\u2191 words', padL, padT - 3);
+   }
+
+   /* ---- stacked bars: posts per month by headline tag ---- */
+   var DRIFT_ORDER = ['technology', 'personal', 'books', 'ai', 'other'];
+   function driftColor(c, key) {
+     return { technology: c.s1, personal: c.s2, books: c.c3, ai: c.s4, other: c.muted }[key];
+   }
+   function drawDrift(chart, data) {
+     var f = fit(chart.canvas, 240), g = f.g, W = f.w, H = f.h;
+     var c = vizColors(chart.canvas);
+     g.clearRect(0, 0, W, H);
+     chart.bars = [];
+     var keys = Object.keys(data).sort();
+     var max = 0;
+     keys.forEach(function (k) {
+       var s = 0; DRIFT_ORDER.forEach(function (tag) { s += data[k][tag] || 0; });
+       if (s > max) max = s;
+     });
+     var padL = 8, padR = 8, padT = 24, padB = 26;
+     var plotW = W - padL - padR, plotH = H - padT - padB;
+     var slot = plotW / keys.length;
+     var barW = Math.min(64, slot * 0.55);
+     g.font = '600 11px Poppins, sans-serif';
+     keys.forEach(function (k, i) {
+       var x = padL + slot * i + (slot - barW) / 2;
+       var yCursor = padT + plotH;
+       var total = 0;
+       DRIFT_ORDER.forEach(function (tag) {
+         var v = data[k][tag] || 0;
+         if (!v) return;
+         total += v;
+         var hSeg = (v / max) * plotH;
+         yCursor -= hSeg;
+         g.fillStyle = driftColor(c, tag);
+         g.globalAlpha = tag === 'other' ? 0.55 : 1;
+         g.beginPath();
+         g.rect(x, yCursor + 1, barW, Math.max(1, hSeg - 2));   // 2px surface gap
+         g.fill();
+         g.globalAlpha = 1;
+         chart.bars.push({ x: x, y: yCursor + 1, w: barW, h: Math.max(1, hSeg - 2),
+           tip: '<strong>' + monthLabel(k) + '</strong><br>' + (tag === 'other' ? 'everything else' : tag) + ': ' + v + ' post' + (v === 1 ? '' : 's') });
+       });
+       g.fillStyle = c.ink; g.textAlign = 'center';
+       g.fillText(String(total), x + barW / 2, yCursor - 6);
+       g.fillStyle = c.muted;
+       g.fillText(monthLabel(k), x + barW / 2, H - 8);
+     });
+     g.strokeStyle = c.grid; g.lineWidth = 1;
+     g.beginPath(); g.moveTo(padL, padT + plotH + 0.5); g.lineTo(W - padR, padT + plotH + 0.5); g.stroke();
+   }
+
+   /* ---- scatter: words vs views (log y) ---- */
+   function drawScatter(chart, pts) {
+     var f = fit(chart.canvas, 280), g = f.g, W = f.w, H = f.h;
+     var c = vizColors(chart.canvas);
+     g.clearRect(0, 0, W, H);
+     chart.bars = [];
+     var padL = 44, padR = 16, padT = 16, padB = 30;
+     var plotW = W - padL - padR, plotH = H - padT - padB;
+     var maxW = 0;
+     pts.forEach(function (d) { if (d.words > maxW) maxW = d.words; });
+     var xMax = Math.ceil(maxW / 1000) * 1000;
+     var yMin = Math.log10(50), yMax = Math.log10(50000);
+     function sx(w) { return padL + (w / xMax) * plotW; }
+     function sy(v) { return padT + plotH - ((Math.log10(v) - yMin) / (yMax - yMin)) * plotH; }
+     g.font = '600 10px Poppins, sans-serif';
+     [100, 1000, 10000].forEach(function (gv) {
+       var y = sy(gv);
+       g.strokeStyle = c.grid; g.lineWidth = 1;
+       g.beginPath(); g.moveTo(padL, y + 0.5); g.lineTo(W - padR, y + 0.5); g.stroke();
+       g.fillStyle = c.muted; g.textAlign = 'right';
+       g.fillText(gv >= 1000 ? (gv / 1000) + 'k' : String(gv), padL - 6, y + 3);
+     });
+     for (var gx = 0; gx <= xMax; gx += 2000) {
+       g.fillStyle = c.muted; g.textAlign = 'center';
+       g.fillText(gx === 0 ? '0' : (gx / 1000) + 'k', sx(gx), H - 10);
+     }
+     g.fillStyle = c.muted; g.textAlign = 'left';
+     g.fillText('views \u2191 (log)', padL + 2, padT - 4);
+     g.textAlign = 'right';
+     g.fillText('words \u2192', W - padR, H - 10);
+     var top = pts[0];
+     pts.forEach(function (d) { if (d.views > top.views) top = d; });
+     // colour ramp domain: the observed view range, on the same log scale
+     var stops = [c.s1, c.s3, c.s4];
+     var vLo = Infinity, vHi = -Infinity;
+     pts.forEach(function (d) {
+       var l = Math.log10(Math.max(60, d.views));
+       if (l < vLo) vLo = l; if (l > vHi) vHi = l;
+     });
+     chart.ramp = { stops: stops, lo: Math.pow(10, vLo), hi: Math.pow(10, vHi) };
+     pts.forEach(function (d) {
+       var x = sx(d.words), y = sy(Math.max(60, d.views));
+       g.beginPath(); g.arc(x, y, 5.5, 0, Math.PI * 2);
+       g.globalAlpha = 0.9;
+       g.fillStyle = rampAt(stops, (Math.log10(Math.max(60, d.views)) - vLo) / Math.max(0.0001, vHi - vLo));
+       g.fill(); g.globalAlpha = 1;
+       g.lineWidth = 2; g.strokeStyle = c.surface; g.stroke();
+       chart.bars.push({ x: x - 7, y: y - 7, w: 14, h: 14,
+         tip: '<strong>' + d.title + '</strong><br>' + fmt(d.words) + ' words &middot; ' + fmt(d.views) + ' views',
+         url: d.url });
+       if (d === top) {
+         g.fillStyle = c.ink; g.textAlign = 'left';
+         g.font = '700 11px Poppins, sans-serif';
+         g.fillText('the Rothfuss post', Math.min(x + 10, W - 130), y + 4);
+         g.font = '600 10px Poppins, sans-serif';
+       }
+     });
+   }
+
+   /* ---- donut: series membership ---- */
+   function drawDonut(chart, segs, centerBig, centerSmall) {
+     var f = fit(chart.canvas, 240), g = f.g, W = f.w, H = f.h;
+     var c = vizColors(chart.canvas);
+     g.clearRect(0, 0, W, H);
+     chart.bars = [];
+     var cx = W / 2, cy = H / 2;
+     var r1 = Math.min(W, H) / 2 - 8, r0 = r1 * 0.62;
+     var total = 0;
+     segs.forEach(function (s) { total += s.value; });
+     var a = -Math.PI / 2;   // start at 12 o'clock
+     var gapAng = (2 / r1);  // ~2px surface gap between segments
+     segs.forEach(function (s) {
+       var span = (s.value / total) * Math.PI * 2;
+       var a0 = a + gapAng / 2, a1 = a + span - gapAng / 2;
+       g.beginPath();
+       g.arc(cx, cy, r1, a0, a1);
+       g.arc(cx, cy, r0, a1, a0, true);
+       g.closePath();
+       g.fillStyle = s.color === 'muted' ? c.muted : c[s.color];
+       g.globalAlpha = s.color === 'muted' ? 0.55 : 1;
+       g.fill();
+       g.globalAlpha = 1;
+       chart.bars.push({ wedge: true, cx: cx, cy: cy, r0: r0, r1: r1,
+         a0: a0, a1: a1,
+         tip: '<strong>' + s.label + '</strong><br>' + s.value + ' post' + (s.value === 1 ? '' : 's') });
+       a += span;
+     });
+     g.fillStyle = c.ink; g.textAlign = 'center';
+     g.font = '700 26px Poppins, sans-serif';
+     g.fillText(centerBig, cx, cy + 2);
+     g.font = '600 10px Poppins, sans-serif';
+     g.fillStyle = c.muted;
+     g.fillText(centerSmall, cx, cy + 20);
+   }
+
+   /* ---- cumulative words line ---- */
+   function drawWords(chart, series) {
+     var f = fit(chart.canvas, 260), g = f.g, W = f.w, H = f.h;
+     var c = vizColors(chart.canvas);
+     g.clearRect(0, 0, W, H);
+     chart.bars = [];
+     var padL = 46, padR = 14, padT = 14, padB = 24;
+     var plotW = W - padL - padR, plotH = H - padT - padB;
+     var total = series[series.length - 1].cum;
+
+     // A real time axis: months come out evenly spaced, and the slope now
+     // reads as words per day rather than words per post. Quiet stretches
+     // show as flat runs instead of being compressed away.
+     function ms(d) { return new Date(d + 'T00:00:00').getTime(); }
+     var tMin = ms(series[0].date), tMax = ms(series[series.length - 1].date);
+     var span = Math.max(1, tMax - tMin);
+     function px(i) { return padL + ((ms(series[i].date) - tMin) / span) * plotW; }
+     function pxT(t) { return padL + ((t - tMin) / span) * plotW; }
+     function py(v) { return padT + plotH - (v / total) * plotH; }
+
+     // recessive gridlines at 0 / 50k / 100k
+     g.font = '600 10px Poppins, sans-serif';
+     [0, 50000, 100000].forEach(function (gv) {
+       if (gv > total) return;
+       var y = py(gv);
+       g.strokeStyle = c.grid; g.lineWidth = 1;
+       g.beginPath(); g.moveTo(padL, y + 0.5); g.lineTo(W - padR, y + 0.5); g.stroke();
+       g.fillStyle = c.muted; g.textAlign = 'right';
+       g.fillText(gv === 0 ? '0' : (gv / 1000) + 'k', padL - 6, y + 3);
+     });
+
+     // month boundaries, one per calendar month inside the range
+     var monthTicks = [];
+     var cur = new Date(tMin); cur.setDate(1);
+     while (cur.getTime() <= tMax) {
+       var t = cur.getTime();
+       var ym = cur.getFullYear() + '-' + ('0' + (cur.getMonth() + 1)).slice(-2);
+       monthTicks.push({ t: t, ym: ym, before: t < tMin });
+       cur.setMonth(cur.getMonth() + 1);
+     }
+     monthTicks.forEach(function (tk) {
+       if (tk.before) return;                 // month started before post one
+       var mx = pxT(tk.t);
+       g.strokeStyle = c.grid; g.lineWidth = 1;
+       g.beginPath(); g.moveTo(mx + 0.5, padT); g.lineTo(mx + 0.5, padT + plotH); g.stroke();
+     });
+
+     // area fill + line
+     g.beginPath();
+     series.forEach(function (s, i) { i === 0 ? g.moveTo(px(i), py(s.cum)) : g.lineTo(px(i), py(s.cum)); });
+     g.strokeStyle = c.s2; g.lineWidth = 2; g.lineJoin = 'round'; g.stroke();
+     g.lineTo(px(series.length - 1), padT + plotH);
+     g.lineTo(px(0), padT + plotH);
+     g.closePath();
+     g.globalAlpha = 0.12; g.fillStyle = c.s2; g.fill(); g.globalAlpha = 1;
+
+     // endpoint marker + direct label
+     var lx = px(series.length - 1), ly = py(total);
+     g.beginPath(); g.arc(lx, ly, 4, 0, Math.PI * 2);
+     g.fillStyle = c.s2; g.fill();
+     g.lineWidth = 2; g.strokeStyle = c.surface; g.stroke();
+     g.fillStyle = c.ink; g.textAlign = 'right';
+     g.font = '700 12px Poppins, sans-serif';
+     g.fillText(fmt(total) + ' words', lx - 10, ly + 4);
+
+     // one label per month, dropped where two would collide
+     g.font = '600 10px Poppins, sans-serif';
+     g.fillStyle = c.muted;
+     var shortLabels = plotW < 420;
+     var lastLabelRight = -Infinity;
+     monthTicks.forEach(function (tk, n) {
+       var label = shortLabels ? monthLabel(tk.ym).split(' ')[0] : monthLabel(tk.ym);
+       var mx = tk.before ? padL : pxT(tk.t);
+       var half = g.measureText(label).width / 2;
+       var left = mx - half, right = mx + half;
+       var align = 'center';
+       if (n === 0) { align = 'left'; left = padL; right = padL + half * 2; }
+       else if (left < lastLabelRight + 8) { return; }
+       if (right > W - padR) { align = 'right'; right = W - padR; }
+       g.textAlign = align;
+       g.fillText(label, align === 'left' ? padL : (align === 'right' ? W - padR : mx), H - 8);
+       lastLabelRight = right;
+     });
+
+     // hover targets: one column per publishing DAY, since five days carry
+     // more than one post (12 July carries four) and they share an x.
+     var days = [];
+     series.forEach(function (s, i) {
+       var last = days[days.length - 1];
+       if (last && last.date === s.date) { last.items.push(s); last.cum = s.cum; }
+       else days.push({ date: s.date, x: px(i), items: [s], cum: s.cum });
+     });
+     days.forEach(function (d, i) {
+       var prevMid = i === 0 ? padL : (days[i - 1].x + d.x) / 2;
+       var nextMid = i === days.length - 1 ? padL + plotW : (d.x + days[i + 1].x) / 2;
+       var head = d.items.length === 1
+         ? '<strong>' + d.items[0].title + '</strong><br>' + fmt(d.items[0].words) + ' words'
+         : '<strong>' + d.items.length + ' posts on ' + fmtDate(d.date) + '</strong><br>'
+           + d.items.map(function (s) { return s.title; }).join('<br>');
+       chart.bars.push({ x: prevMid, y: padT, w: Math.max(1, nextMid - prevMid), h: plotH,
+         tip: head + '<br>' + fmtDate(d.date) + ' &middot; running total ' + fmt(d.cum) });
+     });
+   }
+
+   function build(posts, popular) {
+     // months
+     var months = {};
+     posts.forEach(function (p) { var k = p.date.slice(0, 7); months[k] = (months[k] || 0) + 1; });
+     var mChart = { canvas: document.getElementById('chartMonths'), bars: [] };
+     mChart.draw = function () { drawMonths(mChart, months); };
+     charts.push(mChart);
+
+     // tags
+     var tags = {};
+     posts.forEach(function (p) { (p.tags || []).forEach(function (t) { tags[t] = (tags[t] || 0) + 1; }); });
+     var tagRows = Object.keys(tags).sort(function (a, b) { return tags[b] - tags[a] || a.localeCompare(b); })
+       .map(function (t) { return { label: t, value: tags[t], tipLabel: t, tipValue: tags[t] + ' post' + (tags[t] === 1 ? '' : 's') }; });
+     var tChart = { canvas: document.getElementById('chartTags'), bars: [] };
+     tChart.draw = function () { drawHBars(tChart, tagRows, 's1', String); };
+     charts.push(tChart);
+
+     // cumulative words (oldest first)
+     var ordered = posts.slice().sort(function (a, b) { return a.date.localeCompare(b.date); });
+     var cum = 0;
+     var series = ordered.map(function (p) { cum += (p.words || 0); return { date: p.date, title: p.title, words: p.words || 0, cum: cum }; });
+     var wChart = { canvas: document.getElementById('chartWords'), bars: [] };
+     wChart.draw = function () { drawWords(wChart, series); };
+     charts.push(wChart);
+
+     // top five most read
+     var byUrl = {};
+     posts.forEach(function (p) { byUrl[p.url] = p; });
+     var viewRows = popular.filter(function (e) { return byUrl[e.url]; }).slice(0, 5).map(function (e) {
+       var t = byUrl[e.url].title;
+       var short = t.length > 26 ? t.slice(0, 24).replace(/\s+\S*$/, '') + '…' : t;
+       return { label: short, value: e.views, tipLabel: t, tipValue: fmt(e.views) + ' views',
+                fmt: fmt };
+     });
+     var vChart = { canvas: document.getElementById('chartViews'), bars: [] };
+     vChart.draw = function () { drawHBars(vChart, viewRows, 's4', function (v) { return v >= 1000 ? (v / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : String(v); }); };
+     charts.push(vChart);
+
+     // stat tiles stay live
+     var words = 0, mins = 0;
+     posts.forEach(function (p) { words += p.words || 0; mins += p.readMinutes || 0; });
+     document.getElementById('tilePosts').textContent = String(posts.length);
+     // (the count-up below re-animates these on first view)
+     document.getElementById('tileWords').textContent = fmt(words);
+     document.getElementById('tileHours').textContent = (mins / 60).toFixed(1);
+
+     // topic drift: month x headline tag
+     var TOP_TAGS = ['technology', 'personal', 'books', 'ai'];
+     var drift = {};
+     posts.forEach(function (p) {
+       var k = p.date.slice(0, 7);
+       drift[k] = drift[k] || {};
+       var headline = 'other';
+       for (var i = 0; i < (p.tags || []).length; i++) {
+         if (TOP_TAGS.indexOf(p.tags[i]) !== -1) { headline = p.tags[i]; break; }
+       }
+       drift[k][headline] = (drift[k][headline] || 0) + 1;
+     });
+     var driftChart = { canvas: document.getElementById('chartDrift'), bars: [] };
+     driftChart.draw = function () { drawDrift(driftChart, drift); };
+     charts.push(driftChart);
+
+     // minutes per tag, top six
+     var tagMins = {};
+     posts.forEach(function (p) { (p.tags || []).forEach(function (tg) { tagMins[tg] = (tagMins[tg] || 0) + (p.readMinutes || 0); }); });
+     var minRows = Object.keys(tagMins).sort(function (a, b) { return tagMins[b] - tagMins[a]; }).slice(0, 6)
+       .map(function (tg) { return { label: tg, value: tagMins[tg], tipLabel: tg, tipValue: tagMins[tg] + ' minutes of reading' }; });
+     var tmChart = { canvas: document.getElementById('chartTagMins'), bars: [] };
+     tmChart.draw = function () { drawHBars(tmChart, minRows, 's2', function (v) { return v + ' min'; }); };
+     charts.push(tmChart);
+
+     // effort vs reward scatter (tracked posts only)
+     var scatterPts = popular.filter(function (e) { return byUrl[e.url]; }).map(function (e) {
+       return { title: byUrl[e.url].title, words: byUrl[e.url].words || 0, views: e.views, url: '../' + e.url };
+     });
+     if (scatterPts.length) {
+       var scChart = { canvas: document.getElementById('chartScatter'), bars: [] };
+       scChart.draw = function () {
+       drawScatter(scChart, scatterPts);
+       // rebuild the gradient key from the same stops the canvas used, so a
+       // theme switch restyles both together
+       var box = document.getElementById('viewsRamp');
+       if (!box || !scChart.ramp) return;
+       box.innerHTML = '<b>views</b><span>' + fmt(Math.round(scChart.ramp.lo)) + '</span>'
+         + '<span class="bar" style="background:linear-gradient(90deg,' + scChart.ramp.stops.join(', ') + ')"></span>'
+         + '<span>' + fmt(Math.round(scChart.ramp.hi)) + '</span>';
+     };
+       charts.push(scChart);
+     }
+
+     // series donut
+     var seriesCounts = {};
+     var standalone = 0;
+     posts.forEach(function (p) {
+       var s = p.series;
+       var list = s ? (Array.isArray(s) ? s : [s]) : [];
+       if (!list.length) { standalone++; return; }
+       var name = list[0].name;
+       seriesCounts[name] = (seriesCounts[name] || 0) + 1;
+     });
+     var segOrder = Object.keys(seriesCounts).sort(function (a, b) { return seriesCounts[b] - seriesCounts[a]; });
+     var segColors = ['s1', 's2', 'c3', 's4'];
+     var segs = segOrder.map(function (name, i) {
+       return { label: name, value: seriesCounts[name], color: segColors[i % segColors.length] };
+     });
+     segs.push({ label: 'Standalone posts', value: standalone, color: 'muted' });
+     var inSeries = posts.length - standalone;
+     var pct = Math.round((inSeries / posts.length) * 100) + '%';
+     var dnChart = { canvas: document.getElementById('chartDonut'), bars: [] };
+     dnChart.draw = function () { drawDonut(dnChart, segs, pct, 'in a series'); };
+     charts.push(dnChart);
+
+     // calendar heatmap
+     var byDay = {};
+     posts.forEach(function (p) { (byDay[p.date] = byDay[p.date] || []).push(p); });
+     var dates = posts.map(function (p) { return p.date; }).sort();
+     var first = new Date(dates[0] + 'T12:00:00');
+     var last = new Date(dates[dates.length - 1] + 'T12:00:00');
+     var calChart = { canvas: document.getElementById('chartCalendar'), bars: [] };
+     calChart.draw = function () { drawCalendar(calChart, byDay, first, last); };
+     charts.push(calChart);
+
+     // fifty dots
+     var dChart = { canvas: document.getElementById('chartDots'), bars: [] };
+     // the five commonest first-tags get their own hue in the scatter
+     var tagFreq = {};
+     posts.forEach(function (p) {
+       var t = (p.tags && p.tags[0]) || '';
+       if (t) tagFreq[t] = (tagFreq[t] || 0) + 1;
+     });
+     dChart.tagOrder = Object.keys(tagFreq)
+       .sort(function (a, b) { return tagFreq[b] - tagFreq[a] || a.localeCompare(b); })
+       .slice(0, 5);
+     dChart.draw = function () { drawDots(dChart, posts); };
+     (function () {
+       var box = document.getElementById('dotsLegend');
+       if (!box) return;
+       var cs = getComputedStyle(dChart.canvas.closest('.fifty-viz'));
+       var hues = ['--viz-s1', '--viz-s2', '--viz-s3', '--viz-s4', '--viz-c3']
+         .map(function (v) { return cs.getPropertyValue(v).trim(); });
+       var html = dChart.tagOrder.map(function (t, i) {
+         return '<span><i style="background:' + hues[i] + '"></i>' + t + '</span>';
+       }).join('');
+       box.innerHTML = html + '<span><i style="background:' + cs.getPropertyValue('--viz-muted').trim() + '"></i>everything else</span>';
+     })();
+     charts.push(dChart);
+
+     // random post button: mulberry32 seeded from the clock, because this
+     // one should differ on every click
+     var rndBtn = document.getElementById('fiftyRandom');
+     if (rndBtn) {
+       rndBtn.addEventListener('click', function () {
+         var seed = Date.now() >>> 0;
+         var a = seed;
+         a |= 0; a = (a + 0x6D2B79F5) | 0;
+         var z = Math.imul(a ^ (a >>> 15), 1 | a);
+         z = (z + Math.imul(z ^ (z >>> 7), 61 | z)) ^ z;
+         var r = ((z ^ (z >>> 14)) >>> 0) / 4294967296;
+         var pick = posts[Math.floor(r * posts.length)];
+         window.location.href = '../' + pick.url;
+       });
+     }
+
+     // gentle count-up on the headline tiles (skipped for reduced motion)
+     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+     if (!reduce && 'IntersectionObserver' in window) {
+       var targets = [
+         { el: document.getElementById('tilePosts'), value: posts.length, fmt: function (v) { return String(Math.round(v)); } },
+         { el: document.getElementById('tileWords'), value: words, fmt: function (v) { return fmt(Math.round(v)); } },
+         { el: document.getElementById('tileHours'), value: mins / 60, fmt: function (v) { return v.toFixed(1); } }
+       ];
+       var io = new IntersectionObserver(function (entries) {
+         entries.forEach(function (en) {
+           if (!en.isIntersecting) return;
+           io.unobserve(en.target);
+           var tgt = null;
+           targets.forEach(function (x) { if (x.el === en.target) tgt = x; });
+           if (!tgt) return;
+           var t0 = null;
+           function step(ts) {
+             if (!t0) t0 = ts;
+             var k = Math.min(1, (ts - t0) / 900);
+             var eased = 1 - Math.pow(1 - k, 3);
+             tgt.el.textContent = tgt.fmt(tgt.value * eased);
+             if (k < 1) requestAnimationFrame(step);
+             else tgt.el.textContent = tgt.fmt(tgt.value);
+           }
+           requestAnimationFrame(step);
+         });
+       }, { threshold: 0.6 });
+       targets.forEach(function (x) { if (x.el) io.observe(x.el); });
+     }
+
+     charts.forEach(function (ch) { ch.draw(); hover(ch); });
+   }
+
+   function redrawAll() { charts.forEach(function (ch) { ch.draw(); }); }
+   window.addEventListener('resize', redrawAll);
+   new MutationObserver(redrawAll).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+   Promise.all([
+     fetch('../data/posts.json').then(function (r) { return r.json(); }),
+     fetch('../data/popular.json').then(function (r) { return r.json(); }).catch(function () { return []; })
+   ]).then(function (res) {
+     build(res[0] || [], res[1] || []);
+   }).catch(function () {});
+ })();
+ </script>
+ <script>
+ /* Milestone confetti. No library: a few dozen rectangles under gravity on a
+    throwaway canvas. Skipped entirely for readers who ask for reduced motion,
+    and the canvas is removed once the last piece leaves the viewport so
+    nothing keeps painting behind the article. */
+ (function () {
+   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+   var btn = document.getElementById('fifty-again');
+   var running = false;
+
+   function palette() {
+     var probe = document.querySelector('.fifty-viz');
+     if (!probe) return ['#2a78d6', '#1baf7a', '#eda100', '#d64550', '#9061d9'];
+     var cs = getComputedStyle(probe);
+     return ['--viz-s1', '--viz-s2', '--viz-s3', '--viz-s4', '--viz-c3']
+       .map(function (v) { return (cs.getPropertyValue(v) || '').trim(); })
+       .filter(Boolean);
+   }
+
+   function burst() {
+     if (running) return;
+     running = true;
+
+     var canvas = document.createElement('canvas');
+     canvas.className = 'fifty-confetti';
+     canvas.setAttribute('aria-hidden', 'true');
+     document.body.appendChild(canvas);
+
+     var ctx = canvas.getContext('2d');
+     var dpr = Math.min(window.devicePixelRatio || 1, 2);
+     var w, h;
+     function size() {
+       w = canvas.clientWidth; h = canvas.clientHeight;
+       canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+     }
+     size();
+     window.addEventListener('resize', size);
+
+     var colors = palette();
+     var count = w < 700 ? 70 : 130;
+     var bits = [];
+     for (var i = 0; i < count; i++) {
+       var ribbon = Math.random() < 0.35;
+       bits.push({
+         x: w * (0.15 + Math.random() * 0.7),
+         y: -20 - Math.random() * h * 0.4,
+         vx: (Math.random() - 0.5) * 2.6,
+         vy: 2 + Math.random() * 3.2,
+         w: ribbon ? 3 + Math.random() * 2 : 6 + Math.random() * 5,
+         h: ribbon ? 14 + Math.random() * 12 : 6 + Math.random() * 5,
+         rot: Math.random() * Math.PI,
+         spin: (Math.random() - 0.5) * 0.22,
+         wob: Math.random() * Math.PI * 2,
+         color: colors[i % colors.length]
+       });
+     }
+
+     var start = null;
+     var LIFE = 5200;
+     function frame(ts) {
+       if (start === null) start = ts;
+       var t = ts - start;
+       ctx.clearRect(0, 0, w, h);
+       var alive = 0;
+       for (var i = 0; i < bits.length; i++) {
+         var b = bits[i];
+         b.wob += 0.06;
+         b.x += b.vx + Math.sin(b.wob) * 0.9;
+         b.y += b.vy;
+         b.vy += 0.045;              // gravity
+         b.vx *= 0.995;              // drag
+         b.rot += b.spin;
+         if (b.y < h + 40) alive++;
+         ctx.save();
+         ctx.translate(b.x, b.y);
+         ctx.rotate(b.rot);
+         ctx.globalAlpha = t > LIFE - 900 ? Math.max(0, (LIFE - t) / 900) : 1;
+         ctx.fillStyle = b.color;
+         ctx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h);
+         ctx.restore();
+       }
+       if (alive > 0 && t < LIFE) {
+         requestAnimationFrame(frame);
+       } else {
+         window.removeEventListener('resize', size);
+         canvas.remove();
+         running = false;
+       }
+     }
+     requestAnimationFrame(frame);
+   }
+
+   if (btn) {
+     btn.addEventListener('click', burst);
+     if (reduced) btn.textContent = 'Throw the confetti';
+   }
+   if (!reduced) {
+     // let the charts paint first; the party is the garnish, not the meal
+     window.addEventListener('load', function () { setTimeout(burst, 450); });
+   }
+ })();
+ </script>
+ <script>
+ /* Count the Wrapped numbers up when they scroll into view. Values live in
+    data-count so the printed markup is already correct if this never runs. */
+ (function () {
+   if (!('IntersectionObserver' in window)) return;
+   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+   var nums = [].slice.call(document.querySelectorAll('.fifty-wrapped .wrap-num[data-count]'));
+   if (!nums.length) return;
+   nums.forEach(function (el) { el.dataset.final = el.textContent; });
+   var io = new IntersectionObserver(function (entries) {
+     entries.forEach(function (en) {
+       if (!en.isIntersecting) return;
+       io.unobserve(en.target);
+       var el = en.target;
+       var target = parseFloat(el.dataset.count);
+       var suffix = el.dataset.suffix || '';
+       var t0 = null;
+       function step(ts) {
+         if (!t0) t0 = ts;
+         var k = Math.min(1, (ts - t0) / 850);
+         var eased = 1 - Math.pow(1 - k, 3);
+         el.textContent = Math.round(target * eased).toLocaleString('en-GB') + suffix;
+         if (k < 1) requestAnimationFrame(step);
+         else el.textContent = el.dataset.final;
+       }
+       requestAnimationFrame(step);
+     });
+   }, { threshold: 0.5 });
+   nums.forEach(function (el) { io.observe(el); });
+ })();
+ </script>
+</body>
+</html>

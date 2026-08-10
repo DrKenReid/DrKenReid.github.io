@@ -27,7 +27,9 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
   <link rel="icon" href="../img/core-img/favicon.png">
+  <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
+  <link rel="manifest" href="../manifest.json">
   <link rel="preload" as="image" href="../img/photography/hero/409.webp">
   <link rel="stylesheet" href="../style.min.css">
   <link rel="canonical" href="https://www.kenreid.co.uk/blog/free-comments-via-github-discussions.html">
@@ -49,6 +51,32 @@
       "name": "Ken Reid"
     },
     "keywords": ["comments", "giscus", "github", "static sites", "blogging"]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.kenreid.co.uk/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": "https://www.kenreid.co.uk/blog.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Free Comments via GitHub Discussions",
+        "item": "https://www.kenreid.co.uk/blog/free-comments-via-github-discussions.html"
+      }
+    ]
   }
   </script>
   <script defer src="../js/theme.js"></script>
@@ -164,7 +192,7 @@
               <a href="dark-mode-that-doesnt-flash.html" class="blog-card">
                 <div class="blog-card-img"><img src="../img/photography/thumb/20.webp" alt="Dark Mode That Doesn't Flash" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">6 August 2026 · 7 min read</div>
+                  <div class="blog-card-date">6 August 2026 · 8 min read</div>
                   <h3 class="blog-card-title">Dark Mode That Doesn't Flash</h3>
                   <p class="blog-card-excerpt">Dark mode is easy; dark mode without a white flash is more difficult. How this site stamps the theme before the first paint, and drags every chart and iframe along with it.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
@@ -197,11 +225,9 @@
   <div id="footer-section"></div>
 
   <script src="../js/jquery.min.js"></script>
-  <script src="../js/popper.min.js"></script>
-  <script src="../js/bootstrap.min.js"></script>
   <script src="../js/alime.bundle.js"></script>
+  <script src="../js/site.js"></script>
   <script src="../js/lightbox.js"></script>
-  <script src="../js/share.js"></script>
   <script src="../js/default-assets/active.js"></script>
   <script src="../js/shared-components.js"></script>
   <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
