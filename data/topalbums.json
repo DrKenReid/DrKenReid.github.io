@@ -22,13 +22,6 @@
       "plays": 5
     },
     {
-      "name": "Get Behind Me Satan",
-      "artist": "The White Stripes",
-      "url": "https://www.last.fm/music/The+White+Stripes/Get+Behind+Me+Satan",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/f4bd9ed207184af23b8199fb41c8eba2.jpg",
-      "plays": 5
-    },
-    {
       "name": "High Valley Demos",
       "artist": "Fey Fili",
       "url": "https://www.last.fm/music/Fey+Fili/High+Valley+Demos",
@@ -40,6 +33,13 @@
       "artist": "LUNEKT",
       "url": "https://www.last.fm/music/LUNEKT/Infinite+Requiem+(Deoksoon)",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/d3c0b224f59d9360b067adaeee01b788.jpg",
+      "plays": 4
+    },
+    {
+      "name": "Get Behind Me Satan",
+      "artist": "The White Stripes",
+      "url": "https://www.last.fm/music/The+White+Stripes/Get+Behind+Me+Satan",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/f4bd9ed207184af23b8199fb41c8eba2.jpg",
       "plays": 4
     },
     {
@@ -68,13 +68,6 @@
       "artist": "Jaroslav Beck",
       "url": "https://www.last.fm/music/Jaroslav+Beck/Beat+Saber+(Original+Game+Soundtrack)",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/070f7c8133e30d9c0cc25efc4fdb6462.jpg",
-      "plays": 3
-    },
-    {
-      "name": "III: Lost Chapter",
-      "artist": "Pentakill",
-      "url": "https://www.last.fm/music/Pentakill/III:+Lost+Chapter",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/773e7f0fe04ff1f9e61559c91a3f6b52.png",
       "plays": 3
     },
     {
@@ -156,5 +149,5 @@
     }
   ],
   "period": "3month",
-  "updated": "2026-08-09"
+  "updated": "2026-08-10"
 }
