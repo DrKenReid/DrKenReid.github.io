@@ -5,11 +5,133 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Sat, 08 Aug 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Sat, 08 Aug 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Tue, 11 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Tue, 11 Aug 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Particle Swarm, Live</title>
+      <link>https://www.kenreid.co.uk/blog/particle-swarm-live.html</link>
+      <guid>https://www.kenreid.co.uk/blog/particle-swarm-live.html</guid>
+      <pubDate>Tue, 11 Aug 2026 00:00:00 +0000</pubDate>
+      <description>An interactive particle swarm optimiser in your browser: a flock of dots hunts a landscape none of them can see, steered by private memory and a single piece of gossip, and the sliders let you collapse the swarm on purpose.</description>
+      <category>ai</category>
+      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">View it on the site</a> to play with it.</em></p>
+ <h1>Particle Swarm, Live</h1>
+ <div class="blog-meta">
+ 11 August 2026 &middot;
+ <span class="blog-tag">ai</span>
+ </div>
+
+ <p>In 1995, a social psychologist and an electrical engineer sat down to animate a flock of birds and accidentally invented one of the most popular optimisers of the next two decades, which is a story I love. I really believe that error is one of the most fruitful forms of novelty creation. Below, you can fly the result yourself. It's the sibling of <a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">the ant colony post</a>: another swarm, another crowd of simple agents solving a problem none of them can see individually, with the communication channel turned inside out.</p>
+
+ 
+
+ <p>In Ant Colony Optimisation, the ants coordinate through the environment, and no ant knows anything whatsoever. The knowledge lived in the pheromone map, written and read by thousands of insects who are basically automatons. Particles do the opposite, and each one privately remembers the best spot it has ever stood on, while the whole swarm shares a single piece of gossip: the best spot <em>any</em> member has ever found. That's the entire communication system, and it runs without a trail, a map, or a leader, just a telepathic link of where to find the dropped ice cream or sugar granules.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Particle swarm optimisation (PSO):</strong> an optimiser inspired by bird flocking, where a population of candidate solutions ("particles") fly through the search space, each pulled toward its own best-known point and the swarm's best-known point.</li>
+ <li><strong>Personal best:</strong> the best position a single particle has ever visited. Its private memory, and one of the two forces steering it.</li>
+ <li><strong>Global best:</strong> the best position any particle in the swarm has ever visited. Shared knowledge: every particle feels its pull.</li>
+ <li><strong>Inertia:</strong> how much of its current velocity a particle keeps each step. High inertia means momentum and wide exploration; low inertia means the social pulls dominate.</li>
+ <li><strong>Velocity clamp:</strong> a cap on how fast a particle may move, stopping the update rule from flinging particles out of the search space entirely.</li>
+ <li><strong>Premature convergence:</strong> the whole swarm collapsing onto one point before the space has been properly searched, then being unable to leave. The characteristic failure of anything that shares information too enthusiastically.</li>
+ </ul>
+ </div>
+
+ <h2>The flock that forgot how to fly</h2>
+
+ <p>James Kennedy was a social psychologist and Russell Eberhart was an electrical engineer. Their 1995 paper<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> opens with birds rather than mathematics. They wanted to simulate the choreography of a flock, in the tradition of the boids models, where each simulated bird matches its neighbours' speed, avoids collisions, and stays near the roost. They started deleting rules to see which ones mattered.</p>
+
+ <p>Collision avoidance went, velocity matching went, nearest-neighbour tracking went. What survived would not fool a birdwatcher, or a pigeon, or a cat, just dots drifting toward places that had scored well. But the dots were doing something more interesting than flocking: they were finding the optimum of whatever function defined "good". The choreography fell away and the optimiser remained, and Kennedy and Eberhart named the agents <em>particles</em>, "birds" probably no longer felt right.</p>
+
+ <p>The version below includes one refinement from 1998, when Shi and Eberhart added the inertia weight<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>: a knob controlling how much of its current velocity each particle carries into the next step. </p>
+
+ <h2>Three kinds of pull</h2>
+
+ <p>Every step, each particle updates its velocity as a weighted sum of three forces, which, to me at least, feel kind of like personality traits:</p>
+
+ <ul>
+ <li><strong>Habit (w):</strong> keep doing what you were doing. The inertia weight scales the particle's current velocity.</li>
+ <li><strong>Own memory (c1):</strong> a pull back toward the best place <em>you</em> have ever found. Call it self-trust, or nostalgia.</li>
+ <li><strong>Peer pressure (c2):</strong> a pull toward the best place <em>anyone</em> has ever found. Conformism, sheep-ery.</li>
+ </ul>
+
+ <p>The two social pulls are each multiplied by a fresh random number every step, so no two particles are likely to respond the same. That randomness is what keeps the swarm from collapsing into a single deterministic trajectory.</p>
+
+ <p>The result is clamped to a maximum speed, the particle moves, the function gets evaluated at the new spot, memories get updated, and the loop repeats. That's it! </p>
+
+ <h2>Watch the swarm hunt</h2>
+
+ <p>Below, a swarm is minimising a two-dimensional landscape, where warm colours are low ground (better) and the dashed ring marks the true optimum, which the swarm does not know about. Watch the characteristic dance: particles overshoot the best-known point, get hauled back, overshoot the other way, and the whole cloud contracts around the answer like a slowing pendulum.</p>
+
+ 
+
+ <h2>Break it with the sliders</h2>
+
+ <p><strong>Crank inertia past 1.</strong> Above w = 1 a particle's velocity grows every step instead of decaying, so the only thing stopping the swarm from leaving the map is the speed clamp. The swarm boils, with particles orbiting the best-known point at full speed, permanently overshooting, while the spread chart flatlines high and the fitness chart stalls on momentum.</p>
+
+ <p><strong>Now do the opposite: inertia near 0, peer pressure at 3.</strong> This is the stampede: with no momentum to resist, every particle dives straight at the first decent global best, the spread chart crashes within a few dozen iterations, and the swarm becomes one throbbing dot.</p>
+
+ <p>On the bowl this looks like efficiency, but switch to the egg carton and watch the same setting get eaten: the swarm piles into whichever dimple it saw first, the true optimum sits two ridges away, and nobody has enough independence left to go and look. Premature convergence.</p>
+
+ <p><strong>Set own memory (c1) to zero.</strong> Pure conformism: particles have no attachment to their own discoveries, and the global best is the only guidance. </p>
+
+ <p><strong>Set peer pressure (c2) to zero.</strong> Now nobody shares anything, and you get thirty hermits running thirty independent local searches, each rattling around its own personal best and improving it a little. </p>
+
+ <h2>Now stop breaking it</h2>
+
+ <p><strong>Then go back to the classic setting</strong> (w = 0.72, c1 = c2 = 1.5, numbers the field converged on after years of tuning) and watch the dance it buys you: overshoot, return, contract, with just enough disagreement to keep a few scouts out wide while the core closes in. On the egg carton it will still fail sometimes. The demo isn't broken, that just shows that it's not perfect, and there are still papers being published solving more complex landscapes with PSO.</p>
+
+ <h2>Personality knobs</h2>
+
+ <p>Kennedy never stopped pointing out that this is a model of social learning first and an optimiser second: individuals keep private experience, the group broadcasts its best result, and behaviour is a compromise between habit, self-trust and conformism.</p>
+
+ <p>Every failure mode you just created is a recognisable social failure. The high-conformism swarm is an echo chamber stampeding to its first confident answer. The zero-gossip swarm is a room full of talented people who never talk. The overheated swarm is a committee that keeps relitigating and never makes an actual decision (sounds like many meetings I've been in).</p>
+
+ <h2>Annealing, evolution, ants, particles</h2>
+
+ <p>The through-line of the series: <a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">Simulated annealing</a> was one searcher learning when to accept a worse answer. <a href="https://www.kenreid.co.uk/blog/evolution-live.html">Genetic algorithms</a> were a population improving by dying, the ants stored the answer in the world, and the particles store it in each other. Four strategies, one shared problem: explore enough to find the right valley, exploit enough to reach the bottom of it. See some interesting overlaps in strategy, parameters, landscape advantages and disadvantages?</p>
+
+ <p>Anyway. Go scoop up the swarm, drop it in a corner of the egg carton, and watch thirty dots argue their way out. Or fail to. </p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Is this actually how birds flock?</summary>
+ <p>No. Real flocking is much closer to the boids rules Kennedy and Eberhart started from (local alignment, cohesion, separation among a handful of nearest neighbours), and modern starling studies suggest birds track a fixed number of neighbours rather than everyone in range. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>How is this different from a genetic algorithm?</summary>
+ <p>Both are population-based and gradient-free, but the mechanics are almost disjoint. In a genetic algorithm, individuals are born, breed and die: information moves between solutions by crossover, and progress comes from selection pressure. In PSO nobody dies and nobody breeds. The same thirty particles persist the whole run, and information moves through shared memory instead of inheritance. In practice PSO tends to converge faster on smooth continuous problems, while evolutionary methods are easier to adapt to weird, structured or combinatorial ones.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Does anyone still use PSO?</summary>
+ <p>Yes, heavily, especially in engineering: antenna design, power systems, controller tuning, and any setting where evaluations are expensive, gradients are unavailable, and a decent answer soon beats a perfect answer never.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Kennedy, J., &amp; Eberhart, R. (1995). Particle swarm optimization. <em>Proceedings of ICNN'95 - International Conference on Neural Networks</em>, 4, 1942&ndash;1948. <a href="https://doi.org/10.1109/ICNN.1995.488968" target="_blank" rel="noopener">https://doi.org/10.1109/ICNN.1995.488968</a>
+          </li>
+          <li id="ref-2">
+            Shi, Y., &amp; Eberhart, R. (1998). A modified particle swarm optimizer. <em>1998 IEEE International Conference on Evolutionary Computation Proceedings, IEEE World Congress on Computational Intelligence</em>, 69&ndash;73. <a href="https://doi.org/10.1109/ICEC.1998.699146" target="_blank" rel="noopener">https://doi.org/10.1109/ICEC.1998.699146</a>
+          </li>
+        </ol>
+
+        
+
+ ]]></content:encoded>
+    </item>
     <item>
       <title>50 Blogs: An Infographic</title>
       <link>https://www.kenreid.co.uk/blog/50-blogs-an-infographic.html</link>
@@ -174,128 +296,6 @@
  <p>Being read turns thinking out loud into a conversation, and I am grateful for every one of you, from the person who has read all fifty to the twenty-eight thousand who came for Rothfuss and left.</p>
 
  <p>Thank you for reading. Here is to the next fifty!</p>
-
-        
-
- ]]></content:encoded>
-    </item>
-    <item>
-      <title>Particle Swarm, Live</title>
-      <link>https://www.kenreid.co.uk/blog/particle-swarm-live.html</link>
-      <guid>https://www.kenreid.co.uk/blog/particle-swarm-live.html</guid>
-      <pubDate>Fri, 07 Aug 2026 00:00:00 +0000</pubDate>
-      <description>An interactive particle swarm optimiser in your browser: a flock of dots hunts a landscape none of them can see, steered by private memory and a single piece of gossip, and the sliders let you collapse the swarm on purpose.</description>
-      <category>ai</category>
-      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">View it on the site</a> to play with it.</em></p>
- <h1>Particle Swarm, Live</h1>
- <div class="blog-meta">
- 7 August 2026 &middot;
- <span class="blog-tag">ai</span>
- </div>
-
- <p>In 1995, a social psychologist and an electrical engineer sat down to animate a flock of birds and accidentally invented one of the most popular optimisers of the next two decades, which is a story I love. I really believe that error is one of the most fruitful forms of novelty creation. Below, you can fly the result yourself. It's the sibling of <a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">the ant colony post</a>: another swarm, another crowd of simple agents solving a problem none of them can see individually, with the communication channel turned inside out.</p>
-
- 
-
- <p>In Ant Colony Optimisation, the ants coordinate through the environment, and no ant knows anything whatsoever. The knowledge lived in the pheromone map, written and read by thousands of insects who are basically automatons. Particles do the opposite, and each one privately remembers the best spot it has ever stood on, while the whole swarm shares a single piece of gossip: the best spot <em>any</em> member has ever found. That's the entire communication system, and it runs without a trail, a map, or a leader, just a telepathic link of where to find the dropped ice cream or sugar granules.</p>
-
- <div class="plain-english-box">
- <h2>Quick jargon guide</h2>
- <ul>
- <li><strong>Particle swarm optimisation (PSO):</strong> an optimiser inspired by bird flocking, where a population of candidate solutions ("particles") fly through the search space, each pulled toward its own best-known point and the swarm's best-known point.</li>
- <li><strong>Personal best:</strong> the best position a single particle has ever visited. Its private memory, and one of the two forces steering it.</li>
- <li><strong>Global best:</strong> the best position any particle in the swarm has ever visited. Shared knowledge: every particle feels its pull.</li>
- <li><strong>Inertia:</strong> how much of its current velocity a particle keeps each step. High inertia means momentum and wide exploration; low inertia means the social pulls dominate.</li>
- <li><strong>Velocity clamp:</strong> a cap on how fast a particle may move, stopping the update rule from flinging particles out of the search space entirely.</li>
- <li><strong>Premature convergence:</strong> the whole swarm collapsing onto one point before the space has been properly searched, then being unable to leave. The characteristic failure of anything that shares information too enthusiastically.</li>
- </ul>
- </div>
-
- <h2>The flock that forgot how to fly</h2>
-
- <p>James Kennedy was a social psychologist and Russell Eberhart was an electrical engineer. Their 1995 paper<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> opens with birds rather than mathematics. They wanted to simulate the choreography of a flock, in the tradition of the boids models, where each simulated bird matches its neighbours' speed, avoids collisions, and stays near the roost. They started deleting rules to see which ones mattered.</p>
-
- <p>Collision avoidance went, velocity matching went, nearest-neighbour tracking went. What survived would not fool a birdwatcher, or a pigeon, or a cat, just dots drifting toward places that had scored well. But the dots were doing something more interesting than flocking: they were finding the optimum of whatever function defined "good". The choreography fell away and the optimiser remained, and Kennedy and Eberhart named the agents <em>particles</em>, "birds" probably no longer felt right.</p>
-
- <p>The version below includes one refinement from 1998, when Shi and Eberhart added the inertia weight<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>: a knob controlling how much of its current velocity each particle carries into the next step. </p>
-
- <h2>Three kinds of pull</h2>
-
- <p>Every step, each particle updates its velocity as a weighted sum of three forces, which, to me at least, feel kind of like personality traits:</p>
-
- <ul>
- <li><strong>Habit (w):</strong> keep doing what you were doing. The inertia weight scales the particle's current velocity.</li>
- <li><strong>Own memory (c1):</strong> a pull back toward the best place <em>you</em> have ever found. Call it self-trust, or nostalgia.</li>
- <li><strong>Peer pressure (c2):</strong> a pull toward the best place <em>anyone</em> has ever found. Conformism, sheep-ery.</li>
- </ul>
-
- <p>The two social pulls are each multiplied by a fresh random number every step, so no two particles are likely to respond the same. That randomness is what keeps the swarm from collapsing into a single deterministic trajectory.</p>
-
- <p>The result is clamped to a maximum speed, the particle moves, the function gets evaluated at the new spot, memories get updated, and the loop repeats. That's it! </p>
-
- <h2>Watch the swarm hunt</h2>
-
- <p>Below, a swarm is minimising a two-dimensional landscape, where warm colours are low ground (better) and the dashed ring marks the true optimum, which the swarm does not know about. Watch the characteristic dance: particles overshoot the best-known point, get hauled back, overshoot the other way, and the whole cloud contracts around the answer like a slowing pendulum.</p>
-
- 
-
- <h2>Break it with the sliders</h2>
-
- <p><strong>Crank inertia past 1.</strong> Above w = 1 a particle's velocity grows every step instead of decaying, so the only thing stopping the swarm from leaving the map is the speed clamp. The swarm boils, with particles orbiting the best-known point at full speed, permanently overshooting, while the spread chart flatlines high and the fitness chart stalls on momentum.</p>
-
- <p><strong>Now do the opposite: inertia near 0, peer pressure at 3.</strong> This is the stampede: with no momentum to resist, every particle dives straight at the first decent global best, the spread chart crashes within a few dozen iterations, and the swarm becomes one throbbing dot.</p>
-
- <p>On the bowl this looks like efficiency, but switch to the egg carton and watch the same setting get eaten: the swarm piles into whichever dimple it saw first, the true optimum sits two ridges away, and nobody has enough independence left to go and look. Premature convergence.</p>
-
- <p><strong>Set own memory (c1) to zero.</strong> Pure conformism: particles have no attachment to their own discoveries, and the global best is the only guidance. </p>
-
- <p><strong>Set peer pressure (c2) to zero.</strong> Now nobody shares anything, and you get thirty hermits running thirty independent local searches, each rattling around its own personal best and improving it a little. </p>
-
- <h2>Now stop breaking it</h2>
-
- <p><strong>Then go back to the classic setting</strong> (w = 0.72, c1 = c2 = 1.5, numbers the field converged on after years of tuning) and watch the dance it buys you: overshoot, return, contract, with just enough disagreement to keep a few scouts out wide while the core closes in. On the egg carton it will still fail sometimes. The demo isn't broken, that just shows that it's not perfect, and there are still papers being published solving more complex landscapes with PSO.</p>
-
- <h2>Personality knobs</h2>
-
- <p>Kennedy never stopped pointing out that this is a model of social learning first and an optimiser second: individuals keep private experience, the group broadcasts its best result, and behaviour is a compromise between habit, self-trust and conformism.</p>
-
- <p>Every failure mode you just created is a recognisable social failure. The high-conformism swarm is an echo chamber stampeding to its first confident answer. The zero-gossip swarm is a room full of talented people who never talk. The overheated swarm is a committee that keeps relitigating and never makes an actual decision (sounds like many meetings I've been in).</p>
-
- <h2>Annealing, evolution, ants, particles</h2>
-
- <p>The through-line of the series: <a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">Simulated annealing</a> was one searcher learning when to accept a worse answer. <a href="https://www.kenreid.co.uk/blog/evolution-live.html">Genetic algorithms</a> were a population improving by dying, the ants stored the answer in the world, and the particles store it in each other. Four strategies, one shared problem: explore enough to find the right valley, exploit enough to reach the bottom of it. See some interesting overlaps in strategy, parameters, landscape advantages and disadvantages?</p>
-
- <p>Anyway. Go scoop up the swarm, drop it in a corner of the egg carton, and watch thirty dots argue their way out. Or fail to. </p>
-
- <div class="faq-section">
- <h2>Common questions</h2>
-
- <details class="faq-item">
- <summary>Is this actually how birds flock?</summary>
- <p>No. Real flocking is much closer to the boids rules Kennedy and Eberhart started from (local alignment, cohesion, separation among a handful of nearest neighbours), and modern starling studies suggest birds track a fixed number of neighbours rather than everyone in range. </p>
- </details>
-
- <details class="faq-item">
- <summary>How is this different from a genetic algorithm?</summary>
- <p>Both are population-based and gradient-free, but the mechanics are almost disjoint. In a genetic algorithm, individuals are born, breed and die: information moves between solutions by crossover, and progress comes from selection pressure. In PSO nobody dies and nobody breeds. The same thirty particles persist the whole run, and information moves through shared memory instead of inheritance. In practice PSO tends to converge faster on smooth continuous problems, while evolutionary methods are easier to adapt to weird, structured or combinatorial ones.</p>
- </details>
-
- <details class="faq-item">
- <summary>Does anyone still use PSO?</summary>
- <p>Yes, heavily, especially in engineering: antenna design, power systems, controller tuning, and any setting where evaluations are expensive, gradients are unavailable, and a decent answer soon beats a perfect answer never.</p>
- </details>
- </div>
-
- <h2 class="section-heading" id="references">References</h2>
-
- <ol class="references">
-          <li id="ref-1">
-            Kennedy, J., &amp; Eberhart, R. (1995). Particle swarm optimization. <em>Proceedings of ICNN'95 - International Conference on Neural Networks</em>, 4, 1942&ndash;1948. <a href="https://doi.org/10.1109/ICNN.1995.488968" target="_blank" rel="noopener">https://doi.org/10.1109/ICNN.1995.488968</a>
-          </li>
-          <li id="ref-2">
-            Shi, Y., &amp; Eberhart, R. (1998). A modified particle swarm optimizer. <em>1998 IEEE International Conference on Evolutionary Computation Proceedings, IEEE World Congress on Computational Intelligence</em>, 69&ndash;73. <a href="https://doi.org/10.1109/ICEC.1998.699146" target="_blank" rel="noopener">https://doi.org/10.1109/ICEC.1998.699146</a>
-          </li>
-        </ol>
 
         
 
