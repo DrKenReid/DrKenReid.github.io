@@ -3,18 +3,18 @@
 <head>
  <meta charset="UTF-8">
  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
- <meta name="description" content="An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and break it with the sliders.">
+ <meta name="description" content="An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and see what evaporation is really for.">
  <meta name="keywords" content="ai">
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
  <title>Ant Colony, Live - Ken Reid</title>
  <meta property="og:title" content="Ant Colony, Live">
- <meta property="og:description" content="An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and break it with the sliders.">
+ <meta property="og:description" content="An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and see what evaporation is really for.">
  <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/290.png">
  <meta property="og:url" content="https://www.kenreid.co.uk/blog/ant-colony-live.html">
  <meta property="og:type" content="article">
  <meta name="twitter:card" content="summary_large_image">
  <meta name="twitter:title" content="Ant Colony, Live">
- <meta name="twitter:description" content="An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and break it with the sliders.">
+ <meta name="twitter:description" content="An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and see what evaporation is really for.">
  <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/290.png">
  <meta name="citation_title" content="Ant Colony, Live">
  <meta name="citation_author" content="Reid, Kenneth N.">
@@ -38,7 +38,7 @@
  "@context": "https://schema.org",
  "@type": "BlogPosting",
  "headline": "Ant Colony, Live",
- "description": "An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and break it with the sliders.",
+ "description": "An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and see what evaporation is really for.",
  "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/290.png",
  "author": {
  "@type": "Person",
@@ -213,7 +213,7 @@
    <p class="aco-note"><strong>Drag anywhere on the map</strong> to move the food to the nearest node and watch the colony re-route. Pheromone (the amber glow) is the shared memory; the green line is the route the colony currently agrees on. Route numbers are multiples of the shortest possible path, so 1.00&times; is perfect; pheromone focus is how much of the smell sits on a few trails, and it climbs as the colony commits. <em>Double bridge</em> is the classic lab experiment (two routes, one shorter); <em>City grid</em> offers many equally good routes, so watch the colony break the tie and commit to one anyway; in the <em>Maze</em>, watch evaporation erase the trails that lead into dead ends; and in the <em>Spider web</em>, the colony discovers that the fast way around is through the middle.</p>
  </div>
 
- <h2>Break it with the sliders</h2>
+ <h2>A colony that can't forget</h2>
 
  <p><strong>Turn evaporation off.</strong> The colony commits, hard and early, to whatever route happened to get the first head start, and then it's stuck there forever even when a shorter path is sitting right next to it. This is premature convergence. A colony that can't forget can't improve.</p>
 

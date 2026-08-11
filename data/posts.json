@@ -64,7 +64,7 @@
     "words": 5964
   },
   {
-    "title": "Evolution, Live: Genetic Algorithms",
+    "title": "Evolution, Live",
     "date": "2026-08-04",
     "tags": [
       "ai"
@@ -78,7 +78,7 @@
       "part": 2
     },
     "readMinutes": 17,
-    "words": 3529
+    "words": 3527
   },
   {
     "title": "The Invisible Half of a Blog Post",
@@ -172,7 +172,7 @@
       "data science"
     ],
     "category": "Data & AI",
-    "excerpt": "An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and break it with the sliders.",
+    "excerpt": "An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and see what evaporation is really for.",
     "url": "blog/ant-colony-live.html",
     "image": "img/photography/thumb/290.webp",
     "series": {

@@ -70,7 +70,7 @@
 
  
 
- <h2>Break it with the sliders</h2>
+ <h2>Turning the swarm into a stampede</h2>
 
  <p><strong>Crank inertia past 1.</strong> Above w = 1 a particle's velocity grows every step instead of decaying, so the only thing stopping the swarm from leaving the map is the speed clamp. The swarm boils, with particles orbiting the best-known point at full speed, permanently overshooting, while the spread chart flatlines high and the fitness chart stalls on momentum.</p>
 
@@ -82,7 +82,7 @@
 
  <p><strong>Set peer pressure (c2) to zero.</strong> Now nobody shares anything, and you get thirty hermits running thirty independent local searches, each rattling around its own personal best and improving it a little. </p>
 
- <h2>Now stop breaking it</h2>
+ <h2>Now tune it back</h2>
 
  <p><strong>Then go back to the classic setting</strong> (w = 0.72, c1 = c2 = 1.5, numbers the field converged on after years of tuning) and watch the dance it buys you: overshoot, return, contract, with just enough disagreement to keep a few scouts out wide while the core closes in. On the egg carton it will still fail sometimes. The demo isn't broken, that just shows that it's not perfect, and there are still papers being published solving more complex landscapes with PSO.</p>
 
@@ -1676,14 +1676,14 @@ frame.contentWindow.postMessage(
  ]]></content:encoded>
     </item>
     <item>
-      <title>Evolution, Live: Genetic Algorithms</title>
+      <title>Evolution, Live</title>
       <link>https://www.kenreid.co.uk/blog/evolution-live.html</link>
       <guid>https://www.kenreid.co.uk/blog/evolution-live.html</guid>
       <pubDate>Tue, 04 Aug 2026 00:00:00 +0000</pubDate>
       <description>A genetic algorithm evolving a solution live in your browser: populations, crossover, mutation, and selection as sliders you can break. Fifty translucent triangles evolve the alphabet, and you supply the selection pressure.</description>
       <category>ai</category>
       <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/evolution-live.html">View it on the site</a> to play with it.</em></p>
- <h1>Evolution, Live: Genetic Algorithms</h1>
+ <h1>Evolution, Live</h1>
  <div class="blog-meta">
  4 August 2026 &middot;
  <span class="blog-tag">ai</span>
@@ -1726,7 +1726,7 @@ frame.contentWindow.postMessage(
 
  
 
- <h2>Break it on purpose</h2>
+ <h2>Three ways to stall evolution</h2>
 
  <p>Three experiments to try:</p>
 
@@ -3294,7 +3294,7 @@ return [post for _score, _date, post in ranked[:3]]</code></pre>
       <link>https://www.kenreid.co.uk/blog/ant-colony-live.html</link>
       <guid>https://www.kenreid.co.uk/blog/ant-colony-live.html</guid>
       <pubDate>Sun, 19 Jul 2026 00:00:00 +0000</pubDate>
-      <description>An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and break it with the sliders.</description>
+      <description>An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and see what evaporation is really for.</description>
       <category>ai</category>
       <category>data science</category>
       <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">View it on the site</a> to play with it.</em></p>
@@ -3334,7 +3334,7 @@ return [post for _score, _date, post in ranked[:3]]</code></pre>
 
  
 
- <h2>Break it with the sliders</h2>
+ <h2>A colony that can't forget</h2>
 
  <p><strong>Turn evaporation off.</strong> The colony commits, hard and early, to whatever route happened to get the first head start, and then it's stuck there forever even when a shorter path is sitting right next to it. This is premature convergence. A colony that can't forget can't improve.</p>
 

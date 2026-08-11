@@ -229,7 +229,7 @@
    <p class="pso-note"><strong>Drag anywhere on the map</strong> to scoop the swarm up and drop it there; personal and global bests reset, so the hunt starts over from wherever you left them. The blue dots are particles (with short motion trails), the faint dots are their personal bests, the green ring is the global best (the one piece of gossip everybody shares), and the dashed ring is the true optimum. <em>Shifted bowl</em> is the warm-up; the <em>Banana valley</em> hides its optimum along a curved ridge that the swarm must creep along; the <em>Egg carton</em> is riddled with local minima that swallow overconfident swarms; and the <em>Funnel</em> is nearly flat everywhere except one deep spike, so gossip about the spike is the only useful signal there is.</p>
  </div>
 
- <h2>Break it with the sliders</h2>
+ <h2>Turning the swarm into a stampede</h2>
 
  <p><strong>Crank inertia past 1.</strong> Above w = 1 a particle's velocity grows every step instead of decaying, so the only thing stopping the swarm from leaving the map is the speed clamp. The swarm boils, with particles orbiting the best-known point at full speed, permanently overshooting, while the spread chart flatlines high and the fitness chart stalls on momentum.</p>
 
@@ -241,7 +241,7 @@
 
  <p><strong>Set peer pressure (c2) to zero.</strong> Now nobody shares anything, and you get thirty hermits running thirty independent local searches, each rattling around its own personal best and improving it a little. </p>
 
- <h2>Now stop breaking it</h2>
+ <h2>Now tune it back</h2>
 
  <p><strong>Then go back to the classic setting</strong> (w = 0.72, c1 = c2 = 1.5, numbers the field converged on after years of tuning) and watch the dance it buys you: overshoot, return, contract, with just enough disagreement to keep a few scouts out wide while the core closes in. On the egg carton it will still fail sometimes. The demo isn't broken, that just shows that it's not perfect, and there are still papers being published solving more complex landscapes with PSO.</p>
 
@@ -296,7 +296,7 @@
                 <div class="blog-card-body">
                   <div class="blog-card-date">19 July 2026 · 6 min read</div>
                   <h3 class="blog-card-title">Ant Colony, Live</h3>
-                  <p class="blog-card-excerpt">An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and break it with the sliders.</p>
+                  <p class="blog-card-excerpt">An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and see what evaporation is really for.</p>
                   <div class="blog-card-tags"><span class="blog-tag">ai</span><span class="blog-tag">data science</span></div>
                 </div>
               </a>
