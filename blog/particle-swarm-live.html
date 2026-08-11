@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="An interactive particle swarm optimiser in your browser">
+ <meta name="keywords" content="ai">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Particle Swarm, Live - Ken Reid</title>
+ <meta property="og:title" content="Particle Swarm, Live">
+ <meta property="og:description" content="An interactive particle swarm optimiser in your browser">
+ <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/186.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/particle-swarm-live.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Particle Swarm, Live">
+ <meta name="twitter:description" content="An interactive particle swarm optimiser in your browser">
+ <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/186.png">
+ <meta name="citation_title" content="Particle Swarm, Live">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/08/07">
+ <meta name="citation_online_date" content="2026/08/07">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/particle-swarm-live.html">
+ <meta name="DC.title" content="Particle Swarm, Live">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-08-07">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="../img/photography/hero/186.webp">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "Particle Swarm, Live",
+ "description": "An interactive particle swarm optimiser in your browser",
+ "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/186.png",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-08-07",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["particle swarm optimization", "swarm intelligence", "bird flocking", "interactive", "optimization"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "Particle Swarm, Live",
+       "item": "https://www.kenreid.co.uk/blog/particle-swarm-live.html"
+     }
+   ]
+ }
+ </script>
+ <style>
+   /* Scoped tokens for the PSO widget. Light values here, dark overrides below.
+      Series: s1 = particles, s2 = global best, s3 = accent, s4 = warnings/hot.
+      h0..h2 are the landscape heat ramp (h0 = high ground, h2 = the valley floor). */
+   .pso-viz{
+     --viz-s1:#2a78d6; --viz-s2:#1baf7a; --viz-s3:#eda100; --viz-s4:#d64550;
+     --viz-h0:#f0ede3; --viz-h1:#f2cf92; --viz-h2:#cd6b3a;
+     --viz-ink:#2b2b2b; --viz-muted:#666666; --viz-grid:#e1e0d9; --viz-surface:#ffffff;
+     --viz-border:rgba(0,0,0,0.12); --viz-cell:rgba(0,0,0,0.03);
+     background:var(--viz-surface); border:1px solid var(--viz-border); border-radius:10px;
+     padding:16px; margin:26px 0;
+   }
+   [data-theme="dark"] .pso-viz{
+     --viz-s1:#4a97ef; --viz-s2:#22c68b; --viz-s3:#f0b429; --viz-s4:#e5687a;
+     --viz-h0:#1c1c1c; --viz-h1:#463712; --viz-h2:#a75d28;
+     --viz-ink:#e8e8e8; --viz-muted:#9e9e9e; --viz-grid:#2c2c2a; --viz-surface:#1f1f1f;
+     --viz-border:rgba(255,255,255,0.12); --viz-cell:rgba(255,255,255,0.05);
+   }
+   .pso-viz canvas{ width:100%; display:block; border-radius:6px; touch-action:none; cursor:grab; }
+   .pso-viz canvas:active{ cursor:grabbing; }
+   .pso-viz canvas.pso-chart{ margin-top:14px; touch-action:auto; cursor:default; }
+   .pso-toolbar{ display:flex; flex-wrap:wrap; gap:8px 10px; align-items:center; margin-top:14px; font-size:0.85em; color:var(--viz-ink); }
+   .pso-toolbar label{ display:flex; align-items:center; gap:7px; margin:0 0 0 8px; font-weight:600; }
+   .pso-toolbar select{ background:var(--viz-surface); color:var(--viz-ink); border:1px solid var(--viz-border); border-radius:6px; padding:5px 8px; font-family:inherit; font-size:1em; font-weight:400; cursor:pointer; }
+   .pso-btn{ background:var(--viz-s3); color:#1a1a1a; border:none; border-radius:6px; padding:6px 16px; font-size:0.9em; cursor:pointer; font-family:inherit; }
+   .pso-btn.secondary{ background:transparent; color:var(--viz-ink); border:1px solid var(--viz-border); }
+   #psoRun{ min-width:76px; }
+   .pso-status{ font-size:0.85em; color:var(--viz-muted); margin-left:auto; }
+   .pso-sliders{ display:flex; flex-wrap:wrap; gap:8px 28px; margin-top:12px; font-size:0.85em; color:var(--viz-ink); }
+   .pso-sliders label{ display:flex; align-items:center; gap:8px; margin:0; font-weight:400; }
+   .pso-sliders input[type=range]{ width:110px; accent-color:var(--viz-s3); }
+   .pso-sliders .val{ min-width:2.8em; color:var(--viz-muted); font-variant-numeric:tabular-nums; }
+   .pso-stats{ display:grid; grid-template-columns:repeat(auto-fit,minmax(116px,1fr)); gap:8px; margin-top:14px; }
+   .pso-stat{ background:var(--viz-cell); border:1px solid var(--viz-border); border-radius:8px; padding:7px 10px; display:flex; flex-direction:column; gap:2px; min-width:0; }
+   .pso-stat-lbl{ font-size:0.66em; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--viz-muted); white-space:nowrap; }
+   .pso-stat-val{ font-size:0.95em; font-weight:600; color:var(--viz-ink); font-variant-numeric:tabular-nums; }
+   .pso-swatch{ width:9px; height:9px; border-radius:2px; display:inline-block; vertical-align:-1px; margin-right:4px; }
+   .pso-note{ font-size:0.78em; color:var(--viz-muted); margin:12px 0 0; }
+   @media (max-width: 520px){
+     .pso-viz{ padding:12px; }
+     .pso-sliders{ gap:10px 0; }
+     .pso-sliders label{ width:100%; }
+     .pso-sliders input[type=range]{ flex:1; width:auto; }
+   }
+ </style>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <main id="main-content">
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/186.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">Particle Swarm, Live</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">Particle Swarm, Live</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+ 
+ <div class="blog-post">
+ <h1>Particle Swarm, Live</h1>
+ <div class="blog-meta">
+ 7 August 2026 &middot;
+ <span class="blog-tag">ai</span>
+ </div>
+
+ <p>In 1995, a social psychologist and an electrical engineer sat down to animate a flock of birds and accidentally invented one of the most popular optimisers of the next two decades, which is a story I love. I really believe that error is one of the most fruitful forms of novelty creation. Below, you can fly the result yourself. It's the sibling of <a href="ant-colony-live.html">the ant colony post</a>: another swarm, another crowd of simple agents solving a problem none of them can see individually, with the communication channel turned inside out.</p>
+
+ <noscript><p><strong>The interactive parts of this post require JavaScript.</strong> The prose will still make sense, but the demo will be sadly inert.</p></noscript>
+
+ <p>In Ant Colony Optimisation, the ants coordinate through the environment, and no ant knows anything whatsoever. The knowledge lived in the pheromone map, written and read by thousands of insects who are basically automatons. Particles do the opposite, and each one privately remembers the best spot it has ever stood on, while the whole swarm shares a single piece of gossip: the best spot <em>any</em> member has ever found. That's the entire communication system, and it runs without a trail, a map, or a leader, just a telepathic link of where to find the dropped ice cream or sugar granules.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Particle swarm optimisation (PSO):</strong> an optimiser inspired by bird flocking, where a population of candidate solutions ("particles") fly through the search space, each pulled toward its own best-known point and the swarm's best-known point.</li>
+ <li><strong>Personal best:</strong> the best position a single particle has ever visited. Its private memory, and one of the two forces steering it.</li>
+ <li><strong>Global best:</strong> the best position any particle in the swarm has ever visited. Shared knowledge: every particle feels its pull.</li>
+ <li><strong>Inertia:</strong> how much of its current velocity a particle keeps each step. High inertia means momentum and wide exploration; low inertia means the social pulls dominate.</li>
+ <li><strong>Velocity clamp:</strong> a cap on how fast a particle may move, stopping the update rule from flinging particles out of the search space entirely.</li>
+ <li><strong>Premature convergence:</strong> the whole swarm collapsing onto one point before the space has been properly searched, then being unable to leave. The characteristic failure of anything that shares information too enthusiastically.</li>
+ </ul>
+ </div>
+
+ <h2>The flock that forgot how to fly</h2>
+
+ <p>James Kennedy was a social psychologist and Russell Eberhart was an electrical engineer. Their 1995 paper<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> opens with birds rather than mathematics. They wanted to simulate the choreography of a flock, in the tradition of the boids models, where each simulated bird matches its neighbours' speed, avoids collisions, and stays near the roost. They started deleting rules to see which ones mattered.</p>
+
+ <p>Collision avoidance went, velocity matching went, nearest-neighbour tracking went. What survived would not fool a birdwatcher, or a pigeon, or a cat, just dots drifting toward places that had scored well. But the dots were doing something more interesting than flocking: they were finding the optimum of whatever function defined "good". The choreography fell away and the optimiser remained, and Kennedy and Eberhart named the agents <em>particles</em>, "birds" probably no longer felt right.</p>
+
+ <p>The version below includes one refinement from 1998, when Shi and Eberhart added the inertia weight<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>: a knob controlling how much of its current velocity each particle carries into the next step. </p>
+
+ <h2>Three kinds of pull</h2>
+
+ <p>Every step, each particle updates its velocity as a weighted sum of three forces, which, to me at least, feel kind of like personality traits:</p>
+
+ <ul>
+ <li><strong>Habit (w):</strong> keep doing what you were doing. The inertia weight scales the particle's current velocity.</li>
+ <li><strong>Own memory (c1):</strong> a pull back toward the best place <em>you</em> have ever found. Call it self-trust, or nostalgia.</li>
+ <li><strong>Peer pressure (c2):</strong> a pull toward the best place <em>anyone</em> has ever found. Conformism, sheep-ery.</li>
+ </ul>
+
+ <p>The two social pulls are each multiplied by a fresh random number every step, so no two particles are likely to respond the same. That randomness is what keeps the swarm from collapsing into a single deterministic trajectory.</p>
+
+ <p>The result is clamped to a maximum speed, the particle moves, the function gets evaluated at the new spot, memories get updated, and the loop repeats. That's it! </p>
+
+ <h2>Watch the swarm hunt</h2>
+
+ <p>Below, a swarm is minimising a two-dimensional landscape, where warm colours are low ground (better) and the dashed ring marks the true optimum, which the swarm does not know about. Watch the characteristic dance: particles overshoot the best-known point, get hauled back, overshoot the other way, and the whole cloud contracts around the answer like a slowing pendulum.</p>
+
+ <div class="pso-viz" id="pso-demo">
+   <canvas id="psoCanvas" height="360" role="img" aria-label="Animated particle swarm optimisation demo: particles fly over a coloured fitness landscape, pulled toward their personal bests and the swarm's global best, contracting onto the minimum"></canvas>
+   <div class="pso-toolbar">
+     <button class="pso-btn" id="psoRun" type="button">Pause</button>
+     <button class="pso-btn secondary" id="psoRestart" type="button">Restart</button>
+     <label>Landscape <select id="psoLandSel">
+       <option value="bowl" selected>Shifted bowl</option>
+       <option value="rosenbrock">Banana valley (Rosenbrock)</option>
+       <option value="rastrigin">Egg carton (Rastrigin)</option>
+       <option value="ackley">Funnel (Ackley)</option>
+     </select></label>
+     <span class="pso-status" id="psoStatus"></span>
+   </div>
+   <div class="pso-sliders">
+     <label>Inertia w <input type="range" id="psoW" min="0" max="120" value="72"> <span class="val" id="psoWVal"></span></label>
+     <label>Own memory c1 <input type="range" id="psoC1" min="0" max="300" step="5" value="150"> <span class="val" id="psoC1Val"></span></label>
+     <label>Peer pressure c2 <input type="range" id="psoC2" min="0" max="300" step="5" value="150"> <span class="val" id="psoC2Val"></span></label>
+     <label>Swarm size <input type="range" id="psoN" min="5" max="80" value="30"> <span class="val" id="psoNVal"></span></label>
+   </div>
+   <div class="pso-stats">
+     <div class="pso-stat"><span class="pso-stat-lbl">Iteration</span><span class="pso-stat-val" id="psoIter">0</span></div>
+     <div class="pso-stat"><span class="pso-stat-lbl"><span class="pso-swatch" style="background:var(--viz-s2);"></span>Best fitness</span><span class="pso-stat-val" id="psoBest">&hellip;</span></div>
+     <div class="pso-stat"><span class="pso-stat-lbl"><span class="pso-swatch" style="background:var(--viz-s1);"></span>Swarm spread</span><span class="pso-stat-val" id="psoSpread">&ndash;</span></div>
+     <div class="pso-stat"><span class="pso-stat-lbl">Mean speed</span><span class="pso-stat-val" id="psoSpeed">&ndash;</span></div>
+   </div>
+   <canvas id="psoChart" class="pso-chart" height="120" role="img" aria-label="Live charts: best fitness so far on a log scale, and swarm spread as a percentage of the landscape, both over time"></canvas>
+   <p class="pso-note"><strong>Drag anywhere on the map</strong> to scoop the swarm up and drop it there; personal and global bests reset, so the hunt starts over from wherever you left them. The blue dots are particles (with short motion trails), the faint dots are their personal bests, the green ring is the global best (the one piece of gossip everybody shares), and the dashed ring is the true optimum. <em>Shifted bowl</em> is the warm-up; the <em>Banana valley</em> hides its optimum along a curved ridge that the swarm must creep along; the <em>Egg carton</em> is riddled with local minima that swallow overconfident swarms; and the <em>Funnel</em> is nearly flat everywhere except one deep spike, so gossip about the spike is the only useful signal there is.</p>
+ </div>
+
+ <h2>Break it with the sliders</h2>
+
+ <p><strong>Crank inertia past 1.</strong> Above w = 1 a particle's velocity grows every step instead of decaying, so the only thing stopping the swarm from leaving the map is the speed clamp. The swarm boils, with particles orbiting the best-known point at full speed, permanently overshooting, while the spread chart flatlines high and the fitness chart stalls on momentum.</p>
+
+ <p><strong>Now do the opposite: inertia near 0, peer pressure at 3.</strong> This is the stampede: with no momentum to resist, every particle dives straight at the first decent global best, the spread chart crashes within a few dozen iterations, and the swarm becomes one throbbing dot.</p>
+
+ <p>On the bowl this looks like efficiency, but switch to the egg carton and watch the same setting get eaten: the swarm piles into whichever dimple it saw first, the true optimum sits two ridges away, and nobody has enough independence left to go and look. Premature convergence.</p>
+
+ <p><strong>Set own memory (c1) to zero.</strong> Pure conformism: particles have no attachment to their own discoveries, and the global best is the only guidance. </p>
+
+ <p><strong>Set peer pressure (c2) to zero.</strong> Now nobody shares anything, and you get thirty hermits running thirty independent local searches, each rattling around its own personal best and improving it a little. </p>
+
+ <h2>Now stop breaking it</h2>
+
+ <p><strong>Then go back to the classic setting</strong> (w = 0.72, c1 = c2 = 1.5, numbers the field converged on after years of tuning) and watch the dance it buys you: overshoot, return, contract, with just enough disagreement to keep a few scouts out wide while the core closes in. On the egg carton it will still fail sometimes. The demo isn't broken, that just shows that it's not perfect, and there are still papers being published solving more complex landscapes with PSO.</p>
+
+ <h2>Personality knobs</h2>
+
+ <p>Kennedy never stopped pointing out that this is a model of social learning first and an optimiser second: individuals keep private experience, the group broadcasts its best result, and behaviour is a compromise between habit, self-trust and conformism.</p>
+
+ <p>Every failure mode you just created is a recognisable social failure. The high-conformism swarm is an echo chamber stampeding to its first confident answer. The zero-gossip swarm is a room full of talented people who never talk. The overheated swarm is a committee that keeps relitigating and never makes an actual decision (sounds like many meetings I've been in).</p>
+
+ <h2>Annealing, evolution, ants, particles</h2>
+
+ <p>The through-line of the series: <a href="simulated-annealing-live.html">Simulated annealing</a> was one searcher learning when to accept a worse answer. <a href="evolution-live.html">Genetic algorithms</a> were a population improving by dying, the ants stored the answer in the world, and the particles store it in each other. Four strategies, one shared problem: explore enough to find the right valley, exploit enough to reach the bottom of it. See some interesting overlaps in strategy, parameters, landscape advantages and disadvantages?</p>
+
+ <p>Anyway. Go scoop up the swarm, drop it in a corner of the egg carton, and watch thirty dots argue their way out. Or fail to. </p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Is this actually how birds flock?</summary>
+ <p>No. Real flocking is much closer to the boids rules Kennedy and Eberhart started from (local alignment, cohesion, separation among a handful of nearest neighbours), and modern starling studies suggest birds track a fixed number of neighbours rather than everyone in range. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>How is this different from a genetic algorithm?</summary>
+ <p>Both are population-based and gradient-free, but the mechanics are almost disjoint. In a genetic algorithm, individuals are born, breed and die: information moves between solutions by crossover, and progress comes from selection pressure. In PSO nobody dies and nobody breeds. The same thirty particles persist the whole run, and information moves through shared memory instead of inheritance. In practice PSO tends to converge faster on smooth continuous problems, while evolutionary methods are easier to adapt to weird, structured or combinatorial ones.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Does anyone still use PSO?</summary>
+ <p>Yes, heavily, especially in engineering: antenna design, power systems, controller tuning, and any setting where evaluations are expensive, gradients are unavailable, and a decent answer soon beats a perfect answer never.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Kennedy, J., &amp; Eberhart, R. (1995). Particle swarm optimization. <em>Proceedings of ICNN'95 - International Conference on Neural Networks</em>, 4, 1942&ndash;1948. <a href="https://doi.org/10.1109/ICNN.1995.488968" target="_blank" rel="noopener">https://doi.org/10.1109/ICNN.1995.488968</a>
+          </li>
+          <li id="ref-2">
+            Shi, Y., &amp; Eberhart, R. (1998). A modified particle swarm optimizer. <em>1998 IEEE International Conference on Evolutionary Computation Proceedings, IEEE World Congress on Computational Intelligence</em>, 69&ndash;73. <a href="https://doi.org/10.1109/ICEC.1998.699146" target="_blank" rel="noopener">https://doi.org/10.1109/ICEC.1998.699146</a>
+          </li>
+        </ol>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="ant-colony-live.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/290.webp" alt="Ant Colony, Live" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">19 July 2026 · 6 min read</div>
+                  <h3 class="blog-card-title">Ant Colony, Live</h3>
+                  <p class="blog-card-excerpt">An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and break it with the sliders.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span><span class="blog-tag">data science</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="evolutionary-computation-identity-crisis.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/208.webp" alt="Evolutionary Computation's Identity Crisis in the Age of GenAI" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">18 April 2026 · 11 min read</div>
+                  <h3 class="blog-card-title">Evolutionary Computation's Identity Crisis in the Age of GenAI</h3>
+                  <p class="blog-card-excerpt">Evolutionary Computation is having an identity crisis in the GenAI era, despite delivering major real-world wins in engineering, logistics, and constrained optimization.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="simulated-annealing-live.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/69.webp" alt="Simulated Annealing, Live" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">5 August 2026 · 28 min read</div>
+                  <h3 class="blog-card-title">Simulated Annealing, Live</h3>
+                  <p class="blog-card-excerpt">An interactive introduction to simulated annealing: watch a ball escape local minima as you control the temperature, then race four algorithms live on the Travelling Salesman Problem in your browser.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ </div>
+ </div>
+ </div>
+
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+
+ <script>
+ /* ============================================================
+    Particle Swarm, Live: the interactive demo for this post.
+    No dependencies. Renders to <canvas>, reads its colours from the CSS
+    custom properties on .pso-viz, so the site's light/dark toggle restyles
+    it live. Global-best PSO with inertia weight, minimising 2D landscapes;
+    velocity updates happen on a steady tick, positions integrate per frame.
+    ============================================================ */
+ (function () {
+   'use strict';
+   var wrap = document.getElementById('pso-demo');
+   if (!wrap) return;
+   var cv = document.getElementById('psoCanvas');
+   var chart = document.getElementById('psoChart');
+
+   function mulberry32(seed) {
+     var a = seed >>> 0;
+     return function () {
+       a |= 0; a = (a + 0x6D2B79F5) | 0;
+       var t = Math.imul(a ^ (a >>> 15), 1 | a);
+       t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+     };
+   }
+   function vizColors(el) {
+     var cs = getComputedStyle(el);
+     function v(n) { return cs.getPropertyValue(n).trim(); }
+     return { s1: v('--viz-s1'), s2: v('--viz-s2'), s3: v('--viz-s3'), s4: v('--viz-s4'),
+              h0: v('--viz-h0'), h1: v('--viz-h1'), h2: v('--viz-h2'),
+              ink: v('--viz-ink'), muted: v('--viz-muted'), grid: v('--viz-grid'), surface: v('--viz-surface') };
+   }
+
+   var W = 0, H = 0, ctx = null, WC = 0, HC = 0, ctxC = null;
+   function fitOne(canvas, h) {
+     var dpr = window.devicePixelRatio || 1;
+     var w = canvas.clientWidth || 600;
+     canvas.style.height = h + 'px';
+     canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+     var g = canvas.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+     return { g: g, w: w, h: h };
+   }
+   function fitCanvas() {
+     // heights track the width: a squat wide map on desktop, closer to square
+     // on phones; the chart panes sit side by side when there's room and stack
+     // (with more height) when there isn't
+     var w = cv.clientWidth || 600;
+     var mapH = Math.round(Math.max(250, Math.min(360, w * 0.58)));
+     var m = fitOne(cv, mapH); ctx = m.g; W = m.w; H = m.h;
+     var c = fitOne(chart, w < 480 ? 230 : 120); ctxC = c.g; WC = c.w; HC = c.h;
+   }
+
+   // ---- landscapes ----
+   // dom = [xmin, xmax, ymin, ymax]; every optimum has fitness 0
+   var TAU = Math.PI * 2;
+   var LANDSCAPES = {
+     bowl: {
+       dom: [-5, 5, -5, 5], opt: [1.6, -2.3],
+       f: function (x, y) { var dx = x - 1.6, dy = y + 2.3; return dx * dx + dy * dy; }
+     },
+     rosenbrock: {
+       dom: [-2, 2, -1, 3], opt: [1, 1],
+       f: function (x, y) { var a = 1 - x, b = y - x * x; return a * a + 100 * b * b; }
+     },
+     rastrigin: {
+       dom: [-5.12, 5.12, -5.12, 5.12], opt: [0, 0],
+       f: function (x, y) { return 20 + x * x - 10 * Math.cos(TAU * x) + y * y - 10 * Math.cos(TAU * y); }
+     },
+     ackley: {
+       dom: [-5, 5, -5, 5], opt: [0, 0],
+       f: function (x, y) {
+         return -20 * Math.exp(-0.2 * Math.sqrt(0.5 * (x * x + y * y)))
+                - Math.exp(0.5 * (Math.cos(TAU * x) + Math.cos(TAU * y))) + 20 + Math.E;
+       }
+     }
+   };
+
+   // ---- tunables ----
+   var TICK = 0.125;        // seconds per PSO iteration (positions glide between)
+   var VMAX_FRAC = 0.12;    // velocity clamp, as a fraction of each axis span per tick
+   var TRAIL_LEN = 9;       // frames of motion trail per particle
+   var MAX_SAMPLES = 240, FLOOR = 1e-9;
+
+   // ---- state ----
+   var seed = 20260807, rng = mulberry32(seed);
+   var land = LANDSCAPES.bowl;
+   var parts = [];          // {x,y,vx,vy,px,py,pf,hist:[]}
+   var gx = 0, gy = 0, gf = Infinity;
+   var iter = 0, samples = [];
+   var running = true, raf = null, lastT = 0, tickAcc = 0, dragging = false;
+   var spreadNow = 0, speedNow = 0;
+
+   // heatmap cache: offscreen canvas rebuilt when landscape, size, or theme changes
+   var heatCv = document.createElement('canvas'), heatKey = '';
+
+   // control refs
+   var runBtn = document.getElementById('psoRun');
+   var restartBtn = document.getElementById('psoRestart');
+   var landSel = document.getElementById('psoLandSel');
+   var wS = document.getElementById('psoW'), wV = document.getElementById('psoWVal');
+   var c1S = document.getElementById('psoC1'), c1V = document.getElementById('psoC1Val');
+   var c2S = document.getElementById('psoC2'), c2V = document.getElementById('psoC2Val');
+   var nS = document.getElementById('psoN'), nV = document.getElementById('psoNVal');
+   var statusEl = document.getElementById('psoStatus');
+   var iterEl = document.getElementById('psoIter'), bestEl = document.getElementById('psoBest');
+   var spreadEl = document.getElementById('psoSpread'), speedEl = document.getElementById('psoSpeed');
+
+   function params() {
+     return {
+       w: parseInt(wS.value, 10) / 100,
+       c1: parseInt(c1S.value, 10) / 100,
+       c2: parseInt(c2S.value, 10) / 100
+     };
+   }
+   function spanX() { return land.dom[1] - land.dom[0]; }
+   function spanY() { return land.dom[3] - land.dom[2]; }
+   function diag() { return Math.hypot(spanX(), spanY()); }
+   function sx(x) { return (x - land.dom[0]) / spanX() * W; }
+   function sy(y) { return (y - land.dom[2]) / spanY() * H; }
+   function gauss() {
+     var u = 1 - rng(), v = rng();
+     return Math.sqrt(-2 * Math.log(u)) * Math.cos(TAU * v);
+   }
+
+   function newParticle(x, y) {
+     var p = {
+       x: x, y: y, pf: land.f(x, y), hist: [],
+       vx: (rng() - 0.5) * 0.06 * spanX(),
+       vy: (rng() - 0.5) * 0.06 * spanY()
+     };
+     p.px = p.x; p.py = p.y;
+     if (p.pf < gf) { gf = p.pf; gx = p.x; gy = p.y; }
+     return p;
+   }
+   function initSwarm() {
+     gf = Infinity;
+     parts = [];
+     var n = parseInt(nS.value, 10);
+     for (var i = 0; i < n; i++) {
+       parts.push(newParticle(land.dom[0] + rng() * spanX(), land.dom[2] + rng() * spanY()));
+     }
+     iter = 0; samples = []; tickAcc = 0;
+     measureSwarm();
+   }
+   function scatterAt(x, y) {
+     // drop the swarm around a point; bests reset so the hunt starts over
+     gf = Infinity;
+     var n = parts.length;
+     parts = [];
+     for (var i = 0; i < n; i++) {
+       var px = Math.min(land.dom[1], Math.max(land.dom[0], x + gauss() * 0.06 * spanX()));
+       var py = Math.min(land.dom[3], Math.max(land.dom[2], y + gauss() * 0.06 * spanY()));
+       parts.push(newParticle(px, py));
+     }
+     iter = 0; samples = []; tickAcc = 0;
+     measureSwarm();
+   }
+   function resizeSwarm(n) {
+     while (parts.length > n) parts.pop();
+     // note: gbest may have belonged to a removed particle; the swarm keeps the
+     // memory of the place, which is faithful to how global-best PSO behaves
+     while (parts.length < n) {
+       parts.push(newParticle(land.dom[0] + rng() * spanX(), land.dom[2] + rng() * spanY()));
+     }
+   }
+
+   function measureSwarm() {
+     var n = parts.length, cx = 0, cy = 0, i;
+     for (i = 0; i < n; i++) { cx += parts[i].x; cy += parts[i].y; }
+     cx /= n; cy /= n;
+     var sd = 0, sv = 0;
+     for (i = 0; i < n; i++) {
+       sd += Math.hypot(parts[i].x - cx, parts[i].y - cy);
+       sv += Math.hypot(parts[i].vx, parts[i].vy);
+     }
+     spreadNow = (sd / n) / diag();
+     speedNow = (sv / n) / diag();
+   }
+
+   function tick() {
+     var p = params();
+     var vmx = VMAX_FRAC * spanX(), vmy = VMAX_FRAC * spanY();
+     for (var i = 0; i < parts.length; i++) {
+       var q = parts[i];
+       // evaluate where the particle stands now, update memories
+       var f = land.f(q.x, q.y);
+       if (f < q.pf) { q.pf = f; q.px = q.x; q.py = q.y; }
+       if (f < gf) { gf = f; gx = q.x; gy = q.y; }
+       // velocity update: habit + own memory + peer pressure, then clamp
+       q.vx = p.w * q.vx + p.c1 * rng() * (q.px - q.x) + p.c2 * rng() * (gx - q.x);
+       q.vy = p.w * q.vy + p.c1 * rng() * (q.py - q.y) + p.c2 * rng() * (gy - q.y);
+       if (q.vx > vmx) q.vx = vmx; else if (q.vx < -vmx) q.vx = -vmx;
+       if (q.vy > vmy) q.vy = vmy; else if (q.vy < -vmy) q.vy = -vmy;
+     }
+     iter++;
+     measureSwarm();
+     samples.push({ best: Math.max(gf, FLOOR), spread: spreadNow });
+     if (samples.length > MAX_SAMPLES) samples.shift();
+     updateStats();
+   }
+
+   function movePartsFrame(dt) {
+     // positions glide between ticks so one PSO step per TICK arrives smoothly
+     var k = dt / TICK;
+     for (var i = 0; i < parts.length; i++) {
+       var q = parts[i];
+       q.hist.push(q.x, q.y);
+       if (q.hist.length > TRAIL_LEN * 2) q.hist.splice(0, q.hist.length - TRAIL_LEN * 2);
+       q.x += q.vx * k; q.y += q.vy * k;
+       // reflect at the walls so runaway swarms visibly bounce instead of vanishing
+       if (q.x < land.dom[0]) { q.x = 2 * land.dom[0] - q.x; q.vx = -q.vx; }
+       else if (q.x > land.dom[1]) { q.x = 2 * land.dom[1] - q.x; q.vx = -q.vx; }
+       if (q.y < land.dom[2]) { q.y = 2 * land.dom[2] - q.y; q.vy = -q.vy; }
+       else if (q.y > land.dom[3]) { q.y = 2 * land.dom[3] - q.y; q.vy = -q.vy; }
+       if (q.x < land.dom[0]) q.x = land.dom[0]; else if (q.x > land.dom[1]) q.x = land.dom[1];
+       if (q.y < land.dom[2]) q.y = land.dom[2]; else if (q.y > land.dom[3]) q.y = land.dom[3];
+     }
+   }
+
+   function fmtFit(v) {
+     if (!isFinite(v)) return '…';
+     if (v >= 100) return v.toFixed(0);
+     if (v >= 0.01) return v.toFixed(3);
+     return v.toExponential(2);
+   }
+   function updateStats() {
+     iterEl.textContent = String(iter);
+     bestEl.textContent = fmtFit(gf);
+     spreadEl.textContent = (spreadNow * 100).toFixed(1) + '%';
+     speedEl.textContent = (speedNow * 100).toFixed(1) + '%/step';
+   }
+
+   // ---- heatmap ----
+   function hexRgb(h) {
+     h = h.replace('#', '');
+     if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+     var n = parseInt(h, 16);
+     return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+   }
+   function lerp3(a, b, c, t) {
+     // three-stop ramp: a at t=0, b at t=0.5, c at t=1
+     var lo, hi, u;
+     if (t < 0.5) { lo = a; hi = b; u = t * 2; } else { lo = b; hi = c; u = t * 2 - 1; }
+     return [
+       Math.round(lo[0] + (hi[0] - lo[0]) * u),
+       Math.round(lo[1] + (hi[1] - lo[1]) * u),
+       Math.round(lo[2] + (hi[2] - lo[2]) * u)
+     ];
+   }
+   function buildHeat(c) {
+     var key = landSel.value + '|' + W + 'x' + H + '|' + c.h0 + c.h1 + c.h2;
+     if (key === heatKey) return;
+     heatKey = key;
+     var gw = 170, gh = Math.max(2, Math.round(gw * H / W));
+     var vals = new Float64Array(gw * gh);
+     var fmin = Infinity, fmax = -Infinity, i, j;
+     for (j = 0; j < gh; j++) {
+       var y = land.dom[2] + (j + 0.5) / gh * spanY();
+       for (i = 0; i < gw; i++) {
+         var x = land.dom[0] + (i + 0.5) / gw * spanX();
+         var f = land.f(x, y);
+         vals[j * gw + i] = f;
+         if (f < fmin) fmin = f; if (f > fmax) fmax = f;
+       }
+     }
+     var scale = (fmax - fmin) / 220 + 1e-12, denom = Math.log1p((fmax - fmin) / scale);
+     var A = hexRgb(c.h0), B = hexRgb(c.h1), C = hexRgb(c.h2);
+     heatCv.width = gw; heatCv.height = gh;
+     var g = heatCv.getContext('2d');
+     var img = g.createImageData(gw, gh), d = img.data;
+     var BANDS = 13;
+     for (var k = 0; k < vals.length; k++) {
+       var t = Math.log1p((vals[k] - fmin) / scale) / denom;   // 0 at the optimum
+       t = Math.floor(t * BANDS) / (BANDS - 1);                // posterised contour bands
+       if (t > 1) t = 1;
+       var col = lerp3(A, B, C, 1 - t);                        // low ground gets the warm end
+       d[k * 4] = col[0]; d[k * 4 + 1] = col[1]; d[k * 4 + 2] = col[2]; d[k * 4 + 3] = 255;
+     }
+     g.putImageData(img, 0, 0);
+   }
+
+   // ---- drawing ----
+   function draw() {
+     var c = vizColors(wrap);
+     buildHeat(c);
+     ctx.clearRect(0, 0, W, H);
+     ctx.imageSmoothingEnabled = true;
+     ctx.drawImage(heatCv, 0, 0, W, H);
+     // true optimum: a small dashed ring, kept subtle since the swarm can't see it
+     ctx.save();
+     ctx.setLineDash([3, 3]);
+     ctx.strokeStyle = c.ink; ctx.globalAlpha = 0.55; ctx.lineWidth = 1.2;
+     ctx.beginPath(); ctx.arc(sx(land.opt[0]), sy(land.opt[1]), 6, 0, TAU); ctx.stroke();
+     ctx.restore();
+     var i, q;
+     // motion trails: a gentle alpha ramp along each particle's last few frames
+     ctx.strokeStyle = c.s1; ctx.lineWidth = 1;
+     for (i = 0; i < parts.length; i++) {
+       q = parts[i];
+       var m = q.hist.length / 2;
+       for (var h = 0; h + 1 < m; h++) {
+         ctx.globalAlpha = 0.02 + 0.14 * (h / (m - 1 || 1));
+         ctx.beginPath();
+         ctx.moveTo(sx(q.hist[h * 2]), sy(q.hist[h * 2 + 1]));
+         ctx.lineTo(sx(q.hist[h * 2 + 2]), sy(q.hist[h * 2 + 3]));
+         ctx.stroke();
+       }
+     }
+     ctx.globalAlpha = 1;
+     // personal bests: faint private memories
+     ctx.fillStyle = c.s1; ctx.globalAlpha = 0.28;
+     for (i = 0; i < parts.length; i++) {
+       q = parts[i];
+       ctx.beginPath(); ctx.arc(sx(q.px), sy(q.py), 1.6, 0, TAU); ctx.fill();
+     }
+     ctx.globalAlpha = 1;
+     // particles
+     for (i = 0; i < parts.length; i++) {
+       q = parts[i];
+       ctx.beginPath(); ctx.arc(sx(q.x), sy(q.y), 2.6, 0, TAU); ctx.fillStyle = c.s1; ctx.fill();
+     }
+     // global best: the shared gossip, one ring everybody can feel
+     if (isFinite(gf)) {
+       ctx.beginPath(); ctx.arc(sx(gx), sy(gy), 6.5, 0, TAU);
+       ctx.strokeStyle = c.s2; ctx.lineWidth = 2; ctx.stroke();
+       ctx.beginPath(); ctx.arc(sx(gx), sy(gy), 2, 0, TAU);
+       ctx.fillStyle = c.s2; ctx.fill();
+     }
+     drawChart(c);
+   }
+
+   function drawChart(c) {
+     ctxC.clearRect(0, 0, WC, HC);
+     ctxC.font = '600 9px Poppins, sans-serif';
+     ctxC.textAlign = 'left';
+     if (WC < 480) {   // stacked panes on narrow screens
+       var half = (HC - 14) / 2;
+       drawFitPane(c, 0, 0, WC, half);
+       drawSpreadPane(c, 0, half + 14, WC, half);
+     } else {
+       var gap = 20, paneW = (WC - gap) / 2;
+       drawFitPane(c, 0, 0, paneW, HC);
+       drawSpreadPane(c, paneW + gap, 0, paneW, HC);
+     }
+   }
+
+   var GUT = 34;   // left gutter inside each chart pane for axis labels
+   function drawFitPane(c, x, y, w, h) {
+     // best fitness so far, log scale (all landscapes bottom out at 0)
+     var top = y + 22, bottom = y + h - 8, plotH = bottom - top;
+     var px0 = x + GUT, right = x + w, step = (right - px0) / (MAX_SAMPLES - 1);
+     ctxC.fillStyle = c.muted;
+     ctxC.fillText('BEST FITNESS (LOG)', x, y + 9);
+     var vmin = Infinity, vmax = -Infinity, i;
+     for (i = 0; i < samples.length; i++) {
+       var b = samples[i].best;
+       if (b < vmin) vmin = b; if (b > vmax) vmax = b;
+     }
+     if (!isFinite(vmin)) { vmin = FLOOR; vmax = 1; }
+     var lo = Math.floor(Math.log10(Math.max(vmin, FLOOR)));
+     var hi = Math.ceil(Math.log10(Math.max(vmax, vmin * 10)));
+     if (hi <= lo) hi = lo + 1;
+     function yv(v) { return bottom - (Math.log10(Math.max(v, FLOOR)) - lo) / (hi - lo) * plotH; }
+     var lstep = Math.max(1, Math.ceil((hi - lo) / 4));
+     for (var gv = lo; gv <= hi; gv += lstep) {
+       var gy = yv(Math.pow(10, gv));
+       ctxC.strokeStyle = c.grid; ctxC.lineWidth = 1;
+       ctxC.beginPath(); ctxC.moveTo(px0, gy); ctxC.lineTo(right, gy); ctxC.stroke();
+       ctxC.fillStyle = c.muted; ctxC.textAlign = 'right';
+       ctxC.fillText(gv === 0 ? '1' : '1e' + gv, px0 - 5, gy + 3);
+       ctxC.textAlign = 'left';
+     }
+     if (samples.length > 1) {
+       ctxC.strokeStyle = c.s2; ctxC.lineWidth = 1.6; ctxC.lineJoin = 'round'; ctxC.beginPath();
+       for (i = 0; i < samples.length; i++) {
+         var sxp = px0 + i * step, syp = Math.min(bottom, Math.max(top, yv(samples[i].best)));
+         if (i === 0) ctxC.moveTo(sxp, syp); else ctxC.lineTo(sxp, syp);
+       }
+       ctxC.stroke();
+     }
+   }
+
+   function drawSpreadPane(c, x, y, w, h) {
+     // mean distance to the swarm centroid, as a share of the landscape diagonal
+     var top = y + 22, bottom = y + h - 8, plotH = bottom - top;
+     var px0 = x + GUT, right = x + w, step = (right - px0) / (MAX_SAMPLES - 1);
+     ctxC.fillStyle = c.muted;
+     ctxC.fillText('SWARM SPREAD', x, y + 9);
+     var vmax = 0.05, i;
+     for (i = 0; i < samples.length; i++) if (samples[i].spread > vmax) vmax = samples[i].spread;
+     vmax = Math.ceil(vmax * 20) / 20;   // snap the top of the scale to 5% steps
+     function yv(v) { return bottom - (v / vmax) * plotH; }
+     [0, 0.5, 1].forEach(function (fr) {
+       var gy = yv(fr * vmax);
+       ctxC.strokeStyle = c.grid; ctxC.lineWidth = 1;
+       ctxC.beginPath(); ctxC.moveTo(px0, gy); ctxC.lineTo(right, gy); ctxC.stroke();
+       ctxC.fillStyle = c.muted; ctxC.textAlign = 'right';
+       ctxC.fillText(Math.round(fr * vmax * 100) + '%', px0 - 5, gy + 3);
+       ctxC.textAlign = 'left';
+     });
+     if (samples.length > 1) {
+       ctxC.beginPath();
+       for (i = 0; i < samples.length; i++) {
+         var fx = px0 + i * step, fy = yv(samples[i].spread);
+         if (i === 0) ctxC.moveTo(fx, fy); else ctxC.lineTo(fx, fy);
+       }
+       ctxC.strokeStyle = c.s1; ctxC.lineWidth = 1.6; ctxC.stroke();
+       // subtle fill under the spread line
+       ctxC.lineTo(px0 + (samples.length - 1) * step, bottom);
+       ctxC.lineTo(px0, bottom);
+       ctxC.closePath();
+       ctxC.globalAlpha = 0.12; ctxC.fillStyle = c.s1; ctxC.fill(); ctxC.globalAlpha = 1;
+     }
+   }
+
+   // ---- main loop ----
+   function loop(ts) {
+     if (!running) return;
+     if (!lastT) lastT = ts;
+     var dt = Math.min(0.05, (ts - lastT) / 1000); lastT = ts;
+     tickAcc += dt;
+     while (tickAcc >= TICK) { tick(); tickAcc -= TICK; }
+     movePartsFrame(dt);
+     draw();
+     raf = requestAnimationFrame(loop);
+   }
+   function start() { if (running) { lastT = 0; raf = requestAnimationFrame(loop); } }
+
+   // ---- interaction: drag to relocate the swarm ----
+   function evtXY(ev) { var r = cv.getBoundingClientRect(); return [ev.clientX - r.left, ev.clientY - r.top]; }
+   function dropAt(cxp, cyp) {
+     var x = land.dom[0] + (cxp / W) * spanX();
+     var y = land.dom[2] + (cyp / H) * spanY();
+     x = Math.min(land.dom[1], Math.max(land.dom[0], x));
+     y = Math.min(land.dom[3], Math.max(land.dom[2], y));
+     scatterAt(x, y);
+     updateStats();
+     if (!running) draw();
+   }
+   cv.addEventListener('pointerdown', function (ev) { dragging = true; cv.setPointerCapture(ev.pointerId); var p = evtXY(ev); dropAt(p[0], p[1]); ev.preventDefault(); });
+   cv.addEventListener('pointermove', function (ev) { if (!dragging) return; var p = evtXY(ev); dropAt(p[0], p[1]); });
+   cv.addEventListener('pointerup', function () { dragging = false; });
+   cv.addEventListener('pointercancel', function () { dragging = false; });
+
+   // ---- controls ----
+   runBtn.addEventListener('click', function () {
+     running = !running; runBtn.textContent = running ? 'Pause' : 'Play';
+     statusEl.textContent = running ? '' : 'Paused.';
+     if (running) start(); else if (raf) cancelAnimationFrame(raf);
+   });
+   restartBtn.addEventListener('click', function () { seed += 7; rng = mulberry32(seed); initSwarm(); updateStats(); if (!running) draw(); });
+   landSel.addEventListener('change', function () { land = LANDSCAPES[landSel.value]; initSwarm(); updateStats(); if (!running) draw(); });
+   function setW() { wV.textContent = (parseInt(wS.value, 10) / 100).toFixed(2); }
+   function setC1() { c1V.textContent = (parseInt(c1S.value, 10) / 100).toFixed(2); }
+   function setC2() { c2V.textContent = (parseInt(c2S.value, 10) / 100).toFixed(2); }
+   function setN() { nV.textContent = nS.value; resizeSwarm(parseInt(nS.value, 10)); if (!running) draw(); }
+   wS.addEventListener('input', setW);
+   c1S.addEventListener('input', setC1);
+   c2S.addEventListener('input', setC2);
+   nS.addEventListener('input', setN);
+
+   window.addEventListener('resize', function () { fitCanvas(); if (!running) draw(); });
+   new MutationObserver(function () { draw(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+   // ---- init ----
+   fitCanvas();
+   setW(); setC1(); setC2(); nV.textContent = nS.value;
+   initSwarm();
+   updateStats();
+   draw();
+   start();
+ })();
+ </script>
+</body>
+</html>

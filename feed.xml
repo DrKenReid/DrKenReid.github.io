@@ -40,13 +40,13 @@
  <div class="fifty-tiles-wrap">
  <div class="fifty-tiles" id="fiftyTiles" aria-label="Headline statistics">
    <div class="fifty-tile"><span class="num" id="tilePosts">50</span><span class="lbl">Posts published</span></div>
-   <div class="fifty-tile"><span class="num" id="tileWords">137,985</span><span class="lbl">Words written</span></div>
-   <div class="fifty-tile"><span class="num" id="tileHours">10.9</span><span class="lbl">Hours of reading</span></div>
+   <div class="fifty-tile"><span class="num" id="tileWords">132,421</span><span class="lbl">Words written</span></div>
+   <div class="fifty-tile"><span class="num" id="tileHours">10.4</span><span class="lbl">Hours of reading</span></div>
    <div class="fifty-tile"><span class="num">135</span><span class="lbl">Drafts waiting</span></div>
  </div>
  </div>
 
- <p>One hundred and thirty-eight thousand words. That's kind of crazy. That's a decent-sized novel and a half, mostly about whatever my brain wouldn't let go of and I didn't want to bore my wife or colleagues with (or at least not more than I already had). The fourth tile is the one that I have mixed feelings about: I like having so many draft ideas, some just bullet points or a few scattered paragraphs, it makes it easier to choose a topic I feel like when I have 15 minutes to write. But it also means my drafts just grow and grow, and I already know there are about 5 blogs I wrote out, went to revise, decided I didn't like them and deleted them. So I sometimes wonder how many drafts won't make it to the end, but I suppose that just comes with the process.</p>
+ <p>One hundred and thirty-two thousand words. That's kind of crazy. That's a decent-sized novel and a half, mostly about whatever my brain wouldn't let go of and I didn't want to bore my wife or colleagues with (or at least not more than I already had). The fourth tile is the one that I have mixed feelings about: I like having so many draft ideas, some just bullet points or a few scattered paragraphs, it makes it easier to choose a topic I feel like when I have 15 minutes to write. But it also means my drafts just grow and grow, and I already know there are about 5 blogs I wrote out, went to revise, decided I didn't like them and deleted them. So I sometimes wonder how many drafts won't make it to the end, but I suppose that just comes with the process.</p>
 
  <h2>The publishing rhythm</h2>
 
@@ -82,9 +82,9 @@
 
  <h2>Fifty dots</h2>
 
- <p>Every post on this site is a dot. Time on X, word count on Y, and its main tag for the colour. The band between one and three thousand words is my default length it seems. The dot at the top is the accessibility post at 9,158 words. The one scraping the floor is a 900-word story about ending up in Italy through mistaken identity. </p>
+ <p>Every post on this site is a dot. Time on X, word count on Y, and its main tag for the colour. The band between one and three thousand words is my default length it seems. The dot at the top is the accessibility post at 9,015 words. The one scraping the floor is an 802-word story about ending up in Italy through mistaken identity. </p>
 
- <p>The first twenty-five posts have a median of 2,755 words. The second twenty-five have 1,936. I am expressing brevity over time, unintentionally. </p>
+ <p>The first twenty-five posts have a median of 2,621 words. The second twenty-five have 1,818. I am expressing brevity over time, unintentionally. </p>
 
  
 
@@ -96,7 +96,7 @@
 
  <p>These are all-time page views from analytics for the most-read posts, and lets address the Cthaeh in the room: one post about a fantasy novel that has not been published in fifteen years has collected more readers than everything else on this site combined, several times over. Yeah, one post went viral, so my stats are a bit iffy.</p>
 
- <p>I wrote it in one long sitting. The 9,153-word accessibility chapter I laboured over doesn't even crack the top five in views (reminds me of my thesis now that I think of it). There is a lesson in there about audiences, and I am choosing not to learn it, because I will just continue to write whatever I feel like regardless.</p>
+ <p>I wrote it in one long sitting. The 9,015-word accessibility chapter I laboured over doesn't even crack the top five in views (reminds me of my thesis now that I think of it). There is a lesson in there about audiences, and I am choosing not to learn it, because I will just continue to write whatever I feel like regardless.</p>
 
  
 
@@ -116,7 +116,7 @@
 
  <h2>The small print</h2>
 
- <p>Across the 118 days between the first post and the fiftieth, the blog averaged 1,169 published words per day, counting the days I wrote nothing. I think this is largely due to the fact I write some every day, or at least edit, and when I write I tend to write a lot, perhaps an entire draft, and create a couple other drafts I have for ideas for future posts at once. </p>
+ <p>Across the 118 days between the first post and the fiftieth, the blog averaged 1,122 published words per day, counting the days I wrote nothing. I think this is largely due to the fact I write some every day, or at least edit, and when I write I tend to write a lot, perhaps an entire draft, and create a couple other drafts I have for ideas for future posts at once. </p>
 
  <p>Titles run from 16 characters ("Ant Colony, Live") to the 105-character Rothfuss monument, and only two of the fifty end in question marks, so apparently I prefer telling to asking.</p>
 
@@ -127,8 +127,8 @@
      <div class="wrap-card" style="--accent:var(--viz-s4)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="wrap-num" data-count="161">161</span><span class="wrap-lbl">questions answered</span><span class="wrap-sub">in the FAQ block at the foot</span></div>
      <div class="wrap-card" style="--accent:var(--viz-c3)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><span class="wrap-num" data-count="97">97</span><span class="wrap-lbl">passages quoted</span><span class="wrap-sub">books, papers and songs</span></div>
      <div class="wrap-card" style="--accent:var(--viz-s1)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg></span><span class="wrap-num" data-count="209">209</span><span class="wrap-lbl">outbound links</span><span class="wrap-sub">the audit checks every one</span></div>
-     <div class="wrap-card wide" style="--accent:var(--viz-s2)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg></span><span class="wrap-num" data-count="2760">2,760</span><span class="wrap-lbl">words in the average post</span><span class="wrap-sub">the shortest ran 900, the longest 9,158</span></div>
-     <div class="wrap-card" style="--accent:var(--viz-s3)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span><span class="wrap-num" data-count="42">42</span><span class="wrap-lbl">minutes</span><span class="wrap-sub">the longest single read</span></div>
+     <div class="wrap-card wide" style="--accent:var(--viz-s2)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg></span><span class="wrap-num" data-count="2648">2,648</span><span class="wrap-lbl">words in the average post</span><span class="wrap-sub">the shortest ran 802, the longest 9,015</span></div>
+     <div class="wrap-card" style="--accent:var(--viz-s3)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span><span class="wrap-num" data-count="41">41</span><span class="wrap-lbl">minutes</span><span class="wrap-sub">the longest single read</span></div>
      <div class="wrap-card" style="--accent:var(--viz-s4)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg></span><span class="wrap-num" data-count="12">12</span><span class="wrap-lbl">days</span><span class="wrap-sub">my longest silence</span></div>
      <div class="wrap-card" style="--accent:var(--viz-c3)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><span class="wrap-num">Mon</span><span class="wrap-lbl">favourite publish day</span><span class="wrap-sub">written at the weekend, posted for the commute</span></div>
      <div class="wrap-card" style="--accent:var(--viz-s1)"><span class="wrap-chip"><svg class="wrap-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span><span class="wrap-num" data-count="42" data-suffix="%">42%</span><span class="wrap-lbl">belong to a series</span><span class="wrap-sub">21 of the fifty</span></div>
@@ -174,6 +174,130 @@
  <p>Being read turns thinking out loud into a conversation, and I am grateful for every one of you, from the person who has read all fifty to the twenty-eight thousand who came for Rothfuss and left.</p>
 
  <p>Thank you for reading. Here is to the next fifty!</p>
+
+        
+
+ ]]></content:encoded>
+    </item>
+    <item>
+      <title>Particle Swarm, Live</title>
+      <link>https://www.kenreid.co.uk/blog/particle-swarm-live.html</link>
+      <guid>https://www.kenreid.co.uk/blog/particle-swarm-live.html</guid>
+      <pubDate>Fri, 07 Aug 2026 00:00:00 +0000</pubDate>
+      <description>An interactive particle swarm optimiser in your browser: a flock of dots hunts a landscape none of them can see, steered by private memory and a single piece of gossip, and the sliders let you collapse the swarm on purpose.</description>
+      <category>ai</category>
+      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">View it on the site</a> to play with it.</em></p>
+ <h1>Particle Swarm, Live</h1>
+ <div class="blog-meta">
+ 7 August 2026 &middot;
+ <span class="blog-tag">ai</span>
+ </div>
+
+ <p>In 1995, a social psychologist and an electrical engineer sat down to animate a flock of birds and accidentally invented one of the most popular optimisers of the next two decades, which is a story I love. I really believe that error is one of the most fruitful forms of novelty creation. Below, you can fly the result yourself. It's the sibling of <a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">the ant colony post</a>: another swarm, another crowd of simple agents solving a problem none of them can see individually, with the communication channel turned inside out.</p>
+
+ 
+
+ <p>In Ant Colony Optimisation, the ants coordinate through the environment, and no ant knows anything whatsoever. The knowledge lived in the pheromone map, written and read by thousands of insects who are basically automatons. Particles do the opposite, and each one privately remembers the best spot it has ever stood on, while the whole swarm shares a single piece of gossip: the best spot <em>any</em> member has ever found. That's the entire communication system, and it runs without a trail, a map, or a leader, just a telepathic link of where to find the dropped ice cream or sugar granules.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Particle swarm optimisation (PSO):</strong> an optimiser inspired by bird flocking, where a population of candidate solutions ("particles") fly through the search space, each pulled toward its own best-known point and the swarm's best-known point.</li>
+ <li><strong>Personal best:</strong> the best position a single particle has ever visited. Its private memory, and one of the two forces steering it.</li>
+ <li><strong>Global best:</strong> the best position any particle in the swarm has ever visited. Shared knowledge: every particle feels its pull.</li>
+ <li><strong>Inertia:</strong> how much of its current velocity a particle keeps each step. High inertia means momentum and wide exploration; low inertia means the social pulls dominate.</li>
+ <li><strong>Velocity clamp:</strong> a cap on how fast a particle may move, stopping the update rule from flinging particles out of the search space entirely.</li>
+ <li><strong>Premature convergence:</strong> the whole swarm collapsing onto one point before the space has been properly searched, then being unable to leave. The characteristic failure of anything that shares information too enthusiastically.</li>
+ </ul>
+ </div>
+
+ <h2>The flock that forgot how to fly</h2>
+
+ <p>James Kennedy was a social psychologist and Russell Eberhart was an electrical engineer. Their 1995 paper<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> opens with birds rather than mathematics. They wanted to simulate the choreography of a flock, in the tradition of the boids models, where each simulated bird matches its neighbours' speed, avoids collisions, and stays near the roost. They started deleting rules to see which ones mattered.</p>
+
+ <p>Collision avoidance went, velocity matching went, nearest-neighbour tracking went. What survived would not fool a birdwatcher, or a pigeon, or a cat, just dots drifting toward places that had scored well. But the dots were doing something more interesting than flocking: they were finding the optimum of whatever function defined "good". The choreography fell away and the optimiser remained, and Kennedy and Eberhart named the agents <em>particles</em>, "birds" probably no longer felt right.</p>
+
+ <p>The version below includes one refinement from 1998, when Shi and Eberhart added the inertia weight<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>: a knob controlling how much of its current velocity each particle carries into the next step. </p>
+
+ <h2>Three kinds of pull</h2>
+
+ <p>Every step, each particle updates its velocity as a weighted sum of three forces, which, to me at least, feel kind of like personality traits:</p>
+
+ <ul>
+ <li><strong>Habit (w):</strong> keep doing what you were doing. The inertia weight scales the particle's current velocity.</li>
+ <li><strong>Own memory (c1):</strong> a pull back toward the best place <em>you</em> have ever found. Call it self-trust, or nostalgia.</li>
+ <li><strong>Peer pressure (c2):</strong> a pull toward the best place <em>anyone</em> has ever found. Conformism, sheep-ery.</li>
+ </ul>
+
+ <p>The two social pulls are each multiplied by a fresh random number every step, so no two particles are likely to respond the same. That randomness is what keeps the swarm from collapsing into a single deterministic trajectory.</p>
+
+ <p>The result is clamped to a maximum speed, the particle moves, the function gets evaluated at the new spot, memories get updated, and the loop repeats. That's it! </p>
+
+ <h2>Watch the swarm hunt</h2>
+
+ <p>Below, a swarm is minimising a two-dimensional landscape, where warm colours are low ground (better) and the dashed ring marks the true optimum, which the swarm does not know about. Watch the characteristic dance: particles overshoot the best-known point, get hauled back, overshoot the other way, and the whole cloud contracts around the answer like a slowing pendulum.</p>
+
+ 
+
+ <h2>Break it with the sliders</h2>
+
+ <p><strong>Crank inertia past 1.</strong> Above w = 1 a particle's velocity grows every step instead of decaying, so the only thing stopping the swarm from leaving the map is the speed clamp. The swarm boils, with particles orbiting the best-known point at full speed, permanently overshooting, while the spread chart flatlines high and the fitness chart stalls on momentum.</p>
+
+ <p><strong>Now do the opposite: inertia near 0, peer pressure at 3.</strong> This is the stampede: with no momentum to resist, every particle dives straight at the first decent global best, the spread chart crashes within a few dozen iterations, and the swarm becomes one throbbing dot.</p>
+
+ <p>On the bowl this looks like efficiency, but switch to the egg carton and watch the same setting get eaten: the swarm piles into whichever dimple it saw first, the true optimum sits two ridges away, and nobody has enough independence left to go and look. Premature convergence.</p>
+
+ <p><strong>Set own memory (c1) to zero.</strong> Pure conformism: particles have no attachment to their own discoveries, and the global best is the only guidance. </p>
+
+ <p><strong>Set peer pressure (c2) to zero.</strong> Now nobody shares anything, and you get thirty hermits running thirty independent local searches, each rattling around its own personal best and improving it a little. </p>
+
+ <h2>Now stop breaking it</h2>
+
+ <p><strong>Then go back to the classic setting</strong> (w = 0.72, c1 = c2 = 1.5, numbers the field converged on after years of tuning) and watch the dance it buys you: overshoot, return, contract, with just enough disagreement to keep a few scouts out wide while the core closes in. On the egg carton it will still fail sometimes. The demo isn't broken, that just shows that it's not perfect, and there are still papers being published solving more complex landscapes with PSO.</p>
+
+ <h2>Personality knobs</h2>
+
+ <p>Kennedy never stopped pointing out that this is a model of social learning first and an optimiser second: individuals keep private experience, the group broadcasts its best result, and behaviour is a compromise between habit, self-trust and conformism.</p>
+
+ <p>Every failure mode you just created is a recognisable social failure. The high-conformism swarm is an echo chamber stampeding to its first confident answer. The zero-gossip swarm is a room full of talented people who never talk. The overheated swarm is a committee that keeps relitigating and never makes an actual decision (sounds like many meetings I've been in).</p>
+
+ <h2>Annealing, evolution, ants, particles</h2>
+
+ <p>The through-line of the series: <a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">Simulated annealing</a> was one searcher learning when to accept a worse answer. <a href="https://www.kenreid.co.uk/blog/evolution-live.html">Genetic algorithms</a> were a population improving by dying, the ants stored the answer in the world, and the particles store it in each other. Four strategies, one shared problem: explore enough to find the right valley, exploit enough to reach the bottom of it. See some interesting overlaps in strategy, parameters, landscape advantages and disadvantages?</p>
+
+ <p>Anyway. Go scoop up the swarm, drop it in a corner of the egg carton, and watch thirty dots argue their way out. Or fail to. </p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Is this actually how birds flock?</summary>
+ <p>No. Real flocking is much closer to the boids rules Kennedy and Eberhart started from (local alignment, cohesion, separation among a handful of nearest neighbours), and modern starling studies suggest birds track a fixed number of neighbours rather than everyone in range. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>How is this different from a genetic algorithm?</summary>
+ <p>Both are population-based and gradient-free, but the mechanics are almost disjoint. In a genetic algorithm, individuals are born, breed and die: information moves between solutions by crossover, and progress comes from selection pressure. In PSO nobody dies and nobody breeds. The same thirty particles persist the whole run, and information moves through shared memory instead of inheritance. In practice PSO tends to converge faster on smooth continuous problems, while evolutionary methods are easier to adapt to weird, structured or combinatorial ones.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Does anyone still use PSO?</summary>
+ <p>Yes, heavily, especially in engineering: antenna design, power systems, controller tuning, and any setting where evaluations are expensive, gradients are unavailable, and a decent answer soon beats a perfect answer never.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Kennedy, J., &amp; Eberhart, R. (1995). Particle swarm optimization. <em>Proceedings of ICNN'95 - International Conference on Neural Networks</em>, 4, 1942&ndash;1948. <a href="https://doi.org/10.1109/ICNN.1995.488968" target="_blank" rel="noopener">https://doi.org/10.1109/ICNN.1995.488968</a>
+          </li>
+          <li id="ref-2">
+            Shi, Y., &amp; Eberhart, R. (1998). A modified particle swarm optimizer. <em>1998 IEEE International Conference on Evolutionary Computation Proceedings, IEEE World Congress on Computational Intelligence</em>, 69&ndash;73. <a href="https://doi.org/10.1109/ICEC.1998.699146" target="_blank" rel="noopener">https://doi.org/10.1109/ICEC.1998.699146</a>
+          </li>
+        </ol>
+
+        
 
  ]]></content:encoded>
     </item>
@@ -4520,204 +4644,6 @@ Notation that word processors fight you over is native here:
       <description>GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here&#x27;s the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</description>
       <category>photography</category>
       <category>technology</category>
-      <content:encoded><![CDATA[
-        <h1>Hosting a Photography Portfolio on GitHub for Free</h1>
-        <div class="blog-meta">
-          6 July 2026 &middot;
-          <span class="blog-tag">photography</span>
-        </div>
-
-        <p>My <a href="https://www.kenreid.co.uk/gallery.html">photography gallery</a> currently serves 515 full-resolution photos, about 1.5&nbsp;GB of images, to anyone who clicks on them. My monthly hosting bill for this is zero. </p>
-
-        <p>The catch is that GitHub Pages, which hosts this entire site, has a hard rule: a published site may be no larger than 1&nbsp;GB. My photo collection is bigger than my entire allowance, ignoring all the blog content, and the rest of this website. This post is about GitHub <strong>releases</strong>.</p>
-
-        <div class="plain-english-box">
-          <h2>Quick jargon guide</h2>
-          <ul>
-            <li><strong>GitHub Pages:</strong> GitHub's free static-site hosting, push HTML to a repository and it becomes a website. It's what serves the page you're reading.</li>
-            <li><strong>Repository (repo):</strong> a project folder tracked by git, holding every file and the full history of every change ever made to it.</li>
-            <li><strong>Release:</strong> a snapshot of a repository at a point in time, to which you can attach downloadable files ("release assets"), normally installers and binaries, in this post something else entirely.</li>
-            <li><strong>Git LFS:</strong> Large File Storage, GitHub's official add-on for versioning big files. Solves repo bloat by charging you money instead.</li>
-            <li><strong>Egress:</strong> cloud-billing jargon for data leaving a provider's servers, i.e. what it costs when someone downloads your photo. The line item that ends up dominating image hosting bills.</li>
-            <li><strong>Manifest:</strong> a plain list of files (here, a JSON file naming every photo) that a page reads so it knows what exists without asking a server to enumerate anything.</li>
-            <li><strong>WebP:</strong> a modern image format that compresses far smaller than JPEG or PNG at similar quality, ideal for thumbnails.</li>
-            <li><strong>CLIP:</strong> an OpenAI model that matches images against text descriptions, which makes it a free, automatic photo-tagger.</li>
-          </ul>
-        </div>
-
-        <h2>Hitting the wall</h2>
-
-        <p>When I first added my photography to this site, I exported the photos and committed them to the repository like any other asset. It worked, for a good few years. Then at some random point well past the 1GB limit, GitHub let me know, politely but firmly, that this was no longer going to fly.</p>
-
-        <p>Worse, the damage outlives the mistake. Git never forgets: even after I removed the full-size photos from the site, every committed version of every photo remains in the repository's history. My <code>.git</code> pack sits at 4.91&nbsp;GiB to this day, a monument to the months when I treated a version control system like a hard drive. (You can scrub history with tools like <code>git filter-repo</code>, but every clone, fork, and local copy has to be reconciled with the rewrite, and for a personal site it has so far been easier to live with the scar tissue.)</p>
-
-        <p>So the problem statement became: keep the site on GitHub Pages, keep the photos at full resolution, pay nothing, and stay under 1&nbsp;GB. The numbers to beat, for the curious:</p>
-
-        <ul>
-          <li><strong>1 GB</strong>, maximum size of a published GitHub Pages site (and the recommended ceiling for the repository itself).</li>
-          <li><strong>100 MB</strong>, maximum size of any single file pushed to a repository.</li>
-          <li><strong>100 GB/month</strong>, the soft bandwidth guideline for Pages sites.</li>
-          <li><strong>2 GiB</strong>, maximum size of a single <em>release asset</em>, with no documented cap on the total size of a release.</li>
-        </ul>
-
-        <h2>So: releases are a free bucket</h2>
-
-        <p>GitHub releases exist so projects can attach compiled binaries to a version tag: you tag <code>v1.0</code>, you upload the installers, users download them. But strip away the intent and a release is just an object store bolted onto your repository. Files up to 2&nbsp;GiB each, no total-size cap in the documentation, served from GitHub's download infrastructure rather than your Pages allowance, and addressable by a clean, predictable URL:</p>
-
-        <p style="overflow-x:auto;"><code>https://github.com/&lt;user&gt;/&lt;repo&gt;/releases/download/&lt;tag&gt;/&lt;filename&gt;</code></p>
-
-        <p>So my full-size photos live in a release called <code>photos-v1</code>, attached to this very website's repository. Uploading is two commands with the <a href="https://cli.github.com/" target="_blank" rel="noopener noreferrer">gh CLI</a>:</p>
-
-        <p style="overflow-x:auto;"><code>gh release create photos-v1 --title "Full-size photography" --notes "Gallery originals"</code><br>
-        <code>gh release upload photos-v1 photos/*.png</code></p>
-
-        <p>That release now holds all 515 originals, 1.55&nbsp;GB of them, which is to say: <strong>the "attachment" stapled to my repository is bigger than the entire website is allowed to be.</strong> GitHub is fine with this. Releases are a supported way to distribute a repository's files, and these are, quite literally, the files this repository's site is built around.</p>
-
-        <h2>The full pipeline</h2>
-
-        <p>The release solves storage, but you can't lazily browse a 1.5&nbsp;GB folder from a phone. The other half of the architecture is the oldest idea in web galleries: thumbnails for browsing, originals on demand. Here's the whole pipeline, which is a handful of small Python scripts I run locally when I add photos:</p>
-
-        <ol>
-          <li><strong>Normalise filenames.</strong> Every photo becomes a number: <code>417.png</code>. No <code>IMG_20250612_final_FINAL(2).jpg</code>. Numeric names make the manifest trivial and the URLs boring, and boring URLs are the ones that keep working.</li>
-          <li><strong>Generate thumbnails.</strong> Each original gets a compressed WebP thumbnail (<code>img/photography/thumb/417.webp</code>). These <em>do</em> live in the repository, 492 of them (a couple dozen originals are heroes and duplicates that never got gallery thumbnails), because collectively they're small enough to sit comfortably inside the Pages budget. This is the only image data the site itself hosts.</li>
-          <li><strong>Auto-tag with CLIP.</strong> A local script runs every photo through OpenAI's CLIP model to classify it (landscape, urban, wildlife, winter&hellip;) and writes the results to a JSON file. I wrote about this in <a href="https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html">its own post</a>; those tags drive the gallery's filter buttons, and I never manually categorise anything.</li>
-          <li><strong>Write a manifest.</strong> A JSON list of every filename in the release. The gallery page fetches this instead of asking the GitHub API, so the site works even when the API is rate-limiting.</li>
-          <li><strong>Upload the originals</strong> to the release with <code>gh release upload</code>, and commit the thumbnails plus the two JSON files.</li>
-        </ol>
-
-        <p>Since step 2 is where the actual "optimisation" happens, here it is in full, this is the entire thumbnail pipeline, and it hasn't needed to change in years:</p>
-
-<pre><code class="language-python">from pathlib import Path
-
-from PIL import Image
-from tqdm import tqdm
-
-PHOTOS = Path("img/photography")
-THUMBS = PHOTOS / "thumb"
-WIDTH = 400
-QUALITY = 80
-
-THUMBS.mkdir(exist_ok=True)
-photos = sorted(PHOTOS.glob("*.png"))
-
-before = after = 0
-for photo in tqdm(photos):
-    img = Image.open(photo).convert("RGB")
-    height = round(img.height * WIDTH / img.width)
-    thumb = img.resize((WIDTH, height), Image.LANCZOS)
-
-    out = THUMBS / (photo.stem + ".webp")
-    thumb.save(out, "WEBP", quality=QUALITY)
-
-    before += photo.stat().st_size
-    after += out.stat().st_size
-
-print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
-      f"({1 - after/before:.0%} saved)")</code></pre>
-
-        <p>Three choices doing the work. <code>LANCZOS</code> is the slowest and best-looking of Pillow's resampling filters, at thumbnail sizes the difference from the default is visible, and the extra seconds are irrelevant for a batch job. <code>convert("RGB")</code> drops the alpha channel the PNGs carry but the thumbnails don't need. And WebP at quality 80 is the sweet spot where artefacts stop being visible at 400px before the bytes stop shrinking. Net effect: a ~3&nbsp;MB PNG becomes a ~17&nbsp;KB thumbnail, and the whole gallery's browsing layer, all 492 thumbnails, weighs 8&nbsp;MB, less than three originals.</p>
-
-        <p>At view time, the gallery JavaScript loads the manifest, renders thumbnails in batches of 24 as you scroll, and each lightbox link points at the release URL for the original. The visitor's browser talks to GitHub's release servers directly; my Pages bandwidth only ever carries the thumbnails.</p>
-
-        <figure>
-          <img src="https://www.kenreid.co.uk/img/photography/thumb/387.webp" alt="Ferris wheel lit up at night in Edinburgh, Scotland" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
-          <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> This thumbnail weighs a few dozen kilobytes and comes from my repository. Click-through to the original in the gallery, and GitHub's release servers hand you the full-size file at no cost to my hosting budget.</figcaption>
-        </figure>
-
-        <h2>Why not the "proper" solutions?</h2>
-
-        <p><strong>Git LFS</strong> is GitHub's own answer to large files, and it would have been the natural choice, except the free tier is a single gigabyte of storage and a similarly small monthly bandwidth allowance, after which you're buying data packs. It solves the repository-bloat problem while replacing "free" with "subscription".</p>
-
-        <p><strong>Object storage</strong> (S3, Cloudflare R2, Backblaze B2) is a good answer and I'd use it for anything commercial. But it means an account, a bucket policy, a billing alarm, and a second system to maintain for a personal site whose entire ethos is "one repository contains everything". My gallery's originals sit next to the code that serves them, in the same repo, behind the same login, and I'm lazy in odd ways.</p>
-
-        <p><strong>Photo platforms</strong> solve a different problem, community and discovery, and charge accordingly. For raw hosting, here's the rough landscape as of mid-2026 (prices drift; check before you commit):</p>
-
-        <div style="overflow-x:auto;">
-          <table style="width:100%; border-collapse:collapse; margin:16px 0;">
-            <thead>
-              <tr style="border-bottom:2px solid #999;">
-                <th style="text-align:left; padding:8px;">Option</th>
-                <th style="text-align:left; padding:8px;">Rough cost for ~1.5 GB + modest traffic</th>
-                <th style="text-align:left; padding:8px;">Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr style="border-bottom:1px solid #99999955;">
-                <td style="padding:8px;">Flickr Pro</td>
-                <td style="padding:8px;">~$70&ndash;90/year</td>
-                <td style="padding:8px;">Unlimited storage, but your portfolio lives on their site, in their design.</td>
-              </tr>
-              <tr style="border-bottom:1px solid #99999955;">
-                <td style="padding:8px;">SmugMug</td>
-                <td style="padding:8px;">~$100+/year</td>
-                <td style="padding:8px;">Polished portfolio hosting; really good, really not free.</td>
-              </tr>
-              <tr style="border-bottom:1px solid #99999955;">
-                <td style="padding:8px;">Amazon S3 + egress</td>
-                <td style="padding:8px;">Pennies for storage, ~$0.09/GB served</td>
-                <td style="padding:8px;">The bandwidth line item is the one that surprises people.</td>
-              </tr>
-              <tr style="border-bottom:1px solid #99999955;">
-                <td style="padding:8px;">Cloudflare R2</td>
-                <td style="padding:8px;">~Free at this scale</td>
-                <td style="padding:8px;">Free egress and a generous free tier; the strongest alternative. Still a second account and billing surface.</td>
-              </tr>
-              <tr>
-                <td style="padding:8px;">GitHub release</td>
-                <td style="padding:8px;">$0</td>
-                <td style="padding:8px;">Everything in one repo. You're reading the case study.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h2>The caveats</h2>
-
-        <ul>
-          <li><strong>No contract.</strong> GitHub documents release assets as a distribution feature; they don't promise it as a CDN. If your traffic looked like abuse, they'd be within their rights to object. A personal portfolio's click-through traffic is nowhere near that territory, but a startup's image backend would be.</li>
-          <li><strong>Public means public.</strong> Release assets on a public repo are accessible to anyone with the URL. Fine for a portfolio, since a portfolio's job is to be seen; wrong for anything private.</li>
-          <li><strong>URLs are tied to the repo.</strong> Rename your account or repository and every deep link changes. Choose boring, stable names.</li>
-          <li><strong>No image processing.</strong> S3-with-a-CDN setups can resize on the fly. Here, every size you serve is a size you generated yourself. I need two: thumbnail and original.</li>
-          <li><strong>Don't commit the originals, ever.</strong> The release replaces the repo for full-size files, it doesn't supplement it. Learn from my 4.91&nbsp;GiB of permanently embarrassing git history.</li>
-        </ul>
-
-        <h2>Constraints make better sites</h2>
-
-        <p>The 1&nbsp;GB limit made the gallery <em>better</em>. Being forced to split hot data (thumbnails, manifest, tags) from cold data (originals) is just good architecture, the same shape as any cache-and-archive system. The gallery loads fast on bad connections because it physically cannot ship the heavy files up front.</p>
-
-        <p>Total infrastructure: one repository, one release, three JSON files, and a few local Python scripts. Total cost: nothing. The photos are backed up, versioned adjacent to the site that shows them, and served by one of the most reliable download infrastructures on the internet.</p>
-
-        <div class="faq-section">
-          <h2>Common questions</h2>
-
-          <details class="faq-item">
-            <summary>Is this against GitHub's terms of service?</summary>
-            <p>Releases are for distributing a repository's files, and these are the files this repository's website is built from, so I'm comfortable it's within both the letter and spirit. What the terms do prohibit is using releases as a general-purpose CDN for content unrelated to the repo, or serving traffic at a scale that disrupts the service. Host your portfolio, not your startup's user uploads.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>What happens if GitHub kills the loophole?</summary>
-            <p>Then I run one script to re-upload 515 files somewhere else (probably Cloudflare R2) and change one URL prefix in one JavaScript file. </p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Why PNG originals instead of JPEG or WebP?</summary>
-            <p>PNG is a lossless container I trust for archival, and storage is (see above) free. </p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Could I do this without the command line?</summary>
-            <p>Yes, releases can be created and files uploaded entirely through GitHub's web interface (Releases &rarr; Draft a new release &rarr; drag files in). The CLI just stops being optional somewhere around your fiftieth photo.</p>
-          </details>
-        </div>
-
-        
-
-      </main>
-
-        <hr style="margin: 40px 0;">
-        <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
-      ]]></content:encoded>
     </item>
     <item>
       <title>Why You Aren&#x27;t a &quot;Visual Learner&quot;</title>

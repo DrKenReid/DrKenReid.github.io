@@ -64,7 +64,7 @@ class BlogPostTextExtractor(HTMLParser):
             self.in_skip = None
 
     def handle_data(self, data):
-        if self.div_depth and not self.in_skip:
+        if self.div_depth and not self.in_skip and not self.skip_depth:
             self.chunks.append(data)
 
 
