@@ -67,12 +67,17 @@ function renderHeader(targetId, options) {
         '</ul></div></div></nav>' +
         '</div></div></div></header>';
 
-    if (typeof jQuery !== 'undefined' && jQuery.fn.classyNav) {
-        try {
+    // js/site.js owns the nav now; ClassyNav is only reached for on a page
+    // that somehow ships the bundle without site.js, and never in addition
+    // to it (double-initialising would bind every toggle twice).
+    try {
+        if (typeof window.krInitNav === 'function') {
+            window.krInitNav();
+        } else if (typeof jQuery !== 'undefined' && jQuery.fn.classyNav) {
             jQuery('#alimeNav').classyNav();
-        } catch (e) {
-            console.warn('Header nav init failed:', e);
         }
+    } catch (e) {
+        console.warn('Header nav init failed:', e);
     }
 
     // Three most recent posts, slotted under the "Blogs" label once
