@@ -33,7 +33,8 @@ ALLOWED_TAGS = {"data science", "personal", "photography", "books", "ai", "finan
                 "music"}
 
 # Per-post opt-in scripts that are legitimate additions to the canonical include set.
-OPTIONAL_POST_SCRIPTS = {"../js/nerd-mode.js", "../js/prism-loader.js"}
+OPTIONAL_POST_SCRIPTS = {"../js/nerd-mode.js", "../js/prism-loader.js",
+                         "../js/kr-viz.js"}   # only the interactive demo posts
 
 # Pages exempt from content/metadata checks (verification stubs etc.).
 EXEMPT_PAGES = {"google1473b6928dc28ce6.html"}

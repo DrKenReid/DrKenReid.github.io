@@ -73,6 +73,42 @@ def interactive_posts():
     return posts
 
 
+def check_converges(page, path, failures):
+    """A demo that renders but never gets anywhere still looks fine in a
+    screenshot. Widgets on the kr-viz engine expose a handle, so drive one
+    deterministically and assert it actually moved: same seed twice gives
+    the same readout, and 150 steps change something.
+
+    Posts not yet on the engine are skipped rather than failed.
+    """
+    page.set_viewport_size({"width": 1100, "height": 900})
+    page.goto(f"http://127.0.0.1:{PORT}/{path}", wait_until="domcontentloaded")
+    page.wait_for_timeout(700)
+    handles = page.evaluate(
+        "() => [...document.querySelectorAll('.kr-viz')]"
+        "        .filter(e => e.krViz).map(e => e.id)")
+    for wid in handles:
+        js = """(id) => {
+            const v = document.getElementById(id).krViz;
+            v.seed(20260807); v.stepTo(1);   const a = v.read();
+            v.stepTo(150);                   const b = v.read();
+            v.seed(20260807); v.stepTo(150); const c = v.read();
+            return {a, b, c};
+        }"""
+        try:
+            r = page.evaluate(js, wid)
+        except Exception as e:  # noqa: BLE001 - report, do not abort the suite
+            failures.append(f"{path} #{wid}: handle threw: {e}")
+            print(f"FAIL {path} :: #{wid} handle threw")
+            continue
+        moved = r["a"]["stats"] != r["b"]["stats"] or r["b"]["iteration"] > r["a"]["iteration"]
+        same = r["b"] == r["c"]
+        for ok, name in ((moved, "demo advances"), (same, "same seed, same run")):
+            print(f"{'ok  ' if ok else 'FAIL'} {path} :: #{wid} {name}")
+            if not ok:
+                failures.append(f"{path} #{wid}: {name}")
+
+
 def check_mobile(page, path, failures, console_errors):
     """Interactive demos must scale to phone width: no horizontal
     overflow, no console errors, and every visible canvas both fits the
@@ -163,6 +199,7 @@ def main():
         # Phone-width pass over every interactive (canvas) post.
         for path in interactive_posts():
             check_mobile(page, path, failures, console_errors)
+            check_converges(page, path, failures)
         browser.close()
     server.shutdown()
 

@@ -6789,3 +6789,201 @@ a.kr-series-label:focus {
     gap: 2px; }
   .story-glossary dd {
     margin-bottom: 9px; } }
+
+/* ---------------------------------------------------------------------------
+   Interactive demo chrome (Algorithms, Live and Learning, Live)
+
+   The frame, controls, stat tiles and captions shared by every canvas demo.
+   A post sets only its own series colours on the container:
+
+     <div class="kr-viz" style="--viz-s1:#2a78d6; --viz-s2:#1baf7a">
+
+   --viz-s1..s4 are the series colours; the rest are surface tokens the
+   widget's JS reads back out with getComputedStyle, so a theme flip
+   restyles the canvas as well as the HTML. See BLOG-COMPONENTS.md 19.
+   --------------------------------------------------------------------------- */
+.kr-viz {
+  --viz-s1: #2a78d6;
+  --viz-s2: #1baf7a;
+  --viz-s3: #eda100;
+  --viz-s4: #d64550;
+  --viz-ink: #2b2b2b;
+  --viz-muted: #666666;
+  --viz-grid: #e1e0d9;
+  --viz-surface: #ffffff;
+  --viz-border: rgba(0, 0, 0, 0.12);
+  --viz-cell: rgba(0, 0, 0, 0.03);
+  background: var(--viz-surface);
+  border: 1px solid var(--viz-border);
+  border-radius: 10px;
+  padding: 16px;
+  margin: 26px 0; }
+
+[data-theme="dark"] .kr-viz {
+  --viz-s1: #3987e5;
+  --viz-s2: #199e70;
+  --viz-s3: #f0b429;
+  --viz-s4: #e5687a;
+  --viz-ink: #e8e8e8;
+  --viz-muted: #9e9e9e;
+  --viz-grid: #2c2c2a;
+  --viz-surface: #1f1f1f;
+  --viz-border: rgba(255, 255, 255, 0.12);
+  --viz-cell: rgba(255, 255, 255, 0.05); }
+
+.kr-viz canvas {
+  width: 100%;
+  display: block;
+  border-radius: 6px;
+  touch-action: auto;
+  cursor: default; }
+
+/* A canvas the reader can click or tap. Scoping this to the canvas that
+   takes input means the chart canvas beneath it needs no rule undoing it;
+   a post wanting a different affordance overrides cursor alone. */
+.kr-viz canvas.kr-interactive {
+  cursor: crosshair; }
+
+/* Only a canvas that is dragged in two dimensions may swallow touch
+   gestures. On a phone these demos are full width and near square, so
+   taking touch-action from a tap-only canvas traps a reader trying to
+   scroll past it. */
+.kr-viz canvas.kr-drag {
+  touch-action: none; }
+
+.kr-viz canvas.kr-chart {
+  margin-top: 14px; }
+
+.kr-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  align-items: center;
+  margin-top: 14px;
+  font-size: 0.85em;
+  color: var(--viz-ink); }
+
+.kr-toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 0 8px;
+  font-weight: 600; }
+
+.kr-toolbar input[type=checkbox] {
+  accent-color: var(--viz-s3);
+  width: 15px;
+  height: 15px;
+  margin: 0; }
+
+.kr-toolbar select {
+  background: var(--viz-surface);
+  color: var(--viz-ink);
+  border: 1px solid var(--viz-border);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: 400;
+  cursor: pointer; }
+
+.kr-btn {
+  background: var(--viz-s3);
+  color: #1a1a1a;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-size: 0.9em;
+  cursor: pointer;
+  font-family: inherit; }
+
+.kr-btn.secondary {
+  background: transparent;
+  color: var(--viz-ink);
+  border: 1px solid var(--viz-border); }
+
+.kr-btn.kr-run {
+  min-width: 76px; }
+
+.kr-status {
+  font-size: 0.85em;
+  color: var(--viz-muted);
+  margin-left: auto; }
+
+.kr-sliders {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  margin-top: 12px;
+  font-size: 0.85em;
+  color: var(--viz-ink); }
+
+.kr-sliders label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-weight: 400; }
+
+.kr-sliders input[type=range] {
+  width: 110px;
+  accent-color: var(--viz-s3); }
+
+.kr-sliders .val {
+  min-width: 2.8em;
+  color: var(--viz-muted);
+  font-variant-numeric: tabular-nums; }
+
+.kr-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(116px, 1fr));
+  gap: 8px;
+  margin-top: 14px; }
+
+.kr-stat {
+  background: var(--viz-cell);
+  border: 1px solid var(--viz-border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0; }
+
+.kr-stat-lbl {
+  font-size: 0.66em;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--viz-muted);
+  white-space: nowrap; }
+
+.kr-stat-val {
+  font-size: 0.95em;
+  font-weight: 600;
+  color: var(--viz-ink);
+  font-variant-numeric: tabular-nums; }
+
+.kr-swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  display: inline-block;
+  vertical-align: -1px;
+  margin-right: 4px; }
+
+.kr-note {
+  font-size: 0.78em;
+  color: var(--viz-muted);
+  margin: 12px 0 0; }
+
+@media (max-width: 520px) {
+  .kr-viz {
+    padding: 12px; }
+  .kr-sliders {
+    gap: 10px 0; }
+  .kr-sliders label {
+    width: 100%; }
+  .kr-sliders input[type=range] {
+    flex: 1;
+    width: auto; } }

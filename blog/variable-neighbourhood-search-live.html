@@ -80,22 +80,11 @@
  }
  </script>
  <style>
-   /* Scoped tokens for the VNS widget. Light values here, dark overrides below.
-      Series: s1 = current tour, s2 = session best, s3 = accent (shakes, k), s4 = spare. */
-   .vns-viz{
-     --viz-s1:#2a78d6; --viz-s2:#1baf7a; --viz-s3:#eda100; --viz-s4:#d64550;
-     --viz-ink:#2b2b2b; --viz-muted:#666666; --viz-grid:#e1e0d9; --viz-surface:#ffffff;
-     --viz-border:rgba(0,0,0,0.12); --viz-cell:rgba(0,0,0,0.03);
-     background:var(--viz-surface); border:1px solid var(--viz-border); border-radius:10px;
-     padding:16px; margin:26px 0;
-   }
-   [data-theme="dark"] .vns-viz{
-     --viz-s1:#3987e5; --viz-s2:#199e70; --viz-s3:#f0b429; --viz-s4:#e5687a;
-     --viz-ink:#e8e8e8; --viz-muted:#9e9e9e; --viz-grid:#2c2c2a; --viz-surface:#1f1f1f;
-     --viz-border:rgba(255,255,255,0.12); --viz-cell:rgba(255,255,255,0.05);
-   }
-   .vns-viz canvas{ width:100%; display:block; border-radius:6px; touch-action:auto; cursor:default; }
-   .vns-viz canvas.vns-chart{ margin-top:14px; }
+   /* Widget chrome (frame, controls, tiles) comes from .kr-viz in style.css.
+      This post's series colours match the defaults there: s1 = current tour,
+      s2 = session best, s3 = accent (shakes, k). Only the neighbourhood pills
+      below are particular to VNS. */
+   .kr-toolbar label{ margin:0 0 0 4px; }
    .vns-pills{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
    .vns-pill{
      border:1px solid var(--viz-border); color:var(--viz-muted); border-radius:999px;
@@ -106,29 +95,6 @@
    .vns-pill.on{ background:var(--viz-s3); border-color:var(--viz-s3); color:#1a1a1a; }
    .vns-pill.on b{ color:#1a1a1a; }
    .vns-pill.off{ opacity:0.3; }
-   .vns-toolbar{ display:flex; flex-wrap:wrap; gap:8px 10px; align-items:center; margin-top:14px; font-size:0.85em; color:var(--viz-ink); }
-   .vns-toolbar label{ display:flex; align-items:center; gap:7px; margin:0 0 0 4px; font-weight:600; }
-   .vns-toolbar input[type=checkbox]{ accent-color:var(--viz-s3); width:15px; height:15px; margin:0; }
-   .vns-btn{ background:var(--viz-s3); color:#1a1a1a; border:none; border-radius:6px; padding:6px 16px; font-size:0.9em; cursor:pointer; font-family:inherit; }
-   .vns-btn.secondary{ background:transparent; color:var(--viz-ink); border:1px solid var(--viz-border); }
-   #vnsRun{ min-width:76px; }
-   .vns-status{ font-size:0.85em; color:var(--viz-muted); margin-left:auto; }
-   .vns-sliders{ display:flex; flex-wrap:wrap; gap:8px 28px; margin-top:12px; font-size:0.85em; color:var(--viz-ink); }
-   .vns-sliders label{ display:flex; align-items:center; gap:8px; margin:0; font-weight:400; }
-   .vns-sliders input[type=range]{ width:110px; accent-color:var(--viz-s3); }
-   .vns-sliders .val{ min-width:2.8em; color:var(--viz-muted); font-variant-numeric:tabular-nums; }
-   .vns-stats{ display:grid; grid-template-columns:repeat(auto-fit,minmax(116px,1fr)); gap:8px; margin-top:14px; }
-   .vns-stat{ background:var(--viz-cell); border:1px solid var(--viz-border); border-radius:8px; padding:7px 10px; display:flex; flex-direction:column; gap:2px; min-width:0; }
-   .vns-stat-lbl{ font-size:0.66em; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--viz-muted); white-space:nowrap; }
-   .vns-stat-val{ font-size:0.95em; font-weight:600; color:var(--viz-ink); font-variant-numeric:tabular-nums; }
-   .vns-swatch{ width:9px; height:9px; border-radius:2px; display:inline-block; vertical-align:-1px; margin-right:4px; }
-   .vns-note{ font-size:0.78em; color:var(--viz-muted); margin:12px 0 0; }
-   @media (max-width: 520px){
-     .vns-viz{ padding:12px; }
-     .vns-sliders{ gap:10px 0; }
-     .vns-sliders label{ width:100%; }
-     .vns-sliders input[type=range]{ flex:1; width:auto; }
-   }
  </style>
  <script defer src="../js/theme.js"></script>
  <script defer src="../js/palette.js"></script>
@@ -213,7 +179,7 @@
 
  <p>Below, VNS is solving a seeded random TSP instance live, and the lit badge under the map is the neighbourhood currently in use. Watch it during a rough patch. N1 lights, fails. N2 lights, fails. N3 lights, and then an escape lands, and it snaps straight back to N1. The right-hand chart records that as a sawtooth: every tooth is the search getting stuck, escalating, and being rescued. Amber flashes on the map are the edges the latest shake or improvement just changed.</p>
 
- <div class="vns-viz" id="vns-demo">
+ <div class="kr-viz" id="vns-demo">
    <canvas id="vnsCanvas" height="360" role="img" aria-label="Animated variable neighbourhood search demo: a scatter of cities joined by the current tour, with recently changed edges briefly highlighted in an accent colour as the search shakes and re-descends"></canvas>
    <div class="vns-pills" id="vnsPills" aria-label="Current neighbourhood indicator">
      <span class="vns-pill" data-k="1"><b>N1</b>2-opt</span>
@@ -221,27 +187,11 @@
      <span class="vns-pill" data-k="3"><b>N3</b>seg. exchange</span>
      <span class="vns-pill" data-k="4"><b>N4</b>double bridge</span>
    </div>
-   <div class="vns-toolbar">
-     <button class="vns-btn" id="vnsRun" type="button">Pause</button>
-     <button class="vns-btn secondary" id="vnsRestart" type="button">Restart</button>
-     <button class="vns-btn secondary" id="vnsNew" type="button">New cities</button>
-     <label><input type="checkbox" id="vnsPlain"> plain local search</label>
-     <span class="vns-status" id="vnsStatus"></span>
-   </div>
-   <div class="vns-sliders">
-     <label>Cities <input type="range" id="vnsCities" min="30" max="70" step="5" value="40"> <span class="val" id="vnsCitiesVal"></span></label>
-     <label>k max <input type="range" id="vnsKmax" min="1" max="4" value="4"> <span class="val" id="vnsKmaxVal"></span></label>
-     <label>Speed <input type="range" id="vnsSpeed" min="1" max="40" value="5"> <span class="val" id="vnsSpeedVal"></span></label>
-   </div>
-   <div class="vns-stats">
-     <div class="vns-stat"><span class="vns-stat-lbl"><span class="vns-swatch" style="background:var(--viz-s1);"></span>Tour length</span><span class="vns-stat-val" id="vnsLen">&hellip;</span></div>
-     <div class="vns-stat"><span class="vns-stat-lbl"><span class="vns-swatch" style="background:var(--viz-s2);"></span>Gap vs best</span><span class="vns-stat-val" id="vnsGap">&hellip;</span></div>
-     <div class="vns-stat"><span class="vns-stat-lbl">Shakes</span><span class="vns-stat-val" id="vnsShakes">0</span></div>
-     <div class="vns-stat"><span class="vns-stat-lbl">Current k</span><span class="vns-stat-val" id="vnsK">&ndash;</span></div>
-     <div class="vns-stat"><span class="vns-stat-lbl">Optima escaped</span><span class="vns-stat-val" id="vnsEsc">0</span></div>
-   </div>
-   <canvas id="vnsChart" class="vns-chart" height="150" role="img" aria-label="Live charts: current tour length and session best over time on the left, and a step chart of the neighbourhood index k on the right, whose sawtooth shows the search escalating through bigger moves and snapping back to k equals 1 on each escape"></canvas>
-   <p class="vns-note">Blue is the working tour, and its length is in map units. <strong>Gap vs best</strong> compares the tour on screen with the best length seen since this city layout was generated, so it spikes at every shake and closes again as the descent recovers. <strong>Optima escaped</strong> counts shakes whose re-descent actually beat the incumbent. The k chart is at 1 while life is easy, bouncing upward when it isn't. Restart re-runs the search on the same cities (the session best survives, so you can race yourself). New cities generates a fresh map.</p>
+   <div class="kr-toolbar" data-kr-toolbar></div>
+   <div class="kr-sliders" data-kr-sliders></div>
+   <div class="kr-stats" data-kr-stats></div>
+   <canvas id="vnsChart" class="kr-chart" height="150" role="img" aria-label="Live charts: current tour length and session best over time on the left, and a step chart of the neighbourhood index k on the right, whose sawtooth shows the search escalating through bigger moves and snapping back to k equals 1 on each escape"></canvas>
+   <p class="kr-note">Blue is the working tour, and its length is in map units. <strong>Gap vs best</strong> compares the tour on screen with the best length seen since this city layout was generated, so it spikes at every shake and closes again as the descent recovers. <strong>Optima escaped</strong> counts shakes whose re-descent actually beat the incumbent. The k chart is at 1 while life is easy, bouncing upward when it isn't. Restart re-runs the search on the same cities (the session best survives, so you can race yourself). New cities generates a fresh map.</p>
  </div>
 
  <h2>The Sliders</h2>
@@ -349,21 +299,23 @@
  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
 renderFooter('footer-section');</script>
 
+<script src="../js/kr-viz.js"></script>
  <script>
  /* ============================================================
-    Variable Neighbourhood Search, Live — the interactive demo.
-    No dependencies. Renders to <canvas>, reads its colours from the CSS
-    custom properties on .vns-viz so the light/dark toggle restyles it
-    live. Basic VNS on a seeded random TSP: first-improvement 2-opt
-    descent to a local optimum, then shake in neighbourhood k, descend,
-    accept on improvement (k back to 1) or escalate k up the ladder.
+    Variable Neighbourhood Search, Live: the interactive demo.
+    Chrome from js/kr-viz.js. What stays here is VNS itself:
+    first-improvement 2-opt descent to a local optimum, then a shake in
+    neighbourhood k, descend again, and climb the ladder only when the
+    descent fails to beat the incumbent.
     ============================================================ */
  (function () {
    'use strict';
    var wrap = document.getElementById('vns-demo');
    if (!wrap) return;
-   var cv = document.getElementById('vnsCanvas');
-   var chart = document.getElementById('vnsChart');
+
+   var citySeed = 20260811, MAX_FLASH = 48;
+   var pillEls = Array.prototype.slice.call(document.querySelectorAll('#vnsPills .vns-pill'));
+   var sessionBest = Infinity;      // survives Restart, so you can race yourself
 
    function mulberry32(seed) {
      var a = seed >>> 0;
@@ -374,417 +326,254 @@ renderFooter('footer-section');</script>
        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
      };
    }
-   function vizColors(el) {
-     var cs = getComputedStyle(el);
-     function v(n) { return cs.getPropertyValue(n).trim(); }
-     return { s1: v('--viz-s1'), s2: v('--viz-s2'), s3: v('--viz-s3'), s4: v('--viz-s4'),
-              ink: v('--viz-ink'), muted: v('--viz-muted'), grid: v('--viz-grid'), surface: v('--viz-surface') };
-   }
-
-   var W = 0, H = 0, ctx = null, WC = 0, HC = 0, ctxC = null;
-   function fitOne(canvas, h) {
-     var dpr = window.devicePixelRatio || 1;
-     var w = canvas.clientWidth || 600;
-     canvas.style.height = h + 'px';
-     canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
-     var g = canvas.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
-     return { g: g, w: w, h: h };
-   }
-   function fitCanvas() {
-     // height tracks width: a squat map on desktop, closer to square on
-     // phones; the chart panes sit side by side when wide, stacked when not
-     var w = cv.clientWidth || 600;
-     var mapH = Math.round(Math.max(260, Math.min(380, w * 0.62)));
-     var m = fitOne(cv, mapH); ctx = m.g; W = m.w; H = m.h;
-     var c = fitOne(chart, w < 480 ? 320 : 150); ctxC = c.g; WC = c.w; HC = c.h;
-   }
-
-   // ---- control refs ----
-   var runBtn = document.getElementById('vnsRun');
-   var restartBtn = document.getElementById('vnsRestart');
-   var newBtn = document.getElementById('vnsNew');
-   var plainT = document.getElementById('vnsPlain');
-   var citiesS = document.getElementById('vnsCities'), citiesV = document.getElementById('vnsCitiesVal');
-   var kmaxS = document.getElementById('vnsKmax'), kmaxV = document.getElementById('vnsKmaxVal');
-   var speedS = document.getElementById('vnsSpeed'), speedV = document.getElementById('vnsSpeedVal');
-   var statusEl = document.getElementById('vnsStatus');
-   var lenEl = document.getElementById('vnsLen'), gapEl = document.getElementById('vnsGap');
-   var shakesEl = document.getElementById('vnsShakes'), kEl = document.getElementById('vnsK');
-   var escEl = document.getElementById('vnsEsc');
-   var pillEls = Array.prototype.slice.call(document.querySelectorAll('#vnsPills .vns-pill'));
-
-   // ---- state ----
-   var citySeed = 20260807, searchSeed = 1;
-   var cities = [];                       // {x,y} in 0..1
-   var tour = [], curLen = 0;
-   var incumbent = null, incLen = Infinity;
-   var sessionBest = Infinity;
-   var k = 0;                             // 0 = initial descent, else 1..kmax
-   var phase = 'descent';                 // descent | shake | stuck
-   var shakes = 0, escapes = 0, moves = 0;
-   var scanI = 0, scanJ = 2, sinceImp = 0, totalPairs = 0;
-   var samples = [], MAX_SAMPLES = 300;
-   var flashes = [], FLASH_MS = 1100;     // gentle fade on changed edges
-   var srng = mulberry32(1);
-   var running = true, raf = null, lastT = 0, acc = 0;
-
-   function dist(a, b) { var dx = cities[a].x - cities[b].x, dy = cities[a].y - cities[b].y; return Math.hypot(dx, dy); }
-   function tourLenRaw(t) { var L = 0; for (var i = 0; i < t.length; i++) L += dist(t[i], t[(i + 1) % t.length]); return L; }
    function units(L) { return Math.round(L * 1000); }
-   function px(i) { return cities[i].x * W; }
-   function py(i) { return cities[i].y * H; }
-   function effKmax() { return plainT.checked ? 1 : parseInt(kmaxS.value, 10); }
+   function edgeKey(a, b) { return a < b ? a + '_' + b : b + '_' + a; }
 
-   // ---- setup ----
-   function buildCities() {
-     var n = parseInt(citiesS.value, 10);
-     var crng = mulberry32(citySeed);
-     var minD = 0.55 / Math.sqrt(n);
-     cities = [];
-     var tries = 0;
+   function buildCities(n) {
+     var crng = mulberry32(citySeed), minD = 0.55 / Math.sqrt(n);
+     var cities = [], tries = 0;
      while (cities.length < n && tries < 20000) {
        tries++;
-       var p = { x: 0.05 + crng() * 0.90, y: 0.07 + crng() * 0.86 };
+       var p = {x: 0.05 + crng() * 0.90, y: 0.07 + crng() * 0.86};
        var ok = true;
        for (var q = 0; q < cities.length; q++) {
          if (Math.hypot(p.x - cities[q].x, p.y - cities[q].y) < minD) { ok = false; break; }
        }
        if (ok) cities.push(p);
      }
+     return cities;
    }
-
-   function restartSearch() {
-     var n = cities.length;
-     srng = mulberry32(((searchSeed * 2654435761) ^ citySeed) >>> 0);
-     tour = []; for (var i = 0; i < n; i++) tour.push(i);
-     for (var j = n - 1; j > 0; j--) { var r = Math.floor(srng() * (j + 1)); var tmp = tour[j]; tour[j] = tour[r]; tour[r] = tmp; }
-     curLen = tourLenRaw(tour);
-     incumbent = null; incLen = Infinity;
-     k = 0; phase = 'descent';
-     shakes = 0; escapes = 0; moves = 0;
-     samples = []; flashes = [];
-     resetScan();
-     wrap.dataset.initialLen = units(curLen);
-     if (curLen < sessionBest) sessionBest = curLen;
-     updateStats(); updatePills();
+   function dist(st, a, b) {
+     var dx = st.cities[a].x - st.cities[b].x, dy = st.cities[a].y - st.cities[b].y;
+     return Math.hypot(dx, dy);
    }
-
-   function resetScan() {
-     var n = tour.length;
-     scanI = 0; scanJ = 2; sinceImp = 0;
-     totalPairs = ((n - 2) * (n - 1)) / 2 - 1;   // pairs (i, j>=i+2) minus the (0, n-1) wrap duplicate
+   function tourLen(st, t) {
+     var L = 0;
+     for (var i = 0; i < t.length; i++) L += dist(st, t[i], t[(i + 1) % t.length]);
+     return L;
    }
+   function resetScan(st) {
+     var n = st.tour.length;
+     st.scanI = 0; st.scanJ = 2; st.sinceImp = 0;
+     // pairs (i, j>=i+2) minus the (0, n-1) wrap duplicate
+     st.totalPairs = ((n - 2) * (n - 1)) / 2 - 1;
+   }
+   function effKmax(ctx) { return ctx.controls.plain ? 1 : ctx.controls.kmax; }
 
-   // ---- first-improvement 2-opt descent ----
-   function tryDescentMove() {
-     var n = tour.length;
-     var guard = totalPairs + 2;
-     while (guard-- > 0 && sinceImp < totalPairs) {
-       var i = scanI, j = scanJ;
-       scanJ++;
-       if (scanJ > n - 1) { scanI++; if (scanI > n - 3) scanI = 0; scanJ = scanI + 2; }
-       if (i === 0 && j === n - 1) continue;      // same-edge pair on the cycle: not a move
-       sinceImp++;
-       var a = tour[i], b = tour[i + 1], c = tour[j], d = tour[(j + 1) % n];
-       var delta = dist(a, c) + dist(b, d) - dist(a, b) - dist(c, d);
+   // first-improvement 2-opt descent
+   function tryDescentMove(st) {
+     var n = st.tour.length, guard = st.totalPairs + 2;
+     while (guard-- > 0 && st.sinceImp < st.totalPairs) {
+       var i = st.scanI, j = st.scanJ;
+       st.scanJ++;
+       if (st.scanJ > n - 1) {
+         st.scanI++;
+         if (st.scanI > n - 3) st.scanI = 0;
+         st.scanJ = st.scanI + 2;
+       }
+       if (i === 0 && j === n - 1) continue;    // same-edge pair on the cycle
+       st.sinceImp++;
+       var a = st.tour[i], b = st.tour[i + 1], c = st.tour[j], d = st.tour[(j + 1) % n];
+       var delta = dist(st, a, c) + dist(st, b, d) - dist(st, a, b) - dist(st, c, d);
        if (delta < -1e-12) {
          var lo = i + 1, hi = j;
-         while (lo < hi) { var tmp = tour[lo]; tour[lo] = tour[hi]; tour[hi] = tmp; lo++; hi--; }
-         curLen = tourLenRaw(tour);
-         addFlashes([[a, c], [b, d]]);
-         sinceImp = 0; moves++;
+         while (lo < hi) { var tmp = st.tour[lo]; st.tour[lo] = st.tour[hi]; st.tour[hi] = tmp; lo++; hi--; }
+         st.curLen = tourLen(st, st.tour);
+         addFlashes(st, [[a, c], [b, d]]);
+         st.sinceImp = 0; st.moves++;
          return true;
        }
      }
      return false;
    }
 
-   // ---- the neighbourhood ladder (shakes act on a copy of the incumbent) ----
-   function shakeTour(base, kk) {
-     var s = base.slice(), n = s.length;
-     if (kk === 1) {                              // N1: random 2-opt kick
-       var a = Math.floor(srng() * (n - 3));
-       var span = 2 + Math.floor(srng() * Math.max(2, Math.floor(n / 3)));
+   // the neighbourhood ladder; shakes act on a copy of the incumbent
+   function shakeTour(st, base, kk) {
+     var s = base.slice(), n = s.length, rng = st.srng;
+     if (kk === 1) {                            // N1: random 2-opt kick
+       var a = Math.floor(rng() * (n - 3));
+       var span = 2 + Math.floor(rng() * Math.max(2, Math.floor(n / 3)));
        var b = Math.min(n - 1, a + span);
        while (a < b) { var t1 = s[a]; s[a] = s[b]; s[b] = t1; a++; b--; }
        return s;
      }
-     if (kk === 2) {                              // N2: Or-opt, relocate a chain of 1-3
-       var m = 1 + Math.floor(srng() * 3);
-       var p = Math.floor(srng() * (n - m));
+     if (kk === 2) {                            // N2: Or-opt, relocate a chain of 1-3
+       var m = 1 + Math.floor(rng() * 3);
+       var p = Math.floor(rng() * (n - m));
        var chain = s.splice(p, m);
-       var q = Math.floor(srng() * (s.length + 1));
-       if (q === p) q = (q + 1 + Math.floor(srng() * s.length)) % (s.length + 1);
+       var q = Math.floor(rng() * (s.length + 1));
+       if (q === p) q = (q + 1 + Math.floor(rng() * s.length)) % (s.length + 1);
        Array.prototype.splice.apply(s, [q, 0].concat(chain));
        return s;
      }
-     if (kk === 3) {                              // N3: exchange two short segments (3-opt-lite)
-       var l1 = 2 + Math.floor(srng() * 3), l2 = 2 + Math.floor(srng() * 3);
-       if (n < l1 + l2 + 4) return shakeTour(base, 4);
-       var p1 = Math.floor(srng() * (n - l1 - l2 - 2));
-       var p2 = p1 + l1 + 1 + Math.floor(srng() * (n - l2 - p1 - l1));
+     if (kk === 3) {                            // N3: exchange two short segments
+       var l1 = 2 + Math.floor(rng() * 3), l2 = 2 + Math.floor(rng() * 3);
+       if (n < l1 + l2 + 4) return shakeTour(st, base, 4);
+       var p1 = Math.floor(rng() * (n - l1 - l2 - 2));
+       var p2 = p1 + l1 + 1 + Math.floor(rng() * (n - l2 - p1 - l1));
        return s.slice(0, p1).concat(
          s.slice(p2, p2 + l2), s.slice(p1 + l1, p2), s.slice(p1, p1 + l1), s.slice(p2 + l2));
      }
-     // N4: double bridge (random 4-opt)
-     var c1 = 1 + Math.floor(srng() * (n - 3));
-     var c2 = c1 + 1 + Math.floor(srng() * (n - c1 - 2));
-     var c3 = c2 + 1 + Math.floor(srng() * (n - c2 - 1));
+     var c1 = 1 + Math.floor(rng() * (n - 3));  // N4: double bridge
+     var c2 = c1 + 1 + Math.floor(rng() * (n - c1 - 2));
+     var c3 = c2 + 1 + Math.floor(rng() * (n - c2 - 1));
      return s.slice(0, c1).concat(s.slice(c2, c3), s.slice(c1, c2), s.slice(c3));
    }
-
-   function edgeKey(a, b) { return a < b ? a + '_' + b : b + '_' + a; }
-   function flashDiff(oldT, newT) {
+   function addFlashes(st, pairs) {
+     var now = performance.now();
+     for (var i = 0; i < pairs.length; i++) st.flashes.push({a: pairs[i][0], b: pairs[i][1], t0: now});
+     if (st.flashes.length > MAX_FLASH) st.flashes.splice(0, st.flashes.length - MAX_FLASH);
+   }
+   function flashDiff(st, oldT, newT) {
      var seen = {}, n = oldT.length, list = [];
      for (var i = 0; i < n; i++) seen[edgeKey(oldT[i], oldT[(i + 1) % n])] = 1;
      for (var j = 0; j < n; j++) {
        var a = newT[j], b = newT[(j + 1) % n];
        if (!seen[edgeKey(a, b)]) list.push([a, b]);
      }
-     addFlashes(list);
-   }
-   function addFlashes(pairs) {
-     var now = performance.now();
-     for (var i = 0; i < pairs.length; i++) flashes.push({ a: pairs[i][0], b: pairs[i][1], t0: now });
-     if (flashes.length > 48) flashes.splice(0, flashes.length - 48);
+     addFlashes(st, list);
    }
 
-   // ---- one VNS event: an accepted move, a verdict, or a shake ----
-   function doEvent() {
-     if (phase === 'stuck') { sample(); updateStats(); return; }
-     if (phase === 'descent') {
-       if (!tryDescentMove()) {
-         // local optimum under 2-opt: judge the basin we descended into
-         if (incumbent === null) {
-           incumbent = tour.slice(); incLen = curLen; k = 1;
-         } else if (curLen < incLen - 1e-12) {
-           incumbent = tour.slice(); incLen = curLen; escapes++; k = 1;
-         } else {
-           tour = incumbent.slice(); curLen = incLen;
-           k = k >= effKmax() ? 1 : k + 1;
+   var viz = KRViz.mount('#vns-demo', {
+     seed: 20260811,
+     canvases: {
+       map: {el: '#vnsCanvas',
+             height: function (w) { return Math.max(250, Math.min(380, w * 0.62)); }},
+       chart: {el: '#vnsChart', height: 150, mobile: {height: 320}}
+     },
+     buttons: ['run', 'restart',
+       {id: 'new', label: 'New cities', onClick: function (api) {
+         citySeed += 7919; sessionBest = Infinity; api.restart();
+       }}],
+     controls: [
+       {id: 'plain', type: 'check', label: 'plain local search'},
+       {id: 'cities', label: 'Cities', min: 30, max: 70, step: 5, value: 40, restart: true},
+       {id: 'kmax', label: 'k max', min: 1, max: 4, value: 4},
+       {id: 'speed', label: 'Speed', min: 1, max: 40, value: 5}
+     ],
+     stats: [
+       {id: 'len', label: 'Tour length', tone: 's1'},
+       {id: 'gap', label: 'Gap vs best', tone: 's2'},
+       {id: 'shakes', label: 'Shakes'},
+       {id: 'k', label: 'Current k'},
+       {id: 'esc', label: 'Optima escaped'}
+     ],
+     charts: [{
+       canvas: 'chart',
+       panes: [
+         {label: 'TOUR LENGTH',
+          series: [{key: 'len', tone: 's1', label: 'now'}, {key: 'best', tone: 's2', label: 'best'}]},
+         {label: 'NEIGHBOURHOOD k', yMin: 1, yMax: 4, step: true,
+          yTicks: ['N1', 'N2', 'N3', 'N4'], series: [{key: 'k', tone: 's3', step: true}]}
+       ]
+     }],
+
+     init: function (ctx) {
+       var cities = buildCities(ctx.controls.cities), n = cities.length;
+       // the search stream is derived from the engine's seed, so a replay of
+       // the same seed is the same search; New cities moves both
+       var st = {cities: cities,
+                 srng: mulberry32((Math.floor(ctx.rng() * 4294967296) ^ citySeed) >>> 0),
+                 tour: [], curLen: 0, incumbent: null, incLen: Infinity,
+                 k: 0, phase: 'descent', shakes: 0, escapes: 0, moves: 0, flashes: []};
+       for (var i = 0; i < n; i++) st.tour.push(i);
+       for (var j = n - 1; j > 0; j--) {
+         var r = Math.floor(st.srng() * (j + 1));
+         var tmp = st.tour[j]; st.tour[j] = st.tour[r]; st.tour[r] = tmp;
+       }
+       st.curLen = tourLen(st, st.tour);
+       if (st.curLen < sessionBest) sessionBest = st.curLen;
+       resetScan(st);
+       ctx.record({len: units(st.curLen), best: units(sessionBest), k: 1});
+       return st;
+     },
+
+     step: function (ctx) {
+       var st = ctx.state;
+       if (st.phase === 'stuck') return;
+       if (st.phase === 'descent') {
+         if (!tryDescentMove(st)) {
+           // a local optimum under 2-opt: judge the basin we descended into
+           if (st.incumbent === null) {
+             st.incumbent = st.tour.slice(); st.incLen = st.curLen; st.k = 1;
+           } else if (st.curLen < st.incLen - 1e-12) {
+             st.incumbent = st.tour.slice(); st.incLen = st.curLen; st.escapes++; st.k = 1;
+           } else {
+             st.tour = st.incumbent.slice(); st.curLen = st.incLen;
+             st.k = st.k >= effKmax(ctx) ? 1 : st.k + 1;
+           }
+           if (st.incLen < sessionBest) sessionBest = st.incLen;
+           st.phase = ctx.controls.plain ? 'stuck' : 'shake';
+           resetScan(st);
          }
-         if (incLen < sessionBest) sessionBest = incLen;
-         phase = plainT.checked ? 'stuck' : 'shake';
-         resetScan();
+         if (st.curLen < sessionBest) sessionBest = st.curLen;
+       } else if (st.phase === 'shake') {
+         var old = st.tour;
+         st.tour = shakeTour(st, st.incumbent, st.k);
+         flashDiff(st, old, st.tour);
+         st.curLen = tourLen(st, st.tour);
+         st.shakes++;
+         st.phase = 'descent';
+         resetScan(st);
        }
-       if (curLen < sessionBest) sessionBest = curLen;
-     } else if (phase === 'shake') {
-       var old = tour;
-       tour = shakeTour(incumbent, k);
-       flashDiff(old, tour);
-       curLen = tourLenRaw(tour);
-       shakes++;
-       phase = 'descent';
-       resetScan();
-     }
-     sample(); updateStats();
-   }
+       ctx.record({len: units(st.curLen),
+                   best: isFinite(sessionBest) ? units(sessionBest) : null,
+                   k: Math.max(1, st.k)});
+     },
 
-   function sample() {
-     samples.push({ len: curLen, best: isFinite(sessionBest) ? sessionBest : null, k: k });
-     if (samples.length > MAX_SAMPLES) samples.shift();
-   }
+     draw: function (ctx) {
+       var st = ctx.state, c = ctx.colors, cv = ctx.canvas.map, g = cv.g;
+       var W = cv.w, H = cv.h, n = st.tour.length, i;
+       function px(i2) { return st.cities[i2].x * W; }
+       function py(i2) { return st.cities[i2].y * H; }
 
-   // ---- readouts ----
-   function updateStats() {
-     lenEl.textContent = units(curLen);
-     wrap.dataset.curLen = units(curLen);
-     if (isFinite(sessionBest) && sessionBest > 0) {
-       var gap = Math.max(0, (curLen - sessionBest) / sessionBest * 100);
-       gapEl.textContent = gap.toFixed(1) + '%';
-     } else gapEl.textContent = '…';
-     shakesEl.textContent = String(shakes);
-     escEl.textContent = String(escapes);
-     kEl.textContent = k > 0 ? 'N' + k : '–';
-     if (phase === 'stuck') statusEl.textContent = 'Stuck: 2-opt sees nothing better.';
-     else if (phase === 'shake') statusEl.textContent = 'Local optimum. Reaching for N' + k + '…';
-     else if (k === 0) statusEl.textContent = 'First descent: untangling with 2-opt.';
-     else statusEl.textContent = 'Descending after an N' + k + ' shake.';
-     updatePills();
-   }
-   function updatePills() {
-     var km = effKmax();
-     for (var i = 0; i < pillEls.length; i++) {
-       var kk = i + 1;
-       pillEls[i].classList.toggle('on', kk === k && phase !== 'stuck');
-       pillEls[i].classList.toggle('off', kk > km);
-     }
-   }
-
-   // ---- drawing ----
-   function draw() {
-     var c = vizColors(wrap);
-     ctx.clearRect(0, 0, W, H);
-     // current tour
-     var n = tour.length;
-     if (n) {
-       ctx.strokeStyle = c.s1; ctx.lineWidth = 1.8; ctx.globalAlpha = 0.9; ctx.lineJoin = 'round';
-       ctx.beginPath(); ctx.moveTo(px(tour[0]), py(tour[0]));
-       for (var i = 1; i < n; i++) ctx.lineTo(px(tour[i]), py(tour[i]));
-       ctx.closePath(); ctx.stroke(); ctx.globalAlpha = 1;
-     }
-     // fading highlight on the edges the latest move changed
-     var now = performance.now(), keep = [];
-     for (var f = 0; f < flashes.length; f++) {
-       var fl = flashes[f], a = 1 - (now - fl.t0) / FLASH_MS;
-       if (a <= 0) continue;
-       keep.push(fl);
-       ctx.globalAlpha = 0.85 * a; ctx.strokeStyle = c.s3; ctx.lineWidth = 3.2;
-       ctx.beginPath(); ctx.moveTo(px(fl.a), py(fl.a)); ctx.lineTo(px(fl.b), py(fl.b)); ctx.stroke();
-     }
-     flashes = keep; ctx.globalAlpha = 1;
-     // cities
-     for (var v = 0; v < cities.length; v++) {
-       ctx.beginPath(); ctx.arc(px(v), py(v), 3, 0, Math.PI * 2); ctx.fillStyle = c.ink; ctx.fill();
-     }
-     drawChart(c);
-   }
-
-   function drawChart(c) {
-     ctxC.clearRect(0, 0, WC, HC);
-     ctxC.font = '600 9px Poppins, sans-serif';
-     ctxC.textAlign = 'left';
-     if (WC < 480) {          // stacked panes on narrow screens
-       var half = (HC - 16) / 2;
-       drawLenPane(c, 0, 0, WC, half);
-       drawKPane(c, 0, half + 16, WC, half);
-     } else {
-       var gap = 22, paneW = (WC - gap) / 2;
-       drawLenPane(c, 0, 0, paneW, HC);
-       drawKPane(c, paneW + gap, 0, paneW, HC);
-     }
-   }
-
-   var GUT = 34;              // left gutter inside each pane for axis labels
-   function drawLenPane(c, x, y, w, h) {
-     var top = y + 22, bottom = y + h - 8, plotH = bottom - top;
-     var px0 = x + GUT, right = x + w - 2, step = (right - px0) / (MAX_SAMPLES - 1);
-     ctxC.fillStyle = c.muted; ctxC.fillText('TOUR LENGTH', x, y + 9);
-     if (w > 220) {
-       ctxC.fillStyle = c.s1; ctxC.fillRect(right - 96, y + 4, 10, 3);
-       ctxC.fillStyle = c.muted; ctxC.fillText('now', right - 82, y + 9);
-       ctxC.fillStyle = c.s2; ctxC.fillRect(right - 50, y + 4, 10, 3);
-       ctxC.fillStyle = c.muted; ctxC.fillText('best', right - 36, y + 9);
-     }
-     if (samples.length < 2) return;
-     var lo = Infinity, hi = -Infinity;
-     for (var i = 0; i < samples.length; i++) {
-       var s = samples[i];
-       if (s.len < lo) lo = s.len; if (s.len > hi) hi = s.len;
-       if (s.best != null && s.best < lo) lo = s.best;
-     }
-     if (!isFinite(lo) || !isFinite(hi)) return;
-     if (hi - lo < 1e-9) hi = lo + 1e-9;
-     var pad = (hi - lo) * 0.08; lo -= pad; hi += pad;
-     function yv(v) { return bottom - ((v - lo) / (hi - lo)) * plotH; }
-     [lo, (lo + hi) / 2, hi].forEach(function (gv) {
-       var gy = yv(gv);
-       ctxC.strokeStyle = c.grid; ctxC.lineWidth = 1;
-       ctxC.beginPath(); ctxC.moveTo(px0, gy); ctxC.lineTo(right, gy); ctxC.stroke();
-       ctxC.fillStyle = c.muted; ctxC.textAlign = 'right';
-       ctxC.fillText(String(units(gv)), px0 - 5, gy + 3);
-       ctxC.textAlign = 'left';
-     });
-     function series(key, color) {
-       ctxC.strokeStyle = color; ctxC.lineWidth = 1.6; ctxC.lineJoin = 'round'; ctxC.beginPath();
-       var started = false;
-       for (var j = 0; j < samples.length; j++) {
-         var v = samples[j][key];
-         if (v == null) continue;
-         var sx = px0 + j * step, sy = Math.min(bottom, Math.max(top, yv(v)));
-         if (!started) { ctxC.moveTo(sx, sy); started = true; } else ctxC.lineTo(sx, sy);
+       g.strokeStyle = c.s1; g.lineWidth = 1.6; g.lineJoin = 'round';
+       g.beginPath();
+       for (i = 0; i < n; i++) {
+         var a = st.tour[i], b = st.tour[(i + 1) % n];
+         if (i === 0) g.moveTo(px(a), py(a));
+         g.lineTo(px(b), py(b));
        }
-       if (started) ctxC.stroke();
+       g.stroke();
+
+       // edges the last shake introduced, fading out
+       var now = performance.now();
+       for (i = 0; i < st.flashes.length; i++) {
+         var f = st.flashes[i], age = (now - f.t0) / 900;
+         if (age >= 1) continue;
+         g.globalAlpha = 0.9 * (1 - age);
+         g.strokeStyle = c.s3; g.lineWidth = 2.6;
+         g.beginPath(); g.moveTo(px(f.a), py(f.a)); g.lineTo(px(f.b), py(f.b)); g.stroke();
+       }
+       g.globalAlpha = 1;
+
+       g.fillStyle = c.ink;
+       for (i = 0; i < st.cities.length; i++) {
+         g.beginPath(); g.arc(px(i), py(i), 2.6, 0, Math.PI * 2); g.fill();
+       }
+
+       ctx.set('len', units(st.curLen));
+       ctx.set('gap', (isFinite(sessionBest) && sessionBest > 0)
+         ? Math.max(0, (st.curLen - sessionBest) / sessionBest * 100).toFixed(1) + '%' : '…');
+       ctx.set('shakes', st.shakes);
+       ctx.set('k', st.k > 0 ? 'N' + st.k : '–');
+       ctx.set('esc', st.escapes);
+       if (st.phase === 'stuck') ctx.status('Stuck: 2-opt sees nothing better.');
+       else if (st.phase === 'shake') ctx.status('Local optimum. Reaching for N' + st.k + '…');
+       else if (st.k === 0) ctx.status('First descent: untangling with 2-opt.');
+       else ctx.status('Descending after an N' + st.k + ' shake.');
+       var km = effKmax(ctx);
+       for (i = 0; i < pillEls.length; i++) {
+         var kk = i + 1;
+         pillEls[i].classList.toggle('on', kk === st.k && st.phase !== 'stuck');
+         pillEls[i].classList.toggle('off', kk > km);
+       }
      }
-     series('len', c.s1);
-     series('best', c.s2);
-   }
-
-   function drawKPane(c, x, y, w, h) {
-     var top = y + 22, bottom = y + h - 8, plotH = bottom - top;
-     var px0 = x + GUT, right = x + w - 2, step = (right - px0) / (MAX_SAMPLES - 1);
-     ctxC.fillStyle = c.muted; ctxC.fillText('NEIGHBOURHOOD k', x, y + 9);
-     var yMax = 4.6;
-     function yk(v) { return bottom - (v / yMax) * plotH; }
-     for (var g = 1; g <= 4; g++) {
-       var gy = yk(g);
-       ctxC.strokeStyle = c.grid; ctxC.lineWidth = 1;
-       ctxC.beginPath(); ctxC.moveTo(px0, gy); ctxC.lineTo(right, gy); ctxC.stroke();
-       ctxC.fillStyle = c.muted; ctxC.textAlign = 'right';
-       ctxC.fillText('N' + g, px0 - 5, gy + 3);
-       ctxC.textAlign = 'left';
-     }
-     if (samples.length < 2) return;
-     ctxC.strokeStyle = c.s3; ctxC.lineWidth = 1.8; ctxC.lineJoin = 'round'; ctxC.beginPath();
-     var prevY = null;
-     for (var i = 0; i < samples.length; i++) {
-       var sx = px0 + i * step, sy = yk(samples[i].k);
-       if (prevY === null) ctxC.moveTo(sx, sy);
-       else { ctxC.lineTo(sx, prevY); ctxC.lineTo(sx, sy); }
-       prevY = sy;
-     }
-     ctxC.stroke();
-   }
-
-   // ---- main loop: events are metered by the speed slider so the pace of
-   // accepted moves stays gentle at the default setting ----
-   function loop(ts) {
-     if (!running) return;
-     if (!lastT) lastT = ts;
-     var dt = Math.min(0.1, (ts - lastT) / 1000); lastT = ts;
-     acc += dt * parseInt(speedS.value, 10);
-     var guard = 0;
-     while (acc >= 1 && guard < 60) { acc -= 1; guard++; doEvent(); }
-     if (acc > 2) acc = 0;
-     draw();
-     raf = requestAnimationFrame(loop);
-   }
-   function start() { if (running) { lastT = 0; raf = requestAnimationFrame(loop); } }
-
-   // ---- controls ----
-   runBtn.addEventListener('click', function () {
-     running = !running; runBtn.textContent = running ? 'Pause' : 'Play';
-     if (running) start(); else if (raf) cancelAnimationFrame(raf);
-   });
-   restartBtn.addEventListener('click', function () {
-     searchSeed++; restartSearch(); if (!running) draw();
-   });
-   newBtn.addEventListener('click', function () {
-     citySeed += 7; sessionBest = Infinity; buildCities(); searchSeed++; restartSearch(); if (!running) draw();
-   });
-   citiesS.addEventListener('input', function () {
-     citiesV.textContent = citiesS.value;
-     sessionBest = Infinity; buildCities(); searchSeed++; restartSearch(); if (!running) draw();
-   });
-   kmaxS.addEventListener('input', function () {
-     kmaxV.textContent = kmaxS.value;
-     if (k > effKmax()) k = effKmax();
-     updatePills();
-   });
-   speedS.addEventListener('input', function () { speedV.textContent = speedS.value; });
-   plainT.addEventListener('change', function () {
-     kmaxS.disabled = plainT.checked;
-     if (plainT.checked) {
-       if (phase === 'shake') phase = 'stuck';
-       if (k > 1) k = 1;
-     } else if (phase === 'stuck') {
-       phase = 'shake'; if (k === 0) k = 1;
-     }
-     updateStats();
    });
 
-   window.addEventListener('resize', function () { fitCanvas(); if (!running) draw(); });
-   new MutationObserver(function () { draw(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-
-   // ---- init ----
-   fitCanvas();
-   citiesV.textContent = citiesS.value;
-   kmaxV.textContent = kmaxS.value;
-   speedV.textContent = speedS.value;
-   buildCities();
-   restartSearch();
-   draw();
-   start();
+   // the pills belong above the controls, where they were authored
+   var bar = wrap.querySelector('[data-kr-toolbar]');
+   bar.parentNode.insertBefore(document.getElementById('vnsPills'), bar);
  })();
  </script>
 </body>

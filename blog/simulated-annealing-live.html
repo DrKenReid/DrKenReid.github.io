@@ -82,67 +82,42 @@
  <script defer src="../js/theme.js"></script>
  <script defer src="../js/palette.js"></script>
  <style>
- /* Scoped viz tokens, light values, dark overrides below. Series order is fixed:
- 1 = simulated annealing, 2 = hill climber, 3 = genetic algorithm, 4 = random search */
-.sa-viz{
- --viz-s1:#2a78d6; --viz-s2:#1baf7a; --viz-s3:#eda100; --viz-s4:#008300;
- --viz-ink:#2b2b2b; --viz-muted:#666666; --viz-grid:#e1e0d9; --viz-surface:#ffffff;
- --viz-border:rgba(0,0,0,0.12); --viz-cell:rgba(0,0,0,0.03);
- background:var(--viz-surface); border:1px solid var(--viz-border); border-radius:10px;
- padding:16px; margin:26px 0;
- }
- [data-theme="dark"] .sa-viz{
- --viz-s1:#3987e5; --viz-s2:#199e70; --viz-s3:#f0b429; --viz-s4:#2fae2f;
- --viz-ink:#e8e8e8; --viz-muted:#9e9e9e; --viz-grid:#2c2c2a; --viz-surface:#1f1f1f;
- --viz-border:rgba(255,255,255,0.12); --viz-cell:rgba(255,255,255,0.05);
- }
-.sa-viz canvas{width:100%; display:block; border-radius:6px;}
-.sa-strip{margin-top:10px;}
-.sa-controls{display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center; margin-top:12px; font-size:0.85em; color:var(--viz-ink);}
-.sa-controls label{display:flex; align-items:center; gap:7px; margin:0; font-weight:400;}
-.sa-controls input[type=range]{width:110px; accent-color:var(--viz-s3);}
-.sa-controls input[type=checkbox]{accent-color:var(--viz-s3); width:15px; height:15px; margin:0;}
-.sa-controls .val{min-width:2.8em; color:var(--viz-muted); font-variant-numeric:tabular-nums;}
-.sa-btn{
- background:var(--viz-s3); color:#1a1a1a; border:none; border-radius:6px;
- padding:6px 16px; font-size:0.9em; cursor:pointer; font-family:inherit;
- }
- #curveRun, #raceRun{min-width:76px;}
-.sa-btn.secondary{background:transparent; color:var(--viz-ink); border:1px solid var(--viz-border);}
-.sa-note{font-size:0.78em; color:var(--viz-muted); margin:8px 0 0;}
-.sa-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;}
- @media (max-width:640px){.sa-grid{grid-template-columns:1fr;} }
- @media (max-width:520px){
- .sa-viz{padding:12px;}
- .sa-controls{gap:10px 0;}
- .sa-controls label{width:100%;}
- .sa-controls input[type=range]{flex:1; width:auto;}
- }
-.sa-cell{position:relative;}
-.sa-cell canvas{border:1px solid var(--viz-border);}
-.sa-cell .sa-tag{
- position:absolute; top:8px; left:10px; font-size:0.72em; color:var(--viz-ink);
- display:flex; align-items:center; gap:6px; pointer-events:none;
- }
-.sa-swatch{width:10px; height:10px; border-radius:3px; display:inline-block;}
-.sa-score{position:absolute; top:8px; right:10px; font-size:0.72em; color:var(--viz-muted); pointer-events:none; font-variant-numeric:tabular-nums;}
-.sa-chartwrap{position:relative; margin-top:12px;}
-.sa-tooltip{
- position:absolute; display:none; pointer-events:none; z-index:5;
- background:var(--viz-surface); border:1px solid var(--viz-border); border-radius:6px;
- padding:8px 10px; font-size:0.75em; color:var(--viz-ink); line-height:1.8;
- box-shadow:0 4px 14px rgba(0,0,0,0.25); white-space:nowrap;
- }
-.sa-stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(116px,1fr)); gap:8px; margin-top:12px;}
-.sa-stat{background:var(--viz-cell); border:1px solid var(--viz-border); border-radius:8px; padding:7px 10px; display:flex; flex-direction:column; gap:2px; min-width:0;}
-.sa-stat-lbl{font-size:0.66em; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--viz-muted); white-space:nowrap; display:flex; align-items:center; gap:5px;}
-.sa-stat-val{font-size:0.95em; font-weight:600; color:var(--viz-ink); font-variant-numeric:tabular-nums;}
- /* prose swatches: lane colours that follow the theme */
-.sa-swatch-1{background:#2a78d6;} .sa-swatch-2{background:#1baf7a;}
-.sa-swatch-3{background:#eda100;} .sa-swatch-4{background:#008300;}
- [data-theme="dark"] .sa-swatch-1{background:#3987e5;} [data-theme="dark"] .sa-swatch-2{background:#199e70;}
- [data-theme="dark"] .sa-swatch-3{background:#f0b429;} [data-theme="dark"] .sa-swatch-4{background:#2fae2f;}
-.sa-status{font-size:0.85em; color:var(--viz-muted); margin-left:auto;}
+   /* Overrides of the shared .kr-viz component in style.css. */
+   .kr-viz{ --viz-s4:#008300; }
+   [data-theme="dark"] .kr-viz{ --viz-s4:#2fae2f; }
+   .kr-note{ margin:8px 0 0; }
+   .kr-swatch{ width:10px; height:10px; border-radius:3px; }
+   .kr-stats{ margin-top:12px; }
+   .kr-stat-lbl{ display:flex; align-items:center; gap:5px; }
+
+   /* Particular to this post's widget. */
+   .sa-strip{ margin-top:10px; }
+   .sa-controls{ display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center; margin-top:12px; font-size:0.85em; color:var(--viz-ink); }
+   .sa-controls label{ display:flex; align-items:center; gap:7px; margin:0; font-weight:400; }
+   .sa-controls input[type=range]{ width:110px; accent-color:var(--viz-s3); }
+   .sa-controls input[type=checkbox]{ accent-color:var(--viz-s3); width:15px; height:15px; margin:0; }
+   .sa-controls .val{ min-width:2.8em; color:var(--viz-muted); font-variant-numeric:tabular-nums; }
+   #curveRun, #raceRun{ min-width:76px; }
+   .sa-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+   @media (max-width:640px) { .sa-grid{ grid-template-columns:1fr; } }
+   @media (max-width:520px) { .kr-viz{ padding:12px; } }
+   @media (max-width:520px) { .sa-controls{ gap:10px 0; } }
+   @media (max-width:520px) { .sa-controls label{ width:100%; } }
+   @media (max-width:520px) { .sa-controls input[type=range]{ flex:1; width:auto; } }
+   .sa-cell{ position:relative; }
+   .sa-cell canvas{ border:1px solid var(--viz-border); }
+   .sa-cell .sa-tag{ position:absolute; top:8px; left:10px; font-size:0.72em; color:var(--viz-ink); display:flex; align-items:center; gap:6px; pointer-events:none; }
+   .sa-score{ position:absolute; top:8px; right:10px; font-size:0.72em; color:var(--viz-muted); pointer-events:none; font-variant-numeric:tabular-nums; }
+   .sa-chartwrap{ position:relative; margin-top:12px; }
+   .sa-tooltip{ position:absolute; display:none; pointer-events:none; z-index:5; background:var(--viz-surface); border:1px solid var(--viz-border); border-radius:6px; padding:8px 10px; font-size:0.75em; color:var(--viz-ink); line-height:1.8; box-shadow:0 4px 14px rgba(0,0,0,0.25); white-space:nowrap; }
+   .sa-swatch-1{ background:#2a78d6; }
+   .sa-swatch-2{ background:#1baf7a; }
+   .sa-swatch-3{ background:#eda100; }
+   .sa-swatch-4{ background:#008300; }
+   [data-theme="dark"] .sa-swatch-1{ background:#3987e5; }
+   [data-theme="dark"] .sa-swatch-2{ background:#199e70; }
+   [data-theme="dark"] .sa-swatch-3{ background:#f0b429; }
+   [data-theme="dark"] .sa-swatch-4{ background:#2fae2f; }
  </style>
 </head>
 <body>
@@ -203,19 +178,19 @@
 
  <h2>Play with it: the marble and the thermostat</h2>
 
- <p>Below are two marbles on the same bumpy curve, started at the same spot. The <span style="white-space:nowrap;"><span class="sa-swatch sa-swatch-2"></span> green one</span> is a pure hill climber: it only accepts downhill moves. The <span style="white-space:nowrap;"><span class="sa-swatch sa-swatch-1"></span> blue one</span> anneals: you hold its thermostat. Run it a few times. Watch the greedy marble find the nearest dip and retire there, while the hot marble rattles across the whole curve; then drag the temperature down (or let auto-cool do it) and watch the blue marble crystallise, usually somewhere much deeper. The small dots mark the best point each marble has ever found. The strip under the curve records your run as you go: the temperature you are holding in amber and, in blue, the fraction of uphill moves the annealer is accepting, which is <code>P = exp(&minus;&Delta;/T)</code> made visible.</p>
+ <p>Below are two marbles on the same bumpy curve, started at the same spot. The <span style="white-space:nowrap;"><span class="kr-swatch sa-swatch-2"></span> green one</span> is a pure hill climber: it only accepts downhill moves. The <span style="white-space:nowrap;"><span class="kr-swatch sa-swatch-1"></span> blue one</span> anneals: you hold its thermostat. Run it a few times. Watch the greedy marble find the nearest dip and retire there, while the hot marble rattles across the whole curve; then drag the temperature down (or let auto-cool do it) and watch the blue marble crystallise, usually somewhere much deeper. The small dots mark the best point each marble has ever found. The strip under the curve records your run as you go: the temperature you are holding in amber and, in blue, the fraction of uphill moves the annealer is accepting, which is <code>P = exp(&minus;&Delta;/T)</code> made visible.</p>
 
- <div class="sa-viz" id="curve-demo">
+ <div class="kr-viz" id="curve-demo">
  <canvas id="curveCanvas" height="300" role="img" aria-label="Animated demo: two marbles searching a bumpy curve for its lowest point, one greedy, one using simulated annealing with a user-controlled temperature"></canvas>
  <canvas id="curveStrip" class="sa-strip" height="110" role="img" aria-label="Live strip chart of the annealer's temperature and the share of uphill moves it is currently accepting"></canvas>
  <div class="sa-controls">
- <button class="sa-btn" id="curveRun" type="button">Run</button>
- <button class="sa-btn secondary" id="curveReset" type="button">Drop new marbles</button>
+ <button class="kr-btn" id="curveRun" type="button">Run</button>
+ <button class="kr-btn secondary" id="curveReset" type="button">Drop new marbles</button>
  <label>Temperature <input type="range" id="curveTemp" min="0" max="100" value="70"> <span class="val" id="curveTempVal" style="min-width:4.5em; display:inline-block;"></span></label>
  <label><input type="checkbox" id="curveAuto" checked> auto-cool</label>
  </div>
- <p class="sa-note">Both marbles propose the same size of random step; the only difference is the acceptance rule. Depth readouts show each marble's best-ever height (lower is better).</p>
- <p class="sa-note">The strip is the flight recorder: temperature in amber, the share of uphill proposals being accepted in blue, and in the corner the live Metropolis odds for a typical uphill step.</p>
+ <p class="kr-note">Both marbles propose the same size of random step; the only difference is the acceptance rule. Depth readouts show each marble's best-ever height (lower is better).</p>
+ <p class="kr-note">The strip is the flight recorder: temperature in amber, the share of uphill proposals being accepted in blue, and in the corner the live Metropolis odds for a typical uphill step.</p>
  </div>
 
  <p>The blue marble isn't smarter, it's just <em>temporarily tolerant of bad moves</em>, on a schedule. And that single tweak converts the world's dumbest algorithm into one that, given a sensible cooling schedule, provably converges toward global optima and, more importantly, finds excellent solutions to real industrial problems in practice.</p>
@@ -227,41 +202,41 @@
  <p>The racers, each in its lane colour:</p>
 
  <ul>
- <li><span class="sa-swatch sa-swatch-1"></span> <strong>Simulated annealing</strong>: as above; proposes 2-opt moves (pick two edges of the tour, reconnect them the other way<sup><a href="#ref-4" class="cite-ref">[4]</a></sup>), accepting bad ones on the cooling schedule.</li>
- <li><span class="sa-swatch sa-swatch-2"></span> <strong>Hill climber</strong>, same 2-opt moves, zero tolerance: improvements only.</li>
- <li><span class="sa-swatch sa-swatch-3"></span> <strong>Genetic algorithm</strong>: a population of 40 tours; tournament selection, order crossover, swap mutation, elitism. The napkin algorithm from my <a href="evolution-live.html">GA post</a>.</li>
- <li><span class="sa-swatch sa-swatch-4"></span> <strong>Random search</strong>, shuffles a fresh tour every try and keeps the best. The floor. Somebody has to be it.</li>
+ <li><span class="kr-swatch sa-swatch-1"></span> <strong>Simulated annealing</strong>: as above; proposes 2-opt moves (pick two edges of the tour, reconnect them the other way<sup><a href="#ref-4" class="cite-ref">[4]</a></sup>), accepting bad ones on the cooling schedule.</li>
+ <li><span class="kr-swatch sa-swatch-2"></span> <strong>Hill climber</strong>, same 2-opt moves, zero tolerance: improvements only.</li>
+ <li><span class="kr-swatch sa-swatch-3"></span> <strong>Genetic algorithm</strong>: a population of 40 tours; tournament selection, order crossover, swap mutation, elitism. The napkin algorithm from my <a href="evolution-live.html">GA post</a>.</li>
+ <li><span class="kr-swatch sa-swatch-4"></span> <strong>Random search</strong>, shuffles a fresh tour every try and keeps the best. The floor. Somebody has to be it.</li>
  </ul>
 
  <p>The race is scored in <strong>evaluations</strong>, not iterations. Every time any algorithm asks "how long is this tour?", its meter ticks. The GA evaluates 40 tours per generation, so it gets fewer generations; the annealer evaluates one tour per step, so it gets many steps.</p>
 
- <div class="sa-viz" id="race-demo">
+ <div class="kr-viz" id="race-demo">
  <div class="sa-controls" style="margin-top:0;">
- <button class="sa-btn" id="raceRun" type="button">Start race</button>
- <button class="sa-btn secondary" id="raceReset" type="button">New cities</button>
+ <button class="kr-btn" id="raceRun" type="button">Start race</button>
+ <button class="kr-btn secondary" id="raceReset" type="button">New cities</button>
  <label>Speed <input type="range" id="raceSpeed" min="100" max="3000" step="100" value="600"></label>
- <span class="sa-status" id="raceStatus">Press start, or click any map to add a city.</span>
+ <span class="kr-status" id="raceStatus">Press start, or click any map to add a city.</span>
  </div>
  <div class="sa-grid" id="raceGrid">
- <div class="sa-cell"><canvas class="tourCanvas" data-alg="0" height="240" role="img" aria-label="Best tour found so far by simulated annealing"></canvas><span class="sa-tag"><span class="sa-swatch" style="background:var(--viz-s1);"></span>Simulated annealing</span><span class="sa-score" data-score="0"></span></div>
- <div class="sa-cell"><canvas class="tourCanvas" data-alg="1" height="240" role="img" aria-label="Best tour found so far by the hill climber"></canvas><span class="sa-tag"><span class="sa-swatch" style="background:var(--viz-s2);"></span>Hill climber</span><span class="sa-score" data-score="1"></span></div>
- <div class="sa-cell"><canvas class="tourCanvas" data-alg="2" height="240" role="img" aria-label="Best tour found so far by the genetic algorithm"></canvas><span class="sa-tag"><span class="sa-swatch" style="background:var(--viz-s3);"></span>Genetic algorithm</span><span class="sa-score" data-score="2"></span></div>
- <div class="sa-cell"><canvas class="tourCanvas" data-alg="3" height="240" role="img" aria-label="Best tour found so far by random search"></canvas><span class="sa-tag"><span class="sa-swatch" style="background:var(--viz-s4);"></span>Random search</span><span class="sa-score" data-score="3"></span></div>
+ <div class="sa-cell"><canvas class="tourCanvas" data-alg="0" height="240" role="img" aria-label="Best tour found so far by simulated annealing"></canvas><span class="sa-tag"><span class="kr-swatch" style="background:var(--viz-s1);"></span>Simulated annealing</span><span class="sa-score" data-score="0"></span></div>
+ <div class="sa-cell"><canvas class="tourCanvas" data-alg="1" height="240" role="img" aria-label="Best tour found so far by the hill climber"></canvas><span class="sa-tag"><span class="kr-swatch" style="background:var(--viz-s2);"></span>Hill climber</span><span class="sa-score" data-score="1"></span></div>
+ <div class="sa-cell"><canvas class="tourCanvas" data-alg="2" height="240" role="img" aria-label="Best tour found so far by the genetic algorithm"></canvas><span class="sa-tag"><span class="kr-swatch" style="background:var(--viz-s3);"></span>Genetic algorithm</span><span class="sa-score" data-score="2"></span></div>
+ <div class="sa-cell"><canvas class="tourCanvas" data-alg="3" height="240" role="img" aria-label="Best tour found so far by random search"></canvas><span class="sa-tag"><span class="kr-swatch" style="background:var(--viz-s4);"></span>Random search</span><span class="sa-score" data-score="3"></span></div>
  </div>
  <div class="sa-chartwrap">
  <canvas id="raceChart" height="260" role="img" aria-label="Line chart of best tour length found so far by each algorithm, against number of evaluations used"></canvas>
  <div class="sa-tooltip" id="raceTooltip"></div>
  </div>
  <canvas id="raceStrip" class="sa-strip" height="120" role="img" aria-label="Telemetry strip on the same evaluations axis: the annealer's temperature as a percentage of its starting value, with the planned cooling schedule shown faintly, plus the percentage of uphill moves it accepts"></canvas>
- <div class="sa-stats" id="raceTable" aria-label="Live scoreboard"></div>
+ <div class="kr-stats" id="raceTable" aria-label="Live scoreboard"></div>
  <div class="sa-controls">
  <label>Cities <input type="range" id="pgCities" min="10" max="60" step="5" value="30"> <span class="val" id="pgCitiesVal">30</span></label>
  <label>SA cooling speed <input type="range" id="pgCool" min="4" max="20" step="1" value="10"> <span class="val" id="pgCoolVal"></span></label>
  <label>GA mutation <input type="range" id="pgMut" min="5" max="80" step="5" value="30"> <span class="val" id="pgMutVal"></span></label>
  </div>
- <p class="sa-note">Changing cities re-deals the map. Cooling speed is how aggressively temperature decays over the race (higher = colder sooner). Mutation is the % chance each GA child gets a random swap. Changes reset the race so it stays fair.</p>
- <p class="sa-note">The strip between the chart and the scoreboard is the annealer's telemetry, on the same evaluations axis: the faint amber curve is the planned cooling schedule, the solid amber line is the temperature spent so far (as a % of its starting value), and blue is the share of uphill moves accepted in each stretch.</p>
- <p class="sa-note">All four algorithms share one budget currency: tour-length evaluations (200,000 each per race).</p>
+ <p class="kr-note">Changing cities re-deals the map. Cooling speed is how aggressively temperature decays over the race (higher = colder sooner). Mutation is the % chance each GA child gets a random swap. Changes reset the race so it stays fair.</p>
+ <p class="kr-note">The strip between the chart and the scoreboard is the annealer's telemetry, on the same evaluations axis: the faint amber curve is the planned cooling schedule, the solid amber line is the temperature spent so far (as a % of its starting value), and blue is the share of uphill moves accepted in each stretch.</p>
+ <p class="kr-note">All four algorithms share one budget currency: tour-length evaluations (200,000 each per race).</p>
  </div>
 
  <h2>What to watch for</h2>
@@ -293,7 +268,7 @@
 <pre><code class="language-javascript">  /* ============================================================
   Simulated Annealing, Live, all demo code for this post.
   No dependencies. Everything renders to &lt;canvas&gt; and reads its
-  colours from the CSS custom properties on.sa-viz, so the
+  colours from the CSS custom properties on.kr-viz, so the
   site's light/dark theme toggle restyles the demos live.
   ============================================================ */
   (function() {
@@ -1172,9 +1147,9 @@
           });
         tableBody.innerHTML = rows.map(function(r) {
           var gap = ((r.len / leader - 1) * 100);
-          return '&lt;div class="sa-stat"&gt;&lt;span class="sa-stat-lbl"&gt;' +
-            '&lt;span class="sa-swatch" style="background:' + c.series[r.i] + ';"&gt;&lt;/span&gt;' +
-            NAMES[r.i] + '&lt;/span&gt;&lt;span class="sa-stat-val"&gt;' + r.len.toFixed(2) +
+          return '&lt;div class="kr-stat"&gt;&lt;span class="kr-stat-lbl"&gt;' +
+            '&lt;span class="kr-swatch" style="background:' + c.series[r.i] + ';"&gt;&lt;/span&gt;' +
+            NAMES[r.i] + '&lt;/span&gt;&lt;span class="kr-stat-val"&gt;' + r.len.toFixed(2) +
             ' &lt;span style="color:var(--viz-muted); font-weight:400;"&gt;' +
             (gap &lt; 0.005 ? 'leader' : '+' + gap.toFixed(1) + '%') + '&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;';
         }).join('');
@@ -1313,7 +1288,7 @@
             if (a.hist[k].e &lt;= e) best = a.hist[k].len;
             else break;
           }
-          return '&lt;span class="sa-swatch" style="background:' + c.series[i] + '; margin-right:6px;"&gt;&lt;/span&gt;' +
+          return '&lt;span class="kr-swatch" style="background:' + c.series[i] + '; margin-right:6px;"&gt;&lt;/span&gt;' +
             SHORT[i] + ': ' + (best === null ? ', ' : best.toFixed(2));
         });
         var accAt = null;
@@ -1440,6 +1415,7 @@
  <script src="../js/prism-loader.js"></script>
  <script src="../js/default-assets/active.js"></script>
  <script src="../js/shared-components.js"></script>
+ <script src="../js/kr-viz.js"></script>
  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
 renderFooter('footer-section');
 loadPrism();</script>
@@ -1448,7 +1424,7 @@ loadPrism();</script>
   /* ============================================================
   Simulated Annealing, Live, all demo code for this post.
   No dependencies. Everything renders to <canvas> and reads its
-  colours from the CSS custom properties on.sa-viz, so the
+  colours from the CSS custom properties on.kr-viz, so the
   site's light/dark theme toggle restyles the demos live.
   ============================================================ */
   (function() {
@@ -1465,34 +1441,20 @@ loadPrism();</script>
       };
     }
 
-    function vizColors(el) {
-      var cs = getComputedStyle(el);
-
-      function v(name) {
-        return cs.getPropertyValue(name).trim();
-      }
+    // The engine resolves the tokens; each widget's draw sets CUR first, so
+    // this keeps the {series: [...]} shape both widgets already expect.
+    var CUR = null;
+    function vizColors() {
       return {
-        series: [v('--viz-s1'), v('--viz-s2'), v('--viz-s3'), v('--viz-s4')],
-        ink: v('--viz-ink'),
-        muted: v('--viz-muted'),
-        grid: v('--viz-grid'),
-        surface: v('--viz-surface')
+        series: [CUR.s1, CUR.s2, CUR.s3, CUR.s4],
+        ink: CUR.ink, muted: CUR.muted, grid: CUR.grid, surface: CUR.surface
       };
     }
 
-    function fitCanvas(cv) {
-      var dpr = window.devicePixelRatio || 1;
-      // the height attribute is the desktop height; on narrow screens clamp tall
-      // canvases to a sane aspect (never below 180px) while short telemetry
-      // strips keep their declared height
-      var w = cv.clientWidth;
-      var h = Math.min(parseInt(cv.getAttribute('height'), 10), Math.max(180, Math.round(w * 0.75)));
-      cv.style.height = h + 'px';
-      cv.width = Math.round(w * dpr);
-      cv.height = Math.round(h * dpr);
-      var ctx = cv.getContext('2d');
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      return ctx;
+    // canvas heights keep the old rule: the height attribute is the desktop
+    // height, clamped on narrow screens but never below 180px
+    function fitH(attr) {
+      return function (w) { return Math.min(attr, Math.max(180, Math.round(w * 0.75))); };
     }
 
     /* ============================================================
@@ -1508,8 +1470,7 @@ loadPrism();</script>
       var tempVal = document.getElementById('curveTempVal');
       var autoCool = document.getElementById('curveAuto');
       var strip = document.getElementById('curveStrip');
-      var ctx = fitCanvas(cv);
-      var stripCtx = fitCanvas(strip);
+      var ctx = null, stripCtx = null;   // bound by the engine each frame
       var STRIP_N = 480; // rolling telemetry window, ~8s of frames
       var running = false,
         rafId = null;
@@ -1752,40 +1713,41 @@ loadPrism();</script>
         }
       }
 
-      function loop() {
-        if (!running) return;
-        state.T = (tempSlider.value / 100) * T_MAX;
-        step();
-        draw();
-        rafId = requestAnimationFrame(loop);
+      var VIZ = KRViz.mount('#curve-demo', {
+        seed: 12345,
+        speed: 60,                 // one proposal per frame, as before
+        autostart: false,          // this demo has always waited for Run
+        canvases: {
+          curve: {el: '#curveCanvas', height: fitH(300)},
+          strip: {el: '#curveStrip', height: fitH(110)}
+        },
+        init: function (k) { bind(k); reset(); return {}; },
+        step: function (k) {
+          bind(k);
+          state.T = (tempSlider.value / 100) * T_MAX;
+          step();
+        },
+        draw: function (k) { bind(k); draw(); }
+      });
+      function bind(k) {
+        CUR = k.colors;
+        ctx = k.canvas.curve.g;
+        stripCtx = k.canvas.strip.g;
       }
 
       runBtn.addEventListener('click', function() {
         running = !running;
         runBtn.textContent = running ? 'Pause' : 'Run';
-        if (running) loop();
-        else cancelAnimationFrame(rafId);
+        if (running) VIZ.run(); else VIZ.pause();
       });
       resetBtn.addEventListener('click', function() {
         reset();
+        VIZ.draw();
       });
       tempSlider.addEventListener('input', function() {
         state.T = (tempSlider.value / 100) * T_MAX;
-        if (!running) draw();
+        if (!running) VIZ.draw();
       });
-      window.addEventListener('resize', function() {
-        ctx = fitCanvas(cv);
-        stripCtx = fitCanvas(strip);
-        draw();
-      });
-      new MutationObserver(function() {
-          if (!running) draw();
-        })
-        .observe(document.documentElement, {
-          attributes: true,
-          attributeFilter: ['data-theme']
-        });
-      reset();
     })();
 
     /* ============================================================
@@ -1814,9 +1776,7 @@ loadPrism();</script>
       var pgMut = document.getElementById('pgMut'),
         pgMutVal = document.getElementById('pgMutVal');
 
-      var tourCtx = tourCanvases.map(fitCanvas);
-      var chartCtx = fitCanvas(chartCv);
-      var stripCtx = fitCanvas(stripCv);
+      var tourCtx = [], chartCtx = null, stripCtx = null;  // bound by the engine
       var seed = 20260706,
         rng = mulberry32(seed);
       var cities = [],
@@ -2327,9 +2287,9 @@ loadPrism();</script>
           });
         tableBody.innerHTML = rows.map(function(r) {
           var gap = ((r.len / leader - 1) * 100);
-          return '<div class="sa-stat"><span class="sa-stat-lbl">' +
-            '<span class="sa-swatch" style="background:' + c.series[r.i] + ';"></span>' +
-            NAMES[r.i] + '</span><span class="sa-stat-val">' + r.len.toFixed(2) +
+          return '<div class="kr-stat"><span class="kr-stat-lbl">' +
+            '<span class="kr-swatch" style="background:' + c.series[r.i] + ';"></span>' +
+            NAMES[r.i] + '</span><span class="kr-stat-val">' + r.len.toFixed(2) +
             ' <span style="color:var(--viz-muted); font-weight:400;">' +
             (gap < 0.005 ? 'leader' : '+' + gap.toFixed(1) + '%') + '</span></span></div>';
         }).join('');
@@ -2346,8 +2306,7 @@ loadPrism();</script>
 
       var recordEvery = MAX_EVALS / 400;
 
-      function loop() {
-        if (!running) return;
+      function tickRace() {
         var budget = parseInt(speedSlider.value, 10);
         algs.forEach(function(a) {
           var before = a.evals;
@@ -2367,7 +2326,6 @@ loadPrism();</script>
             }
           }
         });
-        drawAll();
         var done = algs.every(function(a) {
           return a.evals >= MAX_EVALS;
         });
@@ -2393,20 +2351,42 @@ loadPrism();</script>
               a.upA = 0;
             }
           });
-          drawAll();
+          VIZ.pause();
           return;
         }
         statusEl.textContent = Math.round(algs[0].evals / 1000) + 'k / ' + (MAX_EVALS / 1000) + 'k evaluations';
-        rafId = requestAnimationFrame(loop);
+      }
+
+      var VIZ = KRViz.mount('#race-demo', {
+        seed: 20260706,
+        speed: 60,
+        autostart: false,          // the race starts when the reader says so
+        canvases: {
+          t0: {el: '.tourCanvas[data-alg="0"]', height: fitH(240)},
+          t1: {el: '.tourCanvas[data-alg="1"]', height: fitH(240)},
+          t2: {el: '.tourCanvas[data-alg="2"]', height: fitH(240)},
+          t3: {el: '.tourCanvas[data-alg="3"]', height: fitH(240)},
+          chart: {el: '#raceChart', height: fitH(260)},
+          strip: {el: '#raceStrip', height: fitH(120)}
+        },
+        init: function (k) { bind(k); resetRace(false); return {}; },
+        step: function (k) { bind(k); tickRace(); },
+        draw: function (k) { bind(k); drawAll(); }
+      });
+      function bind(k) {
+        CUR = k.colors;
+        tourCtx = [k.canvas.t0.g, k.canvas.t1.g, k.canvas.t2.g, k.canvas.t3.g];
+        chartCtx = k.canvas.chart.g;
+        stripCtx = k.canvas.strip.g;
       }
 
       runBtn.addEventListener('click', function() {
         if (finished) resetRace(true);
         running = !running;
         runBtn.textContent = running ? 'Pause' : 'Resume';
-        if (running) loop();
+        if (running) VIZ.run();
         else {
-          cancelAnimationFrame(rafId);
+          VIZ.pause();
           statusEl.textContent = 'Paused.';
         }
       });
@@ -2468,7 +2448,7 @@ loadPrism();</script>
             if (a.hist[k].e <= e) best = a.hist[k].len;
             else break;
           }
-          return '<span class="sa-swatch" style="background:' + c.series[i] + '; margin-right:6px;"></span>' +
+          return '<span class="kr-swatch" style="background:' + c.series[i] + '; margin-right:6px;"></span>' +
             SHORT[i] + ': ' + (best === null ? ', ' : best.toFixed(2));
         });
         var accAt = null;
@@ -2489,22 +2469,6 @@ loadPrism();</script>
         tooltip.style.display = 'none';
       });
 
-      window.addEventListener('resize', function() {
-        tourCtx = tourCanvases.map(fitCanvas);
-        chartCtx = fitCanvas(chartCv);
-        stripCtx = fitCanvas(stripCv);
-        drawAll();
-      });
-      new MutationObserver(function() {
-          drawAll();
-        })
-        .observe(document.documentElement, {
-          attributes: true,
-          attributeFilter: ['data-theme']
-        });
-
-      newCities(parseInt(pgCities.value, 10));
-      resetRace(true);
     })();
   })();
  </script>

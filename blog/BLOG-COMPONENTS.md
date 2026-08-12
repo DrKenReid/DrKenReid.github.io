@@ -338,12 +338,46 @@ You can omit both the related posts markup and the thanks card entirely; they wi
 Reference implementation: `blog/ant-colony-live.html` (published, mobile-verified).
 Older pattern: `blog/drafts/simulated-annealing-live.html`.
 
-**Architecture (copy from the reference, don't reinvent):**
+The JavaScript half of this is specced in `blog/VIZ-ENGINE.md` (not built
+yet). Until it exists, copy the structure from a recent post.
+
+**The chrome is shared: use `.kr-viz`, do not restyle it per post.**
+The frame, buttons, sliders, stat tiles, status line, swatches and caption
+all come from the `.kr-viz` component in `style.css`, along with the light
+and dark token sets and the `@media (max-width:520px)` block. A post writes
+markup and, at most, a few override lines:
+
+```html
+<div class="kr-viz" id="foo-demo">
+  <canvas id="fooMain" class="kr-interactive" height="360" role="img" aria-label="..."></canvas>
+  <div class="kr-toolbar">
+    <button class="kr-btn kr-run" id="fooRun" type="button">Pause</button>
+    <button class="kr-btn secondary" id="fooRestart" type="button">Restart</button>
+    <span class="kr-status" id="fooStatus"></span>
+  </div>
+  <div class="kr-sliders">
+    <label>Speed <input type="range" id="fooSpeed" min="1" max="40" value="5"> <span class="val" id="fooSpeedVal"></span></label>
+  </div>
+  <div class="kr-stats">
+    <div class="kr-stat"><span class="kr-stat-lbl">Label</span><span class="kr-stat-val" id="fooX">0</span></div>
+  </div>
+  <canvas id="fooChart" class="kr-chart" height="150" role="img" aria-label="..."></canvas>
+  <p class="kr-note">What the reader is looking at.</p>
+</div>
+```
+
+- `kr-interactive` goes on a canvas that takes drag or click input; it sets
+  `touch-action:none` so a drag does not scroll the page. Leave it off the
+  chart canvas so the page still scrolls there. Override `cursor` alone if
+  `grab` or `pointer` reads better than the default `crosshair`.
+- Anything genuinely particular to one widget (pills, legends, grids) keeps
+  the post's own prefix, e.g. `.vns-pill`, and stays in the post's `<style>`.
+- Series colours default to `--viz-s1` blue, `--viz-s2` green, `--viz-s3`
+  amber, `--viz-s4` red in both themes. Set them on the container only if the
+  post needs different ones, and remember the dark block is separate.
 - Seeded RNG via `mulberry32(seed)` so runs are reproducible; never `Math.random()`.
-- All colors come from CSS custom properties on the widget root
-  (`--viz-s1..s4`, `--viz-ink`, `--viz-muted`, `--viz-grid`, `--viz-surface`,
-  `--viz-border`, `--viz-cell`) with a `[data-theme="dark"]` override block,
-  read at draw time via `getComputedStyle`. A `MutationObserver` on
+- All colours are read at draw time via `getComputedStyle` on the widget root,
+  so the canvas restyles with the page. A `MutationObserver` on
   `documentElement`'s `data-theme` attribute redraws on theme toggle.
 - `fitCanvas` handles devicePixelRatio and re-runs on window resize.
 
@@ -356,13 +390,9 @@ Older pattern: `blog/drafts/simulated-annealing-live.html`.
   ~480px width, with the canvas height increased to compensate. Draw panes
   with rect-parameterized functions (`drawPane(x, y, w, h)`) so both layouts
   share one code path.
-- Sliders: full-width rows on phones (`label{width:100%}` +
-  `input[type=range]{flex:1}` inside a `@media (max-width:520px)` block).
-  Desktop slider width ~110px.
-- Main canvas gets `touch-action:none` ONLY if it has drag interaction;
-  chart/readout canvases keep `touch-action:auto` so the page still scrolls.
-- Stat readouts go in a CSS grid of cards
-  (`repeat(auto-fit, minmax(116px, 1fr))`) so they reflow on their own.
+- Sliders going full-width on phones, and the stat grid reflowing at
+  `repeat(auto-fit, minmax(116px, 1fr))`, are both handled by `.kr-viz`.
+  Do not restate them in the post.
 
 **Verification before publish (all mandatory):**
 - Playwright at 360px, 390px, and 1000px viewports: zero console errors, no
