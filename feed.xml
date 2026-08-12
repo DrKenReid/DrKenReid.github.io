@@ -5,11 +5,130 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 11 Aug 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Tue, 11 Aug 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Wed, 12 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Wed, 12 Aug 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Variable Neighbourhood Search, Live</title>
+      <link>https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html</link>
+      <guid>https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html</guid>
+      <pubDate>Wed, 12 Aug 2026 00:00:00 +0000</pubDate>
+      <description>An interactive variable neighbourhood search solving the Travelling Salesman Problem in your browser: watch a tour untangle itself, then watch the search escape a local optimum by changing what counts as a nearby move.</description>
+      <category>ai</category>
+      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html">View it on the site</a> to play with it.</em></p>
+ <h1>Variable Neighbourhood Search, Live</h1>
+ <div class="blog-meta">
+ 12 August 2026 &middot;
+ <span class="blog-tag">ai</span>
+ </div>
+
+ <p>The <a href="https://www.kenreid.co.uk/blog/evolution-live.html">genetic algorithm</a> kept a whole population, so one individual getting stuck didn't matter. <a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">Simulated annealing</a> tolerated bad moves while it was hot, the <a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">ant colony</a> let old trails evaporate, and the <a href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">particle swarm</a> carried enough momentum to sail over a dip before it noticed. This fifth one runs without a temperature schedule, a population, a pheromone trail, or a velocity. When it gets stuck, it changes what "nearby" means. This one hits home because, like many of the algorithms I am blogging about, I am making use of code I wrote years ago - but this one is special, because I used VNS for my <a href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&sortby=pubdate&citation_for_view=bwl2u00AAAAJ:u5HHmVD_uO8C">first ever published research paper</a>.</p>
+
+ 
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Variable neighbourhood search (VNS):</strong> an optimiser that escapes traps by switching, in a fixed order, between different definitions of "nearby".</li>
+ <li><strong>Neighbourhood structure:</strong> the set of solutions you can reach from the current one with a single type of move. Different move types give the same solution completely different neighbours.</li>
+ <li><strong>Local optimum:</strong> a solution none of whose neighbours are better. Since "neighbours" depends on the move type, a solution can be a local optimum under one move type and easy to improve under another.</li>
+ <li><strong>Shaking:</strong> a random jump within the current neighbourhood, applied to a good solution to knock the search into a different basin before descending again.</li>
+ <li><strong>2-opt:</strong> the smallest useful tour edit: remove two edges of the tour and reconnect the other way round, which reverses the segment in between.</li>
+ <li><strong>Or-opt:</strong> a tour edit that relocates a short chain of consecutive cities (one to three of them here) to a different place in the tour.</li>
+ </ul>
+ </div>
+
+ <h2>What does 'stuck' mean?</h2>
+
+ <p>The playing field is the same Travelling Salesman Problem as the annealing post: a scatter of cities, and we want the shortest round trip that visits each city once.</p>
+
+ <p>Local search on the TSP is very simple: take any tour, try a small edit, keep the edit if the tour got shorter, repeat. The classic small edit is 2-opt: snip two edges, reconnect them the other way, which reverses a stretch of the tour and uncrosses one of those ugly X shapes. Do that greedily and a random tangle collapses into something pretty good, pretty quickly.</p>
+
+ <p>But, inevitably, it stops. You reach a tour where no single 2-opt move helps, a local optimum, and are unable to move. In the annealing post I treated that as a fact about the tour: it's stuck. What is stuck is the tour plus <em>this particular definition of nearby</em>.</p>
+
+ <p>A 2-opt local optimum only means that none of the roughly n&sup2; tours reachable by one segment reversal is shorter. Offer a different move, say lifting three consecutive cities out and reinserting them elsewhere (Or-opt), and the same tour suddenly has a completely different set of neighbours, some of which may well be better.</p>
+
+ <p>Mladenović and Hansen built this idea in 1997<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>, called it variable neighbourhood search, and it has been a fixture of the routing and scheduling literature ever since.</p>
+
+ <p>A local optimum is a property of the neighbourhood, not of the solution.</p>
+
+ <h2>I'm gonna need a bigger hammer.</h2>
+
+ <p>Basic VNS keeps a list of neighbourhood structures, ordered from smallest to largest, and climbs that list on an "as needed" basis. Here is one VNS setup:</p>
+
+ <ul>
+ <li><strong>N1, 2-opt kick:</strong> reverse one random segment. The lightest nudge.</li>
+ <li><strong>N2, Or-opt:</strong> pull out a chain of one to three cities and reinsert it somewhere else.</li>
+ <li><strong>N3, segment exchange:</strong> swap two short segments of the tour with each other.</li>
+ <li><strong>N4, double bridge:</strong> cut the tour in four places and reassemble the quarters in a different order. A big kick. It changes four edges at once.</li>
+ </ul>
+
+ <p>That is to say: descend with plain first-improvement 2-opt until you hit a local optimum. That's your incumbent, so set k to 1. Now: <em>shake</em> the incumbent with a random move from neighbourhood N<sub>k</sub>, descend again with 2-opt from wherever that landed, and compare. If the re-descended tour beats the incumbent, move there and reset k to 1. If it doesn't, throw it away and increment k, up to k<sub>max</sub>, then wrap back round.</p>
+
+ <p>This runs without a temperature, an acceptance probability, or a crossover operator. Hansen and Mladenović later distilled the design principles in a survey which is a great starting point <sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+
+ <p>This means the algorithm, by its very nature, will reach for a bigger hammer, as needed. The moment <em>anything</em> works, it drops straight back to the smallest hammer.</p>
+
+ <h2>Watch it climb the ladder</h2>
+
+ <p>Below, VNS is solving a seeded random TSP instance live, and the lit badge under the map is the neighbourhood currently in use. Watch it during a rough patch. N1 lights, fails. N2 lights, fails. N3 lights, and then an escape lands, and it snaps straight back to N1. The right-hand chart records that as a sawtooth: every tooth is the search getting stuck, escalating, and being rescued. Amber flashes on the map are the edges the latest shake or improvement just changed.</p>
+
+ 
+
+ <h2>The Sliders</h2>
+
+ <p><strong>Tick "plain local search".</strong> This switches the shaking off entirely: descend with 2-opt, then stop, and the tour untangles, hits its first local optimum, and freezes there forever, while the k chart flatlines like in that medical drama my partner watches.</p>
+
+ <p><strong>Set k max to 1.</strong> Now the search still shakes, but only ever with the smallest kick, a single random segment reversal. Watch the escapes counter crawl: a small kick barely leaves the current basin, so the 2-opt descent usually slides straight back into the tour it just left.</p>
+
+ <p>The gap stat twitches and recovers, twitches and recovers, going nowhere. It is all motion and no progress.</p>
+
+ <p><strong>Now give it the full ladder, k max at 4, and watch the cost side.</strong> Every time N4 fires, the gap stat spikes hard, because a double bridge tears four edges out of a good tour, and the descent then spends a long run of moves stitching the damage back together.</p>
+
+ <p>That work is only worth it when nothing smaller can move the search, so VNS keeps the big hammer as a last resort.</p>
+
+ <h2>Change what nearby means</h2>
+
+ <p>I like the contrast with the earlier posts in this series: simulated annealing keeps one move type and varies <em>when it will accept a worse solution</em>. The genetic algorithm keeps a population, so the question of any one solution being stuck barely arises.</p>
+
+ <p>VNS, in its basic form, never accepts a worse solution at all, runs a single solution, and the only thing it varies is the move set. Three completely different answers to the same trap.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>How is this different from simulated annealing?</summary>
+ <p>Annealing keeps one neighbourhood and loosens the <em>acceptance rule</em>: worse solutions get through with a probability that decays as the temperature falls, which means picking a cooling schedule. Basic VNS keeps a strict acceptance rule (only ever move to something better) and varies the <em>neighbourhood</em> instead.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Is VNS used in the real world?</summary>
+ <p>Very much so. It has a strong record on vehicle routing, facility location (the p-median problem was one of its earliest wins), job-shop and nurse scheduling, timetabling, and graph problems, and Hansen and Mladenović's survey<sup><a href="#ref-2" class="cite-ref">[2]</a></sup> catalogues dozens of applications. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why not just always use the biggest shake?</summary>
+ <p>It destroys structure a good tour spent many moves earning, and the descent afterwards must spend many more rebuilding it. </p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Mladenović, N., &amp; Hansen, P. (1997). Variable neighborhood search. <em>Computers &amp; Operations Research</em>, 24(11), 1097&ndash;1100. <a href="https://doi.org/10.1016/S0305-0548(97)00031-2" target="_blank" rel="noopener">https://doi.org/10.1016/S0305-0548(97)00031-2</a>
+          </li>
+          <li id="ref-2">
+            Hansen, P., &amp; Mladenović, N. (2001). Variable neighborhood search: Principles and applications. <em>European Journal of Operational Research</em>, 130(3), 449&ndash;467. <a href="https://doi.org/10.1016/S0377-2217(00)00100-4" target="_blank" rel="noopener">https://doi.org/10.1016/S0377-2217(00)00100-4</a>
+          </li>
+        </ol>
+
+        
+
+ ]]></content:encoded>
+    </item>
     <item>
       <title>Particle Swarm, Live</title>
       <link>https://www.kenreid.co.uk/blog/particle-swarm-live.html</link>
@@ -4475,170 +4594,6 @@ Notation that word processors fight you over is native here:
       <description>Fifteen years of Last.fm data - what I listen to when I&#x27;m feeling joyful, depressed, doing work, working out or studying.</description>
       <category>personal</category>
       <category>music</category>
-      <content:encoded><![CDATA[
-        <h1>What 50,000 Scrobbles Say About Me</h1>
-        <div class="blog-meta">
-          6 July 2026 &middot;
-          <span class="blog-tag">personal</span>
-          <span class="blog-tag">music</span>
-        </div>
-
-        <p>As I write this, my Last.fm profile reads 49,716 scrobbles, which means that sometime in the next couple of weeks, probably while I'm doing the dishes or debugging something, a counter I switched on 15.5 years ago will tick to 50,000.</p>
-
-        <p>The counter has been running since the 10th of March, 2011. While I've always failed to keep a diary throughout my life, it turns out I've been keeping one anyway, fifteen years long, written one song at a time, and I only recently thought to read it.</p>
-
-        <div class="plain-english-box">
-          <h2>A quick glossary</h2>
-          <ul>
-            <li><strong>Scrobble:</strong> a record of one song you listened to, sent automatically to a service called Last.fm. </li>
-            <li><strong>Last.fm:</strong> a website that has been logging what its users listen to since 2002.</li>
-            <li><strong>Loved track:</strong> a manual button on Last.fm for marking a song you, well, love. </li>
-          </ul>
-        </div>
-
-        <h2>The top ten makes no sense</h2>
-
-        <p>Here is what fifteen years of listening looks like when you sort it:</p>
-
-        <figure>
-          <img class="theme-img-light" src="https://www.kenreid.co.uk/blog/img/scrobbles-top-artists-light.png" alt="Horizontal bar chart of my top ten Last.fm artists: Ludovico Einaudi 1,312 plays; Pogo 1,289; Jeremy Soule 1,160; Alkaline Trio 708; R.E.M. 666; Brad Sucks 605; The Smashing Pumpkins 602; The Strokes 596; Benjamin Monday 523; Andy McKee 506." loading="lazy" style="width:100%; border-radius:8px;">
-          <img class="theme-img-dark" src="https://www.kenreid.co.uk/blog/img/scrobbles-top-artists-dark.png" alt="Horizontal bar chart of my top ten Last.fm artists: Ludovico Einaudi 1,312 plays; Pogo 1,289; Jeremy Soule 1,160; Alkaline Trio 708; R.E.M. 666; Brad Sucks 605; The Smashing Pumpkins 602; The Strokes 596; Benjamin Monday 523; Andy McKee 506." loading="lazy" style="width:100%; border-radius:8px;">
-          <figcaption class="figure-note">My top ten artists by scrobbles, as of July 2026. Data from Last.fm.</figcaption>
-        </figure>
-
-        <p>Read as a list of favourite artists, this is gibberish. An Italian pianist, an Australian producer who makes music out of chopped-up Disney films, the man who composed the orchestral soundtrack to Skyrim, a Chicago punk band (who I entirely disavow now), and R.E.M., all sharing a podium. I guess this might be why the algorithms of music apps really struggle to find music I might like. It may as well just hit shuffle and hope for the best.</p>
-
-        <p>But that's because the chart isn't a list of favourites. It's strata. Each of those artists is a geological layer from a different era of my life, compressed into one picture. So let me read it the order it was written.</p>
-
-        <h2>The Scotland years</h2>
-
-        <p>Alkaline Trio, Yellowcard, Jimmy Eat World, The Smashing Pumpkins, The Strokes, The White Stripes, Manic Street Preachers, R.E.M. This is the music of being young in Scotland: burned CDs that I'd play in my parents car (they were too kind in letting me play Dragonforce and Children of Bodom, ooft), band t-shirts, and lots and sitting in my room with Ultimate Guitar on my computer screen trying to play songs way too complex for my intermediate level guitar skills.</p>
-
-        <p>The evidence survives. Here is me playing "Cherub Rock" by The Smashing Pumpkins, 17 years ago:</p>
-
-        <figure style="margin: 24px auto; display: flex; flex-direction: column; align-items: center; text-align: center;">
-          <button type="button" class="kr-embed-facade" data-embed-src="https://www.youtube.com/embed/bqK6W5Yok9g" data-embed-height="315" data-embed-title="Cherub Rock Cover"><span class="kr-embed-facade__play" aria-hidden="true"></span><span class="kr-embed-facade__title">Cherub Rock Cover</span><span class="kr-embed-facade__note">Click to load the YouTube player</span></button>
-        </figure>
-
-        <p>A few gigs made it into this layer too: Rammstein (my first, at twelve: being surrounded by that much fire leaves an impression), The White Stripes, Smashing Pumpkins. All were great (though I ended up seeing Smashing Pumpkins 3x in total, with each time presenting less excitement from the band, then Billy Corgan spat into the crowd and onto my face, which I was less than pleased about).</p>
-
-        <p>What strikes me now is that almost none of this layer is still accumulating. R.E.M. sits at 666 plays, and most of the others have barely moved in a decade. The person who needed them gradually changed, the way a diary's handwriting changes without any single entry looking different from the last. Though I do still listen to a lot of Dragonforce and Symphony X.</p>
-
-        <h2>The free internet</h2>
-
-        <p>The next layer is stranger, and I suspect only people of a very specific internet generation and online set of communities will get: Brad Sucks, Josh Woodward, Jonathan Coulton, Lemon Demon, and Pogo, who between them account for thousands of listens. My sixth most-played artist of all time is a one-man band from Canada who called himself Brad Sucks and gave his music away for free on the internet. I actually talked to him once, and he came across as depressed as his songs would indicate he is, which in retrospect I shouldn't have been surprised by. He's a good example of the tortured artist, creating beautiful music out of a tough life.</p>
-
-        <p>This was the era I've <a href="https://www.kenreid.co.uk/blog/life-and-death-of-the-early-internet.html">written about before</a>, when the internet felt like a place made by people rather than companies. Musicians put entire albums online for nothing, because the idea that strangers anywhere in the world could hear your songs was still intoxicating enough to be its own payment. I found Brad Sucks through Last.fm, Jonathan Coulton through WCRadio (warcraft radio) podcasts, and Lemon Demon through a Flash animation about fictional characters having a fight (though this isn't even Neil's best song, FYI, just the most well known).</p>
-
-        <figure style="margin: 24px auto; display: flex; flex-direction: column; align-items: center; text-align: center;">
-          <button type="button" class="kr-embed-facade" data-embed-src="https://www.youtube.com/embed/lrzKT-dFUjE" data-embed-height="315" data-embed-title="Lemon Demon - The Ultimate Showdown"><span class="kr-embed-facade__play" aria-hidden="true"></span><span class="kr-embed-facade__title">Lemon Demon - The Ultimate Showdown</span><span class="kr-embed-facade__note">Click to load the YouTube player</span></button>
-          <figcaption style="margin-top: 8px; font-size: 0.8em; max-width: 560px;">
-            That Flash animation: "The Ultimate Showdown of Ultimate Destiny." 
-          </figcaption>
-        </figure>
-
-        <h2>The loading screen years</h2>
-
-        <p>Jeremy Soule, who scored Morrowind, Oblivion, and Skyrim, sits at number three with 1,160 plays. Below him: Jason Hayes and Russell Brower, composers for World of Warcraft. Howard Shore's Lord of the Rings scores. Ben Prunty's soundtrack for FTL. C418's Minecraft music. Marcin Przyby&#322;owicz's Witcher 3 score, which I was apparently listening to earlier this week.</p>
-
-        <p>My eleventh most-played artist of all time is <em>Paradox Interactive</em>, which is a Swedish video game publisher. I have played their grand strategy games so much that an entire corporation is functionally one of my favourite bands, sitting comfortably above Rammstein, which is an odd thought.</p>
-
-        <p>It would be easy to read this layer as "Ken played too many video games" (which, well, yeah) but I think it also is the point where music stopped being something I identified with from a teenage angst perspective, worrying about girls or how I was perceived. Game soundtracks are often orchestral, epic, or relaxing, comforting, nostalgic. They accompany you, painting an aural embellishment on top of the stories, the visuals and the characters you play as and with. </p>
-
-        <p>If you want one track that explains this entire layer, it's "Totems of the Grizzlemaw", the Grizzly Hills music from Wrath of the Lich King. I have spent more hours inside this piece of music than many of my favourite albums combined:</p>
-
-        <figure style="margin: 24px auto; display: flex; flex-direction: column; align-items: center; text-align: center;">
-          <button type="button" class="kr-embed-facade" data-embed-src="https://www.youtube.com/embed/miqUeM1aSrQ" data-embed-height="315" data-embed-title="Totems of the Grizzlemaw - World of Warcraft: Wrath of the Lich King"><span class="kr-embed-facade__play" aria-hidden="true"></span><span class="kr-embed-facade__title">Totems of the Grizzlemaw - World of Warcraft: Wrath of the Lich King</span><span class="kr-embed-facade__note">Click to load the YouTube player</span></button>
-          <figcaption style="margin-top: 8px; font-size: 0.8em; max-width: 560px;">
-            "Totems of the Grizzlemaw", from the Wrath of the Lich King soundtrack. 
-          </figcaption>
-        </figure>
-
-        <p>I loved it enough that it crossed the line from accompaniment back into activity: ten years ago, in the middle of the chaos of renovating my home at the time, I sat down amidst the "stuff" room and recorded an acoustic cover of it. I also <a href="https://tabs.ultimate-guitar.com/tab/misc-computer-games/world-of-warcraft-wrath-of-the-lich-king-totems-of-the-grizzlemaw-tabs-1801728" target="_blank" rel="noopener noreferrer">wrote up the tab</a>, so the Ultimate Guitar habit from the Scotland years clearly never left either:</p>
-
-        <figure style="margin: 24px auto; display: flex; flex-direction: column; align-items: center; text-align: center;">
-          <button type="button" class="kr-embed-facade" data-embed-src="https://www.youtube.com/embed/oLqKMQ6H4DM" data-embed-height="315" data-embed-title="WotLK Grizzly Hills Day Music - Acoustic Cover by Ken Reid"><span class="kr-embed-facade__play" aria-hidden="true"></span><span class="kr-embed-facade__title">WotLK Grizzly Hills Day Music - Acoustic Cover by Ken Reid</span><span class="kr-embed-facade__note">Click to load the YouTube player</span></button>
-        </figure>
-
-        <p>It wasn't a one-off, either. Here's me playing Dan Romer's Far Cry 5 melody, using a tab by Eddie van der Meer:</p>
-
-        <figure style="margin: 24px auto; display: flex; flex-direction: column; align-items: center; text-align: center;">
-          <button type="button" class="kr-embed-facade" data-embed-src="https://www.youtube.com/embed/rL-C8x0VAAs" data-embed-height="315" data-embed-title="Far Cry 5 Melody by Dan Romer, played by Ken Reid"><span class="kr-embed-facade__play" aria-hidden="true"></span><span class="kr-embed-facade__title">Far Cry 5 Melody by Dan Romer, played by Ken Reid</span><span class="kr-embed-facade__note">Click to load the YouTube player</span></button>
-        </figure>
-
-        <h2>Music to think to</h2>
-
-        <p>My number one artist of all time, the musician the data says I love more than any other, is Ludovico Einaudi, a minimalist Italian pianist, at 1,312 plays.</p>
-
-        <p>I do like Einaudi. But he is not my favourite artist. He is my favourite <em>colleague</em>. Einaudi is what plays when I'm writing a paper, or reading about some technical concept. He is a large part of my "Study" playlist. The same is true of the rest of this layer: Andy McKee and Don Ross's fingerstyle guitar, the Oscar Peterson Trio, Mike Oldfield, an ocean of lofi channels with names like oatmello and Lofi Fruits Music, and Bach, who has been study music for three hundred years and remains undefeated. The <a href="https://www.kenreid.co.uk/music.html">study playlist</a> is accessible if you want to hear it.</p>
-
-        <figure style="margin: 24px auto; display: flex; flex-direction: column; align-items: center; text-align: center;">
-          <button type="button" class="kr-embed-facade" data-embed-src="https://www.youtube.com/embed/Htk5IuW5JHE" data-embed-height="315" data-embed-title="Ludovico Einaudi - I Giorni (Live at The Royal Albert Hall)"><span class="kr-embed-facade__play" aria-hidden="true"></span><span class="kr-embed-facade__title">Ludovico Einaudi - I Giorni (Live at The Royal Albert Hall)</span><span class="kr-embed-facade__note">Click to load the YouTube player</span></button>
-        </figure>
-
-        <p>This is the layer that has been accumulating through my PhD and my postdocs, and it reveals that <strong>the artist at the top of my all-time list got there by being background.</strong> So, I guess scrobbles don't measure love. Einaudi is number one for the same reason my office chair has more hours with me than my closest friends do.</p>
-
-        <h2>Music My Partner Showed Me</h2>
-
-        <p>One of the cool things about being with a musician is they open your mind up to not one but many new worlds of music. Suddenly I'm listening to beautiful folk pieces that speak to my heart:</p>
-
-        <figure style="margin: 24px auto; display: flex; flex-direction: column; align-items: center; text-align: center;">
-          <button type="button" class="kr-embed-facade" data-embed-src="https://www.youtube.com/embed/LDIfcBmCgQ8" data-embed-height="315" data-embed-title="Fey Fili - Suzy &amp; Sam"><span class="kr-embed-facade__play" aria-hidden="true"></span><span class="kr-embed-facade__title">Fey Fili - Suzy &amp; Sam</span><span class="kr-embed-facade__note">Click to load the YouTube player</span></button>
-        </figure>
-
-        <p>Bollywood songs that I find myself addicted to (and learned the dance to):</p>
-
-        <figure style="margin: 24px auto; display: flex; flex-direction: column; align-items: center; text-align: center;">
-          <button type="button" class="kr-embed-facade" data-embed-src="https://www.youtube.com/embed/jCEdTq3j-0U" data-embed-height="315" data-embed-title="Gallan Goodiyaan - Dil Dhadakne Do"><span class="kr-embed-facade__play" aria-hidden="true"></span><span class="kr-embed-facade__title">Gallan Goodiyaan - Dil Dhadakne Do</span><span class="kr-embed-facade__note">Click to load the YouTube player</span></button>
-        </figure>
-
-        <p>And somehow ended up being featured in a music video by a musical artist dear to us both (00:48 seconds):</p>
-
-        <figure style="margin: 24px auto; display: flex; flex-direction: column; align-items: center; text-align: center;">
-          <button type="button" class="kr-embed-facade" data-embed-src="https://www.youtube.com/embed/zccNFpngv7o?start=48" data-embed-height="315" data-embed-title="Na&iuml;ka - SOLEIL (Official Visualizer)"><span class="kr-embed-facade__play" aria-hidden="true"></span><span class="kr-embed-facade__title">Na&iuml;ka - SOLEIL (Official Visualizer)</span><span class="kr-embed-facade__note">Click to load the YouTube player</span></button>
-        </figure>
-
-        <h2>What the diary leaves out</h2>
-
-        <p>Like any diary, the record lies partly by omission. There are no scrobbles for the first chunk of my life, so the bands of my childhood are missing entirely (lots and lots of Mike Oldfield, The White Stripes and Busted), as is anything played on a car radio, at a gig, or in someone else's kitchen, or even on apps where I can't so easily send the listening data to Last.fm. </p>
-
-        <p>And the counting itself is skewed in a way any data scientist will recognise: it measures frequency when what we usually want is intensity. Last.fm actually has a correction for this, the "loved track" button, which requires a deliberate click rather than passive playback. I have 559 loved tracks against 49,716 scrobbles. I've <a href="https://www.kenreid.co.uk/blog/rating-systems.html">written before</a> about how badly rating systems capture what we actually value, and my own listening data turns out to be the same story: the chart knows what I did and almost nothing about what it meant.</p>
-
-        <p>If you want to poke through the full dataset yourself, the live charts below are generated straight from my profile:</p>
-
-        <figure style="margin: 24px auto;">
-          <iframe src="https://lastfmstats.com/user/gohex/charts" title="Live Last.fm statistics for gohex" loading="lazy" style="border: none; border-radius: 8px; width: 100%;" height="900"></iframe>
-          <figcaption class="figure-note">Live charts from lastfmstats.com. Unlike the rest of this post, these will keep updating after I hit publish.</figcaption>
-        </figure>
-
-        <p>And for more of all this, the <a href="https://www.kenreid.co.uk/music.html">music page</a> is the living version of this post: the album wall, the study playlist, and stats that keep counting while I'm not looking.</p>
-
-        <div class="faq-section">
-          <h2>Common questions</h2>
-
-          <details class="faq-item">
-            <summary>What counts as a scrobble?</summary>
-            <p>A play of a track, logged automatically by whatever player or streaming service you've connected to Last.fm. Most scrobblers only count a play once you're at least halfway through the song, so skips don't count.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Isn't letting a website log fifteen years of your listening a bit creepy?</summary>
-            <p>I really don't care.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Do you still scrobble everything?</summary>
-            <p>Everything that goes through my own devices, yes. After fifteen years it would feel strange to stop. The gaps would bother me more than the surveillance of myself does.</p>
-          </details>
-        </div>
-
-        
-
-      </main>
-
-        <hr style="margin: 40px 0;">
-        <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
-      ]]></content:encoded>
     </item>
     <item>
       <title>Hosting a Photography Portfolio on GitHub for Free</title>

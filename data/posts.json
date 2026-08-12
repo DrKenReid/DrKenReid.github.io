@@ -1,5 +1,22 @@
 [
   {
+    "title": "Variable Neighbourhood Search, Live",
+    "date": "2026-08-12",
+    "tags": [
+      "ai"
+    ],
+    "category": "Data & AI",
+    "excerpt": "An interactive variable neighbourhood search solving the Travelling Salesman Problem in your browser: watch a tour untangle itself, then watch the search escape a local optimum by changing what counts as a nearby move.",
+    "url": "blog/variable-neighbourhood-search-live.html",
+    "image": "img/photography/thumb/409.webp",
+    "series": {
+      "name": "Algorithms, Live",
+      "part": 5
+    },
+    "readMinutes": 7,
+    "words": 1434
+  },
+  {
     "title": "Particle Swarm, Live",
     "date": "2026-08-11",
     "tags": [

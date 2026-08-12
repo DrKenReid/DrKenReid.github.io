@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="An interactive variable neighbourhood search solving the Travelling Salesman Problem in your browser.">
+ <meta name="keywords" content="ai">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Variable Neighbourhood Search, Live - Ken Reid</title>
+ <meta property="og:title" content="Variable Neighbourhood Search, Live">
+ <meta property="og:description" content="An interactive variable neighbourhood search solving the Travelling Salesman Problem in your browser.">
+ <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/409.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Variable Neighbourhood Search, Live">
+ <meta name="twitter:description" content="An interactive variable neighbourhood search solving the Travelling Salesman Problem in your browser.">
+ <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/409.png">
+ <meta name="citation_title" content="Variable Neighbourhood Search, Live">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/08/12">
+ <meta name="citation_online_date" content="2026/08/12">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html">
+ <meta name="DC.title" content="Variable Neighbourhood Search, Live">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-08-12">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="../img/photography/hero/409.webp">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "Variable Neighbourhood Search, Live",
+ "description": "An interactive variable neighbourhood search solving the Travelling Salesman Problem in your browser.",
+ "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/409.png",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-08-12",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["ai", "variable neighborhood search", "optimization", "interactive", "travelling salesman"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "Variable Neighbourhood Search, Live",
+       "item": "https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html"
+     }
+   ]
+ }
+ </script>
+ <style>
+   /* Scoped tokens for the VNS widget. Light values here, dark overrides below.
+      Series: s1 = current tour, s2 = session best, s3 = accent (shakes, k), s4 = spare. */
+   .vns-viz{
+     --viz-s1:#2a78d6; --viz-s2:#1baf7a; --viz-s3:#eda100; --viz-s4:#d64550;
+     --viz-ink:#2b2b2b; --viz-muted:#666666; --viz-grid:#e1e0d9; --viz-surface:#ffffff;
+     --viz-border:rgba(0,0,0,0.12); --viz-cell:rgba(0,0,0,0.03);
+     background:var(--viz-surface); border:1px solid var(--viz-border); border-radius:10px;
+     padding:16px; margin:26px 0;
+   }
+   [data-theme="dark"] .vns-viz{
+     --viz-s1:#3987e5; --viz-s2:#199e70; --viz-s3:#f0b429; --viz-s4:#e5687a;
+     --viz-ink:#e8e8e8; --viz-muted:#9e9e9e; --viz-grid:#2c2c2a; --viz-surface:#1f1f1f;
+     --viz-border:rgba(255,255,255,0.12); --viz-cell:rgba(255,255,255,0.05);
+   }
+   .vns-viz canvas{ width:100%; display:block; border-radius:6px; touch-action:auto; cursor:default; }
+   .vns-viz canvas.vns-chart{ margin-top:14px; }
+   .vns-pills{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+   .vns-pill{
+     border:1px solid var(--viz-border); color:var(--viz-muted); border-radius:999px;
+     padding:4px 12px; font-size:0.78em; white-space:nowrap;
+     transition:background 0.3s ease, color 0.3s ease, opacity 0.3s ease, border-color 0.3s ease;
+   }
+   .vns-pill b{ font-weight:700; margin-right:5px; color:var(--viz-ink); transition:color 0.3s ease; }
+   .vns-pill.on{ background:var(--viz-s3); border-color:var(--viz-s3); color:#1a1a1a; }
+   .vns-pill.on b{ color:#1a1a1a; }
+   .vns-pill.off{ opacity:0.3; }
+   .vns-toolbar{ display:flex; flex-wrap:wrap; gap:8px 10px; align-items:center; margin-top:14px; font-size:0.85em; color:var(--viz-ink); }
+   .vns-toolbar label{ display:flex; align-items:center; gap:7px; margin:0 0 0 4px; font-weight:600; }
+   .vns-toolbar input[type=checkbox]{ accent-color:var(--viz-s3); width:15px; height:15px; margin:0; }
+   .vns-btn{ background:var(--viz-s3); color:#1a1a1a; border:none; border-radius:6px; padding:6px 16px; font-size:0.9em; cursor:pointer; font-family:inherit; }
+   .vns-btn.secondary{ background:transparent; color:var(--viz-ink); border:1px solid var(--viz-border); }
+   #vnsRun{ min-width:76px; }
+   .vns-status{ font-size:0.85em; color:var(--viz-muted); margin-left:auto; }
+   .vns-sliders{ display:flex; flex-wrap:wrap; gap:8px 28px; margin-top:12px; font-size:0.85em; color:var(--viz-ink); }
+   .vns-sliders label{ display:flex; align-items:center; gap:8px; margin:0; font-weight:400; }
+   .vns-sliders input[type=range]{ width:110px; accent-color:var(--viz-s3); }
+   .vns-sliders .val{ min-width:2.8em; color:var(--viz-muted); font-variant-numeric:tabular-nums; }
+   .vns-stats{ display:grid; grid-template-columns:repeat(auto-fit,minmax(116px,1fr)); gap:8px; margin-top:14px; }
+   .vns-stat{ background:var(--viz-cell); border:1px solid var(--viz-border); border-radius:8px; padding:7px 10px; display:flex; flex-direction:column; gap:2px; min-width:0; }
+   .vns-stat-lbl{ font-size:0.66em; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--viz-muted); white-space:nowrap; }
+   .vns-stat-val{ font-size:0.95em; font-weight:600; color:var(--viz-ink); font-variant-numeric:tabular-nums; }
+   .vns-swatch{ width:9px; height:9px; border-radius:2px; display:inline-block; vertical-align:-1px; margin-right:4px; }
+   .vns-note{ font-size:0.78em; color:var(--viz-muted); margin:12px 0 0; }
+   @media (max-width: 520px){
+     .vns-viz{ padding:12px; }
+     .vns-sliders{ gap:10px 0; }
+     .vns-sliders label{ width:100%; }
+     .vns-sliders input[type=range]{ flex:1; width:auto; }
+   }
+ </style>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <main id="main-content">
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/409.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">Variable Neighbourhood Search, Live</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">Variable Neighbourhood Search, Live</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+ 
+ <div class="blog-post">
+ <h1>Variable Neighbourhood Search, Live</h1>
+ <div class="blog-meta">
+ 12 August 2026 &middot;
+ <span class="blog-tag">ai</span>
+ </div>
+
+ <p>The <a href="evolution-live.html">genetic algorithm</a> kept a whole population, so one individual getting stuck didn't matter. <a href="simulated-annealing-live.html">Simulated annealing</a> tolerated bad moves while it was hot, the <a href="ant-colony-live.html">ant colony</a> let old trails evaporate, and the <a href="particle-swarm-live.html">particle swarm</a> carried enough momentum to sail over a dip before it noticed. This fifth one runs without a temperature schedule, a population, a pheromone trail, or a velocity. When it gets stuck, it changes what "nearby" means. This one hits home because, like many of the algorithms I am blogging about, I am making use of code I wrote years ago - but this one is special, because I used VNS for my <a href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&sortby=pubdate&citation_for_view=bwl2u00AAAAJ:u5HHmVD_uO8C">first ever published research paper</a>.</p>
+
+ <noscript><p><strong>The interactive parts of this post require JavaScript.</strong> The prose will still make sense, but the demo will be sadly inert.</p></noscript>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Variable neighbourhood search (VNS):</strong> an optimiser that escapes traps by switching, in a fixed order, between different definitions of "nearby".</li>
+ <li><strong>Neighbourhood structure:</strong> the set of solutions you can reach from the current one with a single type of move. Different move types give the same solution completely different neighbours.</li>
+ <li><strong>Local optimum:</strong> a solution none of whose neighbours are better. Since "neighbours" depends on the move type, a solution can be a local optimum under one move type and easy to improve under another.</li>
+ <li><strong>Shaking:</strong> a random jump within the current neighbourhood, applied to a good solution to knock the search into a different basin before descending again.</li>
+ <li><strong>2-opt:</strong> the smallest useful tour edit: remove two edges of the tour and reconnect the other way round, which reverses the segment in between.</li>
+ <li><strong>Or-opt:</strong> a tour edit that relocates a short chain of consecutive cities (one to three of them here) to a different place in the tour.</li>
+ </ul>
+ </div>
+
+ <h2>What does 'stuck' mean?</h2>
+
+ <p>The playing field is the same Travelling Salesman Problem as the annealing post: a scatter of cities, and we want the shortest round trip that visits each city once.</p>
+
+ <p>Local search on the TSP is very simple: take any tour, try a small edit, keep the edit if the tour got shorter, repeat. The classic small edit is 2-opt: snip two edges, reconnect them the other way, which reverses a stretch of the tour and uncrosses one of those ugly X shapes. Do that greedily and a random tangle collapses into something pretty good, pretty quickly.</p>
+
+ <p>But, inevitably, it stops. You reach a tour where no single 2-opt move helps, a local optimum, and are unable to move. In the annealing post I treated that as a fact about the tour: it's stuck. What is stuck is the tour plus <em>this particular definition of nearby</em>.</p>
+
+ <p>A 2-opt local optimum only means that none of the roughly n&sup2; tours reachable by one segment reversal is shorter. Offer a different move, say lifting three consecutive cities out and reinserting them elsewhere (Or-opt), and the same tour suddenly has a completely different set of neighbours, some of which may well be better.</p>
+
+ <p>Mladenović and Hansen built this idea in 1997<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>, called it variable neighbourhood search, and it has been a fixture of the routing and scheduling literature ever since.</p>
+
+ <p>A local optimum is a property of the neighbourhood, not of the solution.</p>
+
+ <h2>I'm gonna need a bigger hammer.</h2>
+
+ <p>Basic VNS keeps a list of neighbourhood structures, ordered from smallest to largest, and climbs that list on an "as needed" basis. Here is one VNS setup:</p>
+
+ <ul>
+ <li><strong>N1, 2-opt kick:</strong> reverse one random segment. The lightest nudge.</li>
+ <li><strong>N2, Or-opt:</strong> pull out a chain of one to three cities and reinsert it somewhere else.</li>
+ <li><strong>N3, segment exchange:</strong> swap two short segments of the tour with each other.</li>
+ <li><strong>N4, double bridge:</strong> cut the tour in four places and reassemble the quarters in a different order. A big kick. It changes four edges at once.</li>
+ </ul>
+
+ <p>That is to say: descend with plain first-improvement 2-opt until you hit a local optimum. That's your incumbent, so set k to 1. Now: <em>shake</em> the incumbent with a random move from neighbourhood N<sub>k</sub>, descend again with 2-opt from wherever that landed, and compare. If the re-descended tour beats the incumbent, move there and reset k to 1. If it doesn't, throw it away and increment k, up to k<sub>max</sub>, then wrap back round.</p>
+
+ <p>This runs without a temperature, an acceptance probability, or a crossover operator. Hansen and Mladenović later distilled the design principles in a survey which is a great starting point <sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+
+ <p>This means the algorithm, by its very nature, will reach for a bigger hammer, as needed. The moment <em>anything</em> works, it drops straight back to the smallest hammer.</p>
+
+ <h2>Watch it climb the ladder</h2>
+
+ <p>Below, VNS is solving a seeded random TSP instance live, and the lit badge under the map is the neighbourhood currently in use. Watch it during a rough patch. N1 lights, fails. N2 lights, fails. N3 lights, and then an escape lands, and it snaps straight back to N1. The right-hand chart records that as a sawtooth: every tooth is the search getting stuck, escalating, and being rescued. Amber flashes on the map are the edges the latest shake or improvement just changed.</p>
+
+ <div class="vns-viz" id="vns-demo">
+   <canvas id="vnsCanvas" height="360" role="img" aria-label="Animated variable neighbourhood search demo: a scatter of cities joined by the current tour, with recently changed edges briefly highlighted in an accent colour as the search shakes and re-descends"></canvas>
+   <div class="vns-pills" id="vnsPills" aria-label="Current neighbourhood indicator">
+     <span class="vns-pill" data-k="1"><b>N1</b>2-opt</span>
+     <span class="vns-pill" data-k="2"><b>N2</b>Or-opt</span>
+     <span class="vns-pill" data-k="3"><b>N3</b>seg. exchange</span>
+     <span class="vns-pill" data-k="4"><b>N4</b>double bridge</span>
+   </div>
+   <div class="vns-toolbar">
+     <button class="vns-btn" id="vnsRun" type="button">Pause</button>
+     <button class="vns-btn secondary" id="vnsRestart" type="button">Restart</button>
+     <button class="vns-btn secondary" id="vnsNew" type="button">New cities</button>
+     <label><input type="checkbox" id="vnsPlain"> plain local search</label>
+     <span class="vns-status" id="vnsStatus"></span>
+   </div>
+   <div class="vns-sliders">
+     <label>Cities <input type="range" id="vnsCities" min="30" max="70" step="5" value="40"> <span class="val" id="vnsCitiesVal"></span></label>
+     <label>k max <input type="range" id="vnsKmax" min="1" max="4" value="4"> <span class="val" id="vnsKmaxVal"></span></label>
+     <label>Speed <input type="range" id="vnsSpeed" min="1" max="40" value="5"> <span class="val" id="vnsSpeedVal"></span></label>
+   </div>
+   <div class="vns-stats">
+     <div class="vns-stat"><span class="vns-stat-lbl"><span class="vns-swatch" style="background:var(--viz-s1);"></span>Tour length</span><span class="vns-stat-val" id="vnsLen">&hellip;</span></div>
+     <div class="vns-stat"><span class="vns-stat-lbl"><span class="vns-swatch" style="background:var(--viz-s2);"></span>Gap vs best</span><span class="vns-stat-val" id="vnsGap">&hellip;</span></div>
+     <div class="vns-stat"><span class="vns-stat-lbl">Shakes</span><span class="vns-stat-val" id="vnsShakes">0</span></div>
+     <div class="vns-stat"><span class="vns-stat-lbl">Current k</span><span class="vns-stat-val" id="vnsK">&ndash;</span></div>
+     <div class="vns-stat"><span class="vns-stat-lbl">Optima escaped</span><span class="vns-stat-val" id="vnsEsc">0</span></div>
+   </div>
+   <canvas id="vnsChart" class="vns-chart" height="150" role="img" aria-label="Live charts: current tour length and session best over time on the left, and a step chart of the neighbourhood index k on the right, whose sawtooth shows the search escalating through bigger moves and snapping back to k equals 1 on each escape"></canvas>
+   <p class="vns-note">Blue is the working tour, and its length is in map units. <strong>Gap vs best</strong> compares the tour on screen with the best length seen since this city layout was generated, so it spikes at every shake and closes again as the descent recovers. <strong>Optima escaped</strong> counts shakes whose re-descent actually beat the incumbent. The k chart is at 1 while life is easy, bouncing upward when it isn't. Restart re-runs the search on the same cities (the session best survives, so you can race yourself). New cities generates a fresh map.</p>
+ </div>
+
+ <h2>The Sliders</h2>
+
+ <p><strong>Tick "plain local search".</strong> This switches the shaking off entirely: descend with 2-opt, then stop, and the tour untangles, hits its first local optimum, and freezes there forever, while the k chart flatlines like in that medical drama my partner watches.</p>
+
+ <p><strong>Set k max to 1.</strong> Now the search still shakes, but only ever with the smallest kick, a single random segment reversal. Watch the escapes counter crawl: a small kick barely leaves the current basin, so the 2-opt descent usually slides straight back into the tour it just left.</p>
+
+ <p>The gap stat twitches and recovers, twitches and recovers, going nowhere. It is all motion and no progress.</p>
+
+ <p><strong>Now give it the full ladder, k max at 4, and watch the cost side.</strong> Every time N4 fires, the gap stat spikes hard, because a double bridge tears four edges out of a good tour, and the descent then spends a long run of moves stitching the damage back together.</p>
+
+ <p>That work is only worth it when nothing smaller can move the search, so VNS keeps the big hammer as a last resort.</p>
+
+ <h2>Change what nearby means</h2>
+
+ <p>I like the contrast with the earlier posts in this series: simulated annealing keeps one move type and varies <em>when it will accept a worse solution</em>. The genetic algorithm keeps a population, so the question of any one solution being stuck barely arises.</p>
+
+ <p>VNS, in its basic form, never accepts a worse solution at all, runs a single solution, and the only thing it varies is the move set. Three completely different answers to the same trap.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>How is this different from simulated annealing?</summary>
+ <p>Annealing keeps one neighbourhood and loosens the <em>acceptance rule</em>: worse solutions get through with a probability that decays as the temperature falls, which means picking a cooling schedule. Basic VNS keeps a strict acceptance rule (only ever move to something better) and varies the <em>neighbourhood</em> instead.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Is VNS used in the real world?</summary>
+ <p>Very much so. It has a strong record on vehicle routing, facility location (the p-median problem was one of its earliest wins), job-shop and nurse scheduling, timetabling, and graph problems, and Hansen and Mladenović's survey<sup><a href="#ref-2" class="cite-ref">[2]</a></sup> catalogues dozens of applications. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why not just always use the biggest shake?</summary>
+ <p>It destroys structure a good tour spent many moves earning, and the descent afterwards must spend many more rebuilding it. </p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Mladenović, N., &amp; Hansen, P. (1997). Variable neighborhood search. <em>Computers &amp; Operations Research</em>, 24(11), 1097&ndash;1100. <a href="https://doi.org/10.1016/S0305-0548(97)00031-2" target="_blank" rel="noopener">https://doi.org/10.1016/S0305-0548(97)00031-2</a>
+          </li>
+          <li id="ref-2">
+            Hansen, P., &amp; Mladenović, N. (2001). Variable neighborhood search: Principles and applications. <em>European Journal of Operational Research</em>, 130(3), 449&ndash;467. <a href="https://doi.org/10.1016/S0377-2217(00)00100-4" target="_blank" rel="noopener">https://doi.org/10.1016/S0377-2217(00)00100-4</a>
+          </li>
+        </ol>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="simulated-annealing-live.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/69.webp" alt="Simulated Annealing, Live" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">5 August 2026 · 28 min read</div>
+                  <h3 class="blog-card-title">Simulated Annealing, Live</h3>
+                  <p class="blog-card-excerpt">An interactive introduction to simulated annealing: watch a ball escape local minima as you control the temperature, then race four algorithms live on the Travelling Salesman Problem in your browser.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="particle-swarm-live.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/186.webp" alt="Particle Swarm, Live" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">11 August 2026 · 8 min read</div>
+                  <h3 class="blog-card-title">Particle Swarm, Live</h3>
+                  <p class="blog-card-excerpt">An interactive particle swarm optimiser in your browser: a flock of dots hunts a landscape none of them can see, steered by private memory and a single piece of gossip, and the sliders let you collapse the swarm on purpose.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="ant-colony-live.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/290.webp" alt="Ant Colony, Live" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">19 July 2026 · 6 min read</div>
+                  <h3 class="blog-card-title">Ant Colony, Live</h3>
+                  <p class="blog-card-excerpt">An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and see what evaporation is really for.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span><span class="blog-tag">data science</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ </div>
+ </div>
+ </div>
+
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+
+ <script>
+ /* ============================================================
+    Variable Neighbourhood Search, Live — the interactive demo.
+    No dependencies. Renders to <canvas>, reads its colours from the CSS
+    custom properties on .vns-viz so the light/dark toggle restyles it
+    live. Basic VNS on a seeded random TSP: first-improvement 2-opt
+    descent to a local optimum, then shake in neighbourhood k, descend,
+    accept on improvement (k back to 1) or escalate k up the ladder.
+    ============================================================ */
+ (function () {
+   'use strict';
+   var wrap = document.getElementById('vns-demo');
+   if (!wrap) return;
+   var cv = document.getElementById('vnsCanvas');
+   var chart = document.getElementById('vnsChart');
+
+   function mulberry32(seed) {
+     var a = seed >>> 0;
+     return function () {
+       a |= 0; a = (a + 0x6D2B79F5) | 0;
+       var t = Math.imul(a ^ (a >>> 15), 1 | a);
+       t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+     };
+   }
+   function vizColors(el) {
+     var cs = getComputedStyle(el);
+     function v(n) { return cs.getPropertyValue(n).trim(); }
+     return { s1: v('--viz-s1'), s2: v('--viz-s2'), s3: v('--viz-s3'), s4: v('--viz-s4'),
+              ink: v('--viz-ink'), muted: v('--viz-muted'), grid: v('--viz-grid'), surface: v('--viz-surface') };
+   }
+
+   var W = 0, H = 0, ctx = null, WC = 0, HC = 0, ctxC = null;
+   function fitOne(canvas, h) {
+     var dpr = window.devicePixelRatio || 1;
+     var w = canvas.clientWidth || 600;
+     canvas.style.height = h + 'px';
+     canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+     var g = canvas.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+     return { g: g, w: w, h: h };
+   }
+   function fitCanvas() {
+     // height tracks width: a squat map on desktop, closer to square on
+     // phones; the chart panes sit side by side when wide, stacked when not
+     var w = cv.clientWidth || 600;
+     var mapH = Math.round(Math.max(260, Math.min(380, w * 0.62)));
+     var m = fitOne(cv, mapH); ctx = m.g; W = m.w; H = m.h;
+     var c = fitOne(chart, w < 480 ? 320 : 150); ctxC = c.g; WC = c.w; HC = c.h;
+   }
+
+   // ---- control refs ----
+   var runBtn = document.getElementById('vnsRun');
+   var restartBtn = document.getElementById('vnsRestart');
+   var newBtn = document.getElementById('vnsNew');
+   var plainT = document.getElementById('vnsPlain');
+   var citiesS = document.getElementById('vnsCities'), citiesV = document.getElementById('vnsCitiesVal');
+   var kmaxS = document.getElementById('vnsKmax'), kmaxV = document.getElementById('vnsKmaxVal');
+   var speedS = document.getElementById('vnsSpeed'), speedV = document.getElementById('vnsSpeedVal');
+   var statusEl = document.getElementById('vnsStatus');
+   var lenEl = document.getElementById('vnsLen'), gapEl = document.getElementById('vnsGap');
+   var shakesEl = document.getElementById('vnsShakes'), kEl = document.getElementById('vnsK');
+   var escEl = document.getElementById('vnsEsc');
+   var pillEls = Array.prototype.slice.call(document.querySelectorAll('#vnsPills .vns-pill'));
+
+   // ---- state ----
+   var citySeed = 20260807, searchSeed = 1;
+   var cities = [];                       // {x,y} in 0..1
+   var tour = [], curLen = 0;
+   var incumbent = null, incLen = Infinity;
+   var sessionBest = Infinity;
+   var k = 0;                             // 0 = initial descent, else 1..kmax
+   var phase = 'descent';                 // descent | shake | stuck
+   var shakes = 0, escapes = 0, moves = 0;
+   var scanI = 0, scanJ = 2, sinceImp = 0, totalPairs = 0;
+   var samples = [], MAX_SAMPLES = 300;
+   var flashes = [], FLASH_MS = 1100;     // gentle fade on changed edges
+   var srng = mulberry32(1);
+   var running = true, raf = null, lastT = 0, acc = 0;
+
+   function dist(a, b) { var dx = cities[a].x - cities[b].x, dy = cities[a].y - cities[b].y; return Math.hypot(dx, dy); }
+   function tourLenRaw(t) { var L = 0; for (var i = 0; i < t.length; i++) L += dist(t[i], t[(i + 1) % t.length]); return L; }
+   function units(L) { return Math.round(L * 1000); }
+   function px(i) { return cities[i].x * W; }
+   function py(i) { return cities[i].y * H; }
+   function effKmax() { return plainT.checked ? 1 : parseInt(kmaxS.value, 10); }
+
+   // ---- setup ----
+   function buildCities() {
+     var n = parseInt(citiesS.value, 10);
+     var crng = mulberry32(citySeed);
+     var minD = 0.55 / Math.sqrt(n);
+     cities = [];
+     var tries = 0;
+     while (cities.length < n && tries < 20000) {
+       tries++;
+       var p = { x: 0.05 + crng() * 0.90, y: 0.07 + crng() * 0.86 };
+       var ok = true;
+       for (var q = 0; q < cities.length; q++) {
+         if (Math.hypot(p.x - cities[q].x, p.y - cities[q].y) < minD) { ok = false; break; }
+       }
+       if (ok) cities.push(p);
+     }
+   }
+
+   function restartSearch() {
+     var n = cities.length;
+     srng = mulberry32(((searchSeed * 2654435761) ^ citySeed) >>> 0);
+     tour = []; for (var i = 0; i < n; i++) tour.push(i);
+     for (var j = n - 1; j > 0; j--) { var r = Math.floor(srng() * (j + 1)); var tmp = tour[j]; tour[j] = tour[r]; tour[r] = tmp; }
+     curLen = tourLenRaw(tour);
+     incumbent = null; incLen = Infinity;
+     k = 0; phase = 'descent';
+     shakes = 0; escapes = 0; moves = 0;
+     samples = []; flashes = [];
+     resetScan();
+     wrap.dataset.initialLen = units(curLen);
+     if (curLen < sessionBest) sessionBest = curLen;
+     updateStats(); updatePills();
+   }
+
+   function resetScan() {
+     var n = tour.length;
+     scanI = 0; scanJ = 2; sinceImp = 0;
+     totalPairs = ((n - 2) * (n - 1)) / 2 - 1;   // pairs (i, j>=i+2) minus the (0, n-1) wrap duplicate
+   }
+
+   // ---- first-improvement 2-opt descent ----
+   function tryDescentMove() {
+     var n = tour.length;
+     var guard = totalPairs + 2;
+     while (guard-- > 0 && sinceImp < totalPairs) {
+       var i = scanI, j = scanJ;
+       scanJ++;
+       if (scanJ > n - 1) { scanI++; if (scanI > n - 3) scanI = 0; scanJ = scanI + 2; }
+       if (i === 0 && j === n - 1) continue;      // same-edge pair on the cycle: not a move
+       sinceImp++;
+       var a = tour[i], b = tour[i + 1], c = tour[j], d = tour[(j + 1) % n];
+       var delta = dist(a, c) + dist(b, d) - dist(a, b) - dist(c, d);
+       if (delta < -1e-12) {
+         var lo = i + 1, hi = j;
+         while (lo < hi) { var tmp = tour[lo]; tour[lo] = tour[hi]; tour[hi] = tmp; lo++; hi--; }
+         curLen = tourLenRaw(tour);
+         addFlashes([[a, c], [b, d]]);
+         sinceImp = 0; moves++;
+         return true;
+       }
+     }
+     return false;
+   }
+
+   // ---- the neighbourhood ladder (shakes act on a copy of the incumbent) ----
+   function shakeTour(base, kk) {
+     var s = base.slice(), n = s.length;
+     if (kk === 1) {                              // N1: random 2-opt kick
+       var a = Math.floor(srng() * (n - 3));
+       var span = 2 + Math.floor(srng() * Math.max(2, Math.floor(n / 3)));
+       var b = Math.min(n - 1, a + span);
+       while (a < b) { var t1 = s[a]; s[a] = s[b]; s[b] = t1; a++; b--; }
+       return s;
+     }
+     if (kk === 2) {                              // N2: Or-opt, relocate a chain of 1-3
+       var m = 1 + Math.floor(srng() * 3);
+       var p = Math.floor(srng() * (n - m));
+       var chain = s.splice(p, m);
+       var q = Math.floor(srng() * (s.length + 1));
+       if (q === p) q = (q + 1 + Math.floor(srng() * s.length)) % (s.length + 1);
+       Array.prototype.splice.apply(s, [q, 0].concat(chain));
+       return s;
+     }
+     if (kk === 3) {                              // N3: exchange two short segments (3-opt-lite)
+       var l1 = 2 + Math.floor(srng() * 3), l2 = 2 + Math.floor(srng() * 3);
+       if (n < l1 + l2 + 4) return shakeTour(base, 4);
+       var p1 = Math.floor(srng() * (n - l1 - l2 - 2));
+       var p2 = p1 + l1 + 1 + Math.floor(srng() * (n - l2 - p1 - l1));
+       return s.slice(0, p1).concat(
+         s.slice(p2, p2 + l2), s.slice(p1 + l1, p2), s.slice(p1, p1 + l1), s.slice(p2 + l2));
+     }
+     // N4: double bridge (random 4-opt)
+     var c1 = 1 + Math.floor(srng() * (n - 3));
+     var c2 = c1 + 1 + Math.floor(srng() * (n - c1 - 2));
+     var c3 = c2 + 1 + Math.floor(srng() * (n - c2 - 1));
+     return s.slice(0, c1).concat(s.slice(c2, c3), s.slice(c1, c2), s.slice(c3));
+   }
+
+   function edgeKey(a, b) { return a < b ? a + '_' + b : b + '_' + a; }
+   function flashDiff(oldT, newT) {
+     var seen = {}, n = oldT.length, list = [];
+     for (var i = 0; i < n; i++) seen[edgeKey(oldT[i], oldT[(i + 1) % n])] = 1;
+     for (var j = 0; j < n; j++) {
+       var a = newT[j], b = newT[(j + 1) % n];
+       if (!seen[edgeKey(a, b)]) list.push([a, b]);
+     }
+     addFlashes(list);
+   }
+   function addFlashes(pairs) {
+     var now = performance.now();
+     for (var i = 0; i < pairs.length; i++) flashes.push({ a: pairs[i][0], b: pairs[i][1], t0: now });
+     if (flashes.length > 48) flashes.splice(0, flashes.length - 48);
+   }
+
+   // ---- one VNS event: an accepted move, a verdict, or a shake ----
+   function doEvent() {
+     if (phase === 'stuck') { sample(); updateStats(); return; }
+     if (phase === 'descent') {
+       if (!tryDescentMove()) {
+         // local optimum under 2-opt: judge the basin we descended into
+         if (incumbent === null) {
+           incumbent = tour.slice(); incLen = curLen; k = 1;
+         } else if (curLen < incLen - 1e-12) {
+           incumbent = tour.slice(); incLen = curLen; escapes++; k = 1;
+         } else {
+           tour = incumbent.slice(); curLen = incLen;
+           k = k >= effKmax() ? 1 : k + 1;
+         }
+         if (incLen < sessionBest) sessionBest = incLen;
+         phase = plainT.checked ? 'stuck' : 'shake';
+         resetScan();
+       }
+       if (curLen < sessionBest) sessionBest = curLen;
+     } else if (phase === 'shake') {
+       var old = tour;
+       tour = shakeTour(incumbent, k);
+       flashDiff(old, tour);
+       curLen = tourLenRaw(tour);
+       shakes++;
+       phase = 'descent';
+       resetScan();
+     }
+     sample(); updateStats();
+   }
+
+   function sample() {
+     samples.push({ len: curLen, best: isFinite(sessionBest) ? sessionBest : null, k: k });
+     if (samples.length > MAX_SAMPLES) samples.shift();
+   }
+
+   // ---- readouts ----
+   function updateStats() {
+     lenEl.textContent = units(curLen);
+     wrap.dataset.curLen = units(curLen);
+     if (isFinite(sessionBest) && sessionBest > 0) {
+       var gap = Math.max(0, (curLen - sessionBest) / sessionBest * 100);
+       gapEl.textContent = gap.toFixed(1) + '%';
+     } else gapEl.textContent = '…';
+     shakesEl.textContent = String(shakes);
+     escEl.textContent = String(escapes);
+     kEl.textContent = k > 0 ? 'N' + k : '–';
+     if (phase === 'stuck') statusEl.textContent = 'Stuck: 2-opt sees nothing better.';
+     else if (phase === 'shake') statusEl.textContent = 'Local optimum. Reaching for N' + k + '…';
+     else if (k === 0) statusEl.textContent = 'First descent: untangling with 2-opt.';
+     else statusEl.textContent = 'Descending after an N' + k + ' shake.';
+     updatePills();
+   }
+   function updatePills() {
+     var km = effKmax();
+     for (var i = 0; i < pillEls.length; i++) {
+       var kk = i + 1;
+       pillEls[i].classList.toggle('on', kk === k && phase !== 'stuck');
+       pillEls[i].classList.toggle('off', kk > km);
+     }
+   }
+
+   // ---- drawing ----
+   function draw() {
+     var c = vizColors(wrap);
+     ctx.clearRect(0, 0, W, H);
+     // current tour
+     var n = tour.length;
+     if (n) {
+       ctx.strokeStyle = c.s1; ctx.lineWidth = 1.8; ctx.globalAlpha = 0.9; ctx.lineJoin = 'round';
+       ctx.beginPath(); ctx.moveTo(px(tour[0]), py(tour[0]));
+       for (var i = 1; i < n; i++) ctx.lineTo(px(tour[i]), py(tour[i]));
+       ctx.closePath(); ctx.stroke(); ctx.globalAlpha = 1;
+     }
+     // fading highlight on the edges the latest move changed
+     var now = performance.now(), keep = [];
+     for (var f = 0; f < flashes.length; f++) {
+       var fl = flashes[f], a = 1 - (now - fl.t0) / FLASH_MS;
+       if (a <= 0) continue;
+       keep.push(fl);
+       ctx.globalAlpha = 0.85 * a; ctx.strokeStyle = c.s3; ctx.lineWidth = 3.2;
+       ctx.beginPath(); ctx.moveTo(px(fl.a), py(fl.a)); ctx.lineTo(px(fl.b), py(fl.b)); ctx.stroke();
+     }
+     flashes = keep; ctx.globalAlpha = 1;
+     // cities
+     for (var v = 0; v < cities.length; v++) {
+       ctx.beginPath(); ctx.arc(px(v), py(v), 3, 0, Math.PI * 2); ctx.fillStyle = c.ink; ctx.fill();
+     }
+     drawChart(c);
+   }
+
+   function drawChart(c) {
+     ctxC.clearRect(0, 0, WC, HC);
+     ctxC.font = '600 9px Poppins, sans-serif';
+     ctxC.textAlign = 'left';
+     if (WC < 480) {          // stacked panes on narrow screens
+       var half = (HC - 16) / 2;
+       drawLenPane(c, 0, 0, WC, half);
+       drawKPane(c, 0, half + 16, WC, half);
+     } else {
+       var gap = 22, paneW = (WC - gap) / 2;
+       drawLenPane(c, 0, 0, paneW, HC);
+       drawKPane(c, paneW + gap, 0, paneW, HC);
+     }
+   }
+
+   var GUT = 34;              // left gutter inside each pane for axis labels
+   function drawLenPane(c, x, y, w, h) {
+     var top = y + 22, bottom = y + h - 8, plotH = bottom - top;
+     var px0 = x + GUT, right = x + w - 2, step = (right - px0) / (MAX_SAMPLES - 1);
+     ctxC.fillStyle = c.muted; ctxC.fillText('TOUR LENGTH', x, y + 9);
+     if (w > 220) {
+       ctxC.fillStyle = c.s1; ctxC.fillRect(right - 96, y + 4, 10, 3);
+       ctxC.fillStyle = c.muted; ctxC.fillText('now', right - 82, y + 9);
+       ctxC.fillStyle = c.s2; ctxC.fillRect(right - 50, y + 4, 10, 3);
+       ctxC.fillStyle = c.muted; ctxC.fillText('best', right - 36, y + 9);
+     }
+     if (samples.length < 2) return;
+     var lo = Infinity, hi = -Infinity;
+     for (var i = 0; i < samples.length; i++) {
+       var s = samples[i];
+       if (s.len < lo) lo = s.len; if (s.len > hi) hi = s.len;
+       if (s.best != null && s.best < lo) lo = s.best;
+     }
+     if (!isFinite(lo) || !isFinite(hi)) return;
+     if (hi - lo < 1e-9) hi = lo + 1e-9;
+     var pad = (hi - lo) * 0.08; lo -= pad; hi += pad;
+     function yv(v) { return bottom - ((v - lo) / (hi - lo)) * plotH; }
+     [lo, (lo + hi) / 2, hi].forEach(function (gv) {
+       var gy = yv(gv);
+       ctxC.strokeStyle = c.grid; ctxC.lineWidth = 1;
+       ctxC.beginPath(); ctxC.moveTo(px0, gy); ctxC.lineTo(right, gy); ctxC.stroke();
+       ctxC.fillStyle = c.muted; ctxC.textAlign = 'right';
+       ctxC.fillText(String(units(gv)), px0 - 5, gy + 3);
+       ctxC.textAlign = 'left';
+     });
+     function series(key, color) {
+       ctxC.strokeStyle = color; ctxC.lineWidth = 1.6; ctxC.lineJoin = 'round'; ctxC.beginPath();
+       var started = false;
+       for (var j = 0; j < samples.length; j++) {
+         var v = samples[j][key];
+         if (v == null) continue;
+         var sx = px0 + j * step, sy = Math.min(bottom, Math.max(top, yv(v)));
+         if (!started) { ctxC.moveTo(sx, sy); started = true; } else ctxC.lineTo(sx, sy);
+       }
+       if (started) ctxC.stroke();
+     }
+     series('len', c.s1);
+     series('best', c.s2);
+   }
+
+   function drawKPane(c, x, y, w, h) {
+     var top = y + 22, bottom = y + h - 8, plotH = bottom - top;
+     var px0 = x + GUT, right = x + w - 2, step = (right - px0) / (MAX_SAMPLES - 1);
+     ctxC.fillStyle = c.muted; ctxC.fillText('NEIGHBOURHOOD k', x, y + 9);
+     var yMax = 4.6;
+     function yk(v) { return bottom - (v / yMax) * plotH; }
+     for (var g = 1; g <= 4; g++) {
+       var gy = yk(g);
+       ctxC.strokeStyle = c.grid; ctxC.lineWidth = 1;
+       ctxC.beginPath(); ctxC.moveTo(px0, gy); ctxC.lineTo(right, gy); ctxC.stroke();
+       ctxC.fillStyle = c.muted; ctxC.textAlign = 'right';
+       ctxC.fillText('N' + g, px0 - 5, gy + 3);
+       ctxC.textAlign = 'left';
+     }
+     if (samples.length < 2) return;
+     ctxC.strokeStyle = c.s3; ctxC.lineWidth = 1.8; ctxC.lineJoin = 'round'; ctxC.beginPath();
+     var prevY = null;
+     for (var i = 0; i < samples.length; i++) {
+       var sx = px0 + i * step, sy = yk(samples[i].k);
+       if (prevY === null) ctxC.moveTo(sx, sy);
+       else { ctxC.lineTo(sx, prevY); ctxC.lineTo(sx, sy); }
+       prevY = sy;
+     }
+     ctxC.stroke();
+   }
+
+   // ---- main loop: events are metered by the speed slider so the pace of
+   // accepted moves stays gentle at the default setting ----
+   function loop(ts) {
+     if (!running) return;
+     if (!lastT) lastT = ts;
+     var dt = Math.min(0.1, (ts - lastT) / 1000); lastT = ts;
+     acc += dt * parseInt(speedS.value, 10);
+     var guard = 0;
+     while (acc >= 1 && guard < 60) { acc -= 1; guard++; doEvent(); }
+     if (acc > 2) acc = 0;
+     draw();
+     raf = requestAnimationFrame(loop);
+   }
+   function start() { if (running) { lastT = 0; raf = requestAnimationFrame(loop); } }
+
+   // ---- controls ----
+   runBtn.addEventListener('click', function () {
+     running = !running; runBtn.textContent = running ? 'Pause' : 'Play';
+     if (running) start(); else if (raf) cancelAnimationFrame(raf);
+   });
+   restartBtn.addEventListener('click', function () {
+     searchSeed++; restartSearch(); if (!running) draw();
+   });
+   newBtn.addEventListener('click', function () {
+     citySeed += 7; sessionBest = Infinity; buildCities(); searchSeed++; restartSearch(); if (!running) draw();
+   });
+   citiesS.addEventListener('input', function () {
+     citiesV.textContent = citiesS.value;
+     sessionBest = Infinity; buildCities(); searchSeed++; restartSearch(); if (!running) draw();
+   });
+   kmaxS.addEventListener('input', function () {
+     kmaxV.textContent = kmaxS.value;
+     if (k > effKmax()) k = effKmax();
+     updatePills();
+   });
+   speedS.addEventListener('input', function () { speedV.textContent = speedS.value; });
+   plainT.addEventListener('change', function () {
+     kmaxS.disabled = plainT.checked;
+     if (plainT.checked) {
+       if (phase === 'shake') phase = 'stuck';
+       if (k > 1) k = 1;
+     } else if (phase === 'stuck') {
+       phase = 'shake'; if (k === 0) k = 1;
+     }
+     updateStats();
+   });
+
+   window.addEventListener('resize', function () { fitCanvas(); if (!running) draw(); });
+   new MutationObserver(function () { draw(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+   // ---- init ----
+   fitCanvas();
+   citiesV.textContent = citiesS.value;
+   kmaxV.textContent = kmaxS.value;
+   speedV.textContent = speedS.value;
+   buildCities();
+   restartSearch();
+   draw();
+   start();
+ })();
+ </script>
+</body>
+</html>
