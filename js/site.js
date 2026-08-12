@@ -308,6 +308,19 @@
             if (toggler) toggler.focus();
         });
 
+        // --- a tap outside the open menu closes it ---
+        // On a phone the menu covers part of the page, and the close icon is
+        // a small target in the corner; tapping the page is what most people
+        // try first. The toggler is excluded because its own handler already
+        // toggles, and a tap on it would otherwise close and reopen.
+        document.addEventListener('click', function (e) {
+            if (!menu.classList.contains('menu-on')) return;
+            var t = e.target;
+            if (!t || !t.closest) return;
+            if (t.closest('.classy-menu') || t.closest('.classy-navbar-toggler')) return;
+            setMenu(false);
+        });
+
         // --- desktop: open a dropdown when focus enters its parent item ---
         // The stylesheet only reveals dropdowns on :hover, and
         // visibility:hidden keeps their links out of the tab order, so
