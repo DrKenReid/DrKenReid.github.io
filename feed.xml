@@ -648,7 +648,7 @@ frame.contentWindow.postMessage(
 
  <h2>Play with it: the marble and the thermostat</h2>
 
- <p>Below are two marbles on the same bumpy curve, started at the same spot. The <span style="white-space:nowrap;"><span class="sa-swatch sa-swatch-2"></span> green one</span> is a pure hill climber: it only accepts downhill moves. The <span style="white-space:nowrap;"><span class="sa-swatch sa-swatch-1"></span> blue one</span> anneals: you hold its thermostat. Run it a few times. Watch the greedy marble find the nearest dip and retire there, while the hot marble rattles across the whole curve; then drag the temperature down (or let auto-cool do it) and watch the blue marble crystallise, usually somewhere much deeper. The small dots mark the best point each marble has ever found. The strip under the curve records your run as you go: the temperature you are holding in amber and, in blue, the fraction of uphill moves the annealer is accepting, which is <code>P = exp(&minus;&Delta;/T)</code> made visible.</p>
+ <p>Below are two marbles on the same bumpy curve, started at the same spot. The <span style="white-space:nowrap;"><span class="kr-swatch sa-swatch-2"></span> green one</span> is a pure hill climber: it only accepts downhill moves. The <span style="white-space:nowrap;"><span class="kr-swatch sa-swatch-1"></span> blue one</span> anneals: you hold its thermostat. Run it a few times. Watch the greedy marble find the nearest dip and retire there, while the hot marble rattles across the whole curve; then drag the temperature down (or let auto-cool do it) and watch the blue marble crystallise, usually somewhere much deeper. The small dots mark the best point each marble has ever found. The strip under the curve records your run as you go: the temperature you are holding in amber and, in blue, the fraction of uphill moves the annealer is accepting, which is <code>P = exp(&minus;&Delta;/T)</code> made visible.</p>
 
  
 
@@ -661,10 +661,10 @@ frame.contentWindow.postMessage(
  <p>The racers, each in its lane colour:</p>
 
  <ul>
- <li><span class="sa-swatch sa-swatch-1"></span> <strong>Simulated annealing</strong>: as above; proposes 2-opt moves (pick two edges of the tour, reconnect them the other way<sup><a href="#ref-4" class="cite-ref">[4]</a></sup>), accepting bad ones on the cooling schedule.</li>
- <li><span class="sa-swatch sa-swatch-2"></span> <strong>Hill climber</strong>, same 2-opt moves, zero tolerance: improvements only.</li>
- <li><span class="sa-swatch sa-swatch-3"></span> <strong>Genetic algorithm</strong>: a population of 40 tours; tournament selection, order crossover, swap mutation, elitism. The napkin algorithm from my <a href="https://www.kenreid.co.uk/blog/evolution-live.html">GA post</a>.</li>
- <li><span class="sa-swatch sa-swatch-4"></span> <strong>Random search</strong>, shuffles a fresh tour every try and keeps the best. The floor. Somebody has to be it.</li>
+ <li><span class="kr-swatch sa-swatch-1"></span> <strong>Simulated annealing</strong>: as above; proposes 2-opt moves (pick two edges of the tour, reconnect them the other way<sup><a href="#ref-4" class="cite-ref">[4]</a></sup>), accepting bad ones on the cooling schedule.</li>
+ <li><span class="kr-swatch sa-swatch-2"></span> <strong>Hill climber</strong>, same 2-opt moves, zero tolerance: improvements only.</li>
+ <li><span class="kr-swatch sa-swatch-3"></span> <strong>Genetic algorithm</strong>: a population of 40 tours; tournament selection, order crossover, swap mutation, elitism. The napkin algorithm from my <a href="https://www.kenreid.co.uk/blog/evolution-live.html">GA post</a>.</li>
+ <li><span class="kr-swatch sa-swatch-4"></span> <strong>Random search</strong>, shuffles a fresh tour every try and keeps the best. The floor. Somebody has to be it.</li>
  </ul>
 
  <p>The race is scored in <strong>evaluations</strong>, not iterations. Every time any algorithm asks "how long is this tour?", its meter ticks. The GA evaluates 40 tours per generation, so it gets fewer generations; the annealer evaluates one tour per step, so it gets many steps.</p>
@@ -700,7 +700,7 @@ frame.contentWindow.postMessage(
 <pre><code class="language-javascript">  /* ============================================================
   Simulated Annealing, Live, all demo code for this post.
   No dependencies. Everything renders to &lt;canvas&gt; and reads its
-  colours from the CSS custom properties on.sa-viz, so the
+  colours from the CSS custom properties on.kr-viz, so the
   site's light/dark theme toggle restyles the demos live.
   ============================================================ */
   (function() {
@@ -1579,9 +1579,9 @@ frame.contentWindow.postMessage(
           });
         tableBody.innerHTML = rows.map(function(r) {
           var gap = ((r.len / leader - 1) * 100);
-          return '&lt;div class="sa-stat"&gt;&lt;span class="sa-stat-lbl"&gt;' +
-            '&lt;span class="sa-swatch" style="background:' + c.series[r.i] + ';"&gt;&lt;/span&gt;' +
-            NAMES[r.i] + '&lt;/span&gt;&lt;span class="sa-stat-val"&gt;' + r.len.toFixed(2) +
+          return '&lt;div class="kr-stat"&gt;&lt;span class="kr-stat-lbl"&gt;' +
+            '&lt;span class="kr-swatch" style="background:' + c.series[r.i] + ';"&gt;&lt;/span&gt;' +
+            NAMES[r.i] + '&lt;/span&gt;&lt;span class="kr-stat-val"&gt;' + r.len.toFixed(2) +
             ' &lt;span style="color:var(--viz-muted); font-weight:400;"&gt;' +
             (gap &lt; 0.005 ? 'leader' : '+' + gap.toFixed(1) + '%') + '&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;';
         }).join('');
@@ -1720,7 +1720,7 @@ frame.contentWindow.postMessage(
             if (a.hist[k].e &lt;= e) best = a.hist[k].len;
             else break;
           }
-          return '&lt;span class="sa-swatch" style="background:' + c.series[i] + '; margin-right:6px;"&gt;&lt;/span&gt;' +
+          return '&lt;span class="kr-swatch" style="background:' + c.series[i] + '; margin-right:6px;"&gt;&lt;/span&gt;' +
             SHORT[i] + ': ' + (best === null ? ', ' : best.toFixed(2));
         });
         var accAt = null;
@@ -1879,7 +1879,7 @@ frame.contentWindow.postMessage(
     coordinates, rgb, alpha), fitness is one minus the mean per-pixel
     difference from a 48x48 target render. Tournament selection, per-triangle
     crossover, per-gene mutation, optional two-slot elitism. Chart colours
-    come from the CSS custom properties on .evo-viz, so the site's light/dark
+    come from the CSS custom properties on .kr-viz, so the site's light/dark
     toggle restyles the widget live; the paintings themselves keep fixed
     colours because the target never changes.
     ============================================================ */
