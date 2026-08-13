@@ -661,7 +661,10 @@ function ensureRelatedPostsSection() {
     var blogPost = document.querySelector('.blog-post');
     if (!blogPost) return Promise.resolve(null);
 
-    var existingRelated = blogPost.querySelector('.related-posts');
+    // Six posts carry their generated block just outside .blog-post, and
+    // looking only inside meant a second one was injected on top of it.
+    var existingRelated = blogPost.querySelector('.related-posts') ||
+                          document.querySelector('.related-posts');
     if (existingRelated) return Promise.resolve(existingRelated);
 
     var mount = blogPost.querySelector('#related-posts-section');
