@@ -98,9 +98,28 @@ the widget is not a blank box, and leaves the run button as the way in.
 out of view and resumes it on return. A demo near the top of a 3,000 word
 post currently runs for the whole read.
 
-**Announce the status line, and only that.** `aria-live="polite"` on
-`.kr-status`, so "solved in 28 steps" reaches a screen reader. Stat tiles
-stay silent; five counters updating every frame is noise, not information.
+**Announce the status line, and only that.** The visible `.kr-status` is not
+itself a live region. Posts that write a counter every step were mutating it
+around fifty times a second (measured: 121 mutations in two seconds on the
+belt demo, 102 on VNS, 99 on hyper-heuristics), which makes a screen reader
+useless. Announcements go instead to a hidden `.kr-sr-only` region, throttled
+to at most one every 1.2 seconds, always carrying the latest text rather than
+whichever landed on the tick. Stat tiles stay silent while running; five
+counters updating every frame is noise, not information.
+
+**Say what it found.** On `ctx.finish()` the engine announces immediately and
+appends a summary built from the stat tiles ("Finished. Iterations 412, best
+1,284"). The `aria-label` on a canvas describes what the demo *is*; without
+this a screen reader never learns what it *did*.
+
+**Keyboard access to a clickable canvas.** A canvas marked `.kr-interactive`
+gets `tabindex="0"`, an `aria-describedby` hint naming the keys, and a drawn
+cursor. Arrow keys move the cursor (Shift for finer steps), Enter or Space
+acts at it, Escape hides it. The engine replays the same `pointerdown`,
+`pointerup` and `click` events the post already handles at the cursor
+position, so no post writes key handling of its own. Before this, eight
+canvases advertised "click or tap to add points" in their own labels with no
+keyboard path to it at all: a WCAG 2.1.1 failure, Level A.
 
 **A deterministic test handle.** The engine exposes on the mount element:
 

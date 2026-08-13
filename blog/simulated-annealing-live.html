@@ -1624,6 +1624,8 @@ loadPrism();</script>
         ctx.fillStyle = c.ink;
         ctx.fillText('greedy best: ' + state.hc.bestF.toFixed(3), 28, 35);
         tempVal.textContent = 'T = ' + state.T.toFixed(3);
+        // the slider reads 0-100; the temperature is what matters
+        tempSlider.setAttribute('aria-valuetext', tempVal.textContent);
         drawStrip();
       }
 
@@ -2405,8 +2407,16 @@ loadPrism();</script>
         });
       });
 
+      /* These sliders predate the engine, so they mirror their own readout
+         into aria-valuetext. Without it a screen reader reads the raw number
+         ("14"), which says nothing about "1.4x" or "30%". */
+      function syncValueText(slider, valEl) {
+        if (slider && valEl) slider.setAttribute('aria-valuetext', valEl.textContent);
+      }
+
       pgCities.addEventListener('input', function() {
         pgCitiesVal.textContent = pgCities.value;
+        syncValueText(pgCities, pgCitiesVal);
       });
       pgCities.addEventListener('change', function() {
         resetRace(false);
@@ -2414,11 +2424,23 @@ loadPrism();</script>
 
       function updateCool() {
         pgCoolVal.textContent = (parseInt(pgCool.value, 10) / 10).toFixed(1) + '×';
+        syncValueText(pgCool, pgCoolVal);
       }
 
       function updateMut() {
         pgMutVal.textContent = pgMut.value + '%';
+        syncValueText(pgMut, pgMutVal);
       }
+
+      /* The race speed slider has no visible readout to mirror, so it
+         describes itself. */
+      function updateRaceSpeed() {
+        speedSlider.setAttribute('aria-valuetext',
+          speedSlider.value + ' evaluations per frame');
+      }
+      speedSlider.addEventListener('input', updateRaceSpeed);
+      updateRaceSpeed();
+      syncValueText(pgCities, pgCitiesVal);
       pgCool.addEventListener('input', updateCool);
       pgCool.addEventListener('change', function() {
         resetRace(true);

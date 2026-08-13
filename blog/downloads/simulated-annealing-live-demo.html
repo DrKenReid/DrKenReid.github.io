@@ -477,6 +477,18 @@ h1{font-size:1.4em;} h2{font-size:1.15em;} a{color:inherit;}
       var resetBtn = document.getElementById('raceReset');
       var speedSlider = document.getElementById('raceSpeed');
       var statusEl = document.getElementById('raceStatus');
+
+      // This file is meant to be downloaded and opened on its own, so the
+      // hidden region carries its own styling rather than relying on the site
+      // stylesheet being alongside it.
+      var liveEl = document.createElement('div');
+      liveEl.setAttribute('aria-live', 'polite');
+      liveEl.setAttribute('aria-atomic', 'true');
+      liveEl.style.cssText = 'position:absolute;width:1px;height:1px;margin:-1px;'
+        + 'padding:0;border:0;clip:rect(0 0 0 0);clip-path:inset(50%);'
+        + 'overflow:hidden;white-space:nowrap';
+      wrap.appendChild(liveEl);
+      function announce(text) { liveEl.textContent = text; }
       var tourCanvases = Array.prototype.slice.call(wrap.querySelectorAll('.tourCanvas'));
       var scoreEls = Array.prototype.slice.call(wrap.querySelectorAll('.sa-score'));
       var chartCv = document.getElementById('raceChart');
@@ -1055,6 +1067,11 @@ h1{font-size:1.4em;} h2{font-size:1.15em;} a{color:inherit;}
             return p.bestLen - q.bestLen;
           })[0];
           statusEl.textContent = 'Race finished. ' + NAMES[algs.indexOf(leader)] + ' wins. Press "New cities" to go again.';
+          // The visible status carries a per-frame evaluation counter, so it
+          // cannot be a live region without flooding a screen reader. The
+          // result is worth announcing, so it goes to its own quiet one.
+          announce('Race finished. ' + NAMES[algs.indexOf(leader)] +
+                   ' wins, with a best tour of ' + Math.round(leader.bestLen) + '.');
           algs.forEach(function(a) {
             a.hist.push({
               e: a.evals,

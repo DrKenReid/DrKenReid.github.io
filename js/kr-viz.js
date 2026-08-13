@@ -18,6 +18,7 @@
   var TOKENS = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8',
                 'ink', 'muted', 'grid', 'surface', 'border', 'cell'];
   var STACK_BELOW = 480;   // chart panes stack below this canvas width
+  var uid = 0;             // for the ids aria-describedby needs
 
   /* Seeded PRNG. Every demo runs from a seed so a reader who reloads sees
      the same run, and so a test can reproduce one. */
@@ -77,11 +78,49 @@
       stats: root.querySelector('[data-kr-stats]')
     };
 
-    var statusEl = null;
-    if (slot.toolbar) {
-      statusEl = el('span', 'kr-status');
-      // the one readout worth announcing; the tiles would be noise
-      statusEl.setAttribute('aria-live', 'polite');
+    // The visible status is not itself a live region. Posts that write a
+    // counter every step were mutating it fifty times a second, which is
+    // unusable through a screen reader. Announcements go to a hidden region
+    // instead, throttled, and the visible span stays purely visual.
+    var statusEl = slot.toolbar ? el('span', 'kr-status') : null;
+
+    var liveEl = el('div', 'kr-sr-only');
+    liveEl.setAttribute('aria-live', 'polite');
+    liveEl.setAttribute('aria-atomic', 'true');
+    root.appendChild(liveEl);
+
+    var ANNOUNCE_MS = 1200;
+    var lastAnnounce = 0, announceTimer = null, pendingText = '';
+
+    function speak(text) {
+      if (!text || text === liveEl.textContent) return;
+      liveEl.textContent = text;
+      lastAnnounce = Date.now();
+    }
+
+    /* Throttled: at most one announcement per ANNOUNCE_MS, and always the
+       most recent text rather than whichever happened to land on the tick. */
+    function announce(text, immediate) {
+      pendingText = text || '';
+      if (announceTimer) { clearTimeout(announceTimer); announceTimer = null; }
+      if (!pendingText) return;
+      var wait = immediate ? 0 : Math.max(0, ANNOUNCE_MS - (Date.now() - lastAnnounce));
+      if (wait === 0) { speak(pendingText); return; }
+      announceTimer = setTimeout(function () {
+        announceTimer = null;
+        speak(pendingText);
+      }, wait);
+    }
+
+    /* What the demo actually found, for a reader who cannot see the tiles.
+       The labels and values are already there; they just never reach AT. */
+    function summarise() {
+      var parts = [];
+      Object.keys(statEls).forEach(function (k) {
+        var s = statEls[k];
+        if (s.label) parts.push(s.label + ' ' + s.el.textContent);
+      });
+      return parts.join(', ');
     }
 
     var runBtn = null;
@@ -159,6 +198,9 @@
         controls[s.id] = Number(input.value);
         val.textContent = s.fmt ? s.fmt(controls[s.id])
                                 : input.value + (s.unit || '');
+        // a log-scaled slider reads "37" to a screen reader and "1e3" on
+        // screen; announce what the reader can see
+        input.setAttribute('aria-valuetext', val.textContent);
         if (booting) return;
         if (s.restart) restart(); else redraw();
       }
@@ -178,7 +220,7 @@
       var v = el('span', 'kr-stat-val', '0');
       tile.appendChild(lbl); tile.appendChild(v);
       slot.stats.appendChild(tile);
-      statEls[s.id] = {el: v, fmt: s.fmt};
+      statEls[s.id] = {el: v, fmt: s.fmt, label: s.label};
     }
 
     (cfg.buttons || []).forEach(addButton);
@@ -197,6 +239,79 @@
         : spec.el;
       canvases[name] = {node: node, spec: spec, g: null, w: 0, h: 0};
     });
+
+    /* ---- keyboard access to a clickable canvas ------------------------ */
+
+    /* A post that handles pointerdown gets keyboard support for free: the
+       engine moves a cursor with the arrow keys and replays the same pointer
+       events at that spot, so no post needs its own key handling. */
+    function actAt(c) {
+      var r = c.node.getBoundingClientRect();
+      var opts = {
+        clientX: r.left + c.cur.x * r.width,
+        clientY: r.top + c.cur.y * r.height,
+        bubbles: true, cancelable: true, button: 0,
+        pointerId: 1, pointerType: 'mouse', isPrimary: true
+      };
+      var Ctor = global.PointerEvent || global.MouseEvent;
+      c.node.dispatchEvent(new Ctor('pointerdown', opts));
+      c.node.dispatchEvent(new Ctor('pointerup', opts));
+      c.node.dispatchEvent(new global.MouseEvent('click', opts));
+    }
+
+    function keyboardOperable(c) {
+      var node = c.node;
+      if (!node || (' ' + node.className + ' ').indexOf(' kr-interactive ') < 0) return;
+      node.tabIndex = 0;
+      c.cur = {x: 0.5, y: 0.5, on: false};
+
+      var hint = el('p', 'kr-sr-only', 'Interactive figure. Arrow keys move a '
+        + 'cursor across it, Enter or Space acts at the cursor, Escape hides '
+        + 'it. Hold Shift for finer steps.');
+      hint.id = 'kr-hint-' + (++uid);
+      root.appendChild(hint);
+      var prior = node.getAttribute('aria-describedby');
+      node.setAttribute('aria-describedby', prior ? prior + ' ' + hint.id : hint.id);
+
+      node.addEventListener('keydown', function (e) {
+        var cur = c.cur, d = e.shiftKey ? 0.01 : 0.04, k = e.key;
+        if (k === 'ArrowLeft') { cur.x -= d; }
+        else if (k === 'ArrowRight') { cur.x += d; }
+        else if (k === 'ArrowUp') { cur.y -= d; }
+        else if (k === 'ArrowDown') { cur.y += d; }
+        else if (k === 'Enter' || k === ' ' || k === 'Spacebar') { actAt(c); }
+        else if (k === 'Escape') { cur.on = false; redraw(); return; }
+        else return;
+        e.preventDefault();          // arrows must not scroll the page here
+        cur.on = true;
+        cur.x = Math.max(0, Math.min(1, cur.x));
+        cur.y = Math.max(0, Math.min(1, cur.y));
+        redraw();
+      });
+      node.addEventListener('focus', function () { c.cur.on = true; redraw(); });
+      node.addEventListener('blur', function () { c.cur.on = false; redraw(); });
+    }
+
+    function drawCursors() {
+      Object.keys(canvases).forEach(function (n) {
+        var c = canvases[n];
+        if (!c.cur || !c.cur.on || !c.g) return;
+        var g = c.g, x = c.cur.x * c.w, y = c.cur.y * c.h;
+        g.save();
+        // ringed in both tones so it reads on any part of any landscape
+        g.strokeStyle = colors.surface || '#fff'; g.lineWidth = 4;
+        g.beginPath(); g.arc(x, y, 8, 0, Math.PI * 2); g.stroke();
+        g.strokeStyle = colors.ink || '#000'; g.lineWidth = 2;
+        g.beginPath(); g.arc(x, y, 8, 0, Math.PI * 2); g.stroke();
+        g.beginPath();
+        g.moveTo(x - 14, y); g.lineTo(x - 5, y);
+        g.moveTo(x + 5, y); g.lineTo(x + 14, y);
+        g.moveTo(x, y - 14); g.lineTo(x, y - 5);
+        g.moveTo(x, y + 5); g.lineTo(x, y + 14);
+        g.stroke();
+        g.restore();
+      });
+    }
 
     function fit() {
       var dpr = global.devicePixelRatio || 1;
@@ -365,8 +480,18 @@
         samples.push(obj);
         if (samples.length > maxSamples) samples.shift();
       },
-      status: function (text) { if (statusEl) statusEl.textContent = text || ''; },
-      finish: function (text) { finished = true; pause(); if (text) ctx.status(text); },
+      status: function (text) {
+        if (statusEl) statusEl.textContent = text || '';
+        announce(text);
+      },
+      finish: function (text) {
+        finished = true;
+        pause();
+        if (text) ctx.status(text);
+        // the one moment worth interrupting for: say what it found
+        var sum = summarise();
+        announce([text || 'Finished.', sum].filter(Boolean).join(' '), true);
+      },
       samples: function () { return samples; }
     };
 
@@ -380,6 +505,7 @@
       });
       cfg.draw(ctx);
       drawCharts();
+      drawCursors();
       // a post that writes its own status (a move counter, say) would
       // otherwise overwrite the reason it is sitting still
       if (reduceNotice && !running && statusEl) statusEl.textContent = reduceNotice;
@@ -455,7 +581,9 @@
     if (global.IntersectionObserver) {
       new global.IntersectionObserver(function (entries) {
         visible = entries[0].isIntersecting;
-        if (!visible) { if (running) { pause(); if (runBtn) runBtn.textContent = 'Pause'; } }
+        // pause() already relabels the button to Play; saying Pause here left
+        // a stopped demo claiming it was running
+        if (!visible) { if (running) pause(); }
         else if (!userPaused && !finished) run();
       }, {threshold: 0.05}).observe(root);
     }
@@ -489,6 +617,7 @@
     /* ---- go ---------------------------------------------------------- */
 
     fit();
+    Object.keys(canvases).forEach(function (n) { keyboardOperable(canvases[n]); });
     booting = false;
     ctx.state = cfg.init(ctx);
     redraw();

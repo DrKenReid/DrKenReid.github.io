@@ -26,6 +26,10 @@ srv = ThreadingHTTPServer(("127.0.0.1", PORT), h)
 srv.RequestHandlerClass.log_message = lambda *a, **k: None
 threading.Thread(target=srv.serve_forever, daemon=True).start()
 
+# Third parties failing is not this site breaking. A draft in particular
+# has no giscus discussion yet, so its comment lookup always 404s.
+NOISE = ("giscus", "googletagmanager", "google-analytics", "gstatic",
+         "fonts.g", "github.com", "githubassets")
 fails = []
 with sync_playwright() as p:
     b = p.chromium.launch()
@@ -33,7 +37,13 @@ with sync_playwright() as p:
         page = b.new_page(viewport={"width": w, "height": hgt})
         errs = []
         page.on("pageerror", lambda e: errs.append(str(e)))
-        page.on("console", lambda m: errs.append("console: " + m.text) if m.type == "error" else None)
+        # A failed resource logs a console line that names no URL, so judging it
+        # from the text alone cannot tell a third party apart from our own asset.
+        # Watch the responses instead, where the URL is available to filter on.
+        page.on("console", lambda m: errs.append("console: " + m.text)
+                if m.type == "error" and not m.text.startswith("Failed to load resource") else None)
+        page.on("response", lambda r: errs.append(f"HTTP {r.status}: {r.url}")
+                if r.status >= 400 and not any(n in r.url for n in NOISE) else None)
         page.add_init_script(f"try{{localStorage.setItem('kr-theme','{theme}')}}catch(e){{}}")
         page.goto(f"http://127.0.0.1:{PORT}/{rel}", wait_until="networkidle")
         page.wait_for_timeout(1200)

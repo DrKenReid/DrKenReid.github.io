@@ -366,10 +366,20 @@ markup and, at most, a few override lines:
 </div>
 ```
 
-- `kr-interactive` goes on a canvas that takes drag or click input; it sets
-  `touch-action:none` so a drag does not scroll the page. Leave it off the
-  chart canvas so the page still scrolls there. Override `cursor` alone if
-  `grab` or `pointer` reads better than the default `crosshair`.
+- `kr-interactive` goes on a canvas that takes click or tap input. It sets the
+  crosshair cursor, and the engine makes the canvas keyboard operable: arrow
+  keys move a drawn cursor, Enter or Space replays the post's own
+  `pointerdown`/`pointerup`/`click` at that spot, Escape hides it. A post
+  handling pointer events therefore needs no key handling of its own. Leave
+  the class off the chart canvas. Override `cursor` alone if `grab` or
+  `pointer` reads better than the default.
+- `kr-drag` is the separate, narrower class that sets `touch-action:none`. Use
+  it only for a canvas dragged in two dimensions: on a phone these demos are
+  full width and near square, so taking touch-action from a tap-only canvas
+  traps a reader trying to scroll past it.
+- Give every canvas `role="img"` and an `aria-label` describing what is drawn
+  and, if it takes input, what tapping does. These labels are the only thing a
+  screen reader gets while the demo runs, so they earn their length.
 - Anything genuinely particular to one widget (pills, legends, grids) keeps
   the post's own prefix, e.g. `.vns-pill`, and stays in the post's `<style>`.
 - Series colours default to `--viz-s1` blue, `--viz-s2` green, `--viz-s3`

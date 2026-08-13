@@ -6854,6 +6854,20 @@ a.kr-series-label:focus {
 .kr-viz canvas.kr-chart {
   margin-top: 14px; }
 
+/* The keyboard hint and the announcement region: read aloud, never drawn.
+   Not display:none, which would take them out of the accessibility tree. */
+.kr-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap; }
+
 .kr-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -7063,3 +7077,25 @@ html.nerd-mode-on .non-nerd {
 
 [data-theme="dark"] .values-grid tbody tr:hover {
   background: #242424; }
+
+/* Two vendor rules earlier in this file strip the outline from links and
+   from inputs (a:focus and input:focus, both outline:none). Because they
+   sit after the site focus ring near the top, the ring survived only on
+   buttons and selects: every link, range slider and checkbox was left with
+   the faint box-shadow alone. Re-assert it here, last in the cascade, so a
+   vendor block stays untouched and a future vendor update cannot undo it. */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+summary:focus,
+[tabindex]:focus {
+  outline: 3px solid var(--site-focus-ring);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px var(--site-focus-shadow); }
+
+/* A keyboard-operable canvas is focused as a whole, so the ring needs to sit
+   outside the rounded corner rather than clip against it. */
+.kr-viz canvas:focus {
+  outline-offset: 2px; }

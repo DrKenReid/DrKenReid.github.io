@@ -487,7 +487,16 @@ From <a href="https://www.kenreid.co.uk/blog/evolution-live.html">Evolution, Liv
    setMut(); setPress(); popV.textContent = popS.value;
    resetSim();
    draw();
-   start();
+   // A reader who asks for reduced motion gets the opening frame and a Play
+   // button, not an animation that starts on its own.
+   if (window.matchMedia &&
+       window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+     running = false;
+     runBtn.textContent = 'Play';
+     statusEl.textContent = 'Paused for reduced motion.';
+   } else {
+     start();
+   }
  })();
  
 </script>

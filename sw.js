@@ -11,7 +11,7 @@
  * Bump VERSION to invalidate old caches.
  */
 
-var VERSION = 'kr-v7';
+var VERSION = 'kr-v8';
 var PAGES_CACHE = VERSION + '-pages';
 var ASSETS_CACHE = VERSION + '-assets';
 var IMG_LIMIT = 200;
