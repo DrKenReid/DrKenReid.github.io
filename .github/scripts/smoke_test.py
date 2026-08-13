@@ -4,6 +4,14 @@ actually appears. The static audit checks markup; this catches the
 class of bug where content exists in the DOM but never becomes visible
 (e.g. reveal-animation regressions).
 
+It also covers the accessibility behaviour that only exists at runtime and
+so cannot be seen in the markup: keyboard access to a clickable canvas, a
+live region that announces without flooding, sliders that expose the value
+a reader can see, a focus ring that survives the cascade, reduced motion,
+and the related-posts block being rendered once rather than twice. Every
+one of those has been broken here before; running this suite against the
+tree from before those fixes produces 24 failures.
+
 Run locally:  .venv/Scripts/python.exe .github/scripts/smoke_test.py
 CI:           see .github/workflows/site-checks.yml (smoke job)
 """
@@ -42,8 +50,23 @@ CHECKS = [
         ("gallery tiles", "document.querySelectorAll('.single_gallery_item').length >= 12"),
         ("filter buttons", "document.querySelectorAll('.gallery-filter-btn').length >= 5"),
     ]),
+    # frodo-sam keeps its generated related-posts block just outside
+    # .blog-post, which is exactly the shape that once got a second block
+    # injected on top of it. Worth pinning on a post that has that layout.
+    ("blog/frodo-sam-and-love.html", [
+        ("exactly one related-posts block",
+         "document.querySelectorAll('.related-posts').length === 1"),
+        ("back-link sits inside main",
+         "(() => { const c = document.querySelector('.post-cta');"
+         "  return !!c && !!c.closest('main'); })()"),
+    ]),
     ("blog/rating-systems.html", [
         ("post body visible", "(() => { const p = document.querySelector('.blog-post > p'); return p && getComputedStyle(p).opacity !== '0'; })()"),
+        ("exactly one related-posts block",
+         "document.querySelectorAll('.related-posts').length === 1"),
+        ("back-link sits inside main",
+         "(() => { const c = document.querySelector('.post-cta');"
+         "  return !!c && !!c.closest('main'); })()"),
         ("toc built", "document.querySelectorAll('.kr-toc a').length >= 4"),
         ("footer latest posts", "document.querySelectorAll('.kr-footer-posts a').length >= 1"),
         ("progress bar", "!!document.querySelector('.kr-progress-bar')"),
@@ -107,6 +130,136 @@ def check_converges(page, path, failures):
             print(f"{'ok  ' if ok else 'FAIL'} {path} :: #{wid} {name}")
             if not ok:
                 failures.append(f"{path} #{wid}: {name}")
+
+
+def check_a11y(page, path, failures):
+    """The demos hold most of the site's interaction, so they hold most of its
+    accessibility risk, and none of it is visible in a screenshot.
+
+    Each of these has been broken in the past:
+      - a canvas advertising "click or tap to add points" that ignored the
+        keyboard entirely (WCAG 2.1.1, level A)
+      - a status span written every step while marked aria-live, which meant
+        around fifty announcements a second
+      - sliders whose screen-reader value was the raw slider integer rather
+        than the temperature or the log-scaled rate the reader can see
+      - a focus ring stripped by a vendor rule further down the stylesheet
+    """
+    page.set_viewport_size({"width": 1280, "height": 900})
+    page.goto(f"http://127.0.0.1:{PORT}/{path}", wait_until="domcontentloaded")
+    page.wait_for_timeout(1200)
+
+    def report(name, ok, detail=""):
+        print(f"{'ok  ' if ok else 'FAIL'} {path} :: a11y {name}"
+              f"{'' if ok else ' -- ' + str(detail)}")
+        if not ok:
+            failures.append(f"{path}: a11y {name} ({detail})")
+
+    # --- sliders announce what the reader can see -----------------------
+    mute = page.evaluate(
+        "() => [...document.querySelectorAll('.kr-viz input[type=range]')]"
+        "      .filter(r => !r.hasAttribute('aria-valuetext'))"
+        "      .map(r => r.id || '(no id)')")
+    report("sliders have aria-valuetext", not mute, mute)
+
+    # --- focus stays visible on every control type ----------------------
+    # The site's focus style is an outline plus a halo. Accepting the halo
+    # alone would have let the original bug through: two vendor rules stripped
+    # outline from links and inputs and left only the faint box-shadow, which
+    # is why this insists on the outline itself.
+    dim = page.evaluate("""() => {
+        const out = [];
+        for (const sel of ['.kr-viz .kr-btn', '.kr-viz input[type=range]',
+                           '.kr-viz select', '.kr-viz input[type=checkbox]',
+                           'main a']) {
+            const n = document.querySelector(sel);
+            if (!n) continue;
+            n.focus();
+            const cs = getComputedStyle(n);
+            if (cs.outlineStyle === 'none' || parseFloat(cs.outlineWidth) < 1)
+                out.push(sel + ' (outline: ' + cs.outlineStyle + ' ' + cs.outlineWidth + ')');
+            n.blur();
+        }
+        return out;
+    }""")
+    report("focus ring is visible on controls", not dim, dim)
+
+    # --- a clickable canvas is operable from the keyboard ---------------
+    canvases = page.evaluate(
+        "() => document.querySelectorAll('.kr-viz canvas.kr-interactive').length")
+    if canvases:
+        info = page.evaluate("""() => {
+            const c = document.querySelector('.kr-viz canvas.kr-interactive');
+            const d = c.getAttribute('aria-describedby');
+            return {tabindex: c.getAttribute('tabindex'),
+                    hint: !!(d && document.getElementById(d.split(' ').pop()))};
+        }""")
+        report("interactive canvas is focusable", info["tabindex"] == "0", info)
+        report("interactive canvas describes its keys", info["hint"], info)
+
+        # freeze it, so any pixel change is the keypress and not the animation
+        page.evaluate("() => document.querySelectorAll('.kr-viz')"
+                      ".forEach(r => r.krViz && r.krViz.pause())")
+        page.wait_for_timeout(250)
+        target = page.query_selector(".kr-viz canvas.kr-interactive")
+        target.focus()
+        for _ in range(3):
+            page.keyboard.press("ArrowRight")
+        page.wait_for_timeout(150)
+        shot = "() => document.querySelector('.kr-viz canvas.kr-interactive').toDataURL()"
+        before = page.evaluate(shot)
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(500)
+        report("Enter acts on the canvas", page.evaluate(shot) != before)
+
+    # --- the live region does not flood ---------------------------------
+    # Posts not on the engine have no live region to measure; a post that is
+    # on the engine and has lost one is a regression, so the two are separated.
+    on_engine = page.evaluate(
+        "() => [...document.querySelectorAll('.kr-viz')].some(e => e.krViz)")
+    if not on_engine:
+        print(f"skip {path} :: a11y live region (post is not on the engine)")
+        return
+    page.evaluate("() => {const r = document.querySelector('.kr-viz');"
+                  "       if (r) r.scrollIntoView({block: 'center'});}")
+    page.wait_for_timeout(300)
+    page.evaluate("() => document.querySelectorAll('.kr-viz')"
+                  ".forEach(r => r.krViz && r.krViz.run())")
+    churn = page.evaluate("""() => new Promise(res => {
+        const live = document.querySelector('.kr-viz .kr-sr-only[aria-live]');
+        if (!live) return res(-1);
+        let n = 0;
+        const mo = new MutationObserver(() => n++);
+        mo.observe(live, {childList: true, characterData: true, subtree: true});
+        setTimeout(() => { mo.disconnect(); res(n); }, 3000);
+    })""")
+    # throttled to one every 1.2s, so three in three seconds is the ceiling
+    report("live region exists", churn != -1, "no .kr-sr-only[aria-live] found")
+    if churn != -1:
+        report("live region is throttled", churn <= 3,
+               f"{churn} announcements in 3s")
+
+
+def check_reduced_motion(browser, path, failures):
+    """Under prefers-reduced-motion the demos must mount paused and stay put,
+    showing the first frame rather than a blank box."""
+    page = browser.new_page(viewport={"width": 1280, "height": 900},
+                            reduced_motion="reduce")
+    page.goto(f"http://127.0.0.1:{PORT}/{path}", wait_until="domcontentloaded")
+    page.wait_for_timeout(1400)
+    first = page.evaluate("() => {const r = document.querySelector('.kr-viz');"
+                          "return r && r.krViz ? r.krViz.read().iteration : -1;}")
+    page.wait_for_timeout(1600)
+    later = page.evaluate("() => {const r = document.querySelector('.kr-viz');"
+                          "return r && r.krViz ? r.krViz.read().iteration : -1;}")
+    page.close()
+    if first == -1:
+        return
+    ok = first == later
+    print(f"{'ok  ' if ok else 'FAIL'} {path} :: a11y honours reduced motion")
+    if not ok:
+        failures.append(f"{path}: kept animating under reduced motion "
+                        f"({first} -> {later})")
 
 
 def check_mobile(page, path, failures, console_errors):
@@ -200,6 +353,10 @@ def main():
         for path in interactive_posts():
             check_mobile(page, path, failures, console_errors)
             check_converges(page, path, failures)
+            check_a11y(page, path, failures)
+        # One reduced-motion pass is enough: the behaviour lives in the engine,
+        # not in any one post.
+        check_reduced_motion(browser, "blog/particle-swarm-live.html", failures)
         browser.close()
     server.shutdown()
 

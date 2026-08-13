@@ -7,7 +7,9 @@ Run from the repo root:  python .github/scripts/audit_site.py [--include-drafts]
 Checks:
   links      internal href/src targets exist; malformed URLs (double scheme etc.)
   meta       description, canonical, og:*, twitter:*, JSON-LD validity per post
-  a11y       img alt, duplicate ids, heading order, single h1
+  a11y       img alt, duplicate ids, heading order, single h1, landmark
+             nesting (a landmark must not close over open containers),
+             aria-label on a role-less div/span, img with no src
   feed       feed.xml well-formed, items resolve to real files
   sitemap    sitemap.xml covers all published indexable pages, no ghosts
   posts      posts.json urls/images exist, tags in allowed set, readMinutes
@@ -42,6 +44,18 @@ EXEMPT_PAGES = {"google1473b6928dc28ce6.html"}
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input",
         "link", "meta", "param", "source", "track", "wbr"}
 
+# Elements HTML lets you leave unclosed. Only a container outside this set
+# still being open when a landmark closes is a real nesting error.
+OPTIONAL_END = {"p", "li", "dt", "dd", "tr", "td", "th", "thead", "tbody",
+                "tfoot", "option", "optgroup", "rt", "rp", "caption",
+                "colgroup"}
+
+LANDMARKS = {"main", "article", "section", "nav", "aside", "header", "footer"}
+
+# aria-label is dropped on these unless a role is present, because their
+# implicit role is generic. Screen readers then announce nothing at all.
+GENERIC_TAGS = {"div", "span"}
+
 
 PROSE_EXCLUDED = {"blockquote", "cite", "footer", "code", "pre", "script",
                   "style", "h1", "h2", "h3", "h4", "h5", "h6", "title", "q"}
@@ -66,6 +80,9 @@ class PageParser(HTMLParser):
         self.ext_nodims = []     # (src, line) external imgs without width+height
         self.fig_in_list = []    # lines where <figure> is a direct child of ul/ol
         self.prose = []          # (text, line) outside PROSE_EXCLUDED tags
+        self.bad_nesting = []    # (landmark, [open tags], line)
+        self.label_no_role = []  # (tag, label, line)
+        self.img_no_src = []     # lines of <img> with neither src nor srcset
         self._stack = []
         self._excl = 0
         self._in_title = False
@@ -93,6 +110,10 @@ class PageParser(HTMLParser):
             self.ids.append((a["id"], line))
         if tag == "a" and a.get("href"):
             self.links.append((a["href"], line))
+        if tag in GENERIC_TAGS and a.get("aria-label") and not a.get("role"):
+            self.label_no_role.append((tag, a["aria-label"][:48], line))
+        if tag == "img" and not (a.get("src") or a.get("srcset")):
+            self.img_no_src.append(line)
         if tag in ("img", "source"):
             src = a.get("src") or a.get("srcset")
             if src:
@@ -134,12 +155,20 @@ class PageParser(HTMLParser):
             self._in_jsonld = False
             self.jsonld.append(("".join(self._jsonld_buf), self._jsonld_line))
         if tag not in VOID and any(t == tag for t, _x in self._stack):
+            forced = []
             while self._stack:
                 popped, was_excl = self._stack.pop()
                 if was_excl:
                     self._excl = max(0, self._excl - 1)
                 if popped == tag:
                     break
+                if popped not in OPTIONAL_END:
+                    forced.append(popped)
+            # A landmark closing over still-open containers means the parser
+            # decides where they end, which moves content out of the landmark
+            # and turns the author's own closing tags into stray ones.
+            if forced and tag in LANDMARKS:
+                self.bad_nesting.append((tag, forced, self.getpos()[0]))
 
     def handle_data(self, data):
         if self._in_title:
@@ -241,6 +270,21 @@ def main():
                 add("ERROR", page, line, "dup-id", f"duplicate id '{i}' (first at line {seen[i]})")
             else:
                 seen[i] = line
+
+        # --- structure a screen reader depends on ---
+        for landmark, forced, line in p.bad_nesting:
+            add("ERROR", page, line, "landmark-nesting",
+                f"</{landmark}> closes with {len(forced)} element(s) still open "
+                f"({', '.join(forced[:4])}); the parser will close them here and "
+                f"push the rest of the content out of the landmark")
+        for tag, label, line in p.label_no_role:
+            add("ERROR", page, line, "label-no-role",
+                f"<{tag} aria-label=\"{label}\"> has no role, so the name is "
+                f"dropped; add role=\"group\" (or region/navigation as fits)")
+        for line in p.img_no_src:
+            add("ERROR", page, line, "img-no-src",
+                "<img> has neither src nor srcset; use a placeholder data URI "
+                "if a script fills it in later")
 
         # --- links / images resolve (and must be git-tracked: a file that
         # exists locally but is untracked 404s in production) ---
