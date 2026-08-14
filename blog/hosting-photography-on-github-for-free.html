@@ -117,7 +117,7 @@
 
         <h2>Hitting the wall</h2>
 
-        <p>When I first added my photography to this site, I exported the photos and committed them to the repository like any other asset. It worked, for a good few years. Then at some random point well past the 1GB limit, GitHub let me know, politely but firmly, that this was no longer going to fly.</p>
+        <p>When I first added my photography to this site, I exported the photos and committed them to the repository like any other asset. It worked, for a good few years. Then at some random point well past the 1GB limit, GitHub let me know, in the nicest possible way, that this was no longer going to fly.</p>
 
         <p>Worse, the damage outlives the mistake. Git never forgets: even after I removed the full-size photos from the site, every committed version of every photo remains in the repository's history. My <code>.git</code> pack sits at 4.91&nbsp;GiB to this day, a monument to the months when I treated a version control system like a hard drive. (You can scrub history with tools like <code>git filter-repo</code>, but every clone, fork, and local copy has to be reconciled with the rewrite, and for a personal site it has so far been easier to live with the scar tissue.)</p>
 
@@ -296,23 +296,23 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
               </a>
             </div>
             <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="letting-robots-update-your-homepage.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/12.webp" alt="Letting Robots Update Your Homepage" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">14 August 2026 · 6 min read</div>
+                  <h3 class="blog-card-title">Letting Robots Update Your Homepage</h3>
+                  <p class="blog-card-excerpt">My homepage shows what I'm listening to and reading, updated every Monday by a GitHub Action that commits to its own repository. Live data on a static site, no server required.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
               <a href="my-website-has-a-test-suite.html" class="blog-card">
                 <div class="blog-card-img"><img src="../img/photography/thumb/4.webp" alt="My Website Has a Test Suite" loading="lazy"></div>
                 <div class="blog-card-body">
                   <div class="blog-card-date">17 July 2026 · 7 min read</div>
                   <h3 class="blog-card-title">My Website Has a Test Suite</h3>
                   <p class="blog-card-excerpt">A Python audit script and headless browser smoke tests run on every push. Here's why a personal blog has a test suite.</p>
-                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
-                </div>
-              </a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="self-hosting-your-fonts.html" class="blog-card">
-                <div class="blog-card-img"><img src="../blog/img/fonts/fonts-og.png" alt="Self-Hosting Your Fonts" loading="lazy"></div>
-                <div class="blog-card-body">
-                  <div class="blog-card-date">12 July 2026 · 5 min read</div>
-                  <h3 class="blog-card-title">Self-Hosting Your Fonts</h3>
-                  <p class="blog-card-excerpt">No Google Fonts, no third-party requests, and icon fonts subset from 75 KB down to 1.5 KB. Here's how, and why it's worth an afternoon.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
                 </div>
               </a>

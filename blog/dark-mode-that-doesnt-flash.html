@@ -203,7 +203,7 @@
 
  <h2>The hard part</h2>
 
- <p>The flash happens because of an ordering problem. The browser starts painting your page as soon as it has the HTML and CSS; your theme JavaScript, if it's a normal script loaded politely at the end, runs <em>after</em> that first paint. So the sequence in dark mode is: paint the default (light) page, run the script, discover the visitor wanted dark, restyle. Well, that's no good.</p>
+ <p>The flash happens because of an ordering problem. The browser starts painting your page as soon as it has the HTML and CSS; your theme JavaScript, if it's a normal script loaded at the end, runs <em>after</em> that first paint. So the sequence in dark mode is: paint the default (light) page, run the script, discover the visitor wanted dark, restyle. Well, that's no good.</p>
 
  <p>The fix is to cheat the ordering. The very first thing in this site's <code>&lt;head&gt;</code>, before the stylesheet, before anything, is this inline script (unsquashed here for reading; the shipped version is one line):</p>
 

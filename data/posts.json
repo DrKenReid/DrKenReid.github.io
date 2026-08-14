@@ -1,5 +1,22 @@
 [
   {
+    "title": "Letting Robots Update Your Homepage",
+    "date": "2026-08-14",
+    "tags": [
+      "technology"
+    ],
+    "category": "Technology",
+    "excerpt": "My homepage shows what I'm listening to and reading, updated every Monday by a GitHub Action that commits to its own repository. Live data on a static site, no server required.",
+    "url": "blog/letting-robots-update-your-homepage.html",
+    "image": "img/photography/thumb/12.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 13
+    },
+    "readMinutes": 6,
+    "words": 1237
+  },
+  {
     "title": "Variable Neighbourhood Search, Live",
     "date": "2026-08-12",
     "tags": [
@@ -61,7 +78,7 @@
       "part": 12
     },
     "readMinutes": 7,
-    "words": 1534
+    "words": 1533
   },
   {
     "title": "Simulated Annealing, Live",
@@ -147,7 +164,7 @@
       "part": 4
     },
     "readMinutes": 14,
-    "words": 2889
+    "words": 2891
   },
   {
     "title": "The Fermi Paradox - Why are we alone in space?",
@@ -357,7 +374,7 @@
       "name": "How This Site Is Built",
       "part": 3
     },
-    "words": 1920
+    "words": 1922
   },
   {
     "title": "Why You Aren't a \"Visual Learner\"",
@@ -386,7 +403,7 @@
     "url": "blog/frodo-sam-and-love.html",
     "image": "img/bg-img/end-of-the-third-age.jpg",
     "readMinutes": 12,
-    "words": 2567
+    "words": 2569
   },
   {
     "title": "Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)",

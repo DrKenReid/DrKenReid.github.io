@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="My homepage shows what I'm listening to and reading, updated every Monday by a GitHub Action, allowing live data on a static site.">
+ <meta name="keywords" content="technology">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Letting Robots Update Your Homepage - Ken Reid</title>
+ <meta property="og:title" content="Letting Robots Update Your Homepage">
+ <meta property="og:description" content="My homepage shows what I'm listening to and reading, updated every Monday by a GitHub Action, allowing live data on a static site.">
+ <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/12.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/letting-robots-update-your-homepage.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Letting Robots Update Your Homepage">
+ <meta name="twitter:description" content="My homepage shows what I'm listening to and reading, updated every Monday by a GitHub Action, allowing live data on a static site.">
+ <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/12.png">
+ <meta name="citation_title" content="Letting Robots Update Your Homepage">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/08/14">
+ <meta name="citation_online_date" content="2026/08/14">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/letting-robots-update-your-homepage.html">
+ <meta name="DC.title" content="Letting Robots Update Your Homepage">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-08-14">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="../img/photography/hero/12.webp">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/letting-robots-update-your-homepage.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "Letting Robots Update Your Homepage",
+ "description": "My homepage shows what I'm listening to and reading, updated every Monday by a GitHub Action, allowing live data on a static site.",
+ "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/12.png",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-08-14",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["github actions", "automation", "static sites", "apis", "last.fm"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "Letting Robots Update Your Homepage",
+       "item": "https://www.kenreid.co.uk/blog/letting-robots-update-your-homepage.html"
+     }
+   ]
+ }
+ </script>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <main id="main-content">
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/12.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">Letting Robots Update Your Homepage</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">Letting Robots Update Your Homepage</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+ 
+ <div class="blog-post">
+ <h1>Letting Robots Update Your Homepage</h1>
+ <div class="blog-meta">
+ 14 August 2026 &middot;
+ <span class="blog-tag">technology</span>
+ </div>
+
+ <p><a href="../index.html">My homepage</a> shows my scrobble count, the book I'm working reading through, the last song I played, and whatever I last posted on Bluesky. This is a static site, meaning it can't just run dynamic scripts on a whim. I set up a system to dynamically update my HTML weekly, however, and it works for free. Part of the series on <a href="../series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>GitHub Actions:</strong> GitHub's free automation. You describe a job in a text file, and GitHub runs it on their machines, on a schedule if you like.</li>
+ <li><strong>Cron:</strong> the venerable syntax for "run this at these times". Mine says <code>0 6 * * 1</code>: every Monday at 06:00 UTC.</li>
+ <li><strong>API:</strong> a website's machine-readable front door. Last.fm's API answers "what did this user play?" with data instead of a web page.</li>
+ <li><strong>API key / secret:</strong> the password for that front door, stored in GitHub's encrypted secrets so it never appears in the code.</li>
+ <li><strong>Scrobble:</strong> one logged song play. My <a href="what-50000-scrobbles-say-about-me.html">Last.fm account</a> has been counting since 2011.</li>
+ <li><strong>Bot commit:</strong> a change to the repository made by an automation rather than a person.</li>
+ </ul>
+ </div>
+
+ <h2>The idea: if the site can't fetch, fetch into the site</h2>
+
+ <p>A normal website with live data has a server that queries things when visitors arrive. A static site can't do that, but it has a loophole: the site is a git repository, and <em>anything that can commit to the repository can change the site</em>. So instead of fetching data per visit, a scheduled job fetches it once a week and commits the results as plain JSON files. The site stays static. Visitors' browsers read those JSON files with an ordinary fetch: same origin, no keys, no rate limits, nothing that can fail separately from the site itself.</p>
+
+ <p>The whole pipeline is one workflow file and one Python script. The workflow is short: check out the repository, run the script, and commit if anything changed:</p>
+
+<pre><code class="language-yaml">name: Refresh live data
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"   # weekly, Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch live data
+        env:
+          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+        run: python .github/scripts/refresh_now.py
+
+      - name: Commit if changed
+        run: |
+          FILES="data/lastfm.json data/now.json data/lastfm-history.json data/topalbums.json"
+          if git diff --quiet $FILES; then
+            echo "No change."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add $FILES
+          git commit -m "Refresh live data (Last.fm, Goodreads)"
+          git push
+</code></pre>
+
+ <p>The <code>workflow_dispatch</code> line adds a manual "run now" button in GitHub's interface (which you will want the first dozen times), while the diff check means runs where nothing changed produce no commit at all.</p>
+
+ <h2>What the script gathers</h2>
+
+ <p>The Python script makes a handful of HTTP requests. From the Last.fm API: my total play count, the most recent track, and my top albums of the past three months, which feed the homepage stat, the "now playing" strip, and the album wall on <a href="../music.html">the music page</a> respectively. From Goodreads, which shut its API years ago but still publishes RSS feeds: my currently-reading shelf, parsed straight out of the XML. Everything goes into a small JSON files under <code>data/</code>, the biggest a few kilobytes.</p>
+
+ <p>Each run appends that week's play count to a rolling log, capped at ninety entries, which at one measurement a week is close to two years of history. </p>
+
+ <figure>
+ <img src="../img/photography/thumb/12.webp" alt="A brindle Staffordshire terrier standing alert in woodland, looking at the camera" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> A good fetcher.</figcaption>
+ </figure>
+
+ <h2>What the homepage shows</h2>
+
+ <p>The strip under the hero is a single row of five things, and only three of them come from the robot. The book and the track are read straight out of <code>now.json</code>. The latest blog post and the latest short story come from <code>posts.json</code> and <code>stories.json</code>, which are written by build scripts when I publish rather than by the Action on a schedule. </p>
+
+ <p>Last.fm distinguishes a track that is playing from one that was played, so the label switches between "Now playing" and "Last played" depending on whether I happen to be listening when you open the page, and the first version gets a little animated equaliser beside it. It is not accurate, because it is updated so infrequently, but it gives some flavor to the site and over time it's likely representative of me. Maybe.</p>
+
+ <p>The fifth item, my most recent Bluesky post, is in no JSON file at all. Your browser fetches it from Bluesky's public API while the page loads. I've been tempted to remove it, as recently I've only posted new blogs to social media, but I hope I will return to posting random thoughts there again soon, making this a bit more useful than another place to see a new blog post (which is already on the index page!)</p>
+
+ <h2>Design decisions </h2>
+
+ <p>The homepage HTML contains a hardcoded scrobble count, and the JavaScript replaces it with the fresh value from the JSON after load. If the fetch fails, or JavaScript is off, the visitor sees a slightly stale number instead of a blank. The robot improves the site but it fails elegantly.</p>
+
+ <p>Goodreads' RSS goes down more often than Last.fm's API. When a source fails, the script keeps whatever the previous run wrote rather than blanking it: better yesterday's truth than today's error. A failure in one source never stops the others from updating, of course.</p>
+
+ <p>The Last.fm key lives in the repository's encrypted secrets and reaches the script as an environment variable. It appears in no file and no log for security reasons (not that I'd be massively put-out if someone broke into my goodreads or last.fm).</p>
+
+ <p>The bot's commits are labelled as bot commits, touch only the data files, and say what they did. My git history has a weekly heartbeat in it now: a tidy row of "Refresh live data" commits, one every Monday, each one the robot clocking in so I don't have to manually update stuff.</p>
+
+ <h2>What else this pattern is good for</h2>
+
+ <p>Anything that changes slowly and comes from somewhere with an API or a feed: your latest posts elsewhere, sports scores, weather, stars on a project, prices you're tracking, a "days since" counter for whatever you are currently ashamed of. The recipe is always the same three steps: a script that fetches and writes JSON, a workflow that runs it on a schedule and commits, and a page that reads the JSON with a fallback. If the data changes faster than a schedule can keep up with (live chat, comment counts), a static site is the wrong tool and no robot can easily fix that. Everything slower works just fine though.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Doesn't committing data on a schedule bloat the repository?</summary>
+ <p>Slowly, and acceptably. Each commit stores a few kilobytes of changed JSON, so a year of weekly commits comes to a couple of hundred kilobytes. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why weekly instead of hourly, or on every visit?</summary>
+ <p>I could but it's not exactly vitally important and worth moving out of the free level of GitHub actions.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>What happens when the robot itself breaks?</summary>
+ <p>GitHub emails me when a scheduled workflow fails.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Could this update the page instantly when something changes?</summary>
+ <p>Not this pattern. A schedule can only poll. Instant would need the source to push (webhooks) into something always listening, which drags a server back into the picture. </p>
+ </details>
+ </div>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="my-website-has-a-test-suite.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/4.webp" alt="My Website Has a Test Suite" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">17 July 2026 · 7 min read</div>
+                  <h3 class="blog-card-title">My Website Has a Test Suite</h3>
+                  <p class="blog-card-excerpt">A Python audit script and headless browser smoke tests run on every push. Here's why a personal blog has a test suite.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="hosting-photography-on-github-for-free.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/387.webp" alt="Hosting a Photography Portfolio on GitHub for Free" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">6 July 2026 · 9 min read</div>
+                  <h3 class="blog-card-title">Hosting a Photography Portfolio on GitHub for Free</h3>
+                  <p class="blog-card-excerpt">GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">photography</span><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="free-comments-via-github-discussions.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/409.webp" alt="Free Comments via GitHub Discussions" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">15 July 2026 · 5 min read</div>
+                  <h3 class="blog-card-title">Free Comments via GitHub Discussions</h3>
+                  <p class="blog-card-excerpt">How giscus gives a static site free comments with no database, no ads, and no tracking.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+
+ <hr style="margin: 40px 0;">
+ <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+ </div>
+ </div>
+ </div>
+
+  </main>
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/prism-loader.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');
+loadPrism(['yaml']);</script>
+</body>
+</html>

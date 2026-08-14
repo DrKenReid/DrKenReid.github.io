@@ -5,11 +5,149 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 12 Aug 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Wed, 12 Aug 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Fri, 14 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Fri, 14 Aug 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Letting Robots Update Your Homepage</title>
+      <link>https://www.kenreid.co.uk/blog/letting-robots-update-your-homepage.html</link>
+      <guid>https://www.kenreid.co.uk/blog/letting-robots-update-your-homepage.html</guid>
+      <pubDate>Fri, 14 Aug 2026 00:00:00 +0000</pubDate>
+      <description>My homepage shows what I&#x27;m listening to and reading, updated every Monday by a GitHub Action that commits to its own repository. Live data on a static site, no server required.</description>
+      <category>technology</category>
+      <content:encoded><![CDATA[
+ <h1>Letting Robots Update Your Homepage</h1>
+ <div class="blog-meta">
+ 14 August 2026 &middot;
+ <span class="blog-tag">technology</span>
+ </div>
+
+ <p><a href="https://www.kenreid.co.uk/index.html">My homepage</a> shows my scrobble count, the book I'm working reading through, the last song I played, and whatever I last posted on Bluesky. This is a static site, meaning it can't just run dynamic scripts on a whim. I set up a system to dynamically update my HTML weekly, however, and it works for free. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>GitHub Actions:</strong> GitHub's free automation. You describe a job in a text file, and GitHub runs it on their machines, on a schedule if you like.</li>
+ <li><strong>Cron:</strong> the venerable syntax for "run this at these times". Mine says <code>0 6 * * 1</code>: every Monday at 06:00 UTC.</li>
+ <li><strong>API:</strong> a website's machine-readable front door. Last.fm's API answers "what did this user play?" with data instead of a web page.</li>
+ <li><strong>API key / secret:</strong> the password for that front door, stored in GitHub's encrypted secrets so it never appears in the code.</li>
+ <li><strong>Scrobble:</strong> one logged song play. My <a href="https://www.kenreid.co.uk/blog/what-50000-scrobbles-say-about-me.html">Last.fm account</a> has been counting since 2011.</li>
+ <li><strong>Bot commit:</strong> a change to the repository made by an automation rather than a person.</li>
+ </ul>
+ </div>
+
+ <h2>The idea: if the site can't fetch, fetch into the site</h2>
+
+ <p>A normal website with live data has a server that queries things when visitors arrive. A static site can't do that, but it has a loophole: the site is a git repository, and <em>anything that can commit to the repository can change the site</em>. So instead of fetching data per visit, a scheduled job fetches it once a week and commits the results as plain JSON files. The site stays static. Visitors' browsers read those JSON files with an ordinary fetch: same origin, no keys, no rate limits, nothing that can fail separately from the site itself.</p>
+
+ <p>The whole pipeline is one workflow file and one Python script. The workflow is short: check out the repository, run the script, and commit if anything changed:</p>
+
+<pre><code class="language-yaml">name: Refresh live data
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"   # weekly, Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch live data
+        env:
+          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+        run: python .github/scripts/refresh_now.py
+
+      - name: Commit if changed
+        run: |
+          FILES="data/lastfm.json data/now.json data/lastfm-history.json data/topalbums.json"
+          if git diff --quiet $FILES; then
+            echo "No change."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add $FILES
+          git commit -m "Refresh live data (Last.fm, Goodreads)"
+          git push
+</code></pre>
+
+ <p>The <code>workflow_dispatch</code> line adds a manual "run now" button in GitHub's interface (which you will want the first dozen times), while the diff check means runs where nothing changed produce no commit at all.</p>
+
+ <h2>What the script gathers</h2>
+
+ <p>The Python script makes a handful of HTTP requests. From the Last.fm API: my total play count, the most recent track, and my top albums of the past three months, which feed the homepage stat, the "now playing" strip, and the album wall on <a href="https://www.kenreid.co.uk/music.html">the music page</a> respectively. From Goodreads, which shut its API years ago but still publishes RSS feeds: my currently-reading shelf, parsed straight out of the XML. Everything goes into a small JSON files under <code>data/</code>, the biggest a few kilobytes.</p>
+
+ <p>Each run appends that week's play count to a rolling log, capped at ninety entries, which at one measurement a week is close to two years of history. </p>
+
+ <figure>
+ <img src="https://www.kenreid.co.uk/img/photography/thumb/12.webp" alt="A brindle Staffordshire terrier standing alert in woodland, looking at the camera" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> A good fetcher.</figcaption>
+ </figure>
+
+ <h2>What the homepage shows</h2>
+
+ <p>The strip under the hero is a single row of five things, and only three of them come from the robot. The book and the track are read straight out of <code>now.json</code>. The latest blog post and the latest short story come from <code>posts.json</code> and <code>stories.json</code>, which are written by build scripts when I publish rather than by the Action on a schedule. </p>
+
+ <p>Last.fm distinguishes a track that is playing from one that was played, so the label switches between "Now playing" and "Last played" depending on whether I happen to be listening when you open the page, and the first version gets a little animated equaliser beside it. It is not accurate, because it is updated so infrequently, but it gives some flavor to the site and over time it's likely representative of me. Maybe.</p>
+
+ <p>The fifth item, my most recent Bluesky post, is in no JSON file at all. Your browser fetches it from Bluesky's public API while the page loads. I've been tempted to remove it, as recently I've only posted new blogs to social media, but I hope I will return to posting random thoughts there again soon, making this a bit more useful than another place to see a new blog post (which is already on the index page!)</p>
+
+ <h2>Design decisions </h2>
+
+ <p>The homepage HTML contains a hardcoded scrobble count, and the JavaScript replaces it with the fresh value from the JSON after load. If the fetch fails, or JavaScript is off, the visitor sees a slightly stale number instead of a blank. The robot improves the site but it fails elegantly.</p>
+
+ <p>Goodreads' RSS goes down more often than Last.fm's API. When a source fails, the script keeps whatever the previous run wrote rather than blanking it: better yesterday's truth than today's error. A failure in one source never stops the others from updating, of course.</p>
+
+ <p>The Last.fm key lives in the repository's encrypted secrets and reaches the script as an environment variable. It appears in no file and no log for security reasons (not that I'd be massively put-out if someone broke into my goodreads or last.fm).</p>
+
+ <p>The bot's commits are labelled as bot commits, touch only the data files, and say what they did. My git history has a weekly heartbeat in it now: a tidy row of "Refresh live data" commits, one every Monday, each one the robot clocking in so I don't have to manually update stuff.</p>
+
+ <h2>What else this pattern is good for</h2>
+
+ <p>Anything that changes slowly and comes from somewhere with an API or a feed: your latest posts elsewhere, sports scores, weather, stars on a project, prices you're tracking, a "days since" counter for whatever you are currently ashamed of. The recipe is always the same three steps: a script that fetches and writes JSON, a workflow that runs it on a schedule and commits, and a page that reads the JSON with a fallback. If the data changes faster than a schedule can keep up with (live chat, comment counts), a static site is the wrong tool and no robot can easily fix that. Everything slower works just fine though.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Doesn't committing data on a schedule bloat the repository?</summary>
+ <p>Slowly, and acceptably. Each commit stores a few kilobytes of changed JSON, so a year of weekly commits comes to a couple of hundred kilobytes. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why weekly instead of hourly, or on every visit?</summary>
+ <p>I could but it's not exactly vitally important and worth moving out of the free level of GitHub actions.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>What happens when the robot itself breaks?</summary>
+ <p>GitHub emails me when a scheduled workflow fails.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Could this update the page instantly when something changes?</summary>
+ <p>Not this pattern. A schedule can only poll. Instant would need the source to push (webhooks) into something always listening, which drags a server back into the picture. </p>
+ </details>
+ </div>
+
+        
+
+
+ <hr style="margin: 40px 0;">
+ <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
+ ]]></content:encoded>
+    </item>
     <item>
       <title>Variable Neighbourhood Search, Live</title>
       <link>https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html</link>
@@ -526,7 +664,7 @@
 
  <h2>The hard part</h2>
 
- <p>The flash happens because of an ordering problem. The browser starts painting your page as soon as it has the HTML and CSS; your theme JavaScript, if it's a normal script loaded politely at the end, runs <em>after</em> that first paint. So the sequence in dark mode is: paint the default (light) page, run the script, discover the visitor wanted dark, restyle. Well, that's no good.</p>
+ <p>The flash happens because of an ordering problem. The browser starts painting your page as soon as it has the HTML and CSS; your theme JavaScript, if it's a normal script loaded at the end, runs <em>after</em> that first paint. So the sequence in dark mode is: paint the default (light) page, run the script, discover the visitor wanted dark, restyle. Well, that's no good.</p>
 
  <p>The fix is to cheat the ordering. The very first thing in this site's <code>&lt;head&gt;</code>, before the stylesheet, before anything, is this inline script (unsquashed here for reading; the shipped version is one line):</p>
 
@@ -2937,7 +3075,7 @@ body.kr-palette-open {
 
  <h2>The peace treaty framing</h2>
 
- <p>The cleanest way out of the paradox is to stop treating tolerance as a virtue and start treating it as an agreement, a reframing I owe to Yonatan Zunger's essay <a href="https://medium.com/@yonatanzunger/tolerance-is-not-a-moral-precept-1af7007d6376" rel="noopener" target="_blank">"Tolerance is not a moral precept"</a>, which calls tolerance a peace treaty, and reminds us that a peace treaty is not a suicide pact. A virtue is something you must extend to everyone unconditionally, which is how you end up politely platforming people who want you dead. An agreement, however, is different. Tolerance is a mutual pact: I accept your right to live as you choose, and you accept mine. Like any pact, it protects the people who keep it. Someone who performs a Nazi salute in a public park is not exercising the pact; they are announcing, in the most legible gesture the twentieth century produced, that they have left it. The paradox dissolves once you see it this way. You are not being intolerant when you refuse to tolerate fascism, any more than you are being violent when you defend yourself from a punch. </p>
+ <p>The cleanest way out of the paradox is to stop treating tolerance as a virtue and start treating it as an agreement, a reframing I owe to Yonatan Zunger's essay <a href="https://medium.com/@yonatanzunger/tolerance-is-not-a-moral-precept-1af7007d6376" rel="noopener" target="_blank">"Tolerance is not a moral precept"</a>, which calls tolerance a peace treaty, and reminds us that a peace treaty is not a suicide pact. A virtue is something you must extend to everyone unconditionally, which is how you end up handing a microphone to people who want you dead. An agreement, however, is different. Tolerance is a mutual pact: I accept your right to live as you choose, and you accept mine. Like any pact, it protects the people who keep it. Someone who performs a Nazi salute in a public park is not exercising the pact; they are announcing, in the most legible gesture the twentieth century produced, that they have left it. The paradox dissolves once you see it this way. You are not being intolerant when you refuse to tolerate fascism, any more than you are being violent when you defend yourself from a punch. </p>
 
  <p>I like this framing because it answers the smug gotcha ("so much for the tolerant left!") without any philosophical hand-waving, and because it matches how every other agreement in life works. Nobody thinks a referee is betraying the spirit of football by ever sending players off.</p>
 
@@ -4394,184 +4532,6 @@ caches.match(req).then(function (hit) {
       <description>I wrote my thesis, my papers, and my CV in LaTeX, and I&#x27;d have it no other way.</description>
       <category>technology</category>
       <category>writing</category>
-      <content:encoded><![CDATA[
-        <h1>Why I Love LaTeX</h1>
-        <div class="blog-meta">
-          12 July 2026 &middot;
-          <span class="blog-tag">technology</span>
-          <span class="blog-tag">writing</span>
-        </div>
-
-        <p>My PhD thesis was written in LaTeX, and so were my papers. So, to the muted horror of every recruiter who has ever asked for "the Word version," is my CV. I have spent a meaningful fraction of my adult life inside a markup language originally released in the 1980s, and I am here to tell you it was not Stockholm syndrome, but respect and, I admit, laziness. LaTeX, once you have it down, is so much easier to use than WYSIWYG editors.</p>
-
-        <div class="plain-english-box">
-          <h2>Quick jargon guide</h2>
-          <ul>
-            <li><strong>LaTeX:</strong> (pronounced "lay-tech", definitely not "lay-tecks") a typesetting system: you write plain text with commands like <code>\section{...}</code>, and a compiler turns it into a polished PDF. The standard tool of mathematics, physics, and computer science publishing.</li>
-            <li><strong>Typesetting:</strong> the craft of arranging text on a page: spacing, line breaks, hyphenation, where the figures land. What printers did by hand for five centuries.</li>
-            <li><strong>Markup:</strong> instructions written <em>in</em> the text, about the text: "this is a heading," "emphasise this." As opposed to clicking a toolbar and hoping.</li>
-            <li><strong>WYSIWYG:</strong> "what you see is what you get". Word, Google Docs. You edit the final appearance directly, which sounds obviously better except (it isn't).</li>
-            <li><strong>Compiling:</strong> running the program that converts your marked-up text into the finished document. Comes with error messages best described as "vintage."</li>
-          </ul>
-        </div>
-
-        <h2>The separation that changes everything</h2>
-
-        <p>LaTeX's founding idea is that <em>what you're saying</em> and <em>how it looks</em> are different jobs, done best by different parties. You handle the words and the structure: this is a chapter, this is a definition, this deserves emphasis. Design is handled through clearly defined rules that generally affect the whole document at once: spacing, hyphenation, figure placement, the numbering of every section, equation, and reference. In Word, this is a standard experience:</p>
-
-        <figure style="margin: 24px auto; max-width: 500px;">
-          <img src="https://www.kenreid.co.uk/blog/img/word-one-pixel-meme.jpeg" alt="Anakin and Padme meme: 'Moving an image in MS Word by 1 pixel', 'This won't mess the whole document up, right?', and the meme's own panels are broken and misaligned as the answer." loading="lazy" style="width:100%; border-radius:8px;">
-        </figure>
-
-        <p>It's the same principle that makes good data science work, too: separate the content from the presentation and both improve. My thesis had hundreds of numbered things: figures, tables, theorems, references to all of the above. Every single number was generated, every cross-reference resolved automatically, every citation formatted from a bibliography file I never once styled by hand. I've known people to fight their word processors for whole afternoons over master's theses a third the length. I fought mine too, but it's often a fight fought once per type of issue, not every citation, and every plot.</p>
-
-        <h2>It's just text</h2>
-
-        <p>A LaTeX document is a plain text file, which also allows for:</p>
-
-        <ul>
-          <li><strong>Version control.</strong> My thesis lived in git, like code, because it <em>was</em> code. Every draft diffable, every deleted paragraph recoverable, every "what did I change since my supervisor read this" answerable.</li>
-          <li><strong>Longevity.</strong> The <code>.tex</code> files from decades ago still compile. No format lock-in, no "this document was created in a newer version," no ransom paid to any vendor.</li>
-          <li><strong>Tooling.</strong> Search it, script it, generate it. When my experiments produced results, code wrote the tables directly into the document. No transcription, no transcription <em>errors</em>.</li>
-          <li><strong>Focus.</strong> A text file cannot distract you with 40 fonts. The absence of formatting options while drafting is not a limitation; it's the whole trick.</li>
-          <li><strong>Frugality.</strong> You don't need an Office 365 license to use LaTeX, it's completely free if you run it locally.</li>
-        </ul>
-
-        <p>It looks like this:</p>
-
-<pre><code class="language-latex">\documentclass[11pt]{report}
-\usepackage{amsmath}
-\usepackage[backend=biber]{biblatex}
-\addbibresource{thesis.bib}
-
-\begin{document}
-
-\chapter{Introduction}
-Scheduling problems are, politely put, everywhere.
-As shown in Section~\ref{sec:motivation}, the real
-question is not whether to optimise but what to
-optimise \emph{for}.
-
-\end{document}</code></pre>
-
-        <h2>The Output</h2>
-
-        <p>LaTeX documents <em>look right</em>, obvious once you've compared them side by side with the alternative: the line spacing, the justified text with proper hyphenation, the kerning, the ligatures, mathematics set the way mathematics should look, without the nightmare-inducing Word equation editor. Knuth built the underlying engine, TeX, because he was (rightly) offended by how his own books were being typeset, and that offence, refined over decades, is now free software! When my thesis came back from the binders it looked like a real book, because by every standard that matters it was typeset like one.</p>
-
-        <h2>Getting started</h2>
-
-        <p>Rather than describe it further, here is a complete LaTeX document. It shows the three things beginners care about: a title block, mathematics, and a table.</p>
-
-<pre><code class="language-latex">% Getting started with LaTeX - the whole document, no hidden parts.
-\documentclass[11pt]{article}
-
-\usepackage[a4paper, margin=2.5cm]{geometry}
-\usepackage{amsmath}
-\usepackage{booktabs}
-
-\title{Getting Started with \LaTeX}
-\author{Ken Reid \\ \texttt{kenreid.co.uk}}
-\date{July 2026}
-
-\begin{document}
-\maketitle
-
-\section{How this works}
-You are reading a PDF that was generated from about forty
-lines of plain text. Headings are numbered automatically,
-and nothing on this page was nudged into place by hand.
-
-\section{Mathematics, the party trick}
-Notation that word processors fight you over is native here:
-\[
-  \hat{\theta} \;=\; \arg\max_{\theta}
-    \sum_{i=1}^{n} \log p(x_i \mid \theta)
-\]
-
-\section{Structure for free}
-\begin{itemize}
-  \item Sections, figures, and equations number themselves.
-  \item Cross-references update when things move.
-  \item Bibliographies format themselves from a reference file.
-\end{itemize}
-
-\begin{center}
-\begin{tabular}{lcc}
-  \toprule
-  Tool     & Learning curve & Ceiling \\
-  \midrule
-  Word     & flat           & low     \\
-  Markdown & flat           & medium  \\
-  \LaTeX{} & steep          & none    \\
-  \bottomrule
-\end{tabular}
-\end{center}
-
-\end{document}</code></pre>
-
-        <p>And here is what that produces:</p>
-
-        <figure style="margin: 24px auto; max-width: 760px;">
-          <object data="latex/getting-started.pdf" type="application/pdf" style="width:100%; height:560px; border-radius:8px;">
-            <p>Your browser would rather download PDFs than display them: <a href="https://www.kenreid.co.uk/blog/latex/getting-started.pdf">open the compiled page here</a>.</p>
-          </object>
-          <figcaption class="figure-note">The compiled result. Also available as <a href="https://www.kenreid.co.uk/blog/latex/getting-started.pdf">the PDF</a> or <a href="https://www.kenreid.co.uk/blog/latex/getting-started.tex">the raw .tex source</a>.</figcaption>
-        </figure>
-
-        <p>To try it yourself, no installation required: <a href="https://www.overleaf.com/docs?snip_uri=https%3A%2F%2Fwww.kenreid.co.uk%2Fblog%2Flatex%2Fgetting-started.tex" target="_blank" rel="noopener noreferrer"><strong>open this file in Overleaf</strong></a>, which will import the source into a free editor in your browser. You need an account, but it makes the whole process of writing LaTeX much easier. Change a word, press Recompile (CTRL-S or CMD-S), and boom, a beautiful PDF.</p>
-
-        <h2>LaTeX is Used Everywhere</h2>
-
-        <p>The getting-started page above also explains, in miniature, why LaTeX became the default in three particular worlds:</p>
-
-        <ul>
-          <li><strong>Research.</strong> Mathematics is native, citations manage themselves from a reference file, and nearly every journal and conference publishes a LaTeX template that formats your paper to their rules automatically. Overleaf added the last missing piece: real-time collaboration, so co-authors edit one live document instead of emailing <code>final_v7_REVISED.docx</code> into the email archives.</li>
-          <li><strong>Tech fields.</strong> Plain text means version control, diffs, code review for documents, and automation: results generated by your code can be written into your report by your code. A document pipeline you can script is a document pipeline that scales, which is why it fits engineering culture like a glove.</li>
-          <li><strong>Professional documents.</strong> Anything long-lived and repeatedly revised (a CV, a report series, a book) benefits from separating content from presentation. The typography does the rest of the work for you, every single compile, forever. </li>
-        </ul>
-
-        <h2>The real costs</h2>
-
-        <p>Love with no complaints is marketing, so: the error messages are archaeological artefacts, a missing brace can produce forty lines of complaint pointing somewhere unrelated, and "Overfull \hbox (badness 10000)" is a sentence I have read several thousand times. And the learning curve is real: the first document takes an evening; the first document you're proud of takes longer.</p>
-
-        <p>Every one of those costs is paid in the first ten percent of a document's life, while the benefits (the automation, the consistency, the diffs, the typography) compound. LaTeX front-loads its pain while word amortises its pain across every day you use it.</p>
-
-        <h2>Who should actually learn it</h2>
-
-        <p>Not everyone, truthfully. If you write short documents with simple structure, modern tools are fine and Markdown is friendlier still. But if you write anything long, structured, numbered, cited, or mathematical (a thesis, a book, a paper, a technical report, or a CV you'll be revising for the next thirty years) the evening it takes to start is one of the best-paying evenings available to you. Overleaf runs it in a browser now, with none of the old installation hazing. </p>
-
-        <p>Mine was simple: the thesis was going to have my name on it forever. It seemed worth typesetting like a real publication should be.</p>
-
-        <div class="faq-section">
-          <h2>Common questions</h2>
-
-          <details class="faq-item">
-            <summary>Isn't LaTeX overkill for normal documents?</summary>
-            <p>For a one-page letter, absolutely. The break-even point is roughly where structure appears: numbered sections, citations, figures that must stay labelled and cross-referenced. </p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Overleaf or a local installation?</summary>
-            <p>Overleaf to learn and collaborate: zero setup, live preview, your co-author can't break your machine. Local (TeX Live plus any good editor) once you want speed, offline work, and git. </p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Is LaTeX still relevant with modern tools and AI writing assistants?</summary>
-            <p>More than ever, oddly: it's plain text, so every modern tool (git, scripts, LLMs) can read and write it natively. </p>
-          </details>
-
-          <details class="faq-item">
-            <summary>What about your CV claim, seriously, LaTeX for a CV?</summary>
-            <p>Seriously: one source file, decades of updates, perfect consistency, and tailored variants generated by commenting sections in and out. </p>
-          </details>
-        </div>
-
-        
-
-
-        <hr style="margin: 40px 0;">
-        <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
-      ]]></content:encoded>
     </item>
     <item>
       <title>What 50,000 Scrobbles Say About Me</title>

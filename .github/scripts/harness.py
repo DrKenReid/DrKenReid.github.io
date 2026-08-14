@@ -63,15 +63,20 @@ def serve(port, root=ROOT):
         server.server_close()
 
 
-def watch_console(page, sink):
-    """Collect real console errors, dropping third-party noise as it arrives.
+# A failed subresource logs a console line that names no URL, so the text
+# cannot say whose it was: a third-party 404 and one of ours look identical
+# here. Those lines are dropped and the same failure is caught on the response
+# instead, where the URL is available to filter on. Dropping this prefix is not
+# optional; without it every draft reports its own missing giscus thread.
+RESOURCE_LINE = "Failed to load resource"
 
-    A failed subresource logs a console line that names no URL, so the text
-    alone cannot say whose it was. Responses carry the URL, so they are
-    filtered there instead.
-    """
+
+def watch_console(page, sink):
+    """Collect real console errors, dropping third-party noise as it arrives."""
     page.on("console", lambda m: sink.append(m.text)
-            if m.type == "error" and not is_noise(m.text) else None)
+            if m.type == "error"
+            and not m.text.startswith(RESOURCE_LINE)
+            and not is_noise(m.text) else None)
     page.on("response", lambda r: sink.append(f"HTTP {r.status}: {r.url}")
             if r.status >= 400 and not is_noise(r.url) else None)
 

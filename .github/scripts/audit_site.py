@@ -223,7 +223,11 @@ def tracked_files():
     return set(out.split())
 
 
-BANNED_PROSE = re.compile(r"\b(?:quiet(?:ly|er|est)?|honest(?:ly)?)\b", re.I)
+# Adverbs only for the last two. The adjectives earn their place: one post is
+# about an embarrassing t-shirt, another discusses politeness as a subject, and
+# aria-live="polite" is an attribute value rather than prose.
+BANNED_PROSE = re.compile(
+    r"\b(?:quiet(?:ly|er|est)?|honest(?:ly)?|embarrassingly|politely)\b", re.I)
 
 # House style: straight ' and " in prose. Verbatim book passages
 # (quotes.html, the quote-wall JSON) keep their original typography
