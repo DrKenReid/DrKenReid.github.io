@@ -39,6 +39,12 @@ jobs:
       - name: Related posts are current
         run: python .github/scripts/generate_related_posts.py --check
 
+      # The feed embeds the full body of the twenty newest posts, so editing a
+      # post changes it. This was the one generator with no --check, and the
+      # feed duly drifted behind a set of class renames without anyone noticing.
+      - name: Feed is current
+        run: python .github/scripts/generate_feed.py --check
+
   # Headless render checks: JS-built UI must actually appear (catches
   # bugs the static audit cannot, e.g. content stuck at opacity 0).
   smoke:

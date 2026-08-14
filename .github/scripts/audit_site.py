@@ -231,6 +231,296 @@ BANNED_PROSE = re.compile(r"\b(?:quiet(?:ly|er|est)?|honest(?:ly)?)\b", re.I)
 CURLY_PROSE = re.compile(r"[‘’“”]")
 
 
+
+class PageCtx:
+    """Everything a per-page check needs, in one object.
+
+    Checks used to live inline in main() as a 200-line run of closures, which
+    meant adding one involved threading state through an already long function.
+    Now a check is a function of this context, and registering it is a line in
+    PAGE_CHECKS.
+    """
+
+    def __init__(self, page, rel, text, parser, tracked, add):
+        self.page = page
+        self.rel = rel
+        self.text = text
+        self.p = parser
+        self.tracked = tracked
+        self.add = add
+        self.is_post = rel.startswith("blog/") and not parser.noindex
+        self.is_redirect = ('http-equiv="refresh"' in text
+                            or "http-equiv='refresh'" in text)
+        self.page_is_tracked = rel in tracked
+        self.ids = {}                 # id -> first line seen
+        self.idset = set()
+        self.jsonld_headline = None
+        self.jsonld_date = None
+
+
+def check_ids(c):
+    # --- ids ---
+    c.ids = {}
+    for i, line in c.p.ids:
+        if i in c.ids:
+            c.add("ERROR", c.page, line, "dup-id", f"duplicate id '{i}' (first at line {c.ids[i]})")
+        else:
+            c.ids[i] = line
+
+
+
+def check_structure(c):
+    # --- structure a screen reader depends on ---
+    for landmark, forced, line in c.p.bad_nesting:
+        c.add("ERROR", c.page, line, "landmark-nesting",
+            f"</{landmark}> closes with {len(forced)} element(s) still open "
+            f"({', '.join(forced[:4])}); the parser will close them here and "
+            f"push the rest of the content out of the landmark")
+    for tag, label, line in c.p.label_no_role:
+        c.add("ERROR", c.page, line, "label-no-role",
+            f"<{tag} aria-label=\"{label}\"> has no role, so the name is "
+            f"dropped; add role=\"group\" (or region/navigation as fits)")
+    for line in c.p.img_no_src:
+        c.add("ERROR", c.page, line, "img-no-src",
+            "<img> has neither src nor srcset; use a placeholder data URI "
+            "if a script fills it in later")
+
+
+
+def check_references(c):
+    # --- links / images resolve (and must be git-c.tracked: a file that
+    # exists locally but is untracked 404s in production) ---
+    c.page_is_tracked = c.rel in c.tracked
+    def check_target(url, line, what="target"):
+        local = resolve_local(c.page, url)
+        if local is None:
+            return
+        if not local.exists():
+            c.add("ERROR", c.page, line, "broken-link", f"missing {what}: {url}")
+        elif c.page_is_tracked:
+            try:
+                relp = local.resolve().relative_to(ROOT).as_posix()
+            except ValueError:
+                relp = None
+            if relp and relp not in c.tracked:
+                c.add("ERROR", c.page, line, "untracked-ref",
+                    f"{what} exists locally but is not tracked by git: {url}")
+
+    for url, line in c.p.links + [(u, l) for (_t, u, _a, _lz, l) in c.p.images]:
+        shape = check_url_shape(url)
+        if shape:
+            c.add("ERROR", c.page, line, "bad-url", f"{shape}: {url[:120]}")
+            continue
+        if url.startswith(SITE + "/"):
+            url = urlparse(url).path
+        check_target(url, line)
+
+    # inline style backgrounds: url(...) references the parser can't see
+    for m in re.finditer(r"url\((['\"]?)([^)'\"]+)\1\)", c.text):
+        u = m.group(2)
+        if is_external(u) or u.startswith("data:"):
+            continue
+        check_target(u, c.text[:m.start()].count("\n") + 1, what="background")
+
+
+
+def check_fragments(c):
+    # --- same-c.page fragments ---
+    c.idset = set(c.ids)
+    for url, line in c.p.links:
+        if url.startswith("#") and len(url) > 1 and url[1:] not in c.idset:
+            c.add("WARN", c.page, line, "bad-fragment", f"no element with id '{url[1:]}'")
+
+
+
+def check_img_alt(c):
+    # --- images alt (only real img elements; <source> has no alt) ---
+    for tag, src, alt, loading, line in c.p.images:
+        if tag == "img" and alt is None:
+            c.add("WARN", c.page, line, "no-alt", f"img missing alt: {src[:80]}")
+
+
+
+def check_dup_alt(c):
+    # --- duplicated alt c.text (screen readers hear it N times) ---
+    alt_first = {}
+    alt_seen = {}
+    for alt, line in c.p.alts:
+        if len(alt) < 9:
+            continue
+        alt_seen[alt] = alt_seen.get(alt, 0) + 1
+        alt_first.setdefault(alt, line)
+    for alt, n in alt_seen.items():
+        if n >= 3:
+            c.add("WARN", c.page, alt_first[alt], "dup-alt",
+                f"alt text repeated {n}x: '{alt[:70]}'")
+
+
+
+def check_img_dims(c):
+    # --- external images without dimensions cause layout shift ---
+    for src, line in c.p.ext_nodims:
+        c.add("WARN", c.page, line, "ext-img-dims",
+            f"external img without width/height: {src[:90]}")
+
+
+
+def check_figures(c):
+    # --- figures may not be direct children of lists ---
+    for line in c.p.fig_in_list:
+        c.add("ERROR", c.page, line, "figure-in-list",
+            "figure is a direct child of ul/ol (invalid HTML)")
+
+
+
+def check_prose(c):
+    # --- blog prose style rules (banned words, em dashes) ---
+    if c.is_post and not c.is_redirect:
+        for chunk, line in c.p.prose:
+            for m in BANNED_PROSE.finditer(chunk):
+                c.add("WARN", c.page, line, "banned-word",
+                    f"'{m.group(0)}' in prose (banned word)")
+            if "—" in chunk:
+                c.add("WARN", c.page, line, "em-dash",
+                    f"em dash in prose: ...{chunk.strip()[:60]}...")
+            if CURLY_PROSE.search(chunk):
+                c.add("WARN", c.page, line, "curly-quote",
+                    f"curly quote/apostrophe in prose (use straight ' \"): ...{chunk.strip()[:60]}...")
+
+
+
+def check_headings(c):
+    # --- headings ---
+    if not c.is_redirect:
+        h1s = [l for (lv, l) in c.p.headings if lv == 1]
+        if c.is_post and len(h1s) == 0:
+            c.add("WARN", c.page, 0, "no-h1", "post has no h1")
+        if len(h1s) > 1:
+            c.add("WARN", c.page, h1s[1], "multi-h1", f"{len(h1s)} h1 elements")
+        prev = 0
+        for lv, line in c.p.headings:
+            if prev and lv > prev + 1:
+                c.add("INFO", c.page, line, "heading-skip", f"h{prev} -> h{lv}")
+            prev = lv
+
+
+
+def check_metadata(c):
+    # --- metadata (posts + top-level pages, not redirects) ---
+    if not c.is_redirect and not c.p.noindex:
+        desc = c.p.metas.get("description", "")
+        if not desc:
+            c.add("ERROR", c.page, 0, "no-desc", "missing meta description")
+        elif CURLY_PROSE.search(desc):
+            c.add("WARN", c.page, 0, "curly-quote",
+                "curly quote/apostrophe in meta description (use straight ' \")")
+        elif len(desc) < 50:
+            c.add("WARN", c.page, 0, "short-desc", f"description only {len(desc)} chars")
+        elif len(desc) > 165:
+            c.add("INFO", c.page, 0, "long-desc", f"description {len(desc)} chars")
+        expected_canonical = f"{SITE}/{c.rel}".replace("/index.html", "/")
+        if not c.p.canonical:
+            c.add("WARN", c.page, 0, "no-canonical", "missing canonical link")
+        elif c.p.canonical.rstrip("/") not in (expected_canonical.rstrip("/"), f"{SITE}/{c.rel}"):
+            c.add("WARN", c.page, 0, "canonical-mismatch",
+                f"canonical {c.p.canonical} != {expected_canonical}")
+        for k in ("og:title", "og:description", "og:image", "og:url"):
+            if k not in c.p.metas:
+                c.add("WARN", c.page, 0, "no-og", f"missing {k}")
+        if "twitter:card" not in c.p.metas:
+            c.add("INFO", c.page, 0, "no-twitter", "missing twitter:card")
+        og_img = c.p.metas.get("og:image", "")
+        if og_img:
+            shape = check_url_shape(og_img)
+            if shape:
+                c.add("ERROR", c.page, 0, "bad-og-image", f"{shape}: {og_img[:120]}")
+            elif og_img.startswith(SITE):
+                local = ROOT / unquote(urlparse(og_img).path.lstrip("/"))
+                if not local.exists():
+                    c.add("ERROR", c.page, 0, "bad-og-image", f"og:image file missing: {og_img}")
+
+
+
+def check_jsonld(c):
+    # --- JSON-LD ---
+    c.jsonld_headline = None
+    c.jsonld_date = None
+    for raw, line in c.p.jsonld:
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError as e:
+            c.add("ERROR", c.page, line, "jsonld-parse", f"invalid JSON-LD: {e}")
+            continue
+        for node in (data if isinstance(data, list) else [data]):
+            if isinstance(node, dict) and isinstance(node.get("@type"), str):
+                c.p.jsonld_types.add(node["@type"])
+        if isinstance(data, dict):
+            c.jsonld_headline = data.get("headline") or c.jsonld_headline
+            c.jsonld_date = data.get("datePublished") or c.jsonld_date
+        def walk(node):
+            if isinstance(node, dict):
+                for k, v in node.items():
+                    if isinstance(v, str) and ("http://" in v or "https://" in v):
+                        shape = check_url_shape(v)
+                        if shape:
+                            c.add("ERROR", c.page, line, "jsonld-url", f"{k}: {shape}: {v[:120]}")
+                        elif v.startswith(SITE + "/"):
+                            lp = ROOT / unquote(urlparse(v).path.lstrip("/"))
+                            if "." in lp.name and not lp.exists():
+                                c.add("ERROR", c.page, line, "jsonld-url", f"{k}: missing file {v}")
+                    else:
+                        walk(v)
+            elif isinstance(node, list):
+                for v in node:
+                    walk(v)
+        walk(data)
+
+
+
+def check_consistency(c):
+    # --- one fact, many places: dates and headlines must agree ---
+    if c.is_post and not c.is_redirect:
+        cit = (c.p.metas.get("citation_publication_date") or "").replace("/", "-")
+        dc = c.p.metas.get("DC.date") or ""
+        dates = {k: v for k, v in
+                 (("citation", cit), ("DC.date", dc), ("JSON-LD", c.jsonld_date or ""))
+                 if v}
+        if len(set(dates.values())) > 1:
+            c.add("WARN", c.page, 0, "date-mismatch",
+                "publication dates disagree: " +
+                ", ".join(f"{k}={v}" for k, v in dates.items()))
+        c.p.page_date = next(iter(set(dates.values())), None) \
+            if len(set(dates.values())) == 1 else None
+        def _norm_title(s):
+            return (s or "").strip().replace("’", "'").replace("‘", "'")                     .replace("“", '"').replace("”", '"')
+        cit_title = _norm_title(c.p.metas.get("citation_title"))
+        if c.jsonld_headline and cit_title and _norm_title(c.jsonld_headline) != cit_title:
+            c.add("WARN", c.page, 0, "headline-mismatch",
+                f"JSON-LD headline '{c.jsonld_headline[:50]}' != title '{cit_title[:50]}'")
+
+
+
+
+# Order is the contract: check_ids fills the id map that check_fragments reads,
+# and check_jsonld fills the headline and date that check_consistency compares.
+# Append a new check here and it runs against every audited page.
+PAGE_CHECKS = [
+    check_ids,
+    check_structure,
+    check_references,
+    check_fragments,
+    check_img_alt,
+    check_dup_alt,
+    check_img_dims,
+    check_figures,
+    check_prose,
+    check_headings,
+    check_metadata,
+    check_jsonld,
+    check_consistency,
+]
+
+
 def main():
     include_drafts = "--include-drafts" in sys.argv
     pages = tracked_html()
@@ -260,214 +550,11 @@ def main():
         if rel.startswith("blog/downloads/"):
             # download artifacts (standalone demo files), not site pages
             continue
-        is_post = rel.startswith("blog/") and not p.noindex
-        is_redirect = "http-equiv=\"refresh\"" in text or "http-equiv='refresh'" in text
 
-        # --- ids ---
-        seen = {}
-        for i, line in p.ids:
-            if i in seen:
-                add("ERROR", page, line, "dup-id", f"duplicate id '{i}' (first at line {seen[i]})")
-            else:
-                seen[i] = line
-
-        # --- structure a screen reader depends on ---
-        for landmark, forced, line in p.bad_nesting:
-            add("ERROR", page, line, "landmark-nesting",
-                f"</{landmark}> closes with {len(forced)} element(s) still open "
-                f"({', '.join(forced[:4])}); the parser will close them here and "
-                f"push the rest of the content out of the landmark")
-        for tag, label, line in p.label_no_role:
-            add("ERROR", page, line, "label-no-role",
-                f"<{tag} aria-label=\"{label}\"> has no role, so the name is "
-                f"dropped; add role=\"group\" (or region/navigation as fits)")
-        for line in p.img_no_src:
-            add("ERROR", page, line, "img-no-src",
-                "<img> has neither src nor srcset; use a placeholder data URI "
-                "if a script fills it in later")
-
-        # --- links / images resolve (and must be git-tracked: a file that
-        # exists locally but is untracked 404s in production) ---
-        page_is_tracked = rel in tracked
-        def check_target(url, line, what="target"):
-            local = resolve_local(page, url)
-            if local is None:
-                return
-            if not local.exists():
-                add("ERROR", page, line, "broken-link", f"missing {what}: {url}")
-            elif page_is_tracked:
-                try:
-                    relp = local.resolve().relative_to(ROOT).as_posix()
-                except ValueError:
-                    relp = None
-                if relp and relp not in tracked:
-                    add("ERROR", page, line, "untracked-ref",
-                        f"{what} exists locally but is not tracked by git: {url}")
-
-        for url, line in p.links + [(u, l) for (_t, u, _a, _lz, l) in p.images]:
-            shape = check_url_shape(url)
-            if shape:
-                add("ERROR", page, line, "bad-url", f"{shape}: {url[:120]}")
-                continue
-            if url.startswith(SITE + "/"):
-                url = urlparse(url).path
-            check_target(url, line)
-
-        # inline style backgrounds: url(...) references the parser can't see
-        for m in re.finditer(r"url\((['\"]?)([^)'\"]+)\1\)", text):
-            u = m.group(2)
-            if is_external(u) or u.startswith("data:"):
-                continue
-            check_target(u, text[:m.start()].count("\n") + 1, what="background")
-
-        # --- same-page fragments ---
-        idset = set(seen)
-        for url, line in p.links:
-            if url.startswith("#") and len(url) > 1 and url[1:] not in idset:
-                add("WARN", page, line, "bad-fragment", f"no element with id '{url[1:]}'")
-
-        # --- images alt (only real img elements; <source> has no alt) ---
-        for tag, src, alt, loading, line in p.images:
-            if tag == "img" and alt is None:
-                add("WARN", page, line, "no-alt", f"img missing alt: {src[:80]}")
-
-        # --- duplicated alt text (screen readers hear it N times) ---
-        alt_first = {}
-        alt_seen = {}
-        for alt, line in p.alts:
-            if len(alt) < 9:
-                continue
-            alt_seen[alt] = alt_seen.get(alt, 0) + 1
-            alt_first.setdefault(alt, line)
-        for alt, n in alt_seen.items():
-            if n >= 3:
-                add("WARN", page, alt_first[alt], "dup-alt",
-                    f"alt text repeated {n}x: '{alt[:70]}'")
-
-        # --- external images without dimensions cause layout shift ---
-        for src, line in p.ext_nodims:
-            add("WARN", page, line, "ext-img-dims",
-                f"external img without width/height: {src[:90]}")
-
-        # --- figures may not be direct children of lists ---
-        for line in p.fig_in_list:
-            add("ERROR", page, line, "figure-in-list",
-                "figure is a direct child of ul/ol (invalid HTML)")
-
-        # --- blog prose style rules (banned words, em dashes) ---
-        if is_post and not is_redirect:
-            for chunk, line in p.prose:
-                for m in BANNED_PROSE.finditer(chunk):
-                    add("WARN", page, line, "banned-word",
-                        f"'{m.group(0)}' in prose (banned word)")
-                if "—" in chunk:
-                    add("WARN", page, line, "em-dash",
-                        f"em dash in prose: ...{chunk.strip()[:60]}...")
-                if CURLY_PROSE.search(chunk):
-                    add("WARN", page, line, "curly-quote",
-                        f"curly quote/apostrophe in prose (use straight ' \"): ...{chunk.strip()[:60]}...")
-
-        # --- headings ---
-        if not is_redirect:
-            h1s = [l for (lv, l) in p.headings if lv == 1]
-            if is_post and len(h1s) == 0:
-                add("WARN", page, 0, "no-h1", "post has no h1")
-            if len(h1s) > 1:
-                add("WARN", page, h1s[1], "multi-h1", f"{len(h1s)} h1 elements")
-            prev = 0
-            for lv, line in p.headings:
-                if prev and lv > prev + 1:
-                    add("INFO", page, line, "heading-skip", f"h{prev} -> h{lv}")
-                prev = lv
-
-        # --- metadata (posts + top-level pages, not redirects) ---
-        if not is_redirect and not p.noindex:
-            desc = p.metas.get("description", "")
-            if not desc:
-                add("ERROR", page, 0, "no-desc", "missing meta description")
-            elif CURLY_PROSE.search(desc):
-                add("WARN", page, 0, "curly-quote",
-                    "curly quote/apostrophe in meta description (use straight ' \")")
-            elif len(desc) < 50:
-                add("WARN", page, 0, "short-desc", f"description only {len(desc)} chars")
-            elif len(desc) > 165:
-                add("INFO", page, 0, "long-desc", f"description {len(desc)} chars")
-            expected_canonical = f"{SITE}/{rel}".replace("/index.html", "/")
-            if not p.canonical:
-                add("WARN", page, 0, "no-canonical", "missing canonical link")
-            elif p.canonical.rstrip("/") not in (expected_canonical.rstrip("/"), f"{SITE}/{rel}"):
-                add("WARN", page, 0, "canonical-mismatch",
-                    f"canonical {p.canonical} != {expected_canonical}")
-            for k in ("og:title", "og:description", "og:image", "og:url"):
-                if k not in p.metas:
-                    add("WARN", page, 0, "no-og", f"missing {k}")
-            if "twitter:card" not in p.metas:
-                add("INFO", page, 0, "no-twitter", "missing twitter:card")
-            og_img = p.metas.get("og:image", "")
-            if og_img:
-                shape = check_url_shape(og_img)
-                if shape:
-                    add("ERROR", page, 0, "bad-og-image", f"{shape}: {og_img[:120]}")
-                elif og_img.startswith(SITE):
-                    local = ROOT / unquote(urlparse(og_img).path.lstrip("/"))
-                    if not local.exists():
-                        add("ERROR", page, 0, "bad-og-image", f"og:image file missing: {og_img}")
-
-        # --- JSON-LD ---
-        jsonld_headline = None
-        jsonld_date = None
-        for raw, line in p.jsonld:
-            try:
-                data = json.loads(raw)
-            except json.JSONDecodeError as e:
-                add("ERROR", page, line, "jsonld-parse", f"invalid JSON-LD: {e}")
-                continue
-            for node in (data if isinstance(data, list) else [data]):
-                if isinstance(node, dict) and isinstance(node.get("@type"), str):
-                    p.jsonld_types.add(node["@type"])
-            if isinstance(data, dict):
-                jsonld_headline = data.get("headline") or jsonld_headline
-                jsonld_date = data.get("datePublished") or jsonld_date
-            def walk(node):
-                if isinstance(node, dict):
-                    for k, v in node.items():
-                        if isinstance(v, str) and ("http://" in v or "https://" in v):
-                            shape = check_url_shape(v)
-                            if shape:
-                                add("ERROR", page, line, "jsonld-url", f"{k}: {shape}: {v[:120]}")
-                            elif v.startswith(SITE + "/"):
-                                lp = ROOT / unquote(urlparse(v).path.lstrip("/"))
-                                if "." in lp.name and not lp.exists():
-                                    add("ERROR", page, line, "jsonld-url", f"{k}: missing file {v}")
-                        else:
-                            walk(v)
-                elif isinstance(node, list):
-                    for v in node:
-                        walk(v)
-            walk(data)
-
-        # --- one fact, many places: dates and headlines must agree ---
-        if is_post and not is_redirect:
-            cit = (p.metas.get("citation_publication_date") or "").replace("/", "-")
-            dc = p.metas.get("DC.date") or ""
-            dates = {k: v for k, v in
-                     (("citation", cit), ("DC.date", dc), ("JSON-LD", jsonld_date or ""))
-                     if v}
-            if len(set(dates.values())) > 1:
-                add("WARN", page, 0, "date-mismatch",
-                    "publication dates disagree: " +
-                    ", ".join(f"{k}={v}" for k, v in dates.items()))
-            page_info[page].page_date = next(iter(set(dates.values())), None) \
-                if len(set(dates.values())) == 1 else None
-            def _norm_title(s):
-                return (s or "").strip().replace("’", "'").replace("‘", "'")                     .replace("“", '"').replace("”", '"')
-            cit_title = _norm_title(p.metas.get("citation_title"))
-            if jsonld_headline and cit_title and _norm_title(jsonld_headline) != cit_title:
-                add("WARN", page, 0, "headline-mismatch",
-                    f"JSON-LD headline '{jsonld_headline[:50]}' != title '{cit_title[:50]}'")
-
-        # --- blog post script includes ---
-        if is_post and not is_redirect:
+        c = PageCtx(page, rel, text, p, tracked, add)
+        for check in PAGE_CHECKS:
+            check(c)
+        if c.is_post and not c.is_redirect:
             page_info[page].is_post = True
 
     # --- script include drift across posts ---

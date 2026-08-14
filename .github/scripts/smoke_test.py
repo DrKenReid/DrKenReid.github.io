@@ -17,22 +17,14 @@ CI:           see .github/workflows/site-checks.yml (smoke job)
 """
 
 import sys
-import threading
-import time
-from functools import partial
-from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
-ROOT = Path(__file__).resolve().parents[2]
-PORT = 8123
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from harness import ROOT, Reporter, serve, watch_console  # noqa: E402
 
-# Console/request errors from third parties are not our site breaking.
-NOISE = ("googletagmanager", "google-analytics", "fonts.g", "gstatic",
-         "instagram", "bsky", "giscus", "cartocdn", "openlibrary",
-         "lastfm", "audioscrobbler", "wikimedia", "youtube", "tiktok",
-         "goodreads", "gr-assets", "github.com", "githubassets")
+PORT = 8123
 
 CHECKS = [
     ("index.html", [
@@ -96,7 +88,7 @@ def interactive_posts():
     return posts
 
 
-def check_converges(page, path, failures):
+def check_converges(page, path, rep):
     """A demo that renders but never gets anywhere still looks fine in a
     screenshot. Widgets on the kr-viz engine expose a handle, so drive one
     deterministically and assert it actually moved: same seed twice gives
@@ -121,18 +113,15 @@ def check_converges(page, path, failures):
         try:
             r = page.evaluate(js, wid)
         except Exception as e:  # noqa: BLE001 - report, do not abort the suite
-            failures.append(f"{path} #{wid}: handle threw: {e}")
-            print(f"FAIL {path} :: #{wid} handle threw")
+            rep.check(path, f"#{wid} handle threw", False, e)
             continue
         moved = r["a"]["stats"] != r["b"]["stats"] or r["b"]["iteration"] > r["a"]["iteration"]
         same = r["b"] == r["c"]
-        for ok, name in ((moved, "demo advances"), (same, "same seed, same run")):
-            print(f"{'ok  ' if ok else 'FAIL'} {path} :: #{wid} {name}")
-            if not ok:
-                failures.append(f"{path} #{wid}: {name}")
+        rep.check(path, f"#{wid} demo advances", moved)
+        rep.check(path, f"#{wid} same seed, same run", same)
 
 
-def check_a11y(page, path, failures):
+def check_a11y(page, path, rep):
     """The demos hold most of the site's interaction, so they hold most of its
     accessibility risk, and none of it is visible in a screenshot.
 
@@ -150,10 +139,7 @@ def check_a11y(page, path, failures):
     page.wait_for_timeout(1200)
 
     def report(name, ok, detail=""):
-        print(f"{'ok  ' if ok else 'FAIL'} {path} :: a11y {name}"
-              f"{'' if ok else ' -- ' + str(detail)}")
-        if not ok:
-            failures.append(f"{path}: a11y {name} ({detail})")
+        return rep.check(path, f"a11y {name}", ok, detail)
 
     # --- sliders announce what the reader can see -----------------------
     mute = page.evaluate(
@@ -218,7 +204,7 @@ def check_a11y(page, path, failures):
     on_engine = page.evaluate(
         "() => [...document.querySelectorAll('.kr-viz')].some(e => e.krViz)")
     if not on_engine:
-        print(f"skip {path} :: a11y live region (post is not on the engine)")
+        rep.skip(path, "a11y live region", "post is not on the engine")
         return
     page.evaluate("() => {const r = document.querySelector('.kr-viz');"
                   "       if (r) r.scrollIntoView({block: 'center'});}")
@@ -240,7 +226,7 @@ def check_a11y(page, path, failures):
                f"{churn} announcements in 3s")
 
 
-def check_reduced_motion(browser, path, failures):
+def check_reduced_motion(browser, path, rep):
     """Under prefers-reduced-motion the demos must mount paused and stay put,
     showing the first frame rather than a blank box."""
     page = browser.new_page(viewport={"width": 1280, "height": 900},
@@ -254,29 +240,43 @@ def check_reduced_motion(browser, path, failures):
                           "return r && r.krViz ? r.krViz.read().iteration : -1;}")
     page.close()
     if first == -1:
+        rep.skip(path, "a11y reduced motion", "post is not on the engine")
         return
-    ok = first == later
-    print(f"{'ok  ' if ok else 'FAIL'} {path} :: a11y honours reduced motion")
-    if not ok:
-        failures.append(f"{path}: kept animating under reduced motion "
-                        f"({first} -> {later})")
+    rep.check(path, "a11y honours reduced motion", first == later,
+              f"advanced {first} -> {later}")
 
 
-def check_mobile(page, path, failures, console_errors):
+def run_assertions(page, scope, assertions, rep):
+    """Evaluate a table of (name, js-expression) pairs against the open page.
+
+    This is the shape most checks want, so both the CHECKS table and the
+    phone-width pass go through it rather than each writing its own loop.
+    """
+    for name, expr in assertions:
+        try:
+            ok = page.evaluate(f"() => {expr}")
+        except Exception as e:  # noqa: BLE001 - a bad expression is a failure
+            ok = False
+            name += f" (evaluate error: {e})"
+        rep.check(scope, name, ok)
+
+
+def check_mobile(page, path, console_errors, rep):
     """Interactive demos must scale to phone width: no horizontal
     overflow, no console errors, and every visible canvas both fits the
     viewport and keeps a usable height (a squashed or zero-height canvas
     renders 'successfully' and is still broken)."""
     console_errors.clear()
+    scope = f"{path} @360px"
     page.set_viewport_size({"width": 360, "height": 780})
     try:
         page.goto(f"http://127.0.0.1:{PORT}/{path}",
                   wait_until="domcontentloaded", timeout=30000)
-    except Exception as e:
-        failures.append(f"{path} @360px: navigation failed: {e}")
+    except Exception as e:  # noqa: BLE001
+        rep.check(scope, "navigation", False, e)
         return
     page.wait_for_timeout(3500)
-    checks = [
+    run_assertions(page, scope, [
         ("no horizontal overflow",
          "document.documentElement.scrollWidth <= 362"),
         ("canvases fit viewport",
@@ -286,45 +286,25 @@ def check_mobile(page, path, failures, console_errors):
          "Array.from(document.querySelectorAll('canvas'))"
          ".filter(c => c.getBoundingClientRect().width > 0)"
          ".every(c => c.getBoundingClientRect().height >= 100)"),
-    ]
-    for name, expr in checks:
-        try:
-            ok = page.evaluate(f"() => {expr}")
-        except Exception as e:
-            ok = False
-            name += f" (evaluate error: {e})"
-        status = "ok" if ok else "FAIL"
-        print(f"{status:4} {path} @360px :: {name}")
-        if not ok:
-            failures.append(f"{path} @360px: {name}")
-    own_errors = [e for e in console_errors
-                  if not any(n in e for n in NOISE)]
-    if own_errors:
-        for e in own_errors[:3]:
-            print(f"FAIL {path} @360px :: console error: {e[:140]}")
-        failures.append(f"{path} @360px: console errors")
+    ], rep)
+    rep.console_errors(scope, console_errors)
 
 
 def main():
-    handler = partial(SimpleHTTPRequestHandler, directory=str(ROOT))
-    server = ThreadingHTTPServer(("127.0.0.1", PORT), handler)
-    threading.Thread(target=server.serve_forever, daemon=True).start()
-
-    failures = []
-    with sync_playwright() as pw:
+    rep = Reporter()
+    with serve(PORT), sync_playwright() as pw:
         browser = pw.chromium.launch()
         page = browser.new_page(viewport={"width": 1280, "height": 900})
         console_errors = []
-        page.on("console", lambda m: console_errors.append(m.text)
-                if m.type == "error" else None)
+        watch_console(page, console_errors)
 
         for path, assertions in CHECKS:
             console_errors.clear()
             try:
                 page.goto(f"http://127.0.0.1:{PORT}/{path}",
                           wait_until="domcontentloaded", timeout=30000)
-            except Exception as e:
-                failures.append(f"{path}: navigation failed: {e}")
+            except Exception as e:  # noqa: BLE001
+                rep.check(path, "navigation", False, e)
                 continue
             page.wait_for_timeout(3500)
             # Reveal-on-scroll content (initSectionReveals) only appears
@@ -332,39 +312,19 @@ def main():
             # reader would. A truly-broken reveal stays hidden regardless.
             page.evaluate("window.scrollBy(0, 700)")
             page.wait_for_timeout(900)
-            for name, expr in assertions:
-                try:
-                    ok = page.evaluate(f"() => {expr}")
-                except Exception as e:
-                    ok = False
-                    name += f" (evaluate error: {e})"
-                status = "ok" if ok else "FAIL"
-                print(f"{status:4} {path} :: {name}")
-                if not ok:
-                    failures.append(f"{path}: {name}")
-            own_errors = [e for e in console_errors
-                          if not any(n in e for n in NOISE)]
-            if own_errors:
-                for e in own_errors[:3]:
-                    print(f"FAIL {path} :: console error: {e[:140]}")
-                failures.append(f"{path}: console errors")
+            run_assertions(page, path, assertions, rep)
+            rep.console_errors(path, console_errors)
 
         # Phone-width pass over every interactive (canvas) post.
         for path in interactive_posts():
-            check_mobile(page, path, failures, console_errors)
-            check_converges(page, path, failures)
-            check_a11y(page, path, failures)
+            check_mobile(page, path, console_errors, rep)
+            check_converges(page, path, rep)
+            check_a11y(page, path, rep)
         # One reduced-motion pass is enough: the behaviour lives in the engine,
         # not in any one post.
-        check_reduced_motion(browser, "blog/particle-swarm-live.html", failures)
+        check_reduced_motion(browser, "blog/particle-swarm-live.html", rep)
         browser.close()
-    server.shutdown()
-
-    if failures:
-        print(f"\n{len(failures)} smoke failure(s)")
-        return 1
-    print("\nsmoke: all green")
-    return 0
+    return rep.summary("smoke")
 
 
 if __name__ == "__main__":

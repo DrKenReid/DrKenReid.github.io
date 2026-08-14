@@ -138,8 +138,22 @@ def main() -> int:
 
     feed = "".join(out)
     ET.fromstring(feed)  # dies loudly on malformed XML
-    (ROOT / "feed.xml").write_text(feed, encoding="utf-8")
+    target = ROOT / "feed.xml"
     full = min(FULL_CONTENT_ITEMS, len(posts))
+
+    # --check is the convention every other generator honours, and this one
+    # did not: it wrote regardless, so "check the feed" silently rebuilt it and
+    # the committed feed drifted for weeks behind a post's class renames.
+    if "--check" in sys.argv:
+        current = target.read_text(encoding="utf-8") if target.exists() else ""
+        if current != feed:
+            print("feed.xml is stale (regenerating would change it)")
+            print("run: python .github/scripts/generate_feed.py")
+            return 1
+        print("feed.xml is up to date.")
+        return 0
+
+    target.write_text(feed, encoding="utf-8")
     print(f"Wrote feed.xml: {len(posts)} items, {full} with full content, {len(feed):,} bytes")
     return 0
 
