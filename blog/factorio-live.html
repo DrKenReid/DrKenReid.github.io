@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="The logistic transport belt problem from my GECCO 2021 paper, running live in your browser: watch simulated annealing and genetic programming lay belts across a walled grid until the items get through.">
+ <meta name="keywords" content="data science">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Factorio, Live: a Game as an Optimisation Benchmark - Ken Reid</title>
+ <meta property="og:title" content="Factorio, Live: a Game as an Optimisation Benchmark">
+ <meta property="og:description" content="The logistic transport belt problem from my GECCO 2021 paper, running live in your browser: watch simulated annealing and genetic programming lay belts across a walled grid until the items get through.">
+ <meta property="og:image" content="https://www.kenreid.co.uk/blog/img/factorio-belt-demo.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/factorio-live.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Factorio, Live: a Game as an Optimisation Benchmark">
+ <meta name="twitter:description" content="The logistic transport belt problem from my GECCO 2021 paper, running live in your browser: watch simulated annealing and genetic programming lay belts across a walled grid until the items get through.">
+ <meta name="twitter:image" content="https://www.kenreid.co.uk/blog/img/factorio-belt-demo.png">
+ <meta name="citation_title" content="Factorio, Live: a Game as an Optimisation Benchmark">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/08/16">
+ <meta name="citation_online_date" content="2026/08/16">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/factorio-live.html">
+ <meta name="DC.title" content="Factorio, Live: a Game as an Optimisation Benchmark">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-08-16">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="img/factorio-belt-demo.png">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/factorio-live.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "Factorio, Live: a Game as an Optimisation Benchmark",
+ "description": "The logistic transport belt problem from my GECCO 2021 paper, running live in your browser: watch simulated annealing and genetic programming lay belts across a walled grid until the items get through.",
+ "image": "https://www.kenreid.co.uk/blog/img/factorio-belt-demo.png",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-08-16",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["data science", "operational research", "factorio", "optimisation", "interactive"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "Factorio, Live: a Game as an Optimisation Benchmark",
+       "item": "https://www.kenreid.co.uk/blog/factorio-live.html"
+     }
+   ]
+ }
+ </script>
+ <style>
+   /* Series: s1 = belts, s2 = the connected route and the receiver,
+      s3 = underground belts and the best-fitness line, s4 = unreached. */
+   .belt-legend{ display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:12px; font-size:0.78em; color:var(--viz-muted); }
+   .belt-legend span{ display:flex; align-items:center; gap:6px; }
+   .belt-key{ width:10px; height:10px; border-radius:2px; display:inline-block; }
+ </style>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <main id="main-content">
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/factorio-belt-demo.png); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">Factorio, Live: a Game as an Optimisation Benchmark</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">Factorio, Live: a Game as an Optimisation Benchmark</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+
+ <div class="blog-post">
+ <h1>Factorio, Live: a Game as an Optimisation Benchmark</h1>
+ <div class="blog-meta">
+ 13 August 2026 &middot;
+ <span class="blog-tag">data science</span>
+ </div>
+
+ <p>Factorio is a game I've loved since it was released. It's my most-played game on Steam, and there's something so deeply satisfying about playing a game all about optimization, exploring and solving problems. When I started thinking about the psychology behind this, I realized that video games, puzzles, board games and the like mirror a satisfaction I find when programming, conducting research and solving real-world problems. It scratches an itch in a particular way unfound in other walks of life: defeating challenges beyond a grind in an RPG, lifting a heavier weight at the gym or accomplishing projects based more on time than difficulty. It's the slow accrual of problems solved into a portfolio of solutions working in tandem, so you can zoom out to the map and say "look at my base! it's a bit of a mess, but it's mine, and I love it."</p>
+
+ <p>I decided to bridge the gap between the video game and the research, both of which scratched that itch in my mind. I brought up the idea with one of my supervisors at Michigan State University (MSU) at the time, <a href="https://scholar.google.com/citations?user=u-FjxEUAAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Prof. Wolfgang Banzhaf</a>. He thought it sounded interesting, and liked my point that a video game is a better teaching instrument than a textbook, since this visually shows success and failure, and the mechanics of individual algorithms live in front of you. He said I should go for it, so I enlisted a couple of my colleauges (now co-authors) and we worked on it together. 
+
+ <noscript><p><strong>The interactive parts of this post require JavaScript.</strong> The prose will still make sense, but the demo will be sadly inert.</p></noscript>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Operational research:</strong> the study of running things well: what to build, where to put it, and in what order. </li>
+ <li><strong>Throughput and bottleneck:</strong> how much gets through per second and what component causes a trickle for the rest of a system.</li>
+ <li><strong>Transport belt:</strong> the conveyor that moves items in Factorio. Its capacity is fixed, so a longer route costs time, not bandwidth.</li>
+ <li><strong>Underground belt:</strong> a pair of entry and exit tiles that carries items beneath obstacles, up to four cells apart. It's kind of like teleporting that takes the same amount of time as a normal belt.</li>
+ <li><strong>Metaheuristic:</strong> a search that improves a solution by trial and feedback rather than solving equations. <a href="simulated-annealing-live.html">Simulated annealing</a> and <a href="evolution-live.html">genetic algorithms</a> are both in this family.</li>
+ </ul>
+ </div>
+
+ <h2>Watch it lay the belts</h2>
+
+ <div class="kr-viz" id="belt-demo">
+   <canvas id="beltCanvas" height="380" role="img" aria-label="A walled grid with an input chest on the left and a receiver on the right. An optimiser places transport belts and underground belts cell by cell, and the route currently carrying items is drawn brighter than the discarded pieces."></canvas>
+   <div class="belt-legend">
+     <span><i class="belt-key" style="background:var(--viz-s1)"></i> belt</span>
+     <span><i class="belt-key" style="background:var(--viz-s3)"></i> underground</span>
+     <span><i class="belt-key" style="background:var(--viz-s2)"></i> carrying items</span>
+     <span><i class="belt-key" style="background:var(--viz-muted)"></i> obstacle</span>
+   </div>
+   <div class="kr-toolbar" data-kr-toolbar></div>
+   <div class="kr-sliders" data-kr-sliders></div>
+   <div class="kr-stats" data-kr-stats></div>
+   <canvas id="beltChart" class="kr-chart" height="120" role="img" aria-label="Best fitness and current fitness against evaluations."></canvas>
+   <p class="kr-note">A cell holds one object: a belt facing one of four directions, an underground entry facing one of four directions, or nothing. Undergrounds pair with the next matching exit within four cells, which is how a solution ducks under an obstacle. Fitness is the paper's weighted sum of items delivered and items accepted, so a belt that starts at the chest and dead-ends still scores something: without that the search would be hunting for a single winning configuration with no gradient to follow. Switch between the two optimisers on the same instance and watch how differently they get there.</p>
+ </div>
+
+
+  <h2>Two places this demo is not the paper</h2>
+
+ <p>The scoring here is not identical to the published version. The paper scored a candidate by running it in the game, which returns nothing at all until the route lands. That cliff is survivable for a method that lays whole paths in one move, and hopeless for one that edits a single cell at a time: annealing would sit at zero for thousands of evaluations and look broken. So the demo adds partial credit for reaching further east, and a small bonus for using fewer belts once connected. It is a shaped objective, and shaped objectives can be gamed, so this is really just for demo purposes, not a realistic solution (mostly since "east" isn't always the goal).</p>
+
+ <p>The second departure is in how annealing picks what to change. The paper varies its neighbour selection with iteration progress. Here, two thirds of edits are at the frontier, meaning the cell where the current route gives up. The reason is arithmetic: on a twelve by twelve grid, a uniformly chosen cell is almost always somewhere the route never reaches, so most edits are invisible to the score and the search spends its budget rearranging scenery. Both changes exist to make the comparison fair to annealing, which is the direction a bias should run if you are going to have one.</p>
+
+ <p>So: this is a pretty and intentionally non-representative demo of the paper.</p>
+
+ <h2>What the paper actually did</h2>
+
+  <p>The paper behind this is <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:8k81kl-MbHgC" target="_blank" rel="noopener noreferrer"><em>The Factory Must Grow: Automation in Factorio</em></a>, written with my co-authors Iliya Miralavy, Stephen Kelly, Wolfgang Banzhaf and Cedric Gondro, and presented at GECCO in 2021. The starting point was that Factorio is a factory simulator that has already done the expensive part of building a benchmark: it has consistent physics, a fixed belt throughput, and a community of players who have spent years discovering what good layouts look like, so how would our algorithms fair?</p>
+
+ <p>We defined the logistic transport belt problem formally, as an integer program with hard constraints on what can occupy a cell and how underground pairs must line up, and two soft constraints to be maximised: items delivered to the receiver, and items accepted from the chest. Then we built the 'Factorio Optimizer Interface', which uses the game's Lua modding hooks and the RCON protocol to place a candidate layout in a running Factorio server and read back how many items the input inserter took and how many reached the output chest. Because it talks over a socket and reads matrices from disk, the optimiser can be written in anything: ours were in Java, Python and C++. The evaluation function is the game itself.</p>
+
+ <p>Three optimisers were compared on six instances, being three grid sizes at three by three, six by six and twelve by twelve, each with and without obstacles. Parallel simulated annealing, a genetic programming system whose operators place and connect belt runs rather than editing cells, and an evolutionary reinforcement learning approach. The small instances are solvable by anything. The twelve by twelve with obstacles is where things really got interesting.</p>
+
+ <p>Genetic programming did well here because its operators speak the language of the problem: laying a run of belts and connecting two points are single moves, so one step of the search covers ground that costs annealing a long chain of individually pointless edits. </p>
+
+ <figure>
+ <img src="img/factorio-paper-12x12-ingame.webp" alt="A Factorio screenshot of the twelve by twelve benchmark instance: a square arena walled in two-deep stone, with a steel chest and inserter at the top right and a receiver at the bottom left. Yellow transport belts wind between tree stumps that act as obstacles, and a line of iron ore rides the belts along the route between the two." loading="lazy" style="width:100%; max-width:620px; display:block; margin:0 auto; border-radius:8px;">
+ <figcaption class="figure-note">From <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:8k81kl-MbHgC" target="_blank" rel="noopener noreferrer">Reid et al. (2021)</a>. The twelve by twelve instance with obstacles, as the optimiser sees it: walls two cells thick, input top right, receiver bottom left, and the stumps are the cells you cannot build on. The ore on the belts is the fitness function happening.</figcaption>
+ </figure>
+
+ <h2>The model</h2>
+
+ <p>Section 4 of the paper states the problem formally. Two hard constraints, two soft ones, and a pair of binary decision variables. Throughput, routing and flow is absent, for a reason I will come back to.</p>
+
+ <p>A position \(p\) is a coordinate pair in the grid. Directions are \(d \in \{0,1,2,3\}\), meaning north, east, south and west. Belts and underground belts are drawn from \(L_b\) and \(L_u\), and \(\phi_p\) is 1 when position \(p\) holds an obstacle and 0 otherwise. The decisions are whether to place a given belt type, at a given position, facing a given way:</p>
+
+ <div class="math-block">
+ \[
+ \begin{aligned}
+ X_{bcpd} &= 0 \text{ or } 1, && \forall b \in L_b,\; \forall p_x \in G_x,\; \forall p_y \in G_y,\; \forall d \in \{0,1,2,3\} \\[4pt]
+ X_{ucpd} &= 0 \text{ or } 1, && \forall u \in L_u,\; \forall p_x \in G_x,\; \forall p_y \in G_y,\; \forall d \in \{0,1,2,3\}
+ \end{aligned}
+ \]
+ </div>
+
+ <figure>
+ <img src="img/factorio-paper-encodings.webp" alt="A table of integer encodings. Negative numbers describe the problem: minus ten to minus seven are output directions, minus six a steel chest, minus five to minus two input directions, minus one a stone wall, and zero is empty. Positive numbers are the solution: one to four are belts facing north, east, south and west, and five to eight are underground belts in the same four directions." loading="lazy" style="width:100%; max-width:420px; display:block; margin:0 auto; border-radius:8px;">
+ <figcaption class="figure-note">From <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:8k81kl-MbHgC" target="_blank" rel="noopener noreferrer">Reid et al. (2021)</a>. The encoding an optimiser reads and writes. Everything below zero is the problem and is fixed; everything above zero is the solution and is yours. A direction is not a separate field, it is baked into the number.</figcaption>
+ </figure>
+
+ <p>The objective maximises the sum of the two soft constraints, each a parameterised item count scaled by a weight (not as in how heavy it is, but a weighting as in scaling), where \(o\) is the number of items output and \(i\) the number input:</p>
+
+ <div class="math-block">
+ \[
+ \begin{aligned}
+ \max \quad & (SC_1 + SC_2), \qquad SC_1 = o \, w_1, \quad SC_2 = i \, w_2 \\[6pt]
+ \text{s.t.} \quad
+ & \left[ \phi_p + \Bigl( \sum_{b \in L_b} X_{bp} \Bigr) + \Bigl( \sum_{u \in L_u} X_{up} \Bigr) \right] < 2 && \text{(HC1)} \\[6pt]
+ & \left[ \Bigl( \sum_{b \in L_b} X_{b} \Bigr) + \Bigl( \sum_{u \in L_u} X_{u} \Bigr) \right] > 0 && \text{(HC2)} \\[4pt]
+ & w_1 + w_2 = 1, \quad 0 \le w_k \le 1
+ \end{aligned}
+ \]
+ </div>
+ <p class="math-caption">HC1 allows a position to hold one logistic object or one obstacle, never both and never two. HC2 requires at least one item to be placed at all. A solution failing either scores zero; otherwise fitness lands between 0 and 1.</p>
+
+ <p>HC1 is the constraint that makes this combinatorial. Every cell you spend is a cell you cannot spend on anything else, and the obstacle term means the grid's difficulty is set before the search starts. HC2 exists to rule out the empty solution, which would otherwise be feasible and uninformative.</p>
+
+ <p>There is no flow conservation here, no belt capacity, no constraint saying a route has to connect. The underground pairing rule, the one that requires an entrance and exit in the same row or column, facing the same way, at most four cells apart, is described in the paper as a property of the game rather than written as an inequality.</p>
+
+ <p>All of that is missing because the model does not evaluate solutions. The game does. A candidate is built in Factorio through the interface, run, and scored on what the receiving chest actually contains, so the physics stays where it already worked instead of being restated as constraints that could disagree with it. That is the paper's real trick, and it is why the formal model can afford to be four lines long.</p>
+
+ <p>It also explains the weights. With \(w_2 = 0\) the objective would count only what arrives, and every layout that fails to connect would score identically at zero, leaving a search no way to tell a near miss from an empty grid. Because \(SC_2\) pays for items merely taken out of the input chest, a belt that starts correctly and dead-ends still earns something. That is a modelling decision rather than an algorithmic one, and it is the difference between a landscape a local search can climb and a cliff it cannot.</p>
+
+ <h2>The niche</h2>
+
+  <p>Optimisation research runs on benchmark sets, and benchmark sets have a known failure mode: they get old, methods get tuned against them, and after a decade you cannot tell whether a new result is progress or overfitting to a fixed library of instances. Games are an interesting escape from that, because a game that people play is a simulator someone else has already paid to build, validate and keep interesting.</p>
+
+ <p>Factorio is a good one for the specific reason that its difficulty is combinatorial rather than reflexive. Nothing here depends on reaction time or hidden information., like many games: it is placement under constraints, with a throughput number at the end, which is the same shape as facility layout, circuit routing and warehouse design in real life. It also comes with something no synthetic benchmark has: a large population of humans who have independently optimised the same problem for fun, and whose solutions you can compare against.</p>
+
+ <p>This is one problem inside one game, with a single objective and an evaluation function that a commercial studio can change in a patch. A benchmark you do not control is a benchmark that can be revised out from under your published results. And the community solutions that make it appealing are also a contamination risk, since a method tuned by someone who knows the good patterns is not discovering them. Games are a useful source of problems, not a replacement for the discipline of saying what your benchmark can and cannot show.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Is this really operational research, or just a game?</summary>
+ <p>Why not both? Strip the graphics and what remains is a constrained routing problem: place components on a grid, respect adjacency and pairing rules, maximise throughput. The same integer program describes it whether the output is rendered as a conveyor or as a line in a warehouse plan. The game is the interface, not the problem.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why not just solve it outright?</summary>
+ <p>You can, up to a point. The small grids are well within reach of an exact solver, and where an exact answer is available it is the right thing to use, because it comes with a proof. The difficulty is that the search space grows with both the grid area and the number of things each cell could be, and the underground pairing constraint links cells that are not adjacent. Past a certain size you are choosing between a guaranteed answer you will not receive today and a good answer you can have in seconds, which is the situation metaheuristics exist for.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Does the demo run the real game?</summary>
+ <p>The demo in this site does not. The paper drove the actual game through an interface and measured real throughput. The demo reimplements the belt mechanics in JavaScript, because running thousands of evaluations in front of you requires an evaluation that takes microseconds rather than seconds. The mechanics modelled here are the ones the problem turns on: belt direction, underground pairing and reach, and items moving at a fixed rate. Everything else about Factorio is absent.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why is genetic programming so much better here?</summary>
+ <p>Because its moves are the right size. Connect lays a whole run of belts in one operation, where annealing changes a cell and asks whether that helped, and most single-cell changes to a broken route help by nothing at all. Given the same budget of four thousand evaluations on the twelve by twelve grid, the population method connects on five runs out of five and reaches a fitness around 0.82, while annealing connects on three and sits near 0.66. The gap in tidiness is starker than the gap in score: annealing arrives with roughly 88 belts on the board against 28, because it has no move that removes a redundant detour once the route works. That's not to say annealing is a weak algorithm. It says the operator matters more than the acceptance rule, which is the same conclusion the paper reached and the reason the comparison is worth running at all.</p>
+ </details>
+
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+ <li id="ref-1">
+ Reid, K. N., Miralavy, I., Kelly, S., Banzhaf, W., &amp; Gondro, C. (2021). <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:8k81kl-MbHgC" target="_blank" rel="noopener noreferrer">The Factory Must Grow: Automation in Factorio</a>. <em>Proceedings of the Genetic and Evolutionary Computation Conference Companion</em>. <a href="https://arxiv.org/abs/2102.04871" target="_blank" rel="noopener">https://arxiv.org/abs/2102.04871</a>
+ </li>
+ </ol>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="optimizing-your-schedule.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/493.webp" alt="Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">15 June 2026 · 19 min read</div>
+                  <h3 class="blog-card-title">Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)</h3>
+                  <p class="blog-card-excerpt">What an operations researcher actually means by optimizing a schedule: objectives, constraints and weightings, a values clarification grid, and a working integer-programming model of your week. Nerd mode optional.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">personal</span><span class="blog-tag">data science</span><span class="blog-tag">advice</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="optimizing-your-schedule-ii.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/488.webp" alt="Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">30 June 2026 · 16 min read</div>
+                  <h3 class="blog-card-title">Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)</h3>
+                  <p class="blog-card-excerpt">A reply to Part I: time is not the only budget. Energy is a second, renewable resource that some activities spend and others restore. A working model of a depleted week, and why rest is production, not indulgence.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">personal</span><span class="blog-tag">data science</span><span class="blog-tag">advice</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="evolutionary-computation-identity-crisis.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/208.webp" alt="Evolutionary Computation's Identity Crisis in the Age of GenAI" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">18 April 2026 · 11 min read</div>
+                  <h3 class="blog-card-title">Evolutionary Computation's Identity Crisis in the Age of GenAI</h3>
+                  <p class="blog-card-excerpt">Evolutionary Computation is having an identity crisis in the GenAI era, despite delivering major real-world wins in engineering, logistics, and constrained optimization.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ </div>
+ </div>
+ </div>
+ </main>
+
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+
+ <script src="../js/kr-viz.js"></script>
+ <script>
+ /* ============================================================
+    The logistic transport belt problem, live.
+
+    The problem is the one defined in "The Factory Must Grow: Automation
+    in Factorio" (Reid, Miralavy, Kelly, Banzhaf and Gondro, GECCO 2021):
+    a walled grid with an input chest on one side and a receiver on the
+    other, and the optimiser has to place transport belts and underground
+    belts so that items get across. A cell holds one object: a belt facing
+    one of four directions, an underground entry facing one of four
+    directions, or nothing. Undergrounds pair with the next matching exit
+    in the same direction within four cells, which is what lets a solution
+    duck under an obstacle.
+
+    Scoring follows the paper's two soft constraints: items delivered to
+    the receiver (SC1) and items accepted from the input chest (SC2), so a
+    dead-ending belt still scores something and the search has a gradient
+    to climb instead of a cliff to fall off.
+
+    Chrome from js/kr-viz.js. What lives here is the belt simulation and
+    the two optimisers the paper benchmarked, simulated annealing and a
+    genetic programming variant with Place and Connect operators.
+    ============================================================ */
+ (function () {
+   'use strict';
+   var wrap = document.getElementById('belt-demo');
+   if (!wrap) return;
+   var instanceSeed = 4242;   // set before mount(): init() reads it
+
+   // cell contents: 0 empty, 1..4 belt N/E/S/W, 5..8 underground entry N/E/S/W,
+   // 9 obstacle. Directions are indexed the same way throughout.
+   var EMPTY = 0, BELT = 1, UNDER = 5, OBSTACLE = 9;
+   var DX = [0, 1, 0, -1], DY = [-1, 0, 1, 0];
+   var DIRNAME = ['north', 'east', 'south', 'west'];
+   var UNDER_REACH = 4;            // the paper's maximum underground separation
+   var BELT_RATE = 15;             // items per second on a yellow belt
+   var CELL_TIME = 1 / 8;          // seconds an item spends crossing one cell
+   var WINDOW = 6;                 // seconds of simulated running per evaluation
+   var POP_SIZE = 30;              // the paper's population
+   var SA_CHAINS = 4;              // the paper's SA is parallel, not a single chain
+   var SA_SYNC = 40;               // iterations between comparing the chains
+
+   function key(x, y, n) { return y * n + x; }
+   function inside(x, y, n) { return x >= 0 && y >= 0 && x < n && y < n; }
+
+   /* ---- the instance -------------------------------------------------
+      Input enters on the left edge heading east, the receiver sits off the
+      right edge. Obstacles are seeded so an instance is reproducible. */
+   function makeInstance(n, obstacles, rng) {
+     var grid = new Uint8Array(n * n);
+     var inY = Math.floor(n / 2), outY = obstacles ? (n - 1) - Math.floor(n / 3) : Math.floor(n / 2);
+     if (obstacles) {
+       var want = Math.max(1, Math.round(n * n * 0.18));
+       var placed = 0, guard = 0;
+       while (placed < want && guard++ < 4000) {
+         var x = Math.floor(rng() * n), y = Math.floor(rng() * n);
+         if (x === 0 && y === inY) continue;             // never block the mouth
+         if (x === n - 1 && y === outY) continue;        // never block the receiver
+         if (grid[key(x, y, n)] !== EMPTY) continue;
+         grid[key(x, y, n)] = OBSTACLE;
+         placed++;
+       }
+     }
+     return {n: n, grid: grid, inY: inY, outY: outY};
+   }
+
+   /* ---- evaluation ---------------------------------------------------
+      Walk the belt from the input mouth. Each ordinary cell costs one
+      cell-time; an underground jumps to its matching exit and costs the
+      cells it covers. The walk ends at the receiver, at a dead end, or in
+      a loop. Items delivered in the window is the throughput times the
+      time left after the first item has travelled the path. */
+   function trace(inst, cells) {
+     var n = inst.n, x = 0, y = inst.inY, path = [], seen = {}, t = 0;
+     var reached = false, accepted = false, loop = false;
+     var first = cells[key(0, inst.inY, n)];
+     if (first >= BELT && first < OBSTACLE) accepted = true;
+     while (true) {
+       if (!inside(x, y, n)) { reached = (x === n && y === inst.outY); break; }
+       var k = key(x, y, n), v = cells[k];
+       if (v === EMPTY || v === OBSTACLE) break;
+       if (seen[k]) { loop = true; break; }
+       seen[k] = 1;
+       path.push(k);
+       var dir, jumped = 0;
+       if (v >= UNDER) {
+         dir = v - UNDER;
+         // find the matching underground exit ahead, within reach
+         var found = -1;
+         for (var step = 1; step <= UNDER_REACH + 1; step++) {
+           var nx = x + DX[dir] * step, ny = y + DY[dir] * step;
+           if (!inside(nx, ny, n)) break;
+           var w = cells[key(nx, ny, n)];
+           if (w >= UNDER && (w - UNDER) === dir) { found = step; break; }
+         }
+         if (found < 0) break;                     // an entry with no exit is a dead end
+         jumped = found;
+         path.push(key(x + DX[dir] * found, y + DY[dir] * found, n));
+         seen[key(x + DX[dir] * found, y + DY[dir] * found, n)] = 1;
+         x += DX[dir] * found; y += DY[dir] * found;
+         t += found * CELL_TIME;
+       } else {
+         dir = v - BELT;
+         t += CELL_TIME;
+       }
+       x += DX[dir]; y += DY[dir];
+       if (path.length > n * n + 4) { loop = true; break; }
+     }
+     // how far east the route got, which is the only signal a single-cell
+     // mutation has to climb before anything is delivered
+     var far = 0;
+     for (var q = 0; q < path.length; q++) {
+       var px2 = path[q] % n;
+       if (px2 > far) far = px2;
+     }
+     if (reached) far = n;
+     return {reached: reached, accepted: accepted, loop: loop, latency: t,
+             path: path, progress: far / n};
+   }
+
+   // SC1 + SC2 with the paper's weighting; w1 favours delivery, w2 keeps a
+   // gradient for solutions that at least take items off the chest
+   var W1 = 0.8, W2 = 0.2;
+   function score(inst, cells) {
+     var r = trace(inst, cells);
+     var delivered = r.reached ? Math.max(0, WINDOW - r.latency) * BELT_RATE : 0;
+     var takenIn = r.accepted ? WINDOW * BELT_RATE : 0;
+     var maxOut = WINDOW * BELT_RATE;
+     var sc1 = delivered / maxOut, sc2 = takenIn / maxOut;
+     // a small pull toward shorter solutions, so the search tidies up once
+     // it has connected rather than leaving spaghetti behind
+     var used = 0;
+     for (var i = 0; i < cells.length; i++) if (cells[i] >= BELT && cells[i] < OBSTACLE) used++;
+     var tidy = r.reached ? 0.02 * (1 - used / cells.length) : 0;
+     // Shaping, and a deliberate departure from the paper: it scored a
+     // candidate by running the game, which gives nothing at all until the
+     // route lands. That cliff is fine for a population method that lays whole
+     // paths, and hopeless for one that edits a cell at a time, so annealing
+     // would look broken here through no fault of its own. Partial credit for
+     // getting further east gives it something to climb.
+     var reach = r.reached ? 0 : 0.18 * r.progress;
+     return {fit: W1 * sc1 + W2 * sc2 + reach + tidy,
+             delivered: delivered, trace: r, used: used};
+   }
+
+   function blank(inst) {
+     var cells = new Uint8Array(inst.grid.length);
+     cells.set(inst.grid);
+     return cells;
+   }
+   function randomiseCell(inst, cells, rng) {
+     var n = inst.n, k;
+     do { k = Math.floor(rng() * cells.length); } while (inst.grid[k] === OBSTACLE);
+     var roll = rng();
+     if (roll < 0.25) cells[k] = EMPTY;
+     else if (roll < 0.8) cells[k] = BELT + Math.floor(rng() * 4);
+     else cells[k] = UNDER + Math.floor(rng() * 4);
+   }
+
+   /* ---- the Connect operator ----------------------------------------
+      The paper's qGP has a Place operator (one object) and a Connect
+      operator (a whole path). Connect is the interesting one: it walks a
+      greedy line from a cell toward the receiver, laying belts as it goes
+      and ducking under obstacles when it can. */
+   function connect(inst, cells, rng) {
+     var n = inst.n;
+     var x = rng() < 0.6 ? 0 : Math.floor(rng() * n);
+     var y = x === 0 ? inst.inY : Math.floor(rng() * n);
+     var guard = 0;
+     var drift = rng() < 0.5 ? 0 : 2;                // this run's vertical bias
+     // A bounded run of belts, not a traverse. Laying the whole width in one
+     // move made the first few generations contain a finished route, so the
+     // demo opened on the answer; a few cells at a time makes Connect what the
+     // paper meant it to be, a building block the population assembles.
+     var span = 2 + Math.floor(rng() * 4);
+     while (inside(x, y, n) && guard++ < span) {
+       // East most of the time, with an occasional turn. It does not know where
+       // the receiver is: an operator that walks straight to the answer is a
+       // solver wearing a genetic operator's coat.
+       var dir = rng() < 0.72 ? 1 : drift;
+       var nx = x + DX[dir], ny = y + DY[dir];
+       if (!inside(nx, ny, n)) { cells[key(x, y, n)] = BELT + dir; break; }
+       if (inst.grid[key(nx, ny, n)] === OBSTACLE) {
+         // duck under: entry here, exit past the obstruction if there is room
+         var step = 2;
+         while (step <= UNDER_REACH &&
+                inside(x + DX[dir] * step, y + DY[dir] * step, n) &&
+                inst.grid[key(x + DX[dir] * step, y + DY[dir] * step, n)] === OBSTACLE) step++;
+         var ex = x + DX[dir] * step, ey = y + DY[dir] * step;
+         if (step > UNDER_REACH || !inside(ex, ey, n)) break;
+         cells[key(x, y, n)] = UNDER + dir;
+         cells[key(ex, ey, n)] = UNDER + dir;
+         x = ex + DX[dir]; y = ey + DY[dir];
+         continue;
+       }
+       if (inst.grid[key(x, y, n)] !== OBSTACLE) cells[key(x, y, n)] = BELT + dir;
+       x = nx; y = ny;
+     }
+   }
+
+   var viz = KRViz.mount('#belt-demo', {
+     seed: 20260812,
+     // The slider means evaluations per second for both optimisers. A GP
+     // generation costs one evaluation per individual, so it steps proportionally
+     // less often: without this the population method silently gets thirty times
+     // the budget and the comparison is meaningless.
+     speed: function (c) {
+       var per = c.solver === 'gp' ? POP_SIZE : SA_CHAINS;
+       return Math.max(0.4, c.speed / per);
+     },
+     canvases: {
+       grid: {el: '#beltCanvas', height: function (w) { return Math.max(260, Math.min(420, w * 0.62)); }},
+       chart: {el: '#beltChart', height: 120, mobile: {height: 210}}
+     },
+     buttons: ['run', 'restart',
+       {id: 'new', label: 'New obstacles', onClick: function (api) {
+         instanceSeed += 101; api.restart();
+       }}],
+     controls: [
+       // 12x12 by default: on the smaller grids a population of 30 stumbles
+       // onto a route in a generation or two, and there is nothing to watch
+       {id: 'size', type: 'select', label: 'Grid', value: '12', options: [
+         {value: '3', label: '3 x 3'}, {value: '6', label: '6 x 6'}, {value: '12', label: '12 x 12'}]},
+       {id: 'solver', type: 'select', label: 'Optimiser', value: 'sa', options: [
+         {value: 'sa', label: 'Simulated annealing'}, {value: 'gp', label: 'Genetic programming'}]},
+       {id: 'obstacles', type: 'check', label: 'obstacles', value: true, restart: true},
+       {id: 'speed', label: 'Speed', min: 10, max: 600, step: 10, value: 40,
+        fmt: function (v) { return v + '/s'; }}
+     ],
+     stats: [
+       {id: 'evals', label: 'Evaluations'},
+       {id: 'out', label: 'Items delivered', tone: 's2',
+        fmt: function (v) { return v.toFixed(0) + '/s'; }},
+       {id: 'state', label: 'Solution'},
+       {id: 'used', label: 'Belts placed'},
+       {id: 'best', label: 'Best fitness', tone: 's3',
+        fmt: function (v) { return v.toFixed(3); }}
+     ],
+     charts: [{
+       canvas: 'chart',
+       panes: [{label: 'BEST FITNESS', yMin: 0, yMax: 1,
+                series: [{key: 'best', tone: 's3', label: 'best'},
+                         {key: 'cur', tone: 's1', label: 'current'}]}]
+     }],
+
+     init: function (ctx) {
+       var n = parseInt(ctx.controls.size, 10);
+       var irng = KRViz.rng(instanceSeed + n * 7);
+       var inst = makeInstance(n, ctx.controls.obstacles, irng);
+       var cells = blank(inst);
+       var s = score(inst, cells);
+       var st = {inst: inst, cells: cells, cur: s, best: s,
+                 bestCells: cells.slice(), view: cells, evals: 1, T: 1, pop: null};
+       if (ctx.controls.solver === 'gp') {
+         st.pop = seedPopulation(inst, ctx.rng);
+         st.evals += POP_SIZE;
+         st.view = st.pop[0].cells;
+       }
+       ctx.record({best: s.fit, cur: s.fit});
+       return st;
+     },
+
+     step: function (ctx) {
+       var st = ctx.state;
+       if (ctx.controls.solver === 'gp') stepGP(ctx, st); else stepSA(ctx, st);
+       ctx.record({best: st.best.fit, cur: st.cur.fit});
+     },
+
+     draw: function (ctx) {
+       var st = ctx.state, c = ctx.colors, cv = ctx.canvas.grid, g = cv.g;
+       var inst = st.inst, n = inst.n, W = cv.w, H = cv.h;
+       var pad = 26;                                   // room for the chests
+       var cell = Math.floor(Math.min((W - pad * 2) / n, (H - 24) / n));
+       var ox = Math.round((W - cell * n) / 2), oy = Math.round((H - cell * n) / 2);
+       // Two layers, because one cannot do both jobs. The attempt on the
+       // bench changes every step and shows the search working; the best route
+       // found is what the numbers describe, and it has to stay legible while
+       // the churn goes on underneath it.
+       var working = st.view || st.bestCells;
+       var show = st.bestCells;
+
+       // the walls the problem sits inside
+       g.strokeStyle = c.grid; g.lineWidth = 1;
+       g.strokeRect(ox - 0.5, oy - 0.5, cell * n + 1, cell * n + 1);
+       for (var y = 0; y < n; y++) {
+         for (var x = 0; x < n; x++) {
+           var v = show[key(x, y, n)];
+           var px = ox + x * cell, py = oy + y * cell;
+           g.strokeStyle = c.grid; g.globalAlpha = 0.45;
+           g.strokeRect(px + 0.5, py + 0.5, cell - 1, cell - 1);
+           g.globalAlpha = 1;
+           if (v === OBSTACLE) {
+             g.fillStyle = c.muted; g.globalAlpha = 0.5;
+             g.fillRect(px + 2, py + 2, cell - 4, cell - 4);
+             g.globalAlpha = 1;
+           }
+         }
+       }
+
+       // The rest of the population, faintly, behind the incumbent. Elitism
+       // keeps the best individual still once it is good, so without this the
+       // grid looks frozen while thirty candidates are churning underneath.
+       if (st.pop && st.pop.length > 1) {
+         g.globalAlpha = 0.10;
+         g.fillStyle = c.s4;
+         for (var pi = 1; pi < st.pop.length; pi += 4) {
+           var pc = st.pop[pi].cells;
+           for (var q = 0; q < pc.length; q++) {
+             if (pc[q] < BELT || pc[q] === OBSTACLE) continue;
+             if (show[q] >= BELT && show[q] < OBSTACLE) continue;   // already drawn solid
+             var qx = q % n, qy = Math.floor(q / n);
+             g.fillRect(ox + qx * cell + cell * 0.3, oy + qy * cell + cell * 0.3,
+                        cell * 0.4, cell * 0.4);
+           }
+         }
+         g.globalAlpha = 1;
+       }
+
+       // the attempt currently on the bench
+       if (working !== show) {
+         g.globalAlpha = 0.28;
+         for (var wy = 0; wy < n; wy++) {
+           for (var wx = 0; wx < n; wx++) {
+             var wv = working[key(wx, wy, n)];
+             if (wv < BELT || wv === OBSTACLE) continue;
+             g.fillStyle = wv >= UNDER ? c.s3 : c.s1;
+             g.fillRect(ox + wx * cell + cell * 0.26, oy + wy * cell + cell * 0.26,
+                        cell * 0.48, cell * 0.48);
+           }
+         }
+         g.globalAlpha = 1;
+       }
+
+       // the traced route, so the reader can see what the score is paying for
+       var tr = score(inst, show).trace;
+       var onPath = {};
+       for (var i = 0; i < tr.path.length; i++) onPath[tr.path[i]] = 1;
+
+       for (y = 0; y < n; y++) {
+         for (x = 0; x < n; x++) {
+           var k = key(x, y, n), val = show[k];
+           if (val < BELT || val === OBSTACLE) continue;
+           var isUnder = val >= UNDER, dir = isUnder ? val - UNDER : val - BELT;
+           var cx = ox + x * cell + cell / 2, cy = oy + y * cell + cell / 2;
+           var live = onPath[k];
+           g.save();
+           g.translate(cx, cy);
+           g.rotate([-Math.PI / 2, 0, Math.PI / 2, Math.PI][dir]);
+           g.globalAlpha = live ? 1 : 0.32;
+           g.fillStyle = isUnder ? c.s3 : (live && tr.reached ? c.s2 : c.s1);
+           var r = cell * 0.32;
+           if (isUnder) {
+             g.fillRect(-r, -r * 0.7, r * 2, r * 1.4);
+             g.fillStyle = c.surface;
+             g.fillRect(-r * 0.2, -r * 0.7, r * 0.4, r * 1.4);
+           } else {
+             g.beginPath();
+             g.moveTo(r, 0); g.lineTo(-r * 0.6, r * 0.7); g.lineTo(-r * 0.6, -r * 0.7);
+             g.closePath(); g.fill();
+           }
+           g.restore();
+           g.globalAlpha = 1;
+         }
+       }
+
+       // input chest and receiver, drawn outside the playable area
+       function chest(cx, cy, label, col) {
+         g.fillStyle = col;
+         g.fillRect(cx - 9, cy - 9, 18, 18);
+         g.fillStyle = c.surface;
+         g.font = '700 10px Poppins, sans-serif';
+         g.textAlign = 'center'; g.textBaseline = 'middle';
+         g.fillText(label, cx, cy + 0.5);
+         g.textAlign = 'start'; g.textBaseline = 'alphabetic';
+       }
+       chest(ox - 14, oy + inst.inY * cell + cell / 2, 'I', c.s1);
+       chest(ox + cell * n + 14, oy + inst.outY * cell + cell / 2, 'O',
+             tr.reached ? c.s2 : c.s4);
+
+       ctx.set('evals', st.evals);
+       ctx.set('out', st.best.delivered);
+       ctx.set('state', st.best.trace.reached ? 'connected'
+               : (st.best.trace.loop ? 'loops' : 'not connected'));
+       ctx.set('used', st.best.used);
+       ctx.set('best', st.best.fit);
+       ctx.status(st.best.trace.reached
+         ? 'Connected: ' + st.best.used + ' objects, ' + st.best.delivered.toFixed(0) + ' items/s.'
+         : 'Searching for a route.');
+     }
+   });
+
+   /* ---- simulated annealing ------------------------------------------
+      One candidate, one perturbed cell at a time, accepting worse
+      solutions while the temperature is high. */
+   function stepSA(ctx, st) {
+     // The paper's is Parallel Simulated Annealing: several chains running at
+     // once and compared, not one walk. On the larger grids a single chain gets
+     // stuck in a corner of the search space and stays there.
+     if (!st.chains) {
+       st.chains = [];
+       for (var c0 = 0; c0 < SA_CHAINS; c0++) {
+         st.chains.push({cells: st.cells.slice(), cur: st.cur});
+       }
+     }
+     for (var ci = 0; ci < st.chains.length; ci++) stepOneChain(ctx, st, st.chains[ci]);
+     // show the chain that is doing best right now
+     var lead = st.chains[0];
+     for (var cj = 1; cj < st.chains.length; cj++) {
+       if (st.chains[cj].cur.fit > lead.cur.fit) lead = st.chains[cj];
+     }
+     // Comparing the chains is the point of running several. Left alone they
+     // each get a quarter of the budget and none of them gets far, because
+     // progress here is a long sequential run of accepted edits rather than a
+     // lucky draw. Periodically the stragglers restart from the leader.
+     if (ctx.iteration % SA_SYNC === 0) {
+       for (var ck = 0; ck < st.chains.length; ck++) {
+         if (st.chains[ck] !== lead && st.chains[ck].cur.fit < lead.cur.fit) {
+           st.chains[ck] = {cells: lead.cells.slice(), cur: lead.cur};
+         }
+       }
+     }
+     st.cells = lead.cells; st.cur = lead.cur; st.view = lead.cells;
+   }
+
+   function stepOneChain(ctx, st, chain) {
+     var cand = chain.cells.slice();
+     var edits = 1 + Math.floor(ctx.rng() * 2);
+     for (var e = 0; e < edits; e++) {
+       // The paper picks neighbours by iteration progress rather than
+       // uniformly. Editing at the frontier, where the route currently gives
+       // up, is the version of that idea this problem wants: a uniformly
+       // random cell is almost always somewhere the route never reaches.
+       if (ctx.rng() < 0.65 && chain.cur.trace.path.length) frontierEdit(st, chain, cand, ctx.rng);
+       else randomiseCell(st.inst, cand, ctx.rng);
+     }
+     var s = score(st.inst, cand);
+     st.evals++;
+     st.T = Math.max(0.01, Math.pow(0.999, st.evals / SA_CHAINS));
+     var d = s.fit - chain.cur.fit;
+     if (d >= 0 || ctx.rng() < Math.exp(d / st.T)) {
+       chain.cells = cand; chain.cur = s;
+       if (s.fit > st.best.fit) { st.best = s; st.bestCells = cand.slice(); }
+     }
+   }
+
+   // Edit at or beside the last cell the route reached.
+   function frontierEdit(st, chain, cells, rng) {
+     var inst = st.inst, n = inst.n, path = chain.cur.trace.path;
+     var k = path[path.length - 1];
+     var x = k % n, y = Math.floor(k / n);
+     var dir = Math.floor(rng() * 4);
+     var nx = x + DX[dir], ny = y + DY[dir];
+     if (rng() < 0.55 && inside(nx, ny, n) && inst.grid[key(nx, ny, n)] !== OBSTACLE) {
+       x = nx; y = ny;
+     }
+     if (inst.grid[key(x, y, n)] === OBSTACLE) return;
+     var roll = rng();
+     if (roll < 0.1) cells[key(x, y, n)] = EMPTY;
+     else if (roll < 0.85) cells[key(x, y, n)] = BELT + Math.floor(rng() * 4);
+     else cells[key(x, y, n)] = UNDER + Math.floor(rng() * 4);
+   }
+
+   /* ---- the genetic programming variant ------------------------------
+      Population of 30, tournament of 5, one elite kept, and the two
+      operators from the paper: Place edits a single cell, Connect lays a
+      whole greedy path. */
+   function seedPopulation(inst, rng) {
+     var pop = [];
+     for (var i = 0; i < POP_SIZE; i++) {
+       var cells = blank(inst);
+       // Mostly noise. Seeding with Connect put a finished route in the first
+       // generation, so the demo opened on the answer and there was nothing to
+       // watch the search do.
+       if (rng() < 0.15) connect(inst, cells, rng);
+       else for (var k = 0; k < 3 + Math.floor(rng() * 3); k++) randomiseCell(inst, cells, rng);
+       pop.push({cells: cells, s: score(inst, cells)});
+     }
+     return pop;
+   }
+   function stepGP(ctx, st) {
+     var inst = st.inst, rng = ctx.rng;
+     if (!st.pop) st.pop = seedPopulation(inst, rng);
+     function tournament() {
+       var b = st.pop[Math.floor(rng() * st.pop.length)];
+       for (var i = 1; i < 5; i++) {
+         var c = st.pop[Math.floor(rng() * st.pop.length)];
+         if (c.s.fit > b.s.fit) b = c;
+       }
+       return b;
+     }
+     st.pop.sort(function (a, b) { return b.s.fit - a.s.fit; });
+     var next = [st.pop[0]];                          // one elite
+     while (next.length < st.pop.length) {
+       var child = tournament().cells.slice();
+       if (rng() < 0.35) connect(inst, child, rng);   // Connect
+       else {                                         // Place
+         var edits = 1 + Math.floor(rng() * 3);
+         for (var e = 0; e < edits; e++) randomiseCell(inst, child, rng);
+       }
+       next.push({cells: child, s: score(inst, child)});
+     }
+     st.pop = next;
+     st.evals += next.length - 1;        // the elite is carried, not re-evaluated
+     st.cur = st.pop[0].s;
+     st.view = st.pop[0].cells;
+     for (var i = 0; i < st.pop.length; i++) {
+       if (st.pop[i].s.fit > st.best.fit) {
+         st.best = st.pop[i].s;
+         st.bestCells = st.pop[i].cells.slice();
+       }
+     }
+   }
+
+ })();
+ </script>
+
+ <!-- KaTeX, lazy-loaded from the CDN and rendered once. The schedule posts
+      gate this behind nerd mode; here the model is part of the argument, so
+      it renders on load. -->
+ <script>
+ (function () {
+   var el = document.querySelector('.blog-post');
+   if (!el || !/\\\[/.test(el.textContent)) return;
+   var css = document.createElement('link');
+   css.rel = 'stylesheet';
+   css.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';
+   document.head.appendChild(css);
+   var core = document.createElement('script');
+   core.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';
+   core.onload = function () {
+     var ar = document.createElement('script');
+     ar.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js';
+     ar.onload = function () {
+       window.renderMathInElement(el, {
+         delimiters: [{left: '\\[', right: '\\]', display: true},
+                      {left: '\\(', right: '\\)', display: false}],
+         throwOnError: false
+       });
+     };
+     document.head.appendChild(ar);
+   };
+   document.head.appendChild(core);
+ })();
+ </script>
+</body>
+</html>

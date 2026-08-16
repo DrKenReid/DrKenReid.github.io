@@ -11,6 +11,156 @@
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Factorio, Live: a Game as an Optimisation Benchmark</title>
+      <link>https://www.kenreid.co.uk/blog/factorio-live.html</link>
+      <guid>https://www.kenreid.co.uk/blog/factorio-live.html</guid>
+      <pubDate>Sun, 16 Aug 2026 00:00:00 +0000</pubDate>
+      <description>The logistic transport belt problem from my GECCO 2021 paper, running live in your browser: watch simulated annealing and genetic programming lay belts across a walled grid until the items get through.</description>
+      <category>data science</category>
+      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/factorio-live.html">View it on the site</a> to play with it.</em></p>
+ <h1>Factorio, Live: a Game as an Optimisation Benchmark</h1>
+ <div class="blog-meta">
+ 13 August 2026 &middot;
+ <span class="blog-tag">data science</span>
+ </div>
+
+ <p>Factorio is a game I've loved since it was released. It's my most-played game on Steam, and there's something so deeply satisfying about playing a game all about optimization, exploring and solving problems. When I started thinking about the psychology behind this, I realized that video games, puzzles, board games and the like mirror a satisfaction I find when programming, conducting research and solving real-world problems. It scratches an itch in a particular way unfound in other walks of life: defeating challenges beyond a grind in an RPG, lifting a heavier weight at the gym or accomplishing projects based more on time than difficulty. It's the slow accrual of problems solved into a portfolio of solutions working in tandem, so you can zoom out to the map and say "look at my base! it's a bit of a mess, but it's mine, and I love it."</p>
+
+ <p>I decided to bridge the gap between the video game and the research, both of which scratched that itch in my mind. I brought up the idea with one of my supervisors at Michigan State University (MSU) at the time, <a href="https://scholar.google.com/citations?user=u-FjxEUAAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Prof. Wolfgang Banzhaf</a>. He thought it sounded interesting, and liked my point that a video game is a better teaching instrument than a textbook, since this visually shows success and failure, and the mechanics of individual algorithms live in front of you. He said I should go for it, so I enlisted a couple of my colleauges (now co-authors) and we worked on it together. 
+
+ 
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Operational research:</strong> the study of running things well: what to build, where to put it, and in what order. </li>
+ <li><strong>Throughput and bottleneck:</strong> how much gets through per second and what component causes a trickle for the rest of a system.</li>
+ <li><strong>Transport belt:</strong> the conveyor that moves items in Factorio. Its capacity is fixed, so a longer route costs time, not bandwidth.</li>
+ <li><strong>Underground belt:</strong> a pair of entry and exit tiles that carries items beneath obstacles, up to four cells apart. It's kind of like teleporting that takes the same amount of time as a normal belt.</li>
+ <li><strong>Metaheuristic:</strong> a search that improves a solution by trial and feedback rather than solving equations. <a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">Simulated annealing</a> and <a href="https://www.kenreid.co.uk/blog/evolution-live.html">genetic algorithms</a> are both in this family.</li>
+ </ul>
+ </div>
+
+ <h2>Watch it lay the belts</h2>
+
+ 
+
+
+  <h2>Two places this demo is not the paper</h2>
+
+ <p>The scoring here is not identical to the published version. The paper scored a candidate by running it in the game, which returns nothing at all until the route lands. That cliff is survivable for a method that lays whole paths in one move, and hopeless for one that edits a single cell at a time: annealing would sit at zero for thousands of evaluations and look broken. So the demo adds partial credit for reaching further east, and a small bonus for using fewer belts once connected. It is a shaped objective, and shaped objectives can be gamed, so this is really just for demo purposes, not a realistic solution (mostly since "east" isn't always the goal).</p>
+
+ <p>The second departure is in how annealing picks what to change. The paper varies its neighbour selection with iteration progress. Here, two thirds of edits are at the frontier, meaning the cell where the current route gives up. The reason is arithmetic: on a twelve by twelve grid, a uniformly chosen cell is almost always somewhere the route never reaches, so most edits are invisible to the score and the search spends its budget rearranging scenery. Both changes exist to make the comparison fair to annealing, which is the direction a bias should run if you are going to have one.</p>
+
+ <p>So: this is a pretty and intentionally non-representative demo of the paper.</p>
+
+ <h2>What the paper actually did</h2>
+
+  <p>The paper behind this is <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:8k81kl-MbHgC" target="_blank" rel="noopener noreferrer"><em>The Factory Must Grow: Automation in Factorio</em></a>, written with my co-authors Iliya Miralavy, Stephen Kelly, Wolfgang Banzhaf and Cedric Gondro, and presented at GECCO in 2021. The starting point was that Factorio is a factory simulator that has already done the expensive part of building a benchmark: it has consistent physics, a fixed belt throughput, and a community of players who have spent years discovering what good layouts look like, so how would our algorithms fair?</p>
+
+ <p>We defined the logistic transport belt problem formally, as an integer program with hard constraints on what can occupy a cell and how underground pairs must line up, and two soft constraints to be maximised: items delivered to the receiver, and items accepted from the chest. Then we built the 'Factorio Optimizer Interface', which uses the game's Lua modding hooks and the RCON protocol to place a candidate layout in a running Factorio server and read back how many items the input inserter took and how many reached the output chest. Because it talks over a socket and reads matrices from disk, the optimiser can be written in anything: ours were in Java, Python and C++. The evaluation function is the game itself.</p>
+
+ <p>Three optimisers were compared on six instances, being three grid sizes at three by three, six by six and twelve by twelve, each with and without obstacles. Parallel simulated annealing, a genetic programming system whose operators place and connect belt runs rather than editing cells, and an evolutionary reinforcement learning approach. The small instances are solvable by anything. The twelve by twelve with obstacles is where things really got interesting.</p>
+
+ <p>Genetic programming did well here because its operators speak the language of the problem: laying a run of belts and connecting two points are single moves, so one step of the search covers ground that costs annealing a long chain of individually pointless edits. </p>
+
+ <figure>
+ <img src="https://www.kenreid.co.uk/blog/img/factorio-paper-12x12-ingame.webp" alt="A Factorio screenshot of the twelve by twelve benchmark instance: a square arena walled in two-deep stone, with a steel chest and inserter at the top right and a receiver at the bottom left. Yellow transport belts wind between tree stumps that act as obstacles, and a line of iron ore rides the belts along the route between the two." loading="lazy" style="width:100%; max-width:620px; display:block; margin:0 auto; border-radius:8px;">
+ <figcaption class="figure-note">From <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:8k81kl-MbHgC" target="_blank" rel="noopener noreferrer">Reid et al. (2021)</a>. The twelve by twelve instance with obstacles, as the optimiser sees it: walls two cells thick, input top right, receiver bottom left, and the stumps are the cells you cannot build on. The ore on the belts is the fitness function happening.</figcaption>
+ </figure>
+
+ <h2>The model</h2>
+
+ <p>Section 4 of the paper states the problem formally. Two hard constraints, two soft ones, and a pair of binary decision variables. Throughput, routing and flow is absent, for a reason I will come back to.</p>
+
+ <p>A position \(p\) is a coordinate pair in the grid. Directions are \(d \in \{0,1,2,3\}\), meaning north, east, south and west. Belts and underground belts are drawn from \(L_b\) and \(L_u\), and \(\phi_p\) is 1 when position \(p\) holds an obstacle and 0 otherwise. The decisions are whether to place a given belt type, at a given position, facing a given way:</p>
+
+ <div class="math-block">
+ \[
+ \begin{aligned}
+ X_{bcpd} &= 0 \text{ or } 1, && \forall b \in L_b,\; \forall p_x \in G_x,\; \forall p_y \in G_y,\; \forall d \in \{0,1,2,3\} \\[4pt]
+ X_{ucpd} &= 0 \text{ or } 1, && \forall u \in L_u,\; \forall p_x \in G_x,\; \forall p_y \in G_y,\; \forall d \in \{0,1,2,3\}
+ \end{aligned}
+ \]
+ </div>
+
+ <figure>
+ <img src="https://www.kenreid.co.uk/blog/img/factorio-paper-encodings.webp" alt="A table of integer encodings. Negative numbers describe the problem: minus ten to minus seven are output directions, minus six a steel chest, minus five to minus two input directions, minus one a stone wall, and zero is empty. Positive numbers are the solution: one to four are belts facing north, east, south and west, and five to eight are underground belts in the same four directions." loading="lazy" style="width:100%; max-width:420px; display:block; margin:0 auto; border-radius:8px;">
+ <figcaption class="figure-note">From <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:8k81kl-MbHgC" target="_blank" rel="noopener noreferrer">Reid et al. (2021)</a>. The encoding an optimiser reads and writes. Everything below zero is the problem and is fixed; everything above zero is the solution and is yours. A direction is not a separate field, it is baked into the number.</figcaption>
+ </figure>
+
+ <p>The objective maximises the sum of the two soft constraints, each a parameterised item count scaled by a weight (not as in how heavy it is, but a weighting as in scaling), where \(o\) is the number of items output and \(i\) the number input:</p>
+
+ <div class="math-block">
+ \[
+ \begin{aligned}
+ \max \quad & (SC_1 + SC_2), \qquad SC_1 = o \, w_1, \quad SC_2 = i \, w_2 \\[6pt]
+ \text{s.t.} \quad
+ & \left[ \phi_p + \Bigl( \sum_{b \in L_b} X_{bp} \Bigr) + \Bigl( \sum_{u \in L_u} X_{up} \Bigr) \right] < 2 && \text{(HC1)} \\[6pt]
+ & \left[ \Bigl( \sum_{b \in L_b} X_{b} \Bigr) + \Bigl( \sum_{u \in L_u} X_{u} \Bigr) \right] > 0 && \text{(HC2)} \\[4pt]
+ & w_1 + w_2 = 1, \quad 0 \le w_k \le 1
+ \end{aligned}
+ \]
+ </div>
+ <p class="math-caption">HC1 allows a position to hold one logistic object or one obstacle, never both and never two. HC2 requires at least one item to be placed at all. A solution failing either scores zero; otherwise fitness lands between 0 and 1.</p>
+
+ <p>HC1 is the constraint that makes this combinatorial. Every cell you spend is a cell you cannot spend on anything else, and the obstacle term means the grid's difficulty is set before the search starts. HC2 exists to rule out the empty solution, which would otherwise be feasible and uninformative.</p>
+
+ <p>There is no flow conservation here, no belt capacity, no constraint saying a route has to connect. The underground pairing rule, the one that requires an entrance and exit in the same row or column, facing the same way, at most four cells apart, is described in the paper as a property of the game rather than written as an inequality.</p>
+
+ <p>All of that is missing because the model does not evaluate solutions. The game does. A candidate is built in Factorio through the interface, run, and scored on what the receiving chest actually contains, so the physics stays where it already worked instead of being restated as constraints that could disagree with it. That is the paper's real trick, and it is why the formal model can afford to be four lines long.</p>
+
+ <p>It also explains the weights. With \(w_2 = 0\) the objective would count only what arrives, and every layout that fails to connect would score identically at zero, leaving a search no way to tell a near miss from an empty grid. Because \(SC_2\) pays for items merely taken out of the input chest, a belt that starts correctly and dead-ends still earns something. That is a modelling decision rather than an algorithmic one, and it is the difference between a landscape a local search can climb and a cliff it cannot.</p>
+
+ <h2>The niche</h2>
+
+  <p>Optimisation research runs on benchmark sets, and benchmark sets have a known failure mode: they get old, methods get tuned against them, and after a decade you cannot tell whether a new result is progress or overfitting to a fixed library of instances. Games are an interesting escape from that, because a game that people play is a simulator someone else has already paid to build, validate and keep interesting.</p>
+
+ <p>Factorio is a good one for the specific reason that its difficulty is combinatorial rather than reflexive. Nothing here depends on reaction time or hidden information., like many games: it is placement under constraints, with a throughput number at the end, which is the same shape as facility layout, circuit routing and warehouse design in real life. It also comes with something no synthetic benchmark has: a large population of humans who have independently optimised the same problem for fun, and whose solutions you can compare against.</p>
+
+ <p>This is one problem inside one game, with a single objective and an evaluation function that a commercial studio can change in a patch. A benchmark you do not control is a benchmark that can be revised out from under your published results. And the community solutions that make it appealing are also a contamination risk, since a method tuned by someone who knows the good patterns is not discovering them. Games are a useful source of problems, not a replacement for the discipline of saying what your benchmark can and cannot show.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Is this really operational research, or just a game?</summary>
+ <p>Why not both? Strip the graphics and what remains is a constrained routing problem: place components on a grid, respect adjacency and pairing rules, maximise throughput. The same integer program describes it whether the output is rendered as a conveyor or as a line in a warehouse plan. The game is the interface, not the problem.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why not just solve it outright?</summary>
+ <p>You can, up to a point. The small grids are well within reach of an exact solver, and where an exact answer is available it is the right thing to use, because it comes with a proof. The difficulty is that the search space grows with both the grid area and the number of things each cell could be, and the underground pairing constraint links cells that are not adjacent. Past a certain size you are choosing between a guaranteed answer you will not receive today and a good answer you can have in seconds, which is the situation metaheuristics exist for.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Does the demo run the real game?</summary>
+ <p>The demo in this site does not. The paper drove the actual game through an interface and measured real throughput. The demo reimplements the belt mechanics in JavaScript, because running thousands of evaluations in front of you requires an evaluation that takes microseconds rather than seconds. The mechanics modelled here are the ones the problem turns on: belt direction, underground pairing and reach, and items moving at a fixed rate. Everything else about Factorio is absent.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why is genetic programming so much better here?</summary>
+ <p>Because its moves are the right size. Connect lays a whole run of belts in one operation, where annealing changes a cell and asks whether that helped, and most single-cell changes to a broken route help by nothing at all. Given the same budget of four thousand evaluations on the twelve by twelve grid, the population method connects on five runs out of five and reaches a fitness around 0.82, while annealing connects on three and sits near 0.66. The gap in tidiness is starker than the gap in score: annealing arrives with roughly 88 belts on the board against 28, because it has no move that removes a redundant detour once the route works. That's not to say annealing is a weak algorithm. It says the operator matters more than the acceptance rule, which is the same conclusion the paper reached and the reason the comparison is worth running at all.</p>
+ </details>
+
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+ <li id="ref-1">
+ Reid, K. N., Miralavy, I., Kelly, S., Banzhaf, W., &amp; Gondro, C. (2021). <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:8k81kl-MbHgC" target="_blank" rel="noopener noreferrer">The Factory Must Grow: Automation in Factorio</a>. <em>Proceedings of the Genetic and Evolutionary Computation Conference Companion</em>. <a href="https://arxiv.org/abs/2102.04871" target="_blank" rel="noopener">https://arxiv.org/abs/2102.04871</a>
+ </li>
+ <li id="ref-2">
+ [Placeholder: a general operational research reference, if the post needs one for the definition.]
+ </li>
+ </ol>
+
+        
+
+ ]]></content:encoded>
+    </item>
+    <item>
       <title>How the Interactive Posts Work</title>
       <link>https://www.kenreid.co.uk/blog/how-the-interactive-posts-work.html</link>
       <guid>https://www.kenreid.co.uk/blog/how-the-interactive-posts-work.html</guid>
@@ -4296,119 +4446,6 @@ return [post for _score, _date, post in ranked[:3]]</code></pre>
       <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
       <description>This site now works offline: a ~100-line service worker, no framework, no build step. Here&#x27;s how.</description>
       <category>technology</category>
-      <content:encoded><![CDATA[
-        <h1>Reading This Site Offline</h1>
-        <div class="blog-meta">
-          12 July 2026 &middot;
-          <span class="blog-tag">technology</span>
-        </div>
-
-        <p>This site learned a small trick recently: it works without the internet. I implemented it out of curiosity on how it would be done, but I'm glad I did. If someone tries to read one of my blogs while on a plane, now they can, so long as it was preloaded. Read a few posts over breakfast, open the site again, and the pages you visited are still there, styled, functional. If the connection dies mid-browse, it will still work. Nice, right?</p>
-
-        <p>This is done via a <strong>service worker</strong>, and this post walks through mine: no framework, no build step, in keeping with <a href="https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html">this site's general philosophy</a> of doing things with the smallest possible amount of infrastructure. If you run a static site anywhere (GitHub Pages included), this is a good philosophy, in my opinion.</p>
-
-        <div class="plain-english-box">
-          <h2>Quick jargon guide</h2>
-          <ul>
-            <li><strong>Service worker:</strong> a small script the browser installs alongside your site and runs in the background. It sits between your pages and the network, and can answer requests itself, including when there is no network.</li>
-            <li><strong>Cache (the browser kind):</strong> a local store of responses the service worker can save and replay. Lives on the visitor's device, controlled by your code.</li>
-            <li><strong>Network-first:</strong> a strategy: try the internet, fall back to the cache. Fresh when online, functional when not.</li>
-            <li><strong>Stale-while-revalidate:</strong> the inverted strategy: answer instantly from cache, then fetch a new copy in the background for next time. Fast always, fresh eventually, annoying when you are refreshing a page for an update, though.</li>
-            <li><strong>Precache:</strong> the short list of files saved at install time, before you've visited anything, the skeleton the site can't render without.</li>
-            <li><strong>Cache invalidation:</strong> famously one of the two hard problems in computer science. A service worker is a machine for having this problem on purpose.</li>
-            <li><strong>giscus:</strong> the comment system under my posts. It stores every comment as a GitHub Discussion and loads in an embedded frame from giscus.app, so the conversation lives on GitHub rather than on this site.</li>
-          </ul>
-        </div>
-
-        <h2>Two strategies</h2>
-
-        <p>Everything the worker does comes down to one decision, made per request: <em>who do you trust more, the network or the cache?</em> </p>
-
-        <p><strong>Pages get network-first.</strong> HTML is where mistakes live: a typo fixed, a broken link repaired, a post updated. When you're online I always want you reading the newest deploy, so the worker tries the network, saves a copy of whatever comes back, and only reaches for that copy when the fetch fails:</p>
-
-<pre><code class="language-js">// HTML: network-first
-fetch(req).then(function (res) {
-  var copy = res.clone();
-  caches.open(PAGES_CACHE).then(function (c) { c.put(req, copy); });
-  return res;
-}).catch(function () {
-  return caches.match(req).then(function (hit) {
-    return hit || caches.match('./offline.html');
-  });
-});</code></pre>
-
-        <p>The chain reads as a 'politeness ranking': fresh page if possible, your cached copy if not, and a dedicated offline page as the final backup. Every page you visit while online becomes a page you own while offline, the cache is your personal reading history.</p>
-
-        <p><strong>Assets get stale-while-revalidate.</strong> CSS, JavaScript, fonts, thumbnails, these change rarely and block rendering while they load, so the priorities invert. The worker answers from cache immediately and refreshes in the background:</p>
-
-<pre><code class="language-js">// Assets: stale-while-revalidate
-caches.match(req).then(function (hit) {
-  var fetching = fetch(req).then(function (res) {
-    if (res && res.status === 200) {
-      var copy = res.clone();
-      caches.open(ASSETS_CACHE).then(function (c) {
-        c.put(req, copy);
-        if (req.destination === 'image') trimCache(ASSETS_CACHE, IMG_LIMIT);
-      });
-    }
-    return res;
-  }).catch(function () { return hit; });
-  return hit || fetching;
-});</code></pre>
-
-        <p>Worst case, you see a stylesheet that's one visit out of date. In exchange, repeat visits render instantly, offline or not. That <code>trimCache</code> call is the one piece of housekeeping, meaning that image caches are capped at 200 entries, oldest evicted first, so browsing my whole <a href="https://www.kenreid.co.uk/gallery.html">gallery</a> doesn't fill up your phone!</p>
-
-        <h2>What I deliberately don't cache</h2>
-
-        <p>The worker ignores anything cross-origin; the full-size photographs stay on GitHub's release servers, caching those would mean warehousing megabytes per photo on your device for a click-through you probably won't repeat. Comments are <i>giscus</i>, which lives in an iframe and belongs to GitHub; offline, it simply doesn't appear, which is the correct behaviour. Analytics likewise gets no offline resurrection, if the network can't see you, neither should it.</p>
-
-        <p><strong>Offline mode should preserve the reading, not fake the internet.</strong> The precache reflects the same idea: it's just the offline page, the stylesheet, the core scripts, and <code>posts.json</code> (so the blog index still works), so about eleven files, everything else earns its place in your cache by you actually opening it.</p>
-
-        <figure>
-          <img src="https://www.kenreid.co.uk/img/photography/thumb/62.webp" alt="A moody grey sea under heavy clouds, distant fish-farm pens near a rocky headland" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
-          <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
-        </figure>
-
-        <h2>The footguns</h2>
-
-        <p>I'm not really a website developer or designer, beyond hobbyist endeavors like this website and a couple of landing pages for research labs I worked in, so much of this section is just what I learned while, well, learning this stuff. Service workers have a deserved reputation for one specific misery: <em>the cache that would not die.</em> Ship a worker with a careless cache-first strategy and your visitors can be pinned to an old version of your site for days: including, delightfully, an old version of the service worker itself. The classic developer experience is editing a file, refreshing, seeing no change, and spending an hour debugging to find it's actually working as intended and you just turn off your monitor for a break and see your sad reflection staring back at yourself. Ahem, anyway.</p>
-
-        <p>I'll also admit what this isn't: it isn't a full progressive web app. There's no install banner, no background sync. Those are all possible and all, for a site whose job is being read, beside the point.</p>
-
-        <h2>Try it</h2>
-
-        <p>Open a few posts, then turn on airplane mode and keep clicking. The pages you visited load; the search on the blog index still filters; the pages you didn't visit hand you a courteous offline page instead of a browser error. Turn the network back on and the whole arrangement dissolves back into an ordinary website. Much like an IT worker, if it's doing the job correctly, you won't even notice it's there. </p>
-
-        <div class="faq-section">
-          <h2>Common questions</h2>
-
-          <details class="faq-item">
-            <summary>Why not just cache the entire site up front?</summary>
-            <p>Precaching everything downloads megabytes a first-time visitor never asked for, most of which they'll never read. As much as I'd like all my visitors to read all my website, most just swing by for something that interests them, then off they go.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Does this let the site track me offline?</summary>
-            <p>No, rather the opposite. The caches live in your browser, managed by your browser, and I have no visibility into them whatsoever. Offline visits send me nothing: no analytics, no logs, no signal you exist. It's the most private way to read the site.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Why not use Workbox or a PWA framework?</summary>
-            <p>Workbox is excellent and I'd reach for it on a complex app. For a hundred-line worker on a static site, the abstraction would outweigh the logic: more configuration than code, and one more dependency to keep updated forever.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>How do updates reach me if I'm serving from cache?</summary>
-            <p>Pages are network-first, so any online visit gets the latest deploy automatically, the cache only speaks when the network can't. </p>
-          </details>
-        </div>
-
-        
-
-
-        <hr style="margin: 40px 0;">
-        <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
-      ]]></content:encoded>
     </item>
     <item>
       <title>The Abandoned Places I Photograph</title>

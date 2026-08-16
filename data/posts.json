@@ -1,5 +1,22 @@
 [
   {
+    "title": "Factorio, Live: a Game as an Optimisation Benchmark",
+    "date": "2026-08-16",
+    "tags": [
+      "data science"
+    ],
+    "category": "Data Science",
+    "excerpt": "The logistic transport belt problem from my GECCO 2021 paper, running live in your browser: watch simulated annealing and genetic programming lay belts across a walled grid until the items get through.",
+    "url": "blog/factorio-live.html",
+    "image": "blog/img/factorio-belt-demo.png",
+    "series": {
+      "name": "Research, Live",
+      "part": 2
+    },
+    "readMinutes": 12,
+    "words": 2488
+  },
+  {
     "title": "How the Interactive Posts Work",
     "date": "2026-08-16",
     "tags": [
