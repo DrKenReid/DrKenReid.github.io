@@ -599,7 +599,7 @@ jobs:
 
  <p>The toggle button in the header flips the attribute, saves the choice to localStorage under a key (<code>kr-theme</code>), and everything restyles instantly, no reload. A brief cross-fade class softens the swap, and the browser's <code>theme-color</code> meta tag (which tints the address bar on phones) is updated to match. All of that is a 60-line JavaScript file.</p>
 
- <details class="code-example"><summary>The whole toggle (js/theme.js, 62 lines)</summary>
+ <details class="code-example"><summary>The whole toggle (js/theme.js)</summary>
 <pre><code class="language-javascript">/**
  * theme.js — Site-wide dark/light mode toggle.
  *
@@ -833,7 +833,7 @@ frame.contentWindow.postMessage(
    </div>
  </div>
 
- <details class="code-example"><summary>The algorithms (JavaScript, 1062 lines)</summary>
+ <details class="code-example"><summary>The algorithms (JavaScript)</summary>
 <pre><code class="language-javascript">  /* ============================================================
   Simulated Annealing, Live, all demo code for this post.
   No dependencies. Everything renders to &lt;canvas&gt; and reads its
@@ -2007,7 +2007,7 @@ frame.contentWindow.postMessage(
    </div>
  </div>
 
- <details class="code-example"><summary>The algorithm (JavaScript, 406 lines)</summary>
+ <details class="code-example"><summary>The algorithm (JavaScript)</summary>
 <pre><code class="language-javascript"> /* ============================================================
     Evolution, Live — the interactive demo for this post.
     No dependencies. A genetic algorithm evolves paintings of a target letter
@@ -2569,7 +2569,7 @@ frame.contentWindow.postMessage(
       <link>https://www.kenreid.co.uk/blog/ctrl-k-for-a-static-site.html</link>
       <guid>https://www.kenreid.co.uk/blog/ctrl-k-for-a-static-site.html</guid>
       <pubDate>Mon, 03 Aug 2026 00:00:00 +0000</pubDate>
-      <description>Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. 217 lines of vanilla JavaScript, no library, and the whole thing is in the post to steal.</description>
+      <description>Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. Vanilla JavaScript, no library, and the whole thing is in the post to steal.</description>
       <category>technology</category>
       <content:encoded><![CDATA[
  <h1>Ctrl+K for a Static Site</h1>
@@ -2578,7 +2578,7 @@ frame.contentWindow.postMessage(
  <span class="blog-tag">technology</span>
  </div>
 
- <p>Try it now, if you're on a keyboard: press <strong>Ctrl+K</strong> (Cmd+K on a Mac), or just <strong>/</strong>. A search box appears over the page. Type "abandoned" and you'll get the blog post about ruins and the gallery filtered to abandoned buildings; type "map" and you're one Enter away from <a href="https://www.kenreid.co.uk/map.html">the photo map</a>. Every page, every post, and every photo tag on this site is reachable from that box, from anywhere. It's the interface programmers know from their editors, transplanted onto a personal website, and this post explains how little it took: 217 lines of vanilla JavaScript, no search service, no library. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
+ <p>Try it now, if you're on a keyboard: press <strong>Ctrl+K</strong> (Cmd+K on a Mac), or just <strong>/</strong>. A search box appears over the page. Type "abandoned" and you'll get the blog post about ruins and the gallery filtered to abandoned buildings; type "map" and you're one Enter away from <a href="https://www.kenreid.co.uk/map.html">the photo map</a>. Every page, every post, and every photo tag on this site is reachable from that box, from anywhere. It's the interface programmers know from their editors, transplanted onto a personal website, and this post explains how little it took: vanilla JavaScript, no search service, no library. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
 
  <div class="plain-english-box">
  <h2>Quick jargon guide</h2>
@@ -2618,7 +2618,7 @@ frame.contentWindow.postMessage(
 
  <p>The whole thing is below, copy-paste ready. The JavaScript is the complete <code>js/palette.js</code> from this site: swap the <code>PAGES</code> array for your own pages, point the two <code>fetch</code> calls at whatever JSON you have (or delete them, along with the sources they feed), and it will run on any static site with no build step. The CSS is the full set of palette styles, dark theme included; the <code>[data-theme="dark"]</code> selectors assume a theme attribute on <code>&lt;html&gt;</code>, so adapt those to however your site handles dark mode.</p>
 
- <details class="code-example"><summary>The JavaScript (js/palette.js, 217 lines)</summary>
+ <details class="code-example"><summary>The JavaScript (js/palette.js)</summary>
 <pre><code class="language-javascript">/**
  * palette.js — site-wide command palette (Ctrl/Cmd+K, or '/').
  *
@@ -2838,7 +2838,7 @@ frame.contentWindow.postMessage(
 })();</code></pre>
  </details>
 
- <details class="code-example"><summary>The CSS (147 lines)</summary>
+ <details class="code-example"><summary>The CSS</summary>
 <pre><code class="language-css">/* Command palette (Ctrl/Cmd+K — js/palette.js) */
 .kr-palette-overlay {
   position: fixed;
@@ -3007,8 +3007,8 @@ body.kr-palette-open {
  </details>
 
  <details class="faq-item">
- <summary>Is 217 lines really the whole thing?</summary>
- <p>The whole behaviour, yes: shortcut, dialog, scoring, keyboard navigation, accessibility announcements. The styling is another 147 lines of CSS, included above. Most of what feels substantial about a palette is borrowed: the pages already exist, the posts file already exists, and the deep links already work. It's a thin, fast layer over structure the site already had, which is the recurring theme of every post in this series.</p>
+ <summary>Is that really the whole thing?</summary>
+ <p>The whole behaviour, yes: shortcut, dialog, scoring, keyboard navigation, accessibility announcements. The styling is the CSS included above. Most of what feels substantial about a palette is borrowed: the pages already exist, the posts file already exists, and the deep links already work. It's a thin, fast layer over structure the site already had, which is the recurring theme of every post in this series.</p>
  </details>
  </div>
 
@@ -4195,7 +4195,7 @@ return [post for _score, _date, post in ranked[:3]]</code></pre>
 
         <p>This site learned a small trick recently: it works without the internet. I implemented it out of curiosity on how it would be done, but I'm glad I did. If someone tries to read one of my blogs while on a plane, now they can, so long as it was preloaded. Read a few posts over breakfast, open the site again, and the pages you visited are still there, styled, functional. If the connection dies mid-browse, it will still work. Nice, right?</p>
 
-        <p>This is done via a <strong>service worker</strong>, and this post walks through mine: ~100 lines of code, no framework, no build step, in keeping with <a href="https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html">this site's general philosophy</a> of doing things with the smallest possible amount of infrastructure. If you run a static site anywhere (GitHub Pages included), this is a good philosophy, in my opinion.</p>
+        <p>This is done via a <strong>service worker</strong>, and this post walks through mine: no framework, no build step, in keeping with <a href="https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html">this site's general philosophy</a> of doing things with the smallest possible amount of infrastructure. If you run a static site anywhere (GitHub Pages included), this is a good philosophy, in my opinion.</p>
 
         <div class="plain-english-box">
           <h2>Quick jargon guide</h2>

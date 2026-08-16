@@ -26,10 +26,16 @@
     "excerpt": "An interactive variable neighbourhood search solving the Travelling Salesman Problem in your browser: watch a tour untangle itself, then watch the search escape a local optimum by changing what counts as a nearby move.",
     "url": "blog/variable-neighbourhood-search-live.html",
     "image": "img/photography/thumb/409.webp",
-    "series": {
-      "name": "Algorithms, Live",
-      "part": 5
-    },
+    "series": [
+      {
+        "name": "Algorithms, Live",
+        "part": 5
+      },
+      {
+        "name": "Research, Live",
+        "part": 1
+      }
+    ],
     "readMinutes": 7,
     "words": 1408
   },
@@ -78,7 +84,7 @@
       "part": 12
     },
     "readMinutes": 7,
-    "words": 1533
+    "words": 1531
   },
   {
     "title": "Simulated Annealing, Live",
@@ -95,7 +101,7 @@
       "part": 3
     },
     "readMinutes": 28,
-    "words": 5964
+    "words": 5962
   },
   {
     "title": "Evolution, Live",
@@ -112,7 +118,7 @@
       "part": 2
     },
     "readMinutes": 16,
-    "words": 3508
+    "words": 3506
   },
   {
     "title": "The Invisible Half of a Blog Post",
@@ -139,15 +145,15 @@
       "technology"
     ],
     "category": "Technology",
-    "excerpt": "Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. 217 lines of vanilla JavaScript, no library, and the whole thing is in the post to steal.",
+    "excerpt": "Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. Vanilla JavaScript, no library, and the whole thing is in the post to steal.",
     "url": "blog/ctrl-k-for-a-static-site.html",
     "image": "img/photography/thumb/46.webp",
     "series": {
       "name": "How This Site Is Built",
       "part": 10
     },
-    "readMinutes": 12,
-    "words": 2424
+    "readMinutes": 11,
+    "words": 2413
   },
   {
     "title": "The Paradox of Tolerance",
@@ -314,7 +320,7 @@
       "name": "How This Site Is Built",
       "part": 4
     },
-    "words": 1191
+    "words": 1187
   },
   {
     "title": "The Abandoned Places I Photograph",

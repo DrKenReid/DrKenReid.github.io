@@ -3,18 +3,18 @@
 <head>
  <meta charset="UTF-8">
  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
- <meta name="description" content="Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. 217 lines of vanilla JavaScript, no library.">
+ <meta name="description" content="Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. Vanilla JavaScript, no library.">
  <meta name="keywords" content="technology">
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
  <title>Ctrl+K for a Static Site - Ken Reid</title>
  <meta property="og:title" content="Ctrl+K for a Static Site">
- <meta property="og:description" content="Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. 217 lines of vanilla JavaScript, no library.">
+ <meta property="og:description" content="Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. Vanilla JavaScript, no library.">
  <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/46.png">
  <meta property="og:url" content="https://www.kenreid.co.uk/blog/ctrl-k-for-a-static-site.html">
  <meta property="og:type" content="article">
  <meta name="twitter:card" content="summary_large_image">
  <meta name="twitter:title" content="Ctrl+K for a Static Site">
- <meta name="twitter:description" content="Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. 217 lines of vanilla JavaScript, no library.">
+ <meta name="twitter:description" content="Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. Vanilla JavaScript, no library.">
  <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/46.png">
  <meta name="citation_title" content="Ctrl+K for a Static Site">
  <meta name="citation_author" content="Reid, Kenneth N.">
@@ -38,7 +38,7 @@
  "@context": "https://schema.org",
  "@type": "BlogPosting",
  "headline": "Ctrl+K for a Static Site",
- "description": "Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. 217 lines of vanilla JavaScript, no library.",
+ "description": "Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. Vanilla JavaScript, no library.",
  "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/46.png",
  "author": {
  "@type": "Person",
@@ -111,7 +111,7 @@
  <span class="blog-tag">technology</span>
  </div>
 
- <p>Try it now, if you're on a keyboard: press <strong>Ctrl+K</strong> (Cmd+K on a Mac), or just <strong>/</strong>. A search box appears over the page. Type "abandoned" and you'll get the blog post about ruins and the gallery filtered to abandoned buildings; type "map" and you're one Enter away from <a href="../map.html">the photo map</a>. Every page, every post, and every photo tag on this site is reachable from that box, from anywhere. It's the interface programmers know from their editors, transplanted onto a personal website, and this post explains how little it took: 217 lines of vanilla JavaScript, no search service, no library. Part of the series on <a href="../series-how-this-site-is-built.html">how this site is built</a>.</p>
+ <p>Try it now, if you're on a keyboard: press <strong>Ctrl+K</strong> (Cmd+K on a Mac), or just <strong>/</strong>. A search box appears over the page. Type "abandoned" and you'll get the blog post about ruins and the gallery filtered to abandoned buildings; type "map" and you're one Enter away from <a href="../map.html">the photo map</a>. Every page, every post, and every photo tag on this site is reachable from that box, from anywhere. It's the interface programmers know from their editors, transplanted onto a personal website, and this post explains how little it took: vanilla JavaScript, no search service, no library. Part of the series on <a href="../series-how-this-site-is-built.html">how this site is built</a>.</p>
 
  <div class="plain-english-box">
  <h2>Quick jargon guide</h2>
@@ -151,7 +151,7 @@
 
  <p>The whole thing is below, copy-paste ready. The JavaScript is the complete <code>js/palette.js</code> from this site: swap the <code>PAGES</code> array for your own pages, point the two <code>fetch</code> calls at whatever JSON you have (or delete them, along with the sources they feed), and it will run on any static site with no build step. The CSS is the full set of palette styles, dark theme included; the <code>[data-theme="dark"]</code> selectors assume a theme attribute on <code>&lt;html&gt;</code>, so adapt those to however your site handles dark mode.</p>
 
- <details class="code-example"><summary>The JavaScript (js/palette.js, 217 lines)</summary>
+ <details class="code-example"><summary>The JavaScript (js/palette.js)</summary>
 <pre><code class="language-javascript">/**
  * palette.js — site-wide command palette (Ctrl/Cmd+K, or '/').
  *
@@ -371,7 +371,7 @@
 })();</code></pre>
  </details>
 
- <details class="code-example"><summary>The CSS (147 lines)</summary>
+ <details class="code-example"><summary>The CSS</summary>
 <pre><code class="language-css">/* Command palette (Ctrl/Cmd+K — js/palette.js) */
 .kr-palette-overlay {
   position: fixed;
@@ -540,8 +540,8 @@ body.kr-palette-open {
  </details>
 
  <details class="faq-item">
- <summary>Is 217 lines really the whole thing?</summary>
- <p>The whole behaviour, yes: shortcut, dialog, scoring, keyboard navigation, accessibility announcements. The styling is another 147 lines of CSS, included above. Most of what feels substantial about a palette is borrowed: the pages already exist, the posts file already exists, and the deep links already work. It's a thin, fast layer over structure the site already had, which is the recurring theme of every post in this series.</p>
+ <summary>Is that really the whole thing?</summary>
+ <p>The whole behaviour, yes: shortcut, dialog, scoring, keyboard navigation, accessibility announcements. The styling is the CSS included above. Most of what feels substantial about a palette is borrowed: the pages already exist, the posts file already exists, and the deep links already work. It's a thin, fast layer over structure the site already had, which is the recurring theme of every post in this series.</p>
  </details>
  </div>
 

@@ -41,6 +41,10 @@ OPTIONAL_POST_SCRIPTS = {"../js/nerd-mode.js", "../js/prism-loader.js",
 # Pages exempt from content/metadata checks (verification stubs etc.).
 EXEMPT_PAGES = {"google1473b6928dc28ce6.html"}
 
+# Pages whose prose is quoted from someone else, so the house style rules
+# (banned words, em dashes, straight quotes) do not apply to it.
+PROSE_EXEMPT_PAGES = {"quotes.html"}
+
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input",
         "link", "meta", "param", "source", "track", "wbr"}
 
@@ -102,6 +106,10 @@ class PageParser(HTMLParser):
             excluded = (tag in PROSE_EXCLUDED or "references" in cls
                         or "figure-note" in cls
                         or "story" in cls.split()
+                        # publication entries are citations: the em dash
+                        # between venue and year is the citation's own
+                        # punctuation, not house prose
+                        or "ds-pub-" in cls
                         or (a.get("id") or "").startswith("ref-"))
             self._stack.append((tag, excluded))
             if excluded:
@@ -227,7 +235,29 @@ def tracked_files():
 # about an embarrassing t-shirt, another discusses politeness as a subject, and
 # aria-live="polite" is an attribute value rather than prose.
 BANNED_PROSE = re.compile(
-    r"\b(?:quiet(?:ly|er|est)?|honest(?:ly)?|embarrassingly|politely)\b", re.I)
+    r"\b(?:quiet(?:ly|er|est)?|honest(?:ly)?|embarrassingly|politely"
+    # "I keep thinking about", "I keep coming back to": the habitual present
+    # that presents a tic as a considered position. The past and perfect
+    # forms are fine ("I kept thinking", "I've been thinking"), and so is
+    # "keep" with an object ("I keep it in the repository").
+    r"|I keep\s+\w+ing"
+    # the world-weary concession, asserting settled authority by declining
+    # to defend it
+    r"|I no longer argue with"
+    # "the fix that stuck", "the name that stuck": implies a history of
+    # rejected alternatives the reader is never shown. Only with "the", so a
+    # literal use ("a paragraph that stuck" in the memory post) survives.
+    r"|the \w+ that stuck"
+    # "more times than I will admit to": a confession that confesses nothing.
+    # Either give the number or cut the clause.
+    r"|than I (?:will|would|care to|can|dare) admit"
+    # Line counts as a measure of anything. They change with every edit and
+    # they are not what makes a thing small or good. Matched with a following
+    # unit word so "3 lines explaining yourself" (about email) survives.
+    r"|[\d,]+ lines of (?:code|vanilla |JavaScript|CSS|Python|HTML|widget)"
+    r"|(?:is|was|around|about|roughly|only|just|under)\s+(?:\w+\s+)?[~\d][\d,]* lines"
+    r"|fits? in [~\d][\d,]* lines)\b",
+    re.I)
 
 # House style: straight ' and " in prose. Verbatim book passages
 # (quotes.html, the quote-wall JSON) keep their original typography
@@ -378,18 +408,30 @@ def check_figures(c):
 
 
 def check_prose(c):
-    # --- blog prose style rules (banned words, em dashes) ---
-    if c.is_post and not c.is_redirect:
-        for chunk, line in c.p.prose:
-            for m in BANNED_PROSE.finditer(chunk):
-                c.add("WARN", c.page, line, "banned-word",
-                    f"'{m.group(0)}' in prose (banned word)")
-            if "—" in chunk:
-                c.add("WARN", c.page, line, "em-dash",
-                    f"em dash in prose: ...{chunk.strip()[:60]}...")
-            if CURLY_PROSE.search(chunk):
-                c.add("WARN", c.page, line, "curly-quote",
-                    f"curly quote/apostrophe in prose (use straight ' \"): ...{chunk.strip()[:60]}...")
+    # --- prose style rules (banned words, em dashes, curly quotes) ---
+    # Posts plus the top-level pages. The check used to be posts-only, which
+    # let "Three playlists I keep coming back to" sit on music.html
+    # indefinitely. Widening it costs nothing: the only non-post prose that
+    # trips these rules is quotes.html, and that is verbatim book passages
+    # keeping their author's own wording and typography.
+    if c.rel in PROSE_EXEMPT_PAGES or c.is_redirect or c.p.noindex:
+        return
+    for chunk, line in c.p.prose:
+        # Banned words and straight quotes are house rules everywhere public,
+        # which is why "Three playlists I keep coming back to" sat unnoticed
+        # on music.html while the check was posts-only.
+        for m in BANNED_PROSE.finditer(chunk):
+            c.add("WARN", c.page, line, "banned-word",
+                f"'{m.group(0)}' in prose (banned word)")
+        if CURLY_PROSE.search(chunk):
+            c.add("WARN", c.page, line, "curly-quote",
+                f"curly quote/apostrophe in prose (use straight ' \"): ...{chunk.strip()[:60]}...")
+        # The em dash rule is written for blog prose. The top-level pages use
+        # dashes in project and publication lines, which is a different
+        # register, so widening this one is a decision rather than a fix.
+        if c.is_post and "—" in chunk:
+            c.add("WARN", c.page, line, "em-dash",
+                f"em dash in prose: ...{chunk.strip()[:60]}...")
 
 
 
