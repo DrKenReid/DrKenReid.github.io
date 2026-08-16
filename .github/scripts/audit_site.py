@@ -84,6 +84,11 @@ class PageParser(HTMLParser):
         self.ext_nodims = []     # (src, line) external imgs without width+height
         self.fig_in_list = []    # lines where <figure> is a direct child of ul/ol
         self.prose = []          # (text, line) outside PROSE_EXCLUDED tags
+        # (text, line) for everything a reader can actually see: only script
+        # and style are dropped. `prose` is narrower on purpose (citations and
+        # fiction keep their own typography), which is why the placeholder in
+        # a reference slot went unseen by the style checks.
+        self.visible = []
         self.bad_nesting = []    # (landmark, [open tags], line)
         self.label_no_role = []  # (tag, label, line)
         self.img_no_src = []     # lines of <img> with neither src nor srcset
@@ -185,6 +190,9 @@ class PageParser(HTMLParser):
             self._jsonld_buf.append(data)
         elif self._excl == 0 and data.strip():
             self.prose.append((data, self.getpos()[0]))
+        if (data.strip() and not self._in_title and not self._in_jsonld
+                and not any(t in ("script", "style") for t, _ in self._stack)):
+            self.visible.append((data, self.getpos()[0]))
 
 
 def tracked_html():
@@ -263,6 +271,24 @@ BANNED_PROSE = re.compile(
 # (quotes.html, the quote-wall JSON) keep their original typography
 # and are not audited here.
 CURLY_PROSE = re.compile(r"[‘’“”]")
+
+# Scaffolding that must never be visible: a note-to-self left where the
+# writing should be. Two shapes, both seen in the corpus. First, anything
+# announcing itself (Placeholder:, TODO:, TBD, XXX, Lorem ipsum). Second, a
+# whole visible sentence wrapped in square brackets, which is how the FAQ
+# stubs and the empty reference slot were written. The second pattern needs
+# the closing bracket to end the span and a verb-ish length to fire, so
+# editorial insertions ("[sic]", "he [Popper] argued") stay legal.
+# new-post-scaffolds.html is a sheet of outlines for posts not yet started;
+# bracketed prompts are its content rather than something left behind in it.
+# Nothing here is ever published, and it is the only file of its kind.
+PLACEHOLDER_EXEMPT = {"new-post-scaffolds.html"}
+
+PLACEHOLDER_PROSE = re.compile(
+    r"\[\s*(?:placeholder|todo|tbd|tk|xxx|fixme|write|add|expand|fill)\b[^\]]*\]"
+    r"|\blorem ipsum\b"
+    r"|(?:^|(?<=[.!?]\s)|(?<=^\s))\[[A-Z][^\]]{24,}\]",
+    re.I | re.M)
 
 
 
@@ -404,6 +430,25 @@ def check_figures(c):
     for line in c.p.fig_in_list:
         c.add("ERROR", c.page, line, "figure-in-list",
             "figure is a direct child of ul/ol (invalid HTML)")
+
+
+
+def check_placeholders(c):
+    # --- unwritten scaffolding that escaped into the page ---
+    # A reference slot reading "[Placeholder: a general operational research
+    # reference]" shipped in factorio-live.html, and the FAQ stubs in the same
+    # draft were the same shape. Both are visible text, so this reads the
+    # visible stream rather than the raw file: bracketed spans are everywhere
+    # in the script blocks (arr[i + 1], [data-theme="dark"]) and none of those
+    # are prose. It cannot use `prose`, which drops the reference list, since
+    # that is exactly where the shipped one was. Runs on drafts too, which is
+    # where these are supposed to die.
+    if Path(c.rel).name in PLACEHOLDER_EXEMPT:
+        return
+    for chunk, line in c.p.visible:
+        for m in PLACEHOLDER_PROSE.finditer(chunk):
+            c.add("ERROR", c.page, line, "placeholder",
+                f"unwritten placeholder in prose: {m.group(0)[:80]}")
 
 
 
@@ -559,6 +604,7 @@ PAGE_CHECKS = [
     check_dup_alt,
     check_img_dims,
     check_figures,
+    check_placeholders,
     check_prose,
     check_headings,
     check_metadata,
@@ -571,7 +617,14 @@ def main():
     include_drafts = "--include-drafts" in sys.argv
     pages = tracked_html()
     if include_drafts:
-        pages = sorted(set(pages) | set(ROOT.glob("*.html")) | set((ROOT / "blog").glob("*.html")))
+        # untracked pages sitting alongside published ones, plus the drafts
+        # folders themselves (blog/drafts/, its per-series subfolders, and
+        # writing/drafts/). Drafts were outside this glob, which is backwards:
+        # a placeholder is cheapest to catch before the post is published.
+        pages = sorted(set(pages) | set(ROOT.glob("*.html"))
+                       | set((ROOT / "blog").glob("*.html"))
+                       | set((ROOT / "blog" / "drafts").rglob("*.html"))
+                       | set((ROOT / "writing").rglob("*.html")))
     tracked = tracked_files()
 
     problems = []           # (severity, file, line, code, message)
