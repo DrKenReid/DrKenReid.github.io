@@ -1,5 +1,22 @@
 [
   {
+    "title": "How the Interactive Posts Work",
+    "date": "2026-08-16",
+    "tags": [
+      "technology"
+    ],
+    "category": "Technology",
+    "excerpt": "Several blogs I've written run simulations in your browser. The chassis underneath them: theme-reactive canvases, seeded randomness, phone-width rules, and a smoke test.",
+    "url": "blog/how-the-interactive-posts-work.html",
+    "image": "img/photography/thumb/303.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 14
+    },
+    "readMinutes": 4,
+    "words": 855
+  },
+  {
     "title": "Letting Robots Update Your Homepage",
     "date": "2026-08-14",
     "tags": [

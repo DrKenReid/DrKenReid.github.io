@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="Several blogs I've written run simulations in your browser. The chassis underneath them includes theme-reactive canvases, seeded randomness, phone-width rules, and a smoke test.">
+ <meta name="keywords" content="technology">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>How the Interactive Posts Work - Ken Reid</title>
+ <meta property="og:title" content="How the Interactive Posts Work">
+ <meta property="og:description" content="Several blogs I've written run simulations in your browser. The chassis underneath them includes theme-reactive canvases, seeded randomness, phone-width rules, and a smoke test.">
+ <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/303.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/how-the-interactive-posts-work.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="How the Interactive Posts Work">
+ <meta name="twitter:description" content="Several blogs I've written run simulations in your browser. The chassis underneath them includes theme-reactive canvases, seeded randomness, phone-width rules, and a smoke test.">
+ <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/303.png">
+ <meta name="citation_title" content="How the Interactive Posts Work">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/08/16">
+ <meta name="citation_online_date" content="2026/08/16">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/how-the-interactive-posts-work.html">
+ <meta name="DC.title" content="How the Interactive Posts Work">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-08-16">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="../img/photography/hero/303.webp">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/how-the-interactive-posts-work.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "How the Interactive Posts Work",
+ "description": "Several blogs I've written run simulations in your browser. The chassis underneath them includes theme-reactive canvases, seeded randomness, phone-width rules, and a smoke test.",
+ "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/303.png",
+ "author": { "@type": "Person", "name": "Ken Reid", "url": "https://www.kenreid.co.uk" },
+ "datePublished": "2026-08-16",
+ "publisher": { "@type": "Person", "name": "Ken Reid" },
+ "keywords": ["canvas", "interactive", "javascript", "simulation", "web development"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "How the Interactive Posts Work",
+       "item": "https://www.kenreid.co.uk/blog/how-the-interactive-posts-work.html"
+     }
+   ]
+ }
+ </script>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+ <div id="header-section"></div>
+
+ <main id="main-content">
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/303.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">How the Interactive Posts Work</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">How the Interactive Posts Work</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+ 
+ <div class="blog-post">
+ <h1>How the Interactive Posts Work</h1>
+ <div class="blog-meta">
+ 16 August 2026 &middot;
+ <span class="blog-tag">technology</span>
+ </div>
+
+ <p>Someone on Cyberspace (new social media website that has such a cool vibe to it) recently asked me how I set up the simulators on my website, if I used a specific library. I responded saying how it's raw javascript, but that got me thinking: I intend to keep making these kind of educational and fun blogs, so why not make a little framework to make it easier on myself?</p>
+
+ <p>The algorithms themselves need to be separate, I wasn't planning on making a new JMetal, DEAP or similar. Part of the series on <a href="../series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Canvas:</strong> an HTML element that gives JavaScript a rectangle of pixels to draw on, every frame, with no memory of what was there before.</li>
+ <li><strong>devicePixelRatio:</strong> how many physical screen pixels sit behind one CSS pixel. Ignoring it can cause canvas drawings to come out blurry on phones and retina displays.</li>
+ <li><strong>CSS custom properties:</strong> variables that live in stylesheets (<code>--viz-ink: #2b2b2b</code>). Scripts can read them at runtime, which is the hinge this whole system turns on.</li>
+ <li><strong>MutationObserver:</strong> a browser API that fires a callback when part of the page changes, like an attribute being flipped by a theme toggle.</li>
+ <li><strong>Seeded RNG:</strong> a random number generator that produces the same "random" sequence every time you start it from the same seed.</li>
+ <li><strong>requestAnimationFrame:</strong> the browser's "call me before the next repaint" scheduler, the correct heartbeat for animation loops.</li>
+ </ul>
+ </div>
+
+ <h2>The CSS owns the colours</h2>
+
+ <p>I always enjoyed color theory in computer science. The RGB values, pixels (did you know it stands for "picture element"?), bitmaps vs JPEGs vs other formats, it's super interesting to me. On this website, the theme toggle cannot restyle it the way it restyles text, and the first version of the ant post hardcoded its colours in JavaScript and looked wrong in one theme or the other. Every widget's colours live on its wrapper element as CSS custom properties, with a dark-theme override block, and the drawing code reads them fresh at draw time:</p>
+
+<pre><code class="language-javascript">function vizColors(el) {
+  var cs = getComputedStyle(el);
+  function v(name) { return cs.getPropertyValue(name).trim(); }
+  return {
+    series: [v('--viz-s1'), v('--viz-s2'), v('--viz-s3'), v('--viz-s4')],
+    ink: v('--viz-ink'), muted: v('--viz-muted'),
+    grid: v('--viz-grid'), surface: v('--viz-surface')
+  };
+}
+
+new MutationObserver(function () { draw(); })
+  .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });</code></pre>
+
+ <p>The observer redraws the moment <code>data-theme</code> gets toggled, so a running simulation changes palette mid-run. This has no practical value whatsoever. </p>
+
+ <h2>Randomness must be reproducible</h2>
+
+ <p><code>Math.random()</code> is banned from the demos. Every widget gets its randomness from mulberry32, a seeded generator:</p>
+
+<pre><code class="language-javascript">function mulberry32(seed) {
+  var a = seed >>> 0;
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    var t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}</code></pre>
+
+ <p>When a reader reports that the race chart does something odd around 90,000 evaluations, I can watch the same 90,000 evaluations they did. "New cities" buttons just bump the seed. </p>
+
+ <h2>Phones are the real test</h2>
+
+ <p>No canvas ever gets a fixed rendered height now: height is computed from measured width, so narrow screens get a taller aspect instead of a squashed ribbon. Side-by-side panes stack vertically below ~480px, and sliders become full-width rows on small screens.</p>
+
+ <p>A canvas only gets <code>touch-action: none</code> if it has drag interaction, so chart canvases never trap a reader mid-scroll.</p>
+
+ <p>And because rules I merely remember are rules I eventually break, the <a href="my-website-has-a-test-suite.html">test suite</a> enforces them. The smoke test auto-discovers every blog page containing a <code>&lt;canvas&gt;</code> tag (no registration list to forget to update) and loads each at 360px wide in a headless browser. It fails the build on horizontal overflow, a canvas wider than the viewport, a canvas squashed under 100px tall, or any console error.</p>
+
+ <h2>The chassis checklist</h2>
+
+ <p>What every new interactive post starts from:</p>
+
+ <ul>
+ <li>A wrapper div carrying the <code>--viz-*</code> palette, light values plus a dark override block.</li>
+ <li><code>vizColors()</code> read at draw time, plus a MutationObserver for theme flips.</li>
+ <li><code>fitCanvas()</code> handling devicePixelRatio and re-running on resize.</li>
+ <li>mulberry32 for every random draw, seeds visible near the top of the file.</li>
+ <li>A requestAnimationFrame loop with a speed slider controlling work per frame, not frame rate.</li>
+ <li><code>role="img"</code> and a real <code>aria-label</code> on every canvas.</li>
+ <li>A standalone single-file version of the demos in <code>blog/downloads/</code>.</li>
+ </ul>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Why raw canvas instead of a chart library?</summary>
+ <p>The demos ARE the content, and libraries make the common case easy at the price of making the odd case a bit more awkward. A four-way race chart with collision-nudged end labels, step-function lines, and a temperature strip sharing its x-axis is the odd case. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Don't the simulations drain phone batteries?</summary>
+ <p>They only run while you press Run, and they do their work inside a requestAnimationFrame budget, so the browser throttles them in background tabs and off-screen. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why not SVG, which the theme could style directly?</summary>
+ <p>SVG restyles beautifully but costs per element, and these simulations push thousands of points and segments per frame.</p>
+ </details>
+ </div>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="dark-mode-that-doesnt-flash.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/20.webp" alt="Dark Mode That Doesn't Flash" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">6 August 2026 · 7 min read</div>
+                  <h3 class="blog-card-title">Dark Mode That Doesn't Flash</h3>
+                  <p class="blog-card-excerpt">Dark mode is easy; dark mode without a white flash is more difficult. How this site stamps the theme before the first paint, and drags every chart and iframe along with it.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="simulated-annealing-live.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/69.webp" alt="Simulated Annealing, Live" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">5 August 2026 · 28 min read</div>
+                  <h3 class="blog-card-title">Simulated Annealing, Live</h3>
+                  <p class="blog-card-excerpt">An interactive introduction to simulated annealing: watch a ball escape local minima as you control the temperature, then race four algorithms live on the Travelling Salesman Problem in your browser.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="evolution-live.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/204.webp" alt="Evolution, Live" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">4 August 2026 · 16 min read</div>
+                  <h3 class="blog-card-title">Evolution, Live</h3>
+                  <p class="blog-card-excerpt">A genetic algorithm evolving a solution live in your browser: populations, crossover, mutation, and selection as sliders you can break. Fifty translucent triangles evolve the alphabet, and you supply the selection pressure.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ </div>
+ <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+ <hr style="margin: 40px 0;">
+ </div>
+ </div>
+
+  </main>
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/prism-loader.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');
+loadPrism();</script>
+</body>
+</html>
