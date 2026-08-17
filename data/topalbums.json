@@ -36,31 +36,10 @@
       "plays": 4
     },
     {
-      "name": "Get Behind Me Satan",
-      "artist": "The White Stripes",
-      "url": "https://www.last.fm/music/The+White+Stripes/Get+Behind+Me+Satan",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/f4bd9ed207184af23b8199fb41c8eba2.jpg",
-      "plays": 4
-    },
-    {
-      "name": "The Secretary's Daughter",
-      "artist": "Benjamin Monday",
-      "url": "https://www.last.fm/music/Benjamin+Monday/The+Secretary%27s+Daughter",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/3b6f5c7f074f5ee0d37416a0f7869688.jpg",
-      "plays": 3
-    },
-    {
       "name": "Trilogy",
       "artist": "Carpenter Brut",
       "url": "https://www.last.fm/music/Carpenter+Brut/Trilogy",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/d0c1914b6840db8f0bdeb105944e7933.jpg",
-      "plays": 3
-    },
-    {
-      "name": "Far Cry 5 Presents: Into the Flames (Original Game Soundtrack)",
-      "artist": "Dan Romer",
-      "url": "https://www.last.fm/music/Dan+Romer/Far+Cry+5+Presents:+Into+the+Flames+(Original+Game+Soundtrack)",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/8bc566258d41f77277147a01c3bf90ad.jpg",
       "plays": 3
     },
     {
@@ -113,13 +92,6 @@
       "plays": 2
     },
     {
-      "name": "True (Bonus Edition)",
-      "artist": "Avicii",
-      "url": "https://www.last.fm/music/Avicii/True+(Bonus+Edition)",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/a0c65b8ccca195beff7eb803661e7e1a.png",
-      "plays": 2
-    },
-    {
       "name": "it boy",
       "artist": "bbno$",
       "url": "https://www.last.fm/music/bbno$/it+boy",
@@ -141,13 +113,34 @@
       "plays": 2
     },
     {
-      "name": "The E.N.D. (The Energy Never Dies)",
-      "artist": "Black Eyed Peas",
-      "url": "https://www.last.fm/music/Black+Eyed+Peas/The+E.N.D.+(The+Energy+Never+Dies)",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/c1c93f40047046c1bce56e8fad76f3e1.png",
+      "name": "The Secretary's Daughter",
+      "artist": "Benjamin Monday",
+      "url": "https://www.last.fm/music/Benjamin+Monday/The+Secretary%27s+Daughter",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/3b6f5c7f074f5ee0d37416a0f7869688.jpg",
+      "plays": 2
+    },
+    {
+      "name": "Burning Sands",
+      "artist": "Boom Kitty",
+      "url": "https://www.last.fm/music/Boom+Kitty/Burning+Sands",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/caa7ed94df9552df2f0c4c811453eebf.jpg",
+      "plays": 2
+    },
+    {
+      "name": "BRAT",
+      "artist": "Charli xcx",
+      "url": "https://www.last.fm/music/Charli+xcx/BRAT",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/b00527c6ae0cd1d4c9bf3706b130ad56.jpg",
+      "plays": 2
+    },
+    {
+      "name": "Camp",
+      "artist": "Childish Gambino",
+      "url": "https://www.last.fm/music/Childish+Gambino/Camp",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/ee716520f1d244d990d5f6c8783375fe.png",
       "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-08-10"
+  "updated": "2026-08-17"
 }
