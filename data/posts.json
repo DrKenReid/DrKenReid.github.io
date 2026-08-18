@@ -1,5 +1,22 @@
 [
   {
+    "title": "CMA-ES, Live",
+    "date": "2026-08-19",
+    "tags": [
+      "ai"
+    ],
+    "category": "Data & AI",
+    "excerpt": "CMA-ES live in your browser: watch an optimiser learn the shape of a valley by stretching and rotating its search cloud until the narrow floor costs it nothing to walk along.",
+    "url": "blog/cma-es-live.html",
+    "image": "img/photography/thumb/431.webp",
+    "series": {
+      "name": "Algorithms, Live",
+      "part": 6
+    },
+    "readMinutes": 7,
+    "words": 1360
+  },
+  {
     "title": "Factorio, Live: a Game as an Optimisation Benchmark",
     "date": "2026-08-16",
     "tags": [
@@ -14,7 +31,7 @@
       "part": 2
     },
     "readMinutes": 12,
-    "words": 2474
+    "words": 2488
   },
   {
     "title": "How the Interactive Posts Work",

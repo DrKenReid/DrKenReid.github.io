@@ -5,11 +5,139 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 16 Aug 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Sun, 16 Aug 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Wed, 19 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Wed, 19 Aug 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>CMA-ES, Live</title>
+      <link>https://www.kenreid.co.uk/blog/cma-es-live.html</link>
+      <guid>https://www.kenreid.co.uk/blog/cma-es-live.html</guid>
+      <pubDate>Wed, 19 Aug 2026 00:00:00 +0000</pubDate>
+      <description>CMA-ES live in your browser: watch an optimiser learn the shape of a valley by stretching and rotating its search cloud until the narrow floor costs it nothing to walk along.</description>
+      <category>ai</category>
+      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/cma-es-live.html">View it on the site</a> to play with it.</em></p>
+ <h1>CMA-ES, Live</h1>
+ <div class="blog-meta">
+ 19 August 2026 &middot;
+ <span class="blog-tag">ai</span>
+ </div>
+
+ <p>There is a shape of problem that many optimisers struggle with: a long, thin, tilted valley. </p>
+
+ <p>The <a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">ants of part 1</a> took steps along edges and left scent behind. The <a href="https://www.kenreid.co.uk/blog/evolution-live.html">genetic algorithm of part 2</a> took steps in genome space, one mutation at a time. <a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">Simulated annealing in part 3</a> had a step size you could watch shrink as the temperature fell. This one learns the <em>shape</em> of the neighbourhood worth searching, and restretches itself to match: CMA-ES</p>
+
+ 
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>CMA-ES:</strong> the Covariance Matrix Adaptation Evolution Strategy. An optimiser that samples a cloud of candidate points, keeps the best ones, and keeps adjusting the cloud's position, size, and shape to follow whatever has been working.</li>
+ <li><strong>Evolution strategy:</strong> the family CMA-ES belongs to: evolutionary optimisers for continuous variables, where mutation means adding random numbers rather than flipping genes.</li>
+ <li><strong>Mean:</strong> the centre of the search cloud, the algorithm's current best guess at where the answer lives.</li>
+ <li><strong>Step size (sigma):</strong> the overall scale of the cloud. Big sigma means bold, scattered samples; small sigma means cautious, local ones.</li>
+ <li><strong>Covariance matrix:</strong> the shape of the cloud: which directions it stretches along and how far. This is the star of the show, and adapting it is what the "CMA" stands for.</li>
+ <li><strong>Condition number:</strong> how stretched the cloud is: the ratio of its longest axis to its shortest. 1 is a circle; 400 is a needle.</li>
+ <li><strong>Black-box optimisation:</strong> optimising a function you can only evaluate, not differentiate or inspect. You put numbers in, a score comes out.</li>
+ </ul>
+ </div>
+
+ <h2>Steps versus shapes</h2>
+
+ <p>Valleys like that are everywhere in real problems (the technical word is ill-conditioned). An optimiser proposing moves in random directions wastes almost all of them climbing walls while gradient descent zigzags across the floor of possible solutions.</p>
+
+ <p>This requires an optimiser that notices "movement along <em>this</em> axis keeps paying off, movement along <em>that</em> one never does".</p>
+
+ <p>CMA-ES keeps a sampling distribution, a fuzzy ellipse of probability. Each generation it draws a cloud of candidate points from the ellipse, scores them, and shifts the centre toward the better half.</p>
+
+ <p>It also updates the ellipse's <em>shape</em>. Directions the winners recently moved in get widened. Directions that never produced a winner get squeezed. It saves the historic data of wins in the covariance matrix.</p>
+
+ <p>Instead of a fixed cooling schedule, CMA-ES watches its own recent movement. If successive generations keep marching the same way, the steps were too small, so sigma grows. If the path folds back on itself, the steps were too big, so sigma shrinks. Exploration vs exploitation.</p>
+
+ <p>Hansen and Ostermeier formalised all of this in 2001<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>, and the design is careful enough that the standard version has no parameters you are expected to tune. But, in this version, for fun, there are sliders so you can override that.</p>
+
+ <h2>The loop on a napkin</h2>
+
+ <ol>
+ <li>Sample a cloud of candidate points from a Gaussian: centre (mean), scale (sigma), shape (covariance).</li>
+ <li>Score every point and rank them.</li>
+ <li>Move the mean toward a weighted average of the best few, best weighted most.</li>
+ <li>Stretch the covariance along the directions those winners came from.</li>
+ <li>Grow or shrink sigma depending on whether recent moves kept pointing the same way.</li>
+ <li>Go to step 1.</li>
+ </ol>
+
+ <h2>Watch it</h2>
+
+ <p>Below, CMA-ES is minimising a landscape drawn as contour shading (darker is worse, the red cross is the global optimum). Blue dots are one generation's samples, the amber rings are the search ellipse at one and two sigma, and the green dot with the fading tail is the mean and the route it took.</p>
+
+ <p>Start with the default narrow valley and watch the ellipse for the first few seconds. It begins as a circle, tips over to match the valley's angle, and stretches. Click or drag anywhere on the map to plant the start point somewhere new.</p>
+
+ 
+
+ <h2>The step-size rule</h2>
+
+ <p>On the smooth valleys the run still works, it just crawls. The step-size rule notices the steady progress and inflates sigma back to something sensible, which you can watch happening on the right-hand chart.</p>
+
+ <p>On the egg carton a tiny sigma is fatal. The cloud fits inside a single dimple, every sample agrees the local floor is the best thing going, and the run settles into the nearest dent.</p>
+
+ <p>If the sigma is huge, the first generations are chaos.</p>
+
+ <p>Then watch the sigma chart. The path the mean traces keeps folding back on itself, the adaptation rule reads that as "steps too big", and sigma falls generation after generation until the cloud shrinks onto something worth exploiting. Thrashing and then recovery is the self recovering step size.</p>
+
+ <p>Drop lambda to 6 and each generation's ranking is built from almost nothing. The mean update gets noisy and the covariance estimate gets noisier.</p>
+
+ <p>Back to the narrow valley, default settings, and this time watch only the amber ellipse and the stretch readout. Circle, tilt, stretch, and then a needle sliding along the valley floor with the stretch number climbing into the hundreds.</p>
+
+ <p>Every other algorithm I've covered in this series would be paying the valley's toll on every single move, but CMA-ES redrew its own geometry so there is no toll left to pay!</p>
+
+ <h2>A memory of directions</h2>
+
+ <p>What I like most about CMA-ES is where it keeps what it has learned. The ants kept their knowledge in the world, as scent on edges. The genetic algorithm kept it in a population, spread implicitly across genomes: variety, but no geometry. Simulated annealing had one knob, a step size, and its step size only goes down.</p>
+
+ <p>CMA-ES keeps a small, dense summary: one point for "where", one number for "how far", and one matrix for "which way". The matrix is the difference. It is a running record of the directions that recently succeeded, updated every generation, and it turns a search that happens <em>in</em> the landscape into one that builds a model <em>of</em> the landscape's local shape.</p>
+
+ <h2>Where it gets used</h2>
+
+ <p>For continuous black-box problems, where the objective is a simulator or a physical measurement or a hyperparameter score with no gradient in sight, CMA-ES is the default serious tool up to a few hundred dimensions (yes, you read that correctly!!). </p>
+
+ <p>It has tuned aircraft geometry, robot gaits, controller parameters, and the settings of other learning systems. Hansen's tutorial<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+
+ <p>When progress stalls, the instinct is to push harder in the direction you were already going. CMA-ES keeps an estimate of which directions have been rewarding you lately, and spend your effort along those, even when they aren't the ones you set off in. Which is surprisingly good life advice to get from a pile of linear algebra.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Is this the full CMA-ES?</summary>
+ <p>Simplified. The demo does the real core: Gaussian sampling, ranking, log-weighted recombination of the best mu samples, the rank-mu covariance update, and cumulative (path-based) step-size adaptation. It leaves out the rank-one covariance update with its separate evolution path, plus restarts and boundary handling, which the standard implementations all include. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why does it keep drifting after finding the optimum?</summary>
+ <p>Because it never knows it has found it. CMA-ES only ever sees relative rankings inside its own cloud, never "you are done". </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>When would I not use CMA-ES?</summary>
+ <p>When you have gradients, use them. On smooth, differentiable problems, and especially in the millions of dimensions of neural network training, gradient methods win by orders of magnitude. </p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Hansen, N., &amp; Ostermeier, A. (2001). Completely derandomized self-adaptation in evolution strategies. <em>Evolutionary Computation</em>, 9(2), 159&ndash;195. <a href="https://doi.org/10.1162/106365601750190398" target="_blank" rel="noopener">https://doi.org/10.1162/106365601750190398</a>
+          </li>
+          <li id="ref-2">
+            Hansen, N. (2016). The CMA Evolution Strategy: A Tutorial. <em>arXiv preprint</em> arXiv:1604.00772. <a href="https://doi.org/10.48550/arXiv.1604.00772" target="_blank" rel="noopener">https://doi.org/10.48550/arXiv.1604.00772</a>
+          </li>
+        </ol>
+
+ ]]></content:encoded>
+    </item>
     <item>
       <title>Factorio, Live: a Game as an Optimisation Benchmark</title>
       <link>https://www.kenreid.co.uk/blog/factorio-live.html</link>
@@ -150,6 +278,9 @@
  <ol class="references">
  <li id="ref-1">
  Reid, K. N., Miralavy, I., Kelly, S., Banzhaf, W., &amp; Gondro, C. (2021). <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:8k81kl-MbHgC" target="_blank" rel="noopener noreferrer">The Factory Must Grow: Automation in Factorio</a>. <em>Proceedings of the Genetic and Evolutionary Computation Conference Companion</em>. <a href="https://arxiv.org/abs/2102.04871" target="_blank" rel="noopener">https://arxiv.org/abs/2102.04871</a>
+ </li>
+ <li id="ref-2">
+ [Placeholder: a general operational research reference, if the post needs one for the definition.]
  </li>
  </ol>
 
@@ -4335,106 +4466,6 @@ return [post for _score, _date, post in ranked[:3]]</code></pre>
       <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
       <description>No Google Fonts, no third-party requests, and icon fonts subset from 75 KB down to 1.5 KB. Here&#x27;s how, and why it&#x27;s worth an afternoon.</description>
       <category>technology</category>
-      <content:encoded><![CDATA[
-        <h1>Self-Hosting Your Fonts</h1>
-        <div class="blog-meta">
-          12 July 2026 &middot;
-          <span class="blog-tag">technology</span>
-        </div>
-
-        <p>The text you're reading is set in Poppins (no, not Mary Poppins), the serifs in the pull quotes are Lora, and until recently both arrived from Google's servers, the way fonts arrive on roughly half the web. Now they're served from this site itself: twelve small font files sitting in the repository next to the photos. This post is just a brief rundown on how and why I did this, and how I shrank three icon fonts by about 97% with a Python script. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
-
-        <div class="plain-english-box">
-          <h2>Quick jargon guide</h2>
-          <ul>
-            <li><strong>Web font:</strong> a font file the browser downloads with the page, so visitors see your chosen typeface rather than whatever their device has installed.</li>
-            <li><strong>WOFF2:</strong> the modern compressed format for web fonts. Universally supported, roughly a third the size of older formats.</li>
-            <li><strong>@font-face:</strong> the CSS rule that tells the browser "this family name maps to this font file". Self-hosting is mostly writing these by hand.</li>
-            <li><strong>Icon font:</strong> a font whose "letters" are pictures (the GitHub logo, a house, an arrow). A common way to ship icons before SVG took over.</li>
-            <li><strong>Subsetting:</strong> deleting every glyph from a font that your site doesn't use. A font with 700 icons of which you use 5 can lose the other 695.</li>
-            <li><strong>Unicode range:</strong> the span of characters a font file covers. Serving just the Latin range is itself a subset: no Cyrillic or Vietnamese glyphs for a site written in English.</li>
-          </ul>
-        </div>
-
-        <h2>The why</h2>
-
-        <p>Well, mainly because I wanted to learn about fonts. I think they're interesting: they communicate tone, a certain visual 'feel' that goes beyond the words on the page, they have interest accessibility benefits and they have some fascinating history. But, the technical reasons are: <strong>Privacy:</strong> every page view against Google Fonts tells Google's servers a visitor's IP address requested your page, and in 2022 a German court found that arrangement violated the GDPR. Serving fonts yourself means your readers talk to nobody but you. <strong>Reliability and speed:</strong> a third-party font server is one more thing that can be slow, blocked (Google is unreachable in some countries), or discontinued. Self-hosted fonts arrive over the same connection as everything else. <strong>Ownership:</strong> the same philosophy as the rest of this site. Fewer moving parts owned by other people.</p>
-
-        <p>The counterargument used to be caching: the theory that everyone has Google's copy of Poppins cached already, so linking to it is free. That theory died in 2020 when browsers partitioned their caches per site for privacy reasons. Every site now downloads its own copy regardless, so the shared-cache benefit is actually negative, since you download it repeatedly.</p>
-
-        <h2>The how</h2>
-
-        <p>Google Fonts provides them, of course. Download the family, keep the WOFF2 versions of the weights you actually use, and write an <code>@font-face</code> block per file:</p>
-
-<pre><code class="language-css">@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/vendor/poppins-400.woff2") format("woff2");
-}</code></pre>
-
-        <p>This site carries seven weights of Poppins and five faces of Lora (the italics matter for pull quotes), Latin subset only, for a grand total of about 244 KB, less than a single photograph thumbnail-and-hero pair. The <code>font-display: swap</code> line is the one non-obvious part: it tells the browser to show text immediately in a fallback font and swap when the real one arrives, rather than showing nothing. Neat, right? Invisible text while a font loads is way more irritating than a brief flash of the wrong font that most people won't see.</p>
-
-        <figure style="margin: 30px 0;">
-          <img class="theme-img-light" src="https://www.kenreid.co.uk/blog/img/fonts/specimen-poppins-light.webp" alt="Type specimen of Poppins: six weights from Thin 100 to Bold 700, each set as a pangram, with the full alphabet and numerals below" width="1000" height="801" loading="lazy" style="width:100%; border-radius:8px;">
-          <img class="theme-img-dark" src="https://www.kenreid.co.uk/blog/img/fonts/specimen-poppins-dark.webp" alt="Type specimen of Poppins: six weights from Thin 100 to Bold 700, each set as a pangram, with the full alphabet and numerals below" width="1000" height="801" loading="lazy" style="width:100%; border-radius:8px;">
-          <figcaption class="figure-note">Poppins, rendered from the same woff2 files this page just loaded. Seven weights, 54&nbsp;KB all told.</figcaption>
-        </figure>
-
-        <figure style="margin: 30px 0;">
-          <img class="theme-img-light" src="https://www.kenreid.co.uk/blog/img/fonts/specimen-lora-light.webp" alt="Type specimen of Lora: regular, medium, and semibold weights with their italics, each set as a pangram, with the full alphabet and numerals below" width="1000" height="598" loading="lazy" style="width:100%; border-radius:8px;">
-          <img class="theme-img-dark" src="https://www.kenreid.co.uk/blog/img/fonts/specimen-lora-dark.webp" alt="Type specimen of Lora: regular, medium, and semibold weights with their italics, each set as a pangram, with the full alphabet and numerals below" width="1000" height="598" loading="lazy" style="width:100%; border-radius:8px;">
-          <figcaption class="figure-note">Lora's five faces. The italics earn their bytes in the pull quotes.</figcaption>
-        </figure>
-
-        <h2>The fun part: subsetting icon fonts</h2>
-
-        <p>The site's template arrived with three icon fonts (FontAwesome, Themify, ElegantIcons), each carrying hundreds of icons. A count of what the site actually uses came to: five FontAwesome icons, sixteen Themify icons, and two ElegantIcons. </p>
-
-        <p>Using the <code>fontTools</code> library, a Python script scans every page and script on the site for icon class names (<code>fa-github</code>, <code>ti-arrow-up</code>, and so on), parses each vendor stylesheet to map those class names to the character codes inside the font, and then writes a new font containing only those characters. The results are satisfying in a way few optimisations are:</p>
-
-<pre><code class="language-python"># Original -> subset (woff/woff2)
-# FontAwesome   75.4 KB -> 1.5 KB   (5 icons kept,  ~98% smaller)
-# Themify       54.8 KB -> 2.7 KB   (16 icons kept, ~95% smaller)
-# ElegantIcons  62.2 KB -> 1.2 KB   (2 icons kept,  ~98% smaller)</code></pre>
-
-        <p>The subset files live alongside the originals, and the CSS build swaps the font sources to the subsets at minification time, so the originals remain on hand for the day a new icon appears. That day is the obvious failure mode (use a new icon, forget to re-subset, icon renders as an empty box), which is why the script also writes a manifest of what's included. I have some checks in place to make sure this goes smoothly, and that will be in another blog on how "my website has a test suite". </p>
-
-        <h2>A note on SVG icons</h2>
-
-        <p>Would SVG icons be more modern than icon fonts? Yes, and a fresh site should use them. But the template came with icon fonts wired into everything, and three kilobytes of subset font is not a problem worth a rewrite. So, why not optimise the thing you have.</p>
-
-        <div class="faq-section">
-          <h2>Common questions</h2>
-
-          <details class="faq-item">
-            <summary>Is self-hosting Google's fonts legal?</summary>
-            <p>Yes. Fonts on Google Fonts are under open licences, mostly the SIL Open Font License, which explicitly permits serving them yourself. </p>
-          </details>
-
-          <details class="faq-item">
-            <summary>How much faster is it, really?</summary>
-            <p>Modest and consistent: you save a DNS lookup and TLS handshake to a third domain, which is tens to a couple of hundred milliseconds on first visit. The bigger wins are the icon subsets (about 190 KB of fonts became 5 KB) and immunity to the third party ever being slow. </p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Do I need all those weights?</summary>
-            <p>Almost certainly not, and this site is mildly guilty: seven weights of Poppins is what the template's CSS references, so seven weights it is. </p>
-          </details>
-
-          <details class="faq-item">
-            <summary>What about variable fonts?</summary>
-            <p>A variable font packs every weight into one file and would replace my seven Poppins files with one. It's the right choice for a new build; I keep the static weights because they're what the download offered and the total is already small. </p>
-          </details>
-        </div>
-
-        
-
-
-        <hr style="margin: 40px 0;">
-        <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
-      ]]></content:encoded>
     </item>
     <item>
       <title>Reading This Site Offline</title>

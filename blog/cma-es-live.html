@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="CMA-ES live in your browser: watch an optimiser learn the shape of a valley by stretching and rotating its search cloud">
+ <meta name="keywords" content="ai">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>CMA-ES, Live - Ken Reid</title>
+ <meta property="og:title" content="CMA-ES, Live">
+ <meta property="og:description" content="CMA-ES live in your browser: watch an optimiser learn the shape of a valley by stretching and rotating its search cloud">
+ <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/431.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/cma-es-live.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="CMA-ES, Live">
+ <meta name="twitter:description" content="CMA-ES live in your browser: watch an optimiser learn the shape of a valley by stretching and rotating its search cloud">
+ <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/431.png">
+ <meta name="citation_title" content="CMA-ES, Live">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/08/19">
+ <meta name="citation_online_date" content="2026/08/19">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/cma-es-live.html">
+ <meta name="DC.title" content="CMA-ES, Live">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-08-19">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="../img/photography/hero/431.webp">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/cma-es-live.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "CMA-ES, Live",
+ "description": "CMA-ES live in your browser: watch an optimiser learn the shape of a valley by stretching and rotating its search cloud",
+ "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/431.png",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-08-19",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["CMA-ES", "evolution strategy", "covariance matrix adaptation", "interactive", "optimization"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "CMA-ES, Live",
+       "item": "https://www.kenreid.co.uk/blog/cma-es-live.html"
+     }
+   ]
+ }
+ </script>
+ <style>
+   /* Series: s1 = sample cloud, s2 = mean + trajectory, s3 = covariance ellipse, s4 = optimum. */
+   /* Overrides of the shared .kr-viz component in style.css. */
+   [data-theme="dark"] .kr-viz{ --viz-s1:#4a94ea; --viz-s2:#22b381; }
+   .kr-sliders .val{ min-width:3.4em; }
+ </style>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <main id="main-content">
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/431.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">CMA-ES, Live</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">CMA-ES, Live</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+ 
+ <div class="blog-post">
+ <h1>CMA-ES, Live</h1>
+ <div class="blog-meta">
+ 19 August 2026 &middot;
+ <span class="blog-tag">ai</span>
+ </div>
+
+ <p>There is a shape of problem that many optimisers struggle with: a long, thin, tilted valley. </p>
+
+ <p>The <a href="ant-colony-live.html">ants of part 1</a> took steps along edges and left scent behind. The <a href="evolution-live.html">genetic algorithm of part 2</a> took steps in genome space, one mutation at a time. <a href="simulated-annealing-live.html">Simulated annealing in part 3</a> had a step size you could watch shrink as the temperature fell. This one learns the <em>shape</em> of the neighbourhood worth searching, and restretches itself to match: CMA-ES</p>
+
+ <noscript><p><strong>The interactive parts of this post require JavaScript.</strong> The prose will still make sense, but the demo will be sadly inert.</p></noscript>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>CMA-ES:</strong> the Covariance Matrix Adaptation Evolution Strategy. An optimiser that samples a cloud of candidate points, keeps the best ones, and keeps adjusting the cloud's position, size, and shape to follow whatever has been working.</li>
+ <li><strong>Evolution strategy:</strong> the family CMA-ES belongs to: evolutionary optimisers for continuous variables, where mutation means adding random numbers rather than flipping genes.</li>
+ <li><strong>Mean:</strong> the centre of the search cloud, the algorithm's current best guess at where the answer lives.</li>
+ <li><strong>Step size (sigma):</strong> the overall scale of the cloud. Big sigma means bold, scattered samples; small sigma means cautious, local ones.</li>
+ <li><strong>Covariance matrix:</strong> the shape of the cloud: which directions it stretches along and how far. This is the star of the show, and adapting it is what the "CMA" stands for.</li>
+ <li><strong>Condition number:</strong> how stretched the cloud is: the ratio of its longest axis to its shortest. 1 is a circle; 400 is a needle.</li>
+ <li><strong>Black-box optimisation:</strong> optimising a function you can only evaluate, not differentiate or inspect. You put numbers in, a score comes out.</li>
+ </ul>
+ </div>
+
+ <h2>Steps versus shapes</h2>
+
+ <p>Valleys like that are everywhere in real problems (the technical word is ill-conditioned). An optimiser proposing moves in random directions wastes almost all of them climbing walls while gradient descent zigzags across the floor of possible solutions.</p>
+
+ <p>This requires an optimiser that notices "movement along <em>this</em> axis keeps paying off, movement along <em>that</em> one never does".</p>
+
+ <p>CMA-ES keeps a sampling distribution, a fuzzy ellipse of probability. Each generation it draws a cloud of candidate points from the ellipse, scores them, and shifts the centre toward the better half.</p>
+
+ <p>It also updates the ellipse's <em>shape</em>. Directions the winners recently moved in get widened. Directions that never produced a winner get squeezed. It saves the historic data of wins in the covariance matrix.</p>
+
+ <p>Instead of a fixed cooling schedule, CMA-ES watches its own recent movement. If successive generations keep marching the same way, the steps were too small, so sigma grows. If the path folds back on itself, the steps were too big, so sigma shrinks. Exploration vs exploitation.</p>
+
+ <p>Hansen and Ostermeier formalised all of this in 2001<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>, and the design is careful enough that the standard version has no parameters you are expected to tune. But, in this version, for fun, there are sliders so you can override that.</p>
+
+ <h2>The loop on a napkin</h2>
+
+ <ol>
+ <li>Sample a cloud of candidate points from a Gaussian: centre (mean), scale (sigma), shape (covariance).</li>
+ <li>Score every point and rank them.</li>
+ <li>Move the mean toward a weighted average of the best few, best weighted most.</li>
+ <li>Stretch the covariance along the directions those winners came from.</li>
+ <li>Grow or shrink sigma depending on whether recent moves kept pointing the same way.</li>
+ <li>Go to step 1.</li>
+ </ol>
+
+ <h2>Watch it</h2>
+
+ <p>Below, CMA-ES is minimising a landscape drawn as contour shading (darker is worse, the red cross is the global optimum). Blue dots are one generation's samples, the amber rings are the search ellipse at one and two sigma, and the green dot with the fading tail is the mean and the route it took.</p>
+
+ <p>Start with the default narrow valley and watch the ellipse for the first few seconds. It begins as a circle, tips over to match the valley's angle, and stretches. Click or drag anywhere on the map to plant the start point somewhere new.</p>
+
+ <div class="kr-viz" id="cma-demo">
+   <canvas id="cmaCanvas" height="360" role="img" aria-label="Animated CMA-ES demo: a contour-shaded fitness landscape with a cloud of blue sample points, an amber covariance ellipse drawn at one and two sigma, and a green mean point leaving a fading trajectory as the optimiser converges toward a red cross marking the global optimum. Click or drag to move the start point." class="kr-interactive kr-drag"></canvas>
+   <div class="kr-toolbar" data-kr-toolbar></div>
+   <div class="kr-sliders" data-kr-sliders></div>
+   <div class="kr-stats" data-kr-stats></div>
+   <canvas id="cmaChart" class="kr-chart" height="120" role="img" aria-label="Live charts on logarithmic axes: best fitness found so far falling over generations, and the step size sigma adapting over generations."></canvas>
+   <p class="kr-note"><strong>Click or drag on the map</strong> to move the start point and restart. Best fitness is the gap to the optimum, so smaller is better and 0 is perfect. Ellipse stretch is the condition number of the covariance matrix (1&times; is a circle, hundreds is a needle). Both charts use log scales, because a healthy CMA-ES run improves by orders of magnitude, not increments. The run keeps going after it converges, so restart it if you'd like.</p>
+ </div>
+
+ <h2>The step-size rule</h2>
+
+ <p>On the smooth valleys the run still works, it just crawls. The step-size rule notices the steady progress and inflates sigma back to something sensible, which you can watch happening on the right-hand chart.</p>
+
+ <p>On the egg carton a tiny sigma is fatal. The cloud fits inside a single dimple, every sample agrees the local floor is the best thing going, and the run settles into the nearest dent.</p>
+
+ <p>If the sigma is huge, the first generations are chaos.</p>
+
+ <p>Then watch the sigma chart. The path the mean traces keeps folding back on itself, the adaptation rule reads that as "steps too big", and sigma falls generation after generation until the cloud shrinks onto something worth exploiting. Thrashing and then recovery is the self recovering step size.</p>
+
+ <p>Drop lambda to 6 and each generation's ranking is built from almost nothing. The mean update gets noisy and the covariance estimate gets noisier.</p>
+
+ <p>Back to the narrow valley, default settings, and this time watch only the amber ellipse and the stretch readout. Circle, tilt, stretch, and then a needle sliding along the valley floor with the stretch number climbing into the hundreds.</p>
+
+ <p>Every other algorithm I've covered in this series would be paying the valley's toll on every single move, but CMA-ES redrew its own geometry so there is no toll left to pay!</p>
+
+ <h2>A memory of directions</h2>
+
+ <p>What I like most about CMA-ES is where it keeps what it has learned. The ants kept their knowledge in the world, as scent on edges. The genetic algorithm kept it in a population, spread implicitly across genomes: variety, but no geometry. Simulated annealing had one knob, a step size, and its step size only goes down.</p>
+
+ <p>CMA-ES keeps a small, dense summary: one point for "where", one number for "how far", and one matrix for "which way". The matrix is the difference. It is a running record of the directions that recently succeeded, updated every generation, and it turns a search that happens <em>in</em> the landscape into one that builds a model <em>of</em> the landscape's local shape.</p>
+
+ <h2>Where it gets used</h2>
+
+ <p>For continuous black-box problems, where the objective is a simulator or a physical measurement or a hyperparameter score with no gradient in sight, CMA-ES is the default serious tool up to a few hundred dimensions (yes, you read that correctly!!). </p>
+
+ <p>It has tuned aircraft geometry, robot gaits, controller parameters, and the settings of other learning systems. Hansen's tutorial<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+
+ <p>When progress stalls, the instinct is to push harder in the direction you were already going. CMA-ES keeps an estimate of which directions have been rewarding you lately, and spend your effort along those, even when they aren't the ones you set off in. Which is surprisingly good life advice to get from a pile of linear algebra.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Is this the full CMA-ES?</summary>
+ <p>Simplified. The demo does the real core: Gaussian sampling, ranking, log-weighted recombination of the best mu samples, the rank-mu covariance update, and cumulative (path-based) step-size adaptation. It leaves out the rank-one covariance update with its separate evolution path, plus restarts and boundary handling, which the standard implementations all include. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why does it keep drifting after finding the optimum?</summary>
+ <p>Because it never knows it has found it. CMA-ES only ever sees relative rankings inside its own cloud, never "you are done". </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>When would I not use CMA-ES?</summary>
+ <p>When you have gradients, use them. On smooth, differentiable problems, and especially in the millions of dimensions of neural network training, gradient methods win by orders of magnitude. </p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Hansen, N., &amp; Ostermeier, A. (2001). Completely derandomized self-adaptation in evolution strategies. <em>Evolutionary Computation</em>, 9(2), 159&ndash;195. <a href="https://doi.org/10.1162/106365601750190398" target="_blank" rel="noopener">https://doi.org/10.1162/106365601750190398</a>
+          </li>
+          <li id="ref-2">
+            Hansen, N. (2016). The CMA Evolution Strategy: A Tutorial. <em>arXiv preprint</em> arXiv:1604.00772. <a href="https://doi.org/10.48550/arXiv.1604.00772" target="_blank" rel="noopener">https://doi.org/10.48550/arXiv.1604.00772</a>
+          </li>
+        </ol>
+
+ </div>
+ </div>
+ </div>
+
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+
+<script src="../js/kr-viz.js"></script>
+ <script>
+ /* ============================================================
+    CMA-ES, Live: the interactive demo for this post.
+    Chrome from js/kr-viz.js. What stays here is CMA-ES itself: the
+    sampling from a covariance ellipse, log-weighted recombination,
+    cumulative step-size adaptation and the rank-mu covariance update,
+    plus the drawing (cached contour background, the mean's trail, the
+    sample cloud, and the ellipse at one and two sigma).
+    ============================================================ */
+ (function () {
+   'use strict';
+   var wrap = document.getElementById('cma-demo');
+   if (!wrap) return;
+
+   var COS30 = Math.cos(Math.PI / 6), SIN30 = Math.sin(Math.PI / 6);
+   var CHI2 = 1.2533;                // E||N(0, I_2)||
+   var LANDS = {
+     valley: {
+       dom: {x0: -5, x1: 5, y0: -3.6, y1: 3.6},
+       opt: [1.2, 0.4], fopt: 0, start: [-3.8, -2.4],
+       f: function (x, y) {
+         var dx = x - 1.2, dy = y - 0.4;
+         var u = COS30 * dx + SIN30 * dy, v = -SIN30 * dx + COS30 * dy;
+         return u * u + 60 * v * v;
+       }
+     },
+     banana: {
+       dom: {x0: -2.2, x1: 2.2, y0: -1.0, y1: 3.0},
+       opt: [1, 1], fopt: 0, start: [-1.6, 2.5],
+       f: function (x, y) { var a = 1 - x, b = y - x * x; return a * a + 100 * b * b; }
+     },
+     rastrigin: {
+       dom: {x0: -4.5, x1: 4.5, y0: -3.3, y1: 3.3},
+       opt: [0, 0], fopt: 0, start: [-3.6, 2.4],
+       f: function (x, y) {
+         return 20 + x * x - 10 * Math.cos(2 * Math.PI * x)
+                   + y * y - 10 * Math.cos(2 * Math.PI * y);
+       }
+     },
+     basins: {
+       // deceptive: a wide, comfortable basin bottoming out at 0.55 and a
+       // narrow one bottoming out at 0, the global optimum, slightly better
+       dom: {x0: -5, x1: 5, y0: -3.6, y1: 3.6},
+       opt: [3.1, -1.4], fopt: 0, start: [-4.2, 2.8],
+       f: function (x, y) {
+         var ax = x + 2.4, ay = y - 0.6, bx = x - 3.1, by = y + 1.4;
+         return Math.min(0.28 * (ax * ax + ay * ay) + 0.55, 4.0 * (bx * bx + by * by));
+       }
+     }
+   };
+
+   var startM = null;               // dragged start point, world coords
+   var spare = null;                // cached second normal deviate
+
+   function span(land) {
+     return Math.max(land.dom.x1 - land.dom.x0, land.dom.y1 - land.dom.y0);
+   }
+   function sigma0(land, pct) { return span(land) * Math.pow(10, -2.6 + 2.3 * (pct / 100)); }
+   function muFrac(press) { return 0.62 - 0.5 * (press / 100); }
+
+   // recombination weights and the strategy constants derived from them
+   function selParams(lam, press) {
+     var mu = Math.max(2, Math.min(lam - 1, Math.round(lam * muFrac(press))));
+     var w = [], sum = 0, i;
+     for (i = 0; i < mu; i++) { w.push(Math.log(mu + 0.5) - Math.log(i + 1)); sum += w[i]; }
+     var sq = 0;
+     for (i = 0; i < mu; i++) { w[i] /= sum; sq += w[i] * w[i]; }
+     var muEff = 1 / sq, n = 2;
+     var cs = (muEff + 2) / (n + muEff + 5);
+     var ds = 1 + 2 * Math.max(0, Math.sqrt((muEff - 1) / (n + 1)) - 1) + cs;
+     var cmu = Math.min(0.9, 2 * (muEff - 2 + 1 / muEff) / ((n + 2) * (n + 2) + muEff));
+     return {mu: mu, w: w, muEff: muEff, cs: cs, ds: ds, cmu: cmu};
+   }
+
+   // eigendecomposition of the symmetric 2x2 covariance [[a,b],[b,c]]
+   function eigen2(M) {
+     var a = M[0], b = M[1], c = M[2];
+     var tr2 = (a + c) / 2, disc = Math.sqrt(Math.max(0, (a - c) * (a - c) / 4 + b * b));
+     var l1 = Math.max(1e-14, tr2 + disc), l2 = Math.max(l1 * 1e-8, tr2 - disc);
+     var vx, vy;
+     if (Math.abs(b) > 1e-14) { vx = l1 - c; vy = b; }
+     else if (a >= c) { vx = 1; vy = 0; }
+     else { vx = 0; vy = 1; }
+     var nrm = Math.hypot(vx, vy) || 1;
+     return {l1: l1, l2: l2, c: vx / nrm, s: vy / nrm};
+   }
+   function randn(rng) {
+     if (spare !== null) { var t = spare; spare = null; return t; }
+     var u = 1 - rng(), v = rng();
+     var r = Math.sqrt(-2 * Math.log(u)), th = 2 * Math.PI * v;
+     spare = r * Math.sin(th);
+     return r * Math.cos(th);
+   }
+   function hexRgb(h) {
+     if (!h) return null;
+     h = h.replace('#', '');
+     if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+     if (h.length !== 6) return null;
+     var n = parseInt(h, 16);
+     return isNaN(n) ? null : [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+   }
+   function fmtNum(v) {
+     if (!isFinite(v)) return '…';
+     var a = Math.abs(v);
+     if (a !== 0 && (a >= 1000 || a < 0.001)) return v.toExponential(1);
+     if (a >= 10) return v.toFixed(1);
+     return v.toFixed(3);
+   }
+   function fmtCond(v) {
+     if (!isFinite(v)) return '…';
+     if (v >= 10000) return v.toExponential(1);
+     if (v >= 100) return Math.round(v) + '×';
+     return v.toFixed(1) + '×';
+   }
+
+   // contour background, cached per landscape + theme + size
+   var bg = {key: '', canvas: null};
+   function buildBg(land, name, c, W, H) {
+     var key = name + '|' + c.surface + '|' + W + 'x' + H;
+     if (key === bg.key && bg.canvas) return bg.canvas;
+     var surf = hexRgb(c.surface) || [255, 255, 255], ink = hexRgb(c.ink) || [43, 43, 43];
+     var w2 = Math.max(2, Math.round(W / 2)), h2 = Math.max(2, Math.round(H / 2));
+     var off = document.createElement('canvas');
+     off.width = w2; off.height = h2;
+     var g = off.getContext('2d');
+     var img = g.createImageData(w2, h2);
+     var vals = new Float64Array(w2 * h2);
+     var vmin = Infinity, vmax = -Infinity, i, j;
+     for (j = 0; j < h2; j++) {
+       var wy = land.dom.y1 - ((j + 0.5) / h2) * (land.dom.y1 - land.dom.y0);
+       for (i = 0; i < w2; i++) {
+         var wx = land.dom.x0 + ((i + 0.5) / w2) * (land.dom.x1 - land.dom.x0);
+         var v = Math.log(land.f(wx, wy) - land.fopt + 0.02);
+         vals[j * w2 + i] = v;
+         if (v < vmin) vmin = v;
+         if (v > vmax) vmax = v;
+       }
+     }
+     var BANDS = 13, range = (vmax - vmin) || 1;
+     for (i = 0; i < vals.length; i++) {
+       var band = Math.min(BANDS - 1, Math.floor(((vals[i] - vmin) / range) * BANDS));
+       var t = 0.03 + 0.33 * (band / (BANDS - 1)), p = i * 4;
+       img.data[p]     = Math.round(surf[0] + (ink[0] - surf[0]) * t);
+       img.data[p + 1] = Math.round(surf[1] + (ink[1] - surf[1]) * t);
+       img.data[p + 2] = Math.round(surf[2] + (ink[2] - surf[2]) * t);
+       img.data[p + 3] = 255;
+     }
+     g.putImageData(img, 0, 0);
+     bg = {key: key, canvas: off};
+     return off;
+   }
+
+   var viz = KRViz.mount('#cma-demo', {
+     seed: 20260807,
+     speed: 10,                    // generations per second: the ellipse stays watchable
+     canvases: {
+       map: {el: '#cmaCanvas',
+             height: function (w) { return Math.max(250, Math.min(380, w * 0.62)); }},
+       chart: {el: '#cmaChart', height: 120, mobile: {height: 230}}
+     },
+     buttons: ['run', 'restart'],
+     controls: [
+       {id: 'land', type: 'select', label: 'Landscape', value: 'valley', options: [
+         {value: 'valley', label: 'Narrow valley'}, {value: 'banana', label: 'Banana valley'},
+         {value: 'rastrigin', label: 'Egg carton'}, {value: 'basins', label: 'Two basins'}]},
+       {id: 'lambda', label: 'Population λ', min: 6, max: 80, step: 2, value: 24},
+       {id: 'sigma', label: 'Initial σ', min: 1, max: 100, value: 55, restart: true,
+        fmt: function (v) { return fmtNum(sigma0(LANDS[currentLand()], v)); }},
+       {id: 'press', label: 'Selection pressure', min: 5, max: 95, value: 50,
+        fmt: function (v) { return 'top ' + Math.round(muFrac(v) * 100) + '%'; }}
+     ],
+     stats: [
+       {id: 'gen', label: 'Generation'},
+       {id: 'best', label: 'Best fitness', tone: 's2', fmt: fmtNum},
+       {id: 'sigma', label: 'Step size σ', tone: 's3', fmt: fmtNum},
+       {id: 'cond', label: 'Ellipse stretch', fmt: fmtCond}
+     ],
+     charts: [{
+       canvas: 'chart',
+       panes: [
+         {label: 'BEST FITNESS (LOG)', log: true, series: [{key: 'best', tone: 's2'}]},
+         {label: 'STEP SIZE σ (LOG)', log: true, series: [{key: 'sigma', tone: 's3'}]}
+       ]
+     }],
+
+     init: function (ctx) {
+       var land = LANDS[ctx.controls.land];
+       var mean = (startM || land.start).slice();
+       spare = null;
+       return {land: land, mean: mean, sigma: sigma0(land, ctx.controls.sigma),
+               C: [1, 0, 1], ps: [0, 0], bestF: Infinity, bestGap: Infinity,
+               pop: [], trail: [mean.slice()]};
+     },
+
+     step: function (ctx) {
+       var st = ctx.state, land = st.land;
+       var lam = ctx.controls.lambda, sp = selParams(lam, ctx.controls.press);
+       var eg = eigen2(st.C), sd1 = Math.sqrt(eg.l1), sd2 = Math.sqrt(eg.l2);
+       var i, off = [];
+       for (i = 0; i < lam; i++) {
+         var z1 = randn(ctx.rng), z2 = randn(ctx.rng);
+         var y1 = eg.c * sd1 * z1 - eg.s * sd2 * z2;
+         var y2 = eg.s * sd1 * z1 + eg.c * sd2 * z2;
+         var x1 = st.mean[0] + st.sigma * y1, x2 = st.mean[1] + st.sigma * y2;
+         off.push({x1: x1, x2: x2, y1: y1, y2: y2, z1: z1, z2: z2, f: land.f(x1, x2)});
+       }
+       off.sort(function (a, b) { return a.f - b.f; });
+       if (off[0].f < st.bestF) {
+         st.bestF = off[0].f;
+         st.bestGap = Math.max(st.bestF - land.fopt, 1e-13);
+       }
+
+       // recombine the top mu with log weights
+       var yw1 = 0, yw2 = 0, zw1 = 0, zw2 = 0;
+       for (i = 0; i < sp.mu; i++) {
+         var o = off[i], w = sp.w[i];
+         yw1 += w * o.y1; yw2 += w * o.y2;
+         zw1 += w * o.z1; zw2 += w * o.z2;
+       }
+       var mNew = [st.mean[0] + st.sigma * yw1, st.mean[1] + st.sigma * yw2];
+
+       // cumulative step-size adaptation: C^(-1/2)(mNew-mean)/sigma = B*zw
+       var bz1 = eg.c * zw1 - eg.s * zw2, bz2 = eg.s * zw1 + eg.c * zw2;
+       var k = Math.sqrt(sp.cs * (2 - sp.cs) * sp.muEff);
+       st.ps[0] = (1 - sp.cs) * st.ps[0] + k * bz1;
+       st.ps[1] = (1 - sp.cs) * st.ps[1] + k * bz2;
+       var arg = (sp.cs / sp.ds) * (Math.hypot(st.ps[0], st.ps[1]) / CHI2 - 1);
+       st.sigma *= Math.exp(Math.max(-0.6, Math.min(0.6, arg)));
+       var sMin = span(land) * 1e-9, sMax = span(land) * 3;
+       if (st.sigma < sMin) st.sigma = sMin;
+       if (st.sigma > sMax) st.sigma = sMax;
+
+       // rank-mu covariance update
+       var ra = 0, rb = 0, rc = 0;
+       for (i = 0; i < sp.mu; i++) {
+         var o2 = off[i], w2 = sp.w[i];
+         ra += w2 * o2.y1 * o2.y1; rb += w2 * o2.y1 * o2.y2; rc += w2 * o2.y2 * o2.y2;
+       }
+       st.C[0] = (1 - sp.cmu) * st.C[0] + sp.cmu * ra;
+       st.C[1] = (1 - sp.cmu) * st.C[1] + sp.cmu * rb;
+       st.C[2] = (1 - sp.cmu) * st.C[2] + sp.cmu * rc;
+
+       st.mean = mNew;
+       st.trail.push(mNew.slice());
+       if (st.trail.length > 260) st.trail.shift();
+       st.pop = off;
+       ctx.record({best: st.bestGap, sigma: st.sigma});
+     },
+
+     draw: function (ctx) {
+       var st = ctx.state, c = ctx.colors, cv = ctx.canvas.map, g = cv.g;
+       var land = st.land, W = cv.w, H = cv.h;
+       function pxX(x) { return (x - land.dom.x0) / (land.dom.x1 - land.dom.x0) * W; }
+       function pxY(y) { return (land.dom.y1 - y) / (land.dom.y1 - land.dom.y0) * H; }
+
+       g.imageSmoothingEnabled = true;
+       g.drawImage(buildBg(land, ctx.controls.land, c, W, H), 0, 0, W, H);
+
+       // trajectory of the mean, fading with age
+       if (st.trail.length > 1) {
+         g.strokeStyle = c.s2; g.lineWidth = 1.8; g.lineJoin = 'round'; g.lineCap = 'round';
+         for (var t = 1; t < st.trail.length; t++) {
+           g.globalAlpha = 0.06 + 0.62 * (t / st.trail.length);
+           g.beginPath();
+           g.moveTo(pxX(st.trail[t - 1][0]), pxY(st.trail[t - 1][1]));
+           g.lineTo(pxX(st.trail[t][0]), pxY(st.trail[t][1]));
+           g.stroke();
+         }
+         g.globalAlpha = 1;
+       }
+       // sample cloud: one dot per offspring of the current generation
+       g.fillStyle = c.s1; g.globalAlpha = 0.8;
+       for (var i = 0; i < st.pop.length; i++) {
+         var sx = pxX(st.pop[i].x1), sy = pxY(st.pop[i].x2);
+         if (sx < -20 || sx > W + 20 || sy < -20 || sy > H + 20) continue;
+         g.beginPath(); g.arc(sx, sy, 2.4, 0, Math.PI * 2); g.fill();
+       }
+       g.globalAlpha = 1;
+
+       // covariance ellipse at one and two sigma
+       var eg = eigen2(st.C);
+       function ellipse(kSig) {
+         var sd1 = Math.sqrt(eg.l1), sd2 = Math.sqrt(eg.l2), STEPS = 44;
+         g.beginPath();
+         for (var i2 = 0; i2 <= STEPS; i2++) {
+           var th = (i2 / STEPS) * Math.PI * 2, ct = Math.cos(th), sn = Math.sin(th);
+           var wx = st.mean[0] + st.sigma * kSig * (eg.c * sd1 * ct - eg.s * sd2 * sn);
+           var wy = st.mean[1] + st.sigma * kSig * (eg.s * sd1 * ct + eg.c * sd2 * sn);
+           var px = pxX(wx), py = pxY(wy);
+           if (i2 === 0) g.moveTo(px, py); else g.lineTo(px, py);
+         }
+       }
+       g.strokeStyle = c.s3;
+       g.lineWidth = 2; ellipse(1); g.stroke();
+       g.lineWidth = 1.3; g.globalAlpha = 0.55; ellipse(2); g.stroke();
+       g.globalAlpha = 1;
+
+       // global optimum: ringed cross
+       var ox = pxX(land.opt[0]), oy = pxY(land.opt[1]);
+       g.strokeStyle = c.s4; g.lineWidth = 2;
+       g.beginPath(); g.arc(ox, oy, 7, 0, Math.PI * 2); g.stroke();
+       g.beginPath();
+       g.moveTo(ox - 4, oy); g.lineTo(ox + 4, oy);
+       g.moveTo(ox, oy - 4); g.lineTo(ox, oy + 4);
+       g.stroke();
+
+       // the mean
+       var mx = pxX(st.mean[0]), my = pxY(st.mean[1]);
+       g.beginPath(); g.arc(mx, my, 4.2, 0, Math.PI * 2);
+       g.fillStyle = c.s2; g.fill();
+       g.lineWidth = 1.5; g.strokeStyle = c.surface; g.stroke();
+
+       ctx.set('gen', ctx.iteration);
+       ctx.set('best', isFinite(st.bestGap) ? st.bestGap : NaN);
+       ctx.set('sigma', st.sigma);
+       ctx.set('cond', eg.l1 / eg.l2);
+     }
+   });
+
+   // read from the DOM, not from viz: this is called while the controls
+   // are still being built, before mount() has returned
+   function currentLand() {
+     var sel = wrap.querySelector('select');
+     return (sel && LANDS[sel.value]) ? sel.value : 'valley';
+   }
+
+   // click or drag on the map to plant the start point and restart there
+   var cv = document.getElementById('cmaCanvas'), dragging = false;
+   function plant(ev) {
+     var st = viz.ctx.state, land = st.land, rect = cv.getBoundingClientRect();
+     var x = land.dom.x0 + ((ev.clientX - rect.left) / rect.width) * (land.dom.x1 - land.dom.x0);
+     var y = land.dom.y1 - ((ev.clientY - rect.top) / rect.height) * (land.dom.y1 - land.dom.y0);
+     startM = [Math.max(land.dom.x0, Math.min(land.dom.x1, x)),
+               Math.max(land.dom.y0, Math.min(land.dom.y1, y))];
+     viz.restart();
+   }
+   cv.addEventListener('pointerdown', function (ev) {
+     dragging = true; cv.setPointerCapture(ev.pointerId); plant(ev);
+   });
+   cv.addEventListener('pointermove', function (ev) { if (dragging) plant(ev); });
+   cv.addEventListener('pointerup', function () { dragging = false; });
+   cv.addEventListener('pointercancel', function () { dragging = false; });
+   // a new landscape means the old start point is meaningless
+   wrap.addEventListener('change', function (ev) {
+     if (ev.target.tagName === 'SELECT') { startM = null; }
+   }, true);
+ })();
+ </script>
+</body>
+</html>
