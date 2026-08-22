@@ -5,11 +5,140 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 19 Aug 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Wed, 19 Aug 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Sat, 22 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Sat, 22 Aug 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Differential Evolution, Live</title>
+      <link>https://www.kenreid.co.uk/blog/differential-evolution-live.html</link>
+      <guid>https://www.kenreid.co.uk/blog/differential-evolution-live.html</guid>
+      <pubDate>Sat, 22 Aug 2026 00:00:00 +0000</pubDate>
+      <description>Differential evolution running live in your browser: a population whose own spread sets its step size hunts minima on four landscapes.</description>
+      <category>ai</category>
+      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/differential-evolution-live.html">View it on the site</a> to play with it.</em></p>
+ <h1>Differential Evolution, Live</h1>
+ <div class="blog-meta">
+ 22 August 2026 &middot;
+ <span class="blog-tag">ai</span>
+ </div>
+
+ <p>This is part seven of the Algorithms, Live series. So far <a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">ants have foraged</a>, <a href="https://www.kenreid.co.uk/blog/evolution-live.html">triangles have evolved</a>, <a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">a search has cooled its way out of bad valleys</a>, <a href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">a swarm has chased its own best guess</a>, <a href="https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html">a stuck search has widened its neighbourhood until it came unstuck</a>, and <a href="https://www.kenreid.co.uk/blog/cma-es-live.html">a cloud of samples has learned the shape of a valley</a>.</p>
+
+ <p>Today's algorithm is for hard continuous problems: differential evolution. It's one of the simpler of the evolutionary family, a few lines of arithmetic wrapped in a loop. I was first properly introduced to it by Prof. Cedric Gondro, at Michigan State University, as it's one of his favorite algorithms, so we were considering its use for genomic prediction problems.</p>
+
+ 
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Differential evolution (DE):</strong> an optimiser that improves a population of candidate points by adding scaled differences between population members to other members, keeping each change only if it scores better.</li>
+ <li><strong>Difference vector:</strong> the arrow from one population member to another (\(b - c\)). It encodes a direction and a distance the population currently spans, and it is the raw material every DE move is built from.</li>
+ <li><strong>Mutant / donor vector:</strong> the new candidate built by adding a scaled difference vector to a third member: \(a + F(b - c).\) Also called the donor, because it donates coordinates during crossover.</li>
+ <li><strong>Crossover rate (CR):</strong> the probability that each coordinate of the trial point is taken from the mutant rather than from the parent. High \(\mathit{CR}\) means big coordinated moves. Low \(\mathit{CR}\) means one-coordinate-at-a-time nudges.</li>
+ <li><strong>Scale factor (F):</strong> the multiplier on the difference vector. It scales the population's own geometry up or down but never replaces it.</li>
+ <li><strong>Premature convergence:</strong> the population huddling into one small region before it has found the best basin. In DE this is doubly fatal, because a huddled population can only generate tiny difference vectors, so it loses the ability to leave.</li>
+ </ul>
+ </div>
+
+ <h2>Subtraction as a search strategy</h2>
+
+ <p>Here is DE/rand/1/bin<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>: keep a population of points scattered over the landscape. To improve any one of them:</p>
+
+ <ol>
+ <li>Pick three other members at random: \(a\), \(b\), and \(c\).</li>
+ <li>Build a mutant: take the difference vector from \(c\) to \(b\), scale it by \(F\), and add it to \(a\). In symbols, \(a + F(b - c).\)</li>
+ <li>Crossover: build a trial point by taking each coordinate from the mutant with probability \(\mathit{CR}\), otherwise keeping the parent's coordinate. (One coordinate is always taken from the mutant, so the trial is never a clone of the parent.)</li>
+ <li>Greedy selection: score the trial. If it beats the parent, it takes the parent's seat in the population. If not, it is thrown away and the parent stays.</li>
+ </ol>
+
+ <p>Do that once for every member to create a generation. Repeat!</p>
+
+ <p>Every other optimiser in this series had to decide how big a move to make: simulated annealing had a cooling schedule, the genetic algorithm had a mutation rate, gradient descent has a learning rate. DE samples a difference between two of its own members and uses <em>that</em> as the move.</p>
+
+ <p>Early in a run the population is sprayed across the whole landscape, so the differences are long and the moves are large. As the population drains into a valley, its members bunch together, the differences between them shrink, and the move size shrinks too. </p>
+
+ <p>The difference vectors shrink, and they also point somewhere useful. If the population has settled along a curved valley, the differences between members mostly run along that valley, so mutants get launched along it too.</p>
+
+ <p>The population becomes a rough map of the terrain it's sitting on. The state you already have to keep doubles as the search geometry.</p>
+
+ <h2>Watch the geometry</h2>
+
+ <p>You probably get this now if you're reading through the series, but here goes: the demo below runs DE on a choice of four classic test landscapes. The coloured ground is the fitness surface (deeper blue is worse, the ground fades toward the background where it is low, and a small cross marks the global minimum). The blue dots are the population, and the green ring is the best point found so far.</p>
+
+ <p>Each generation, one member of the population gets its donor construction drawn in full: the three amber dots are \(a\), \(b\), and \(c\), the dashed amber arrow is the difference vector from \(c\) to \(b\), and the red arrow is that same vector scaled by \(F\) and grafted onto \(a\), ending at the mutant (the hollow red circle). The red diamond is the trial point after crossover, ringed if it won its duel with the parent.</p>
+
+ <p>Then compare the arrows at generation two with the arrows at generation sixty. Same code, same \(F\), and the moves have shrunk by orders of magnitude because the population did.</p>
+
+ 
+
+ <h2>F, CR, and a population of eight</h2>
+
+ <p><strong>Drop \(\boldsymbol{F}\) to 0.1 on the Egg carton.</strong> Every move is now a tenth of a population difference, so members can only creep to the nearest dimple. The spread collapses early, usually before anyone has found the central basin.</p>
+
+ <p>Then the trap springs. A huddled population can only make tiny difference vectors, so the step size follows the spread down and the search is welded shut. Self-scaling, run in reverse. The best-fitness line goes flat while the spread line dives, and that is premature convergence.</p>
+
+ <p><strong>Now push \(\boldsymbol{F}\) to 1.8.</strong> Every mutant overshoots the region the population spans, so the population becomes a spray. The spread line stops falling, the mean step stays huge, and best fitness improves only by luck. DE needs the population to contract for its thermometer to read cooler. At \(F\) this high, contraction never begins.</p>
+
+ <p><strong>Set \(\boldsymbol{\mathit{CR}}\) near zero on the Banana valley.</strong> Each trial now differs from its parent in a single coordinate, so the search moves like a rook: horizontally or vertically, never diagonally. The banana valley is curved, and progress along it needs both coordinates to change together.</p>
+
+ <p>Watch the population inch along in tiny axis-aligned stair steps. Then push \(\mathit{CR}\) back up to 0.9 and watch it slide along the valley in coordinated diagonal moves. \(\mathit{CR}\) is the knob that decides whether DE moves one coordinate at a time or as whole vectors.</p>
+
+ <p><strong>Shrink the population to 8.</strong> The difference vectors are now drawn from a pool of a few dozen possible pairs, so the same handful of directions gets recycled over and over.</p>
+
+ <p>Diversity is essential and a tiny population runs out of it almost immediately: fast convergence, frequently to the wrong dimple. The genetic algorithm in part two had the same failure for the same reason, a gene pool too small to explore with.</p>
+
+ <h2>The missing knob</h2>
+
+ <p>Put this next to the genetic algorithm from part two and the family resemblance is obvious: a population, mutation, crossover, selection. The GA shuffled bits and letters. DE does arithmetic on real vectors. The GA made mutation from coin flips and a fixed rate you had to tune. DE makes mutation out of the population itself, so the operator adapts as the population does.</p>
+
+ <p>And the GA ran a selection lottery where fit parents got more tickets. DE holds one duel per seat, child against its own parent, winner sits. The best member can only be replaced by something better.</p>
+
+ <p>Its sophisticated cousin <a href="https://www.kenreid.co.uk/blog/cma-es-live.html">CMA-ES</a> learns an explicit statistical model of where good moves live and updates it with some fairly serious mathematics. DE gets a decent share of the same benefit, steps that stretch along the good directions and shrink as the search closes in, using subtraction.</p>
+
+ <p>It is dumber than CMA-ES generally, but very much stands on its own, regardless!</p>
+
+ <h2>Where DE turns up in practice</h2>
+
+ <p>Storn and Price introduced it in 1997<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>, it won early optimisation competitions, and it is still a default first try in engineering optimisation: antenna design, power systems, chemical process tuning, anywhere someone has a black-box simulator with a dozen real-valued dials. The survey literature on its variants runs to hundreds of papers<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+
+ <p>You can buy adaptivity: learned models, schedules, meta-parameters. Or you can arrange the algorithm so the state it already keeps <em>is</em> the adaptation. DE gets self-scaling search out of a subtraction.</p>
+
+ <p>Go and set the Egg carton running, click somewhere daft to strand the population in a corner, and watch the arrows do the rest.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Why is it called "differential" evolution?</summary>
+ <p>For the difference vectors: every mutation is built from the difference between two population members. It has nothing to do with differential equations or with derivatives.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>How do I pick F and CR in practice?</summary>
+ <p>The folklore defaults hold up surprisingly well: \(F\) between 0.5 and 0.9, \(\mathit{CR}\) around 0.9. This demo starts at \(F = 0.8\), \(\mathit{CR} = 0.9\). Low \(\mathit{CR}\) only helps when your variables are independent of each other, which you rarely know in advance, so high \(\mathit{CR}\) is the safer bet. If you'd rather not choose at all, self-adaptive variants such as jDE and SaDE evolve \(F\) and \(\mathit{CR}\) alongside the solutions, and the Das and Suganthan survey covers them at length<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Doesn't greedy selection cause the premature convergence you just demonstrated?</summary>
+ <p>Less than you'd think. The duel is greedy about <em>who survives</em>, but the moves themselves come from the whole population's geometry, and that keeps exploration alive as long as the population is spread out. What kills the search in the \(F = 0.1\) experiment is the spread collapsing before the good basin is found. Greedy replacement plus population-shaped mutation is a surprisingly stable pairing, and it's a big part of why DE needs so little babysitting.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Storn, R., &amp; Price, K. (1997). Differential Evolution - A Simple and Efficient Heuristic for global Optimization over Continuous Spaces. <em>Journal of Global Optimization</em>, 11(4), 341&ndash;359. <a href="https://doi.org/10.1023/A:1008202821328" target="_blank" rel="noopener">https://doi.org/10.1023/A:1008202821328</a>
+          </li>
+          <li id="ref-2">
+            Das, S., &amp; Suganthan, P. N. (2011). Differential Evolution: A Survey of the State-of-the-Art. <em>IEEE Transactions on Evolutionary Computation</em>, 15(1), 4&ndash;31. <a href="https://doi.org/10.1109/TEVC.2010.2059031" target="_blank" rel="noopener">https://doi.org/10.1109/TEVC.2010.2059031</a>
+          </li>
+        </ol>
+
+ ]]></content:encoded>
+    </item>
     <item>
       <title>CMA-ES, Live</title>
       <link>https://www.kenreid.co.uk/blog/cma-es-live.html</link>
@@ -4370,91 +4499,6 @@ return [post for _score, _date, post in ranked[:3]]</code></pre>
       <description>239 of my photographs plotted on an interactive world map, this is how the photo map works.</description>
       <category>technology</category>
       <category>photography</category>
-      <content:encoded><![CDATA[
-        <h1>Putting My Photos on a Map</h1>
-        <div class="blog-meta">
-          14 July 2026 &middot;
-          <span class="blog-tag">technology</span>
-          <span class="blog-tag">photography</span>
-        </div>
-
-        <p>My photography spans two countries I've lived in and a handful I've visited, and a plain grid of thumbnails hides that storytelling, sadly. So, I decided to try my hand with <a href="https://www.kenreid.co.uk/map.html">a photo map</a>: an interactive world map where each marker is a place I've photographed. Click a marker and you get a popup of thumbnails; click a thumbnail and the whole region opens as a full-screen slideshow. This is the how to, as part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
-
-        <div class="plain-english-box">
-          <h2>Quick jargon guide</h2>
-          <ul>
-            <li><strong>Leaflet:</strong> the standard open-source JavaScript library for interactive maps. It draws the map, handles panning and zooming, and places markers; it's the engine under a huge share of the web's non-Google maps.</li>
-            <li><strong>Tile server:</strong> where the actual map imagery comes from. Maps are served as a grid of small square images ("tiles") drawn on demand as you pan and zoom.</li>
-            <li><strong>Geotagging:</strong> attaching a location to a photo, either automatically (phones embed GPS in the file) or by hand (me, squinting at a map, going "that was definitely Falkirk").</li>
-            <li><strong>Marker / popup:</strong> the pin on the map and the bubble that opens when you click it.</li>
-            <li><strong>Deep link:</strong> a URL that opens the page in a specific state, like the map already zoomed to one region.</li>
-          </ul>
-        </div>
-
-        <h2>The data</h2>
-
-        <p>The obvious way to geotag photos is to read the GPS coordinates cameras embed in their files. My photos mostly don't have any: they come from a real camera without GPS, not a phone, and even when coordinates exist I strip metadata from published files, usually due to not being super careful about backing up my photos over the years, so some of these are screenshots from websites I put them (GuruShots!). So the map's data is a single hand-maintained JSON file: a list of 29 named regions, each with one latitude/longitude pair and the list of photo numbers taken there, 239 photos placed so far.</p>
-
-<pre><code class="language-js">{
-  "name": "Falkirk",
-  "lat": 56.0011, "lng": -3.7835,
-  "photos": ["135", "141", "197", "..."]
-}</code></pre>
-
-        <p>Placing photos by hand sounds like a chore and mildly is but it's not awful either. A region pin says "around Falkirk", never "this street, this house, this ruin", which matters both for <a href="https://www.kenreid.co.uk/blog/abandoned-places-i-photograph.html">the abandoned places</a> (some locations shouldn't be advertised) and for anywhere near where people live. And meaning: "University of Stirling" and "Ochil Hills" are how I think about where photos were taken, not coordinates. </p>
-
-        <h2>The map</h2>
-
-        <p>The mapping library is <a href="https://leafletjs.com/" target="_blank" rel="noopener noreferrer">Leaflet</a>, and in keeping with <a href="https://www.kenreid.co.uk/blog/self-hosting-your-fonts.html">house policy</a> the library itself is served from this site, not a CDN. The tiles (the map imagery) are external however, coming from CARTO's free basemaps. There are two tile styles, a light one and a dark one, and the map swaps between them when you toggle the site's theme.</p>
-
-        <figure>
-          <img class="theme-img-light" src="https://www.kenreid.co.uk/blog/img/map/photo-map-light.webp" alt="The photo map: a world map with red circular markers showing photo counts across Scotland, Europe, and the United States" width="1110" height="649" loading="lazy" style="width:100%; border-radius:8px;">
-          <img class="theme-img-dark" src="https://www.kenreid.co.uk/blog/img/map/photo-map-dark.webp" alt="The photo map: a world map with red circular markers showing photo counts across Scotland, Europe, and the United States" width="1110" height="649" loading="lazy" style="width:100%; border-radius:8px;">
-          <figcaption class="figure-note">The map as it stands: 29 regions, 239 photos placed. Tiles &copy; CARTO / OpenStreetMap contributors.</figcaption>
-        </figure>
-
-        <h2>Markers, popups, and the slideshow</h2>
-
-        <p>Each region renders as one circular marker showing its photo count, its size scaled gently with the number (34 to 52 pixels, so Falkirk's 28 photos read bigger than Dublin's one without turning into a bubble chart). I skipped marker-clustering plugins entirely: hand-curated regions <em>are</em> the clustering, done once, with better names than any algorithm would pick.</p>
-
-        <p>Clicking a marker opens a popup with the region's name and up to nine thumbnails; clicking any thumbnail opens the region's <em>entire</em> photo set as a lightbox slideshow, starting from the one you picked. The thumbnails are the same small WebP files the <a href="https://www.kenreid.co.uk/gallery.html">gallery</a> uses, and the slideshow pulls the full-resolution originals from <a href="https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html">the GitHub release where they live</a>. The map also cooperates with the rest of the site: gallery photos with a known place show a location label linking to the map pre-zoomed on that region, via a small <code>?region=</code> parameter in the URL, so the command palette / search function (CTRL + K) can show you places on the map when you search for, say, "East Lansing".</p>
-
-        <h2>If you want one of these</h2>
-
-        <p>The real hurdle isn't the code, it's the data. Leaflet's tutorial gets a map with markers running super quickly; deciding where 239 photos were taken took considerably longer, spread over batches (my git history contains the commit "Geotag batch: Falkirk, Falkland, Lansing added; 63 more photos placed", which tells you how it actually went). Start coarse: a dozen regions, big radii, photos you're sure about. I'll add more when I'm running low on bigger ideas to add to the site!</p>
-
-        <p>If your photos <em>do</em> have GPS data (phone photographers, this is you), your version of the data file can be generated by a script reading the coordinates, snapping them to a sensible grid, and naming clusters after the nearest town. Consider still doing the naming pass by hand; "Grandma's village" beats "cluster_17" forever. And whatever you do, check what location data you're publishing before you publish it: the same GPS metadata that makes the map easy also tells the internet where you sleep.</p>
-
-        <div class="faq-section">
-          <h2>Common questions</h2>
-
-          <details class="faq-item">
-            <summary>Why not just use the tags in the gallery for places?</summary>
-            <p>The gallery's tags describe what's <em>in</em> a photo (wildlife, architecture, silhouette) and are <a href="https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html">generated by a vision model</a>; places are about where I was standing, which no model can see. The two systems complement each other: tags answer "show me the wildlife", the map answers "show me Scotland".</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Is relying on free map tiles safe?</summary>
-            <p>It's a dependency, like any third party. CARTO's free tier is intended for this scale, and if it ever went away, Leaflet doesn't care where tiles come from: OpenStreetMap's own servers, another provider, or self-hosted tiles all slot into the same line of code. The data file, which is the part with my work in it, is mine and portable.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>How accurate are the pins?</summary>
-            <p>Deliberately imprecise.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Does the map work offline?</summary>
-            <p>Partially. The page and its data are cached by the site's <a href="https://www.kenreid.co.uk/blog/reading-this-site-offline.html">service worker</a>, but tiles come from a third party the worker deliberately ignores, so offline you'd get markers floating on grey.</p>
-          </details>
-        </div>
-
-        
-
-
-        <hr style="margin: 40px 0;">
-        <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
-      ]]></content:encoded>
     </item>
     <item>
       <title>Self-Hosting Your Fonts</title>

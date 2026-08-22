@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="Differential evolution running live in your browser: a population whose own spread sets its step size hunts minima on four landscapes.">
+ <meta name="keywords" content="ai">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Differential Evolution, Live - Ken Reid</title>
+ <meta property="og:title" content="Differential Evolution, Live">
+ <meta property="og:description" content="Differential evolution running live in your browser: a population whose own spread sets its step size hunts minima on four landscapes.">
+ <meta property="og:image" content="https://www.kenreid.co.uk/blog/img/diffevo/diffevo-og.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/differential-evolution-live.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Differential Evolution, Live">
+ <meta name="twitter:description" content="Differential evolution running live in your browser: a population whose own spread sets its step size hunts minima on four landscapes.">
+ <meta name="twitter:image" content="https://www.kenreid.co.uk/blog/img/diffevo/diffevo-og.png">
+ <meta name="citation_title" content="Differential Evolution, Live">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/08/22">
+ <meta name="citation_online_date" content="2026/08/22">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/differential-evolution-live.html">
+ <meta name="DC.title" content="Differential Evolution, Live">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-08-22">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="img/diffevo/diffevo-hero.webp">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/differential-evolution-live.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "Differential Evolution, Live",
+ "description": "Differential evolution running live in your browser: a population whose own spread sets its step size hunts minima on four landscapes.",
+ "image": "https://www.kenreid.co.uk/blog/img/diffevo/diffevo-og.png",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-08-22",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["differential evolution", "evolutionary computation", "interactive", "optimization", "metaheuristics"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "Differential Evolution, Live",
+       "item": "https://www.kenreid.co.uk/blog/differential-evolution-live.html"
+     }
+   ]
+ }
+ </script>
+ <style>
+   /* Series: s1 = landscape/population, s2 = best point, s3 = donor geometry, s4 = mutant/trial. */
+ </style>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <main id="main-content">
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/diffevo/diffevo-hero.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">Differential Evolution, Live</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">Differential Evolution, Live</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+ 
+ <div class="blog-post">
+ <h1>Differential Evolution, Live</h1>
+ <div class="blog-meta">
+ 22 August 2026 &middot;
+ <span class="blog-tag">ai</span>
+ </div>
+
+ <p>This is part seven of the Algorithms, Live series. So far <a href="ant-colony-live.html">ants have foraged</a>, <a href="evolution-live.html">triangles have evolved</a>, <a href="simulated-annealing-live.html">a search has cooled its way out of bad valleys</a>, <a href="particle-swarm-live.html">a swarm has chased its own best guess</a>, <a href="variable-neighbourhood-search-live.html">a stuck search has widened its neighbourhood until it came unstuck</a>, and <a href="cma-es-live.html">a cloud of samples has learned the shape of a valley</a>.</p>
+
+ <p>Today's algorithm is for hard continuous problems: differential evolution. It's one of the simpler of the evolutionary family, a few lines of arithmetic wrapped in a loop. I was first properly introduced to it by Prof. Cedric Gondro, at Michigan State University, as it's one of his favorite algorithms, so we were considering its use for genomic prediction problems.</p>
+
+ <noscript><p><strong>The interactive parts of this post require JavaScript.</strong> The prose will still make sense, but the demo will be sadly inert.</p></noscript>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Differential evolution (DE):</strong> an optimiser that improves a population of candidate points by adding scaled differences between population members to other members, keeping each change only if it scores better.</li>
+ <li><strong>Difference vector:</strong> the arrow from one population member to another (\(b - c\)). It encodes a direction and a distance the population currently spans, and it is the raw material every DE move is built from.</li>
+ <li><strong>Mutant / donor vector:</strong> the new candidate built by adding a scaled difference vector to a third member: \(a + F(b - c).\) Also called the donor, because it donates coordinates during crossover.</li>
+ <li><strong>Crossover rate (CR):</strong> the probability that each coordinate of the trial point is taken from the mutant rather than from the parent. High \(\mathit{CR}\) means big coordinated moves. Low \(\mathit{CR}\) means one-coordinate-at-a-time nudges.</li>
+ <li><strong>Scale factor (F):</strong> the multiplier on the difference vector. It scales the population's own geometry up or down but never replaces it.</li>
+ <li><strong>Premature convergence:</strong> the population huddling into one small region before it has found the best basin. In DE this is doubly fatal, because a huddled population can only generate tiny difference vectors, so it loses the ability to leave.</li>
+ </ul>
+ </div>
+
+ <h2>Subtraction as a search strategy</h2>
+
+ <p>Here is DE/rand/1/bin<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>: keep a population of points scattered over the landscape. To improve any one of them:</p>
+
+ <ol>
+ <li>Pick three other members at random: \(a\), \(b\), and \(c\).</li>
+ <li>Build a mutant: take the difference vector from \(c\) to \(b\), scale it by \(F\), and add it to \(a\). In symbols, \(a + F(b - c).\)</li>
+ <li>Crossover: build a trial point by taking each coordinate from the mutant with probability \(\mathit{CR}\), otherwise keeping the parent's coordinate. (One coordinate is always taken from the mutant, so the trial is never a clone of the parent.)</li>
+ <li>Greedy selection: score the trial. If it beats the parent, it takes the parent's seat in the population. If not, it is thrown away and the parent stays.</li>
+ </ol>
+
+ <p>Do that once for every member to create a generation. Repeat!</p>
+
+ <p>Every other optimiser in this series had to decide how big a move to make: simulated annealing had a cooling schedule, the genetic algorithm had a mutation rate, gradient descent has a learning rate. DE samples a difference between two of its own members and uses <em>that</em> as the move.</p>
+
+ <p>Early in a run the population is sprayed across the whole landscape, so the differences are long and the moves are large. As the population drains into a valley, its members bunch together, the differences between them shrink, and the move size shrinks too. </p>
+
+ <p>The difference vectors shrink, and they also point somewhere useful. If the population has settled along a curved valley, the differences between members mostly run along that valley, so mutants get launched along it too.</p>
+
+ <p>The population becomes a rough map of the terrain it's sitting on. The state you already have to keep doubles as the search geometry.</p>
+
+ <h2>Watch the geometry</h2>
+
+ <p>You probably get this now if you're reading through the series, but here goes: the demo below runs DE on a choice of four classic test landscapes. The coloured ground is the fitness surface (deeper blue is worse, the ground fades toward the background where it is low, and a small cross marks the global minimum). The blue dots are the population, and the green ring is the best point found so far.</p>
+
+ <p>Each generation, one member of the population gets its donor construction drawn in full: the three amber dots are \(a\), \(b\), and \(c\), the dashed amber arrow is the difference vector from \(c\) to \(b\), and the red arrow is that same vector scaled by \(F\) and grafted onto \(a\), ending at the mutant (the hollow red circle). The red diamond is the trial point after crossover, ringed if it won its duel with the parent.</p>
+
+ <p>Then compare the arrows at generation two with the arrows at generation sixty. Same code, same \(F\), and the moves have shrunk by orders of magnitude because the population did.</p>
+
+ <div class="kr-viz" id="de-demo">
+   <canvas id="deCanvas" height="360" role="img" aria-label="Animated differential evolution demo: a population of dots hunts the minimum of a coloured fitness landscape. Each generation one dot is spotlighted with its donor construction: three population members, the dashed difference vector between two of them, that vector scaled and attached to the third, and the resulting mutant and trial points." class="kr-interactive"></canvas>
+   <div class="kr-toolbar" data-kr-toolbar></div>
+   <div class="kr-sliders" data-kr-sliders></div>
+   <div class="kr-stats" data-kr-stats></div>
+   <canvas id="deChart" class="kr-chart" height="120" role="img" aria-label="Live charts on logarithmic scales: best fitness over generations, and population spread over generations."></canvas>
+   <p class="kr-note"><strong>Click (or tap) anywhere on the landscape</strong> to re-seed the whole population as a tight cluster around that spot and watch it fan out or slide home. Spread is the mean distance from each member to the population's centre. Mean step is the average length of \(F(b - c)\) this generation. Both charts use log scales, so self-scaling convergence shows up as a roughly straight downhill line. On the <em>Egg carton</em>, watch the population straddle several dimples before it commits. On the <em>Banana valley</em>, watch the difference vectors line up with the curve of the valley floor.</p>
+ </div>
+
+ <h2>F, CR, and a population of eight</h2>
+
+ <p><strong>Drop \(\boldsymbol{F}\) to 0.1 on the Egg carton.</strong> Every move is now a tenth of a population difference, so members can only creep to the nearest dimple. The spread collapses early, usually before anyone has found the central basin.</p>
+
+ <p>Then the trap springs. A huddled population can only make tiny difference vectors, so the step size follows the spread down and the search is welded shut. Self-scaling, run in reverse. The best-fitness line goes flat while the spread line dives, and that is premature convergence.</p>
+
+ <p><strong>Now push \(\boldsymbol{F}\) to 1.8.</strong> Every mutant overshoots the region the population spans, so the population becomes a spray. The spread line stops falling, the mean step stays huge, and best fitness improves only by luck. DE needs the population to contract for its thermometer to read cooler. At \(F\) this high, contraction never begins.</p>
+
+ <p><strong>Set \(\boldsymbol{\mathit{CR}}\) near zero on the Banana valley.</strong> Each trial now differs from its parent in a single coordinate, so the search moves like a rook: horizontally or vertically, never diagonally. The banana valley is curved, and progress along it needs both coordinates to change together.</p>
+
+ <p>Watch the population inch along in tiny axis-aligned stair steps. Then push \(\mathit{CR}\) back up to 0.9 and watch it slide along the valley in coordinated diagonal moves. \(\mathit{CR}\) is the knob that decides whether DE moves one coordinate at a time or as whole vectors.</p>
+
+ <p><strong>Shrink the population to 8.</strong> The difference vectors are now drawn from a pool of a few dozen possible pairs, so the same handful of directions gets recycled over and over.</p>
+
+ <p>Diversity is essential and a tiny population runs out of it almost immediately: fast convergence, frequently to the wrong dimple. The genetic algorithm in part two had the same failure for the same reason, a gene pool too small to explore with.</p>
+
+ <h2>The missing knob</h2>
+
+ <p>Put this next to the genetic algorithm from part two and the family resemblance is obvious: a population, mutation, crossover, selection. The GA shuffled bits and letters. DE does arithmetic on real vectors. The GA made mutation from coin flips and a fixed rate you had to tune. DE makes mutation out of the population itself, so the operator adapts as the population does.</p>
+
+ <p>And the GA ran a selection lottery where fit parents got more tickets. DE holds one duel per seat, child against its own parent, winner sits. The best member can only be replaced by something better.</p>
+
+ <p>Its sophisticated cousin <a href="cma-es-live.html">CMA-ES</a> learns an explicit statistical model of where good moves live and updates it with some fairly serious mathematics. DE gets a decent share of the same benefit, steps that stretch along the good directions and shrink as the search closes in, using subtraction.</p>
+
+ <p>It is dumber than CMA-ES generally, but very much stands on its own, regardless!</p>
+
+ <h2>Where DE turns up in practice</h2>
+
+ <p>Storn and Price introduced it in 1997<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>, it won early optimisation competitions, and it is still a default first try in engineering optimisation: antenna design, power systems, chemical process tuning, anywhere someone has a black-box simulator with a dozen real-valued dials. The survey literature on its variants runs to hundreds of papers<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+
+ <p>You can buy adaptivity: learned models, schedules, meta-parameters. Or you can arrange the algorithm so the state it already keeps <em>is</em> the adaptation. DE gets self-scaling search out of a subtraction.</p>
+
+ <p>Go and set the Egg carton running, click somewhere daft to strand the population in a corner, and watch the arrows do the rest.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Why is it called "differential" evolution?</summary>
+ <p>For the difference vectors: every mutation is built from the difference between two population members. It has nothing to do with differential equations or with derivatives.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>How do I pick F and CR in practice?</summary>
+ <p>The folklore defaults hold up surprisingly well: \(F\) between 0.5 and 0.9, \(\mathit{CR}\) around 0.9. This demo starts at \(F = 0.8\), \(\mathit{CR} = 0.9\). Low \(\mathit{CR}\) only helps when your variables are independent of each other, which you rarely know in advance, so high \(\mathit{CR}\) is the safer bet. If you'd rather not choose at all, self-adaptive variants such as jDE and SaDE evolve \(F\) and \(\mathit{CR}\) alongside the solutions, and the Das and Suganthan survey covers them at length<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Doesn't greedy selection cause the premature convergence you just demonstrated?</summary>
+ <p>Less than you'd think. The duel is greedy about <em>who survives</em>, but the moves themselves come from the whole population's geometry, and that keeps exploration alive as long as the population is spread out. What kills the search in the \(F = 0.1\) experiment is the spread collapsing before the good basin is found. Greedy replacement plus population-shaped mutation is a surprisingly stable pairing, and it's a big part of why DE needs so little babysitting.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Storn, R., &amp; Price, K. (1997). Differential Evolution - A Simple and Efficient Heuristic for global Optimization over Continuous Spaces. <em>Journal of Global Optimization</em>, 11(4), 341&ndash;359. <a href="https://doi.org/10.1023/A:1008202821328" target="_blank" rel="noopener">https://doi.org/10.1023/A:1008202821328</a>
+          </li>
+          <li id="ref-2">
+            Das, S., &amp; Suganthan, P. N. (2011). Differential Evolution: A Survey of the State-of-the-Art. <em>IEEE Transactions on Evolutionary Computation</em>, 15(1), 4&ndash;31. <a href="https://doi.org/10.1109/TEVC.2010.2059031" target="_blank" rel="noopener">https://doi.org/10.1109/TEVC.2010.2059031</a>
+          </li>
+        </ol>
+
+ </div>
+ </div>
+ </div>
+
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+
+<script src="../js/kr-viz.js"></script>
+ <script>
+ /* ============================================================
+    Differential Evolution, Live: the interactive demo for this post.
+    Chrome from js/kr-viz.js. What stays here is DE/rand/1/bin itself,
+    the test landscapes, and the drawing: a cached heatmap, the
+    population, and one individual's donor construction (a, b, c, the
+    difference vector, the mutant, the trial) spotlighted each
+    generation, with the spotlight rotating around the population.
+    ============================================================ */
+ (function () {
+   'use strict';
+   var wrap = document.getElementById('de-demo');
+   if (!wrap) return;
+
+   var LANDSCAPES = {
+     bowl: {
+       xmin: -4, xmax: 4, ymin: -4, ymax: 4, opt: [1.2, -0.8],
+       f: function (x, y) { var dx = x - 1.2, dy = y + 0.8; return dx * dx + dy * dy; }
+     },
+     banana: {
+       xmin: -2, xmax: 2, ymin: -1, ymax: 3, opt: [1, 1],
+       f: function (x, y) { var a = 1 - x, b = y - x * x; return a * a + 100 * b * b; }
+     },
+     eggcarton: {
+       xmin: -5.12, xmax: 5.12, ymin: -5.12, ymax: 5.12, opt: [0, 0],
+       f: function (x, y) {
+         return 20 + x * x - 10 * Math.cos(2 * Math.PI * x) + y * y - 10 * Math.cos(2 * Math.PI * y);
+       }
+     },
+     funnel: {
+       xmin: -5, xmax: 5, ymin: -5, ymax: 5, opt: [0, 0],
+       f: function (x, y) {
+         return -20 * Math.exp(-0.2 * Math.sqrt(0.5 * (x * x + y * y)))
+                - Math.exp(0.5 * (Math.cos(2 * Math.PI * x) + Math.cos(2 * Math.PI * y)))
+                + 20 + Math.E;
+       }
+     }
+   };
+
+   function hexRgb(h) {
+     h = h.replace('#', '');
+     if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+     return [parseInt(h.substr(0, 2), 16), parseInt(h.substr(2, 2), 16), parseInt(h.substr(4, 2), 16)];
+   }
+   function fmt(v) {
+     if (v === null || v === undefined || !isFinite(v)) return '…';
+     if (v === 0) return '0';
+     if (Math.abs(v) >= 100) return v.toFixed(1);
+     if (Math.abs(v) >= 0.001) return v.toFixed(4);
+     return v.toExponential(2);
+   }
+   function clampDomain(land, p) {
+     p[0] = Math.max(land.xmin, Math.min(land.xmax, p[0]));
+     p[1] = Math.max(land.ymin, Math.min(land.ymax, p[1]));
+     return p;
+   }
+
+   // heatmap, cached per landscape + theme + canvas size
+   var heatCache = {key: '', canvas: null};
+   function heatmap(land, name, c, W, H) {
+     var theme = document.documentElement.getAttribute('data-theme') || '';
+     var key = name + '|' + theme + '|' + W + 'x' + H;
+     if (heatCache.key === key && heatCache.canvas) return heatCache.canvas;
+     var gw = 220, gh = Math.max(2, Math.round(gw * H / Math.max(1, W)));
+     var off = document.createElement('canvas'); off.width = gw; off.height = gh;
+     var g = off.getContext('2d');
+     var img = g.createImageData(gw, gh);
+     var vals = new Float64Array(gw * gh);
+     var vmin = Infinity, vmax = -Infinity, r, q, v;
+     for (r = 0; r < gh; r++) {
+       var y = land.ymin + (r + 0.5) / gh * (land.ymax - land.ymin);
+       for (q = 0; q < gw; q++) {
+         var x = land.xmin + (q + 0.5) / gw * (land.xmax - land.xmin);
+         v = land.f(x, y);
+         vals[r * gw + q] = v;
+         if (v < vmin) vmin = v;
+         if (v > vmax) vmax = v;
+       }
+     }
+     var lo = hexRgb(c.surface), hi = hexRgb(c.s1);
+     var denom = Math.log(1 + vmax - vmin) || 1;
+     for (var k = 0; k < vals.length; k++) {
+       var t = Math.log(1 + vals[k] - vmin) / denom;
+       t = Math.floor(t * 14) / 14;             // banding for a contour-map feel
+       var m = 0.06 + 0.78 * t;
+       img.data[k * 4]     = Math.round(lo[0] + (hi[0] - lo[0]) * m);
+       img.data[k * 4 + 1] = Math.round(lo[1] + (hi[1] - lo[1]) * m);
+       img.data[k * 4 + 2] = Math.round(lo[2] + (hi[2] - lo[2]) * m);
+       img.data[k * 4 + 3] = 255;
+     }
+     g.putImageData(img, 0, 0);
+     heatCache = {key: key, canvas: off};
+     return off;
+   }
+
+   var viz = KRViz.mount('#de-demo', {
+     seed: 20260807,
+     speed: 4,                     // generations per second; DE has no speed slider
+     canvases: {
+       map: {el: '#deCanvas',
+             height: function (w) { return Math.max(260, Math.min(360, w * 0.6)); }},
+       chart: {el: '#deChart', height: 120, mobile: {height: 220}}
+     },
+     buttons: ['run', 'restart'],
+     controls: [
+       {id: 'land', type: 'select', label: 'Landscape', value: 'bowl', options: [
+         {value: 'bowl', label: 'Bowl'}, {value: 'banana', label: 'Banana valley'},
+         {value: 'eggcarton', label: 'Egg carton'}, {value: 'funnel', label: 'Funnel'}]},
+       {id: 'f', label: 'F (step scale)', min: 10, max: 200, step: 5, value: 80,
+        fmt: function (v) { return (v / 100).toFixed(2); }},
+       {id: 'cr', label: 'CR (crossover)', min: 0, max: 100, step: 5, value: 90,
+        fmt: function (v) { return (v / 100).toFixed(2); }},
+       {id: 'pop', label: 'Population', min: 8, max: 80, step: 2, value: 30}
+     ],
+     stats: [
+       {id: 'gen', label: 'Generation'},
+       {id: 'best', label: 'Best fitness', tone: 's2', fmt: fmt},
+       {id: 'spread', label: 'Spread', tone: 's3', fmt: fmt},
+       {id: 'step', label: 'Mean step', tone: 's4', fmt: fmt}
+     ],
+     charts: [{
+       canvas: 'chart',
+       panes: [
+         {label: 'BEST FITNESS (LOG)', log: true, series: [{key: 'best', tone: 's2'}]},
+         {label: 'POPULATION SPREAD (LOG)', log: true, series: [{key: 'spread', tone: 's3'}]}
+       ]
+     }],
+
+     init: function (ctx) {
+       var land = LANDSCAPES[ctx.controls.land];
+       var st = {land: land, pop: [], best: null, spot: null, lastStep: 0, lastSpread: 0};
+       for (var i = 0; i < ctx.controls.pop; i++) st.pop.push(randIndiv(ctx, st));
+       st.lastSpread = spreadOf(st.pop);
+       return st;
+     },
+
+     step: function (ctx) {
+       var st = ctx.state, land = st.land;
+       resize(ctx, st);
+       var F = ctx.controls.f / 100, CR = ctx.controls.cr / 100, n = st.pop.length;
+       if (n < 4) return;
+       var next = new Array(n), stepSum = 0, spotI = ctx.iteration % n;
+       for (var i = 0; i < n; i++) {
+         var ia, ib, ic;
+         do { ia = Math.floor(ctx.rng() * n); } while (ia === i);
+         do { ib = Math.floor(ctx.rng() * n); } while (ib === i || ib === ia);
+         do { ic = Math.floor(ctx.rng() * n); } while (ic === i || ic === ia || ic === ib);
+         var A = st.pop[ia].x, B = st.pop[ib].x, C = st.pop[ic].x;
+         var mutant = [A[0] + F * (B[0] - C[0]), A[1] + F * (B[1] - C[1])];
+         stepSum += F * Math.hypot(B[0] - C[0], B[1] - C[1]);
+         var jrand = ctx.rng() < 0.5 ? 0 : 1;
+         var trial = [0, 0];
+         for (var j = 0; j < 2; j++) {
+           trial[j] = (ctx.rng() < CR || j === jrand) ? mutant[j] : st.pop[i].x[j];
+         }
+         clampDomain(land, trial);
+         var tf = land.f(trial[0], trial[1]);
+         var accepted = tf <= st.pop[i].f;
+         next[i] = accepted ? {x: trial, f: tf} : st.pop[i];
+         considerBest(st, trial, tf);
+         if (i === spotI) {
+           st.spot = {parent: st.pop[i].x.slice(), a: A.slice(), b: B.slice(), c: C.slice(),
+                      mutant: mutant.slice(), trial: trial.slice(), accepted: accepted};
+         }
+       }
+       st.pop = next;
+       st.lastStep = stepSum / n;
+       st.lastSpread = spreadOf(st.pop);
+       ctx.record({best: st.best.f, spread: Math.max(st.lastSpread, 1e-12)});
+     },
+
+     draw: function (ctx) {
+       var st = ctx.state, c = ctx.colors, cv = ctx.canvas.map, g = cv.g;
+       var land = st.land, W = cv.w, H = cv.h;
+       function toPx(p) {
+         return [(p[0] - land.xmin) / (land.xmax - land.xmin) * W,
+                 (p[1] - land.ymin) / (land.ymax - land.ymin) * H];
+       }
+       function dot(x, y, r, color) {
+         g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fillStyle = color; g.fill();
+       }
+       function arrow(x1, y1, x2, y2, color, dashed) {
+         g.save();
+         g.strokeStyle = color; g.fillStyle = color; g.lineWidth = 1.8;
+         if (dashed) g.setLineDash([5, 4]);
+         g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke();
+         g.setLineDash([]);
+         var ang = Math.atan2(y2 - y1, x2 - x1);
+         g.beginPath(); g.moveTo(x2, y2);
+         g.lineTo(x2 - 8 * Math.cos(ang - 0.42), y2 - 8 * Math.sin(ang - 0.42));
+         g.lineTo(x2 - 8 * Math.cos(ang + 0.42), y2 - 8 * Math.sin(ang + 0.42));
+         g.closePath(); g.fill();
+         g.restore();
+       }
+       function label(x, y, txt) {
+         g.font = '700 11px Poppins, sans-serif';
+         g.lineWidth = 3; g.strokeStyle = c.surface;
+         g.strokeText(txt, x + 7, y - 6);
+         g.fillStyle = c.ink;
+         g.fillText(txt, x + 7, y - 6);
+       }
+
+       g.drawImage(heatmap(land, ctx.controls.land, c, W, H), 0, 0, W, H);
+
+       var op = toPx(land.opt);
+       g.strokeStyle = c.ink; g.lineWidth = 1.4; g.globalAlpha = 0.75;
+       g.beginPath();
+       g.moveTo(op[0] - 6, op[1]); g.lineTo(op[0] + 6, op[1]);
+       g.moveTo(op[0], op[1] - 6); g.lineTo(op[0], op[1] + 6);
+       g.stroke(); g.globalAlpha = 1;
+
+       for (var i = 0; i < st.pop.length; i++) {
+         var p = toPx(st.pop[i].x);
+         dot(p[0], p[1], 2.8, c.s1);
+       }
+       if (st.best) {
+         var bp = toPx(st.best.x);
+         g.beginPath(); g.arc(bp[0], bp[1], 6.5, 0, Math.PI * 2);
+         g.strokeStyle = c.s2; g.lineWidth = 2.2; g.stroke();
+         dot(bp[0], bp[1], 2.4, c.s2);
+       }
+       if (st.spot) {
+         var s = st.spot;
+         var pa = toPx(s.a), pb = toPx(s.b), pc = toPx(s.c);
+         var pm = toPx(s.mutant), pt = toPx(s.trial), pp = toPx(s.parent);
+         g.beginPath(); g.arc(pp[0], pp[1], 5.5, 0, Math.PI * 2);
+         g.strokeStyle = c.ink; g.lineWidth = 1.4; g.globalAlpha = 0.6; g.stroke();
+         g.globalAlpha = 1;
+         arrow(pc[0], pc[1], pb[0], pb[1], c.s3, true);      // the difference vector
+         arrow(pa[0], pa[1], pm[0], pm[1], c.s3, false);     // scaled and attached to a
+         dot(pa[0], pa[1], 4, c.s3); label(pa[0], pa[1], 'a');
+         dot(pb[0], pb[1], 4, c.s3); label(pb[0], pb[1], 'b');
+         dot(pc[0], pc[1], 4, c.s3); label(pc[0], pc[1], 'c');
+         dot(pm[0], pm[1], 4.5, c.s4); label(pm[0], pm[1], 'mutant');
+         g.beginPath(); g.arc(pt[0], pt[1], 5.5, 0, Math.PI * 2);
+         g.strokeStyle = c.s4; g.lineWidth = 2; g.setLineDash(s.accepted ? [] : [3, 3]);
+         g.stroke(); g.setLineDash([]);
+         label(pt[0], pt[1], s.accepted ? 'trial (kept)' : 'trial (rejected)');
+       }
+
+       ctx.set('gen', ctx.iteration);
+       ctx.set('best', st.best ? st.best.f : null);
+       ctx.set('spread', st.lastSpread);
+       ctx.set('step', ctx.iteration > 0 ? st.lastStep : null);
+     }
+   });
+
+   function considerBest(st, x, f) {
+     if (!st.best || f < st.best.f) st.best = {x: x.slice(), f: f};
+   }
+   function randIndiv(ctx, st) {
+     var land = st.land;
+     var x = [land.xmin + ctx.rng() * (land.xmax - land.xmin),
+              land.ymin + ctx.rng() * (land.ymax - land.ymin)];
+     var f = land.f(x[0], x[1]);
+     considerBest(st, x, f);
+     return {x: x, f: f};
+   }
+   function spreadOf(pop) {
+     if (!pop.length) return 0;
+     var mx = 0, my = 0, i;
+     for (i = 0; i < pop.length; i++) { mx += pop[i].x[0]; my += pop[i].x[1]; }
+     mx /= pop.length; my /= pop.length;
+     var s = 0;
+     for (i = 0; i < pop.length; i++) s += Math.hypot(pop[i].x[0] - mx, pop[i].x[1] - my);
+     return s / pop.length;
+   }
+   // the population slider resizes the pool in place: keep the fittest,
+   // top up with fresh draws, rather than throwing the run away
+   function resize(ctx, st) {
+     var want = ctx.controls.pop;
+     if (st.pop.length === want) return;
+     st.pop.sort(function (u, v) { return u.f - v.f; });
+     while (st.pop.length > want) st.pop.pop();
+     while (st.pop.length < want) st.pop.push(randIndiv(ctx, st));
+   }
+
+   // click or tap to re-seed the population as a tight cluster
+   document.getElementById('deCanvas').addEventListener('pointerdown', function (ev) {
+     var ctx = viz.ctx, st = ctx.state, cv = ctx.canvas.map;
+     var land = st.land, rect = cv.node.getBoundingClientRect();
+     var cx = land.xmin + (ev.clientX - rect.left) / rect.width * (land.xmax - land.xmin);
+     var cy = land.ymin + (ev.clientY - rect.top) / rect.height * (land.ymax - land.ymin);
+     var sx = 0.06 * (land.xmax - land.xmin), sy = 0.06 * (land.ymax - land.ymin);
+     function gauss() {
+       var u = Math.max(ctx.rng(), 1e-9), v = ctx.rng();
+       return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+     }
+     st.best = null; st.pop = []; st.spot = null;
+     for (var i = 0; i < ctx.controls.pop; i++) {
+       var x = clampDomain(land, [cx + gauss() * sx, cy + gauss() * sy]);
+       var f = land.f(x[0], x[1]);
+       considerBest(st, x, f);
+       st.pop.push({x: x, f: f});
+     }
+     st.lastSpread = spreadOf(st.pop);
+     viz.draw();
+   });
+ })();
+ </script>
+ <!-- KaTeX, lazy-loaded from the CDN and rendered once. Same pattern as the
+      Factorio post: the symbols are part of the argument here, so no nerd gate. -->
+ <script>
+ (function () {
+   var el = document.querySelector('.blog-post');
+   if (!el || !/\\[([]/.test(el.textContent)) return;
+   var css = document.createElement('link');
+   css.rel = 'stylesheet';
+   css.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';
+   document.head.appendChild(css);
+   var core = document.createElement('script');
+   core.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';
+   core.onload = function () {
+     var ar = document.createElement('script');
+     ar.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js';
+     ar.onload = function () {
+       window.renderMathInElement(el, {
+         delimiters: [{left: '\\[', right: '\\]', display: true},
+                      {left: '\\(', right: '\\)', display: false}],
+         throwOnError: false
+       });
+       // The jargon pass skips raw TeX, so re-run it now the equations are
+       // real elements and the surrounding prose can take its tooltips.
+       if (typeof applyJargonTooltips === 'function') applyJargonTooltips();
+     };
+     document.head.appendChild(ar);
+   };
+   document.head.appendChild(core);
+ })();
+ </script>
+</body>
+</html>
