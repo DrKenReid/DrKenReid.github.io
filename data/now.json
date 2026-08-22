@@ -1,16 +1,16 @@
 {
   "track": {
-    "name": "It Follows Official Trailer 1 - Horror Movie HD",
-    "artist": "Rotten Tomatoes Indie",
-    "url": "https://www.last.fm/music/Rotten+Tomatoes+Indie/_/It+Follows+Official+Trailer+1+-+Horror+Movie+HD",
-    "nowPlaying": false
+    "name": "White Flag (Radio Edit)",
+    "artist": "Dido",
+    "url": "https://www.last.fm/music/Dido/_/White+Flag+(Radio+Edit)",
+    "nowPlaying": true
   },
   "reading": [
     {
-      "title": "The Path of Ascension (The Path of Ascension #1)",
+      "title": "The Path of Ascension 2 (The Path of Ascension #2)",
       "author": "C. Mantis",
-      "link": "https://www.goodreads.com/review/show/6568054292?utm_medium=api&utm_source=rss",
-      "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1661063219l/62037390._SX50_.jpg"
+      "link": "https://www.goodreads.com/review/show/8875976091?utm_medium=api&utm_source=rss",
+      "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1665872641l/62836635._SX50_.jpg"
     },
     {
       "title": "Dungeon Crawler Carl (Dungeon Crawler Carl, #1)",
@@ -25,5 +25,5 @@
       "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344700029l/13436402._SX50_.jpg"
     }
   ],
-  "updated": "2026-08-17"
+  "updated": "2026-08-22"
 }

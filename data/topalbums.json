@@ -36,13 +36,6 @@
       "plays": 4
     },
     {
-      "name": "Trilogy",
-      "artist": "Carpenter Brut",
-      "url": "https://www.last.fm/music/Carpenter+Brut/Trilogy",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/d0c1914b6840db8f0bdeb105944e7933.jpg",
-      "plays": 3
-    },
-    {
       "name": "Beat Saber (Original Game Soundtrack)",
       "artist": "Jaroslav Beck",
       "url": "https://www.last.fm/music/Jaroslav+Beck/Beat+Saber+(Original+Game+Soundtrack)",
@@ -127,6 +120,13 @@
       "plays": 2
     },
     {
+      "name": "Trilogy",
+      "artist": "Carpenter Brut",
+      "url": "https://www.last.fm/music/Carpenter+Brut/Trilogy",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/d0c1914b6840db8f0bdeb105944e7933.jpg",
+      "plays": 2
+    },
+    {
       "name": "BRAT",
       "artist": "Charli xcx",
       "url": "https://www.last.fm/music/Charli+xcx/BRAT",
@@ -142,5 +142,5 @@
     }
   ],
   "period": "3month",
-  "updated": "2026-08-17"
+  "updated": "2026-08-22"
 }
