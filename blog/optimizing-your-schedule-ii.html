@@ -492,6 +492,9 @@ renderFooter('footer-section');</script>
         delimiters: [{ left: '\\[', right: '\\]', display: true }, { left: '\\(', right: '\\)', display: false }],
         throwOnError: false
       });
+      // The jargon pass skips raw TeX, so re-run it now the equations are
+      // real elements and the surrounding prose can take its tooltips.
+      if (typeof applyJargonTooltips === 'function') applyJargonTooltips();
     }
 
     initNerdMode({

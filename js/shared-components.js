@@ -1605,10 +1605,24 @@ function applyJargonTooltips() {
                 if (skipTags[parent.tagName]) {
                     return NodeFilter.FILTER_REJECT;
                 }
+                if (parent.classList && (parent.classList.contains('katex') ||
+                        parent.classList.contains('katex-display') ||
+                        parent.classList.contains('math-block'))) {
+                    return NodeFilter.FILTER_REJECT;
+                }
                 if (sourceBoxes.indexOf(parent) !== -1) {
                     return NodeFilter.FILTER_REJECT;
                 }
                 parent = parent.parentElement;
+            }
+
+            // Leave TeX source alone. A term like "F" or "CR" sitting inside
+            // \(...\) would be wrapped in an <abbr>, which splits the
+            // text node and stops KaTeX finding its delimiters. Posts that
+            // render math call this function again afterwards, so the prose
+            // around the finished equations still gets its tooltips.
+            if (/\\[([]/.test(node.nodeValue)) {
+                return NodeFilter.FILTER_REJECT;
             }
 
             if (!jargonRegex.test(node.nodeValue)) {
