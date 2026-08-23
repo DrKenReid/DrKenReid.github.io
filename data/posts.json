@@ -25,7 +25,7 @@
     "category": "Data & AI",
     "excerpt": "CMA-ES live in your browser: watch an optimiser learn the shape of a valley by stretching and rotating its search cloud until the narrow floor costs it nothing to walk along.",
     "url": "blog/cma-es-live.html",
-    "image": "img/photography/thumb/431.webp",
+    "image": "blog/img/cmaes/cmaes-hero.webp",
     "series": {
       "name": "Algorithms, Live",
       "part": 6
@@ -93,7 +93,7 @@
     "category": "Data & AI",
     "excerpt": "An interactive variable neighbourhood search solving the Travelling Salesman Problem in your browser: watch a tour untangle itself, then watch the search escape a local optimum by changing what counts as a nearby move.",
     "url": "blog/variable-neighbourhood-search-live.html",
-    "image": "img/photography/thumb/409.webp",
+    "image": "blog/img/vns/vns-hero.webp",
     "series": [
       {
         "name": "Algorithms, Live",
@@ -116,7 +116,7 @@
     "category": "Data & AI",
     "excerpt": "An interactive particle swarm optimiser in your browser: a flock of dots hunts a landscape none of them can see, steered by private memory and a single piece of gossip, and the sliders let you collapse the swarm on purpose.",
     "url": "blog/particle-swarm-live.html",
-    "image": "img/photography/thumb/186.webp",
+    "image": "blog/img/pso/pso-hero.webp",
     "series": {
       "name": "Algorithms, Live",
       "part": 4
@@ -163,7 +163,7 @@
     "category": "Data & AI",
     "excerpt": "An interactive introduction to simulated annealing: watch a ball escape local minima as you control the temperature, then race four algorithms live on the Travelling Salesman Problem in your browser.",
     "url": "blog/simulated-annealing-live.html",
-    "image": "img/photography/thumb/69.webp",
+    "image": "blog/img/annealing/annealing-hero.webp",
     "series": {
       "name": "Algorithms, Live",
       "part": 3
@@ -180,7 +180,7 @@
     "category": "Data & AI",
     "excerpt": "A genetic algorithm evolving a solution live in your browser: populations, crossover, mutation, and selection as sliders you can break. Fifty translucent triangles evolve the alphabet, and you supply the selection pressure.",
     "url": "blog/evolution-live.html",
-    "image": "img/photography/thumb/204.webp",
+    "image": "blog/img/evolution/evolution-hero.webp",
     "series": {
       "name": "Algorithms, Live",
       "part": 2
@@ -282,7 +282,7 @@
     "category": "Data & AI",
     "excerpt": "An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and see what evaporation is really for.",
     "url": "blog/ant-colony-live.html",
-    "image": "img/photography/thumb/290.webp",
+    "image": "blog/img/antcolony/antcolony-hero.webp",
     "series": {
       "name": "Algorithms, Live",
       "part": 1
