@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="Genetic programming in your browser: watch a population of expression trees evolve to fit a hidden curve, read the best program as it grows.">
+ <meta name="keywords" content="ai">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Genetic Programming, Live - Ken Reid</title>
+ <meta property="og:title" content="Genetic Programming, Live">
+ <meta property="og:description" content="Genetic programming in your browser: watch a population of expression trees evolve to fit a hidden curve, read the best program as it grows.">
+ <meta property="og:image" content="https://www.kenreid.co.uk/blog/img/gp/gp-og.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/genetic-programming-live.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Genetic Programming, Live">
+ <meta name="twitter:description" content="Genetic programming in your browser: watch a population of expression trees evolve to fit a hidden curve, read the best program as it grows.">
+ <meta name="twitter:image" content="https://www.kenreid.co.uk/blog/img/gp/gp-og.png">
+ <meta name="citation_title" content="Genetic Programming, Live">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/08/23">
+ <meta name="citation_online_date" content="2026/08/23">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/genetic-programming-live.html">
+ <meta name="DC.title" content="Genetic Programming, Live">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-08-23">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="img/gp/gp-hero.webp">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/genetic-programming-live.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "Genetic Programming, Live",
+ "description": "Genetic programming in your browser: watch a population of expression trees evolve to fit a hidden curve, read the best program as it grows.",
+ "image": "https://www.kenreid.co.uk/blog/img/gp/gp-og.png",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-08-23",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["genetic programming", "symbolic regression", "evolutionary computation", "interactive", "optimization"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "Genetic Programming, Live",
+       "item": "https://www.kenreid.co.uk/blog/genetic-programming-live.html"
+     }
+   ]
+ }
+ </script>
+ <style>
+   /* Series: s1 = operator nodes / avg size, s2 = best program's curve, s3 = leaves and accents, s4 = target data points. */
+   /* Particular to this post's widget. */
+   .gp-expr{ margin-top:10px; font-family:"Courier New", Courier, monospace; font-size:0.82em; line-height:1.5; color:var(--viz-ink); background:var(--viz-cell); border:1px solid var(--viz-border); border-radius:6px; padding:7px 10px; overflow-wrap:anywhere; }
+   .gp-expr .lbl{ font-family:Poppins, sans-serif; font-size:0.82em; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--viz-muted); margin-right:8px; }
+ </style>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <main id="main-content">
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/gp/gp-hero.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">Genetic Programming, Live</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">Genetic Programming, Live</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+ 
+ <div class="blog-post">
+ <h1>Genetic Programming, Live</h1>
+ <div class="blog-meta">
+ 23 August 2026 &middot;
+ <span class="blog-tag">ai</span>
+ </div>
+
+ <p>Genetic programming evolves programs. What gets bred is the program itself rather than the settings of a program: a working formula nobody wrote, assembled out of worse ones. I've published with this one: the belt-laying search in <a href="factorio-live.html">the Factorio post</a> is a genetic programming system, and it came out ahead of both other methods in the paper.</p>
+
+ <p>This is part eight of the series. So far:</p>
+ <ul>
+ <li><a href="ant-colony-live.html">ants have foraged</a></li>
+ <li><a href="evolution-live.html">triangles have evolved</a></li>
+ <li><a href="simulated-annealing-live.html">a search has cooled its way out of bad valleys</a></li>
+ <li><a href="particle-swarm-live.html">a swarm has chased its own best guess</a></li>
+ <li><a href="variable-neighbourhood-search-live.html">a stuck search has widened its neighbourhood until it came unstuck</a></li>
+ <li><a href="cma-es-live.html">a cloud of samples has learned the shape of a valley</a></li>
+ <li><a href="differential-evolution-live.html">a population has built its moves out of its own spread</a></li>
+ </ul>
+
+ <noscript><p><strong>The interactive parts of this post require JavaScript.</strong> The prose will still make sense, but the demo will be sadly inert.</p></noscript>
+
+ <p>In part two every individual was a fixed-length list of numbers: fifty triangles, ten genes each, five hundred dials for evolution to twiddle. The <em>shape</em> of that genome was decided by me, in advance, forever. Genetic programming throws that away. The genome is a tree of code, and the size and shape of the tree are up for grabs too. Evolution gets the structure as well as the settings.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Genetic programming (GP):</strong> an evolutionary algorithm whose individuals are programs (here, mathematical expressions) rather than fixed-length strings of parameters. Selection, crossover, and mutation operate on the program's tree.</li>
+ <li><strong>Expression tree:</strong> a program written as a tree, with operators at the branches and variables or constants at the leaves. sin(x)*(x+1.7) is a seven-node tree.</li>
+ <li><strong>Symbolic regression:</strong> searching for a formula that fits data, where the formula itself is the unknown, not just the coefficients of a formula you chose in advance.</li>
+ <li><strong>Crossover:</strong> in GP, snipping a random subtree out of one parent and grafting in a random subtree from another. Children can be bigger than both parents or smaller than either.</li>
+ <li><strong>Bloat:</strong> trees growing larger generation after generation without getting any fitter - famous disease of GP.</li>
+ <li><strong>Parsimony pressure:</strong> a fitness penalty per node, taxing big trees. The standard treatment for bloat.</li>
+ <li><strong>Intron:</strong> code that has no effect on a program's output, like a subtree multiplied by zero. Bloat is mostly introns.</li>
+ </ul>
+ </div>
+
+ <h2>An infinite haystack</h2>
+
+ <p>The demo below does symbolic regression. I sample forty points from a hidden target curve, and the population's job is to find an expression that fits them. Individuals are trees built from plus, minus, times, a protected divide (dividing by nearly zero returns 1 instead of exploding), sine, cosine, the variable x, and random constants.</p>
+
+ <p>Fitness is mean squared error over the sample points with the lower the better. A formula that outputs infinity or NaN anywhere gets a score so bad it amounts to a death sentence.</p>
+
+ <p>Part two's genome was a box with five hundred dials: finite and fixed. The space of all expressions is infinite, and almost all of it is garbage. A random tree comes out like cos(x/x)*0.3-x. There's no gradient to follow and no obvious notion of "nearby".</p>
+
+ <p>And yet a population of these things, bred and culled, finds working programs in seconds - which is kinda crazy.</p>
+
+ <h2>Trading subtrees</h2>
+
+ <p>The engine is the one you already know from part two: tournament selection, crossover, mutation, and a couple of elites carried into each new generation untouched. What changes is what crossover <em>means</em>. With trees, crossover picks a random subtree in each parent and swaps them. It works because subtrees are meaningful units in a way that random substrings of characters never are: sin(2*x) is a working component. Evolution here is trading parts, not shuffling letters.</p>
+
+ <p>The starting population is grown "ramped half-and-half", a mix of bushy full trees and scraggly random ones at several depths (GP-speak for seeding the pool with variety). I also cap tree depth at eight, partly for your device's sake and partly because, as you'll see, GP will take every inch you give it.</p>
+
+ <h2>Watch a program grow</h2>
+
+ <p>Below, a population of formulas is evolving against the data. The dots are the samples from the hidden curve, and the green line is the best formula so far, redrawn each generation so you can watch it snap toward the data.</p>
+
+ <p>The node diagram is that formula's actual code: blue nodes are operators, amber leaves are x and constants. The readout underneath prints it as maths you can read. Generations tick by a few per second so the motion stays watchable.</p>
+
+ <div class="kr-viz" id="gp-demo">
+   <canvas id="gpCanvas" height="340" role="img" aria-label="Animated genetic programming demo: sample points from a hidden target curve, the best evolved formula's curve fitting them, and the best program drawn as an expression tree that grows and changes as evolution proceeds"></canvas>
+   <div class="gp-expr" id="gpExprWrap"><span class="lbl">Best program</span><span id="gpExpr">&hellip;</span></div>
+   <div class="kr-toolbar" data-kr-toolbar></div>
+   <div class="kr-sliders" data-kr-sliders></div>
+   <div class="kr-stats" data-kr-stats></div>
+   <canvas id="gpChart" class="kr-chart" height="120" role="img" aria-label="Live charts: best error over generations on a logarithmic scale, and average program size in nodes over generations"></canvas>
+   <p class="kr-note"><strong>Best error</strong> is the mean squared distance between the green curve and the dots, and the left chart plots it on a log scale, so every gridline down is ten times better. <strong>Avg size</strong> is the mean node count across the whole population: the bloat detector, and the right chart is where you watch it take off. Switching target restarts the run, because a new curve is a new fitness landscape. Expect long flat stretches in the error and then sudden cliffs, which is crossover assembling the right subtree at last.</p>
+ </div>
+
+ <h2>The parsimony tax</h2>
+
+ <p><strong>Set parsimony to zero.</strong> Keep one eye on the average size chart. Error improves, then plateaus, while average size climbs and keeps climbing until it slams into the depth cap.</p>
+
+ <p>The population is now hauling around programs of a hundred-plus nodes that fit the data no better than a fifteen-node formula from fifty generations ago. This is bloat, the most famous disease of genetic programming and the reason the parsimony slider exists. Why a population would <em>choose</em> to bloat gets its own section below.</p>
+
+ <p><strong>Now slam parsimony to maximum.</strong> The opposite catastrophe --- every node now costs more fitness than accuracy is worth, so the population collapses to tiny, dumb expressions: a bare constant, a lonely x. They fit the data terribly, but cheaply. Parsimony is a tax, and like any tax, set it too high and nobody builds anything.</p>
+
+ <p><strong>Shrink the population to twenty.</strong> The run crawls or stalls. With so few trees, the pool of subtrees for crossover to trade is tiny, and once the population homogenises, mutation has to invent every new part from scratch.</p>
+
+ <p><strong>And drop mutation to zero</strong> while you're at it. Same lesson as part two, sharper here: crossover can only recombine subtrees that already exist somewhere in the population. Once the interesting ones are gone, they are gone.</p>
+
+ <h2>Bloat is evolved defensive code</h2>
+
+ <p>Subtree crossover is destructive: graft a random subtree into a random point of a working program and you'll usually break it.</p>
+
+ <p>Imagine two parents of equal fitness, one lean, one padded with introns: code that computes something and then multiplies it by zero, or adds a quantity and subtracts it again. When crossover hits the padded parent, odds are it lands in the padding, and the child behaves just like its parent. When it hits the lean one, it hits something that mattered.</p>
+
+ <p>Padded parents therefore produce more viable children. Padding spreads. Average size marches upward while fitness stands perfectly still.</p>
+
+ <p>The population is evolving <em>resistance to its own genetic operators</em>. No line of my code rewards defensive padding: it falls out of selection pressure, the same way real genomes are stuffed with non-coding DNA and real codebases accrete dead branches nobody dares delete (you don't want to see some of the folders I don't sync to GitHub here locally...).</p>
+
+ <p>The trees are, in effect, growing bubble wrap to survive crossover.</p>
+
+ <h2>Where GP turns up in practice</h2>
+
+ <p>Symbolic regression is the flagship application and it earns its keep in science. Fit a neural network to experimental data and you get a black box that interpolates. Fit an expression tree and you get an equation a human can read and argue with.</p>
+
+ <p>GP-based systems have rediscovered conservation laws from raw motion-capture data, and they get used to propose compact models in physics, materials science and ecology. When you want insight rather than raw predictive power, a ten-node formula beats a million-weight network, contrary to what many machine learning specialists would say.</p>
+
+ <p>NASA's ST5 mission needed a small satellite antenna with an awkward radiation pattern, and an evolutionary algorithm designed one<sup><a href="#ref-3" class="cite-ref">[3]</a></sup>. The result looks like a bent paperclip. No engineer would have drawn it, and it outperformed the conventionally designed alternative.</p>
+
+ <p>It flew in 2006. There is evolved hardware in space!</p>
+
+ <p>John Koza launched the field with his 1992 book<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> and then spent years compiling "human-competitive" results: GP runs that reinvented patented circuits and produced patentable designs of their own. </p>
+
+ <p>Every one of them lived in a domain with a fast, automatic, well-behaved fitness function. GP never became a general way to write software, and the field guide I recommend below<sup><a href="#ref-2" class="cite-ref">[2]</a></sup> is refreshingly frank about why. Where a score is cheap to compute and means what you want, GP is a live option. Everywhere else, the fitness function is the really hard part.</p>
+
+ <h2>Structure is a freedom</h2>
+
+ <p>Part two's lesson was that the fitness function is where the meaning lives: change what you reward and you change what evolves. Give evolution control over structure as well and it will use that control in every way that pays.</p>
+
+ <p>It builds the subtree that fits your curve. It also builds padding to shield that subtree from your own crossover operator, and for the same reason: both help its children survive.</p>
+
+ <p>Zero the parsimony and watch the trees fatten in real time, then tax them back down to stumps. Sit through thirty flat generations of the error chart until it falls off a cliff, because two mediocre parents happened to be holding complementary halves of the answer.</p>
+
+ <p>An infinite search space, almost all of it garbage, explored by trading parts and taxing waste. It should not work anything like as well as it does.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Is this how AI coding assistants work?</summary>
+ <p>No. A modern code assistant is a large language model: it learned from an enormous corpus of human-written code and generates likely text, so it turns up to every problem with a vast prior about what programs should look like. GP turns up knowing nothing. It has never seen a maths textbook. It has a score, and it searches blind. That makes it wasteful (it rediscovers wheels constantly) and also unprejudiced: it can find designs no human would write, like that antenna. Researchers have begun combining the two, with a language model proposing programs and an evolutionary loop scoring and selecting them.</p>
+ </details>
+
+
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Koza, J. R. (1992). <em>Genetic Programming: On the Programming of Computers by Means of Natural Selection</em>. MIT Press. ISBN 978-0262111706.
+          </li>
+          <li id="ref-2">
+            Poli, R., Langdon, W. B., &amp; McPhee, N. F. (2008). <em>A Field Guide to Genetic Programming</em>. Freely available at <a href="http://www.gp-field-guide.org.uk" target="_blank" rel="noopener">http://www.gp-field-guide.org.uk</a>
+          </li>
+          <li id="ref-3">
+            Lohn, J. D., Hornby, G. S., &amp; Linden, D. S. (2005). An evolved antenna for deployment on NASA's Space Technology 5 mission. In <em>Genetic Programming Theory and Practice II</em> (pp. 301&ndash;315). Springer.
+          </li>
+        </ol>
+
+ </div>
+ </div>
+ </div>
+
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+
+<script src="../js/kr-viz.js"></script>
+ <script>
+ /* ============================================================
+    Genetic Programming, Live: the interactive demo for this post.
+    Chrome from js/kr-viz.js. What stays here is the GP itself:
+    expression trees, tournament selection with a parsimony tax,
+    subtree crossover and mutation, plus the drawing of the fitted
+    curve and the best program as a tree.
+    ============================================================ */
+ (function () {
+   'use strict';
+   var wrap = document.getElementById('gp-demo');
+   if (!wrap) return;
+
+   var XMIN = -2.5, XMAX = 2.5, NPTS = 40;
+   var MAXD = 8;              // depth cap: bloat needs a ceiling on phones
+   var ELITES = 2, TOUR = 3, PX = 0.9;
+   var FUNCS = [
+     {op: '+', ar: 2}, {op: '-', ar: 2}, {op: '*', ar: 2}, {op: '/', ar: 2},
+     {op: 'sin', ar: 1}, {op: 'cos', ar: 1}
+   ];
+   var TARGETS = [
+     {f: function (x) { return 0.5 * x * x * x - x; }},
+     {f: function (x) { return Math.sin(2 * x) * 2 / (1 + x * x); }},
+     {f: function (x) { return Math.abs(x) - 1; }},
+     {f: function (x) { return 2 / (1 + Math.exp(-3 * x)) - 1; }}
+   ];
+   var exprEl = document.getElementById('gpExpr');
+   var seedBase = 20260807, restarts = 0;
+
+   function plotHFor(w) { return Math.round(Math.min(320, w * 0.72)); }
+   function fmtC(v) { return String(Math.round(v * 100) / 100); }
+   function fmtErr(e) {
+     if (!isFinite(e)) return '…';
+     return e >= 0.01 ? e.toFixed(3) : e.toExponential(1);
+   }
+
+   // ---- trees ----
+   function randTerm(rng) { return rng() < 0.5 ? {op: 'x'} : {op: 'c', v: rng() * 4 - 2}; }
+   function randFunc(rng) { return FUNCS[(rng() * FUNCS.length) | 0]; }
+   function grow(rng, d, maxd) {
+     if (d >= maxd || (d > 1 && rng() < 0.25)) return randTerm(rng);
+     var f = randFunc(rng), kids = [];
+     for (var i = 0; i < f.ar; i++) kids.push(grow(rng, d + 1, maxd));
+     return {op: f.op, kids: kids};
+   }
+   function full(rng, d, maxd) {
+     if (d >= maxd) return randTerm(rng);
+     var f = randFunc(rng), kids = [];
+     for (var i = 0; i < f.ar; i++) kids.push(full(rng, d + 1, maxd));
+     return {op: f.op, kids: kids};
+   }
+   function clone(n) {
+     var c = {op: n.op};
+     if (n.op === 'c') c.v = n.v;
+     if (n.kids) { c.kids = []; for (var i = 0; i < n.kids.length; i++) c.kids.push(clone(n.kids[i])); }
+     return c;
+   }
+   function count(n) {
+     var s = 1;
+     if (n.kids) for (var i = 0; i < n.kids.length; i++) s += count(n.kids[i]);
+     return s;
+   }
+   function depth(n) {
+     if (!n.kids || !n.kids.length) return 1;
+     var d = 0;
+     for (var i = 0; i < n.kids.length; i++) { var k = depth(n.kids[i]); if (k > d) d = k; }
+     return d + 1;
+   }
+   function listNodes(t) {
+     var out = [];
+     (function rec(n, parent, idx, d) {
+       out.push({node: n, parent: parent, idx: idx, d: d});
+       if (n.kids) for (var i = 0; i < n.kids.length; i++) rec(n.kids[i], n, i, d + 1);
+     })(t, null, -1, 1);
+     return out;
+   }
+   function evalTree(n, x) {
+     switch (n.op) {
+       case 'x': return x;
+       case 'c': return n.v;
+       case 'sin': return Math.sin(evalTree(n.kids[0], x));
+       case 'cos': return Math.cos(evalTree(n.kids[0], x));
+       case '+': return evalTree(n.kids[0], x) + evalTree(n.kids[1], x);
+       case '-': return evalTree(n.kids[0], x) - evalTree(n.kids[1], x);
+       case '*': return evalTree(n.kids[0], x) * evalTree(n.kids[1], x);
+       case '/':
+         var b = evalTree(n.kids[1], x);
+         return Math.abs(b) < 1e-6 ? 1 : evalTree(n.kids[0], x) / b;
+     }
+     return 0;
+   }
+   function infix(n) {
+     switch (n.op) {
+       case 'x': return 'x';
+       case 'c': return fmtC(n.v);
+       case 'sin': case 'cos': return n.op + '(' + infix(n.kids[0]) + ')';
+       default: return '(' + infix(n.kids[0]) + n.op + infix(n.kids[1]) + ')';
+     }
+   }
+   function infixTop(n) {
+     var s = infix(n);
+     if (s.charAt(0) === '(' && s.charAt(s.length - 1) === ')') s = s.slice(1, -1);
+     if (s.length > 200) s = s.slice(0, 200) + '…';
+     return s;
+   }
+
+   function evalMSE(tree, pts) {
+     var sum = 0;
+     for (var i = 0; i < pts.length; i++) {
+       var y = evalTree(tree, pts[i].x);
+       if (!isFinite(y)) return 1e9;
+       var d = y - pts[i].y;
+       sum += d * d;
+       if (!isFinite(sum)) return 1e9;
+     }
+     return sum / pts.length;
+   }
+   function makeInd(tree, pts) {
+     return {tree: tree, mse: evalMSE(tree, pts), nodes: count(tree)};
+   }
+
+   var viz = KRViz.mount('#gp-demo', {
+     seed: seedBase,
+     speed: 5.5,                   // generations per second: curve motion stays watchable
+     canvases: {
+       main: {el: '#gpCanvas', height: function (w) {
+         return w < 480 ? plotHFor(w) + 12 + Math.round(Math.min(250, w * 0.60))
+                        : Math.round(Math.max(260, Math.min(340, w * 0.45)));
+       }},
+       chart: {el: '#gpChart', height: 120, mobile: {height: 230}}
+     },
+     buttons: ['run', {id: 'restart', label: 'Restart', onClick: function (api) {
+       restarts++; api.seed(seedBase + restarts * 9973);
+     }}],
+     controls: [
+       {id: 'target', type: 'select', label: 'Target', value: '0', options: [
+         {value: '0', label: 'Cubic polynomial'}, {value: '1', label: 'Damped sine'},
+         {value: '2', label: 'V-shaped kink'}, {value: '3', label: 'Smooth step'}]},
+       {id: 'pop', label: 'Population', min: 20, max: 200, step: 10, value: 60, restart: true},
+       {id: 'mut', label: 'Mutation', min: 0, max: 100, value: 20,
+        fmt: function (v) { return v + '%'; }},
+       {id: 'pars', label: 'Parsimony', min: 0, max: 100, value: 15,
+        fmt: function (v) { return v + '%'; }}
+     ],
+     stats: [
+       {id: 'gen', label: 'Generation'},
+       {id: 'best', label: 'Best error', tone: 's2', fmt: fmtErr},
+       {id: 'size', label: 'Best size'},
+       {id: 'avg', label: 'Avg size', tone: 's1', fmt: function (v) { return v.toFixed(1); }}
+     ],
+     charts: [{
+       canvas: 'chart',
+       panes: [
+         {label: 'BEST ERROR (LOG)', log: true, series: [{key: 'e', tone: 's2'}]},
+         {label: 'AVERAGE PROGRAM SIZE', yMin: 0, series: [{key: 's', tone: 's1'}]}
+       ]
+     }],
+
+     init: function (ctx) {
+       var f = TARGETS[parseInt(ctx.controls.target, 10)].f;
+       var pts = [], lo = Infinity, hi = -Infinity;
+       for (var i = 0; i < NPTS; i++) {
+         var x = XMIN + (XMAX - XMIN) * i / (NPTS - 1), y = f(x);
+         pts.push({x: x, y: y});
+         if (y < lo) lo = y;
+         if (y > hi) hi = y;
+       }
+       var pad = 0.2 * ((hi - lo) || 1);
+       var st = {pts: pts, yLo: lo - pad, yHi: hi + pad, pop: [], best: null, avg: 0};
+       for (i = 0; i < ctx.controls.pop; i++) {
+         var maxd = 2 + (i % 3);
+         var tree = (i % 2 === 0) ? grow(ctx.rng, 1, maxd) : full(ctx.rng, 1, maxd);
+         st.pop.push(makeInd(tree, pts));
+       }
+       updateBest(st);
+       st.avg = avgNodes(st.pop);
+       ctx.record({e: Math.max(st.best.mse, 1e-13), s: st.avg});
+       return st;
+     },
+
+     step: function (ctx) {
+       var st = ctx.state, pts = st.pts, rng = ctx.rng;
+       var p = ctx.controls.pars / 100, coef = p * p * 0.05;
+       var m = ctx.controls.mut / 100, POP = ctx.controls.pop;
+
+       function tour() {
+         var bi = (rng() * st.pop.length) | 0;
+         var bs = st.pop[bi].mse + coef * st.pop[bi].nodes;
+         for (var k = 1; k < TOUR; k++) {
+           var j = (rng() * st.pop.length) | 0;
+           var s = st.pop[j].mse + coef * st.pop[j].nodes;
+           if (s < bs) { bs = s; bi = j; }
+         }
+         return st.pop[bi];
+       }
+       function xover(a, b) {
+         var child = clone(a), pa = listNodes(child), pb = listNodes(b);
+         for (var t = 0; t < 3; t++) {
+           var tn = pa[(rng() * pa.length) | 0], dn = pb[(rng() * pb.length) | 0];
+           if (tn.d - 1 + depth(dn.node) <= MAXD) {
+             var donor = clone(dn.node);
+             if (tn.parent) tn.parent.kids[tn.idx] = donor; else child = donor;
+             return child;
+           }
+         }
+         return child;   // no legal graft found: reproduce the parent copy
+       }
+       function subtreeMut(t) {
+         var nodes = listNodes(t), pick = nodes[(rng() * nodes.length) | 0];
+         var allow = Math.min(2 + ((rng() * 3) | 0), MAXD - pick.d + 1);
+         var repl = allow < 1 ? randTerm(rng) : grow(rng, 1, allow);
+         if (pick.parent) pick.parent.kids[pick.idx] = repl; else t = repl;
+         return t;
+       }
+       function pointMut(t, prob) {
+         var nodes = listNodes(t);
+         for (var i = 0; i < nodes.length; i++) {
+           if (rng() >= prob) continue;
+           var n = nodes[i].node;
+           if (n.op === 'c') { n.v += (rng() * 2 - 1) * 0.6; }
+           else if (n.op === 'x') { if (rng() < 0.5) { n.op = 'c'; n.v = rng() * 4 - 2; } }
+           else {
+             var ar = (n.op === 'sin' || n.op === 'cos') ? 1 : 2, opts = [];
+             for (var f2 = 0; f2 < FUNCS.length; f2++) {
+               if (FUNCS[f2].ar === ar && FUNCS[f2].op !== n.op) opts.push(FUNCS[f2].op);
+             }
+             if (opts.length) n.op = opts[(rng() * opts.length) | 0];
+           }
+         }
+       }
+
+       var sorted = st.pop.slice().sort(function (a, b) {
+         return (a.mse + coef * a.nodes) - (b.mse + coef * b.nodes);
+       });
+       var next = sorted.slice(0, Math.min(ELITES, POP));
+       while (next.length < POP) {
+         var tree;
+         if (rng() < PX) tree = xover(tour().tree, tour().tree);
+         else tree = clone(tour().tree);
+         if (rng() < m) tree = subtreeMut(tree);
+         if (m > 0) pointMut(tree, m * 0.15);
+         next.push(makeInd(tree, pts));
+       }
+       st.pop = next;
+       updateBest(st);
+       st.avg = avgNodes(st.pop);
+       ctx.record({e: Math.max(st.best.mse, 1e-13), s: st.avg});
+     },
+
+     draw: function (ctx) {
+       var st = ctx.state, c = ctx.colors, cv = ctx.canvas.main, g = cv.g;
+       var W = cv.w, H = cv.h;
+       if (W < 480) {
+         var ph = plotHFor(W);
+         drawPlot(g, c, st, 0, 0, W, ph);
+         drawTree(g, c, st, 0, ph + 12, W, H - ph - 12);
+       } else {
+         var gap = 16, pw = Math.round(W * 0.58);
+         drawPlot(g, c, st, 0, 0, pw, H);
+         drawTree(g, c, st, pw + gap, 0, W - pw - gap, H);
+       }
+       ctx.set('gen', ctx.iteration);
+       ctx.set('best', st.best.mse);
+       ctx.set('size', st.best.nodes);
+       ctx.set('avg', st.avg);
+       exprEl.textContent = infixTop(st.best.tree);
+     }
+   });
+
+   function avgNodes(pop) {
+     var s = 0;
+     for (var i = 0; i < pop.length; i++) s += pop[i].nodes;
+     return s / pop.length;
+   }
+   function updateBest(st) {
+     for (var i = 0; i < st.pop.length; i++) {
+       if (!st.best || st.pop[i].mse < st.best.mse) {
+         st.best = {tree: clone(st.pop[i].tree), mse: st.pop[i].mse, nodes: st.pop[i].nodes};
+       }
+     }
+   }
+
+   function drawPlot(g, c, st, rx, ry, rw, rh) {
+     g.font = '600 9px Poppins, sans-serif'; g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+     g.fillStyle = c.muted;
+     g.fillText('DATA + BEST FIT', rx, ry + 9);
+     var left = rx + 30, right = rx + rw - 6, top = ry + 18, bottom = ry + rh - 16;
+     function sx(v) { return left + (v - XMIN) / (XMAX - XMIN) * (right - left); }
+     function sy(v) { return bottom - (v - st.yLo) / (st.yHi - st.yLo) * (bottom - top); }
+     g.strokeStyle = c.grid; g.lineWidth = 1;
+     g.strokeRect(left, top, right - left, bottom - top);
+     var i, v;
+     for (i = 1; i < 4; i++) {
+       v = st.yLo + (st.yHi - st.yLo) * i / 4;
+       g.beginPath(); g.moveTo(left, sy(v)); g.lineTo(right, sy(v)); g.stroke();
+     }
+     for (i = 0; i <= 4; i++) {
+       v = st.yLo + (st.yHi - st.yLo) * i / 4;
+       g.fillStyle = c.muted; g.textAlign = 'right';
+       g.fillText(v.toFixed(1), left - 4, sy(v) + 3);
+     }
+     g.textAlign = 'center';
+     [-2, -1, 0, 1, 2].forEach(function (xv) {
+       g.strokeStyle = c.grid;
+       g.beginPath(); g.moveTo(sx(xv), top); g.lineTo(sx(xv), bottom); g.stroke();
+       g.fillStyle = c.muted;
+       g.fillText(String(xv), sx(xv), bottom + 11);
+     });
+     g.textAlign = 'left';
+     // best program's curve, clipped to the frame
+     g.save();
+     g.beginPath(); g.rect(left, top, right - left, bottom - top); g.clip();
+     g.strokeStyle = c.s2; g.lineWidth = 2; g.lineJoin = 'round';
+     g.beginPath();
+     var started = false, N = 140;
+     for (i = 0; i <= N; i++) {
+       var x = XMIN + (XMAX - XMIN) * i / N, y = evalTree(st.best.tree, x);
+       if (!isFinite(y)) { started = false; continue; }
+       var cx = sx(x), cy = sy(y);
+       if (!started) { g.moveTo(cx, cy); started = true; } else g.lineTo(cx, cy);
+     }
+     g.stroke();
+     g.restore();
+     g.fillStyle = c.s4;
+     for (i = 0; i < st.pts.length; i++) {
+       g.beginPath(); g.arc(sx(st.pts[i].x), sy(st.pts[i].y), 2.6, 0, Math.PI * 2); g.fill();
+     }
+   }
+
+   function drawTree(g, c, st, rx, ry, rw, rh) {
+     g.font = '600 9px Poppins, sans-serif'; g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+     g.fillStyle = c.muted;
+     g.fillText('BEST PROGRAM AS A TREE', rx, ry + 9);
+     var root = st.best.tree, leaves = 0, maxD = 1;
+     (function assign(n, d) {
+       if (d > maxD) maxD = d;
+       n._d = d;
+       if (!n.kids || !n.kids.length) { n._x = leaves + 0.5; leaves++; }
+       else {
+         var sum = 0;
+         for (var i = 0; i < n.kids.length; i++) { assign(n.kids[i], d + 1); sum += n.kids[i]._x; }
+         n._x = sum / n.kids.length;
+       }
+     })(root, 1);
+     var left = rx + 8, right = rx + rw - 8, top = ry + 24, bottom = ry + rh - 10;
+     function nx(n) { return left + (n._x / leaves) * (right - left); }
+     function ny(n) { return maxD === 1 ? (top + bottom) / 2 : top + ((n._d - 1) / (maxD - 1)) * (bottom - top); }
+     var r = Math.max(3, Math.min(11, (right - left) / (leaves * 2.4),
+                                 (bottom - top) / (Math.max(1, maxD - 1) * 2.6)));
+     var all = listNodes(root);
+     g.strokeStyle = c.grid; g.lineWidth = 1.4;
+     all.forEach(function (e) {
+       if (!e.parent) return;
+       g.beginPath(); g.moveTo(nx(e.parent), ny(e.parent)); g.lineTo(nx(e.node), ny(e.node)); g.stroke();
+     });
+     var fontPx = Math.max(7, Math.min(11, Math.round(r * 1.15)));
+     g.textAlign = 'center'; g.textBaseline = 'middle';
+     all.forEach(function (e) {
+       var n = e.node, isTerm = (n.op === 'x' || n.op === 'c');
+       g.beginPath(); g.arc(nx(n), ny(n), r, 0, Math.PI * 2);
+       g.fillStyle = isTerm ? c.s3 : c.s1; g.fill();
+       g.lineWidth = 1; g.strokeStyle = c.surface; g.stroke();
+       if (r >= 5.5) {
+         var lab = n.op === 'c' ? fmtC(n.v) : (n.op === '*' ? '×' : (n.op === '/' ? '÷' : n.op));
+         if (lab.length > 4) lab = lab.slice(0, 4);
+         g.font = '700 ' + fontPx + 'px Poppins, sans-serif';
+         g.fillStyle = isTerm ? '#1a1a1a' : '#ffffff';
+         g.fillText(lab, nx(n), ny(n) + 0.5);
+       }
+     });
+     g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+   }
+ })();
+ </script>
+</body>
+</html>

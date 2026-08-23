@@ -1,5 +1,22 @@
 [
   {
+    "title": "Genetic Programming, Live",
+    "date": "2026-08-23",
+    "tags": [
+      "ai"
+    ],
+    "category": "Data & AI",
+    "excerpt": "Genetic programming in your browser: watch a population of expression trees evolve to fit a hidden curve, read the best program as it grows, and give it bloat with the sliders.",
+    "url": "blog/genetic-programming-live.html",
+    "image": "blog/img/gp/gp-hero.webp",
+    "series": {
+      "name": "Algorithms, Live",
+      "part": 8
+    },
+    "readMinutes": 9,
+    "words": 1824
+  },
+  {
     "title": "Differential Evolution, Live",
     "date": "2026-08-22",
     "tags": [
