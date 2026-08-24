@@ -1,9 +1,9 @@
 {
   "track": {
-    "name": "White Flag (Radio Edit)",
-    "artist": "Dido",
-    "url": "https://www.last.fm/music/Dido/_/White+Flag+(Radio+Edit)",
-    "nowPlaying": true
+    "name": "Totems of the Grizzlemaw",
+    "artist": "World of Warcraft: Wrath of the Lich King Original Soundtrack",
+    "url": "https://www.last.fm/music/World+of+Warcraft:+Wrath+of+the+Lich+King+Original+Soundtrack/_/Totems+of+the+Grizzlemaw",
+    "nowPlaying": false
   },
   "reading": [
     {
@@ -25,5 +25,5 @@
       "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1344700029l/13436402._SX50_.jpg"
     }
   ],
-  "updated": "2026-08-22"
+  "updated": "2026-08-24"
 }

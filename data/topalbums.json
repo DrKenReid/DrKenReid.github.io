@@ -36,6 +36,13 @@
       "plays": 4
     },
     {
+      "name": "Minecraft - Volume Alpha",
+      "artist": "C418",
+      "url": "https://www.last.fm/music/C418/Minecraft+-+Volume+Alpha",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/b9f87564f51e402c843e109a7021dc83.png",
+      "plays": 3
+    },
+    {
       "name": "Beat Saber (Original Game Soundtrack)",
       "artist": "Jaroslav Beck",
       "url": "https://www.last.fm/music/Jaroslav+Beck/Beat+Saber+(Original+Game+Soundtrack)",
@@ -85,13 +92,6 @@
       "plays": 2
     },
     {
-      "name": "it boy",
-      "artist": "bbno$",
-      "url": "https://www.last.fm/music/bbno$/it+boy",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/2d056ba6d08b6e5bcf62de5b578b99be.jpg",
-      "plays": 2
-    },
-    {
       "name": "1-800",
       "artist": "bbno$ & Ironmouse",
       "url": "https://www.last.fm/music/bbno$+&+Ironmouse/1-800",
@@ -132,15 +132,8 @@
       "url": "https://www.last.fm/music/Charli+xcx/BRAT",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/b00527c6ae0cd1d4c9bf3706b130ad56.jpg",
       "plays": 2
-    },
-    {
-      "name": "Camp",
-      "artist": "Childish Gambino",
-      "url": "https://www.last.fm/music/Childish+Gambino/Camp",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/ee716520f1d244d990d5f6c8783375fe.png",
-      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-08-22"
+  "updated": "2026-08-24"
 }
