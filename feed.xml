@@ -95,7 +95,7 @@
 
  <p><strong>Set tenure to 0.</strong> A ban that expires instantly is not a ban, so this is hill climbing again, cycle and all, even with the memory checkbox ticked. Tenure is the memory. The checkbox just decides whether anyone writes to it.</p>
 
- <p><strong>S tenure to 20.</strong> Now the search forbids so much of its own neighbourhood that it can barely exploit anything. It reaches a promising region, is immediately banned from refining it, and lurches away, sometimes abandoning a one-conflict board it could have finished in a step or two.</p>
+ <p><strong>Set tenure to 20.</strong> Now the search forbids so much of its own neighbourhood that it can barely exploit anything. It reaches a promising region, is immediately banned from refining it, and lurches away, sometimes abandoning a one-conflict board it could have finished in a step or two.</p>
 
  <p><strong>Grow the board.</strong> Bigger boards mean bigger neighbourhoods and longer plateaus, and the sweet-spot tenure grows with them. Around 7 suits the 8&times;8 board, and at 16&times;16 you'll want noticeably more. The literature's rule of thumb is that tenure should scale with problem size.</p>
 
