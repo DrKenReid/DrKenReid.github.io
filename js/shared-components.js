@@ -57,12 +57,7 @@ function renderHeader(targetId, options) {
         '<li' + (active === 'blog' ? ' class="active"' : '') + '><a href="' + basePath + 'blog.html"' + (active === 'blog' && !blogChild ? ' aria-current="page"' : '') + '>Blog</a>' +
         '<ul class="dropdown kr-nav-dd-wide">' +
         '<li class="kr-nav-group-label kr-nav-label-blogs">Recent <a href="' + basePath + 'blog.html">Blogs</a></li>' +
-        '<li class="kr-nav-group-label' + (blogChild === 'series-index' ? ' active' : '') + '">Recent <a href="' + basePath + 'series.html"' + (blogChild === 'series-index' ? ' aria-current="page"' : '') + '>Series</a></li>' +
-        '<li class="kr-nav-series' + (blogChild === 'series-site' ? ' active' : '') + '"><a href="' + basePath + 'series-how-this-site-is-built.html"' + (blogChild === 'series-site' ? ' aria-current="page"' : '') + '>How This Site Is Built</a></li>' +
-        '<li class="kr-nav-series' + (blogChild === 'series-schedule' ? ' active' : '') + '"><a href="' + basePath + 'series-optimizing-your-schedule.html"' + (blogChild === 'series-schedule' ? ' aria-current="page"' : '') + '>Optimizing Your Schedule</a></li>' +
-        '<li class="kr-nav-series' + (blogChild === 'series-algorithms' ? ' active' : '') + '"><a href="' + basePath + 'series-algorithms-live.html"' + (blogChild === 'series-algorithms' ? ' aria-current="page"' : '') + '>Algorithms, Live</a></li>' +
-        '<li class="kr-nav-series' + (blogChild === 'series-research' ? ' active' : '') + '"><a href="' + basePath + 'series-research-live.html"' + (blogChild === 'series-research' ? ' aria-current="page"' : '') + '>Research, Live</a></li>' +
-        '<li class="kr-nav-series' + (blogChild === 'series-ethics' ? ' active' : '') + '"><a href="' + basePath + 'series-everyday-ethics.html"' + (blogChild === 'series-ethics' ? ' aria-current="page"' : '') + '>Everyday Ethics</a></li>' +
+        '<li class="kr-nav-group-label kr-nav-label-series' + (blogChild === 'series-index' ? ' active' : '') + '">Recent <a href="' + basePath + 'series.html"' + (blogChild === 'series-index' ? ' aria-current="page"' : '') + '>Series</a></li>' +
         '</ul></li>' +
         navItem('contact', basePath + 'contact.html', 'Contact') +
         '</ul></div></div></nav>' +
@@ -81,21 +76,64 @@ function renderHeader(targetId, options) {
         console.warn('Header nav init failed:', e);
     }
 
-    // Three most recent posts, slotted under the "Blogs" label once
-    // posts.json arrives (the header itself renders synchronously).
+    // Three most recent posts under the "Blogs" label, and the three most
+    // recently updated series under the "Series" label, once posts.json
+    // arrives (the header itself renders synchronously). Both lists are
+    // derived rather than hard-coded, so a new series joins the nav as soon
+    // as its first post ships -- provided its landing page exists, which is
+    // step 2 of the series checklist in blog/drafts/SERIES-PLANS.md.
     loadBlogPosts().then(function(posts) {
-        var label = document.querySelector('.kr-nav-dd-wide .kr-nav-label-blogs');
-        if (!label || !Array.isArray(posts) || !posts.length) return;
-        var anchor = label;
-        posts.slice(0, 3).forEach(function(p) {
+        if (!Array.isArray(posts) || !posts.length) return;
+
+        function slotUnder(labelClass, items, build) {
+            var anchor = document.querySelector('.kr-nav-dd-wide .' + labelClass);
+            if (!anchor) return;
+            items.forEach(function(item) {
+                var li = build(item);
+                anchor.parentNode.insertBefore(li, anchor.nextSibling);
+                anchor = li;
+            });
+        }
+
+        slotUnder('kr-nav-label-blogs', posts.slice(0, 3), function(p) {
             var li = document.createElement('li');
             li.className = 'kr-nav-series kr-nav-recent';
             var a = document.createElement('a');
             a.href = basePath + (p.url || 'blog.html');
             a.textContent = p.title;
             li.appendChild(a);
-            anchor.parentNode.insertBefore(li, anchor.nextSibling);
-            anchor = li;
+            return li;
+        });
+
+        // Newest post first, so the first sighting of a series name is its
+        // most recent post: that ordering is "most recently updated". Dates
+        // are ISO strings, which sort correctly as text.
+        var byDate = posts.slice().sort(function(a, b) {
+            return (b.date || '') < (a.date || '') ? -1 : ((b.date || '') > (a.date || '') ? 1 : 0);
+        });
+        var seen = {}, names = [];
+        byDate.forEach(function(p) {
+            postSeriesList(p).forEach(function(entry) {
+                if (!entry || !entry.name || seen[entry.name]) return;
+                seen[entry.name] = true;
+                names.push(entry.name);
+            });
+        });
+
+        var here = window.location.pathname;
+        slotUnder('kr-nav-label-series', names.slice(0, 3), function(name) {
+            var href = seriesPageHref(name);
+            var li = document.createElement('li');
+            li.className = 'kr-nav-series';
+            var a = document.createElement('a');
+            a.href = basePath + href.replace(/^\//, '');
+            a.textContent = name;
+            if (here === href) {
+                li.className += ' active';
+                a.setAttribute('aria-current', 'page');
+            }
+            li.appendChild(a);
+            return li;
         });
     }).catch(function() {});
 }
