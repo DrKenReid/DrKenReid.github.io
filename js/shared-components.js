@@ -61,6 +61,7 @@ function renderHeader(targetId, options) {
         '<li class="kr-nav-series' + (blogChild === 'series-site' ? ' active' : '') + '"><a href="' + basePath + 'series-how-this-site-is-built.html"' + (blogChild === 'series-site' ? ' aria-current="page"' : '') + '>How This Site Is Built</a></li>' +
         '<li class="kr-nav-series' + (blogChild === 'series-schedule' ? ' active' : '') + '"><a href="' + basePath + 'series-optimizing-your-schedule.html"' + (blogChild === 'series-schedule' ? ' aria-current="page"' : '') + '>Optimizing Your Schedule</a></li>' +
         '<li class="kr-nav-series' + (blogChild === 'series-algorithms' ? ' active' : '') + '"><a href="' + basePath + 'series-algorithms-live.html"' + (blogChild === 'series-algorithms' ? ' aria-current="page"' : '') + '>Algorithms, Live</a></li>' +
+        '<li class="kr-nav-series' + (blogChild === 'series-research' ? ' active' : '') + '"><a href="' + basePath + 'series-research-live.html"' + (blogChild === 'series-research' ? ' aria-current="page"' : '') + '>Research, Live</a></li>' +
         '<li class="kr-nav-series' + (blogChild === 'series-ethics' ? ' active' : '') + '"><a href="' + basePath + 'series-everyday-ethics.html"' + (blogChild === 'series-ethics' ? ' aria-current="page"' : '') + '>Everyday Ethics</a></li>' +
         '</ul></li>' +
         navItem('contact', basePath + 'contact.html', 'Contact') +
