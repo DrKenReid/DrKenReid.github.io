@@ -5,11 +5,138 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 23 Aug 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Sun, 23 Aug 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Wed, 26 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Tabu Search, Live</title>
+      <link>https://www.kenreid.co.uk/blog/tabu-search-live.html</link>
+      <guid>https://www.kenreid.co.uk/blog/tabu-search-live.html</guid>
+      <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
+      <description>An interactive tabu search in your browser: watch a search with a memory solve N-Queens live, ban its own best moves, and escape the traps that stop every other method in this series.</description>
+      <category>ai</category>
+      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/tabu-search-live.html">View it on the site</a> to play with it.</em></p>
+ <h1>Tabu Search, Live</h1>
+ <div class="blog-meta">
+ 26 August 2026 &middot;
+ <span class="blog-tag">ai</span>
+ </div>
+
+ <p>Eight posts in, every escape from a trap in this series has been some flavour of randomness:</p>
+ <ul>
+ <li><a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">simulated annealing</a> gambles: while it's hot it accepts bad moves at random and hopes for betterment</li>
+ <li><a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">the ant colony</a> wanders its way out</li>
+ <li><a href="https://www.kenreid.co.uk/blog/evolution-live.html">the genetic algorithm</a> and its <a href="https://www.kenreid.co.uk/blog/genetic-programming-live.html">program-breeding cousin</a> mutate their way out</li>
+ <li><a href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">the swarm</a> jitters</li>
+ <li><a href="https://www.kenreid.co.uk/blog/cma-es-live.html">CMA-ES</a> and <a href="https://www.kenreid.co.uk/blog/differential-evolution-live.html">differential evolution</a> sample their way out of trouble</li>
+ <li>even <a href="https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html">variable neighbourhood search</a>, the most systematic escape artist so far, opens every escape with a random shake</li>
+ </ul>
+
+ <p>Tabu search is the odd one out, escaping traps by <em>remembering</em> them: it keeps a short list of places it has just been and refuses to go back, even when going back looks like the best move on the board. </p>
+
+ 
+
+ <p>Fred Glover sketched the idea in 1986<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> and built it out properly in 1989<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>. The core of it is simple: run a greedy search, but make the recent past forbidden. That one addition turns the dumbest search strategy going into something that can walk out of a local optimum, cross a plateau, and keep improving. It needs no temperature and no coin to flip, which makes it something of an oddity in this series.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Tabu search:</strong> a greedy search that keeps a short-term memory of recent moves and forbids undoing them, so it can climb out of traps instead of circling back in.</li>
+ <li><strong>Tabu list:</strong> the ban list itself: the attributes of recent moves (in our demo, squares a queen just vacated) that the search is not allowed to revisit yet.</li>
+ <li><strong>Tenure:</strong> how many iterations an entry stays on the tabu list before it expires.</li>
+ <li><strong>Aspiration criterion:</strong> the escape clause: a tabu move is allowed anyway if it would produce the best solution ever seen. Bans are for moves that merely look good.</li>
+ <li><strong>Cycling:</strong> the failure tabu search exists to prevent: a memoryless search bouncing between the same few solutions forever because each looks like the best neighbour of the other.</li>
+ <li><strong>Steepest descent:</strong> evaluate every neighbour of the current solution and take the best one. Fast, greedy, and helpless the moment no neighbour improves.</li>
+ <li><strong>Intensification vs diversification:</strong> Glover's tug-of-war: search hard near the good solutions you have found (intensify), versus force yourself somewhere you have never been (diversify). Recency memory the key here.</li>
+ </ul>
+ </div>
+
+ <h2>Greed with amnesia</h2>
+
+ <p>Steepest descent is the greediest search there is: look at every neighbour of your current solution, take the best one, repeat. It's fast, it's simple, and it's doomed: sooner or later it reaches a solution where no neighbour is better, and there it sits. That was covered that failure in the annealing post, where the cure was randomness on a cooling schedule.</p>
+
+ <p>Allow sideways moves (neighbours that are no worse, a common tweak for crossing flat regions) and the search steps from board A to board B, surveys the neighbourhood, and concludes that the best move from B is... back to A.</p>
+
+ <p>So it goes back, and then the best move from A is back to B. It will do this until all the coal mines and oil refineries run dry.</p>
+
+ <p>This is <em>cycling</em>, the signature failure of memoryless search, where every step the algorithm wakes up fresh with no idea it has been here before. Whether three times or over nine thousand times.</p>
+
+ <h2>A ban list and a countdown</h2>
+
+ <p>In tabu search, after each move, an attribute of the position you just left (in our demo, the square a queen just vacated) goes on a ban list for a handful of iterations, called its tenure.</p>
+
+ <p>While it's on the list, the search may not move a queen back there, however tempting the move looks, and with the recent past fenced off the only direction available is somewhere new. So the ban list turns "best move" into "best move I haven't just made", a small change that punches through plateaus which hold a hill climber forever.</p>
+
+ <p>There is one safety valve: if a banned move would produce the best solution ever seen, the ban is waived. This is the <em>aspiration criterion</em>, and it exists because tabu attributes are deliberately crude: banning a square bans every future board that would use it, including, occasionally, a record-breaking one. When the forbidden move beats anything in the run so far, take it.</p>
+
+ <h2>Glover's tug-of-war</h2>
+
+ <p>Glover framed the wider method as a balance between <em>intensification</em> (search hard near the good solutions you already have) and <em>diversification</em> (force yourself into regions you have never visited). Serious implementations layer on frequency memory (penalise moves you make too often), long-term restarts, and cleverer aspiration rules. It all grows from the same seed: the search takes notes on itself, and then obeys them. The demo here is a simple version.</p>
+
+ <h2>Eight queens, no peace</h2>
+
+ <p>The playground this time is the N-Queens problem: place N queens on an N&times;N chessboard so that none attacks another, meaning no two share a row, column, or diagonal. Our queens start one per column, so columns are handled for free, and a move relocates one queen within her own column. The score is the number of attacking pairs, and zero means solved.</p>
+
+ <p>It's a lovely testbed for tabu search because the landscape is nothing but plateaus. Near the end you are almost always sitting at one or two conflicts, surrounded by equally mediocre neighbours. That's the terrain where greedy search paces in circles, like me trying to find my car in the multistory car park outside my work (I have the memory of a pigeon with some things).</p>
+
+ <p>Below, a tabu search is solving the board live, and red lines join queens that currently attack each other.</p>
+
+ <p>The frost is the memory: when a queen leaves a square that square ices over, and the frost fades as its tenure counts down, so you're watching the algorithm's short-term memory dissolve in real time. The readout underneath lists the banned squares with their countdowns. When the search overrides a ban because the move would break a record, an "aspiration!" badge lights up next to the toolbar.</p>
+
+ 
+
+ <h2>Tenure, at zero and at twenty</h2>
+
+ <p><strong>Switch the memory off.</strong> The search becomes plain steepest descent with sideways moves, and on a lucky board it solves anyway. Most of the time it drops to one or two conflicts and then starts pacing, and the "revisited states" counter begins to climb as it bounces between the same handful of boards, forever, at whatever speed you set. The chart flatlines with a tiny shimmer, which is the cycle itself.</p>
+
+ <p>Flip the memory back on and the search usually punches out within a few dozen steps. One counter, and it makes the case for tabu search better than I can.</p>
+
+ <p><strong>Set tenure to 0.</strong> A ban that expires instantly is not a ban, so this is hill climbing again, cycle and all, even with the memory checkbox ticked. Tenure is the memory. The checkbox just decides whether anyone writes to it.</p>
+
+ <p><strong>S tenure to 20.</strong> Now the search forbids so much of its own neighbourhood that it can barely exploit anything. It reaches a promising region, is immediately banned from refining it, and lurches away, sometimes abandoning a one-conflict board it could have finished in a step or two.</p>
+
+ <p><strong>Grow the board.</strong> Bigger boards mean bigger neighbourhoods and longer plateaus, and the sweet-spot tenure grows with them. Around 7 suits the 8&times;8 board, and at 16&times;16 you'll want noticeably more. The literature's rule of thumb is that tenure should scale with problem size.</p>
+
+ <h2>Remembering the good and remembering the bad</h2>
+
+ <p>There's some interesting debates I have in my mind about this concept, because it's somewhat philosophical. Our human memories are odd, we often think of periods of time that are difficult and we dislike fondly later in life, like times in the military - we remember the fun moments and forget the 5am wake up time, endless PT and drills. But we also remember specific jarring, horrible moments with great clarity - PTSD is exactly a big warning marker left with the intent to protect us, and let us remember what was bad.</p>
+
+ <p>Maybe there's something to take from this: it's actually efficient to remember the bad things, but at some point to let them go, and perhaps similar can be said about remembering the good things, when trying to move towards a better future.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Why is it spelled "tabu" and not "taboo"?</summary>
+ <p>Because Glover spelled it that way, and the field kept his spelling. "Tabu" is closer to the Tongan word that English borrowed "taboo" from, and both forms show up in older literature. So it's a citation rather than a typo. It also makes the algorithm much easier to search for, which is a nice side effect.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Tabu search vs simulated annealing?</summary>
+ <p>They treat the same disease with opposite medicine. Annealing escapes local optima stochastically: it accepts worse moves with a probability that cools over time, so its behaviour is a distribution and every run differs. Tabu search is deterministic. Same starting board, same tenure, same run, every time (the only randomness in this demo is the scramble that deals the board). Annealing carries no memory and trusts the temperature. Tabu search carries memory and trusts the list. In practice they're complementary, and plenty of hybrid methods anneal with a tabu list bolted on.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Is tabu search used for anything real?</summary>
+ <p>Heavily. It has one of the strongest production records of any metaheuristic: job-shop and staff scheduling, vehicle routing, university timetabling, telecoms network design. For years, many of the best-known solutions on standard vehicle routing benchmarks belonged to tabu search variants. Like everything in this series, it asks almost nothing of the problem, just a neighbourhood and a score, so it travels well.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Glover, F. (1986). Future paths for integer programming and links to artificial intelligence. <em>Computers &amp; Operations Research</em>, 13(5), 533&ndash;549. <a href="https://doi.org/10.1016/0305-0548(86)90048-1" target="_blank" rel="noopener">https://doi.org/10.1016/0305-0548(86)90048-1</a>
+          </li>
+          <li id="ref-2">
+            Glover, F. (1989). Tabu Search - Part I. <em>ORSA Journal on Computing</em>, 1(3), 190&ndash;206. <a href="https://doi.org/10.1287/ijoc.1.3.190" target="_blank" rel="noopener">https://doi.org/10.1287/ijoc.1.3.190</a>
+          </li>
+        </ol>
+
+ ]]></content:encoded>
+    </item>
     <item>
       <title>Genetic Programming, Live</title>
       <link>https://www.kenreid.co.uk/blog/genetic-programming-live.html</link>
@@ -167,7 +294,15 @@
  <span class="blog-tag">ai</span>
  </div>
 
- <p>This is part seven of the Algorithms, Live series. So far <a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">ants have foraged</a>, <a href="https://www.kenreid.co.uk/blog/evolution-live.html">triangles have evolved</a>, <a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">a search has cooled its way out of bad valleys</a>, <a href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">a swarm has chased its own best guess</a>, <a href="https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html">a stuck search has widened its neighbourhood until it came unstuck</a>, and <a href="https://www.kenreid.co.uk/blog/cma-es-live.html">a cloud of samples has learned the shape of a valley</a>.</p>
+ <p>This is part seven of the Algorithms, Live series. So far:</p>
+ <ul>
+ <li><a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">ants have foraged</a></li>
+ <li><a href="https://www.kenreid.co.uk/blog/evolution-live.html">triangles have evolved</a></li>
+ <li><a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">a search has cooled its way out of bad valleys</a></li>
+ <li><a href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">a swarm has chased its own best guess</a></li>
+ <li><a href="https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html">a stuck search has widened its neighbourhood until it came unstuck</a></li>
+ <li><a href="https://www.kenreid.co.uk/blog/cma-es-live.html">a cloud of samples has learned the shape of a valley</a></li>
+ </ul>
 
  <p>Today's algorithm is for hard continuous problems: differential evolution. It's one of the simpler of the evolutionary family, a few lines of arithmetic wrapped in a loop. I was first properly introduced to it by Prof. Cedric Gondro, at Michigan State University, as it's one of his favorite algorithms, so we were considering its use for genomic prediction problems.</p>
 
@@ -298,7 +433,14 @@
 
  <p>There is a shape of problem that many optimisers struggle with: a long, thin, tilted valley. </p>
 
- <p>The <a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">ants of part 1</a> took steps along edges and left scent behind. The <a href="https://www.kenreid.co.uk/blog/evolution-live.html">genetic algorithm of part 2</a> took steps in genome space, one mutation at a time. <a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">Simulated annealing in part 3</a> had a step size you could watch shrink as the temperature fell. This one learns the <em>shape</em> of the neighbourhood worth searching, and restretches itself to match: CMA-ES</p>
+ <p>Every algorithm in this series so far has moved in steps whose size and shape were settled in advance:</p>
+ <ul>
+ <li><a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">the ants of part 1</a> took steps along edges and left scent behind</li>
+ <li><a href="https://www.kenreid.co.uk/blog/evolution-live.html">the genetic algorithm of part 2</a> took steps in genome space, one mutation at a time</li>
+ <li><a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">simulated annealing in part 3</a> had a step size you could watch shrink as the temperature fell</li>
+ </ul>
+
+ <p>This one learns the <em>shape</em> of the neighbourhood worth searching, and restretches itself to match: CMA-ES</p>
 
  
 
@@ -819,7 +961,15 @@ jobs:
  <span class="blog-tag">ai</span>
  </div>
 
- <p>The <a href="https://www.kenreid.co.uk/blog/evolution-live.html">genetic algorithm</a> kept a whole population, so one individual getting stuck didn't matter. <a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">Simulated annealing</a> tolerated bad moves while it was hot, the <a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">ant colony</a> let old trails evaporate, and the <a href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">particle swarm</a> carried enough momentum to sail over a dip before it noticed. This fifth one runs without a temperature schedule, a population, a pheromone trail, or a velocity. When it gets stuck, it changes what "nearby" means. This one hits home because, like many of the algorithms I am blogging about, I am making use of code I wrote years ago - but this one is special, because I used VNS for my <a href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&sortby=pubdate&citation_for_view=bwl2u00AAAAJ:u5HHmVD_uO8C">first ever published research paper</a>.</p>
+ <p>Every algorithm in this series so far has had its own way of not getting stuck:</p>
+ <ul>
+ <li><a href="https://www.kenreid.co.uk/blog/evolution-live.html">the genetic algorithm</a> kept a whole population, so one individual getting stuck didn't matter</li>
+ <li><a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">simulated annealing</a> tolerated bad moves while it was hot</li>
+ <li><a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">the ant colony</a> let old trails evaporate</li>
+ <li><a href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">the particle swarm</a> carried enough momentum to sail over a dip before it noticed</li>
+ </ul>
+
+ <p>This fifth one runs without a temperature schedule, a population, a pheromone trail, or a velocity. When it gets stuck, it changes what "nearby" means. This one hits home because, like many of the algorithms I am blogging about, I am making use of code I wrote years ago - but this one is special, because I used VNS for my <a href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&sortby=pubdate&citation_for_view=bwl2u00AAAAJ:u5HHmVD_uO8C">first ever published research paper</a>.</p>
 
  
 
@@ -1008,7 +1158,15 @@ jobs:
 
  <h2>Annealing, evolution, ants, particles</h2>
 
- <p>The through-line of the series: <a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">Simulated annealing</a> was one searcher learning when to accept a worse answer. <a href="https://www.kenreid.co.uk/blog/evolution-live.html">Genetic algorithms</a> were a population improving by dying, the ants stored the answer in the world, and the particles store it in each other. Four strategies, one shared problem: explore enough to find the right valley, exploit enough to reach the bottom of it. See some interesting overlaps in strategy, parameters, landscape advantages and disadvantages?</p>
+ <p>The through-line of the series:</p>
+ <ul>
+ <li><a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">simulated annealing</a> was one searcher learning when to accept a worse answer</li>
+ <li><a href="https://www.kenreid.co.uk/blog/evolution-live.html">genetic algorithms</a> were a population improving by dying</li>
+ <li><a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">the ants</a> stored the answer in the world</li>
+ <li>and the particles store it in each other</li>
+ </ul>
+
+ <p>Four strategies, one shared problem: explore enough to find the right valley, exploit enough to reach the bottom of it. See some interesting overlaps in strategy, parameters, landscape advantages and disadvantages?</p>
 
  <p>Anyway. Go scoop up the swarm, drop it in a corner of the egg carton, and watch thirty dots argue their way out. Or fail to. </p>
 
@@ -4428,127 +4586,6 @@ return [post for _score, _date, post in ranked[:3]]</code></pre>
       <description>My high school music teacher told me not to aim for university: I was &#x27;more suited to manual labour&#x27;.</description>
       <category>personal</category>
       <category>advice</category>
-      <content:encoded><![CDATA[
-        <h1>My Teacher Said I Shouldn't Go To University</h1>
-        <div class="blog-meta">
-          16 July 2026 &middot;
-          <span class="blog-tag">personal</span>
-          <span class="blog-tag">advice</span>
-        </div>
-
-        <p>In high school, my music teacher told me I shouldn't aim to be a doctor, because I was "more suited to manual labour". In fact, she said that not only to me, but to my parents, at a student-parent night.</p>
-
-        <p>I want to be fair to her, but I <i>am</i> writing this with a doctorate. Not the kind she meant, admittedly, a PhD makes you the sort of doctor who is useless in a medical emergency but insufferable when anyone brings up a topic vaguely related to your specialty, yet my title is real, my thesis was dissected by a bunch of people with way more experience than I, and somewhere inside, I still remember being told I wasn't good enough, and couldn't be good enough, by a trusted advisor.</p>
-
-        <p>Teachers make thousands of judgement calls, and try to direct their students in the direction best for their displayed aptitudes, skills, abilities and what they appear to enjoy. How did she come to decide I was more suited to working with my hands? A music grade (where, by the way, I scored highly on performance because I loved guitar, and poorly on other parts of the classwork), a snapshot of who I am, and a very narrow idea of what my capabilities looks like, in a very specific field. How can a music teacher say "Well, this student kind of sucks at identifying Baroque music from Rococo, so they probably should be a plumber"? Besides the permanent glare I adopt whenever I think of her, what was the real damage? Well, I was lucky, because teenagers today still experience this kind of snapshot judgement, and the research says it does more than describe futures for kids. It writes them.</p>
-
-        <div class="plain-english-box">
-          <h2>Quick jargon guide</h2>
-          <ul>
-            <li><strong>Teacher expectation effects:</strong> the finding that what a teacher believes about a student can nudge that student's actual outcomes, famously via the "Pygmalion" study. The size of the effect is debated; its existence, much less so.</li>
-            <li><strong>Golem effect:</strong> Teacher expectation effect's ugly sibling, <em>low</em> expectations dragging performance down.</li>
-            <li><strong>Academic self-efficacy:</strong> a student's belief that they can succeed at academic work, one of the strongest psychological predictors of how they actually do.</li>
-            <li><strong>g (general intelligence):</strong> the well-replicated statistical finding that performance across mental tasks correlates. Real, useful, and still only part of the picture any single grade captures.</li>
-            <li><strong>Multiple intelligences:</strong> Gardner's popular theory that intelligence comes in eight-ish flavours. Scientifically shaky as psychometrics, but pointing at something real about the plurality of human skill.</li>
-          </ul>
-        </div>
-
-        <h2>What she was looking at</h2>
-
-        <p>Whatever my teacher saw when she looked at me, I'm guessing it was something to do with grades from when I was forced to play glockenspiel. That thinking is the design of the system she worked in. School distils each pupil into a thin column of numbers generated by one activity: sitting still, absorbing material in a fixed order at a fixed age, and reproducing it silently on paper (or by bashing thin metal plates in a specific order and rhythm). Do that well and you're "academic." Do it badly, or do it <em>later than your teens</em>, because adolescent brains run on wildly different schedules, and the system files you as "not academic". </p>
-
-        <p>Grades are a decent-but-leaky predictor even of the thing they're supposed to predict: meta-analytic work like Richardson, Abraham and Bond's review<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> finds prior grades correlate moderately with university performance, leaving an enormous share of the outcome to everything else: effort regulation, study strategies, tutoring, circumstances, and, notably, <strong>academic self-efficacy</strong>, whether the student <em>believes</em> they can do it. Sounds a bit weak, right? </p>
-
-        <figure>
-          <img src="https://www.kenreid.co.uk/img/photography/thumb/451.webp" alt="Close-up of an acoustic guitar in low light, sunlight catching the strings, fretboard, and ornate pickguard" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
-          <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> The guitar my parents gifted me when I turned 16, I still have it at 34, and it came to the USA from Scotland with me.</figcaption>
-        </figure>
-
-        <h2>Prophecy is an intervention</h2>
-
-        <p>If a teenager's belief in their own academic capability is one of the strongest psychological predictors of their university performance, then look again at what a sentence like "you're more suited to manual labour" actually is: it's an <em>intervention on the predictor variable</em>. This isn't a guess, it's changing the variables that cause the outcome.</p>
-
-        <p>This is the territory of the famous Pygmalion study,<sup><a href="#ref-2" class="cite-ref">[2]</a></sup> where teachers told (falsely) that certain randomly-chosen pupils were about to bloom saw those pupils gain the most, and of its grim mirror, the golem effect, where low expectations do the opposite work. The literature has spent fifty years arguing about effect sizes, which is valid: expectation effects are usually modest, on average. A stray remark from an authority figure, landing on a fifteen-year-old at the age when identity is wet cement, doesn't get experienced as a data point but as a verdict, and some of us can quote it verbatim decades later, which should tell you something the impression such remarks can make on kids. That is to say: it may not always stick, it likely depends on the relationship the kid has with the teacher, the emotional vulnerability and circumstances of the kid, and counterweights, but it did with me, and it does with others.</p>
-
-        <p>I got lucky: enough stubbornness to treat the verdict as a provocation, and enough people elsewhere in my life balancing it out (thanks Mum + Dad). A different kid (same ability, fewer counterweights) hears the same sentence and might be dissuaded entirely from whatever their goals are. </p>
-
-        <figure>
-          <img src="https://www.kenreid.co.uk/img/photography/thumb/113.webp" alt="Black and white photograph of an acoustic guitar lying across a striped surface" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
-          <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
-        </figure>
-
-        <h2>The many shapes of capable</h2>
-
-        <p>I've <a href="https://www.kenreid.co.uk/blog/why-you-arent-a-visual-learner.html">previously taken a flamethrower</a> to pop-psychology taxonomies of the mind, and I intend to stay consistent. Howard Gardner's "multiple intelligences" (the theory that we each carry separate musical, spatial, interpersonal, bodily intelligences) is, as psychometrics, shaky: the abilities correlate, the categories resist clean measurement, and the framework has never out-predicted boring old <em>g</em>. If you came here for "everyone is secretly a genius in their own modality," you are reading the wrong article.</p>
-
-        <p>Even mainstream intelligence research describes ability as a hierarchy: a general factor, yes, but with broad group abilities (verbal, spatial, quantitative, mechanical) and thousands of specific skills layered beneath, all of it interacting with interest, practice, temperament, and time. A school grade samples one thin horizontal slice of that, once, at an age when the whole edifice is still under construction and might be entirely changed because the kid was going through something that morning. The carpenter's spatial reasoning, the care worker's social perception, the mechanic's fault-finding, the musician's ear: these are real, demanding, <em>trainable</em> forms of capability that grades just don't measure at one time, nevermind over time. </p>
-
-        <p>The insult in "suited to manual labour" was never to me, it was to manual labour. The sentence only works as a put-down inside a worldview where the trades are a punishment tier for the insufficiently bookish, or for people who have ADHD or similar difficulties in the neurotypically designed classroom, a worldview that is snobbish about the people who build its houses and wire its schools, and that pushes academically-shaped kids away from skilled work they might have loved. </p>
-
-        <p>There's a gendered layer to this, too. I recently read <em>Boys Don't Try? Rethinking Masculinity in Schools</em> by Matt Pinkett and Mark Roberts,<sup><a href="#ref-3" class="cite-ref">[3]</a></sup> two teachers examining why boys collect verdicts like mine so reliably. A lot of what gets filed under "boys don't try" is self-protection (if you never try, failing can't become evidence about you), and the fix is not lowering the bar to match the stereotype but refusing the stereotype altogether: high expectations, warm relationships, and no prophecies. I'd hand it to any teacher who has ever caught themselves sorting a class into who is and isn't "university material".</p>
-
-        <h2>If you were told similarly:</h2>
-
-        <ul>
-          <li>A grade measured how you did one kind of task, in one format, at one age, under whatever was happening at home that year. It contains no information about you at 20, 30 or 40.</li>
-          <li>Self-efficacy isn't magic thinking; it's the thing that determines whether you apply, persist, and ask for help.</li>
-          <li>Access courses, mature entry, apprenticeships that become degrees, degrees that start at 30. The system's front door has a strange obsession with your teens, it's hardly the end.</li>
-          <li>If the trades, or care, or making things is where your capability lives, that's not a consolation prize, that's the goal that society doesn't recognize as success (and considering all the "white collar" job difficulties, the trades are a very lucrative, respectable and desirable goal). </li>
-        </ul>
-
-        <h2>To my teacher, if she's reading</h2>
-
-        <p>If she's still alive, I doubt she remembers saying it. That's just it though - the sentence that lodged in me for decades probably cost her four seconds and was immediately forgotten. I hope her years of teaching had better impacts on kids than that one remark, and I'd rather this post reach some teacher mid-career than reach her. So, to that teacher: you hold a variable that the meta-analyses rank near the top of the stack, and you adjust it every time you tell a teenager what they are. Forecast less, care more. You will be wrong about which ones bloom (the research says so, my doctorate says so, too) so you might as well be wrong in the direction that costs nothing and occasionally builds a doctor from a kid who wants to be a doctor.</p>
-
-        <figure>
-          <img src="https://www.kenreid.co.uk/img/photography/thumb/461.webp" alt="Acoustic guitar photographed against a purple wall" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
-          <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
-        </figure>
-
-        <div class="faq-section">
-          <h2>Common questions</h2>
-
-          <details class="faq-item">
-            <summary>Do you resent her?</summary>
-            <p>Less than the opening of this post suggests. She was one adult having, possibly, one careless afternoon inside a system that invited that kind of sorting. People are rarely improved by contempt, that applies to her too. </p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Aren't some students just not suited to university?</summary>
-            <p>Of course, and frank guidance about fit, options, and trade-offs is a teacher doing their job. <em>Prophecy plus hierarchy</em>: declaring a teenager's ceiling, from thin evidence, in a tone that ranks the alternatives as lesser. "Have you considered an apprenticeship, they'd be lucky to have you" and "you're not university material" contain the same information and opposite interventions.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Isn't "multiple intelligences" debunked?</summary>
-            <p>As a psychometric theory, it has serious problems, see the section above, and my <a href="https://www.kenreid.co.uk/blog/why-you-arent-a-visual-learner.html">learning-styles post</a> for the adjacent myth. Ability is demonstrably plural beneath the general factor, grades sample it narrowly, and capability keeps developing long after school stops measuring.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>What should a teacher say instead?</summary>
-            <p>Describe the path, not the person: "this is what the next grade up looks like, here's the gap, here's how people close it." </p>
-          </details>
-        </div>
-
-        <h2 class="section-heading" id="references">References</h2>
-
-        <ol class="references">
-          <li id="ref-1">
-            Richardson, M., Abraham, C., &amp; Bond, R. (2012). Psychological correlates of university students' academic performance: A systematic review and meta-analysis. <em>Psychological Bulletin</em>, 138(2), 353&ndash;387. <a href="https://doi.org/10.1037/a0026838" target="_blank" rel="noopener">https://doi.org/10.1037/a0026838</a>
-          </li>
-          <li id="ref-2">
-            Rosenthal, R., &amp; Jacobson, L. (1968). Pygmalion in the classroom: Teacher expectation and pupils' intellectual development. <em>The Urban Review</em>, 3(1), 16&ndash;20. <a href="https://doi.org/10.1007/BF02322211" target="_blank" rel="noopener">https://doi.org/10.1007/BF02322211</a>
-          </li>
-          <li id="ref-3">
-            Pinkett, M., &amp; Roberts, M. (2019). <em>Boys Don't Try? Rethinking Masculinity in Schools.</em> Routledge. <a href="https://doi.org/10.4324/9781351163729" target="_blank" rel="noopener">https://doi.org/10.4324/9781351163729</a>
-          </li>
-        </ol>
-
-        
-
-
-        <hr style="margin: 40px 0;">
-        <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
-      ]]></content:encoded>
     </item>
     <item>
       <title>Free Comments via GitHub Discussions</title>

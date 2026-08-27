@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="An interactive tabu search in your browser: watch a search with a memory solve N-Queens live.">
+ <meta name="keywords" content="ai">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Tabu Search, Live - Ken Reid</title>
+ <meta property="og:title" content="Tabu Search, Live">
+ <meta property="og:description" content="An interactive tabu search in your browser: watch a search with a memory solve N-Queens live.">
+ <meta property="og:image" content="https://www.kenreid.co.uk/blog/img/tabu/tabu-og.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/tabu-search-live.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Tabu Search, Live">
+ <meta name="twitter:description" content="An interactive tabu search in your browser: watch a search with a memory solve N-Queens live.">
+ <meta name="twitter:image" content="https://www.kenreid.co.uk/blog/img/tabu/tabu-og.png">
+ <meta name="citation_title" content="Tabu Search, Live">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/08/26">
+ <meta name="citation_online_date" content="2026/08/26">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/tabu-search-live.html">
+ <meta name="DC.title" content="Tabu Search, Live">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-08-26">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="img/tabu/tabu-hero.webp">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/tabu-search-live.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "Tabu Search, Live",
+ "description": "An interactive tabu search in your browser: watch a search with a memory solve N-Queens live.",
+ "image": "https://www.kenreid.co.uk/blog/img/tabu/tabu-og.png",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-08-26",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["ai", "tabu search", "optimization", "interactive", "n-queens"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "Tabu Search, Live",
+       "item": "https://www.kenreid.co.uk/blog/tabu-search-live.html"
+     }
+   ]
+ }
+ </script>
+ <style>
+   /* Series: s1 = memory frost, s2 = best-so-far, s3 = accent/buttons, s4 = conflicts. */
+   /* Overrides of the shared .kr-viz component in style.css. */
+   .kr-toolbar label{ margin:0; }
+
+   /* Particular to this post's widget. */
+   .tabu-asp{ opacity:0; transition:opacity 0.45s ease; background:var(--viz-s3); color:#1a1a1a; border-radius:5px; padding:2px 9px; font-size:0.78em; font-weight:600; pointer-events:none; }
+   .tabu-asp.show{ opacity:1; }
+   .tabu-mem{ font-size:0.75em; color:var(--viz-muted); margin-top:10px; line-height:1.9; font-variant-numeric:tabular-nums; min-height:1.5em; }
+ </style>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <main id="main-content">
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/tabu/tabu-hero.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">Tabu Search, Live</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">Tabu Search, Live</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+ 
+ <div class="blog-post">
+ <h1>Tabu Search, Live</h1>
+ <div class="blog-meta">
+ 26 August 2026 &middot;
+ <span class="blog-tag">ai</span>
+ </div>
+
+ <p>Eight posts in, every escape from a trap in this series has been some flavour of randomness:</p>
+ <ul>
+ <li><a href="simulated-annealing-live.html">simulated annealing</a> gambles: while it's hot it accepts bad moves at random and hopes for betterment</li>
+ <li><a href="ant-colony-live.html">the ant colony</a> wanders its way out</li>
+ <li><a href="evolution-live.html">the genetic algorithm</a> and its <a href="genetic-programming-live.html">program-breeding cousin</a> mutate their way out</li>
+ <li><a href="particle-swarm-live.html">the swarm</a> jitters</li>
+ <li><a href="cma-es-live.html">CMA-ES</a> and <a href="differential-evolution-live.html">differential evolution</a> sample their way out of trouble</li>
+ <li>even <a href="variable-neighbourhood-search-live.html">variable neighbourhood search</a>, the most systematic escape artist so far, opens every escape with a random shake</li>
+ </ul>
+
+ <p>Tabu search is the odd one out, escaping traps by <em>remembering</em> them: it keeps a short list of places it has just been and refuses to go back, even when going back looks like the best move on the board. </p>
+
+ <noscript><p><strong>The interactive parts of this post require JavaScript.</strong> The prose will still make sense, but the demo will be sadly inert.</p></noscript>
+
+ <p>Fred Glover sketched the idea in 1986<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> and built it out properly in 1989<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>. The core of it is simple: run a greedy search, but make the recent past forbidden. That one addition turns the dumbest search strategy going into something that can walk out of a local optimum, cross a plateau, and keep improving. It needs no temperature and no coin to flip, which makes it something of an oddity in this series.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Tabu search:</strong> a greedy search that keeps a short-term memory of recent moves and forbids undoing them, so it can climb out of traps instead of circling back in.</li>
+ <li><strong>Tabu list:</strong> the ban list itself: the attributes of recent moves (in our demo, squares a queen just vacated) that the search is not allowed to revisit yet.</li>
+ <li><strong>Tenure:</strong> how many iterations an entry stays on the tabu list before it expires.</li>
+ <li><strong>Aspiration criterion:</strong> the escape clause: a tabu move is allowed anyway if it would produce the best solution ever seen. Bans are for moves that merely look good.</li>
+ <li><strong>Cycling:</strong> the failure tabu search exists to prevent: a memoryless search bouncing between the same few solutions forever because each looks like the best neighbour of the other.</li>
+ <li><strong>Steepest descent:</strong> evaluate every neighbour of the current solution and take the best one. Fast, greedy, and helpless the moment no neighbour improves.</li>
+ <li><strong>Intensification vs diversification:</strong> Glover's tug-of-war: search hard near the good solutions you have found (intensify), versus force yourself somewhere you have never been (diversify). Recency memory the key here.</li>
+ </ul>
+ </div>
+
+ <h2>Greed with amnesia</h2>
+
+ <p>Steepest descent is the greediest search there is: look at every neighbour of your current solution, take the best one, repeat. It's fast, it's simple, and it's doomed: sooner or later it reaches a solution where no neighbour is better, and there it sits. That was covered that failure in the annealing post, where the cure was randomness on a cooling schedule.</p>
+
+ <p>Allow sideways moves (neighbours that are no worse, a common tweak for crossing flat regions) and the search steps from board A to board B, surveys the neighbourhood, and concludes that the best move from B is... back to A.</p>
+
+ <p>So it goes back, and then the best move from A is back to B. It will do this until all the coal mines and oil refineries run dry.</p>
+
+ <p>This is <em>cycling</em>, the signature failure of memoryless search, where every step the algorithm wakes up fresh with no idea it has been here before. Whether three times or over nine thousand times.</p>
+
+ <h2>A ban list and a countdown</h2>
+
+ <p>In tabu search, after each move, an attribute of the position you just left (in our demo, the square a queen just vacated) goes on a ban list for a handful of iterations, called its tenure.</p>
+
+ <p>While it's on the list, the search may not move a queen back there, however tempting the move looks, and with the recent past fenced off the only direction available is somewhere new. So the ban list turns "best move" into "best move I haven't just made", a small change that punches through plateaus which hold a hill climber forever.</p>
+
+ <p>There is one safety valve: if a banned move would produce the best solution ever seen, the ban is waived. This is the <em>aspiration criterion</em>, and it exists because tabu attributes are deliberately crude: banning a square bans every future board that would use it, including, occasionally, a record-breaking one. When the forbidden move beats anything in the run so far, take it.</p>
+
+ <h2>Glover's tug-of-war</h2>
+
+ <p>Glover framed the wider method as a balance between <em>intensification</em> (search hard near the good solutions you already have) and <em>diversification</em> (force yourself into regions you have never visited). Serious implementations layer on frequency memory (penalise moves you make too often), long-term restarts, and cleverer aspiration rules. It all grows from the same seed: the search takes notes on itself, and then obeys them. The demo here is a simple version.</p>
+
+ <h2>Eight queens, no peace</h2>
+
+ <p>The playground this time is the N-Queens problem: place N queens on an N&times;N chessboard so that none attacks another, meaning no two share a row, column, or diagonal. Our queens start one per column, so columns are handled for free, and a move relocates one queen within her own column. The score is the number of attacking pairs, and zero means solved.</p>
+
+ <p>It's a lovely testbed for tabu search because the landscape is nothing but plateaus. Near the end you are almost always sitting at one or two conflicts, surrounded by equally mediocre neighbours. That's the terrain where greedy search paces in circles, like me trying to find my car in the multistory car park outside my work (I have the memory of a pigeon with some things).</p>
+
+ <p>Below, a tabu search is solving the board live, and red lines join queens that currently attack each other.</p>
+
+ <p>The frost is the memory: when a queen leaves a square that square ices over, and the frost fades as its tenure counts down, so you're watching the algorithm's short-term memory dissolve in real time. The readout underneath lists the banned squares with their countdowns. When the search overrides a ban because the move would break a record, an "aspiration!" badge lights up next to the toolbar.</p>
+
+ <div class="kr-viz" id="tabu-demo">
+   <canvas id="tabuBoard" height="440" role="img" aria-label="Animated tabu search demo: queens on a chessboard are moved one at a time to reduce attacking pairs, with red lines joining attacking queens and recently vacated squares frosted over to show the tabu list fading as tenure counts down"></canvas>
+   <div class="kr-toolbar" data-kr-toolbar>
+     <span class="tabu-asp" id="tabuAsp">aspiration!</span>
+   </div>
+   <div class="kr-sliders" data-kr-sliders></div>
+   <div class="kr-stats" data-kr-stats></div>
+   <div class="tabu-mem" id="tabuMem"></div>
+   <canvas id="tabuChart" class="kr-chart" height="130" role="img" aria-label="Live charts: number of attacking pairs now and best so far against iterations, plus the cumulative count of revisited board states"></canvas>
+   <p class="kr-note">Frosted squares are on the tabu list; the number in the corner is the remaining tenure, and the frost melts as it runs out. "Revisited states" counts how often the search lands on a board it has already seen: with memory on it stays low, and with memory off on a stubborn board you can watch it climb forever. Scramble deals a new board.</p>
+ </div>
+
+ <h2>Tenure, at zero and at twenty</h2>
+
+ <p><strong>Switch the memory off.</strong> The search becomes plain steepest descent with sideways moves, and on a lucky board it solves anyway. Most of the time it drops to one or two conflicts and then starts pacing, and the "revisited states" counter begins to climb as it bounces between the same handful of boards, forever, at whatever speed you set. The chart flatlines with a tiny shimmer, which is the cycle itself.</p>
+
+ <p>Flip the memory back on and the search usually punches out within a few dozen steps. One counter, and it makes the case for tabu search better than I can.</p>
+
+ <p><strong>Set tenure to 0.</strong> A ban that expires instantly is not a ban, so this is hill climbing again, cycle and all, even with the memory checkbox ticked. Tenure is the memory. The checkbox just decides whether anyone writes to it.</p>
+
+ <p><strong>Set tenure to 20.</strong> Now the search forbids so much of its own neighbourhood that it can barely exploit anything. It reaches a promising region, is immediately banned from refining it, and lurches away, sometimes abandoning a one-conflict board it could have finished in a step or two.</p>
+
+ <p><strong>Grow the board.</strong> Bigger boards mean bigger neighbourhoods and longer plateaus, and the sweet-spot tenure grows with them. Around 7 suits the 8&times;8 board, and at 16&times;16 you'll want noticeably more. The literature's rule of thumb is that tenure should scale with problem size.</p>
+
+ <h2>Remembering the good and remembering the bad</h2>
+
+ <p>There's some interesting debates I have in my mind about this concept, because it's somewhat philosophical. Our human memories are odd, we often think of periods of time that are difficult and we dislike fondly later in life, like times in the military - we remember the fun moments and forget the 5am wake up time, endless PT and drills. But we also remember specific jarring, horrible moments with great clarity - PTSD is exactly a big warning marker left with the intent to protect us, and let us remember what was bad.</p>
+
+ <p>Maybe there's something to take from this: it's actually efficient to remember the bad things, but at some point to let them go, and perhaps similar can be said about remembering the good things, when trying to move towards a better future.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Why is it spelled "tabu" and not "taboo"?</summary>
+ <p>Because Glover spelled it that way, and the field kept his spelling. "Tabu" is closer to the Tongan word that English borrowed "taboo" from, and both forms show up in older literature. So it's a citation rather than a typo. It also makes the algorithm much easier to search for, which is a nice side effect.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Tabu search vs simulated annealing?</summary>
+ <p>They treat the same disease with opposite medicine. Annealing escapes local optima stochastically: it accepts worse moves with a probability that cools over time, so its behaviour is a distribution and every run differs. Tabu search is deterministic. Same starting board, same tenure, same run, every time (the only randomness in this demo is the scramble that deals the board). Annealing carries no memory and trusts the temperature. Tabu search carries memory and trusts the list. In practice they're complementary, and plenty of hybrid methods anneal with a tabu list bolted on.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Is tabu search used for anything real?</summary>
+ <p>Heavily. It has one of the strongest production records of any metaheuristic: job-shop and staff scheduling, vehicle routing, university timetabling, telecoms network design. For years, many of the best-known solutions on standard vehicle routing benchmarks belonged to tabu search variants. Like everything in this series, it asks almost nothing of the problem, just a neighbourhood and a score, so it travels well.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Glover, F. (1986). Future paths for integer programming and links to artificial intelligence. <em>Computers &amp; Operations Research</em>, 13(5), 533&ndash;549. <a href="https://doi.org/10.1016/0305-0548(86)90048-1" target="_blank" rel="noopener">https://doi.org/10.1016/0305-0548(86)90048-1</a>
+          </li>
+          <li id="ref-2">
+            Glover, F. (1989). Tabu Search - Part I. <em>ORSA Journal on Computing</em>, 1(3), 190&ndash;206. <a href="https://doi.org/10.1287/ijoc.1.3.190" target="_blank" rel="noopener">https://doi.org/10.1287/ijoc.1.3.190</a>
+          </li>
+        </ol>
+
+ </div>
+ </div>
+ </div>
+
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+
+<script src="../js/kr-viz.js"></script>
+ <script>
+/* ============================================================
+   Tabu Search, Live - the interactive demo for this post.
+   The chrome (canvas sizing, palette, run loop, controls, tiles and
+   charts) comes from js/kr-viz.js. What stays here is the algorithm:
+   steepest descent over single-queen column moves, with recently
+   vacated squares held on a tabu list and an aspiration override.
+   ============================================================ */
+(function () {
+  'use strict';
+  var wrap = document.getElementById('tabu-demo');
+  if (!wrap) return;
+
+  var ANIM_MS = 240;
+  var seedBase = 20260812;
+
+  function conflictsOf(q) {
+    var n = 0;
+    for (var i = 0; i < q.length; i++)
+      for (var j = i + 1; j < q.length; j++)
+        if (q[i] === q[j] || Math.abs(q[i] - q[j]) === j - i) n++;
+    return n;
+  }
+  function attackingPairs(q) {
+    var out = [];
+    for (var i = 0; i < q.length; i++)
+      for (var j = i + 1; j < q.length; j++)
+        if (q[i] === q[j] || Math.abs(q[i] - q[j]) === j - i) out.push([i, j]);
+    return out;
+  }
+  function sqName(c, r, N) {
+    // chess-style coordinates: files a.. from the left, ranks 1.. from the bottom
+    return String.fromCharCode(97 + c) + (N - r);
+  }
+  function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+
+  var aspEl = document.getElementById('tabuAsp'), aspTimer = null;
+  function flashAsp() {
+    aspEl.classList.add('show');
+    if (aspTimer) clearTimeout(aspTimer);
+    aspTimer = setTimeout(function () { aspEl.classList.remove('show'); }, 1200);
+  }
+  var memEl = document.getElementById('tabuMem');
+
+  KRViz.mount('#tabu-demo', {
+    seed: seedBase,
+    canvases: {
+      board: {el: '#tabuBoard', height: function (w) { return Math.min(w, 440); }},
+      chart: {el: '#tabuChart', height: 130, mobile: {height: 250}}
+    },
+    buttons: ['run', 'restart',
+      {id: 'scramble', label: 'Scramble',
+       onClick: function (api) { seedBase += 13; api.seed(seedBase); }}],
+    controls: [
+      {id: 'memory', type: 'check', label: 'Tabu memory', value: true},
+      {id: 'n', label: 'Board', min: 6, max: 16, value: 8, restart: true,
+       fmt: function (v) { return v + '×' + v; }},
+      {id: 'tenure', label: 'Tenure', min: 0, max: 20, value: 7},
+      {id: 'speed', label: 'Speed', min: 1, max: 30, value: 6}
+    ],
+    stats: [
+      {id: 'conf', label: 'Conflicts now'},
+      {id: 'best', label: 'Best conflicts'},
+      {id: 'iters', label: 'Iterations'},
+      {id: 'rev', label: 'Revisited states'},
+      {id: 'len', label: 'Tabu list length'}
+    ],
+    charts: [{
+      canvas: 'chart',
+      panes: [
+        {label: 'CONFLICTS', yMin: 0,
+         series: [{key: 'cur', tone: 's1', label: 'now'},
+                  {key: 'best', tone: 's2', label: 'best'}]},
+        {label: 'REVISITED STATES', yMin: 0,
+         series: [{key: 'rev', tone: 's4', fill: true}]}
+      ]
+    }],
+
+    init: function (ctx) {
+      var N = ctx.controls.n, queens = [];
+      for (var i = 0; i < N; i++) queens.push(Math.floor(ctx.rng() * N));
+      // an already-solved deal gives the demo nothing to do; nudge it
+      var guard = 0;
+      while (conflictsOf(queens) === 0 && guard++ < 50) queens[0] = (queens[0] + 1) % N;
+      var cur = conflictsOf(queens);
+      var st = {N: N, queens: queens, tabu: [], seen: new Set(),
+                cur: cur, bestEver: cur, revisits: 0, anim: null};
+      st.seen.add(queens.join(','));
+      ctx.record({cur: cur, best: cur, rev: 0});
+      return st;
+    },
+
+    step: function (ctx) {
+      var st = ctx.state, N = st.N, queens = st.queens;
+      var memoryOn = ctx.controls.memory, tenure = ctx.controls.tenure;
+      if (!memoryOn) st.tabu = [];
+      // age the memory first: entries added this step get their full tenure
+      for (var i = st.tabu.length - 1; i >= 0; i--) {
+        st.tabu[i].left--;
+        if (st.tabu[i].left <= 0) st.tabu.splice(i, 1);
+      }
+      function isTabu(c, r) {
+        for (var k = 0; k < st.tabu.length; k++)
+          if (st.tabu[k].c === c && st.tabu[k].r === r) return true;
+        return false;
+      }
+      // steepest descent over every (column, row) move, tabu moves barred
+      // unless they would beat the best-ever board (aspiration); deterministic
+      // tie-break (first found) so memoryless cycling is plain to see
+      var bestVal = Infinity, bestC = -1, bestR = -1, usedAsp = false;
+      for (var c = 0; c < N; c++) {
+        var old = queens[c];
+        for (var r = 0; r < N; r++) {
+          if (r === old) continue;
+          queens[c] = r;
+          var v = conflictsOf(queens);
+          queens[c] = old;
+          var barred = memoryOn && isTabu(c, r);
+          if (barred && !(v < st.bestEver)) continue;
+          if (v < bestVal) { bestVal = v; bestC = c; bestR = r; usedAsp = barred; }
+        }
+      }
+      if (bestC < 0) {
+        // everything admissible was tabu (only possible at extreme settings):
+        // fall back to the plain best move
+        for (var c2 = 0; c2 < N; c2++) {
+          var o2 = queens[c2];
+          for (var r2 = 0; r2 < N; r2++) {
+            if (r2 === o2) continue;
+            queens[c2] = r2;
+            var v2 = conflictsOf(queens);
+            queens[c2] = o2;
+            if (v2 < bestVal) { bestVal = v2; bestC = c2; bestR = r2; }
+          }
+        }
+        usedAsp = false;
+      }
+      var oldRow = queens[bestC];
+      queens[bestC] = bestR;
+      if (memoryOn && tenure > 0) st.tabu.push({c: bestC, r: oldRow, left: tenure, total: tenure});
+      st.cur = bestVal;
+      if (usedAsp) flashAsp();
+      var key = queens.join(',');
+      if (st.seen.has(key)) st.revisits++;
+      else if (st.seen.size < 30000) st.seen.add(key);
+      if (st.cur < st.bestEver) st.bestEver = st.cur;
+      ctx.record({cur: st.cur, best: st.bestEver, rev: st.revisits});
+      st.anim = {col: bestC, from: oldRow, to: bestR, start: performance.now()};
+      if (st.cur === 0) ctx.finish('Solved in ' + (ctx.iteration + 1) + ' steps.');
+    },
+
+    draw: function (ctx) {
+      var st = ctx.state, c = ctx.colors, cv = ctx.canvas.board, g = cv.g, N = st.N;
+      var boardPx = Math.min(cv.w, 440), cell = boardPx / N;
+      var bx = (cv.w - boardPx) / 2, by = 0;
+
+      g.fillStyle = c.grid;
+      g.globalAlpha = 0.5;
+      for (var row = 0; row < N; row++)
+        for (var col = 0; col < N; col++)
+          if ((row + col) % 2 === 1) g.fillRect(bx + col * cell, by + row * cell, cell, cell);
+      g.globalAlpha = 1;
+      g.strokeStyle = c.grid; g.lineWidth = 1;
+      g.strokeRect(bx + 0.5, by + 0.5, boardPx - 1, boardPx - 1);
+
+      // frost: the tabu list made visible; opacity tracks remaining tenure
+      for (var f = 0; f < st.tabu.length; f++) {
+        var e = st.tabu[f], a = e.total > 0 ? e.left / e.total : 0;
+        var fx = bx + e.c * cell, fy = by + e.r * cell;
+        g.globalAlpha = 0.10 + 0.30 * a;
+        g.fillStyle = c.s1;
+        g.fillRect(fx + 2, fy + 2, cell - 4, cell - 4);
+        g.globalAlpha = 0.35 + 0.45 * a;
+        g.fillStyle = c.ink;
+        g.font = '600 ' + Math.max(8, Math.round(cell * 0.26)) + 'px Poppins, sans-serif';
+        g.textAlign = 'right'; g.textBaseline = 'alphabetic';
+        g.fillText(String(e.left), fx + cell - 4, fy + cell - 4);
+      }
+      g.globalAlpha = 1;
+
+      // conflict lines between attacking queens: static, gentle
+      var pairs = attackingPairs(st.queens), attacked = {};
+      g.strokeStyle = c.s4; g.lineWidth = 2; g.globalAlpha = 0.3; g.lineCap = 'round';
+      for (var p = 0; p < pairs.length; p++) {
+        var i1 = pairs[p][0], j1 = pairs[p][1];
+        attacked[i1] = true; attacked[j1] = true;
+        g.beginPath();
+        g.moveTo(bx + (i1 + 0.5) * cell, by + (st.queens[i1] + 0.5) * cell);
+        g.lineTo(bx + (j1 + 0.5) * cell, by + (st.queens[j1] + 0.5) * cell);
+        g.stroke();
+      }
+      g.globalAlpha = 1;
+
+      // queens; the one that just moved slides in with an eased animation
+      g.font = Math.round(cell * 0.72) + 'px serif';
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      var now = performance.now();
+      for (var q = 0; q < N; q++) {
+        var rowPos = st.queens[q];
+        if (st.anim && st.anim.col === q) {
+          var t = (now - st.anim.start) / ANIM_MS;
+          if (t < 1) rowPos = st.anim.from + (st.anim.to - st.anim.from) * ease(Math.max(0, t));
+        }
+        g.fillStyle = attacked[q] ? c.s4 : c.ink;
+        g.fillText('♛', bx + (q + 0.5) * cell, by + (rowPos + 0.5) * cell + cell * 0.03);
+      }
+      g.textAlign = 'start'; g.textBaseline = 'alphabetic';
+
+      ctx.set('conf', st.cur);
+      ctx.set('best', st.bestEver);
+      ctx.set('iters', ctx.iteration);
+      ctx.set('rev', st.revisits);
+      ctx.set('len', st.tabu.length);
+      if (st.tabu.length) {
+        var bits = [];
+        for (var m = 0; m < st.tabu.length; m++)
+          bits.push(sqName(st.tabu[m].c, st.tabu[m].r, N) + ' (' + st.tabu[m].left + ')');
+        memEl.textContent = 'Tabu list: ' + bits.join(', ');
+      } else {
+        memEl.textContent = ctx.controls.memory && ctx.controls.tenure > 0
+          ? 'Tabu list: empty' : 'Tabu list: off';
+      }
+    }
+  });
+
+  // the aspiration badge sits with the controls, after the buttons
+  var bar = wrap.querySelector('[data-kr-toolbar]');
+  bar.insertBefore(aspEl, bar.querySelector('.kr-status'));
+})();
+ </script>
+</body>
+</html>

@@ -128,7 +128,15 @@
  <span class="blog-tag">ai</span>
  </div>
 
- <p>The <a href="evolution-live.html">genetic algorithm</a> kept a whole population, so one individual getting stuck didn't matter. <a href="simulated-annealing-live.html">Simulated annealing</a> tolerated bad moves while it was hot, the <a href="ant-colony-live.html">ant colony</a> let old trails evaporate, and the <a href="particle-swarm-live.html">particle swarm</a> carried enough momentum to sail over a dip before it noticed. This fifth one runs without a temperature schedule, a population, a pheromone trail, or a velocity. When it gets stuck, it changes what "nearby" means. This one hits home because, like many of the algorithms I am blogging about, I am making use of code I wrote years ago - but this one is special, because I used VNS for my <a href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&sortby=pubdate&citation_for_view=bwl2u00AAAAJ:u5HHmVD_uO8C">first ever published research paper</a>.</p>
+ <p>Every algorithm in this series so far has had its own way of not getting stuck:</p>
+ <ul>
+ <li><a href="evolution-live.html">the genetic algorithm</a> kept a whole population, so one individual getting stuck didn't matter</li>
+ <li><a href="simulated-annealing-live.html">simulated annealing</a> tolerated bad moves while it was hot</li>
+ <li><a href="ant-colony-live.html">the ant colony</a> let old trails evaporate</li>
+ <li><a href="particle-swarm-live.html">the particle swarm</a> carried enough momentum to sail over a dip before it noticed</li>
+ </ul>
+
+ <p>This fifth one runs without a temperature schedule, a population, a pheromone trail, or a velocity. When it gets stuck, it changes what "nearby" means. This one hits home because, like many of the algorithms I am blogging about, I am making use of code I wrote years ago - but this one is special, because I used VNS for my <a href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&sortby=pubdate&citation_for_view=bwl2u00AAAAJ:u5HHmVD_uO8C">first ever published research paper</a>.</p>
 
  <noscript><p><strong>The interactive parts of this post require JavaScript.</strong> The prose will still make sense, but the demo will be sadly inert.</p></noscript>
 
@@ -257,12 +265,12 @@
               </a>
             </div>
             <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="particle-swarm-live.html" class="blog-card">
-                <div class="blog-card-img"><img src="../blog/img/pso/pso-hero.webp" alt="Particle Swarm, Live" loading="lazy"></div>
+              <a href="tabu-search-live.html" class="blog-card">
+                <div class="blog-card-img"><img src="../blog/img/tabu/tabu-hero.webp" alt="Tabu Search, Live" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">11 August 2026 · 8 min read</div>
-                  <h3 class="blog-card-title">Particle Swarm, Live</h3>
-                  <p class="blog-card-excerpt">An interactive particle swarm optimiser in your browser: a flock of dots hunts a landscape none of them can see, steered by private memory and a single piece of gossip, and the sliders let you collapse the swarm on purpose.</p>
+                  <div class="blog-card-date">26 August 2026 · 8 min read</div>
+                  <h3 class="blog-card-title">Tabu Search, Live</h3>
+                  <p class="blog-card-excerpt">An interactive tabu search in your browser: watch a search with a memory solve N-Queens live, ban its own best moves, and escape the traps that stop every other method in this series.</p>
                   <div class="blog-card-tags"><span class="blog-tag">ai</span></div>
                 </div>
               </a>
