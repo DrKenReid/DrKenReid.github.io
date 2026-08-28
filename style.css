@@ -1823,6 +1823,39 @@ input:required {
   .plain-english-box ul {
     margin-bottom: 0; }
 
+/* Recurring "narrator voice" scene box (Cognitive Biases series and any
+   post that reworks a standing example). Set apart from the article
+   prose: accent rule, tinted panel, and a small scene label so the same
+   scenes stay recognisable across parts. */
+.kr-scene {
+  margin: 30px 0;
+  padding: 18px 22px 4px;
+  border-left: 3px solid #c53030;
+  border-radius: 0 10px 10px 0;
+  background: #faf8f7; }
+  .kr-scene p {
+    color: #3d3d3d; }
+  .kr-scene > p:last-of-type {
+    margin-bottom: 14px; }
+
+.kr-scene-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c53030;
+  margin-bottom: 6px; }
+
+.kr-scene p.kr-scene-note {
+  margin: 0;
+  padding-top: 12px;
+  border-top: 1px solid #e8e2e0;
+  font-size: 14px;
+  line-height: 1.65;
+  font-style: italic;
+  color: #5f5f5f; }
+
 .plain-english-box.collapsible-jargon-box {
   margin: 16px 0;
   padding: 0;
@@ -3584,6 +3617,20 @@ input:required {
   border-color: #383838;
   background: #222222;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2); }
+
+[data-theme="dark"] .kr-scene {
+  border-left-color: #fc6060;
+  background: #201d1d; }
+
+[data-theme="dark"] .kr-scene p {
+  color: #cfcfcf; }
+
+[data-theme="dark"] .kr-scene-label {
+  color: #fc6060; }
+
+[data-theme="dark"] .kr-scene p.kr-scene-note {
+  border-top-color: #35302f;
+  color: #a5a5a5; }
 
 [data-theme="dark"] .plain-english-box.collapsible-jargon-box > summary {
   color: #e2e2e2; }

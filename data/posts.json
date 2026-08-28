@@ -1,5 +1,23 @@
 [
   {
+    "title": "Confirmation Bias Is the Mother Bias",
+    "date": "2026-08-28",
+    "tags": [
+      "philosophy",
+      "science"
+    ],
+    "category": "Ideas",
+    "excerpt": "Confirmation bias is the bias under the biases. Why it's the hardest to fix, why smart people are worse, and there might be something that can help us.",
+    "url": "blog/confirmation-bias-is-the-mother-bias.html",
+    "image": "img/photography/thumb/66.webp",
+    "series": {
+      "name": "Cognitive Biases",
+      "part": 1
+    },
+    "readMinutes": 7,
+    "words": 1440
+  },
+  {
     "title": "Tabu Search, Live",
     "date": "2026-08-26",
     "tags": [

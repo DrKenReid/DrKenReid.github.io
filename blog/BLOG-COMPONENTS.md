@@ -435,3 +435,25 @@ Every published post needs an entry at the top of `data/posts.json`:
 - Multi-part posts may add `"series": {"name": "Series Name", "part": 1}` — every post sharing that series name gets an automatic parts banner under its meta line
 - Related-posts sections are baked by `scripts/generate_related_posts.py` (TF-IDF over post text); rerun it after publishing so other posts can recommend the new one
 - Do NOT add unpublished posts here until Ken confirms push
+
+---
+
+## 20. Narrator Scene Box (recurring example)
+
+```html
+<aside class="kr-scene">
+  <p class="kr-scene-label">The dinner table</p>
+  <p>Scene text goes here.</p>
+</aside>
+```
+
+**CSS classes:** `kr-scene`, `kr-scene-label`
+**Notes:** A "narrator voice" panel, set apart from article prose by an
+accent left rule and a tinted background. Built for the Cognitive Biases
+series, where the same handful of scenes (the dinner table, the
+dashboard, the gym) are reworked in every part so readers recognise them
+across posts; reusable anywhere a post carries a standing example. The
+label is the scene name, not a heading, so it stays out of the document
+outline and out of the auto-generated contents. Use `<aside>` rather than
+`<div>`: the content is set apart from the main narrative. Keep the
+introducing sentence in normal prose above the box.

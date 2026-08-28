@@ -5,11 +5,123 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 26 Aug 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Fri, 28 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Confirmation Bias Is the Mother Bias</title>
+      <link>https://www.kenreid.co.uk/blog/confirmation-bias-is-the-mother-bias.html</link>
+      <guid>https://www.kenreid.co.uk/blog/confirmation-bias-is-the-mother-bias.html</guid>
+      <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+      <description>Confirmation bias is the bias under the biases. Why it&#x27;s the hardest to fix, why smart people are worse, and there might be something that can help us.</description>
+      <category>philosophy</category>
+      <category>science</category>
+      <content:encoded><![CDATA[
+ <h1>Confirmation Bias Is the Mother Bias</h1>
+ <div class="blog-meta">
+ 28 August 2026 &middot;
+ <span class="blog-tag">science</span>
+ <span class="blog-tag">philosophy</span>
+ </div>
+
+ <p>Nobody googles "reasons I am wrong about this". We google "reasons I am right about this", and we smugly nod at how wise we are.</p>
+
+ <p>There are dozens of named cognitive biases, and this is the start of a series on them - I find them fascinating and I'm using this series as a means to learn about some psychology 101, and share what I've learned. One such bias sits under the others and is something of a basis for others. Confirmation bias is the tendency to seek, notice, remember and believe evidence that supports what we already think, and to ignore, discount or forget evidence that doesn't. It's how your uncle can keep bringing up the same political arguments at Thanksgiving dinner, forgetting what you've already said that clearly counters his argument - he won't remember, because the information you provide is irrelevant to him.</p>
+
+ <h2>Evidence</h2>
+
+ <p>The comforting model of the mind is a courtroom: you gather evidence, weigh it impartially, and reach a verdict. The actual mind runs the process backwards most of the time. You start with the verdict (the belief you already hold, or want to hold) and then work as its defence lawyer, scouring for supporting evidence and cross-examining anything inconsistent into silence. </p>
+
+ <p>You search for confirming information. You read ambiguous evidence as supporting your side. You remember the hits and forget the misses. You let confirming evidence in over a doorstep and make disconfirming evidence climb a wall<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>. </p>
+
+ <h2>Setting the Stage</h2>
+
+ <p>I want to put two scenes down here, because I am going to keep returning to them throughout the series (or try to, if I can bend the examples enough each time!). Every bias in this run is easier to see when it happens to the same people in the same rooms, so: meet the dinner table and the dashboard. They will be back!</p>
+
+ <aside class="kr-scene">
+  <p class="kr-scene-label">The dinner table</p>
+  <p>My uncle has decided the earth is flat. He arrives at dinner with a video of a coastline where you can supposedly see a lighthouse the curve should have hidden, and a man saying "they never show you the curve." He found it in seconds, because he searched for "proof flat earth real". I countered it, again. You can lie down, watch the sun set, then stand up and watch it set a second time, which wouldn't work on a flat earth. All the other planets can be observed to be spherical. Shadows over time show the Earth is round. None of it sticks: the counter-evidence is immediately dismissed. I run the same search he does, I consider it and work through from his perspective back to mine, rather than searching "proof earth is not flat", and that makes me understand his approach more, and reinforces my position as a rigorous argument, instead of parroting what I previously read.</p>
+  <figure style="margin: 18px 0 4px;">
+   <img src="https://www.kenreid.co.uk/img/photography/thumb/211.webp" alt="An older man in glasses and a tie at a busy restaurant dinner table, mid-conversation, wine glasses and flowers in front of him" loading="lazy" style="width:100%; display:block; border-radius:8px;">
+   <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+  </figure>
+  <p class="kr-scene-note">The uncle searched for evidence to prove his position, assuming he was already correct, not showing curiosity and willingness to consider other opinions. Classic confirmation bias.</p>
+ </aside>
+
+ <aside class="kr-scene">
+  <p class="kr-scene-label">The neighbour</p>
+  <p>I knew before even moving into my new place that my neighbours wouldn't like me. And, in my first week here, that man across the road clearly didn't like me. He doesn't wave, and then, when he does wave, it's begrudging, only after I do. He put his bins out later than me, but then after he saw I did it earlier, he's almost doing it the night before to beat me. I send him a Christmas card but he didn't send one to me. He did sign for a parcel for me when I wasn't home, but it just feels like he's doing it to have one over me, seem to be the nicer neighbour - so fake. I knew it before I even met my neighbour: I knew he wouldn't like me, and every interaction just proves it. </p>
+  <figure style="margin: 18px 0 4px;">
+   <img src="https://www.kenreid.co.uk/img/photography/thumb/306.webp" alt="A concrete tower block shot from below against a clear blue sky, rows of windows receding upward" loading="lazy" style="width:100%; display:block; border-radius:8px;">
+   <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+  </figure>
+  <p class="kr-scene-note">Here, the person new to the neighbourhood already decided how the relationships with their neighbours would be, and took any evidence (even the neighour being nice) as evidence for the neighbour hating them.</p>
+ </aside>
+
+ <h2>Why intelligence hinders you</h2>
+
+ <p>Being clever, educated or numerate does not protect you (despite what most of us tell ourselves), and can make things <em>worse</em>. A smarter person is a better lawyer: quicker at generating persuasive arguments for what they already believe, better at spotting the flaw in inconvenient evidence, more fluent at explaining away the anomaly. It's funny how we assume intelligent people are wiser. There's a reason wisdom and intelligence are separate ability scores in pathfinder and dungeons a dragons: intelligence is knowing that a tomato is a fruit, wisdom is not adding it to your cereal.</p>
+
+ <p>Studies find that greater numeracy and reasoning ability can <em>increase</em> polarisation on politically charged questions, because people put their cognitive horsepower to work for their existing side rather than for the truth<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>. The ignorant are overconfident, fine, we all knew that. The capable are better at rationalising, which is not a great thing for society.</p>
+
+ <h2>The one habit that helps (apparently)</h2>
+
+ <p>Willpower does nothing here. "Be less biased" is an instruction on the level of "be taller". Confirmation bias runs below awareness, so telling yourself to be fair-minded mostly produces a more confident lawyer. The thing that helps is structural: <strong>go and find the strongest version of the opposing case.</strong></p>
+
+ <p>Before settling a belief that matters, hunt down the best argument <em>against</em> it, from the cleverest people who disagree, and try to state their case so well they would sign off on your summary. That is steelmanning, and it is the discipline behind <a href="https://www.kenreid.co.uk/blog/how-to-write-a-blog.html">how I try to write</a> (and mostly fail at).</p>
+
+ <p>Ask "what would change my mind?" and get worried if the answer is "nothing". Watch for the flinch, too. That little urge to wave a piece of evidence away is strong and itself deeply bias - you're doing that with your "tribe", your "side" and your "argument" in mind, not actually fairly comparing evidence. Your defence lawyer has found something and would like it kept out of the record.</p>
+
+ <h2>But, even with that...</h2>
+
+ <p>It won't make you unbiased. Nothing does. But - it will insert a step where you point your intelligence towards something more than building walls.</p>
+
+ <p>You cannot trust your sense of having weighed the evidence fairly. It is a horrible fact to know about yourself and we're kind of stuck with that fact. What's worse, knowing this doesn't solve the problem. It's like recognizing you having a proclivity for a certain flavor of ice cream doesn't make you like all of them equally suddenly. But maybe it can help you try new flavors, if you take that next step. This metaphor is a bit stretched: what I mean is, try thinking of other perspectives thoroughly. Intellectual empathy; emotional, too. </p>
+
+ <figure style="margin: 24px auto;">
+  <img src="https://www.kenreid.co.uk/img/photography/thumb/66.webp" alt="Stainless steel trays of gelato in a shop counter, chocolate chip, caramel swirl and nut flavours side by side" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+  <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+ </figure>
+
+ <p>Go and read the <a href="https://doi.org/10.1037/1089-2680.2.2.175" target="_blank" rel="noopener">Nickerson review</a>. It came out in 1998.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>If everyone has confirmation bias, isn't objective truth hopeless?</summary>
+ <p>No. Individuals are badly biased, but well-designed <em>systems</em> can be much better than any individual in them. Science works, imperfectly, because it institutionalises disconfirmation: peer review, replication, adversarial scrutiny, predictions registered. The fix for a bias you cannot remove from a single head is to build processes where other people's confirmation biases point in opposite directions and cancel it out, somewhat.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>How is confirmation bias different from just having strong opinions?</summary>
+ <p>Having a strong opinion is fine and often justified. Confirmation bias is about how you <em>maintain</em> it: protecting it by filtering evidence instead of testing it. What gives it away is not the strength of the belief but how the belief behaves when challenged. A well-held strong opinion can name what would change it and engages with the best counterarguments. A bias-protected one waves disconfirming evidence off without looking at it and never seems to update about anything, ever. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Doesn't steelmanning the other side just make me vulnerable to bad ideas?</summary>
+ <p>I think that a belief challenged is a belief trained, like lifting weights. It hurts, and is tiring, but it is the only way to improve. If you argument is so weak that it can't stand up to alternative view points, why are you so keen to hold onto it? </p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+ <ol class="references">
+          <li id="ref-1">
+            Nickerson, R. S. (1998). Confirmation bias: A ubiquitous phenomenon in many guises. <em>Review of General Psychology</em>, 2(2), 175&ndash;220. <a href="https://doi.org/10.1037/1089-2680.2.2.175" target="_blank" rel="noopener">https://doi.org/10.1037/1089-2680.2.2.175</a>
+          </li>
+          <li id="ref-2">
+            Kahan, D. M., et al. (2017). Motivated numeracy and enlightened self-government. <em>Behavioural Public Policy</em>, 1(1), 54&ndash;86. <a href="https://doi.org/10.1017/bpp.2016.2" target="_blank" rel="noopener">https://doi.org/10.1017/bpp.2016.2</a>
+          </li>
+        </ol>
+
+        
+
+ <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
+ <hr style="margin: 40px 0;">
+ ]]></content:encoded>
+    </item>
     <item>
       <title>Tabu Search, Live</title>
       <link>https://www.kenreid.co.uk/blog/tabu-search-live.html</link>
@@ -4454,129 +4566,6 @@ return [post for _score, _date, post in ranked[:3]]</code></pre>
       <pubDate>Fri, 17 Jul 2026 00:00:00 +0000</pubDate>
       <description>A Python audit script and headless browser smoke tests run on every push. Here&#x27;s why a personal blog has a test suite.</description>
       <category>technology</category>
-      <content:encoded><![CDATA[
-        <h1>My Website Has a Test Suite</h1>
-        <div class="blog-meta">
-          17 July 2026 &middot;
-          <span class="blog-tag">technology</span>
-        </div>
-
-        <p>Deprecations, external dependency shutdowns, infrastructure changes, data changes and shifting standards. Websites rot: each broken piece sits there for months until a reader (or worse, a potential employer) finds it before you do. I got tired of discovering this stuff by accident, so I gave it a test suite.</p>
-
-        <p>This post covers a static audit script that reads every page like a very pedantic proofreader, and a headless browser test that loads the site like a very terminal focused nerd. These both run automatically on every push.</p>
-
-        <div class="plain-english-box">
-          <h2>Quick jargon guide</h2>
-          <ul>
-            <li><strong>CI (continuous integration):</strong> a robot that runs your checks every time you change the code, so a mistake is caught minutes after you make it instead of months later.</li>
-            <li><strong>GitHub Actions:</strong> GitHub's built-in CI. You describe jobs in a small text file; GitHub runs them on their machines for free whenever you push.</li>
-            <li><strong>Static audit:</strong> checks that read the HTML files as text, without a browser: do the links point at real files, do the pages have descriptions, and so on.</li>
-            <li><strong>Headless browser:</strong> a real browser running invisibly, controlled by a script. It executes the JavaScript and renders the page, catching what text-reading can't.</li>
-            <li><strong>Alt text:</strong> the written description attached to an image, read aloud by screen readers. Missing alt text is the most common accessibility failure on the web.</li>
-            <li><strong>Smoke test:</strong> the minimum useful test: turn it on, see if smoke comes out. For a website: load the page, check the important things actually appeared.</li>
-          </ul>
-        </div>
-
-        <h2>The proofreader</h2>
-
-        <p>The first half is <code>audit_site.py</code>, a Python script with no dependencies beyond the standard library. It asks git for every tracked HTML file, parses each one, and complains about everything it doesn't like. It requires <strong>zero errors, zero warnings</strong>, on every page, on every commit.</p>
-
-        <p>What it checks, roughly in order of how often it has saved me:</p>
-
-        <ul>
-          <li><strong>Broken links and images.</strong> Every internal link and image source is resolved to an actual file on disk. A renamed page or a missing thumbnail fails the audit immediately.</li>
-          <li><strong>Metadata.</strong> Every page needs a description of sensible length, a canonical URL that matches its filename, and the social preview tags that make links look respectable when shared. The audit also validates that the preview image actually exists (this caused me so many issues trying to understand how social media sites grab images).</li>
-          <li><strong>Structured data.</strong> Each blog post carries a machine-readable summary for search engines. The audit parses every one and checks each URL inside it, because invalid structured data fails silently in the real world.</li>
-          <li><strong>Accessibility basics.</strong> Images without alt text, duplicate element ids, missing or multiple h1 headings, and skipped heading levels all get flagged for accessibility requirements I set.</li>
-          <li><strong>The data files.</strong> The blog listing is driven by a JSON file: every entry must point at a real page and a real image, every date must be well-formed, and every tag must come from a fixed allowed list. That last one exists because the tag buttons are generated dynamically, so a typo like "phtography" wouldn't error; it would just mint a brand-new filter button and display it.</li>
-          <li><strong>The feeds.</strong> The RSS feed and the sitemap are parsed and reconciled against the post list, so publishing a post without wiring it up everywhere gets caught. Not much point in publishing a new blog that isn't shown anywhere!</li>
-        </ul>
-
-        <figure>
-          <img src="https://www.kenreid.co.uk/img/photography/thumb/4.webp" alt="Two wrecked wooden fishing boats rotting on a tidal mudflat under a heavy grey sky" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
-          <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> </figcaption>
-        </figure>
-
-        <h2>Headless smoke tests</h2>
-
-        <p>The audit reads files; it cannot tell you whether the page actually <em>works</em>. This site injects its header, footer, comments, and related posts with JavaScript, and it animates sections into view as you scroll. A one-character mistake in that JavaScript can leave a page technically valid and completely blank, and the audit wouldn't catch it.</p>
-
-        <p>So the second half is a smoke test built on <a href="https://playwright.dev/" target="_blank" rel="noopener noreferrer">Playwright</a>, which drives a real, invisible Chromium. The script serves the repository over a local web server, loads seven representative pages, waits a few seconds for the JavaScript and animations to settle, and then asserts on what a visitor would actually see:</p>
-
-<pre><code class="language-python"># A few of the checks, one page each:
-# index.html   - hero present, live-stats skeletons cleared, blog cards visible
-# blog.html    - at least 3 post cards and 3 tag filter buttons rendered
-# gallery.html - at least 12 photos in the grid
-# a blog post  - body text visible (opacity != 0), table of contents built
-# quotes.html  - at least 500 quote cards
-# map.html     - the map initialised with at least 10 markers</code></pre>
-
-        <p>The site reveals sections with a fade-in animation, which means a JavaScript failure doesn't remove content, it leaves content sitting in the page at opacity zero: present in the HTML, invisible to humans. That is the failure a static checker can never catch. The check is a Python tuple holding a line of JavaScript, evaluated inside the live page:</p>
-
-<pre><code class="language-python">("post body visible",
- "(() => { const p = document.querySelector('.blog-post > p');"
- "  return p &amp;&amp; getComputedStyle(p).opacity !== '0'; })()"),</code></pre>
-
-        <p>The test also collects console errors, ignoring the third-party noise (analytics, embeds) and failing on anything from my own code.</p>
-
-        <h2>The robot that runs it all</h2>
-
-        <p>Both halves run in GitHub Actions on every push. The workflow has two jobs: one installs Python and runs the audit plus three build checks: that the minified stylesheet is up to date (the CSS build is <a href="https://www.kenreid.co.uk/blog/self-hosting-your-fonts.html">its own story</a>), that every post's read time matches its current word count, and that the baked related-posts blocks still match a fresh ranking; the other installs Playwright and runs the smoke tests. If either fails, I get an email and a red X on the commit within a few minutes. A local pre-commit hook runs the CSS check too, so most mistakes never even reach GitHub.</p>
-
-        <p>Is this overkill for a personal site? No: it's <em>because</em> the site is a hobby that I need automation. Nobody is paid to notice when this site breaks (or, you know, paid for writing blogs, creating the site, etc.). There is no QA department, no on-call rota, just me, and I would rather spend my evenings writing posts than manually clicking every link on fifty pages. The test suite is what lets a one-person site behave like it has staff.</p>
-
-        <p>The suite also enforces my rules on me. Zero errors and zero warnings sounds strict, but a clean baseline means any non-zero number is news.</p>
-
-        <h2>What it still misses</h2>
-
-        <p>The audit checks that every referenced image exists <em>on disk</em>. It does not check that the image is committed to git. I published a post whose hero image existed on my machine but had never been committed, every local check passed, and the live site served a grey void where a seascape should have been. A reader (fine: me) spotted it and fixed it later that day, but that's not great when I already had a few dozen readers.</p>
-
-        <p>Each gap you find becomes the next check you write. The fix here is a rule that any local file referenced by a tracked page must itself be tracked, which is one more function in the audit script. Here is that check as it runs today (lightly trimmed):</p>
-
-<pre><code class="language-python">def check_target(url, line, what="target"):
-    local = resolve_local(page, url)
-    if local is None:
-        return  # external URL, checked elsewhere
-    if not local.exists():
-        add("ERROR", page, line, "broken-link", f"missing {what}: {url}")
-    elif page_is_tracked:
-        relp = local.resolve().relative_to(ROOT).as_posix()
-        if relp not in tracked:
-            add("ERROR", page, line, "untracked-ref",
-                f"{what} exists locally but is not tracked by git: {url}")</code></pre>
-
-        <p>Fittingly, that check fired while I was preparing this very post: the hero image at the top of this page existed on my machine and had never been committed. Test suites are never finished, only extended.</p>
-
-        <div class="faq-section">
-          <h2>Common questions</h2>
-
-          <details class="faq-item">
-            <summary>Isn't this what link checkers and Lighthouse already do?</summary>
-            <p>Partly, and I'd recommend either over nothing. The difference is specificity: a generic tool doesn't know that my tags come from an allowed list, that my posts share a canonical script set, or that my feed must mirror my posts file. The checks that catch real mistakes are the ones that encode <em>your</em> site's requirements.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>How long did this take to build?</summary>
-            <p>The first version of the audit was ten minutes: parse the HTML, resolve the links, print complaints. Everything else accreted one check at a time, usually after some error broke the live page. </p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Does CI like this cost anything?</summary>
-            <p>At most a couple of dollars a month for my little site.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Where would you start on an existing site?</summary>
-            <p>Broken internal links, missing alt text, and missing page descriptions, in that order. </p>
-          </details>
-        </div>
-
-        
-
-
-        <hr style="margin: 40px 0;">
-        <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
-      ]]></content:encoded>
     </item>
     <item>
       <title>My Teacher Said I Shouldn&#x27;t Go To University</title>
