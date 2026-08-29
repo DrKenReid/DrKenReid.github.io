@@ -62,7 +62,6 @@ THEME_COLOR_LINE = '<meta name="theme-color" content="#1a1a1a">'
 MANIFEST_LINE = '<link rel="manifest" href="../manifest.json">'
 
 THUMB_RE = re.compile(r'^img/photography/thumb/(\d+)\.webp$')
-RELEASE = 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1'
 
 
 # --------------------------------------------------------------------------
@@ -88,12 +87,18 @@ def esc(text):
 
 
 def og_image(post):
-    """Social card image. Thumbs map to the full-size photo in the
-    photos-v1 release; anything else is served from the site."""
+    """Social card image, always served from the site.
+
+    Thumbs map to the 1920px hero rendition rather than to the photos-v1
+    release PNG. A release asset 302s to a signed, expiring URL that sends
+    Content-Type: application/octet-stream and Content-Disposition:
+    attachment, so scrapers reject it as an image and fall back to whatever
+    they can find in the page body (a related-post card thumbnail, usually).
+    Pages serves the hero as image/webp from a stable URL."""
     image = post.get('image', '')
     thumb = THUMB_RE.match(image)
     if thumb:
-        return f'{RELEASE}/{thumb.group(1)}.png'
+        return f'{SITE}/img/photography/hero/{thumb.group(1)}.webp'
     if image.startswith('http'):
         return image
     return f'{SITE}/{image}'
