@@ -3420,7 +3420,7 @@ frame.contentWindow.postMessage(
   "headline": "The Invisible Half of a Blog Post",
   "author": { "@type": "Person", "name": "Ken Reid", "url": "https://www.kenreid.co.uk" },
   "datePublished": "2026-08-04",
-  "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/78.png"
+  "image": "https://www.kenreid.co.uk/img/photography/hero/78.webp"
 }
 &lt;/script&gt;</code></pre>
 
