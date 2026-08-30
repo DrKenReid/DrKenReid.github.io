@@ -1,5 +1,23 @@
 [
   {
+    "title": "The Availability Heuristic Runs the News",
+    "date": "2026-08-30",
+    "tags": [
+      "philosophy",
+      "science"
+    ],
+    "category": "Ideas",
+    "excerpt": "We judge likelihood by how easily examples come to mind, so we fear the vivid and rare and shrug at the common and deadly. Why the news makes us afraid of the wrong things.",
+    "url": "blog/the-availability-heuristic-runs-the-news.html",
+    "image": "img/photography/thumb/63.webp",
+    "series": {
+      "name": "Cognitive Biases",
+      "part": 2
+    },
+    "readMinutes": 6,
+    "words": 1225
+  },
+  {
     "title": "Confirmation Bias Is the Mother Bias",
     "date": "2026-08-28",
     "tags": [

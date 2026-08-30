@@ -5,11 +5,122 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 28 Aug 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Sun, 30 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Sun, 30 Aug 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>The Availability Heuristic Runs the News</title>
+      <link>https://www.kenreid.co.uk/blog/the-availability-heuristic-runs-the-news.html</link>
+      <guid>https://www.kenreid.co.uk/blog/the-availability-heuristic-runs-the-news.html</guid>
+      <pubDate>Sun, 30 Aug 2026 00:00:00 +0000</pubDate>
+      <description>We judge likelihood by how easily examples come to mind, so we fear the vivid and rare and shrug at the common and deadly. Why the news makes us afraid of the wrong things.</description>
+      <category>philosophy</category>
+      <category>science</category>
+      <content:encoded><![CDATA[
+ <h1>The Availability Heuristic Runs the News</h1>
+ <div class="blog-meta">
+ 30 August 2026 &middot;
+ <span class="blog-tag">science</span>
+ <span class="blog-tag">philosophy</span>
+ </div>
+
+ <p>The news is a list of the least representative things that happened yesterday, which you might think - great, that's interesting! The problem is, our minds calibrate to work out how dangerous the world is with this information. Quick: which is more dangerous, flying or driving? Sharks or vending machines? Terrorism or heart disease? If your gut said "flying, sharks, terrorism", your gut is confidently and dramatically wrong.</p>
+
+ <p>You judge how likely a thing is by how <em>easily</em> examples come to mind. The examples that come easily are the vivid ones, the ones the news showed you. That, in a nutshell, is the availability heuristic, and it runs your sense of risk, your politics, and a fair amount of your fear.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Availability heuristic:</strong> judging how likely something is by how easily examples spring to mind.</li>
+ <li><strong>Base rate:</strong> how often a thing actually happens, as opposed to how often you hear about it.</li>
+ <li><strong>Denominator:</strong> the "out of how many" under every scary number; a headline usually reports the numerator and skips this part.</li>
+ <li><strong>Newsworthiness filter:</strong> news reports the unusual by definition, so what reaches you is selected against being representative.</li>
+ <li><strong>Doomscrolling:</strong> an infinite feed of the world's most vivid catastrophes, which your gut reads as a frequency table.</li>
+ </ul>
+ </div>
+
+ <h2>The shortcut</h2>
+
+ <p>The availability heuristic, named by Tversky and Kahneman, is the brain's habit of estimating how frequent or likely something is by how readily instances spring to mind<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>. Most of the time it's a decent shortcut: common things usually <em>are</em> easier to recall than rare ones, so "easy to remember" tracks "actually frequent" well enough to get you through a Tuesday.</p>
+
+ <p>It fails when ease of recall is driven by something <em>other</em> than frequency. In the modern world that is constant: vividness, emotional intensity and media coverage all make an event easier to recall without making it any more common.</p>
+
+ <p>So the events that dominate our sense of risk are the rare, dramatic, well-covered ones. Plane crashes get wall-to-wall coverage, and car crashes, which kill vastly more people, are too routine to report, so flying <em>feels</em> more dangerous while being far safer per mile.</p>
+
+ <h2>The risks with no pictures</h2>
+
+ <p>Shark attacks get a summer of headlines out of a handful of incidents, while the far deadlier risks (heart disease, the drive to the beach) produce no images at all. Terrorism reshapes whole societies' fears and budgets while killing a tiny fraction of the number who die of the mundane, unphotogenic causes nobody panics about. That last one makes me angry.</p>
+
+ <p>The mismatch between what we fear and what actually harms us is, in large part, the availability heuristic reading the news as if it were a frequency table<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+
+ <h2>The news is an availability machine</h2>
+
+ <p>The news isn't lying, which is the trap. News reports the <em>un</em>usual by definition: "plane lands safely" is not a story, "plane crashes" is. That newsworthiness filter guarantees that what reaches you is the rare and dramatic rather than the common and deadly.</p>
+
+ <figure style="margin: 24px auto;">
+  <img src="https://www.kenreid.co.uk/img/photography/thumb/89.webp" alt="A city stretching to the hills under a lid of dark storm clouds" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+  <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+ </figure>
+
+ <p>So the news stocks your memory with the vivid, atypical events that the availability heuristic will then treat as frequent ones. You get a mental sample of the world selected for drama and against representativeness, and your sense of risk is built on that sample.</p>
+
+ <p>This is a cousin of survivorship bias, and of the habit of analysing whatever data happened to be lying around: in all of them, a filtered sample gets mistaken for the whole picture.</p>
+
+ <p>Then there is doomscrolling. An infinite feed that tailors towards what you enjoy - the algorithm literally learns based on how quickly you scroll, or don't, from one item to the next, whether you comment, react, share. So when you show an interest in, well, interesting things that are, say, unusual, such as landslides, violence, politics, terrorism videos, whatever - you begin to see MORE of that because the algorithm learns what you interact with. Therefore, you start to think "this is how things are".</p>
+
+ <p>The same wiring that helped an ancestor remember which mushroom caused a friend to die, or where there were dangerous animals, is now allowing you to identify dangerous patterns in a carefully crafted information feed, fed to you from your phone.</p>
+
+ <h2>What to do about a bias you can't turn off</h2>
+
+ <p>You can't just "stop" this by knowing it exists, but you can install a correction: <strong>when you notice fear, or a judgement about risk, ask where the example came from.</strong> Did this feel likely because you have base-rate data, or because a headline handed you a picture? That one question separates "this is common" from "this is merely memorable".</p>
+
+ <h2>The boring denominators</h2>
+
+ <p>The deeper practice is going after <em>base rates</em>, the boring denominators, instead of anecdotes. How many flights per crash? How many people drive, versus how many die driving? What's the trend, rather than the latest incident?</p>
+
+ <p>Numbers are the antidote because they're unmoved by vividness. A statistic does not care how frightening your mental image is (notice how often journalists say "thousands" without the "out of millions"). So the frightening image is your cue to go and find the statistic.</p>
+
+ <p>Your intuition has been fed a curated diet of the dramatic, so when it hands you a confident sense of how risky the world is, treat the confidence as a symptom rather than a measurement.</p>
+
+ <p>Next time a headline frightens you, go and find the denominator. It's usually two searches away, and nowhere near as interesting as the headline.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Doesn't this just tell people to ignore the news and real dangers?</summary>
+ <p>Journalists judge success by number of viewers and interactions. They are incentivised to make news that is clickbait, sensationalised, or blatantly pandering to specific crowds. "The news" is real-world information filtered through groups of people incentivised to misbehave. I recommend at least trying various news outlets, but preferably, get your news from smaller agencies, and be deeply discerning.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>If the world is safer than it feels, why does everyone feel it's getting worse?</summary>
+ <p>There are a half-dozen upcoming apocalypses that are real, including climate change, antibiotic resistance, and world war. Use your time and anxiety to better the world and our chances of preventing those things, don't fret over inflated figures from pot-stirring articles complaining about immigration or gang violence - it's clickbait and it is seeding hatred against our fellow humans.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Isn't it a bit privileged to tell people their fears are irrational?</summary>
+ <p>It would be, if the claim were "your fears are stupid". The heuristic is a universal shortcut with a sensible origin, not a personal failing, and plenty of the fears it produces are justified. The argument is only that ease of recall and true frequency come apart in a media-saturated world, so it pays to check which one a given fear is tracking, especially for the high-stakes calls (what to worry about, how to vote, what you will let reshape a society). Respecting people's fears and helping them aim those fears well are compatible.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+ <ol class="references">
+          <li id="ref-1">
+            Tversky, A., &amp; Kahneman, D. (1973). Availability: A heuristic for judging frequency and probability. <em>Cognitive Psychology</em>, 5(2), 207&ndash;232. <a href="https://doi.org/10.1016/0010-0285(73)90033-9" target="_blank" rel="noopener">https://doi.org/10.1016/0010-0285(73)90033-9</a>
+          </li>
+          <li id="ref-2">
+            Slovic, P. (1987). Perception of risk. <em>Science</em>, 236(4799), 280&ndash;285. <a href="https://doi.org/10.1126/science.3563507" target="_blank" rel="noopener">https://doi.org/10.1126/science.3563507</a>
+          </li>
+        </ol>
+
+        
+
+ <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
+ <hr style="margin: 40px 0;">
+ ]]></content:encoded>
+    </item>
     <item>
       <title>Confirmation Bias Is the Mother Bias</title>
       <link>https://www.kenreid.co.uk/blog/confirmation-bias-is-the-mother-bias.html</link>
@@ -4490,84 +4601,6 @@ return [post for _score, _date, post in ranked[:3]]</code></pre>
       <description>An interactive ant colony optimiser in your browser: watch a shortest path emerge from thousands of tiny, blind, local decisions, and see what evaporation is really for.</description>
       <category>ai</category>
       <category>data science</category>
-      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">View it on the site</a> to play with it.</em></p>
- <h1>Ant Colony, Live</h1>
- <div class="blog-meta">
- 19 July 2026 &middot;
- <span class="blog-tag">ai</span>
- </div>
-
- <p>This search strategy is about something strange and, to me, a fascinating trick we have learned from observing and being inspired by nature: a shortest path found by thousands of blind agents, not one of which has any idea what it's doing.</p>
-
- 
-
- <p>Real ants find the shortest route between nest and food with no map, no memory to speak of, and no leader. Each ant follows two dumb rules: wander, biased toward the smell of pheromone, and drop pheromone as you walk. And yet the colony reliably solves a problem no individual ant could even represent. The intelligence isn't of the ants, it's <em>emergent</em>.</p>
-
- <div class="plain-english-box">
- <h2>Quick jargon guide</h2>
- <ul>
- <li><strong>Ant Colony Optimization (ACO):</strong> an optimiser inspired by foraging ants, where many simple agents build solutions and reinforce good ones with virtual "pheromone".</li>
- <li><strong>Stigmergy:</strong> coordination through the environment rather than direct communication. Ants don't talk; they edit a shared chemical map, and the map tells the next ant what to do.</li>
- <li><strong>Pheromone:</strong> a virtual scent deposited on good path segments. It marks routes that worked, biasing future ants toward them.</li>
- <li><strong>Evaporation:</strong> pheromone fading over time. Without it, early mistakes get locked in forever; it's the colony's way of forgetting.</li>
- <li><strong>Exploration vs exploitation:</strong> the balance between following strong trails (exploit) and trying new paths (explore). A tunable weight.</li>
- <li><strong>Emergence:</strong> a behavior exhibited in colonies or groups of organisms that provides solutions without any individual understanding the problem.</li>
- </ul>
- </div>
-
- <h2>How dumb agents get smart together</h2>
-
- <p>Many ants set out at random. Shorter routes get walked end-to-end faster, so an ant on a short route completes more trips in the same time, so it lays pheromone more often per unit time. The short route therefore accumulates scent faster than long ones. The next wave of ants, biased toward scent, is more likely to pick it, which lays yet more scent, which biases yet more ants. A positive feedback loop amplifies whatever's working.</p>
-
- <p>Left unchecked, that loop would be a disaster: the first route to get lucky would snowball and lock in, good or not. Which is why evaporation is essential. Scent fades, so a route has to keep <em>proving itself</em> to stay attractive; a stale trail to a mediocre route decays away and frees the colony to find something better. Reinforcement finds good solutions; forgetting stops the colony being stuck with the first trail. Marco Dorigo formalised all this in the early 1990s<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>, and it turned out to be competitive on routing problems (think Amazon deliveries, Google maps, etc.)
-
- <h2>Watch the trail form</h2>
-
- <p>Below, a colony is foraging on a small map. Watch the pheromone (the glow on the paths) start uniform and noisy, then sharpen, as one route out-competes the others and the colony pours itself onto it as an emergent behavior.</p>
-
- 
-
- <h2>A colony that can't forget</h2>
-
- <p><strong>Turn evaporation off.</strong> The colony commits, hard and early, to whatever route happened to get the first head start, and then it's stuck there forever even when a shorter path is sitting right next to it. This is premature convergence. A colony that can't forget can't improve.</p>
-
- <p><strong>Turn evaporation up to maximum.</strong> Now the opposite: trails vanish before they can build, the colony never commits to anything, and the ants wander like it's the first minute forever. Memory that's too short is as useless as memory that's too long. The sweet spot between them is key - interesting thought, right?</p>
-
- <p><strong>Crank exploration.</strong> Push the ants to ignore the trails and strike out on their own, and watch a fascinating trade: the colony becomes slow to lock onto the best route but much better at noticing when the world changes (drag the food and see). Low exploration is fast and brittle; high exploration is slow and adaptive. </p>
-
- <h2>Why "no one is in charge"</h2>
-
- <p>The thing I most want you to take from watching this is the absence at the centre. There is no queen ant in charge. There is no scout ant specialized in picking up distant scents that knows the route. If you interrogated every single ant, none could tell you the solution, because the solution isn't stored in any ant: it's stored in the environment, in the pattern of scent, edited a little by each passing insect and read a little by the next. Intelligence, here, is a property of the <em>system</em>, not any of its parts.</p>
-
- <p>Starlings do it in the sky, neurons do it in your skull, markets do it (imperfectly), and it's the reason I find swarm methods fascinating. We're used to thinking capability requires a capable agent: a smart ant, a smart boss, a smart model. Stigmergy says no. Get the local rules and the shared medium right, and competence can emerge from a crowd of things too simple to hold it individually. The same process that finds the food can also stampede a colony, or a market, or a comment section, straight off a cliff -- emergence is not the same as wisdom. </p>
-
- <p>Anyway. Go drag the food around and watch a thing with no mind change its mind. </p>
-
- <div class="faq-section">
- <h2>Common questions</h2>
-
- <details class="faq-item">
- <summary>Do real ants actually do this?</summary>
- <p>The core process is real and was studied in actual ants (the classic double-bridge experiments showed colonies converging on the shorter branch via pheromone). The algorithm is still a simplification: real ant navigation also uses visual landmarks, path integration, and multiple pheromone types. As with the genetic algorithm, ACO borrows the idea as a metaphor; it's a faithful teacher of stigmergy and a loose model of entomology.</p>
- </details>
-
- <details class="faq-item">
- <summary>Is ant colony optimization actually used for anything?</summary>
- <p>Yes, mostly on routing and scheduling: network routing, vehicle routing, and various assignment problems, often hybridised with local search. It's rarely the outright best tool for a given problem (No Free Lunch), but it's competitive on dynamic problems where the environment keeps changing, because the evaporation-and-reinforcement loop naturally re-adapts, which is what you can watch when you drag the food.</p>
- </details>
- </div>
-
- <h2 class="section-heading" id="references">References</h2>
-
- <ol class="references">
-          <li id="ref-1">
-            Dorigo, M., Maniezzo, V., &amp; Colorni, A. (1996). Ant system: Optimization by a colony of cooperating agents. <em>IEEE Transactions on Systems, Man, and Cybernetics, Part B</em>, 26(1), 29&ndash;41. <a href="https://doi.org/10.1109/3477.484436" target="_blank" rel="noopener">https://doi.org/10.1109/3477.484436</a>
-          </li>
-        </ol>
-
-        
-
- ]]></content:encoded>
     </item>
     <item>
       <title>My Website Has a Test Suite</title>
