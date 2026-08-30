@@ -1,5 +1,22 @@
 [
   {
+    "title": "Making This Website Accessible",
+    "date": "2026-08-30",
+    "tags": [
+      "technology"
+    ],
+    "category": "Technology",
+    "excerpt": "Thirty small habits keep this site accessible: a skip link, screen-reader notes on new-tab links, reduced-motion fallbacks, and an audit that catches the many that I forget along the way.",
+    "url": "blog/making-this-website-accessible.html",
+    "image": "img/photography/thumb/367.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 15
+    },
+    "readMinutes": 5,
+    "words": 965
+  },
+  {
     "title": "The Availability Heuristic Runs the News",
     "date": "2026-08-30",
     "tags": [

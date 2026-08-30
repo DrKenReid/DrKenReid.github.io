@@ -1249,15 +1249,36 @@ function renderSeriesNav() {
             var box = document.createElement('nav');
             box.className = 'kr-series';
             box.setAttribute('aria-label', 'Article series: ' + entry.name);
+            // Long series collapse to the first three and last three parts,
+            // with a "See all" toggle between; the current post stays visible
+            // wherever it falls.
+            var collapse = parts.length > 6;
+            var hiddenCount = 0;
+            var items = parts.map(function(p, idx) {
+                var isCurrent = p.url === current.url;
+                var href = (p.url || '').replace(/^blog\//, '');
+                var label = 'Part ' + postSeriesEntry(p, entry.name).part + ': ' + p.title;
+                var hide = collapse && idx >= 3 && idx < parts.length - 3 && !isCurrent;
+                if (hide) hiddenCount++;
+                return '<li' + (isCurrent ? ' class="current" aria-current="page"' : '') + (hide ? ' hidden' : '') + '>' +
+                    (isCurrent ? label : '<a href="' + href + '">' + label + '</a>') + '</li>';
+            });
+            if (collapse && hiddenCount) {
+                items.splice(3, 0, '<li class="kr-series-more"><button type="button" aria-expanded="false">See all ' +
+                    parts.length + ' parts</button></li>');
+            }
             box.innerHTML = '<a class="kr-series-label" href="' + seriesPageHref(entry.name) + '">Series · ' + entry.name + '</a>' +
-                '<ol class="kr-series-parts">' +
-                parts.map(function(p) {
-                    var isCurrent = p.url === current.url;
-                    var href = (p.url || '').replace(/^blog\//, '');
-                    var label = 'Part ' + postSeriesEntry(p, entry.name).part + ': ' + p.title;
-                    return '<li' + (isCurrent ? ' class="current" aria-current="page"' : '') + '>' +
-                        (isCurrent ? label : '<a href="' + href + '">' + label + '</a>') + '</li>';
-                }).join('') + '</ol>';
+                '<ol class="kr-series-parts">' + items.join('') + '</ol>';
+            var moreBtn = box.querySelector('.kr-series-more button');
+            if (moreBtn) {
+                moreBtn.addEventListener('click', function() {
+                    box.querySelectorAll('.kr-series-parts li[hidden]').forEach(function(li) {
+                        li.hidden = false;
+                    });
+                    var holder = moreBtn.closest('li');
+                    holder.parentNode.removeChild(holder);
+                });
+            }
 
             if (anchor && anchor.parentNode) {
                 anchor.parentNode.insertBefore(box, anchor.nextSibling);

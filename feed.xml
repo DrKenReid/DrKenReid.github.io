@@ -11,6 +11,105 @@
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Making This Website Accessible</title>
+      <link>https://www.kenreid.co.uk/blog/making-this-website-accessible.html</link>
+      <guid>https://www.kenreid.co.uk/blog/making-this-website-accessible.html</guid>
+      <pubDate>Sun, 30 Aug 2026 00:00:00 +0000</pubDate>
+      <description>Thirty small habits keep this site accessible: a skip link, screen-reader notes on new-tab links, reduced-motion fallbacks, and an audit that catches the many that I forget along the way.</description>
+      <category>technology</category>
+      <content:encoded><![CDATA[
+ <h1>Making This Website Accessible</h1>
+ <div class="blog-meta">
+ 30 August 2026 &middot;
+ <span class="blog-tag">technology</span>
+ </div>
+
+ <p>I have <a href="https://www.kenreid.co.uk/blog/accessibility-first-product-design-data-science.html">banged on before</a> about accessibility working best as a starting constraint rather than a retrofit. This site is where I get to practise that habit continually: my core philosophy is that if something is inaccessible to some it may as well be inaccessible to all. I make sure of this with a pile of small habits, and an audit script that catches the bits I inevitably miss. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Screen reader:</strong> software that reads a page aloud (or to a braille display) for blind and low-vision users, navigating by headings, links, and landmarks rather than by looking.</li>
+ <li><strong>WCAG:</strong> the Web Content Accessibility Guidelines, the standard everyone measures against. Its techniques have catalogue numbers, like items at IKEA.</li>
+ <li><strong>ARIA attributes:</strong> HTML attributes (<code>aria-pressed</code>, <code>aria-label</code>, <code>aria-live</code>) that tell assistive technology what a widget is and what state it's in when the visuals alone can't.</li>
+ <li><strong>sr-only:</strong> a CSS class that hides text visually but leaves it for screen readers. The inverse of decoration.</li>
+ <li><strong>Skip link:</strong> a link at the very top of the page, visible only when focused, that jumps keyboard users past the navigation to the content.</li>
+ <li><strong>Reduced motion:</strong> an operating-system setting (<code>prefers-reduced-motion</code>) that asks websites to calm down with the animations. Vestibular disorders make this a health feature, not a taste.</li>
+ <li><strong>Focus trap:</strong> keeping keyboard focus inside an open dialog so Tab doesn't wander off into the page behind it.</li>
+ </ul>
+ </div>
+
+ <h2>The keyboard path</h2>
+
+ <p>The first element injected into every page is what is known as a skip link. Press Tab on any page here and "Skip to main content" appears before anything else. In short, this allows you to press Enter and get past any navigation fluff at the top of the page. It's invisible to mouse users, and is an old trick that is often forgotten in 'modern' websites.</p>
+
+ <figure style="margin: 24px auto;">
+  <img src="https://www.kenreid.co.uk/blog/img/a11y/skip-link.webp" alt="The site header with a Skip to main content button overlaid on the navigation, outlined by a red focus ring" loading="lazy" width="1520" height="214" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+  <figcaption class="figure-note">Press Tab anywhere on the site and this is the first stop. Mouse users never see it.</figcaption>
+ </figure>
+
+ <p>The Ctrl+K <a href="https://www.kenreid.co.uk/blog/ctrl-k-for-a-static-site.html">command palette</a> got the full dialog treatment: focus moves into the input when it opens, Tab is trapped (it moves the selection instead of escaping the dialog), Escape closes it, and results are given to screen readers through an <code>aria-live</code> region. The filter buttons on the blog and gallery use <code>aria-pressed</code>, so "Photography, toggle button, pressed" comes through instead of a mystery link.</p>
+
+ <figure style="margin: 24px auto;">
+  <img src="https://www.kenreid.co.uk/blog/img/a11y/command-palette.webp" alt="The Ctrl+K command palette open over a dimmed homepage, with the query accessib typed, six post results listed, the top one highlighted, and footer hints reading navigate, open, esc close" loading="lazy" width="1520" height="1064" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+  <figcaption class="figure-note">The palette moves focus into the input, traps Tab, closes on Escape, and announces results through an aria-live region.</figcaption>
+ </figure>
+
+ <figure style="margin: 24px auto;">
+  <img src="https://www.kenreid.co.uk/blog/img/a11y/tag-filters.webp" alt="The blog's tag filter bar with fourteen outlined tag buttons; the photography tag is solid red, showing its pressed state" loading="lazy" width="1520" height="236" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+  <figcaption class="figure-note">The pressed filter reads as "photography, toggle button, pressed": the visual state and the aria-pressed state are the same fact.</figcaption>
+ </figure>
+
+ <p>The theme toggle updates <code>aria-pressed</code> and swaps its label between "Switch to light mode" and "Switch to dark mode", so the button always says what it will do, not what it did.</p>
+
+ <h2>The screen reader path</h2>
+
+ <p>Links that open a new tab get a screen-reader-only annotation, WCAG technique G201, applied automatically:</p>
+
+<pre><code class="language-javascript">// Appends screen-reader-only "(opens in new tab)" to target="_blank" links
+var span = document.createElement('span');
+span.className = 'sr-only';
+span.textContent = ' (opens in new tab)';
+link.appendChild(span);</code></pre>
+
+ <p>A MutationObserver reapplies it to links injected later (related posts, footers), because on this site half the content arrives after first paint. For a screen reader user, a link that teleports you into a new tab with no warning is awful.</p>
+
+ <p>Images carry real alternative text - I imagine not having it feels almost painful for screen-reader users, they likely feel they're missing out on important content and don't know what it is, like missing pages in a book. I aim for a description, not caption: the photo of my dog is "A picture of my puppy, Brutus", and the chart images in data posts describe the actual bars and numbers, so the information is actually useful, instead of "a photo" or "the results shown as an image". The interactive posts give every canvas <code>role="img"</code> and an <code>aria-label</code> saying what the simulation shows. A label is a thin substitute for "here is a live algorithm race you cannot see", so I'm open to suggestions on how to make it a better experience.</p>
+
+ <h2>The vestibular path</h2>
+
+ <p>Three separate systems check <code>prefers-reduced-motion</code>: the scroll-reveal animations (everything just appears, already visible), the homepage stats (they display their final number instead of counting up), and the CSS transitions (three media blocks calm them down). The site has to be complete with the animation subtracted, and only then is the animation allowed.</p>
+
+ <h2>Checkpoints</h2>
+
+ <p>Habits decay, so the <a href="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">audit script</a> checks every page for the a11y basics (alt text, heading structure, link health, metadata) on every push, and CI fails loudly when a new post shows how bad my memory is at maintaining these standards without a checklist. I love automating stuff, I'd rather put in extra effort early to save effort later.</p>
+
+ <figure style="margin: 24px auto;">
+  <img src="https://www.kenreid.co.uk/blog/img/a11y/audit-output.webp" alt="Terminal output of the audit script: four INFO lines about long meta descriptions, then a summary reading 86 pages audited, 0 errors, 0 warnings, 29 info, with the zeroes in green" loading="lazy" width="1520" height="449" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+  <figcaption class="figure-note">The audit summary on a clean tree. CI runs the same script on every push and fails the build on any error or warning.</figcaption>
+ </figure>
+
+ <p>I'd love to hear from an actual screen reader user. If you use assistive tech and something here fights you, the <a href="https://www.kenreid.co.uk/contact.html">contact page</a> works, and I fix reported things fast.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>It's just a blog why do you put in so much effort?</summary>
+ <p>Reverse the question: what justifies publishing a public page some readers can't use? The effort is also smaller than it looks. Nearly everything above was under an hour of work, done once, and enforced by automation afterwards. The expensive version of accessibility is the retrofit. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Does dark mode count as accessibility?</summary>
+ <p>For me, yes. I get headaches and my eyes burn when I look at bright screens. So <a href="https://www.kenreid.co.uk/blog/dark-mode-that-doesnt-flash.html">avoiding the white flash</a> matters most for people like me. For everyone else it's comfort. </p>
+ </details>
+ </div>
+
+        
+
+ ]]></content:encoded>
+    </item>
+    <item>
       <title>The Availability Heuristic Runs the News</title>
       <link>https://www.kenreid.co.uk/blog/the-availability-heuristic-runs-the-news.html</link>
       <guid>https://www.kenreid.co.uk/blog/the-availability-heuristic-runs-the-news.html</guid>
@@ -4478,120 +4577,6 @@ body.kr-palette-open {
       <description>No database, no CMS, no Jekyll: this blog&#x27;s search, tag filters, pagination, read times, and related posts all hang off one JSON file and two Python scripts.</description>
       <category>technology</category>
       <category>writing</category>
-      <content:encoded><![CDATA[
- <h1>A Blog Engine in One JSON File</h1>
- <div class="blog-meta">
- 26 July 2026 &middot;
- <span class="blog-tag">technology</span>
- <span class="blog-tag">writing</span>
- </div>
-
- <p>The <a href="https://www.kenreid.co.uk/blog.html">blog listing on this site</a> has live search, tag filters with counts, pagination, read-time estimates, and a "related posts" section under every article. I refused to use a blogging platform (Wordpress, Blogger), and frankly felt too lazy to implement a database. The entire engine is one JSON file, about three hundred lines of plain JavaScript, and two Python scripts I run when publishing. This post explains the arrangement, because I think it's the sweet spot for a personal blog, and it's a chapter in the larger story of <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
-
- <div class="plain-english-box">
- <h2>Quick jargon guide</h2>
- <ul>
- <li><strong>JSON:</strong> a plain-text format for structured data, readable by both humans and every programming language. </li>
- <li><strong>CMS (content management system):</strong> software like WordPress that stores your posts in a database and assembles pages on demand. </li>
- <li><strong>Static site generator:</strong> a tool (Jekyll, Hugo) that compiles text files into HTML at build time.</li>
- <li><strong>TF-IDF:</strong> a classic text-analysis technique that scores how characteristic a word is for a document: words frequent in this post but rare elsewhere define what it's about.</li>
- <li><strong>Cosine similarity:</strong> a measure of how alike two documents are, computed from their word scores. </li>
- </ul>
- </div>
-
- <h2>The single source of truth</h2>
-
- <p>Everything hangs off <code>data/posts.json</code>: a flat list, one entry per post, currently dozens of them. An entry is just this:</p>
-
-<pre><code class="language-json">{
-  "title": "My Website Has a Test Suite",
-  "date": "2026-07-17",
-  "tags": ["technology"],
-  "category": "Technology",
-  "excerpt": "A Python audit script and headless browser smoke tests run on every push. Here's why a personal blog has a test suite.",
-  "url": "blog/my-website-has-a-test-suite.html",
-  "image": "img/photography/thumb/4.webp",
-  "series": { "name": "How This Site Is Built", "part": 8 },
-  "readMinutes": 8,
-  "words": 1570
-}</code></pre>
-
- <p>Publishing a post means writing the HTML page and adding one entry to this file. The same file then feeds many things: the blog listing, the search index, the tag buttons, the footer's "latest writing" list, the site-wide command palette, the "next/previous post" links, and the related-posts scoring. One file, many consumers, no synchronisation problems, because there is nothing to synchronise. Laziness can force some ingenuity, I like to tell myself.</p>
-
- <h2>The front end</h2>
-
- <p>The listing page fetches the JSON, sorts by date, and renders cards nine to a page. Search is an ordinary text input that filters as you type, matching against title, excerpt, and tags. The tag buttons aren't hardcoded anywhere: the script counts how often each tag appears across all posts and renders one button per tag, labelled with its count, sorted by popularity. Click two tags and you get posts matching either; click "All" and you're back to everything.</p>
-
- <p>Because tag buttons are generated from the data, a typo in the JSON doesn't produce an error, it produces a new button: misspell "photography" once and the blog begins offering a "phtography" filter containing one post. The fix is more careful typing, but it's also <a href="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">a test suite</a>: my audit script holds the list of allowed tags, and anything outside it fails the build. This does mean adding a tag has an extra step, but so far my tags are broad so I've had no issues.</p>
-
- <figure>
- <img src="https://www.kenreid.co.uk/img/photography/thumb/71.webp" alt="Pine branches with small cones catching low sun, seen through a chain-link fence" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
- <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
- </figure>
-
- <h2>The publish-time scripts</h2>
-
- <p><strong>Read times</strong> are computed. A Python script extracts the body text of each post (only the article region, ignoring scripts and navigation), counts the words, and divides by 220 words per minute, rounding up. The result is baked into the JSON as <code>readMinutes</code>. I picked 220 because it's a middle-of-the-road adult reading speed; the number is just an estimate so people know what they're getting into, I doubt many people time it!</p>
-
-<pre><code class="language-python">WORDS_PER_MINUTE = 220
-
-post["readMinutes"] = max(1, -(-words // WORDS_PER_MINUTE))  # ceil division
-post["words"] = words</code></pre>
-
- <p><strong>Related posts</strong> are great for keeping visitors interested. A second script reads the full text of every post and builds TF-IDF vectors: each post becomes a list of scored words, where words common in that post but rare across the blog score highest. The title counts double, since it's the strongest signal of what a post is about. Related candidates are ranked by cosine similarity, with a small bonus of 0.06 per shared tag, and the top three get baked into the page as static HTML. The whole ranking is four lines of code:</p>
-
-<pre><code class="language-python"># how alike is this candidate's vocabulary to the current post's?
-# 0.0 = nothing in common, 1.0 = identical word profile
-sim = cosine(vectors[current_url], vectors[url])
-
-# how many tags do the two posts share? (usually 0 or 1)
-shared = len(current_tags.intersection(post.get('tags', [])))
-
-# final score: word similarity plus 0.06 per shared tag.
-# the date rides along as a tiebreaker, newer post wins
-ranked.append((sim + TAG_BOOST * shared, post.get('date', ''), post))
-
-# ... every candidate scored, then: sort and keep the best three
-return [post for _score, _date, post in ranked[:3]]</code></pre>
-
- <p>The related posts you see under this article were chosen when it was published, by a script that read every post on the site. Doing that in the browser would mean shipping the full text of dozens of posts to every visitor. Doing it at publish time costs the visitor nothing, and the recommendations reflect content, not just matching tags. When any post is published, the script re-bakes every page, so older posts learn about newer ones.</p>
-
- <h2>Why not Jekyll?</h2>
-
- <p>GitHub Pages has Jekyll built in, and for most people starting a blog I'd recommend it without hesitation. This site actually predates its blog by a good margin: it began as a simple portfolio back in 2012 or so, then grew into a photography portfolio built from an HTML template, and bolting a static site generator onto an existing hand-crafted site means converting everything to its conventions. And, also importantly, I like doing this. It's a fun project that I learn from, and provides me with more context of the modern web than my 2010 class on portlets, XSLT and DOM.</p>
-
- <p>But, that means that each post is a full HTML file. I have tricks up my sleeve for making it easier, which I describe throughout this series, and for the few dozen blogs I've written so far it's been worth it. Ask me again at 500.</p>
-
- <div class="faq-section">
- <h2>Common questions</h2>
-
- <details class="faq-item">
- <summary>Doesn't editing JSON by hand invite mistakes?</summary>
- <p>Constantly, which is why <a href="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">the audit script</a> validates every field.</p>
- </details>
-
- <details class="faq-item">
- <summary>Why not compute related posts by tags alone?</summary>
- <p>Tags are coarse: this blog has dozens of posts and 13 allowed tags, so "personal" matches half the site. TF-IDF looks at the actual words, so a post about Scottish hospitals finds other posts about Scotland and photography rather than three random "personal" entries. </p>
- </details>
-
- <details class="faq-item">
- <summary>What happens when the JSON and the HTML disagree?</summary>
- <p>The JSON wins, because everything visitors see (cards, search, links) comes from it. The <a href="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">audit</a> exists to make disagreement impossible in practice: a post page without a JSON entry is invisible, and a JSON entry without a page fails the build.</p>
- </details>
-
- <details class="faq-item">
- <summary>Could I copy this approach?</summary>
- <p>Yes, read more of this series to grab snippets and check out my github repo!</p>
- </details>
- </div>
-
-        
-
-
- <hr style="margin: 40px 0;">
- <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
- ]]></content:encoded>
     </item>
     <item>
       <title>Ant Colony, Live</title>

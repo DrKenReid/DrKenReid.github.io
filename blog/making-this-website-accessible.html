@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="There are thirty small habits to improve accessibility on this website: a skip link, screen-reader notes on new-tab links, reduced-motion fallbacks, and an audit that catches the many that I forget along the way.">
+ <meta name="keywords" content="technology">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Making This Website Accessible - Ken Reid</title>
+ <meta property="og:title" content="Making This Website Accessible">
+ <meta property="og:description" content="There are thirty small habits to improve accessibility on this website: a skip link, screen-reader notes on new-tab links, reduced-motion fallbacks, and an audit that catches the many that I forget along the way.">
+ <meta property="og:image" content="https://www.kenreid.co.uk/img/photography/hero/367.webp">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/making-this-website-accessible.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Making This Website Accessible">
+ <meta name="twitter:description" content="There are thirty small habits to improve accessibility on this website: a skip link, screen-reader notes on new-tab links, reduced-motion fallbacks, and an audit that catches the many that I forget along the way.">
+ <meta name="twitter:image" content="https://www.kenreid.co.uk/img/photography/hero/367.webp">
+ <meta name="citation_title" content="Making This Website Accessible">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/08/30">
+ <meta name="citation_online_date" content="2026/08/30">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/making-this-website-accessible.html">
+ <meta name="DC.title" content="Making This Website Accessible">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-08-30">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="../img/photography/hero/367.webp">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/making-this-website-accessible.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "Making This Website Accessible",
+ "description": "There are thirty small habits to improve accessibility on this website: a skip link, screen-reader notes on new-tab links, reduced-motion fallbacks, and an audit that catches the many that I forget along the way.",
+ "image": "https://www.kenreid.co.uk/img/photography/hero/367.webp",
+ "author": { "@type": "Person", "name": "Ken Reid", "url": "https://www.kenreid.co.uk" },
+ "datePublished": "2026-08-30",
+ "publisher": { "@type": "Person", "name": "Ken Reid" },
+ "keywords": ["accessibility", "a11y", "wcag", "screen readers", "web development"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "Making This Website Accessible",
+       "item": "https://www.kenreid.co.uk/blog/making-this-website-accessible.html"
+     }
+   ]
+ }
+ </script>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+ <div id="header-section"></div>
+
+ <main id="main-content">
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/367.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">Making This Website Accessible</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">Making This Website Accessible</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+ 
+ <div class="blog-post">
+ <h1>Making This Website Accessible</h1>
+ <div class="blog-meta">
+ 30 August 2026 &middot;
+ <span class="blog-tag">technology</span>
+ </div>
+
+ <p>I have <a href="accessibility-first-product-design-data-science.html">banged on before</a> about accessibility working best as a starting constraint rather than a retrofit. This site is where I get to practise that habit continually: my core philosophy is that if something is inaccessible to some it may as well be inaccessible to all. I make sure of this with a pile of small habits, and an audit script that catches the bits I inevitably miss. Part of the series on <a href="../series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Screen reader:</strong> software that reads a page aloud (or to a braille display) for blind and low-vision users, navigating by headings, links, and landmarks rather than by looking.</li>
+ <li><strong>WCAG:</strong> the Web Content Accessibility Guidelines, the standard everyone measures against. Its techniques have catalogue numbers, like items at IKEA.</li>
+ <li><strong>ARIA attributes:</strong> HTML attributes (<code>aria-pressed</code>, <code>aria-label</code>, <code>aria-live</code>) that tell assistive technology what a widget is and what state it's in when the visuals alone can't.</li>
+ <li><strong>sr-only:</strong> a CSS class that hides text visually but leaves it for screen readers. The inverse of decoration.</li>
+ <li><strong>Skip link:</strong> a link at the very top of the page, visible only when focused, that jumps keyboard users past the navigation to the content.</li>
+ <li><strong>Reduced motion:</strong> an operating-system setting (<code>prefers-reduced-motion</code>) that asks websites to calm down with the animations. Vestibular disorders make this a health feature, not a taste.</li>
+ <li><strong>Focus trap:</strong> keeping keyboard focus inside an open dialog so Tab doesn't wander off into the page behind it.</li>
+ </ul>
+ </div>
+
+ <h2>The keyboard path</h2>
+
+ <p>The first element injected into every page is what is known as a skip link. Press Tab on any page here and "Skip to main content" appears before anything else. In short, this allows you to press Enter and get past any navigation fluff at the top of the page. It's invisible to mouse users, and is an old trick that is often forgotten in 'modern' websites.</p>
+
+ <figure style="margin: 24px auto;">
+  <img src="img/a11y/skip-link.webp" alt="The site header with a Skip to main content button overlaid on the navigation, outlined by a red focus ring" loading="lazy" width="1520" height="214" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+  <figcaption class="figure-note">Press Tab anywhere on the site and this is the first stop. Mouse users never see it.</figcaption>
+ </figure>
+
+ <p>The Ctrl+K <a href="ctrl-k-for-a-static-site.html">command palette</a> got the full dialog treatment: focus moves into the input when it opens, Tab is trapped (it moves the selection instead of escaping the dialog), Escape closes it, and results are given to screen readers through an <code>aria-live</code> region. The filter buttons on the blog and gallery use <code>aria-pressed</code>, so "Photography, toggle button, pressed" comes through instead of a mystery link.</p>
+
+ <figure style="margin: 24px auto;">
+  <img src="img/a11y/command-palette.webp" alt="The Ctrl+K command palette open over a dimmed homepage, with the query accessib typed, six post results listed, the top one highlighted, and footer hints reading navigate, open, esc close" loading="lazy" width="1520" height="1064" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+  <figcaption class="figure-note">The palette moves focus into the input, traps Tab, closes on Escape, and announces results through an aria-live region.</figcaption>
+ </figure>
+
+ <figure style="margin: 24px auto;">
+  <img src="img/a11y/tag-filters.webp" alt="The blog's tag filter bar with fourteen outlined tag buttons; the photography tag is solid red, showing its pressed state" loading="lazy" width="1520" height="236" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+  <figcaption class="figure-note">The pressed filter reads as "photography, toggle button, pressed": the visual state and the aria-pressed state are the same fact.</figcaption>
+ </figure>
+
+ <p>The theme toggle updates <code>aria-pressed</code> and swaps its label between "Switch to light mode" and "Switch to dark mode", so the button always says what it will do, not what it did.</p>
+
+ <h2>The screen reader path</h2>
+
+ <p>Links that open a new tab get a screen-reader-only annotation, WCAG technique G201, applied automatically:</p>
+
+<pre><code class="language-javascript">// Appends screen-reader-only "(opens in new tab)" to target="_blank" links
+var span = document.createElement('span');
+span.className = 'sr-only';
+span.textContent = ' (opens in new tab)';
+link.appendChild(span);</code></pre>
+
+ <p>A MutationObserver reapplies it to links injected later (related posts, footers), because on this site half the content arrives after first paint. For a screen reader user, a link that teleports you into a new tab with no warning is awful.</p>
+
+ <p>Images carry real alternative text - I imagine not having it feels almost painful for screen-reader users, they likely feel they're missing out on important content and don't know what it is, like missing pages in a book. I aim for a description, not caption: the photo of my dog is "A picture of my puppy, Brutus", and the chart images in data posts describe the actual bars and numbers, so the information is actually useful, instead of "a photo" or "the results shown as an image". The interactive posts give every canvas <code>role="img"</code> and an <code>aria-label</code> saying what the simulation shows. A label is a thin substitute for "here is a live algorithm race you cannot see", so I'm open to suggestions on how to make it a better experience.</p>
+
+ <h2>The vestibular path</h2>
+
+ <p>Three separate systems check <code>prefers-reduced-motion</code>: the scroll-reveal animations (everything just appears, already visible), the homepage stats (they display their final number instead of counting up), and the CSS transitions (three media blocks calm them down). The site has to be complete with the animation subtracted, and only then is the animation allowed.</p>
+
+ <h2>Checkpoints</h2>
+
+ <p>Habits decay, so the <a href="my-website-has-a-test-suite.html">audit script</a> checks every page for the a11y basics (alt text, heading structure, link health, metadata) on every push, and CI fails loudly when a new post shows how bad my memory is at maintaining these standards without a checklist. I love automating stuff, I'd rather put in extra effort early to save effort later.</p>
+
+ <figure style="margin: 24px auto;">
+  <img src="img/a11y/audit-output.webp" alt="Terminal output of the audit script: four INFO lines about long meta descriptions, then a summary reading 86 pages audited, 0 errors, 0 warnings, 29 info, with the zeroes in green" loading="lazy" width="1520" height="449" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+  <figcaption class="figure-note">The audit summary on a clean tree. CI runs the same script on every push and fails the build on any error or warning.</figcaption>
+ </figure>
+
+ <p>I'd love to hear from an actual screen reader user. If you use assistive tech and something here fights you, the <a href="../contact.html">contact page</a> works, and I fix reported things fast.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>It's just a blog why do you put in so much effort?</summary>
+ <p>Reverse the question: what justifies publishing a public page some readers can't use? The effort is also smaller than it looks. Nearly everything above was under an hour of work, done once, and enforced by automation afterwards. The expensive version of accessibility is the retrofit. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Does dark mode count as accessibility?</summary>
+ <p>For me, yes. I get headaches and my eyes burn when I look at bright screens. So <a href="dark-mode-that-doesnt-flash.html">avoiding the white flash</a> matters most for people like me. For everyone else it's comfort. </p>
+ </details>
+ </div>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="ctrl-k-for-a-static-site.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/46.webp" alt="Ctrl+K for a Static Site" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">3 August 2026 · 11 min read</div>
+                  <h3 class="blog-card-title">Ctrl+K for a Static Site</h3>
+                  <p class="blog-card-excerpt">Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. Vanilla JavaScript, no library, and the whole thing is in the post to steal.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="dark-mode-that-doesnt-flash.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/20.webp" alt="Dark Mode That Doesn't Flash" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">6 August 2026 · 7 min read</div>
+                  <h3 class="blog-card-title">Dark Mode That Doesn't Flash</h3>
+                  <p class="blog-card-excerpt">Dark mode is easy; dark mode without a white flash is more difficult. How this site stamps the theme before the first paint, and drags every chart and iframe along with it.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="my-website-has-a-test-suite.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/4.webp" alt="My Website Has a Test Suite" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">17 July 2026 · 7 min read</div>
+                  <h3 class="blog-card-title">My Website Has a Test Suite</h3>
+                  <p class="blog-card-excerpt">A Python audit script and headless browser smoke tests run on every push. Here's why a personal blog has a test suite.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ </div>
+ <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+ <hr style="margin: 40px 0;">
+ </div>
+ </div>
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/prism-loader.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');
+loadPrism();</script>
+</body>
+</html>
