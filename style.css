@@ -1732,10 +1732,9 @@ input:required {
     border: none !important;
     border-radius: 10px; }
 
-/* Bluesky / Substack / Cyberspace SVG icons in social links */
+/* Bluesky / Substack SVG icons in social links */
 .bluesky-icon,
-.substack-icon,
-.cyberspace-icon {
+.substack-icon {
   width: 1em;
   height: 1em;
   fill: currentColor;
@@ -5139,11 +5138,6 @@ hr:has(+ #footer-section) {
 .kr-footer .social-info .bluesky-icon {
   width: 15px;
   height: 13px;
-  fill: currentColor; }
-
-.kr-footer .social-info .cyberspace-icon {
-  width: 14px;
-  height: 14px;
   fill: currentColor; }
 
 .kr-footer .social-info .substack-icon {
