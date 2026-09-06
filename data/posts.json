@@ -1,5 +1,18 @@
 [
   {
+    "title": "Leading a Horse to Water",
+    "date": "2026-09-06",
+    "tags": [
+      "advice"
+    ],
+    "category": "Ideas",
+    "excerpt": "You give feedback to a colleague. They thank you for it, and a week later nothing has changed. Three checks before you push harder, one change of approach, a budget, and a date.",
+    "url": "blog/leading-a-horse-to-water.html",
+    "image": "img/photography/thumb/439.webp",
+    "readMinutes": 15,
+    "words": 3166
+  },
+  {
     "title": "Making This Website Accessible",
     "date": "2026-08-30",
     "tags": [
