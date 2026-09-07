@@ -1,16 +1,16 @@
 {
   "track": {
-    "name": "Firefly",
-    "artist": "The White Panda",
-    "url": "https://www.last.fm/music/The+White+Panda/_/Firefly",
+    "name": "Plug In Baby (XX Anniversary RemiXX)",
+    "artist": "Muse",
+    "url": "https://www.last.fm/music/Muse/_/Plug+In+Baby+(XX+Anniversary+RemiXX)",
     "nowPlaying": false
   },
   "reading": [
     {
-      "title": "The Path of Ascension 3 (The Path of Ascension #3)",
-      "author": "C. Mantis",
-      "link": "https://www.goodreads.com/review/show/8894530612?utm_medium=api&utm_source=rss",
-      "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1676522927l/97458422._SX50_.jpg"
+      "title": "The Knight (The Last Horizon, #3)",
+      "author": "Will Wight",
+      "link": "https://www.goodreads.com/review/show/8772349976?utm_medium=api&utm_source=rss",
+      "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1715707898l/213353605._SY75_.jpg"
     },
     {
       "title": "Dungeon Crawler Carl (Dungeon Crawler Carl, #1)",
@@ -25,5 +25,5 @@
       "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1701688704l/394535._SY75_.jpg"
     }
   ],
-  "updated": "2026-08-31"
+  "updated": "2026-09-07"
 }

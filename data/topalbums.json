@@ -5,7 +5,7 @@
       "artist": "The Strokes",
       "url": "https://www.last.fm/music/The+Strokes/Is+This+It",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/c7a4e1700ae85d9910bbe59887a8c771.jpg",
-      "plays": 7
+      "plays": 8
     },
     {
       "name": "ECLESIA",
@@ -22,18 +22,11 @@
       "plays": 4
     },
     {
-      "name": "Infinite Requiem (Deoksoon)",
-      "artist": "LUNEKT",
-      "url": "https://www.last.fm/music/LUNEKT/Infinite+Requiem+(Deoksoon)",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/d3c0b224f59d9360b067adaeee01b788.jpg",
-      "plays": 4
-    },
-    {
-      "name": "Dopamine (Split Brain Version)",
-      "artist": "Madelline",
-      "url": "https://www.last.fm/music/Madelline/Dopamine+(Split+Brain+Version)",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/4415ed4c7fafb84cdbfb0cad3cbd5028.jpg",
-      "plays": 4
+      "name": "Barbie The Album",
+      "artist": "Ava Max",
+      "url": "https://www.last.fm/music/Ava+Max/Barbie+The+Album",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/75f2e0e43c8a8b0bffee8c47bcc1c845.png",
+      "plays": 3
     },
     {
       "name": "Minecraft - Volume Alpha",
@@ -47,6 +40,20 @@
       "artist": "Jaroslav Beck",
       "url": "https://www.last.fm/music/Jaroslav+Beck/Beat+Saber+(Original+Game+Soundtrack)",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/070f7c8133e30d9c0cc25efc4fdb6462.jpg",
+      "plays": 3
+    },
+    {
+      "name": "Infinite Requiem (Deoksoon)",
+      "artist": "LUNEKT",
+      "url": "https://www.last.fm/music/LUNEKT/Infinite+Requiem+(Deoksoon)",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/d3c0b224f59d9360b067adaeee01b788.jpg",
+      "plays": 3
+    },
+    {
+      "name": "Dopamine (Split Brain Version)",
+      "artist": "Madelline",
+      "url": "https://www.last.fm/music/Madelline/Dopamine+(Split+Brain+Version)",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/4415ed4c7fafb84cdbfb0cad3cbd5028.jpg",
       "plays": 3
     },
     {
@@ -71,13 +78,6 @@
       "plays": 2
     },
     {
-      "name": "Barbie The Album",
-      "artist": "Ava Max",
-      "url": "https://www.last.fm/music/Ava+Max/Barbie+The+Album",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/75f2e0e43c8a8b0bffee8c47bcc1c845.png",
-      "plays": 2
-    },
-    {
       "name": "Wide Open Light",
       "artist": "Ben Harper",
       "url": "https://www.last.fm/music/Ben+Harper/Wide+Open+Light",
@@ -89,13 +89,6 @@
       "artist": "Benjamin Monday",
       "url": "https://www.last.fm/music/Benjamin+Monday/The+Secretary%27s+Daughter",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/3b6f5c7f074f5ee0d37416a0f7869688.jpg",
-      "plays": 2
-    },
-    {
-      "name": "Burning Sands",
-      "artist": "Boom Kitty",
-      "url": "https://www.last.fm/music/Boom+Kitty/Burning+Sands",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/caa7ed94df9552df2f0c4c811453eebf.jpg",
       "plays": 2
     },
     {
@@ -125,8 +118,22 @@
       "url": "https://www.last.fm/music/Dan+Stevens/Beauty+and+the+Beast+(Original+Motion+Picture+Soundtrack%2FDeluxe+Edition)",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/0d5ce94684640f8cb6237ce36e21133f.jpg",
       "plays": 2
+    },
+    {
+      "name": "White Flag",
+      "artist": "Dido",
+      "url": "https://www.last.fm/music/Dido/White+Flag",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/eb0101b8308ecbef4b77bdc696817d8f.png",
+      "plays": 2
+    },
+    {
+      "name": "Unethical",
+      "artist": "Faouzia",
+      "url": "https://www.last.fm/music/Faouzia/Unethical",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/ca42388269f5ebcc69ad3f85474a3697.jpg",
+      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-08-31"
+  "updated": "2026-09-07"
 }
