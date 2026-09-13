@@ -78,6 +78,15 @@
  .rr-legend { display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:10px; font-size:0.78em; color:var(--viz-muted); }
  .rr-legend span { display:flex; align-items:center; gap:6px; }
  .rr-key { width:11px; height:11px; border-radius:3px; display:inline-block; }
+ .rr-constraints { margin-top:12px; border:1px solid var(--viz-border); border-radius:8px; padding:6px 12px 8px; font-size:0.82em; color:var(--viz-ink); overflow-x:auto; }
+ .rr-constraints table { width:100%; border-collapse:collapse; }
+ .rr-constraints th { text-align:left; font-weight:600; color:var(--viz-muted); font-size:0.85em; letter-spacing:0.04em; text-transform:uppercase; padding:4px 0; }
+ .rr-constraints td { padding:4px 0; border-top:1px solid var(--viz-border); vertical-align:top; }
+ .rr-constraints th.rr-val, .rr-constraints td.rr-val { text-align:right; white-space:nowrap; padding-left:10px; font-variant-numeric:tabular-nums; }
+ .rr-ok { color:var(--viz-s2); font-weight:600; }
+ .rr-bad { color:var(--viz-s4); font-weight:600; }
+ .rr-soft { color:var(--viz-muted); font-weight:600; }
+ @media (max-width:520px) { .rr-constraints { font-size:0.74em; padding:4px 8px 6px; } .rr-constraints td.rr-val { padding-left:6px; } .rr-constraints td.rr-val:last-child { white-space:normal; max-width:4.5em; } }
  </style>
 
  <script defer src="../js/theme.js"></script>
@@ -131,12 +140,12 @@
 
  <h2>The demo</h2>
 
- <p>Each row is a person, each column a day. Cells are the shift they are working. The bar under each day shows whether that day's demand is covered: short is bad, and grey means uncovered.</p>
+ <p>Each row is a person, each column a day. Cells are the shift they are working. The rows under the grid are the demand check: for each day and shift, how many staff over or under the requirement, so -2 on the night row means two short and +1 means one spare. A working cell carries the same figure when its shift is out of balance, which marks the allocations that are surplus and the ones holding up a short day. The panel under the stats scores each constraint separately: the two hard ones, which have to hold, and the two soft ones the last five per cent of the fitness is spent on.</p>
 
  <p>One step is one full ruin and recreate, under the same simulated annealing control the paper uses. The ruined cells flash before they are refilled, so you can see the size and shape of the hole. The default strategy is the paper's: score every allocation, then demolish the probabilistically weakest. Switch to the blind strategies to see what the aiming is worth: scattered cells, a person's whole fortnight, or everybody's Tuesday.</p>
 
  <div class="kr-viz" id="rr-demo">
-   <canvas id="rrGrid" height="360" role="img" aria-label="Animated employee roster: twelve rows of staff against fourteen days, each cell coloured by shift type. The search repeatedly removes a block of assignments and rebuilds them, and coverage bars under each day show whether demand is met."></canvas>
+   <canvas id="rrGrid" height="360" role="img" aria-label="Animated employee roster: twelve rows of staff against fourteen days, each cell coloured by shift type. The search repeatedly removes a block of assignments and rebuilds them, and rows under each day show how far each shift is over or under demand."></canvas>
    <div class="kr-toolbar" data-kr-toolbar></div>
    <div class="kr-sliders" data-kr-sliders></div>
    <div class="rr-legend">
@@ -147,6 +156,18 @@
      <span><i class="rr-key" style="background:var(--viz-s4)"></i>Just ruined</span>
    </div>
    <div class="kr-stats" data-kr-stats></div>
+   <div class="rr-constraints" id="rrConstraints">
+     <table>
+       <thead><tr><th>Constraint</th><th class="rr-val">Score</th><th class="rr-val">Status</th></tr></thead>
+       <tbody>
+         <tr><td>Hard: demand covered on every shift</td><td class="rr-val" id="rrHc1"></td><td class="rr-val" id="rrHc1s"></td></tr>
+         <tr><td>Hard: no night shift straight into an early</td><td class="rr-val" id="rrHc2"></td><td class="rr-val" id="rrHc2s"></td></tr>
+         <tr><td>Soft: no run longer than five days</td><td class="rr-val" id="rrSc1"></td><td class="rr-val" id="rrSc1s"></td></tr>
+         <tr><td>Soft: a fair share of the work (within one shift of the mean)</td><td class="rr-val" id="rrSc2"></td><td class="rr-val" id="rrSc2s"></td></tr>
+         <tr><td>Fitness: 95 &times; hard + 5 &times; soft</td><td class="rr-val" id="rrTotal"></td><td class="rr-val"></td></tr>
+       </tbody>
+     </table>
+   </div>
    <canvas id="rrChart" class="kr-chart" height="150" role="img" aria-label="Chart of roster fitness over iterations, with the current fitness and the best fitness found so far."></canvas>
    <p class="kr-note">Fitness follows the paper's weighting: hard constraints (meeting each day's demand, no night shift straight into an early) are 95% of the score, soft ones (no runs longer than five days, a fair share of the work) are the rest. The acceptance is simulated annealing with the energy modelled as inverse fitness, the same control the paper uses, so early on the search sometimes keeps a worse roster on purpose.</p>
  </div>
@@ -294,8 +315,11 @@ renderFooter('footer-section');</script>
    var DAYS = 14, STAFF = 12;
    var OFF = 0, EARLY = 1, LATE = 2, NIGHT = 3;
    var DEMAND = [0, 4, 3, 2];          // staff needed per shift type, per day
-   var HARD_CHECKS = 126 + 156;        // demand units + night-to-early rest boundaries
-   var SOFT_CHECKS = 168 + 12;         // run-length day checks + per-person fairness checks
+   var DEMAND_UNITS = DAYS * (DEMAND[1] + DEMAND[2] + DEMAND[3]);   // 126
+   var REST_CHECKS = STAFF * (DAYS - 1);                            // 156 night-to-early boundaries
+   var RUN_CHECKS = STAFF * DAYS;                                   // 168 run-length day checks
+   var HARD_CHECKS = DEMAND_UNITS + REST_CHECKS;
+   var SOFT_CHECKS = RUN_CHECKS + STAFF;                            // plus one fairness check per person
 
    function emptyRoster() {
      var r = [];
@@ -313,14 +337,19 @@ renderFooter('footer-section');</script>
      return c;
    }
 
-   /* --- fitness: the paper's weighting, hard constraints 95%, soft 5% --- */
-   function fitness(r) {
+   /* --- fitness: the paper's weighting, hard constraints 95%, soft 5% ---
+      breakdown() scores each constraint on its own so the panel under the
+      demo can show them; fitness() is the weighted sum. */
+   function breakdown(r) {
      var d, s, k;
      // hard: demand units covered, and no night shift followed by an early
-     var covered = 0;
+     var covered = 0, short = 0;
      for (d = 0; d < DAYS; d++) {
        var c = coverage(r, d);
-       for (k = EARLY; k <= NIGHT; k++) covered += Math.min(c[k], DEMAND[k]);
+       for (k = EARLY; k <= NIGHT; k++) {
+         covered += Math.min(c[k], DEMAND[k]);
+         if (c[k] < DEMAND[k]) short += DEMAND[k] - c[k];
+       }
      }
      var restOK = 0;
      for (s = 0; s < STAFF; s++) {
@@ -341,18 +370,40 @@ renderFooter('footer-section');</script>
      mean /= STAFF;
      var fairOK = 0;
      for (s = 0; s < STAFF; s++) if (Math.abs(counts[s] - mean) <= 1) fairOK++;
-     var hard = (covered + restOK) / HARD_CHECKS;
-     var soft = (runOK + fairOK) / SOFT_CHECKS;
-     return 95 * hard + 5 * soft;
+     return {covered: covered, short: short, restOK: restOK, runOK: runOK, fairOK: fairOK,
+             hard: (covered + restOK) / HARD_CHECKS, soft: (runOK + fairOK) / SOFT_CHECKS};
    }
 
-   function uncovered(r) {
-     var n = 0;
-     for (var d = 0; d < DAYS; d++) {
-       var c = coverage(r, d);
-       for (var k = EARLY; k <= NIGHT; k++) if (c[k] < DEMAND[k]) n += DEMAND[k] - c[k];
-     }
-     return n;
+   function fitness(r) {
+     var b = breakdown(r);
+     return 95 * b.hard + 5 * b.soft;
+   }
+
+   /* --- the constraint panel under the stat tiles ------------------- */
+   var panelIds = ['rrHc1', 'rrHc1s', 'rrHc2', 'rrHc2s', 'rrSc1', 'rrSc1s', 'rrSc2', 'rrSc2s', 'rrTotal'];
+   var panel = {};
+   for (var pi = 0; pi < panelIds.length; pi++) panel[panelIds[pi]] = document.getElementById(panelIds[pi]);
+
+   function setCell(id, text, cls) {
+     var e = panel[id];
+     if (!e) return;
+     if (e.textContent !== text) e.textContent = text;
+     if (cls !== undefined && e.className !== 'rr-val ' + cls) e.className = 'rr-val ' + cls;
+   }
+
+   function updatePanel(b) {
+     var restBroken = REST_CHECKS - b.restOK;
+     var runOver = RUN_CHECKS - b.runOK;
+     var fairOff = STAFF - b.fairOK;
+     setCell('rrHc1', b.covered + ' / ' + DEMAND_UNITS + ' units');
+     setCell('rrHc1s', b.short ? b.short + ' short' : 'OK', b.short ? 'rr-bad' : 'rr-ok');
+     setCell('rrHc2', b.restOK + ' / ' + REST_CHECKS + ' boundaries');
+     setCell('rrHc2s', restBroken ? restBroken + ' broken' : 'OK', restBroken ? 'rr-bad' : 'rr-ok');
+     setCell('rrSc1', b.runOK + ' / ' + RUN_CHECKS + ' day-checks');
+     setCell('rrSc1s', runOver ? runOver + ' over' : 'OK', runOver ? 'rr-soft' : 'rr-ok');
+     setCell('rrSc2', b.fairOK + ' / ' + STAFF + ' people');
+     setCell('rrSc2s', fairOff ? fairOff + ' off' : 'OK', fairOff ? 'rr-soft' : 'rr-ok');
+     setCell('rrTotal', (95 * b.hard).toFixed(1) + ' + ' + (5 * b.soft).toFixed(1) + ' = ' + (95 * b.hard + 5 * b.soft).toFixed(1));
    }
 
    /* --- component fitness, for the paper's evolutionary selection --------
@@ -482,7 +533,7 @@ renderFooter('footer-section');</script>
      seed: 20260924,
 
      canvases: {
-       grid:  {el: '#rrGrid', height: function (w) { return Math.max(230, Math.min(360, w * 0.52)); }},
+       grid:  {el: '#rrGrid', height: function (w) { return Math.max(280, Math.min(420, w * 0.62)); }},
        chart: {el: '#rrChart', height: 150, mobile: {height: 150}}
      },
 
@@ -504,7 +555,7 @@ renderFooter('footer-section');</script>
      stats: [
        {id: 'fit',  label: 'Fitness', tone: 's1', fmt: function (v) { return v.toFixed(1); }},
        {id: 'best', label: 'Best', tone: 's2', fmt: function (v) { return v.toFixed(1); }},
-       {id: 'gaps', label: 'Uncovered', tone: 's4'},
+       {id: 'hard', label: 'Hard broken', tone: 's4'},
        {id: 'accept', label: 'Accepted'}
      ],
 
@@ -524,6 +575,7 @@ renderFooter('footer-section');</script>
          }
        }
        var f = fitness(r);
+       updatePanel(breakdown(r));
        return {r: r, fit: f, best: f, bestR: clone(r), holes: [],
                accepted: 0, tried: 0, T: 3.0};
      },
@@ -547,7 +599,9 @@ renderFooter('footer-section');</script>
        st.T *= 0.985;
        ctx.set('fit', st.fit);
        ctx.set('best', st.best);
-       ctx.set('gaps', uncovered(st.r));
+       var b = breakdown(st.r);
+       ctx.set('hard', b.short + (REST_CHECKS - b.restOK));
+       updatePanel(b);
        ctx.set('accept', st.accepted + '/' + st.tried);
        ctx.record({now: st.fit, best: st.best});
        // No finish condition: the soft constraints keep fitness just shy of
@@ -557,38 +611,59 @@ renderFooter('footer-section');</script>
      draw: function (ctx) {
        var st = ctx.state, c = ctx.canvas.grid, g = c.g, C = ctx.colors;
        if (!g) return;
-       var padL = 26, padT = 8, padB = 26;
+       var padL = 26, padT = 8, padB = 56;
        var cw = (c.w - padL) / DAYS, ch = (c.h - padT - padB) / STAFF;
        var tone = [C.cell, C.s1, C.s2, C.s3];
 
        var ruined = {};
        for (var i = 0; i < st.holes.length; i++) ruined[st.holes[i][0] + ',' + st.holes[i][1]] = 1;
 
+       // per day and shift: staff over (+) or under (-) the requirement
+       var deltas = [], d, k;
+       for (d = 0; d < DAYS; d++) {
+         var cv = coverage(st.r, d);
+         deltas.push([0, cv[EARLY] - DEMAND[EARLY], cv[LATE] - DEMAND[LATE], cv[NIGHT] - DEMAND[NIGHT]]);
+       }
+
+       g.textBaseline = 'middle';
        for (var s = 0; s < STAFF; s++) {
-         for (var d = 0; d < DAYS; d++) {
+         for (d = 0; d < DAYS; d++) {
            var x = padL + d * cw, y = padT + s * ch;
-           g.fillStyle = tone[st.r[s][d]];
+           k = st.r[s][d];
+           g.fillStyle = tone[k];
            g.fillRect(x + 1, y + 1, cw - 2, ch - 2);
            if (ruined[s + ',' + d]) {
              g.strokeStyle = C.s4; g.lineWidth = 1.5;
              g.strokeRect(x + 1.5, y + 1.5, cw - 3, ch - 3);
            }
+           // a working cell whose shift is out of balance carries the figure
+           var dl = deltas[d][k];
+           if (k !== OFF && dl !== 0 && cw >= 18 && ch >= 12) {
+             g.fillStyle = C.surface;
+             g.font = '700 9px Poppins, sans-serif';
+             g.textAlign = 'center';
+             g.fillText((dl > 0 ? '+' : '') + dl, x + cw / 2, y + ch / 2);
+           }
          }
        }
 
-       // coverage bars: one per day, height is the shortfall
+       // demand rows under the grid: one per shift type, one figure per day
+       var rowLbl = ['', 'E', 'L', 'N'], rowTone = [null, C.s1, C.s2, C.s3];
+       var ry0 = c.h - padB + 4, rh = 11;
        g.font = '600 9px Poppins, sans-serif';
-       for (d = 0; d < DAYS; d++) {
-         var cov = coverage(st.r, d), gap = 0;
-         for (var k = 1; k <= 3; k++) if (cov[k] < DEMAND[k]) gap += DEMAND[k] - cov[k];
-         var bx = padL + d * cw, by = c.h - padB + 4, bh = 14;
-         g.fillStyle = C.grid;
-         g.fillRect(bx + 1, by, cw - 2, bh);
-         if (gap > 0) {
-           g.fillStyle = C.s4;
-           g.fillRect(bx + 1, by, cw - 2, Math.min(bh, gap * 5));
+       for (k = EARLY; k <= NIGHT; k++) {
+         var ry = ry0 + (k - 1) * rh + rh / 2;
+         g.textAlign = 'right';
+         g.fillStyle = rowTone[k];
+         g.fillText(rowLbl[k], padL - 5, ry);
+         g.textAlign = 'center';
+         for (d = 0; d < DAYS; d++) {
+           var dv = deltas[d][k];
+           g.fillStyle = dv < 0 ? C.s4 : (dv > 0 ? C.ink : C.muted);
+           g.fillText(dv === 0 ? '0' : (dv > 0 ? '+' : '') + dv, padL + d * cw + cw / 2, ry);
          }
        }
+       g.textBaseline = 'alphabetic';
        g.fillStyle = C.muted;
        g.textAlign = 'right';
        g.fillText('staff', padL - 4, padT + 9);

@@ -44,7 +44,7 @@
 
  <h2>The demo</h2>
 
- <p>Each row is a person, each column a day. Cells are the shift they are working. The bar under each day shows whether that day's demand is covered: short is bad, and grey means uncovered.</p>
+ <p>Each row is a person, each column a day. Cells are the shift they are working. The rows under the grid are the demand check: for each day and shift, how many staff over or under the requirement, so -2 on the night row means two short and +1 means one spare. A working cell carries the same figure when its shift is out of balance, which marks the allocations that are surplus and the ones holding up a short day. The panel under the stats scores each constraint separately: the two hard ones, which have to hold, and the two soft ones the last five per cent of the fitness is spent on.</p>
 
  <p>One step is one full ruin and recreate, under the same simulated annealing control the paper uses. The ruined cells flash before they are refilled, so you can see the size and shape of the hole. The default strategy is the paper's: score every allocation, then demolish the probabilistically weakest. Switch to the blind strategies to see what the aiming is worth: scattered cells, a person's whole fortnight, or everybody's Tuesday.</p>
 
