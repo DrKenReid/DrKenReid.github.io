@@ -168,7 +168,7 @@
        </tbody>
      </table>
    </div>
-   <canvas id="rrChart" class="kr-chart" height="150" role="img" aria-label="Chart of roster fitness over iterations, with the current fitness and the best fitness found so far."></canvas>
+   <canvas id="rrChart" class="kr-chart" height="150" role="img" aria-label="Two charts over iterations: how far the current and best rosters sit from a fitness of 100, on a log scale, and the soft-constraint score out of 5."></canvas>
    <p class="kr-note">Fitness follows the paper's weighting: hard constraints (meeting each day's demand, no night shift straight into an early) are 95% of the score, soft ones (no runs longer than five days, a fair share of the work) are the rest. The acceptance is simulated annealing with the energy modelled as inverse fitness, the same control the paper uses, so early on the search sometimes keeps a worse roster on purpose.</p>
  </div>
 
@@ -403,7 +403,7 @@ renderFooter('footer-section');</script>
      setCell('rrSc1s', runOver ? runOver + ' over' : 'OK', runOver ? 'rr-soft' : 'rr-ok');
      setCell('rrSc2', b.fairOK + ' / ' + STAFF + ' people');
      setCell('rrSc2s', fairOff ? fairOff + ' off' : 'OK', fairOff ? 'rr-soft' : 'rr-ok');
-     setCell('rrTotal', (95 * b.hard).toFixed(1) + ' + ' + (5 * b.soft).toFixed(1) + ' = ' + (95 * b.hard + 5 * b.soft).toFixed(1));
+     setCell('rrTotal', (95 * b.hard).toFixed(2) + ' + ' + (5 * b.soft).toFixed(2) + ' = ' + (95 * b.hard + 5 * b.soft).toFixed(2));
    }
 
    /* --- component fitness, for the paper's evolutionary selection --------
@@ -534,7 +534,7 @@ renderFooter('footer-section');</script>
 
      canvases: {
        grid:  {el: '#rrGrid', height: function (w) { return Math.max(280, Math.min(420, w * 0.62)); }},
-       chart: {el: '#rrChart', height: 150, mobile: {height: 150}}
+       chart: {el: '#rrChart', height: 190, mobile: {height: 360}}
      },
 
      controls: [
@@ -553,16 +553,21 @@ renderFooter('footer-section');</script>
      }}],
 
      stats: [
-       {id: 'fit',  label: 'Fitness', tone: 's1', fmt: function (v) { return v.toFixed(1); }},
-       {id: 'best', label: 'Best', tone: 's2', fmt: function (v) { return v.toFixed(1); }},
+       {id: 'fit',  label: 'Fitness', tone: 's1', fmt: function (v) { return v.toFixed(2); }},
+       {id: 'best', label: 'Best', tone: 's2', fmt: function (v) { return v.toFixed(2); }},
        {id: 'hard', label: 'Hard broken', tone: 's4'},
        {id: 'accept', label: 'Accepted'}
      ],
 
      charts: [{
        canvas: 'chart',
-       panes: [{label: 'FITNESS', series: [{key: 'now', tone: 's1'},
-                                           {key: 'best', tone: 's2', width: 2}]}]
+       panes: [
+         {label: 'DISTANCE FROM 100 (LOG)', log: true, yMin: 0.1, yMax: 10,
+          series: [{key: 'gap', tone: 's1', label: 'now'},
+                   {key: 'bestGap', tone: 's2', width: 2, label: 'best'}]},
+         {label: 'SOFT SCORE (OF 5)',
+          series: [{key: 'soft', tone: 's3'}]}
+       ]
      }],
 
      init: function (ctx) {
@@ -603,7 +608,9 @@ renderFooter('footer-section');</script>
        ctx.set('hard', b.short + (REST_CHECKS - b.restOK));
        updatePanel(b);
        ctx.set('accept', st.accepted + '/' + st.tried);
-       ctx.record({now: st.fit, best: st.best});
+       // the chart plots distance from 100 on a log axis, so the last per cent
+       // (where the soft constraints live) is not squashed into a flat line
+       ctx.record({gap: Math.max(0.1, 100 - st.fit), bestGap: Math.max(0.1, 100 - st.best), soft: 5 * b.soft});
        // No finish condition: the soft constraints keep fitness just shy of
        // 100, so there is no clean moment to declare victory.
      },
