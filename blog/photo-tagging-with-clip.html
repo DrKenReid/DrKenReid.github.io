@@ -142,7 +142,7 @@
           </ul>
         </div>
 
-        <h2>The Approach</h2>
+        <h2>The approach</h2>
 
         <p><a href="https://github.com/mlfoundations/open_clip" target="_blank" rel="noopener noreferrer">OpenCLIP</a> is an open-source implementation of OpenAI's CLIP model. The core idea is elegant: it maps images and text into the same embedding space, so you can describe what you're looking for in plain English and the model will tell you how well each image matches. No training on your own data, no labelling, no fine-tuning. You just... describe the categories and let it figure it out.</p>
 
@@ -188,7 +188,7 @@
 
         <p>The tagging script lives in the repo at <code>scripts/tag_photos.py</code>, so if I add new photos I just re-run it and push. The whole thing is reproducible by anyone with the same dependencies installed (open_clip_torch, pillow, tqdm).</p>
 
-        <h2>What I'd Do Differently</h2>
+        <h2>What I'd do differently</h2>
 
         <ul>
           <li>A larger CLIP model (ViT-L-14) would improve accuracy on ambiguous images, at the cost of slower inference. Whether that trade-off is worth it for 500+ images is debatable, but for a larger collection it probably would be.</li>

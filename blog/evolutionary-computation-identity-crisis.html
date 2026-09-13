@@ -124,7 +124,7 @@
 
 				<p>I have spent my entire academic and professional life steeped in the world of Evolutionary Computation (EC). From grinding through my PhD and postdocs onward, I've used these algorithms to solve both massive real-world industrial and complex theoretical problems. I have seen firsthand what these systems can do.</p>
 
-				<p>Before we get into the current crisis facing the field, I have to confess my enduring love for the biology that started it all. The biological world is staggeringly complex, but the mechanisms driving that complexity are surprisingly simple. John Holland, the pioneer of genetic algorithms, realized decades ago that we could borrow evolution's trick for software: maintain a population of candidate solutions, keep the ones that work, mutate and recombine them, repeat. It seems obvious in hindsight, but simple ideas are often the most brilliant.</p>
+				<p>Before we get into the current crisis facing the field, I have to confess my love for the biology that started it all. The biological world is staggeringly complex, but the mechanisms driving that complexity are surprisingly simple. John Holland, the pioneer of genetic algorithms, realized decades ago that we could borrow evolution's trick for software: maintain a population of candidate solutions, keep the ones that work, mutate and recombine them, repeat. It seems obvious in hindsight, but simple ideas are often the most brilliant.</p>
 
 				<details class="plain-english-box" style="margin-bottom: 28px;">
 					<summary style="cursor: pointer;"><h2 style="display: inline; margin: 0;">Quick jargon guide (expand)</h2></summary>
@@ -173,7 +173,7 @@
 
 				<p>GenAI models are fundamentally interpolation engines.<sup><a href="#ref-17" class="cite-ref">[17]</a></sup> They are trained on existing human output and generate plausible-looking responses that blend what they have seen. That is extraordinarily powerful for text, code, images, and conversation. But it is not optimization. A large language model asked to design an antenna geometry will produce something that looks like an antenna. It will not produce something that satisfies specific gain, weight, and power constraints while minimizing material cost, because it has no way to enforce hard constraints or evaluate physical feasibility.<sup><a href="#ref-18" class="cite-ref">[18]</a></sup> </p>
 
-				<p>EAs operate differently. Each candidate in the population is evaluated against a real objective function (which can include simulations, physical models, or constraint checkers), and the search improves iteratively through selection, mutation, and recombination.<sup><a href="#ref-19" class="cite-ref">[19]</a></sup> The constraints are not suggestions; they are enforced at every generation.</p>
+				<p>EAs operate differently. Each candidate in the population is evaluated against a real objective function (which can include simulations, physical models, or constraint checkers), and the search improves iteratively through selection, mutation, and recombination.<sup><a href="#ref-19" class="cite-ref">[19]</a></sup> The constraints are enforced at every generation.</p>
 
 				<p>This is not a competition between the two. GenAI and EAs solve fundamentally different classes of problem. The issue is that funding, attention, and hiring all follow the hype, and right now the hype is entirely on one side.<sup><a href="#ref-20" class="cite-ref">[20]</a></sup> EC researchers are not losing on technical merit. They are losing on marketing.</p>
 
@@ -183,7 +183,7 @@
 
 				<p>The pattern is now well documented. Algorithms branded around wolves, whales, moths, fireflies, bats, antlions, and similar themes are often introduced with novel biological stories, but their actual update rules map onto known metaheuristic building blocks already present in earlier work.<sup><a href="#ref-10" class="cite-ref">[10]</a></sup><sup><a href="#ref-11" class="cite-ref">[11]</a></sup><sup><a href="#ref-12" class="cite-ref">[12]</a></sup> The issue is not that inspiration is bad. The issue is that metaphor can obscure how an algorithm works.</p>
 
-				<p>Concrete examples repeatedly cited in critiques include:</p>
+				<p>Concrete examples from the critiques include:</p>
 
 				<ul>
 					<li><strong>Grey Wolf Optimizer / Whale Optimization / Firefly / Bat / Antlion variants</strong>: often presented as distinct families, but deconstructions show strong structural overlap with pre-existing attraction-repulsion, random walk, and population update templates.<sup><a href="#ref-10" class="cite-ref">[10]</a></sup></li>
@@ -236,7 +236,7 @@
 
 				<h2>EC in the GenAI era</h2>
 
-				<p>Here is what I find frustrating: the GenAI wave is not just pulling attention away from EC, it is creating the kind of problems that EAs are built to solve. Neural architecture search, hyperparameter optimization, prompt engineering at scale, constrained code generation, multi-objective model selection: these are all optimization problems with messy, non-differentiable, or combinatorial search spaces. EAs should be central to the next generation of AI systems, not sidelined by them.</p>
+				<p>Here is what I find frustrating: the GenAI wave is pulling attention away from EC while creating the kind of problems that EAs are built to solve. Neural architecture search, hyperparameter optimization, prompt engineering at scale, constrained code generation, multi-objective model selection: these are all optimization problems with messy, non-differentiable, or combinatorial search spaces. EAs should be central to the next generation of AI systems, not sidelined by them.</p>
 
                 <img src="../img/photography/thumb/186.webp" alt="An abstract representation of machine learning." loading="lazy" width="400" height="266">
 

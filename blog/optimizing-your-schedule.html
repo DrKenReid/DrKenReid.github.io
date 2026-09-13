@@ -243,7 +243,7 @@
 
         <div class="non-nerd">
           <p>For the example running through this post, the real, unmovable limits are: sleep (the body insists on roughly seven hours a night, eight if you can manage it); paid work (forty hours, fixed by contract); chores (just under three hours a day, sadly); and a minimum of family time.</p>
-          <p>Everything else is open. Exercise, learning, leisure, deep work: no fixed floor, no fixed ceiling. The question, for each of those, is how much of the remaining hours you choose to give them. That choice is where your real priorities become legible.</p>
+          <p>Everything else is open. Exercise, learning, leisure, deep work: no fixed floor, no fixed ceiling. The question, for each of those, is how much of the remaining hours you choose to give them.</p>
         </div>
 
         <h2>Not everything counts the same</h2>
@@ -315,7 +315,7 @@
           </tbody>
         </table>
 
-        <p>Even with no further machinery, this table is useful. Look down the "matters" column and then across to "hours now," and the mismatches jump out: things I claim to value at 4 getting two or three hours, things I value at 1 or below eating the evening. </p>
+        <p>Even without solving anything, this table is useful. Look down the "matters" column and then across to "hours now," and the mismatches jump out: things I claim to value at 4 getting two or three hours, things I value at 1 or below eating the evening. </p>
 
         <div class="nerd-only">
           <p>But we are going to solve it, because the grid above is, near enough, the input to an optimization model. The "matters" column is the vector of weights \( w_i \). The activities are the index set \( A \). All that is missing is the bounds (the floors and ceilings) and a constraint or two to keep the solution realistic. So let us build it.</p>
@@ -441,7 +441,7 @@ Objective (weighted score, not hours): 547
           <p>Learning and leisure carry the same weight of 3, so the solver was <em>indifferent</em> between them: it poured all twelve into leisure and left learning at nothing, but it could just as correctly have done the reverse, or split them down the middle. This is called degeneracy: the model admitting that some choices make no difference to the objective. Which, I would argue, we should implement some kind of equality preference into the objective.</p>
         </div>
 
-        <h2 class="nerd-only">The Limits</h2>
+        <h2 class="nerd-only">The limits</h2>
 
         <p class="nerd-only">The failure mode of this kind of thinking is taking it too seriously and trying to live inside a spreadsheet. Your life is not a linear program, and the places it refuses to be one need naming. Ultimately, these kind of solvers don't measure up to reality. If you're having a bad day, your "leisure" hours will need a serious and immediate bump up. If your sink floods and you need to clean out the kitchen cupboards due to spreading water, you can't ignore it because you don't have enough chores hours!</p>
 

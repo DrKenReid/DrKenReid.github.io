@@ -121,7 +121,7 @@
 
  <h2>The CSS owns the colours</h2>
 
- <p>I always enjoyed color theory in computer science. The RGB values, pixels (did you know it stands for "picture element"?), bitmaps vs JPEGs vs other formats, it's super interesting to me. On this website, the theme toggle cannot restyle it the way it restyles text, and the first version of the ant post hardcoded its colours in JavaScript and looked wrong in one theme or the other. Every widget's colours live on its wrapper element as CSS custom properties, with a dark-theme override block, and the drawing code reads them fresh at draw time:</p>
+ <p>I always enjoyed color theory in computer science. The RGB values, pixels (did you know it stands for "picture element"?), bitmaps vs JPEGs vs other formats, it's super interesting to me. On this website, the theme toggle cannot restyle a canvas the way it restyles text, and the first version of the ant post hardcoded its colours in JavaScript and looked wrong in one theme or the other. Every widget's colours live on its wrapper element as CSS custom properties, with a dark-theme override block, and the drawing code reads them fresh at draw time:</p>
 
 <pre><code class="language-javascript">function vizColors(el) {
   var cs = getComputedStyle(el);

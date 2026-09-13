@@ -151,7 +151,7 @@
 
  <p>The demo below does symbolic regression. I sample forty points from a hidden target curve, and the population's job is to find an expression that fits them. Individuals are trees built from plus, minus, times, a protected divide (dividing by nearly zero returns 1 instead of exploding), sine, cosine, the variable x, and random constants.</p>
 
- <p>Fitness is mean squared error over the sample points with the lower the better. A formula that outputs infinity or NaN anywhere gets a score so bad it amounts to a death sentence.</p>
+ <p>Fitness is mean squared error over the sample points, the lower the better. A formula that outputs infinity or NaN anywhere gets a score so bad it amounts to a death sentence.</p>
 
  <p>Part two's genome was a box with five hundred dials: finite and fixed. The space of all expressions is infinite, and almost all of it is garbage. A random tree comes out like cos(x/x)*0.3-x. There's no gradient to follow and no obvious notion of "nearby".</p>
 
@@ -185,7 +185,7 @@
 
  <p>The population is now hauling around programs of a hundred-plus nodes that fit the data no better than a fifteen-node formula from fifty generations ago. This is bloat, the most famous disease of genetic programming and the reason the parsimony slider exists. Why a population would <em>choose</em> to bloat gets its own section below.</p>
 
- <p><strong>Now slam parsimony to maximum.</strong> The opposite catastrophe --- every node now costs more fitness than accuracy is worth, so the population collapses to tiny, dumb expressions: a bare constant, a lonely x. They fit the data terribly, but cheaply. Parsimony is a tax, and like any tax, set it too high and nobody builds anything.</p>
+ <p><strong>Now slam parsimony to maximum.</strong> The opposite catastrophe: every node now costs more fitness than accuracy is worth, so the population collapses to tiny, dumb expressions: a bare constant, a lonely x. They fit the data terribly, but cheaply. Parsimony is a tax, and like any tax, set it too high and nobody builds anything.</p>
 
  <p><strong>Shrink the population to twenty.</strong> The run crawls or stalls. With so few trees, the pool of subtrees for crossover to trade is tiny, and once the population homogenises, mutation has to invent every new part from scratch.</p>
 

@@ -127,7 +127,7 @@
 
         <h2>The why</h2>
 
-        <p>Well, mainly because I wanted to learn about fonts. I think they're interesting: they communicate tone, a certain visual 'feel' that goes beyond the words on the page, they have interest accessibility benefits and they have some fascinating history. But, the technical reasons are: <strong>Privacy:</strong> every page view against Google Fonts tells Google's servers a visitor's IP address requested your page, and in 2022 a German court found that arrangement violated the GDPR. Serving fonts yourself means your readers talk to nobody but you. <strong>Reliability and speed:</strong> a third-party font server is one more thing that can be slow, blocked (Google is unreachable in some countries), or discontinued. Self-hosted fonts arrive over the same connection as everything else. <strong>Ownership:</strong> the same philosophy as the rest of this site. Fewer moving parts owned by other people.</p>
+        <p>Well, mainly because I wanted to learn about fonts. I think they're interesting: they communicate tone, a certain visual 'feel' that goes beyond the words on the page, they have interesting accessibility benefits and they have some fascinating history. But, the technical reasons are: <strong>Privacy:</strong> every page view against Google Fonts tells Google's servers a visitor's IP address requested your page, and in 2022 a German court found that arrangement violated the GDPR. Serving fonts yourself means your readers talk to nobody but you. <strong>Reliability and speed:</strong> a third-party font server is one more thing that can be slow, blocked (Google is unreachable in some countries), or discontinued. Self-hosted fonts arrive over the same connection as everything else. <strong>Ownership:</strong> the same philosophy as the rest of this site. Fewer moving parts owned by other people.</p>
 
         <p>The counterargument used to be caching: the theory that everyone has Google's copy of Poppins cached already, so linking to it is free. That theory died in 2020 when browsers partitioned their caches per site for privacy reasons. Every site now downloads its own copy regardless, so the shared-cache benefit is actually negative, since you download it repeatedly.</p>
 
@@ -168,7 +168,7 @@
 # Themify       54.8 KB -> 2.7 KB   (16 icons kept, ~95% smaller)
 # ElegantIcons  62.2 KB -> 1.2 KB   (2 icons kept,  ~98% smaller)</code></pre>
 
-        <p>The subset files live alongside the originals, and the CSS build swaps the font sources to the subsets at minification time, so the originals remain on hand for the day a new icon appears. That day is the obvious failure mode (use a new icon, forget to re-subset, icon renders as an empty box), which is why the script also writes a manifest of what's included. I have some checks in place to make sure this goes smoothly, and that will be in another blog on how "my website has a test suite". </p>
+        <p>The subset files live alongside the originals, and the CSS build swaps the font sources to the subsets at minification time, so the originals remain on hand for the day a new icon appears. That day is the obvious failure mode (use a new icon, forget to re-subset, icon renders as an empty box), so the script also writes a manifest of what's included. I have some checks in place to make sure this goes smoothly, and that will be in another blog on how "my website has a test suite". </p>
 
         <h2>A note on SVG icons</h2>
 

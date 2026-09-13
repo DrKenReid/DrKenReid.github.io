@@ -111,7 +111,7 @@
  <span class="blog-tag">technology</span>
  </div>
 
- <p><a href="../index.html">My homepage</a> shows my scrobble count, the book I'm working reading through, the last song I played, and whatever I last posted on Bluesky. This is a static site, meaning it can't just run dynamic scripts on a whim. I set up a system to dynamically update my HTML weekly, however, and it works for free. Part of the series on <a href="../series-how-this-site-is-built.html">how this site is built</a>.</p>
+ <p><a href="../index.html">My homepage</a> shows my scrobble count, the book I'm reading through, the last song I played, and whatever I last posted on Bluesky. This is a static site, meaning it can't just run dynamic scripts on a whim. I set up a system to dynamically update my HTML weekly, however, and it works for free. Part of the series on <a href="../series-how-this-site-is-built.html">how this site is built</a>.</p>
 
  <div class="plain-english-box">
  <h2>Quick jargon guide</h2>
@@ -173,7 +173,7 @@ jobs:
 
  <h2>What the script gathers</h2>
 
- <p>The Python script makes a handful of HTTP requests. From the Last.fm API: my total play count, the most recent track, and my top albums of the past three months, which feed the homepage stat, the "now playing" strip, and the album wall on <a href="../music.html">the music page</a> respectively. From Goodreads, which shut its API years ago but still publishes RSS feeds: my currently-reading shelf, parsed straight out of the XML. Everything goes into a small JSON files under <code>data/</code>, the biggest a few kilobytes.</p>
+ <p>The Python script makes a handful of HTTP requests. From the Last.fm API: my total play count, the most recent track, and my top albums of the past three months, which feed the homepage stat, the "now playing" strip, and the album wall on <a href="../music.html">the music page</a> respectively. From Goodreads, which shut its API years ago but still publishes RSS feeds: my currently-reading shelf, parsed straight out of the XML. Everything goes into small JSON files under <code>data/</code>, the biggest a few kilobytes.</p>
 
  <p>Each run appends that week's play count to a rolling log, capped at ninety entries, which at one measurement a week is close to two years of history. </p>
 
