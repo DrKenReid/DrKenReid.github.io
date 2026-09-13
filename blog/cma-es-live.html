@@ -510,6 +510,13 @@ renderFooter('footer-section');</script>
        if (st.trail.length > 260) st.trail.shift();
        st.pop = off;
        ctx.record({best: st.bestGap, sigma: st.sigma});
+       // land.fopt is the known minimum, and the demo already clamps what
+       // it can show: the gap bottoms out at 1e-13 and sigma at sMin. The
+       // gap lands on its floor while the step size is still visibly
+       // shrinking, so both have to be there before a pane is frozen
+       if (st.bestGap <= 1e-13 && st.sigma <= sMin) {
+         ctx.finish('Optimum found: the gap and the step size have both bottomed out.');
+       }
      },
 
      draw: function (ctx) {

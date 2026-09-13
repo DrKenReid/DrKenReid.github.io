@@ -500,6 +500,16 @@ renderFooter('footer-section');</script>
        }
        measure(st);
        ctx.record({best: Math.max(st.gf, FLOOR), spread: st.spread});
+       // every landscape here bottoms out at zero, a minimum the search
+       // approaches in floating point rather than lands on. 1e-12 is the
+       // floor of the engine's log axis and three decades under FLOOR, so
+       // the fitness pane has been pinned at the bottom for dozens of
+       // iterations by then; the spread test holds a run open while the
+       // swarm is still visibly closing in, since one lucky particle can
+       // reach the minimum before the rest arrive
+       if (st.gf < 1e-12 && st.spread < 1e-4) {
+         ctx.finish('Optimum found: the swarm is sitting on the minimum.');
+       }
      },
 
      draw: function (ctx) {
@@ -565,6 +575,9 @@ renderFooter('footer-section');</script>
    // the hunt starts over from wherever you left them
    var cv = document.getElementById('psoCanvas'), dragging = false;
    function scatter(ev) {
+     // a finished run is paused and the Play button is inert until a restart,
+     // so a drag has to revive the demo or the map would stop responding
+     if (viz.read().finished) { viz.restart(); viz.run(); }
      var st = viz.ctx.state, cvs = viz.ctx.canvas.map, land = st.land;
      var r = cv.getBoundingClientRect();
      var x = land.dom[0] + (ev.clientX - r.left) / r.width * spanX(land);

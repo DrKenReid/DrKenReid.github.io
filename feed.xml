@@ -110,7 +110,7 @@
 
  <details class="faq-item">
  <summary>Does this beat a solver?</summary>
- <p>Not on a small clean instance, where a solver that proves optimality will return a provably optimal roster and this will not. It wins when the instance is large, the constraints are awkward to express in a solver's language, and you need a good answer in seconds rather than a perfect one overnight. Most operational researchers care more about a good enough solution in time over a perfect solution a week late.</p>
+ <p>Not on a small clean instance. A solver hands you an answer with a proof attached, and this hands you an answer. The demo can announce a perfect roster only because the score in this toy stops at 100, so hitting the ceiling is the proof. Give it a real objective with no ceiling and the search has no way of knowing whether it is done. It wins when the instance is large, the constraints are awkward to express in a solver's language, and you need a good answer in seconds rather than a perfect one overnight. Most operational researchers care more about a good enough solution in time over a perfect solution a week late.</p>
  </details>
  </div>
 

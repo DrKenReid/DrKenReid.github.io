@@ -856,6 +856,20 @@ loadPrism();</script>
        if (stats.best > st.bestEver) st.bestEver = stats.best;
        ctx.record({best: stats.best, avg: stats.avg, div: stats.div});
        st.last = stats;
+       // A match of 1 is the optimum and only a pixel-identical painting
+       // scores it: fitness is 1 minus a sum of integer channel distances,
+       // so it hits 1 when that sum is zero and never otherwise.
+       if (stats.best >= 1) {
+         // draw() writes the tiles and has not run for this generation yet,
+         // and finish() reads them for what it announces, so bring them
+         // forward or a screen reader hears the generation before this one
+         ctx.set('gen', ctx.iteration + 1);
+         ctx.set('best', fmtPct(Math.max(st.bestEver, stats.best)));
+         ctx.set('avg', fmtPct(stats.avg));
+         ctx.set('div', Math.round(stats.div * 100) + '%');
+         ctx.set('evals', st.evals >= 10000 ? (st.evals / 1000).toFixed(0) + 'k' : st.evals);
+         ctx.finish('Perfect match: the champion reproduces the target pixel for pixel.');
+       }
      },
 
      draw: function (ctx) {

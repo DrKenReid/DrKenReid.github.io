@@ -430,6 +430,15 @@ renderFooter('footer-section');</script>
        st.lastStep = stepSum / n;
        st.lastSpread = spreadOf(st.pop);
        ctx.record({best: st.best.f, spread: Math.max(st.lastSpread, 1e-12)});
+       // every landscape here bottoms out at zero, a minimum the search
+       // approaches in floating point rather than lands on. 1e-12 is the
+       // floor of the engine's log axis, so under it the fitness pane
+       // cannot move, and the population has collapsed to a dot well
+       // before that: spread is under 1e-4 of the domain at every setting
+       // measured
+       if (st.best.f < 1e-12) {
+         ctx.finish('Optimum found: the population is sitting on the minimum.');
+       }
      },
 
      draw: function (ctx) {
@@ -540,6 +549,9 @@ renderFooter('footer-section');</script>
 
    // click or tap to re-seed the population as a tight cluster
    document.getElementById('deCanvas').addEventListener('pointerdown', function (ev) {
+     // a finished run is paused and the Play button is inert until a restart,
+     // so a click has to revive the demo or the landscape would stop responding
+     if (viz.read().finished) { viz.restart(); viz.run(); }
      var ctx = viz.ctx, st = ctx.state, cv = ctx.canvas.map;
      var land = st.land, rect = cv.node.getBoundingClientRect();
      var cx = land.xmin + (ev.clientX - rect.left) / rect.width * (land.xmax - land.xmin);

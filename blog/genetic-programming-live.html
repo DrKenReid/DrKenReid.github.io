@@ -518,6 +518,21 @@ renderFooter('footer-section');</script>
        updateBest(st);
        st.avg = avgNodes(st.pop);
        ctx.record({e: Math.max(st.best.mse, 1e-13), s: st.avg});
+       // Zero error is the optimum: the mean squared error is a sum of
+       // squared residuals, so it reaches zero only when the program passes
+       // through every sample point. The error tile prints values in
+       // exponential notation all the way down, so any tolerance here would
+       // stop a run the reader can still watch improving.
+       if (st.best.mse === 0) {
+         // draw() writes the tiles and has not run for this generation yet,
+         // and finish() reads them for what it announces, so bring them
+         // forward or a screen reader hears the generation before this one
+         ctx.set('gen', ctx.iteration + 1);
+         ctx.set('best', st.best.mse);
+         ctx.set('size', st.best.nodes);
+         ctx.set('avg', st.avg);
+         ctx.finish('Perfect fit: the program passes through every sample point.');
+       }
      },
 
      draw: function (ctx) {
