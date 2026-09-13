@@ -1,5 +1,22 @@
 [
   {
+    "title": "Ruin and Recreate, Live",
+    "date": "2026-09-13",
+    "tags": [
+      "data science"
+    ],
+    "category": "Data Science",
+    "excerpt": "Most search algorithms improve a solution by nudging it. Ruin and recreate demolishes part of it and rebuilds, which works better on rosters. The method behind my 2018 rostering paper, running in your browser.",
+    "url": "blog/ruin-and-recreate-live.html",
+    "image": "img/photography/thumb/288.webp",
+    "series": {
+      "name": "Research, Live",
+      "part": 3
+    },
+    "readMinutes": 8,
+    "words": 1613
+  },
+  {
     "title": "Leading a Horse to Water",
     "date": "2026-09-06",
     "tags": [

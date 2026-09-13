@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="Most search algorithms improve a solution by nudging it. Ruin and recreate demolishes part of it and rebuilds, which works better on rosters.">
+ <meta name="keywords" content="data science">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Ruin and Recreate, Live - Ken Reid</title>
+ <meta property="og:title" content="Ruin and Recreate, Live">
+ <meta property="og:description" content="Most search algorithms improve a solution by nudging it. Ruin and recreate demolishes part of it and rebuilds, which works better on rosters.">
+ <meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/288.png">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/ruin-and-recreate-live.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Ruin and Recreate, Live">
+ <meta name="twitter:description" content="Most search algorithms improve a solution by nudging it. Ruin and recreate demolishes part of it and rebuilds.">
+ <meta name="twitter:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/288.png">
+ <meta name="citation_title" content="Ruin and Recreate, Live">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/09/13">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/ruin-and-recreate-live.html">
+ <meta name="DC.title" content="Ruin and Recreate, Live">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-09-13">
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="../img/photography/hero/288.webp">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/ruin-and-recreate-live.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "Ruin and Recreate, Live",
+ "description": "Most search algorithms improve a solution by nudging it. Ruin and recreate demolishes part of it and rebuilds, which works better on rosters.",
+ "image": "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/288.png",
+ "author": { "@type": "Person", "name": "Ken Reid", "url": "https://www.kenreid.co.uk" },
+ "datePublished": "2026-09-13",
+ "publisher": { "@type": "Person", "name": "Ken Reid" },
+ "keywords": ["metaheuristics", "scheduling", "rostering", "large neighbourhood search", "optimisation"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "Ruin and Recreate, Live",
+       "item": "https://www.kenreid.co.uk/blog/ruin-and-recreate-live.html"
+     }
+   ]
+ }
+ </script>
+
+ <style>
+ /* Widget-specific furniture. Shared chrome lives in the .kr-viz component. */
+ .rr-legend { display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:10px; font-size:0.78em; color:var(--viz-muted); }
+ .rr-legend span { display:flex; align-items:center; gap:6px; }
+ .rr-key { width:11px; height:11px; border-radius:3px; display:inline-block; }
+ </style>
+
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+ <div id="header-section"></div>
+
+ <main id="main-content">
+ <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/288.webp); background-size: cover; background-position: center center;">
+ <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+ <div class="breadcrumb-content text-center">
+ <p class="page-title">Ruin and Recreate, Live</p>
+ <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+ <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+ <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+ <li class="breadcrumb-item active" aria-current="page">Ruin and Recreate, Live</li>
+ </ol></nav>
+ </div>
+ </div></div></div>
+ </section>
+
+ <div class="about-us-area section-padding-80 clearfix">
+ <div class="container">
+
+ <div class="blog-post">
+ <h1>Ruin and Recreate, Live</h1>
+ <div class="blog-meta">
+ 13 September 2026 &middot;
+ <span class="blog-tag">data science</span>
+ </div>
+
+ <p>I started my Ph.D. in 2015 under Dr. Jingpeng Li, a kindly and intelligent man who was very patient with me going down the wrong roads and floundering over fairly fundamental and basic math. He had some interesting ideas on how to modify existing algorithms to improve their capabilities, and let me toy with them to begin to understand some of that fundamental math, as well as get a feel for how search algorithms, at their core, actually function.</p>
+
+<p>Most search algorithms take a working solution, change one thing, and keep the change if it helped. That works until the solution is tangled, at which point every single change makes things worse and the search sits there, surrounded by improvements it cannot reach because each one requires three simultaneous moves.</p>
+
+ <p>Ruin and recreate knocks a hole in the solution and rebuilds the solution. This is the method behind <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:Se3iqnhoufwC" target="_blank" rel="noopener">a rostering paper I wrote in 2018</a><sup><a href="#ref-1" class="cite-ref">[1]</a></sup> with colleagues at Stirling, York and BT, using a variant of Jingpeng's own algorithm: Evolutionary Ruin and Stochastic Recreate<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>, where the wrecking ball is aimed by fitness rather than swung blindly. The demo below is that method on a simple roster. Part of the series on <a href="../series-research-live.html">research, live</a>.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Roster:</strong> who works which shift on which day. Here, twelve staff over fourteen days, each on an early, late, or night shift, or off.</li>
+ <li><strong>Fitness:</strong> one number saying how good a roster is, out of 100. Following the paper, hard constraints (covering demand, legal rest) are 95% of the score and soft ones (fair shares, no long runs) are the last 5%.</li>
+ <li><strong>Local search:</strong> repeatedly make a small change and keep it if the fitness rises.</li>
+ <li><strong>Local optimum:</strong> a solution where every small change makes things worse, which does not mean it is any good.</li>
+ <li><strong>Large neighbourhood search:</strong> the family this belongs to<sup><a href="#ref-3" class="cite-ref">[3]</a></sup>. Instead of small changes, make one enormous change and repair the damage intelligently.</li>
+ <li><strong>Evolutionary ruin:</strong> the paper's twist. Every allocation gets its own fitness score, and the weaker an allocation, the more likely the ruin phase is to demolish it.</li>
+ </ul>
+ </div>
+
+ <h2>The demo</h2>
+
+ <p>Each row is a person, each column a day. Cells are the shift they are working. The bar under each day shows whether that day's demand is covered: short is bad, and grey means uncovered.</p>
+
+ <p>One step is one full ruin and recreate, under the same simulated annealing control the paper uses. The ruined cells flash before they are refilled, so you can see the size and shape of the hole. The default strategy is the paper's: score every allocation, then demolish the probabilistically weakest. Switch to the blind strategies to see what the aiming is worth: scattered cells, a person's whole fortnight, or everybody's Tuesday.</p>
+
+ <div class="kr-viz" id="rr-demo">
+   <canvas id="rrGrid" height="360" role="img" aria-label="Animated employee roster: twelve rows of staff against fourteen days, each cell coloured by shift type. The search repeatedly removes a block of assignments and rebuilds them, and coverage bars under each day show whether demand is met."></canvas>
+   <div class="kr-toolbar" data-kr-toolbar></div>
+   <div class="kr-sliders" data-kr-sliders></div>
+   <div class="rr-legend">
+     <span><i class="rr-key" style="background:var(--viz-s1)"></i>Early</span>
+     <span><i class="rr-key" style="background:var(--viz-s2)"></i>Late</span>
+     <span><i class="rr-key" style="background:var(--viz-s3)"></i>Night</span>
+     <span><i class="rr-key" style="background:var(--viz-cell)"></i>Off</span>
+     <span><i class="rr-key" style="background:var(--viz-s4)"></i>Just ruined</span>
+   </div>
+   <div class="kr-stats" data-kr-stats></div>
+   <canvas id="rrChart" class="kr-chart" height="150" role="img" aria-label="Chart of roster fitness over iterations, with the current fitness and the best fitness found so far."></canvas>
+   <p class="kr-note">Fitness follows the paper's weighting: hard constraints (meeting each day's demand, no night shift straight into an early) are 95% of the score, soft ones (no runs longer than five days, a fair share of the work) are the rest. The acceptance is simulated annealing with the energy modelled as inverse fitness, the same control the paper uses, so early on the search sometimes keeps a worse roster on purpose.</p>
+ </div>
+
+ <h2>Why breaking it on purpose works</h2>
+
+ <p>A roster is full of constraints that interlock. Moving one person off Tuesday night leaves Tuesday night short, so the move is rejected, so the person stays. Every individual change is bad, and yet the roster as a whole is nowhere near as good as it could be. That is a local optimum with high walls (you try to climb them and only fall right back down, you need to jump out of there entirely).</p>
+
+ <p>Removing thirty assignments at once does not have to be an improvement, because the recreate step is not obliged to put them back where they were. It rebuilds greedily against the fitness function, which means it can discover an arrangement that no sequence of single moves would have reached, since each intermediate step in that sequence would have been rejected.</p>
+
+ <p>You can see this in action in the demo: small ruins converge smoothly and stall early. Large ruins jump around and take longer per step, since there is more to rebuild. The paper's answer is this: if you know which allocations are weak, a small, well-aimed ruin can do the work of a large blind one.</p>
+
+ <h2>Aim the wrecking ball, or swing it harder</h2>
+
+ <p>I measured all four strategies on this instance. The score is the median number of steps to first reach a fitness of 99.5, over five seeds, with a 200-step cap; "never" means the median run did not get there at all. Lower is faster:</p>
+
+ <table class="values-grid">
+ <thead><tr><th>Ruin size</th><th class="score">Scattered</th><th class="score">Whole people</th><th class="score">Whole days</th><th class="score">Weakest (the paper)</th></tr></thead>
+ <tbody>
+ <tr><td>8 cells</td><td class="score">22</td><td class="score">never</td><td class="score">31</td><td class="score">10</td></tr>
+ <tr><td>16 cells</td><td class="score">9</td><td class="score">never</td><td class="score">31</td><td class="score">8</td></tr>
+ <tr><td>32 cells</td><td class="score">10</td><td class="score">23</td><td class="score">17</td><td class="score">16</td></tr>
+ <tr><td>56 cells</td><td class="score">6</td><td class="score">20</td><td class="score">12</td><td class="score">16</td></tr>
+ <tr><td>80 cells</td><td class="score">7</td><td class="score">10</td><td class="score">5</td><td class="score">17</td></tr>
+ </tbody>
+ </table>
+
+ <p>The fitness-guided ruin is fastest when the holes are small, eight or ten steps with a demolition of only eight cells, and gets no benefit from swinging harder, because it was never relying on volume in the first place. The blind strategies are the mirror image: they need size. Scattered cells come good from sixteen cells up; ruining everybody's Tuesday is the single fastest setting in the table at eighty cells, seven whole columns of the roster at a time.</p>
+
+ <p>Whole-people ruin at small sizes is the table's disaster zone, and the reason generalises. Eight or sixteen cells is one person's fortnight: freeing a single row while the other eleven stay fixed leaves the recreate step boxed in by everything it did not touch. Structured damage only pays when the structure being suspended is big enough to rearrange.</p>
+
+ <p>So the destroy operator and its size are not two parameters, they are one decision: aim, or swing big. The paper's selection operator decides, and its reward is reaching the same quality with a fraction of the demolition, which matters when every ruined cell costs rebuild time. Blind volume gets there too, eventually, by suspending so many constraints at once that the rebuild has room to rearrange everything.</p>
+
+ <h2>What the demo is not</h2>
+
+ <p>The real problem had a great deal more to it: engineers with different skills and a first-skill preference, shift rules dictating lengths, start-time windows and shift counts, alternating week patterns, UK working-time law, and two consecutive rest days per week as a soft target. The instances ran to around 200 employees, drawn from a domain of roughly 25,000 field engineers. The fitness function works with eight hard constraints and four soft ones, weighted 95 to 5.</p>
+
+ <p>What survives compression is the shape of the method, which is the part that transfers. Score it, break the weak parts, rebuild, and let the temperature decide what to keep.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>What makes it "evolutionary"?</summary>
+ <p>The ruin phase runs on component fitness, in two mini-phases the paper calls selection and mutation. Selection scores every allocation and demolishes the probabilistically weakest, so bad genes die faster than good ones. Mutation then removes a few allocations at random, regardless of fitness, which keeps the search exploring even when every component looks healthy. Survival of the fittest, applied to the pieces of one schedule rather than to a population of schedules.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Is this just simulated annealing with extra steps?</summary>
+ <p>SA is in there, but as the referee rather than the boxer. The engine is the ruin and rebuild; annealing referees, deciding whether the rebuilt roster replaces the current one, with energy modelled as inverse fitness, and its falling temperature is what stops the destruction of a nearly finished schedule late in the run. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why greedy repair rather than an optimal one?</summary>
+ <p>Because optimal repair of a thirty-cell hole is itself a hard problem, and you need to do it thousands of times. Greedy is fast, which buys iterations, and iterations buy quality. Where the repair can be made optimal cheaply, doing so is usually worth it: that variant is called large neighbourhood search with an optimal repair.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>How big should the ruin be?</summary>
+ <p>The amount of demolition emerges from the selection and mutation probabilities, which were tuned with a Taguchi design of experiments, and it falls naturally over the run: as the schedule improves, component fitness rises and protects good allocations from selection, while the falling temperature damps disruption late on. The table above shows why that self-regulation is the right instinct.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Does this beat a solver?</summary>
+ <p>Not on a small clean instance, where a solver that proves optimality will return a provably optimal roster and this will not. It wins when the instance is large, the constraints are awkward to express in a solver's language, and you need a good answer in seconds rather than a perfect one overnight. Most operational researchers care more about a good enough solution in time over a perfect solution a week late.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Reid, K. N., Li, J., Veerapen, N., Swan, J., McCormick, A., Kern, M., &amp; Owusu, G. (2018). Shift Scheduling and Employee Rostering: An Evolutionary Ruin &amp; Stochastic Recreate Solution. In <em>2018 10th Computer Science and Electronic Engineering (CEEC)</em>, 19&ndash;23. IEEE. <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:Se3iqnhoufwC" target="_blank" rel="noopener">Google Scholar</a>
+          </li>
+          <li id="ref-2">
+            Li, J., Bai, R., Shen, Y., &amp; Qu, R. (2015). Search with evolutionary ruin and stochastic rebuild: A theoretic framework and a case study on exam timetabling. <em>European Journal of Operational Research</em>, 242(3), 798&ndash;806.
+          </li>
+          <li id="ref-3">
+            Schrimpf, G., Schneider, J., Stamm-Wilbrandt, H., &amp; Dueck, G. (2000). Record Breaking Optimization Results Using the Ruin and Recreate Principle. <em>Journal of Computational Physics</em>, 159(2), 139&ndash;171. <a href="https://doi.org/10.1006/jcph.1999.6413" target="_blank" rel="noopener">https://doi.org/10.1006/jcph.1999.6413</a>
+          </li>
+        </ol>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="factorio-live.html" class="blog-card">
+                <div class="blog-card-img"><img src="../blog/img/factorio-belt-demo.png" alt="Factorio, Live: a Game as an Optimisation Benchmark" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">16 August 2026 · 12 min read</div>
+                  <h3 class="blog-card-title">Factorio, Live: a Game as an Optimisation Benchmark</h3>
+                  <p class="blog-card-excerpt">The logistic transport belt problem from my GECCO 2021 paper, running live in your browser: watch simulated annealing and genetic programming lay belts across a walled grid until the items get through.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">data science</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="optimizing-your-schedule.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/493.webp" alt="Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">15 June 2026 · 19 min read</div>
+                  <h3 class="blog-card-title">Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)</h3>
+                  <p class="blog-card-excerpt">What an operations researcher actually means by optimizing a schedule: objectives, constraints and weightings, a values clarification grid, and a working integer-programming model of your week. Nerd mode optional.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">personal</span><span class="blog-tag">data science</span><span class="blog-tag">advice</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="optimizing-your-schedule-ii.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/488.webp" alt="Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">30 June 2026 · 16 min read</div>
+                  <h3 class="blog-card-title">Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)</h3>
+                  <p class="blog-card-excerpt">A reply to Part I: time is not the only budget. Energy is a second, renewable resource that some activities spend and others restore. A working model of a depleted week, and why rest is production, not indulgence.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">personal</span><span class="blog-tag">data science</span><span class="blog-tag">advice</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ <hr style="margin: 40px 0;">
+ <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+ </div>
+ </div>
+ </div>
+
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script src="../js/kr-viz.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+
+ <script>
+ (function () {
+   var DAYS = 14, STAFF = 12;
+   var OFF = 0, EARLY = 1, LATE = 2, NIGHT = 3;
+   var DEMAND = [0, 4, 3, 2];          // staff needed per shift type, per day
+   var HARD_CHECKS = 126 + 156;        // demand units + night-to-early rest boundaries
+   var SOFT_CHECKS = 168 + 12;         // run-length day checks + per-person fairness checks
+
+   function emptyRoster() {
+     var r = [];
+     for (var s = 0; s < STAFF; s++) {
+       var row = [];
+       for (var d = 0; d < DAYS; d++) row.push(OFF);
+       r.push(row);
+     }
+     return r;
+   }
+
+   function coverage(r, d) {
+     var c = [0, 0, 0, 0];
+     for (var s = 0; s < STAFF; s++) c[r[s][d]]++;
+     return c;
+   }
+
+   /* --- fitness: the paper's weighting, hard constraints 95%, soft 5% --- */
+   function fitness(r) {
+     var d, s, k;
+     // hard: demand units covered, and no night shift followed by an early
+     var covered = 0;
+     for (d = 0; d < DAYS; d++) {
+       var c = coverage(r, d);
+       for (k = EARLY; k <= NIGHT; k++) covered += Math.min(c[k], DEMAND[k]);
+     }
+     var restOK = 0;
+     for (s = 0; s < STAFF; s++) {
+       for (d = 1; d < DAYS; d++) {
+         if (!(r[s][d - 1] === NIGHT && r[s][d] === EARLY)) restOK++;
+       }
+     }
+     // soft: no run longer than five days, and a fair share of the work
+     var runOK = 0, counts = [], mean = 0;
+     for (s = 0; s < STAFF; s++) {
+       var run = 0, n = 0;
+       for (d = 0; d < DAYS; d++) {
+         if (r[s][d] !== OFF) { run++; n++; } else run = 0;
+         if (run <= 5) runOK++;
+       }
+       counts.push(n); mean += n;
+     }
+     mean /= STAFF;
+     var fairOK = 0;
+     for (s = 0; s < STAFF; s++) if (Math.abs(counts[s] - mean) <= 1) fairOK++;
+     var hard = (covered + restOK) / HARD_CHECKS;
+     var soft = (runOK + fairOK) / SOFT_CHECKS;
+     return 95 * hard + 5 * soft;
+   }
+
+   function uncovered(r) {
+     var n = 0;
+     for (var d = 0; d < DAYS; d++) {
+       var c = coverage(r, d);
+       for (var k = EARLY; k <= NIGHT; k++) if (c[k] < DEMAND[k]) n += DEMAND[k] - c[k];
+     }
+     return n;
+   }
+
+   /* --- component fitness, for the paper's evolutionary selection --------
+      Scores one allocation the way the paper's solution decomposition does:
+      how much this cell contributes to constraint trouble. */
+   function cellFitness(r, s, d) {
+     var f = 1.0, k = r[s][d];
+     if (k === OFF) return 1.0;
+     var c = coverage(r, d);
+     if (c[k] > DEMAND[k]) f -= 0.5;                      // surplus: not needed here
+     if (d > 0 && r[s][d - 1] === NIGHT && k === EARLY) f -= 0.6;
+     if (d < DAYS - 1 && k === NIGHT && r[s][d + 1] === EARLY) f -= 0.6;
+     var run = 0;
+     for (var d2 = 0; d2 <= d; d2++) run = r[s][d2] === OFF ? 0 : run + 1;
+     if (run > 5) f -= 0.3;
+     var n = 0;
+     for (var d3 = 0; d3 < DAYS; d3++) if (r[s][d3] !== OFF) n++;
+     if (n > (DAYS / 2) + 1) f -= 0.2;                    // hogging the rota
+     return Math.max(0, f);
+   }
+
+   /* --- ruin -------------------------------------------------------- */
+   function ruin(r, strategy, size, rng) {
+     var holes = [], s, d, i;
+     if (strategy === 'staff') {
+       var rows = Math.max(1, Math.round(size / DAYS));
+       for (i = 0; i < rows; i++) {
+         s = (rng() * STAFF) | 0;
+         for (d = 0; d < DAYS; d++) holes.push([s, d]);
+       }
+     } else if (strategy === 'day') {
+       var cols = Math.max(1, Math.round(size / STAFF));
+       for (i = 0; i < cols; i++) {
+         d = (rng() * DAYS) | 0;
+         for (s = 0; s < STAFF; s++) holes.push([s, d]);
+       }
+     } else if (strategy === 'weak') {
+       // the paper's evolutionary ruin: selection removes allocations with
+       // low component fitness, then mutation removes a few at random
+       // regardless of fitness, keeping exploration alive
+       var mutN = Math.max(1, Math.round(size * 0.3));
+       var cand = [];
+       for (s = 0; s < STAFF; s++) {
+         for (d = 0; d < DAYS; d++) {
+           if (r[s][d] !== OFF) cand.push([s, d, 1.1 - cellFitness(r, s, d)]);
+         }
+       }
+       var want = Math.min(size - mutN, cand.length);
+       for (i = 0; i < want; i++) {
+         var totalW = 0, j;
+         for (j = 0; j < cand.length; j++) totalW += cand[j][2];
+         var pick = rng() * totalW, at = cand.length - 1;
+         for (j = 0; j < cand.length; j++) {
+           pick -= cand[j][2];
+           if (pick <= 0) { at = j; break; }
+         }
+         holes.push([cand[at][0], cand[at][1]]);
+         cand.splice(at, 1);
+       }
+       for (i = 0; i < mutN && cand.length; i++) {          // the mutation mini-phase
+         var mAt = (rng() * cand.length) | 0;
+         holes.push([cand[mAt][0], cand[mAt][1]]);
+         cand.splice(mAt, 1);
+       }
+     } else {                                   // scattered
+       for (i = 0; i < size; i++) {
+         holes.push([(rng() * STAFF) | 0, (rng() * DAYS) | 0]);
+       }
+     }
+     for (i = 0; i < holes.length; i++) r[holes[i][0]][holes[i][1]] = OFF;
+     return holes;
+   }
+
+   /* --- recreate ----------------------------------------------------- */
+   // Greedy: visit the holes in random order and take the fittest shift for
+   // each, evaluating the real fitness function rather than a proxy.
+   function recreate(r, holes, rng) {
+     var order = holes.slice();
+     for (var i = order.length - 1; i > 0; i--) {
+       var j = (rng() * (i + 1)) | 0, t = order[i]; order[i] = order[j]; order[j] = t;
+     }
+     for (i = 0; i < order.length; i++) {
+       var s = order[i][0], d = order[i][1];
+       var best = OFF, bestFit = -Infinity;
+       for (var k = OFF; k <= NIGHT; k++) {
+         r[s][d] = k;
+         var f = fitness(r);
+         if (f > bestFit) { bestFit = f; best = k; }
+       }
+       r[s][d] = best;
+     }
+   }
+
+   /* the paper's recreate also rebuilds under-allocated weeks: any employee
+      short of shifts in a week gets a random day off opened and refilled */
+   function topUp(r, rng) {
+     var TARGET = 6;                     // shifts per person per week, the contract ceiling
+     var order = [];
+     for (var s = 0; s < STAFF; s++) order.push(s);
+     for (var i = order.length - 1; i > 0; i--) {
+       var j = (rng() * (i + 1)) | 0, t = order[i]; order[i] = order[j]; order[j] = t;
+     }
+     for (var oi = 0; oi < order.length; oi++) {
+       var st = order[oi];
+       for (var w = 0; w < 2; w++) {
+         var from = w * 7, n = 0, offs = [];
+         for (var d = from; d < from + 7; d++) {
+           if (r[st][d] !== OFF) n++; else offs.push(d);
+         }
+         if (n < TARGET && offs.length) {
+           var d2 = offs[(rng() * offs.length) | 0];
+           var best = OFF, bestFit = -Infinity;
+           for (var k = OFF; k <= NIGHT; k++) {
+             r[st][d2] = k;
+             var f = fitness(r);
+             if (f > bestFit) { bestFit = f; best = k; }
+           }
+           r[st][d2] = best;
+         }
+       }
+     }
+   }
+
+   function clone(r) { return r.map(function (row) { return row.slice(); }); }
+
+   KRViz.mount('#rr-demo', {
+     seed: 20260924,
+
+     canvases: {
+       grid:  {el: '#rrGrid', height: function (w) { return Math.max(230, Math.min(360, w * 0.52)); }},
+       chart: {el: '#rrChart', height: 150, mobile: {height: 150}}
+     },
+
+     controls: [
+       {id: 'strategy', label: 'Ruin', type: 'select', value: 'weak', restart: false,
+        options: [{value: 'weak',   label: 'weakest allocations (the paper)'},
+                  {value: 'random', label: 'scattered cells'},
+                  {value: 'staff',  label: 'whole people'},
+                  {value: 'day',    label: 'whole days'}]},
+       {id: 'size', label: 'Ruin size', min: 4, max: 80, step: 4, value: 16,
+        fmt: function (v) { return v + ' cells'; }},
+       {id: 'speed', label: 'Speed', min: 1, max: 40, value: 8, unit: '/s'}
+     ],
+
+     buttons: ['run', 'restart', {id: 'new', label: 'New roster', onClick: function (api) {
+       api.ctx.state.reseed = true; api.restart();
+     }}],
+
+     stats: [
+       {id: 'fit',  label: 'Fitness', tone: 's1', fmt: function (v) { return v.toFixed(1); }},
+       {id: 'best', label: 'Best', tone: 's2', fmt: function (v) { return v.toFixed(1); }},
+       {id: 'gaps', label: 'Uncovered', tone: 's4'},
+       {id: 'accept', label: 'Accepted'}
+     ],
+
+     charts: [{
+       canvas: 'chart',
+       panes: [{label: 'FITNESS', series: [{key: 'now', tone: 's1'},
+                                           {key: 'best', tone: 's2', width: 2}]}]
+     }],
+
+     init: function (ctx) {
+       var r = emptyRoster();
+       // a deliberately poor starting roster: random scatter of shifts that
+       // covers nothing properly
+       for (var s = 0; s < STAFF; s++) {
+         for (var d = 0; d < DAYS; d++) {
+           r[s][d] = (ctx.rng() < 0.45) ? ((ctx.rng() * 3) | 0) + 1 : OFF;
+         }
+       }
+       var f = fitness(r);
+       return {r: r, fit: f, best: f, bestR: clone(r), holes: [],
+               accepted: 0, tried: 0, T: 3.0};
+     },
+
+     step: function (ctx) {
+       var st = ctx.state;
+       var candidate = clone(st.r);
+       var holes = ruin(candidate, ctx.controls.strategy,
+                        ctx.controls.size, ctx.rng);
+       recreate(candidate, holes, ctx.rng);
+       topUp(candidate, ctx.rng);
+       var f = fitness(candidate);
+       st.tried++;
+       st.holes = holes;
+       // the paper's SA control: worse states accepted with a probability
+       // that falls as the temperature does
+       if (f >= st.fit || ctx.rng() < Math.exp((f - st.fit) / st.T)) {
+         st.r = candidate; st.fit = f; st.accepted++;
+         if (f > st.best) { st.best = f; st.bestR = clone(candidate); }
+       }
+       st.T *= 0.985;
+       ctx.set('fit', st.fit);
+       ctx.set('best', st.best);
+       ctx.set('gaps', uncovered(st.r));
+       ctx.set('accept', st.accepted + '/' + st.tried);
+       ctx.record({now: st.fit, best: st.best});
+       // No finish condition: the soft constraints keep fitness just shy of
+       // 100, so there is no clean moment to declare victory.
+     },
+
+     draw: function (ctx) {
+       var st = ctx.state, c = ctx.canvas.grid, g = c.g, C = ctx.colors;
+       if (!g) return;
+       var padL = 26, padT = 8, padB = 26;
+       var cw = (c.w - padL) / DAYS, ch = (c.h - padT - padB) / STAFF;
+       var tone = [C.cell, C.s1, C.s2, C.s3];
+
+       var ruined = {};
+       for (var i = 0; i < st.holes.length; i++) ruined[st.holes[i][0] + ',' + st.holes[i][1]] = 1;
+
+       for (var s = 0; s < STAFF; s++) {
+         for (var d = 0; d < DAYS; d++) {
+           var x = padL + d * cw, y = padT + s * ch;
+           g.fillStyle = tone[st.r[s][d]];
+           g.fillRect(x + 1, y + 1, cw - 2, ch - 2);
+           if (ruined[s + ',' + d]) {
+             g.strokeStyle = C.s4; g.lineWidth = 1.5;
+             g.strokeRect(x + 1.5, y + 1.5, cw - 3, ch - 3);
+           }
+         }
+       }
+
+       // coverage bars: one per day, height is the shortfall
+       g.font = '600 9px Poppins, sans-serif';
+       for (d = 0; d < DAYS; d++) {
+         var cov = coverage(st.r, d), gap = 0;
+         for (var k = 1; k <= 3; k++) if (cov[k] < DEMAND[k]) gap += DEMAND[k] - cov[k];
+         var bx = padL + d * cw, by = c.h - padB + 4, bh = 14;
+         g.fillStyle = C.grid;
+         g.fillRect(bx + 1, by, cw - 2, bh);
+         if (gap > 0) {
+           g.fillStyle = C.s4;
+           g.fillRect(bx + 1, by, cw - 2, Math.min(bh, gap * 5));
+         }
+       }
+       g.fillStyle = C.muted;
+       g.textAlign = 'right';
+       g.fillText('staff', padL - 4, padT + 9);
+       g.textAlign = 'left';
+       g.fillText('day 1', padL, c.h - 4);
+       g.textAlign = 'right';
+       g.fillText('day ' + DAYS, c.w - 2, c.h - 4);
+     }
+   });
+ })();
+ </script>
+</body>
+</html>
