@@ -5,7 +5,7 @@
       "artist": "The Strokes",
       "url": "https://www.last.fm/music/The+Strokes/Is+This+It",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/c7a4e1700ae85d9910bbe59887a8c771.jpg",
-      "plays": 8
+      "plays": 9
     },
     {
       "name": "ECLESIA",
@@ -40,13 +40,6 @@
       "artist": "Jaroslav Beck",
       "url": "https://www.last.fm/music/Jaroslav+Beck/Beat+Saber+(Original+Game+Soundtrack)",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/070f7c8133e30d9c0cc25efc4fdb6462.jpg",
-      "plays": 3
-    },
-    {
-      "name": "Infinite Requiem (Deoksoon)",
-      "artist": "LUNEKT",
-      "url": "https://www.last.fm/music/LUNEKT/Infinite+Requiem+(Deoksoon)",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/d3c0b224f59d9360b067adaeee01b788.jpg",
       "plays": 3
     },
     {
@@ -132,8 +125,15 @@
       "url": "https://www.last.fm/music/Faouzia/Unethical",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/ca42388269f5ebcc69ad3f85474a3697.jpg",
       "plays": 2
+    },
+    {
+      "name": "Franz Ferdinand",
+      "artist": "Franz Ferdinand",
+      "url": "https://www.last.fm/music/Franz+Ferdinand/Franz+Ferdinand",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/963d2fd230d9c9727797dca40098dd71.png",
+      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-09-07"
+  "updated": "2026-09-14"
 }
