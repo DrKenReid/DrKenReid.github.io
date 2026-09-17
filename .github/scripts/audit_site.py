@@ -252,6 +252,9 @@ BANNED_PROSE = re.compile(
     # the world-weary concession, asserting settled authority by declining
     # to defend it
     r"|I no longer argue with"
+    # "I have a soft spot for X": self-characterisation standing in for a
+    # reason. Name what the thing does that earns the affection.
+    r"|I(?:'ve| have)(?: got)? a soft spot for"
     # "the fix that stuck", "the name that stuck": implies a history of
     # rejected alternatives the reader is never shown. Only with "the", so a
     # literal use ("a paragraph that stuck" in the memory post) survives.

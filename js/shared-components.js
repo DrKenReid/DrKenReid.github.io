@@ -551,20 +551,132 @@ function createBlogCardElement(post, options) {
     return col;
 }
 
-function formatPostDate(dateValue) {
-    var date = dateValue;
+/* Bare YYYY-MM-DD is built as a local date so the day shown never slips by a
+   timezone; anything else falls through to the Date constructor. Shared by
+   blog.js and stories.js for sorting, and by formatPostDate below. */
+function krParsePostDate(dateValue) {
     if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
         var parts = dateValue.split('-');
-        date = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
-    } else {
-        date = new Date(dateValue);
+        return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
     }
+    return new Date(dateValue);
+}
 
-    return date.toLocaleDateString('en-GB', {
+function formatPostDate(dateValue) {
+    return krParsePostDate(dateValue).toLocaleDateString('en-GB', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
     });
+}
+
+/* ---- Shared listing chrome ----
+   A listing page renders its furniture from the same ids -- #blog-search-static, #blog-grid,
+   #blog-pagination -- so only the noun and the state callbacks differ. */
+
+/**
+ * Upgrade the static search input into the live one.
+ * opts: { total, noun, onInput(query), onPresetQuery(query) }
+ * Supplying onPresetQuery opts the listing into ?q=term handoffs
+ * (e.g. from the 404 page's search box to /blog.html?q=term).
+ */
+function krBuildListSearchBox(opts) {
+    var o = opts || {};
+    var input = document.getElementById('blog-search-static');
+    if (!input) return null;
+    input.id = 'blog-search';
+    input.placeholder = 'Search ' + o.total + ' ' + o.noun + '...';
+
+    if (typeof o.onPresetQuery === 'function') {
+        var preset = (new URLSearchParams(window.location.search).get('q') || '').trim();
+        if (preset) {
+            input.value = preset;
+            o.onPresetQuery(preset.toLowerCase());
+        }
+    }
+
+    input.addEventListener('focus', function() { this.style.borderColor = '#fc6060'; });
+    input.addEventListener('blur', function() { this.style.borderColor = '#ddd'; });
+    input.addEventListener('input', function() {
+        if (o.onInput) o.onInput(this.value.toLowerCase().trim());
+    });
+    return input;
+}
+
+/**
+ * Reuse the search placeholder as a result counter. `unfiltered` is true when
+ * neither the search box nor the filters narrow the list, in which case the
+ * placeholder reverts to the prompt.
+ */
+function krUpdateSearchCounter(filtered, total, noun, unfiltered) {
+    var input = document.getElementById('blog-search');
+    if (!input) return;
+    input.placeholder = unfiltered
+        ? 'Search ' + total + ' ' + noun + '...'
+        : filtered + ' of ' + total + ' ' + noun;
+}
+
+/**
+ * Numeric pager inserted after #blog-grid, with first/last pairs and ellipses
+ * once there are more than 7 pages. onSelect(page) re-renders the caller's
+ * list; the grid is then scrolled back into view.
+ */
+function krRenderListPagination(current, total, onSelect) {
+    var existing = document.getElementById('blog-pagination');
+    if (existing) existing.remove();
+    if (total <= 1) return;
+
+    var nav = document.createElement('div');
+    nav.id = 'blog-pagination';
+    nav.style.cssText = 'display:flex; justify-content:center; align-items:center; gap:8px; margin:32px 0 16px; flex-wrap:wrap;';
+
+    function makeBtn(label, page, disabled, active) {
+        var btn = document.createElement('button');
+        btn.className = 'btn gallery-filter-btn' + (active ? ' active' : '');
+        btn.textContent = label;
+        btn.disabled = disabled;
+        btn.style.cssText = 'min-width:38px; padding:8px 14px;' + (disabled ? 'opacity:0.4;cursor:default;' : '');
+        if (!disabled) {
+            btn.onclick = function() {
+                onSelect(page);
+                var grid = document.getElementById('blog-grid');
+                if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            };
+        }
+        return btn;
+    }
+
+    nav.appendChild(makeBtn('\u00AB', current - 1, current === 1, false));
+
+    var pages = [];
+    if (total <= 7) {
+        for (var i = 1; i <= total; i++) pages.push(i);
+    } else {
+        pages = [1, 2];
+        if (current > 4) pages.push('...');
+        for (var j = Math.max(3, current - 1); j <= Math.min(total - 2, current + 1); j++) pages.push(j);
+        if (current < total - 3) pages.push('...');
+        pages.push(total - 1, total);
+        pages = pages.filter(function(v, k, a) { return a.indexOf(v) === k; });
+    }
+
+    pages.forEach(function(p) {
+        if (p === '...') {
+            var span = document.createElement('span');
+            span.textContent = '...';
+            span.style.cssText = 'padding:0 4px; color:#888;';
+            nav.appendChild(span);
+        } else {
+            nav.appendChild(makeBtn(p, p, false, p === current));
+        }
+    });
+
+    nav.appendChild(makeBtn('\u00BB', current + 1, current === total, false));
+
+    var grid = document.getElementById('blog-grid');
+    if (grid && grid.parentNode) {
+        grid.parentNode.insertBefore(nav, grid.nextSibling);
+    }
 }
 
 function resolveCurrentPostFileName() {
@@ -1957,6 +2069,118 @@ function initLightboxFix() {
 }
 
 /**
+ * Full resolution mode: the norm for photography-led posts.
+ *
+ * Posts embed 400px thumbnails and keep the originals in the photos-v1
+ * release, which is right for a first paint and wrong for looking at a
+ * photograph. A post opts in with data-fullres on its .blog-post and gets
+ * a panel at the top that swaps every thumbnail for its original, plus a
+ * link under each photo for a reader who only wants one of them. The
+ * estimate in the panel assumes ~2.7 MB an original; a post whose files
+ * are heavier or lighter can override it with data-fullres-size (in MB).
+ */
+function initFullResMode() {
+    var post = document.querySelector('.blog-post[data-fullres]');
+    if (!post || post.querySelector('.fullres-card')) return;
+
+    var RELEASE = typeof KR_RELEASE !== 'undefined' ? KR_RELEASE :
+        'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/';
+    var imgs = Array.prototype.slice.call(
+        post.querySelectorAll('figure img[src*="/thumb/"]'));
+    if (!imgs.length) return;
+
+    function stem(img) {
+        var m = (img.dataset.thumb || img.getAttribute('src') || '').match(/\/thumb\/(\w+)\.webp$/);
+        return m ? m[1] : null;
+    }
+
+    function setHiRes(img, btn, on) {
+        if (on === (img.dataset.hires || '0')) return;
+        if (on === '1') {
+            img.dataset.thumb = img.dataset.thumb || img.getAttribute('src');
+            img.style.opacity = '0.4';
+            btn.textContent = 'loading original...';
+            var cleanup = function() {
+                img.removeEventListener('load', done);
+                img.removeEventListener('error', fail);
+                img.style.opacity = '';
+            };
+            var done = function() {
+                cleanup();
+                btn.textContent = 'full resolution ✓ (tap to revert)';
+            };
+            var fail = function() {
+                cleanup();
+                img.src = img.dataset.thumb;
+                btn.textContent = 'could not load original';
+                delete img.dataset.hires;
+            };
+            img.addEventListener('load', done);
+            img.addEventListener('error', fail);
+            img.dataset.hires = '1';
+            img.src = RELEASE + stem(img) + '.png';
+        } else {
+            delete img.dataset.hires;
+            img.src = img.dataset.thumb;
+            img.style.opacity = '';
+            btn.textContent = 'load full resolution';
+        }
+    }
+
+    // Per-photo links. A photo inside a .photo-grid sheet has no caption of
+    // its own (one figcaption covers the whole grid), so it is driven by the
+    // panel alone and gets a button that is never shown.
+    var pairs = [];
+    imgs.forEach(function(img) {
+        if (!stem(img)) return;
+        var fig = img.closest('figure');
+        var cap = img.closest('.photo-grid') ? null : (fig && fig.querySelector('figcaption'));
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'fullres-link';
+        btn.textContent = 'load full resolution';
+        btn.addEventListener('click', function() {
+            setHiRes(img, btn, img.dataset.hires === '1' ? '0' : '1');
+        });
+        if (cap) cap.appendChild(btn);
+        pairs.push({ img: img, btn: btn });
+    });
+    if (!pairs.length) return;
+
+    var mb = parseFloat(post.getAttribute('data-fullres-size')) ||
+        Math.round(pairs.length * 2.7);
+    var panel = document.createElement('div');
+    panel.className = 'fullres-card';
+    panel.innerHTML =
+        '<div class="fullres-copy">' +
+            '<strong>Load high resolution versions</strong>' +
+            '<span>Swaps all ' + pairs.length + ' photos for the original files ' +
+            '(roughly ' + mb + ' MB), which can take a while on a slow connection. ' +
+            'Any single photo can also be loaded from the link beneath it.</span>' +
+        '</div>' +
+        '<label class="fullres-switch" title="Load high resolution versions">' +
+            '<input type="checkbox" aria-label="Load high resolution versions">' +
+            '<span class="fullres-slider"></span>' +
+        '</label>';
+
+    // Top of the post, under the meta line and whatever the shared chrome has
+    // already slotted in there (series banner, narrow-screen contents).
+    var anchorEl = post.querySelector('.kr-toc-mobile') ||
+        post.querySelector('.kr-series') ||
+        post.querySelector('.blog-meta');
+    if (anchorEl && anchorEl.parentNode) {
+        anchorEl.parentNode.insertBefore(panel, anchorEl.nextSibling);
+    } else {
+        post.insertBefore(panel, post.firstChild);
+    }
+
+    panel.querySelector('input').addEventListener('change', function() {
+        var on = this.checked ? '1' : '0';
+        pairs.forEach(function(p) { setHiRes(p.img, p.btn, on); });
+    });
+}
+
+/**
  * Appends screen-reader-only "(opens in new tab)" text to target="_blank"
  * links (WCAG G201). A MutationObserver covers links injected later
  * (header, footer, thanks CTA, Bluesky feed, blog cards).
@@ -2409,3 +2633,4 @@ applyJargonTooltips();
 initCopyQuotes();
 initDropCap();
 initLightboxFix();
+initFullResMode();

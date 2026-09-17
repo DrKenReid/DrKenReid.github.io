@@ -110,7 +110,7 @@
         return '<div class="col-12 col-md-6 col-lg-4 mb-30">' +
           '<a href="' + seriesPageHref(name) + '" class="blog-card">' +
           '<div class="blog-card-img"><img src="' + cover + '" alt="" loading="lazy">' +
-          '<span class="kr-series-chip">' + parts.length + ' parts</span></div>' +
+          '<span class="kr-series-chip">' + parts.length + (parts.length === 1 ? ' part' : ' parts') + '</span></div>' +
           '<div class="blog-card-body">' +
           '<div class="blog-card-date">Updated ' + formatPostDate(latest.date) + ' &middot; ' + mins + ' min all told</div>' +
           '<h3 class="blog-card-title">' + name + '</h3>' +

@@ -90,7 +90,7 @@
   <div class="about-us-area section-padding-80 clearfix">
     <div class="container">
       
-      <div class="blog-post">
+      <div class="blog-post" data-fullres data-fullres-size="60">
         <h1>The Abandoned Places I Photograph</h1>
         <div class="blog-meta">
           12 July 2026 &middot;
@@ -353,100 +353,9 @@
   <script src="../js/alime.bundle.js"></script>
   <script src="../js/site.js"></script>
   <script src="../js/lightbox.js"></script>
-  <script src="../js/nerd-mode.js"></script>
   <script src="../js/default-assets/active.js"></script>
   <script src="../js/shared-components.js"></script>
   <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
 renderFooter('footer-section');</script>
-  <script>
-  // Full resolution mode: swap the 400px thumbnails for the release
-  // originals, either all at once or one photo at a time.
-  (function () {
-    var RELEASE = typeof KR_RELEASE !== 'undefined' ? KR_RELEASE : 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/';
-    var imgs = Array.prototype.slice.call(
-      document.querySelectorAll('.blog-post figure img[src*="/thumb/"]'));
-    if (!imgs.length) return;
-
-    function stem(img) {
-      var m = (img.dataset.thumb || img.getAttribute('src')).match(/\/thumb\/(\w+)\.webp$/);
-      return m ? m[1] : null;
-    }
-
-    function setHiRes(img, btn, on) {
-      if (on === (img.dataset.hires || '0')) return;
-      if (on === '1') {
-        img.dataset.thumb = img.dataset.thumb || img.getAttribute('src');
-        img.style.opacity = '0.4';
-        btn.textContent = 'loading original…';
-        var cleanup = function () {
-          img.removeEventListener('load', done);
-          img.removeEventListener('error', fail);
-          img.style.opacity = '';
-        };
-        var done = function () {
-          cleanup();
-          btn.textContent = 'full resolution ✓ (tap to revert)';
-        };
-        var fail = function () {
-          cleanup();
-          img.src = img.dataset.thumb;
-          btn.textContent = 'could not load original';
-          delete img.dataset.hires;
-        };
-        img.addEventListener('load', done);
-        img.addEventListener('error', fail);
-        img.dataset.hires = '1';
-        img.src = RELEASE + stem(img) + '.png';
-      } else {
-        delete img.dataset.hires;
-        img.src = img.dataset.thumb;
-        img.style.opacity = '';
-        btn.textContent = 'load full resolution';
-      }
-    }
-
-    // per-photo buttons
-    var buttons = [];
-    imgs.forEach(function (img) {
-      if (!stem(img)) return;
-      var cap = img.closest('figure').querySelector('figcaption');
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.textContent = 'load full resolution';
-      btn.setAttribute('style',
-        'display:inline-block;margin-left:10px;padding:0;border:none;background:none;' +
-        'font:inherit;font-size:0.85em;color:#fc6060;cursor:pointer;text-decoration:underline;');
-      btn.addEventListener('click', function () {
-        setHiRes(img, btn, img.dataset.hires === '1' ? '0' : '1');
-      });
-      if (cap) cap.appendChild(btn);
-      buttons.push({ img: img, btn: btn });
-    });
-
-    // master toggle card, styled like the nerd-mode switch (nerd-mode.js
-    // is loaded for its card CSS; initNerdMode is never called here)
-    var firstFig = imgs[0].closest('figure');
-    var panel = document.createElement('div');
-    panel.innerHTML =
-      '<div class="nerd-toggle-card">' +
-        '<div class="nerd-copy">' +
-          '<strong>Full resolution mode</strong>' +
-          '<span>Loads the original files for all ' + buttons.length +
-          ' photos (roughly 60 MB), which can take a while on a slow connection. ' +
-          'You can also load any single photo from the link beneath it.</span>' +
-        '</div>' +
-        '<label class="nerd-switch" title="Toggle full resolution mode">' +
-          '<input type="checkbox" id="fullres-toggle" aria-label="Toggle full resolution mode">' +
-          '<span class="nerd-slider"></span>' +
-        '</label>' +
-      '</div>';
-    firstFig.parentNode.insertBefore(panel, firstFig);
-
-    document.getElementById('fullres-toggle').addEventListener('change', function () {
-      var on = this.checked;
-      buttons.forEach(function (b) { setHiRes(b.img, b.btn, on ? '1' : '0'); });
-    });
-  })();
-  </script>
 </body>
 </html>

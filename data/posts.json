@@ -26,6 +26,10 @@
     "excerpt": "You give feedback to a colleague. They thank you for it, and a week later nothing has changed. Three checks before you push harder, one change of approach, a budget, and a date.",
     "url": "blog/leading-a-horse-to-water.html",
     "image": "img/photography/thumb/439.webp",
+    "series": {
+      "name": "Feedback",
+      "part": 1
+    },
     "readMinutes": 15,
     "words": 3166
   },

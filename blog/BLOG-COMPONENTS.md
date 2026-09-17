@@ -457,3 +457,62 @@ label is the scene name, not a heading, so it stays out of the document
 outline and out of the auto-generated contents. Use `<aside>` rather than
 `<div>`: the content is set apart from the main narrative. Keep the
 introducing sentence in normal prose above the box.
+
+---
+
+## 21. Photo Grid (contact sheet inside one figure)
+
+```html
+<figure style="margin: 24px auto;">
+  <div class="photo-grid">
+    <img src="../img/photography/thumb/35.webp" alt="Description" loading="lazy">
+    <img src="../img/photography/thumb/46.webp" alt="Description" loading="lazy">
+    <!-- as many as the sheet needs -->
+  </div>
+  <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+</figure>
+```
+
+**CSS class:** `photo-grid`
+**Notes:** For showing a body of Ken's own work without a caption under
+every frame: two up on desktop, one up under 576px. One `<figure>` wraps
+the whole sheet so a single `&copy; Ken Reid` figcaption covers every
+image in it (section 1 still governs single photos, which keep their own
+figcaption). Use `img/photography/thumb/N.webp` sources: the post must
+load `js/lightbox.js`, and `shared-components.js` then wraps each thumb
+in a lightbox anchor pointing at the full-size photos-v1 release PNG, so
+the grid cells become those anchors and the CSS sizes both. Do not link
+the images yourself.
+
+---
+
+## 22. Full Resolution Mode (photography posts)
+
+```html
+<div class="blog-post" data-fullres>
+```
+
+Optional, when 2.7 MB a photo is a bad guess for this post's files:
+
+```html
+<div class="blog-post" data-fullres data-fullres-size="60">
+```
+
+**CSS classes:** `fullres-card`, `fullres-copy`, `fullres-switch`,
+`fullres-slider`, `fullres-link` (all in `style.css`)
+**Notes:** THE NORM FOR PHOTOGRAPHY-LED POSTS. The attribute is the whole
+of it: `initFullResMode()` in `shared-components.js` injects a "Load high
+resolution versions" panel at the top of the post (under the meta line,
+the series banner and the narrow-screen contents), and adds a
+"load full resolution" link to the figcaption of every photo. The switch
+swaps every `img/photography/thumb/N.webp` in a `<figure>` for the
+photos-v1 release original; each link does one photo, and toggles back.
+A failed load falls back to the thumbnail and says so.
+
+Do not paste the script into the post. Photos inside a section 21
+`photo-grid` are driven by the panel only, since one figcaption covers
+the whole sheet and a per-photo link would have nowhere to live. The size
+estimate defaults to 2.7 MB per photo; `data-fullres-size` overrides it
+with a figure in MB. `js/nerd-mode.js` is NOT needed for the card styling
+(that dependency was how the first version of this worked, in
+abandoned-places-i-photograph.html, before it moved here).
