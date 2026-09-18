@@ -4433,6 +4433,32 @@ html.theme-switching *::after {
 @view-transition {
   navigation: auto; }
 
+/* Naming an element on both sides of a navigation upgrades that cross-fade
+   into a morph: the post card's photograph becomes the post's banner.
+   js/shared-components.js hands the name to whichever card was clicked
+   (only one element per document may hold it). Motion is opt-out, and an
+   unnamed page just cross-fades as before. */
+@media (prefers-reduced-motion: no-preference) {
+  .breadcrumb-area,
+  .kr-opener {
+    view-transition-name: kr-hero; }
+
+  ::view-transition-group(kr-hero) {
+    animation-duration: 420ms;
+    animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1); }
+
+  ::view-transition-old(kr-hero),
+  ::view-transition-new(kr-hero) {
+    /* The card is a 16:10 crop and the banner is a wide strip; cover the
+       box in both so the photograph does not stretch on the way. */
+    height: 100%;
+    object-fit: cover;
+    animation-duration: 420ms; }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 260ms; } }
+
 /* Reading progress bar on blog posts (injected by shared-components.js) */
 .kr-progress-bar {
   position: fixed;
@@ -4704,60 +4730,6 @@ html[data-theme="dark"] {
   text-transform: uppercase; }
 
 /* Album wall on the music page (js/albums.js) */
-.album-wall {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
-  gap: 12px;
-  padding-bottom: 60px; }
-
-.album-wall-item {
-  position: relative;
-  display: block;
-  aspect-ratio: 1 / 1;
-  border-radius: 8px;
-  overflow: hidden;
-  background: rgba(127, 127, 127, 0.12);
-  transition: transform 0.25s ease, box-shadow 0.25s ease; }
-
-.album-wall-item:hover {
-  transform: translateY(-4px) scale(1.03);
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35);
-  z-index: 2; }
-
-.album-wall-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block; }
-
-.album-wall-meta {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 22px 8px 7px;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.82));
-  opacity: 0;
-  transition: opacity 0.25s ease; }
-
-.album-wall-item:hover .album-wall-meta {
-  opacity: 1; }
-
-.album-wall-name {
-  display: block;
-  font-size: 11.5px;
-  font-weight: 600;
-  color: #ffffff;
-  line-height: 1.35;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; }
-
-.album-wall-artist {
-  display: block;
-  font-size: 10.5px;
-  color: rgba(255, 255, 255, 0.75); }
-
 /* Quote wall (quotes.html) */
 .kr-quote-search {
   width: 100%;
@@ -7254,6 +7226,1142 @@ html.nerd-mode-on .non-nerd {
 [data-theme="dark"] .values-grid tbody tr:hover {
   background: #242424; }
 
+/* ============================================================
+   :: Brand system
+   The peach-to-gold gradient was defined once, on the hero h2, and
+   used nowhere else. It is the most distinctive mark the site has,
+   so it becomes the signature: wordmark, section rules, accents.
+   Red is demoted to what it should have been all along, the colour
+   of things you can click.
+   ============================================================ */
+:root {
+  --kr-brand-from: #c0392b;
+  --kr-brand-to: #d98324;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  /* For type over a photograph, which is dark in either theme. */
+  --kr-photo-from: #ff9696;
+  --kr-photo-to: #ffe89e;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  /* Decorative accent: eyebrows, stat labels, icons. Never a link.
+     Deliberately neutral stone rather than a second hue: on a site
+     carrying 492 photographs, every decorative colour competes with the
+     work. The gradient above is the signature; this recedes.
+     Deep enough to clear 4.5:1 on the warm background at 12px. */
+  --kr-eyebrow: #6b6459;
+  /* Fluid display type. Headings previously stepped 36px -> 24px at one
+     breakpoint and never grew past 36px on a wide screen. */
+  --kr-display: clamp(30px, 3.6vw, 50px);
+  --kr-display-sm: clamp(21px, 2.3vw, 29px);
+  --kr-surface-warm: #faf7f2;
+  --kr-surface-card: #fffdfa;
+  --kr-hairline: #e7e0d6; }
+
+:root[data-theme="dark"] {
+  --kr-brand-from: #ff9696;
+  --kr-brand-to: #ffe89e;
+  --kr-eyebrow: #a8a099;
+  --kr-surface-warm: #1f1f1f;
+  --kr-surface-card: #252525;
+  --kr-hairline: #3a3a3a; }
+
+/* Gradient text needs a fallback: without background-clip support,
+   transparent text is invisible text. */
+.kr-gradient-text {
+  color: var(--kr-brand-from); }
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .kr-gradient-text {
+    background: var(--kr-brand-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; } }
+
+/* --- Wordmark ---------------------------------------------------------
+   Was a 48x21 PNG of the word "Ken.", which could not be themed, could
+   not carry the gradient, and softened on high-DPI screens. */
+.nav-brand .kr-wordmark {
+  font-family: 'Poppins', sans-serif;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  display: inline-block; }
+
+.nav-brand .kr-wordmark__dot {
+  color: var(--kr-action, #c53030);
+  -webkit-text-fill-color: var(--kr-action, #c53030); }
+
+[data-theme="dark"] .nav-brand .kr-wordmark__dot {
+  color: #fc6060;
+  -webkit-text-fill-color: #fc6060; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .nav-brand .kr-wordmark {
+    animation: kr-brand-in 0.9s ease; } }
+
+/* The hero carried the only instance of the gradient on the whole site,
+   written as two literals. It reads from the token now, so the palette is
+   changed in one place. */
+.single-welcome-slide .welcome-text h2 {
+  background: var(--kr-photo-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent; }
+
+/* --- Evolving hero headline (js/hero-evolve.js) -----------------------
+   The canvas replaces the h2 visually; the real heading sits beside it as
+   visually-hidden text so the outline and the crawler still see it. */
+.kr-hero-kicker {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kr-photo-to);
+  margin-bottom: 14px; }
+
+.kr-hero-evolve {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  aspect-ratio: 640 / 190;
+  margin: 0 0 6px -6px; }
+
+@media only screen and (max-width: 767px) {
+  .kr-hero-evolve {
+    max-width: 100%;
+    aspect-ratio: 640 / 165; } }
+
+/* --- Colophon ---------------------------------------------------------
+   Figures rather than cards: the page is a set of measurements, and
+   boxing each one would say the opposite of what it is claiming. */
+.kr-colo-lede {
+  font-size: clamp(16px, 1.3vw, 18px);
+  line-height: 1.75;
+  text-align: center;
+  color: #5a5348; }
+
+[data-theme="dark"] .kr-colo-lede {
+  color: #b9b2a8; }
+
+.kr-colo-block {
+  max-width: 900px;
+  margin: 0 auto 56px;
+  padding-top: 34px;
+  border-top: 1px solid var(--kr-hairline); }
+
+.kr-colo-h {
+  font-family: 'Lora', Georgia, serif;
+  font-size: var(--kr-display-sm);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  text-align: center;
+  margin: 0 0 30px; }
+
+.kr-colo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 30px 24px;
+  margin: 0; }
+
+.kr-colo-stat {
+  text-align: center; }
+
+.kr-colo-stat dt {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kr-eyebrow);
+  margin-bottom: 8px; }
+
+.kr-colo-stat dd {
+  margin: 0;
+  font-size: clamp(24px, 2.4vw, 32px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums; }
+
+.kr-colo-stat p {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #6b6459; }
+
+[data-theme="dark"] .kr-colo-stat p {
+  color: #9a9389; }
+
+.kr-colo-chart {
+  max-width: 900px;
+  margin: 0 auto;
+  color: var(--kr-eyebrow); }
+
+.kr-colo-chart svg {
+  display: block;
+  width: 100%;
+  height: 180px; }
+
+.kr-colo-chart figcaption {
+  text-align: center;
+  margin-top: 10px; }
+
+/* Two-column prose blocks: the stack, and the type specimens. */
+.kr-colo-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px 44px;
+  max-width: 860px;
+  margin: 0 auto; }
+
+.kr-colo-subh {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kr-eyebrow);
+  margin: 0 0 14px; }
+
+.kr-colo-list {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+
+.kr-colo-list li {
+  position: relative;
+  padding-left: 18px;
+  margin-bottom: 10px;
+  font-size: 14.5px;
+  line-height: 1.6; }
+
+.kr-colo-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 7px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--kr-eyebrow); }
+
+/* The build scripts: a name and what it does for a living. */
+.kr-colo-defs {
+  max-width: 820px;
+  margin: 28px auto 0; }
+
+.kr-colo-defs > div {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  gap: 4px 22px;
+  padding: 11px 0;
+  border-top: 1px solid var(--kr-hairline); }
+
+.kr-colo-defs dt {
+  font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+  font-size: 13px;
+  color: var(--kr-eyebrow); }
+
+.kr-colo-defs dd {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55; }
+
+@media only screen and (max-width: 575px) {
+  .kr-colo-defs > div {
+    grid-template-columns: 1fr; } }
+
+/* Type specimens, set in the faces they are describing. */
+.kr-colo-spec {
+  margin: 0 0 6px;
+  font-size: clamp(38px, 5vw, 58px);
+  line-height: 1;
+  letter-spacing: -0.02em; }
+
+.kr-colo-spec--sans {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600; }
+
+.kr-colo-spec--serif {
+  font-family: 'Lora', Georgia, serif;
+  font-weight: 600; }
+
+.kr-colo-caption {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #6b6459; }
+
+[data-theme="dark"] .kr-colo-caption {
+  color: #9a9389; }
+
+.kr-colo-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 26px;
+  justify-content: center;
+  margin: 34px auto 0;
+  max-width: 860px; }
+
+.kr-colo-sw {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  font-weight: 600; }
+
+.kr-colo-sw em {
+  font-style: normal;
+  font-weight: 400;
+  color: #6b6459; }
+
+[data-theme="dark"] .kr-colo-sw em {
+  color: #9a9389; }
+
+.kr-colo-chip {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(127, 127, 127, 0.3);
+  flex: 0 0 auto; }
+
+.kr-colo-chip--grad { background: var(--kr-brand-gradient); }
+.kr-colo-chip--action { background: #c53030; }
+.kr-colo-chip--eyebrow { background: var(--kr-eyebrow); }
+.kr-colo-chip--surface { background: var(--kr-surface-warm); }
+
+[data-theme="dark"] .kr-colo-chip--action { background: #fc6060; }
+
+.kr-colo-note {
+  max-width: 68ch;
+  margin: 26px auto 0;
+  font-size: 14.5px;
+  line-height: 1.75;
+  text-align: center;
+  color: #6b6459; }
+
+[data-theme="dark"] .kr-colo-note {
+  color: #a49d93; }
+
+/* --- Theme switch as a circular reveal --------------------------------
+   theme.js writes the pressed button's centre and the distance to the
+   farthest viewport corner into custom properties, then flips the theme
+   inside document.startViewTransition. The new snapshot is clipped to a
+   circle that grows from that point over the old one. The class on <html>
+   scopes these so ordinary page navigations keep their plain cross-fade. */
+html.kr-theme-reveal::view-transition-old(root),
+html.kr-theme-reveal::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal; }
+
+html.kr-theme-reveal::view-transition-old(root) {
+  z-index: 1; }
+
+html.kr-theme-reveal::view-transition-new(root) {
+  z-index: 2;
+  animation: kr-theme-reveal 950ms cubic-bezier(0.25, 0.6, 0.3, 1) both; }
+
+@keyframes kr-theme-reveal {
+  from {
+    clip-path: circle(0px at var(--kr-reveal-x, 50%) var(--kr-reveal-y, 0%)); }
+  to {
+    clip-path: circle(var(--kr-reveal-r, 150vmax) at var(--kr-reveal-x, 50%) var(--kr-reveal-y, 0%)); } }
+
+/* --- Scroll-driven flourishes -----------------------------------------
+   Native CSS, no script: the rule under a section heading draws itself
+   left to right as the heading enters the viewport, and its eyebrow
+   settles into place. Ignored entirely by browsers without
+   animation-timeline, and by readers who asked for less motion. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .section-heading.text-center h2::after,
+    .text-center > .section-eyebrow + h2::after,
+    .text-center .section-heading h2::after {
+      transform-origin: left center;
+      animation: kr-rule-draw cubic-bezier(0.22, 0.61, 0.36, 1) both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 32%; }
+
+    .section-eyebrow + h2,
+    .section-heading h2 {
+      animation: kr-heading-in cubic-bezier(0.22, 0.61, 0.36, 1) both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 26%; }
+
+    .section-eyebrow {
+      animation: kr-eyebrow-in cubic-bezier(0.22, 0.61, 0.36, 1) both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 24%; } } }
+
+@keyframes kr-rule-draw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); } }
+
+@keyframes kr-heading-in {
+  from { opacity: 0; transform: translateY(44px); }
+  to { opacity: 1; transform: none; } }
+
+@keyframes kr-eyebrow-in {
+  from { opacity: 0; letter-spacing: 0.5em; transform: translateY(18px); }
+  to { opacity: 1; letter-spacing: 0.18em; transform: none; } }
+
+/* Without animation-timeline support, shared-components.js writes --kr-p
+   (0 at the bottom edge, 1 a third of the way up) on each element as the
+   page scrolls, and the same motion is computed straight from it. Not a
+   paused animation scrubbed by a negative delay: Chrome does not re-seek
+   a running animation when its delay changes, so that version sat on
+   frame zero. The .kr-js in the selector outranks .kr-js .wow.kr-revealed,
+   which would otherwise force opacity back to 1. */
+html.kr-js.kr-scroll-fallback .section-eyebrow + h2,
+html.kr-js.kr-scroll-fallback .section-heading h2 {
+  opacity: var(--kr-p, 1);
+  transform: translateY(calc((1 - var(--kr-p, 1)) * 44px));
+  transition: none; }
+
+html.kr-js.kr-scroll-fallback .section-heading.text-center h2::after,
+html.kr-js.kr-scroll-fallback .text-center > .section-eyebrow + h2::after,
+html.kr-js.kr-scroll-fallback .text-center .section-heading h2::after {
+  transform-origin: left center;
+  transform: scaleX(var(--kr-p, 1)); }
+
+html.kr-js.kr-scroll-fallback .section-eyebrow {
+  opacity: var(--kr-p, 1);
+  letter-spacing: calc(0.18em + (1 - var(--kr-p, 1)) * 0.32em);
+  transform: translateY(calc((1 - var(--kr-p, 1)) * 18px));
+  transition: none; }
+
+/* --- 404: the search that never finds anything ------------------------ */
+.kr-lost {
+  max-width: 640px;
+  margin: 0 auto 28px; }
+
+.kr-lost canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 640 / 150; }
+
+.kr-lost__status {
+  margin-top: 8px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kr-eyebrow); }
+
+.kr-lightbox .mfp-title .kr-lightbox-map {
+  display: inline-block;
+  margin-left: 12px;
+  color: #ffe89e;
+  text-decoration: underline;
+  text-underline-offset: 3px; }
+
+/* --- Justified photo gallery -------------------------------------------
+   Rows are packed so every row fills the container and every frame keeps
+   its own aspect ratio: panoramas run wide, portraits stand tall. Sizes
+   are set inline by gallery.js from data/photo-dims.json, so the layout
+   is right before a single thumbnail has loaded. */
+.kr-justified {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 6px;
+  margin-left: 0;
+  margin-right: 0; }
+
+.kr-justified .single_gallery_item {
+  flex: 0 0 auto;
+  padding: 0;
+  margin: 0 !important;
+  max-width: 100%; }
+
+.kr-justified .single-portfolio-content,
+.kr-justified .single-portfolio-content img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 4px; }
+
+/* The last row is not stretched: a lone portrait must not become a mural. */
+.kr-justified .single_gallery_item.kr-justified__loose img {
+  object-fit: cover; }
+
+/* --- Live covers (js/live-covers.js) ---------------------------------
+   A canvas laid over a series card's cover while it is hovered. Fades in
+   over the still image, so the card reads as "waking up" rather than
+   swapping. */
+.kr-live-card .blog-card-img,
+.kr-live-card .post-thumbnail {
+  position: relative; }
+
+.kr-live-cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 260ms ease;
+  pointer-events: none;
+  border-radius: inherit; }
+
+.kr-live-cover.is-on {
+  opacity: 1; }
+
+/* The overlay card paints a gradient (::after, z-index 1) and its text
+   (z-index 100) over the thumbnail. The canvas goes between them: above
+   the photograph, below the title. */
+.single-post-area .kr-live-cover {
+  z-index: 5; }
+
+/* --- The shelf (literature.html, js/bookshelf.js) ----------------------
+   Spines sit on a board and scroll sideways. Rating decides the colour
+   band: fives take the gradient, fours warm stone, the rest cooler stone,
+   so a good year reads as a warm stretch of shelf. */
+.kr-shelf-area {
+  padding: 70px 0 40px; }
+
+.kr-shelf-scroll {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 34px 24px 0;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch; }
+
+.kr-shelf {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  width: max-content;
+  min-width: 100%;
+  padding-bottom: 0; }
+
+.kr-shelf__board {
+  height: 18px;
+  margin: 0 -24px;
+  background: linear-gradient(#5a4a3a, #3a2f24);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35); }
+
+[data-theme="dark"] .kr-shelf__board {
+  background: linear-gradient(#3b3129, #221c17); }
+
+.kr-shelf__year {
+  align-self: flex-end;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  color: var(--kr-eyebrow);
+  padding: 0 8px 8px 0;
+  margin-left: 14px; }
+
+.kr-spine {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex: 0 0 auto;
+  border-radius: 2px 2px 0 0;
+  background: #8f857a;
+  box-shadow: inset -2px 0 0 rgba(0, 0, 0, 0.18), inset 2px 0 0 rgba(255, 255, 255, 0.12);
+  text-decoration: none;
+  transition: transform 160ms ease, filter 160ms ease;
+  overflow: hidden; }
+
+.kr-spine:hover,
+.kr-spine:focus-visible {
+  transform: translateY(-8px);
+  filter: brightness(1.08);
+  z-index: 2; }
+
+.kr-spine--r5 { background: linear-gradient(180deg, #ff9696, #ffe89e); }
+.kr-spine--r4 { background: #b8a58f; }
+.kr-spine--r3 { background: #8f857a; }
+.kr-spine--r2 { background: #6f6961; }
+.kr-spine--r1 { background: #57534d; }
+.kr-spine--r0 { background: #7d766c; }
+
+.kr-spine__title {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+  color: rgba(20, 16, 12, 0.88);
+  padding: 12px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 100%; }
+
+.kr-spine--r3 .kr-spine__title,
+.kr-spine--r2 .kr-spine__title,
+.kr-spine--r1 .kr-spine__title,
+.kr-spine--r0 .kr-spine__title {
+  color: rgba(255, 250, 244, 0.86); }
+
+/* --- Editorial post opener (.github/scripts/apply_post_opener.py) -------
+   Full-bleed hero, title set large in Lora bottom-left, kicker and
+   standfirst from posts.json. Legibility over an arbitrary photograph is
+   the whole problem, so it is solved three ways at once: a scrim that
+   deepens toward the text, a layered text shadow, and a tighter measure
+   so the title never runs into the brightest part of the frame. */
+.kr-opener {
+  position: relative;
+  min-height: min(78vh, 720px);
+  display: flex;
+  align-items: flex-end;
+  /* clip, not hidden: hidden makes this a scroll container, and the
+     view() timelines of the drift, lift and scrim would then measure
+     against the opener itself (which never scrolls) rather than the page. */
+  overflow: clip;
+  color: #fff;
+  background: #151515; }
+
+.kr-opener__media {
+  position: absolute;
+  inset: 0;
+  background: var(--kr-opener-img) center / cover no-repeat;
+  transform: scale(1.04); }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .kr-opener__media {
+      animation: kr-opener-drift linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%; } } }
+
+@keyframes kr-opener-drift {
+  from { transform: scale(1.04) translateY(0); }
+  to { transform: scale(1.12) translateY(70px); } }
+
+/* As the reader scrolls into the article the opener eases out: the type
+   lifts and fades and the scrim deepens, on the same exit-range timeline
+   as the photograph's drift. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .kr-opener__inner {
+      animation: kr-opener-lift linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%; }
+    .kr-opener__scrim {
+      animation: kr-opener-deepen linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%; } } }
+
+@keyframes kr-opener-lift {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-56px); opacity: 0.15; } }
+
+@keyframes kr-opener-deepen {
+  from { box-shadow: inset 0 0 0 100vmax rgba(14, 14, 14, 0); }
+  to { box-shadow: inset 0 0 0 100vmax rgba(14, 14, 14, 0.55); } }
+
+.kr-opener__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      rgba(8, 8, 8, 0.62) 0%,
+      rgba(8, 8, 8, 0.12) 28%,
+      rgba(8, 8, 8, 0.38) 52%,
+      rgba(8, 8, 8, 0.86) 76%,
+      rgba(8, 8, 8, 0.96) 100%); }
+
+.kr-opener__inner {
+  position: relative;
+  padding-top: 120px;
+  padding-bottom: 56px;
+  max-width: 1000px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 3px 10px rgba(0, 0, 0, 0.7), 0 10px 40px rgba(0, 0, 0, 0.6); }
+
+.kr-opener__crumbs .breadcrumb {
+  background: none;
+  padding: 0;
+  margin: 0 0 26px;
+  font-size: 13px; }
+
+.kr-opener__crumbs .breadcrumb-item,
+.kr-opener__crumbs .breadcrumb-item a {
+  color: rgba(255, 255, 255, 0.82); }
+
+.kr-opener__crumbs .breadcrumb-item.active {
+  color: #ffe89e; }
+
+.kr-opener__kicker {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ffe89e;
+  margin: 0 0 14px; }
+
+.kr-opener__title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(38px, 6vw, 78px);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin: 0 0 18px;
+  max-width: 14ch;
+  color: #fff; }
+
+.kr-opener__standfirst {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(17px, 1.6vw, 21px);
+  line-height: 1.55;
+  max-width: 58ch;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 18px; }
+
+.kr-opener__credit {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.66);
+  margin: 0; }
+
+.kr-opener__cue {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  width: 26px;
+  height: 40px;
+  margin-left: -13px;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  border-radius: 14px; }
+
+.kr-opener__cue span {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  width: 4px;
+  height: 8px;
+  margin-left: -2px;
+  border-radius: 2px;
+  background: #ffe89e;
+  animation: kr-cue 1.6s ease-in-out infinite; }
+
+@keyframes kr-cue {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  60% { transform: translateY(12px); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-opener__cue span {
+    animation: none; } }
+
+@media only screen and (max-width: 767px) {
+  .kr-opener {
+    min-height: 68vh; }
+  .kr-opener__inner {
+    padding-top: 90px;
+    padding-bottom: 40px; } }
+
+/* The opener already shows the title; the article's own h1 stays for the
+   outline and for assistive tech but does not print twice. */
+.kr-opener ~ * .blog-post > h1 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap; }
+
+/* --- Section headings -------------------------------------------------
+   An eyebrow is always followed by its h2, so the pair can be styled
+   without editing the 21 pages that use it. Lora already carries blog
+   prose; borrowing it here is what stops the homepage and the posts
+   reading as two different sites. */
+.section-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--kr-eyebrow);
+  margin-bottom: 10px; }
+
+[data-theme="dark"] .section-eyebrow {
+  color: var(--kr-eyebrow); }
+
+.section-eyebrow + h2,
+.section-heading h2 {
+  font-family: 'Lora', Georgia, 'Times New Roman', serif;
+  font-size: var(--kr-display);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  text-transform: none;
+  margin-bottom: 0; }
+
+@media only screen and (max-width: 767px) {
+  .section-eyebrow + h2,
+  .section-heading h2 {
+    font-size: var(--kr-display); } }
+
+/* The gradient as a short rule under centred section headings. */
+.section-heading.text-center h2::after,
+.text-center > .section-eyebrow + h2::after,
+.text-center .section-heading h2::after {
+  content: "";
+  display: block;
+  width: 54px;
+  height: 3px;
+  margin: 18px auto 0;
+  border-radius: 2px;
+  background: var(--kr-brand-gradient); }
+
+/* --- Warm light theme -------------------------------------------------
+   Pure white fought both the Lora and the photographs. Off-white with a
+   little warmth in it suits both. Dark theme keeps its own values via
+   the higher-specificity rules already in this file. */
+body {
+  background-color: var(--kr-surface-warm); }
+
+.bg-tint {
+  background: #f4efe7; }
+
+[data-theme="dark"] .bg-tint {
+  background: #1f1f1f; }
+
+.quote-carousel {
+  background: #f4efe7;
+  border-top-color: var(--kr-hairline);
+  border-bottom-color: var(--kr-hairline); }
+
+.bsky-post-card,
+.social-card {
+  background: var(--kr-surface-card);
+  border-color: var(--kr-hairline); }
+
+[data-theme="dark"] .bsky-post-card,
+[data-theme="dark"] .social-card {
+  background: #252525;
+  border-color: #3a3a3a; }
+
+.kr-list-search {
+  background: var(--kr-surface-card);
+  border-color: var(--kr-hairline); }
+
+/* --- Motion -----------------------------------------------------------
+   Reveal-on-scroll belonged to every card in every grid, so a filter
+   click or a page change replayed a staggered fade nine times over.
+   Section headings keep it; repeated cards do not. */
+@media (prefers-reduced-motion: no-preference) {
+  .kr-js .wow.kr-no-reveal {
+    opacity: 1;
+    transform: none; } }
+
+/* ============================================================
+   :: Homepage rhythm
+   The page ran to 5,568px over nine sections, each with the same
+   80px of padding, and the photography finished last. These rules
+   tighten the secondary sections so the work can come earlier.
+   ============================================================ */
+.kr-intro-area {
+  padding-top: 80px;
+  padding-bottom: 10px; }
+
+.kr-intro-lede {
+  font-size: clamp(17px, 1.35vw, 19px);
+  line-height: 1.75;
+  color: #5a5348;
+  max-width: 680px;
+  margin: 0 auto; }
+
+[data-theme="dark"] .kr-intro-lede {
+  color: #b9b2a8; }
+
+/* The numbers now hang off the intro rather than forming their own band. */
+.home-stats-bar {
+  padding: 34px 0 54px; }
+
+.home-stat-value {
+  font-size: clamp(26px, 2.6vw, 36px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em; }
+
+.home-stat-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kr-eyebrow); }
+
+[data-theme="dark"] .home-stat-label {
+  color: var(--kr-eyebrow); }
+
+.home-stat-icon {
+  opacity: 0.45;
+  font-size: 15px; }
+
+/* --- Latest posts -----------------------------------------------------
+   Three full-width cards stacked beside the promo panel ran to 1,534px,
+   the tallest thing on the page by a factor of two. Turned on their side
+   they read as an editorial list and cost a third of the height. The
+   markup is unchanged; only this column's cards lie down. */
+.kr-latest-list .blog-card {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden; }
+
+.kr-latest-list .blog-card-img {
+  flex: 0 0 38%;
+  max-width: 38%;
+  aspect-ratio: auto;
+  border-radius: 8px 0 0 8px; }
+
+.kr-latest-list .blog-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block; }
+
+.kr-latest-list .blog-card-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 16px 20px; }
+
+.kr-latest-list .blog-card-title {
+  font-size: 19px;
+  line-height: 1.25;
+  margin-bottom: 8px; }
+
+.kr-latest-list .blog-card-excerpt {
+  font-size: 13.5px;
+  line-height: 1.6;
+  /* Excerpts run to four lines at this width and the cards stop matching
+     each other; three keeps the column even. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 10px; }
+
+@media only screen and (max-width: 575px) {
+  .kr-latest-list .blog-card {
+    display: block; }
+  .kr-latest-list .blog-card-img {
+    flex-basis: auto;
+    max-width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: 8px 8px 0 0; } }
+
+/* --- Explore ----------------------------------------------------------
+   Six identical cards, each a box around two lines of text. The card
+   treatment is reserved for things that are actually cards. */
+.kr-explore-area {
+  padding: 66px 0 56px; }
+
+.kr-explore-row {
+  justify-content: center; }
+
+.kr-explore-link {
+  display: block;
+  height: 100%;
+  padding: 18px 10px;
+  text-align: center;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: border-color 220ms, transform 220ms; }
+
+.kr-explore-link__icon {
+  display: block;
+  font-size: 26px;
+  margin-bottom: 12px;
+  color: var(--kr-eyebrow); }
+
+.kr-explore-link h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 4px; }
+
+.kr-explore-link p {
+  font-size: 12.5px;
+  margin: 0;
+  color: #6b6459; }
+
+[data-theme="dark"] .kr-explore-link p {
+  color: #9a9389; }
+
+.kr-explore-link:hover,
+.kr-explore-link:focus-visible {
+  border-color: var(--kr-hairline);
+  transform: translateY(-3px); }
+
+.kr-explore-link:hover .kr-explore-link__icon {
+  color: var(--kr-action, #c53030); }
+
+[data-theme="dark"] .kr-explore-link:hover .kr-explore-link__icon {
+  color: #fc6060; }
+
+/* Bluesky posts run long, and the card links out to the full thing, so the
+   preview is capped rather than letting one rambling post set the height. */
+.kr-social-area .bsky-post-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden; }
+
+.kr-social-area .bsky-post-images {
+  max-height: 210px;
+  overflow: hidden; }
+
+/* --- Social -----------------------------------------------------------
+   Two posts rather than three: the most disposable content on the page
+   was taking a screen and a half of it. */
+.kr-social-area {
+  padding: 56px 0 46px; }
+
+/* --- Photography band -------------------------------------------------
+   Promoted above the secondary sections and given room to be looked at. */
+.follow-area {
+  padding-top: 64px; }
+
+/* Faceted filter panel (blog listing, series index): one labelled row per
+   filter group, the rows stacked, each row's buttons scrolling on their own
+   at phone widths so the labels stay aligned. */
+.kr-filter-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; }
+  .kr-filter-panel .gallery-filter-btn {
+    white-space: nowrap; }
+
+.kr-facet-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px; }
+  .kr-facet-row[hidden] {
+    display: none; }
+
+.kr-facet-row__label {
+  flex: 0 0 auto;
+  min-width: 62px;
+  text-align: right;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9a9a9a; }
+
+.kr-facet-row__btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center; }
+
+/* Excluded (the third click on a tri-state button): dashed and struck
+   through, so it reads as "not these" rather than as another selection. */
+.gallery-filter-btn.kr-facet-btn--excluded {
+  border-style: dashed;
+  border-color: #9a9a9a;
+  color: #8a8a8a;
+  text-decoration: line-through; }
+  .gallery-filter-btn.kr-facet-btn--excluded .filter-count {
+    text-decoration: none; }
+
+/* Collapsed filter overflow. .gallery-filter-btn sets display:inline-flex,
+   which ties with the user agent's [hidden] rule on specificity and wins on
+   source order, so hiding a button needs saying explicitly here. */
+.gallery-filter-btn[hidden] {
+  display: none; }
+
+/* The "+N more" toggle is a control for the row rather than a filter, so it
+   reads quieter and smaller than the pills beside it. Not dashed: that is
+   how an excluded tri-state button reads, one row below. */
+.gallery-filter-btn.kr-filter-more {
+  font-size: 12px;
+  padding: 5px 14px;
+  color: #6b6b6b; }
+
+[data-theme="dark"] .gallery-filter-btn.kr-filter-more {
+  color: #9a9a9a; }
+
+.kr-facet-row--clear {
+  justify-content: center; }
+
+.kr-facet-clear {
+  font-size: 12px;
+  padding: 5px 14px; }
+
+[data-theme="dark"] .kr-facet-row__label {
+  color: #8f8f8f; }
+
+[data-theme="dark"] .gallery-filter-btn.kr-facet-btn--excluded {
+  border-color: #5a5a5a;
+  color: #8f8f8f; }
+
+@media only screen and (max-width: 767px) {
+  .kr-facet-row {
+    align-items: flex-start;
+    gap: 4px;
+    flex-direction: column; }
+  .kr-facet-row__label {
+    text-align: left;
+    min-width: 0;
+    padding-left: 2px; }
+  .kr-facet-row__btns {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding-bottom: 6px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch; }
+  .kr-facet-row__btns .gallery-filter-btn {
+    flex: 0 0 auto;
+    scroll-snap-align: start; } }
+
+/* Search box on the blog and writing list pages. The colours used to sit
+   in each page's inline style, which hard-coded a light border and left a
+   white field sitting on the dark theme's background. */
+.kr-list-search {
+  width: 100%;
+  max-width: 420px;
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  font-size: 14px;
+  background: #ffffff;
+  color: #252525;
+  -webkit-transition: border-color 200ms;
+  transition: border-color 200ms; }
+  .kr-list-search::-webkit-input-placeholder {
+    color: #8a8a8a; }
+  .kr-list-search::placeholder {
+    color: #8a8a8a; }
+  .kr-list-search:hover,
+  .kr-list-search:focus {
+    border-color: #c53030; }
+
+/* Result count under the toolbar. A live region, so it is also what a
+   screen reader hears when the filters change the list; empty whenever
+   nothing is narrowing it. */
+.kr-list-counter {
+  margin: 0 0 18px;
+  text-align: center;
+  font-size: 13px;
+  color: #6b6b6b; }
+  .kr-list-counter:empty {
+    margin: 0; }
+
+[data-theme="dark"] .kr-list-search {
+  background: #232323;
+  border-color: #444;
+  color: #e6e6e6; }
+
+[data-theme="dark"] .kr-list-search::-webkit-input-placeholder {
+  color: #9a9a9a; }
+
+[data-theme="dark"] .kr-list-search::placeholder {
+  color: #9a9a9a; }
+
+[data-theme="dark"] .kr-list-search:hover,
+[data-theme="dark"] .kr-list-search:focus {
+  border-color: #fc6060; }
+
+[data-theme="dark"] .kr-list-counter {
+  color: #a0a0a0; }
+
 /* Two vendor rules earlier in this file strip the outline from links and
    from inputs (a:focus and input:focus, both outline:none). Because they
    sit after the site focus ring near the top, the ring survived only on
@@ -7275,3 +8383,678 @@ summary:focus,
    outside the rounded corner rather than clip against it. */
 .kr-viz canvas:focus {
   outline-offset: 2px; }
+
+/* --- Gallery filter morph (gallery.js krGalleryMorph) -----------------
+   During a filter change every tile carries a view-transition-name, so
+   the frames that survive slide to their new rows. Scoped to the html
+   class the script sets for the duration. */
+@media (prefers-reduced-motion: no-preference) {
+  html.kr-gallery-vt::view-transition-group(*) {
+    animation-duration: 420ms;
+    animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1); }
+  html.kr-gallery-vt::view-transition-old(*),
+  html.kr-gallery-vt::view-transition-new(*) {
+    height: 100%;
+    object-fit: cover;
+    animation-duration: 420ms; }
+  html.kr-gallery-vt::view-transition-old(root),
+  html.kr-gallery-vt::view-transition-new(root) {
+    animation-duration: 180ms; } }
+
+/* --- Lightbox morph (gallery.js krLightboxMorph) ----------------------
+   The ghost is the clicked thumbnail, fixed and animated between the
+   tile and the frame. While it travels the lightbox's own content is
+   hidden; kr-morph-in reveals it once the ghost has landed. */
+.kr-lightbox-ghost {
+  position: fixed;
+  z-index: 1050;
+  object-fit: cover;
+  border-radius: 4px;
+  pointer-events: none;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55); }
+
+.kr-lightbox.kr-morph.mfp-fade.mfp-wrap .mfp-content {
+  opacity: 0;
+  transition: opacity 0.18s ease; }
+
+.kr-lightbox.kr-morph.mfp-fade.mfp-wrap.kr-morph-in .mfp-content {
+  opacity: 1; }
+
+.kr-lightbox.kr-morph.mfp-fade.mfp-wrap.kr-morph-out .mfp-content {
+  opacity: 0 !important;
+  transition: none; }
+
+.kr-lightbox.kr-morph.mfp-fade.mfp-bg {
+  transition-duration: 0.34s; }
+
+/* --- Cursor-lit card borders (initCardLight) --------------------------
+   A ring the size of the card, masked to a hairline, with a radial
+   gradient centred on the pointer. The card's own border is handed over
+   to the ring while hovered so the two do not stack. */
+.kr-lit {
+  position: relative; }
+
+.kr-lit__ring {
+  display: none; }
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .kr-lit__ring {
+    display: block;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px;
+    pointer-events: none;
+    z-index: 7;
+    background: radial-gradient(240px circle at var(--kr-mx, 50%) var(--kr-my, 50%), var(--kr-brand-from) 0%, var(--kr-brand-to) 32%, transparent 64%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.35s ease; }
+
+  .kr-lit:hover .kr-lit__ring,
+  .kr-lit:focus-within .kr-lit__ring {
+    opacity: 1; }
+
+  .blog-card.kr-lit:hover {
+    border-color: transparent; } }
+
+/* --- Ambient glow behind cards (krGlowHost) ---------------------------
+   The column carries the card's cover, blurred, as a ::before that sits
+   under the card and comes up on hover. */
+.kr-glow-host {
+  position: relative;
+  z-index: 0; }
+
+.kr-glow-host::before {
+  content: '';
+  position: absolute;
+  inset: 8px 10px 12px;
+  z-index: -1;
+  border-radius: 18px;
+  background: var(--kr-cover) center / cover no-repeat;
+  filter: blur(26px) saturate(1.6);
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none; }
+
+@media (hover: hover) {
+  .kr-glow-host:hover::before,
+  .kr-glow-host:focus-within::before {
+    opacity: 0.5;
+    transform: scale(1.03) translateY(10px); }
+
+  [data-theme="dark"] .kr-glow-host:hover::before,
+  [data-theme="dark"] .kr-glow-host:focus-within::before {
+    opacity: 0.72; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-glow-host::before {
+    transition: none; } }
+
+/* --- Record crate (music.html, js/albums.js) --------------------------
+   Sleeves are absolutely placed along the crate by --i, tilted back, and
+   filed with the most played at the front (highest --i, highest z). A
+   hovered sleeve lifts clear of the front board and shows its label. */
+.kr-crate {
+  --kr-sleeve: clamp(150px, 22vw, 250px);
+  position: relative;
+  height: calc(var(--kr-sleeve) + 130px);
+  max-width: 1000px;
+  margin: 24px auto 70px;
+  perspective: 1400px; }
+
+.kr-crate__sleeve {
+  position: absolute;
+  bottom: 62px;
+  left: calc(4% + var(--i) * (74% / max(1, var(--kr-n) - 1)));
+  width: var(--kr-sleeve);
+  height: var(--kr-sleeve);
+  z-index: calc(10 + var(--i));
+  transform-origin: bottom left;
+  transform: rotateY(-30deg) rotateX(4deg);
+  border-radius: 3px;
+  background: #1c1a18;
+  box-shadow: -10px 0 22px rgba(0, 0, 0, 0.4), inset 2px 0 0 rgba(255, 255, 255, 0.18);
+  transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.45s ease;
+  outline-offset: 4px; }
+
+.kr-crate__sleeve img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 3px; }
+
+.kr-crate__sleeve:hover,
+.kr-crate__sleeve:focus-visible {
+  z-index: 200;
+  transform: translateY(-84px) rotateY(-6deg) rotateX(0deg) scale(1.06);
+  box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5); }
+
+.kr-crate__label {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 12px);
+  transform: translateX(-50%) translateY(-6px);
+  white-space: nowrap;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: rgba(14, 14, 14, 0.92);
+  color: #fff;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.35;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease; }
+
+.kr-crate__sleeve:hover .kr-crate__label,
+.kr-crate__sleeve:focus-visible .kr-crate__label {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0); }
+
+.kr-crate__name {
+  display: block;
+  font-weight: 600; }
+
+.kr-crate__artist {
+  display: block;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.72); }
+
+.kr-crate__board {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 86px;
+  z-index: 150;
+  border-radius: 6px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 3px, transparent 3px 11px),
+    linear-gradient(#7a6350, #56443a 60%, #4a3a2e);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35), inset 0 3px 0 rgba(255, 255, 255, 0.12); }
+
+.kr-crate__board::before {
+  content: '';
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 34px;
+  height: 16px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5); }
+
+[data-theme="dark"] .kr-crate__board {
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0 3px, transparent 3px 11px),
+    linear-gradient(#4a3d33, #33291f 60%, #2a2118); }
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-crate__sleeve,
+  .kr-crate__label {
+    transition: none; } }
+
+/* --- Editorial type -----------------------------------------------------
+   Balanced headings, paragraphs without orphans, hanging quotes where the
+   browser can, and a Lora drop cap on the first paragraph of a post. */
+h1, h2, h3,
+.kr-opener__title,
+.blog-card-title,
+.post-title {
+  text-wrap: balance; }
+
+.blog-post p,
+.blog-post li,
+.kr-opener__standfirst,
+.blog-card-excerpt {
+  text-wrap: pretty; }
+
+.blog-post {
+  hanging-punctuation: first last; }
+
+.blog-post h2 {
+  scroll-margin-top: 96px; }
+
+.kr-opener ~ * .blog-post > p:first-of-type::first-letter {
+  font-family: 'Lora', Georgia, serif;
+  font-weight: 600;
+  color: #1f1b17;
+  float: left;
+  font-size: 3.5em;
+  line-height: 0.8;
+  padding: 0.12em 0.14em 0 0; }
+
+@supports (initial-letter: 3) {
+  .kr-opener ~ * .blog-post > p:first-of-type::first-letter {
+    float: none;
+    font-size: inherit;
+    line-height: inherit;
+    padding: 0 0.12em 0 0;
+    initial-letter: 3; } }
+
+[data-theme="dark"] .kr-opener ~ * .blog-post > p:first-of-type::first-letter {
+  color: #f1ede6; }
+
+/* --- Contents marker (renderPostToc) ------------------------------------
+   The rail's active entry used to light its own border; now one gradient
+   marker slides along the track to it. */
+.kr-toc {
+  --kr-toc-top: 6px;
+  --kr-toc-h: 0px; }
+
+.kr-toc__marker {
+  position: absolute;
+  left: 0;
+  width: 2px;
+  top: var(--kr-toc-top);
+  height: var(--kr-toc-h);
+  background: var(--kr-brand-gradient);
+  opacity: 0;
+  z-index: 1;
+  transition: top 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), height 0.3s ease, opacity 0.3s ease; }
+
+.kr-toc.is-tracking .kr-toc__marker {
+  opacity: 1; }
+
+.kr-toc.is-tracking a.active {
+  border-left-color: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-toc__marker {
+    transition: none; } }
+
+/* --- Sidenotes (initPostSidenotes) --------------------------------------
+   Absolutely placed against the 780px article, past the share rail in the
+   right gutter, laid out by script. Exist only from 1360px. */
+.kr-sidenote {
+  display: none; }
+
+@media (min-width: 1360px) {
+  .blog-post.kr-has-sidenotes {
+    position: relative; }
+
+  .kr-sidenote {
+    display: block;
+    position: absolute;
+    left: calc(100% + 88px);
+    width: 200px;
+    padding-left: 12px;
+    border-left: 2px solid var(--kr-hairline);
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: #6b6459;
+    transition: color 0.25s ease, border-color 0.25s ease; }
+
+  .kr-sidenote a {
+    color: inherit;
+    overflow-wrap: anywhere; }
+
+  .kr-sidenote__n {
+    display: block;
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--kr-eyebrow);
+    margin-bottom: 2px; }
+
+  .kr-sidenote.is-hot {
+    color: #1f1b17;
+    border-color: var(--kr-brand-from); }
+
+  [data-theme="dark"] .kr-sidenote {
+    color: #a8a099; }
+
+  [data-theme="dark"] .kr-sidenote.is-hot {
+    color: #f1ede6; } }
+
+/* --- Lightbox filmstrip (gallery.js krLightboxStrip) ------------------ */
+.kr-lightbox-strip {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1046;
+  display: flex;
+  gap: 6px;
+  padding: 10px 16px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: linear-gradient(transparent, rgba(11, 11, 11, 0.85) 40%);
+  opacity: 0;
+  transition: opacity 0.3s ease 0.2s; }
+
+.kr-lightbox-strip::-webkit-scrollbar {
+  display: none; }
+
+.mfp-wrap.mfp-ready .kr-lightbox-strip {
+  opacity: 1; }
+
+.mfp-wrap.mfp-removing .kr-lightbox-strip {
+  opacity: 0;
+  transition-delay: 0s; }
+
+.kr-lightbox-strip__item {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #222;
+  cursor: pointer;
+  opacity: 0.55;
+  outline-offset: 2px;
+  transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; }
+
+.kr-lightbox-strip__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block; }
+
+.kr-lightbox-strip__item:hover,
+.kr-lightbox-strip__item:focus-visible {
+  opacity: 1; }
+
+.kr-lightbox-strip__item.is-current {
+  opacity: 1;
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 2px #ffe89e; }
+
+/* The frame gives the strip its room; the caption bar sits just above it. */
+.kr-lightbox.kr-strip .mfp-container img.mfp-img {
+  max-height: calc(100vh - 112px) !important; }
+
+.kr-lightbox.kr-strip .mfp-container {
+  padding-bottom: 66px; }
+
+/* --- Reading calendar (literature.html, js/bookshelf.js) --------------
+   Magnitude in one hue: the amber of the brand gradient stepped light to
+   dark, with dark-mode steps chosen for the dark surface rather than
+   flipped. */
+.kr-cal-area {
+  padding: 70px 0 30px; }
+
+.kr-cal {
+  --kr-cal-0: #eee8dd;
+  --kr-cal-1: #f0cf8a;
+  --kr-cal-2: #d9962c;
+  --kr-cal-3: #9c5a12;
+  max-width: 1000px;
+  margin: 0 auto; }
+
+[data-theme="dark"] .kr-cal {
+  --kr-cal-0: #2b2b2b;
+  --kr-cal-1: #5a4a22;
+  --kr-cal-2: #b0842c;
+  --kr-cal-3: #ffe89e; }
+
+.kr-cal__grid {
+  display: grid;
+  gap: 6px; }
+
+.kr-cal__row {
+  display: grid;
+  grid-template-columns: 44px 1fr 96px;
+  align-items: center;
+  gap: 10px; }
+
+.kr-cal__year {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--kr-eyebrow); }
+
+.kr-cal__weeks {
+  display: grid;
+  grid-template-columns: repeat(53, 1fr);
+  gap: 3px; }
+
+.kr-cal__cell {
+  aspect-ratio: 1;
+  border-radius: 2px;
+  background: var(--kr-cal-0); }
+
+.kr-cal__cell[data-l="1"] { background: var(--kr-cal-1); }
+.kr-cal__cell[data-l="2"] { background: var(--kr-cal-2); }
+.kr-cal__cell[data-l="3"] { background: var(--kr-cal-3); }
+
+.kr-cal__cell--future {
+  opacity: 0.35; }
+
+button.kr-cal__cell {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  display: block;
+  width: 100%; }
+
+.kr-cal__cell[data-k]:hover,
+.kr-cal__cell[data-k]:focus-visible {
+  outline: 2px solid var(--kr-brand-from);
+  outline-offset: 1px; }
+
+/* The week card (initCalendarTip). */
+.kr-cal__tip {
+  position: fixed;
+  z-index: 5000;
+  width: max-content;
+  max-width: min(320px, calc(100vw - 16px));
+  background: var(--kr-surface-card, #fff);
+  border: 1px solid var(--kr-hairline);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  padding: 10px 12px 8px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #444;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.18s ease, visibility 0s linear 0.18s; }
+
+.kr-cal__tip.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.18s ease, visibility 0s linear 0s; }
+
+@supports (position-area: top) {
+  .kr-cal__tip {
+    position-anchor: --kr-cal;
+    position-area: top center;
+    position-try-fallbacks: flip-block;
+    margin: 0 0 10px; } }
+
+.kr-cal__tip-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--kr-eyebrow);
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--kr-hairline); }
+
+.kr-cal__tip-list {
+  list-style: none;
+  margin: 0;
+  padding: 0; }
+
+.kr-cal__tip-list li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 12px;
+  padding: 4px 0; }
+
+.kr-cal__tip-list li + li {
+  border-top: 1px solid var(--kr-hairline); }
+
+.kr-cal__tip-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: #1f1b17; }
+
+.kr-cal__tip-author {
+  grid-column: 1;
+  color: var(--kr-eyebrow); }
+
+.kr-cal__tip-stars {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  letter-spacing: 1px;
+  font-size: 12px;
+  color: var(--kr-hairline); }
+
+.kr-cal__tip-stars .is-on {
+  color: #d9962c; }
+
+.kr-cal__tip-more {
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: var(--kr-eyebrow); }
+
+[data-theme="dark"] .kr-cal__tip {
+  color: #cfcfcf;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55); }
+
+[data-theme="dark"] .kr-cal__tip-title {
+  color: #f1ede6; }
+
+[data-theme="dark"] .kr-cal__tip-stars .is-on {
+  color: #ffe89e; }
+
+.kr-cal__total {
+  display: flex;
+  align-items: center;
+  gap: 8px; }
+
+.kr-cal__bar {
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--kr-brand-gradient);
+  flex: 0 1 auto;
+  min-width: 2px;
+  max-width: 64px; }
+
+.kr-cal__n {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #444;
+  min-width: 2ch; }
+
+[data-theme="dark"] .kr-cal__n {
+  color: #dcdcdc; }
+
+.kr-cal__legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--kr-eyebrow); }
+
+.kr-cal__legend .kr-cal__cell {
+  width: 11px;
+  height: 11px; }
+
+.kr-cal__legend span:first-child {
+  margin-right: 4px; }
+
+.kr-cal__legend span:last-child {
+  margin-left: 4px; }
+
+.kr-cal__table {
+  margin-top: 14px;
+  font-size: 13px; }
+
+.kr-cal__table summary {
+  cursor: pointer;
+  color: var(--kr-eyebrow); }
+
+.kr-cal__table table {
+  margin-top: 8px;
+  border-collapse: collapse; }
+
+.kr-cal__table th,
+.kr-cal__table td {
+  padding: 3px 14px 3px 0;
+  text-align: left; }
+
+@media (max-width: 767px) {
+  .kr-cal__row {
+    grid-template-columns: 38px 1fr 64px;
+    gap: 6px; }
+  .kr-cal__weeks {
+    gap: 2px; }
+  .kr-cal__cell {
+    border-radius: 1px; }
+  .kr-cal__bar {
+    max-width: 36px; } }
+
+/* --- Entry animations for things that appear (@starting-style) --------
+   The filter panel and the command palette toggle display, which used to
+   mean they popped. With display transitions and a starting style they
+   rise in and fade out, and browsers without the feature keep the pop. */
+@media (prefers-reduced-motion: no-preference) {
+  .kr-filter-panel:not([hidden]) {
+    opacity: 1;
+    translate: 0 0;
+    transition: opacity 0.22s ease, translate 0.22s ease, display 0.22s allow-discrete; }
+
+  @starting-style {
+    .kr-filter-panel:not([hidden]) {
+      opacity: 0;
+      translate: 0 -8px; } }
+
+  .kr-filter-panel[hidden] {
+    opacity: 0;
+    translate: 0 -8px; }
+
+  .kr-palette-overlay.is-open {
+    opacity: 1;
+    transition: opacity 0.2s ease, display 0.2s allow-discrete; }
+
+  .kr-palette-overlay.is-open .kr-palette {
+    scale: 1;
+    opacity: 1;
+    transition: scale 0.22s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.2s ease; }
+
+  @starting-style {
+    .kr-palette-overlay.is-open {
+      opacity: 0; }
+    .kr-palette-overlay.is-open .kr-palette {
+      scale: 0.96;
+      opacity: 0; } } }
+
+/* --- Anchored citation preview ------------------------------------------
+   Where the browser supports anchor positioning the card hangs off the
+   citation itself (initCitePreviews sets anchor-name on hover) and flips
+   below it when there is no room above. Elsewhere the script places it. */
+@supports (position-area: top) {
+  .cite-preview {
+    position-anchor: --kr-cite;
+    position-area: top center;
+    position-try-fallbacks: flip-block;
+    margin: 0 0 10px;
+    width: max-content;
+    max-width: min(420px, calc(100vw - 24px)); } }

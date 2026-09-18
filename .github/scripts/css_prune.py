@@ -43,6 +43,8 @@ RUNTIME_TOKENS = {
     # Authoring helpers used by unpublished drafts: keep so drafts preview
     # correctly before their classes join the tracked corpus.
     "theme-img-light", "theme-img-dark", "latex-logo",
+    # bookshelf.js builds the rating band as "kr-spine--r" + n
+    "kr-spine--r0", "kr-spine--r1", "kr-spine--r2", "kr-spine--r3", "kr-spine--r4", "kr-spine--r5",
 }
 
 
@@ -106,6 +108,12 @@ def collect_usage():
     for f in files:
         text = f.read_text(encoding="utf-8", errors="replace")
         for m in re.finditer(r'class=["\']([^"\']+)["\']', text):
+            classes.update(m.group(1).split())
+        # data-animation names an animate.css class that active.js adds
+        # on slide change. It never appears in a class attribute, so
+        # without this the rule setting animation-name is pruned and the
+        # hero text arrives with no animation at all.
+        for m in re.finditer(r'data-animation=["\']([^"\']+)["\']', text):
             classes.update(m.group(1).split())
         for m in re.finditer(r'id=["\']([^"\']+)["\']', text):
             ids.add(m.group(1))

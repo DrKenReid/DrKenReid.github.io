@@ -29,43 +29,29 @@
   <link rel="preload" as="image" href="/img/bg-img/ken-hero.webp">
   <link rel="stylesheet" href="/style.min.css">
   <style>
+    /* The stats band's type, colour and spacing now live in style.css with
+       the rest of the brand system; what stays here is only the surface it
+       sits on, which is specific to this page. */
     .home-stats-bar {
-      background: #f7f7f7;
-      padding: 40px 0;
-      border-top: 1px solid #ebebeb;
-      border-bottom: 1px solid #ebebeb;
+      background: transparent;
+      border-top: 1px solid var(--kr-hairline);
+      border-bottom: 1px solid var(--kr-hairline);
     }
     .home-stat-value {
-      font-size: 28px;
-      font-weight: 700;
       color: #252525;
-    }
-    .home-stat-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: #c53030;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-    }
-    [data-theme="dark"] .home-stat-label {
-      color: #fc6060;
     }
     .home-stat-icon {
       display: block;
-      font-size: 17px;
-      color: #a8a8a8;
       margin-bottom: 10px;
-    }
-    [data-theme="dark"] .home-stat-icon {
-      color: #6d6d6d;
+      /* Was #a8a8a8 light / #6d6d6d dark, which sat at 2.2:1 and 3.4:1
+         against their backgrounds. Barely visible is not subtle. */
+      color: #7d766c;
     }
     .home-section-note {
       color: #636363;
     }
-    [data-theme="dark"] .home-stats-bar {
-      background: #202020;
-      border-top-color: #333;
-      border-bottom-color: #333;
+    [data-theme="dark"] .home-stat-icon {
+      color: #9a9389;
     }
     [data-theme="dark"] .home-stat-value {
       color: #f0f0f0;
@@ -190,21 +176,41 @@
         </div>
       </div>
 
+
+      <!-- Slide 5: the headline is evolved rather than typed (js/hero-evolve.js) -->
+      <div class="single-welcome-slide bg-overlay">
+        <div class="slide-bg bg-img" style="background-image: url(/img/photography/hero/141.webp);"></div>
+        <div class="container h-100">
+          <div class="row h-100 align-items-center">
+            <div class="col-12 col-lg-8 col-xl-7">
+              <div class="welcome-text">
+                <span class="kr-hero-kicker" data-animation="bounceInDown" data-delay="200ms">Researcher &amp; Data Scientist</span>
+                <h2 class="sr-only">Hi, I'm Ken.</h2>
+                <canvas class="kr-hero-evolve" width="640" height="190" aria-hidden="true"></canvas>
+                <p data-animation="bounceInDown" data-delay="300ms">That headline is not a font. It is a hundred and ten translucent triangles being evolved toward the words, one accepted mutation at a time, in your browser.</p>
+                <a href="/data_science.html" class="btn alime-btn mt-30" data-animation="bounceInDown" data-delay="500ms">See the research</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <a href="#about-me" class="kr-scroll-cue" aria-label="Scroll to content"><span></span></a>
   </section>
 
-  <!-- About Section -->
-  <section class="about-us-area section-padding-80-0 clearfix" id="about-me">
+  <!-- About + numbers -->
+  <section class="about-us-area kr-intro-area clearfix" id="about-me">
     <div class="container">
       <div class="row align-items-center">
         <div class="col-12 col-lg-8 offset-lg-2">
           <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
             <span class="section-eyebrow">Welcome</span>
-        <h2>About Me</h2>
+            <h2>About Me</h2>
           </div>
-          <p class="text-center wow fadeInUp" data-wow-delay="200ms" style="font-size: 1.1em; line-height: 1.8; color: #636363;">Thanks for checking out my site. I'm from Scotland, now living in MI, USA. I build software and solve data problems, publish research papers, and recently started a master's in Organizational Leadership. I also take photos, play guitar, and read a lot of well written and awful books.</p>
+          <p class="text-center kr-intro-lede">I'm from Scotland, now living in MI, USA. I solve data problems, optimize stuff, publish research papers, and recently started a master's in Organizational Leadership. I also take photos, play guitar, and read a huge variety of books.</p><br>
+
+          <p class="text-center kr-intro-lede">Thanks for checking out my site.</p>
         </div>
       </div>
     </div>
@@ -218,7 +224,7 @@
         <h2 class="wow fadeInUp" data-wow-delay="100ms">Latest Blog Posts</h2>
       </div>
       <div class="row justify-content-center">
-        <div class="col-12 col-lg-7" id="latest-posts"></div>
+        <div class="col-12 col-lg-7 kr-latest-list" id="latest-posts"></div>
         <div class="col-12 col-lg-5 mb-30">
           <div class="wow fadeInUp kr-blog-promo" data-wow-delay="200ms" style="background-image: url(/img/bg-img/ken-train.webp);">
             <span class="sr-only">Background photo: Ken Reid on a train, lit by the window.</span>
@@ -235,8 +241,8 @@
     </div>
   </section>
 
-  <!-- Stats Bar -->
-  <section class="wow fadeInUp home-stats-bar" data-wow-delay="100ms">
+  <!-- Numbers, attached to the intro above -->
+  <section class="home-stats-bar">
     <div class="container">
       <dl class="row text-center justify-content-center">
         <div class="col-6 col-md-auto home-stat">
@@ -278,6 +284,10 @@
     </div>
   </section>
 
+  <!-- Photography (injected by shared-components.js), promoted above the
+       secondary sections: it is the best work on the site. -->
+  <div id="instagram-section"></div>
+
   <!-- Now strip (live-ish data; rendered by shared-components.js) -->
   <section class="kr-now-area">
     <div class="container">
@@ -286,51 +296,51 @@
   </section>
 
   <!-- Quick Links -->
-  <section class="about-us-area section-padding-80-0 clearfix bg-tint">
+  <section class="about-us-area kr-explore-area clearfix bg-tint">
     <div class="container">
       <div class="text-center" style="margin-bottom: 40px;">
         <span class="section-eyebrow">Around the site</span>
         <h2 class="wow fadeInUp" data-wow-delay="100ms">Explore</h2>
       </div>
-      <div class="row">
-        <div class="col-6 col-md-4 col-lg-2 mb-30 wow fadeInUp" data-wow-delay="100ms">
-          <a href="/data_science.html" class="social-card">
-            <div class="social-card__emoji" aria-hidden="true">🔬</div>
+      <div class="row kr-explore-row">
+        <div class="col-6 col-md-4 col-lg-2">
+          <a href="/data_science.html" class="kr-explore-link">
+            <i class="ti-stats-up kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Data Science</h3>
             <p>Projects &amp; publications</p>
           </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2 mb-30 wow fadeInUp" data-wow-delay="150ms">
-          <a href="/gallery.html" class="social-card">
-            <div class="social-card__emoji" aria-hidden="true">📷</div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <a href="/gallery.html" class="kr-explore-link">
+            <i class="ti-camera kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Photography</h3>
             <p>490+ photos</p>
           </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2 mb-30 wow fadeInUp" data-wow-delay="200ms">
-          <a href="/music.html" class="social-card">
-            <div class="social-card__emoji" aria-hidden="true">🎸</div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <a href="/music.html" class="kr-explore-link">
+            <i class="ti-music-alt kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Music</h3>
             <p>Guitar &amp; listening</p>
           </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2 mb-30 wow fadeInUp" data-wow-delay="250ms">
-          <a href="/literature.html" class="social-card">
-            <div class="social-card__emoji" aria-hidden="true">📚</div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <a href="/literature.html" class="kr-explore-link">
+            <i class="ti-book kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Literature</h3>
             <p>Reviews &amp; stats</p>
           </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2 mb-30 wow fadeInUp" data-wow-delay="300ms">
-          <a href="/blog.html" class="social-card">
-            <div class="social-card__emoji" aria-hidden="true">✍️</div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <a href="/blog.html" class="kr-explore-link">
+            <i class="ti-write kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Blog</h3>
             <p>Writing &amp; thoughts</p>
           </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2 mb-30 wow fadeInUp" data-wow-delay="350ms">
-          <a href="/contact.html" class="social-card">
-            <div class="social-card__emoji" aria-hidden="true">📨</div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <a href="/contact.html" class="kr-explore-link">
+            <i class="ti-email kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Contact</h3>
             <p>Get in touch</p>
           </a>
@@ -340,7 +350,7 @@
   </section>
 
   <!-- Bluesky Feed -->
-  <div class="about-us-area section-padding-80-0 clearfix">
+  <div class="about-us-area kr-social-area clearfix">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
@@ -365,9 +375,6 @@
     </div>
   </section>
 
-  <!-- Instagram Feed (injected by shared-components.js) -->
-  <div id="instagram-section"></div>
-
   <!-- Footer (injected by shared-components.js) -->
   </main>
   <div id="footer-section"></div>
@@ -379,6 +386,7 @@
   <script src="/js/lightbox.js"></script>
   <script src="/js/default-assets/active.js"></script>
   <script src="/js/shared-components.js"></script>
+  <script defer src="/js/hero-evolve.js?v=20260917a"></script>
   <script>
     renderHeader('header-section', { basePath: '/', active: 'home' });
     renderInstagramSection('instagram-section');
@@ -465,12 +473,12 @@
       var HANDLE = 'kenreid.co.uk';
       var container = document.getElementById('bsky-posts');
       if (!container) return;
-      container.innerHTML = [1, 2, 3].map(function() {
+      container.innerHTML = [1, 2].map(function() {
         return '<div class="bsky-post-card"><span class="kr-skel-bar" style="width:35%;"></span>' +
                '<span class="kr-skel-bar" style="width:92%;"></span>' +
                '<span class="kr-skel-bar" style="width:78%;"></span></div>';
       }).join('');
-      fetch('https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=' + DID + '&limit=3&filter=posts_no_replies')
+      fetch('https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=' + DID + '&limit=2&filter=posts_no_replies')
         .then(function(r) { return r.json(); })
         .then(function(data) {
           container.innerHTML = '';

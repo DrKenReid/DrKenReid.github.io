@@ -33,6 +33,18 @@ CHECKS = [
         ("stats visible", "document.querySelectorAll('.home-stat-value').length >= 4"),
         ("blog cards visible", "Array.from(document.querySelectorAll('.blog-card, .single-post-area')).filter(e => getComputedStyle(e).opacity !== '0').length >= 1"),
         ("footer grid", "!!document.querySelector('.kr-footer-grid')"),
+        # active.js applies an animate.css class named by data-animation
+        # when the hero changes slide. The class appears in no class
+        # attribute, so the CSS pruner dropped the rule that sets
+        # animation-name and the headline landed with no animation for
+        # months without anything failing. Assert the class still
+        # resolves to a real animation.
+        ("hero slide animation survives pruning",
+         "(() => { const d = document.createElement('div');"
+         "  d.className = 'animated bounceInDown';"
+         "  document.body.appendChild(d);"
+         "  const n = getComputedStyle(d).animationName; d.remove();"
+         "  return n === 'bounceInDown'; })()"),
     ]),
     ("blog.html", [
         ("blog tiles visible", "Array.from(document.querySelectorAll('#blog-grid .single-post-area')).filter(e => getComputedStyle(e).opacity !== '0').length >= 3"),

@@ -18,7 +18,8 @@
         { title: 'Literature', sub: 'Reviews & reading stats', url: 'literature.html' },
         { title: 'Quote Wall', sub: '571 saved passages', url: 'quotes.html' },
         { title: 'Blog', sub: 'All posts', url: 'blog.html' },
-        { title: 'Contact', sub: 'Get in touch', url: 'contact.html' }
+        { title: 'Contact', sub: 'Get in touch', url: 'contact.html' },
+        { title: 'Colophon', sub: 'How this site is built, measured', url: 'colophon.html' }
     ];
 
     const PHOTO_TAGS = ['wildlife', 'portrait', 'bw', 'architecture', 'abandoned',

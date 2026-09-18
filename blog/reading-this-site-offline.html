@@ -9,13 +9,13 @@
   <title>Reading This Site Offline - Ken Reid</title>
   <meta property="og:title" content="Reading This Site Offline">
   <meta property="og:description" content="This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.">
-  <meta property="og:image" content="https://www.kenreid.co.uk/img/photography/hero/62.webp">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/og/reading-this-site-offline.jpg">
   <meta property="og:url" content="https://www.kenreid.co.uk/blog/reading-this-site-offline.html">
   <meta property="og:type" content="article">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Reading This Site Offline">
   <meta name="twitter:description" content="This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.">
-  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/photography/hero/62.webp">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/reading-this-site-offline.jpg">
   <meta name="citation_title" content="Reading This Site Offline">
   <meta name="citation_author" content="Reid, Kenneth N.">
   <meta name="citation_publication_date" content="2026/07/12">
@@ -40,7 +40,7 @@
     "mainEntityOfPage": "https://www.kenreid.co.uk/blog/reading-this-site-offline.html",
     "headline": "Reading This Site Offline",
     "description": "This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.",
-    "image": "https://www.kenreid.co.uk/img/photography/hero/62.webp",
+    "image": "https://www.kenreid.co.uk/img/og/reading-this-site-offline.jpg",
     "author": {
       "@type": "Person",
       "name": "Ken Reid",
@@ -74,20 +74,24 @@
   <div id="header-section"></div>
 
   <main id="main-content">
-  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/62.webp); background-size: cover; background-position: center center;">
-    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
-      <div class="breadcrumb-content text-center">
-        <p class="page-title">Reading This Site Offline</p>
-        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
-          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
-          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Reading This Site Offline</li>
-        </ol></nav>
-      </div>
-    </div></div></div>
-  </section>
+  <header class="kr-opener" style="--kr-opener-img: url(/img/photography/hero/62.webp);">
+    <div class="kr-opener__media" aria-hidden="true"></div>
+    <div class="kr-opener__scrim" aria-hidden="true"></div>
+    <div class="container kr-opener__inner">
+      <nav aria-label="breadcrumb" class="kr-opener__crumbs"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Reading This Site Offline</li>
+      </ol></nav>
+      <p class="kr-opener__kicker">Technology &middot; 12 July 2026 &middot; 6 min read</p>
+      <p class="kr-opener__title page-title">Reading This Site Offline</p>
+      <p class="kr-opener__standfirst">This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.</p>
+      <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>
+    </div>
+    <a class="kr-opener__cue" href="#main-content-body" aria-label="Scroll to the article"><span></span></a>
+  </header>
 
-  <div class="about-us-area section-padding-80 clearfix">
+  <div class="about-us-area section-padding-80 clearfix" id="main-content-body">
     <div class="container">
       
       <div class="blog-post">
@@ -215,7 +219,7 @@ caches.match(req).then(function (hit) {
               <a href="dark-mode-that-doesnt-flash.html" class="blog-card">
                 <div class="blog-card-img"><img src="../img/photography/thumb/20.webp" alt="Dark Mode That Doesn't Flash" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">6 August 2026 · 7 min read</div>
+                  <div class="blog-card-date">6 August 2026 · 8 min read</div>
                   <h3 class="blog-card-title">Dark Mode That Doesn't Flash</h3>
                   <p class="blog-card-excerpt">Dark mode is easy; dark mode without a white flash is more difficult. How this site stamps the theme before the first paint, and drags every chart and iframe along with it.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span></div>

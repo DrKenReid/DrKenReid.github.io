@@ -39,6 +39,70 @@
           <h2>Page Not Found</h2>
           <p style="color: #636363; font-size: 16px; line-height: 1.8; margin: 20px 0 24px;">The page you're looking for doesn't exist, was moved, or I broke something. <a href="/contact.html">Please let me know!</a></p>
 
+          <!-- A hill climber looking for the page. It never finds it, because
+               there is nothing to find; the joke is the algorithm's problem. -->
+          <figure class="kr-lost" aria-hidden="true">
+            <canvas id="kr-lost-canvas" width="640" height="150"></canvas>
+            <figcaption class="kr-lost__status"><span id="kr-lost-status">Searching…</span></figcaption>
+          </figure>
+          <script>
+          (function () {
+            var c = document.getElementById('kr-lost-canvas');
+            if (!c || !c.getContext) return;
+            var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var status = document.getElementById('kr-lost-status');
+            var path = decodeURIComponent(location.pathname || '/');
+            var W = 640, H = 150, ctx = c.getContext('2d');
+
+            // A rugged landscape seeded from the path, so every missing URL
+            // gets its own hills to be lost in.
+            var seed = 0; for (var i = 0; i < path.length; i++) seed = (seed * 31 + path.charCodeAt(i)) >>> 0;
+            function rnd() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
+            var terms = []; for (var k = 0; k < 7; k++) terms.push([1 + k * 1.7, rnd() * 6.28, 0.5 / (k + 1)]);
+            function land(x) { var y = 0; for (var t = 0; t < terms.length; t++) y += Math.sin(x * terms[t][0] + terms[t][1]) * terms[t][2]; return y; }
+
+            var x = rnd() * 6.28, best = land(x), stalls = 0, evals = 0, restarts = 0, trail = [];
+
+            function draw() {
+              var dark = document.documentElement.getAttribute('data-theme') !== 'light';
+              ctx.clearRect(0, 0, W, H);
+              ctx.strokeStyle = dark ? 'rgba(232,226,216,0.35)' : 'rgba(60,54,46,0.35)';
+              ctx.lineWidth = 1.5;
+              ctx.beginPath();
+              for (var px = 0; px <= W; px++) {
+                var xx = px / W * 6.28, yy = H * 0.6 - land(xx) * 40;
+                px ? ctx.lineTo(px, yy) : ctx.moveTo(px, yy);
+              }
+              ctx.stroke();
+              ctx.fillStyle = dark ? 'rgba(255,150,150,0.25)' : 'rgba(197,48,48,0.2)';
+              for (var i = 0; i < trail.length; i++) {
+                ctx.beginPath(); ctx.arc(trail[i] / 6.28 * W, H * 0.6 - land(trail[i]) * 40, 2, 0, 6.28); ctx.fill();
+              }
+              ctx.fillStyle = dark ? '#ffe89e' : '#c53030';
+              ctx.beginPath(); ctx.arc(x / 6.28 * W, H * 0.6 - land(x) * 40, 5, 0, 6.28); ctx.fill();
+            }
+
+            function step() {
+              for (var e = 0; e < 3; e++) {
+                var cand = x + (rnd() - 0.5) * 0.5;
+                if (cand < 0) cand += 6.28; if (cand > 6.28) cand -= 6.28;
+                evals++;
+                if (land(cand) > best) { best = land(cand); x = cand; stalls = 0; trail.push(x); if (trail.length > 60) trail.shift(); }
+                else stalls++;
+              }
+              if (stalls > 90) { restarts++; stalls = 0; x = rnd() * 6.28; best = land(x); trail = []; }
+              draw();
+              if (status) status.textContent = 'Searched ' + evals.toLocaleString() + ' places' +
+                (restarts ? ', restarted ' + restarts + (restarts === 1 ? ' time' : ' times') : '') +
+                '. Still no ' + path + '.';
+              if (!reduced && evals < 60000) requestAnimationFrame(step);
+            }
+            draw();
+            if (reduced) { if (status) status.textContent = 'Looked everywhere. No ' + path + '.'; }
+            else requestAnimationFrame(step);
+          }());
+          </script>
+
           <form action="/blog.html" method="get" role="search" style="max-width: 420px; margin: 0 auto 14px;">
             <input type="search" name="q" placeholder="Search the blog instead..." aria-label="Search the blog"
                    style="width: 100%; padding: 12px 22px; border: 1px solid #ddd; border-radius: 999px; font-size: 15px; outline: none;">

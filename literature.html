@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="/style.min.css">
   <script defer src="/js/literature.js"></script>
   <script defer src="/js/bookwall.js"></script>
+  <script defer src="/js/bookshelf.js?v=20260918a"></script>
   <style>
     .gr_grid_book_container{float:left;width:98px;height:160px;padding:0;overflow:hidden}
   </style>
@@ -116,6 +117,33 @@
           </a>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Reading calendar: books finished per week since 2021 (js/bookshelf.js) -->
+  <div class="about-us-area kr-cal-area clearfix" id="reading-calendar">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 22px;">
+        <span class="section-eyebrow">Week by week</span>
+        <h2>Reading Calendar</h2>
+        <p style="margin-top: 10px;">Every book I finished since 2021, one cell per week. Darker means more; the bar at the end of each row is the year's total. Hover a cell for the titles.</p>
+      </div>
+      <div id="kr-reading-calendar" class="kr-cal"></div>
+    </div>
+  </div>
+
+  <!-- The shelf: every book as a spine, in reading order (js/bookshelf.js) -->
+  <div class="about-us-area kr-shelf-area clearfix" id="shelf">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 22px;">
+        <span class="section-eyebrow">In reading order</span>
+        <h2>The Shelf</h2>
+        <p style="margin-top: 10px;"><span id="kr-shelf-count">&mdash;</span> spines, oldest on the left. Width follows the title, colour follows my rating. Scroll along it; hover a spine for the book.</p>
+      </div>
+    </div>
+    <div class="kr-shelf-scroll">
+      <div id="kr-shelf" class="kr-shelf" role="list" aria-label="Every book I have rated, as spines on a shelf"></div>
+      <div class="kr-shelf__board" aria-hidden="true"></div>
     </div>
   </div>
 

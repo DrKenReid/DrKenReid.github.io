@@ -60,6 +60,36 @@
       font-family: "Poppins", sans-serif;
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
     }
+    .kr-map-marker--photo {
+      position: relative;
+      background-color: #333;
+      background-size: cover;
+      background-position: center;
+      border-width: 3px;
+      transition: transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.25s ease;
+    }
+    .kr-map-marker--photo:hover,
+    .kr-map-marker--photo:focus-visible {
+      transform: scale(1.18);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
+      z-index: 5;
+    }
+    .kr-map-marker__n {
+      position: absolute;
+      right: -6px;
+      bottom: -6px;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      border-radius: 11px;
+      background: #fc6060;
+      color: #fff;
+      border: 2px solid #fff;
+      font-size: 11px;
+      line-height: 18px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    }
     .kr-map-popup .kr-map-region {
       font-weight: 600;
       font-size: 14px;
@@ -150,14 +180,16 @@
     renderFooter('footer-section');
 
     (function () {
+      // Esri's grey canvases: a quiet base in both themes, and no API key
+      // (CARTO's basemaps started watermarking keyless tiles in 2026).
       var TILES = {
         light: {
-          url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+          attribution: 'Tiles &copy; <a href="https://www.esri.com/">Esri</a> &mdash; Esri, HERE, Garmin, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         },
         dark: {
-          url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+          attribution: 'Tiles &copy; <a href="https://www.esri.com/">Esri</a> &mdash; Esri, HERE, Garmin, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }
       };
       var RELEASE = typeof KR_RELEASE !== 'undefined' ? KR_RELEASE : 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/';
@@ -174,7 +206,7 @@
         if (currentTiles) map.removeLayer(currentTiles);
         currentTiles = L.tileLayer(TILES[theme].url, {
           attribution: TILES[theme].attribution,
-          maxZoom: 18
+          maxZoom: 16
         }).addTo(map);
       }
       applyTiles();
@@ -218,12 +250,16 @@
         regions.forEach(function (region) {
           regionsByName[region.name] = region;
           bounds.push([region.lat, region.lng]);
-          var size = Math.max(34, Math.min(52, 30 + region.photos.length));
+          // The marker is the place's first frame, with the count as a badge:
+          // a map of photographs should show photographs.
+          var size = Math.max(44, Math.min(64, 40 + region.photos.length));
           var marker = L.marker([region.lat, region.lng], {
             icon: L.divIcon({
               className: '',
-              html: '<div class="kr-map-marker" role="button" tabindex="0" aria-label="' +
-                  region.name + ', ' + region.photos.length + ' photos" style="width:' + size + 'px;height:' + size + 'px;">' + region.photos.length + '</div>',
+              html: '<div class="kr-map-marker kr-map-marker--photo" role="button" tabindex="0" aria-label="' +
+                  region.name + ', ' + region.photos.length + ' photos" style="width:' + size + 'px;height:' + size + 'px;' +
+                  'background-image:url(/img/photography/thumb/' + region.photos[0] + '.webp)">' +
+                  '<span class="kr-map-marker__n">' + region.photos.length + '</span></div>',
               iconSize: [size, size],
               iconAnchor: [size / 2, size / 2]
             }),

@@ -26,24 +26,47 @@
     // for the photo strip.
     window.addCarouselPauseControl = function (carousel, container, label, resumeTimeout) {
         if (!carousel || !carousel.length || !container || !container.length) return;
+        var userPaused = false;
         var btn = $('<button type="button" class="carousel-pause-btn" aria-pressed="false"></button>')
             .attr('aria-label', 'Pause ' + label)
             .attr('title', 'Pause ' + label)
             .html('<i class="ti-control-pause" aria-hidden="true"></i>');
-        btn.on('click', function () {
-            var paused = btn.attr('aria-pressed') === 'true';
+
+        // Owl restarts autoplay from four of its own handlers: mouseover,
+        // mouseleave, touchstart and touchend. Three check whether the
+        // carousel is still rotating; touchend does not, so on a touch
+        // device the tap that pauses the slideshow also resumes it. All
+        // four are gated on autoplayHoverPause, so switching that off for
+        // the duration is what makes a pause stick. WCAG 2.2.2 asks for a
+        // mechanism to stop movement, not one that mostly works.
+        function setPaused(paused) {
+            userPaused = paused;
+            var core = carousel.data('owl.carousel');
+            if (core && core.settings) core.settings.autoplayHoverPause = !paused;
             if (paused) {
-                carousel.trigger('play.owl.autoplay', [resumeTimeout]);
-            } else {
                 carousel.trigger('stop.owl.autoplay');
+            } else {
+                carousel.trigger('play.owl.autoplay', [resumeTimeout]);
             }
-            btn.attr('aria-pressed', String(!paused))
-                .attr('aria-label', (paused ? 'Pause ' : 'Play ') + label)
-                .attr('title', (paused ? 'Pause ' : 'Play ') + label)
+            btn.attr('aria-pressed', String(paused))
+                .attr('aria-label', (paused ? 'Play ' : 'Pause ') + label)
+                .attr('title', (paused ? 'Play ' : 'Pause ') + label)
                 .html(paused
-                    ? '<i class="ti-control-pause" aria-hidden="true"></i>'
-                    : '<i class="ti-control-play" aria-hidden="true"></i>');
+                    ? '<i class="ti-control-play" aria-hidden="true"></i>'
+                    : '<i class="ti-control-pause" aria-hidden="true"></i>');
+        }
+
+        btn.on('click', function () {
+            setPaused(!userPaused);
         });
+
+        // Belt and braces for anything that still slips through, such as a
+        // swipe or a nav arrow: landing on a new slide while the reader has
+        // asked for stillness must not leave the timer running.
+        carousel.on('translated.owl.carousel', function () {
+            if (userPaused) carousel.trigger('stop.owl.autoplay');
+        });
+
         container.append(btn);
     };
 
@@ -100,7 +123,10 @@
     // :: Masonry gallery (gallery.html)
     // *********************************
 
-    if ($.fn.imagesLoaded) {
+    // The gallery grid was an isotope masonry that cropped every frame to
+    // the column width. gallery.js now lays it out in justified rows from
+    // precomputed aspect ratios, so isotope is left alone here.
+    if ($.fn.imagesLoaded && $('.alime-portfolio').length && !$('.alime-portfolio').hasClass('kr-justified')) {
         $('.alime-portfolio').imagesLoaded(function () {
             $('.alime-portfolio').isotope({
                 itemSelector: '.single_gallery_item',

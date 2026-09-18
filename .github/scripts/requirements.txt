@@ -14,3 +14,10 @@ playwright>=1.59
 # requirement here, not an optional speed-up.
 fonttools>=4.62
 brotli>=1.2
+
+# generate_og_images.py - renders each post's share card with Pillow, and
+# reads the site's woff2 fonts through fontTools (above).
+# detect_monochrome.py - reads thumbnail pixels to decide the gallery's
+# B&W tag. generate_photo_dims.py reads WebP headers itself and only
+# falls back to Pillow for an unfamiliar container.
+Pillow>=10

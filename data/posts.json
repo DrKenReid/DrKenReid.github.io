@@ -28,7 +28,8 @@
       "part": 3
     },
     "readMinutes": 9,
-    "words": 1781
+    "words": 1781,
+    "interactive": true
   },
   {
     "title": "Leading a Horse to Water",
@@ -45,7 +46,8 @@
       "part": 1
     },
     "readMinutes": 15,
-    "words": 3166
+    "words": 3166,
+    "interactive": true
   },
   {
     "title": "Making This Website Accessible",
@@ -62,7 +64,8 @@
       "part": 15
     },
     "readMinutes": 5,
-    "words": 965
+    "words": 965,
+    "code": true
   },
   {
     "title": "The Availability Heuristic Runs the News",
@@ -115,7 +118,8 @@
       "part": 9
     },
     "readMinutes": 8,
-    "words": 1752
+    "words": 1752,
+    "interactive": true
   },
   {
     "title": "Genetic Programming, Live",
@@ -132,7 +136,8 @@
       "part": 8
     },
     "readMinutes": 9,
-    "words": 1822
+    "words": 1822,
+    "interactive": true
   },
   {
     "title": "Differential Evolution, Live",
@@ -149,7 +154,8 @@
       "part": 7
     },
     "readMinutes": 9,
-    "words": 1772
+    "words": 1772,
+    "interactive": true
   },
   {
     "title": "CMA-ES, Live",
@@ -166,7 +172,8 @@
       "part": 6
     },
     "readMinutes": 7,
-    "words": 1379
+    "words": 1379,
+    "interactive": true
   },
   {
     "title": "Factorio, Live: a Game as an Optimisation Benchmark",
@@ -183,7 +190,8 @@
       "part": 2
     },
     "readMinutes": 12,
-    "words": 2470
+    "words": 2470,
+    "interactive": true
   },
   {
     "title": "How the Interactive Posts Work",
@@ -200,7 +208,8 @@
       "part": 14
     },
     "readMinutes": 4,
-    "words": 856
+    "words": 856,
+    "code": true
   },
   {
     "title": "Letting Robots Update Your Homepage",
@@ -217,7 +226,8 @@
       "part": 13
     },
     "readMinutes": 6,
-    "words": 1235
+    "words": 1235,
+    "code": true
   },
   {
     "title": "Variable Neighbourhood Search, Live",
@@ -240,7 +250,8 @@
       }
     ],
     "readMinutes": 7,
-    "words": 1423
+    "words": 1423,
+    "interactive": true
   },
   {
     "title": "Particle Swarm, Live",
@@ -257,7 +268,8 @@
       "part": 4
     },
     "readMinutes": 8,
-    "words": 1617
+    "words": 1617,
+    "interactive": true
   },
   {
     "title": "50 Blogs: An Infographic",
@@ -286,8 +298,9 @@
       "name": "How This Site Is Built",
       "part": 12
     },
-    "readMinutes": 7,
-    "words": 1532
+    "readMinutes": 8,
+    "words": 1555,
+    "code": true
   },
   {
     "title": "Simulated Annealing, Live",
@@ -304,7 +317,9 @@
       "part": 3
     },
     "readMinutes": 28,
-    "words": 5962
+    "words": 5962,
+    "interactive": true,
+    "code": true
   },
   {
     "title": "Evolution, Live",
@@ -321,7 +336,9 @@
       "part": 2
     },
     "readMinutes": 16,
-    "words": 3506
+    "words": 3506,
+    "interactive": true,
+    "code": true
   },
   {
     "title": "The Invisible Half of a Blog Post",
@@ -339,7 +356,8 @@
       "part": 11
     },
     "readMinutes": 5,
-    "words": 1048
+    "words": 1085,
+    "code": true
   },
   {
     "title": "Ctrl+K for a Static Site",
@@ -356,7 +374,8 @@
       "part": 10
     },
     "readMinutes": 11,
-    "words": 2413
+    "words": 2413,
+    "code": true
   },
   {
     "title": "The Paradox of Tolerance",
@@ -405,7 +424,8 @@
       "part": 9
     },
     "readMinutes": 6,
-    "words": 1181
+    "words": 1181,
+    "code": true
   },
   {
     "title": "Ant Colony, Live",
@@ -423,7 +443,8 @@
       "part": 1
     },
     "readMinutes": 6,
-    "words": 1172
+    "words": 1172,
+    "interactive": true
   },
   {
     "title": "My Website Has a Test Suite",
@@ -440,7 +461,8 @@
       "part": 8
     },
     "readMinutes": 7,
-    "words": 1447
+    "words": 1480,
+    "code": true
   },
   {
     "title": "My Teacher Said I Shouldn't Go To University",
@@ -489,7 +511,8 @@
       "part": 6
     },
     "readMinutes": 5,
-    "words": 1021
+    "words": 1072,
+    "code": true
   },
   {
     "title": "Self-Hosting Your Fonts",
@@ -506,7 +529,8 @@
       "part": 5
     },
     "readMinutes": 5,
-    "words": 1067
+    "words": 1067,
+    "code": true
   },
   {
     "title": "Reading This Site Offline",
@@ -523,7 +547,8 @@
       "name": "How This Site Is Built",
       "part": 4
     },
-    "words": 1187
+    "words": 1187,
+    "code": true
   },
   {
     "title": "The Abandoned Places I Photograph",
@@ -551,7 +576,8 @@
     "url": "blog/why-i-love-latex.html",
     "image": "img/photography/thumb/16.webp",
     "readMinutes": 7,
-    "words": 1432
+    "words": 1432,
+    "code": true
   },
   {
     "title": "What 50,000 Scrobbles Say About Me",
@@ -583,7 +609,8 @@
       "name": "How This Site Is Built",
       "part": 3
     },
-    "words": 1921
+    "words": 1921,
+    "code": true
   },
   {
     "title": "Why You Aren't a \"Visual Learner\"",
@@ -631,7 +658,8 @@
       "name": "Optimizing Your Schedule",
       "part": 2
     },
-    "words": 3490
+    "words": 3490,
+    "code": true
   },
   {
     "title": "What We Leave Behind",
@@ -665,7 +693,8 @@
       "name": "Optimizing Your Schedule",
       "part": 1
     },
-    "words": 3997
+    "words": 3997,
+    "code": true
   },
   {
     "title": "What Was I Made For?",
@@ -842,7 +871,8 @@
     "url": "blog/accessibility-first-product-design-data-science.html",
     "image": "img/photography/thumb/21.webp",
     "readMinutes": 41,
-    "words": 8994
+    "words": 8994,
+    "code": true
   },
   {
     "title": "The Life and Death of the Early Internet",
@@ -972,7 +1002,8 @@
     "url": "blog/second-brain-local-llm-professional.html",
     "image": "img/photography/thumb/75.webp",
     "readMinutes": 7,
-    "words": 1389
+    "words": 1389,
+    "code": true
   },
   {
     "title": "Snowball vs Avalanche: The Science of Paying Off Debt",
@@ -1029,6 +1060,7 @@
       "name": "How This Site Is Built",
       "part": 1
     },
-    "words": 1067
+    "words": 1067,
+    "code": true
   }
 ]

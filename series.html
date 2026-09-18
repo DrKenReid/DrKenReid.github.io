@@ -61,9 +61,16 @@
       <div class="text-center" style="margin-bottom: 36px;">
         <span class="section-eyebrow">The collections</span>
         <h2>Every Series</h2>
-        <p class="kr-muted" style="max-width: 640px; margin: 12px auto 0;">Some ideas take more than one post. These are the multi-part runs, most recently updated first; each card leads to the full series page.</p>
+        <p class="kr-muted" style="max-width: 640px; margin: 12px auto 0;">Some ideas take more than one post. These are the multi-part runs, most recently updated first; filter or sort them below, and each card leads to the full series page.</p>
         <p style="margin: 20px 0 0;"><a class="btn alime-btn btn-2" href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe by email</a></p>
       </div>
+      <div class="kr-blog-toolbar text-center" style="margin-bottom:14px;">
+        <button type="button" id="kr-filter-toggle" class="btn gallery-filter-btn" aria-expanded="false" aria-controls="blog-filters">Filter &#9662;</button>
+        <button type="button" id="kr-sort-toggle" class="btn gallery-filter-btn" aria-expanded="false" aria-controls="blog-sort">Sort: Updated &darr;</button>
+      </div>
+      <div id="blog-filters" class="gallery-filters kr-filter-panel text-center kr-collapse" style="margin-bottom:20px;" hidden></div>
+      <div id="blog-sort" class="gallery-filters text-center kr-collapse" style="margin-bottom:20px;" hidden></div>
+      <p id="blog-counter" class="kr-list-counter" role="status" aria-live="polite" aria-atomic="true"></p>
       <div class="row justify-content-center" id="series-index-grid"></div>
     </div>
   </div>
@@ -80,44 +87,13 @@
 
   <script src="/js/site.js"></script>
   <script src="/js/shared-components.js"></script>
+  <script src="/js/live-covers.js?v=20260918a"></script>
+  <script src="/js/series-index.js?v=20260917a"></script>
   <script>
     renderHeader('header-section', { basePath: '/', active: 'blog', blogChild: 'series-index' });
     renderFooter('footer-section');
+    initSeriesIndex();
 
-    /* Series index: built from posts.json, most recently updated first. */
-    loadBlogPosts().then(function(posts) {
-      var grid = document.getElementById('series-index-grid');
-      if (!grid || !Array.isArray(posts)) return;
-      var map = {};
-      posts.forEach(function(p) {
-        postSeriesList(p).forEach(function(s) {
-          if (s && s.name) (map[s.name] = map[s.name] || []).push(p);
-        });
-      });
-      var names = Object.keys(map).sort(function(a, b) {
-        function latest(n) {
-          return map[n].reduce(function(m, p) { return p.date > m ? p.date : m; }, '');
-        }
-        return latest(b).localeCompare(latest(a));
-      });
-      grid.innerHTML = names.map(function(name) {
-        var parts = map[name].slice().sort(function(a, b) {
-          return (postSeriesEntry(a, name).part || 0) - (postSeriesEntry(b, name).part || 0);
-        });
-        var latest = map[name].slice().sort(function(a, b) { return b.date.localeCompare(a.date); })[0];
-        var mins = parts.reduce(function(s, p) { return s + (p.readMinutes || 0); }, 0);
-        var cover = '/' + (parts[0].image || 'img/photography/hero/97.webp');
-        return '<div class="col-12 col-md-6 col-lg-4 mb-30">' +
-          '<a href="' + seriesPageHref(name) + '" class="blog-card">' +
-          '<div class="blog-card-img"><img src="' + cover + '" alt="" loading="lazy">' +
-          '<span class="kr-series-chip">' + parts.length + (parts.length === 1 ? ' part' : ' parts') + '</span></div>' +
-          '<div class="blog-card-body">' +
-          '<div class="blog-card-date">Updated ' + formatPostDate(latest.date) + ' &middot; ' + mins + ' min all told</div>' +
-          '<h3 class="blog-card-title">' + name + '</h3>' +
-          '<p class="blog-card-excerpt">Latest: ' + latest.title + '</p>' +
-          '</div></a></div>';
-      }).join('');
-    }).catch(function() {});
   </script>
 </body>
 </html>

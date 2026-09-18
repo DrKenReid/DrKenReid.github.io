@@ -1545,7 +1545,7 @@ jobs:
 
  <h2>What the script gathers</h2>
 
- <p>The Python script makes a handful of HTTP requests. From the Last.fm API: my total play count, the most recent track, and my top albums of the past three months, which feed the homepage stat, the "now playing" strip, and the album wall on <a href="https://www.kenreid.co.uk/music.html">the music page</a> respectively. From Goodreads, which shut its API years ago but still publishes RSS feeds: my currently-reading shelf, parsed straight out of the XML. Everything goes into small JSON files under <code>data/</code>, the biggest a few kilobytes.</p>
+ <p>The Python script makes a handful of HTTP requests. From the Last.fm API: my total play count, the most recent track, and my top albums of the past three months, which feed the homepage stat, the "now playing" strip, and the record crate on <a href="https://www.kenreid.co.uk/music.html">the music page</a> respectively. From Goodreads, which shut its API years ago but still publishes RSS feeds: my currently-reading shelf, parsed straight out of the XML. Everything goes into small JSON files under <code>data/</code>, the biggest a few kilobytes.</p>
 
  <p>Each run appends that week's play count to a rolling log, capped at ninety entries, which at one measurement a week is close to two years of history. </p>
 
@@ -2072,7 +2072,7 @@ jobs:
   background-color: #1a1a1a;
   color: #e2e2e2; }</code></pre>
 
- <p>The toggle button in the header flips the attribute, saves the choice to localStorage under a key (<code>kr-theme</code>), and everything restyles instantly, no reload. A brief cross-fade class softens the swap, and the browser's <code>theme-color</code> meta tag (which tints the address bar on phones) is updated to match. All of that is a 60-line JavaScript file.</p>
+ <p>The toggle button in the header flips the attribute, saves the choice to localStorage under a key (<code>kr-theme</code>), and everything restyles instantly, no reload. The new theme wipes out from the toggle button in a growing circle (a view transition clipped by a <code>clip-path</code> animation; browsers without the API get a brief cross-fade instead), and the browser's <code>theme-color</code> meta tag (which tints the address bar on phones) is updated to match. All of that is one short JavaScript file.</p>
 
  <details class="code-example"><summary>The whole toggle (js/theme.js)</summary>
 <pre><code class="language-javascript">/**
@@ -3946,7 +3946,7 @@ frame.contentWindow.postMessage(
 
  <h2>The card in the chat window</h2>
 
- <p>Open Graph: five tags giving the post's title, description, preview image, address, and type. When someone pastes your link into a group chat or a social feed, the platform reads these tags to build the preview card. Without them, your link renders as bare blue text or, worse, a card assembled from whatever the scraper found first. With them, every share has a title, summary sentence, and one of <a href="https://www.kenreid.co.uk/gallery.html">my photographs</a> at full card width. Twitter's near-identical tag family sits alongside for the platforms that read that instead.</p>
+ <p>Open Graph: five tags giving the post's title, description, preview image, address, and type. When someone pastes your link into a group chat or a social feed, the platform reads these tags to build the preview card. Without them, your link renders as bare blue text or, worse, a card assembled from whatever the scraper found first. With them, every share has a title, summary sentence, and a card image: the post's hero photograph with the title set over it in the site's own type, rendered by a script when the post is published so a shared link looks like the site it leads to. Twitter's near-identical tag family sits alongside for the platforms that read that instead.</p>
 
 <pre><code class="language-html">&lt;meta property="og:title" content="The Invisible Half of a Blog Post"&gt;
 &lt;meta property="og:description" content="Every post on this blog carries around eighty lines
@@ -3955,7 +3955,7 @@ frame.contentWindow.postMessage(
 &lt;meta property="og:url" content="https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html"&gt;
 &lt;meta property="og:type" content="article"&gt;</code></pre>
 
- <p>The description gets written by a human (me), because it's the sentence that decides whether a stranger clicks. And the image tag points at a full-resolution photo, not a thumbnail, because preview scrapers resize down gracefully and up horribly.</p>
+ <p>The description gets written by a human (me), because it's the sentence that decides whether a stranger clicks. And the image tag points at a 1200 by 630 card built from the full-resolution photo, not a thumbnail, because preview scrapers resize down gracefully and up horribly.</p>
 
  <h2>The librarian's copy</h2>
 

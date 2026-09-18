@@ -9,13 +9,13 @@
   <title>My Website Has a Test Suite - Ken Reid</title>
   <meta property="og:title" content="My Website Has a Test Suite">
   <meta property="og:description" content="A 532-line Python script audits every page of this site for broken links, bad metadata, and missing alt text, and CI runs it on every push. Here's why a personal blog has a test suite.">
-  <meta property="og:image" content="https://www.kenreid.co.uk/blog/img/test-suite/test-suite-og.jpg">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/og/my-website-has-a-test-suite.jpg">
   <meta property="og:url" content="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">
   <meta property="og:type" content="article">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="My Website Has a Test Suite">
   <meta name="twitter:description" content="A 532-line Python script audits every page of this site for broken links, bad metadata, and missing alt text, and CI runs it on every push. Here's why a personal blog has a test suite.">
-  <meta name="twitter:image" content="https://www.kenreid.co.uk/blog/img/test-suite/test-suite-og.jpg">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/my-website-has-a-test-suite.jpg">
   <meta name="citation_title" content="My Website Has a Test Suite">
   <meta name="citation_author" content="Reid, Kenneth N.">
   <meta name="citation_publication_date" content="2026/07/17">
@@ -39,7 +39,7 @@
     "@type": "BlogPosting",
     "headline": "My Website Has a Test Suite",
     "description": "A 532-line Python script audits every page of this site for broken links, bad metadata, and missing alt text, and CI runs it on every push. Here's why a personal blog has a test suite.",
-    "image": "https://www.kenreid.co.uk/blog/img/test-suite/test-suite-og.jpg",
+    "image": "https://www.kenreid.co.uk/img/og/my-website-has-a-test-suite.jpg",
     "author": {
       "@type": "Person",
       "name": "Ken Reid",
@@ -88,20 +88,24 @@
   <div id="header-section"></div>
 
   <main id="main-content">
-  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/4.webp); background-size: cover; background-position: center center;">
-    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
-      <div class="breadcrumb-content text-center">
-        <p class="page-title">My Website Has a Test Suite</p>
-        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
-          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
-          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
-          <li class="breadcrumb-item active" aria-current="page">My Website Has a Test Suite</li>
-        </ol></nav>
-      </div>
-    </div></div></div>
-  </section>
+  <header class="kr-opener" style="--kr-opener-img: url(/img/photography/hero/4.webp);">
+    <div class="kr-opener__media" aria-hidden="true"></div>
+    <div class="kr-opener__scrim" aria-hidden="true"></div>
+    <div class="container kr-opener__inner">
+      <nav aria-label="breadcrumb" class="kr-opener__crumbs"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">My Website Has a Test Suite</li>
+      </ol></nav>
+      <p class="kr-opener__kicker">Technology &middot; 17 July 2026 &middot; 7 min read</p>
+      <p class="kr-opener__title page-title">My Website Has a Test Suite</p>
+      <p class="kr-opener__standfirst">A Python audit script and headless browser smoke tests run on every push. Here's why a personal blog has a test suite.</p>
+      <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>
+    </div>
+    <a class="kr-opener__cue" href="#main-content-body" aria-label="Scroll to the article"><span></span></a>
+  </header>
 
-  <div class="about-us-area section-padding-80 clearfix">
+  <div class="about-us-area section-padding-80 clearfix" id="main-content-body">
     <div class="container">
       
       <div class="blog-post">
@@ -171,7 +175,7 @@
 
         <h2>The robot that runs it all</h2>
 
-        <p>Both halves run in GitHub Actions on every push. The workflow has two jobs: one installs Python and runs the audit plus three build checks: that the minified stylesheet is up to date (the CSS build is <a href="self-hosting-your-fonts.html">its own story</a>), that every post's read time matches its current word count, and that the baked related-posts blocks still match a fresh ranking; the other installs Playwright and runs the smoke tests. If either fails, I get an email and a red X on the commit within a few minutes. A local pre-commit hook runs the CSS check too, so most mistakes never even reach GitHub.</p>
+        <p>Both halves run in GitHub Actions on every push. The workflow has two jobs: one installs Python and runs the audit plus a row of build checks: that the minified stylesheet is up to date (the CSS build is <a href="self-hosting-your-fonts.html">its own story</a>), that every post's read time matches its current word count, that the baked related-posts blocks still match a fresh ranking, and that every generated file (the feed, each post's share image and opening header, the colophon's figures, the gallery's photo sizes and its black and white tags) still agrees with its source; the other installs Playwright and runs the smoke tests. If either fails, I get an email and a red X on the commit within a few minutes. A local pre-commit hook runs the CSS check too, so most mistakes never even reach GitHub.</p>
 
         <p>Is this overkill for a personal site? No: it's <em>because</em> the site is a hobby that I need automation. Nobody is paid to notice when this site breaks (or, you know, paid for writing blogs, creating the site, etc.). There is no QA department, no on-call rota, just me, and I would rather spend my evenings writing posts than manually clicking every link on fifty pages. The test suite is what lets a one-person site behave like it has staff.</p>
 

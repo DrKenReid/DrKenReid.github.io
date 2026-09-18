@@ -26,15 +26,6 @@
   <link rel="preload" as="image" href="/img/photography/hero/97.webp">
   <link rel="stylesheet" href="/style.min.css">
   <style>
-    #blog-filters {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    #blog-filters .gallery-filter-btn {
-      white-space: nowrap;
-    }
     .blog-card-img {
       aspect-ratio: 16 / 10;
       overflow: hidden;
@@ -47,23 +38,8 @@
       object-fit: cover;
       display: block;
     }
-    @media (max-width: 767px) {
-      #blog-filters {
-        overflow-x: auto;
-        overflow-y: hidden;
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        padding-bottom: 6px;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-      }
-      #blog-filters .gallery-filter-btn {
-        flex: 0 0 auto;
-        scroll-snap-align: start;
-      }
-    }
   </style>
-  <script src="/js/blog.js?v=20260808b"></script>
+  <script src="/js/blog.js?v=20260917a"></script>
   <script defer src="/js/theme.js"></script>
   <script defer src="/js/palette.js"></script>
   <script type="application/ld+json">
@@ -105,7 +81,7 @@
   <div class="alime-blog-area section-padding-80-0 mb-70">
     <div class="container">
       <div style="text-align:center; margin-bottom:16px;">
-        <input type="text" id="blog-search-static" placeholder="Search posts..." style="width:100%; max-width:420px; padding:10px 20px; border:1px solid #ddd; border-radius:999px; font-size:14px; outline:none;" />
+        <input type="text" id="blog-search-static" class="kr-list-search" placeholder="Search posts..." />
       </div>
       <div style="text-align:center; margin-bottom:24px;">
         <a class="btn alime-btn btn-2" href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe by email</a>
@@ -115,9 +91,9 @@
         <button type="button" id="kr-filter-toggle" class="btn gallery-filter-btn" aria-expanded="false" aria-controls="blog-filters">Filter &#9662;</button>
         <button type="button" id="kr-sort-toggle" class="btn gallery-filter-btn" aria-expanded="false" aria-controls="blog-sort">Sort: Date &darr;</button>
       </div>
-      <div id="blog-filters" class="gallery-filters text-center kr-collapse" style="margin-bottom:20px;" hidden></div>
+      <div id="blog-filters" class="gallery-filters kr-filter-panel text-center kr-collapse" style="margin-bottom:20px;" hidden></div>
       <div id="blog-sort" class="gallery-filters text-center kr-collapse" style="margin-bottom:20px;" hidden></div>
-      <p id="blog-counter" style="display:none;"></p>
+      <p id="blog-counter" class="kr-list-counter" role="status" aria-live="polite" aria-atomic="true"></p>
       <div class="row" id="blog-grid"></div>
       <div class="kr-subscribe-row">
         <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe by email</a>
@@ -140,6 +116,7 @@
   <script src="/js/lightbox.js"></script>
   <script src="/js/default-assets/active.js"></script>
   <script src="/js/shared-components.js"></script>
+  <script src="/js/live-covers.js?v=20260918a"></script>
   <script>initBlog();</script>
   <script>
     renderHeader('header-section', { basePath: '/', active: 'blog' });

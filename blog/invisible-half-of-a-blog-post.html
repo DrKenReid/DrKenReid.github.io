@@ -9,13 +9,13 @@
  <title>The Invisible Half of a Blog Post - Ken Reid</title>
  <meta property="og:title" content="The Invisible Half of a Blog Post">
  <meta property="og:description" content="Every post on this blog carries around eighty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags.">
- <meta property="og:image" content="https://www.kenreid.co.uk/img/photography/hero/78.webp">
+ <meta property="og:image" content="https://www.kenreid.co.uk/img/og/invisible-half-of-a-blog-post.jpg">
  <meta property="og:url" content="https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html">
  <meta property="og:type" content="article">
  <meta name="twitter:card" content="summary_large_image">
  <meta name="twitter:title" content="The Invisible Half of a Blog Post">
  <meta name="twitter:description" content="Every post on this blog carries around eighty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags.">
- <meta name="twitter:image" content="https://www.kenreid.co.uk/img/photography/hero/78.webp">
+ <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/invisible-half-of-a-blog-post.jpg">
  <meta name="citation_title" content="The Invisible Half of a Blog Post">
  <meta name="citation_author" content="Reid, Kenneth N.">
  <meta name="citation_publication_date" content="2026/08/04">
@@ -39,7 +39,7 @@
  "@type": "BlogPosting",
  "headline": "The Invisible Half of a Blog Post",
  "description": "Every post on this blog carries around eighty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags.",
- "image": "https://www.kenreid.co.uk/img/photography/hero/78.webp",
+ "image": "https://www.kenreid.co.uk/img/og/invisible-half-of-a-blog-post.jpg",
  "author": {
  "@type": "Person",
  "name": "Ken Reid",
@@ -88,20 +88,24 @@
  <div id="header-section"></div>
 
  <main id="main-content">
- <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/78.webp); background-size: cover; background-position: center center;">
- <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
- <div class="breadcrumb-content text-center">
- <p class="page-title">The Invisible Half of a Blog Post</p>
- <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
- <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
- <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
- <li class="breadcrumb-item active" aria-current="page">The Invisible Half of a Blog Post</li>
- </ol></nav>
- </div>
- </div></div></div>
- </section>
+  <header class="kr-opener" style="--kr-opener-img: url(/img/photography/hero/78.webp);">
+    <div class="kr-opener__media" aria-hidden="true"></div>
+    <div class="kr-opener__scrim" aria-hidden="true"></div>
+    <div class="container kr-opener__inner">
+      <nav aria-label="breadcrumb" class="kr-opener__crumbs"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">The Invisible Half of a Blog Post</li>
+      </ol></nav>
+      <p class="kr-opener__kicker">Technology &middot; 4 August 2026 &middot; 5 min read</p>
+      <p class="kr-opener__title page-title">The Invisible Half of a Blog Post</p>
+      <p class="kr-opener__standfirst">Every post on this blog carries around eighty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.</p>
+      <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>
+    </div>
+    <a class="kr-opener__cue" href="#main-content-body" aria-label="Scroll to the article"><span></span></a>
+  </header>
 
- <div class="about-us-area section-padding-80 clearfix">
+ <div class="about-us-area section-padding-80 clearfix" id="main-content-body">
  <div class="container">
  
  <div class="blog-post">
@@ -128,7 +132,7 @@
 
  <h2>The card in the chat window</h2>
 
- <p>Open Graph: five tags giving the post's title, description, preview image, address, and type. When someone pastes your link into a group chat or a social feed, the platform reads these tags to build the preview card. Without them, your link renders as bare blue text or, worse, a card assembled from whatever the scraper found first. With them, every share has a title, summary sentence, and one of <a href="../gallery.html">my photographs</a> at full card width. Twitter's near-identical tag family sits alongside for the platforms that read that instead.</p>
+ <p>Open Graph: five tags giving the post's title, description, preview image, address, and type. When someone pastes your link into a group chat or a social feed, the platform reads these tags to build the preview card. Without them, your link renders as bare blue text or, worse, a card assembled from whatever the scraper found first. With them, every share has a title, summary sentence, and a card image: the post's hero photograph with the title set over it in the site's own type, rendered by a script when the post is published so a shared link looks like the site it leads to. Twitter's near-identical tag family sits alongside for the platforms that read that instead.</p>
 
 <pre><code class="language-html">&lt;meta property="og:title" content="The Invisible Half of a Blog Post"&gt;
 &lt;meta property="og:description" content="Every post on this blog carries around eighty lines
@@ -137,7 +141,7 @@
 &lt;meta property="og:url" content="https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html"&gt;
 &lt;meta property="og:type" content="article"&gt;</code></pre>
 
- <p>The description gets written by a human (me), because it's the sentence that decides whether a stranger clicks. And the image tag points at a full-resolution photo, not a thumbnail, because preview scrapers resize down gracefully and up horribly.</p>
+ <p>The description gets written by a human (me), because it's the sentence that decides whether a stranger clicks. And the image tag points at a 1200 by 630 card built from the full-resolution photo, not a thumbnail, because preview scrapers resize down gracefully and up horribly.</p>
 
  <h2>The librarian's copy</h2>
 

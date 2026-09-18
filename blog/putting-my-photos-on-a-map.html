@@ -9,13 +9,13 @@
   <title>Putting My Photos on a Map - Ken Reid</title>
   <meta property="og:title" content="Putting My Photos on a Map">
   <meta property="og:description" content="239 of my photographs plotted on an interactive world map, this is how the photo map works.">
-  <meta property="og:image" content="https://www.kenreid.co.uk/blog/img/map/map-og.png">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/og/putting-my-photos-on-a-map.jpg">
   <meta property="og:url" content="https://www.kenreid.co.uk/blog/putting-my-photos-on-a-map.html">
   <meta property="og:type" content="article">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Putting My Photos on a Map">
   <meta name="twitter:description" content="239 of my photographs plotted on an interactive world map, this is how the photo map works.">
-  <meta name="twitter:image" content="https://www.kenreid.co.uk/blog/img/map/map-og.png">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/putting-my-photos-on-a-map.jpg">
   <meta name="citation_title" content="Putting My Photos on a Map">
   <meta name="citation_author" content="Reid, Kenneth N.">
   <meta name="citation_publication_date" content="2026/07/14">
@@ -39,7 +39,7 @@
     "@type": "BlogPosting",
     "headline": "Putting My Photos on a Map",
     "description": "239 of my photographs plotted on an interactive world map, this is how the photo map works.",
-    "image": "https://www.kenreid.co.uk/blog/img/map/map-og.png",
+    "image": "https://www.kenreid.co.uk/img/og/putting-my-photos-on-a-map.jpg",
     "author": {
       "@type": "Person",
       "name": "Ken Reid",
@@ -88,20 +88,23 @@
   <div id="header-section"></div>
 
   <main id="main-content">
-  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(img/map/map-hero.webp); background-size: cover; background-position: center center;">
-    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
-      <div class="breadcrumb-content text-center">
-        <p class="page-title">Putting My Photos on a Map</p>
-        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
-          <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
-          <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Putting My Photos on a Map</li>
-        </ol></nav>
-      </div>
-    </div></div></div>
-  </section>
+  <header class="kr-opener" style="--kr-opener-img: url(/blog/img/map/map-hero.webp);">
+    <div class="kr-opener__media" aria-hidden="true"></div>
+    <div class="kr-opener__scrim" aria-hidden="true"></div>
+    <div class="container kr-opener__inner">
+      <nav aria-label="breadcrumb" class="kr-opener__crumbs"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Putting My Photos on a Map</li>
+      </ol></nav>
+      <p class="kr-opener__kicker">Technology &middot; 14 July 2026 &middot; 5 min read</p>
+      <p class="kr-opener__title page-title">Putting My Photos on a Map</p>
+      <p class="kr-opener__standfirst">239 of my photographs plotted on an interactive world map, this is how the photo map works.</p>
+    </div>
+    <a class="kr-opener__cue" href="#main-content-body" aria-label="Scroll to the article"><span></span></a>
+  </header>
 
-  <div class="about-us-area section-padding-80 clearfix">
+  <div class="about-us-area section-padding-80 clearfix" id="main-content-body">
     <div class="container">
       
       <div class="blog-post">
@@ -139,17 +142,17 @@
 
         <h2>The map</h2>
 
-        <p>The mapping library is <a href="https://leafletjs.com/" target="_blank" rel="noopener noreferrer">Leaflet</a>, and in keeping with <a href="self-hosting-your-fonts.html">house policy</a> the library itself is served from this site, not a CDN. The tiles (the map imagery) are external however, coming from CARTO's free basemaps. There are two tile styles, a light one and a dark one, and the map swaps between them when you toggle the site's theme.</p>
+        <p>The mapping library is <a href="https://leafletjs.com/" target="_blank" rel="noopener noreferrer">Leaflet</a>, and in keeping with <a href="self-hosting-your-fonts.html">house policy</a> the library itself is served from this site, not a CDN. The tiles (the map imagery) are external however, coming from Esri's free grey canvases. There are two tile styles, a light one and a dark one, and the map swaps between them when you toggle the site's theme.</p>
 
         <figure>
-          <img class="theme-img-light" src="img/map/photo-map-light.webp" alt="The photo map: a world map with red circular markers showing photo counts across Scotland, Europe, and the United States" width="1110" height="649" loading="lazy" style="width:100%; border-radius:8px;">
-          <img class="theme-img-dark" src="img/map/photo-map-dark.webp" alt="The photo map: a world map with red circular markers showing photo counts across Scotland, Europe, and the United States" width="1110" height="649" loading="lazy" style="width:100%; border-radius:8px;">
-          <figcaption class="figure-note">The map as it stands: 29 regions, 239 photos placed. Tiles &copy; CARTO / OpenStreetMap contributors.</figcaption>
+          <img class="theme-img-light" src="img/map/photo-map-light.webp" alt="The photo map: a world map with round photograph markers, each badged with its photo count, across Scotland, Europe, and the United States" width="1110" height="649" loading="lazy" style="width:100%; border-radius:8px;">
+          <img class="theme-img-dark" src="img/map/photo-map-dark.webp" alt="The photo map: a world map with round photograph markers, each badged with its photo count, across Scotland, Europe, and the United States" width="1110" height="649" loading="lazy" style="width:100%; border-radius:8px;">
+          <figcaption class="figure-note">The map as it stands: 29 regions, 239 photos placed. Tiles &copy; Esri / OpenStreetMap contributors.</figcaption>
         </figure>
 
         <h2>Markers, popups, and the slideshow</h2>
 
-        <p>Each region renders as one circular marker showing its photo count, its size scaled gently with the number (34 to 52 pixels, so Falkirk's 28 photos read bigger than Dublin's one without turning into a bubble chart). I skipped marker-clustering plugins entirely: hand-curated regions <em>are</em> the clustering, done once, with better names than any algorithm would pick.</p>
+        <p>Each region renders as one circular marker: the first photograph taken there, with the photo count as a badge, its size scaled gently with the number (44 to 64 pixels, so Falkirk's 28 photos read bigger than Dublin's one without turning into a bubble chart). A map of photographs should show photographs; the plain red discs it launched with told you how many without telling you what. I skipped marker-clustering plugins entirely: hand-curated regions <em>are</em> the clustering, done once, with better names than any algorithm would pick.</p>
 
         <p>Clicking a marker opens a popup with the region's name and up to nine thumbnails; clicking any thumbnail opens the region's <em>entire</em> photo set as a lightbox slideshow, starting from the one you picked. The thumbnails are the same small WebP files the <a href="../gallery.html">gallery</a> uses, and the slideshow pulls the full-resolution originals from <a href="hosting-photography-on-github-for-free.html">the GitHub release where they live</a>. The map also cooperates with the rest of the site: gallery photos with a known place show a location label linking to the map pre-zoomed on that region, via a small <code>?region=</code> parameter in the URL, so the command palette / search function (CTRL + K) can show you places on the map when you search for, say, "East Lansing".</p>
 
@@ -169,7 +172,7 @@
 
           <details class="faq-item">
             <summary>Is relying on free map tiles safe?</summary>
-            <p>It's a dependency, like any third party. CARTO's free tier is intended for this scale, and if it ever went away, Leaflet doesn't care where tiles come from: OpenStreetMap's own servers, another provider, or self-hosted tiles all slot into the same line of code. The data file, which is the part with my work in it, is mine and portable.</p>
+            <p>It's a dependency, like any third party, and this one has already bitten once: the map launched on CARTO's free basemaps, and two months later every tile arrived stamped API KEY REQUIRED. Leaflet doesn't care where tiles come from, so the fix was one URL. Esri's grey canvases, OpenStreetMap's own servers, another provider, or self-hosted tiles all slot into the same line of code. The data file, which is the part with my work in it, is mine and portable.</p>
           </details>
 
           <details class="faq-item">

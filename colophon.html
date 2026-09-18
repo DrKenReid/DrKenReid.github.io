@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+  <meta name="description" content="How kenreid.co.uk is built and what it weighs: no framework, no build step on the server, pruned CSS, subset icon fonts, and the numbers behind all of it.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Colophon - Ken Reid</title>
+  <meta property="og:title" content="Colophon - Ken Reid">
+  <meta property="og:description" content="How kenreid.co.uk is built and what it weighs: no framework, no build step on the server, pruned CSS, subset icon fonts, and the numbers behind all of it.">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/photography/hero/141.webp">
+  <meta property="og:url" content="https://www.kenreid.co.uk/colophon.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Colophon - Ken Reid">
+  <meta name="twitter:description" content="How kenreid.co.uk is built and what it weighs: no framework, no build step on the server, pruned CSS, subset icon fonts, and the numbers behind all of it.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/photography/hero/141.webp">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="/img/core-img/favicon.png">
+  <link rel="apple-touch-icon" href="/img/core-img/apple-touch-icon.png">
+  <meta name="theme-color" content="#1a1a1a">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="canonical" href="https://www.kenreid.co.uk/colophon.html">
+  <link rel="preload" as="image" href="/img/photography/hero/141.webp">
+  <link rel="stylesheet" href="/style.min.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Colophon - Ken Reid",
+    "url": "https://www.kenreid.co.uk/colophon.html",
+    "description": "How kenreid.co.uk is built and what it weighs.",
+    "author": {"@type": "Person", "name": "Ken Reid", "url": "https://www.kenreid.co.uk"}
+  }
+  </script>
+  <script defer src="/js/theme.js"></script>
+  <script defer src="/js/palette.js"></script>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <div id="header-section"></div>
+
+  <main id="main-content">
+
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/141.webp);">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <h1 class="page-title">Colophon</h1>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="/index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Colophon</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <div class="about-us-area section-padding-80-0 clearfix">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+          <div class="text-center" style="margin-bottom: 40px;">
+            <span class="section-eyebrow">Under the hood</span>
+            <h2>How this is built</h2>
+          </div>
+          <p class="kr-colo-lede">Hand-written HTML, CSS and JavaScript, served straight off GitHub
+            Pages. No framework, no bundler, no build step between the repository and the page you
+            are reading. Everything below is measured from the repository itself by
+            <code>generate_colophon.py</code> rather than typed in, so it cannot go out of date
+            without a check failing.</p>
+        </div>
+      </div>
+
+      <section class="kr-colo-block" aria-labelledby="colo-weight">
+        <h3 class="kr-colo-h" id="colo-weight">What it weighs</h3>
+        <dl class="kr-colo-grid">
+          <div class="kr-colo-stat">
+            <dt>Stylesheet</dt>
+            <dd data-colo="cssServed">&mdash;</dd>
+            <p data-colo="cssSaved">&mdash;</p>
+          </div>
+          <div class="kr-colo-stat">
+            <dt>Icon fonts</dt>
+            <dd data-colo="iconAfter">&mdash;</dd>
+            <p data-colo="iconSaved">&mdash;</p>
+          </div>
+          <div class="kr-colo-stat">
+            <dt>Text fonts</dt>
+            <dd data-colo="webFont">&mdash;</dd>
+            <p data-colo="webFontFiles">&mdash;</p>
+          </div>
+          <div class="kr-colo-stat">
+            <dt>JavaScript</dt>
+            <dd data-colo="js">&mdash;</dd>
+            <p data-colo="jsFiles">&mdash;</p>
+          </div>
+          <div class="kr-colo-stat">
+            <dt>Dependencies</dt>
+            <dd>0</dd>
+            <p>No npm, no lockfile, nothing to audit</p>
+          </div>
+          <div class="kr-colo-stat">
+            <dt>Build step on deploy</dt>
+            <dd>None</dd>
+            <p>Pages serves the repository as written</p>
+          </div>
+        </dl>
+        <p class="kr-colo-note">One stylesheet is authored; the served file is generated by
+          inlining the vendor CSS and then deleting every rule whose selector matches nothing on
+          the site. The icon fonts are subset to the glyphs actually used, which is where most of
+          that saving comes from. Nothing is minified beyond the stylesheet, because the numbers
+          above did not justify the extra moving part.</p>
+      </section>
+
+      <section class="kr-colo-block" aria-labelledby="colo-contents">
+        <h3 class="kr-colo-h" id="colo-contents">What is in it</h3>
+        <dl class="kr-colo-grid">
+          <div class="kr-colo-stat"><dt>Pages</dt><dd data-colo="pages">&mdash;</dd></div>
+          <div class="kr-colo-stat"><dt>Posts</dt><dd data-colo="posts">&mdash;</dd></div>
+          <div class="kr-colo-stat"><dt>Words</dt><dd data-colo="words">&mdash;</dd></div>
+          <div class="kr-colo-stat">
+            <dt>Reading time</dt><dd data-colo="hours">&mdash;</dd>
+            <p>End to end, at 220 words a minute</p></div>
+          <div class="kr-colo-stat"><dt>Series</dt><dd data-colo="series">&mdash;</dd></div>
+          <div class="kr-colo-stat"><dt>Topics</dt><dd data-colo="tags">&mdash;</dd></div>
+          <div class="kr-colo-stat">
+            <dt>Photographs</dt><dd data-colo="photos">&mdash;</dd>
+            <p data-colo="imageBytes">&mdash;</p></div>
+          <div class="kr-colo-stat">
+            <dt>Posts with a live demo</dt><dd data-colo="interactive">&mdash;</dd>
+            <p data-colo="codePosts">&mdash;</p></div>
+        </dl>
+      </section>
+
+      <section class="kr-colo-block" aria-labelledby="colo-writing">
+        <h3 class="kr-colo-h" id="colo-writing">The writing</h3>
+        <dl class="kr-colo-grid">
+          <div class="kr-colo-stat">
+            <dt>First post</dt><dd data-colo="firstPost">&mdash;</dd>
+            <p data-colo="latestPost">&mdash;</p></div>
+          <div class="kr-colo-stat">
+            <dt>Posts a month</dt><dd data-colo="cadence">&mdash;</dd>
+            <p>Averaged across the whole run</p></div>
+          <div class="kr-colo-stat">
+            <dt>Average post</dt><dd data-colo="avgWords">&mdash;</dd>
+            <p>words</p></div>
+          <div class="kr-colo-stat">
+            <dt>Longest</dt><dd data-colo="longestWords">&mdash;</dd>
+            <p data-colo="longestTitle">&mdash;</p></div>
+          <div class="kr-colo-stat">
+            <dt>Shortest</dt><dd data-colo="shortestWords">&mdash;</dd>
+            <p data-colo="shortestTitle">&mdash;</p></div>
+          <div class="kr-colo-stat">
+            <dt>Commits</dt><dd data-colo="commits">&mdash;</dd>
+            <p data-colo="repoStart">&mdash;</p></div>
+        </dl>
+      </section>
+
+      <section class="kr-colo-block" aria-labelledby="colo-history">
+        <h3 class="kr-colo-h" id="colo-history">How it was built, month by month</h3>
+        <figure class="kr-colo-chart">
+          <svg id="kr-colo-commits" viewBox="0 0 900 180" preserveAspectRatio="none"
+               role="img" aria-labelledby="kr-colo-commits-title"><title id="kr-colo-commits-title">Commits per month since the repository began</title></svg>
+          <figcaption class="kr-colo-caption" id="kr-colo-commits-cap">&mdash;</figcaption>
+        </figure>
+        <p class="kr-colo-note">Every commit to the repository, by month. The site was a
+          single page for years; the writing, the tooling and most of what the rest of this page
+          describes arrived in one long push through 2026.</p>
+      </section>
+
+      <section class="kr-colo-block" aria-labelledby="colo-stack">
+        <h3 class="kr-colo-h" id="colo-stack">What it runs on</h3>
+        <div class="kr-colo-cols">
+          <div>
+            <h4 class="kr-colo-subh">It uses</h4>
+            <ul class="kr-colo-list">
+              <li>Hand-written HTML, CSS and JavaScript</li>
+              <li>GitHub Pages, from the repository's default branch</li>
+              <li>Python for the build scripts and the audit</li>
+              <li>Playwright to drive the interactive posts in a real browser</li>
+              <li>A service worker, so visited pages survive going offline</li>
+              <li>GitHub Discussions for comments, Last.fm and Goodreads for the live figures</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="kr-colo-subh">It deliberately does not</h4>
+            <ul class="kr-colo-list">
+              <li>Use a framework, a bundler, or a package manager</li>
+              <li>Ship a single third-party runtime dependency</li>
+              <li>Carry advertising, or any tracker beyond one analytics tag</li>
+              <li>Require JavaScript to read a post</li>
+              <li>Animate anything that a reader has asked it not to</li>
+              <li>Publish a figure on this page that was typed rather than measured</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="kr-colo-block" aria-labelledby="colo-build">
+        <h3 class="kr-colo-h" id="colo-build">The build</h3>
+        <p class="kr-colo-note">There is no build on deploy, but there is one before a commit.
+          <span data-colo="buildScripts">&mdash;</span> scripts generate what would otherwise be
+          maintained by hand, and every one of them has a <code>--check</code> mode that fails
+          rather than silently repairing.</p>
+        <dl class="kr-colo-defs">
+          <div><dt>minify_css.py</dt>
+            <dd>Inlines the vendor imports, deletes rules nothing matches, points the icon
+              fonts at their subsets</dd></div>
+          <div><dt>generate_read_times.py</dt>
+            <dd>Counts each post's words, which also decides its band in the blog filter</dd></div>
+          <div><dt>generate_post_facets.py</dt>
+            <dd>Detects which posts carry a live demo or code, for the Format filter</dd></div>
+          <div><dt>generate_related_posts.py</dt>
+            <dd>Ranks neighbours by TF-IDF over body text and bakes the cards in</dd></div>
+          <div><dt>generate_feed.py</dt>
+            <dd>Builds the RSS feed, full-text for the twenty newest posts</dd></div>
+          <div><dt>subset_icon_fonts.py</dt>
+            <dd>Cuts three icon fonts down to the glyphs the site actually uses</dd></div>
+          <div><dt>audit_site.py</dt>
+            <dd>Links, metadata, structured data, accessibility basics, feed and sitemap</dd></div>
+          <div><dt>generate_colophon.py</dt>
+            <dd>Measures everything on this page</dd></div>
+        </dl>
+      </section>
+
+      <section class="kr-colo-block" aria-labelledby="colo-checks">
+        <h3 class="kr-colo-h" id="colo-checks">How it is checked</h3>
+        <dl class="kr-colo-grid">
+          <div class="kr-colo-stat">
+            <dt>Checks per push</dt>
+            <dd data-colo="ciChecks">&mdash;</dd>
+            <p>All must pass before the site deploys</p>
+          </div>
+          <div class="kr-colo-stat">
+            <dt>Audit baseline</dt>
+            <dd>0 / 0</dd>
+            <p>Errors and warnings, across every page</p>
+          </div>
+          <div class="kr-colo-stat">
+            <dt>Lines of CSS</dt>
+            <dd data-colo="cssLines">&mdash;</dd>
+            <p>One authored file</p>
+          </div>
+          <div class="kr-colo-stat">
+            <dt>Lines of JavaScript</dt>
+            <dd data-colo="jsLines">&mdash;</dd>
+            <p data-colo="dataFiles">&mdash;</p>
+          </div>
+        </dl>
+        <p class="kr-colo-note">A push runs the site audit, rebuilds the stylesheet and fails if
+          the committed one differs, and drives every interactive post in a headless browser to
+          check it still converges, still works at phone width, and still announces itself to a
+          screen reader.</p>
+      </section>
+
+      <section class="kr-colo-block" aria-labelledby="colo-type">
+        <h3 class="kr-colo-h" id="colo-type">Type and colour</h3>
+        <div class="kr-colo-cols">
+          <div>
+            <p class="kr-colo-spec kr-colo-spec--sans">Poppins</p>
+            <p class="kr-colo-caption">Interface, navigation, headlines on photographs.
+              Self-hosted, seven weights.</p>
+          </div>
+          <div>
+            <p class="kr-colo-spec kr-colo-spec--serif">Lora</p>
+            <p class="kr-colo-caption">Section headings and the body of every post.
+              Self-hosted, three weights plus italics.</p>
+          </div>
+        </div>
+        <div class="kr-colo-swatches">
+          <span class="kr-colo-sw"><span class="kr-colo-chip kr-colo-chip--grad"></span>Gradient
+            <em>wordmark, hero, rules</em></span>
+          <span class="kr-colo-sw"><span class="kr-colo-chip kr-colo-chip--action"></span>Red
+            <em>anything you can click</em></span>
+          <span class="kr-colo-sw"><span class="kr-colo-chip kr-colo-chip--eyebrow"></span>Stone
+            <em>labels and decoration</em></span>
+          <span class="kr-colo-sw"><span class="kr-colo-chip kr-colo-chip--surface"></span>Surface
+            <em>warm off-white, never pure</em></span>
+        </div>
+        <p class="kr-colo-note">One accent does one job. Red means a control; the gradient is
+          reserved for the two places the site signs its own name. Everything decorative is
+          neutral, because 492 photographs are colour enough for one website.</p>
+      </section>
+
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+          <p class="kr-colo-note">Photography is my own, shot on a Canon EOS 60D; the full-size
+            files live in a GitHub release rather than the repository, because Pages has an
+            artifact limit and 492 originals do not fit inside it. Hosting is GitHub Pages on a
+            custom domain. The whole thing is written up, at considerably more length than this,
+            in <a href="/series-how-this-site-is-built.html">How This Site Is Built</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </main>
+
+  <hr>
+  <div id="footer-section"></div>
+
+  <script src="/js/site.js"></script>
+  <script src="/js/shared-components.js"></script>
+  <script>
+    renderHeader('header-section', { basePath: '/' });
+    renderFooter('footer-section');
+
+    /* Every figure comes from data/colophon.json, written by
+       .github/scripts/generate_colophon.py. */
+    (function () {
+      function kb(bytes) { return Math.round(bytes / 1024).toLocaleString() + ' KB'; }
+      function pct(before, after) {
+        if (!before) return '';
+        return Math.round(100 - (after / before) * 100) + '% smaller than its inputs';
+      }
+      /* Built from local parts on purpose: new Date('2019-12-01') is parsed
+         as UTC midnight, which lands in the previous month once the browser
+         is west of Greenwich. Same reason krParsePostDate exists. */
+      /* Bars in the site's own colours: the busiest month in the gradient,
+         the rest in stone, so the eye lands where the work did. */
+      function drawCommits(rows) {
+        var svg = document.getElementById('kr-colo-commits');
+        var cap = document.getElementById('kr-colo-commits-cap');
+        if (!svg || !rows.length) return;
+        var W = 900, H = 180, pad = 4, base = H - 22;
+        var max = Math.max.apply(null, rows.map(function (r) { return r[1]; })) || 1;
+        var bw = (W - pad * 2) / rows.length;
+        var peak = rows.reduce(function (a, r) { return r[1] > a[1] ? r : a; }, rows[0]);
+        var ns = 'http://www.w3.org/2000/svg';
+        var frag = document.createDocumentFragment();
+        var defs = document.createElementNS(ns, 'defs');
+        defs.innerHTML = '<linearGradient id="kr-colo-grad" x1="0" y1="1" x2="0" y2="0">' +
+          '<stop offset="0" stop-color="#ff9696"/><stop offset="1" stop-color="#ffe89e"/></linearGradient>';
+        frag.appendChild(defs);
+        rows.forEach(function (r, i) {
+          var h = r[1] ? Math.max(2, (base - 10) * r[1] / max) : 0;
+          var rect = document.createElementNS(ns, 'rect');
+          rect.setAttribute('x', (pad + i * bw + 0.6).toFixed(1));
+          rect.setAttribute('y', (base - h).toFixed(1));
+          rect.setAttribute('width', Math.max(1, bw - 1.2).toFixed(1));
+          rect.setAttribute('height', h.toFixed(1));
+          rect.setAttribute('rx', '1');
+          rect.setAttribute('fill', r === peak ? 'url(#kr-colo-grad)' : 'currentColor');
+          rect.setAttribute('opacity', r === peak ? '1' : '0.55');
+          var t = document.createElementNS(ns, 'title');
+          t.textContent = month(r[0]) + ': ' + r[1] + (r[1] === 1 ? ' commit' : ' commits');
+          rect.appendChild(t);
+          frag.appendChild(rect);
+        });
+        // year ticks
+        rows.forEach(function (r, i) {
+          if (r[0].slice(5) !== '01' && i !== 0) return;
+          var tx = document.createElementNS(ns, 'text');
+          tx.setAttribute('x', (pad + i * bw).toFixed(1));
+          tx.setAttribute('y', H - 6);
+          tx.setAttribute('font-size', '11');
+          tx.setAttribute('fill', 'currentColor');
+          tx.setAttribute('opacity', '0.7');
+          tx.textContent = r[0].slice(0, 4);
+          frag.appendChild(tx);
+        });
+        svg.appendChild(frag);
+        if (cap) cap.textContent = 'Busiest month: ' + month(peak[0]) + ', ' + peak[1] + ' commits. ' +
+          rows.filter(function (r) { return r[1] === 0; }).length + ' months with none.';
+      }
+      function month(iso) {
+        if (!iso) return '';
+        var parts = iso.split('-');
+        if (parts.length < 2) return iso;
+        var d = new Date(Number(parts[0]), Number(parts[1]) - 1, 1);
+        return isNaN(d) ? iso
+          : d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+      }
+      fetch('/data/colophon.json').then(function (r) { return r.json(); }).then(function (d) {
+        var out = {
+          cssServed: kb(d.cssServedBytes),
+          cssSaved: pct(d.cssInputBytes, d.cssServedBytes),
+          iconAfter: kb(d.iconFontAfterBytes),
+          iconSaved: 'subset from ' + kb(d.iconFontBeforeBytes),
+          webFont: kb(d.webFontBytes),
+          webFontFiles: d.webFontCount + ' files, self-hosted',
+          js: kb(d.jsBytes),
+          jsFiles: d.jsFiles + ' files, none minified',
+          pages: d.pages.toLocaleString(),
+          posts: d.posts.toLocaleString(),
+          words: d.words.toLocaleString(),
+          hours: Math.round(d.readMinutes / 60) + ' hours',
+          series: d.series.toLocaleString(),
+          tags: d.tags.toLocaleString(),
+          photos: d.photos.toLocaleString(),
+          imageBytes: Math.round(d.imageBytes / 1048576) + ' MB of thumbnails and heroes',
+          interactive: d.interactivePosts.toLocaleString(),
+          codePosts: d.codePosts + ' more carry code',
+          firstPost: month(d.firstPost),
+          latestPost: 'latest ' + month(d.latestPost),
+          cadence: d.postsPerMonth.toFixed(1),
+          avgWords: d.averagePostWords.toLocaleString(),
+          longestWords: d.longestPostWords.toLocaleString(),
+          longestTitle: d.longestPostTitle,
+          shortestWords: d.shortestPostWords.toLocaleString(),
+          shortestTitle: d.shortestPostTitle,
+          commits: d.commits.toLocaleString(),
+          repoStart: 'since ' + month(d.repoStart + '-01'),
+          ciChecks: d.ciChecks.toLocaleString(),
+          buildScripts: d.buildScripts.toLocaleString(),
+          cssLines: d.cssLines.toLocaleString(),
+          jsLines: d.jsLines.toLocaleString(),
+          dataFiles: 'plus ' + d.dataFiles + ' data files'
+        };
+        drawCommits(d.commitsByMonth || []);
+        Object.keys(out).forEach(function (k) {
+          document.querySelectorAll('[data-colo="' + k + '"]').forEach(function (el) {
+            el.textContent = out[k];
+          });
+        });
+      }).catch(function () {
+        document.querySelectorAll('[data-colo]').forEach(function (el) {
+          el.textContent = 'unavailable';
+        });
+      });
+    }());
+  </script>
+</body>
+</html>

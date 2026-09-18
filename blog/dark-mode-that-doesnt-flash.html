@@ -9,13 +9,13 @@
  <title>Dark Mode That Doesn't Flash - Ken Reid</title>
  <meta property="og:title" content="Dark Mode That Doesn't Flash">
  <meta property="og:description" content="Dark mode is easy; dark mode without a white flash is more difficult.">
- <meta property="og:image" content="https://www.kenreid.co.uk/img/photography/hero/20.webp">
+ <meta property="og:image" content="https://www.kenreid.co.uk/img/og/dark-mode-that-doesnt-flash.jpg">
  <meta property="og:url" content="https://www.kenreid.co.uk/blog/dark-mode-that-doesnt-flash.html">
  <meta property="og:type" content="article">
  <meta name="twitter:card" content="summary_large_image">
  <meta name="twitter:title" content="Dark Mode That Doesn't Flash">
  <meta name="twitter:description" content="Dark mode is easy; dark mode without a white flash is more difficult.">
- <meta name="twitter:image" content="https://www.kenreid.co.uk/img/photography/hero/20.webp">
+ <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/dark-mode-that-doesnt-flash.jpg">
  <meta name="citation_title" content="Dark Mode That Doesn't Flash">
  <meta name="citation_author" content="Reid, Kenneth N.">
  <meta name="citation_publication_date" content="2026/08/06">
@@ -39,7 +39,7 @@
  "@type": "BlogPosting",
  "headline": "Dark Mode That Doesn't Flash",
  "description": "Dark mode is easy; dark mode without a white flash is more difficult.",
- "image": "https://www.kenreid.co.uk/img/photography/hero/20.webp",
+ "image": "https://www.kenreid.co.uk/img/og/dark-mode-that-doesnt-flash.jpg",
  "author": {
  "@type": "Person",
  "name": "Ken Reid",
@@ -88,20 +88,24 @@
  <div id="header-section"></div>
 
  <main id="main-content">
- <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(../img/photography/hero/20.webp); background-size: cover; background-position: center center;">
- <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
- <div class="breadcrumb-content text-center">
- <p class="page-title">Dark Mode That Doesn't Flash</p>
- <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
- <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
- <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
- <li class="breadcrumb-item active" aria-current="page">Dark Mode That Doesn't Flash</li>
- </ol></nav>
- </div>
- </div></div></div>
- </section>
+  <header class="kr-opener" style="--kr-opener-img: url(/img/photography/hero/20.webp);">
+    <div class="kr-opener__media" aria-hidden="true"></div>
+    <div class="kr-opener__scrim" aria-hidden="true"></div>
+    <div class="container kr-opener__inner">
+      <nav aria-label="breadcrumb" class="kr-opener__crumbs"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Dark Mode That Doesn't Flash</li>
+      </ol></nav>
+      <p class="kr-opener__kicker">Technology &middot; 6 August 2026 &middot; 7 min read</p>
+      <p class="kr-opener__title page-title">Dark Mode That Doesn't Flash</p>
+      <p class="kr-opener__standfirst">Dark mode is easy; dark mode without a white flash is more difficult. How this site stamps the theme before the first paint, and drags every chart and iframe along with it.</p>
+      <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>
+    </div>
+    <a class="kr-opener__cue" href="#main-content-body" aria-label="Scroll to the article"><span></span></a>
+  </header>
 
- <div class="about-us-area section-padding-80 clearfix">
+ <div class="about-us-area section-padding-80 clearfix" id="main-content-body">
  <div class="container">
  
  <div class="blog-post">
@@ -136,7 +140,7 @@
   background-color: #1a1a1a;
   color: #e2e2e2; }</code></pre>
 
- <p>The toggle button in the header flips the attribute, saves the choice to localStorage under a key (<code>kr-theme</code>), and everything restyles instantly, no reload. A brief cross-fade class softens the swap, and the browser's <code>theme-color</code> meta tag (which tints the address bar on phones) is updated to match. All of that is a 60-line JavaScript file.</p>
+ <p>The toggle button in the header flips the attribute, saves the choice to localStorage under a key (<code>kr-theme</code>), and everything restyles instantly, no reload. The new theme wipes out from the toggle button in a growing circle (a view transition clipped by a <code>clip-path</code> animation; browsers without the API get a brief cross-fade instead), and the browser's <code>theme-color</code> meta tag (which tints the address bar on phones) is updated to match. All of that is one short JavaScript file.</p>
 
  <details class="code-example"><summary>The whole toggle (js/theme.js)</summary>
 <pre><code class="language-javascript">/**

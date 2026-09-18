@@ -33,6 +33,32 @@ jobs:
       - name: Read times are current
         run: python .github/scripts/generate_read_times.py --check
 
+      # The blog filter's Format row reads interactive/code flags off
+      # posts.json. They are detected from each post's HTML, so adding a
+      # demo or a code block changes what the buttons should match.
+      - name: Post facets are current
+        run: python .github/scripts/generate_post_facets.py --check
+
+      # colophon.html renders nothing but measurements of the repository,
+      # so any change to the corpus or the build can make them wrong.
+      - name: Colophon figures are current
+        run: python .github/scripts/generate_colophon.py --check
+
+      # The justified gallery lays frames out from recorded thumbnail
+      # sizes; a new photograph without one falls back to 3:2.
+      - name: Photo dimensions are current
+        run: python .github/scripts/generate_photo_dims.py --check
+
+      # Every post has a share image in the site's design, and points at
+      # it. The check reads the input manifest, not the JPEG bytes.
+      - name: Share images are current
+        run: python .github/scripts/generate_og_images.py --check
+
+      # Every post opens with the editorial header; a new post written
+      # from an old template would still carry the breadcrumb banner.
+      - name: Posts have the opener
+        run: python .github/scripts/apply_post_opener.py --check
+
       # Related-posts blocks are baked into each post's HTML by TF-IDF over
       # body text, so editing a post can change what its neighbours should
       # recommend. Checks the baked block matches a fresh ranking.
@@ -60,6 +86,11 @@ jobs:
         run: |
           pip install -r .github/scripts/requirements.txt
           playwright install --with-deps chromium
+
+      # Needs Pillow, so it lives in the job that installs requirements.
+      # The gallery's B&W tag is decided by pixels, not by the tagger.
+      - name: Monochrome tags agree with the pixels
+        run: python .github/scripts/detect_monochrome.py --check
 
       - name: Smoke tests
         run: python .github/scripts/smoke_test.py
