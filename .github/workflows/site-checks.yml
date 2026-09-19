@@ -9,7 +9,10 @@ jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
+      # Full history: the colophon counts commits by month.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:

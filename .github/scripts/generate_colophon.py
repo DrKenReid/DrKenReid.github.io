@@ -20,6 +20,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "data" / "colophon.json"
 
+# Fields read from git history, checked with tolerance (see --check).
+HISTORY = ("commits", "commitsByMonth")
+LAG = 25
+
 
 def tracked(pattern):
     """Git-tracked files matching a pathspec, as paths that still exist."""
@@ -37,13 +41,25 @@ def tracked(pattern):
     return out
 
 
+TEXT = {".css", ".js", ".html", ".htm", ".json", ".xml", ".svg", ".txt",
+        ".md", ".py", ".yml", ".yaml", ".webmanifest"}
+
+
 def size(path):
+    """Bytes as Pages serves them. The repository stores LF; a Windows
+    working copy checks out CRLF, so a text file is counted with one byte
+    per line end or the figure changes with the machine that measured it."""
     p = ROOT / path if not isinstance(path, Path) else path
-    return p.stat().st_size if p.exists() else 0
+    if not p.exists():
+        return 0
+    n = p.stat().st_size
+    if p.suffix.lower() in TEXT:
+        n -= p.read_bytes().count(b"\r\n")
+    return n
 
 
 def total(paths):
-    return sum(f.stat().st_size for f in paths)
+    return sum(size(f) for f in paths)
 
 
 def css_input_bytes():
@@ -57,7 +73,7 @@ def css_input_bytes():
     if not src.exists():
         return 0
     text = src.read_text(encoding="utf-8", errors="replace")
-    total_bytes = src.stat().st_size
+    total_bytes = size(src)
     for rel in re.findall(r"@import\s+url\(([^)]+)\)", text):
         total_bytes += size(ROOT / rel.strip().strip("\"'"))
     return total_bytes
@@ -98,11 +114,15 @@ def months_between(a, b):
 def commits_by_month():
     """[[YYYY-MM, count], ...] for every month since the first commit,
     zeros included, so the chart shows silence as well as activity."""
-    raw = git_line(["git", "log", "--format=%ad", "--date=format:%Y-%m"])
+    # %aI keeps each author's own zone, so the month is the same whichever
+    # zone the measuring machine runs in (CI is UTC; a late commit here is
+    # already tomorrow there).
+    raw = git_line(["git", "log", "--format=%aI"])
     if not raw:
         return []
     counts = {}
-    for m in raw.split("\n"):
+    for d in raw.split("\n"):
+        m = d[:7]
         if m:
             counts[m] = counts.get(m, 0) + 1
     first = min(counts)
@@ -202,7 +222,7 @@ def main(argv=None):
         "commits": int(git_line(["git", "rev-list", "--count", "HEAD"]) or 0),
         "commitsByMonth": commits_by_month(),
         "repoStart": git_line(
-            ["git", "log", "--reverse", "--format=%ad", "--date=format:%Y-%m"]).split("\n")[0],
+            ["git", "log", "--reverse", "--format=%aI"]).split("\n")[0][:7],
     }
 
     if check_only:
@@ -211,14 +231,27 @@ def main(argv=None):
             print("run: python .github/scripts/generate_colophon.py")
             return 1
         current = json.loads(OUT.read_text(encoding="utf-8"))
-        drift = [k for k in data if current.get(k) != data[k]]
+        # The history fields are measured before the commit that carries
+        # them exists, and the live-data workflow commits without running
+        # this, so the page is allowed to lag a little: never ahead of the
+        # truth, never more than LAG commits behind it.
+        drift = [k for k in data if k not in HISTORY and current.get(k) != data[k]]
+        behind = data["commits"] - int(current.get("commits") or 0)
+        recorded = dict(current.get("commitsByMonth") or [])
+        actual = dict(data["commitsByMonth"])
+        months_ok = all(actual.get(m, 0) >= n for m, n in recorded.items())
+        if behind < 0 or behind > LAG or not months_ok:
+            drift += list(HISTORY)
         if drift:
             print("data/colophon.json is stale in %d field(s):" % len(drift))
             for k in drift:
                 print("  %s: %r -> %r" % (k, current.get(k), data[k]))
+            if behind > LAG:
+                print("  (the commit history is %d commits behind; %d allowed)" % (behind, LAG))
             print("run: python .github/scripts/generate_colophon.py")
             return 1
-        print("data/colophon.json is up to date.")
+        print("data/colophon.json is up to date%s." % (
+            " (%d commit%s behind, within %d)" % (behind, "" if behind == 1 else "s", LAG) if behind else ""))
         return 0
 
     OUT.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
