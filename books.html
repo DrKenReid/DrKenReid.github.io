@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+  <meta name="description" content="Every book Ken Reid has rated on Goodreads, as covers: search by title or author, filter by rating, click through to the review.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Every Book - Ken Reid</title>
+  <meta property="og:title" content="Every Book - Ken Reid">
+  <meta property="og:description" content="Every book Ken Reid has rated on Goodreads, as covers: search by title or author, filter by rating.">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/the-youth-dont-age.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Every Book - Ken Reid">
+  <meta name="twitter:description" content="Every book I have rated, as a wall of covers you can search and filter.">
+  <meta property="og:url" content="https://www.kenreid.co.uk/books.html">
+  <meta property="og:type" content="website">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <link rel="icon" href="/img/core-img/favicon.png">
+  <link rel="apple-touch-icon" href="/img/core-img/apple-touch-icon.png">
+  <meta name="theme-color" content="#1a1a1a">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="canonical" href="https://www.kenreid.co.uk/books.html">
+  <link rel="stylesheet" href="/style.min.css">
+  <script defer src="/js/bookwall.js?v=20260919b"></script>
+  <script defer src="/js/theme.js"></script>
+  <script defer src="/js/palette.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Every Book - Ken Reid",
+    "author": { "@type": "Person", "name": "Ken Reid", "url": "https://www.kenreid.co.uk" },
+    "url": "https://www.kenreid.co.uk/books.html"
+  }
+  </script>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+
+  <!-- Header -->
+  <div id="header-section"></div>
+
+  <main id="main-content">
+
+  <!-- Breadcrumb -->
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/230.webp);">
+    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
+      <div class="breadcrumb-content text-center">
+        <h1 class="page-title">Every Book</h1>
+        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+          <li class="breadcrumb-item"><a href="/index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item"><a href="/literature.html">Literature</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Every Book</li>
+        </ol></nav>
+      </div>
+    </div></div></div>
+  </section>
+
+  <!-- The wall: every rated book with a cover, searchable (js/bookwall.js) -->
+  <div class="about-us-area section-padding-80-0 clearfix" id="bookshelf" style="padding-top: 60px;">
+    <div class="container">
+      <div class="text-center" style="margin-bottom: 28px;">
+        <span class="section-eyebrow">The library</span>
+        <h2 class="wow fadeInUp" data-wow-delay="100ms">Every Book</h2>
+        <p style="margin-top: 10px;"><span id="book-wall-count"></span> from my Goodreads history, filterable by my rating. Click a cover for the review page. The <a href="/literature.html">reading page</a> has the calendar, the shelf and a few reviews.</p>
+      </div>
+      <div class="text-center" style="margin-bottom: 18px;">
+        <input type="search" id="book-wall-search" class="kr-quote-search" placeholder="Search titles and authors…" aria-label="Search books">
+      </div>
+      <div id="book-wall-filters" class="gallery-filters text-center" style="margin-bottom: 26px;"></div>
+      <div id="book-wall-grid" class="book-wall"></div>
+      <p class="text-center" style="margin-top: 30px; color: #7d766c; font-size: 14px;">Books Goodreads has no ISBN for (most of the Kindle series) are on the shelf and the calendar but have no cover to hang here.</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Photo Highlights (Instagram) -->
+  <div id="instagram-section"></div>
+
+  </main>
+  <div id="footer-section"></div>
+
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/alime.bundle.js"></script>
+  <script src="/js/site.js"></script>
+  <script src="/js/lightbox.js"></script>
+  <script src="/js/default-assets/active.js"></script>
+  <script src="/js/shared-components.js"></script>
+  <script src="/js/live-covers.js?v=20260919a"></script>
+  <script src="/js/covers-site.js?v=20260919a"></script>
+  <script>
+    renderHeader('header-section', { basePath: '/', active: 'hobbies', hobbiesChild: 'books' });
+    renderInstagramSection('instagram-section');
+    renderFooter('footer-section');
+  </script>
+</body>
+</html>

@@ -52,6 +52,7 @@ function renderHeader(targetId, options) {
         '<li class="kr-nav-sub' + (hobbiesChild === 'map' ? ' active' : '') + '"><a href="' + basePath + 'map.html"' + (hobbiesChild === 'map' ? ' aria-current="page"' : '') + '>Photo Map</a></li>' +
         '<li' + isHobbyChildActive('music') + '><a href="' + basePath + 'music.html"' + (hobbiesChild === 'music' ? ' aria-current="page"' : '') + '>Music</a></li>' +
         '<li' + isHobbyChildActive('literature') + '><a href="' + basePath + 'literature.html"' + (hobbiesChild === 'literature' ? ' aria-current="page"' : '') + '>Literature</a></li>' +
+        '<li class="kr-nav-sub' + (hobbiesChild === 'books' ? ' active' : '') + '"><a href="' + basePath + 'books.html"' + (hobbiesChild === 'books' ? ' aria-current="page"' : '') + '>Every Book</a></li>' +
         '<li class="kr-nav-sub' + (hobbiesChild === 'quotes' ? ' active' : '') + '"><a href="' + basePath + 'quotes.html"' + (hobbiesChild === 'quotes' ? ' aria-current="page"' : '') + '>Quote Wall</a></li>' +
         '</ul></li>' +
         '<li' + (active === 'blog' ? ' class="active"' : '') + '><a href="' + basePath + 'blog.html"' + (active === 'blog' && !blogChild ? ' aria-current="page"' : '') + '>Blog</a>' +
@@ -2044,7 +2045,7 @@ function renderFooter(targetId) {
     var NAV_LINKS = [
         ['About', 'about.html'], ['Data Science', 'data_science.html'],
         ['Photography', 'gallery.html'], ['Photo Map', 'map.html'],
-        ['Music', 'music.html'], ['Literature', 'literature.html'],
+        ['Music', 'music.html'], ['Literature', 'literature.html'], ['Every Book', 'books.html'],
         ['Quote Wall', 'quotes.html'], ['Blog', 'blog.html'], ['Contact', 'contact.html']
     ];
 

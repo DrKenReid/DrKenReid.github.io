@@ -25,9 +25,14 @@ jobs:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
         run: python .github/scripts/refresh_now.py
 
+      # The read shelf (Goodreads RSS) -> data/books.json + data/reading.json,
+      # so a book marked read reaches the calendar, shelf and wall on its own.
+      - name: Refresh the read shelf
+        run: python .github/scripts/refresh_books.py
+
       - name: Commit if changed
         run: |
-          FILES="data/lastfm.json data/now.json data/lastfm-history.json data/topalbums.json"
+          FILES="data/lastfm.json data/now.json data/lastfm-history.json data/topalbums.json data/books.json data/reading.json"
           if git diff --quiet $FILES; then
             echo "No change."
             exit 0

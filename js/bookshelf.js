@@ -28,18 +28,31 @@
         return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
     }
 
+    /* A book's finish dates: `d` is the latest (unless it is only the
+       date added, `e`), `p` holds the earlier reads the weekly refresh
+       kept as the date moved on. Each is a session the calendar counts;
+       the shelf files the book once, where it was first read. */
+    function sessions(b) {
+        var out = b.e ? [] : [b.d];
+        return out.concat(b.p || []);
+    }
+    function firstRead(b) {
+        var s = sessions(b);
+        return s.length ? s.slice().sort()[0] : String(b.d || '');
+    }
+
     function render(books) {
         var shelf = document.getElementById('kr-shelf');
         if (!shelf) return;
         var sorted = books.slice().sort(function (a, b) {
-            return String(a.d || '').localeCompare(String(b.d || ''));
+            return firstRead(a).localeCompare(firstRead(b));
         });
         var years = {};
         var html = sorted.map(function (b) {
             var title = b.t || '';
             var w = Math.max(26, Math.min(74, 18 + title.length * 0.85));
             var h = 200 + (hash(b.a || '') % 56);
-            var year = String(b.d || '').slice(0, 4);
+            var year = firstRead(b).slice(0, 4);
             var marker = '';
             if (year && !years[year]) {
                 years[year] = true;
@@ -98,16 +111,17 @@
         var now = new Date(), thisYear = now.getFullYear();
         var byCell = {}, byYear = {};
         books.forEach(function (b) {
-            // b.e marks a date Goodreads only knows the book was added on,
-            // which says nothing about the week it was finished.
-            if (b.e) return;
-            var d = parseDate(b.d);
-            if (!d) return;
-            var iw = isoWeek(d);
-            if (iw.year < CAL_FROM) return;
-            var k = iw.year + '-' + iw.week;
-            (byCell[k] = byCell[k] || []).push(b);
-            byYear[iw.year] = (byYear[iw.year] || 0) + 1;
+            // Every finish, re-reads included; a date that is only the
+            // date added (b.e) says nothing about the week and is skipped.
+            sessions(b).forEach(function (s) {
+                var d = parseDate(s);
+                if (!d) return;
+                var iw = isoWeek(d);
+                if (iw.year < CAL_FROM) return;
+                var k = iw.year + '-' + iw.week;
+                (byCell[k] = byCell[k] || []).push(b);
+                byYear[iw.year] = (byYear[iw.year] || 0) + 1;
+            });
         });
         var years = [];
         for (var y = CAL_FROM; y <= thisYear; y++) years.push(y);
@@ -197,13 +211,117 @@
         window.addEventListener('scroll', function () { tip.classList.remove('is-visible'); }, { passive: true });
     }
 
+    /* ------------------------------------------------------- reading now
+       The last book finished and this year's count, beside the books in
+       progress that the page fills from now.json. */
+    function coverOrBlank(b) {
+        if (b.i) {
+            return '<img src="https://covers.openlibrary.org/b/isbn/' + b.i + '-M.jpg?default=false" alt="" loading="lazy"' +
+                ' onerror="this.outerHTML=\'<span class=&quot;kr-now__cover--blank&quot;>\' + this.getAttribute(\'data-t\') + \'</span>\'"' +
+                ' data-t="' + esc(b.t) + '">';
+        }
+        return '<span class="kr-now__cover--blank">' + esc(b.t) + '</span>';
+    }
+    function fmtDay(d) {
+        return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+    function renderNow(books) {
+        var last = document.getElementById('kr-last-finished');
+        var yc = document.getElementById('kr-year-count');
+        if (!last && !yc) return;
+        var dated = books.filter(function (b) { return !b.e && parseDate(b.d); });
+        dated.sort(function (a, b) { return String(b.d).localeCompare(String(a.d)); });
+        if (last) {
+            last.innerHTML = dated.slice(0, 2).map(function (b) {
+                var d = parseDate(b.d);
+                return '<a class="kr-now__book" href="' + goodreadsUrl(b) + '" target="_blank" rel="noopener noreferrer">' +
+                    coverOrBlank(b) +
+                    '<span><span class="kr-now__title">' + esc(b.t) + '</span>' +
+                    '<span class="kr-now__meta">' + esc(b.a || '') + (b.r ? ' &middot; ' + b.r + '/5' : '') + '<br>' + fmtDay(d) + '</span></span></a>';
+            }).join('');
+        }
+        if (yc) {
+            var y = new Date().getFullYear();
+            var inYear = function (year) {
+                var n = 0;
+                books.forEach(function (b) { sessions(b).forEach(function (s) { if (s.slice(0, 4) === String(year)) n++; }); });
+                return n;
+            };
+            var thisYear = inYear(y), lastYear = inYear(y - 1);
+            var again = 0;
+            books.forEach(function (b) { (b.p || []).forEach(function () { if (String(b.d).slice(0, 4) === String(y)) again++; }); });
+            yc.textContent = String(thisYear);
+            var sub = document.getElementById('kr-year-sub');
+            if (sub) sub.textContent = 'book' + (thisYear === 1 ? '' : 's') + ' finished in ' + y + (again ? ', ' + again + ' of them re-reads' : '') + '; ' + lastYear + ' in ' + (y - 1) + '.';
+        }
+    }
+
+    /* ---------------------------------------------------------- figures
+       Six numbers worked out from books.json, so a Goodreads refresh
+       changes them without anyone retyping a figure. */
+    function renderFigures(books) {
+        var host = document.getElementById('kr-figures');
+        var dated = books.filter(function (b) { return !b.e && parseDate(b.d); });
+        var rated = books.filter(function (b) { return b.r > 0; });
+        var reviews = books.filter(function (b) { return b.v; }).length;
+        // The counts quoted in the page's prose come from the same file.
+        Array.prototype.forEach.call(document.querySelectorAll('[data-lit]'), function (el) {
+            var k = el.getAttribute('data-lit');
+            if (k === 'books') el.textContent = String(Math.floor(books.length / 10) * 10) + '+';
+            if (k === 'reviews') el.textContent = String(reviews);
+        });
+        if (!host) return;
+        var avg = rated.reduce(function (s, b) { return s + b.r; }, 0) / (rated.length || 1);
+        var five = rated.filter(function (b) { return b.r === 5; }).length;
+        var byAuthor = {}, byYear = {};
+        var finishes = [];
+        books.forEach(function (b) {
+            if (b.a) byAuthor[b.a] = (byAuthor[b.a] || 0) + 1;
+            sessions(b).forEach(function (s) { if (parseDate(s)) finishes.push(s); });
+        });
+        finishes.sort();
+        finishes.forEach(function (s) { var y = s.slice(0, 4); byYear[y] = (byYear[y] || 0) + 1; });
+        var topAuthor = Object.keys(byAuthor).sort(function (a, b) { return byAuthor[b] - byAuthor[a] || a.localeCompare(b); })[0] || '';
+        var topYear = Object.keys(byYear).sort(function (a, b) { return byYear[b] - byYear[a] || b.localeCompare(a); })[0] || '';
+        // Longest run of consecutive ISO weeks with at least one book finished.
+        var weeks = {};
+        finishes.forEach(function (s) {
+            var d = parseDate(s), day = d.getDay() || 7;
+            var mon = new Date(d.getFullYear(), d.getMonth(), d.getDate() - day + 1);
+            weeks[mon.getTime()] = true;
+        });
+        var keys = Object.keys(weeks).map(Number).sort(function (a, b) { return a - b; });
+        var best = 0, run = 0, bestEnd = 0;
+        for (var i = 0; i < keys.length; i++) {
+            run = (i > 0 && keys[i] - keys[i - 1] <= 7 * 86400000 + 3600000) ? run + 1 : 1;
+            if (run > best) { best = run; bestEnd = keys[i]; }
+        }
+        var streakEnd = best ? new Date(bestEnd) : null;
+        var first = finishes.length ? parseDate(finishes[0]) : null;
+        var rereads = books.reduce(function (n, b) { return n + (b.p || []).length; }, 0);
+        var figures = [
+            ['Books read', String(books.length), (first ? 'on the shelf since ' + first.getFullYear() : '') + (rereads ? ', ' + rereads + ' read again' : '')],
+            ['Five stars', String(five), Math.round(100 * five / (rated.length || 1)) + '% of the ' + rated.length + ' I rated'],
+            ['Average rating', avg.toFixed(2), 'out of 5, across every rating'],
+            ['Most read author', topAuthor, byAuthor[topAuthor] + ' books'],
+            ['Busiest year', topYear, byYear[topYear] + ' books finished'],
+            ['Longest streak', best + (best === 1 ? ' week' : ' weeks'), streakEnd ? 'in a row with a book finished, ending ' + streakEnd.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '']
+        ];
+        host.innerHTML = figures.map(function (f) {
+            return '<div class="kr-figure"><dt>' + esc(f[0]) + '</dt><dd><span class="kr-figure__n">' + esc(f[1]) + '</span>' +
+                (f[2] ? '<span class="kr-figure__sub">' + esc(f[2]) + '</span>' : '') + '</dd></div>';
+        }).join('');
+    }
+
     function init() {
-        if (!document.getElementById('kr-shelf') && !document.getElementById('kr-reading-calendar')) return;
+        if (!document.getElementById('kr-shelf') && !document.getElementById('kr-reading-calendar') && !document.getElementById('kr-figures')) return;
         fetch('/data/books.json').then(function (r) { return r.json(); }).then(function (books) {
             if (!Array.isArray(books)) return;
             var read = books.filter(function (b) { return b && b.t; });
             render(read);
             renderCalendar(read);
+            renderNow(read);
+            renderFigures(read);
         }).catch(function () {});
     }
 

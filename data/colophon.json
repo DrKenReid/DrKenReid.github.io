@@ -1,5 +1,5 @@
 {
-  "pages": 92,
+  "pages": 93,
   "posts": 66,
   "postPages": 69,
   "words": 158895,
@@ -8,25 +8,25 @@
   "codePosts": 20,
   "series": 7,
   "photos": 492,
-  "cssSourceBytes": 239081,
-  "cssInputBytes": 551477,
-  "cssServedBytes": 237898,
+  "cssSourceBytes": 242372,
+  "cssInputBytes": 554768,
+  "cssServedBytes": 239240,
   "jsFiles": 22,
-  "jsBytes": 757154,
+  "jsBytes": 766696,
   "iconFontBeforeBytes": 133268,
   "iconFontAfterBytes": 4620,
   "buildScripts": 20,
   "ciChecks": 14,
   "dependencies": 0,
   "buildStep": false,
-  "htmlBytes": 5140767,
+  "htmlBytes": 5140380,
   "imageCount": 777,
   "imageBytes": 45289771,
   "webFontCount": 12,
   "webFontBytes": 249612,
-  "cssLines": 9227,
-  "jsLines": 9786,
-  "dataFiles": 18,
+  "cssLines": 9379,
+  "jsLines": 10028,
+  "dataFiles": 19,
   "tags": 13,
   "firstPost": "2026-04-10",
   "latestPost": "2026-09-16",
@@ -36,7 +36,7 @@
   "shortestPostWords": 802,
   "shortestPostTitle": "When I Ended Up in Italy Because of Mistaken Identity",
   "averagePostWords": 2408,
-  "commits": 602,
+  "commits": 603,
   "commitsByMonth": [
     [
       "2019-12",
@@ -364,7 +364,7 @@
     ],
     [
       "2026-09",
-      21
+      22
     ]
   ],
   "repoStart": "2019-12"

@@ -266,7 +266,7 @@
         <div class="col-6 col-md-auto home-stat" data-live="stat:books">
           <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
           <dt class="home-stat-label">Books Read</dt>
-          <dd class="home-stat-value">600+</dd>
+          <dd id="books-read-count" class="home-stat-value">600+</dd>
           <i class="ti-book home-stat-icon" aria-hidden="true"></i>
         </div>
         <div class="col-6 col-md-auto home-stat" data-live="stat:scrobbles">
@@ -284,7 +284,7 @@
         <div class="col-6 col-md-auto home-stat" data-live="stat:reviews">
           <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
           <dt class="home-stat-label">Book Reviews</dt>
-          <dd class="home-stat-value">257</dd>
+          <dd id="book-review-count" class="home-stat-value">257</dd>
           <i class="ti-star home-stat-icon" aria-hidden="true"></i>
         </div>
       </dl>
@@ -449,6 +449,12 @@
         fetch('/data/photography-files.json').then(function(r) { return r.json(); }).then(function(files) {
           var el = document.getElementById('photo-count');
           if (el && Array.isArray(files)) el.textContent = files.length;
+        }).catch(function() {});
+        // Reading figures from the weekly Goodreads refresh (data/reading.json)
+        fetch('/data/reading.json').then(function(r) { return r.json(); }).then(function(rd) {
+          var a = document.getElementById('books-read-count'), b = document.getElementById('book-review-count');
+          if (a && rd && rd.books) a.textContent = (Math.floor(rd.books / 10) * 10) + '+';
+          if (b && rd && rd.reviews) b.textContent = String(rd.reviews);
         }).catch(function() {});
         fetch('/data/quotes-all.json').then(function(r) { return r.json(); }).then(function(qs) {
           var el = document.getElementById('quote-count');

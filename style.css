@@ -8952,6 +8952,158 @@ h1, h2, h3,
 .kr-cal-area {
   padding: 70px 0 30px; }
 
+/* --- Reading Now and the figures (literature.html, js/bookshelf.js) ----
+   The page opens on what is live: the books in progress from now.json,
+   the last one finished and this year's count from books.json. Further
+   down, six figures worked out from the same file. Both are cards on a
+   hairline, no fill, so the photographs and covers carry the colour. */
+.kr-now-area {
+  padding: 70px 0 20px; }
+
+.kr-now {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 0.8fr;
+  gap: 22px;
+  max-width: 1000px;
+  margin: 0 auto; }
+
+@media (max-width: 900px) {
+  .kr-now {
+    grid-template-columns: 1fr; } }
+
+.kr-now__col {
+  padding: 22px 24px;
+  border: 1px solid var(--kr-hairline);
+  border-radius: 12px; }
+
+.kr-now__h,
+.kr-figure dt {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kr-eyebrow);
+  margin: 0 0 14px; }
+
+.kr-now__books {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 22px; }
+
+.kr-now__book {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  max-width: 250px;
+  text-decoration: none; }
+
+/* The card is one link; the type stays ink rather than a block of red,
+   and the title underlines on hover to say so. */
+.kr-now__book,
+.kr-now__book:hover,
+.kr-now__book:focus-visible,
+[data-theme="dark"] .kr-now__book,
+[data-theme="dark"] .kr-now__book:hover,
+[data-theme="dark"] .kr-now__book:focus-visible {
+  color: inherit; }
+
+.kr-now__book:hover .kr-now__title,
+.kr-now__book:focus-visible .kr-now__title {
+  text-decoration: underline;
+  text-underline-offset: 3px; }
+
+.kr-now__title,
+.kr-now__meta {
+  display: block; }
+
+.kr-now__book img,
+.kr-now__cover--blank {
+  flex: 0 0 56px;
+  width: 56px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: 3px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); }
+
+.kr-now__cover--blank {
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  font-size: 9px;
+  line-height: 1.25;
+  text-align: center;
+  background: #3a3632;
+  color: #e6e0d6; }
+
+.kr-now__title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 2px 0 3px; }
+
+.kr-now__meta,
+.kr-now__sub,
+.kr-figure__sub {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #7d766c;
+  margin: 0; }
+
+[data-theme="dark"] .kr-now__meta,
+[data-theme="dark"] .kr-now__sub,
+[data-theme="dark"] .kr-figure__sub {
+  color: #9a9389; }
+
+.kr-now__big {
+  font-size: clamp(36px, 4vw, 54px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 4px 0 10px; }
+
+.kr-figures-area {
+  padding: 60px 0 30px; }
+
+.kr-figures {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  max-width: 1000px;
+  margin: 0 auto; }
+
+@media (max-width: 700px) {
+  .kr-figures {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px; } }
+
+.kr-figure {
+  margin: 0;
+  padding: 20px 22px;
+  border: 1px solid var(--kr-hairline);
+  border-radius: 12px; }
+
+.kr-figure dd {
+  margin: 0; }
+
+.kr-figure__n {
+  display: block;
+  font-size: clamp(24px, 2.6vw, 34px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance; }
+
+.kr-figure__sub {
+  display: block;
+  margin-top: 6px; }
+
+/* Three reviews show; the rest wait behind the button. */
+.kr-reviews--collapsed > .col-12:nth-child(n+4) {
+  display: none; }
+
+.kr-reviews__more {
+  margin-top: 4px; }
+
 .kr-cal {
   --kr-cal-0: #eee8dd;
   --kr-cal-1: #f0cf8a;
