@@ -559,6 +559,34 @@ function createBlogCardElement(post, options) {
     return col;
 }
 
+/* Pages that do not ship the sketch engine (posts, mainly) load it on
+   demand so their related-post cards and pager can run sketches too. */
+var krLiveCoversLoading = null;
+function krEnsureLiveCovers(cb) {
+    if (window.krLiveCovers && window.krLiveCovers.kinds.length > 12) { cb(); return; }
+    if (!krLiveCoversLoading) {
+        krLiveCoversLoading = new Promise(function(resolve) {
+            var root = siteRootPrefix();
+            function load(src) {
+                return new Promise(function(ok) {
+                    var sc = document.createElement('script');
+                    sc.src = root + src;
+                    sc.onload = ok; sc.onerror = ok;
+                    document.head.appendChild(sc);
+                });
+            }
+            var first = window.krLiveCovers ? Promise.resolve() : load('js/live-covers.js?v=20260919a');
+            first.then(function() { return load('js/covers.js?v=20260919a'); }).then(function() {
+                // Cards already in the markup (the baked related posts) bound
+                // nothing while the sketches were still loading; bind them now.
+                if (window.krLiveCovers) window.krLiveCovers.attach(document.body, null);
+                resolve();
+            });
+        });
+    }
+    krLiveCoversLoading.then(cb);
+}
+
 /* The column around a card carries the card's own cover as a blurred
    glow (CSS ::before on .kr-glow-host), so on hover each card casts light
    in its photograph's colours. The column is used rather than the card
@@ -843,6 +871,11 @@ function renderRelatedPosts(targetId) {
                 }).join('') +
                 '</div>' +
                 '</div>';
+            // The three cards run their posts' sketches on hover, like any card.
+            krEnsureLiveCovers(function() {
+                var grid = el.querySelector('.related-posts-grid');
+                if (grid && window.krLiveCovers) window.krLiveCovers.attach(grid, function() { return true; });
+            });
         })
         .catch(function(error) {
             console.error('Failed to load related posts:', error);
@@ -954,7 +987,8 @@ function renderPrevNextNav() {
         function link(post, cls, arrow, label) {
             if (!post) return '<span class="post-pagination-spacer"></span>';
             var href = (post.url || '').replace(/^blog\//, '');
-            return '<a href="' + href + '" class="post-pagination-link ' + cls + '">' +
+            // data-live with no key: the sketch is the post's own, from the href.
+            return '<a href="' + href + '" class="post-pagination-link ' + cls + '" data-live="" data-live-under data-live-href="' + (post.url || '') + '">' +
                 '<span class="post-pagination-label">' + arrow + ' ' + label + '</span>' +
                 '<span class="post-pagination-title">' + post.title + '</span>' +
                 '</a>';
@@ -966,6 +1000,9 @@ function renderPrevNextNav() {
         nav.innerHTML =
             link(older, 'post-pagination-prev', '&larr;', 'Older') +
             link(newer, 'post-pagination-next', '&rarr;', 'Newer');
+        krEnsureLiveCovers(function() {
+            if (window.krLiveCovers) window.krLiveCovers.attach(nav, function() { return true; });
+        });
 
         var anchor = blogPost.querySelector('.blog-thanks-cta') ||
             blogPost.querySelector('.related-posts, #related-posts-section');
@@ -1391,13 +1428,9 @@ function renderSeriesPage() {
             grid.appendChild(col);
         });
 
-        // Parts with a live demo run one on hover (js/live-covers.js).
+        // Every part runs its own sketch on hover (js/live-covers.js, js/covers.js).
         if (window.krLiveCovers) {
-            var liveByHref = {};
-            parts.forEach(function(p) { if (krIsAlgorithmPost(p)) liveByHref[p.url] = true; });
-            window.krLiveCovers.attach(grid, function(href) {
-                return !!liveByHref[href.replace(/^\.?\//, '')];
-            });
+            window.krLiveCovers.attach(grid, function() { return true; });
         }
 
         var count = document.getElementById('series-count');
@@ -2400,7 +2433,8 @@ function renderNowStrip() {
                 esc(book.author) + extra, book.link || 'literature.html');
         }
         if (now && now.track && now.track.name) {
-            var eq = '<span class="kr-eq" aria-hidden="true"><span></span><span></span><span></span></span>';
+            // The bars only bounce while something is actually playing.
+            var eq = '<span class="kr-eq' + (now.track.nowPlaying ? ' is-playing' : '') + '" aria-hidden="true"><span></span><span></span><span></span></span>';
             addItem(2, '🎧', (now.track.nowPlaying ? 'Now playing' : 'Last played') + eq,
                 esc(now.track.name), esc(now.track.artist), now.track.url || 'music.html');
         }
@@ -2802,7 +2836,7 @@ function initHeroTransitions() {
         if (!card) return;
         var img = card.querySelector('img');
         if (!img) return;
-        var banner = document.querySelector('.breadcrumb-area, .kr-opener');
+        var banner = document.querySelector('.breadcrumb-area, .kr-opener__media');
         if (banner) banner.style.viewTransitionName = 'none';
         img.style.viewTransitionName = 'kr-hero';
     }, true);
@@ -2811,9 +2845,9 @@ function initHeroTransitions() {
     // still handed over; put it back so the next click works.
     window.addEventListener('pageshow', function () {
         document.querySelectorAll('[style*="view-transition-name"]').forEach(function (el) {
-            if (!el.classList.contains('breadcrumb-area') && !el.classList.contains('kr-opener')) el.style.viewTransitionName = '';
+            if (!el.classList.contains('breadcrumb-area') && !el.classList.contains('kr-opener__media')) el.style.viewTransitionName = '';
         });
-        var banner = document.querySelector('.breadcrumb-area, .kr-opener');
+        var banner = document.querySelector('.breadcrumb-area, .kr-opener__media');
         if (banner) banner.style.viewTransitionName = '';
     });
 }

@@ -32,6 +32,19 @@
             t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
     }
     function dot(ctx, x, y, r, fill) { ctx.fillStyle = fill; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill(); }
+    function text(ctx, str, x, y, size, fill, weight, align, family) {
+        ctx.fillStyle = fill || C.ink;
+        ctx.font = (weight || 500) + ' ' + size + 'px ' + (family || 'Poppins, sans-serif');
+        ctx.textAlign = align || 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(str, x, y);
+    }
+    function line(ctx, x1, y1, x2, y2, stroke, width) {
+        ctx.strokeStyle = stroke || C.dim; ctx.lineWidth = width || 1;
+        ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    }
+    function rect(ctx, x, y, w, h, fill) { ctx.fillStyle = fill; ctx.fillRect(x, y, w, h); }
+    function ease(t) { t = Math.max(0, Math.min(1, t)); return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
 
     /* A bumpy 2D landscape shared by the population-based demos, plus a
        cheap shaded background for it drawn once per mount. */
@@ -462,18 +475,34 @@
         return true;
     }
 
+    /* Any element with data-live="<key>" is a host in its own right: the
+       canvas is laid over it (or under its text with data-live-under), and
+       data-live-arg carries JSON for sketches that need a parameter, such
+       as a place's coordinates. */
+    function hostOf(card) {
+        return card.querySelector('[data-live-host]') || card.querySelector('.blog-card-img, .post-thumbnail') ||
+            (card.hasAttribute('data-live') ? card : null);
+    }
+    function kindOf(card) {
+        var key = card.getAttribute('data-live');
+        if (key && KINDS[key]) return key;
+        return kindFor(card.getAttribute('data-live-href') || card.getAttribute('href') || card.getAttribute('data-href') || '');
+    }
+
     function start(card) {
         if (card._live) return;
-        var host = card.querySelector('.blog-card-img, .post-thumbnail');
+        var host = hostOf(card);
         if (!host) return;
         var rect = host.getBoundingClientRect();
         if (!rect.width) return;
         var href = card.getAttribute('data-live-href') || card.getAttribute('href') || card.getAttribute('data-href') || '';
-        var kind = kindFor(href);
+        var kind = kindOf(card);
         if (!kind) return;
+        var arg = null;
+        try { arg = JSON.parse(card.getAttribute('data-live-arg') || 'null'); } catch (e) { arg = null; }
         var dpr = Math.min(window.devicePixelRatio || 1, 2);
         var c = document.createElement('canvas');
-        c.className = 'kr-live-cover';
+        c.className = 'kr-live-cover' + (card.hasAttribute('data-live-under') ? ' kr-live-cover--under' : '');
         c.width = Math.round(rect.width * dpr);
         c.height = Math.round(rect.height * dpr);
         c.setAttribute('aria-hidden', 'true');
@@ -481,15 +510,21 @@
         host.appendChild(c);
         var ctx = c.getContext('2d');
         ctx.scale(dpr, dpr);
-        var algo = KINDS[kind](rect.width, rect.height, rng(hash(href)));
+        var algo = KINDS[kind](rect.width, rect.height, rng(hash(href || kind)), arg);
         var run = { raf: 0, stop: false };
         card._live = run;
+        // Under-mode hosts become a dark stage while running (the veil
+        // stays on whatever the sketch asked) and their text turns light.
+        var under = card.hasAttribute('data-live-under');
+        card.classList.add('kr-live-on');
         requestAnimationFrame(function frame() {
             if (run.stop) return;
             algo.step();
             ctx.clearRect(0, 0, rect.width, rect.height);
-            ctx.fillStyle = C.veil;
-            ctx.fillRect(0, 0, rect.width, rect.height);
+            if (algo.veil !== false || under) {
+                ctx.fillStyle = C.veil;
+                ctx.fillRect(0, 0, rect.width, rect.height);
+            }
             algo.draw(ctx);
             run.raf = requestAnimationFrame(frame);
         });
@@ -502,6 +537,7 @@
         run.stop = true;
         cancelAnimationFrame(run.raf);
         card._live = null;
+        card.classList.remove('kr-live-on');
         var c = card.querySelector('.kr-live-cover');
         if (c) c.remove();
     }
@@ -510,12 +546,15 @@
         and a sketch exists for the post. */
     function attach(root, isLive) {
         if (!root || !canRun()) return;
-        var cards = root.querySelectorAll('a.blog-card, .single-post-area[data-href]');
+        var cards = root.querySelectorAll('a.blog-card, .single-post-area[data-href], [data-live]');
         Array.prototype.forEach.call(cards, function (card) {
+            if (card._liveBound) return;
             var href = card.getAttribute('href') || card.getAttribute('data-href') || '';
-            if (!isLive(href, card)) return;
-            if (!kindFor(card.getAttribute('data-live-href') || href)) return;
+            if (isLive && !isLive(href, card)) return;
+            if (!kindOf(card)) return;
+            card._liveBound = true;
             card.classList.add('kr-live-card');
+            if (card.hasAttribute('data-live')) card.classList.add('kr-live-host');
             card.addEventListener('mouseenter', function () { start(card); });
             card.addEventListener('mouseleave', function () { stop(card); });
             card.addEventListener('focusin', function () { start(card); });
@@ -523,5 +562,21 @@
         });
     }
 
-    window.krLiveCovers = { attach: attach, kindFor: kindFor, kinds: Object.keys(KINDS) };
+    /* Sketches for the rest of the posts live in js/covers.js and register
+       themselves here; the helpers are shared so every sketch draws with
+       the same palette and tools. */
+    function define(slug, factory) { KINDS[slug] = factory; }
+
+    /* Hosts written into a page's markup (stat tiles, hobby cards, rows)
+       bind themselves once the page and its sketch files have loaded;
+       cards a script renders later are attached by that script. */
+    function attachStatic() { attach(document.body, null); }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', attachStatic);
+    else attachStatic();
+
+    window.krLiveCovers = {
+        attach: attach, kindFor: kindFor, define: define,
+        get kinds() { return Object.keys(KINDS); },
+        helpers: { C: C, dot: dot, text: text, line: line, rect: rect, ease: ease, hash: hash, rng: rng, makeLandscape: makeLandscape }
+    };
 }());

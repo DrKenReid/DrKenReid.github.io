@@ -245,37 +245,44 @@
   <section class="home-stats-bar">
     <div class="container">
       <dl class="row text-center justify-content-center">
-        <div class="col-6 col-md-auto home-stat">
+        <div class="col-6 col-md-auto home-stat" data-live="stat:posts">
+          <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
           <dt class="home-stat-label">Blog Posts</dt>
           <dd id="blog-post-count" class="home-stat-value">40</dd>
           <i class="ti-pencil-alt home-stat-icon" aria-hidden="true"></i>
         </div>
-        <div class="col-6 col-md-auto home-stat">
+        <div class="col-6 col-md-auto home-stat" data-live="stat:words">
+          <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
           <dt class="home-stat-label">Words Written</dt>
           <dd id="word-count" class="home-stat-value">110K+</dd>
           <i class="ti-write home-stat-icon" aria-hidden="true"></i>
         </div>
-        <div class="col-6 col-md-auto home-stat">
+        <div class="col-6 col-md-auto home-stat" data-live="stat:photos">
+          <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
           <dt class="home-stat-label">Photos</dt>
           <dd id="photo-count" class="home-stat-value">490+</dd>
           <i class="ti-camera home-stat-icon" aria-hidden="true"></i>
         </div>
-        <div class="col-6 col-md-auto home-stat">
+        <div class="col-6 col-md-auto home-stat" data-live="stat:books">
+          <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
           <dt class="home-stat-label">Books Read</dt>
           <dd class="home-stat-value">590+</dd>
           <i class="ti-book home-stat-icon" aria-hidden="true"></i>
         </div>
-        <div class="col-6 col-md-auto home-stat">
+        <div class="col-6 col-md-auto home-stat" data-live="stat:scrobbles">
+          <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
           <dt class="home-stat-label">Scrobbles</dt>
           <dd class="home-stat-value" data-lastfm="scrobbles">49.7K+</dd>
           <i class="ti-headphone home-stat-icon" aria-hidden="true"></i>
         </div>
-        <div class="col-6 col-md-auto home-stat">
+        <div class="col-6 col-md-auto home-stat" data-live="stat:quotes">
+          <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
           <dt class="home-stat-label">Quotes Saved</dt>
           <dd id="quote-count" class="home-stat-value">571</dd>
           <i class="ti-comment-alt home-stat-icon" aria-hidden="true"></i>
         </div>
-        <div class="col-6 col-md-auto home-stat">
+        <div class="col-6 col-md-auto home-stat" data-live="stat:reviews">
+          <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
           <dt class="home-stat-label">Book Reviews</dt>
           <dd class="home-stat-value">255</dd>
           <i class="ti-star home-stat-icon" aria-hidden="true"></i>
@@ -304,45 +311,51 @@
       </div>
       <div class="row kr-explore-row">
         <div class="col-6 col-md-4 col-lg-2">
-          <a href="/data_science.html" class="kr-explore-link">
+          <a href="/data_science.html" class="kr-explore-link" data-live="explore:data-science">
             <i class="ti-stats-up kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Data Science</h3>
             <p>Projects &amp; publications</p>
+            <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
           </a>
         </div>
         <div class="col-6 col-md-4 col-lg-2">
-          <a href="/gallery.html" class="kr-explore-link">
+          <a href="/gallery.html" class="kr-explore-link" data-live="explore:photography">
             <i class="ti-camera kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Photography</h3>
             <p>490+ photos</p>
+            <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
           </a>
         </div>
         <div class="col-6 col-md-4 col-lg-2">
-          <a href="/music.html" class="kr-explore-link">
+          <a href="/music.html" class="kr-explore-link" data-live="explore:hobbies">
             <i class="ti-music-alt kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Music</h3>
             <p>Guitar &amp; listening</p>
+            <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
           </a>
         </div>
         <div class="col-6 col-md-4 col-lg-2">
-          <a href="/literature.html" class="kr-explore-link">
+          <a href="/literature.html" class="kr-explore-link" data-live="explore:series">
             <i class="ti-book kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Literature</h3>
             <p>Reviews &amp; stats</p>
+            <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
           </a>
         </div>
         <div class="col-6 col-md-4 col-lg-2">
-          <a href="/blog.html" class="kr-explore-link">
+          <a href="/blog.html" class="kr-explore-link" data-live="explore:blog">
             <i class="ti-write kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Blog</h3>
             <p>Writing &amp; thoughts</p>
+            <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
           </a>
         </div>
         <div class="col-6 col-md-4 col-lg-2">
-          <a href="/contact.html" class="kr-explore-link">
+          <a href="/contact.html" class="kr-explore-link" data-live="explore:about">
             <i class="ti-email kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Contact</h3>
             <p>Get in touch</p>
+            <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
           </a>
         </div>
       </div>
@@ -386,6 +399,9 @@
   <script src="/js/lightbox.js"></script>
   <script src="/js/default-assets/active.js"></script>
   <script src="/js/shared-components.js"></script>
+  <script src="/js/live-covers.js?v=20260919a"></script>
+  <script src="/js/covers.js?v=20260919a"></script>
+  <script src="/js/covers-site.js?v=20260919a"></script>
   <script defer src="/js/hero-evolve.js?v=20260917a"></script>
   <script>
     renderHeader('header-section', { basePath: '/', active: 'home' });
@@ -465,6 +481,8 @@
           row.appendChild(col);
         });
         container.appendChild(row);
+        // The latest cards run their posts' sketches on hover too.
+        if (window.krLiveCovers) window.krLiveCovers.attach(container, function() { return true; });
       }).catch(function() {});
 
     /* Bluesky feed */

@@ -339,26 +339,18 @@ function renderSeriesIndex() {
 	}
 	krUpdateSearchCounter(list.length, allSeries.length, 'series', seriesFilterCount() === 0);
 
-	// Cards for series with a live demo run one on hover (js/live-covers.js).
+	// Every series card runs part one's sketch on hover (data-live-href,
+	// set in the card markup, names the part).
 	if (window.krLiveCovers) {
-		var liveHrefs = {};
-		// An interactive part is not enough: the Feedback series has a
-		// budget widget. A live cover means an algorithm running, so the
-		// series has to be about one.
-		list.forEach(function(s) {
-			var algo = s.tags.indexOf('ai') !== -1 || s.tags.indexOf('data science') !== -1;
-			if (s.interactive && algo) liveHrefs[seriesPageHref(s.name)] = true;
-		});
-		window.krLiveCovers.attach(grid, function(href) { return !!liveHrefs[href]; });
+		window.krLiveCovers.attach(grid, function() { return true; });
 	}
 }
 
 function seriesCardHtml(s) {
 	var cover = '/' + (s.parts[0].image || DEFAULT_POST_IMAGE);
 	var name = krEscapeHtml(s.name);
-	// The cover is part one's image, so the live sketch is part one's too;
-	// failing that, the first part that has a demo.
-	var liveFrom = s.parts.filter(function(p) { return p.interactive; })[0];
+	// The cover is part one's image, so the live sketch is part one's too.
+	var liveFrom = s.parts[0];
 	var liveAttr = liveFrom ? ' data-live-href="' + krEscapeHtml(liveFrom.url) + '"' : '';
 	return '<div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url(' + cover + ')">' +
 		'<a href="' + seriesPageHref(s.name) + '" class="blog-card kr-lit"' + liveAttr + '>' +

@@ -343,6 +343,8 @@
           rect.setAttribute('rx', '1');
           rect.setAttribute('fill', r === peak ? 'url(#kr-colo-grad)' : 'currentColor');
           rect.setAttribute('opacity', r === peak ? '1' : '0.55');
+          // Left to right, a little later each: the chart fills as a wave.
+          rect.style.animationRangeStart = 'entry ' + Math.round(i / rows.length * 30) + '%';
           var t = document.createElementNS(ns, 'title');
           t.textContent = month(r[0]) + ': ' + r[1] + (r[1] === 1 ? ' commit' : ' commits');
           rect.appendChild(t);

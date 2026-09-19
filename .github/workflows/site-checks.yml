@@ -49,6 +49,11 @@ jobs:
       - name: Photo dimensions are current
         run: python .github/scripts/generate_photo_dims.py --check
 
+      # Every post's card runs a sketch of its own on hover; a new post
+      # without one would be the card that does nothing.
+      - name: Every post has a live cover
+        run: python .github/scripts/check_live_covers.py --check
+
       # Every post has a share image in the site's design, and points at
       # it. The check reads the input manifest, not the JPEG bytes.
       - name: Share images are current

@@ -666,12 +666,10 @@ function renderPosts() {
 	updateBlogCounter(filtered.length, allPosts.length);
 	krRenderListPagination(currentPage, totalPages, setBlogPage);
 
-	// Cards for posts with an algorithm demo run one on hover (js/live-covers.js).
+	// Every card runs its post's own sketch on hover (js/live-covers.js,
+	// js/covers.js); attach() skips any post without one.
 	if (window.krLiveCovers) {
-		var liveByHref = {};
-		// On the listing every interactive post runs, whatever the filter.
-		pagePosts.forEach(function(p) { if (p.interactive) liveByHref[p.url] = true; });
-		window.krLiveCovers.attach(container, function(href) { return !!liveByHref[href]; });
+		window.krLiveCovers.attach(container, function() { return true; });
 	}
 }
 

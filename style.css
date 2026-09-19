@@ -4434,14 +4434,23 @@ html.theme-switching *::after {
   navigation: auto; }
 
 /* Naming an element on both sides of a navigation upgrades that cross-fade
-   into a morph: the post card's photograph becomes the post's banner.
+   into a morph: the post card's photograph becomes the post's hero. Only
+   the photograph layer carries the name, not the opener, so the title and
+   standfirst fade in over it in place rather than riding inside the
+   growing image.
    js/shared-components.js hands the name to whichever card was clicked
    (only one element per document may hold it). Motion is opt-out, and an
    unnamed page just cross-fades as before. */
 @media (prefers-reduced-motion: no-preference) {
   .breadcrumb-area,
-  .kr-opener {
+  .kr-opener__media {
     view-transition-name: kr-hero; }
+
+  /* The title block gets its own group so it fades in above the arriving
+     photograph; left in the root snapshot it would sit beneath the morph
+     and pop into view only when the transition ended. */
+  .kr-opener__inner {
+    view-transition-name: kr-hero-text; }
 
   ::view-transition-group(kr-hero) {
     animation-duration: 420ms;
@@ -7686,6 +7695,145 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
 .kr-justified .single_gallery_item.kr-justified__loose img {
   object-fit: cover; }
 
+/* A data-live element hosts its own canvas; with data-live-under the
+   canvas sits beneath the element's text instead of over it. */
+.kr-live-host {
+  position: relative;
+  overflow: clip; }
+
+/* Zero specificity on purpose: a child that positions itself (the
+   publication stage, the gallery globe, a screen-reader-only note) keeps
+   its own position. */
+:where(.kr-live-host > :not(.sr-only)) {
+  position: relative;
+  z-index: 1; }
+
+.kr-live-cover--under {
+  z-index: 0 !important; }
+
+.kr-live-host > .kr-live-cover:not(.kr-live-cover--under) {
+  z-index: 6; }
+
+/* While an under-mode host runs, it is a dark stage and its type goes
+   light, whichever theme the page is in. */
+[data-live-under].kr-live-on,
+[data-live-under].kr-live-on :not(a):not(.btn):not(.kr-live-cover) {
+  color: #f1ede6 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7); }
+
+[data-live-under].kr-live-on {
+  border-radius: 10px; }
+
+/* Gallery tiles: the globe badge appears with the rest of the hover layer. */
+.kr-tile-globe {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: clip;
+  background: rgba(11, 11, 11, 0.55);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  z-index: 3; }
+
+.single-portfolio-content:hover .kr-tile-globe,
+.single-portfolio-content:focus-within .kr-tile-globe {
+  opacity: 1; }
+
+/* Publication rows keep their text; the sketch runs in a stage on the
+   right of the row, which the text leaves room for on wide screens. */
+.ds-pub-entry[data-live] {
+  position: relative; }
+
+.kr-pub-stage {
+  display: none; }
+
+@media (min-width: 900px) {
+  .ds-pub-entry[data-live] {
+    padding-right: 40%; }
+  .kr-pub-stage {
+    display: block;
+    position: absolute;
+    top: 8px;
+    right: 0;
+    bottom: 8px;
+    width: 37%;
+    border-radius: 10px;
+    overflow: clip;
+    pointer-events: none; } }
+
+/* Stat tiles, Explore links and the About cards keep their type where it
+   is; the sketch runs in a stage of its own, a strip beneath the text (a
+   corner box on the About cards) that darkens only while running. */
+.kr-stat-stage,
+.kr-explore-stage {
+  display: block;
+  width: 100%;
+  border-radius: 8px;
+  overflow: clip;
+  background: transparent;
+  transition: background-color 600ms ease; }
+
+.kr-stat-stage {
+  min-width: 112px;
+  height: 40px;
+  margin-top: 10px; }
+
+.kr-explore-stage {
+  height: 56px;
+  margin-top: 12px; }
+
+.kr-live-host > .kr-hobby-stage {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 84px;
+  height: 64px;
+  border-radius: 10px;
+  overflow: clip;
+  background: transparent;
+  transition: background-color 600ms ease; }
+
+.kr-live-on > .kr-stat-stage,
+.kr-live-on > .kr-explore-stage,
+.kr-live-on > .kr-hobby-stage {
+  background: #161616; }
+
+/* The stages fade in slowly, the publication stage slowest. */
+.kr-stat-stage .kr-live-cover,
+.kr-explore-stage .kr-live-cover,
+.kr-hobby-stage .kr-live-cover {
+  transition-duration: 600ms; }
+
+.kr-pub-stage .kr-live-cover {
+  transition-duration: 900ms; }
+
+/* The now strip's bars only bounce while a track is playing. */
+.kr-eq span {
+  animation-play-state: paused;
+  height: 30%; }
+
+.kr-eq.is-playing span {
+  animation-play-state: running; }
+
+/* Colophon commit bars rise as the chart scrolls up the viewport. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .kr-colo-chart rect {
+      transform-box: fill-box;
+      transform-origin: bottom;
+      animation: kr-bar-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 45%; } } }
+
+@keyframes kr-bar-rise {
+  from { transform: scaleY(0.02); }
+  to { transform: scaleY(1); } }
+
 /* --- Live covers (js/live-covers.js) ---------------------------------
    A canvas laid over a series card's cover while it is hovered. Fades in
    over the still image, so the card reads as "waking up" rather than
@@ -7821,12 +7969,21 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
 .kr-opener__media {
   position: absolute;
   inset: 0;
+  overflow: clip; }
+
+/* The photograph itself sits on a pseudo-element so the named layer above
+   is an unscaled box: the view-transition snapshot then matches the
+   opener exactly instead of bleeding past it by the drift's 4%. */
+.kr-opener__media::before {
+  content: '';
+  position: absolute;
+  inset: 0;
   background: var(--kr-opener-img) center / cover no-repeat;
   transform: scale(1.04); }
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .kr-opener__media {
+    .kr-opener__media::before {
       animation: kr-opener-drift linear both;
       animation-timeline: view();
       animation-range: exit 0% exit 100%; } } }
@@ -7857,7 +8014,13 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   from { box-shadow: inset 0 0 0 100vmax rgba(14, 14, 14, 0); }
   to { box-shadow: inset 0 0 0 100vmax rgba(14, 14, 14, 0.55); } }
 
-.kr-opener__scrim {
+/* The scrim gradient lives on the photograph layer's ::after so it is part
+   of the layer the card morphs into: a bare photograph arriving and then
+   darkening the instant the transition ended read as a flash. The scrim
+   element itself keeps only the scroll-driven deepening, which is nothing
+   at the top of the page. */
+.kr-opener__media::after {
+  content: '';
   position: absolute;
   inset: 0;
   background:
@@ -7867,6 +8030,10 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
       rgba(8, 8, 8, 0.38) 52%,
       rgba(8, 8, 8, 0.86) 76%,
       rgba(8, 8, 8, 0.96) 100%); }
+
+.kr-opener__scrim {
+  position: absolute;
+  inset: 0; }
 
 .kr-opener__inner {
   position: relative;
@@ -8069,7 +8236,7 @@ body {
 
 /* The numbers now hang off the intro rather than forming their own band. */
 .home-stats-bar {
-  padding: 34px 0 54px; }
+  padding: 34px 0 30px; }
 
 .home-stat-value {
   font-size: clamp(26px, 2.6vw, 36px);

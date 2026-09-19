@@ -16,6 +16,7 @@ var photoDims = {};          // stem -> [w, h], from data/photo-dims.json
 var justifyTimer = null;
 var photoTags = {};
 var photoPlaces = {};
+var photoCoords = {};   // stem -> [lat, lng], for the tile's globe badge
 var activeCat = '*';
 
 // Labels only. These were prefixed with emoji, which render at a different
@@ -57,7 +58,10 @@ function initGallery() {
         galleryAll = Array.isArray(results[1]) ? results[1].slice().sort(compareFileNames) : [];
         photoPlaces = {};
         ((results[2] || {}).regions || []).forEach(function(region) {
-            (region.photos || []).forEach(function(stem) { photoPlaces[String(stem)] = region.name; });
+            (region.photos || []).forEach(function(stem) {
+                photoPlaces[String(stem)] = region.name;
+                if (region.lat && region.lng) photoCoords[String(stem)] = [+region.lat, +region.lng];
+            });
         });
         galleryView = galleryAll;
         buildFilterButtons();
@@ -324,6 +328,18 @@ function loadMoreImages(silent) {
         hover.appendChild(link);
         wrapper.appendChild(img);
         wrapper.appendChild(hover);
+        // A placed frame gets a small globe in its corner on hover, turned
+        // to where the photograph was taken (js/covers-site.js, gallery:globe).
+        var coords = photoCoords[String(stem)];
+        if (coords && window.krLiveCovers) {
+            col.setAttribute('data-live', 'gallery:globe');
+            col.setAttribute('data-live-arg', JSON.stringify({ lat: coords[0], lng: coords[1] }));
+            var globe = document.createElement('span');
+            globe.className = 'kr-tile-globe';
+            globe.setAttribute('data-live-host', '');
+            globe.setAttribute('aria-hidden', 'true');
+            wrapper.appendChild(globe);
+        }
         col.appendChild(wrapper);
         container.appendChild(col);
         newElements.push(col);
@@ -334,6 +350,7 @@ function loadMoreImages(silent) {
     // Sizes come from photo-dims.json, so the new batch can be laid out
     // now rather than after its images arrive.
     layoutJustified();
+    if (window.krLiveCovers) window.krLiveCovers.attach(container, function() { return true; });
 
     if (!silent) {
         updateCounter();
