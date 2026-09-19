@@ -80,7 +80,9 @@ def signature(post: dict, hero: Path | None) -> str:
     h.update(post["title"].encode())
     h.update(kicker_of(post).encode())
     if hero and hero.exists():
-        h.update(str(hero.relative_to(ROOT)).encode())
+        # as_posix: the same signature from a Windows working copy and the
+        # Linux runner, which would otherwise disagree on every separator.
+        h.update(hero.relative_to(ROOT).as_posix().encode())
         h.update(str(hero.stat().st_size).encode())
     h.update(b"v1")
     return h.hexdigest()[:16]
