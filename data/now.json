@@ -1,17 +1,11 @@
 {
   "track": {
-    "name": "Airplane! (5/10) Movie",
-    "artist": "I Speak Jive",
-    "url": "https://www.last.fm/music/I+Speak+Jive/_/Airplane!+(5%2F10)+Movie",
+    "name": "Bring to the Boil",
+    "artist": "Beltaine",
+    "url": "https://www.last.fm/music/Beltaine/_/Bring+to+the+Boil",
     "nowPlaying": false
   },
   "reading": [
-    {
-      "title": "The Infinite Extent (Bobiverse, #6)",
-      "author": "Dennis E. Taylor",
-      "link": "https://www.goodreads.com/review/show/8938536115?utm_medium=api&utm_source=rss",
-      "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1784111102l/255460483._SX50_.jpg"
-    },
     {
       "title": "Dungeon Crawler Carl (Dungeon Crawler Carl, #1)",
       "author": "Matt Dinniman",
@@ -23,7 +17,13 @@
       "author": "Cormac McCarthy",
       "link": "https://www.goodreads.com/review/show/5348470770?utm_medium=api&utm_source=rss",
       "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1701688704l/394535._SY75_.jpg"
+    },
+    {
+      "title": "Babel",
+      "author": "R.F. Kuang",
+      "link": "https://www.goodreads.com/review/show/5010899429?utm_medium=api&utm_source=rss",
+      "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1677361825l/57945316._SY75_.jpg"
     }
   ],
-  "updated": "2026-09-14"
+  "updated": "2026-09-19"
 }

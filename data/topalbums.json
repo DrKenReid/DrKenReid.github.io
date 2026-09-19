@@ -12,20 +12,20 @@
       "artist": "Naïka",
       "url": "https://www.last.fm/music/Na%C3%AFka/ECLESIA",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/e6c40e9652aac25010b8094263138aa2.jpg",
-      "plays": 5
-    },
-    {
-      "name": "High Valley Demos",
-      "artist": "Fey Fili",
-      "url": "https://www.last.fm/music/Fey+Fili/High+Valley+Demos",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/01d34ed523f8706f4e2bb3270294dc62.jpg",
-      "plays": 4
+      "plays": 6
     },
     {
       "name": "Barbie The Album",
       "artist": "Ava Max",
       "url": "https://www.last.fm/music/Ava+Max/Barbie+The+Album",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/75f2e0e43c8a8b0bffee8c47bcc1c845.png",
+      "plays": 3
+    },
+    {
+      "name": "Waves Collide",
+      "artist": "Bad Rabbits",
+      "url": "https://www.last.fm/music/Bad+Rabbits/Waves+Collide",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/83beead9c97c943f053d21725aceaaf4.jpg",
       "plays": 3
     },
     {
@@ -36,17 +36,10 @@
       "plays": 3
     },
     {
-      "name": "Beat Saber (Original Game Soundtrack)",
-      "artist": "Jaroslav Beck",
-      "url": "https://www.last.fm/music/Jaroslav+Beck/Beat+Saber+(Original+Game+Soundtrack)",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/070f7c8133e30d9c0cc25efc4fdb6462.jpg",
-      "plays": 3
-    },
-    {
-      "name": "Dopamine (Split Brain Version)",
-      "artist": "Madelline",
-      "url": "https://www.last.fm/music/Madelline/Dopamine+(Split+Brain+Version)",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/4415ed4c7fafb84cdbfb0cad3cbd5028.jpg",
+      "name": "Divenire (Deluxe Edition)",
+      "artist": "Ludovico Einaudi",
+      "url": "https://www.last.fm/music/Ludovico+Einaudi/Divenire+(Deluxe+Edition)",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/44d6abcfd8aed5439223f0e88d8e4626.jpg",
       "plays": 3
     },
     {
@@ -71,10 +64,10 @@
       "plays": 2
     },
     {
-      "name": "Wide Open Light",
-      "artist": "Ben Harper",
-      "url": "https://www.last.fm/music/Ben+Harper/Wide+Open+Light",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/3ca0e57373046ff8dd309aeea94e2485.jpg",
+      "name": "KONCENtRAD",
+      "artist": "Beltaine",
+      "url": "https://www.last.fm/music/Beltaine/KONCENtRAD",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/aa92416e16354a695e4f9df31d47b72f.jpg",
       "plays": 2
     },
     {
@@ -92,27 +85,6 @@
       "plays": 2
     },
     {
-      "name": "BRAT",
-      "artist": "Charli xcx",
-      "url": "https://www.last.fm/music/Charli+xcx/BRAT",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/b00527c6ae0cd1d4c9bf3706b130ad56.jpg",
-      "plays": 2
-    },
-    {
-      "name": "Camp",
-      "artist": "Childish Gambino",
-      "url": "https://www.last.fm/music/Childish+Gambino/Camp",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/ee716520f1d244d990d5f6c8783375fe.png",
-      "plays": 2
-    },
-    {
-      "name": "Beauty and the Beast (Original Motion Picture Soundtrack/Deluxe Edition)",
-      "artist": "Dan Stevens",
-      "url": "https://www.last.fm/music/Dan+Stevens/Beauty+and+the+Beast+(Original+Motion+Picture+Soundtrack%2FDeluxe+Edition)",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/0d5ce94684640f8cb6237ce36e21133f.jpg",
-      "plays": 2
-    },
-    {
       "name": "White Flag",
       "artist": "Dido",
       "url": "https://www.last.fm/music/Dido/White+Flag",
@@ -127,13 +99,34 @@
       "plays": 2
     },
     {
+      "name": "High Valley Demos",
+      "artist": "Fey Fili",
+      "url": "https://www.last.fm/music/Fey+Fili/High+Valley+Demos",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/01d34ed523f8706f4e2bb3270294dc62.jpg",
+      "plays": 2
+    },
+    {
       "name": "Franz Ferdinand",
       "artist": "Franz Ferdinand",
       "url": "https://www.last.fm/music/Franz+Ferdinand/Franz+Ferdinand",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/963d2fd230d9c9727797dca40098dd71.png",
       "plays": 2
+    },
+    {
+      "name": "Beat Saber (Original Game Soundtrack)",
+      "artist": "Jaroslav Beck",
+      "url": "https://www.last.fm/music/Jaroslav+Beck/Beat+Saber+(Original+Game+Soundtrack)",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/070f7c8133e30d9c0cc25efc4fdb6462.jpg",
+      "plays": 2
+    },
+    {
+      "name": "The Elder Scrolls IV: Oblivion (Original Game Soundtrack)",
+      "artist": "Jeremy Soule",
+      "url": "https://www.last.fm/music/Jeremy+Soule/The+Elder+Scrolls+IV:+Oblivion+(Original+Game+Soundtrack)",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/263ef8870fb4908b76b574f178224aa3.jpg",
+      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-09-14"
+  "updated": "2026-09-19"
 }
