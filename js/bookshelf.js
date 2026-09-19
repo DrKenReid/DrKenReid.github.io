@@ -1,7 +1,7 @@
 /**
  * bookshelf.js — the literature page's shelf of spines.
  *
- * Every rated book in data/books.json drawn as a spine, in the order it
+ * Every book read in data/books.json drawn as a spine, in the order it
  * was read: width from the length of the title, height varied by author,
  * colour band by rating. Hover or focus for the title; click for the
  * Goodreads page. It is a picture of a reading life rather than a table,
@@ -98,6 +98,9 @@
         var now = new Date(), thisYear = now.getFullYear();
         var byCell = {}, byYear = {};
         books.forEach(function (b) {
+            // b.e marks a date Goodreads only knows the book was added on,
+            // which says nothing about the week it was finished.
+            if (b.e) return;
             var d = parseDate(b.d);
             if (!d) return;
             var iw = isoWeek(d);
@@ -198,9 +201,9 @@
         if (!document.getElementById('kr-shelf') && !document.getElementById('kr-reading-calendar')) return;
         fetch('/data/books.json').then(function (r) { return r.json(); }).then(function (books) {
             if (!Array.isArray(books)) return;
-            var rated = books.filter(function (b) { return b && b.t; });
-            render(rated);
-            renderCalendar(rated);
+            var read = books.filter(function (b) { return b && b.t; });
+            render(read);
+            renderCalendar(read);
         }).catch(function () {});
     }
 

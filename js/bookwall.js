@@ -1,9 +1,9 @@
 /**
  * bookwall.js — the literature page's cover wall.
  *
- * Renders every rated book from data/books.json as an OpenLibrary
- * cover, filterable by rating. Covers that OpenLibrary lacks are
- * dropped on error, so the wall stays clean.
+ * Renders every rated book in data/books.json that has an ISBN as an
+ * OpenLibrary cover, filterable by rating. Covers that OpenLibrary lacks
+ * are dropped on error, so the wall stays clean.
  */
 (function () {
     var books = [];
@@ -43,6 +43,9 @@
         if (!grid) return;
         var q = searchQuery.trim().toLowerCase();
         var subset = books.filter(function (b) {
+            // books.json holds every book read; the wall shows the rated
+            // ones Goodreads has an ISBN for, since the cover needs one.
+            if (!b.i || !b.r) return false;
             if (activeRating !== 0 && b.r !== activeRating) return false;
             return !q || (b.t + ' ' + b.a).toLowerCase().indexOf(q) !== -1;
         });
@@ -67,7 +70,7 @@
         var options = [[0, 'All'], [5, '5★'], [4, '4★'], [3, '3★'], [2, '2★'], [1, '1★']];
         bar.innerHTML = '';
         options.forEach(function (opt) {
-            var count = opt[0] === 0 ? books.length : books.filter(function (b) { return b.r === opt[0]; }).length;
+            var count = books.filter(function (b) { return b.i && b.r && (opt[0] === 0 || b.r === opt[0]); }).length;
             if (!count) return;
             var btn = document.createElement('button');
             btn.className = 'btn gallery-filter-btn' + (opt[0] === activeRating ? ' active' : '');
