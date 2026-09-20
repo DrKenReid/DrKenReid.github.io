@@ -560,32 +560,39 @@ function createBlogCardElement(post, options) {
     return col;
 }
 
-/* Pages that do not ship the sketch engine (posts, mainly) load it on
-   demand so their related-post cards and pager can run sketches too. */
-var krLiveCoversLoading = null;
-function krEnsureLiveCovers(cb) {
-    if (window.krLiveCovers && window.krLiveCovers.kinds.length > 12) { cb(); return; }
-    if (!krLiveCoversLoading) {
-        krLiveCoversLoading = new Promise(function(resolve) {
-            var root = siteRootPrefix();
-            function load(src) {
-                return new Promise(function(ok) {
-                    var sc = document.createElement('script');
-                    sc.src = root + src;
-                    sc.onload = ok; sc.onerror = ok;
-                    document.head.appendChild(sc);
-                });
-            }
-            var first = window.krLiveCovers ? Promise.resolve() : load('js/live-covers.js?v=20260919a');
-            first.then(function() { return load('js/covers.js?v=20260919a'); }).then(function() {
-                // Cards already in the markup (the baked related posts) bound
-                // nothing while the sketches were still loading; bind them now.
-                if (window.krLiveCovers) window.krLiveCovers.attach(document.body, null);
-                resolve();
-            });
+/* The hover sketches (js/live-covers.js, covers.js, covers-site.js:
+   39 KB gzipped) load on the first sign of a pointer, and only where a
+   pointer can hover and motion is welcome, so phones never fetch them.
+   The engine binds cards on its own once it arrives; nothing here or
+   in any renderer needs to call it. One version string for all three. */
+var KR_COVERS_VERSION = '20260920a';
+var krCoversLoading = null;
+function krLoadLiveCovers() {
+    if (krCoversLoading) return krCoversLoading;
+    var root = siteRootPrefix();
+    function load(src) {
+        return new Promise(function(ok) {
+            var sc = document.createElement('script');
+            sc.src = root + 'js/' + src + '.js?v=' + KR_COVERS_VERSION;
+            sc.onload = ok; sc.onerror = ok;
+            document.head.appendChild(sc);
         });
     }
-    krLiveCoversLoading.then(cb);
+    krCoversLoading = (window.krLiveCovers ? Promise.resolve() : load('live-covers'))
+        .then(function() { return Promise.all([load('covers'), load('covers-site')]); });
+    return krCoversLoading;
+}
+function initLiveCovers() {
+    if (!window.matchMedia) return;
+    if (window.matchMedia('(hover: none)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var arm = function() {
+        window.removeEventListener('pointermove', arm);
+        window.removeEventListener('focusin', arm);
+        krLoadLiveCovers();
+    };
+    window.addEventListener('pointermove', arm, { passive: true });
+    window.addEventListener('focusin', arm, { passive: true });
 }
 
 /* The column around a card carries the card's own cover as a blurred
@@ -872,11 +879,8 @@ function renderRelatedPosts(targetId) {
                 }).join('') +
                 '</div>' +
                 '</div>';
-            // The three cards run their posts' sketches on hover, like any card.
-            krEnsureLiveCovers(function() {
-                var grid = el.querySelector('.related-posts-grid');
-                if (grid && window.krLiveCovers) window.krLiveCovers.attach(grid, function() { return true; });
-            });
+            // The three cards run their posts' sketches on hover, like any card
+            // (js/live-covers.js binds them as they appear).
         })
         .catch(function(error) {
             console.error('Failed to load related posts:', error);
@@ -1001,9 +1005,6 @@ function renderPrevNextNav() {
         nav.innerHTML =
             link(older, 'post-pagination-prev', '&larr;', 'Older') +
             link(newer, 'post-pagination-next', '&rarr;', 'Newer');
-        krEnsureLiveCovers(function() {
-            if (window.krLiveCovers) window.krLiveCovers.attach(nav, function() { return true; });
-        });
 
         var anchor = blogPost.querySelector('.blog-thanks-cta') ||
             blogPost.querySelector('.related-posts, #related-posts-section');
@@ -1429,10 +1430,7 @@ function renderSeriesPage() {
             grid.appendChild(col);
         });
 
-        // Every part runs its own sketch on hover (js/live-covers.js, js/covers.js).
-        if (window.krLiveCovers) {
-            window.krLiveCovers.attach(grid, function() { return true; });
-        }
+        // Every part runs its own sketch on hover (js/live-covers.js binds them).
 
         var count = document.getElementById('series-count');
         if (count) {
@@ -2986,6 +2984,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initEmbedFacades();
     initHeroTransitions();
     initScrollFlourishes();
+    initLiveCovers();
     if ('MutationObserver' in window) {
         new MutationObserver(annotateNewTabLinks).observe(document.body, { childList: true, subtree: true });
     }

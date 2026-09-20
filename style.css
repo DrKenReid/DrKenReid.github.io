@@ -7718,7 +7718,7 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
    light, whichever theme the page is in. */
 [data-live-under].kr-live-on,
 [data-live-under].kr-live-on :not(a):not(.btn):not(.kr-live-cover) {
-  color: #f1ede6 !important;
+  color: #f1ede6;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7); }
 
 [data-live-under].kr-live-on {

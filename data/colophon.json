@@ -8,24 +8,24 @@
   "codePosts": 20,
   "series": 7,
   "photos": 492,
-  "cssSourceBytes": 243067,
-  "cssInputBytes": 555463,
-  "cssServedBytes": 239751,
+  "cssSourceBytes": 243056,
+  "cssInputBytes": 555452,
+  "cssServedBytes": 239740,
   "jsFiles": 22,
-  "jsBytes": 774833,
+  "jsBytes": 779729,
   "iconFontBeforeBytes": 133268,
   "iconFontAfterBytes": 4620,
   "buildScripts": 21,
   "ciChecks": 14,
   "dependencies": 0,
   "buildStep": false,
-  "htmlBytes": 5218258,
+  "htmlBytes": 5216287,
   "imageCount": 778,
   "imageBytes": 45339669,
   "webFontCount": 12,
   "webFontBytes": 249612,
   "cssLines": 9407,
-  "jsLines": 10156,
+  "jsLines": 10226,
   "dataFiles": 19,
   "tags": 13,
   "firstPost": "2026-04-10",
@@ -36,7 +36,7 @@
   "shortestPostWords": 802,
   "shortestPostTitle": "When I Ended Up in Italy Because of Mistaken Identity",
   "averagePostWords": 2401,
-  "commits": 610,
+  "commits": 611,
   "commitsByMonth": [
     [
       "2019-12",
@@ -364,7 +364,7 @@
     ],
     [
       "2026-09",
-      29
+      30
     ]
   ],
   "repoStart": "2019-12"

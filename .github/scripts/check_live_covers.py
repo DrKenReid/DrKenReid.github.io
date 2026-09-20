@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Every post has a live cover: the sketch its card runs on hover.
 
-Sketches are registered by slug, either as KINDS['<slug>'] in
-js/live-covers.js or as def('<slug>', ...) in js/covers.js. A post in
-data/posts.json without one fails the check, so a new post cannot be
-committed until it has its own sketch (a card that does nothing on hover
-would be the odd one out).
+Sketches are registered by slug with def('<slug>', ...) in js/covers.js
+(the interactive posts' miniatures open the file; js/live-covers.js is
+only the engine). A post in data/posts.json without one fails the check,
+so a new post cannot be committed until it has its own sketch (a card
+that does nothing on hover would be the odd one out). The smoke suite
+separately runs every registered sketch to check it draws.
 
     python .github/scripts/check_live_covers.py          # report
     python .github/scripts/check_live_covers.py --check  # exit 1 if any missing
@@ -26,10 +27,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 POSTS = ROOT / "data" / "posts.json"
 DRAFTS = ROOT / "blog" / "drafts"
-SOURCES = [ROOT / "js" / "live-covers.js", ROOT / "js" / "covers.js"]
+SOURCES = [ROOT / "js" / "covers.js"]
 
-# KINDS['slug'] in the engine; def('slug', ...) or define('slug', ...) in covers.js.
-DEFINITION = re.compile(r"(?:KINDS\[|\bdef(?:ine)?\()\s*'([a-z0-9-]+)'")
+# def('slug', ...) or define('slug', ...) in covers.js.
+DEFINITION = re.compile(r"\bdef(?:ine)?\(\s*'([a-z0-9-]+)'")
 
 
 def defined_slugs() -> dict[str, list[str]]:

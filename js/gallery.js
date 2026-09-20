@@ -331,7 +331,7 @@ function loadMoreImages(silent) {
         // A placed frame gets a small globe in its corner on hover, turned
         // to where the photograph was taken (js/covers-site.js, gallery:globe).
         var coords = photoCoords[String(stem)];
-        if (coords && window.krLiveCovers) {
+        if (coords) {
             col.setAttribute('data-live', 'gallery:globe');
             col.setAttribute('data-live-arg', JSON.stringify({ lat: coords[0], lng: coords[1] }));
             var globe = document.createElement('span');
@@ -350,7 +350,6 @@ function loadMoreImages(silent) {
     // Sizes come from photo-dims.json, so the new batch can be laid out
     // now rather than after its images arrive.
     layoutJustified();
-    if (window.krLiveCovers) window.krLiveCovers.attach(container, function() { return true; });
 
     if (!silent) {
         updateCounter();

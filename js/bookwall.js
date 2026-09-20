@@ -60,7 +60,6 @@
                 '<span class="book-wall-stars">' + stars(b.r) + '</span>' +
                 '</a>';
         }).join('');
-        if (window.krLiveCovers) window.krLiveCovers.attach(grid, function () { return true; });
         var counter = document.getElementById('book-wall-count');
         if (counter) {
             counter.textContent = subset.length + ' book' + (subset.length === 1 ? '' : 's');

@@ -341,9 +341,6 @@ function renderSeriesIndex() {
 
 	// Every series card runs part one's sketch on hover (data-live-href,
 	// set in the card markup, names the part).
-	if (window.krLiveCovers) {
-		window.krLiveCovers.attach(grid, function() { return true; });
-	}
 }
 
 function seriesCardHtml(s) {

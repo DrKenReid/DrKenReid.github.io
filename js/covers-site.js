@@ -13,7 +13,7 @@
     if (!window.krLiveCovers) return;
     var H = window.krLiveCovers.helpers, def = window.krLiveCovers.define;
     var C = H.C, dot = H.dot, text = H.text, line = H.line, rect = H.rect, ease = H.ease;
-    var TAU = 6.2832;
+    var TAU = H.TAU;
 
     // Lowercase letters rain down and pile into a growing heap along the bottom.
     def('stat:words', function (w, h, rnd) {
@@ -356,15 +356,6 @@
             }
         };
     });
-}());
-
-
-(function () {
-    'use strict';
-    if (!window.krLiveCovers) return;
-    var H = window.krLiveCovers.helpers, def = window.krLiveCovers.define;
-    var C = H.C, dot = H.dot, text = H.text, line = H.line, rect = H.rect, ease = H.ease;
-    var TAU = 6.2832;
 
     // Six guitar strings; every ~50 frames one is plucked and rings as a decaying standing wave.
     def('hobby:music', function (w, h, rnd) {
@@ -574,15 +565,6 @@
             }
         };
     });
-}());
-
-
-(function () {
-    'use strict';
-    if (!window.krLiveCovers) return;
-    var H = window.krLiveCovers.helpers, def = window.krLiveCovers.define;
-    var C = H.C, dot = H.dot, text = H.text, line = H.line, rect = H.rect, ease = H.ease;
-    var TAU = 6.2832;
 
     // Token bars stream into a hub, which fans branches out to six field labels.
     def('pub:llm-outlook', function (w, h, rnd) {
@@ -880,13 +862,6 @@
             veil: false
         };
     });
-}());
-
-(function () {
-    'use strict';
-    if (!window.krLiveCovers) return;
-    var H = window.krLiveCovers.helpers, def = window.krLiveCovers.define;
-    var C = H.C, rect = H.rect, text = H.text, ease = H.ease;
 
     // Post cards stack up one at a time, newest on top.
     def('stat:posts', function (w, h, rnd) {

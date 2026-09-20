@@ -238,6 +238,46 @@ def check_a11y(page, path, rep):
                f"{churn} announcements in 3s")
 
 
+def check_sketches(page, rep):
+    """Every registered hover sketch draws: instantiate each at card size
+    through the engine's own factory, step it 120 frames and require that
+    it threw nothing and painted something. One sketch once sat blank for
+    most of its cycle and only an eye caught it; this is the check that
+    would have."""
+    scope = "js/covers.js sketches"
+    page.set_viewport_size({"width": 1280, "height": 900})
+    page.goto(f"http://127.0.0.1:{PORT}/blog.html", wait_until="domcontentloaded")
+    page.wait_for_function("() => typeof krLoadLiveCovers === 'function'", timeout=15000)
+    page.evaluate("() => krLoadLiveCovers()")
+    page.wait_for_function("() => window.krLiveCovers && window.krLiveCovers.kinds.length > 60", timeout=15000)
+    result = page.evaluate("""() => {
+        const api = window.krLiveCovers, out = { count: 0, bad: [] };
+        const args = { 'gallery:globe': { lat: 56.1, lng: -3.9 } };
+        for (const kind of api.kinds) {
+            out.count++;
+            const c = document.createElement('canvas'); c.width = 360; c.height = 220;
+            const ctx = c.getContext('2d');
+            try {
+                const s = api.make(kind, 360, 220, 7, args[kind] || null);
+                let painted = 0;
+                for (let i = 0; i < 120; i++) {
+                    s.step();
+                    if (i % 30 === 29) {
+                        ctx.clearRect(0, 0, 360, 220); s.draw(ctx);
+                        const d = ctx.getImageData(0, 0, 360, 220).data; let n = 0;
+                        for (let k = 3; k < d.length; k += 16) if (d[k] > 0) n++;
+                        painted = Math.max(painted, n / (d.length / 16));
+                    }
+                }
+                if (painted < 0.001) out.bad.push(kind + ' (blank)');   // a lone glyph or a pin is enough; blank is blank
+            } catch (e) { out.bad.push(kind + ' (' + (e && e.message) + ')'); }
+        }
+        return out;
+    }""")
+    rep.check(scope, f"all {result['count']} sketches run and draw",
+              not result["bad"], ", ".join(result["bad"][:6]))
+
+
 def check_reduced_motion(browser, path, rep):
     """Under prefers-reduced-motion the demos must mount paused and stay put,
     showing the first frame rather than a blank box."""
@@ -335,6 +375,9 @@ def main():
         # One reduced-motion pass is enough: the behaviour lives in the engine,
         # not in any one post.
         check_reduced_motion(browser, "blog/particle-swarm-live.html", rep)
+        # Every hover sketch, in one pass: they are registered by slug and
+        # the engine exposes the factory it uses.
+        check_sketches(page, rep)
         browser.close()
     return rep.summary("smoke")
 

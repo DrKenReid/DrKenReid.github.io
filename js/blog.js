@@ -668,9 +668,6 @@ function renderPosts() {
 
 	// Every card runs its post's own sketch on hover (js/live-covers.js,
 	// js/covers.js); attach() skips any post without one.
-	if (window.krLiveCovers) {
-		window.krLiveCovers.attach(container, function() { return true; });
-	}
 }
 
 // Variable column widths matching the template's alternating masonry
