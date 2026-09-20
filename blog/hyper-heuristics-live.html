@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="A hyper-heuristic timetabling exams live in your browser: four move heuristics compete for a learning manager's attention while a Great Deluge water level drains.">
+ <meta name="keywords" content="ai">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Hyper-Heuristics, Live - Ken Reid</title>
+ <meta property="og:title" content="Hyper-Heuristics, Live">
+ <meta property="og:description" content="A hyper-heuristic timetabling exams live in your browser: four move heuristics compete for a learning manager's attention while a Great Deluge water level drains.">
+ <meta property="og:image" content="https://www.kenreid.co.uk/img/og/hyper-heuristics-live.jpg">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/hyper-heuristics-live.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Hyper-Heuristics, Live">
+ <meta name="twitter:description" content="A hyper-heuristic timetabling exams live in your browser: four move heuristics compete for a learning manager's attention while a Great Deluge water level drains.">
+ <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/hyper-heuristics-live.jpg">
+ <meta name="citation_title" content="Hyper-Heuristics, Live">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/09/19">
+ <meta name="citation_online_date" content="2026/09/19">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/hyper-heuristics-live.html">
+ <meta name="DC.title" content="Hyper-Heuristics, Live">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-09-19">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="img/hyperheuristics/hyperheuristics-hero.webp">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/hyper-heuristics-live.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "Hyper-Heuristics, Live",
+ "description": "A hyper-heuristic timetabling exams live in your browser: four move heuristics compete for a learning manager's attention while a Great Deluge water level drains.",
+ "image": "https://www.kenreid.co.uk/img/og/hyper-heuristics-live.jpg",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-09-19",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["ai", "hyper-heuristics", "great deluge", "exam timetabling", "optimization", "interactive"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "Hyper-Heuristics, Live",
+       "item": "https://www.kenreid.co.uk/blog/hyper-heuristics-live.html"
+     }
+   ]
+ }
+ </script>
+ <style>
+   /* Series: s1 = water, s2 = healthy/improving, s3 = accent/cost, s4 = conflict. */
+   /* Overrides of the shared .kr-viz component in style.css. */
+   .kr-status{ font-variant-numeric:tabular-nums; }
+
+   /* Particular to this post's widget. */
+   .hh-heur{ margin-top:14px; display:flex; flex-direction:column; gap:6px; }
+   .hh-heur-row{ display:flex; align-items:center; gap:10px; font-size:0.78em; color:var(--viz-ink); }
+   .hh-heur-name{ width:10.5em; white-space:nowrap; font-weight:600; }
+   .hh-heur-row.fav .hh-heur-name{ color:var(--viz-s3); }
+   .hh-bar{ flex:1; height:10px; background:var(--viz-cell); border:1px solid var(--viz-border); border-radius:5px; overflow:hidden; }
+   .hh-bar-fill{ height:100%; width:25%; background:var(--viz-s3); transition:width 0.35s ease; }
+   .hh-heur-pct{ width:3.2em; text-align:right; color:var(--viz-muted); font-variant-numeric:tabular-nums; }
+   @media (max-width: 520px) { .hh-heur-name{ width:8.5em; } }
+ </style>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <main id="main-content">
+  <header class="kr-opener" style="--kr-opener-img: url(/blog/img/hyperheuristics/hyperheuristics-hero.webp);">
+    <div class="kr-opener__media" aria-hidden="true"></div>
+    <div class="kr-opener__scrim" aria-hidden="true"></div>
+    <div class="container kr-opener__inner">
+      <nav aria-label="breadcrumb" class="kr-opener__crumbs"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Hyper-Heuristics, Live</li>
+      </ol></nav>
+      <p class="kr-opener__kicker">Data &amp; AI &middot; 19 September 2026 &middot; 9 min read</p>
+      <p class="kr-opener__title page-title">Hyper-Heuristics, Live</p>
+      <p class="kr-opener__standfirst">A hyper-heuristic timetabling exams live in your browser: four move heuristics compete for a learning manager's attention while a Great Deluge water level drains.</p>
+    </div>
+    <a class="kr-opener__cue" href="#main-content-body" aria-label="Scroll to the article"><span></span></a>
+  </header>
+
+ <div class="about-us-area section-padding-80 clearfix" id="main-content-body">
+ <div class="container">
+ 
+ <div class="blog-post">
+ <h1>Hyper-Heuristics, Live</h1>
+ <div class="blog-meta">
+ 19 September 2026 &middot;
+ <span class="blog-tag">ai</span>
+ </div>
+
+ <p>Nine posts in, every search strategy in this series has handed you its dials and waited:</p>
+ <ul>
+ <li><a href="ant-colony-live.html">the ant colony</a> wanted an evaporation rate</li>
+ <li><a href="evolution-live.html">the genetic algorithm</a> and its <a href="genetic-programming-live.html">program-breeding cousin</a> wanted mutation rates and population sizes</li>
+ <li><a href="simulated-annealing-live.html">simulated annealing</a> put you in charge of the thermostat</li>
+ <li><a href="particle-swarm-live.html">the swarm</a> asked for inertia, own memory and peer pressure</li>
+ <li><a href="variable-neighbourhood-search-live.html">variable neighbourhood search</a> needed to know how many neighbourhoods to shake through</li>
+ <li><a href="cma-es-live.html">CMA-ES</a> adapted its own step size, but still took a population and a starting sigma from you</li>
+ <li><a href="differential-evolution-live.html">differential evolution</a> asked for F and CR</li>
+ <li><a href="tabu-search-live.html">tabu search</a>, one post ago, wanted its tenure set</li>
+ </ul>
+
+ <p>Hyper heuristics are inherently <i>meta</i>. It searches for the right way to search, optimizing by choosing the best optimizer.</p>
+
+ <p>It's a heuristic for choosing heuristics, and the field calls it a hyper-heuristic.</p>
+
+ <noscript><p><strong>The interactive parts of this post require JavaScript.</strong> The prose will still make sense, but the demo will be sadly inert.</p></noscript>
+
+ <p>The problem this demo is chewing on is exam timetabling, which is very close to what I solved during my studies. My PhD went on rostering BT's engineers, and exam timetabling is the same family of problem with students in place of shifts: easy to state, brutal to solve, and impossible to explain to friends and family about exactly what makes it so difficult. </p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Hyper-heuristic:</strong> a search strategy that operates on other search strategies. It decides which move-making heuristic to apply next, rather than editing the solution itself.</li>
+ <li><strong>Low-level heuristic:</strong> one of the workers: a simple move rule, like "swap two exams", that actually edits the timetable.</li>
+ <li><strong>Domain barrier:</strong> the wall between manager and workers. The hyper-heuristic never sees exams, students, or rooms; only whether the cost went up or down.</li>
+ <li><strong>Selection vs generation hyper-heuristics:</strong> selection hyper-heuristics choose among existing heuristics (this post); generation hyper-heuristics assemble brand-new heuristics from components, often with genetic programming.</li>
+ <li><strong>Great Deluge:</strong> an acceptance rule with a single moving part: a water level that starts generous and drains steadily. Any move that keeps the cost at or below the level is accepted, uphill or not.</li>
+ <li><strong>Acceptance criterion:</strong> the rule that decides whether a proposed move is kept or thrown away. Annealing uses temperature and probability; Great Deluge uses a water level.</li>
+ <li><strong>Hard constraint:</strong> a rule the timetable must satisfy (no student sitting two exams at once). Violations are possible but only if really struggling to find solutions.</li>
+ <li><strong>Soft constraint:</strong> a preference (no back-to-back exams for the same student). </li>
+ </ul>
+ </div>
+
+ <h2>Twenty exams, seven slots, three rooms</h2>
+
+ <p>Any of us who have been to college / university have likely experienced the hellish end of term exam period. Most students stick to specific degree programs, so if you're a 'generic' student, your exams will likely be spaced fairly evenly. If you, however, are doing a triple major of sports, theoretical physics and nursing, you are the most likely to be screwed over, as screwing up people with that specific triple-threat (just you) is less of a failure than messing up everyone who just took generic psychology classes exams.</p>
+
+ <p>The instance below is twenty exams, labelled A to T, to be placed into seven timeslots with three rooms available per slot. A seeded random conflict graph decides which pairs of exams share students. From that, one number to shrink. Two conflicting exams in the same slot is a hard constraint violation and costs '100', because somewhere a student is expected to be in two rooms at once.</p>
+
+ <p>Conflicting exams in adjacent slots cost 1 to 3 (scaled by how many students they share), because back-to-back exams are legal, but far from ideal. And a fourth exam squeezed into a three-room slot costs 10 per extra exam. That weighting is the standard trick for mixing hard and soft constraints into one objective.</p>
+
+ <p>A timetable is not usable until the hard count reaches zero. Everything after that is how an "acceptable" timetables progresses towards "ok", and hopefully, "good", or even better, "optimal".</p>
+
+ <h2>The manager and the workers</h2>
+
+ <p>Four low-level heuristics do the standard heuristic solving business. <strong>H1 nudge</strong> moves one random exam to a random slot. <strong>H2 swap</strong> picks two exams and trades their slots. <strong>H3 worst-to-best</strong> finds the exam contributing the most penalty and moves it to the slot where it does the least damage. <strong>H4 ruin</strong> kicks three random exams to random slots, a small controlled demolition.</p>
+
+ <p>Above them sits the manager - it keeps a score for each worker, rewards a worker whenever its move is accepted and improves the cost, and lets every score decay over time. Even the manager's least favourite heuristic keeps getting the odd chance, because a heuristic useless so far might be useful later down the line when the circumstances change.</p>
+
+ <p>Cowling, Kendall and Soubeiga used the same pattern to schedule a sales summit<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>, in the paper that named the modern field.</p>
+
+ <h2>Intentionally Blind</h2>
+
+ <p>The manager can't see the timetable. It doesn't know what an exam is. It has no idea students exist. It just has four levers to pull and keeps records of what is working well just now, what isn't, and keeps chugging.</p>
+
+ <p>All it ever observes is "I pulled lever three and the cost went down by 40" or "I pulled lever one and the move was rejected". That blindness is called the domain barrier, and it sounds like a handicap but it's necessary.</p>
+
+ <p>Because the manager only ever hears cost deltas, you can unplug the four timetabling workers, plug in "move a nurse to another shift" and "swap two delivery routes", and the same manager, unchanged, starts learning which of <em>those</em> levers earns its keep. The domain knowledge lives entirely in the cheap, disposable workers. Burke (who was briefly my supervisor at Stirling) and colleagues' survey<sup><a href="#ref-3" class="cite-ref">[3]</a></sup> maps how far that one trick works.</p>
+
+ <h2>Great Deluge: the tide going out</h2>
+
+ <p>The manager decides which move to try. Something still has to decide which results to keep: Gunter Dueck's Great Deluge, published in 1993<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> does the trick.</p>
+
+ <p>Dueck told it as a story about rain - it rains without end, the water rises, and a hiker who wants to end up on a high peak just has one goal: keep their feet dry!</p>
+
+ <p>For minimisation, just turn it upside down: cost is depth, and the search is a fish that must stay submerged. The tide goes out, the pool drains, and the fish is herded into the deepest hollow of the reef it can still reach, or mermaids, or whatever, it's a metaphor you get the idea.</p>
+
+ <p>Compare the two acceptance rules. Simulated annealing accepts a worsening move with probability <code>exp(&minus;&Delta;/T)</code>, which means choosing a starting temperature, a cooling schedule, and possibly reheats: a small family of dials, as the <a href="simulated-annealing-live.html">demo</a> showed. Great Deluge accepts any move that lands at or below the water level. Uphill, downhill, sideways: if you are under the surface, woohoo.</p>
+
+ <h2>Watch the manager learn</h2>
+
+ <p>Watch the probability bars first. That row is the manager's opinion of its workers, updating live. Early on, H3 hoovers up credit, because on a messy random timetable the biggest offender is obvious. Then the easy repairs run out, H3 stalls, decay eats its lead, and you can watch H1 and H4 claw back probability as disruption starts earning acceptances that greedy repair cannot find.</p>
+
+ <p>Then watch the flood chart. The shaded water is the accepted region, the line is the cost swimming inside it, and whenever the tide presses down on the line, the level is doing the forcing.</p>
+
+ <div class="kr-viz" id="hh-demo">
+   <canvas id="hhCanvas" height="360" role="img" aria-label="Animated exam timetabling demo: twenty lettered exam tiles arranged in seven timeslot columns, tinted by how much penalty each contributes, with red links joining conflicting exams that share a timeslot, sliding between slots as heuristics move them"></canvas>
+   <div class="hh-heur" id="hhHeur" role="group" aria-label="Live selection probabilities for the four low-level heuristics">
+     <div class="hh-heur-row" data-h="0"><span class="hh-heur-name">H1 nudge one exam</span><div class="hh-bar"><div class="hh-bar-fill"></div></div><span class="hh-heur-pct">25%</span></div>
+     <div class="hh-heur-row" data-h="1"><span class="hh-heur-name">H2 swap two exams</span><div class="hh-bar"><div class="hh-bar-fill"></div></div><span class="hh-heur-pct">25%</span></div>
+     <div class="hh-heur-row" data-h="2"><span class="hh-heur-name">H3 worst to best slot</span><div class="hh-bar"><div class="hh-bar-fill"></div></div><span class="hh-heur-pct">25%</span></div>
+     <div class="hh-heur-row" data-h="3"><span class="hh-heur-name">H4 ruin &amp; recreate</span><div class="hh-bar"><div class="hh-bar-fill"></div></div><span class="hh-heur-pct">25%</span></div>
+   </div>
+   <canvas id="hhChart" class="kr-chart" height="160" role="img" aria-label="Live charts: total cost over time with the draining Great Deluge water level shown as a shaded flood area, and the percentage of proposed moves being accepted"></canvas>
+   <div class="kr-toolbar" data-kr-toolbar></div>
+   <div class="kr-sliders" data-kr-sliders></div>
+   <div class="kr-stats" data-kr-stats></div>
+   <p class="kr-note">Columns are timeslots; tiles are exams, tinted from green (harmless) to red (expensive) by the penalty each currently contributes. A red link joins two conflicting exams caught in the same slot; the dashed line marks the three-room capacity. In the chart, the shaded flood is the Great Deluge acceptance region draining away, the amber line is the cost living inside it, and the second pane tracks what share of proposed moves is being accepted. Speed is moves per second. The run stops itself when the timetable is perfect, or when the tide has passed the search and nothing has been accepted for 600 moves in a row.</p>
+ </div>
+
+ <h2>The tide, too fast and too slow</h2>
+
+ <p>Drain the water too fast, by pushing the drop rate to maximum, and the level crashes below any cost the search can actually reach. From then on nothing passes the test at all: the accepted-moves stat falls to zero while the hard-conflict count sits stranded above it, and after 600 rejections in a row the demo gives up and says so. The search hasn't converged. The tide stranded it partway down the reef, which is the deluge's version of quenching hot metal too quickly.</p>
+
+ <p>Drain it too slowly and the level stays miles above the cost, the rule accepts almost everything, and the search wanders: plenty of motion, nothing pushing the cost down. The chart shows a cost line bouncing around far below a distant water surface but going nowhere in particular. All the forcing comes from the tide.</p>
+
+ <p>Then turn learning to zero. The manager stops keeping score and picks workers uniformly at random: a committee with no memory. Restart a few runs at learning zero, then a few at full learning, and compare how long the hard-conflict counter takes to hit zero. </p>
+
+ <h2>The ladder up</h2>
+
+ <p>There is a tradition in this series of me telling you that some dial matters enormously and then making you tune it by hand: mutation rates, evaporation rates, cooling schedules, F and CR, tabu tenures. <a href="cma-es-live.html">CMA-ES</a> staged the first escape from that tradition, adapting its own search distribution as it ran; a hyper-heuristic takes the idea to its limit and moves the whole choice of <em>which heuristic to use</em> inside the run.</p>
+
+ <p>It doesn't remove the design decisions: I still chose the workers, the reward, the decay and the floor. Turtles, all the way up.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Why not just use the best heuristic all the time?</summary>
+ <p>The great thing about hyper-heuristics is that they can work on varied problems. If you have an especially large number of exams vs. more or less constraints vs. lots of "ok" solutions and it being hard to traverse them etc.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>How is Great Deluge different from simulated annealing?</summary>
+ <p>Both accept worsening moves early and become strict late. Annealing is probabilistic: a worse move survives a coin flip whose odds shrink with the damage done and with the falling temperature. Great Deluge is a deterministic threshold: any move landing at or below the water level is accepted, however bad, and any move above it is rejected, however slight. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Is the manager just a multi-armed bandit?</summary>
+ <p>It is a close cousin. Choosing which lever to pull based on observed payoffs is the bandit problem, though here the payoffs are nonstationary, so the scores decay rather than accumulate forever. The demo above is a selection hyper-heuristic, choosing among fixed workers. Generation hyper-heuristics go further and build new heuristics from raw ingredients, often with genetic programming - the Burke survey in the references maps the family tree.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Dueck, G. (1993). New Optimization Heuristics: The Great Deluge Algorithm and the Record-to-Record Travel. <em>Journal of Computational Physics</em>, 104(1), 86&ndash;92. <a href="https://doi.org/10.1006/jcph.1993.1010" target="_blank" rel="noopener">https://doi.org/10.1006/jcph.1993.1010</a>
+          </li>
+          <li id="ref-2">
+            Cowling, P., Kendall, G., &amp; Soubeiga, E. (2001). A Hyperheuristic Approach to Scheduling a Sales Summit. In <em>Practice and Theory of Automated Timetabling III (PATAT 2000)</em>, LNCS 2079, 176&ndash;190. <a href="https://doi.org/10.1007/3-540-44629-X_11" target="_blank" rel="noopener">https://doi.org/10.1007/3-540-44629-X_11</a>
+          </li>
+          <li id="ref-3">
+            Burke, E. K., Gendreau, M., Hyde, M., Kendall, G., Ochoa, G., &Ouml;zcan, E., &amp; Qu, R. (2013). Hyper-heuristics: a survey of the state of the art. <em>Journal of the Operational Research Society</em>, 64(12), 1695&ndash;1724. <a href="https://doi.org/10.1057/jors.2013.71" target="_blank" rel="noopener">https://doi.org/10.1057/jors.2013.71</a>
+          </li>
+        </ol>
+
+ </div>
+ </div>
+ </div>
+
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+
+<script src="../js/kr-viz.js"></script>
+ <script>
+ /* ============================================================
+    Hyper-heuristics, Live: the interactive demo for this post.
+    Chrome from js/kr-viz.js. What stays here is the exam timetabling
+    problem, the four low-level heuristics, the manager's adaptive
+    roulette over their scores, Great Deluge acceptance, and the
+    drawing of the timetable with its eased tile motion.
+    ============================================================ */
+ (function () {
+   'use strict';
+   var wrap = document.getElementById('hh-demo');
+   if (!wrap) return;
+
+   var E = 20, S = 7, ROOMS = 3, HARD = 100, CAPW = 10;
+   var LETTERS = 'ABCDEFGHIJKLMNOPQRST';
+   var HNAMES = ['H1 nudge', 'H2 swap', 'H3 worst-to-best', 'H4 ruin'];
+   var ACC_WIN = 120;
+   var STALL = 600;      // rejections in a row before the run calls itself done
+   var instanceSeed = 20260807, instances = 0;
+   var heurRows = document.querySelectorAll('#hhHeur .hh-heur-row');
+   var dispX = [], dispY = [];
+
+   function hexToRgb(h) {
+     h = (h || '').trim();
+     if (h[0] === '#') {
+       var s = h.slice(1);
+       if (s.length === 3) s = s[0] + s[0] + s[1] + s[1] + s[2] + s[2];
+       var n = parseInt(s, 16);
+       return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+     }
+     var m = h.match(/\d+/g);
+     return m ? [+m[0], +m[1], +m[2]] : [128, 128, 128];
+   }
+   function mixCss(a, b, t) {
+     var A = hexToRgb(a), B2 = hexToRgb(b);
+     return 'rgb(' + Math.round(A[0] + (B2[0] - A[0]) * t) + ',' +
+                     Math.round(A[1] + (B2[1] - A[1]) * t) + ',' +
+                     Math.round(A[2] + (B2[2] - A[2]) * t) + ')';
+   }
+   function roundRect(g, x, y, w, h, r) {
+     g.beginPath();
+     g.moveTo(x + r, y);
+     g.arcTo(x + w, y, x + w, y + h, r);
+     g.arcTo(x + w, y + h, x, y + h, r);
+     g.arcTo(x, y + h, x, y, r);
+     g.arcTo(x, y, x + w, y, r);
+     g.closePath();
+   }
+
+   // the conflict graph is a property of the instance, not of a run, so it
+   // is built from its own seeded stream and survives Restart
+   function buildInstance(seed) {
+     var a = seed >>> 0;
+     function r() {
+       a |= 0; a = (a + 0x6D2B79F5) | 0;
+       var t = Math.imul(a ^ (a >>> 15), 1 | a);
+       t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+     }
+     var pairs = [], neigh = [], e, i, j;
+     for (e = 0; e < E; e++) neigh.push([]);
+     for (i = 0; i < E; i++) {
+       for (j = i + 1; j < E; j++) {
+         if (r() < 0.25) {
+           var w = 1 + Math.floor(r() * 3);
+           pairs.push({a: i, b: j, w: w});
+           neigh[i].push({o: j, w: w});
+           neigh[j].push({o: i, w: w});
+         }
+       }
+     }
+     return {pairs: pairs, neigh: neigh};
+   }
+   var inst = buildInstance(instanceSeed);
+
+   function slotCounts(slotOf) {
+     var cnt = new Array(S).fill(0);
+     for (var e = 0; e < E; e++) cnt[slotOf[e]]++;
+     return cnt;
+   }
+   function totalCost(slotOf) {
+     var c = 0, cnt = slotCounts(slotOf), s, p;
+     for (s = 0; s < S; s++) if (cnt[s] > ROOMS) c += (cnt[s] - ROOMS) * CAPW;
+     for (p = 0; p < inst.pairs.length; p++) {
+       var d = Math.abs(slotOf[inst.pairs[p].a] - slotOf[inst.pairs[p].b]);
+       if (d === 0) c += HARD; else if (d === 1) c += inst.pairs[p].w;
+     }
+     return c;
+   }
+   function hardCount(slotOf) {
+     var n = 0;
+     for (var p = 0; p < inst.pairs.length; p++) {
+       if (slotOf[inst.pairs[p].a] === slotOf[inst.pairs[p].b]) n++;
+     }
+     return n;
+   }
+   function examPen(slotOf, e, cnt) {
+     // full attribution of pair costs, plus this exam's share of slot overflow
+     var c = 0, s = slotOf[e];
+     for (var n = 0; n < inst.neigh[e].length; n++) {
+       var d = Math.abs(s - slotOf[inst.neigh[e][n].o]);
+       if (d === 0) c += HARD; else if (d === 1) c += inst.neigh[e][n].w;
+     }
+     if (cnt[s] > ROOMS) c += CAPW * (cnt[s] - ROOMS) / cnt[s];
+     return c;
+   }
+   function probs(scores) {
+     var w = [], sum = 0, i;
+     for (i = 0; i < 4; i++) { w.push(scores[i] + 0.15); sum += w[i]; }
+     for (i = 0; i < 4; i++) w[i] /= sum;
+     return w;
+   }
+
+   var viz = KRViz.mount('#hh-demo', {
+     seed: 20260807,
+     canvases: {
+       board: {el: '#hhCanvas',
+               height: function (w) { return Math.max(280, Math.min(400, w * 0.62)); }},
+       chart: {el: '#hhChart', height: 160, mobile: {height: 300}}
+     },
+     buttons: ['run', 'restart',
+       {id: 'new', label: 'New instance', onClick: function (api) {
+         instances++;
+         inst = buildInstance(instanceSeed + instances * 7919);
+         api.restart();
+       }}],
+     controls: [
+       {id: 'drop', label: 'Water drop rate', min: 5, max: 100, value: 30,
+        fmt: function (v) { return v + '%'; }},
+       {id: 'learn', label: 'Learning', min: 0, max: 100, value: 60,
+        fmt: function (v) { return v + '%'; }},
+       {id: 'speed', label: 'Speed', min: 10, max: 600, step: 10, value: 120,
+        fmt: function (v) { return String(v); }}
+     ],
+     stats: [
+       {id: 'cost', label: 'Current cost'},
+       {id: 'best', label: 'Best cost'},
+       {id: 'water', label: 'Water level'},
+       {id: 'hard', label: 'Hard conflicts'},
+       {id: 'acc', label: 'Accepted moves'},
+       {id: 'fav', label: 'Favourite'}
+     ],
+     charts: [{
+       canvas: 'chart',
+       panes: [
+         {label: 'COST vs WATER LEVEL', yMin: 0,
+          series: [{key: 'c', tone: 's1', label: 'cost'},
+                   {key: 'b', tone: 's2', label: 'best'},
+                   {key: 'B', tone: 's3', label: 'water'}]},
+         {label: 'ACCEPTED MOVES', yMin: 0, yMax: 1, series: [{key: 'a', tone: 's4', fill: true}]}
+       ]
+     }],
+
+     init: function (ctx) {
+       var slotOf = [];
+       for (var e = 0; e < E; e++) slotOf.push(Math.floor(ctx.rng() * S));
+       var cur = totalCost(slotOf);
+       dispX = []; dispY = [];
+       var st = {slotOf: slotOf, cur: cur, best: cur, bestSlotOf: slotOf.slice(),
+                 B0: Math.max(60, cur * 1.2), B: Math.max(60, cur * 1.2), scores: [1, 1, 1, 1],
+                 accHist: [], flash: new Array(E).fill(0),
+                 rejectRun: 0, feasibleAt: 0};
+       ctx.record({c: cur, b: cur, B: st.B, a: 0});
+       return st;
+     },
+
+     step: function (ctx) {
+       var st = ctx.state, slotOf = st.slotOf, rng = ctx.rng;
+
+       function randSlotNot(s) { var ns = Math.floor(rng() * (S - 1)); if (ns >= s) ns++; return ns; }
+       function propose(h) {
+         var e, i;
+         if (h === 0) {                                   // move one random exam
+           e = Math.floor(rng() * E);
+           return [[e, randSlotNot(slotOf[e])]];
+         }
+         if (h === 1) {                                   // swap two exams' slots
+           var a = Math.floor(rng() * E), b = Math.floor(rng() * E), g = 0;
+           while ((b === a || slotOf[b] === slotOf[a]) && g++ < 12) b = Math.floor(rng() * E);
+           if (b === a || slotOf[a] === slotOf[b]) return null;
+           return [[a, slotOf[b]], [b, slotOf[a]]];
+         }
+         if (h === 2) {                                   // worst exam to its best slot
+           var cnt = slotCounts(slotOf), we = 0, wp = -1;
+           for (e = 0; e < E; e++) {
+             var p = examPen(slotOf, e, cnt);
+             if (p > wp) { wp = p; we = e; }
+           }
+           var old = slotOf[we], bs = old, bc = Infinity;
+           for (var s = 0; s < S; s++) {
+             slotOf[we] = s;
+             var c = totalCost(slotOf);
+             if (c < bc) { bc = c; bs = s; }
+           }
+           slotOf[we] = old;
+           if (bs === old) bs = randSlotNot(old);         // never a no-op
+           return [[we, bs]];
+         }
+         var picks = [], used = {};                        // small ruin-and-recreate
+         while (picks.length < 3) {
+           e = Math.floor(rng() * E);
+           if (used[e]) continue;
+           used[e] = 1; picks.push([e, Math.floor(rng() * S)]);
+         }
+         return picks;
+       }
+
+       // the manager: adaptive roulette over heuristic scores
+       var w = [], sum = 0, i;
+       for (i = 0; i < 4; i++) { w.push(st.scores[i] + 0.15); sum += w[i]; }
+       var rr = rng() * sum, acc2 = 0, h = 3;
+       for (i = 0; i < 4; i++) { acc2 += w[i]; if (rr <= acc2) { h = i; break; } }
+
+       var mv = propose(h), accepted = false;
+       if (mv) {
+         var olds = [];
+         for (i = 0; i < mv.length; i++) { olds.push(slotOf[mv[i][0]]); slotOf[mv[i][0]] = mv[i][1]; }
+         var nc = totalCost(slotOf);
+         // Great Deluge: keep any move at or below the water level, uphill or
+         // not; once the level crashes below the reachable cost, nothing passes
+         if (nc <= st.B) {
+           accepted = true;
+           var learn = ctx.controls.learn / 100;
+           if (nc < st.cur && learn > 0) {
+             st.scores[h] = Math.min(30, st.scores[h] + learn * (1 + (st.cur - nc) / 25));
+           }
+           st.cur = nc;
+           if (nc < st.best) { st.best = nc; st.bestSlotOf = slotOf.slice(); }   // the incumbent
+           for (i = 0; i < mv.length; i++) st.flash[mv[i][0]] = 0.7;
+         } else {
+           for (i = 0; i < mv.length; i++) slotOf[mv[i][0]] = olds[i];
+         }
+       }
+       st.rejectRun = accepted ? 0 : st.rejectRun + 1;
+       for (var k = 0; k < 4; k++) st.scores[k] *= 0.998;   // reputations decay
+       // the tide goes out: a linear drain plus a catch-up term, so when the
+       // level sits far above the cost it falls faster and stays taut
+       var d = ctx.controls.drop / 100;
+       st.B = Math.max(0, st.B - (st.B0 * Math.pow(d, 6) * 0.2 +
+                                  Math.max(0, st.B - st.cur) * d * 0.002));
+       st.accHist.push(accepted ? 1 : 0);
+       if (st.accHist.length > ACC_WIN) st.accHist.shift();
+
+       // sample about four times a second whatever the move rate
+       var every = Math.max(1, Math.round(ctx.controls.speed / 4));
+       if (ctx.iteration % every === 0) {
+         ctx.record({c: st.cur, b: st.best, B: st.B, a: accRate(st)});
+       }
+
+       // early stopping: a perfect timetable, or the tide has passed the
+       // search (nothing accepted for STALL moves with the level below the
+       // cost, so only an improvement could ever pass again). The deluge
+       // accepts uphill moves, so the run may be sitting above its best;
+       // like any sensible implementation it hands back the best it found.
+       var hard = hardCount(slotOf), n = (ctx.iteration + 1).toLocaleString();
+       if (hard === 0 && !st.feasibleAt) st.feasibleAt = ctx.iteration + 1;
+       if (st.cur === 0) {
+         st.done = true;
+         ctx.finish('Perfect timetable in ' + n + ' moves: no clashes, no back-to-back exams, nobody in the corridor.');
+       } else if (st.rejectRun >= STALL && st.B < st.cur) {
+         st.done = true;
+         if (st.cur > st.best) {
+           for (i = 0; i < E; i++) slotOf[i] = st.bestSlotOf[i];
+           st.cur = st.best;
+           hard = hardCount(slotOf);
+         }
+         if (hard > 0) {
+           ctx.finish('Stranded after ' + n + ' moves: the tide fell below anything the search could reach. Best it found: cost ' +
+                      Math.round(st.best) + ' with ' + hard + ' hard conflict' + (hard === 1 ? '' : 's') + '. Slow the drain and restart.');
+         } else {
+           ctx.finish('Settled after ' + n + ' moves: the tide is out. Showing the best timetable it found, a legal one at cost ' +
+                      Math.round(st.best) + '.');
+         }
+       }
+     },
+
+     draw: function (ctx) {
+       var st = ctx.state, c = ctx.colors, cv = ctx.canvas.board, g = cv.g;
+       var W = cv.w, H = cv.h, slotOf = st.slotOf, e, s;
+       var labelH = 18, topPad = 8, colW = (W - 8) / S;
+       var stacks = [];
+       for (s = 0; s < S; s++) stacks.push([]);
+       for (e = 0; e < E; e++) stacks[slotOf[e]].push(e);
+       var maxStack = 4;
+       for (s = 0; s < S; s++) if (stacks[s].length > maxStack) maxStack = stacks[s].length;
+       var avail = H - labelH - topPad - 6;
+       var rowH = Math.min(38, avail / maxStack);
+       var tileH = rowH - 4, tileW = colW - 10;
+       var cnt = slotCounts(slotOf);
+
+       for (s = 0; s < S; s++) {
+         var cx = 4 + s * colW;
+         g.fillStyle = c.grid; g.globalAlpha = 0.25;
+         roundRect(g, cx + 1, topPad - 4, colW - 6, avail + 8, 6); g.fill();
+         g.globalAlpha = 1;
+         g.fillStyle = c.muted; g.font = '600 10px Poppins, sans-serif';
+         g.textAlign = 'center';
+         g.fillText('Slot ' + (s + 1), cx + (colW - 4) / 2, H - 5);
+         g.textAlign = 'start';
+       }
+       var capY = topPad + ROOMS * rowH - 1;
+       if (maxStack > ROOMS) {
+         g.strokeStyle = c.muted; g.setLineDash([4, 4]); g.lineWidth = 1; g.globalAlpha = 0.7;
+         g.beginPath(); g.moveTo(4, capY); g.lineTo(W - 4, capY); g.stroke();
+         g.setLineDash([]); g.globalAlpha = 1;
+       }
+       // target positions, eased display positions
+       var k = 1 - Math.exp(-8 * (ctx.dt || 0.016)), moving = 0;
+       for (s = 0; s < S; s++) {
+         for (var q = 0; q < stacks[s].length; q++) {
+           e = stacks[s][q];
+           var tx = 4 + s * colW + 5, ty = topPad + q * rowH;
+           if (dispX[e] === undefined) { dispX[e] = tx; dispY[e] = ty; }
+           dispX[e] += (tx - dispX[e]) * k;
+           dispY[e] += (ty - dispY[e]) * k;
+           moving = Math.max(moving, Math.abs(tx - dispX[e]), Math.abs(ty - dispY[e]));
+         }
+       }
+       // the frame loop stops when the run finishes, but the board may
+       // still be gliding (a finish hands back the best timetable), so it
+       // keeps drawing on its own until every tile has arrived
+       if (st.done && moving > 0.4 && !st.settling) {
+         st.settling = true;
+         requestAnimationFrame(function () { st.settling = false; viz.draw(); });
+       }
+       g.lineWidth = 2; g.globalAlpha = 0.6; g.strokeStyle = c.s4;
+       for (var p = 0; p < inst.pairs.length; p++) {
+         if (slotOf[inst.pairs[p].a] !== slotOf[inst.pairs[p].b]) continue;
+         g.beginPath();
+         g.moveTo(dispX[inst.pairs[p].a] + tileW / 2, dispY[inst.pairs[p].a] + tileH / 2);
+         g.lineTo(dispX[inst.pairs[p].b] + tileW / 2, dispY[inst.pairs[p].b] + tileH / 2);
+         g.stroke();
+       }
+       g.globalAlpha = 1;
+
+       g.font = '700 11px Poppins, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+       for (e = 0; e < E; e++) {
+         var t = Math.min(1, examPen(slotOf, e, cnt) / 120);
+         var col = mixCss(c.s2, c.s4, t);
+         g.globalAlpha = 0.16 + 0.24 * t;
+         roundRect(g, dispX[e], dispY[e], tileW, tileH, 5); g.fillStyle = col; g.fill();
+         g.globalAlpha = 1;
+         g.lineWidth = 1.5; g.strokeStyle = col;
+         roundRect(g, dispX[e], dispY[e], tileW, tileH, 5); g.stroke();
+         if (st.flash[e] > 0) {           // steady fade after a move, no strobing
+           g.globalAlpha = Math.min(1, st.flash[e] / 0.7);
+           g.lineWidth = 2; g.strokeStyle = c.s1;
+           roundRect(g, dispX[e] - 1.5, dispY[e] - 1.5, tileW + 3, tileH + 3, 6); g.stroke();
+           g.globalAlpha = 1;
+           st.flash[e] = Math.max(0, st.flash[e] - (ctx.dt || 0.016));
+         }
+         g.fillStyle = c.ink;
+         g.fillText(LETTERS[e], dispX[e] + tileW / 2, dispY[e] + tileH / 2 + 0.5);
+       }
+       g.textAlign = 'start'; g.textBaseline = 'alphabetic';
+
+       var pr = probs(st.scores), fav = 0;
+       for (var i2 = 1; i2 < 4; i2++) if (pr[i2] > pr[fav]) fav = i2;
+       ctx.set('cost', Math.round(st.cur));
+       ctx.set('best', Math.round(st.best));
+       ctx.set('water', Math.round(st.B));
+       ctx.set('hard', hardCount(slotOf));
+       ctx.set('acc', Math.round(accRate(st) * 100) + '%');
+       ctx.set('fav', HNAMES[fav]);
+       if (!st.done) ctx.status(ctx.iteration.toLocaleString() + ' moves');   // a finished run keeps its verdict
+       for (var r2 = 0; r2 < heurRows.length; r2++) {
+         var row = heurRows[r2];
+         row.querySelector('.hh-bar-fill').style.width = (pr[r2] * 100).toFixed(1) + '%';
+         row.querySelector('.hh-heur-pct').textContent = Math.round(pr[r2] * 100) + '%';
+         row.classList.toggle('fav', r2 === fav);
+       }
+     }
+   });
+
+   function accRate(st) {
+     if (!st.accHist.length) return 0;
+     var n = 0;
+     for (var i = 0; i < st.accHist.length; i++) n += st.accHist[i];
+     return n / st.accHist.length;
+   }
+ })();
+ </script>
+</body>
+</html>

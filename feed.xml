@@ -5,11 +5,152 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 16 Sep 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Wed, 16 Sep 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Sat, 19 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Sat, 19 Sep 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Hyper-Heuristics, Live</title>
+      <link>https://www.kenreid.co.uk/blog/hyper-heuristics-live.html</link>
+      <guid>https://www.kenreid.co.uk/blog/hyper-heuristics-live.html</guid>
+      <pubDate>Sat, 19 Sep 2026 00:00:00 +0000</pubDate>
+      <description>A hyper-heuristic timetabling exams live in your browser: four move heuristics compete for a learning manager&#x27;s attention while a Great Deluge water level drains.</description>
+      <category>ai</category>
+      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/hyper-heuristics-live.html">View it on the site</a> to play with it.</em></p>
+ <h1>Hyper-Heuristics, Live</h1>
+ <div class="blog-meta">
+ 19 September 2026 &middot;
+ <span class="blog-tag">ai</span>
+ </div>
+
+ <p>Nine posts in, every search strategy in this series has handed you its dials and waited:</p>
+ <ul>
+ <li><a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">the ant colony</a> wanted an evaporation rate</li>
+ <li><a href="https://www.kenreid.co.uk/blog/evolution-live.html">the genetic algorithm</a> and its <a href="https://www.kenreid.co.uk/blog/genetic-programming-live.html">program-breeding cousin</a> wanted mutation rates and population sizes</li>
+ <li><a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">simulated annealing</a> put you in charge of the thermostat</li>
+ <li><a href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">the swarm</a> asked for inertia, own memory and peer pressure</li>
+ <li><a href="https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html">variable neighbourhood search</a> needed to know how many neighbourhoods to shake through</li>
+ <li><a href="https://www.kenreid.co.uk/blog/cma-es-live.html">CMA-ES</a> adapted its own step size, but still took a population and a starting sigma from you</li>
+ <li><a href="https://www.kenreid.co.uk/blog/differential-evolution-live.html">differential evolution</a> asked for F and CR</li>
+ <li><a href="https://www.kenreid.co.uk/blog/tabu-search-live.html">tabu search</a>, one post ago, wanted its tenure set</li>
+ </ul>
+
+ <p>Hyper heuristics are inherently <i>meta</i>. It searches for the right way to search, optimizing by choosing the best optimizer.</p>
+
+ <p>It's a heuristic for choosing heuristics, and the field calls it a hyper-heuristic.</p>
+
+ 
+
+ <p>The problem this demo is chewing on is exam timetabling, which is very close to what I solved during my studies. My PhD went on rostering BT's engineers, and exam timetabling is the same family of problem with students in place of shifts: easy to state, brutal to solve, and impossible to explain to friends and family about exactly what makes it so difficult. </p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Hyper-heuristic:</strong> a search strategy that operates on other search strategies. It decides which move-making heuristic to apply next, rather than editing the solution itself.</li>
+ <li><strong>Low-level heuristic:</strong> one of the workers: a simple move rule, like "swap two exams", that actually edits the timetable.</li>
+ <li><strong>Domain barrier:</strong> the wall between manager and workers. The hyper-heuristic never sees exams, students, or rooms; only whether the cost went up or down.</li>
+ <li><strong>Selection vs generation hyper-heuristics:</strong> selection hyper-heuristics choose among existing heuristics (this post); generation hyper-heuristics assemble brand-new heuristics from components, often with genetic programming.</li>
+ <li><strong>Great Deluge:</strong> an acceptance rule with a single moving part: a water level that starts generous and drains steadily. Any move that keeps the cost at or below the level is accepted, uphill or not.</li>
+ <li><strong>Acceptance criterion:</strong> the rule that decides whether a proposed move is kept or thrown away. Annealing uses temperature and probability; Great Deluge uses a water level.</li>
+ <li><strong>Hard constraint:</strong> a rule the timetable must satisfy (no student sitting two exams at once). Violations are possible but only if really struggling to find solutions.</li>
+ <li><strong>Soft constraint:</strong> a preference (no back-to-back exams for the same student). </li>
+ </ul>
+ </div>
+
+ <h2>Twenty exams, seven slots, three rooms</h2>
+
+ <p>Any of us who have been to college / university have likely experienced the hellish end of term exam period. Most students stick to specific degree programs, so if you're a 'generic' student, your exams will likely be spaced fairly evenly. If you, however, are doing a triple major of sports, theoretical physics and nursing, you are the most likely to be screwed over, as screwing up people with that specific triple-threat (just you) is less of a failure than messing up everyone who just took generic psychology classes exams.</p>
+
+ <p>The instance below is twenty exams, labelled A to T, to be placed into seven timeslots with three rooms available per slot. A seeded random conflict graph decides which pairs of exams share students. From that, one number to shrink. Two conflicting exams in the same slot is a hard constraint violation and costs '100', because somewhere a student is expected to be in two rooms at once.</p>
+
+ <p>Conflicting exams in adjacent slots cost 1 to 3 (scaled by how many students they share), because back-to-back exams are legal, but far from ideal. And a fourth exam squeezed into a three-room slot costs 10 per extra exam. That weighting is the standard trick for mixing hard and soft constraints into one objective.</p>
+
+ <p>A timetable is not usable until the hard count reaches zero. Everything after that is how an "acceptable" timetables progresses towards "ok", and hopefully, "good", or even better, "optimal".</p>
+
+ <h2>The manager and the workers</h2>
+
+ <p>Four low-level heuristics do the standard heuristic solving business. <strong>H1 nudge</strong> moves one random exam to a random slot. <strong>H2 swap</strong> picks two exams and trades their slots. <strong>H3 worst-to-best</strong> finds the exam contributing the most penalty and moves it to the slot where it does the least damage. <strong>H4 ruin</strong> kicks three random exams to random slots, a small controlled demolition.</p>
+
+ <p>Above them sits the manager - it keeps a score for each worker, rewards a worker whenever its move is accepted and improves the cost, and lets every score decay over time. Even the manager's least favourite heuristic keeps getting the odd chance, because a heuristic useless so far might be useful later down the line when the circumstances change.</p>
+
+ <p>Cowling, Kendall and Soubeiga used the same pattern to schedule a sales summit<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>, in the paper that named the modern field.</p>
+
+ <h2>Intentionally Blind</h2>
+
+ <p>The manager can't see the timetable. It doesn't know what an exam is. It has no idea students exist. It just has four levers to pull and keeps records of what is working well just now, what isn't, and keeps chugging.</p>
+
+ <p>All it ever observes is "I pulled lever three and the cost went down by 40" or "I pulled lever one and the move was rejected". That blindness is called the domain barrier, and it sounds like a handicap but it's necessary.</p>
+
+ <p>Because the manager only ever hears cost deltas, you can unplug the four timetabling workers, plug in "move a nurse to another shift" and "swap two delivery routes", and the same manager, unchanged, starts learning which of <em>those</em> levers earns its keep. The domain knowledge lives entirely in the cheap, disposable workers. Burke (who was briefly my supervisor at Stirling) and colleagues' survey<sup><a href="#ref-3" class="cite-ref">[3]</a></sup> maps how far that one trick works.</p>
+
+ <h2>Great Deluge: the tide going out</h2>
+
+ <p>The manager decides which move to try. Something still has to decide which results to keep: Gunter Dueck's Great Deluge, published in 1993<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> does the trick.</p>
+
+ <p>Dueck told it as a story about rain - it rains without end, the water rises, and a hiker who wants to end up on a high peak just has one goal: keep their feet dry!</p>
+
+ <p>For minimisation, just turn it upside down: cost is depth, and the search is a fish that must stay submerged. The tide goes out, the pool drains, and the fish is herded into the deepest hollow of the reef it can still reach, or mermaids, or whatever, it's a metaphor you get the idea.</p>
+
+ <p>Compare the two acceptance rules. Simulated annealing accepts a worsening move with probability <code>exp(&minus;&Delta;/T)</code>, which means choosing a starting temperature, a cooling schedule, and possibly reheats: a small family of dials, as the <a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">demo</a> showed. Great Deluge accepts any move that lands at or below the water level. Uphill, downhill, sideways: if you are under the surface, woohoo.</p>
+
+ <h2>Watch the manager learn</h2>
+
+ <p>Watch the probability bars first. That row is the manager's opinion of its workers, updating live. Early on, H3 hoovers up credit, because on a messy random timetable the biggest offender is obvious. Then the easy repairs run out, H3 stalls, decay eats its lead, and you can watch H1 and H4 claw back probability as disruption starts earning acceptances that greedy repair cannot find.</p>
+
+ <p>Then watch the flood chart. The shaded water is the accepted region, the line is the cost swimming inside it, and whenever the tide presses down on the line, the level is doing the forcing.</p>
+
+ 
+
+ <h2>The tide, too fast and too slow</h2>
+
+ <p>Drain the water too fast, by pushing the drop rate to maximum, and the level crashes below any cost the search can actually reach. From then on nothing passes the test at all: the accepted-moves stat falls to zero while the hard-conflict count sits stranded above it, and after 600 rejections in a row the demo gives up and says so. The search hasn't converged. The tide stranded it partway down the reef, which is the deluge's version of quenching hot metal too quickly.</p>
+
+ <p>Drain it too slowly and the level stays miles above the cost, the rule accepts almost everything, and the search wanders: plenty of motion, nothing pushing the cost down. The chart shows a cost line bouncing around far below a distant water surface but going nowhere in particular. All the forcing comes from the tide.</p>
+
+ <p>Then turn learning to zero. The manager stops keeping score and picks workers uniformly at random: a committee with no memory. Restart a few runs at learning zero, then a few at full learning, and compare how long the hard-conflict counter takes to hit zero. </p>
+
+ <h2>The ladder up</h2>
+
+ <p>There is a tradition in this series of me telling you that some dial matters enormously and then making you tune it by hand: mutation rates, evaporation rates, cooling schedules, F and CR, tabu tenures. <a href="https://www.kenreid.co.uk/blog/cma-es-live.html">CMA-ES</a> staged the first escape from that tradition, adapting its own search distribution as it ran; a hyper-heuristic takes the idea to its limit and moves the whole choice of <em>which heuristic to use</em> inside the run.</p>
+
+ <p>It doesn't remove the design decisions: I still chose the workers, the reward, the decay and the floor. Turtles, all the way up.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Why not just use the best heuristic all the time?</summary>
+ <p>The great thing about hyper-heuristics is that they can work on varied problems. If you have an especially large number of exams vs. more or less constraints vs. lots of "ok" solutions and it being hard to traverse them etc.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>How is Great Deluge different from simulated annealing?</summary>
+ <p>Both accept worsening moves early and become strict late. Annealing is probabilistic: a worse move survives a coin flip whose odds shrink with the damage done and with the falling temperature. Great Deluge is a deterministic threshold: any move landing at or below the water level is accepted, however bad, and any move above it is rejected, however slight. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Is the manager just a multi-armed bandit?</summary>
+ <p>It is a close cousin. Choosing which lever to pull based on observed payoffs is the bandit problem, though here the payoffs are nonstationary, so the scores decay rather than accumulate forever. The demo above is a selection hyper-heuristic, choosing among fixed workers. Generation hyper-heuristics go further and build new heuristics from raw ingredients, often with genetic programming - the Burke survey in the references maps the family tree.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            Dueck, G. (1993). New Optimization Heuristics: The Great Deluge Algorithm and the Record-to-Record Travel. <em>Journal of Computational Physics</em>, 104(1), 86&ndash;92. <a href="https://doi.org/10.1006/jcph.1993.1010" target="_blank" rel="noopener">https://doi.org/10.1006/jcph.1993.1010</a>
+          </li>
+          <li id="ref-2">
+            Cowling, P., Kendall, G., &amp; Soubeiga, E. (2001). A Hyperheuristic Approach to Scheduling a Sales Summit. In <em>Practice and Theory of Automated Timetabling III (PATAT 2000)</em>, LNCS 2079, 176&ndash;190. <a href="https://doi.org/10.1007/3-540-44629-X_11" target="_blank" rel="noopener">https://doi.org/10.1007/3-540-44629-X_11</a>
+          </li>
+          <li id="ref-3">
+            Burke, E. K., Gendreau, M., Hyde, M., Kendall, G., Ochoa, G., &Ouml;zcan, E., &amp; Qu, R. (2013). Hyper-heuristics: a survey of the state of the art. <em>Journal of the Operational Research Society</em>, 64(12), 1695&ndash;1724. <a href="https://doi.org/10.1057/jors.2013.71" target="_blank" rel="noopener">https://doi.org/10.1057/jors.2013.71</a>
+          </li>
+        </ol>
+
+ ]]></content:encoded>
+    </item>
     <item>
       <title>Photographing Strangers</title>
       <link>https://www.kenreid.co.uk/blog/photographing-strangers.html</link>
@@ -3922,122 +4063,6 @@ frame.contentWindow.postMessage(
       <description>Every post on this blog carries around eighty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.</description>
       <category>technology</category>
       <category>writing</category>
-      <content:encoded><![CDATA[
- <h1>The Invisible Half of a Blog Post</h1>
- <div class="blog-meta">
- 4 August 2026 &middot;
- <span class="blog-tag">technology</span>
- <span class="blog-tag">writing</span>
- </div>
-
- <p>When I publish a post here, the words are roughly half the file. The other half is metadata: eighty-odd lines in the page's head, plus entries in two site-wide XML files. Skipping it all would change nothing about the reading experience, but it's necessary and is checked by <a href="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">a machine</a>. This post describes it. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
-
- <div class="plain-english-box">
- <h2>Quick jargon guide</h2>
- <ul>
- <li><strong>Metadata:</strong> data about the page rather than in it: its title, summary, author, date, and preview image, written in machine-readable form.</li>
- <li><strong>Open Graph:</strong> the tag family (invented by Facebook, used by everyone) that controls the card shown when your link is shared in a chat or feed.</li>
- <li><strong>Canonical URL:</strong> a tag declaring "this address is the one true home of this page", so search engines don't treat variants as duplicates.</li>
- <li><strong>JSON-LD / structured data:</strong> a machine-readable summary of the page (this is an article, by this person, on this date) in a format search engines parse directly.</li>
- <li><strong>RSS feed:</strong> a site-wide XML file listing recent posts, so feed readers can check for new writing without visiting.</li>
- <li><strong>Sitemap:</strong> a plain list of every page you'd like search engines to know about.</li>
- </ul>
- </div>
-
- <h2>The card in the chat window</h2>
-
- <p>Open Graph: five tags giving the post's title, description, preview image, address, and type. When someone pastes your link into a group chat or a social feed, the platform reads these tags to build the preview card. Without them, your link renders as bare blue text or, worse, a card assembled from whatever the scraper found first. With them, every share has a title, summary sentence, and a card image: the post's hero photograph with the title set over it in the site's own type, rendered by a script when the post is published so a shared link looks like the site it leads to. Twitter's near-identical tag family sits alongside for the platforms that read that instead.</p>
-
-<pre><code class="language-html">&lt;meta property="og:title" content="The Invisible Half of a Blog Post"&gt;
-&lt;meta property="og:description" content="Every post on this blog carries around eighty lines
-      of metadata nobody reads: social preview cards, structured data, feeds, citation tags."&gt;
-&lt;meta property="og:image" content="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/78.png"&gt;
-&lt;meta property="og:url" content="https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html"&gt;
-&lt;meta property="og:type" content="article"&gt;</code></pre>
-
- <p>The description gets written by a human (me), because it's the sentence that decides whether a stranger clicks. And the image tag points at a 1200 by 630 card built from the full-resolution photo, not a thumbnail, because preview scrapers resize down gracefully and up horribly.</p>
-
- <h2>The librarian's copy</h2>
-
- <p>Below the social tags sits a block of JSON-LD: the same facts (headline, author, date, image) restated in schema.org's vocabulary, which is the format Google actually parses for rich results. Where the Open Graph tags talk to chat apps, this block talks to crawlers, and it's how I explain that this page is an article by me.</p>
-
-<pre><code class="language-html">&lt;script type="application/ld+json"&gt;
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "The Invisible Half of a Blog Post",
-  "author": { "@type": "Person", "name": "Ken Reid", "url": "https://www.kenreid.co.uk" },
-  "datePublished": "2026-08-04",
-  "image": "https://www.kenreid.co.uk/img/photography/hero/78.webp"
-}
-&lt;/script&gt;</code></pre>
-
- <p>Each post carries citation tags (the format Google Scholar reads) and Dublin Core tags (the library world's metadata standard). I spent years in academia, the tags cost six lines, and if someone ever does want to cite <a href="https://www.kenreid.co.uk/blog/what-50000-scrobbles-say-about-me.html">the scrobbles post</a> in their media-studies dissertation, their reference manager will fill every field correctly. It's courteous and costs me nothing but a couple of seconds, and might give another citation or two to my Google Scholar account!</p>
-
-<pre><code class="language-html">&lt;meta name="citation_title" content="The Invisible Half of a Blog Post"&gt;
-&lt;meta name="citation_author" content="Reid, Kenneth N."&gt;
-&lt;meta name="citation_publication_date" content="2026/08/04"&gt;
-&lt;meta name="DC.title" content="The Invisible Half of a Blog Post"&gt;
-&lt;meta name="DC.creator" content="Kenneth N. Reid"&gt;
-&lt;meta name="DC.date" content="2026-08-04"&gt;</code></pre>
-
- <figure>
- <img src="https://www.kenreid.co.uk/img/photography/thumb/78.webp" alt="A four-pane skylight in a dark wooden attic roof, bright sky showing through" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
- <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> The part of the structure you only notice when the light comes through it.</figcaption>
- </figure>
-
- <h2>The site-wide ledgers</h2>
-
- <p>Two XML files round out every publish. The sitemap is a list of every page, so crawlers miss nothing. The RSS feed is how readers with feed readers (a small, excellent demographic) get new posts delivered without visiting, and it's essential infrastructure here. RSS predates the social platforms and will outlive several of them.</p>
-
-<pre><code class="language-xml">&lt;!-- feed.xml --&gt;
-&lt;item&gt;
-  &lt;title&gt;The Invisible Half of a Blog Post&lt;/title&gt;
-  &lt;link&gt;https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html&lt;/link&gt;
-  &lt;pubDate&gt;Tue, 04 Aug 2026 00:00:00 +0000&lt;/pubDate&gt;
-&lt;/item&gt;
-
-&lt;!-- sitemap.xml --&gt;
-&lt;url&gt;&lt;loc&gt;https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html&lt;/loc&gt;
-     &lt;changefreq&gt;yearly&lt;/changefreq&gt;&lt;priority&gt;0.8&lt;/priority&gt;&lt;/url&gt;</code></pre>
-
- <p>Each post also declares a canonical URL: the www and non-www versions of your site, plus any URL with tracking junk appended, all count as <em>different pages</em> to a search engine, splitting your modest search presence into fragments. One tag per page declares the official address and the fragments reunite.</p>
-
-<pre><code class="language-html">&lt;link rel="canonical" href="https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html"&gt;</code></pre>
-
- <h2>The real problem is discipline</h2>
-
- <p>Nothing above is hard. The hard part is that it's eighty lines of near-identical boilerplate on every post, and near-identical is the operative curse: copy the head from the last post, forget to change the og:image, and next week your post about cats is shared around under a photograph of a dog. </p>
-
- <p>So: automate the checking, not necessarily the writing. My audit script validates every page's metadata (descriptions present and sensibly sized, canonical matching the filename, preview images existing, JSON-LD parsing, feed and sitemap complete) on every push. Those eighty lines stay correct because a robot reads them. Without that, my recommendation would be to keep <em>less</em> metadata: only what you can maintain, because wrong metadata is worse than none.</p>
-
- <div class="faq-section">
- <h2>Common questions</h2>
-
- <details class="faq-item">
- <summary>What's the minimum set worth having?</summary>
- <p>Title, description, canonical, and the Open Graph tags with a real image. That covers search snippets and share cards, which is where the visible benefit lives. Add RSS if you post regularly; it's one generated file and your most loyal readers will use it. Everything beyond that is diminishing returns done for craft.</p>
- </details>
-
- <details class="faq-item">
- <summary>Does any of this improve search ranking?</summary>
- <p>Mostly no, and be suspicious of anyone selling otherwise. Metadata doesn't make a page rank higher; it makes the page <em>present correctly</em> wherever it appears: the right snippet, the right card, the right attribution. </p>
- </details>
-
- <details class="faq-item">
- <summary>How do I check what my links look like when shared?</summary>
- <p>Paste the URL into a private chat with yourself and see what unfurls. </p>
- </details>
-
- <details class="faq-item">
- <summary>Why not generate all this with a static site generator?</summary>
- <p>A generator absolutely would, from a few front-matter fields, and it's a fine reason to use one. This site is hand-built by choice (<a href="https://www.kenreid.co.uk/blog/blog-engine-in-one-json-file.html">a decision explained elsewhere</a>), so the equivalent is a checked template: same output, different division of labour between me and the machines.</p>
- </details>
- </div>
-
-        
-
- ]]></content:encoded>
     </item>
     <item>
       <title>Ctrl+K for a Static Site</title>
