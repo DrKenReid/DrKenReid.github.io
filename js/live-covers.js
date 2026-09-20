@@ -412,6 +412,84 @@
         };
     };
 
+    // Hyper-heuristics: a small exam timetable being shuffled by four
+    // workers while the deluge drains. Tiles hop between slot columns,
+    // red links mark clashes that thin out, the flood level sinks down
+    // the board, and four bars on the right are the manager's changing
+    // opinion of its workers, the favourite lit gold.
+    KINDS['hyper-heuristics-live'] = function (w, h, rnd) {
+        var S = 7, E = 16, pad = 6, boardW = w * 0.68, colW = (boardW - pad * 2) / S;
+        var top = h * 0.1, rowH = Math.min(14, (h * 0.78) / 4), tileH = rowH - 3, tileW = colW - 4;
+        var slot = [], x = [], y = [], i, tick = 0, CYCLE = 420;
+        for (i = 0; i < E; i++) slot.push((rnd() * S) | 0);
+        var pairs = []; for (i = 0; i < E; i++) for (var j = i + 1; j < E; j++) if (rnd() < 0.16) pairs.push([i, j]);
+        var score = [1, 1, 1, 1], shown = [0.25, 0.25, 0.25, 0.25], fav = 2, moved = -1, movedAt = -99;
+        function targets() {
+            var stack = []; for (var s = 0; s < S; s++) stack.push(0);
+            var t = [];
+            for (var e = 0; e < E; e++) { var s2 = slot[e]; t.push([pad + s2 * colW + 2, top + stack[s2] * rowH]); stack[s2]++; }
+            return t;
+        }
+        var tg = targets(); for (i = 0; i < E; i++) { x.push(tg[i][0]); y.push(tg[i][1]); }
+        function clashes() { var n = 0; for (var p = 0; p < pairs.length; p++) if (slot[pairs[p][0]] === slot[pairs[p][1]]) n++; return n; }
+        return {
+            step: function () {
+                tick++;
+                var phase = (tick % CYCLE) / CYCLE;
+                if (tick % CYCLE === 0) { for (i = 0; i < E; i++) slot[i] = (rnd() * S) | 0; score = [1, 1, 1, 1]; }
+                // a move every few frames, rarer as the tide falls; the greedy
+                // repair (H3) earns most credit early, disruption later
+                var rate = 0.45 * (1 - phase) + 0.04;
+                if (rnd() < rate) {
+                    var h = rnd() < (phase < 0.4 ? 0.55 : 0.3) ? 2 : (rnd() * 4) | 0;
+                    var e = (rnd() * E) | 0, before = clashes();
+                    if (h === 2) {   // move a clashing exam to a quieter slot
+                        for (var p = 0; p < pairs.length; p++) if (slot[pairs[p][0]] === slot[pairs[p][1]]) { e = pairs[p][rnd() < 0.5 ? 0 : 1]; break; }
+                    }
+                    var was = slot[e];
+                    slot[e] = (rnd() * S) | 0;
+                    // kept if it helps; a worsening move only passes while the
+                    // water is high, which is the deluge in miniature
+                    if (clashes() <= before) { score[h] += 1 + (before - clashes()); moved = e; movedAt = tick; }
+                    else if (rnd() < 0.6 * (1 - phase)) { moved = e; movedAt = tick; }
+                    else slot[e] = was;
+                }
+                for (i = 0; i < 4; i++) score[i] *= 0.985;
+                var sum = 0; for (i = 0; i < 4; i++) sum += score[i] + 0.15;
+                fav = 0;
+                for (i = 0; i < 4; i++) { var pr = (score[i] + 0.15) / sum; shown[i] += (pr - shown[i]) * 0.08; if (shown[i] > shown[fav]) fav = i; }
+                tg = targets();
+                for (i = 0; i < E; i++) { x[i] += (tg[i][0] - x[i]) * 0.18; y[i] += (tg[i][1] - y[i]) * 0.18; }
+            },
+            draw: function (ctx) {
+                var phase = (tick % CYCLE) / CYCLE, s;
+                for (s = 0; s < S; s++) rect(ctx, pad + s * colW + 1, top - 3, colW - 2, rowH * 4 + 6, 'rgba(255,255,255,0.05)');
+                // the deluge: a flood that drains down the board over the cycle
+                var level = top - 4 + (rowH * 4 + 10) * ease(Math.min(1, phase * 1.1));
+                rect(ctx, pad, level, boardW - pad * 2, top + rowH * 4 + 6 - level, 'rgba(143,180,230,0.16)');
+                line(ctx, pad, level, boardW - pad, level, C.blue, 1.5);
+                ctx.strokeStyle = 'rgba(252,96,96,0.75)'; ctx.lineWidth = 1;
+                for (var p = 0; p < pairs.length; p++) {
+                    var a = pairs[p][0], b = pairs[p][1];
+                    if (slot[a] !== slot[b]) continue;
+                    ctx.beginPath(); ctx.moveTo(x[a] + tileW / 2, y[a] + tileH / 2); ctx.lineTo(x[b] + tileW / 2, y[b] + tileH / 2); ctx.stroke();
+                }
+                for (var e = 0; e < E; e++) {
+                    var hot = tick - movedAt < 14 && e === moved;
+                    rect(ctx, x[e], y[e], tileW, tileH, hot ? C.b : 'rgba(255,255,255,0.28)');
+                }
+                // the manager's opinion: four bars, the favourite lit
+                var bx = boardW + 8, bw = w - bx - pad, by = top + 2, bh = Math.max(5, rowH * 0.55), gap = (rowH * 4) / 4;
+                for (i = 0; i < 4; i++) {
+                    rect(ctx, bx, by + i * gap, bw, bh, 'rgba(255,255,255,0.10)');
+                    rect(ctx, bx, by + i * gap, bw * Math.min(1, shown[i] * 1.6), bh, i === fav ? C.b : C.dim);
+                }
+                text(ctx, 'H1', bx, by + 4 * gap + 2, 8, C.dim, 600, 'left');
+                text(ctx, 'H4', bx + bw, by + 4 * gap + 2, 8, C.dim, 600, 'right');
+            }
+        };
+    };
+
     KINDS['variable-neighbourhood-search-live'] = function (w, h, rnd) {
         var n = 26, pts = [], order = [], hot = [], tick = 0;
         for (var i = 0; i < n; i++) { pts.push([w * (0.06 + 0.88 * rnd()), h * (0.1 + 0.8 * rnd())]); order.push(i); }
