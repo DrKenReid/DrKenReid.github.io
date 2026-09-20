@@ -9097,9 +9097,37 @@ h1, h2, h3,
   display: block;
   margin-top: 6px; }
 
-/* Three reviews show; the rest wait behind the button. */
+/* Three reviews show; the rest wait behind the button. Each card's
+   cover and title open my review on Goodreads, and the truncated text
+   ends in a link to the rest. */
 .kr-reviews--collapsed > .col-12:nth-child(n+4) {
   display: none; }
+
+.review-title .review-link-wrap {
+  color: inherit;
+  font-weight: inherit; }
+
+.review-title .review-link-wrap:hover,
+.review-title .review-link-wrap:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px; }
+
+.review-cover .review-link-wrap {
+  display: inline-block; }
+
+.review-cover .review-link-wrap:hover img {
+  transform: translateY(-2px);
+  transition: transform 200ms ease; }
+
+.review-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #c53030; }
+
+[data-theme="dark"] .review-link {
+  color: #fc6060; }
 
 .kr-reviews__more {
   margin-top: 4px; }

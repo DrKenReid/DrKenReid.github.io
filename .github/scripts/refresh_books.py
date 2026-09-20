@@ -17,6 +17,7 @@ first-read dates; from then on this script accumulates the rest.
     t  title                  a  author
     r  my rating (0 unrated)  i  ISBN, when Goodreads has one
     g  Goodreads book id      v  1 when I wrote a review
+    w  Goodreads review id (goodreads.com/review/show/<w>: my rating and review)
     d  date last finished, or the date added when Goodreads has no date
     e  1 when d is only the date added (the calendar leaves it out)
     p  earlier finish dates, oldest first
@@ -26,6 +27,7 @@ Also writes data/reading.json, the three figures the homepage shows.
     python .github/scripts/refresh_books.py
 """
 import json
+import re
 import sys
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -113,6 +115,11 @@ def main(argv=None):
         if isbn:
             b["i"] = isbn
         b["g"] = g
+        # The item's link is my review page for the book; the shelf, the
+        # wall and the selected reviews link there rather than to the book.
+        m = re.search(r"/review/show/(\d+)", text(it, "link"))
+        if m:
+            b["w"] = m.group(1)
         finished = parse_date(text(it, "user_read_at"))
         earlier = list(prev.get("p") or [])
         if finished:

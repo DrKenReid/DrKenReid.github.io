@@ -2332,11 +2332,17 @@ function initCountUpStats() {
         var decimals = (m[1].split('.')[1] || '').length;
         var start = null;
         var DURATION = 1100;
+        var written = text;
         function step(ts) {
+            // A live figure (Last.fm, the read shelf, the quote count)
+            // can land before the first frame or mid-animation; if the
+            // text is no longer ours, it is the truth, so stop rather
+            // than write the stale one back.
+            if (el.textContent.trim() !== written) return;
             if (start === null) start = ts;
             var t = Math.min(1, (ts - start) / DURATION);
             var eased = 1 - Math.pow(1 - t, 3);
-            el.textContent = (target * eased).toFixed(decimals) + suffix;
+            el.textContent = written = (target * eased).toFixed(decimals) + suffix;
             if (t < 1) {
                 requestAnimationFrame(step);
             } else {

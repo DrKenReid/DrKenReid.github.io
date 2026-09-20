@@ -13,7 +13,10 @@
 (function () {
     'use strict';
 
+    /* My review page for the book when the refresh has its id (rating
+       and review in one place), else the book's page. */
     function goodreadsUrl(book) {
+        if (book.w) return 'https://www.goodreads.com/review/show/' + book.w;
         return book.g ? 'https://www.goodreads.com/book/show/' + book.g
                       : 'https://www.goodreads.com/search?q=' + encodeURIComponent(book.t);
     }

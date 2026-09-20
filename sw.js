@@ -4,14 +4,17 @@
  * Strategy:
  *   - HTML navigations: network-first, falling back to cache, then to
  *     the offline page. Deploys are therefore always fresh online.
- *   - Same-origin assets (css/js/fonts/data/images): stale-while-
+ *   - Data files (data/*.json): network-first, falling back to cache.
+ *     They change on a schedule (Last.fm, Goodreads), and served stale
+ *     they showed last week's shelf on the first visit after a refresh.
+ *   - Other same-origin assets (css/js/fonts/images): stale-while-
  *     revalidate — instant from cache, refreshed in the background.
  *   - Cross-origin requests are left alone.
  *
  * Bump VERSION to invalidate old caches.
  */
 
-var VERSION = 'kr-v9';
+var VERSION = 'kr-v10';
 var PAGES_CACHE = VERSION + '-pages';
 var ASSETS_CACHE = VERSION + '-assets';
 var IMG_LIMIT = 200;
@@ -76,6 +79,20 @@ self.addEventListener('fetch', function (event) {
           return hit || caches.match('./offline.html');
         });
       })
+    );
+    return;
+  }
+
+  // Data: network-first, the cached copy only when offline
+  if (url.pathname.indexOf('/data/') !== -1) {
+    event.respondWith(
+      fetch(req).then(function (res) {
+        if (res && res.status === 200) {
+          var copy = res.clone();
+          caches.open(ASSETS_CACHE).then(function (c) { c.put(req, copy); });
+        }
+        return res;
+      }).catch(function () { return caches.match(req); })
     );
     return;
   }

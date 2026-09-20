@@ -71,12 +71,45 @@ function prevQuote() {
 }
 
 function initReviews() {
-    fetch('/data/reviews.json').then(function (r) { return r.json(); }).then(function (data) {
-        renderReviews(data);
+    // reviews.json is the hand-picked dozen; books.json (the weekly
+    // Goodreads refresh) knows each book's review id, so the card can
+    // link to the review itself rather than to the book.
+    // A book being read again is on currently-reading, not the read
+    // shelf, so now.json's entries (which link to the review) join in.
+    Promise.all([
+        fetch('/data/reviews.json').then(function (r) { return r.json(); }),
+        fetch('/data/books.json').then(function (r) { return r.json(); }).catch(function () { return []; }),
+        fetch('/data/now.json').then(function (r) { return r.json(); }).catch(function () { return {}; })
+    ]).then(function (all) {
+        var books = Array.isArray(all[1]) ? all[1].slice() : [];
+        ((all[2] && all[2].reading) || []).forEach(function (b) {
+            var m = /\/review\/show\/(\d+)/.exec(b.link || '');
+            if (m) books.push({ t: b.title, w: m[1] });
+        });
+        renderReviews(all[0], books);
     }).catch(function () {});
 }
 
-function renderReviews(reviews) {
+function goodreadsReviewUrl(r, books) {
+    var key = function (s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); };
+    var hit = null;
+    for (var i = 0; i < books.length && !hit; i++) {
+        var b = books[i];
+        if ((r.isbn13 && b.i === r.isbn13) || (r.isbn && b.i === r.isbn) || key(b.t) === key(r.title)) hit = b;
+    }
+    if (!hit) {
+        // A different edition: the title before any series bracket.
+        var short = key(r.title.replace(/\s*\(.*?\)\s*$/, '').split(':')[0]);
+        for (var j = 0; j < books.length && !hit; j++) {
+            if (key(books[j].t.replace(/\s*\(.*?\)\s*$/, '').split(':')[0]) === short) hit = books[j];
+        }
+    }
+    if (!hit) return '';
+    if (hit.w) return 'https://www.goodreads.com/review/show/' + hit.w;
+    return hit.g ? 'https://www.goodreads.com/book/show/' + hit.g : '';
+}
+
+function renderReviews(reviews, books) {
     var container = document.getElementById('reviews-grid');
     if (!container) return;
     reviews.forEach(function (r) {
@@ -85,18 +118,23 @@ function renderReviews(reviews) {
         var stars = '';
         for (var i = 0; i < 5; i++) stars += i < r.rating ? '★' : '☆';
         var text = r.review;
-        if (text.length > 300) text = text.substring(0, 300).replace(/\s+\S*$/, '') + '...';
+        var cut = text.length > 300;
+        if (cut) text = text.substring(0, 300).replace(/\s+\S*$/, '') + '...';
         text = text.replace(/\n/g, '<br>');
         var isbn = r.isbn13 || r.isbn || '';
         var coverUrl = isbn ? 'https://covers.openlibrary.org/b/isbn/' + isbn + '-L.jpg' : '';
+        var url = goodreadsReviewUrl(r, books || []);
+        var open = url ? '<a href="' + url + '" target="_blank" rel="noopener noreferrer" class="review-link-wrap">' : '';
+        var close = url ? '</a>' : '';
         var card = document.createElement('div');
         card.className = 'review-card';
-        card.innerHTML = (coverUrl ? '<div class="review-cover"><img src="' + coverUrl + '" alt="Book cover: ' + r.title + ' by ' + r.author + '" loading="lazy" onerror="this.parentElement.style.display=\'none\'"></div>' : '') +
+        card.innerHTML = (coverUrl ? '<div class="review-cover">' + open + '<img src="' + coverUrl + '" alt="Book cover: ' + r.title + ' by ' + r.author + '" loading="lazy" onerror="this.parentElement.parentElement.style.display=\'none\'">' + close + '</div>' : '') +
             '<div class="review-body">' +
             '<div class="review-stars">' + stars + '</div>' +
-            '<h3 class="review-title">' + r.title + '</h3>' +
+            '<h3 class="review-title">' + open + r.title + close + '</h3>' +
             '<p class="review-author">' + r.author + '</p>' +
             '<p class="review-text">' + text + '</p>' +
+            (url ? '<a href="' + url + '" target="_blank" rel="noopener noreferrer" class="review-link">' + (cut ? 'Read the full review on Goodreads' : 'This review on Goodreads') + ' &rarr;</a>' : '') +
             '</div>';
         col.appendChild(card);
         container.appendChild(col);
