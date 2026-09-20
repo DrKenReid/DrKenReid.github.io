@@ -1,11 +1,11 @@
 {
-  "pages": 94,
-  "posts": 67,
-  "postPages": 70,
-  "words": 160851,
-  "readMinutes": 761,
+  "pages": 95,
+  "posts": 68,
+  "postPages": 71,
+  "words": 161655,
+  "readMinutes": 765,
   "interactivePosts": 13,
-  "codePosts": 20,
+  "codePosts": 21,
   "series": 7,
   "photos": 492,
   "cssSourceBytes": 243056,
@@ -19,9 +19,9 @@
   "ciChecks": 14,
   "dependencies": 0,
   "buildStep": false,
-  "htmlBytes": 5216287,
-  "imageCount": 778,
-  "imageBytes": 45339669,
+  "htmlBytes": 5245549,
+  "imageCount": 779,
+  "imageBytes": 45406336,
   "webFontCount": 12,
   "webFontBytes": 249612,
   "cssLines": 9407,
@@ -29,14 +29,14 @@
   "dataFiles": 19,
   "tags": 13,
   "firstPost": "2026-04-10",
-  "latestPost": "2026-09-19",
-  "postsPerMonth": 11.2,
+  "latestPost": "2026-09-20",
+  "postsPerMonth": 11.3,
   "longestPostWords": 8994,
   "longestPostTitle": "Accessibility-First Design in Data Science",
   "shortestPostWords": 802,
   "shortestPostTitle": "When I Ended Up in Italy Because of Mistaken Identity",
-  "averagePostWords": 2401,
-  "commits": 611,
+  "averagePostWords": 2377,
+  "commits": 612,
   "commitsByMonth": [
     [
       "2019-12",
@@ -364,7 +364,7 @@
     ],
     [
       "2026-09",
-      30
+      31
     ]
   ],
   "repoStart": "2019-12"

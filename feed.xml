@@ -5,11 +5,85 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Sat, 19 Sep 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Sat, 19 Sep 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Sun, 20 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Sun, 20 Sep 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Every Card Has a Sketch</title>
+      <link>https://www.kenreid.co.uk/blog/every-card-has-a-sketch.html</link>
+      <guid>https://www.kenreid.co.uk/blog/every-card-has-a-sketch.html</guid>
+      <pubDate>Sun, 20 Sep 2026 00:00:00 +0000</pubDate>
+      <description>Move your mouse over a card on the blog and the cover starts doing something. How the sketches work.</description>
+      <category>technology</category>
+      <content:encoded><![CDATA[
+ <h1>Every Card Has a Sketch</h1>
+ <div class="blog-meta">
+ 20 September 2026 &middot;
+ <span class="blog-tag">technology</span>
+ </div>
+
+ <p>Move your mouse over any card on the <a href="https://www.kenreid.co.uk/blog.html">blog listing</a> and the cover starts doing something. The <a href="https://www.kenreid.co.uk/blog/tabu-search-live.html">tabu search</a> one has queens on a chessboard getting banned from squares they just left. The <a href="https://www.kenreid.co.uk/blog/why-i-love-latex.html">LaTeX</a> one types out <code>\section{Why}</code> on the left while a little page sets itself on the right. I made one for every post (67 at the time of writing), then got a bit carried away and did the homepage stats, the publications and the book wall as well. This is how they work. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+ <div class="kr-sketch-demo" data-live="every-card-has-a-sketch" data-live-under tabindex="0">
+ <p class="kr-sketch-demo__hint">This post has one too, of course. Hover here (or tab to it) to watch it.</p>
+ </div>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Canvas:</strong> the browser element you draw on with code instead of markup. Every sketch here is a canvas laid over a card's cover photo.</li>
+ <li><strong>requestAnimationFrame:</strong> the browser's "call me back before the next repaint". Sixty times a second on most screens, a hundred and twenty on some laptops. This bit me, see below.</li>
+ <li><strong>MutationObserver:</strong> a way to get told when something new lands on the page, so code can deal with cards that show up after it loaded.</li>
+ </ul>
+ </div>
+
+ <h2>What a sketch is</h2>
+
+ <p>Each one is a function, in essence. It gets a width, a height and a random number generator, and hands back two more functions: <code>step</code>, which moves things along, and <code>draw</code>, which paints. Here's the offline-reading one with some fat trimmed:</p>
+
+ <pre><code class="language-javascript">def('reading-this-site-offline', function (w, h, rnd) {
+    var t = 0;   // frame counter; the engine advances this, not the browser's clock
+    return {
+        // one cycle is 300 frames: 90 online, then 210 offline, then round again
+        step: function () { t = (t + 1) % 300; },
+        draw: function (ctx) {
+            var off = t &gt; 90;
+            // the wifi symbol: three arcs, faded out once "off"
+            for (var i = 0; i &lt; 3; i++) {
+                ctx.strokeStyle = off ? alpha('#ffffff', 0.15) : C.ink;
+                ctx.beginPath(); ctx.arc(w * 0.2, h * 0.5, 10 + i * 10, 3.6, 5.8); ctx.stroke();
+            }
+            // a little page, sliding left to right, looping every 100 frames
+            var k = phase(t * 1.5, 100);
+            rect(ctx, w * 0.62 + w * 0.22 * k, h * 0.42, 14, 18, C.b);
+            // the caption underneath, swapping with the wifi state
+            text(ctx, off ? 'offline, still reading' : 'online', w * 0.5, h * 0.9, 9, off ? C.b : C.dim, 700, 'center');
+        }
+    };
+});</code></pre>
+
+ <h2>The engine</h2>
+
+ <p>First, the engine finds the cards. Cards on this site get rendered by five or six different scripts at different moments (the blog listing, the series pages, the related posts under each article, the homepage), and my first version made each of those scripts call the engine once it had finished rendering. Now the engine watches the page for anything being added and hooks up any card it has a sketch for.</p>
+
+ <p>Second, it steps sixty times a second whatever the screen is doing. The sketches count frames, and my first version stepped once per <code>requestAnimationFrame</code>, which is fine on a 60 Hz monitor but silly on a 120 Hz one: every ant ran at double speed, every tide went out in half the time. In a throttled background tab they crawled instead. So the engine keeps its own clock now and steps once per sixtieth of a second of real time, with a cap so a tab that's been hidden for a minute doesn't try to catch up all in one go.</p>
+
+ <p>Third, it doesn't load until it's needed. The three files come to 39 KB compressed, which is a lot to send a phone for a hover effect it can't trigger (no mouse, no hover, nothing to do). So no page includes them any more. The first time a mouse moves, and only if the browser says hovering is a thing it can do and you haven't asked for reduced motion, the shared script fetches all three. On a desktop they turn up about a second before you could want them, which is close enough for me, and phones don't store them at all.</p>
+
+ <h2>Keeping them from rotting</h2>
+
+ <p>There are two checks. A commit gets refused if any post in the listing has no sketch, so I can't publish without drawing one, to make sure I don't forget (something I do frequently without lots of checkpoints for myself!). And the <a href="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">test suite</a> builds every sketch, runs it for 120 frames, and fails if it throws or the canvas is still blank at the end. </p>
+
+ <p>If you're reading this on a phone you've seen none of it, and that's fine. Nothing to hover with, nothing to download, and the cards are just cards.</p>
+
+        
+
+ <hr style="margin: 40px 0;">
+ <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
+ ]]></content:encoded>
+    </item>
     <item>
       <title>Hyper-Heuristics, Live</title>
       <link>https://www.kenreid.co.uk/blog/hyper-heuristics-live.html</link>
@@ -3554,506 +3628,6 @@ frame.contentWindow.postMessage(
       <pubDate>Tue, 04 Aug 2026 00:00:00 +0000</pubDate>
       <description>A genetic algorithm evolving a solution live in your browser: populations, crossover, mutation, and selection as sliders you can break. Fifty translucent triangles evolve the alphabet, and you supply the selection pressure.</description>
       <category>ai</category>
-      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/evolution-live.html">View it on the site</a> to play with it.</em></p>
- <h1>Evolution, Live</h1>
- <div class="blog-meta">
- 4 August 2026 &middot;
- <span class="blog-tag">ai</span>
- </div>
-
- <p>A while ago I set <a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">an ant colony foraging in your browser</a>. Watching an optimiser work beats reading about one, by a mile, so here is the sequel, for the algorithm that is even more watchable, because it is even more alive. This post evolves a solution in front of you, out of a population that breeds, mutates, and dies, generation by generation, on your CPU.</p>
-
- 
-
- <div class="plain-english-box">
- <h2>Quick jargon guide</h2>
- <ul>
- <li><strong>Genetic algorithm (GA):</strong> an optimiser that keeps a population of candidate solutions and improves it by imitating natural selection: the fittest breed, the rest die.</li>
- <li><strong>Individual / genome:</strong> one candidate solution, encoded as a string of "genes" the algorithm can cut and mutate.</li>
- <li><strong>Fitness function:</strong> the score that decides who breeds.</li>
- <li><strong>Selection:</strong> picking parents, biased toward the fit. Turn the bias up and evolution speeds toward whatever's currently best, at the cost of variety.</li>
- <li><strong>Crossover:</strong> combining two parents' genomes into a child, the "sexual" recombination step.</li>
- <li><strong>Mutation:</strong> random tweaks to a genome. The source of new material; too little and you stagnate, too much and you get a lot of noise.</li>
- <li><strong>Elitism:</strong> carrying the best individuals into the next generation untouched, so the best score never gets worse.</li>
- <li><strong>Premature convergence:</strong> the population collapsing to near-copies of one decent solution too early, killing the diversity needed to find a great one. </li>
- </ul>
- </div>
-
- <h2>The whole algorithm on a napkin</h2>
-
- <p>The entire loop:</p>
-
- <ol>
- <li>Make a population of random candidate solutions.</li>
- <li>Score each one with the fitness function.</li>
- <li>Select parents, biased toward the fitter ones.</li>
- <li>Cross them over to make children, mutate the children a little.</li>
- <li>Replace the old population with the new one (keeping a few elites).</li>
- <li>Go to step 2. Repeat until bored or converged.</li>
- </ol>
-
- <h2>Watch it evolve</h2>
-
- <p>Below, a population is evolving toward a target. Each little picture is one individual; the big one is the current champion. Press play and watch the champion sharpen out of noise, generation by generation. Play with the parameters in the sliders to see how they affect the outcome.</p>
-
- 
-
- <h2>Three ways to stall evolution</h2>
-
- <p>Three experiments to try:</p>
-
- <p><strong>Crank selection pressure to maximum.</strong> The population will rocket toward the best early solution and then <em>stop improving</em>, sometimes far from a good answer. You've just caused premature convergence: everyone became a copy of one lucky ancestor, and with no diversity left, crossover has nothing to recombine and mutation alone can't dig out. </p>
-
- <p><strong>Set mutation to zero.</strong> Evolution grinds to a halt the moment the population homogenises, because crossover can only ever remix genes that already exist. No new material, no progress. Then push mutation to maximum and watch the opposite disaster: the champion thrashes randomly and never settles, because you've turned evolution into a random search.</p>
-
- <p><strong>Shrink the population to a handful.</strong> Small populations converge fast and badly; they're a tiny gene pool, prone to the same fragility as any small, inbred group. This happens in real life often when a natural disaster strikes, or a small number of a species is separated (e.g. a pond splits in two, or high winds migrate some animals across distance).</p>
-
- <h2>The thesis</h2>
-
- <p>Gradient descent, the engine under modern AI, needs a smooth, differentiable landscape to roll down. The genetic algorithm in your browser needs no such thing. It will happily optimise a target you can only <em>score</em>, never differentiate: a timetable, a circuit layout, a wing shape evaluated by a physics simulator. Whole classes of real problems have no gradient to descend, and on those, evolution isn't a quaint biological metaphor, nor a glorified random number generator, it's the only tool that works.</p>
-
- <p>And the fitness function, the thing you were choosing every time you moved a slider, is where all the meaning lives. Change what you reward and you change what evolves, completely. I've watched evolutionary systems find gleeful, alien loopholes in a fitness function, technically-correct solutions no human would ever propose, and every one of them was a small lesson in being careful what you optimise for. It's the same lesson the paperclip thought-experiment provides.</p>
-
- <p>So play with it. Melt it, starve it, inbreed it, and get a better feel for the importance of parameter selection and genetic algorithms.</p>
-
- <div class="downloads-block">
-   <p class="downloads-title">Download the standalone demo</p>
-   <div class="download-links">
-     <a class="download-link" href="https://www.kenreid.co.uk/blog/downloads/evolution-live-ga.html" download>evolution-live-ga.html</a>
-   </div>
- </div>
-
- <details class="code-example"><summary>The algorithm (JavaScript)</summary>
-<pre><code class="language-javascript"> /* ============================================================
-    Evolution, Live — the interactive demo for this post.
-    No dependencies. A genetic algorithm evolves paintings of a target letter
-    (K by default, any of A-Z from the toolbar select):
-    each individual is 50 translucent triangles (10 genes apiece: six vertex
-    coordinates, rgb, alpha), fitness is one minus the mean per-pixel
-    difference from a 48x48 target render. Tournament selection, per-triangle
-    crossover, per-gene mutation, optional two-slot elitism. Chart colours
-    come from the CSS custom properties on .kr-viz, so the site's light/dark
-    toggle restyles the widget live; the paintings themselves keep fixed
-    colours because the target never changes.
-    ============================================================ */
- (function () {
-   'use strict';
-   var wrap = document.getElementById('evo-demo');
-   if (!wrap) return;
-   var cv = document.getElementById('evoCanvas');
-   var chart = document.getElementById('evoChart');
-
-   function mulberry32(seed) {
-     var a = seed &gt;&gt;&gt; 0;
-     return function () {
-       a |= 0; a = (a + 0x6D2B79F5) | 0;
-       var t = Math.imul(a ^ (a &gt;&gt;&gt; 15), 1 | a);
-       t = (t + Math.imul(t ^ (t &gt;&gt;&gt; 7), 61 | t)) ^ t;
-       return ((t ^ (t &gt;&gt;&gt; 14)) &gt;&gt;&gt; 0) / 4294967296;
-     };
-   }
-   function vizColors(el) {
-     var cs = getComputedStyle(el);
-     function v(n) { return cs.getPropertyValue(n).trim(); }
-     return { s1: v('--viz-s1'), s2: v('--viz-s2'), s3: v('--viz-s3'), s4: v('--viz-s4'),
-              ink: v('--viz-ink'), muted: v('--viz-muted'), grid: v('--viz-grid'), surface: v('--viz-surface') };
-   }
-   var W = 0, H = 0, ctx = null, WC = 0, HC = 0, ctxC = null;
-   function fitOne(canvas, h) {
-     var dpr = window.devicePixelRatio || 1;
-     var w = canvas.clientWidth || 600;
-     canvas.style.height = h + 'px';
-     canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
-     var g = canvas.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
-     return { g: g, w: w, h: h };
-   }
-   function fitCanvas() {
-     // height tracks width: champion beside the grid on desktop, champion
-     // above the grid (and a taller canvas) on phones
-     var w = cv.clientWidth || 600;
-     var mainH = w &lt; 480 ? Math.round(Math.min(600, w * 1.30))
-                         : Math.round(Math.max(260, Math.min(340, w * 0.5)));
-     var m = fitOne(cv, mainH); ctx = m.g; W = m.w; H = m.h;
-     var c = fitOne(chart, w &lt; 480 ? 170 : 120); ctxC = c.g; WC = c.w; HC = c.h;
-   }
-
-   // ---- tunables ----
-   var TRIS = 50, GENES = TRIS * 10, EVAL = 48;   // genome + fitness render size
-   var EVAL_BUDGET = 120, MAX_GENS_FRAME = 2;     // work per animation frame; low
-                                                  // enough that the sharpening is
-                                                  // watchable rather than instant
-   var ELITES = 2;
-   var BG = '#1e1e21', TARGET_INK = '#fc6060';    // fixed painting colours
-
-   // ---- state ----
-   var seedBase = 20260718, reseeds = 0, rng = mulberry32(seedBase);
-   var pop = [];                    // [{genes, fit, cv}], eval canvas per individual
-   var gen = 0, evals = 0, bestEver = 0, bestIdx = 0;
-   var hist = [], stride = 1, sinceSample = 0;    // chart history, decimated as it grows
-   var running = true, raf = null;
-   var target = null, targetData = null;
-
-   // control refs
-   var runBtn = document.getElementById('evoRun');
-   var reseedBtn = document.getElementById('evoReseed');
-   var popS = document.getElementById('evoPop'), popV = document.getElementById('evoPopVal');
-   var mutS = document.getElementById('evoMut'), mutV = document.getElementById('evoMutVal');
-   var pressS = document.getElementById('evoPress'), pressV = document.getElementById('evoPressVal');
-   var eliteC = document.getElementById('evoElite');
-   var letterSel = document.getElementById('evoLetter');
-   var statusEl = document.getElementById('evoStatus');
-   var genEl = document.getElementById('evoGen'), bestEl = document.getElementById('evoBest');
-   var avgEl = document.getElementById('evoAvg'), divEl = document.getElementById('evoDiv');
-   var evalsEl = document.getElementById('evoEvals');
-
-   // ---- the target: one bold letter (K by default), re-rendered on change ----
-   function makeTarget(letter) {
-     target = document.createElement('canvas');
-     target.width = EVAL; target.height = EVAL;
-     var g = target.getContext('2d', { willReadFrequently: true });
-     g.fillStyle = BG; g.fillRect(0, 0, EVAL, EVAL);
-     g.fillStyle = TARGET_INK;
-     var size = 46;
-     g.font = '900 ' + size + 'px Arial, sans-serif';
-     var w = g.measureText(letter).width;   // shrink-to-fit so W and M don't clip
-     if (w &gt; EVAL - 6) {
-       size = Math.floor(size * (EVAL - 6) / w);
-       g.font = '900 ' + size + 'px Arial, sans-serif';
-     }
-     g.textAlign = 'center'; g.textBaseline = 'middle';
-     g.fillText(letter, EVAL / 2, EVAL / 2 + 2);
-     targetData = g.getImageData(0, 0, EVAL, EVAL).data;
-   }
-
-   // ---- genome plumbing ----
-   function renderGenome(genes, g, size) {
-     g.fillStyle = BG; g.fillRect(0, 0, size, size);
-     for (var t = 0; t &lt; TRIS; t++) {
-       var i = t * 10;
-       g.fillStyle = 'rgba(' + (genes[i + 6] * 255 | 0) + ',' + (genes[i + 7] * 255 | 0) + ',' +
-                     (genes[i + 8] * 255 | 0) + ',' + (genes[i + 9] * 0.85).toFixed(3) + ')';
-       g.beginPath();
-       g.moveTo(genes[i] * size, genes[i + 1] * size);
-       g.lineTo(genes[i + 2] * size, genes[i + 3] * size);
-       g.lineTo(genes[i + 4] * size, genes[i + 5] * size);
-       g.closePath(); g.fill();
-     }
-   }
-   function evaluate(ind) {
-     var g = ind.cv.getContext('2d', { willReadFrequently: true });
-     renderGenome(ind.genes, g, EVAL);
-     var d = g.getImageData(0, 0, EVAL, EVAL).data, sum = 0;
-     for (var p = 0; p &lt; d.length; p += 4) {
-       sum += Math.abs(d[p] - targetData[p]) + Math.abs(d[p + 1] - targetData[p + 1]) +
-              Math.abs(d[p + 2] - targetData[p + 2]);
-     }
-     ind.fit = 1 - sum / (EVAL * EVAL * 3 * 255);
-     evals++;
-   }
-   function newIndividual(genes) {
-     var c = document.createElement('canvas');
-     c.width = EVAL; c.height = EVAL;
-     var ind = { genes: genes, fit: 0, cv: c };
-     evaluate(ind);
-     return ind;
-   }
-   function randomGenes() {
-     var g = new Float32Array(GENES);
-     for (var i = 0; i &lt; GENES; i++) g[i] = rng();
-     return g;
-   }
-
-   // ---- the algorithm ----
-   function tournament(T) {
-     var bi = (rng() * pop.length) | 0;
-     for (var k = 1; k &lt; T; k++) {
-       var j = (rng() * pop.length) | 0;
-       if (pop[j].fit &gt; pop[bi].fit) bi = j;
-     }
-     return pop[bi];
-   }
-   function breed(pa, pb, pMut, dMut) {
-     var g = new Float32Array(GENES);
-     for (var t = 0; t &lt; TRIS; t++) {      // crossover: whole triangles from either parent
-       var src = rng() &lt; 0.5 ? pa.genes : pb.genes;
-       for (var k = 0; k &lt; 10; k++) g[t * 10 + k] = src[t * 10 + k];
-     }
-     for (var i = 0; i &lt; GENES; i++) {     // mutation: per-gene nudge, clamped to [0,1]
-       if (rng() &lt; pMut) {
-         var v = g[i] + (rng() * 2 - 1) * dMut;
-         g[i] = v &lt; 0 ? 0 : v &gt; 1 ? 1 : v;
-       }
-     }
-     return g;
-   }
-   function stepGeneration() {
-     var n = pop.length;
-     // slider mappings: pressure 1 = uniform random parents (pure drift),
-     // 10 = the whole population in every tournament (winner takes all)
-     var s = +pressS.value;
-     var T = Math.max(1, Math.round(1 + (n - 1) * Math.pow((s - 1) / 9, 2)));
-     var mv = +mutS.value / 100;
-     var pMut = Math.pow(mv, 1.5) * 0.35;
-     var dMut = 0.05 + 0.45 * mv;
-     var elite = eliteC.checked ? Math.min(ELITES, n) : 0;
-     pop.sort(function (a, b) { return b.fit - a.fit; });
-     var next = pop.slice(0, elite);
-     while (next.length &lt; n) next.push(newIndividual(breed(tournament(T), tournament(T), pMut, dMut)));
-     pop = next;
-     gen++;
-     sample();
-   }
-   function generationCost() {
-     return Math.max(1, pop.length - (eliteC.checked ? Math.min(ELITES, pop.length) : 0));
-   }
-   function runBudget() {
-     var spent = 0, gens = 0;
-     while (gens &lt; MAX_GENS_FRAME &amp;&amp; spent + generationCost() &lt;= EVAL_BUDGET) {
-       stepGeneration();
-       spent += generationCost(); gens++;
-     }
-   }
-
-   // ---- stats + chart history ----
-   function popStats() {
-     var n = pop.length, sum = 0, best = -1, bi = 0;
-     for (var i = 0; i &lt; n; i++) {
-       sum += pop[i].fit;
-       if (pop[i].fit &gt; best) { best = pop[i].fit; bi = i; }
-     }
-     bestIdx = bi;
-     // diversity: mean per-gene standard deviation, normalised so a fully
-     // random population reads ~100% (std of uniform [0,1] is 1/sqrt(12))
-     var m, m2, gsum = 0;
-     for (var gI = 0; gI &lt; GENES; gI++) {
-       m = 0; m2 = 0;
-       for (var j = 0; j &lt; n; j++) { var v = pop[j].genes[gI]; m += v; m2 += v * v; }
-       m /= n;
-       gsum += Math.sqrt(Math.max(0, m2 / n - m * m));
-     }
-     var div = Math.min(1, (gsum / GENES) / 0.2887);
-     return { best: best, avg: sum / n, div: div };
-   }
-   function sample() {
-     if (++sinceSample &lt; stride) return;
-     sinceSample = 0;
-     var st = popStats();
-     if (st.best &gt; bestEver) bestEver = st.best;
-     hist.push({ g: gen, best: st.best, avg: st.avg, div: st.div });
-     if (hist.length &gt;= 480) {   // decimate so the chart array stays bounded
-       hist = hist.filter(function (_, i) { return i % 2 === 0; });
-       stride *= 2;
-     }
-   }
-
-   // ---- drawing ----
-   function layout() {
-     var pad = 10, lab = 16;
-     if (W &lt; 480) {
-       var s = Math.round(Math.min(W - 2 * pad, H * 0.55));
-       var gy = pad + lab + s + pad + lab;
-       return { champ: { x: (W - s) / 2, y: pad + lab, s: s },
-                grid: { x: pad, y: gy, w: W - 2 * pad, h: H - gy - pad } };
-     }
-     var side = H - 2 * pad - lab;
-     var gx = pad + side + pad + 8;
-     return { champ: { x: pad, y: pad + lab, s: side },
-              grid: { x: gx, y: pad + lab, w: W - gx - pad, h: side } };
-   }
-   function label(text, x, y, c, align) {
-     ctx.fillStyle = c;
-     ctx.font = '600 10px Poppins, sans-serif';
-     ctx.textAlign = align || 'start'; ctx.textBaseline = 'alphabetic';
-     ctx.fillText(text, x, y);
-     ctx.textAlign = 'start';
-   }
-   function draw() {
-     var c = vizColors(wrap);
-     var L = layout();
-     var st = popStats();   // refreshes bestIdx so the champion pane never lags
-     ctx.clearRect(0, 0, W, H);
-     ctx.fillStyle = c.surface; ctx.fillRect(0, 0, W, H);
-
-     // champion pane: the best individual, rendered as vectors so it stays crisp
-     label('CHAMPION', L.champ.x, L.champ.y - 5, c.muted);
-     ctx.save();
-     ctx.translate(L.champ.x, L.champ.y);
-     renderGenome(pop[bestIdx].genes, ctx, L.champ.s);
-     ctx.restore();
-     ctx.strokeStyle = c.grid; ctx.lineWidth = 1;
-     ctx.strokeRect(L.champ.x + 0.5, L.champ.y + 0.5, L.champ.s - 1, L.champ.s - 1);
-
-     // target inset, top-right corner of the champion pane
-     var ts = Math.max(34, Math.round(L.champ.s * 0.24));
-     var tx = L.champ.x + L.champ.s - ts - 6, ty = L.champ.y + 6;
-     ctx.drawImage(target, tx, ty, ts, ts);
-     ctx.strokeStyle = c.muted; ctx.strokeRect(tx + 0.5, ty + 0.5, ts - 1, ts - 1);
-     label('TARGET', L.champ.x + L.champ.s, L.champ.y - 5, c.muted, 'right');
-
-     // population grid: every individual's evaluation render, champion ringed
-     label('POPULATION', L.grid.x, L.grid.y - 5, c.muted);
-     var n = pop.length;
-     var cols = Math.max(1, Math.ceil(Math.sqrt(n * L.grid.w / Math.max(1, L.grid.h))));
-     var rows = Math.ceil(n / cols);
-     var cell = Math.floor(Math.min(L.grid.w / cols, L.grid.h / rows));
-     for (var i = 0; i &lt; n; i++) {
-       var x = L.grid.x + (i % cols) * cell, y = L.grid.y + ((i / cols) | 0) * cell;
-       ctx.drawImage(pop[i].cv, x + 1, y + 1, cell - 2, cell - 2);
-       if (i === bestIdx) {
-         ctx.strokeStyle = c.s2; ctx.lineWidth = 2;
-         ctx.strokeRect(x + 1.5, y + 1.5, cell - 3, cell - 3);
-         ctx.lineWidth = 1;
-       }
-     }
-     drawChart(c);
-     updateStats(st);
-   }
-   function drawChart(c) {
-     ctxC.clearRect(0, 0, WC, HC);
-     ctxC.fillStyle = c.surface; ctxC.fillRect(0, 0, WC, HC);
-     var x0 = 34, x1 = WC - 62, y0 = 8, y1 = HC - 16;
-     ctxC.font = '9px Poppins, sans-serif';
-     [0, 0.5, 1].forEach(function (p) {
-       var y = y1 - (y1 - y0) * p;
-       ctxC.strokeStyle = c.grid; ctxC.lineWidth = 1;
-       ctxC.beginPath(); ctxC.moveTo(x0, y + 0.5); ctxC.lineTo(x1, y + 0.5); ctxC.stroke();
-       ctxC.fillStyle = c.muted; ctxC.textAlign = 'right';
-       ctxC.fillText(Math.round(p * 100) + '%', x0 - 5, y + 3);
-     });
-     ctxC.textAlign = 'center';
-     ctxC.fillStyle = c.muted;
-     ctxC.fillText('generations', (x0 + x1) / 2, HC - 4);
-     ctxC.textAlign = 'start';
-     if (hist.length &lt; 2) return;
-     var g0 = hist[0].g, g1 = hist[hist.length - 1].g;
-     function X(gi) { return x0 + (x1 - x0) * ((gi - g0) / Math.max(1, g1 - g0)); }
-     function Y(v) { return y1 - (y1 - y0) * v; }
-     var series = [ { k: 'best', col: c.s2, name: 'best' },
-                    { k: 'avg', col: c.s1, name: 'average' },
-                    { k: 'div', col: c.s3, name: 'diversity' } ];
-     // series lines, labelled at their right-hand ends (labels nudged apart)
-     var ends = [];
-     series.forEach(function (s) {
-       ctxC.beginPath();
-       for (var i = 0; i &lt; hist.length; i++) {
-         var x = X(hist[i].g), y = Y(hist[i][s.k]);
-         if (i === 0) ctxC.moveTo(x, y); else ctxC.lineTo(x, y);
-       }
-       ctxC.strokeStyle = s.col; ctxC.lineWidth = 1.6; ctxC.stroke();
-       ends.push({ y: Y(hist[hist.length - 1][s.k]), col: s.col, name: s.name });
-     });
-     ends.sort(function (a, b) { return a.y - b.y; });
-     for (var e = 1; e &lt; ends.length; e++) {
-       if (ends[e].y - ends[e - 1].y &lt; 10) ends[e].y = ends[e - 1].y + 10;
-     }
-     ends.forEach(function (e2) {
-       ctxC.fillStyle = e2.col;
-       ctxC.fillText(e2.name, x1 + 5, Math.max(y0 + 6, Math.min(y1, e2.y)) + 3);
-     });
-   }
-   function fmtPct(v) { return (v * 100).toFixed(1) + '%'; }
-   function updateStats(st) {
-     genEl.textContent = gen;
-     bestEl.textContent = fmtPct(Math.max(bestEver, st.best));
-     avgEl.textContent = fmtPct(st.avg);
-     divEl.textContent = Math.round(st.div * 100) + '%';
-     evalsEl.textContent = evals &gt;= 10000 ? (evals / 1000).toFixed(0) + 'k' : evals;
-   }
-
-   // ---- run control ----
-   function loop() {
-     if (!running) return;
-     runBudget();
-     draw();
-     raf = requestAnimationFrame(loop);
-   }
-   function start() { if (running) raf = requestAnimationFrame(loop); }
-   function resetSim() {
-     rng = mulberry32(seedBase + reseeds * 9973);
-     evals = 0; gen = 0; bestEver = 0; bestIdx = 0;
-     hist = []; stride = 1; sinceSample = 0;
-     pop = [];
-     var n = +popS.value;
-     for (var i = 0; i &lt; n; i++) pop.push(newIndividual(randomGenes()));
-     sample();
-   }
-
-   runBtn.addEventListener('click', function () {
-     running = !running;
-     runBtn.textContent = running ? 'Pause' : 'Play';
-     statusEl.textContent = running ? '' : 'Paused.';
-     if (running) start(); else if (raf) cancelAnimationFrame(raf);
-   });
-   reseedBtn.addEventListener('click', function () {
-     reseeds++; resetSim();
-     if (!running) draw();
-   });
-   function setPop() {
-     popV.textContent = popS.value;
-     var n = +popS.value;
-     if (n === pop.length) return;
-     pop.sort(function (a, b) { return b.fit - a.fit; });
-     if (n &lt; pop.length) pop = pop.slice(0, n);
-     else while (pop.length &lt; n) {   // grow with mutated copies of survivors
-       var p = pop[(rng() * pop.length) | 0];
-       pop.push(newIndividual(breed(p, p, 0.1, 0.3)));
-     }
-     if (!running) draw();
-   }
-   function setMut() { mutV.textContent = mutS.value + '%'; }
-   function setPress() { pressV.textContent = pressS.value; }
-   popS.addEventListener('input', setPop);
-   mutS.addEventListener('input', setMut);
-   pressS.addEventListener('input', setPress);
-   letterSel.addEventListener('change', function () {
-     // a new target is a new fitness landscape: re-render it and start over
-     makeTarget(letterSel.value);
-     resetSim();
-     if (!running) draw();
-   });
-
-   window.addEventListener('resize', function () { fitCanvas(); if (!running) draw(); });
-   new MutationObserver(function () { draw(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-
-   // ---- init ----
-   for (var li = 0; li &lt; 26; li++) {
-     var opt = document.createElement('option');
-     opt.value = opt.textContent = String.fromCharCode(65 + li);
-     if (opt.value === 'K') opt.selected = true;
-     letterSel.appendChild(opt);
-   }
-   makeTarget('K');
-   fitCanvas();
-   setMut(); setPress(); popV.textContent = popS.value;
-   resetSim();
-   draw();
-   start();
- })();
- </code></pre>
- </details>
-
- <div class="faq-section">
- <h2>Common questions</h2>
-
- <details class="faq-item">
- <summary>Is this how real biological evolution works?</summary>
- <p>Ish. This is a metaphor. Real evolution has no fitness function written down anywhere (fitness just <em>is</em> reproductive success), no fixed population size, no clean generations, and no goal. The GA borrows the process (variation plus selection) and bolts on an explicit target because we <em>want</em> something specific, while nature just wants a mix of equilibrium of an ecosystem and successful species. </p>
- </details>
-
- <details class="faq-item">
- <summary>Why would I use this instead of a neural network?</summary>
- <p>When the thing you're optimising isn't differentiable and can only be scored: discrete layouts, schedules, structures evaluated by a simulator, or strategies. Gradient-based methods (which power neural nets) need a smooth slope to follow; evolution doesn't. They're also not rivals: evolutionary methods are increasingly used to tune, prune, and search neural architectures, so the two often ride together.</p>
- </details>
-
- <details class="faq-item">
- <summary>Doesn't this waste a lot of computation on bad candidates?</summary>
- <p>Yes: the population is insurance against getting stuck, paid for in extra evaluations. On easy, smooth problems it's wasteful and a hill climber wins. On hard, rugged, deceptive ones, the wasted evaluations are what keeps evolution from committing early to a bad answer. No algorithm wins everywhere; that's the No Free Lunch theorem.</p>
- </details>
- </div>
-
-        
-
- ]]></content:encoded>
     </item>
     <item>
       <title>The Invisible Half of a Blog Post</title>

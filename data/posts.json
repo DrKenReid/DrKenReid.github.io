@@ -1,5 +1,23 @@
 [
   {
+    "title": "Every Card Has a Sketch",
+    "date": "2026-09-20",
+    "tags": [
+      "technology"
+    ],
+    "category": "Technology",
+    "excerpt": "Move your mouse over a card on the blog and the cover starts doing something. How the sketches work.",
+    "url": "blog/every-card-has-a-sketch.html",
+    "image": "img/photography/hero/204.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 16
+    },
+    "readMinutes": 4,
+    "words": 804,
+    "code": true
+  },
+  {
     "title": "Hyper-Heuristics, Live",
     "date": "2026-09-19",
     "tags": [

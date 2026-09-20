@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="Move your mouse over a card on the blog and the cover starts doing something. How the sketches work.">
+ <meta name="keywords" content="technology">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Every Card Has a Sketch - Ken Reid</title>
+ <meta property="og:title" content="Every Card Has a Sketch">
+ <meta property="og:description" content="Move your mouse over a card on the blog and the cover starts doing something. How the sketches work.">
+ <meta property="og:image" content="https://www.kenreid.co.uk/img/og/every-card-has-a-sketch.jpg">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/every-card-has-a-sketch.html">
+ <meta property="og:type" content="article">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Every Card Has a Sketch">
+ <meta name="twitter:description" content="Move your mouse over a card on the blog and the cover starts doing something. How the sketches work.">
+ <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/every-card-has-a-sketch.jpg">
+ <meta name="citation_title" content="Every Card Has a Sketch">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/09/20">
+ <meta name="citation_online_date" content="2026/09/20">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/every-card-has-a-sketch.html">
+ <meta name="DC.title" content="Every Card Has a Sketch">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-09-20">
+ <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
+ <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="../img/photography/hero/204.webp">
+ <link rel="stylesheet" href="../style.min.css">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/every-card-has-a-sketch.html">
+ <script type="application/ld+json">
+ {
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "Every Card Has a Sketch",
+ "description": "Move your mouse over a card on the blog and the cover starts doing something. How the sketches work.",
+ "image": "https://www.kenreid.co.uk/img/og/every-card-has-a-sketch.jpg",
+ "author": {
+ "@type": "Person",
+ "name": "Ken Reid",
+ "url": "https://www.kenreid.co.uk"
+ },
+ "datePublished": "2026-09-20",
+ "publisher": {
+ "@type": "Person",
+ "name": "Ken Reid"
+ },
+ "keywords": ["javascript", "canvas", "animation", "performance", "static site", "testing"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "Every Card Has a Sketch",
+       "item": "https://www.kenreid.co.uk/blog/every-card-has-a-sketch.html"
+     }
+   ]
+ }
+ </script>
+ <style>
+   /* A live demo of this post's own sketch, dropped straight into the
+      prose. data-live-under does the work (canvas under the text, host
+      turns into a dark stage while running); this just gives it a size. */
+   .kr-sketch-demo {
+     height: 220px;
+     max-width: 420px;
+     margin: 28px auto;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     border: 1px solid var(--kr-hairline);
+     border-radius: 10px;
+   }
+   .kr-sketch-demo__hint {
+     margin: 0;
+     padding: 0 24px;
+     text-align: center;
+     font-size: 13px;
+     color: var(--kr-eyebrow);
+   }
+ </style>
+ <script defer src="../js/theme.js"></script>
+ <script defer src="../js/palette.js"></script>
+</head>
+<body>
+ <div id="preloader"><div class="loader"></div></div>
+
+ <div id="header-section"></div>
+
+ <main id="main-content">
+  <header class="kr-opener" style="--kr-opener-img: url(/img/photography/hero/204.webp);">
+    <div class="kr-opener__media" aria-hidden="true"></div>
+    <div class="kr-opener__scrim" aria-hidden="true"></div>
+    <div class="container kr-opener__inner">
+      <nav aria-label="breadcrumb" class="kr-opener__crumbs"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Every Card Has a Sketch</li>
+      </ol></nav>
+      <p class="kr-opener__kicker">Technology &middot; 20 September 2026 &middot; 4 min read</p>
+      <p class="kr-opener__title page-title">Every Card Has a Sketch</p>
+      <p class="kr-opener__standfirst">Move your mouse over a card on the blog and the cover starts doing something. How the sketches work.</p>
+      <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>
+    </div>
+    <a class="kr-opener__cue" href="#main-content-body" aria-label="Scroll to the article"><span></span></a>
+  </header>
+
+ <div class="about-us-area section-padding-80 clearfix" id="main-content-body">
+ <div class="container">
+
+ <div class="blog-post">
+ <h1>Every Card Has a Sketch</h1>
+ <div class="blog-meta">
+ 20 September 2026 &middot;
+ <span class="blog-tag">technology</span>
+ </div>
+
+ <p>Move your mouse over any card on the <a href="../blog.html">blog listing</a> and the cover starts doing something. The <a href="tabu-search-live.html">tabu search</a> one has queens on a chessboard getting banned from squares they just left. The <a href="why-i-love-latex.html">LaTeX</a> one types out <code>\section{Why}</code> on the left while a little page sets itself on the right. I made one for every post (67 at the time of writing), then got a bit carried away and did the homepage stats, the publications and the book wall as well. This is how they work. Part of the series on <a href="../series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+ <div class="kr-sketch-demo" data-live="every-card-has-a-sketch" data-live-under tabindex="0">
+ <p class="kr-sketch-demo__hint">This post has one too, of course. Hover here (or tab to it) to watch it.</p>
+ </div>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Canvas:</strong> the browser element you draw on with code instead of markup. Every sketch here is a canvas laid over a card's cover photo.</li>
+ <li><strong>requestAnimationFrame:</strong> the browser's "call me back before the next repaint". Sixty times a second on most screens, a hundred and twenty on some laptops. This bit me, see below.</li>
+ <li><strong>MutationObserver:</strong> a way to get told when something new lands on the page, so code can deal with cards that show up after it loaded.</li>
+ </ul>
+ </div>
+
+ <h2>What a sketch is</h2>
+
+ <p>Each one is a function, in essence. It gets a width, a height and a random number generator, and hands back two more functions: <code>step</code>, which moves things along, and <code>draw</code>, which paints. Here's the offline-reading one with some fat trimmed:</p>
+
+ <pre><code class="language-javascript">def('reading-this-site-offline', function (w, h, rnd) {
+    var t = 0;   // frame counter; the engine advances this, not the browser's clock
+    return {
+        // one cycle is 300 frames: 90 online, then 210 offline, then round again
+        step: function () { t = (t + 1) % 300; },
+        draw: function (ctx) {
+            var off = t &gt; 90;
+            // the wifi symbol: three arcs, faded out once "off"
+            for (var i = 0; i &lt; 3; i++) {
+                ctx.strokeStyle = off ? alpha('#ffffff', 0.15) : C.ink;
+                ctx.beginPath(); ctx.arc(w * 0.2, h * 0.5, 10 + i * 10, 3.6, 5.8); ctx.stroke();
+            }
+            // a little page, sliding left to right, looping every 100 frames
+            var k = phase(t * 1.5, 100);
+            rect(ctx, w * 0.62 + w * 0.22 * k, h * 0.42, 14, 18, C.b);
+            // the caption underneath, swapping with the wifi state
+            text(ctx, off ? 'offline, still reading' : 'online', w * 0.5, h * 0.9, 9, off ? C.b : C.dim, 700, 'center');
+        }
+    };
+});</code></pre>
+
+ <h2>The engine</h2>
+
+ <p>First, the engine finds the cards. Cards on this site get rendered by five or six different scripts at different moments (the blog listing, the series pages, the related posts under each article, the homepage), and my first version made each of those scripts call the engine once it had finished rendering. Now the engine watches the page for anything being added and hooks up any card it has a sketch for.</p>
+
+ <p>Second, it steps sixty times a second whatever the screen is doing. The sketches count frames, and my first version stepped once per <code>requestAnimationFrame</code>, which is fine on a 60 Hz monitor but silly on a 120 Hz one: every ant ran at double speed, every tide went out in half the time. In a throttled background tab they crawled instead. So the engine keeps its own clock now and steps once per sixtieth of a second of real time, with a cap so a tab that's been hidden for a minute doesn't try to catch up all in one go.</p>
+
+ <p>Third, it doesn't load until it's needed. The three files come to 39 KB compressed, which is a lot to send a phone for a hover effect it can't trigger (no mouse, no hover, nothing to do). So no page includes them any more. The first time a mouse moves, and only if the browser says hovering is a thing it can do and you haven't asked for reduced motion, the shared script fetches all three. On a desktop they turn up about a second before you could want them, which is close enough for me, and phones don't store them at all.</p>
+
+ <h2>Keeping them from rotting</h2>
+
+ <p>There are two checks. A commit gets refused if any post in the listing has no sketch, so I can't publish without drawing one, to make sure I don't forget (something I do frequently without lots of checkpoints for myself!). And the <a href="my-website-has-a-test-suite.html">test suite</a> builds every sketch, runs it for 120 frames, and fails if it throws or the canvas is still blank at the end. </p>
+
+ <p>If you're reading this on a phone you've seen none of it, and that's fine. Nothing to hover with, nothing to download, and the cards are just cards.</p>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="how-the-interactive-posts-work.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/303.webp" alt="How the Interactive Posts Work" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">16 August 2026 · 4 min read</div>
+                  <h3 class="blog-card-title">How the Interactive Posts Work</h3>
+                  <p class="blog-card-excerpt">Several blogs I've written run simulations in your browser. The chassis underneath them: theme-reactive canvases, seeded randomness, phone-width rules, and a smoke test.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="blog-engine-in-one-json-file.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/71.webp" alt="A Blog Engine in One JSON File" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">26 July 2026 · 6 min read</div>
+                  <h3 class="blog-card-title">A Blog Engine in One JSON File</h3>
+                  <p class="blog-card-excerpt">No database, no CMS, no Jekyll: this blog's search, tag filters, pagination, read times, and related posts all hang off one JSON file and two Python scripts.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30">
+              <a href="making-this-website-accessible.html" class="blog-card">
+                <div class="blog-card-img"><img src="../img/photography/thumb/367.webp" alt="Making This Website Accessible" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">30 August 2026 · 5 min read</div>
+                  <h3 class="blog-card-title">Making This Website Accessible</h3>
+                  <p class="blog-card-excerpt">Thirty small habits keep this site accessible: a skip link, screen-reader notes on new-tab links, reduced-motion fallbacks, and an audit that catches the many that I forget along the way.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ <hr style="margin: 40px 0;">
+ <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
+ </div>
+ </div>
+ </div>
+
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js"></script>
+ <script src="../js/site.js"></script>
+ <script src="../js/lightbox.js"></script>
+ <script src="../js/prism-loader.js"></script>
+ <script src="../js/default-assets/active.js"></script>
+ <script src="../js/shared-components.js"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');
+loadPrism(['javascript']);</script>
+</body>
+</html>
