@@ -2,7 +2,7 @@
   "pages": 94,
   "posts": 67,
   "postPages": 70,
-  "words": 160853,
+  "words": 160851,
   "readMinutes": 761,
   "interactivePosts": 13,
   "codePosts": 20,
@@ -36,7 +36,7 @@
   "shortestPostWords": 802,
   "shortestPostTitle": "When I Ended Up in Italy Because of Mistaken Identity",
   "averagePostWords": 2401,
-  "commits": 609,
+  "commits": 610,
   "commitsByMonth": [
     [
       "2019-12",
@@ -364,7 +364,7 @@
     ],
     [
       "2026-09",
-      28
+      29
     ]
   ],
   "repoStart": "2019-12"
