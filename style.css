@@ -8387,6 +8387,13 @@ body {
 .kr-filter-panel {
   display: flex;
   flex-direction: column;
+  /* The panel also carries .gallery-filters, which sets flex-wrap: wrap.
+     Wrapping a *column* container lays the rows out in vertical lines,
+     each line only as wide as its own content, so a row could never be
+     stretched down to the panel's width: at phone widths the rows sat
+     ~550px wide inside a 360px panel and their overflow-x never engaged.
+     One line, always. */
+  flex-wrap: nowrap;
   gap: 10px; }
   .kr-filter-panel .gallery-filter-btn {
     white-space: nowrap; }
