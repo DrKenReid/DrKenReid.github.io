@@ -8964,10 +8964,10 @@ h1, h2, h3,
    the last one finished and this year's count from books.json. Further
    down, six figures worked out from the same file. Both are cards on a
    hairline, no fill, so the photographs and covers carry the colour. */
-.kr-now-area {
+.kr-reading-area {
   padding: 70px 0 20px; }
 
-.kr-now {
+.kr-reading {
   display: grid;
   grid-template-columns: 1.4fr 1fr 0.8fr;
   gap: 22px;
@@ -8975,15 +8975,15 @@ h1, h2, h3,
   margin: 0 auto; }
 
 @media (max-width: 900px) {
-  .kr-now {
+  .kr-reading {
     grid-template-columns: 1fr; } }
 
-.kr-now__col {
+.kr-reading__col {
   padding: 22px 24px;
   border: 1px solid var(--kr-hairline);
   border-radius: 12px; }
 
-.kr-now__h,
+.kr-reading__h,
 .kr-figure dt {
   font-size: 11px;
   font-weight: 600;
@@ -8992,12 +8992,12 @@ h1, h2, h3,
   color: var(--kr-eyebrow);
   margin: 0 0 14px; }
 
-.kr-now__books {
+.kr-reading__books {
   display: flex;
   flex-wrap: wrap;
   gap: 18px 22px; }
 
-.kr-now__book {
+.kr-reading__book {
   display: flex;
   gap: 12px;
   align-items: flex-start;
@@ -9006,25 +9006,25 @@ h1, h2, h3,
 
 /* The card is one link; the type stays ink rather than a block of red,
    and the title underlines on hover to say so. */
-.kr-now__book,
-.kr-now__book:hover,
-.kr-now__book:focus-visible,
-[data-theme="dark"] .kr-now__book,
-[data-theme="dark"] .kr-now__book:hover,
-[data-theme="dark"] .kr-now__book:focus-visible {
+.kr-reading__book,
+.kr-reading__book:hover,
+.kr-reading__book:focus-visible,
+[data-theme="dark"] .kr-reading__book,
+[data-theme="dark"] .kr-reading__book:hover,
+[data-theme="dark"] .kr-reading__book:focus-visible {
   color: inherit; }
 
-.kr-now__book:hover .kr-now__title,
-.kr-now__book:focus-visible .kr-now__title {
+.kr-reading__book:hover .kr-reading__title,
+.kr-reading__book:focus-visible .kr-reading__title {
   text-decoration: underline;
   text-underline-offset: 3px; }
 
-.kr-now__title,
-.kr-now__meta {
+.kr-reading__title,
+.kr-reading__meta {
   display: block; }
 
-.kr-now__book img,
-.kr-now__cover--blank {
+.kr-reading__book img,
+.kr-reading__cover--blank {
   flex: 0 0 56px;
   width: 56px;
   height: 84px;
@@ -9032,7 +9032,7 @@ h1, h2, h3,
   border-radius: 3px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); }
 
-.kr-now__cover--blank {
+.kr-reading__cover--blank {
   display: grid;
   place-items: center;
   padding: 4px;
@@ -9042,26 +9042,26 @@ h1, h2, h3,
   background: #3a3632;
   color: #e6e0d6; }
 
-.kr-now__title {
+.kr-reading__title {
   font-size: 14px;
   font-weight: 600;
   line-height: 1.3;
   margin: 2px 0 3px; }
 
-.kr-now__meta,
-.kr-now__sub,
+.kr-reading__meta,
+.kr-reading__sub,
 .kr-figure__sub {
   font-size: 12.5px;
   line-height: 1.5;
   color: #7d766c;
   margin: 0; }
 
-[data-theme="dark"] .kr-now__meta,
-[data-theme="dark"] .kr-now__sub,
+[data-theme="dark"] .kr-reading__meta,
+[data-theme="dark"] .kr-reading__sub,
 [data-theme="dark"] .kr-figure__sub {
   color: #9a9389; }
 
-.kr-now__big {
+.kr-reading__big {
   font-size: clamp(36px, 4vw, 54px);
   font-weight: 600;
   line-height: 1;

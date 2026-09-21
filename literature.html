@@ -69,27 +69,27 @@
 
   <!-- Reading now: books in progress (data/now.json, refreshed by the bot),
        the last one finished and this year's count (js/bookshelf.js) -->
-  <div class="about-us-area kr-now-area clearfix" id="now">
+  <div class="about-us-area kr-reading-area clearfix" id="now">
     <div class="container">
       <div class="text-center" style="margin-bottom: 28px;">
         <span class="section-eyebrow">Right now</span>
         <h2>Reading Now</h2>
       </div>
-      <div class="kr-now">
-        <div class="kr-now__col">
-          <h3 class="kr-now__h">Currently reading</h3>
-          <div class="kr-now__books" id="currently-reading-grid">
-            <p class="kr-now__meta">Loading from Goodreads&hellip;</p>
+      <div class="kr-reading">
+        <div class="kr-reading__col">
+          <h3 class="kr-reading__h">Currently reading</h3>
+          <div class="kr-reading__books" id="currently-reading-grid">
+            <p class="kr-reading__meta">Loading from Goodreads&hellip;</p>
           </div>
         </div>
-        <div class="kr-now__col">
-          <h3 class="kr-now__h">Last finished</h3>
-          <div class="kr-now__books" id="kr-last-finished"></div>
+        <div class="kr-reading__col">
+          <h3 class="kr-reading__h">Last finished</h3>
+          <div class="kr-reading__books" id="kr-last-finished"></div>
         </div>
-        <div class="kr-now__col">
-          <h3 class="kr-now__h">This year</h3>
-          <p class="kr-now__big"><span id="kr-year-count">&mdash;</span></p>
-          <p class="kr-now__sub" id="kr-year-sub"></p>
+        <div class="kr-reading__col">
+          <h3 class="kr-reading__h">This year</h3>
+          <p class="kr-reading__big"><span id="kr-year-count">&mdash;</span></p>
+          <p class="kr-reading__sub" id="kr-year-sub"></p>
         </div>
       </div>
     </div>
@@ -205,17 +205,17 @@
       var grid = document.getElementById('currently-reading-grid');
       if (!grid) return;
       if (!now || !Array.isArray(now.reading) || !now.reading.length) {
-        grid.innerHTML = '<p class="kr-now__meta">Between books.</p>';
+        grid.innerHTML = '<p class="kr-reading__meta">Between books.</p>';
         return;
       }
       grid.innerHTML = now.reading.map(function(b) {
         var title = krEscapeHtml(b.title);
         var author = krEscapeHtml(b.author || '');
         var cover = b.img
-          ? '<img src="' + krEscapeHtml(b.img) + '" alt="" loading="lazy" onerror="this.outerHTML=\'<span class=&quot;kr-now__cover--blank&quot;>' + title + '</span>\'">'
-          : '<span class="kr-now__cover--blank">' + title + '</span>';
-        return '<a class="kr-now__book" rel="nofollow noopener noreferrer" target="_blank" href="' + krEscapeHtml(b.link) + '">' +
-          cover + '<span><span class="kr-now__title">' + title + '</span><span class="kr-now__meta">' + author + '</span></span></a>';
+          ? '<img src="' + krEscapeHtml(b.img) + '" alt="" loading="lazy" onerror="this.outerHTML=\'<span class=&quot;kr-reading__cover--blank&quot;>' + title + '</span>\'">'
+          : '<span class="kr-reading__cover--blank">' + title + '</span>';
+        return '<a class="kr-reading__book" rel="nofollow noopener noreferrer" target="_blank" href="' + krEscapeHtml(b.link) + '">' +
+          cover + '<span><span class="kr-reading__title">' + title + '</span><span class="kr-reading__meta">' + author + '</span></span></a>';
       }).join('');
     }).catch(function() {});
   </script>

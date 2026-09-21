@@ -220,10 +220,10 @@
     function coverOrBlank(b) {
         if (b.i) {
             return '<img src="https://covers.openlibrary.org/b/isbn/' + b.i + '-M.jpg?default=false" alt="" loading="lazy"' +
-                ' onerror="this.outerHTML=\'<span class=&quot;kr-now__cover--blank&quot;>\' + this.getAttribute(\'data-t\') + \'</span>\'"' +
+                ' onerror="this.outerHTML=\'<span class=&quot;kr-reading__cover--blank&quot;>\' + this.getAttribute(\'data-t\') + \'</span>\'"' +
                 ' data-t="' + esc(b.t) + '">';
         }
-        return '<span class="kr-now__cover--blank">' + esc(b.t) + '</span>';
+        return '<span class="kr-reading__cover--blank">' + esc(b.t) + '</span>';
     }
     function fmtDay(d) {
         return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -237,10 +237,10 @@
         if (last) {
             last.innerHTML = dated.slice(0, 2).map(function (b) {
                 var d = parseDate(b.d);
-                return '<a class="kr-now__book" href="' + goodreadsUrl(b) + '" target="_blank" rel="noopener noreferrer">' +
+                return '<a class="kr-reading__book" href="' + goodreadsUrl(b) + '" target="_blank" rel="noopener noreferrer">' +
                     coverOrBlank(b) +
-                    '<span><span class="kr-now__title">' + esc(b.t) + '</span>' +
-                    '<span class="kr-now__meta">' + esc(b.a || '') + (b.r ? ' &middot; ' + b.r + '/5' : '') + '<br>' + fmtDay(d) + '</span></span></a>';
+                    '<span><span class="kr-reading__title">' + esc(b.t) + '</span>' +
+                    '<span class="kr-reading__meta">' + esc(b.a || '') + (b.r ? ' &middot; ' + b.r + '/5' : '') + '<br>' + fmtDay(d) + '</span></span></a>';
             }).join('');
         }
         if (yc) {
