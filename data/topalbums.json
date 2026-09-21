@@ -43,6 +43,13 @@
       "plays": 3
     },
     {
+      "name": "Maximum Yodel (Extended Edition)",
+      "artist": "The Institute of Quackology",
+      "url": "https://www.last.fm/music/The+Institute+of+Quackology/Maximum+Yodel+(Extended+Edition)",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/c5d3b9c0efea759c185bee8473321bae.jpg",
+      "plays": 3
+    },
+    {
       "name": "The Battle",
       "artist": "Allen-Lande",
       "url": "https://www.last.fm/music/Allen-Lande/The+Battle",
@@ -113,20 +120,20 @@
       "plays": 2
     },
     {
+      "name": "Colors Collide",
+      "artist": "French 79",
+      "url": "https://www.last.fm/music/French+79/Colors+Collide",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/ace982a07042cd1260bd4d62612b09b7.jpg",
+      "plays": 2
+    },
+    {
       "name": "Beat Saber (Original Game Soundtrack)",
       "artist": "Jaroslav Beck",
       "url": "https://www.last.fm/music/Jaroslav+Beck/Beat+Saber+(Original+Game+Soundtrack)",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/070f7c8133e30d9c0cc25efc4fdb6462.jpg",
       "plays": 2
-    },
-    {
-      "name": "The Elder Scrolls IV: Oblivion (Original Game Soundtrack)",
-      "artist": "Jeremy Soule",
-      "url": "https://www.last.fm/music/Jeremy+Soule/The+Elder+Scrolls+IV:+Oblivion+(Original+Game+Soundtrack)",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/263ef8870fb4908b76b574f178224aa3.jpg",
-      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-09-19"
+  "updated": "2026-09-21"
 }
