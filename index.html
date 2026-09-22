@@ -380,11 +380,32 @@
     </div>
   </div>
 
-  <!-- Random Quote -->
-  <section class="quote-carousel" id="home-quote" style="min-height: 200px;">
-    <div class="quote-inner">
-      <p id="home-quote-text"></p>
-      <p id="home-quote-attr"></p>
+  <!-- Random Quote. Its own class, not the literature page's .quote-carousel:
+       that one is a carousel with nav buttons, this is one still quotation. -->
+  <section class="kr-home-quote" id="home-quote">
+    <div class="kr-home-quote__inner">
+      <!-- Quotation and attribution are one block, so the space reserved for
+           the longest of them falls outside the pair and never between. -->
+      <div class="kr-home-quote__body" id="home-quote-body">
+        <p class="kr-home-quote__text" id="home-quote-text"></p>
+        <p class="kr-home-quote__attr" id="home-quote-attr"></p>
+      </div>
+      <!-- The bar is the countdown to the next quote, so you can see one
+           coming; the arrows either side of it step through the set by
+           hand, and the button below stops the clock (WCAG 2.2.2). -->
+      <div class="kr-home-quote__controls" id="home-quote-controls" hidden>
+        <div class="kr-home-quote__row">
+          <button type="button" class="kr-home-quote__nav" id="home-quote-prev"
+                  aria-label="Previous quotation"><span aria-hidden="true"></span></button>
+          <span class="kr-home-quote__track" aria-hidden="true">
+            <span class="kr-home-quote__bar" id="home-quote-bar"></span>
+          </span>
+          <button type="button" class="kr-home-quote__nav kr-home-quote__nav--next" id="home-quote-next"
+                  aria-label="Next quotation"><span aria-hidden="true"></span></button>
+        </div>
+        <button type="button" class="kr-home-quote__toggle" id="home-quote-toggle"
+                aria-label="Pause the quotations"><span aria-hidden="true"></span></button>
+      </div>
     </div>
   </section>
 
@@ -405,19 +426,119 @@
     renderInstagramSection('instagram-section');
     renderFooter('footer-section');
 
-    /* Random quote on home page — curated selection */
+    /* The quotations rotate, starting from a random one so the homepage
+       does not always open on the same line. The countdown bar is the
+       clock: the next quote is drawn when the bar's animation ends, so
+       the bar and the rotation cannot disagree, and pausing the animation
+       pauses the rotation with it. The arrows step through by hand, and
+       every change happens behind a fade. Under prefers-reduced-motion
+       nothing rotates on its own and nothing fades. */
     fetch('/data/quotes-home.json')
       .then(function(r) { return r.json(); })
       .then(function(quotes) {
-        var q = quotes[Math.floor(Math.random() * quotes.length)];
         var el = document.getElementById('home-quote-text');
         var attr = document.getElementById('home-quote-attr');
-        if (el && q) {
-          el.textContent = '\u201C' + q.quote + '\u201D';
-          attr.textContent = '\u2014 ' + q.author + ', ' + q.book;
-          el.style.opacity = '1';
-          attr.style.opacity = '1';
+        if (!el || !quotes || !quotes.length) return;
+
+        var section = document.getElementById('home-quote');
+        var body = document.getElementById('home-quote-body');
+        var inner = body.parentNode;
+        var controls = document.getElementById('home-quote-controls');
+        var toggle = document.getElementById('home-quote-toggle');
+        var bar = document.getElementById('home-quote-bar');
+        var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var i = Math.floor(Math.random() * quotes.length);
+        var paused = false;
+
+        function line(q) {
+          // Middot, not a comma: set in letterspaced caps, "Kahneman, Thinking,
+          // Fast and Slow" has two commas doing two different jobs.
+          return q.author + ' \u00b7 ' + q.book;
         }
+
+        /* Hold the height of the tallest quotation, so swapping one for
+           another never shifts the rest of the page. Measured rather than
+           guessed: a hidden twin of the block is filled with every quote in
+           turn at the real width, which means a quote added to the JSON is
+           accounted for without anyone touching the CSS. Rerun on resize,
+           since the number of lines changes with the width. */
+        function reserve() {
+          var ghost = body.cloneNode(true);
+          ghost.removeAttribute('id');
+          ghost.setAttribute('aria-hidden', 'true');
+          ghost.style.cssText = 'position:absolute;left:0;right:0;top:0;min-height:0;visibility:hidden;pointer-events:none;';
+          inner.appendChild(ghost);
+          var gt = ghost.querySelector('.kr-home-quote__text');
+          var ga = ghost.querySelector('.kr-home-quote__attr');
+          var tall = 0;
+          for (var n = 0; n < quotes.length; n++) {
+            gt.textContent = '\u201C' + quotes[n].quote + '\u201D';
+            ga.textContent = line(quotes[n]);
+            tall = Math.max(tall, ghost.offsetHeight);
+          }
+          inner.removeChild(ghost);
+          body.style.minHeight = tall + 'px';
+        }
+
+        /* Swap one quotation for the next behind a fade, so the change
+           reads as a change and not as a flicker. The text is replaced at
+           the bottom of the fade, where nobody can see it happen. Steps
+           count from where the fade is going, not from what is on screen,
+           so two quick presses of the arrow move two quotations rather
+           than one. Under prefers-reduced-motion the swap is immediate. */
+        var fading;
+        var pending = i;
+        function step(d) { change(pending + d); }
+        function change(n) {
+          pending = ((n % quotes.length) + quotes.length) % quotes.length;
+          if (still) { show(pending); return; }
+          clearTimeout(fading);
+          body.style.opacity = '0';
+          fading = setTimeout(function() {
+            show(pending);
+            body.style.opacity = '1';
+          }, 340);
+        }
+
+        function show(n) {
+          i = ((n % quotes.length) + quotes.length) % quotes.length;
+          var q = quotes[i];
+          el.textContent = '\u201C' + q.quote + '\u201D';
+          attr.textContent = line(q);
+          if (still) return;
+          // A longer quotation needs longer on screen, within reason.
+          var words = q.quote.split(/\s+/).length;
+          section.style.setProperty('--kr-quote-dwell',
+            Math.min(Math.max(words * 260, 7000), 16000) + 'ms');
+          // Restart the countdown: drop the animation, force a reflow, restore it.
+          bar.style.animation = 'none';
+          void bar.offsetWidth;
+          bar.style.animation = '';
+        }
+
+        show(i);
+        // Web fonts decide how many lines a quotation takes, so measure
+        // once they are in. Before then the reserved height would be wrong.
+        if (document.fonts && document.fonts.ready) { document.fonts.ready.then(reserve); } else { reserve(); }
+        var resized;
+        window.addEventListener('resize', function() {
+          clearTimeout(resized);
+          resized = setTimeout(reserve, 200);
+        });
+
+        controls.hidden = false;
+        document.getElementById('home-quote-prev').addEventListener('click', function() { step(-1); });
+        document.getElementById('home-quote-next').addEventListener('click', function() { step(1); });
+        if (still) return;
+
+        section.classList.add('kr-home-quote--running');
+        bar.addEventListener('animationend', function() { if (!paused) step(1); });
+
+        toggle.addEventListener('click', function() {
+          paused = !paused;
+          section.classList.toggle('kr-home-quote--paused', paused);
+          toggle.setAttribute('aria-label', paused ? 'Resume the quotations' : 'Pause the quotations');
+        });
       }).catch(function() {});
 
     /* Latest 3 blog posts */

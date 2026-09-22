@@ -3021,7 +3021,7 @@ input:required {
    ============================== */
 
 @media print {
-  #preloader, header, .breadcrumb-area, .quote-carousel,
+  #preloader, header, .breadcrumb-area, .quote-carousel, .kr-home-quote,
   #instagram-section, #footer-section, .gallery-filters,
   #load-more-btn, .quote-nav, hr { display: none !important; }
   body { color: #000; background: #fff; }
@@ -3345,12 +3345,10 @@ input:required {
   border-top-color: #333;
   border-bottom-color: #333; }
 
-[data-theme="dark"] .quote-carousel #quote-text,
-[data-theme="dark"] .quote-carousel #home-quote-text {
+[data-theme="dark"] .quote-carousel #quote-text {
   color: #f5f5f5; }
 
-[data-theme="dark"] .quote-carousel #quote-attr,
-[data-theme="dark"] .quote-carousel #home-quote-attr {
+[data-theme="dark"] .quote-carousel #quote-attr {
   color: #fc6060; }
 
 /* --- Gallery filter buttons --- */
@@ -6030,6 +6028,220 @@ a.kr-series-label:focus {
 
 [data-theme="dark"] .kr-series-parts li a:hover {
   color: #fc6060; }
+
+/* --- The homepage quotation ------------------------------------------
+   One quotation pulled at random from data/quotes-home.json. Its own
+   class rather than the literature page's .quote-carousel, which is a
+   carousel with nav buttons and a different job. Lora at display size,
+   the source as an eyebrow, and one big quotation mark hanging over the
+   opening line. The mark is drawn by CSS rather than written into the
+   markup: it is pure decoration (the quotation already carries its own
+   quotation marks from the script), and a stray curly quote in the HTML
+   is the thing audit_site.py rightly complains about. The empty alt text
+   after the slash keeps it off screen readers where that is supported. */
+.kr-home-quote {
+  background: #f4efe7;
+  border-top: 1px solid var(--kr-hairline);
+  border-bottom: 1px solid var(--kr-hairline);
+  padding: 64px 20px 72px;
+  text-align: center; }
+
+.kr-home-quote__inner {
+  position: relative;
+  max-width: 780px;
+  margin: 0 auto; }
+
+.kr-home-quote__inner::before {
+  content: "\201C" / "";
+  position: absolute;
+  top: -46px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: Lora, Georgia, serif;
+  font-size: 130px;
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0.5;
+  /* Gradient text needs the @supports guard: transparent text with no
+     background-clip is invisible text. Falls back to the flat brand red. */
+  color: var(--kr-brand-from); }
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .kr-home-quote__inner::before {
+    background: var(--kr-brand-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; } }
+
+/* The script measures every quotation and holds the tallest as a
+   min-height on the block below, so swapping one for another never moves
+   the page. align-content centres the shorter ones in the space that
+   reserves, quotation and attribution together. */
+.kr-home-quote__body {
+  display: grid;
+  align-content: center;
+  /* The script fades this to 0, changes the words, and fades it back. */
+  transition: opacity 0.34s ease; }
+
+.kr-home-quote__text {
+  position: relative;
+  font-family: Lora, Georgia, serif;
+  font-size: clamp(21px, 2.4vw, 29px);
+  line-height: 1.55;
+  margin: 0 0 20px;
+  text-wrap: balance; }
+
+.kr-home-quote__attr {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--kr-eyebrow);
+  margin: 0; }
+
+/* The quotations rotate. The bar is the countdown to the next one, so a
+   change is never a surprise, and the button stops the rotation (WCAG
+   2.2.2). One clock drives both: the script advances on the bar's
+   animationend, so the bar can never disagree with the timer, and
+   pausing the animation pauses the advance with it. */
+/* Two rows: an arrow at each end of the countdown, and the pause button
+   centred under it. The row is symmetrical, so centring the button in the
+   column puts it under the middle of the bar. */
+.kr-home-quote__controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px; }
+
+.kr-home-quote__row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px; }
+
+.kr-home-quote__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--kr-hairline);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--kr-eyebrow);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease; }
+
+.kr-home-quote__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--kr-hairline);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--kr-eyebrow);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease; }
+
+.kr-home-quote__toggle:hover,
+.kr-home-quote__toggle:focus-visible,
+.kr-home-quote__nav:hover,
+.kr-home-quote__nav:focus-visible {
+  border-color: #c53030;
+  color: #c53030; }
+
+[data-theme="dark"] .kr-home-quote__toggle:hover,
+[data-theme="dark"] .kr-home-quote__toggle:focus-visible,
+[data-theme="dark"] .kr-home-quote__nav:hover,
+[data-theme="dark"] .kr-home-quote__nav:focus-visible {
+  border-color: #fc6060;
+  color: #fc6060; }
+
+/* Chevrons: a 6px square wearing two borders, turned 45 degrees. The
+   margin is optical, not geometric: the apex sits at one edge, so the
+   bounding box centres a shape that does not look centred. */
+.kr-home-quote__nav span {
+  display: block;
+  width: 6px;
+  height: 6px;
+  margin-right: 2px;
+  border-top: 2px solid currentColor;
+  border-left: 2px solid currentColor;
+  transform: rotate(-45deg); }
+
+.kr-home-quote__nav--next span {
+  margin-right: 0;
+  margin-left: 2px;
+  transform: rotate(135deg); }
+
+/* Two bars while running, a triangle once paused: the button shows what
+   pressing it does. Drawn in CSS so there is no icon font to wait for. */
+.kr-home-quote__toggle span {
+  display: block;
+  width: 8px;
+  height: 9px;
+  border-left: 3px solid currentColor;
+  border-right: 3px solid currentColor; }
+
+.kr-home-quote--paused .kr-home-quote__toggle span {
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  border-left: 8px solid currentColor;
+  border-right: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent; }
+
+.kr-home-quote__track {
+  width: 104px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--kr-hairline);
+  overflow: hidden; }
+
+.kr-home-quote__bar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: var(--kr-brand-gradient); }
+
+.kr-home-quote--running .kr-home-quote__bar {
+  animation: kr-quote-dwell var(--kr-quote-dwell, 9s) linear forwards; }
+
+.kr-home-quote--paused .kr-home-quote__bar {
+  animation-play-state: paused; }
+
+@keyframes kr-quote-dwell {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); } }
+
+/* Asked for less motion: nothing rotates on its own, so the countdown and
+   the pause button go, having nothing left to count or stop. The arrows
+   stay, because stepping through the quotations by hand is still worth
+   having and nothing moves until somebody asks it to. */
+@media (prefers-reduced-motion: reduce) {
+  .kr-home-quote__toggle,
+  .kr-home-quote__track {
+    display: none; }
+  .kr-home-quote__bar {
+    animation: none; } }
+
+[data-theme="dark"] .kr-home-quote {
+  background: #1f1f1f; }
+
+@media only screen and (max-width: 767px) {
+  .kr-home-quote {
+    padding: 52px 18px 56px; }
+  .kr-home-quote__inner::before {
+    font-size: 96px;
+    top: -34px; } }
 
 /* "Now" strip on the homepage (rendered by shared-components.js) */
 .kr-now-area {
