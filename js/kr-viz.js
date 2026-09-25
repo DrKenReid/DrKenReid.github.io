@@ -1,6 +1,7 @@
 /*
- * kr-viz.js - the shared engine behind the Algorithms, Live and Learning,
- * Live demos. Spec and rationale: blog/VIZ-ENGINE.md.
+ * kr-viz.js - the shared engine behind the Algorithms, Live and Research,
+ * Live demos. Options, the context, the handle and a complete example:
+ * .github/docs/VIZ-ENGINE.md.
  *
  * It owns the chrome: canvas sizing and devicePixelRatio, the palette and
  * its theme rebind, the run loop and speed, controls, stat tiles, charts,
@@ -11,6 +12,10 @@
  * and draw as plain functions, and those stay readable in view-source.
  *
  * No dependencies, no build step.
+ *
+ * Design notes: why the demos share an engine, and what moving them onto
+ * it fixed, in "How the Interactive Posts Work",
+ * https://www.kenreid.co.uk/blog/how-the-interactive-posts-work.html
  */
 (function (global) {
   'use strict';
@@ -18,6 +23,10 @@
   var TOKENS = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8',
                 'ink', 'muted', 'grid', 'surface', 'border', 'cell'];
   var STACK_BELOW = 480;   // chart panes stack below this canvas width
+  // Backing-store ceiling, shared with live-covers.js and hero-evolve.js.
+  // A 3x phone would otherwise allocate 9 pixels per CSS pixel and redraw
+  // all of them every frame, for detail nobody can see at that size.
+  var MAX_DPR = 2;
   var uid = 0;             // for the ids aria-describedby needs
 
   /* Seeded PRNG. Every demo runs from a seed so a reader who reloads sees
@@ -237,7 +246,7 @@
       var node = typeof spec.el === 'string'
         ? (root.querySelector(spec.el) || document.querySelector(spec.el))
         : spec.el;
-      canvases[name] = {node: node, spec: spec, g: null, w: 0, h: 0};
+      canvases[name] = {node: node, spec: spec, g: null, w: 0, h: 0, dpr: 0};
     });
 
     /* ---- keyboard access to a clickable canvas ------------------------ */
@@ -313,8 +322,22 @@
       });
     }
 
+    /* Size each canvas's backing store to its box. Returns true when any
+       canvas was reallocated, so the caller knows whether to redraw.
+
+       The guard is the point. Assigning canvas.width, even to the value it
+       already has, throws the bitmap away and clears it. Phones fire resize
+       whenever the address bar slides in or out, which is every change of
+       scroll direction, while the canvas width has not moved at all; without
+       the guard each of those reallocated every canvas and blanked a paused
+       or finished demo until something redrew it. The height is compared
+       as well as the width because a post's height function can change its
+       answer at STACK_BELOW, and the ratio because dragging the window to a
+       monitor with a different density changes the store without changing
+       the box. */
     function fit() {
-      var dpr = global.devicePixelRatio || 1;
+      var dpr = Math.min(global.devicePixelRatio || 1, MAX_DPR);
+      var changed = false;
       Object.keys(canvases).forEach(function (name) {
         var c = canvases[name];
         if (!c.node) return;
@@ -322,13 +345,16 @@
         var spec = (w < STACK_BELOW && c.spec.mobile) ? c.spec.mobile : c.spec;
         var h = typeof spec.height === 'function' ? spec.height(w) : spec.height;
         h = Math.round(h);
+        if (c.g && w === c.w && h === c.h && dpr === c.dpr) return;
         c.node.style.height = h + 'px';
         c.node.width = Math.round(w * dpr);
         c.node.height = Math.round(h * dpr);
         var g = c.node.getContext('2d');
         g.setTransform(dpr, 0, 0, dpr, 0, 0);
-        c.g = g; c.w = w; c.h = h;
+        c.g = g; c.w = w; c.h = h; c.dpr = dpr;
+        changed = true;
       });
+      return changed;
     }
 
     /* ---- charts ------------------------------------------------------ */
@@ -568,7 +594,17 @@
 
     /* ---- environment ------------------------------------------------- */
 
-    global.addEventListener('resize', function () { fit(); redraw(); });
+    // A window drag delivers resize events faster than frames, and each one
+    // forces a layout read in fit(); coalesce them to one pass per frame.
+    var resizeQueued = false;
+    global.addEventListener('resize', function () {
+      if (resizeQueued) return;
+      resizeQueued = true;
+      global.requestAnimationFrame(function () {
+        resizeQueued = false;
+        if (fit()) redraw();
+      });
+    });
 
     new MutationObserver(function () {
       colors = readColors(root);

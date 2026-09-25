@@ -2,26 +2,32 @@
 """Subset the icon fonts (Font Awesome, Themify, ElegantIcons) to the
 glyphs the site actually uses.
 
-Used icon classes come from the same corpus the CSS pruner scans (all
-HTML including drafts, JS string literals, inline scripts, blog/*.md).
-Class -> codepoint mapping comes from each font's vendor CSS. Subset
-files are written next to the originals with a -subset suffix;
-.github/scripts/minify_css.py swaps the @font-face src to the subset files at
-build time, so the vendor CSS on disk stays untouched.
+Used icon classes come from the same corpus the CSS pruner scans and
+by the same test (css_prune.collect_usage): files git tracks, so their
+class attributes, JS string literals, inline scripts and blog/*.md.
+Untracked drafts are not read; an icon a draft introduces joins the
+subset once the draft is added to the index. Class -> codepoint mapping
+comes from each font's vendor CSS. Subset files are written next to the
+originals with a -subset suffix; .github/scripts/minify_css.py swaps the
+@font-face src to the subset files at build time, so the vendor CSS on
+disk stays untouched.
 
-Rerun when a new icon class is introduced, then rebuild the min CSS.
+Rerun when a new icon class is introduced, then rebuild the min CSS:
+
+    python .github/scripts/subset_icon_fonts.py
+    python .github/scripts/minify_css.py
 """
 
+import json
 import re
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import sitelib  # noqa: E402
 from css_prune import collect_usage  # noqa: E402
 
-from fontTools.subset import Subsetter, Options, load_font, save_font
-
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = sitelib.ROOT
 
 FONTS = [
     {
@@ -54,19 +60,27 @@ FONTS = [
 ]
 
 
-def main():
-    classes, _ids = collect_usage()
+def main(argv=None):
+    sitelib.arg_parser(__doc__).parse_args(argv)
+    # Imported after the arguments are parsed, so --help and a mistyped
+    # flag answer without loading the font toolkit.
+    from fontTools.subset import Subsetter, Options, load_font, save_font
+
+    usage = collect_usage()
     manifest = {}
     for spec in FONTS:
         defined = {}
         for m in re.finditer(spec["class_re"], spec["css"].read_text(encoding="utf-8")):
             defined[m.group(1)] = int(m.group(2), 16)
-        used = sorted(c for c in classes if c in defined)
+        # usage.used() rather than a set lookup: it is the test the pruner
+        # keeps icon rules by, and the one minify_css.py checks this
+        # manifest with, so an icon cannot be styled but missing a glyph.
+        used = sorted(usage.used(defined))
         manifest[spec["name"]] = used
         codepoints = {defined[c] for c in used}
         print(f"{spec['name']}: {len(used)} used of {len(defined)} defined -> {used}")
         if not codepoints:
-            print("  nothing used — no subset written")
+            print("  nothing used, no subset written")
             continue
         for src in spec["sources"]:
             if not src.exists():
@@ -84,15 +98,15 @@ def main():
             save_font(font, str(out), options)
             print(f"  {src.name}: {src.stat().st_size:,} -> {out.name}: {out.stat().st_size:,} bytes")
 
-    # Manifest of subsetted classes — minify_css.py --check compares the
+    # Manifest of subsetted classes: minify_css.py --check compares the
     # tracked corpus against this and fails when a used icon is missing
     # from the subsets (which would render as an empty box).
-    import json
     manifest_path = ROOT / "fonts" / "subset-manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n",
                              encoding="utf-8", newline="\n")
     print(f"wrote {manifest_path.relative_to(ROOT)}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

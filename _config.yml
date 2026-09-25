@@ -1,0 +1,16 @@
+# GitHub Pages runs every push through Jekyll. This site is plain HTML with
+# no front matter anywhere, so Jekyll passes each page through untouched and
+# this file exists for one setting.
+#
+# Pages turns on the optional-front-matter plugin by default, which renders
+# a Markdown file into HTML even when it has no front matter. The files in
+# blog/downloads/*.md are meant to be downloaded as Markdown, not turned
+# into web pages beside themselves. require_front_matter: true switches
+# that plugin off, so Markdown without front matter is published as the raw
+# file, with no HTML twin.
+#
+# Deliberately absent: a .nojekyll file. It would skip Jekyll altogether,
+# and with it the rule that leaves dot-directories unpublished, so .github/
+# (workflows, build scripts, internal docs) would be served as part of the
+# site.
+require_front_matter: true

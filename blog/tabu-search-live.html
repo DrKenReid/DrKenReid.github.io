@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
  <meta charset="UTF-8">
  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -10,8 +10,14 @@
  <meta property="og:title" content="Tabu Search, Live">
  <meta property="og:description" content="An interactive tabu search in your browser: watch a search with a memory solve N-Queens live.">
  <meta property="og:image" content="https://www.kenreid.co.uk/img/og/tabu-search-live.jpg">
+ <meta property="og:image:width" content="1200">
+ <meta property="og:image:height" content="630">
+ <meta property="og:image:alt" content="Tabu Search, Live">
  <meta property="og:url" content="https://www.kenreid.co.uk/blog/tabu-search-live.html">
  <meta property="og:type" content="article">
+ <meta property="og:site_name" content="Ken Reid">
+ <meta property="og:locale" content="en_GB">
+ <meta property="article:published_time" content="2026-08-26">
  <meta name="twitter:card" content="summary_large_image">
  <meta name="twitter:title" content="Tabu Search, Live">
  <meta name="twitter:description" content="An interactive tabu search in your browser: watch a search with a memory solve N-Queens live.">
@@ -24,33 +30,59 @@
  <meta name="DC.title" content="Tabu Search, Live">
  <meta name="DC.creator" content="Kenneth N. Reid">
  <meta name="DC.date" content="2026-08-26">
- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
- <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <script defer src="../js/analytics.js"></script>
  <link rel="icon" href="../img/core-img/favicon.png">
  <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
  <meta name="theme-color" content="#1a1a1a">
  <link rel="manifest" href="../manifest.json">
- <link rel="preload" as="image" href="img/tabu/tabu-hero.webp">
- <link rel="stylesheet" href="../style.min.css">
+ <link rel="preload" as="image" href="img/tabu/tabu-hero.webp" fetchpriority="high">
+ <link rel="stylesheet" href="../style.min.css?v=20260923a">
  <link rel="canonical" href="https://www.kenreid.co.uk/blog/tabu-search-live.html">
  <script type="application/ld+json">
  {
- "@context": "https://schema.org",
- "@type": "BlogPosting",
- "headline": "Tabu Search, Live",
- "description": "An interactive tabu search in your browser: watch a search with a memory solve N-Queens live.",
- "image": "https://www.kenreid.co.uk/img/og/tabu-search-live.jpg",
- "author": {
- "@type": "Person",
- "name": "Ken Reid",
- "url": "https://www.kenreid.co.uk"
- },
- "datePublished": "2026-08-26",
- "publisher": {
- "@type": "Person",
- "name": "Ken Reid"
- },
- "keywords": ["ai", "tabu search", "optimization", "interactive", "n-queens"]
+   "@context": "https://schema.org",
+   "@type": "BlogPosting",
+   "mainEntityOfPage": {
+     "@type": "WebPage",
+     "@id": "https://www.kenreid.co.uk/blog/tabu-search-live.html"
+   },
+   "url": "https://www.kenreid.co.uk/blog/tabu-search-live.html",
+   "headline": "Tabu Search, Live",
+   "description": "An interactive tabu search in your browser: watch a search with a memory solve N-Queens live.",
+   "image": {
+     "@type": "ImageObject",
+     "url": "https://www.kenreid.co.uk/img/og/tabu-search-live.jpg",
+     "width": 1200,
+     "height": 630
+   },
+   "datePublished": "2026-08-26",
+   "dateModified": "2026-08-26",
+   "author": {
+     "@type": "Person",
+     "@id": "https://www.kenreid.co.uk/#ken",
+     "name": "Ken Reid",
+     "url": "https://www.kenreid.co.uk/"
+   },
+   "publisher": {
+     "@type": "Person",
+     "@id": "https://www.kenreid.co.uk/#ken",
+     "name": "Ken Reid",
+     "url": "https://www.kenreid.co.uk/"
+   },
+   "isPartOf": [
+     { "@id": "https://www.kenreid.co.uk/#website" },
+     {
+       "@type": "CreativeWorkSeries",
+       "@id": "https://www.kenreid.co.uk/series-algorithms-live.html#series",
+       "name": "Algorithms, Live",
+       "url": "https://www.kenreid.co.uk/series-algorithms-live.html"
+     }
+   ],
+   "inLanguage": "en-GB",
+   "articleSection": "Data & AI",
+   "wordCount": 1752,
+   "timeRequired": "PT8M",
+   "keywords": ["ai", "tabu search", "optimization", "interactive", "n-queens"]
  }
  </script>
  <script type="application/ld+json">
@@ -89,12 +121,10 @@
    .tabu-asp.show{ opacity:1; }
    .tabu-mem{ font-size:0.75em; color:var(--viz-muted); margin-top:10px; line-height:1.9; font-variant-numeric:tabular-nums; min-height:1.5em; }
  </style>
- <script defer src="../js/theme.js"></script>
- <script defer src="../js/palette.js"></script>
+ <script defer src="../js/theme.js?v=20260923a"></script>
+ <script defer src="../js/palette.js?v=20260923a"></script>
 </head>
 <body>
- <div id="preloader"><div class="loader"></div></div>
-
  <div id="header-section"></div>
 
  <main id="main-content">
@@ -107,7 +137,7 @@
         <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
         <li class="breadcrumb-item active" aria-current="page">Tabu Search, Live</li>
       </ol></nav>
-      <p class="kr-opener__kicker">Data &amp; AI &middot; 26 August 2026 &middot; 8 min read</p>
+      <p class="kr-opener__kicker">Data &amp; AI &middot; <time datetime="2026-08-26">26 August 2026</time> &middot; 8 min read</p>
       <p class="kr-opener__title page-title">Tabu Search, Live</p>
       <p class="kr-opener__standfirst">An interactive tabu search in your browser: watch a search with a memory solve N-Queens live, ban its own best moves, and escape the traps that stop every other method in this series.</p>
     </div>
@@ -245,6 +275,48 @@
           </li>
         </ol>
 
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/blog/img/vns/vns-hero.webp')">
+              <a href="variable-neighbourhood-search-live.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../blog/img/vns/vns-hero.webp" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 August 2026 · 7 min read</div>
+                  <h3 class="blog-card-title">Variable Neighbourhood Search, Live</h3>
+                  <p class="blog-card-excerpt">An interactive variable neighbourhood search solving the Travelling Salesman Problem in your browser: watch a tour untangle itself, then watch the search escape a local optimum by changing what counts as a nearby move.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/blog/img/annealing/annealing-hero.webp')">
+              <a href="simulated-annealing-live.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../blog/img/annealing/annealing-hero.webp" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">5 August 2026 · 28 min read</div>
+                  <h3 class="blog-card-title">Simulated Annealing, Live</h3>
+                  <p class="blog-card-excerpt">An interactive introduction to simulated annealing: watch a ball escape local minima as you control the temperature, then race four algorithms live on the Travelling Salesman Problem in your browser.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/blog/img/diffevo/diffevo-hero.webp')">
+              <a href="differential-evolution-live.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../blog/img/diffevo/diffevo-hero.webp" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">22 August 2026 · 9 min read</div>
+                  <h3 class="blog-card-title">Differential Evolution, Live</h3>
+                  <p class="blog-card-excerpt">Differential evolution running live in your browser: a population whose own spread sets its step size hunts minima on four landscapes.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">ai</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
  </div>
  </div>
  </div>
@@ -255,15 +327,15 @@
  <div id="footer-section"></div>
 
  <script src="../js/jquery.min.js"></script>
- <script src="../js/alime.bundle.js"></script>
- <script src="../js/site.js"></script>
- <script src="../js/lightbox.js"></script>
- <script src="../js/default-assets/active.js"></script>
- <script src="../js/shared-components.js"></script>
+ <script src="../js/alime.bundle.js?v=20260923a"></script>
+ <script src="../js/site.js?v=20260923a"></script>
+ <script src="../js/lightbox.js?v=20260923a"></script>
+ <script src="../js/default-assets/active.js?v=20260923a"></script>
+ <script src="../js/shared-components.js?v=20260923a"></script>
  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
 renderFooter('footer-section');</script>
 
-<script src="../js/kr-viz.js"></script>
+<script src="../js/kr-viz.js?v=20260923a"></script>
  <script>
 /* ============================================================
    Tabu Search, Live - the interactive demo for this post.

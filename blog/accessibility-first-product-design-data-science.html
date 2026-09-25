@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -10,8 +10,14 @@
   <meta property="og:title" content="Accessibility-First Design in Data Science">
   <meta property="og:description" content="Most data science outputs are inaccessible by default. Designing for access first produces clearer plots, better dashboards, and more rigorous communication for everyone.">
   <meta property="og:image" content="https://www.kenreid.co.uk/img/og/accessibility-first-product-design-data-science.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Accessibility-First Design in Data Science">
   <meta property="og:url" content="https://www.kenreid.co.uk/blog/accessibility-first-product-design-data-science.html">
   <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Ken Reid">
+  <meta property="og:locale" content="en_GB">
+  <meta property="article:published_time" content="2026-05-11">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Accessibility-First Design in Data Science">
   <meta name="twitter:description" content="Most data science outputs are inaccessible by default. Designing for access first produces clearer plots, better dashboards, and more rigorous communication for everyone.">
@@ -24,15 +30,13 @@
   <meta name="DC.title" content="Accessibility-First Design in Data Science">
   <meta name="DC.creator" content="Kenneth N. Reid">
   <meta name="DC.date" content="2026-05-11">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <script defer src="../js/analytics.js"></script>
   <link rel="icon" href="../img/core-img/favicon.png">
   <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
   <link rel="manifest" href="../manifest.json">
-  <link rel="preload" as="image" href="../img/photography/hero/21.webp">
-  <link rel="stylesheet" href="../style.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <link rel="preload" as="image" href="../img/photography/hero/21.webp" fetchpriority="high">
+  <link rel="stylesheet" href="../style.min.css?v=20260923a">
   <link rel="canonical" href="https://www.kenreid.co.uk/blog/accessibility-first-product-design-data-science.html">
   <style>
     .blog-post details.code-example pre {
@@ -99,6 +103,17 @@
         margin-right: -150px;
       }
     }
+    /* The two demo tables' header rows. Their colours are the example (a
+       header that fails contrast, and the fix), so they are the same in
+       both themes, unlike everything around them. */
+    .plot-compare tr.demo-head--poor {
+      background: #cccccc;
+      color: #555555;
+    }
+    .plot-compare tr.demo-head--fixed {
+      background: #222222;
+      color: #ffffff;
+    }
     .table-fix-contrast tbody tr:nth-child(even) {
       background: #f5f5f5;
     }
@@ -135,9 +150,26 @@
       border-radius: 10px;
       background: #fafafa;
     }
+    /* Plotly arrives only when the reader nears the figure (see the
+       script at the foot of the page), so the host holds the chart's
+       final height from the start and nothing below it moves when it
+       draws. 450px is the height Plotly gives an autosized chart. */
     .interactive-plot .plotly-host {
       width: 100%;
-      min-height: 420px;
+      height: 450px;
+    }
+    .interactive-plot .plotly-host:empty {
+      display: grid;
+      place-items: center;
+    }
+    /* .kr-js: without scripts nothing is loading, so say nothing. */
+    .kr-js .interactive-plot .plotly-host:empty::before {
+      content: "Loading the 3D view";
+      font-size: 14px;
+      color: var(--kr-muted);
+    }
+    .kr-js .interactive-plot .plotly-host.is-failed::before {
+      content: "The 3D view could not be loaded.";
     }
     [data-theme="dark"] .interactive-plot {
       border-color: #3b3b3b;
@@ -148,27 +180,39 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Accessibility-First Design in Data Science",
-    "description": "Most data science outputs are inaccessible by default. Designing for access first produces clearer plots, better dashboards, and more rigorous communication for everyone.",
-    "image": "https://www.kenreid.co.uk/img/og/accessibility-first-product-design-data-science.jpg",
-    "author": {
-      "@type": "Person",
-      "name": "Ken Reid",
-      "url": "https://www.kenreid.co.uk"
-    },
-    "datePublished": "2026-05-11",
-    "publisher": {
-      "@type": "Person",
-      "name": "Ken Reid"
-    },
-    "keywords": [
-      "data-science"
-    ],
-    "url": "https://www.kenreid.co.uk/blog/accessibility-first-product-design-data-science.html",
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https://www.kenreid.co.uk/blog/accessibility-first-product-design-data-science.html"
-    }
+    },
+    "url": "https://www.kenreid.co.uk/blog/accessibility-first-product-design-data-science.html",
+    "headline": "Accessibility-First Design in Data Science",
+    "description": "Most data science outputs are inaccessible by default. Designing for access first produces clearer plots, better dashboards, and more rigorous communication for everyone.",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://www.kenreid.co.uk/img/og/accessibility-first-product-design-data-science.jpg",
+      "width": 1200,
+      "height": 630
+    },
+    "datePublished": "2026-05-11",
+    "dateModified": "2026-05-11",
+    "author": {
+      "@type": "Person",
+      "@id": "https://www.kenreid.co.uk/#ken",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk/"
+    },
+    "publisher": {
+      "@type": "Person",
+      "@id": "https://www.kenreid.co.uk/#ken",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk/"
+    },
+    "isPartOf": { "@id": "https://www.kenreid.co.uk/#website" },
+    "inLanguage": "en-GB",
+    "articleSection": "Data & AI",
+    "wordCount": 8990,
+    "timeRequired": "PT41M",
+    "keywords": ["data-science"]
   }
   </script>
   <script type="application/ld+json">
@@ -197,12 +241,10 @@
     ]
   }
   </script>
-  <script defer src="../js/theme.js"></script>
-  <script defer src="../js/palette.js"></script>
+  <script defer src="../js/theme.js?v=20260923a"></script>
+  <script defer src="../js/palette.js?v=20260923a"></script>
 </head>
 <body>
-  <div id="preloader"><div class="loader"></div></div>
-
   <div id="header-section"></div>
 
   <main id="main-content">
@@ -216,7 +258,7 @@
         <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
         <li class="breadcrumb-item active" aria-current="page">Accessibility-First Design in Data Science</li>
       </ol></nav>
-      <p class="kr-opener__kicker">Data &amp; AI &middot; 11 May 2026 &middot; 41 min read</p>
+      <p class="kr-opener__kicker">Data &amp; AI &middot; <time datetime="2026-05-11">11 May 2026</time> &middot; 41 min read</p>
       <p class="kr-opener__title page-title">Accessibility-First Design in Data Science</p>
       <p class="kr-opener__standfirst">Data science outputs are often inaccessible by default. Accessibility-first design in plots, dashboards, and tables improves understanding for everyone.</p>
       <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>
@@ -240,7 +282,7 @@
         <p>When you design for access first, you make fewer charts, label them better, and remove the visual decoration that was getting in the way. The beneficiaries go far beyond any single label - the next section is about how broad that audience really is - and ultimately they include you. Why bother doing work if your peers cannot use it?</p>
 
         <figure>
-          <img src="../img/photography/thumb/19.webp" alt="Clean visual composition used as a cover-style motif for accessibility-first communication" loading="lazy" style="width:100%; border-radius:8px;" width="400" height="266">
+          <img src="../img/photography/thumb/19.webp" alt="Clean visual composition used as a cover-style motif for accessibility-first communication" loading="lazy" class="kr-figure-img" width="400" height="266">
           <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
         </figure>
 
@@ -266,7 +308,7 @@
         <p>This is the same argument that the visualisation research community has been making about reaching broader audiences: the assumption that everyone consumes charts as high-resolution colour images, with full attention, and with the same visualisation literacy as the author, is false, and it gatekeeps insight behind a purely visual medium.<sup><a href="#ref-2" class="cite-ref">[2]</a></sup> Designing for access is acknowledging the basic requirements for usable visualisations.</p>
 
         <figure>
-          <img src="../img/photography/thumb/388.webp" alt="Photography image used as an interlude before the colour and redundant coding section" loading="lazy" style="width:100%; border-radius:8px;" width="400" height="265">
+          <img src="../img/photography/thumb/388.webp" alt="Photography image used as an interlude before the colour and redundant coding section" loading="lazy" class="kr-figure-img" width="400" height="265">
           <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
         </figure>
 
@@ -285,7 +327,7 @@
         <h3>The problem: colour-only encoding</h3>
 
         <figure>
-          <img src="img/accessibility-scatter-bad.png" alt="Scatter plot with three groups encoded by red, green, and blue circles only. Under red-green colour vision deficiency, Group A and Group B appear as the same colour and become indistinguishable." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="975" height="675">
+          <img src="img/accessibility-scatter-bad.png" alt="Scatter plot with three groups encoded by red, green, and blue circles only. Under red-green colour vision deficiency, Group A and Group B appear as the same colour and become indistinguishable." loading="lazy" class="kr-figure-img" style="max-width: 700px;" width="975" height="675">
           <figcaption class="figure-note">Colour-only encoding. Group&nbsp;A (red) and Group&nbsp;B (green) look identical under deuteranopia, the most common form of CVD. The legend also relies on colour, so it offers no fallback.</figcaption>
         </figure>
 
@@ -333,7 +375,7 @@ plt.close(fig)
         <h3>The fix: redundant coding with Okabe&ndash;Ito</h3>
 
         <figure>
-          <img src="img/accessibility-scatter-good.png" alt="The same scatter plot data using the Okabe-Ito CVD-safe palette with distinct marker shapes: orange circles for Group A, blue squares for Group B, and teal triangles for Group C. Groups are distinguishable by colour or shape independently." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="975" height="675">
+          <img src="img/accessibility-scatter-good.png" alt="The same scatter plot data using the Okabe-Ito CVD-safe palette with distinct marker shapes: orange circles for Group A, blue squares for Group B, and teal triangles for Group C. Groups are distinguishable by colour or shape independently." loading="lazy" class="kr-figure-img" style="max-width: 700px;" width="975" height="675">
           <figcaption class="figure-note">Redundant coding with the Okabe&ndash;Ito palette and distinct markers. Each group is identified by colour <em>and</em> shape, so the chart remains legible when either channel fails.</figcaption>
         </figure>
 
@@ -402,7 +444,7 @@ plt.close(fig)
         <h3>The problem: colour-only line encoding</h3>
 
         <figure>
-          <img src="img/accessibility-line-bad.png" alt="Line chart of monthly product sales with three lines distinguished only by colour: blue, orange, and green. When the lines cross in mid-year, there is no shape or style difference to help re-identify them." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="975" height="675">
+          <img src="img/accessibility-line-bad.png" alt="Line chart of monthly product sales with three lines distinguished only by colour: blue, orange, and green. When the lines cross in mid-year, there is no shape or style difference to help re-identify them." loading="lazy" class="kr-figure-img" style="max-width: 700px;" width="975" height="675">
           <figcaption class="figure-note">Colour-only line encoding. When A and B cross in summer, a reader with CVD has no fallback because both lines are the same hue and the legend cannot help.</figcaption>
         </figure>
 
@@ -449,7 +491,7 @@ plt.close(fig)
         <h3>The fix: colour + line style + markers</h3>
 
         <figure>
-          <img src="img/accessibility-line-good.png" alt="The same time series with Okabe-Ito colours, distinct line styles (solid, dashed, dash-dot), and markers at every third point. Product A rises on a solid orange line with circles; Product B is flat on a dashed blue line with squares; Product C falls on a dash-dot teal line with triangles." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="975" height="675">
+          <img src="img/accessibility-line-good.png" alt="The same time series with Okabe-Ito colours, distinct line styles (solid, dashed, dash-dot), and markers at every third point. Product A rises on a solid orange line with circles; Product B is flat on a dashed blue line with squares; Product C falls on a dash-dot teal line with triangles." loading="lazy" class="kr-figure-img" style="max-width: 700px;" width="975" height="675">
           <figcaption class="figure-note">Three independent channels: colour, line style, and marker shape. Any one of them can be removed and the chart still works. The title states the pattern, so a reader who only skims the title still gets the main finding.</figcaption>
         </figure>
 
@@ -521,7 +563,7 @@ plt.close(fig)
         <h3>The problem: <jargon key="chart junk">chart junk</jargon></h3>
 
         <figure>
-          <img src="img/accessibility-bar-bad.png" alt="Bar chart of quarterly revenue with four different bar colours, a redundant legend repeating the x-axis labels, a grey background, fake drop shadows, both horizontal and vertical gridlines, and a generic title." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="975" height="675">
+          <img src="img/accessibility-bar-bad.png" alt="Bar chart of quarterly revenue with four different bar colours, a redundant legend repeating the x-axis labels, a grey background, fake drop shadows, both horizontal and vertical gridlines, and a generic title." loading="lazy" class="kr-figure-img" style="max-width: 700px;" width="975" height="675">
           <figcaption class="figure-note">Every bar is a different colour, but category is already encoded on the x-axis, so the colours add nothing. The legend repeats the axis labels. The grey background, drop shadows, and crossed gridlines all cost the reader processing time without encoding any data.</figcaption>
         </figure>
 
@@ -566,7 +608,7 @@ plt.close(fig)
         <h3>The fix: high <jargon key="data-ink ratio">data-ink ratio</jargon></h3>
 
         <figure>
-          <img src="img/accessibility-bar-good.png" alt="The same quarterly revenue data as a clean bar chart. All bars are a single shade of blue, axis labels are clear, gridlines are subtle and horizontal only, and the title reads: Q4 revenue reached its highest point of 2024." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="975" height="675">
+          <img src="img/accessibility-bar-good.png" alt="The same quarterly revenue data as a clean bar chart. All bars are a single shade of blue, axis labels are clear, gridlines are subtle and horizontal only, and the title reads: Q4 revenue reached its highest point of 2024." loading="lazy" class="kr-figure-img" style="max-width: 700px;" width="975" height="675">
           <figcaption class="figure-note">One colour (the x-axis already encodes category), no legend, subtle horizontal gridlines only, and a title that states the takeaway. Every remaining element earns its pixels.</figcaption>
         </figure>
 
@@ -615,7 +657,7 @@ plt.close(fig)
         <h3>The problem: low contrast</h3>
 
         <figure>
-          <img src="img/accessibility-contrast-bad.png" alt="Line chart of monthly model error rates for three experiment variants. Labels, axis text, and legend are all in light grey, and all three series are very similar pale greys, making the chart hard to read." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="1037" height="651">
+          <img src="img/accessibility-contrast-bad.png" alt="Line chart of monthly model error rates for three experiment variants. Labels, axis text, and legend are all in light grey, and all three series are very similar pale greys, making the chart hard to read." loading="lazy" class="kr-figure-img" style="max-width: 700px;" width="1037" height="651">
           <figcaption class="figure-note">Low-contrast text and line colours create ambiguity about which series is improving. This is still plausible in real dashboards, but already hard to decode quickly in presentation conditions.</figcaption>
         </figure>
 
@@ -658,7 +700,7 @@ plt.close(fig)
         <h3>The fix: WCAG-compliant contrast</h3>
 
         <figure>
-          <img src="img/accessibility-contrast-good.png" alt="The same monthly error-rate line chart with near-black text and high-separation series colours. Labels and legend are clear and each trend is easy to distinguish at a glance." loading="lazy" style="width:100%; border-radius:8px; max-width:700px;" width="1074" height="690">
+          <img src="img/accessibility-contrast-good.png" alt="The same monthly error-rate line chart with near-black text and high-separation series colours. Labels and legend are clear and each trend is easy to distinguish at a glance." loading="lazy" class="kr-figure-img" style="max-width: 700px;" width="1074" height="690">
           <figcaption class="figure-note">Near-black text and higher-separation line colours make all three trends immediately legible. The key takeaway is visible without zooming.</figcaption>
         </figure>
 
@@ -706,8 +748,8 @@ plt.close(fig)
 
         <p>A dashboard should give the user a fast, comprehensive read on the situation: they open it, get the bigger picture in seconds, and drill down only where something looks off. The literature on dashboards in time-critical settings is consistent that this only works when cognitive load is minimised.<sup><a href="#ref-4" class="cite-ref">[4]</a></sup></p>
 
-        <blockquote style="margin: 24px 0; padding: 16px 20px; border-left: 3px solid #999; font-style: italic; color: #555;">
-          <p style="margin: 0;">If the layout, encodings, or density force the user to think hard about <em>how to read the dashboard</em>, the dashboard has failed its primary purpose.</p>
+        <blockquote class="kr-pullquote">
+          <p>If the layout, encodings, or density force the user to think hard about <em>how to read the dashboard</em>, the dashboard has failed its primary purpose.</p>
         </blockquote>
 
         <p>That failure is amplified for readers managing attention-regulation differences, post-stroke or post-concussion processing limits, or simple decision fatigue at the end of a long day.</p>
@@ -744,7 +786,7 @@ plt.close(fig)
             <figure>
               <table style="width:100%; border-collapse:collapse; font-size:14px; margin:16px 0;">
                 <thead>
-                  <tr style="background:#cccccc; color:#555555;">
+                  <tr class="demo-head--poor">
                     <td colspan="3" style="padding:8px 12px; text-align:left;">Mortgage approvals 2024</td>
                   </tr>
                   <tr>
@@ -791,7 +833,7 @@ plt.close(fig)
               <table class="table-fix-contrast" style="width:100%; border-collapse:collapse; font-size:14px; margin: 16px 0;">
                 <caption style="text-align:left; font-weight:600; padding-bottom:8px;">Mortgage approval rate by region and quarter (2024)</caption>
                 <thead>
-                  <tr style="background:#222222; color:#ffffff;">
+                  <tr class="demo-head--fixed">
                     <th scope="col" style="padding:8px 12px; text-align:left;">Region</th>
                     <th scope="col" style="padding:8px 12px; text-align:right;">Q1 approval rate (%)</th>
                     <th scope="col" style="padding:8px 12px; text-align:right;">Q2 approval rate (%)</th>
@@ -854,7 +896,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The problem: too many bubbles, jet colours, no labels</h4>
             <figure>
-              <img src="img/accessibility-bubble-bad.png" alt="Bubble chart of 60 portfolio holdings using rainbow jet colours. Many bubbles overlap without visible boundaries. There are no labels on any point and the title reads Portfolio holdings with no finding." loading="lazy" style="width:100%; border-radius:8px;" width="918" height="661">
+              <img src="img/accessibility-bubble-bad.png" alt="Bubble chart of 60 portfolio holdings using rainbow jet colours. Many bubbles overlap without visible boundaries. There are no labels on any point and the title reads Portfolio holdings with no finding." loading="lazy" class="kr-figure-img" width="918" height="661">
               <figcaption class="figure-note">60 bubbles, jet colours encoding nothing, no strokes on overlaps, no direct labels. The title states the chart type, not a finding.</figcaption>
             </figure>
 <details class="code-example"><summary>Python example</summary>
@@ -890,7 +932,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The fix: capped count, strokes, direct labels</h4>
             <figure>
-              <img src="img/accessibility-bubble-good.png" alt="Bubble chart of portfolio risk with fifteen semi-transparent sky-blue circles outlined in dark grey. Holdings 4, 9, and 15 are the three largest and have permanent text labels with leader lines. Title: Three holdings dominate portfolio risk." loading="lazy" style="width:100%; border-radius:8px;" width="1067" height="707">
+              <img src="img/accessibility-bubble-good.png" alt="Bubble chart of portfolio risk with fifteen semi-transparent sky-blue circles outlined in dark grey. Holdings 4, 9, and 15 are the three largest and have permanent text labels with leader lines. Title: Three holdings dominate portfolio risk." loading="lazy" class="kr-figure-img" width="1067" height="707">
               <figcaption class="figure-note">Fifteen bubbles, semi-transparent fill with a high-contrast stroke so every boundary is visible through overlaps, and direct labels on the three largest holdings.</figcaption>
             </figure>
 
@@ -961,7 +1003,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The problem: translucent fills, CVD-unsafe colours</h4>
             <figure>
-              <img src="img/accessibility-venn-bad.png" alt="Three-set Venn diagram with translucent red, green, and blue fills. Overlap regions create orange, purple, and teal, which are unreadable by CVD readers and fail WCAG contrast for text laid on them. Counts are rendered directly on the coloured fills without backgrounds." loading="lazy" style="width:100%; border-radius:8px;" width="663" height="622">
+              <img src="img/accessibility-venn-bad.png" alt="Three-set Venn diagram with translucent red, green, and blue fills. Overlap regions create orange, purple, and teal, which are unreadable by CVD readers and fail WCAG contrast for text laid on them. Counts are rendered directly on the coloured fills without backgrounds." loading="lazy" class="kr-figure-img" width="663" height="622">
               <figcaption class="figure-note">Default matplotlib_venn fills: semitransparent red, green, blue. Overlaps create new hues that fail contrast checks and are unreadable by CVD readers. Numbers lack background boxes.</figcaption>
             </figure>
 <details class="code-example"><summary>Python example</summary>
@@ -988,7 +1030,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The fix: stroke-only encoding with labelled regions</h4>
             <figure>
-              <img src="img/accessibility-venn-good.png" alt="Three-set Venn diagram showing customer segment overlap. The Email subscribers circle has a solid black outline, Mobile app users has a dashed outline, and Loyalty members has a dotted outline. Each region is labelled with a count in thousands, and every number sits in a white rounded rectangle." loading="lazy" style="width:100%; border-radius:8px;" width="713" height="707">
+              <img src="img/accessibility-venn-good.png" alt="Three-set Venn diagram showing customer segment overlap. The Email subscribers circle has a solid black outline, Mobile app users has a dashed outline, and Loyalty members has a dotted outline. Each region is labelled with a count in thousands, and every number sits in a white rounded rectangle." loading="lazy" class="kr-figure-img" width="713" height="707">
               <figcaption class="figure-note">No fill colours. Set membership is encoded entirely by stroke style, and each numeric label sits on a white background so the strokes behind it never compromise legibility.</figcaption>
             </figure>
 
@@ -1055,7 +1097,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The problem: box plot hides distribution shape</h4>
             <figure>
-              <img src="img/accessibility-distribution-bad.png" alt="Box plot of processing time for Teams A, B, and C. All three teams have similar-looking boxes and whiskers. Team B is bimodal in the underlying data but this is completely invisible from the box plot." loading="lazy" style="width:100%; border-radius:8px;" width="1067" height="707">
+              <img src="img/accessibility-distribution-bad.png" alt="Box plot of processing time for Teams A, B, and C. All three teams have similar-looking boxes and whiskers. Team B is bimodal in the underlying data but this is completely invisible from the box plot." loading="lazy" class="kr-figure-img" width="1067" height="707">
               <figcaption class="figure-note">Box plot compresses distribution to five statistics. Team B is bimodal but its median and IQR are nearly identical to Team A's. A non-statistician (or a distracted statistician) misses it entirely.</figcaption>
             </figure>
 <details class="code-example"><summary>Python example</summary>
@@ -1100,7 +1142,7 @@ plt.close(fig)
           <div class="plot-compare__panel">
             <h4>The fix: violin plot reveals distribution shape</h4>
             <figure>
-              <img src="img/accessibility-distribution-good.png" alt="Two side-by-side panels showing the same processing-time data for Teams A, B, and C. The left panel is a box plot in which all three teams have similar boxes and whiskers. The right panel is a violin plot of the same data: Team A is a single peak around 15 days, Team B has two clear peaks at roughly 9 and 22 days, and Team C is right-skewed with a long upper tail." loading="lazy" style="width:100%; border-radius:8px;" width="1067" height="707">
+              <img src="img/accessibility-distribution-good.png" alt="Two side-by-side panels showing the same processing-time data for Teams A, B, and C. The left panel is a box plot in which all three teams have similar boxes and whiskers. The right panel is a violin plot of the same data: Team A is a single peak around 15 days, Team B has two clear peaks at roughly 9 and 22 days, and Team C is right-skewed with a long upper tail." loading="lazy" class="kr-figure-img" width="1067" height="707">
               <figcaption class="figure-note">Violin plot: kernel density estimate encoded as shape directly. Team B's two lobes are immediately visible without knowing what an IQR is.</figcaption>
             </figure>
 
@@ -1517,7 +1559,7 @@ plt.close(fig)
         <p>These aren't rare; they are the things experienced reviewers complain about in every other paper they read, and the things audiences notice in every other talk. They persist because we treat the figure as an artefact of the analysis instead of as a piece of communication that has its own production standards.</p>
 
         <figure>
-          <img src="../img/photography/thumb/149.webp" alt="Audience-view perspective of presentation materials, reinforcing readability and slide legibility in real viewing conditions" loading="lazy" style="width:100%; border-radius:8px;" width="400" height="266">
+          <img src="../img/photography/thumb/149.webp" alt="Audience-view perspective of presentation materials, reinforcing readability and slide legibility in real viewing conditions" loading="lazy" class="kr-figure-img" width="400" height="266">
           <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
         </figure>
 
@@ -1538,7 +1580,7 @@ plt.close(fig)
         </ul>
 
         <figure>
-          <img src="../img/photography/thumb/302.webp" alt="Photograph reinforcing practical, real-world viewing contexts for accessibility checks" loading="lazy" style="width:100%; border-radius:8px;" width="400" height="266">
+          <img src="../img/photography/thumb/302.webp" alt="Photograph reinforcing practical, real-world viewing contexts for accessibility checks" loading="lazy" class="kr-figure-img" width="400" height="266">
           <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
         </figure>
 
@@ -1628,44 +1670,44 @@ plt.close(fig)
         <div class="related-posts">
           <h2>Related posts</h2>
           <div class="row related-posts-grid">
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="making-this-website-accessible.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/367.webp" alt="Making This Website Accessible" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/367.webp')">
+              <a href="making-this-website-accessible.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/367.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">30 August 2026 · 5 min read</div>
+                  <div class="blog-card-date">30 August 2026 · 6 min read</div>
                   <h3 class="blog-card-title">Making This Website Accessible</h3>
                   <p class="blog-card-excerpt">Thirty small habits keep this site accessible: a skip link, screen-reader notes on new-tab links, reduced-motion fallbacks, and an audit that catches the many that I forget along the way.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
                 </div>
               </a>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="no-idea-no-problem-data-science-portfolio.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/19.webp" alt="No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/19.webp')">
+              <a href="no-idea-no-problem-data-science-portfolio.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/19.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
                   <div class="blog-card-date">20 April 2026 · 10 min read</div>
-                  <h3 class="blog-card-title">No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio</h3>
+                  <h3 class="blog-card-title">No Idea? No Problem: A Beginner&#x27;s Guide to Building Your Data Science Portfolio</h3>
                   <p class="blog-card-excerpt">A practical guide to building a data science portfolio when you have no idea where to start. Covers project types, documentation, novelty, collaboration, and working in the GenAI era.</p>
                   <div class="blog-card-tags"><span class="blog-tag">data science</span></div>
                 </div>
               </a>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="ruin-and-recreate-live.html" class="blog-card">
-                <div class="blog-card-img"><img src="../blog/img/ruin/ruin-hero.webp" alt="Ruin and Recreate, Live" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/46.webp')">
+              <a href="ctrl-k-for-a-static-site.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/46.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">13 September 2026 · 9 min read</div>
-                  <h3 class="blog-card-title">Ruin and Recreate, Live</h3>
-                  <p class="blog-card-excerpt">Most search algorithms improve a solution by nudging it. Ruin and recreate demolishes part of it and rebuilds, which works better on rosters. The method behind my 2018 rostering paper, running in your browser.</p>
-                  <div class="blog-card-tags"><span class="blog-tag">data science</span></div>
+                  <div class="blog-card-date">3 August 2026 · 27 min read</div>
+                  <h3 class="blog-card-title">Ctrl+K for a Static Site</h3>
+                  <p class="blog-card-excerpt">Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. Vanilla JavaScript, no library, and the whole thing is in the post to steal.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
                 </div>
               </a>
             </div>
           </div>
         </div>
-
-        <hr style="margin: 40px 0;">
-        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
       </div>
     </div>
   </div>
@@ -1676,16 +1718,52 @@ plt.close(fig)
   <div id="footer-section"></div>
 
   <script src="../js/jquery.min.js"></script>
-  <script src="../js/alime.bundle.js"></script>
-  <script src="../js/site.js"></script>
-  <script src="../js/lightbox.js"></script>
-  <script src="../js/default-assets/active.js"></script>
-  <script src="../js/shared-components.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="../js/alime.bundle.js?v=20260923a"></script>
+  <script src="../js/site.js?v=20260923a"></script>
+  <script src="../js/lightbox.js?v=20260923a"></script>
+  <script src="../js/default-assets/active.js?v=20260923a"></script>
+  <script src="../js/shared-components.js?v=20260923a"></script>
   <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
 renderFooter('footer-section');
-hljs.highlightAll();
+
+// Plotly is the heaviest thing on this page and the 3D view sits near its
+// end, so the gl3d partial bundle (the 3D traces only: 533 KB compressed,
+// against 1.3 MB for the full build this page used to load up front) is
+// fetched when the figure comes within 800px of the viewport. The host
+// keeps the chart's height while it waits (see .plotly-host in the head),
+// so nothing moves when it draws.
+var PLOTLY_SRC = 'https://cdn.plot.ly/plotly-gl3d-2.35.2.min.js';
+var PLOTLY_MARGIN = '800px 0px';
+
+function loadFitnessPlotly() {
+  var host = document.getElementById('fitness-plotly');
+  if (!host) return;
+  var requested = false;
+  function inject() {
+    if (requested) return;
+    requested = true;
+    var s = document.createElement('script');
+    s.src = PLOTLY_SRC;
+    s.async = true;
+    s.onload = renderFitnessPlotly;
+    s.onerror = function () { host.classList.add('is-failed'); };
+    document.head.appendChild(s);
+  }
+  if (!('IntersectionObserver' in window)) { inject(); return; }
+  var io = new IntersectionObserver(function (entries) {
+    if (entries.some(function (e) { return e.isIntersecting; })) {
+      io.disconnect();
+      inject();
+    }
+  }, { rootMargin: PLOTLY_MARGIN });
+  io.observe(host);
+}
+
+function plotlyThemeColours() {
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var bg = isDark ? '#222' : '#fafafa';
+  return { paper_bgcolor: bg, plot_bgcolor: bg, 'font.color': isDark ? '#e2e2e2' : '#222222' };
+}
 
 function renderFitnessPlotly() {
   var host = document.getElementById('fitness-plotly');
@@ -1746,15 +1824,13 @@ function renderFitnessPlotly() {
     }
   }];
 
-  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  var paperBg = isDark ? '#222' : '#fafafa';
-  var fontColor = isDark ? '#e2e2e2' : '#222222';
+  var colours = plotlyThemeColours();
 
   var layout = {
     margin: { l: 0, r: 0, b: 0, t: 30 },
-    paper_bgcolor: paperBg,
-    plot_bgcolor: paperBg,
-    font: { color: fontColor },
+    paper_bgcolor: colours.paper_bgcolor,
+    plot_bgcolor: colours.plot_bgcolor,
+    font: { color: colours['font.color'] },
     title: { text: 'Interactive fitness landscape (exploration mode)', x: 0.5 },
     scene: {
       xaxis: { title: 'Hyperparameter alpha' },
@@ -1769,9 +1845,15 @@ function renderFitnessPlotly() {
     displaylogo: false,
     modeBarButtonsToRemove: ['lasso2d', 'select2d']
   });
+
+  // The chart paints its own background, so a theme toggle after it has
+  // drawn would leave it in the old theme's colours.
+  new MutationObserver(function () {
+    Plotly.relayout(host, plotlyThemeColours());
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 }
 
-renderFitnessPlotly();
+loadFitnessPlotly();
 
 (function () {
   var DESKTOP_MIN_WIDTH = 992;

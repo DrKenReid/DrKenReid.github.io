@@ -6,25 +6,33 @@ carries a live demo, and whether it shows code. Both are properties of the
 post's HTML rather than of its metadata, so they are detected here and
 written onto the entry instead of being maintained by hand.
 
-    interactive  the post embeds a .kr-viz widget (the demo engine)
+    interactive  the post mounts a demo on the engine (KRViz.mount)
     code         the post has at least one <pre><code> block
 
 Flags are written only when true, so an ordinary post's entry is unchanged.
 Run after adding or substantially editing a post:
 
     python .github/scripts/generate_post_facets.py
+    python .github/scripts/generate_post_facets.py --check   # exit 1 if any are stale
 """
 import json
 import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-POSTS_JSON = ROOT / "data" / "posts.json"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import sitelib  # noqa: E402
 
-# The demo engine's root element. Deliberately narrower than "<canvas",
-# which also matches the static Chart.js figures in the infographic post.
-VIZ_RE = re.compile(r'class="[^"]*\bkr-viz\b')
+ROOT = sitelib.ROOT
+POSTS_JSON = sitelib.POSTS_JSON
+
+# A live demo is one the engine runs: the post calls KRViz.mount. Narrower
+# than "<canvas", which also matches the static Chart.js figures in the
+# infographic post, and narrower than the .kr-viz class, whose frame and
+# tokens also host static figures (the flow chart in
+# leading-a-horse-to-water.html), which the blog's "posts with a live
+# demo" filter and the colophon's count should not include.
+VIZ_RE = re.compile(r"\bKRViz\.mount\(")
 # Code samples are always <pre><code>; a bare <pre> is used for other
 # things (the BibTeX citation box, for one), so <code> is what counts.
 CODE_RE = re.compile(r"<pre[^>]*>\s*<code")
@@ -40,8 +48,11 @@ def detect(html: str) -> dict:
 
 
 def main(argv=None):
-    check_only = "--check" in (argv if argv is not None else sys.argv[1:])
-    posts = json.loads(POSTS_JSON.read_text(encoding="utf-8"))
+    parser = sitelib.arg_parser(__doc__)
+    parser.add_argument("--check", action="store_true",
+                        help="exit 1 if a flag in posts.json is stale; write nothing")
+    check_only = parser.parse_args(argv).check
+    posts = sitelib.load_posts()
     drift = []
     totals = {f: 0 for f in FACETS}
 
@@ -79,7 +90,7 @@ def main(argv=None):
         json.dumps(posts, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
     summary = ", ".join(f"{totals[f]} {f}" for f in FACETS)
-    print(f"\nWrote {POSTS_JSON} — {summary} across {len(posts)} posts")
+    print(f"\nWrote {POSTS_JSON.relative_to(ROOT).as_posix()}: {summary} across {len(posts)} posts")
     return 0
 
 

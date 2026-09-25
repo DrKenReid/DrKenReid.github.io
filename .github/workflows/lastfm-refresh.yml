@@ -5,40 +5,109 @@ on:
     - cron: "0 6 * * 1"   # weekly, Mondays 06:00 UTC
   workflow_dispatch:
 
+# The only workflow that writes: it commits the refreshed data files.
 permissions:
   contents: write
+
+# A manual run landing on the scheduled one would have both committing
+# the same files; the second waits for the first instead, then rebases
+# onto it. cancel-in-progress is off, so a running refresh is never
+# stopped between its commit and its push.
+concurrency:
+  group: live-data
+  cancel-in-progress: false
 
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # The files this workflow owns: validated, then committed, as one list.
+      FILES: >-
+        data/lastfm.json data/now.json data/lastfm-history.json
+        data/topalbums.json data/books.json data/reading.json
     steps:
+      # Shallow is enough: the rebase before the push needs only this
+      # commit and whatever landed on top of it since.
       - uses: actions/checkout@v4
 
+      # Both refresh scripts and the validator are standard library only,
+      # so nothing is installed.
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      # Scrobble count + recent track (Last.fm) and currently-reading
-      # (Goodreads RSS) -> data/lastfm.json + data/now.json
-      - name: Fetch live data
+      # Scrobble count, recent track and top albums (Last.fm), and the
+      # currently-reading shelf (Goodreads RSS) -> data/lastfm.json,
+      # now.json, lastfm-history.json, topalbums.json. Each source keeps
+      # its old values when its fetch fails, and the script exits 1 after
+      # writing the rest. continue-on-error lets the steps below still
+      # commit what did refresh; the last step turns the failure red.
+      - name: Fetch listening and currently-reading
+        id: now
+        continue-on-error: true
         env:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
         run: python .github/scripts/refresh_now.py
 
       # The read shelf (Goodreads RSS) -> data/books.json + data/reading.json,
-      # so a book marked read reaches the calendar, shelf and wall on its own.
+      # so a book marked read reaches the calendar, shelf and wall on its
+      # own. Writes nothing and exits 1 on a truncated or short feed, or a
+      # merge that would lose a re-read date; books.json is left as it was.
       - name: Refresh the read shelf
+        id: books
+        continue-on-error: true
         run: python .github/scripts/refresh_books.py
 
-      - name: Commit if changed
+      # Every file against data/schema/ before anything is committed: the
+      # pages parse these in the browser with no fallback for a wrong
+      # shape, so a file that fails is never pushed. A failure here is a
+      # script or upstream change to look at, not a network blip.
+      - name: Validate the data files
+        id: validate
+        run: python .github/scripts/validate_data.py $FILES
+
+      # Commits whatever refreshed, even when a fetch step failed (their
+      # continue-on-error keeps this job going; always() also covers a
+      # failure elsewhere), but never data that failed validation. The
+      # rebase is for a push that landed after checkout (Ken's, or the
+      # previous run's): the refresh is replayed on top instead of the
+      # push being rejected.
+      - name: Commit what refreshed
+        if: always() && steps.validate.outcome == 'success'
         run: |
-          FILES="data/lastfm.json data/now.json data/lastfm-history.json data/topalbums.json data/books.json data/reading.json"
-          if git diff --quiet $FILES; then
+          if git diff --quiet -- $FILES; then
             echo "No change."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add $FILES
+          git add -- $FILES
           git commit -m "Refresh live data (Last.fm, Goodreads)"
-          git push
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin "HEAD:$GITHUB_REF_NAME"
+
+      # continue-on-error makes a failed fetch look green in the run list.
+      # This step makes the run red whenever any source did not refresh,
+      # after the commit, so a partial refresh is both kept and reported.
+      - name: Fail if any source did not refresh
+        if: always()
+        env:
+          NOW: ${{ steps.now.outcome }}
+          BOOKS: ${{ steps.books.outcome }}
+          VALID: ${{ steps.validate.outcome }}
+        run: |
+          status=0
+          if [ "$NOW" != success ]; then
+            echo "::error::Last.fm / currently-reading refresh: $NOW (see 'Fetch listening and currently-reading')"
+            status=1
+          fi
+          if [ "$BOOKS" != success ]; then
+            echo "::error::Read-shelf refresh: $BOOKS (see 'Refresh the read shelf')"
+            status=1
+          fi
+          if [ "$VALID" != success ]; then
+            echo "::error::Data validation: $VALID; nothing was committed"
+            status=1
+          fi
+          exit $status

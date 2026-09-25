@@ -19,13 +19,15 @@ sketch yet, so it can be written before publish day.
 """
 from __future__ import annotations
 
-import json
 import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-POSTS = ROOT / "data" / "posts.json"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import sitelib  # noqa: E402
+
+ROOT = sitelib.ROOT
+POSTS = sitelib.POSTS_JSON
 DRAFTS = ROOT / "blog" / "drafts"
 SOURCES = [ROOT / "js" / "covers.js"]
 
@@ -52,17 +54,22 @@ def draft_slugs() -> list[tuple[str, str]]:
             for p in sorted(DRAFTS.rglob("*.html"))]
 
 
-def main(argv: list[str]) -> int:
-    check = "--check" in argv
-    posts = json.loads(POSTS.read_text(encoding="utf-8"))
-    posts = posts["posts"] if isinstance(posts, dict) else posts
+def main(argv: list[str] | None = None) -> int:
+    parser = sitelib.arg_parser(__doc__)
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--check", action="store_true",
+                      help="exit 1 if a post in posts.json has no sketch")
+    mode.add_argument("--drafts", action="store_true",
+                      help="list the drafts whose publish slug has no sketch yet")
+    args = parser.parse_args(argv)
+    posts = sitelib.load_posts(POSTS)
     slugs = [Path(p["url"]).stem for p in posts]
     found = defined_slugs()
     missing = [s for s in slugs if s not in found]
     twice = [s for s, where in found.items() if len(where) > 1]
     orphans = [s for s in found if s not in slugs]
 
-    if "--drafts" in argv:
+    if args.drafts:
         drafts = draft_slugs()
         ready = [(s, p) for s, p in drafts if s in found]
         todo = [(s, p) for s, p in drafts if s not in found]
@@ -77,7 +84,7 @@ def main(argv: list[str]) -> int:
     if missing:
         print(f"{len(missing)} post(s) have no live cover sketch:")
         for s in missing:
-            print(f"  {s}   -> add krLiveCovers.define('{s}', ...) to js/covers.js")
+            print(f"  {s}   -> add def('{s}', function (w, h, rnd) {{ ... }}) to js/covers.js")
     if twice:
         print("defined more than once: " + ", ".join(twice))
     if orphans:
@@ -85,8 +92,8 @@ def main(argv: list[str]) -> int:
     if not missing and not twice:
         print(f"Every post has a live cover ({len(slugs)} posts, {len(found)} sketches).")
         return 0
-    return 1 if check else 0
+    return 1 if args.check else 0
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    sys.exit(main())

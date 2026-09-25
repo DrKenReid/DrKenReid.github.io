@@ -15,10 +15,14 @@
   var state = 0; // 0 = idle, 1 = loading, 2 = ready
   var CDN = 'https://cdn.jsdelivr.net/npm/prismjs@1.29.0/';
 
-  // Inject a one-time style so Prism's pre sits flush inside .code-example blocks.
+  // Inject a one-time style so Prism's pre sits flush inside a
+  // <details class="code-example">, where the summary bar above it supplies
+  // the frame. Scoped to that wrapper on purpose: unscoped, the !important
+  // reached every highlighted block on the page, so a standalone listing
+  // lost the rounded corners and spacing .blog-post pre gives it.
   (function () {
     var s = document.createElement('style');
-    s.textContent = 'pre[class*="language-"]{margin:0!important;border-radius:0!important;}';
+    s.textContent = '.code-example pre[class*="language-"]{margin:0!important;border-radius:0!important;}';
     document.head.appendChild(s);
   }());
 

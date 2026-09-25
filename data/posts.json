@@ -14,7 +14,7 @@
       "part": 16
     },
     "readMinutes": 4,
-    "words": 804,
+    "words": 800,
     "code": true
   },
   {
@@ -47,7 +47,7 @@
     "url": "blog/photographing-strangers.html",
     "image": "img/photography/thumb/275.webp",
     "readMinutes": 7,
-    "words": 1437
+    "words": 1433
   },
   {
     "title": "Ruin and Recreate, Live",
@@ -64,7 +64,7 @@
       "part": 3
     },
     "readMinutes": 9,
-    "words": 1781,
+    "words": 1777,
     "interactive": true
   },
   {
@@ -82,8 +82,7 @@
       "part": 1
     },
     "readMinutes": 15,
-    "words": 3166,
-    "interactive": true
+    "words": 3166
   },
   {
     "title": "Making This Website Accessible",
@@ -99,8 +98,8 @@
       "name": "How This Site Is Built",
       "part": 15
     },
-    "readMinutes": 5,
-    "words": 965,
+    "readMinutes": 6,
+    "words": 1146,
     "code": true
   },
   {
@@ -119,7 +118,7 @@
       "part": 2
     },
     "readMinutes": 6,
-    "words": 1225
+    "words": 1221
   },
   {
     "title": "Confirmation Bias Is the Mother Bias",
@@ -137,7 +136,7 @@
       "part": 1
     },
     "readMinutes": 7,
-    "words": 1531
+    "words": 1527
   },
   {
     "title": "Tabu Search, Live",
@@ -243,9 +242,10 @@
       "name": "How This Site Is Built",
       "part": 14
     },
-    "readMinutes": 4,
-    "words": 856,
-    "code": true
+    "readMinutes": 5,
+    "words": 1062,
+    "code": true,
+    "interactive": true
   },
   {
     "title": "Letting Robots Update Your Homepage",
@@ -261,8 +261,8 @@
       "name": "How This Site Is Built",
       "part": 13
     },
-    "readMinutes": 6,
-    "words": 1235,
+    "readMinutes": 8,
+    "words": 1627,
     "code": true
   },
   {
@@ -334,8 +334,8 @@
       "name": "How This Site Is Built",
       "part": 12
     },
-    "readMinutes": 8,
-    "words": 1555,
+    "readMinutes": 10,
+    "words": 2027,
     "code": true
   },
   {
@@ -384,15 +384,15 @@
       "writing"
     ],
     "category": "Technology",
-    "excerpt": "Every post on this blog carries around eighty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.",
+    "excerpt": "Every post on this blog carries a pile of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.",
     "url": "blog/invisible-half-of-a-blog-post.html",
     "image": "img/photography/thumb/78.webp",
     "series": {
       "name": "How This Site Is Built",
       "part": 11
     },
-    "readMinutes": 5,
-    "words": 1085,
+    "readMinutes": 7,
+    "words": 1525,
     "code": true
   },
   {
@@ -409,8 +409,8 @@
       "name": "How This Site Is Built",
       "part": 10
     },
-    "readMinutes": 11,
-    "words": 2413,
+    "readMinutes": 27,
+    "words": 5804,
     "code": true
   },
   {
@@ -428,7 +428,7 @@
       "part": 4
     },
     "readMinutes": 14,
-    "words": 2878
+    "words": 2874
   },
   {
     "title": "The Fermi Paradox - Why are we alone in space?",
@@ -442,7 +442,7 @@
     "url": "blog/the-fermi-paradox-and-the-great-silence.html",
     "image": "img/photography/thumb/357.webp",
     "readMinutes": 22,
-    "words": 4801
+    "words": 4797
   },
   {
     "title": "A Blog Engine in One JSON File",
@@ -452,15 +452,15 @@
       "writing"
     ],
     "category": "Technology",
-    "excerpt": "No database, no CMS, no Jekyll: this blog's search, tag filters, pagination, read times, and related posts all hang off one JSON file and two Python scripts.",
+    "excerpt": "No database, no CMS, no Jekyll: this blog's search, filters, pagination, read times, and related posts all hang off one JSON file and the Python scripts that run when I publish.",
     "url": "blog/blog-engine-in-one-json-file.html",
     "image": "img/photography/thumb/71.webp",
     "series": {
       "name": "How This Site Is Built",
       "part": 9
     },
-    "readMinutes": 6,
-    "words": 1181,
+    "readMinutes": 7,
+    "words": 1489,
     "code": true
   },
   {
@@ -496,8 +496,8 @@
       "name": "How This Site Is Built",
       "part": 8
     },
-    "readMinutes": 7,
-    "words": 1480,
+    "readMinutes": 8,
+    "words": 1721,
     "code": true
   },
   {
@@ -512,7 +512,7 @@
     "url": "blog/my-teacher-said-i-shouldnt-go-to-university.html",
     "image": "img/photography/thumb/113.webp",
     "readMinutes": 9,
-    "words": 1815
+    "words": 1811
   },
   {
     "title": "Free Comments via GitHub Discussions",
@@ -529,7 +529,7 @@
       "part": 7
     },
     "readMinutes": 5,
-    "words": 906
+    "words": 902
   },
   {
     "title": "Putting My Photos on a Map",
@@ -539,7 +539,7 @@
       "photography"
     ],
     "category": "Technology",
-    "excerpt": "239 of my photographs plotted on an interactive world map, this is how the photo map works.",
+    "excerpt": "264 of my photographs plotted on an interactive world map, this is how the photo map works.",
     "url": "blog/putting-my-photos-on-a-map.html",
     "image": "blog/img/map/photo-map-dark.webp",
     "series": {
@@ -564,8 +564,8 @@
       "name": "How This Site Is Built",
       "part": 5
     },
-    "readMinutes": 5,
-    "words": 1067,
+    "readMinutes": 7,
+    "words": 1324,
     "code": true
   },
   {
@@ -575,15 +575,15 @@
       "technology"
     ],
     "category": "Technology",
-    "excerpt": "This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.",
+    "excerpt": "This site now works offline: one hand-written service worker, no framework, no build step. Here's how.",
     "url": "blog/reading-this-site-offline.html",
     "image": "img/photography/thumb/62.webp",
-    "readMinutes": 6,
+    "readMinutes": 8,
     "series": {
       "name": "How This Site Is Built",
       "part": 4
     },
-    "words": 1187,
+    "words": 1700,
     "code": true
   },
   {
@@ -598,7 +598,7 @@
     "url": "blog/abandoned-places-i-photograph.html",
     "image": "img/photography/thumb/135.webp",
     "readMinutes": 9,
-    "words": 1827
+    "words": 1823
   },
   {
     "title": "Why I Love LaTeX",
@@ -612,7 +612,7 @@
     "url": "blog/why-i-love-latex.html",
     "image": "img/photography/thumb/16.webp",
     "readMinutes": 7,
-    "words": 1432,
+    "words": 1428,
     "code": true
   },
   {
@@ -627,7 +627,7 @@
     "url": "blog/what-50000-scrobbles-say-about-me.html",
     "image": "img/photography/thumb/13.webp",
     "readMinutes": 9,
-    "words": 1792
+    "words": 1788
   },
   {
     "title": "Hosting a Photography Portfolio on GitHub for Free",
@@ -640,12 +640,12 @@
     "excerpt": "GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.",
     "url": "blog/hosting-photography-on-github-for-free.html",
     "image": "img/photography/thumb/387.webp",
-    "readMinutes": 9,
+    "readMinutes": 10,
     "series": {
       "name": "How This Site Is Built",
       "part": 3
     },
-    "words": 1921,
+    "words": 2060,
     "code": true
   },
   {
@@ -744,7 +744,7 @@
     "url": "blog/what-was-i-made-for.html",
     "image": "img/photography/thumb/43.webp",
     "readMinutes": 15,
-    "words": 3147
+    "words": 3143
   },
   {
     "title": "M*A*S*H in the Modern Era: Comedy, Trauma, and the 4077th",
@@ -757,7 +757,7 @@
     "url": "blog/mash-modern-perspective.html",
     "image": "https://commons.wikimedia.org/wiki/Special:FilePath/MASH_cast_1972.JPG",
     "readMinutes": 15,
-    "words": 3172
+    "words": 3168
   },
   {
     "title": "Iain M. Banks and The Culture",
@@ -770,7 +770,7 @@
     "url": "blog/the-culture-series.html",
     "image": "img/photography/thumb/30.webp",
     "readMinutes": 14,
-    "words": 3038
+    "words": 3034
   },
   {
     "title": "The Individualization of Responsibility",
@@ -813,7 +813,7 @@
     "url": "blog/books-i-recommend-to-friends.html",
     "image": "img/photography/thumb/430.webp",
     "readMinutes": 14,
-    "words": 2973
+    "words": 2969
   },
   {
     "title": "Why Nobody Thanks the Person Who Stopped the Disaster",
@@ -907,7 +907,7 @@
     "url": "blog/accessibility-first-product-design-data-science.html",
     "image": "img/photography/thumb/21.webp",
     "readMinutes": 41,
-    "words": 8994,
+    "words": 8990,
     "code": true
   },
   {
@@ -921,7 +921,7 @@
     "url": "blog/life-and-death-of-the-early-internet.html",
     "image": "img/photography/thumb/375.webp",
     "readMinutes": 22,
-    "words": 4828
+    "words": 4824
   },
   {
     "title": "From Scotland to Michigan",
@@ -934,7 +934,7 @@
     "url": "blog/from-scotland-to-michigan.html",
     "image": "img/photography/thumb/18.webp",
     "readMinutes": 16,
-    "words": 3492
+    "words": 3488
   },
   {
     "title": "The Ethics of LLM Use (Not LLMs)",
@@ -947,7 +947,7 @@
     "url": "blog/ethics-of-llm-use-not-llms.html",
     "image": "img/photography/thumb/280.webp",
     "readMinutes": 32,
-    "words": 6992
+    "words": 6988
   },
   {
     "title": "Dungeon Crawler Carl and the Strange Dignity of LitRPG",
@@ -960,7 +960,7 @@
     "url": "blog/dungeon-crawler-carl-litrpg-dignity.html",
     "image": "img/photography/thumb/141.webp",
     "readMinutes": 22,
-    "words": 4686
+    "words": 4682
   },
   {
     "title": "Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction",
@@ -973,7 +973,7 @@
     "url": "blog/fifteen-years-of-silence-rothfuss-doors-of-stone.html",
     "image": "img/photography/thumb/109.webp",
     "readMinutes": 12,
-    "words": 2605
+    "words": 2601
   },
   {
     "title": "No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio",
@@ -986,7 +986,7 @@
     "url": "blog/no-idea-no-problem-data-science-portfolio.html",
     "image": "img/photography/thumb/19.webp",
     "readMinutes": 10,
-    "words": 2129
+    "words": 2125
   },
   {
     "title": "Evolutionary Computation's Identity Crisis in the Age of GenAI",
@@ -999,7 +999,7 @@
     "url": "blog/evolutionary-computation-identity-crisis.html",
     "image": "img/photography/thumb/208.webp",
     "readMinutes": 11,
-    "words": 2402
+    "words": 2398
   },
   {
     "title": "In Defense of Audiobooks",
@@ -1012,7 +1012,7 @@
     "url": "blog/in-defense-of-audiobooks.html",
     "image": "img/photography/thumb/366.webp",
     "readMinutes": 12,
-    "words": 2452
+    "words": 2448
   },
   {
     "title": "Why It Still Matters to Learn to Code in the Age of AI",
@@ -1025,7 +1025,7 @@
     "url": "blog/why-learn-to-code-age-of-ai.html",
     "image": "img/photography/thumb/14.webp",
     "readMinutes": 7,
-    "words": 1500
+    "words": 1496
   },
   {
     "title": "Your Professional Second Brain for Local LLM Work",
@@ -1038,7 +1038,7 @@
     "url": "blog/second-brain-local-llm-professional.html",
     "image": "img/photography/thumb/75.webp",
     "readMinutes": 7,
-    "words": 1389,
+    "words": 1385,
     "code": true
   },
   {
@@ -1052,7 +1052,7 @@
     "url": "blog/snowball-vs-avalanche.html",
     "image": "blog/img/debt_total_curve.png",
     "readMinutes": 6,
-    "words": 1185
+    "words": 1181
   },
   {
     "title": "Book Ratings Are Broken",
@@ -1065,7 +1065,7 @@
     "url": "blog/rating-systems.html",
     "image": "blog/img/rating_distribution.png",
     "readMinutes": 12,
-    "words": 2492
+    "words": 2488
   },
   {
     "title": "Why Most Self-Help Books Are Trash (And Which Ones Aren't)",
@@ -1078,7 +1078,7 @@
     "url": "blog/self-help-books.html",
     "image": "img/photography/thumb/97.webp",
     "readMinutes": 9,
-    "words": 1945
+    "words": 1941
   },
   {
     "title": "Building a Photo Tagging System with CLIP",
@@ -1091,12 +1091,12 @@
     "excerpt": "How I used OpenCLIP to automatically classify 500+ photos into 10 categories in under a minute, zero API cost, running entirely on CPU.",
     "url": "blog/photo-tagging-with-clip.html",
     "image": "img/photography/thumb/1.webp",
-    "readMinutes": 5,
+    "readMinutes": 6,
     "series": {
       "name": "How This Site Is Built",
       "part": 1
     },
-    "words": 1067,
+    "words": 1178,
     "code": true
   }
 ]

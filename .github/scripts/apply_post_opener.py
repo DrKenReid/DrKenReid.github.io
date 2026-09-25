@@ -16,26 +16,33 @@ Drafts (blog/drafts/, not in posts.json) get the same opener from their
 own head, so a preview looks like the published page: title from the
 banner, date from citation_publication_date, category from the first
 keyword (mapped the way posts.json maps tags), standfirst from the meta
-description, read time counted at 220 wpm. At publish the opener is
-rebuilt from posts.json, so nothing a draft guessed survives.
+description, read time from sitelib.read_minutes (220 wpm, rounded up
+as posts.json's readMinutes is, so a draft's "4 min" does not publish
+as 5). At publish the opener is rebuilt from posts.json, so nothing a
+draft guessed survives.
 
     python .github/scripts/apply_post_opener.py            # all tracked posts
     python .github/scripts/apply_post_opener.py blog/x.html
     python .github/scripts/apply_post_opener.py --drafts   # every draft
     python .github/scripts/apply_post_opener.py --check    # CI: none missing or stale
+
+A title longer than LONG_TITLE characters also gets kr-opener--long,
+which sets it a step smaller (style.css §06, "Long titles"). The
+kicker's date is a <time datetime="YYYY-MM-DD"> so it is machine
+readable where it is shown, not only in the head's metadata.
 """
 import html
-import json
 import re
-import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-POSTS = ROOT / "data" / "posts.json"
-DRAFTS = ROOT / "blog" / "drafts"
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from generate_read_times import WORDS_PER_MINUTE, count_words  # noqa: E402
+import sitelib  # noqa: E402
+from generate_read_times import count_words  # noqa: E402
+
+ROOT = sitelib.ROOT
+POSTS = sitelib.POSTS_JSON
+DRAFTS = ROOT / "blog" / "drafts"
 
 BANNER_RE = re.compile(r"[ \t]*<section class=\"breadcrumb-area[\s\S]*?</section>\n?")
 URL_RE = re.compile(r"url\(([^)]+)\)")
@@ -43,11 +50,17 @@ TITLE_RE = re.compile(r"class=\"(?:[^\"]* )?page-title\">([^<]+)<")
 MONTHS = ["January", "February", "March", "April", "May", "June", "July",
           "August", "September", "October", "November", "December"]
 
+# Characters of title (as read, entities decoded) beyond which the opener
+# sets it a step smaller. About fifteen characters fit a line of the
+# title's 14ch measure, so 60 is four lines at full size; the titles well
+# past it ran to five, six and seven lines and pushed the opener taller
+# than a 1440x900 screen. The CSS side, with the numbers, is style.css §06
+# Openers, "--- Long titles".
+LONG_TITLE = 60
+
 
 def tracked_posts():
-    out = subprocess.run(["git", "ls-files", "blog/*.html"], cwd=ROOT,
-                         capture_output=True, text=True).stdout
-    return [ROOT / p for p in out.splitlines() if p and (ROOT / p).exists()]
+    return sitelib.tracked("blog/*.html")
 
 
 def nice_date(iso):
@@ -62,13 +75,14 @@ def esc(s):
 def build_opener(post, img, title, prefix="../"):
     kicker = " &middot; ".join(x for x in [
         esc(post.get("category", "")),
-        nice_date(post["date"]),
+        '<time datetime="%s">%s</time>' % (post["date"], nice_date(post["date"])),
         "%d min read" % post["readMinutes"] if post.get("readMinutes") else "",
     ] if x)
     credit = ('      <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>\n'
               if "img/photography/" in img else "")
+    modifier = " kr-opener--long" if len(html.unescape(title)) > LONG_TITLE else ""
     return (
-        '  <header class="kr-opener" style="--kr-opener-img: url(%s);">\n'
+        '  <header class="kr-opener%s" style="--kr-opener-img: url(%s);">\n'
         '    <div class="kr-opener__media" aria-hidden="true"></div>\n'
         '    <div class="kr-opener__scrim" aria-hidden="true"></div>\n'
         '    <div class="container kr-opener__inner">\n'
@@ -84,7 +98,7 @@ def build_opener(post, img, title, prefix="../"):
         '    </div>\n'
         '    <a class="kr-opener__cue" href="#main-content-body" aria-label="Scroll to the article"><span></span></a>\n'
         '  </header>\n'
-    ) % (img, prefix, prefix, title, kicker, title, esc(post.get("excerpt", "")), credit)
+    ) % (modifier, img, prefix, prefix, title, kicker, title, esc(post.get("excerpt", "")), credit)
 
 
 def absolute_img(url, page=None):
@@ -113,7 +127,9 @@ def absolute_img(url, page=None):
 
 
 IMG_PROP_RE = re.compile(r'--kr-opener-img: url\(([^)]+)\)')
-OPENER_RE = re.compile(r"[ \t]*<header class=\"kr-opener\"[\s\S]*?</header>\n?")
+# The opener's own class list: "kr-opener" alone or with its modifiers.
+OPENER_RE = re.compile(r"[ \t]*<header class=\"kr-opener(?: [^\"]*)?\"[\s\S]*?</header>\n?")
+HAS_OPENER_RE = re.compile(r"<header class=\"kr-opener(?: [^\"]*)?\"")
 CRUMB_PREFIX_RE = re.compile(r'href="((?:\.\./)+)index\.html"')
 META_RE = {
     "description": re.compile(r'<meta name="description" content="([^"]*)"'),
@@ -145,7 +161,7 @@ def draft_post(path, text, categories):
         "date": "%s-%s-%s" % date.groups(),
         "category": categories.get(first_tag, first_tag.title() if first_tag else ""),
         "excerpt": html.unescape(desc.group(1)) if desc else "",
-        "readMinutes": max(1, round(words / WORDS_PER_MINUTE)) if words else 0,
+        "readMinutes": sitelib.read_minutes(words) if words else 0,
     }
 
 
@@ -178,7 +194,7 @@ def convert(path, by_url, categories, write=True):
     opener, block = wanted_opener(path, text, by_url, categories)
     if opener is None:
         return block
-    had = 'class="kr-opener"' in text
+    had = bool(HAS_OPENER_RE.search(text))
     if had and block.group(0) == opener:
         return "already"
     new = text[:block.start()] + opener + text[block.end():]
@@ -195,13 +211,20 @@ def draft_files():
 
 
 def main(argv=None):
-    argv = argv if argv is not None else sys.argv[1:]
-    check_only = "--check" in argv
-    targets = [ROOT / a for a in argv if not a.startswith("--")]
-    if "--drafts" in argv:
+    parser = sitelib.arg_parser(__doc__)
+    parser.add_argument("paths", nargs="*", metavar="blog/x.html",
+                        help="posts or drafts to convert (default: every tracked post)")
+    parser.add_argument("--check", action="store_true",
+                        help="exit 1 if a post lacks the opener or it disagrees with posts.json; write nothing")
+    parser.add_argument("--drafts", action="store_true",
+                        help="also convert every draft under blog/drafts/")
+    args = parser.parse_args(argv)
+    check_only = args.check
+    targets = [ROOT / a for a in args.paths]
+    if args.drafts:
         targets += draft_files()
     targets = targets or tracked_posts()
-    posts = json.loads(POSTS.read_text(encoding="utf-8"))
+    posts = sitelib.load_posts(POSTS)
     by_url = {p["url"]: p for p in posts}
     categories = tag_categories(posts)
 
@@ -212,7 +235,7 @@ def main(argv=None):
             if rel not in by_url:
                 continue
             t = p.read_text(encoding="utf-8")
-            if 'class="kr-opener"' not in t and BANNER_RE.search(t):
+            if not HAS_OPENER_RE.search(t) and BANNER_RE.search(t):
                 missing.append(rel)
             elif convert(p, by_url, categories, write=False) == "refreshed":
                 stale.append(rel)

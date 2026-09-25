@@ -2,12 +2,20 @@
 #
 #   pip install -r .github/scripts/requirements.txt
 #
-# audit_site.py, minify_css.py, css_prune.py, generate_quote_wall.py and
-# refresh_now.py are standard library only and need nothing from this file.
+# Only the scripts named below need it. Everything else is standard
+# library only: run_checks.py and its --fast subset, the audit, the
+# stylesheet build, the unit tests, and the weekly refresh_now.py,
+# refresh_books.py and validate_data.py. Of the --check modes, only
+# detect_monochrome.py's needs a package (Pillow), which is why
+# site-checks.yml installs this file in the smoke job alone.
 
 # smoke_test.py - headless render checks, also installed by site-checks.yml.
 # The browser itself is a separate download:  playwright install chromium
-playwright>=1.59
+# Pinned exactly, not >=: each Playwright release drives one Chromium
+# build, and CI caches that browser under this version, so the pin is
+# what makes the cache key mean something. Bump it deliberately, with
+# a local smoke run.
+playwright==1.59.0
 
 # subset_icon_fonts.py - subsets the icon fonts to the glyphs actually used.
 # fontTools writes the .woff2 flavour through brotli, so it is a hard

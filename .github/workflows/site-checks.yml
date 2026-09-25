@@ -5,100 +5,328 @@ on:
     branches: [master]
   pull_request:
 
+# Nothing here writes to the repository or publishes anything, so the
+# token can only read.
+permissions:
+  contents: read
+
+# A new push to a pull request makes the run in progress moot, so runs
+# for a pull request share one group and the newer cancels the older.
+# A push to master gets a group of its own (the run id): each push
+# deploys, so each one should end with a verdict, and a shared group
+# would still drop a waiting run when a third push queued behind it.
+concurrency:
+  group: site-checks-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+  cancel-in-progress: true
+
+# The check steps are .github/scripts/run_checks.py's registry, in its
+# dependency order, one named step each so a failure is named in the
+# checks list. The "CI runs the registered checks" step fails when this
+# file and the registry stop running the same commands, and colophon.html
+# counts the steps below that run a check (not the Install / Set up
+# steps) as its "checks per push". Every check step carries
+# `if: !cancelled()`, so one failure does not hide the rest: a push that
+# breaks the stylesheet and the sitemap reports both in one run. Locally,
+# all of it:
+#   python .github/scripts/run_checks.py --browser
+
 jobs:
   audit:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      # Full history: the colophon counts commits by month.
+      # Full history, because the colophon counts commits by month, but
+      # no old file contents: blob:none fetches every commit and tree and
+      # only the blobs this checkout needs, so years of replaced images
+      # stay on the server. Nothing here reads an old file's contents
+      # (the colophon asks git only for dates and counts), so no blob is
+      # ever fetched later on demand.
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          filter: blob:none
 
+      # No pip cache here: every check in this job is standard library,
+      # so there is nothing to download, and setup-python's pip cache
+      # fails the job at the end when pip never created a cache to save.
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      # Links, metadata, JSON-LD, a11y basics, feed.xml, sitemap.xml,
-      # posts.json integrity. Exits nonzero on any ERROR-level finding.
-      - name: Site audit
-        run: python .github/scripts/audit_site.py
+      # Node for the JavaScript unit tests, which use its built-in test
+      # runner and no packages. Pinned rather than left to the runner
+      # image, because `node --test` reads a quoted glob itself only from
+      # Node 21, and the image's default has been older than that.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
 
-      # style.min.css is generated from style.css by minify_css.py
-      # (inline imports, prune unused rules, swap subset fonts).
-      # Fails when the committed file does not match a fresh build —
-      # including when new HTML starts using a class that was pruned.
-      - name: CSS build is current
-        run: python .github/scripts/minify_css.py --check
+      # Every data file with a schema in data/schema/: the six the weekly
+      # live-data workflow writes (it validates them before it commits),
+      # plus posts.json and publications.json. This holds a hand edit or a
+      # script change to the same shape, since the pages parse these with
+      # no fallback.
+      - name: Data files match their schemas
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/validate_data.py
+
+      # Posts copied from older posts carried style attributes, three
+      # shapes of reference list and a hand-made back link. The normaliser
+      # moved them onto the post components; this holds them there. First
+      # of the post checks, because it rewrites the bodies the rest count.
+      - name: Post markup uses the components
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/normalize_post_markup.py --check
 
       # data/posts.json carries a words/readMinutes pair per post, used for
       # the read-time badge and the homepage word total. Drifts silently
       # whenever a post is edited without rerunning the generator.
       - name: Read times are current
+        if: ${{ !cancelled() }}
         run: python .github/scripts/generate_read_times.py --check
 
       # The blog filter's Format row reads interactive/code flags off
       # posts.json. They are detected from each post's HTML, so adding a
       # demo or a code block changes what the buttons should match.
       - name: Post facets are current
+        if: ${{ !cancelled() }}
         run: python .github/scripts/generate_post_facets.py --check
 
-      # colophon.html renders nothing but measurements of the repository,
-      # so any change to the corpus or the build can make them wrong.
-      - name: Colophon figures are current
-        run: python .github/scripts/generate_colophon.py --check
-
-      # The justified gallery lays frames out from recorded thumbnail
-      # sizes; a new photograph without one falls back to 3:2.
-      - name: Photo dimensions are current
-        run: python .github/scripts/generate_photo_dims.py --check
-
-      # Every post's card runs a sketch of its own on hover; a new post
-      # without one would be the card that does nothing.
-      - name: Every post has a live cover
-        run: python .github/scripts/check_live_covers.py --check
+      # Every post opens with the editorial header, and the header says
+      # what posts.json says; a new post written from an old template
+      # would still carry the breadcrumb banner, and a changed read time
+      # would leave the kicker behind.
+      - name: Posts have the opener
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/apply_post_opener.py --check
 
       # Every post has a share image in the site's design, and points at
       # it. The check reads the input manifest, not the JPEG bytes.
       - name: Share images are current
+        if: ${{ !cancelled() }}
         run: python .github/scripts/generate_og_images.py --check
-
-      # Every post opens with the editorial header; a new post written
-      # from an old template would still carry the breadcrumb banner.
-      - name: Posts have the opener
-        run: python .github/scripts/apply_post_opener.py --check
 
       # Related-posts blocks are baked into each post's HTML by TF-IDF over
       # body text, so editing a post can change what its neighbours should
       # recommend. Checks the baked block matches a fresh ranking.
       - name: Related posts are current
+        if: ${{ !cancelled() }}
         run: python .github/scripts/generate_related_posts.py --check
+
+      # The justified gallery lays frames out from recorded thumbnail
+      # sizes; a new photograph without one falls back to 3:2. Every post
+      # image carries its width and height too, so it reserves its box
+      # before it loads (the fix, --stamp-img, writes them into the post).
+      - name: Photo dimensions are current
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/generate_photo_dims.py --check
 
       # The feed embeds the full body of the twenty newest posts, so editing a
       # post changes it. This was the one generator with no --check, and the
       # feed duly drifted behind a set of class renames without anyone noticing.
       - name: Feed is current
+        if: ${{ !cancelled() }}
         run: python .github/scripts/generate_feed.py --check
 
+      # quotes.html carries every saved passage as HTML, baked from
+      # data/quotes-all.json; a quote added to the file and not rebuilt
+      # would be on the homepage and missing from the wall.
+      - name: Quote wall is current
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/generate_quote_wall.py --check
+
+      # The publication list on data_science.html and its ScholarlyArticle
+      # JSON-LD are both generated from data/publications.json, so a
+      # citation count cannot say one thing in the list and another in the
+      # structured data.
+      - name: Publications are current
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/generate_publications.py --check
+
+      # blog.html and series.html carry a <noscript> list of every post
+      # from posts.json, the only way into the writing without JavaScript.
+      # A post published without rebuilding it would be missing there.
+      - name: No-script post listing is current
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/generate_listing_fallback.py --check
+
+      # sitemap.xml is generated from the tracked pages, with each post's
+      # lastmod from posts.json. Guards the step that used to be "add the
+      # URL by hand": a published post missing from the sitemap, a
+      # deleted page left in it, or a date that no longer matches.
+      - name: Sitemap is current
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/generate_sitemap.py --check
+
+      # Post heads used to be hand-copied from whichever post was open at
+      # the time, which is how BreadcrumbList, the manifest link and the
+      # apple-touch-icon once went missing from most of the corpus. Ahead
+      # of the CSS build, because its fixer rewrites the JSON-LD the
+      # pruner reads.
+      - name: Post heads are canonical
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/generate_post_head.py --check
+
+      # The pruner's own fixtures, ahead of the build that trusts it: a
+      # pruner that loses one pattern (mixed quotes on a line, a 'stem-' +
+      # n class) drops live rules from the served stylesheet silently.
+      - name: CSS pruner self-test
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/css_prune.py --selftest
+
+      # style.css against its own rules: every var() names a property
+      # something sets, every property set is read, no rule is repeated,
+      # one print block, and the raw-colour, !important and dark-twin
+      # counts in .github/css-baseline.json only ever go down.
+      - name: Stylesheet rules and ratchets hold
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/check_css.py --check
+
+      # style.min.css is generated from style.css by minify_css.py
+      # (inline imports, prune unused rules, swap subset fonts). Fails
+      # when the committed file does not match a fresh build, including
+      # when new HTML starts using a class that was pruned. After the
+      # generators above, because the pruner reads the HTML they write.
+      - name: CSS build is current
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/minify_css.py --check
+
+      # Every post's card runs a sketch of its own on hover; a new post
+      # without one would be the card that does nothing.
+      - name: Every post has a live cover
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/check_live_covers.py --check
+
+      # The developer docs (.github/docs/), the README and code comments
+      # name files by path, and a rename that leaves one behind sends the
+      # next reader to a file that is not there. Also refuses a pointer to
+      # a private file or a review label in tracked text.
+      - name: Docs name files that exist
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/check_docs.py --check
+
+      # Unit tests for the scripts themselves (tests/, standard library
+      # unittest), so a rule the audit enforces is pinned by examples of
+      # what it must and must not match.
+      - name: Unit tests
+        if: ${{ !cancelled() }}
+        run: python -m unittest discover -s tests -v
+
+      # The browser scripts' pure helpers (ISO weeks on the reading
+      # calendar, re-read sessions, the post runtime's neighbours and
+      # lead-ins), run in Node's vm with stub globals. The quotes keep the
+      # glob for Node to expand, as it does on every platform.
+      - name: JavaScript unit tests
+        if: ${{ !cancelled() }}
+        run: node --test "tests/js/*.test.js"
+
+      # This file and run_checks.py's registry run the same commands, so
+      # a check added in one place and forgotten in the other fails here
+      # instead of going unrun.
+      - name: CI runs the registered checks
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/run_checks.py --ci-parity
+
+      # Links, metadata, JSON-LD, accessibility basics, feed and sitemap
+      # coverage, posts.json integrity. --strict fails on a warning as
+      # well as an error: the baseline is zero of both, and a warning that
+      # cannot fail the build is one nobody reads.
+      - name: Site audit
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/audit_site.py --strict
+
+      # colophon.html renders nothing but measurements of the repository,
+      # so any change to the corpus or the build can make them wrong.
+      # Last, because the outputs checked above (the served stylesheet,
+      # the share images, this file's own step count) are among what it
+      # measures.
+      - name: Colophon figures are current
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/generate_colophon.py --check
+
   # Headless render checks: JS-built UI must actually appear (catches
-  # bugs the static audit cannot, e.g. content stuck at opacity 0).
+  # bugs the static audit cannot, e.g. content stuck at opacity 0), every
+  # post must render the one template, and the templates must hold their
+  # performance budgets. The three suites take about four minutes
+  # together on a laptop.
   smoke:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
+      # The tree at this commit only: nothing in this job reads history.
       - uses: actions/checkout@v4
 
+      # Caches pip's downloads keyed on requirements.txt, so an unchanged
+      # pin set installs from the cache instead of PyPI.
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
+          cache-dependency-path: .github/scripts/requirements.txt
 
-      - name: Install Playwright
+      # Playwright, Pillow and fontTools, the only packages any check
+      # needs, at the versions requirements.txt pins.
+      - name: Install Python dependencies
+        run: pip install -r .github/scripts/requirements.txt
+
+      # Each Playwright release drives one specific Chromium build, so
+      # the browser cache is keyed on the exact pin in requirements.txt:
+      # bumping the pin fetches the matching browser, and nothing else does.
+      - name: Set up the Playwright cache key
+        id: playwright
         run: |
-          pip install -r .github/scripts/requirements.txt
-          playwright install --with-deps chromium
+          v=$(sed -n 's/^playwright==\([^ #]*\).*/\1/p' .github/scripts/requirements.txt)
+          test -n "$v" || { echo "::error::requirements.txt has no exact playwright== pin"; exit 1; }
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/cache/restore@v4
+        id: browser-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ms-playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+
+      - name: Install Chromium
+        if: steps.browser-cache.outputs.cache-hit != 'true'
+        run: python -m playwright install --with-deps chromium
+
+      # Saved as soon as the download succeeds, not at the end of the job
+      # (where plain actions/cache saves only if every step passed), so a
+      # failing smoke test does not send the next run back to the network
+      # for the same browser.
+      - uses: actions/cache/save@v4
+        if: steps.browser-cache.outputs.cache-hit != 'true'
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ steps.browser-cache.outputs.cache-primary-key }}
+
+      # A cache hit restores the browser but not the system libraries it
+      # links against, which live outside the cache.
+      - name: Install Chromium's system libraries
+        if: steps.browser-cache.outputs.cache-hit == 'true'
+        run: python -m playwright install-deps chromium
 
       # Needs Pillow, so it lives in the job that installs requirements.
       # The gallery's B&W tag is decided by pixels, not by the tagger.
       - name: Monochrome tags agree with the pixels
+        if: ${{ !cancelled() }}
         run: python .github/scripts/detect_monochrome.py --check
 
+      # Loads the key pages in Chromium and asserts the JS-built UI is
+      # there, visible, keyboard-reachable and quiet in the console.
       - name: Smoke tests
+        if: ${{ !cancelled() }}
         run: python .github/scripts/smoke_test.py
+
+      # All of the posts, less closely than the smoke suite reads two: one
+      # end band with its slots in order, opener colours, sidenotes,
+      # progress at the end mark, no overflow, no console errors.
+      - name: Every post renders the template
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/check_post_template.py
+
+      # CLS, bytes and requests per template against
+      # .github/perf-budgets.json, nothing fetched twice, no render-blocking
+      # head script, and the offline scenario the service worker exists for.
+      - name: Performance budgets hold
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/perf_budget.py

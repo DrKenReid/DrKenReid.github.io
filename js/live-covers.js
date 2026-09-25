@@ -20,6 +20,10 @@
  *
  * Touch devices have no hover, and reduced-motion readers asked for
  * stillness; both get the static cover.
+ *
+ * Writing a sketch: .github/docs/COMPONENTS.md, "The hover sketch".
+ * Design notes: "Every Card Has a Sketch",
+ * https://www.kenreid.co.uk/blog/every-card-has-a-sketch.html
  */
 (function () {
     'use strict';

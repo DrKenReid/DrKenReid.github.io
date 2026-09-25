@@ -17,28 +17,16 @@ import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import sitelib  # noqa: E402
+from run_checks import check_steps  # noqa: E402  (one rule for "a check step")
+
+ROOT = sitelib.ROOT
 OUT = ROOT / "data" / "colophon.json"
 
 # Fields read from git history, checked with tolerance (see --check).
 HISTORY = ("commits", "commitsByMonth")
 LAG = 25
-
-
-def tracked(pattern):
-    """Git-tracked files matching a pathspec, as paths that still exist."""
-    try:
-        res = subprocess.run(
-            ["git", "ls-files", pattern],
-            cwd=ROOT, capture_output=True, text=True, check=True)
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        return []
-    out = []
-    for line in res.stdout.splitlines():
-        p = ROOT / line.strip()
-        if line.strip() and p.exists():
-            out.append(p)
-    return out
 
 
 TEXT = {".css", ".js", ".html", ".htm", ".json", ".xml", ".svg", ".txt",
@@ -80,11 +68,19 @@ def css_input_bytes():
 
 
 def ci_checks():
-    """Named steps in the site-checks workflow."""
+    """Steps in the site-checks workflow that run a check.
+
+    colophon.html calls this "checks per push", so it counts only the
+    steps that can fail the build on a finding, not the ones that install
+    packages, fetch a browser or check out the repository (the old count
+    took every named step, installs included). The rule is
+    run_checks.check_steps, the same one --ci-parity holds the workflow
+    to, so this number is also the size of the registry CI runs.
+    """
     wf = ROOT / ".github" / "workflows" / "site-checks.yml"
     if not wf.exists():
         return 0
-    return len(re.findall(r"^\s*- name:", wf.read_text(encoding="utf-8"), re.M))
+    return len(check_steps(wf.read_text(encoding="utf-8")))
 
 
 def lines(paths):
@@ -142,22 +138,29 @@ def commits_by_month():
 
 
 def main(argv=None):
-    argv = argv if argv is not None else sys.argv[1:]
-    check_only = "--check" in argv
+    ap = sitelib.arg_parser(__doc__)
+    ap.add_argument("--check", action="store_true",
+                    help="exit 1 if data/colophon.json is stale; write nothing")
+    check_only = ap.parse_args(argv).check
 
-    posts = json.loads((ROOT / "data" / "posts.json").read_text(encoding="utf-8"))
-    html_pages = tracked("*.html")
-    blog_pages = tracked("blog/*.html")
-    js_files = [f for f in tracked("js/*.js") if not f.name.endswith(".min.js")]
-    scripts = tracked(".github/scripts/*.py")
+    posts = sitelib.load_posts()
+    # sitelib.tracked raises when git fails; this script's own copy used
+    # to return an empty list, and would have written a colophon claiming
+    # no pages at all.
+    html_pages = sitelib.tracked("*.html")
+    blog_pages = sitelib.tracked("blog/*.html")
+    js_files = [f for f in sitelib.tracked("js/*.js") if not f.name.endswith(".min.js")]
+    scripts = sitelib.tracked(".github/scripts/*.py")
 
     css_src = size("style.css")
     css_min = size("style.min.css")
 
-    images = (tracked("img/**/*.webp") + tracked("img/**/*.png")
-              + tracked("img/**/*.jpg") + tracked("img/**/*.svg"))
-    web_fonts = tracked("fonts/vendor/*.woff2")
-    data_files = tracked("data/*.json")
+    images = sitelib.tracked("img/**/*.webp", "img/**/*.png", "img/**/*.jpg", "img/**/*.svg")
+    web_fonts = sitelib.tracked("fonts/vendor/*.woff2")
+    # The files the pages read. A git pathspec's * crosses directories,
+    # so without the parent test data/schema/*.schema.json (validation
+    # rules, not data) would join the count.
+    data_files = [f for f in sitelib.tracked("data/*.json") if f.parent == ROOT / "data"]
 
     dates = sorted(p["date"] for p in posts)
     word_counts = sorted(((p.get("words", 0), p["title"]) for p in posts), reverse=True)
@@ -180,15 +183,14 @@ def main(argv=None):
         "readMinutes": sum(p.get("readMinutes", 0) for p in posts),
         "interactivePosts": sum(1 for p in posts if p.get("interactive")),
         "codePosts": sum(1 for p in posts if p.get("code")),
-        "series": len({
-            s["name"]
-            for p in posts
-            for s in (p["series"] if isinstance(p.get("series"), list)
-                      else ([p["series"]] if p.get("series") else []))
-            if s.get("name")
-        }),
+        "series": len({s["name"] for p in posts
+                       for s in sitelib.series_list(p) if s.get("name")}),
         "photos": len(json.loads(
             (ROOT / "data" / "photography-files.json").read_text(encoding="utf-8"))),
+        # The homepage's quote count, read from here so the page does not
+        # download all of quotes-all.json to learn its length.
+        "quotes": len(json.loads(
+            (ROOT / "data" / "quotes-all.json").read_text(encoding="utf-8"))),
         "cssSourceBytes": css_src,
         "cssInputBytes": css_input_bytes(),
         "cssServedBytes": css_min,

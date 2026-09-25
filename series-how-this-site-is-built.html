@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -9,19 +9,25 @@
   <meta property="og:title" content="How This Site Is Built - Ken Reid">
   <meta property="og:description" content="The series on how kenreid.co.uk works: plain HTML, CSS, and JavaScript on GitHub Pages, no framework, no build step.">
   <meta property="og:image" content="https://www.kenreid.co.uk/blog/img/fonts/fonts-og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Letterforms from the site's two typefaces, Aa, Gg and Rr, on a dark ground">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="How This Site Is Built - Ken Reid">
   <meta name="twitter:description" content="The series on how kenreid.co.uk works: plain HTML, CSS, and JavaScript on GitHub Pages, no framework, no build step.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/blog/img/fonts/fonts-og.png">
+  <meta name="twitter:image:alt" content="Letterforms from the site's two typefaces, Aa, Gg and Rr, on a dark ground">
   <meta property="og:url" content="https://www.kenreid.co.uk/series-how-this-site-is-built.html">
   <meta property="og:type" content="website">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <meta property="og:site_name" content="Ken Reid">
+  <meta property="og:locale" content="en_GB">
+  <script defer src="/js/analytics.js"></script>
   <link rel="icon" href="/img/core-img/favicon.png">
   <link rel="apple-touch-icon" href="/img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
   <link rel="manifest" href="/manifest.json">
-  <link rel="preload" as="image" href="/blog/img/fonts/fonts-hero.webp">
-  <link rel="stylesheet" href="/style.min.css">
+  <link rel="preload" as="image" href="/blog/img/fonts/fonts-hero.webp" fetchpriority="high">
+  <link rel="stylesheet" href="/style.min.css?v=20260923a">
   <link rel="canonical" href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">
   <script type="application/ld+json">
   {
@@ -33,46 +39,68 @@
     "author": {"@type": "Person", "name": "Ken Reid", "url": "https://www.kenreid.co.uk"}
   }
   </script>
-  <script defer src="/js/theme.js"></script>
-  <script defer src="/js/palette.js"></script>
+  <script defer src="/js/theme.js?v=20260923a"></script>
+  <script defer src="/js/palette.js?v=20260923a"></script>
 </head>
 <body>
-  <div id="preloader"><div class="loader"></div></div>
-
   <div id="header-section"></div>
 
   <main id="main-content">
 
-  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/blog/img/fonts/fonts-hero.webp); background-size: cover; background-position: center center;">
-    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
-      <div class="breadcrumb-content text-center">
-        <h1 class="page-title">How This Site Is Built</h1>
-        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+  <!-- Page opener (style.css §06, "Page opener") -->
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/blog/img/fonts/fonts-hero.webp);">
+    <div class="container">
+      <div class="breadcrumb-content">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="/index.html"><i class="icon_house_alt"></i> Home</a></li>
           <li class="breadcrumb-item"><a href="/blog.html">Blog</a></li>
           <li class="breadcrumb-item active" aria-current="page">How This Site Is Built</li>
         </ol></nav>
+        <h1 class="page-title">How This Site Is Built</h1>
       </div>
-    </div></div></div>
+    </div>
   </section>
 
   <div class="about-us-area section-padding-80 clearfix">
     <div class="container">
-      <div class="text-center" style="margin-bottom: 36px;">
-        <span class="section-eyebrow">Series</span>
-        <h2>How This Site Is Built</h2>
-        <p style="max-width: 640px; margin: 12px auto 0;">Everything on this site runs on plain HTML, CSS, and JavaScript, served free from GitHub Pages: no framework, no build step, nothing to renew. Each part covers one piece of the machinery, in whatever order curiosity takes you.</p>
-        <p id="series-count" class="kr-muted" style="margin-top: 10px; font-size: 13px;"></p>
+      <div class="kr-series-intro">
+        <p class="kr-series-lede">Everything on this site runs on plain HTML, CSS, and JavaScript, served free from GitHub Pages: no framework, no build step, nothing to renew. Each part covers one piece of the machinery, in whatever order curiosity takes you.</p>
+        <p id="series-count" class="kr-series-count"></p>
       </div>
       <div id="series-page" class="kr-series-page" data-series="How This Site Is Built">
+        <h2 class="sr-only">Parts in this series</h2>
         <div class="row" id="series-grid"></div>
+        <!-- BEGIN listing-fallback: written by .github/scripts/generate_listing_fallback.py from data/posts.json; edits made here are overwritten. -->
+        <noscript>
+          <ol>
+            <li><a href="/blog/photo-tagging-with-clip.html">Building a Photo Tagging System with CLIP</a>, <time class="kr-muted" datetime="2026-04-10">10 April 2026</time></li>
+            <li><a href="/blog/how-to-write-a-blog.html">How to Write a Blog (or: What I Learned By Doing It)</a>, <time class="kr-muted" datetime="2026-05-13">13 May 2026</time></li>
+            <li><a href="/blog/hosting-photography-on-github-for-free.html">Hosting a Photography Portfolio on GitHub for Free</a>, <time class="kr-muted" datetime="2026-07-06">6 July 2026</time></li>
+            <li><a href="/blog/reading-this-site-offline.html">Reading This Site Offline</a>, <time class="kr-muted" datetime="2026-07-12">12 July 2026</time></li>
+            <li><a href="/blog/self-hosting-your-fonts.html">Self-Hosting Your Fonts</a>, <time class="kr-muted" datetime="2026-07-12">12 July 2026</time></li>
+            <li><a href="/blog/putting-my-photos-on-a-map.html">Putting My Photos on a Map</a>, <time class="kr-muted" datetime="2026-07-14">14 July 2026</time></li>
+            <li><a href="/blog/free-comments-via-github-discussions.html">Free Comments via GitHub Discussions</a>, <time class="kr-muted" datetime="2026-07-15">15 July 2026</time></li>
+            <li><a href="/blog/my-website-has-a-test-suite.html">My Website Has a Test Suite</a>, <time class="kr-muted" datetime="2026-07-17">17 July 2026</time></li>
+            <li><a href="/blog/blog-engine-in-one-json-file.html">A Blog Engine in One JSON File</a>, <time class="kr-muted" datetime="2026-07-26">26 July 2026</time></li>
+            <li><a href="/blog/ctrl-k-for-a-static-site.html">Ctrl+K for a Static Site</a>, <time class="kr-muted" datetime="2026-08-03">3 August 2026</time></li>
+            <li><a href="/blog/invisible-half-of-a-blog-post.html">The Invisible Half of a Blog Post</a>, <time class="kr-muted" datetime="2026-08-04">4 August 2026</time></li>
+            <li><a href="/blog/dark-mode-that-doesnt-flash.html">Dark Mode That Doesn't Flash</a>, <time class="kr-muted" datetime="2026-08-06">6 August 2026</time></li>
+            <li><a href="/blog/letting-robots-update-your-homepage.html">Letting Robots Update Your Homepage</a>, <time class="kr-muted" datetime="2026-08-14">14 August 2026</time></li>
+            <li><a href="/blog/how-the-interactive-posts-work.html">How the Interactive Posts Work</a>, <time class="kr-muted" datetime="2026-08-16">16 August 2026</time></li>
+            <li><a href="/blog/making-this-website-accessible.html">Making This Website Accessible</a>, <time class="kr-muted" datetime="2026-08-30">30 August 2026</time></li>
+            <li><a href="/blog/every-card-has-a-sketch.html">Every Card Has a Sketch</a>, <time class="kr-muted" datetime="2026-09-20">20 September 2026</time></li>
+          </ol>
+        </noscript>
+        <!-- END listing-fallback -->
       </div>
     </div>
   </div>
 
   <div class="kr-next-stop">
     <p>Prefer to wander? Every post lives on <a href="/blog.html">the blog</a>, series and strays alike.</p>
-    <a href="/blog.html" class="btn alime-btn btn-2">Browse all posts</a>
+    <div class="kr-btn-row">
+      <a href="/blog.html" class="kr-btn kr-btn--ghost">Browse all posts</a>
+    </div>
   </div>
 
   </main>
@@ -80,8 +108,8 @@
   <hr>
   <div id="footer-section"></div>
 
-  <script src="/js/site.js"></script>
-  <script src="/js/shared-components.js"></script>
+  <script src="/js/site.js?v=20260923a"></script>
+  <script src="/js/shared-components.js?v=20260923a"></script>
   <script>renderHeader('header-section', { basePath: '/', active: 'blog', blogChild: 'series-site' });
 renderFooter('footer-section');
 renderSeriesPage();</script>

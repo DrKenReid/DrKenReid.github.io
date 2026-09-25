@@ -1,0 +1,6 @@
+{
+  "about": "Counts .github/scripts/check_css.py holds style.css to. Each may only go down: --update-baseline writes a lower count and refuses a higher one. To raise one on purpose, edit this file and say why in the commit.",
+  "rawColours": 819,
+  "important": 58,
+  "darkRules": 189
+}

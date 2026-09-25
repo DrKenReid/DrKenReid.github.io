@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -10,8 +10,14 @@
   <meta property="og:title" content="Book Ratings Are Broken">
   <meta property="og:description" content="Rating systems are broken. A data-driven look at 569 books on Goodreads.">
   <meta property="og:image" content="https://www.kenreid.co.uk/img/og/rating-systems.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Book Ratings Are Broken">
   <meta property="og:url" content="https://www.kenreid.co.uk/blog/rating-systems.html">
   <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Ken Reid">
+  <meta property="og:locale" content="en_GB">
+  <meta property="article:published_time" content="2026-04-12">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Book Ratings Are Broken">
   <meta name="twitter:description" content="Rating systems are broken. A data-driven look at 569 books on Goodreads.">
@@ -24,43 +30,51 @@
   <meta name="DC.title" content="Book Ratings Are Broken">
   <meta name="DC.creator" content="Kenneth N. Reid">
   <meta name="DC.date" content="2026-04-12">
-  <!-- Google Analytics (GA4) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <script defer src="../js/analytics.js"></script>
   <link rel="icon" href="../img/core-img/favicon.png">
   <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
   <link rel="manifest" href="../manifest.json">
-  <link rel="preload" as="image" href="../blog/img/rating_distribution_banner.png">
-  <link rel="stylesheet" href="../style.min.css">
+  <link rel="preload" as="image" href="../blog/img/rating_distribution_banner.png" fetchpriority="high">
+  <link rel="stylesheet" href="../style.min.css?v=20260923a">
   <link rel="canonical" href="https://www.kenreid.co.uk/blog/rating-systems.html">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Book Ratings Are Broken",
-    "description": "Rating systems are broken. A data-driven look at 569 books on Goodreads.",
-    "image": "https://www.kenreid.co.uk/img/og/rating-systems.jpg",
-    "author": {
-      "@type": "Person",
-      "name": "Ken Reid",
-      "url": "https://www.kenreid.co.uk"
-    },
-    "datePublished": "2026-04-12",
-    "publisher": {
-      "@type": "Person",
-      "name": "Ken Reid"
-    },
-    "keywords": [
-      "books",
-      "ratings",
-      "Goodreads"
-    ],
-    "url": "https://www.kenreid.co.uk/blog/rating-systems.html",
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https://www.kenreid.co.uk/blog/rating-systems.html"
-    }
+    },
+    "url": "https://www.kenreid.co.uk/blog/rating-systems.html",
+    "headline": "Book Ratings Are Broken",
+    "description": "Rating systems are broken. A data-driven look at 569 books on Goodreads.",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://www.kenreid.co.uk/img/og/rating-systems.jpg",
+      "width": 1200,
+      "height": 630
+    },
+    "datePublished": "2026-04-12",
+    "dateModified": "2026-04-12",
+    "author": {
+      "@type": "Person",
+      "@id": "https://www.kenreid.co.uk/#ken",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk/"
+    },
+    "publisher": {
+      "@type": "Person",
+      "@id": "https://www.kenreid.co.uk/#ken",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk/"
+    },
+    "isPartOf": { "@id": "https://www.kenreid.co.uk/#website" },
+    "inLanguage": "en-GB",
+    "articleSection": "Books & Media",
+    "wordCount": 2488,
+    "timeRequired": "PT12M",
+    "keywords": ["books", "ratings", "Goodreads"]
   }
   </script>
   <script type="application/ld+json">
@@ -89,12 +103,10 @@
     ]
   }
   </script>
-  <script defer src="../js/theme.js"></script>
-  <script defer src="../js/palette.js"></script>
+  <script defer src="../js/theme.js?v=20260923a"></script>
+  <script defer src="../js/palette.js?v=20260923a"></script>
 </head>
 <body>
-  <div id="preloader"><div class="loader"></div></div>
-
   <!-- Header -->
   <div id="header-section"></div>
 
@@ -109,7 +121,7 @@
         <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
         <li class="breadcrumb-item active" aria-current="page">Book Ratings Are Broken</li>
       </ol></nav>
-      <p class="kr-opener__kicker">Books &amp; Media &middot; 12 April 2026 &middot; 12 min read</p>
+      <p class="kr-opener__kicker">Books &amp; Media &middot; <time datetime="2026-04-12">12 April 2026</time> &middot; 12 min read</p>
       <p class="kr-opener__title page-title">Book Ratings Are Broken</p>
       <p class="kr-opener__standfirst">569 books rated, and the star system fails at all of them. A data-driven look at my own Goodreads ratings, review lengths, genre bias, and the silence problem.</p>
     </div>
@@ -158,7 +170,7 @@
 
         <img class="chart-dark" src="img/review_length_by_rating.png" alt="1-star reviews average 554 chars, 5-star average 331" loading="lazy" width="1200" height="600">
 
-        <p style="text-align:center;color:#888;font-size:13px;">The polynomial regression from my analysis project confirms it (R&sup2; = 0.03, meaning review length explains almost nothing about rating):</p>
+        <p class="kr-muted-note kr-muted-note--center">The polynomial regression from my analysis project confirms it (R&sup2; = 0.03, meaning review length explains almost nothing about rating):</p>
         <img class="chart-dark" src="img/gr_review_length.png" alt="Polynomial regression of rating vs review length, R-squared 0.03" loading="lazy" width="1184" height="784">
 
         <p>My 1-star reviews are nearly twice as long as my 5-star reviews. Displeasure makes me far more articulate than joy. When I love something, I tend to write things like "I'm crying, 10/10" (a numerical score inside a text review that already has a numerical score). When I hate something, I can produce a multi-paragraph breakdown of why, complete with quotes, structural criticism, and not very well concealed contempt - I might be a tad cynical.</p>
@@ -187,10 +199,10 @@
 
         <img class="chart-dark" src="img/genre_rating_bias.png" alt="Horizontal bar chart: fantasy 4.27 avg, horror 3.50 avg" loading="lazy" width="1200" height="750">
 
-        <p style="text-align:center;color:#888;font-size:13px;">The rating density curves by genre from the analysis project show this even more clearly:</p>
+        <p class="kr-muted-note kr-muted-note--center">The rating density curves by genre from the analysis project show this even more clearly:</p>
         <img class="chart-dark" src="img/gr_genre_ratings.png" alt="Distribution of ratings for each primary genre" loading="lazy" width="1023" height="710">
 
-        <p style="text-align:center;color:#888;font-size:13px;">And here's how my genre consumption has shifted over time:</p>
+        <p class="kr-muted-note kr-muted-note--center">And here's how my genre consumption has shifted over time:</p>
         <img class="chart-dark" src="img/gr_top_genres.webp" alt="Animated bar chart race of top genres by pages read over time" loading="lazy" width="1000" height="600">
 
         <p>I rate fantasy nearly a full star higher than horror. This doesn't mean fantasy literature is objectively superior to horror (I can feel the Stephen King fans warming up their keyboards). What it means is that I pick fantasy books I'm predisposed to enjoy, and I pick horror books that are more likely to challenge or unsettle me. The genres I consume for comfort get higher ratings than the genres I consume for discomfort. The stars are measuring my selection bias, which is a finding that would make any data scientist wince, because selection bias is the thing we spend our entire careers trying to eliminate from datasets, and here it is sitting proudly in my own reading data. Human after all!</p>
@@ -274,45 +286,44 @@
         <div class="related-posts">
           <h2>Related posts</h2>
           <div class="row related-posts-grid">
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="books-i-recommend-to-friends.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/430.webp" alt="The Books I Recommend to Friends" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/430.webp')">
+              <a href="books-i-recommend-to-friends.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/430.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
                   <div class="blog-card-date">22 May 2026 · 14 min read</div>
                   <h3 class="blog-card-title">The Books I Recommend to Friends</h3>
-                  <p class="blog-card-excerpt">The thirteen books I actually push on friends, grouped by the kind of friend I'd press them into the hands of.</p>
+                  <p class="blog-card-excerpt">The thirteen books I actually push on friends, grouped by the kind of friend I&#x27;d press them into the hands of.</p>
                   <div class="blog-card-tags"><span class="blog-tag">books</span></div>
                 </div>
               </a>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="self-help-books.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/97.webp" alt="Why Most Self-Help Books Are Trash (And Which Ones Aren't)" loading="lazy"></div>
-                <div class="blog-card-body">
-                  <div class="blog-card-date">11 April 2026 · 9 min read</div>
-                  <h3 class="blog-card-title">Why Most Self-Help Books Are Trash (And Which Ones Aren't)</h3>
-                  <p class="blog-card-excerpt">The bad ones are blog posts stretched to 300 pages. The good ones cite their sources. Here's how to tell the difference.</p>
-                  <div class="blog-card-tags"><span class="blog-tag">books</span></div>
-                </div>
-              </a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="the-fermi-paradox-and-the-great-silence.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/357.webp" alt="The Fermi Paradox - Why are we alone in space?" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/357.webp')">
+              <a href="the-fermi-paradox-and-the-great-silence.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/357.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
                   <div class="blog-card-date">28 July 2026 · 22 min read</div>
                   <h3 class="blog-card-title">The Fermi Paradox - Why are we alone in space?</h3>
-                  <p class="blog-card-excerpt">The galaxy is old and vast and should be teeming, and it is silent. A tour of the Fermi paradox's unsettling answers through the science fiction that dramatises them, from Liu Cixin's dark forest to Banks's Culture.</p>
+                  <p class="blog-card-excerpt">The galaxy is old and vast and should be teeming, and it is silent. A tour of the Fermi paradox&#x27;s unsettling answers through the science fiction that dramatises them, from Liu Cixin&#x27;s dark forest to Banks&#x27;s Culture.</p>
                   <div class="blog-card-tags"><span class="blog-tag">science</span><span class="blog-tag">books</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/141.webp')">
+              <a href="dungeon-crawler-carl-litrpg-dignity.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/141.webp" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">25 April 2026 · 22 min read</div>
+                  <h3 class="blog-card-title">Dungeon Crawler Carl and the Strange Dignity of LitRPG</h3>
+                  <p class="blog-card-excerpt">A book snob&#x27;s confession: how Dungeon Crawler Carl used absurd LitRPG mechanics to deliver one of the most devastating emotional payloads in modern fantasy.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">books</span></div>
                 </div>
               </a>
             </div>
           </div>
         </div>
-
-
-        <hr style="margin: 40px 0;">
-        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
       </div>
     </div>
   </div>
@@ -322,11 +333,11 @@
   <div id="footer-section"></div>
 
   <script src="../js/jquery.min.js"></script>
-  <script src="../js/alime.bundle.js"></script>
-  <script src="../js/site.js"></script>
-  <script src="../js/lightbox.js"></script>
-  <script src="../js/default-assets/active.js"></script>
-  <script src="../js/shared-components.js"></script>
+  <script src="../js/alime.bundle.js?v=20260923a"></script>
+  <script src="../js/site.js?v=20260923a"></script>
+  <script src="../js/lightbox.js?v=20260923a"></script>
+  <script src="../js/default-assets/active.js?v=20260923a"></script>
+  <script src="../js/shared-components.js?v=20260923a"></script>
   <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
 renderFooter('footer-section');</script>
 </body>

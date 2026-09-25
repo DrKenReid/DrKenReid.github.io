@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- data-kr-root: GitHub Pages serves this page for any missing path at
+     any depth, so its scripts are told where the site root is instead of
+     working it out from the URL (see siteRootPrefix). -->
+<html lang="en-GB" data-kr-root="/">
 <head>
   <meta charset="UTF-8">
   <meta name="robots" content="noindex">
@@ -7,37 +10,39 @@
   <meta name="description" content="Page not found — Ken Reid">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>404 - Ken Reid</title>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <script defer src="/js/analytics.js"></script>
   <link rel="icon" href="/img/core-img/favicon.png">
   <link rel="apple-touch-icon" href="/img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
-  <link rel="preload" as="image" href="/img/photography/hero/15.webp">
-  <link rel="stylesheet" href="/style.min.css">
-  <script defer src="/js/theme.js"></script>
-  <script defer src="/js/palette.js"></script>
+  <link rel="preload" as="image" href="/img/photography/hero/15.webp" fetchpriority="high">
+  <link rel="stylesheet" href="/style.min.css?v=20260923a">
+  <script defer src="/js/theme.js?v=20260923a"></script>
+  <script defer src="/js/palette.js?v=20260923a"></script>
 </head>
 <body>
-  <div id="preloader"><div class="loader"></div></div>
-
   <div id="header-section"></div>
 
   <main id="main-content">
 
+  <!-- Page opener (style.css §06, "Page opener"). The h1 says what
+       happened in words; the status code is the last crumb. -->
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/15.webp);">
-    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
-      <div class="breadcrumb-content text-center">
-        <h1 class="page-title">404</h1>
+    <div class="container">
+      <div class="breadcrumb-content">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">404</li>
+        </ol></nav>
+        <h1 class="page-title">Page Not Found</h1>
       </div>
-    </div></div></div>
+    </div>
   </section>
 
   <div class="about-us-area section-padding-80 clearfix">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8 text-center">
-          <h2>Page Not Found</h2>
-          <p style="color: #636363; font-size: 16px; line-height: 1.8; margin: 20px 0 24px;">The page you're looking for doesn't exist, was moved, or I broke something. <a href="/contact.html">Please let me know!</a></p>
+          <p class="kr-lost__lede">The page you're looking for doesn't exist, was moved, or I broke something. <a href="/contact.html">Please let me know!</a></p>
 
           <!-- A hill climber looking for the page. It never finds it, because
                there is nothing to find; the joke is the algorithm's problem. -->
@@ -103,58 +108,34 @@
           }());
           </script>
 
-          <form action="/blog.html" method="get" role="search" style="max-width: 420px; margin: 0 auto 14px;">
-            <input type="search" name="q" placeholder="Search the blog instead..." aria-label="Search the blog"
-                   style="width: 100%; padding: 12px 22px; border: 1px solid #ddd; border-radius: 999px; font-size: 15px; outline: none;">
+          <form action="/blog.html" method="get" role="search" class="kr-lost__search">
+            <input type="search" name="q" class="kr-list-search" placeholder="Search the blog instead..." aria-label="Search the blog">
           </form>
-          <p class="kr-muted" style="font-size: 13px; margin-bottom: 26px;">or press <span class="kr-palette-kbd">Ctrl K</span> to search everything on the site</p>
-          <a href="/index.html" class="btn alime-btn btn-2">Back to Home</a>
-          <a href="/blog.html" class="btn alime-btn btn-2" style="margin-left: 8px;">Browse the Blog</a>
+          <p class="kr-muted kr-key-hint kr-lost__hint">or press <kbd class="kr-palette-kbd"><kbd class="kr-kbd-mod">Ctrl</kbd> <kbd>K</kbd></kbd> to search everything on the site</p>
+          <div class="kr-btn-row">
+            <a href="/index.html" class="kr-btn kr-btn--primary">Back to home</a>
+            <a href="/blog.html" class="kr-btn kr-btn--ghost">Browse the blog</a>
+          </div>
         </div>
       </div>
 
-      <div class="text-center" style="margin: 60px 0 26px;">
-        <h3>Or read something new</h3>
+      <div class="section-heading section-heading--sm section-heading--snug kr-lost__more text-center">
+        <h2>Or read something new</h2>
       </div>
       <div class="row justify-content-center" id="lost-latest"></div>
-      <script>
-        fetch('/data/posts.json').then(function(r) { return r.json(); }).then(function(posts) {
-          var host = document.getElementById('lost-latest');
-          if (!host || !Array.isArray(posts) || !posts.length) return;
-          host.innerHTML = posts.slice(0, 3).map(function(p) {
-            return '<div class="col-12 col-md-6 col-lg-4 mb-30">' +
-              '<a href="/' + (p.url || '') + '" class="blog-card">' +
-              '<div class="blog-card-img"><img src="/' + p.image + '" alt="' + p.title + '" loading="lazy"></div>' +
-              '<div class="blog-card-body">' +
-              '<div class="blog-card-date">' + p.date + (p.readMinutes ? ' · ' + p.readMinutes + ' min read' : '') + '</div>' +
-              '<h3 class="blog-card-title">' + p.title + '</h3>' +
-              '<p class="blog-card-excerpt">' + (p.excerpt || '') + '</p>' +
-              '</div></a></div>';
-          }).join('');
-        }).catch(function() {});
-      </script>
 
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8 text-center">
-          <figure style="margin: 34px auto 0; max-width: 640px;">
-            <img id="lost-photo" alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="display: none; width: 100%; border-radius: 12px;">
-            <figcaption id="lost-photo-caption" style="display: none; margin-top: 10px; font-size: 0.9rem; opacity: 0.85;">
-              Since you're lost anyway, here's a random photo I took. <a href="/gallery.html">There are 490+ more.</a>
+          <!-- Hidden until a photograph has loaded, so it has no size to
+               reserve (its frame is picked at random, so neither is there
+               one to write down). The inline display only takes effect
+               once the script lifts `hidden`. -->
+          <figure class="kr-lost mt-4">
+            <img id="lost-photo" alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="display: block; border-radius: 12px;" hidden>
+            <figcaption id="lost-photo-caption" class="kr-lost__status" hidden>
+              Since you're lost anyway, here's a random photo I took. <a href="/gallery.html">There are <span id="lost-photo-more">490+</span> more.</a>
             </figcaption>
           </figure>
-          <script>
-            fetch('/data/photography-standard-files.json').then(function(r) { return r.json(); }).then(function(files) {
-              if (!Array.isArray(files) || !files.length) return;
-              var pick = files[Math.floor(Math.random() * files.length)];
-              var img = document.getElementById('lost-photo');
-              img.src = '/img/photography/thumb/' + pick.replace(/\.(png|jpg|JPG|jpeg)$/, '.webp');
-              img.alt = 'A random photograph from the gallery';
-              img.onload = function() {
-                img.style.display = 'block';
-                document.getElementById('lost-photo-caption').style.display = 'block';
-              };
-            }).catch(function() {});
-          </script>
         </div>
       </div>
     </div>
@@ -163,9 +144,43 @@
   </main>
   <div id="footer-section"></div>
 
-  <script src="/js/site.js"></script>
-  <script src="/js/shared-components.js"></script>
-  <script>renderHeader('header-section', { basePath: '/', active: 'home' });
-renderFooter('footer-section');</script>
+  <script src="/js/site.js?v=20260923a"></script>
+  <script src="/js/shared-components.js?v=20260923a"></script>
+  <script>
+    // No nav item is underlined: a missing page is not the home page.
+    renderHeader('header-section', { basePath: '/' });
+    renderFooter('footer-section');
+
+    // The three newest posts, as the same cards the rest of the site uses.
+    // posts.json is the request the header and footer already made. The
+    // card resolves its link and cover from data-kr-root="/", so they are
+    // right at whatever URL this page was served.
+    loadBlogPosts().then(function(posts) {
+      var host = document.getElementById('lost-latest');
+      if (!host || !Array.isArray(posts)) return;
+      posts.slice(0, 3).forEach(function(post) {
+        host.appendChild(createBlogCardElement(post));
+      });
+    }).catch(function() {});
+
+    // Since you're lost anyway: a random photograph, shown once it loads.
+    krFetchJson('data/photography-standard-files.json').then(function(files) {
+      if (!Array.isArray(files) || !files.length) return;
+      var pick = String(files[Math.floor(Math.random() * files.length)]);
+      var img = document.getElementById('lost-photo');
+      img.onload = function() {
+        img.hidden = false;
+        document.getElementById('lost-photo-caption').hidden = false;
+      };
+      img.alt = 'A random photograph from the gallery';
+      img.src = '/img/photography/thumb/' + pick.replace(/\.[^.]+$/, '') + '.webp';
+    }).catch(function() {});
+
+    // "There are N more": every frame in the gallery but the one shown.
+    krFetchJson('data/photography-files.json').then(function(files) {
+      var more = document.getElementById('lost-photo-more');
+      if (more && Array.isArray(files) && files.length > 1) more.textContent = files.length - 1;
+    }).catch(function() {});
+  </script>
 </body>
 </html>

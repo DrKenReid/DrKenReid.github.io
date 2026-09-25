@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -10,8 +10,14 @@
   <meta property="og:title" content="Building a Photo Tagging System with CLIP">
   <meta property="og:description" content="How I used OpenCLIP to automatically classify 500+ photos into 10 categories, zero API cost.">
   <meta property="og:image" content="https://www.kenreid.co.uk/img/og/photo-tagging-with-clip.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Building a Photo Tagging System with CLIP">
   <meta property="og:url" content="https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html">
   <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Ken Reid">
+  <meta property="og:locale" content="en_GB">
+  <meta property="article:published_time" content="2026-04-10">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Building a Photo Tagging System with CLIP">
   <meta name="twitter:description" content="How I used OpenCLIP to automatically classify 500+ photos into 10 categories, zero API cost.">
@@ -24,45 +30,59 @@
   <meta name="DC.title" content="Building a Photo Tagging System with CLIP">
   <meta name="DC.creator" content="Kenneth N. Reid">
   <meta name="DC.date" content="2026-04-10">
-  <!-- Google Analytics (GA4) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <script defer src="../js/analytics.js"></script>
   <link rel="icon" href="../img/core-img/favicon.png">
   <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
   <link rel="manifest" href="../manifest.json">
-  <link rel="preload" as="image" href="../img/photography/hero/1.webp">
-  <link rel="stylesheet" href="../style.min.css">
+  <link rel="preload" as="image" href="../img/photography/hero/1.webp" fetchpriority="high">
+  <link rel="stylesheet" href="../style.min.css?v=20260923a">
   <link rel="canonical" href="https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "Building a Photo Tagging System with CLIP",
-    "description": "How I used OpenCLIP to automatically classify 500+ photos into 10 categories, zero API cost.",
-    "image": "https://www.kenreid.co.uk/img/og/photo-tagging-with-clip.jpg",
-    "author": {
-      "@type": "Person",
-      "name": "Ken Reid",
-      "url": "https://www.kenreid.co.uk"
-    },
-    "datePublished": "2026-04-10",
-    "publisher": {
-      "@type": "Person",
-      "name": "Ken Reid"
-    },
-    "keywords": [
-      "nerd-stuff",
-      "photography",
-      "CLIP",
-      "OpenCLIP",
-      "computer vision"
-    ],
-    "url": "https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html",
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html"
-    }
+    },
+    "url": "https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html",
+    "headline": "Building a Photo Tagging System with CLIP",
+    "description": "How I used OpenCLIP to automatically classify 500+ photos into 10 categories, zero API cost.",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://www.kenreid.co.uk/img/og/photo-tagging-with-clip.jpg",
+      "width": 1200,
+      "height": 630
+    },
+    "datePublished": "2026-04-10",
+    "dateModified": "2026-04-10",
+    "author": {
+      "@type": "Person",
+      "@id": "https://www.kenreid.co.uk/#ken",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk/"
+    },
+    "publisher": {
+      "@type": "Person",
+      "@id": "https://www.kenreid.co.uk/#ken",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk/"
+    },
+    "isPartOf": [
+      { "@id": "https://www.kenreid.co.uk/#website" },
+      {
+        "@type": "CreativeWorkSeries",
+        "@id": "https://www.kenreid.co.uk/series-how-this-site-is-built.html#series",
+        "name": "How This Site Is Built",
+        "url": "https://www.kenreid.co.uk/series-how-this-site-is-built.html"
+      }
+    ],
+    "inLanguage": "en-GB",
+    "articleSection": "Data & AI",
+    "wordCount": 1178,
+    "timeRequired": "PT6M",
+    "keywords": ["nerd-stuff", "photography", "CLIP", "OpenCLIP", "computer vision"]
   }
   </script>
   <script type="application/ld+json">
@@ -91,12 +111,10 @@
     ]
   }
   </script>
-  <script defer src="../js/theme.js"></script>
-  <script defer src="../js/palette.js"></script>
+  <script defer src="../js/theme.js?v=20260923a"></script>
+  <script defer src="../js/palette.js?v=20260923a"></script>
 </head>
 <body>
-  <div id="preloader"><div class="loader"></div></div>
-
   <!-- Header -->
   <div id="header-section"></div>
 
@@ -111,7 +129,7 @@
         <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
         <li class="breadcrumb-item active" aria-current="page">Building a Photo Tagging System with CLIP</li>
       </ol></nav>
-      <p class="kr-opener__kicker">Data &amp; AI &middot; 10 April 2026 &middot; 5 min read</p>
+      <p class="kr-opener__kicker">Data &amp; AI &middot; <time datetime="2026-04-10">10 April 2026</time> &middot; 6 min read</p>
       <p class="kr-opener__title page-title">Building a Photo Tagging System with CLIP</p>
       <p class="kr-opener__standfirst">How I used OpenCLIP to automatically classify 500+ photos into 10 categories in under a minute, zero API cost, running entirely on CPU.</p>
       <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>
@@ -171,9 +189,9 @@
 
         <p>The ViT-B-32 model processed all 500+ images in <strong>44 seconds</strong> on CPU. No GPU needed, no API calls, zero cost. I ran this on my computer while making coffee.</p>
 
-        <p>Each image gets multi-label tags (a photo can be both "landscape" and "winter"), with per-category similarity thresholds tuned to get roughly 1.3 tags per image on average. I went through a couple of iterations on the thresholds: too aggressive and everything got tagged "nature", too conservative and most images only got one tag. The output is a simple JSON mapping filename to tag array:</p>
+        <p>Each image gets multi-label tags (a photo can be both "landscape" and "winter"), with per-category similarity thresholds tuned to get roughly 1.2 tags per image on average. I went through a couple of iterations on the thresholds: too aggressive and everything got tagged "nature", too conservative and most images only got one tag. The output is a simple JSON mapping filename to tag array:</p>
 
-        <pre><code>{
+        <pre><code class="language-json">{
   "1": ["nature", "silhouette"],
   "15": ["abandoned", "bw"],
   "50": ["architecture", "bw", "urban"],
@@ -182,15 +200,17 @@
 
         <h2>Accuracy</h2>
 
-        <p>Spot-checking against my own judgement, I'd estimate 85-90% accuracy. The model handles clear cases well: a sheep in a field is "wildlife", a monochrome street scene is "bw" + "urban", a derelict building is "abandoned". Where it struggles is with quirky or abstract shots. A painted dalmatian traffic cone on a city street got tagged "architecture", which I can't even be mad about because it technically is sitting next to a building. A lensball photo got tagged "portrait" because the model detected what it thought was a face. It wasn't wrong, it was just working with a different definition of "portrait" than I had in mind.</p>
+        <p>Spot-checking against my own judgement, I'd estimate 85-90% accuracy. The model handles clear cases well: a sheep in a field is "wildlife", a derelict building is "abandoned". Where it struggles is with quirky or abstract shots. A painted dalmatian traffic cone on a city street got tagged "architecture", which I can't even be mad about because it technically is sitting next to a building. A lensball photo got tagged "portrait" because the model detected what it thought was a face. It wasn't wrong, it was just working with a different definition of "portrait" than I had in mind.</p>
+
+        <p>The one category I stopped trusting it with was B&amp;W. CLIP called a lot of colour frames black and white, so that tag doesn't come from the model any more. A small script, <code>detect_monochrome.py</code>, looks at each thumbnail's pixels instead: a frame only counts when there's almost no colour anywhere in it, so a grey street with one pink coat in it stays out. It runs with the rest of the site's checks, and they fail if the B&amp;W filter and the pixels ever disagree.</p>
 
         <p>The nice thing about this approach is that re-running the whole pipeline is trivial. Tweak a threshold, adjust a prompt, run again in under a minute. If I wanted to add a "creative/abstract" category to catch those edge cases, it would take about two minutes of work.</p>
 
         <h2>Integration</h2>
 
-        <p>The gallery page loads the tags JSON via JavaScript and renders filter buttons above the photo grid. Click "&#x1f43e; Wildlife (78)" and the gallery filters instantly using Isotope for the layout animation. It's satisfying in a way that only a well-animated filter transition can be.</p>
+        <p>The gallery page loads the tags JSON via JavaScript and renders filter buttons above the photo grid. Click "Wildlife (99)" and the grid rebuilds with just those frames, in justified rows where every row fills the width and every photo keeps its own shape. The change is a view transition, so a photo that survives the filter slides to its new spot while the rest fade out. It's satisfying in a way that only a well-animated filter transition can be.</p>
 
-        <p>The tagging script lives in the repo at <code>scripts/tag_photos.py</code>, so if I add new photos I just re-run it and push. The whole thing is reproducible by anyone with the same dependencies installed (open_clip_torch, pillow, tqdm).</p>
+        <p>The tagging script, <code>tag_photos.py</code>, lives on my own machine rather than in the repo, so if I add new photos I just re-run it there and push the new <code>data/photo-tags.json</code>. It needs open_clip_torch, pillow and tqdm.</p>
 
         <h2>What I'd do differently</h2>
 
@@ -200,7 +220,7 @@
           <li>A manual override JSON that merges with the auto-generated tags would let me fix the obvious misses without re-running the whole pipeline. Sometimes you just want to tell the computer "no, that's a traffic cone, not architecture" and move on with your life.</li>
         </ul>
 
-        <p>The full code is on <a href="https://github.com/DrKenReid/DrKenReid.github.io/blob/master/scripts/tag_photos.py" target="_blank" rel="noopener noreferrer">GitHub</a>, and you can see the result on the <a href="../gallery.html">Photography</a> page.</p>
+        <p>The tags it wrote are on <a href="https://github.com/DrKenReid/DrKenReid.github.io/blob/master/data/photo-tags.json" target="_blank" rel="noopener noreferrer">GitHub</a>, and you can see the result on the <a href="../gallery.html">Photography</a> page.</p>
 
         <div class="faq-section">
           <h2>Common questions</h2>
@@ -229,31 +249,34 @@
         <div class="related-posts">
           <h2>Related posts</h2>
           <div class="row related-posts-grid">
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="hosting-photography-on-github-for-free.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/387.webp" alt="Hosting a Photography Portfolio on GitHub for Free" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/387.webp')">
+              <a href="hosting-photography-on-github-for-free.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/387.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">6 July 2026 · 9 min read</div>
+                  <div class="blog-card-date">6 July 2026 · 10 min read</div>
                   <h3 class="blog-card-title">Hosting a Photography Portfolio on GitHub for Free</h3>
-                  <p class="blog-card-excerpt">GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here's the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</p>
+                  <p class="blog-card-excerpt">GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here&#x27;s the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</p>
                   <div class="blog-card-tags"><span class="blog-tag">photography</span><span class="blog-tag">technology</span></div>
                 </div>
               </a>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="putting-my-photos-on-a-map.html" class="blog-card">
-                <div class="blog-card-img"><img src="../blog/img/map/photo-map-dark.webp" alt="Putting My Photos on a Map" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/blog/img/map/photo-map-dark.webp')">
+              <a href="putting-my-photos-on-a-map.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../blog/img/map/photo-map-dark.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
                   <div class="blog-card-date">14 July 2026 · 5 min read</div>
                   <h3 class="blog-card-title">Putting My Photos on a Map</h3>
-                  <p class="blog-card-excerpt">239 of my photographs plotted on an interactive world map, this is how the photo map works.</p>
+                  <p class="blog-card-excerpt">264 of my photographs plotted on an interactive world map, this is how the photo map works.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">photography</span></div>
                 </div>
               </a>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="abandoned-places-i-photograph.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/135.webp" alt="The Abandoned Places I Photograph" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/135.webp')">
+              <a href="abandoned-places-i-photograph.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/135.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
                   <div class="blog-card-date">12 July 2026 · 9 min read</div>
                   <h3 class="blog-card-title">The Abandoned Places I Photograph</h3>
@@ -264,10 +287,6 @@
             </div>
           </div>
         </div>
-
-
-        <hr style="margin: 40px 0;">
-        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
       </div>
     </div>
   </div>
@@ -277,12 +296,13 @@
   <div id="footer-section"></div>
 
   <script src="../js/jquery.min.js"></script>
-  <script src="../js/alime.bundle.js"></script>
-  <script src="../js/site.js"></script>
-  <script src="../js/lightbox.js"></script>
-  <script src="../js/default-assets/active.js"></script>
-  <script src="../js/shared-components.js"></script>
+  <script src="../js/alime.bundle.js?v=20260923a"></script>
+  <script src="../js/site.js?v=20260923a"></script>
+  <script src="../js/lightbox.js?v=20260923a"></script>
+  <script src="../js/default-assets/active.js?v=20260923a"></script>
+  <script src="../js/shared-components.js?v=20260923a"></script>
   <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
-renderFooter('footer-section');</script>
+renderFooter('footer-section');
+</script>
 </body>
 </html>

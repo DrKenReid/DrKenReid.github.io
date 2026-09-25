@@ -9,7 +9,12 @@
  * are miniatures of their demos and open the file.
  *
  * .github/scripts/check_live_covers.py fails the build when a post has
- * no sketch, so a new post needs one before it can ship.
+ * no sketch, so a new post needs one before it can ship. The helpers, the
+ * factory's arguments and how to try a sketch by hand are in
+ * .github/docs/COMPONENTS.md, "The hover sketch".
+ *
+ * Design notes: "Every Card Has a Sketch",
+ * https://www.kenreid.co.uk/blog/every-card-has-a-sketch.html
  */
 (function () {
     'use strict';

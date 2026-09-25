@@ -70,7 +70,7 @@
 
  <p>Second, it steps sixty times a second whatever the screen is doing. The sketches count frames, and my first version stepped once per <code>requestAnimationFrame</code>, which is fine on a 60 Hz monitor but silly on a 120 Hz one: every ant ran at double speed, every tide went out in half the time. In a throttled background tab they crawled instead. So the engine keeps its own clock now and steps once per sixtieth of a second of real time, with a cap so a tab that's been hidden for a minute doesn't try to catch up all in one go.</p>
 
- <p>Third, it doesn't load until it's needed. The three files come to 39 KB compressed, which is a lot to send a phone for a hover effect it can't trigger (no mouse, no hover, nothing to do). So no page includes them any more. The first time a mouse moves, and only if the browser says hovering is a thing it can do and you haven't asked for reduced motion, the shared script fetches all three. On a desktop they turn up about a second before you could want them, which is close enough for me, and phones don't store them at all.</p>
+ <p>Third, it doesn't load until it's needed. The three files come to 41 KB compressed, which is a lot to send a phone for a hover effect it can't trigger (no mouse, no hover, nothing to do). So no page includes them any more. The first time a mouse moves, and only if the browser says hovering is a thing it can do and you haven't asked for reduced motion, the shared script fetches all three. On a desktop they turn up about a second before you could want them, which is close enough for me, and phones don't store them at all.</p>
 
  <h2>Keeping them from rotting</h2>
 
@@ -79,9 +79,6 @@
  <p>If you're reading this on a phone you've seen none of it, and that's fine. Nothing to hover with, nothing to download, and the cards are just cards.</p>
 
         
-
- <hr style="margin: 40px 0;">
- <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
  ]]></content:encoded>
     </item>
     <item>
@@ -223,6 +220,8 @@
           </li>
         </ol>
 
+        
+
  ]]></content:encoded>
     </item>
     <item>
@@ -233,6 +232,144 @@
       <description>Street photography is legal in most places and comfortable in almost none of them. Where the law actually lands across 52 jurisdictions, and the four tests I use before I raise a camera at someone.</description>
       <category>photography</category>
       <category>philosophy</category>
+      <content:encoded><![CDATA[
+ <h1>Photographing Strangers</h1>
+ <div class="blog-meta">
+ 16 September 2026 &middot;
+ <span class="blog-tag">photography</span>
+ </div>
+
+ <p>I've taken photos of many people without them knowing or consenting. Sometimes, they do know, but don't consent - I'll take a photo and they turn around and see my lens pointing at them. So far no one has asked me to delete any photos, but I've definitely had stares and glares.</p>
+
+ <p>Street photography stirs some interesting questions. It's legal in most public places (though not in the UAE or South Korea, and France is far stricter than visitors expect), but there are lots of legal ways you can be an asshole.</p>
+
+ <figure class="kr-figure--solo">
+   <img src="https://www.kenreid.co.uk/img/photography/thumb/213.webp" alt="A young man in a grey hooded top crossing an empty paved square, half turned towards the camera" loading="lazy" class="kr-figure-img" width="400" height="266">
+   <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+ </figure>
+
+ <h2>Legality</h2>
+
+ <p>In most jurisdictions, including the UK and US, photographing people in public spaces is broadly legal. There's a reduced expectation of privacy in public, and the whole documentary tradition depends on that freedom.</p>
+
+ <p>"Broadly legal" covers three quite different rules, though, and which one you are under depends on where your feet are. Wikimedia Commons maintains a country-by-country list of consent requirements for pictures of identifiable people, because it has to: it hosts the photographs. Of the 52 jurisdictions it documents, the split runs like this.</p>
+
+ <table class="values-grid">
+ <thead>
+ <tr><th>What the law asks of you</th><th class="score">Jurisdictions</th><th>Notes</th></tr>
+ </thead>
+ <tbody>
+ <tr><td>Nothing: shoot and publish without asking</td><td class="score">18</td><td>Including India, the US, Iran<sup>*</sup>, the UK and South Africa</td></tr>
+ <tr><td>Consent to publish, but not to shoot</td><td class="score">18</td><td>Including Russia, Ethiopia, Mexico, the Philippines and Germany</td></tr>
+ <tr><td>Consent before you press the shutter</td><td class="score">14</td><td>Including China, Indonesia, Brazil, Japan and Turkey</td></tr>
+ <tr><td>Unsettled, or different inside one country</td><td class="score">2</td><td>Canada (province by province) and Hong Kong</td></tr>
+ </tbody>
+ </table>
+
+ <p class="figure-note" style="text-align: left;">Counts from the <a href="https://commons.wikimedia.org/wiki/Commons:Country_specific_consent_requirements" target="_blank" rel="noopener noreferrer">Wikimedia Commons country-specific consent requirements</a> guideline. It documents 52 jurisdictions out of roughly 195, and says plainly that a country's absence from the list proves nothing: the UAE is not on it, and criminalises photographing a person without consent under Article 44 of Federal Decree-Law 34 of 2021. <sup>*</sup>Iran sits in the top row on one narrow 2007 statute about women-only spaces and private gatherings, which shows how much work "with exceptions" is doing in every row above. None of this is legal advice.</p>
+
+ <p>That says nothing about the ethics or social implications, of course. Cultures vary from town to town, never mind across country borders. But legal is the floor, and plenty of legal things are unkind, so treating the law as the whole of the ethics is unwise. The question I care about is "should I, and how", and the law can perhaps give insight into some broad strokes of social acceptance, but not ethics.</p>
+
+ <p>The context has changed since the old masters. When Cartier-Bresson or Vivian Maier shot a stranger, that photograph lived in a print, a gallery, a book, or perhaps in a dusty old film cartridge in a chest somewhere. A bounded, slow world.</p>
+
+ <p>A photograph now can be uploaded, geolocated, reverse-image-searched and attached to a name in minutes. The same click that once made a fleeting image now makes a searchable, permanent, findable record of a person who never agreed to be in it. So the ethics can't be inherited wholesale from a pre-internet age. And that cuts both ways: we live in the era of Flock cameras, smartphones, and TikTok, Twitch, Facebook and YouTube livestreamers.</p>
+
+ <figure class="kr-figure--solo">
+   <img src="https://www.kenreid.co.uk/img/photography/thumb/163.webp" alt="Pedestrians walking away from the camera along a busy city pavement past cafe tables and a parked bicycle" loading="lazy" class="kr-figure-img" width="400" height="257">
+   <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+ </figure>
+
+ <h2>A working framework</h2>
+
+ <p>We can also consider paparazzi, as the worst kind of "well, it's legal" defence. Sure, it's legal, but camping outside someone's home, place of work or school to take non-consensual photos, hoping to make a dollar selling them to some awful supermarket rag, is still a choice you made (who needs AI slop when you can peruse human created slop?).</p>
+
+ <p>I think there's something on the other side of this that I haven't heard discussed: photography paralysis. Being so afraid of the first that you never take a plain photograph of human life at all. That's a real loss, because people are some of the most important things we can photograph. Someone just living their life, representing a common interest, feeling and life can echo something shared, capture beautiful moments and collective sadness. There is art in people being people, and capturing a fleeting moment forever. Not capturing that is almost like destroying a beautiful painting or poem.</p>
+
+ <figure class="kr-figure--solo">
+   <img src="https://www.kenreid.co.uk/img/photography/thumb/212.webp" alt="A busker playing guitar against a shopfront on a cobbled street at dusk, the lit lane running away behind them" loading="lazy" class="kr-figure-img" width="400" height="266">
+   <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+ </figure>
+
+ <h2>How I draw my bounds</h2>
+
+ <p><strong>The dignity test.</strong> Before I publish (and often before I shoot), I ask whether the image honours the person or exploits them. A photograph that shows a stranger as interesting, dignified, fully human is a different object from one that invites the viewer to laugh at them, or gawk at them, or one that is really just virtue signalling from me.</p>
+
+ <p>If the picture's whole appeal is that the subject is a spectacle, I'll have basically made a zoo and considered that person an animal.</p>
+
+ <figure class="kr-figure--solo">
+   <img src="https://www.kenreid.co.uk/img/photography/thumb/275.webp" alt="An older man in a patterned shirt and cap sitting on a stool in the sun outside a dark shopfront, black and white" loading="lazy" class="kr-figure-img" width="400" height="266">
+   <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+ </figure>
+
+ <p><strong>The power gradient.</strong> This is the one that does the most work for me. Photograph across or up the power gradient, rarely down it.</p>
+
+ <p>A candid of a confident person striding through their city is wonderful. A candid of someone at their most vulnerable (homeless, grieving, drunk, struggling) turns their worst moment into my content. It's the same worry I had about <a href="https://www.kenreid.co.uk/blog/abandoned-places-i-photograph.html">ruin porn</a>: a beautiful photograph of someone's suffering is still a photograph of suffering, and making it beautiful doesn't mean you're not personally benefitting from another's suffering. That doesn't mean you can't take photos of these things, but you need to be more creative in your photos. Avoiding faces or other identifying marks (tattoos, nametags) means you can show, for example, homelessness in Las Vegas, without it being exploitation. It can even be powerful, eye-opening, educational and a rallying cry.</p>
+
+ <figure class="kr-figure--solo">
+   <img src="https://www.kenreid.co.uk/img/photography/thumb/231.webp" alt="A man stretched out along a park bench in the afternoon, arms spread across the backrest, black and white" loading="lazy" class="kr-figure-img" width="400" height="249">
+   <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+ </figure>
+
+ <p><strong>The ask-after option.</strong> You don't always have to choose between a stolen candid and a stiff posed shot. Shoot first, then approach, show them the frame, offer to delete it or to send it. It turns a taking into something closer to a collaboration, and people are delighted more often than not in my experience. It doesn't cost the "purity" of the unaware candid but it does buy a clear conscience and, often, can make someone's day (and maybe get you an extra Instagram follower if that's something you care about).</p>
+
+ <figure class="kr-figure--solo">
+   <img src="https://www.kenreid.co.uk/img/photography/thumb/252.webp" alt="A couple walking away through a stone archway, one arm draped over the other's shoulder, black and white" loading="lazy" class="kr-figure-img" width="400" height="266">
+   <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+ </figure>
+
+ <p><strong>Consider obvious boundaries.</strong> Is the person you want to photograph on their own property, e.g. through a window or somewhere else they would normally expect privacy? Or are you in their home with them - if so, consider asking - taking photos inside someone's home can feel like an invasion of privacy to them.</p>
+
+ <h2>Use the discomfort</h2>
+
+ <p>Documentary photography of any kind requires you to have an <em>opinion about your subject</em>, not merely a technically good composition. The discomfort I feel raising a camera at a stranger keeps me asking the dignity question and checking the power gradient, so don't squash it down entirely, it can be informative, or at least help you check yourself.</p>
+
+ <figure class="kr-figure--solo">
+   <img src="https://www.kenreid.co.uk/img/photography/thumb/198.webp" alt="A woman in a sun hat crossing a bright square, a coat over one arm and a wheeled shopping bag in the other hand" loading="lazy" class="kr-figure-img" width="400" height="233">
+   <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+ </figure>
+
+ <p>So I don't want to talk myself out of the hesitation, and I don't want you to either. The best street photography was made by people who clearly loved their subjects, and you can see it in the frames: the humans in them are seen, not caught.</p>
+
+ <p>Keep the hesitation. Ask the dignity question, check the gradient, leave other people's kids out of it, and take the photograph when the answers come out right. So, Wheaton's Law.</p>
+
+ <h2>Some of the frames</h2>
+
+ <figure class="kr-figure--solo">
+   <div class="photo-grid">
+     <img src="https://www.kenreid.co.uk/img/photography/thumb/35.webp" alt="A lone figure standing at the end of a floating jetty on dark water, wooded hills behind, black and white" loading="lazy" width="400" height="196">
+     <img src="https://www.kenreid.co.uk/img/photography/thumb/46.webp" alt="A woman with a large shoulder bag walking across a sunlit square in front of an arcaded stone building" loading="lazy" width="400" height="266">
+     <img src="https://www.kenreid.co.uk/img/photography/thumb/64.webp" alt="Two men crossing a wide pedestrian street, one striding away and one in a hooded top with a backpack" loading="lazy" width="400" height="266">
+     <img src="https://www.kenreid.co.uk/img/photography/thumb/81.webp" alt="Two wrestlers grappling in a sand pit at an outdoor event, spectators lining the edge" loading="lazy" width="400" height="266">
+     <img src="https://www.kenreid.co.uk/img/photography/thumb/169.webp" alt="A man walking away down a wide boardwalk past shuttered units and a liquor store sign" loading="lazy" width="400" height="266">
+     <img src="https://www.kenreid.co.uk/img/photography/thumb/202.webp" alt="Two men in silhouette crossing a sunlit square, backlit against pale paving" loading="lazy" width="400" height="400">
+     <img src="https://www.kenreid.co.uk/img/photography/thumb/221.webp" alt="A man in a beanie standing outside a shopfront holding a hand-lettered sign reading 'fuck you', black and white" loading="lazy" width="400" height="266">
+     <img src="https://www.kenreid.co.uk/img/photography/thumb/277.webp" alt="Two people sitting in silhouette on a riverbank under a stone bridge, kayaks on the water beyond" loading="lazy" width="400" height="263">
+     <img src="https://www.kenreid.co.uk/img/photography/thumb/278.webp" alt="A person in a hooded top sitting alone on a riverbank looking out over the water, a slogan printed across the back of the hood" loading="lazy" width="400" height="266">
+   </div>
+   <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+ </figure>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Isn't asking permission going to kill the candid, spontaneous quality?</summary>
+ <p>For the unaware candid, yes. That's what the ask-after option is for: shoot the spontaneous frame first, then approach. You keep the candid moment and add consent. That being said, of course be safe. Don't approach (or even photograph, ideally) people who you suspect might react poorly.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Doesn't all this hand-wringing just mean you should never do street photography?</summary>
+ <p>It takes some social confidence, and there's always an element of being unsafe when dealing with strangers. I think the "hand-wringing" is just about making sure we maintain our ethics while conducting our artform.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>What about candids where the person is just part of a wider scene?</summary>
+ <p>Eh, it varies. Some laws don't care, some do, and ethically, I think there's definitely a level of "well, you are in public, people will perceive you - if you don't want to be perceived, don't be in public" that can be applied to group photos much more so than individual shots.</p>
+ </details>
+ </div>
+
+        
+ ]]></content:encoded>
     </item>
     <item>
       <title>Ruin and Recreate, Live</title>
@@ -353,9 +490,6 @@
         </ol>
 
         
-
- <hr style="margin: 40px 0;">
- <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
  ]]></content:encoded>
     </item>
     <item>
@@ -586,24 +720,24 @@
 
  <p>The first element injected into every page is what is known as a skip link. Press Tab on any page here and "Skip to main content" appears before anything else. In short, this allows you to press Enter and get past any navigation fluff at the top of the page. It's invisible to mouse users, and is an old trick that is often forgotten in 'modern' websites.</p>
 
- <figure style="margin: 24px auto;">
-  <img src="https://www.kenreid.co.uk/blog/img/a11y/skip-link.webp" alt="The site header with a Skip to main content button overlaid on the navigation, outlined by a red focus ring" loading="lazy" width="1520" height="214" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+ <figure class="kr-figure--solo">
+  <img src="https://www.kenreid.co.uk/blog/img/a11y/skip-link.webp" alt="The site header with a Skip to main content button overlaid on the navigation, outlined by a red focus ring" loading="lazy" width="1520" height="214" class="kr-figure-img">
   <figcaption class="figure-note">Press Tab anywhere on the site and this is the first stop. Mouse users never see it.</figcaption>
  </figure>
 
  <p>The Ctrl+K <a href="https://www.kenreid.co.uk/blog/ctrl-k-for-a-static-site.html">command palette</a> got the full dialog treatment: focus moves into the input when it opens, Tab is trapped (it moves the selection instead of escaping the dialog), Escape closes it, and results are given to screen readers through an <code>aria-live</code> region. The filter buttons on the blog and gallery use <code>aria-pressed</code>, so "Photography, toggle button, pressed" comes through instead of a mystery link.</p>
 
- <figure style="margin: 24px auto;">
-  <img src="https://www.kenreid.co.uk/blog/img/a11y/command-palette.webp" alt="The Ctrl+K command palette open over a dimmed homepage, with the query accessib typed, six post results listed, the top one highlighted, and footer hints reading navigate, open, esc close" loading="lazy" width="1520" height="1064" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+ <figure class="kr-figure--solo">
+  <img src="https://www.kenreid.co.uk/blog/img/a11y/command-palette.webp" alt="The Ctrl+K command palette open over a dimmed homepage, with the query accessib typed, six post results listed, the top one highlighted, and footer hints reading navigate, open, esc close" loading="lazy" width="1520" height="1064" class="kr-figure-img">
   <figcaption class="figure-note">The palette moves focus into the input, traps Tab, closes on Escape, and announces results through an aria-live region.</figcaption>
  </figure>
 
- <figure style="margin: 24px auto;">
-  <img src="https://www.kenreid.co.uk/blog/img/a11y/tag-filters.webp" alt="The blog's tag filter bar with fourteen outlined tag buttons; the photography tag is solid red, showing its pressed state" loading="lazy" width="1520" height="236" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+ <figure class="kr-figure--solo">
+  <img src="https://www.kenreid.co.uk/blog/img/a11y/tag-filters.webp" alt="The blog's Filter and Sort buttons above the Topic row: All (68), technology, ai and personal as outlined buttons, the photography tag solid red to show its pressed state, and a +9 more button" loading="lazy" width="1520" height="248" class="kr-figure-img">
   <figcaption class="figure-note">The pressed filter reads as "photography, toggle button, pressed": the visual state and the aria-pressed state are the same fact.</figcaption>
  </figure>
 
- <p>The theme toggle updates <code>aria-pressed</code> and swaps its label between "Switch to light mode" and "Switch to dark mode", so the button always says what it will do, not what it did.</p>
+ <p>The theme toggle swaps its label between "Switch to light mode" and "Switch to dark mode", so the button always says what it will do, not what it did. It has no <code>aria-pressed</code>, on purpose: a label that changes plus a pressed state gets read out as "Switch to light mode, toggle button, pressed", which leaves you to work out whether pressed means light or dark.</p>
 
  <h2>The screen reader path</h2>
 
@@ -621,15 +755,15 @@ link.appendChild(span);</code></pre>
 
  <h2>The vestibular path</h2>
 
- <p>Three separate systems check <code>prefers-reduced-motion</code>: the scroll-reveal animations (everything just appears, already visible), the homepage stats (they display their final number instead of counting up), and the CSS transitions (three media blocks calm them down). The site has to be complete with the animation subtracted, and only then is the animation allowed.</p>
+ <p>Every script that moves something checks <code>prefers-reduced-motion</code> (eight of them at the last count), and the stylesheet has 28 media blocks for it. The section headings that rise into place as you scroll are pure CSS (<code>animation-timeline: view()</code>), and with reduced motion on they just appear, already visible, as does the script fallback for browsers without it. The homepage stats display their final number instead of counting up. The interactive demos mount paused, the carousels start paused, the hover sketches on the blog cards never load, the hero's evolving headline is drawn as plain type, and the theme switch cross-fades instead of washing across the page from the button. The site has to be complete with the animation subtracted, and only then is the animation allowed.</p>
 
  <h2>Checkpoints</h2>
 
- <p>Habits decay, so the <a href="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">audit script</a> checks every page for the a11y basics (alt text, heading structure, link health, metadata) on every push, and CI fails loudly when a new post shows how bad my memory is at maintaining these standards without a checklist. I love automating stuff, I'd rather put in extra effort early to save effort later.</p>
+ <p>Habits decay, so the <a href="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">audit script</a> checks every page for the a11y basics (alt text, heading structure, link health, metadata) on every push, a contrast test checks every text colour and the focus ring against WCAG AA in both themes, and a headless browser presses Tab for real to make sure the focus ring shows up, measures the contrast on the rendered pages, and checks the demos work from a keyboard without flooding a screen reader. CI fails loudly when a new post shows how bad my memory is at maintaining these standards without a checklist. I love automating stuff, I'd rather put in extra effort early to save effort later.</p>
 
- <figure style="margin: 24px auto;">
-  <img src="https://www.kenreid.co.uk/blog/img/a11y/audit-output.webp" alt="Terminal output of the audit script: four INFO lines about long meta descriptions, then a summary reading 86 pages audited, 0 errors, 0 warnings, 29 info, with the zeroes in green" loading="lazy" width="1520" height="449" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
-  <figcaption class="figure-note">The audit summary on a clean tree. CI runs the same script on every push and fails the build on any error or warning.</figcaption>
+ <figure class="kr-figure--solo">
+  <img src="https://www.kenreid.co.uk/blog/img/a11y/audit-output.webp" alt="Terminal output of the audit script: four INFO lines about long meta descriptions, then a summary reading 86 pages audited, 0 errors, 0 warnings, 29 info, with the zeroes in green" loading="lazy" width="1520" height="449" class="kr-figure-img">
+  <figcaption class="figure-note">The audit summary on a clean tree the week this post went up. It reads 95 pages audited now, still with 0 errors and 0 warnings. CI runs the same script on every push and fails the build on any error or warning.</figcaption>
  </figure>
 
  <p>I'd love to hear from an actual screen reader user. If you use assistive tech and something here fights you, the <a href="https://www.kenreid.co.uk/contact.html">contact page</a> works, and I fix reported things fast.</p>
@@ -701,8 +835,8 @@ link.appendChild(span);</code></pre>
 
  <p>The news isn't lying, which is the trap. News reports the <em>un</em>usual by definition: "plane lands safely" is not a story, "plane crashes" is. That newsworthiness filter guarantees that what reaches you is the rare and dramatic rather than the common and deadly.</p>
 
- <figure style="margin: 24px auto;">
-  <img src="https://www.kenreid.co.uk/img/photography/thumb/89.webp" alt="A city stretching to the hills under a lid of dark storm clouds" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+ <figure class="kr-figure--solo">
+  <img src="https://www.kenreid.co.uk/img/photography/thumb/89.webp" alt="A city stretching to the hills under a lid of dark storm clouds" loading="lazy" class="kr-figure-img" width="400" height="265">
   <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
  </figure>
 
@@ -758,9 +892,6 @@ link.appendChild(span);</code></pre>
         </ol>
 
         
-
- <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
- <hr style="margin: 40px 0;">
  ]]></content:encoded>
     </item>
     <item>
@@ -806,8 +937,8 @@ link.appendChild(span);</code></pre>
  <aside class="kr-scene">
   <p class="kr-scene-label">The dinner table</p>
   <p>My uncle has decided the earth is flat. He arrives at dinner with a video of a coastline where you can supposedly see a lighthouse the curve should have hidden, and a man saying "they never show you the curve." He found it in seconds, because he searched for "proof flat earth real". I countered it, again. You can lie down, watch the sun set, then stand up and watch it set a second time, which wouldn't work on a flat earth. All the other planets can be observed to be spherical. Shadows over time show the Earth is round. None of it sticks: the counter-evidence is immediately dismissed. I run the same search he does, I consider it and work through from his perspective back to mine, rather than searching "proof earth is not flat", and that makes me understand his approach more, and reinforces my position as a rigorous argument, instead of parroting what I previously read.</p>
-  <figure style="margin: 18px 0 4px;">
-   <img src="https://www.kenreid.co.uk/img/photography/thumb/211.webp" alt="An older man in glasses and a tie at a busy restaurant dinner table, mid-conversation, wine glasses and flowers in front of him" loading="lazy" style="width:100%; display:block; border-radius:8px;">
+  <figure class="kr-figure--solo">
+   <img src="https://www.kenreid.co.uk/img/photography/thumb/211.webp" alt="An older man in glasses and a tie at a busy restaurant dinner table, mid-conversation, wine glasses and flowers in front of him" loading="lazy" class="kr-figure-img" width="400" height="266">
    <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
   </figure>
   <p class="kr-scene-note">The uncle searched for evidence to prove his position, assuming he was already correct, not showing curiosity and willingness to consider other opinions. Classic confirmation bias.</p>
@@ -816,8 +947,8 @@ link.appendChild(span);</code></pre>
  <aside class="kr-scene">
   <p class="kr-scene-label">The neighbour</p>
   <p>I knew before even moving into my new place that my neighbours wouldn't like me. And, in my first week here, that man across the road clearly didn't like me. He doesn't wave, and then, when he does wave, it's begrudging, only after I do. He put his bins out later than me, but then after he saw I did it earlier, he's almost doing it the night before to beat me. I send him a Christmas card but he didn't send one to me. He did sign for a parcel for me when I wasn't home, but it just feels like he's doing it to have one over me, seem to be the nicer neighbour - so fake. I knew it before I even met my neighbour: I knew he wouldn't like me, and every interaction just proves it. </p>
-  <figure style="margin: 18px 0 4px;">
-   <img src="https://www.kenreid.co.uk/img/photography/thumb/306.webp" alt="A concrete tower block shot from below against a clear blue sky, rows of windows receding upward" loading="lazy" style="width:100%; display:block; border-radius:8px;">
+  <figure class="kr-figure--solo">
+   <img src="https://www.kenreid.co.uk/img/photography/thumb/306.webp" alt="A concrete tower block shot from below against a clear blue sky, rows of windows receding upward" loading="lazy" class="kr-figure-img" width="400" height="266">
    <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
   </figure>
   <p class="kr-scene-note">Here, the person new to the neighbourhood already decided how the relationships with their neighbours would be, and took any evidence (even the neighbour being nice) as evidence for the neighbour hating them.</p>
@@ -843,8 +974,8 @@ link.appendChild(span);</code></pre>
 
  <p>You cannot trust your sense of having weighed the evidence fairly. It is a horrible fact to know about yourself and we're kind of stuck with that fact. What's worse, knowing this doesn't solve the problem. It's like recognizing you having a proclivity for a certain flavor of ice cream doesn't make you like all of them equally suddenly. But maybe it can help you try new flavors, if you take that next step. This metaphor is a bit stretched: what I mean is, try thinking of other perspectives thoroughly. Intellectual empathy; emotional, too. </p>
 
- <figure style="margin: 24px auto;">
-  <img src="https://www.kenreid.co.uk/img/photography/thumb/66.webp" alt="Stainless steel trays of gelato in a shop counter, chocolate chip, caramel swirl and nut flavours side by side" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+ <figure class="kr-figure--solo">
+  <img src="https://www.kenreid.co.uk/img/photography/thumb/66.webp" alt="Stainless steel trays of gelato in a shop counter, chocolate chip, caramel swirl and nut flavours side by side" loading="lazy" class="kr-figure-img" width="400" height="265">
   <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
  </figure>
 
@@ -880,9 +1011,6 @@ link.appendChild(span);</code></pre>
         </ol>
 
         
-
- <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
- <hr style="margin: 40px 0;">
  ]]></content:encoded>
     </item>
     <item>
@@ -1009,6 +1137,8 @@ link.appendChild(span);</code></pre>
             Glover, F. (1989). Tabu Search - Part I. <em>ORSA Journal on Computing</em>, 1(3), 190&ndash;206. <a href="https://doi.org/10.1287/ijoc.1.3.190" target="_blank" rel="noopener">https://doi.org/10.1287/ijoc.1.3.190</a>
           </li>
         </ol>
+
+        
 
  ]]></content:encoded>
     </item>
@@ -1153,6 +1283,8 @@ link.appendChild(span);</code></pre>
           </li>
         </ol>
 
+        
+
  ]]></content:encoded>
     </item>
     <item>
@@ -1290,6 +1422,8 @@ link.appendChild(span);</code></pre>
           </li>
         </ol>
 
+        
+
  ]]></content:encoded>
     </item>
     <item>
@@ -1425,6 +1559,8 @@ link.appendChild(span);</code></pre>
           </li>
         </ol>
 
+        
+
  ]]></content:encoded>
     </item>
     <item>
@@ -1482,7 +1618,7 @@ link.appendChild(span);</code></pre>
  <p>Genetic programming did well here because its operators fit the problem: laying a run of belts and connecting two points are single moves, so one step of the search covers ground that costs annealing a long chain of individually pointless edits. </p>
 
  <figure>
- <img src="https://www.kenreid.co.uk/blog/img/factorio-paper-12x12-ingame.webp" alt="A Factorio screenshot of the twelve by twelve benchmark instance: a square arena walled in two-deep stone, with a steel chest and inserter at the top right and a receiver at the bottom left. Yellow transport belts wind between tree stumps that act as obstacles, and a line of iron ore rides the belts along the route between the two." loading="lazy" style="width:100%; max-width:620px; display:block; margin:0 auto; border-radius:8px;">
+ <img src="https://www.kenreid.co.uk/blog/img/factorio-paper-12x12-ingame.webp" alt="A Factorio screenshot of the twelve by twelve benchmark instance: a square arena walled in two-deep stone, with a steel chest and inserter at the top right and a receiver at the bottom left. Yellow transport belts wind between tree stumps that act as obstacles, and a line of iron ore rides the belts along the route between the two." loading="lazy" class="kr-figure-img" style="max-width: 620px;" width="1100" height="1151">
  <figcaption class="figure-note">From <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:8k81kl-MbHgC" target="_blank" rel="noopener noreferrer">Reid et al. (2021)</a>. The twelve by twelve instance with obstacles, as the optimiser sees it: walls two cells thick, input top right, receiver bottom left, and the stumps are the cells you cannot build on. The ore on the belts is the fitness function happening.</figcaption>
  </figure>
 
@@ -1502,7 +1638,7 @@ link.appendChild(span);</code></pre>
  </div>
 
  <figure>
- <img src="https://www.kenreid.co.uk/blog/img/factorio-paper-encodings.webp" alt="A table of integer encodings. Negative numbers describe the problem: minus ten to minus seven are output directions, minus six a steel chest, minus five to minus two input directions, minus one a stone wall, and zero is empty. Positive numbers are the solution: one to four are belts facing north, east, south and west, and five to eight are underground belts in the same four directions." loading="lazy" style="width:100%; max-width:420px; display:block; margin:0 auto; border-radius:8px;">
+ <img src="https://www.kenreid.co.uk/blog/img/factorio-paper-encodings.webp" alt="A table of integer encodings. Negative numbers describe the problem: minus ten to minus seven are output directions, minus six a steel chest, minus five to minus two input directions, minus one a stone wall, and zero is empty. Positive numbers are the solution: one to four are belts facing north, east, south and west, and five to eight are underground belts in the same four directions." loading="lazy" class="kr-figure-img" style="max-width: 420px;" width="590" height="546">
  <figcaption class="figure-note">From <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:8k81kl-MbHgC" target="_blank" rel="noopener noreferrer">Reid et al. (2021)</a>. The encoding an optimiser reads and writes. Everything below zero is the problem and is fixed; everything above zero is the solution and is yours. A direction is not a separate field, it is baked into the number.</figcaption>
  </figure>
 
@@ -1606,26 +1742,30 @@ link.appendChild(span);</code></pre>
 
  <h2>The CSS owns the colours</h2>
 
- <p>I always enjoyed color theory in computer science. The RGB values, pixels (did you know it stands for "picture element"?), bitmaps vs JPEGs vs other formats, it's super interesting to me. On this website, the theme toggle cannot restyle a canvas the way it restyles text, and the first version of the ant post hardcoded its colours in JavaScript and looked wrong in one theme or the other. Every widget's colours live on its wrapper element as CSS custom properties, with a dark-theme override block, and the drawing code reads them fresh at draw time:</p>
+ <p>I always enjoyed color theory in computer science. The RGB values, pixels (did you know it stands for "picture element"?), bitmaps vs JPEGs vs other formats, it's super interesting to me. On this website, the theme toggle cannot restyle a canvas the way it restyles text, and the first version of the ant post hardcoded its colours in JavaScript and looked wrong in one theme or the other. Every widget's colours live on its wrapper element as CSS custom properties, set for both themes in one place in the stylesheet, and the little framework, <code>js/kr-viz.js</code>, reads them and hands them to the drawing code as <code>ctx.colors</code>. Before it existed, every post carried its own copy of the function that reads them: sixteen copies, in five slightly different versions. Here's the one that's left, and the observer that rereads it:</p>
 
-<pre><code class="language-javascript">function vizColors(el) {
-  var cs = getComputedStyle(el);
-  function v(name) { return cs.getPropertyValue(name).trim(); }
-  return {
-    series: [v('--viz-s1'), v('--viz-s2'), v('--viz-s3'), v('--viz-s4')],
-    ink: v('--viz-ink'), muted: v('--viz-muted'),
-    grid: v('--viz-grid'), surface: v('--viz-surface')
-  };
+<pre><code class="language-javascript">var TOKENS = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8',
+              'ink', 'muted', 'grid', 'surface', 'border', 'cell'];
+
+function readColors(el) {
+  var cs = getComputedStyle(el), out = {};
+  for (var i = 0; i &lt; TOKENS.length; i++) {
+    out[TOKENS[i]] = cs.getPropertyValue('--viz-' + TOKENS[i]).trim();
+  }
+  return out;
 }
 
-new MutationObserver(function () { draw(); })
-  .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });</code></pre>
+new MutationObserver(function () {
+  colors = readColors(root);
+  ctx.colors = colors;
+  redraw();
+}).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});</code></pre>
 
  <p>The observer redraws the moment <code>data-theme</code> gets toggled, so a running simulation changes palette mid-run. This has no practical value whatsoever. </p>
 
  <h2>Randomness must be reproducible</h2>
 
- <p><code>Math.random()</code> is banned from the demos. Every widget gets its randomness from mulberry32, a seeded generator:</p>
+ <p><code>Math.random()</code> is banned from the demos. Every widget gets its randomness from <code>ctx.rng()</code>, which is mulberry32, a seeded generator inside the framework:</p>
 
 <pre><code class="language-javascript">function mulberry32(seed) {
   var a = seed >>> 0;
@@ -1641,7 +1781,7 @@ new MutationObserver(function () { draw(); })
 
  <h2>Phones are the real test</h2>
 
- <p>No canvas ever gets a fixed rendered height now: height is computed from measured width, so narrow screens get a taller aspect instead of a squashed ribbon. Side-by-side panes stack vertically below ~480px, and sliders become full-width rows on small screens.</p>
+ <p>No canvas ever gets a fixed rendered height now: the framework computes height from measured width, so narrow screens get a taller aspect instead of a squashed ribbon. It also caps the pixel density at 2, because a 3x phone would otherwise redraw nine pixels for every one it shows, every frame, for detail nobody can see at that size. Side-by-side panes stack vertically below ~480px, and sliders become full-width rows on small screens.</p>
 
  <p>A canvas only gets <code>touch-action: none</code> if it has drag interaction, so chart canvases never trap a reader mid-scroll.</p>
 
@@ -1652,13 +1792,11 @@ new MutationObserver(function () { draw(); })
  <p>What every new interactive post starts from:</p>
 
  <ul>
- <li>A wrapper div carrying the <code>--viz-*</code> palette, light values plus a dark override block.</li>
- <li><code>vizColors()</code> read at draw time, plus a MutationObserver for theme flips.</li>
- <li><code>fitCanvas()</code> handling devicePixelRatio and re-running on resize.</li>
- <li>mulberry32 for every random draw, seeds visible near the top of the file.</li>
- <li>A requestAnimationFrame loop with a speed slider controlling work per frame, not frame rate.</li>
+ <li>A <code>.kr-viz</code> wrapper with empty slots for the toolbar, the sliders and the stat tiles, which the framework fills. The <code>--viz-*</code> palette comes from the stylesheet; a post that wants other series colours sets them on its own wrapper, in both themes.</li>
+ <li>One call: <code>KRViz.mount(target, {canvases, buttons, controls, stats, charts, init, step, draw})</code>. The post keeps <code>init</code>, <code>step</code> and <code>draw</code>, the algorithm and the drawing, as plain functions you can read in view-source. The framework does the rest: it sizes the canvases, rereads the colours on a theme flip, and runs the loop.</li>
+ <li><code>ctx.rng()</code> for every random draw, from a seed in the options.</li>
+ <li>Speed in steps per second, the same in every demo; the framework works out how many steps to run in each frame.</li>
  <li><code>role="img"</code> and a real <code>aria-label</code> on every canvas.</li>
- <li>A standalone single-file version of the demos in <code>blog/downloads/</code>.</li>
  </ul>
 
  <div class="faq-section">
@@ -1671,7 +1809,7 @@ new MutationObserver(function () { draw(); })
 
  <details class="faq-item">
  <summary>Don't the simulations drain phone batteries?</summary>
- <p>They only run while you press Run, and they do their work inside a requestAnimationFrame budget, so the browser throttles them in background tabs and off-screen. </p>
+ <p>They start by themselves, but only run while they're on screen: the framework pauses a demo when it scrolls out of view and picks it up again when it comes back, unless you paused it yourself. If your system asks for reduced motion, they wait for you to press Play. They also do their work inside a requestAnimationFrame budget, so the browser throttles them in background tabs. </p>
  </details>
 
  <details class="faq-item">
@@ -1716,7 +1854,7 @@ new MutationObserver(function () { draw(); })
 
  <p>A normal website with live data has a server that queries things when visitors arrive. A static site can't do that, but it has a loophole: the site is a git repository, and <em>anything that can commit to the repository can change the site</em>. So instead of fetching data per visit, a scheduled job fetches it once a week and commits the results as plain JSON files. The site stays static. Visitors' browsers read those JSON files with an ordinary fetch: same origin, no keys, no rate limits, nothing that can fail separately from the site itself.</p>
 
- <p>The whole pipeline is one workflow file and one Python script. The workflow is short: check out the repository, run the script, and commit if anything changed:</p>
+ <p>The whole pipeline is one workflow file and three Python scripts. The workflow checks out the repository, runs the two fetch scripts, checks what they wrote, and commits whatever changed (the comments are trimmed out here):</p>
 
 <pre><code class="language-yaml">name: Refresh live data
 
@@ -1728,54 +1866,102 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: live-data
+  cancel-in-progress: false
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FILES: >-
+        data/lastfm.json data/now.json data/lastfm-history.json
+        data/topalbums.json data/books.json data/reading.json
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Fetch live data
+      - name: Fetch listening and currently-reading
+        id: now
+        continue-on-error: true
         env:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
         run: python .github/scripts/refresh_now.py
 
-      - name: Commit if changed
+      - name: Refresh the read shelf
+        id: books
+        continue-on-error: true
+        run: python .github/scripts/refresh_books.py
+
+      - name: Validate the data files
+        id: validate
+        run: python .github/scripts/validate_data.py $FILES
+
+      - name: Commit what refreshed
+        if: always() &amp;&amp; steps.validate.outcome == 'success'
         run: |
-          FILES="data/lastfm.json data/now.json data/lastfm-history.json data/topalbums.json"
-          if git diff --quiet $FILES; then
+          if git diff --quiet -- $FILES; then
             echo "No change."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add $FILES
+          git add -- $FILES
           git commit -m "Refresh live data (Last.fm, Goodreads)"
-          git push
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin "HEAD:$GITHUB_REF_NAME"
+
+      - name: Fail if any source did not refresh
+        if: always()
+        env:
+          NOW: ${{ steps.now.outcome }}
+          BOOKS: ${{ steps.books.outcome }}
+          VALID: ${{ steps.validate.outcome }}
+        run: |
+          status=0
+          if [ "$NOW" != success ]; then
+            echo "::error::Last.fm / currently-reading refresh: $NOW (see 'Fetch listening and currently-reading')"
+            status=1
+          fi
+          if [ "$BOOKS" != success ]; then
+            echo "::error::Read-shelf refresh: $BOOKS (see 'Refresh the read shelf')"
+            status=1
+          fi
+          if [ "$VALID" != success ]; then
+            echo "::error::Data validation: $VALID; nothing was committed"
+            status=1
+          fi
+          exit $status
 </code></pre>
 
  <p>The <code>workflow_dispatch</code> line adds a manual "run now" button in GitHub's interface (which you will want the first dozen times), while the diff check means runs where nothing changed produce no commit at all.</p>
 
+ <p>Most of the rest is there for when something breaks. Both fetch steps are allowed to fail (<code>continue-on-error</code>), so a Goodreads outage doesn't stop the Last.fm numbers from landing, and the last step turns the run red afterwards so I still hear about it. Nothing is committed unless every file passes its schema in <code>data/schema/</code>, because the pages read these files with no fallback for a wrong shape. The robot and I both push to the same branch, hence the <code>git pull --rebase</code> before its push, and the concurrency group makes a manual run wait for a scheduled one instead of both committing the same files at once.</p>
+
  <h2>What the script gathers</h2>
 
- <p>The Python script makes a handful of HTTP requests. From the Last.fm API: my total play count, the most recent track, and my top albums of the past three months, which feed the homepage stat, the "now playing" strip, and the record crate on <a href="https://www.kenreid.co.uk/music.html">the music page</a> respectively. From Goodreads, which shut its API years ago but still publishes RSS feeds: my currently-reading shelf, parsed straight out of the XML. Everything goes into small JSON files under <code>data/</code>, the biggest a few kilobytes.</p>
+ <p>The first script, <code>refresh_now.py</code>, makes a handful of HTTP requests. From the Last.fm API: my total play count, the most recent track, and my top albums of the past three months, which feed the homepage stat, the "now playing" strip, and the record crate on <a href="https://www.kenreid.co.uk/music.html">the music page</a> respectively. From Goodreads, which shut its API years ago but still publishes RSS feeds: my currently-reading shelf, parsed straight out of the XML.</p>
+
+ <p>The second, <code>refresh_books.py</code>, reads the feed of my read shelf the same way and merges it into <code>data/books.json</code>, so a book I mark as read on Goodreads turns up on this site's reading pages by itself. The feed only reports the latest time I finished a book, so when I re-read something the script holds on to the earlier dates itself, because they exist nowhere else. It also writes <code>data/reading.json</code>, the books-read and reviews figures on the homepage. Everything goes into JSON files under <code>data/</code>, most of them a few kilobytes, apart from <code>books.json</code>, which holds every book I've marked read and weighs about 83 KB.</p>
 
  <p>Each run appends that week's play count to a rolling log, capped at ninety entries, which at one measurement a week is close to two years of history. </p>
 
  <figure>
- <img src="https://www.kenreid.co.uk/img/photography/thumb/12.webp" alt="A brindle Staffordshire terrier standing alert in woodland, looking at the camera" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+ <img src="https://www.kenreid.co.uk/img/photography/thumb/12.webp" alt="A brindle Staffordshire terrier standing alert in woodland, looking at the camera" loading="lazy" class="kr-figure-img" width="400" height="266">
  <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> A good fetcher.</figcaption>
  </figure>
 
  <h2>What the homepage shows</h2>
 
- <p>The strip under the hero is a single row of five things, and only three of them come from the robot. The book and the track are read straight out of <code>now.json</code>. The latest blog post and the latest short story come from <code>posts.json</code> and <code>stories.json</code>, which are written by build scripts when I publish rather than by the Action on a schedule. </p>
+ <p>The strip under the hero is a single row of up to four things, and only two of them come from the robot. The book and the track are read straight out of <code>now.json</code>. The latest short story comes from <code>stories.json</code>, which is an empty list until the first story goes up, so for now the strip leaves that card out. The latest blog post isn't in the strip at all, because the homepage has a whole section of its own for those.</p>
 
  <p>Last.fm distinguishes a track that is playing from one that was played, so the label switches between "Now playing" and "Last played" depending on whether I happen to be listening when you open the page, and the first version gets a little animated equaliser beside it. It is not accurate, because it is updated so infrequently, but it gives some flavor to the site and over time it's likely representative of me. Maybe.</p>
 
- <p>The fifth item, my most recent Bluesky post, is in no JSON file at all. Your browser fetches it from Bluesky's public API while the page loads. I've been tempted to remove it, as recently I've only posted new blogs to social media, but I hope I will return to posting random thoughts there again soon, making this a bit more useful than another place to see a new blog post (which is already on the index page!)</p>
+ <p>The third item, my most recent Bluesky post, is in no JSON file at all. Your browser fetches it from Bluesky's public API while the page loads. I've been tempted to remove it, as recently I've only posted new blogs to social media, but I hope I will return to posting random thoughts there again soon, making this a bit more useful than another place to see a new blog post (which is already on the index page!)</p>
 
  <h2>Design decisions </h2>
 
@@ -1801,12 +1987,12 @@ jobs:
 
  <details class="faq-item">
  <summary>Why weekly instead of hourly, or on every visit?</summary>
- <p>I could but it's not exactly vitally important and worth moving out of the free level of GitHub actions.</p>
+ <p>I could but it's hardly vitally important and worth moving out of the free level of GitHub actions.</p>
  </details>
 
  <details class="faq-item">
  <summary>What happens when the robot itself breaks?</summary>
- <p>GitHub emails me when a scheduled workflow fails.</p>
+ <p>GitHub emails me when a scheduled workflow fails, and the last step makes sure a run where only one source failed still counts as a failure.</p>
  </details>
 
  <details class="faq-item">
@@ -1816,10 +2002,6 @@ jobs:
  </div>
 
         
-
-
- <hr style="margin: 40px 0;">
- <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
  ]]></content:encoded>
     </item>
     <item>
@@ -2277,28 +2459,48 @@ jobs:
 
  <h2>The process</h2>
 
- <p>The site's theme is a single attribute on the root element: <code>&lt;html data-theme="dark"&gt;</code> or <code>&lt;html data-theme="light"&gt;</code>. The stylesheet's light styles are the defaults, and dark mode is a set of override rules scoped to that attribute. These are the first two rules of this site's stylesheet, verbatim:</p>
+ <p>The site's theme is a single attribute on the root element: <code>&lt;html data-theme="dark"&gt;</code> or <code>&lt;html data-theme="light"&gt;</code>. The stylesheet names every colour once, as a custom property (a token), with the light values as the defaults, and dark mode restates the same tokens under that attribute. These are the first two rules in this site's own stylesheet, after the imports, trimmed to the two colours that paint the page, plus the body rule that reads them:</p>
 
-<pre><code class="language-css">body {
-  color: #252525;
-  background-color: #ffffff; }
+<pre><code class="language-css">:root {
+  --kr-surface-0: #faf7f2;
+  --kr-ink: #252525; }
 
-[data-theme="dark"] body {
-  background-color: #1a1a1a;
-  color: #e2e2e2; }</code></pre>
+:root[data-theme="dark"] {
+  --kr-surface-0: #1a1a1a;
+  --kr-ink: #e2e2e2; }
 
- <p>The toggle button in the header flips the attribute, saves the choice to localStorage under a key (<code>kr-theme</code>), and everything restyles instantly, no reload. The new theme wipes out from the toggle button in a growing circle (a view transition clipped by a <code>clip-path</code> animation; browsers without the API get a brief cross-fade instead), and the browser's <code>theme-color</code> meta tag (which tints the address bar on phones) is updated to match. All of that is one short JavaScript file.</p>
+body {
+  color: var(--kr-ink);
+  background-color: var(--kr-surface-0); }</code></pre>
+
+ <p>The body rule has no dark version at all: the tokens change and it follows them. Some rules do still need a hand-written <code>[data-theme="dark"]</code> twin, wherever a colour was typed straight into a rule instead of read from a token. There are 189 of them, and a check in the build fails if that number ever goes up.</p>
+
+ <p>The toggle button in the header flips the attribute, saves the choice to localStorage under a key (<code>kr-theme</code>), and everything restyles instantly, no reload. The new theme wipes out from the toggle button in a growing circle (a view transition clipped by a <code>clip-path</code> animation). Browsers without the API, and anyone who has asked their system for reduced motion, get a cross-fade instead, and it takes over a second on purpose: a whole page changing brightness at once is rough on photosensitive eyes. The browser's <code>theme-color</code> meta tag (which tints the address bar on phones) is updated to match, and the button is named by what it does ("Switch to light mode") with no pressed state, because a label that changes plus a pressed state leaves a screen-reader user working out whether pressed means light or dark. All of that is one short JavaScript file.</p>
 
  <details class="code-example"><summary>The whole toggle (js/theme.js)</summary>
 <pre><code class="language-javascript">/**
- * theme.js — Site-wide dark/light mode toggle.
+ * theme.js: the site-wide dark/light mode toggle.
  *
  * Responsibilities:
  *   - Read stored preference from localStorage on DOMContentLoaded
  *   - Default to dark mode when there is no stored preference
  *   - Apply data-theme="dark"|"light" to &lt;html&gt;
- *   - Keep the #theme-toggle button aria state in sync
+ *   - Keep the #theme-toggle button's label on the action it performs
  *   - Persist choice across page loads
+ *
+ * The button is named by what it does ("Switch to light mode") and has no
+ * aria-pressed. A toggle button carries one or the other, never both: a
+ * label that changes with the state plus a pressed state is heard as
+ * "Switch to light mode, toggle button, pressed", which asks the reader to
+ * work out whether pressed means light or dark. Its sun and moon glyphs
+ * are inline SVG in the markup (shared-components.js, KR_THEME_ICONS),
+ * swapped by CSS on data-theme, so nothing here touches its contents.
+ *
+ * The switch itself is a circular reveal: the new theme washes across the
+ * page from the button that was pressed, using the View Transitions API
+ * (document.startViewTransition, same-document form). Where that is not
+ * supported, or where the reader has asked for reduced motion, it falls
+ * back to the older slow cross-fade driven by the .theme-switching class.
  *
  * Flash-of-wrong-theme (FODT) prevention is handled by a tiny inline
  * script injected into every page's &lt;head&gt; (see the kr-theme check).
@@ -2321,32 +2523,68 @@ jobs:
 
     // Keep the browser UI (mobile address bar etc.) matching the page background.
     var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', dark ? '#1a1a1a' : '#ffffff');
+    if (meta) meta.setAttribute('content', dark ? '#1a1a1a' : '#faf7f2');
 
     var btn = document.getElementById('theme-toggle');
     if (!btn) return;
-    btn.setAttribute('aria-pressed', String(dark));
-    btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
-    btn.setAttribute('title',      dark ? 'Switch to light mode' : 'Switch to dark mode');
+    var action = dark ? 'Switch to light mode' : 'Switch to dark mode';
+    btn.removeAttribute('aria-pressed');
+    btn.setAttribute('aria-label', action);
+    btn.setAttribute('title', action);
+  }
+
+  function reducedMotion() {
+    return window.matchMedia &amp;&amp;
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  /* The circle has to reach the farthest corner of the viewport from the
+     button, whichever corner that is. */
+  function revealRadius(x, y) {
+    var w = window.innerWidth, h = window.innerHeight;
+    return Math.hypot(Math.max(x, w - x), Math.max(y, h - y));
   }
 
   document.addEventListener('DOMContentLoaded', function () {
     apply(stored() || DEFAULT_THEME);
 
-    // Delegated click — works even if button is injected after this script runs
+    // Delegated, so it works although the button is injected after this runs.
     var switchTimer = null;
     document.addEventListener('click', function (e) {
       var btn = e.target.closest ? e.target.closest('#theme-toggle') : null;
       if (!btn) return;
       var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      // Cross-fade the swap (CSS scopes transitions to .theme-switching)
-      document.documentElement.classList.add('theme-switching');
-      if (switchTimer) clearTimeout(switchTimer);
-      switchTimer = setTimeout(function () {
-        document.documentElement.classList.remove('theme-switching');
-      }, 350);
       save(next);
-      apply(next);
+
+      var canReveal = typeof document.startViewTransition === 'function' &amp;&amp; !reducedMotion();
+      if (!canReveal) {
+        // Cross-fade the swap (CSS scopes transitions to .theme-switching);
+        // kept slow so the full-page luminance change is gentle on
+        // photosensitive users
+        document.documentElement.classList.add('theme-switching');
+        if (switchTimer) clearTimeout(switchTimer);
+        switchTimer = setTimeout(function () {
+          document.documentElement.classList.remove('theme-switching');
+        }, 1100);
+        apply(next);
+        return;
+      }
+
+      // Circle origin: the button's centre, in viewport pixels. Written to
+      // custom properties so the CSS clip-path can read them.
+      var r = btn.getBoundingClientRect();
+      var x = r.left + r.width / 2;
+      var y = r.top + r.height / 2;
+      var root = document.documentElement;
+      root.style.setProperty('--kr-reveal-x', x + 'px');
+      root.style.setProperty('--kr-reveal-y', y + 'px');
+      root.style.setProperty('--kr-reveal-r', revealRadius(x, y) + 'px');
+      root.classList.add('kr-theme-reveal');
+
+      var vt = document.startViewTransition(function () { apply(next); });
+      vt.finished.catch(function () {}).then(function () {
+        root.classList.remove('kr-theme-reveal');
+      });
     });
   });
 }());</code></pre>
@@ -2370,7 +2608,7 @@ jobs:
  <p>Inline scripts in the head are render-blocking: the browser stops and runs them before painting a single pixel. Normally that's why performance guides tell you never to put scripts there. I broke the rules here because I made sure it's super efficient (it runs in well under a millisecond) and by doing the one job that must happen before paint: stamping the saved theme onto the root element to prevent harming the corneas of my few thousand readers (although the idea of my code having the power to burn eyeballs across the globe is kind of cool sounding). By the time the browser paints, the attribute is already correct, and there is nothing to flash. The <code>try/catch</code> is for browsers that block localStorage entirely; they get the default, which on this site is dark, on the fact that a light flash in a dark room is worse than a dark flash in a bright one.</p>
 
  <figure>
- <img src="https://www.kenreid.co.uk/img/photography/thumb/20.webp" alt="Old wooden floorboards in near darkness, low light catching the grain, black and white" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+ <img src="https://www.kenreid.co.uk/img/photography/thumb/20.webp" alt="Old wooden floorboards in near darkness, low light catching the grain, black and white" loading="lazy" class="kr-figure-img" width="400" height="266">
  <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
  </figure>
 
@@ -2416,20 +2654,16 @@ frame.contentWindow.postMessage(
 
  <details class="faq-item">
  <summary>Why one data attribute instead of a CSS class?</summary>
- <p>Near-total taste. An attribute reads as "this page has one theme state" while classes invite accumulating several. It also keeps theme selectors visually distinct from styling classes in the stylesheet, which after a few hundred override rules matters more than I expected.</p>
+ <p>Near-total taste. An attribute reads as "this page has one theme state" while classes invite accumulating several. It also keeps theme selectors visually distinct from styling classes in the stylesheet, which after a couple of hundred dark rules matters more than I expected.</p>
  </details>
 
  <details class="faq-item">
  <summary>How much CSS did dark mode actually take?</summary>
- <p>More than the tutorials imply: this site's dark theme is hundreds of override rules accumulated over time, because a template built light-first has hardcoded colours everywhere. Building theme-aware from day one (ideally with colour variables) is dramatically less work than retrofitting.</p>
+ <p>More than the tutorials imply: this site's dark theme grew as hundreds of override rules, because a template built light-first has hardcoded colours everywhere. Most of those have since become colour variables restated in one dark block, with 189 hand-written dark rules left over. Building theme-aware from day one (ideally with colour variables) is dramatically less work than retrofitting.</p>
  </details>
  </div>
 
         
-
-
- <hr style="margin: 40px 0;">
- <p style="text-align: center;"><a class="post-cta" href="https://www.kenreid.co.uk/blog.html">Back to all posts</a></p>
  ]]></content:encoded>
     </item>
     <item>
@@ -3634,7 +3868,7 @@ frame.contentWindow.postMessage(
       <link>https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html</link>
       <guid>https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html</guid>
       <pubDate>Tue, 04 Aug 2026 00:00:00 +0000</pubDate>
-      <description>Every post on this blog carries around eighty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.</description>
+      <description>Every post on this blog carries a pile of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.</description>
       <category>technology</category>
       <category>writing</category>
     </item>
@@ -3668,7 +3902,7 @@ frame.contentWindow.postMessage(
       <link>https://www.kenreid.co.uk/blog/blog-engine-in-one-json-file.html</link>
       <guid>https://www.kenreid.co.uk/blog/blog-engine-in-one-json-file.html</guid>
       <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
-      <description>No database, no CMS, no Jekyll: this blog&#x27;s search, tag filters, pagination, read times, and related posts all hang off one JSON file and two Python scripts.</description>
+      <description>No database, no CMS, no Jekyll: this blog&#x27;s search, filters, pagination, read times, and related posts all hang off one JSON file and the Python scripts that run when I publish.</description>
       <category>technology</category>
       <category>writing</category>
     </item>
@@ -3711,7 +3945,7 @@ frame.contentWindow.postMessage(
       <link>https://www.kenreid.co.uk/blog/putting-my-photos-on-a-map.html</link>
       <guid>https://www.kenreid.co.uk/blog/putting-my-photos-on-a-map.html</guid>
       <pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
-      <description>239 of my photographs plotted on an interactive world map, this is how the photo map works.</description>
+      <description>264 of my photographs plotted on an interactive world map, this is how the photo map works.</description>
       <category>technology</category>
       <category>photography</category>
     </item>
@@ -3728,7 +3962,7 @@ frame.contentWindow.postMessage(
       <link>https://www.kenreid.co.uk/blog/reading-this-site-offline.html</link>
       <guid>https://www.kenreid.co.uk/blog/reading-this-site-offline.html</guid>
       <pubDate>Sun, 12 Jul 2026 00:00:00 +0000</pubDate>
-      <description>This site now works offline: a ~100-line service worker, no framework, no build step. Here&#x27;s how.</description>
+      <description>This site now works offline: one hand-written service worker, no framework, no build step. Here&#x27;s how.</description>
       <category>technology</category>
     </item>
     <item>

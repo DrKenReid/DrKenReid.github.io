@@ -6,23 +6,27 @@
  * Bootstrap and the ClassyNav / jarallax / scrollUp plugins bundled in
  * js/alime.bundle.js:
  *
- *   1. Preloader dismissal
- *   2. Primary navigation (a drop-in replacement for the ClassyNav plugin)
- *   3. Sticky header
- *   4. Parallax hero backgrounds (.jarallax)
- *   5. Scroll-to-top control (#scrollUp)
- *   6. href="#" click guard
+ *   1. Primary navigation (a drop-in replacement for the ClassyNav plugin)
+ *   2. Sticky header
+ *   3. Parallax hero backgrounds (.jarallax)
+ *   4. Scroll-to-top control (#scrollUp)
+ *   5. href="#" click guard
  *
  * Safe to load on every page: each piece is a no-op when the markup it
- * drives is absent. Nothing here touches style.css, so the class names and
- * DOM shape below deliberately mirror what the stylesheet already expects
- * (breakpoint-on / breakpoint-off, menu-on, has-down, cn-dropdown-item,
- * dd-trigger, #scrollUp).
+ * drives is absent. The class names below mirror what the stylesheet
+ * expects (breakpoint-on / breakpoint-off, menu-on, has-down,
+ * cn-dropdown-item, dd-trigger, #scrollUp), plus two this file adds for
+ * the header's states: .sticky and .kr-menu-open on .main-header-area.
  *
  * The header markup is injected by shared-components.js, which calls
  * window.krInitNav() as soon as it exists. The DOMContentLoaded fallback
  * below covers any page that builds the header another way; krInitNav() is
  * idempotent, so calling it twice is harmless.
+ *
+ * The page preloader that used to be section 1 is gone: it hid a page that
+ * was already readable behind a spinner. No rule styles its markup any
+ * more, so a copy left in an older draft is an empty div, and
+ * generate_post_head.py strips it at publish.
  */
 (function () {
     'use strict';
@@ -67,8 +71,14 @@
     }
 
     // Make a non-button element behave like one for mouse and keyboard.
+    // A real <button> needs only the click listener: it already turns
+    // Enter and Space into a click, and a keydown handler as well would
+    // run the action twice.
     function clickable(el, handler) {
         el.addEventListener('click', handler);
+        if (el.tagName === 'BUTTON') return;
+        el.setAttribute('role', 'button');
+        el.setAttribute('tabindex', '0');
         el.addEventListener('keydown', function (e) {
             if (!isActivationKey(e)) return;
             e.preventDefault();
@@ -77,50 +87,51 @@
     }
 
     // ------------------------------------------------------------------
-    // 1. Preloader
-    // ------------------------------------------------------------------
-    // Dismissed on DOM ready rather than window 'load', so content is not
-    // hidden behind it while images finish downloading. style.css also has
-    // a keyframe failsafe at 4s in case this never runs.
-
-    function initPreloader() {
-        var el = document.getElementById('preloader');
-        if (!el) return;
-
-        function remove() {
-            if (el.parentNode) el.parentNode.removeChild(el);
-        }
-
-        if (reduceMotion || !canAnimate) {
-            remove();
-            return;
-        }
-        el.animate([{ opacity: 1 }, { opacity: 0 }],
-            { duration: 400, easing: 'linear', fill: 'forwards' }).onfinish = remove;
-        // If the animation never fires (background tab, animation API
-        // quirks) the preloader must still not sit on top of the page.
-        setTimeout(remove, 1500);
-    }
-
-    // ------------------------------------------------------------------
-    // 2. Primary navigation
+    // 1. Primary navigation
     // ------------------------------------------------------------------
     // Replaces ClassyNav 1.1.0. The stylesheet drives every visual state, so
-    // this only has to reproduce the plugin's DOM contract:
+    // this reproduces the plugin's DOM contract:
     //
     //   .classy-nav-container  gets breakpoint-on (<=991px) / breakpoint-off
     //   .classy-menu           gets menu-on while the off-canvas menu is open
     //   .navbarToggler         gets active while the off-canvas menu is open
+    //   .main-header-area      gets kr-menu-open at the same time (the bar
+    //                          turns solid behind the open menu)
     //   li with a submenu      gets has-down (+ cn-dropdown-item / megamenu-item)
     //                          and a trailing <span class="dd-trigger">
-    //   li.has-down            gets active while its submenu is open
+    //   li.has-down            gets active and kr-sub-open while its submenu
+    //                          is open
     //
-    // On top of that it adds the keyboard support the plugin never had:
-    // the toggler, the close icon and every dd-trigger are reachable by Tab
-    // and operated with Enter/Space, Escape closes the off-canvas menu, and
-    // on desktop a dropdown opens when focus enters its parent item (the
-    // stylesheet only opens them on :hover, which left the submenus
-    // unreachable without a mouse).
+    // KEYBOARD
+    //   The menu button (.classy-navbar-toggler, a <button>) and every
+    //   dd-trigger work with Enter and Space. On a desktop a dropdown opens
+    //   when focus enters its parent item: the stylesheet only opens them on
+    //   :hover, and visibility:hidden keeps their links out of the Tab order.
+    //
+    // THE PHONE MENU'S FOCUS CONTRACT (breakpoint-on, 991px and under)
+    //   Closed: the panel is visibility:hidden (style.css, "Header and
+    //     chrome"), so none of its links is a Tab stop; the bar's own
+    //     controls (wordmark, theme toggle, menu button) are all that Tab
+    //     reaches before the page.
+    //   Opening: focus moves to the first link in the menu, and everything
+    //     outside the header (the skip link, <main>, the footer, anything
+    //     else under <body>) is made inert, so Tab cycles through the
+    //     header alone and a screen reader cannot wander into the page
+    //     under the menu. Elements that were already inert are left as
+    //     they were and stay inert afterwards.
+    //   Closing: the menu button again, Escape, a tap outside the menu,
+    //     crossing to the desktop layout, or the palette opening from the
+    //     menu's Search item. Every one of them lifts the inert and returns
+    //     focus to the menu button, except crossing to desktop (the button
+    //     is hidden there) and a page restored from the back/forward cache
+    //     with the menu still open (nothing had focus to return).
+    //   Submenus: at this width the whole Hobbies row opens its submenu
+    //     (its link goes nowhere, href="#") and carries aria-expanded; its
+    //     dd-trigger is only the chevron. Blog's link goes to the blog, so
+    //     its dd-trigger stays the separate, focusable toggle.
+    //
+    // window.krNavMenu = { open(), close(opts), isOpen() } for other chrome
+    // (the command palette) that must take over from the menu.
 
     var subCounter = 0;
 
@@ -130,6 +141,13 @@
             if (c.tagName === 'UL' || c.classList.contains('megamenu')) return c;
         }
         return null;
+    }
+
+    // A nav item's own link, if it is a placeholder (href="#") that exists
+    // only to open its submenu.
+    function placeholderLink(li) {
+        var a = li.firstElementChild;
+        return a && a.tagName === 'A' && a.getAttribute('href') === '#' ? a : null;
     }
 
     // Height animation standing in for jQuery's slideToggle().
@@ -161,6 +179,27 @@
         };
     }
 
+    // Makes every element outside `keep` inert: its siblings, its
+    // parent's siblings and so on up to <body>. Returns a function that
+    // undoes exactly that, leaving anything that was already inert alone.
+    function inertAround(keep) {
+        var changed = [];
+        for (var node = keep; node && node.parentElement && node !== document.body;
+            node = node.parentElement) {
+            var sibling = node.parentElement.firstElementChild;
+            for (; sibling; sibling = sibling.nextElementSibling) {
+                if (sibling === node || sibling.hasAttribute('inert') ||
+                    /^(SCRIPT|STYLE|LINK|TEMPLATE|NOSCRIPT)$/.test(sibling.tagName)) continue;
+                sibling.setAttribute('inert', '');
+                changed.push(sibling);
+            }
+        }
+        return function () {
+            for (var i = 0; i < changed.length; i++) changed[i].removeAttribute('inert');
+            changed = [];
+        };
+    }
+
     function initNav() {
         var nav = document.getElementById('alimeNav');
         if (!nav || nav.getAttribute('data-kr-nav') === '1') return;
@@ -172,9 +211,11 @@
 
         nav.setAttribute('data-kr-nav', '1');
 
+        var header = nav.closest('.header-area') || nav;
+        var bar = nav.closest('.main-header-area');
         var toggler = nav.querySelector('.classy-navbar-toggler');
         var burger = nav.querySelector('.navbarToggler');
-        var closeIcon = nav.querySelector('.classycloseIcon');
+        var releaseInert = null;
 
         if (!menu.id) menu.id = 'kr-primary-menu';
 
@@ -203,12 +244,18 @@
 
             var trigger = document.createElement('span');
             trigger.className = 'dd-trigger';
-            trigger.setAttribute('role', 'button');
-            trigger.setAttribute('tabindex', '0');
-            trigger.setAttribute('aria-expanded', 'false');
-            trigger.setAttribute('aria-controls', sub.id);
-            trigger.setAttribute('aria-label',
-                (link.textContent || 'Submenu').trim() + ' submenu');
+            if (placeholderLink(li)) {
+                // The row itself is the control (see the focus contract);
+                // a second Tab stop saying the same thing would be noise.
+                trigger.setAttribute('aria-hidden', 'true');
+            } else {
+                trigger.setAttribute('role', 'button');
+                trigger.setAttribute('tabindex', '0');
+                trigger.setAttribute('aria-expanded', 'false');
+                trigger.setAttribute('aria-controls', sub.id);
+                trigger.setAttribute('aria-label',
+                    (link.textContent || 'Submenu').trim() + ' submenu');
+            }
             li.appendChild(trigger);
         }
 
@@ -230,6 +277,10 @@
             return container.classList.contains('breakpoint-off');
         }
 
+        function isOpen() {
+            return menu.classList.contains('menu-on');
+        }
+
         function toggleSubmenu(li, force) {
             var sub = childSubmenu(li);
             if (!sub) return;
@@ -242,7 +293,13 @@
                 open || li.getAttribute('data-kr-page-active') === '1');
 
             var trigger = li.querySelector('.dd-trigger');
-            if (trigger) trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (trigger && trigger.hasAttribute('aria-expanded')) {
+                trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+            }
+            var row = placeholderLink(li);
+            if (row && row.hasAttribute('aria-expanded')) {
+                row.setAttribute('aria-expanded', open ? 'true' : 'false');
+            }
             slide(sub, open, DROPDOWN_SPEED);
         }
 
@@ -251,74 +308,136 @@
             for (var k = 0; k < open.length; k++) toggleSubmenu(open[k], false);
         }
 
-        function setMenu(open) {
+        // Placeholder rows are buttons at phone width and plain (inert)
+        // links on a desktop, where hover and focus open their dropdowns.
+        function applyRowRoles(desktop) {
+            var owners = nav.querySelectorAll('.classynav li.has-down');
+            for (var k = 0; k < owners.length; k++) {
+                var row = placeholderLink(owners[k]);
+                var sub = childSubmenu(owners[k]);
+                if (!row || !sub) continue;
+                if (desktop) {
+                    row.removeAttribute('role');
+                    row.removeAttribute('aria-expanded');
+                    row.removeAttribute('aria-controls');
+                } else {
+                    row.setAttribute('role', 'button');
+                    row.setAttribute('aria-controls', sub.id);
+                    row.setAttribute('aria-expanded',
+                        owners[k].classList.contains('kr-sub-open') ? 'true' : 'false');
+                }
+            }
+        }
+
+        /**
+         * Opens or closes the phone menu. opts.returnFocus (default true)
+         * sends focus back to the menu button on close; see the contract
+         * above for the two paths that pass false.
+         */
+        function setMenu(open, opts) {
+            if (open === isOpen()) return;
             menu.classList.toggle('menu-on', open);
+            if (bar) bar.classList.toggle('kr-menu-open', open);
             if (burger) burger.classList.toggle('active', open);
             if (toggler) {
                 toggler.setAttribute('aria-expanded', open ? 'true' : 'false');
                 toggler.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
             }
+            if (open) {
+                releaseInert = inertAround(header);
+                // The panel is visible from this frame on (its visibility
+                // has no delay on the way in), so the link can take focus
+                // now; preventScroll because the panel is still sliding in.
+                // The header's CSS keeps visibility out of the links'
+                // transitions, but a link that ever transitions it again
+                // (a `transition: all` anywhere up the cascade) refuses
+                // focus for that one frame, so it is asked again on the
+                // next rather than the menu opening with nothing focused.
+                var first = menu.querySelector('.classynav a[href]');
+                if (first) {
+                    first.focus({ preventScroll: true });
+                    if (document.activeElement !== first) {
+                        window.requestAnimationFrame(function () {
+                            if (isOpen()) first.focus({ preventScroll: true });
+                        });
+                    }
+                }
+                return;
+            }
+            if (releaseInert) releaseInert();
+            releaseInert = null;
+            var returnFocus = !opts || opts.returnFocus !== false;
+            if (returnFocus && toggler && !isDesktop()) toggler.focus({ preventScroll: true });
         }
 
-        // --- off-canvas toggle + close icon ---
+        // --- the menu button ---
         if (toggler) {
-            toggler.setAttribute('role', 'button');
-            toggler.setAttribute('tabindex', '0');
             toggler.setAttribute('aria-controls', menu.id);
             toggler.setAttribute('aria-expanded', 'false');
             toggler.setAttribute('aria-label', 'Open menu');
             clickable(toggler, function () {
-                setMenu(!menu.classList.contains('menu-on'));
-            });
-        }
-        if (closeIcon) {
-            closeIcon.setAttribute('role', 'button');
-            closeIcon.setAttribute('tabindex', '0');
-            closeIcon.setAttribute('aria-label', 'Close menu');
-            clickable(closeIcon, function () {
-                setMenu(false);
-                if (toggler) toggler.focus();
+                setMenu(!isOpen());
             });
         }
 
-        // --- submenu triggers (delegated: renderHeader adds recent-post
-        //     items to the Blog dropdown after this runs) ---
+        // --- submenu triggers and placeholder rows (delegated: renderHeader
+        //     adds recent-post items to the Blog dropdown after this runs) ---
         function triggerFrom(target) {
             return target && target.closest ? target.closest('.dd-trigger') : null;
         }
+        function rowFrom(target) {
+            if (isDesktop() || !target || !target.closest) return null;
+            var a = target.closest('.classynav li.has-down > a[href="#"]');
+            return a && childSubmenu(a.parentNode) ? a : null;
+        }
         nav.addEventListener('click', function (e) {
             var trigger = triggerFrom(e.target);
-            if (!trigger) return;
+            var row = trigger ? null : rowFrom(e.target);
+            if (!trigger && !row) return;
             e.preventDefault();
-            toggleSubmenu(trigger.parentNode);
+            toggleSubmenu((trigger || row).parentNode);
         });
         nav.addEventListener('keydown', function (e) {
             if (!isActivationKey(e)) return;
             var trigger = triggerFrom(e.target);
-            if (!trigger) return;
-            e.preventDefault();
-            toggleSubmenu(trigger.parentNode);
+            if (trigger) {
+                e.preventDefault();
+                toggleSubmenu(trigger.parentNode);
+                return;
+            }
+            // Enter on a link already fires the click above; a role=button
+            // row also has to answer Space, which a link ignores.
+            if (e.key !== 'Enter' && rowFrom(e.target)) {
+                e.preventDefault();
+                toggleSubmenu(e.target.parentNode);
+            }
         });
 
         // --- Escape closes the off-canvas menu ---
         document.addEventListener('keydown', function (e) {
             if (e.key !== 'Escape' && e.key !== 'Esc') return;
-            if (!menu.classList.contains('menu-on')) return;
+            if (!isOpen()) return;
             setMenu(false);
-            if (toggler) toggler.focus();
         });
 
         // --- a tap outside the open menu closes it ---
-        // On a phone the menu covers part of the page, and the close icon is
-        // a small target in the corner; tapping the page is what most people
-        // try first. The toggler is excluded because its own handler already
-        // toggles, and a tap on it would otherwise close and reopen.
+        // The dimmed page beside the panel is what most people tap first.
+        // The menu button toggles by itself, and the theme toggle is a
+        // header control the reader may want while the menu is open, so a
+        // tap on either is not "outside".
         document.addEventListener('click', function (e) {
-            if (!menu.classList.contains('menu-on')) return;
+            if (!isOpen()) return;
             var t = e.target;
             if (!t || !t.closest) return;
-            if (t.closest('.classy-menu') || t.closest('.classy-navbar-toggler')) return;
+            if (t.closest('.classy-menu, .classy-navbar-toggler, #theme-toggle')) return;
             setMenu(false);
+        });
+
+        // --- a page restored from the back/forward cache ---
+        // Tapping a menu link leaves the menu open as the page unloads;
+        // coming Back would otherwise restore it open over an inert page.
+        window.addEventListener('pageshow', function (e) {
+            if (e.persisted && isOpen()) setMenu(false, { returnFocus: false });
         });
 
         // --- desktop: open a dropdown when focus enters its parent item ---
@@ -377,24 +496,33 @@
             // submenu opened on a phone-width viewport does not leave the
             // desktop bar showing a stray current-page marker.
             if (desktop) {
-                setMenu(false);
+                setMenu(false, { returnFocus: false });
                 closeAllSubmenus();
             } else {
                 hideFocusDropdown();
             }
+            applyRowRoles(desktop);
         }
 
         applyBreakpoint();
         window.addEventListener('resize', throttled(applyBreakpoint));
+
+        window.krNavMenu = {
+            open: function () { if (!isDesktop()) setMenu(true); },
+            close: function (opts) { setMenu(false, opts); },
+            isOpen: isOpen
+        };
     }
 
     window.krInitNav = initNav;
 
     // ------------------------------------------------------------------
-    // 3. Sticky header
+    // 2. Sticky header
     // ------------------------------------------------------------------
-    // The header is injected after this file runs, so the element is looked
-    // up lazily and re-looked-up if it is ever replaced.
+    // .sticky on .main-header-area as soon as the page leaves the top: the
+    // bar trades its scrim for a frosted surface (style.css, "Header and
+    // chrome"). The header is injected after this file runs, so the element
+    // is looked up lazily and re-looked-up if it is ever replaced.
 
     function initSticky() {
         var header = null;
@@ -412,7 +540,7 @@
     }
 
     // ------------------------------------------------------------------
-    // 4. Parallax hero backgrounds
+    // 3. Parallax hero backgrounds
     // ------------------------------------------------------------------
     // Stands in for jarallax 1.10.6 at speed 0.5, which is all the site used
     // it for, and lands the background in the same place the plugin did:
@@ -494,7 +622,7 @@
     }
 
     // ------------------------------------------------------------------
-    // 5. Scroll-to-top
+    // 4. Scroll-to-top
     // ------------------------------------------------------------------
     // Same element the scrollUp plugin built (#scrollUp is already styled in
     // style.css), minus the inline positioning the plugin duplicated and
@@ -551,7 +679,7 @@
     }
 
     // ------------------------------------------------------------------
-    // 6. href="#" click guard
+    // 5. href="#" click guard
     // ------------------------------------------------------------------
     // Delegated, so it also covers the injected nav's placeholder parents.
 
@@ -568,7 +696,6 @@
     initSticky();
 
     ready(function () {
-        initPreloader();
         initNav();
         initParallax();
         initScrollUp();

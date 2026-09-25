@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
  <meta charset="UTF-8">
  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -10,8 +10,14 @@
  <meta property="og:title" content="Particle Swarm, Live">
  <meta property="og:description" content="An interactive particle swarm optimiser in your browser">
  <meta property="og:image" content="https://www.kenreid.co.uk/img/og/particle-swarm-live.jpg">
+ <meta property="og:image:width" content="1200">
+ <meta property="og:image:height" content="630">
+ <meta property="og:image:alt" content="Particle Swarm, Live">
  <meta property="og:url" content="https://www.kenreid.co.uk/blog/particle-swarm-live.html">
  <meta property="og:type" content="article">
+ <meta property="og:site_name" content="Ken Reid">
+ <meta property="og:locale" content="en_GB">
+ <meta property="article:published_time" content="2026-08-11">
  <meta name="twitter:card" content="summary_large_image">
  <meta name="twitter:title" content="Particle Swarm, Live">
  <meta name="twitter:description" content="An interactive particle swarm optimiser in your browser">
@@ -24,33 +30,59 @@
  <meta name="DC.title" content="Particle Swarm, Live">
  <meta name="DC.creator" content="Kenneth N. Reid">
  <meta name="DC.date" content="2026-08-11">
- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
- <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+ <script defer src="../js/analytics.js"></script>
  <link rel="icon" href="../img/core-img/favicon.png">
  <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
  <meta name="theme-color" content="#1a1a1a">
  <link rel="manifest" href="../manifest.json">
- <link rel="preload" as="image" href="img/pso/pso-hero.webp">
- <link rel="stylesheet" href="../style.min.css">
+ <link rel="preload" as="image" href="img/pso/pso-hero.webp" fetchpriority="high">
+ <link rel="stylesheet" href="../style.min.css?v=20260923a">
  <link rel="canonical" href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">
  <script type="application/ld+json">
  {
- "@context": "https://schema.org",
- "@type": "BlogPosting",
- "headline": "Particle Swarm, Live",
- "description": "An interactive particle swarm optimiser in your browser",
- "image": "https://www.kenreid.co.uk/img/og/particle-swarm-live.jpg",
- "author": {
- "@type": "Person",
- "name": "Ken Reid",
- "url": "https://www.kenreid.co.uk"
- },
- "datePublished": "2026-08-11",
- "publisher": {
- "@type": "Person",
- "name": "Ken Reid"
- },
- "keywords": ["particle swarm optimization", "swarm intelligence", "bird flocking", "interactive", "optimization"]
+   "@context": "https://schema.org",
+   "@type": "BlogPosting",
+   "mainEntityOfPage": {
+     "@type": "WebPage",
+     "@id": "https://www.kenreid.co.uk/blog/particle-swarm-live.html"
+   },
+   "url": "https://www.kenreid.co.uk/blog/particle-swarm-live.html",
+   "headline": "Particle Swarm, Live",
+   "description": "An interactive particle swarm optimiser in your browser",
+   "image": {
+     "@type": "ImageObject",
+     "url": "https://www.kenreid.co.uk/img/og/particle-swarm-live.jpg",
+     "width": 1200,
+     "height": 630
+   },
+   "datePublished": "2026-08-11",
+   "dateModified": "2026-08-11",
+   "author": {
+     "@type": "Person",
+     "@id": "https://www.kenreid.co.uk/#ken",
+     "name": "Ken Reid",
+     "url": "https://www.kenreid.co.uk/"
+   },
+   "publisher": {
+     "@type": "Person",
+     "@id": "https://www.kenreid.co.uk/#ken",
+     "name": "Ken Reid",
+     "url": "https://www.kenreid.co.uk/"
+   },
+   "isPartOf": [
+     { "@id": "https://www.kenreid.co.uk/#website" },
+     {
+       "@type": "CreativeWorkSeries",
+       "@id": "https://www.kenreid.co.uk/series-algorithms-live.html#series",
+       "name": "Algorithms, Live",
+       "url": "https://www.kenreid.co.uk/series-algorithms-live.html"
+     }
+   ],
+   "inLanguage": "en-GB",
+   "articleSection": "Data & AI",
+   "wordCount": 1617,
+   "timeRequired": "PT8M",
+   "keywords": ["particle swarm optimization", "swarm intelligence", "bird flocking", "interactive", "optimization"]
  }
  </script>
  <script type="application/ld+json">
@@ -89,12 +121,10 @@
    /* Particular to this post's widget. */
    .kr-viz canvas:active{ cursor:grabbing; }
  </style>
- <script defer src="../js/theme.js"></script>
- <script defer src="../js/palette.js"></script>
+ <script defer src="../js/theme.js?v=20260923a"></script>
+ <script defer src="../js/palette.js?v=20260923a"></script>
 </head>
 <body>
- <div id="preloader"><div class="loader"></div></div>
-
  <div id="header-section"></div>
 
  <main id="main-content">
@@ -107,7 +137,7 @@
         <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
         <li class="breadcrumb-item active" aria-current="page">Particle Swarm, Live</li>
       </ol></nav>
-      <p class="kr-opener__kicker">Data &amp; AI &middot; 11 August 2026 &middot; 8 min read</p>
+      <p class="kr-opener__kicker">Data &amp; AI &middot; <time datetime="2026-08-11">11 August 2026</time> &middot; 8 min read</p>
       <p class="kr-opener__title page-title">Particle Swarm, Live</p>
       <p class="kr-opener__standfirst">An interactive particle swarm optimiser in your browser: a flock of dots hunts a landscape none of them can see, steered by private memory and a single piece of gossip, and the sliders let you collapse the swarm on purpose.</p>
     </div>
@@ -246,9 +276,10 @@
         <div class="related-posts">
           <h2>Related posts</h2>
           <div class="row related-posts-grid">
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="differential-evolution-live.html" class="blog-card">
-                <div class="blog-card-img"><img src="../blog/img/diffevo/diffevo-hero.webp" alt="Differential Evolution, Live" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/blog/img/diffevo/diffevo-hero.webp')">
+              <a href="differential-evolution-live.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../blog/img/diffevo/diffevo-hero.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
                   <div class="blog-card-date">22 August 2026 · 9 min read</div>
                   <h3 class="blog-card-title">Differential Evolution, Live</h3>
@@ -257,9 +288,10 @@
                 </div>
               </a>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="cma-es-live.html" class="blog-card">
-                <div class="blog-card-img"><img src="../blog/img/cmaes/cmaes-hero.webp" alt="CMA-ES, Live" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/blog/img/cmaes/cmaes-hero.webp')">
+              <a href="cma-es-live.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../blog/img/cmaes/cmaes-hero.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
                   <div class="blog-card-date">19 August 2026 · 7 min read</div>
                   <h3 class="blog-card-title">CMA-ES, Live</h3>
@@ -268,9 +300,10 @@
                 </div>
               </a>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="ant-colony-live.html" class="blog-card">
-                <div class="blog-card-img"><img src="../blog/img/antcolony/antcolony-hero.webp" alt="Ant Colony, Live" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/blog/img/antcolony/antcolony-hero.webp')">
+              <a href="ant-colony-live.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../blog/img/antcolony/antcolony-hero.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
                   <div class="blog-card-date">19 July 2026 · 6 min read</div>
                   <h3 class="blog-card-title">Ant Colony, Live</h3>
@@ -292,15 +325,15 @@
  <div id="footer-section"></div>
 
  <script src="../js/jquery.min.js"></script>
- <script src="../js/alime.bundle.js"></script>
- <script src="../js/site.js"></script>
- <script src="../js/lightbox.js"></script>
- <script src="../js/default-assets/active.js"></script>
- <script src="../js/shared-components.js"></script>
+ <script src="../js/alime.bundle.js?v=20260923a"></script>
+ <script src="../js/site.js?v=20260923a"></script>
+ <script src="../js/lightbox.js?v=20260923a"></script>
+ <script src="../js/default-assets/active.js?v=20260923a"></script>
+ <script src="../js/shared-components.js?v=20260923a"></script>
  <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
 renderFooter('footer-section');</script>
 
-<script src="../js/kr-viz.js"></script>
+<script src="../js/kr-viz.js?v=20260923a"></script>
  <script>
  /* ============================================================
     Particle Swarm, Live: the interactive demo for this post.

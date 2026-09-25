@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.kenreid.co.uk/data/schema/books.schema.json",
+  "title": "data/books.json",
+  "description": "Every book on the Goodreads read shelf, latest finish first. Rewritten weekly by .github/scripts/refresh_books.py from the public read-shelf RSS. Read in the browser by the reading calendar, shelf and figures (js/bookshelf.js), the cover wall on books.html (js/bookwall.js) and the reviews on literature.html. Keys are single letters because the whole file is fetched by every reader of those pages.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["t", "a", "r", "g", "w", "d"],
+    "additionalProperties": false,
+    "properties": {
+      "t": {
+        "type": "string",
+        "description": "Title as Goodreads gives it, series in brackets, curly quotes straightened to the house style."
+      },
+      "a": {
+        "type": "string",
+        "description": "Author, with runs of spaces collapsed."
+      },
+      "r": {
+        "type": "integer",
+        "enum": [0, 1, 2, 3, 4, 5],
+        "description": "My star rating; 0 when the book is unrated. The shelf styles each spine by it (kr-spine--r<n>)."
+      },
+      "v": {
+        "type": "integer",
+        "enum": [1],
+        "description": "Present, as 1, when I wrote a review. Absent otherwise; reading.json's reviews counts these."
+      },
+      "i": {
+        "type": "string",
+        "pattern": "^[0-9]{9}[0-9X]([0-9]{3})?$",
+        "description": "ISBN-10 or ISBN-13, when Goodreads has one. The cover wall looks covers up by it and shows only rated books that have one. The value on file is kept in preference to the feed's; those seeded from the Goodreads export are ISBN-13."
+      },
+      "g": {
+        "type": "string",
+        "pattern": "^[0-9]+$",
+        "description": "Goodreads book id. refresh_books.py matches feed items to records by it."
+      },
+      "w": {
+        "type": "string",
+        "pattern": "^[0-9]+$",
+        "description": "Goodreads review id: goodreads.com/review/show/<w> is my rating and review, where the shelf, the wall, Reading Now and the selected reviews link. Also the fallback match when an edition change gives the same review a new book id."
+      },
+      "d": {
+        "type": "string",
+        "pattern": "^([0-9]{4}/[0-9]{2}/[0-9]{2})?$",
+        "description": "Date I last finished it, YYYY/MM/DD. When e is 1 it is only the date the book was added. Empty only if Goodreads gave neither date."
+      },
+      "e": {
+        "type": "integer",
+        "enum": [1],
+        "description": "Present, as 1, when d is only the date added. The calendar and the year counts leave such a book out."
+      },
+      "p": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[0-9]{4}/[0-9]{2}/[0-9]{2}$"
+        },
+        "description": "Earlier finish dates, oldest first, one per earlier read. The feed reports only the latest finish and the full session list needs a login, so these exist only here and in this file's git history: refresh_books.py never drops one while the book is on file."
+      },
+      "m": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Consecutive weekly refreshes whose feed did not include this book. Absent while the feed carries it. A book missing once is kept unchanged (a short feed is more likely than a removal); refresh_books.py drops it when this would reach 2."
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "_about": "Budgets for .github/scripts/perf_budget.py: first-party bytes (uncompressed) and requests at load, per template and viewport, about 15% above the heaviest of four measurements on 2026-09-24. Raise one only for a change that is meant to cost more, and say why in the commit; the script's docstring has the procedure.",
+  "cls": 0.1,
+  "runs": 3,
+  "templates": {
+    "index": {
+      "page": "index.html",
+      "phone":   {"js": 530000, "css": 290000, "font": 90000,  "img": 620000,  "requests": 49},
+      "desktop": {"js": 530000, "css": 290000, "font": 90000,  "img": 730000,  "requests": 54}
+    },
+    "blog": {
+      "page": "blog.html",
+      "phone":   {"js": 550000, "css": 290000, "font": 100000, "img": 430000,  "requests": 45},
+      "desktop": {"js": 550000, "css": 290000, "font": 100000, "img": 640000,  "requests": 57}
+    },
+    "gallery": {
+      "page": "gallery.html",
+      "phone":   {"js": 560000, "css": 290000, "font": 90000,  "img": 1110000, "requests": 82},
+      "desktop": {"js": 560000, "css": 290000, "font": 90000,  "img": 1120000, "requests": 83}
+    },
+    "literature": {
+      "page": "literature.html",
+      "phone":   {"js": 570000, "css": 290000, "font": 90000,  "img": 150000,  "requests": 38},
+      "desktop": {"js": 570000, "css": 290000, "font": 90000,  "img": 150000,  "requests": 38}
+    },
+    "prose post": {
+      "page": "blog/rating-systems.html",
+      "phone":   {"js": 520000, "css": 290000, "font": 140000, "img": 230000,  "requests": 34},
+      "desktop": {"js": 520000, "css": 290000, "font": 140000, "img": 230000,  "requests": 34}
+    },
+    "interactive post": {
+      "page": "blog/particle-swarm-live.html",
+      "phone":   {"js": 550000, "css": 290000, "font": 140000, "img": 110000,  "requests": 32},
+      "desktop": {"js": 550000, "css": 290000, "font": 140000, "img": 110000,  "requests": 32}
+    }
+  }
+}

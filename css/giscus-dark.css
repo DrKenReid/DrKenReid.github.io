@@ -4,6 +4,14 @@
  * (Primer primitives, MIT — github.com/primer/primitives).
  * Canvas is transparent so the widget sits directly on the page. */
 
+/* Must match the page's own color-scheme (style.css, Brand system). When
+ * a frame's scheme differs from the element embedding it, the browser
+ * paints the frame an opaque canvas in its own scheme, so a frame left at
+ * the default (light) would sit on the dark page as a white panel. */
+:root {
+  color-scheme: dark;
+}
+
 main {
   --color-prettylights-syntax-comment: #8b949e;
   --color-prettylights-syntax-constant: #79c0ff;
@@ -45,17 +53,21 @@ main {
   --color-btn-active-bg: #303030;
   --color-btn-active-border: #6e7681;
   --color-btn-selected-bg: #1f1f1f;
+  /* White type on the filled button, so the fill is the deep red in this
+   * theme too, as the category chips are: white on #c53030 is 5.47:1, on
+   * #fc6060 it was 3.0:1. The #fc6060 of dark-theme links is for red
+   * type on a dark ground, not for a ground under white type. */
   --color-btn-primary-text: #ffffff;
-  --color-btn-primary-bg: #fc6060;
+  --color-btn-primary-bg: #c53030;
   --color-btn-primary-border: rgb(255 255 255 / 10%);
   --color-btn-primary-shadow: 0 0 transparent;
   --color-btn-primary-inset-shadow: 0 0 transparent;
-  --color-btn-primary-hover-bg: #c53030;
+  --color-btn-primary-hover-bg: #a52424;
   --color-btn-primary-hover-border: rgb(255 255 255 / 10%);
-  --color-btn-primary-selected-bg: #c53030;
+  --color-btn-primary-selected-bg: #a52424;
   --color-btn-primary-selected-shadow: 0 0 transparent;
   --color-btn-primary-disabled-text: rgb(255 255 255 / 50%);
-  --color-btn-primary-disabled-bg: rgb(252 96 96 / 45%);
+  --color-btn-primary-disabled-bg: rgb(197 48 48 / 45%);
   --color-btn-primary-disabled-border: rgb(255 255 255 / 10%);
   --color-action-list-item-default-hover-bg: rgb(177 186 196 / 12%);
   --color-segmented-control-bg: rgb(110 118 129 / 10%);

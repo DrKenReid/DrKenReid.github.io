@@ -1,34 +1,239 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <meta name="robots" content="noindex">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Offline - Ken Reid</title>
+  <meta name="description" content="You're offline. Posts saved on this device still open.">
+  <meta name="theme-color" content="#1a1a1a">
+  <link rel="icon" href="/img/core-img/favicon.png">
+  <!-- sw.js serves this page in place of whatever URL failed, so every path
+       here is root-absolute: a relative one would resolve against
+       /blog/whatever.html. The stylesheet is in the worker's precache, which
+       is what lets the page use the site's tokens with no connection. -->
+  <link rel="stylesheet" href="/style.min.css">
   <style>
     body {
       margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #1a1a1a;
-      color: #dcdcdc;
-      font-family: 'Poppins', system-ui, sans-serif;
-      text-align: center;
-      padding: 24px;
+      background: var(--kr-surface-warm, #faf7f2);
+      color: var(--kr-ink, #252525);
+      font-family: 'Poppins', 'Poppins Fallback', system-ui, sans-serif;
     }
-    h1 { color: #ffffff; margin: 0 0 6px; }
-    h1 span { color: #fc6060; }
-    p { color: #9a9a9a; line-height: 1.7; max-width: 34em; }
-    a { color: #fc6060; }
+
+    .kr-offline {
+      box-sizing: border-box;
+      max-width: 40rem;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: clamp(40px, 12vh, 120px) 16px 64px;
+    }
+    .kr-offline__brand {
+      display: inline-block;
+      margin-bottom: clamp(32px, 8vh, 64px);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      text-decoration: none;
+    }
+    .kr-offline__dot {
+      color: var(--kr-action, #c53030);
+      -webkit-text-fill-color: var(--kr-action, #c53030);
+    }
+    .kr-offline .kr-offline__eyebrow {
+      margin: 0 0 10px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--kr-eyebrow, #6b6459);
+    }
+    .kr-offline .kr-offline__title {
+      margin: 0;
+      font-family: 'Lora', 'Lora Fallback', Georgia, serif;
+      font-size: var(--kr-display, clamp(30px, 3.6vw, 50px));
+      font-weight: 600;
+      line-height: 1.15;
+      color: var(--kr-ink, #252525);
+    }
+    .kr-offline__rule {
+      display: block;
+      width: 56px;
+      height: 3px;
+      margin: 18px 0 22px;
+      border-radius: 2px;
+      background: var(--kr-brand-gradient, #c0392b);
+    }
+    .kr-offline .kr-offline__lede {
+      margin: 0 0 28px;
+      max-width: 34em;
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--kr-muted, #666666);
+    }
+    .kr-offline__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 20px;
+      align-items: center;
+      margin-bottom: 48px;
+      font-size: 15px;
+    }
+    .kr-offline a:not(.kr-offline__brand) {
+      color: var(--kr-action, #c53030);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .kr-offline a:not(.kr-offline__brand):hover {
+      color: var(--kr-action-hover, #a52424);
+    }
+    .kr-offline a.kr-offline__retry {
+      display: inline-block;
+      padding: 9px 20px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .kr-offline .kr-offline__saved h2 {
+      margin: 0 0 4px;
+      font-family: 'Lora', 'Lora Fallback', Georgia, serif;
+      font-size: var(--kr-display-sm, clamp(21px, 2.3vw, 29px));
+      font-weight: 600;
+      color: var(--kr-ink, #252525);
+    }
+    .kr-offline .kr-offline__count {
+      margin: 0 0 16px;
+      font-size: 13px;
+      color: var(--kr-muted, #666666);
+    }
+    .kr-offline__list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid var(--kr-hairline, #e7e0d6);
+    }
+    .kr-offline__list li {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--kr-hairline, #e7e0d6);
+    }
+    .kr-offline__list a {
+      font-family: 'Lora', 'Lora Fallback', Georgia, serif;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    .kr-offline .kr-offline__meta {
+      display: block;
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--kr-muted, #666666);
+    }
   </style>
 </head>
 <body>
-  <div>
-    <h1>You're offline<span>.</span></h1>
-    <p>This page isn't cached yet. Posts you've read before should still open &mdash;
-    try <a href="/blog.html">the blog</a> or go <a href="/index.html">home</a> once you're back online.</p>
-  </div>
+  <main class="kr-offline" id="main-content">
+    <a class="kr-offline__brand" href="/index.html" aria-label="Ken Reid, home"><span class="kr-gradient-text">Ken<span class="kr-offline__dot">.</span></span></a>
+
+    <p class="kr-offline__eyebrow">No connection</p>
+    <h1 class="kr-offline__title">You're offline</h1>
+    <span class="kr-offline__rule" aria-hidden="true"></span>
+    <p class="kr-offline__lede" id="kr-offline-lede">This page isn't saved on this device yet. Try again once you're back online.</p>
+
+    <div class="kr-offline__actions">
+      <!-- An empty href reloads the address that failed, which is the page
+           the reader wanted, not offline.html. Works without script. -->
+      <a class="kr-offline__retry" href="">Try again</a>
+      <a href="/index.html">Home</a>
+      <a href="/blog.html">Blog</a>
+    </div>
+
+    <section class="kr-offline__saved" id="kr-offline-saved" aria-labelledby="kr-offline-saved-title" hidden>
+      <h2 id="kr-offline-saved-title">Saved on this device</h2>
+      <p class="kr-offline__count" id="kr-offline-count"></p>
+      <ol class="kr-offline__list" id="kr-offline-list"></ol>
+    </section>
+  </main>
+
+  <script>
+  /* Lists the posts this browser can open offline: the pages cache sw.js
+     keeps (any cache whose name ends in -pages, so a version bump needs no
+     edit here), intersected with the precached posts.json for titles, dates
+     and read times. Newest save first: Cache.keys() is in write order and
+     the worker rewrites a page each time it is read, so the end of the list
+     is what was read most recently. */
+  (function () {
+    if (!('caches' in window)) return;
+    var section = document.getElementById('kr-offline-saved');
+    var list = document.getElementById('kr-offline-list');
+    var count = document.getElementById('kr-offline-count');
+
+    function savedPaths() {
+      return caches.keys().then(function (names) {
+        return Promise.all(names.filter(function (n) {
+          return /-pages$/.test(n);
+        }).map(function (n) {
+          return caches.open(n).then(function (c) { return c.keys(); });
+        }));
+      }).then(function (groups) {
+        var order = [];
+        groups.forEach(function (reqs) {
+          reqs.forEach(function (r) {
+            var path = new URL(r.url).pathname;
+            var at = order.indexOf(path);
+            if (at !== -1) order.splice(at, 1);
+            order.push(path);
+          });
+        });
+        return order.reverse();
+      });
+    }
+
+    function posts() {
+      return caches.match('/data/posts.json', {ignoreSearch: true}).then(function (res) {
+        return res ? res.json() : [];
+      });
+    }
+
+    function when(iso) {
+      var d = new Date(iso + 'T12:00:00');
+      if (isNaN(d)) return '';
+      return d.toLocaleDateString('en-GB', {day: 'numeric', month: 'long', year: 'numeric'});
+    }
+
+    Promise.all([savedPaths(), posts()]).then(function (got) {
+      var byPath = {};
+      (Array.isArray(got[1]) ? got[1] : []).forEach(function (p) {
+        if (p && p.url) byPath['/' + p.url.replace(/^\//, '')] = p;
+      });
+      var saved = got[0].map(function (path) { return byPath[path]; }).filter(Boolean);
+      if (!saved.length) return;
+
+      saved.forEach(function (p) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = '/' + p.url.replace(/^\//, '');
+        a.textContent = p.title;
+        var meta = document.createElement('span');
+        meta.className = 'kr-offline__meta';
+        meta.textContent = [when(p.date), p.readMinutes ? p.readMinutes + ' min read' : '']
+          .filter(Boolean).join(' · ');
+        li.appendChild(a);
+        li.appendChild(meta);
+        list.appendChild(li);
+      });
+      count.textContent = saved.length === 1
+        ? 'One post opens without a connection.'
+        : saved.length + ' posts open without a connection.';
+      document.getElementById('kr-offline-lede').textContent =
+        'This page isn\'t saved on this device yet. Try again once you\'re ' +
+        'back online, or read one of the posts below in the meantime.';
+      section.hidden = false;
+    }).catch(function () {});
+  })();
+  </script>
 </body>
 </html>

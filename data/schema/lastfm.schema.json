@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.kenreid.co.uk/data/schema/lastfm.schema.json",
+  "title": "data/lastfm.json",
+  "description": "The all-time Last.fm scrobble count, for the homepage's listening figure. Written weekly by .github/scripts/refresh_now.py; left as it was when the Last.fm fetch fails.",
+  "type": "object",
+  "required": ["scrobbles", "user", "updated"],
+  "additionalProperties": false,
+  "properties": {
+    "scrobbles": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total plays on the account (user.getinfo playcount)."
+    },
+    "user": {
+      "type": "string",
+      "description": "The Last.fm username the figure belongs to."
+    },
+    "updated": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Date of the refresh that wrote the file, YYYY-MM-DD."
+    }
+  }
+}

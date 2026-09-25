@@ -1,11 +1,13 @@
 {
+  "id": "/",
   "name": "Ken Reid",
   "short_name": "Ken Reid",
   "description": "Ken Reid — Data Scientist, photographer, guitarist, and avid reader.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#fc6060",
+  "background_color": "#1a1a1a",
+  "theme_color": "#1a1a1a",
   "icons": [
     {
       "src": "img/core-img/favicon.png",
@@ -21,6 +23,12 @@
       "src": "img/core-img/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "img/core-img/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "categories": ["personal", "portfolio", "blog"]

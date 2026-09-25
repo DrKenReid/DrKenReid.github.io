@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -10,16 +10,22 @@
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="About Me - Ken Reid">
   <meta property="og:description" content="The rest of Ken — pets, music, cooking, homelab, blogging, and more.">
-  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/ken1.webp">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/og/page-about.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="About Me: pets, music, cooking and homelab, over one of Ken Reid's photographs">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="About Me - Ken Reid">
   <meta name="twitter:description" content="The rest of Ken — pets, music, cooking, homelab, blogging, and more.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/page-about.jpg">
+  <meta name="twitter:image:alt" content="About Me: pets, music, cooking and homelab, over one of Ken Reid's photographs">
   <meta property="og:url" content="https://www.kenreid.co.uk/about.html">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ken Reid">
+  <meta property="og:locale" content="en_GB">
 
-  <!-- Google Analytics (GA4) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <!-- Google Analytics (GA4), requested after the page has loaded -->
+  <script defer src="/js/analytics.js"></script>
 
   <!-- Favicon & Manifest -->
   <link rel="icon" href="/img/core-img/favicon.png">
@@ -29,11 +35,11 @@
 
   <!-- Stylesheet -->
   <link rel="canonical" href="https://www.kenreid.co.uk/about.html">
-  <link rel="preload" as="image" href="/img/photography/hero/203.webp">
-  <link rel="stylesheet" href="/style.min.css">
+  <link rel="preload" as="image" href="/img/photography/hero/203.webp" fetchpriority="high">
+  <link rel="stylesheet" href="/style.min.css?v=20260923a">
 
-  <script defer src="/js/theme.js"></script>
-  <script defer src="/js/palette.js"></script>
+  <script defer src="/js/theme.js?v=20260923a"></script>
+  <script defer src="/js/palette.js?v=20260923a"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -50,31 +56,20 @@
 </head>
 <body>
 
-  <!-- Preloader -->
-  <div id="preloader">
-    <div class="loader"></div>
-  </div>
-
   <!-- Header -->
   <div id="header-section"></div>
 
   <main id="main-content">
 
-  <!-- Breadcrumb -->
+  <!-- Page opener (style.css §06, "Page opener") -->
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/203.webp);">
-    <div class="container h-100">
-      <div class="row h-100 align-items-center">
-        <div class="col-12">
-          <div class="breadcrumb-content text-center">
-            <h1 class="page-title">About Me</h1>
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb justify-content-center">
-                <li class="breadcrumb-item"><a href="/index.html"><i class="icon_house_alt"></i> Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">About</li>
-              </ol>
-            </nav>
-          </div>
-        </div>
+    <div class="container">
+      <div class="breadcrumb-content">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/index.html"><i class="icon_house_alt"></i> Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">About</li>
+        </ol></nav>
+        <h1 class="page-title">About Me</h1>
       </div>
     </div>
   </section>
@@ -82,17 +77,18 @@
   <!-- Intro -->
   <section class="about-us-area section-padding-80-0 clearfix">
     <div class="container">
-      <div class="row align-items-center">
-        <div class="col-12 col-lg-5">
-          <div class="mb-80 wow fadeInUp" data-wow-delay="100ms">
-            <img src="/img/bg-img/ken2.webp" alt="Ken Reid, full-length portrait" class="about-photo" width="587" height="1271">
+      <!-- Text first, so a phone reads the introduction before the
+           portrait; from 992px the portrait moves to the left column. -->
+      <div class="row">
+        <div class="col-12 col-lg-7">
+          <div class="section-heading section-heading--left mb-50">
+            <h2>The Rest of Me</h2>
+            <p class="section-heading__lede">I'm Ken, a Scottish-born data scientist with a Ph.D. in AI, now living in the United States. My research background is in niche areas of artificial intelligence, and I care deeply about ethical AI and environmental sustainability in computing. If you're here for the professional side, head over to <a href="/data_science.html">Data Science</a>. This page is everything else.</p>
           </div>
         </div>
-        <div class="col-12 col-lg-7">
-          <div class="about-us-content mb-80">
-            <h2 class="wow fadeInUp" data-wow-delay="100ms">The Rest of Me</h2>
-            <div class="line wow fadeInUp" data-wow-delay="200ms"></div>
-            <p class="about-hero-text wow fadeInUp" data-wow-delay="300ms">I'm Ken, a Scottish-born data scientist with a Ph.D. in AI, now living in the United States. My research background is in niche areas of artificial intelligence, and I care deeply about ethical AI and environmental sustainability in computing. If you're here for the professional side, head over to <a href="/data_science.html">Data Science</a>. This page is everything else.</p>
+        <div class="col-12 col-lg-5 order-lg-first">
+          <div class="mb-80">
+            <img src="/img/bg-img/ken2.webp" alt="Ken Reid smiling, holding two vegetable skewers" class="about-photo about-portrait" width="587" height="1271">
           </div>
         </div>
       </div>
@@ -102,17 +98,13 @@
   <!-- The Road So Far -->
   <section class="section-padding-80-0 clearfix">
     <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-12">
-          <div class="text-center" style="margin-bottom: 32px;">
-            <span class="section-eyebrow">The road so far</span>
-            <h2 class="wow fadeInUp" data-wow-delay="100ms">A Short Timeline</h2>
-          </div>
-        </div>
+      <div class="section-heading text-center">
+        <span class="section-eyebrow">The road so far</span>
+        <h2>A Short Timeline</h2>
       </div>
       <div class="row align-items-center justify-content-center">
         <div class="col-12 col-lg-7">
-          <ul class="blog-timeline kr-timeline wow fadeInUp" data-wow-delay="150ms" style="margin-bottom: 60px;">
+          <ul class="blog-timeline kr-timeline mb-5">
             <li>
               <span class="tl-year">2009&ndash;2013</span>
               <span class="tl-dot"></span>
@@ -129,7 +121,7 @@
               <span class="tl-body">Postdocs applying AI to genomics, satellite imagery, evolution, and video games.</span>
             </li>
             <li>
-              <span class="tl-year" style="white-space: normal;">Across the pond</span>
+              <span class="tl-year text-wrap">Across the pond</span>
               <span class="tl-dot"></span>
               <span class="tl-body">Moved from Scotland to Michigan; data scientist at the University of Michigan right at the start of the GenAI boom.</span>
             </li>
@@ -141,8 +133,8 @@
           </ul>
         </div>
         <div class="col-12 col-lg-5">
-          <div class="wow fadeInUp" data-wow-delay="250ms" style="margin-bottom: 60px;">
-            <a href="/img/bg-img/ken-timeline.webp" class="img-lightbox portfolio-img" style="cursor: zoom-in;"><img src="/img/bg-img/ken-timeline.webp" alt="A younger Ken in black and white, looking off to the side" class="about-photo" style="width: 100%;" loading="lazy" width="800" height="533"></a>
+          <div class="mb-5">
+            <a href="/img/bg-img/ken-timeline.webp" class="img-lightbox portfolio-img"><img src="/img/bg-img/ken-timeline.webp" alt="A younger Ken in black and white, looking off to the side" class="about-photo" loading="lazy" width="800" height="533"></a>
           </div>
         </div>
       </div>
@@ -150,51 +142,40 @@
   </section>
 
   <!-- Pets -->
-  <section class="bg-gray section-padding-80 clearfix">
+  <section class="bg-tint section-padding-80 clearfix">
     <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
-            <div class="about-section-icon" style="margin: 0 auto 18px;">
-              <i class="ti-heart"></i>
-            </div>
-            <h2>Pets</h2>
-          </div>
-        </div>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-12 col-lg-10">
-          <p class="text-center wow fadeInUp" data-wow-delay="200ms" style="font-size: 15px; line-height: 1.9; color: #636363; margin-bottom: 40px;">The household includes Brutey, a brindle pup I brought over from Scotland, four cats (Kwee, Chaos, Yoyo, and Nila), plus a small flock of chickens. They're not pets, really; they're family. Most of my <a href="/gallery.html">photography</a> ends up being of them, and I wouldn't have it any other way.</p>
-        </div>
+      <div class="section-heading text-center">
+        <h2>Pets</h2>
+        <p class="section-heading__lede">The household includes Brutey, a brindle pup I brought over from Scotland, four cats (Kwee, Chaos, Yoyo, and Nila), plus a small flock of chickens. They're not pets, really; they're family. Most of my <a href="/gallery.html">photography</a> ends up being of them, and I wouldn't have it any other way.</p>
       </div>
       <div class="row align-items-center">
-        <div class="col-12 col-md-6 col-lg-4 mb-30 wow fadeInUp" data-wow-delay="200ms">
-          <img src="/img/photography/thumb/318.webp" alt="Brutey — brindle pup" class="about-photo" style="width: 100%; height: 350px; object-fit: cover;" loading="lazy" width="400" height="266">
-          <p class="kr-caption">Brutey 🐕</p>
+        <div class="col-12 col-md-6 col-lg-4 mb-30">
+          <img src="/img/photography/thumb/318.webp" alt="Brutey — brindle pup" class="about-photo" style="height: 350px; object-fit: cover;" loading="lazy" width="400" height="266">
+          <p class="kr-caption">Brutey <svg class="kr-glyph" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><ellipse cx="5.4" cy="10.6" rx="1.9" ry="2.3"/><ellipse cx="9.3" cy="5.9" rx="2" ry="2.5"/><ellipse cx="14.7" cy="5.9" rx="2" ry="2.5"/><ellipse cx="18.6" cy="10.6" rx="1.9" ry="2.3"/><path d="M12 11.6c-2.7 0-5.8 3.8-5.8 6.3 0 1.7 1.3 2.8 2.9 2.8 1.2 0 2-.6 2.9-.6s1.7.6 2.9.6c1.6 0 2.9-1.1 2.9-2.8 0-2.5-3.1-6.3-5.8-6.3z"/></svg></p>
         </div>
         <div class="col-12 col-md-6 col-lg-4 mb-30">
           <div class="row">
-            <div class="col-6 mb-15 wow fadeInUp" data-wow-delay="250ms">
-              <img src="/img/bg-img/kwee.webp" alt="Kwee the cat" class="about-photo" style="width: 100%; height: 165px; object-fit: cover;" loading="lazy" width="500" height="500">
+            <div class="col-6 mb-15">
+              <img src="/img/bg-img/kwee.webp" alt="Kwee the cat" class="about-photo" style="height: 165px; object-fit: cover;" loading="lazy" width="500" height="500">
               <p class="kr-caption kr-caption--sm">Kwee</p>
             </div>
-            <div class="col-6 mb-15 wow fadeInUp" data-wow-delay="300ms">
-              <img src="/img/bg-img/chaos.webp" alt="Chaos the cat" class="about-photo" style="width: 100%; height: 165px; object-fit: cover;" loading="lazy" width="500" height="512">
+            <div class="col-6 mb-15">
+              <img src="/img/bg-img/chaos.webp" alt="Chaos the cat" class="about-photo" style="height: 165px; object-fit: cover;" loading="lazy" width="500" height="512">
               <p class="kr-caption kr-caption--sm">Chaos</p>
             </div>
-            <div class="col-6 wow fadeInUp" data-wow-delay="350ms">
-              <img src="/img/bg-img/yoyo.webp" alt="Yoyo the cat" class="about-photo" style="width: 100%; height: 165px; object-fit: cover;" loading="lazy" width="500" height="500">
+            <div class="col-6">
+              <img src="/img/bg-img/yoyo.webp" alt="Yoyo the cat" class="about-photo" style="height: 165px; object-fit: cover;" loading="lazy" width="500" height="500">
               <p class="kr-caption kr-caption--sm">Yoyo</p>
             </div>
-            <div class="col-6 wow fadeInUp" data-wow-delay="400ms">
-              <img src="/img/bg-img/nila.webp" alt="Nila the cat" class="about-photo" style="width: 100%; height: 165px; object-fit: cover;" loading="lazy" width="500" height="500">
+            <div class="col-6">
+              <img src="/img/bg-img/nila.webp" alt="Nila the cat" class="about-photo" style="height: 165px; object-fit: cover;" loading="lazy" width="500" height="500">
               <p class="kr-caption kr-caption--sm">Nila</p>
             </div>
           </div>
         </div>
-        <div class="col-12 col-md-12 col-lg-4 mb-30 wow fadeInUp" data-wow-delay="450ms">
-          <img src="/img/bg-img/chickens.webp" alt="The chickens" class="about-photo" style="width: 100%; height: 350px; object-fit: cover;" loading="lazy" width="587" height="1271">
-          <p class="kr-caption">The Flock 🐔</p>
+        <div class="col-12 col-md-12 col-lg-4 mb-30">
+          <img src="/img/bg-img/chickens.webp" alt="The chickens" class="about-photo" style="height: 350px; object-fit: cover;" loading="lazy" width="587" height="1271">
+          <p class="kr-caption">The Flock <svg class="kr-glyph" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><path d="M16 8 2 22"/><path d="M17.5 15H9"/></svg></p>
         </div>
       </div>
     </div>
@@ -203,95 +184,62 @@
   <!-- Card Grid: Music, Language, Cooking, Writing -->
   <section class="section-padding-80 clearfix">
     <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
-            <div class="about-section-icon" style="margin: 0 auto 18px;">
-              <i class="ti-star"></i>
-            </div>
-            <h2>Hobbies &amp; Interests</h2>
-          </div>
-        </div>
+      <div class="section-heading text-center">
+        <h2>Hobbies &amp; Interests</h2>
       </div>
       <div class="row align-items-center">
-        <div class="col-12 col-lg-7">
-      <div class="row">
-
-        <!-- Music -->
-        <div class="col-12 col-md-6 col-lg-6 mb-30 wow fadeInUp" data-wow-delay="100ms">
-          <div class="about-card" data-live="hobby:music">
-            <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
-            <div class="about-section-icon">
-              <i class="ti-music-alt"></i>
+        <div class="col-12 col-lg-7 mb-30">
+          <div class="kr-hobby-grid">
+            <!-- Music -->
+            <div class="about-card" data-live="hobby:music">
+              <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+              <h3>Music</h3>
+              <p>I've played guitar since I was about 11, though I still can't tell you what key I'm in. These days it's mostly fingerstyle, learning covers from players like Andy McKee and Antoine Dufour. I'd like to start writing my own music at some point. I've also been <a href="https://www.last.fm/user/gohex" target="_blank" rel="noopener">tracking my listening on Last.fm</a> since 2014. The top artists are a mess: Ludovico Einaudi, Alkaline Trio, Jeremy Soule, Rammstein. Make of that what you will.</p>
+              <a href="/music.html" class="about-link">Listening stats &rarr;</a>
             </div>
-            <h3>Music</h3>
-            <p>I've played guitar since I was about 11, though I still can't tell you what key I'm in. These days it's mostly fingerstyle, learning covers from players like Andy McKee and Antoine Dufour. I'd like to start writing my own music at some point. I've also been <a href="https://www.last.fm/user/gohex" target="_blank" rel="noopener">tracking my listening on Last.fm</a> since 2014. The top artists are a mess: Ludovico Einaudi, Alkaline Trio, Jeremy Soule, Rammstein. Make of that what you will.</p>
-            <a href="/music.html" class="about-link">Listening stats &rarr;</a>
+
+            <!-- Language -->
+            <div class="about-card" data-live="hobby:language">
+              <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+              <h3>Language</h3>
+              <p>I'm learning Tamil. Theoretically. At my current rate of roughly one word per month, the more accurate phrasing is "I want to learn Tamil."</p>
+            </div>
+
+            <!-- Cooking -->
+            <div class="about-card" data-live="hobby:cooking">
+              <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+              <h3>Cooking</h3>
+              <p>I'm vegan and I cook with a mix of South Asian and Scottish influence. Lots of dals, soups, stews, kale salads. I batch-cook most things and enjoy healthy, tasty and batch-able meals most of all. That way I can enjoy good food without spending every day in the kitchen. Except when I burn things then I have to eat it for a week.</p>
+            </div>
+
+            <!-- Writing -->
+            <div class="about-card" data-live="hobby:writing">
+              <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+              <h3>Writing</h3>
+              <p>I write fiction, very passively. I have many ideas written down and a few chapters of different stories. I'm not sure where I want to go with it yet, but I like writing.</p>
+            </div>
           </div>
         </div>
-
-        <!-- Language -->
-        <div class="col-12 col-md-6 col-lg-6 mb-30 wow fadeInUp" data-wow-delay="200ms">
-          <div class="about-card" data-live="hobby:language">
-            <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
-            <div class="about-section-icon">
-              <i class="ti-comments"></i>
-            </div>
-            <h3>Language</h3>
-            <p>I'm learning Tamil. Theoretically. At my current rate of roughly one word per month, the more accurate phrasing is "I want to learn Tamil."</p>
-          </div>
+        <div class="col-12 col-lg-5 mb-30">
+          <img src="/img/bg-img/ken1.webp" alt="Ken in a beanie with a grey and white cat perched on his shoulder" class="about-photo" loading="lazy" width="1143" height="1271">
         </div>
-
-        <!-- Cooking -->
-        <div class="col-12 col-md-6 col-lg-6 mb-30 wow fadeInUp" data-wow-delay="300ms">
-          <div class="about-card" data-live="hobby:cooking">
-            <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
-            <div class="about-section-icon">
-              <i class="ti-cup"></i>
-            </div>
-            <h3>Cooking</h3>
-            <p>I'm vegan and I cook with a mix of South Asian and Scottish influence. Lots of dals, soups, stews, kale salads. I batch-cook most things and enjoy healthy, tasty and batch-able meals most of all. That way I can enjoy good food without spending every day in the kitchen. Except when I burn things then I have to eat it for a week.</p>
-          </div>
-        </div>
-
-        <!-- Writing -->
-        <div class="col-12 col-md-6 col-lg-6 mb-30 wow fadeInUp" data-wow-delay="400ms">
-          <div class="about-card" data-live="hobby:writing">
-            <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
-            <div class="about-section-icon">
-              <i class="ti-pencil-alt"></i>
-            </div>
-            <h3>Writing</h3>
-            <p>I write fiction, very passively. I have many ideas written down and a few chapters of different stories. I'm not sure where I want to go with it yet, but I like writing.</p>
-          </div>
-        </div>
-
       </div>
-      </div><!-- end col-lg-7 -->
-        <div class="col-12 col-lg-5 mb-30 wow fadeInUp" data-wow-delay="100ms">
-          <img src="/img/bg-img/ken1.webp" alt="Ken in a beanie with a grey and white cat perched on his shoulder" class="about-photo" style="width: 100%; border-radius: 10px;" loading="lazy" width="1143" height="1271">
-        </div>
-      </div><!-- end row align-items-center -->
     </div>
   </section>
 
   <!-- Homelab & Tech -->
-  <section class="bg-gray section-padding-80 clearfix">
+  <section class="bg-tint section-padding-80 clearfix">
     <div class="container">
       <div class="row align-items-center">
         <div class="col-12 col-lg-5">
-          <div class="mb-30 wow fadeInUp" data-wow-delay="100ms">
+          <div class="mb-30">
             <img src="/img/photography/thumb/16.webp" alt="Code on a monitor, photographed at an angle" class="about-photo" loading="lazy" width="400" height="533">
           </div>
         </div>
         <div class="col-12 col-lg-7">
-          <div class="about-us-content mb-30">
-            <div class="about-section-icon wow fadeInUp" data-wow-delay="100ms">
-              <i class="ti-server"></i>
-            </div>
-            <h2 class="wow fadeInUp" data-wow-delay="150ms">Homelab &amp; Tech</h2>
-            <div class="line wow fadeInUp" data-wow-delay="200ms"></div>
-            <p class="kr-body-text wow fadeInUp" data-wow-delay="300ms">I run a self-hosted media setup I call <strong>KenPlex</strong>: Plex plus about 20 Dockerized services handling automation, transcoding, metadata, and monitoring. The music library alone is around 230,000 tracks, managed with beets and Mp3tag. I've written PowerShell and Python scripts for bulk audiobook conversion to <code>.m4b</code>, automated cover art lookups, and various other things that probably didn't need automating but were fun to build. More of my projects are on <a href="https://github.com/DrKenReid" target="_blank" rel="noopener">GitHub</a>.</p>
+          <div class="section-heading section-heading--left mb-30">
+            <h2>Homelab &amp; Tech</h2>
+            <p class="section-heading__lede">I run a self-hosted media setup I call <strong>KenPlex</strong>: Plex plus about 20 Dockerized services handling automation, transcoding, metadata, and monitoring. The music library alone is around 230,000 tracks, managed with beets and Mp3tag. I've written PowerShell and Python scripts for bulk audiobook conversion to <code>.m4b</code>, automated cover art lookups, and various other things that probably didn't need automating but were fun to build. More of my projects are on <a href="https://github.com/DrKenReid" target="_blank" rel="noopener">GitHub</a>.</p>
           </div>
         </div>
       </div>
@@ -303,23 +251,14 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col-12 col-lg-7">
-          <div class="about-us-content mb-30">
-            <div class="about-section-icon wow fadeInUp" data-wow-delay="100ms">
-              <i class="ti-pencil"></i>
-            </div>
-            <h2 class="wow fadeInUp" data-wow-delay="150ms">Blogging</h2>
-            <div class="line wow fadeInUp" data-wow-delay="200ms"></div>
-            <p class="kr-body-text wow fadeInUp" data-wow-delay="300ms">I write <a href="/blog.html">a lot</a>: data science, books, photography, music, moving countries, and whatever else I'm currently thinking through. Writing is how I find out whether I actually understand something, and the posts that survive that test end up here. If you'd rather have new posts arrive by themselves, there's a <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">free email newsletter</a> too. The site itself is hand-built and measured on its <a href="/colophon.html">colophon</a>.</p>
+          <div class="section-heading section-heading--left mb-30">
+            <h2>Blogging</h2>
+            <p class="section-heading__lede">I write <a href="/blog.html">a lot</a>: data science, books, photography, music, moving countries, and whatever else I'm currently thinking through. Writing is how I find out whether I actually understand something, and the posts that survive that test end up here. If you'd rather have new posts arrive by themselves, there's a <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">free email newsletter</a> too. The site itself is hand-built and measured on its <a href="/colophon.html">colophon</a>.</p>
           </div>
         </div>
         <div class="col-12 col-lg-5">
-          <div class="mb-30 wow fadeInUp" data-wow-delay="200ms">
+          <div class="mb-30">
             <img src="/img/bg-img/ken-blogging.webp" alt="Ken with a grey and white cat perched on his shoulder" class="about-photo" loading="lazy" width="800" height="600">
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
           </div>
         </div>
       </div>
@@ -327,18 +266,19 @@
   </section>
 
   <!-- Get in Touch -->
-  <section class="bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/158.webp); padding: 100px 0; overflow: hidden;">
+  <section class="kr-photo-band bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/158.webp);">
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-12 col-lg-8 text-center">
-          <h2 class="wow fadeInUp" data-wow-delay="100ms" style="color: #fff; margin-bottom: 20px;">Get in Touch</h2>
-          <p class="wow fadeInUp" data-wow-delay="200ms" style="font-size: 15px; line-height: 1.9; color: rgba(255,255,255,0.85); margin-bottom: 30px;">Say hello, ask about a photo, or tell me my code is wrong. I like hearing from people.</p>
-          <p class="wow fadeInUp" data-wow-delay="250ms" style="margin-bottom: 14px;">
-            <a href="mailto:ken@kenreid.co.uk" class="btn alime-btn btn-2">Email me</a>
-            <a href="/contact.html" class="btn alime-btn" style="margin-left: 10px;">Contact page</a>
-          </p>
-          <p class="wow fadeInUp" data-wow-delay="300ms" style="font-size: 13px; color: rgba(255,255,255,0.75);">Or follow along on <a href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer" style="color: #fc9a9a;">Bluesky</a> or by <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer" style="color: #fc9a9a;">email newsletter</a>.</p>
-
+        <div class="col-12 col-lg-8">
+          <div class="section-heading section-heading--on-photo text-center">
+            <h2>Get in Touch</h2>
+            <p class="section-heading__lede">Say hello, ask about a photo, or tell me my code is wrong. I like hearing from people.</p>
+          </div>
+          <div class="kr-btn-row">
+            <a href="mailto:ken@kenreid.co.uk" class="kr-btn kr-btn--primary">Email me</a>
+            <a href="/contact.html" class="kr-btn kr-btn--on-photo">Contact page</a>
+          </div>
+          <p class="kr-photo-band__note">Or follow along on <a href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer">Bluesky</a> or by <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">email newsletter</a>.</p>
         </div>
       </div>
     </div>
@@ -353,14 +293,14 @@
 
   <!-- JavaScript -->
   <script src="/js/jquery.min.js"></script>
-  <script src="/js/alime.bundle.js"></script>
-  <script src="/js/site.js"></script>
-  <script src="/js/lightbox.js"></script>
-  <script src="/js/default-assets/active.js"></script>
-  <script src="/js/shared-components.js"></script>
+  <script src="/js/alime.bundle.js?v=20260923a"></script>
+  <script src="/js/site.js?v=20260923a"></script>
+  <script src="/js/lightbox.js?v=20260923a"></script>
+  <script src="/js/default-assets/active.js?v=20260923a"></script>
+  <script src="/js/shared-components.js?v=20260923a"></script>
   <script>
     renderHeader('header-section', { basePath: '/', active: 'about' });
-    renderInstagramSection('instagram-section');
+    renderPhotoStrip('instagram-section');
     renderFooter('footer-section');
   </script>
 

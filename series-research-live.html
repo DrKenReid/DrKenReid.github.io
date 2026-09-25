@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -10,59 +10,85 @@
   <meta property="og:title" content="Research, Live">
   <meta property="og:description" content="The papers I wrote, running in your browser. Each part takes one piece of my published research and puts it on a canvas you can interfere with.">
   <meta property="og:image" content="https://www.kenreid.co.uk/img/photography/hero/288.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="1800">
+  <meta property="og:image:alt" content="A bare dead tree in silhouette against a cloudy sky, in black and white">
   <meta property="og:url" content="https://www.kenreid.co.uk/series-research-live.html">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ken Reid">
+  <meta property="og:locale" content="en_GB">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Research, Live">
   <meta name="twitter:description" content="The papers I wrote, running in your browser.">
   <meta name="twitter:image" content="https://www.kenreid.co.uk/img/photography/hero/288.webp">
+  <meta name="twitter:image:alt" content="A bare dead tree in silhouette against a cloudy sky, in black and white">
+  <script defer src="/js/analytics.js"></script>
   <link rel="icon" href="/img/core-img/favicon.png">
-  <link rel="apple-touch-icon" href="/img/core-img/favicon.png">
+  <link rel="apple-touch-icon" href="/img/core-img/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#1a1a1a">
-  <link rel="preload" as="image" href="/img/photography/hero/288.webp">
-  <link rel="stylesheet" href="/style.min.css">
+  <link rel="preload" as="image" href="/img/photography/hero/288.webp" fetchpriority="high">
+  <link rel="stylesheet" href="/style.min.css?v=20260923a">
   <link rel="canonical" href="https://www.kenreid.co.uk/series-research-live.html">
-  <script defer src="/js/theme.js"></script>
-  <script defer src="/js/palette.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Research, Live - Ken Reid",
+    "url": "https://www.kenreid.co.uk/series-research-live.html",
+    "about": "Published research rebuilt as interactive in-browser demonstrations",
+    "author": {"@type": "Person", "name": "Ken Reid", "url": "https://www.kenreid.co.uk"}
+  }
+  </script>
+  <script defer src="/js/theme.js?v=20260923a"></script>
+  <script defer src="/js/palette.js?v=20260923a"></script>
 </head>
 <body>
-  <div id="preloader"><div class="loader"></div></div>
-
   <div id="header-section"></div>
 
   <main id="main-content">
 
-  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/288.webp); background-size: cover; background-position: center center;">
-    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
-      <div class="breadcrumb-content text-center">
-        <h1 class="page-title">Research, Live</h1>
-        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+  <!-- Page opener (style.css §06, "Page opener") -->
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/288.webp);">
+    <div class="container">
+      <div class="breadcrumb-content">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="/index.html"><i class="icon_house_alt"></i> Home</a></li>
           <li class="breadcrumb-item"><a href="/blog.html">Blog</a></li>
           <li class="breadcrumb-item active" aria-current="page">Research, Live</li>
         </ol></nav>
+        <h1 class="page-title">Research, Live</h1>
       </div>
-    </div></div></div>
+    </div>
   </section>
 
   <div class="about-us-area section-padding-80 clearfix">
     <div class="container">
-      <div class="text-center" style="margin-bottom: 36px;">
-        <span class="section-eyebrow">Series</span>
-        <h2>Research, Live</h2>
-        <p style="max-width: 640px; margin: 12px auto 0;">A paper is a poor way to show a moving thing. Each part of this series takes one piece of my published research, rebuilds it as something running in your browser, and hands you the parameters. Some of these took a cluster and six months the first time. They now fit in a page you can open on a phone, which says more about the last decade of hardware than about the work.</p>
-        <p id="series-count" class="kr-muted" style="margin-top: 10px; font-size: 13px;"></p>
+      <div class="kr-series-intro">
+        <p class="kr-series-lede">A paper is a poor way to show a moving thing. Each part of this series takes one piece of my published research, rebuilds it as something running in your browser, and hands you the parameters. Some of these took a cluster and six months the first time. They now fit in a page you can open on a phone, which says more about the last decade of hardware than about the work.</p>
+        <p id="series-count" class="kr-series-count"></p>
       </div>
       <div id="series-page" class="kr-series-page" data-series="Research, Live">
+        <h2 class="sr-only">Parts in this series</h2>
         <div class="row" id="series-grid"></div>
+        <!-- BEGIN listing-fallback: written by .github/scripts/generate_listing_fallback.py from data/posts.json; edits made here are overwritten. -->
+        <noscript>
+          <ol>
+            <li><a href="/blog/variable-neighbourhood-search-live.html">Variable Neighbourhood Search, Live</a>, <time class="kr-muted" datetime="2026-08-12">12 August 2026</time></li>
+            <li><a href="/blog/factorio-live.html">Factorio, Live: a Game as an Optimisation Benchmark</a>, <time class="kr-muted" datetime="2026-08-16">16 August 2026</time></li>
+            <li><a href="/blog/ruin-and-recreate-live.html">Ruin and Recreate, Live</a>, <time class="kr-muted" datetime="2026-09-13">13 September 2026</time></li>
+          </ol>
+        </noscript>
+        <!-- END listing-fallback -->
       </div>
     </div>
   </div>
 
   <div class="kr-next-stop">
     <p>Prefer to wander? Every post lives on <a href="/blog.html">the blog</a>, series and strays alike.</p>
-    <a href="/blog.html" class="btn alime-btn btn-2">Browse all posts</a>
+    <div class="kr-btn-row">
+      <a href="/blog.html" class="kr-btn kr-btn--ghost">Browse all posts</a>
+    </div>
   </div>
 
   </main>
@@ -70,8 +96,8 @@
   <hr>
   <div id="footer-section"></div>
 
-  <script src="/js/site.js"></script>
-  <script src="/js/shared-components.js"></script>
+  <script src="/js/site.js?v=20260923a"></script>
+  <script src="/js/shared-components.js?v=20260923a"></script>
   <script>renderHeader('header-section', { basePath: '/', active: 'blog', blogChild: 'series-research' });
 renderFooter('footer-section');
 renderSeriesPage();</script>

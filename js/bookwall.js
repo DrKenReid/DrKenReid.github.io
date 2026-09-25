@@ -1,28 +1,32 @@
 /**
- * bookwall.js — the literature page's cover wall.
+ * bookwall.js: the cover wall on books.html ("Every Book").
  *
- * Renders every rated book in data/books.json that has an ISBN as an
- * OpenLibrary cover, filterable by rating. Covers that OpenLibrary lacks
- * are dropped on error, so the wall stays clean.
+ * Every rated book in data/books.json that has an ISBN, as its Open
+ * Library cover, searchable by title and author and filterable by my
+ * rating. The filter is the documented one: books.json holds every book
+ * read, and the wall shows the rated ones Goodreads has an ISBN for,
+ * since a cover is looked up by ISBN.
+ *
+ * Links, cover URLs and tooltips come from krBookshelf (js/bookshelf.js,
+ * loaded first), so a tile says and links what the shelf does.
+ * A cover Open Library has no scan of is not dropped: js/bookshelf.js
+ * sets it in type, from the data- attributes on the <img>,
+ * so every tile the counts promise is on the wall. The counts are the
+ * filter buttons' (built by renderFilterBar, which gives them
+ * aria-pressed), the total in the lede, and #book-wall-count, the shared
+ * .kr-list-counter live region, empty unless something narrows the wall.
  */
 (function () {
-    var books = [];
-    var activeRating = 0;   // 0 = all
+    'use strict';
+
+    var SEARCH_DEBOUNCE_MS = 120;
+    var SKELETON_TILES = 18;
+
+    var books = [];         // books.json, shared with other readers: read only
+    var activeRating = 0;   // 0 = every rating
     var searchQuery = '';
 
-    function coverUrl(isbn) {
-        // default=false makes OpenLibrary 404 on missing covers instead of
-        // serving a blank 1x1, so onerror can drop the tile.
-        return 'https://covers.openlibrary.org/b/isbn/' + isbn + '-M.jpg?default=false';
-    }
-
-    /* My review page for the book when the refresh has its id, else the
-       book's page. */
-    function goodreadsUrl(book) {
-        if (book.w) return 'https://www.goodreads.com/review/show/' + book.w;
-        return book.g ? 'https://www.goodreads.com/book/show/' + book.g
-                      : 'https://www.goodreads.com/search?q=' + encodeURIComponent(book.t);
-    }
+    function onTheWall(b) { return !!(b.i && b.r); }
 
     function stars(n) {
         return '★'.repeat(n);
@@ -41,50 +45,54 @@
         return 'genre:fiction';
     }
 
+    function tile(b) {
+        var name = krBookTitle(b.t);
+        return '<a class="book-wall-item" data-live="' + genreOf(b) + '" href="' + krEscapeHtml(krBookshelf.goodreadsUrl(b)) + '"' +
+            ' target="_blank" rel="noopener noreferrer" title="' + krEscapeHtml(krBookshelf.label(b)) + '">' +
+            '<img src="' + krEscapeHtml(krBookshelf.coverUrl(b.i, 'M')) + '" alt="' + krEscapeHtml(name.title + ' by ' + b.a) + '" loading="lazy"' +
+            krTypeCover.dataAttrs(b) + '>' +
+            '<span class="book-wall-stars"><span aria-hidden="true">' + stars(b.r) + '</span>' +
+            '<span class="sr-only">, rated ' + b.r + ' of 5</span></span>' +
+            '</a>';
+    }
+
     function renderWall() {
         var grid = document.getElementById('book-wall-grid');
         if (!grid) return;
         var q = searchQuery.trim().toLowerCase();
-        var subset = books.filter(function (b) {
-            // books.json holds every book read; the wall shows the rated
-            // ones Goodreads has an ISBN for, since the cover needs one.
-            if (!b.i || !b.r) return false;
+        var wall = books.filter(onTheWall);
+        var subset = wall.filter(function (b) {
             if (activeRating !== 0 && b.r !== activeRating) return false;
             return !q || (b.t + ' ' + b.a).toLowerCase().indexOf(q) !== -1;
         });
-        grid.innerHTML = subset.map(function (b) {
-            return '<a class="book-wall-item" data-live="' + genreOf(b) + '" href="' + goodreadsUrl(b) + '" target="_blank" rel="noopener noreferrer"' +
-                ' title="' + (b.t + ' — ' + b.a + ' (' + stars(b.r) + ')').replace(/"/g, '&quot;') + '">' +
-                '<img src="' + coverUrl(b.i) + '" alt="' + (b.t + ' by ' + b.a).replace(/"/g, '&quot;') + '" loading="lazy"' +
-                ' onerror="this.closest(\'.book-wall-item\').remove()">' +
-                '<span class="book-wall-stars">' + stars(b.r) + '</span>' +
-                '</a>';
-        }).join('');
-        var counter = document.getElementById('book-wall-count');
-        if (counter) {
-            counter.textContent = subset.length + ' book' + (subset.length === 1 ? '' : 's');
-        }
+        grid.innerHTML = subset.map(tile).join('');
+        krUpdateSearchCounter(subset.length, wall.length, 'books', !q && !activeRating,
+            { input: null, counter: 'book-wall-count' });
     }
 
     function renderFilters() {
         var bar = document.getElementById('book-wall-filters');
         if (!bar) return;
-        var options = [[0, 'All'], [5, '5★'], [4, '4★'], [3, '3★'], [2, '2★'], [1, '1★']];
-        bar.innerHTML = '';
-        options.forEach(function (opt) {
-            var count = books.filter(function (b) { return b.i && b.r && (opt[0] === 0 || b.r === opt[0]); }).length;
-            if (!count) return;
-            var btn = document.createElement('button');
-            btn.className = 'btn gallery-filter-btn' + (opt[0] === activeRating ? ' active' : '');
-            btn.textContent = opt[1] + ' (' + count + ')';
-            btn.addEventListener('click', function () {
-                activeRating = opt[0];
-                bar.querySelectorAll('.gallery-filter-btn').forEach(function (b) { b.classList.remove('active'); });
-                btn.classList.add('active');
+        var wall = books.filter(onTheWall);
+        var items = [5, 4, 3, 2, 1].map(function (r) {
+            return {
+                key: String(r),
+                // The star is decoration; a screen reader hears "5 stars".
+                label: r + '<span aria-hidden="true">★</span><span class="sr-only"> star' + (r === 1 ? '' : 's') + '</span>',
+                count: wall.filter(function (b) { return b.r === r; }).length
+            };
+        }).filter(function (it) { return it.count > 0; });
+        bar.setAttribute('aria-label', 'Filter by my rating');
+        renderFilterBar(bar, items, {
+            multi: false,
+            allLabel: 'All (' + wall.length + ')',
+            onChange: function (keys) {
+                activeRating = keys.length ? +keys[0] : 0;
                 renderWall();
-            });
-            bar.appendChild(btn);
+            }
         });
+        var total = document.getElementById('book-wall-total');
+        if (total) total.textContent = wall.length + ' books';
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -98,15 +106,20 @@
                 debounce = setTimeout(function () {
                     searchQuery = search.value;
                     renderWall();
-                }, 120);
+                }, SEARCH_DEBOUNCE_MS);
             });
         }
-        // Skeleton covers while books.json + cover images arrive
-        grid.innerHTML = new Array(18).fill('<span class="book-wall-item kr-skeleton"></span>').join('');
-        fetch('/data/books.json').then(function (r) { return r.json(); }).then(function (data) {
-            books = data || [];
+        // Skeleton covers while books.json and the covers arrive.
+        grid.innerHTML = new Array(SKELETON_TILES).fill('<span class="book-wall-item kr-skeleton"></span>').join('');
+        // The same request js/bookshelf.js would make, shared through krFetchJson.
+        krFetchJson('data/books.json').then(function (data) {
+            books = Array.isArray(data) ? data : [];
             renderFilters();
             renderWall();
-        }).catch(function () { grid.innerHTML = ''; });
+        }).catch(function () {
+            grid.innerHTML = '';
+            var counter = document.getElementById('book-wall-count');
+            if (counter) counter.textContent = 'The books could not be loaded just now.';
+        });
     });
 }());

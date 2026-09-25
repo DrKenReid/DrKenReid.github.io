@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <!-- Primary Meta Tags -->
   <meta charset="UTF-8">
@@ -11,12 +11,19 @@
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="Ken Reid - Data Scientist, Photographer, Writer">
   <meta property="og:description" content="Ken Reid — Data Scientist, photographer, guitarist, and avid reader. Explore photography, music, literature, and more.">
-  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/ken1.webp">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/og/page-index.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Ken Reid: data scientist, photographer, writer, beside a black and white portrait of Ken">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Ken Reid - Data Scientist, Photographer, Writer">
   <meta name="twitter:description" content="Ken Reid — Data Scientist, photographer, guitarist, and avid reader. Explore photography, music, literature, and more.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/page-index.jpg">
+  <meta name="twitter:image:alt" content="Ken Reid: data scientist, photographer, writer, beside a black and white portrait of Ken">
   <meta property="og:url" content="https://www.kenreid.co.uk">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ken Reid">
+  <meta property="og:locale" content="en_GB">
 
   <!-- Favicon & Manifest -->
   <link rel="icon" href="/img/core-img/favicon.png">
@@ -26,8 +33,8 @@
 
   <!-- Stylesheet -->
   <link rel="alternate" type="application/rss+xml" title="Ken Reid's Blog" href="https://www.kenreid.co.uk/feed.xml">
-  <link rel="preload" as="image" href="/img/bg-img/ken-hero.webp">
-  <link rel="stylesheet" href="/style.min.css">
+  <link rel="preload" as="image" href="/img/bg-img/ken-hero.webp" fetchpriority="high">
+  <link rel="stylesheet" href="/style.min.css?v=20260923a">
   <style>
     /* The stats band's type, colour and spacing now live in style.css with
        the rest of the brand system; what stays here is only the surface it
@@ -47,63 +54,78 @@
          against their backgrounds. Barely visible is not subtle. */
       color: #7d766c;
     }
-    .home-section-note {
-      color: #636363;
-    }
     [data-theme="dark"] .home-stat-icon {
       color: #9a9389;
     }
     [data-theme="dark"] .home-stat-value {
       color: #f0f0f0;
     }
-    [data-theme="dark"] .home-section-note {
-      color: #b8b8b8 !important;
-    }
   </style>
 
-  <!-- Google Analytics (GA4) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <!-- Google Analytics (GA4), requested after the page has loaded -->
+  <script defer src="/js/analytics.js"></script>
   <link rel="canonical" href="https://www.kenreid.co.uk/">
+  <!-- The site and its author as one graph. The Person's @id is the one
+       data_science.html's ProfilePage and every ScholarlyArticle author
+       point at, so all of them describe the same node; keep its facts in
+       step with that page (tests/test_structured_data.py checks). -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Ken Reid",
-    "alternateName": "Dr. Kenneth N. Reid",
-    "url": "https://www.kenreid.co.uk",
-    "image": "https://www.kenreid.co.uk/img/bg-img/ken1.webp",
-    "jobTitle": "Data Scientist",
-    "sameAs": [
-      "https://www.linkedin.com/in/kennethneilreid",
-      "https://github.com/DrKenReid",
-      "https://bsky.app/profile/kenreid.co.uk",
-      "https://www.instagram.com/drkenreid/",
-      "https://www.youtube.com/@kenreid",
-      "https://www.tiktok.com/@drkenreid",
-      "https://www.goodreads.com/user/show/42371562-ken-reid",
-      "https://www.last.fm/user/gohex"
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://www.kenreid.co.uk/#website",
+        "name": "Ken Reid",
+        "url": "https://www.kenreid.co.uk/",
+        "inLanguage": "en-GB",
+        "publisher": { "@id": "https://www.kenreid.co.uk/#ken" }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://www.kenreid.co.uk/#ken",
+        "name": "Ken Reid",
+        "alternateName": "Dr. Kenneth N. Reid",
+        "honorificPrefix": "Dr",
+        "url": "https://www.kenreid.co.uk/",
+        "image": "https://www.kenreid.co.uk/img/bg-img/ken1.webp",
+        "jobTitle": "Senior Data Scientist",
+        "worksFor": { "@type": "Organization", "name": "Rocket Mortgage" },
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Stirling" },
+        "sameAs": [
+          "https://www.linkedin.com/in/kennethneilreid",
+          "https://github.com/DrKenReid",
+          "https://scholar.google.com/citations?user=bwl2u00AAAAJ",
+          "https://orcid.org/0000-0001-8654-2430",
+          "https://www.researchgate.net/profile/Ken_Reid4/",
+          "https://bsky.app/profile/kenreid.co.uk",
+          "https://www.instagram.com/drkenreid/",
+          "https://www.youtube.com/@kenreid",
+          "https://www.tiktok.com/@drkenreid",
+          "https://www.goodreads.com/user/show/42371562-ken-reid",
+          "https://www.last.fm/user/gohex"
+        ]
+      }
     ]
   }
   </script>
-  <script defer src="/js/theme.js"></script>
-  <script defer src="/js/palette.js"></script>
+  <script defer src="/js/theme.js?v=20260923a"></script>
+  <script defer src="/js/palette.js?v=20260923a"></script>
 </head>
 <body>
-
-  <!-- Preloader -->
-  <div id="preloader">
-    <div class="loader"></div>
-  </div>
 
   <!-- Header -->
   <div id="header-section"></div>
 
-  <main id="main-content">
+  <main id="main-content" class="kr-home">
 
   <h1 class="sr-only">Ken Reid — Data Scientist, photographer, guitarist, and avid reader</h1>
 
-  <!-- Hero Carousel -->
+  <!-- Hero Carousel. Slide 1 is laid out before Owl runs (style.css,
+       "Homepage sections"), so the page does not jump when the carousel
+       starts. Only its photograph is in the markup; the other slides
+       name theirs in data-bg, and the script at the foot of this page
+       applies them once the page has loaded. -->
   <section class="welcome-area">
     <div class="welcome-slides owl-carousel">
 
@@ -116,8 +138,8 @@
               <div class="welcome-text">
                 <h2 data-animation="bounceInDown" data-delay="700ms">Hi, I'm Ken.</h2>
                 <p data-animation="bounceInDown" data-delay="300ms">Data Scientist, photographer, guitarist, and avid reader.</p>
-                <a href="/data_science.html" class="btn alime-btn mt-30" data-animation="bounceInDown" data-delay="500ms">See My Work</a>
-                <a class="kr-hero-latest" href="/blog.html" hidden>
+                <a href="/data_science.html" class="kr-btn kr-btn--on-photo mt-30" data-animation="bounceInDown" data-delay="500ms">See My Work</a>
+                <a class="kr-hero-latest kr-hero-latest--pending" href="/blog.html">
                   <span class="kr-hero-latest__tag">New post</span>
                   <span class="kr-hero-latest__title"></span>
                   <span aria-hidden="true">&rarr;</span>
@@ -128,58 +150,11 @@
         </div>
       </div>
 
-      <!-- Slide 2 -->
+      <!-- Slide 2: the headline is evolved rather than typed (js/hero-evolve.js).
+           Second rather than last: as the fifth slide it only came round
+           after forty seconds in the hero. -->
       <div class="single-welcome-slide bg-overlay">
-        <div class="slide-bg bg-img" style="background-image: url(/img/photography/hero/23.webp);"></div>
-        <div class="container h-100">
-          <div class="row h-100 align-items-center">
-            <div class="col-12 col-lg-8 col-xl-6">
-              <div class="welcome-text">
-                <h2 data-animation="bounceInDown" data-delay="700ms">Photography</h2>
-                <p data-animation="bounceInDown" data-delay="300ms">A decade of self-taught photography. Mostly landscapes, urban decay, and pets.</p>
-                <a href="/gallery.html" class="btn alime-btn mt-30" data-animation="bounceInDown" data-delay="500ms">View Portfolio</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Slide 3 -->
-      <div class="single-welcome-slide bg-overlay">
-        <div class="slide-bg bg-img" style="background-image: url(/img/photography/hero/113.webp);"></div>
-        <div class="container h-100">
-          <div class="row h-100 align-items-center">
-            <div class="col-12 col-lg-8 col-xl-6">
-              <div class="welcome-text">
-                <h2 data-animation="bounceInDown" data-delay="700ms">Music</h2>
-                <p data-animation="bounceInDown" data-delay="300ms">Playing guitar since I was 11. Still learning.</p>
-                <a href="/music.html" class="btn alime-btn mt-30" data-animation="bounceInDown" data-delay="500ms">Listen</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Slide 4 -->
-      <div class="single-welcome-slide bg-overlay">
-        <div class="slide-bg bg-img" style="background-image: url(/img/photography/hero/97.webp);"></div>
-        <div class="container h-100">
-          <div class="row h-100 align-items-center">
-            <div class="col-12 col-lg-8 col-xl-6">
-              <div class="welcome-text">
-                <h2 data-animation="bounceInDown" data-delay="700ms">Blog</h2>
-                <p data-animation="bounceInDown" data-delay="300ms">Writing about books, data, photography, and whatever else I'm thinking about.</p>
-                <a href="/blog.html" class="btn alime-btn mt-30" data-animation="bounceInDown" data-delay="500ms">Read</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <!-- Slide 5: the headline is evolved rather than typed (js/hero-evolve.js) -->
-      <div class="single-welcome-slide bg-overlay">
-        <div class="slide-bg bg-img" style="background-image: url(/img/photography/hero/141.webp);"></div>
+        <div class="slide-bg bg-img" data-bg="/img/photography/hero/141.webp"></div>
         <div class="container h-100">
           <div class="row h-100 align-items-center">
             <div class="col-12 col-lg-8 col-xl-7">
@@ -188,7 +163,55 @@
                 <h2 class="sr-only">Hi, I'm Ken.</h2>
                 <canvas class="kr-hero-evolve" width="640" height="190" aria-hidden="true"></canvas>
                 <p data-animation="bounceInDown" data-delay="300ms">That headline is not a font. It is a hundred and ten translucent triangles being evolved toward the words, one accepted mutation at a time, in your browser.</p>
-                <a href="/data_science.html" class="btn alime-btn mt-30" data-animation="bounceInDown" data-delay="500ms">See the research</a>
+                <a href="/data_science.html" class="kr-btn kr-btn--on-photo mt-30" data-animation="bounceInDown" data-delay="500ms">See the research</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="single-welcome-slide bg-overlay">
+        <div class="slide-bg bg-img" data-bg="/img/photography/hero/23.webp"></div>
+        <div class="container h-100">
+          <div class="row h-100 align-items-center">
+            <div class="col-12 col-lg-8 col-xl-6">
+              <div class="welcome-text">
+                <h2 data-animation="bounceInDown" data-delay="700ms">Photography</h2>
+                <p data-animation="bounceInDown" data-delay="300ms">A decade of self-taught photography. Mostly landscapes, urban decay, and pets.</p>
+                <a href="/gallery.html" class="kr-btn kr-btn--on-photo mt-30" data-animation="bounceInDown" data-delay="500ms">View Portfolio</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4 -->
+      <div class="single-welcome-slide bg-overlay">
+        <div class="slide-bg bg-img" data-bg="/img/photography/hero/113.webp"></div>
+        <div class="container h-100">
+          <div class="row h-100 align-items-center">
+            <div class="col-12 col-lg-8 col-xl-6">
+              <div class="welcome-text">
+                <h2 data-animation="bounceInDown" data-delay="700ms">Music</h2>
+                <p data-animation="bounceInDown" data-delay="300ms">Playing guitar since I was 11. Still learning.</p>
+                <a href="/music.html" class="kr-btn kr-btn--on-photo mt-30" data-animation="bounceInDown" data-delay="500ms">Listen</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 5 -->
+      <div class="single-welcome-slide bg-overlay">
+        <div class="slide-bg bg-img" data-bg="/img/photography/hero/97.webp"></div>
+        <div class="container h-100">
+          <div class="row h-100 align-items-center">
+            <div class="col-12 col-lg-8 col-xl-6">
+              <div class="welcome-text">
+                <h2 data-animation="bounceInDown" data-delay="700ms">Blog</h2>
+                <p data-animation="bounceInDown" data-delay="300ms">Writing about books, data, photography, and whatever else I'm thinking about.</p>
+                <a href="/blog.html" class="kr-btn kr-btn--on-photo mt-30" data-animation="bounceInDown" data-delay="500ms">Read</a>
               </div>
             </div>
           </div>
@@ -204,7 +227,7 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col-12 col-lg-8 offset-lg-2">
-          <div class="section-heading text-center wow fadeInUp" data-wow-delay="100ms">
+          <div class="section-heading text-center">
             <span class="section-eyebrow">Welcome</span>
             <h2>About Me</h2>
           </div>
@@ -217,22 +240,27 @@
   </section>
 
   <!-- Latest Blog Posts -->
-  <section class="about-us-area section-padding-80-0 clearfix">
+  <section class="about-us-area kr-latest-area clearfix">
     <div class="container">
-      <div class="text-center" style="margin-bottom: 40px;">
+      <div class="section-heading text-center">
         <span class="section-eyebrow">From the blog</span>
-        <h2 class="wow fadeInUp" data-wow-delay="100ms">Latest Blog Posts</h2>
+        <h2>Latest Blog Posts</h2>
       </div>
       <div class="row justify-content-center">
         <div class="col-12 col-lg-7 kr-latest-list" id="latest-posts"></div>
         <div class="col-12 col-lg-5 mb-30">
-          <div class="wow fadeInUp kr-blog-promo" data-wow-delay="200ms" style="background-image: url(/img/bg-img/ken-train.webp);">
+          <div class="kr-blog-promo" style="background-image: url(/img/bg-img/ken-train.webp);">
             <span class="sr-only">Background photo: Ken Reid on a train, lit by the window.</span>
             <div class="kr-blog-promo__content">
-              <span class="section-eyebrow">The blog</span>
-              <h3>Writing to find out <span style="white-space: nowrap;">what I think</span></h3>
+              <!-- The card sits on a photograph, so its heading takes the
+                   on-photo colours (the gold eyebrow) in both themes; the
+                   theme's stone eyebrow was 2.5:1 on the card's dark glass. -->
+              <div class="section-heading section-heading--on-photo mb-0">
+                <span class="section-eyebrow">The blog</span>
+                <h3>Writing to find out <span class="text-nowrap">what I think</span></h3>
+              </div>
               <p>Data science, books, photography, music, moving countries: whatever I'm currently thinking through ends up written down here, with citations where I can find them.</p>
-              <a class="btn alime-btn btn-2" href="/blog.html">Browse all posts</a>
+              <a class="kr-btn kr-btn--on-photo" href="/blog.html">Browse all posts</a>
               <p class="kr-blog-promo__sub">Or get new posts <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">by email</a>.</p>
             </div>
           </div>
@@ -241,26 +269,34 @@
     </div>
   </section>
 
-  <!-- Numbers, attached to the intro above -->
+  <!-- Numbers. The figures in the markup are the first paint and what a
+       reader without JavaScript keeps, so they are real ones: posts,
+       words, photographs and quotations from data/colophon.json, books
+       and reviews from reading.json, scrobbles from lastfm.json, as those
+       files stood when these were last set by hand. At load the script at
+       the foot of the page (and updateLastfmStats for scrobbles) writes the
+       current figures over them, and the count-up (shared-components.js)
+       animates whatever is there when the band scrolls into view, so a
+       figure left stale here is only wrong until the data arrives. -->
   <section class="home-stats-bar">
     <div class="container">
       <dl class="row text-center justify-content-center">
         <div class="col-6 col-md-auto home-stat" data-live="stat:posts">
           <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
           <dt class="home-stat-label">Blog Posts</dt>
-          <dd id="blog-post-count" class="home-stat-value">40</dd>
+          <dd id="blog-post-count" class="home-stat-value">68</dd>
           <i class="ti-pencil-alt home-stat-icon" aria-hidden="true"></i>
         </div>
         <div class="col-6 col-md-auto home-stat" data-live="stat:words">
           <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
           <dt class="home-stat-label">Words Written</dt>
-          <dd id="word-count" class="home-stat-value">110K+</dd>
+          <dd id="word-count" class="home-stat-value">161K+</dd>
           <i class="ti-write home-stat-icon" aria-hidden="true"></i>
         </div>
         <div class="col-6 col-md-auto home-stat" data-live="stat:photos">
           <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
           <dt class="home-stat-label">Photos</dt>
-          <dd id="photo-count" class="home-stat-value">490+</dd>
+          <dd id="photo-count" class="home-stat-value">517</dd>
           <i class="ti-camera home-stat-icon" aria-hidden="true"></i>
         </div>
         <div class="col-6 col-md-auto home-stat" data-live="stat:books">
@@ -272,7 +308,7 @@
         <div class="col-6 col-md-auto home-stat" data-live="stat:scrobbles">
           <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
           <dt class="home-stat-label">Scrobbles</dt>
-          <dd class="home-stat-value" data-lastfm="scrobbles">49.7K+</dd>
+          <dd class="home-stat-value" data-lastfm="scrobbles">50K+</dd>
           <i class="ti-headphone home-stat-icon" aria-hidden="true"></i>
         </div>
         <div class="col-6 col-md-auto home-stat" data-live="stat:quotes">
@@ -305,12 +341,12 @@
   <!-- Quick Links -->
   <section class="about-us-area kr-explore-area clearfix bg-tint">
     <div class="container">
-      <div class="text-center" style="margin-bottom: 40px;">
+      <div class="section-heading text-center">
         <span class="section-eyebrow">Around the site</span>
-        <h2 class="wow fadeInUp" data-wow-delay="100ms">Explore</h2>
+        <h2>Explore</h2>
       </div>
       <div class="row kr-explore-row">
-        <div class="col-6 col-md-4 col-lg-2">
+        <div class="col-6 col-md-3 col-lg">
           <a href="/data_science.html" class="kr-explore-link" data-live="explore:data-science">
             <i class="ti-stats-up kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Data Science</h3>
@@ -318,15 +354,15 @@
             <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
           </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2">
+        <div class="col-6 col-md-3 col-lg">
           <a href="/gallery.html" class="kr-explore-link" data-live="explore:photography">
             <i class="ti-camera kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Photography</h3>
-            <p>490+ photos</p>
+            <p><span id="explore-photo-count">517</span> photos</p>
             <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
           </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2">
+        <div class="col-6 col-md-3 col-lg">
           <a href="/music.html" class="kr-explore-link" data-live="explore:hobbies">
             <i class="ti-music-alt kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Music</h3>
@@ -334,15 +370,15 @@
             <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
           </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <a href="/literature.html" class="kr-explore-link" data-live="explore:series">
+        <div class="col-6 col-md-3 col-lg">
+          <a href="/literature.html" class="kr-explore-link" data-live="explore:literature">
             <i class="ti-book kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Literature</h3>
             <p>Reviews &amp; stats</p>
             <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
           </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2">
+        <div class="col-6 col-md-3 col-lg">
           <a href="/blog.html" class="kr-explore-link" data-live="explore:blog">
             <i class="ti-write kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Blog</h3>
@@ -350,7 +386,15 @@
             <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
           </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2">
+        <div class="col-6 col-md-3 col-lg">
+          <a href="/series.html" class="kr-explore-link" data-live="explore:series">
+            <i class="ti-layers kr-explore-link__icon" aria-hidden="true"></i>
+            <h3>Series</h3>
+            <p><span id="explore-series-count">7</span> collections</p>
+            <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
+          </a>
+        </div>
+        <div class="col-6 col-md-3 col-lg">
           <a href="/contact.html" class="kr-explore-link" data-live="explore:about">
             <i class="ti-email kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Contact</h3>
@@ -362,26 +406,27 @@
     </div>
   </section>
 
-  <!-- Bluesky Feed -->
-  <div class="about-us-area kr-social-area clearfix">
+  <!-- Bluesky feed (renderBlueskyFeed, shared-components.js) -->
+  <section class="about-us-area kr-social-area clearfix">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
-          <div class="text-center" style="margin-bottom: 30px;">
+          <div class="section-heading text-center">
             <span class="section-eyebrow">Social</span>
-        <h2 class="wow fadeInUp" data-wow-delay="100ms">Recent on Bluesky</h2>
-            <p class="wow fadeInUp home-section-note" data-wow-delay="200ms">
+            <h2>Recent on Bluesky</h2>
+            <p class="section-heading__lede">
               <a href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer">@kenreid.co.uk</a>
             </p>
           </div>
-          <div id="bsky-posts" class="wow fadeInUp" data-wow-delay="300ms" style="max-width: 600px; margin: 0 auto;"></div>
+          <div id="bsky-posts" class="kr-social-feed"></div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Random Quote. Its own class, not the literature page's .quote-carousel:
-       that one is a carousel with nav buttons, this is one still quotation. -->
+  <!-- Random Quote. The same .kr-home-quote component, and the same
+       rotator (krQuoteRotator), carry the literature page's quotations
+       (with .kr-home-quote--hold), so a change here shows there too. -->
   <section class="kr-home-quote" id="home-quote">
     <div class="kr-home-quote__inner">
       <!-- Quotation and attribution are one block, so the space reserved for
@@ -415,260 +460,121 @@
 
   <!-- JavaScript -->
   <script src="/js/jquery.min.js"></script>
-  <script src="/js/alime.bundle.js"></script>
-  <script src="/js/site.js"></script>
-  <script src="/js/lightbox.js"></script>
-  <script src="/js/default-assets/active.js"></script>
-  <script src="/js/shared-components.js"></script>
+  <script src="/js/alime.bundle.js?v=20260923a"></script>
+  <script src="/js/site.js?v=20260923a"></script>
+  <script src="/js/lightbox.js?v=20260923a"></script>
+  <script src="/js/default-assets/active.js?v=20260923a"></script>
+  <script src="/js/shared-components.js?v=20260923a"></script>
   <script defer src="/js/hero-evolve.js?v=20260917a"></script>
   <script>
+    /* The homepage's own wiring. The furniture every page shares (header,
+       footer, photo strip, the Now strip, the Last.fm figure, the count-up
+       and the hover sketches) lives in shared-components.js; this script
+       does only what no other page does. Every data file is read through
+       krFetchJson, which requests a URL once per page, so the header's
+       recent posts, the Now strip and the code below share one posts.json
+       and one Bluesky request. Each part fails on its own without taking
+       the others with it; a figure whose file fails keeps the value it
+       was painted with. */
     renderHeader('header-section', { basePath: '/', active: 'home' });
-    renderInstagramSection('instagram-section');
+    renderPhotoStrip('instagram-section');
     renderFooter('footer-section');
+    renderBlueskyFeed(document.getElementById('bsky-posts'), { limit: 2 });
 
-    /* The quotations rotate, starting from a random one so the homepage
-       does not always open on the same line. The countdown bar is the
-       clock: the next quote is drawn when the bar's animation ends, so
-       the bar and the rotation cannot disagree, and pausing the animation
-       pauses the rotation with it. The arrows step through by hand, and
-       every change happens behind a fade. Under prefers-reduced-motion
-       nothing rotates on its own and nothing fades. */
-    fetch('/data/quotes-home.json')
-      .then(function(r) { return r.json(); })
-      .then(function(quotes) {
-        var el = document.getElementById('home-quote-text');
-        var attr = document.getElementById('home-quote-attr');
-        if (!el || !quotes || !quotes.length) return;
-
-        var section = document.getElementById('home-quote');
-        var body = document.getElementById('home-quote-body');
-        var inner = body.parentNode;
-        var controls = document.getElementById('home-quote-controls');
-        var toggle = document.getElementById('home-quote-toggle');
-        var bar = document.getElementById('home-quote-bar');
-        var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        var i = Math.floor(Math.random() * quotes.length);
-        var paused = false;
-
-        function line(q) {
-          // Middot, not a comma: set in letterspaced caps, "Kahneman, Thinking,
-          // Fast and Slow" has two commas doing two different jobs.
-          return q.author + ' \u00b7 ' + q.book;
-        }
-
-        /* Hold the height of the tallest quotation, so swapping one for
-           another never shifts the rest of the page. Measured rather than
-           guessed: a hidden twin of the block is filled with every quote in
-           turn at the real width, which means a quote added to the JSON is
-           accounted for without anyone touching the CSS. Rerun on resize,
-           since the number of lines changes with the width. */
-        function reserve() {
-          var ghost = body.cloneNode(true);
-          ghost.removeAttribute('id');
-          ghost.setAttribute('aria-hidden', 'true');
-          ghost.style.cssText = 'position:absolute;left:0;right:0;top:0;min-height:0;visibility:hidden;pointer-events:none;';
-          inner.appendChild(ghost);
-          var gt = ghost.querySelector('.kr-home-quote__text');
-          var ga = ghost.querySelector('.kr-home-quote__attr');
-          var tall = 0;
-          for (var n = 0; n < quotes.length; n++) {
-            gt.textContent = '\u201C' + quotes[n].quote + '\u201D';
-            ga.textContent = line(quotes[n]);
-            tall = Math.max(tall, ghost.offsetHeight);
-          }
-          inner.removeChild(ghost);
-          body.style.minHeight = tall + 'px';
-        }
-
-        /* Swap one quotation for the next behind a fade, so the change
-           reads as a change and not as a flicker. The text is replaced at
-           the bottom of the fade, where nobody can see it happen. Steps
-           count from where the fade is going, not from what is on screen,
-           so two quick presses of the arrow move two quotations rather
-           than one. Under prefers-reduced-motion the swap is immediate. */
-        var fading;
-        var pending = i;
-        function step(d) { change(pending + d); }
-        function change(n) {
-          pending = ((n % quotes.length) + quotes.length) % quotes.length;
-          if (still) { show(pending); return; }
-          clearTimeout(fading);
-          body.style.opacity = '0';
-          fading = setTimeout(function() {
-            show(pending);
-            body.style.opacity = '1';
-          }, 340);
-        }
-
-        function show(n) {
-          i = ((n % quotes.length) + quotes.length) % quotes.length;
-          var q = quotes[i];
-          el.textContent = '\u201C' + q.quote + '\u201D';
-          attr.textContent = line(q);
-          if (still) return;
-          // A longer quotation needs longer on screen, within reason.
-          var words = q.quote.split(/\s+/).length;
-          section.style.setProperty('--kr-quote-dwell',
-            Math.min(Math.max(words * 260, 7000), 16000) + 'ms');
-          // Restart the countdown: drop the animation, force a reflow, restore it.
-          bar.style.animation = 'none';
-          void bar.offsetWidth;
-          bar.style.animation = '';
-        }
-
-        show(i);
-        // Web fonts decide how many lines a quotation takes, so measure
-        // once they are in. Before then the reserved height would be wrong.
-        if (document.fonts && document.fonts.ready) { document.fonts.ready.then(reserve); } else { reserve(); }
-        var resized;
-        window.addEventListener('resize', function() {
-          clearTimeout(resized);
-          resized = setTimeout(reserve, 200);
-        });
-
-        controls.hidden = false;
-        document.getElementById('home-quote-prev').addEventListener('click', function() { step(-1); });
-        document.getElementById('home-quote-next').addEventListener('click', function() { step(1); });
-        if (still) return;
-
-        section.classList.add('kr-home-quote--running');
-        bar.addEventListener('animationend', function() { if (!paused) step(1); });
-
-        toggle.addEventListener('click', function() {
-          paused = !paused;
-          section.classList.toggle('kr-home-quote--paused', paused);
-          toggle.setAttribute('aria-label', paused ? 'Resume the quotations' : 'Pause the quotations');
-        });
-      }).catch(function() {});
-
-    /* Latest 3 blog posts */
-    function parsePostDate(dateValue) {
-      if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
-        var parts = dateValue.split('-');
-        return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
-      }
-      return new Date(dateValue);
+    /** Writes a figure into each element named in `ids` that exists. */
+    function setFigure(ids, value) {
+      [].concat(ids).forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = String(value);
+      });
     }
 
-    fetch('/data/posts.json')
-      .then(function(r) { return r.json(); })
-      .then(function(posts) {
-        posts.sort(function(a, b) { return parsePostDate(b.date) - parsePostDate(a.date); });
-        var blogPostCount = document.getElementById('blog-post-count');
-        if (blogPostCount) {
-          blogPostCount.textContent = posts.length;
-        }
-        var wordCount = document.getElementById('word-count');
-        if (wordCount) {
-          var totalWords = posts.reduce(function(sum, p) { return sum + (p.words || 0); }, 0);
-          if (totalWords >= 1000) wordCount.textContent = Math.floor(totalWords / 1000) + 'K+';
-        }
-        /* Live counts for photos and quotes (1d) */
-        fetch('/data/photography-files.json').then(function(r) { return r.json(); }).then(function(files) {
-          var el = document.getElementById('photo-count');
-          if (el && Array.isArray(files)) el.textContent = files.length;
-        }).catch(function() {});
-        // Reading figures from the weekly Goodreads refresh (data/reading.json)
-        fetch('/data/reading.json').then(function(r) { return r.json(); }).then(function(rd) {
-          var a = document.getElementById('books-read-count'), b = document.getElementById('book-review-count');
-          if (a && rd && rd.books) a.textContent = (Math.floor(rd.books / 10) * 10) + '+';
-          if (b && rd && rd.reviews) b.textContent = String(rd.reviews);
-        }).catch(function() {});
-        fetch('/data/quotes-all.json').then(function(r) { return r.json(); }).then(function(qs) {
-          var el = document.getElementById('quote-count');
-          if (el && Array.isArray(qs)) el.textContent = qs.length;
-        }).catch(function() {});
-        // The owl carousel clones the slide for looping, so populate every
-        // copy of the chip, not just the original by id.
-        if (posts.length) {
-          document.querySelectorAll('.kr-hero-latest').forEach(function(hero) {
-            hero.href = '/' + (posts[0].url || 'blog.html');
-            hero.querySelector('.kr-hero-latest__title').textContent = posts[0].title;
-            hero.hidden = false;
-          });
-        }
-        var container = document.getElementById('latest-posts');
-        if (!container) return;
-        var row = document.createElement('div');
-        row.className = 'row';
-        posts.slice(0, 3).forEach(function(post) {
-          var dateStr = parsePostDate(post.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-          var col = typeof createBlogCardElement === 'function'
-            ? createBlogCardElement(post, {
-                colClass: 'col-12 mb-30',
-                href: post.url,
-                imageSrc: post.image,
-                dateStr: dateStr,
-                showReadTime: false
-              })
-            : document.createElement('div');
-          row.appendChild(col);
-        });
-        container.appendChild(row);
-        // The latest cards run their posts' sketches on hover too.
-      }).catch(function() {});
-
-    /* Bluesky feed */
+    /* Hero photographs for slides 2 to 5, named in data-bg. They are
+       applied after the load event, once the browser is idle (or after
+       IDLE_MS where requestIdleCallback is missing), which keeps four
+       large images out of the critical window and still has them in well
+       before the first advance at ten seconds. Owl has cloned slides for
+       its loop by then, and the clones carry data-bg too, so every copy is
+       filled; clones Owl makes later copy the painted style. A reader who
+       moves the carousel before then gets the photographs at once. */
     (function() {
-      var DID = 'did:plc:ks2rxbqomt6vsae6tepl6pcm';
-      var HANDLE = 'kenreid.co.uk';
-      var container = document.getElementById('bsky-posts');
-      if (!container) return;
-      container.innerHTML = [1, 2].map(function() {
-        return '<div class="bsky-post-card"><span class="kr-skel-bar" style="width:35%;"></span>' +
-               '<span class="kr-skel-bar" style="width:92%;"></span>' +
-               '<span class="kr-skel-bar" style="width:78%;"></span></div>';
-      }).join('');
-      fetch('https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=' + DID + '&limit=2&filter=posts_no_replies')
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-          container.innerHTML = '';
-          if (!data.feed || !data.feed.length) return;
-          data.feed.forEach(function(item) {
-            var post = item.post;
-            var record = post.record;
-            var author = post.author || {};
-            var rkey = post.uri.split('/').pop();
-            var date = new Date(record.createdAt);
-            var dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-            var postUrl = 'https://bsky.app/profile/' + HANDLE + '/post/' + rkey;
-
-            /* Avatar */
-            var avatarHtml = author.avatar
-              ? '<a href="https://bsky.app/profile/' + HANDLE + '" target="_blank" rel="noopener noreferrer" aria-label="View @' + HANDLE + ' on Bluesky"><img class="bsky-post-avatar" src="' + author.avatar + '" alt="' + (author.displayName || HANDLE) + ' avatar" loading="lazy"></a>'
-              : '';
-
-            /* Attached images */
-            var imagesHtml = '';
-            var embed = post.embed;
-            if (embed && embed.$type === 'app.bsky.embed.images#view' && embed.images && embed.images.length) {
-              var imgs = embed.images;
-              imagesHtml = '<div class="bsky-post-images count-' + Math.min(imgs.length, 4) + '">';
-              imgs.slice(0, 4).forEach(function(img) {
-                imagesHtml += '<img class="bsky-post-img" src="' + img.thumb + '" alt="' + (img.alt || 'Post image').replace(/"/g, '&quot;') + '" loading="lazy">';
-              });
-              imagesHtml += '</div>';
-            }
-
-            var card = document.createElement('div');
-            card.className = 'bsky-post-card';
-            card.innerHTML =
-              '<div class="bsky-post-header">' +
-                avatarHtml +
-                '<div>' +
-                  '<div class="bsky-post-handle">@' + HANDLE + '</div>' +
-                  '<div class="bsky-post-date">' + dateStr + '</div>' +
-                '</div>' +
-              '</div>' +
-              '<p class="bsky-post-text">' + (record.text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>') + '</p>' +
-              imagesHtml +
-              '<div class="bsky-post-meta">' +
-                '<a class="bsky-post-view-link" href="' + postUrl + '" target="_blank" rel="noopener noreferrer">View on Bluesky &rarr;</a>' +
-              '</div>';
-            container.appendChild(card);
-          });
-        }).catch(function() { container.innerHTML = ''; });
+      var IDLE_MS = 2000;
+      var painted = false;
+      function paintSlides() {
+        if (painted) return;
+        painted = true;
+        document.querySelectorAll('.welcome-slides [data-bg]').forEach(function(el) {
+          el.style.backgroundImage = 'url("' + el.getAttribute('data-bg') + '")';
+          el.removeAttribute('data-bg');
+        });
+      }
+      function whenIdle() {
+        if ('requestIdleCallback' in window) requestIdleCallback(paintSlides, { timeout: IDLE_MS });
+        else setTimeout(paintSlides, IDLE_MS);
+      }
+      if (document.readyState === 'complete') whenIdle();
+      else window.addEventListener('load', whenIdle, { once: true });
+      if (window.jQuery) jQuery('.welcome-slides').one('translate.owl.carousel', paintSlides);
     })();
+
+    /* The quotations rotate (krQuoteRotator in shared-components.js, the
+       same code as the literature page's band), starting from a random
+       one so the homepage does not always open on the same line. */
+    krFetchJson('data/quotes-home.json').then(function(quotes) {
+      if (!Array.isArray(quotes) || !quotes.length) return;
+      krQuoteRotator(document.getElementById('home-quote'), quotes,
+        { start: Math.floor(Math.random() * quotes.length) });
+    }).catch(function() {});
+
+    /* posts.json: the three latest posts as cards, the hero's "New post"
+       chip, and the post and word counts. krFetchJson hands every reader
+       the same array, so it is copied before sorting; the file is already
+       newest first, and the sort only guards against a hand edit. */
+    loadBlogPosts().then(function(all) {
+      var posts = all.slice().sort(function(a, b) {
+        return krParsePostDate(b.date) - krParsePostDate(a.date);
+      });
+      if (!posts.length) return;
+      setFigure('blog-post-count', posts.length);
+      var words = posts.reduce(function(sum, p) { return sum + (p.words || 0); }, 0);
+      if (words >= 1000) setFigure('word-count', Math.floor(words / 1000) + 'K+');
+
+      // Owl clones slide 1 for its loop, so every copy of the chip is
+      // filled. Its room is held while it waits (style.css), so showing
+      // it moves nothing.
+      document.querySelectorAll('.kr-hero-latest').forEach(function(chip) {
+        chip.href = '/' + (posts[0].url || 'blog.html');
+        chip.querySelector('.kr-hero-latest__title').textContent = posts[0].title;
+        chip.classList.remove('kr-hero-latest--pending');
+      });
+
+      // The cards bind their posts' hover sketches by themselves
+      // (live-covers.js watches the page for cards rendered late).
+      var list = document.getElementById('latest-posts');
+      if (!list) return;
+      var row = document.createElement('div');
+      row.className = 'row';
+      posts.slice(0, 3).forEach(function(post) {
+        row.appendChild(createBlogCardElement(post, { colClass: 'col-12 mb-30', showReadTime: false }));
+      });
+      list.appendChild(row);
+    }).catch(function() {});
+
+    /* Counts that other files already hold. colophon.json is measured by
+       generate_colophon.py, which CI keeps in step with the tree, so the
+       photograph and quotation counts come from it rather than from
+       downloading both lists to take their length. */
+    krFetchJson('data/colophon.json').then(function(site) {
+      if (site.photos > 0) setFigure(['photo-count', 'explore-photo-count'], site.photos);
+      if (site.quotes > 0) setFigure('quote-count', site.quotes);
+      if (site.series > 0) setFigure('explore-series-count', site.series);
+    }).catch(function() {});
+
+    // Written weekly from the Goodreads read shelf (refresh_books.py).
+    krFetchJson('data/reading.json').then(function(rd) {
+      if (rd.books > 0) setFigure('books-read-count', (Math.floor(rd.books / 10) * 10) + '+');
+      if (rd.reviews > 0) setFigure('book-review-count', rd.reviews);
+    }).catch(function() {});
   </script>
 
 </body>

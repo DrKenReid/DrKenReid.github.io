@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.kenreid.co.uk/data/schema/posts.schema.json",
+  "title": "data/posts.json",
+  "description": "Every published post, newest first. The blog listing, the cards, the palette, the opener, the feed, the sitemap, the share images and each post's head are all built from it. Title, date, updated, tags, category, excerpt, url, image and series are written by hand; readMinutes and words come from generate_read_times.py, code and interactive from generate_post_facets.py. What a schema cannot say is checked elsewhere: tags against the allowed set and that url and image exist (audit_site.py), and that updated is not before date (generate_post_head.py).",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["title", "date", "tags", "category", "excerpt", "url", "image", "readMinutes", "words"],
+    "additionalProperties": false,
+    "properties": {
+      "title": {
+        "type": "string",
+        "pattern": "\\S",
+        "description": "As the opener, the cards and the JSON-LD headline print it."
+      },
+      "date": {
+        "type": "string",
+        "pattern": "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
+        "description": "Publication date, YYYY-MM-DD."
+      },
+      "updated": {
+        "type": "string",
+        "pattern": "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
+        "description": "Optional. The last change in substance, YYYY-MM-DD, set by hand. Becomes the post's dateModified, article:modified_time and sitemap lastmod; without it they use date. Never taken from git, whose commit times the post-commit hook moves."
+      },
+      "tags": {
+        "type": "array",
+        "items": {"type": "string", "pattern": "^[a-z]+( [a-z]+)*$"},
+        "description": "Lower-case topic tags. The allowed set is ALLOWED_TAGS in .github/scripts/audit_site.py; the blog's Topic filter makes a button for each tag it finds, so a typo would be a new button."
+      },
+      "category": {
+        "type": "string",
+        "enum": ["Books & Media", "Data & AI", "Data Science", "Ideas", "Money", "Personal", "Photography", "Technology"],
+        "description": "The opener's kicker and the JSON-LD articleSection. Each value has sign-off routes in KR_ROUTES (js/shared-components.js); a new category needs an entry there too."
+      },
+      "excerpt": {
+        "type": "string",
+        "pattern": "\\S",
+        "description": "The standfirst under the opener title, and the card excerpt."
+      },
+      "url": {
+        "type": "string",
+        "pattern": "^blog/[a-z0-9-]+\\.html$",
+        "description": "Site-relative path of the post."
+      },
+      "image": {
+        "type": "string",
+        "pattern": "\\S",
+        "description": "Card image: site-relative (a gallery thumb, a blog/img file) or a full URL."
+      },
+      "series": {
+        "type": ["object", "array"],
+        "description": "The series the post is part of: one {name, part}, or a list of them for a post in two series. Each name has a page, series-<slug>.html.",
+        "required": ["name", "part"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {"type": "string", "pattern": "\\S"},
+          "part": {"type": "integer", "minimum": 1}
+        },
+        "items": {
+          "type": "object",
+          "required": ["name", "part"],
+          "additionalProperties": false,
+          "properties": {
+            "name": {"type": "string", "pattern": "\\S"},
+            "part": {"type": "integer", "minimum": 1}
+          }
+        }
+      },
+      "readMinutes": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Written by generate_read_times.py (220 words a minute, rounded up)."
+      },
+      "words": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Written by generate_read_times.py; the JSON-LD wordCount."
+      },
+      "code": {
+        "type": "boolean",
+        "description": "Written by generate_post_facets.py: the post has a <pre><code> block. Absent when false."
+      },
+      "interactive": {
+        "type": "boolean",
+        "description": "Written by generate_post_facets.py: the post has a .kr-viz demo. Absent when false."
+      }
+    }
+  }
+}

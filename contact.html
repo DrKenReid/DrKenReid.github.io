@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -8,47 +8,74 @@
   <title>Contact - Ken Reid</title>
   <meta property="og:title" content="Contact - Ken Reid">
   <meta property="og:description" content="Get in touch with Ken Reid — email, social media, and more.">
-  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/ken1.webp">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/og/page-contact.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Contact: email and social media, over one of Ken Reid's photographs">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Contact - Ken Reid">
   <meta name="twitter:description" content="Get in touch with Ken Reid — email, social media, and more.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/page-contact.jpg">
+  <meta name="twitter:image:alt" content="Contact: email and social media, over one of Ken Reid's photographs">
   <meta property="og:url" content="https://www.kenreid.co.uk/contact.html">
   <meta property="og:type" content="website">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <meta property="og:site_name" content="Ken Reid">
+  <meta property="og:locale" content="en_GB">
+  <script defer src="/js/analytics.js"></script>
   <link rel="icon" href="/img/core-img/favicon.png">
   <link rel="apple-touch-icon" href="/img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
   <link rel="manifest" href="/manifest.json">
   <link rel="canonical" href="https://www.kenreid.co.uk/contact.html">
-  <link rel="preload" as="image" href="/img/photography/hero/117.webp">
-  <link rel="stylesheet" href="/style.min.css">
+  <link rel="preload" as="image" href="/img/photography/hero/117.webp" fetchpriority="high">
+  <link rel="stylesheet" href="/style.min.css?v=20260923a">
   <style>
-    /* Page-specific extras; .social-card base + dark styles live in style.css (3d) */
+    /* Page-specific extras; .social-card base + dark styles live in style.css §08 Cards */
     .social-card {
       padding: 25px 20px;
     }
+    /* Each network's mark (a themify glyph, or an inline SVG where
+       themify has none) in the stone decoration colour: the card is the
+       link, and red is for what can be clicked. */
     .social-card .social-icon {
       font-size: 36px;
+      line-height: 1;
       margin-bottom: 12px;
       display: block;
+      color: var(--kr-eyebrow);
+    }
+    /* Each mark is a block of its own, one em (36px) tall: an inline
+       glyph sits on the line's baseline beside the span's own Poppins
+       strut, and the two fonts' different ascents made the icon-font
+       cards a few pixels taller than the SVG ones, so the titles did not
+       line up across the row. */
+    .social-card .social-icon > * {
+      display: block;
+      height: 1em;
+      line-height: 1;
+    }
+    .social-card .social-icon > svg {
+      width: 1em;
+      margin: 0 auto;
+      fill: currentColor;
     }
     .social-card h3 {
       font-size: 16px;
     }
-    .social-card:hover h3 { color: #fc6060; }
+    .social-card:hover h3 { color: var(--kr-action); }
     .social-card p {
       font-size: 13px;
     }
-    .contact-note {
-      color: #636363;
-    }
-    [data-theme="dark"] .contact-note {
-      color: #cccccc !important;
+    /* The page opens on this paragraph rather than a heading: the opener
+       already says Contact. Its type is the shared lede's (.kr-lede, §05);
+       only where it sits is set here. */
+    p.contact-lede {
+      max-width: 34em;
+      margin: 0 auto 12px;
     }
   </style>
-  <script defer src="/js/theme.js"></script>
-  <script defer src="/js/palette.js"></script>
+  <script defer src="/js/theme.js?v=20260923a"></script>
+  <script defer src="/js/palette.js?v=20260923a"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -65,24 +92,22 @@
   </script>
 </head>
 <body>
-  <div id="preloader"><div class="loader"></div></div>
-
   <!-- Header -->
   <div id="header-section"></div>
 
   <main id="main-content">
 
-  <!-- Breadcrumb -->
+  <!-- Page opener (style.css §06, "Page opener") -->
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/117.webp);">
-    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
-      <div class="breadcrumb-content text-center">
-        <h1 class="page-title">Contact</h1>
-        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+    <div class="container">
+      <div class="breadcrumb-content">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="/index.html"><i class="icon_house_alt"></i> Home</a></li>
           <li class="breadcrumb-item active" aria-current="page">Contact</li>
         </ol></nav>
+        <h1 class="page-title">Contact</h1>
       </div>
-    </div></div></div>
+    </div>
   </section>
 
   <!-- Intro -->
@@ -90,12 +115,10 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8 text-center">
-          <span class="section-eyebrow">Contact</span>
-        <h2 class="wow fadeInUp" data-wow-delay="100ms">Get in Touch</h2>
-          <p class="wow fadeInUp contact-note" data-wow-delay="200ms" style="font-size: 16px; line-height: 1.8; margin-bottom: 10px;">
+          <p class="kr-lede contact-lede">
             I like hearing from people. Questions about my work, book recommendations, photography, or anything else on this site are all welcome.
           </p>
-          <p class="wow fadeInUp" data-wow-delay="300ms" style="margin-bottom: 40px;">
+          <p class="mb-5">
             <a href="mailto:ken@kenreid.co.uk?subject=Hello%20from%20kenreid.co.uk" class="kr-mail-link">ken@kenreid.co.uk</a>
           </p>
         </div>
@@ -106,48 +129,48 @@
   <!-- Social Cards -->
   <div class="about-us-area section-padding-80-0 clearfix" id="social">
     <div class="container">
-      <div class="text-center" style="margin-bottom: 40px;">
-        <h2 class="wow fadeInUp" data-wow-delay="100ms">Find Me Online</h2>
+      <div class="section-heading text-center">
+        <h2>Find Me Online</h2>
       </div>
       <div class="row justify-content-center">
-        <div class="col-6 col-md-4 col-lg-2 mb-30 wow fadeInUp" data-wow-delay="100ms">
+        <div class="col-6 col-md-4 col-lg-2 mb-30">
           <a href="https://www.linkedin.com/in/kennethneilreid" target="_blank" rel="noopener noreferrer" class="social-card">
-            <span class="social-icon">💼</span>
+            <span class="social-icon" aria-hidden="true"><i class="ti-linkedin kr-glyph" aria-hidden="true"></i></span>
             <h3>LinkedIn</h3>
             <p>Professional network</p>
           </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2 mb-30 wow fadeInUp" data-wow-delay="150ms">
+        <div class="col-6 col-md-4 col-lg-2 mb-30">
           <a href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer" class="social-card">
-            <span class="social-icon">🦋</span>
+            <span class="social-icon" aria-hidden="true"><svg class="kr-glyph" viewBox="0 0 568 501" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><path d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.21C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.842 193.273-185.702 70.281-63.111-64.76-33.889-129.52 80.986-149.071-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.659 0 75.291 0 57.946 0-28.906 76.135-1.612 123.121 33.664z"/></svg></span>
             <h3>Bluesky</h3>
             <p>Thoughts &amp; links</p>
           </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2 mb-30 wow fadeInUp" data-wow-delay="200ms">
+        <div class="col-6 col-md-4 col-lg-2 mb-30">
           <a href="https://github.com/DrKenReid" target="_blank" rel="noopener noreferrer" class="social-card">
-            <span class="social-icon">💻</span>
+            <span class="social-icon" aria-hidden="true"><i class="ti-github kr-glyph" aria-hidden="true"></i></span>
             <h3>GitHub</h3>
             <p>Code &amp; projects</p>
           </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2 mb-30 wow fadeInUp" data-wow-delay="250ms">
+        <div class="col-6 col-md-4 col-lg-2 mb-30">
           <a href="https://www.instagram.com/drkenreid/" target="_blank" rel="noopener noreferrer" class="social-card">
-            <span class="social-icon">📷</span>
+            <span class="social-icon" aria-hidden="true"><i class="ti-instagram kr-glyph" aria-hidden="true"></i></span>
             <h3>Instagram</h3>
             <p>Photography</p>
           </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2 mb-30 wow fadeInUp" data-wow-delay="300ms">
+        <div class="col-6 col-md-4 col-lg-2 mb-30">
           <a href="https://www.youtube.com/@kenreid" target="_blank" rel="noopener noreferrer" class="social-card">
-            <span class="social-icon">🎬</span>
+            <span class="social-icon" aria-hidden="true"><i class="ti-youtube kr-glyph" aria-hidden="true"></i></span>
             <h3>YouTube</h3>
             <p>Videos &amp; playlists</p>
           </a>
         </div>
-        <div class="col-6 col-md-4 col-lg-2 mb-30 wow fadeInUp" data-wow-delay="350ms">
+        <div class="col-6 col-md-4 col-lg-2 mb-30">
           <a href="https://www.tiktok.com/@drkenreid" target="_blank" rel="noopener noreferrer" class="social-card">
-            <span class="social-icon">🎵</span>
+            <span class="social-icon" aria-hidden="true"><svg class="kr-glyph" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></span>
             <h3>TikTok</h3>
             <p>Short-form content</p>
           </a>
@@ -161,13 +184,11 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
-          <div class="text-center" style="margin-bottom: 30px;">
-            <h2 class="wow fadeInUp" data-wow-delay="100ms">Recent on Bluesky</h2>
-            <p class="wow fadeInUp contact-note" data-wow-delay="200ms">
-              <a href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer">@kenreid.co.uk</a>
-            </p>
+          <div class="section-heading text-center">
+            <h2>Recent on Bluesky</h2>
+            <p class="section-heading__lede"><a href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer">@kenreid.co.uk</a></p>
           </div>
-          <div id="bsky-posts" class="wow fadeInUp" data-wow-delay="300ms"></div>
+          <div id="bsky-posts"></div>
         </div>
       </div>
     </div>
@@ -176,13 +197,13 @@
   <!-- Map -->
   <div class="about-us-area section-padding-80 clearfix" id="location">
     <div class="container">
-      <div class="text-center" style="margin-bottom: 30px;">
-        <h2 class="wow fadeInUp" data-wow-delay="100ms">Based In</h2>
-        <p class="wow fadeInUp contact-note" data-wow-delay="200ms">Ann Arbor, Michigan</p>
+      <div class="section-heading text-center">
+        <h2>Based In</h2>
+        <p class="section-heading__lede">Ann Arbor, Michigan</p>
       </div>
       <div class="row justify-content-center">
         <div class="col-12 col-lg-10">
-          <figure class="wow fadeInUp kr-static-map" data-wow-delay="300ms" style="margin: 0;">
+          <figure class="kr-static-map m-0">
             <a href="https://www.google.com/maps/place/Ann+Arbor,+MI" target="_blank" rel="noopener noreferrer" aria-label="Open Ann Arbor, Michigan in Google Maps">
               <img src="/img/bg-img/ann-arbor-map.webp" alt="Map of southeast Michigan centred on Ann Arbor" loading="lazy" width="820" height="360">
             </a>
@@ -199,84 +220,16 @@
   <div id="footer-section"></div>
 
   <script src="/js/jquery.min.js"></script>
-  <script src="/js/alime.bundle.js"></script>
-  <script src="/js/site.js"></script>
-  <script src="/js/lightbox.js"></script>
-  <script src="/js/default-assets/active.js"></script>
-  <script src="/js/shared-components.js"></script>
+  <script src="/js/alime.bundle.js?v=20260923a"></script>
+  <script src="/js/site.js?v=20260923a"></script>
+  <script src="/js/lightbox.js?v=20260923a"></script>
+  <script src="/js/default-assets/active.js?v=20260923a"></script>
+  <script src="/js/shared-components.js?v=20260923a"></script>
   <script>
     renderHeader('header-section', { basePath: '/', active: 'contact' });
-    renderInstagramSection('instagram-section');
+    renderPhotoStrip('instagram-section');
     renderFooter('footer-section');
-
-    /* Fetch latest Bluesky posts and render as cards */
-    (function() {
-      var DID = 'did:plc:ks2rxbqomt6vsae6tepl6pcm';
-      var HANDLE = 'kenreid.co.uk';
-      var container = document.getElementById('bsky-posts');
-      if (!container) return;
-      container.innerHTML = [1, 2, 3].map(function() {
-        return '<div class="bsky-post-card"><span class="kr-skel-bar" style="width:35%;"></span>' +
-               '<span class="kr-skel-bar" style="width:92%;"></span>' +
-               '<span class="kr-skel-bar" style="width:78%;"></span></div>';
-      }).join('');
-
-      fetch('https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=' + DID + '&limit=5&filter=posts_no_replies')
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-          container.innerHTML = '';
-          if (!data.feed || !data.feed.length) {
-            container.innerHTML = '<p class="bsky-post-meta" style="text-align:center;">No recent posts.</p>';
-            return;
-          }
-          data.feed.forEach(function(item) {
-            var post = item.post;
-            var record = post.record;
-            var author = post.author || {};
-            var rkey = post.uri.split('/').pop();
-            var date = new Date(record.createdAt);
-            var dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-            var postUrl = 'https://bsky.app/profile/' + HANDLE + '/post/' + rkey;
-
-            /* Avatar */
-            var avatarHtml = author.avatar
-              ? '<a href="https://bsky.app/profile/' + HANDLE + '" target="_blank" rel="noopener noreferrer" aria-label="View @' + HANDLE + ' on Bluesky"><img class="bsky-post-avatar" src="' + author.avatar + '" alt="' + ((author.displayName || HANDLE) + ' avatar').replace(/\"/g, '&quot;') + '" loading="lazy"></a>'
-              : '';
-
-            /* Attached images */
-            var imagesHtml = '';
-            var embed = post.embed;
-            if (embed && embed.$type === 'app.bsky.embed.images#view' && embed.images && embed.images.length) {
-              var imgs = embed.images;
-              imagesHtml = '<div class="bsky-post-images count-' + Math.min(imgs.length, 4) + '">';
-              imgs.slice(0, 4).forEach(function(img) {
-                imagesHtml += '<img class="bsky-post-img" src="' + img.thumb + '" alt="' + (img.alt || 'Post image').replace(/"/g, '&quot;') + '" loading="lazy">';
-              });
-              imagesHtml += '</div>';
-            }
-
-            var card = document.createElement('div');
-            card.className = 'bsky-post-card';
-            card.innerHTML =
-              '<div class="bsky-post-header">' +
-                avatarHtml +
-                '<div>' +
-                  '<div class="bsky-post-handle">@' + HANDLE + '</div>' +
-                  '<div class="bsky-post-date">' + dateStr + '</div>' +
-                '</div>' +
-              '</div>' +
-              '<p class="bsky-post-text">' + (record.text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>') + '</p>' +
-              imagesHtml +
-              '<div class="bsky-post-meta">' +
-                '<a class="bsky-post-view-link" href="' + postUrl + '" target="_blank" rel="noopener noreferrer">View on Bluesky &rarr;</a>' +
-              '</div>';
-            container.appendChild(card);
-          });
-        })
-        .catch(function() {
-          container.innerHTML = '<p class="bsky-post-meta" style="text-align:center;">Could not load posts. <a class="bsky-post-view-link" href="https://bsky.app/profile/' + HANDLE + '" target="_blank" rel="noopener noreferrer">View on Bluesky</a></p>';
-        });
-    })();
+    renderBlueskyFeed(document.getElementById('bsky-posts'), { limit: 5 });
   </script>
 </body>
 </html>

@@ -2,11 +2,13 @@
 Precompute reading times and word counts into data/posts.json.
 
 Counts the words inside each post's <div class="blog-post"> and writes
-readMinutes (220 wpm, matching the JS estimate) and words fields onto
-every entry. The homepage stats bar sums the words fields.
+readMinutes (sitelib.read_minutes: 220 wpm, rounded up) and words fields
+onto every entry. The browser only displays readMinutes, never
+recomputes it; the homepage stats bar sums the words fields.
 Run after adding or substantially editing a post:
 
     python .github/scripts/generate_read_times.py
+    python .github/scripts/generate_read_times.py --check   # exit 1 if any are stale
 """
 import json
 import sys
@@ -14,9 +16,12 @@ import re
 from html.parser import HTMLParser
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-POSTS_JSON = ROOT / "data" / "posts.json"
-WORDS_PER_MINUTE = 220
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import sitelib  # noqa: E402
+from sitelib import WORDS_PER_MINUTE, read_minutes  # noqa: E402,F401  (re-exported)
+
+ROOT = sitelib.ROOT
+POSTS_JSON = sitelib.POSTS_JSON
 
 
 class BlogPostTextExtractor(HTMLParser):
@@ -69,26 +74,46 @@ class BlogPostTextExtractor(HTMLParser):
 
 
 def count_words(html_path: Path) -> int:
+    """Words a reader reads in the post's .blog-post div.
+
+    A parser rather than sitelib.post_body: post_body returns the body's
+    markup, and counting words needs its text without scripts, styles or
+    the related-posts cards. Both find the same div (by class token, in
+    any attribute order), so the feed and the read time agree on what
+    the article is.
+    """
     parser = BlogPostTextExtractor()
     parser.feed(html_path.read_text(encoding="utf-8"))
     return len(re.findall(r"\S+", " ".join(parser.chunks)))
 
 
 def main(argv=None):
-    check_only = "--check" in (argv if argv is not None else sys.argv[1:])
-    posts = json.loads(POSTS_JSON.read_text(encoding="utf-8"))
+    parser = sitelib.arg_parser(__doc__)
+    parser.add_argument("--check", action="store_true",
+                        help="exit 1 if posts.json disagrees with the posts; write nothing")
+    check_only = parser.parse_args(argv).check
+    posts = sitelib.load_posts()
     total = 0
     drift = []
+    # A post with no file or no body fails the run, in both modes, and
+    # nothing is written. It used to be printed and passed over, while the
+    # feed and the related-posts generator failed on the same post, so the
+    # first red line in a check run named a symptom downstream instead of
+    # this, the cause.
+    broken = []
     for post in posts:
         html_path = ROOT / post["url"]
         if not html_path.exists():
-            print(f"MISSING {post['url']}")
+            broken.append(f"{post['url']}: listed in posts.json but the file is missing")
+            continue
+        if sitelib.post_body(html_path.read_text(encoding="utf-8")) is None:
+            broken.append(f"{post['url']}: no .blog-post body, or one that never closes")
             continue
         words = count_words(html_path)
         if not words:
-            print(f"NO .blog-post CONTENT in {post['url']}")
+            broken.append(f"{post['url']}: the .blog-post body has no words")
             continue
-        minutes = max(1, -(-words // WORDS_PER_MINUTE))  # ceil division
+        minutes = read_minutes(words)
         if post.get("words") != words or post.get("readMinutes") != minutes:
             drift.append(
                 f"{post['url']}: words {post.get('words')} -> {words}, "
@@ -99,6 +124,12 @@ def main(argv=None):
         total += words
         if not check_only:
             print(f"{minutes:3d} min  {words:6d} words  {post['url']}")
+
+    if broken:
+        print(f"error: {len(broken)} post(s) have no body to count:")
+        for b in broken:
+            print(f"  {b}")
+        return 1
 
     if check_only:
         if drift:
@@ -113,7 +144,8 @@ def main(argv=None):
     POSTS_JSON.write_text(
         json.dumps(posts, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
-    print(f"\nWrote {POSTS_JSON} — {total:,} words across {len(posts)} posts")
+    print(f"\nWrote {POSTS_JSON.relative_to(ROOT).as_posix()}: "
+          f"{total:,} words across {len(posts)} posts")
     return 0
 
 

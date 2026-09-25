@@ -1,44 +1,74 @@
-/* Self-hosted Google Fonts (latin subset) — downloaded 2026-07-07.
-   Files live in fonts/vendor/; regenerate via the commit that added this. */
+/* Self-hosted web fonts (latin subset), plus metric-matched fallbacks.
+
+   Files live in fonts/vendor/. This sheet is @imported by style.css and
+   inlined into style.min.css by minify_css.py, which rewrites the relative
+   url()s to root-relative ones; rebuild the min file after any edit here.
+
+   --- Lora ----------------------------------------------------------------
+   Lora ships as a variable font with one axis, wght 400-700. Google serves
+   the same file whichever static weight is asked for, so the 400, 500 and
+   600 downloads this sheet used to point at were three copies of one file
+   (and the two italics two copies of another). A page using Lora at 400
+   and 600 fetched it twice. Now there is one face per style, declared over
+   the whole axis, and every weight in that range comes from one download.
+
+   --- Poppins -------------------------------------------------------------
+   Static files, one per weight: Poppins has no variable release.
+
+   --- Fallbacks -----------------------------------------------------------
+   font-display: swap shows text at once in a fallback and swaps the web
+   font in when it lands. Georgia and Arial set the same words to other
+   widths, on shorter line boxes, than Lora and Poppins, so the swap
+   reflowed every paragraph: lines rewrapped and the page jumped.
+   'Lora Fallback' and 'Poppins Fallback' are those system fonts scaled and
+   re-metricked to take up the same space. They go straight after the web
+   font in each font-family stack.
+
+   How the numbers were measured:
+     size-adjust   First the mean advance width of the web font over that
+                   of the local font, each weighted by how often every
+                   character occurs in the site's own prose (the <p> text
+                   of every tracked post, about 736,000 characters), read
+                   from the fonts' hmtx tables with fontTools. Lora was
+                   instanced at the weight each face stands in for: 400
+                   for the regular faces, 600 (the heading weight) for the
+                   bold ones. Poppins used its 400 and 600 files. Then
+                   corrected by setting 22,000 characters of the same prose
+                   in both fonts in Chromium, which brings in kerning: a
+                   further 0.1-0.3%.
+     ascent, descent, line-gap overrides
+                   The web font's hhea metrics over units-per-em (Lora
+                   1006/274/0, Poppins 1050/350/100), divided by
+                   size-adjust, because the browser scales the overrides by
+                   size-adjust too.
+   Result in Chromium, a 2,400-character passage at 18px in a 680px column:
+   widths within 0.7% of the web font's, line boxes of identical height at
+   line-height: normal, and the same line count in every case but one
+   (Lora italic 400 wraps to 30 lines where the web font takes 29). Poppins
+   500 and 700 borrow the 400 and 600 numbers and land within the same 0.7%.
+
+   Where Georgia or Arial are missing (Android, most Linux) the local()
+   lookups fail, the face is skipped, and the stack moves on to the next
+   family. Liberation Sans and Arimo are metric clones of Arial and Gelasio
+   of Georgia, so the same numbers hold for them.
+
+   Re-measure if a font file is replaced or the weight a face stands in for
+   changes. */
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/vendor/lora-var.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 
 @font-face {
   font-family: 'Lora';
   font-style: italic;
-  font-weight: 400;
+  font-weight: 400 700;
   font-display: swap;
-  src: url('../fonts/vendor/lora-400-italic.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-
-@font-face {
-  font-family: 'Lora';
-  font-style: italic;
-  font-weight: 500;
-  font-display: swap;
-  src: url('../fonts/vendor/lora-500-italic.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-
-@font-face {
-  font-family: 'Lora';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('../fonts/vendor/lora-400.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-
-@font-face {
-  font-family: 'Lora';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('../fonts/vendor/lora-500.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-
-@font-face {
-  font-family: 'Lora';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url('../fonts/vendor/lora-600.woff2') format('woff2');
+  src: url('../fonts/vendor/lora-var-italic.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 
 @font-face {
@@ -96,3 +126,67 @@
   font-display: swap;
   src: url('../fonts/vendor/poppins-700.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+/* --- Lora Fallback: Georgia, sized to Lora ------------------------------ */
+
+@font-face {
+  font-family: 'Lora Fallback';
+  font-style: normal;
+  font-weight: 100 500;
+  src: local('Georgia'), local('Gelasio');
+  size-adjust: 105.34%;
+  ascent-override: 95.50%;
+  descent-override: 26.01%;
+  line-gap-override: 0.00%; }
+
+@font-face {
+  font-family: 'Lora Fallback';
+  font-style: normal;
+  font-weight: 600 900;
+  src: local('Georgia Bold'), local('Georgia-Bold'), local('Gelasio Bold');
+  size-adjust: 92.19%;
+  ascent-override: 109.12%;
+  descent-override: 29.72%;
+  line-gap-override: 0.00%; }
+
+@font-face {
+  font-family: 'Lora Fallback';
+  font-style: italic;
+  font-weight: 100 500;
+  src: local('Georgia Italic'), local('Georgia-Italic'), local('Gelasio Italic');
+  size-adjust: 100.20%;
+  ascent-override: 100.39%;
+  descent-override: 27.34%;
+  line-gap-override: 0.00%; }
+
+@font-face {
+  font-family: 'Lora Fallback';
+  font-style: italic;
+  font-weight: 600 900;
+  src: local('Georgia Bold Italic'), local('Georgia-BoldItalic'), local('Gelasio Bold Italic');
+  size-adjust: 86.95%;
+  ascent-override: 115.69%;
+  descent-override: 31.51%;
+  line-gap-override: 0.00%; }
+
+/* --- Poppins Fallback: Arial, sized to Poppins -------------------------- */
+
+@font-face {
+  font-family: 'Poppins Fallback';
+  font-style: normal;
+  font-weight: 100 500;
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('Arimo');
+  size-adjust: 112.49%;
+  ascent-override: 93.34%;
+  descent-override: 31.11%;
+  line-gap-override: 8.89%; }
+
+@font-face {
+  font-family: 'Poppins Fallback';
+  font-style: normal;
+  font-weight: 600 900;
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'), local('Arimo Bold');
+  size-adjust: 106.19%;
+  ascent-override: 98.88%;
+  descent-override: 32.96%;
+  line-gap-override: 9.42%; }

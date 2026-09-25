@@ -1,20 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
-  <meta name="description" content="A 532-line Python script audits every page of this site for broken links, bad metadata, and missing alt text, and CI runs it on every push. Here's why a personal blog has a test suite.">
+  <meta name="description" content="A Python script audits every page of this site for broken links, bad metadata, and missing alt text, and CI runs it on every push. Here's why a personal blog has a test suite.">
   <meta name="keywords" content="technology">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>My Website Has a Test Suite - Ken Reid</title>
   <meta property="og:title" content="My Website Has a Test Suite">
-  <meta property="og:description" content="A 532-line Python script audits every page of this site for broken links, bad metadata, and missing alt text, and CI runs it on every push. Here's why a personal blog has a test suite.">
+  <meta property="og:description" content="A Python script audits every page of this site for broken links, bad metadata, and missing alt text, and CI runs it on every push. Here's why a personal blog has a test suite.">
   <meta property="og:image" content="https://www.kenreid.co.uk/img/og/my-website-has-a-test-suite.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="My Website Has a Test Suite">
   <meta property="og:url" content="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">
   <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Ken Reid">
+  <meta property="og:locale" content="en_GB">
+  <meta property="article:published_time" content="2026-07-17">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="My Website Has a Test Suite">
-  <meta name="twitter:description" content="A 532-line Python script audits every page of this site for broken links, bad metadata, and missing alt text, and CI runs it on every push. Here's why a personal blog has a test suite.">
+  <meta name="twitter:description" content="A Python script audits every page of this site for broken links, bad metadata, and missing alt text, and CI runs it on every push. Here's why a personal blog has a test suite.">
   <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/my-website-has-a-test-suite.jpg">
   <meta name="citation_title" content="My Website Has a Test Suite">
   <meta name="citation_author" content="Reid, Kenneth N.">
@@ -24,32 +30,58 @@
   <meta name="DC.title" content="My Website Has a Test Suite">
   <meta name="DC.creator" content="Kenneth N. Reid">
   <meta name="DC.date" content="2026-07-17">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <script defer src="../js/analytics.js"></script>
   <link rel="icon" href="../img/core-img/favicon.png">
   <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
   <link rel="manifest" href="../manifest.json">
-  <link rel="preload" as="image" href="../img/photography/hero/4.webp">
-  <link rel="stylesheet" href="../style.min.css">
+  <link rel="preload" as="image" href="../img/photography/hero/4.webp" fetchpriority="high">
+  <link rel="stylesheet" href="../style.min.css?v=20260923a">
   <link rel="canonical" href="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html"
+    },
+    "url": "https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html",
     "headline": "My Website Has a Test Suite",
-    "description": "A 532-line Python script audits every page of this site for broken links, bad metadata, and missing alt text, and CI runs it on every push. Here's why a personal blog has a test suite.",
-    "image": "https://www.kenreid.co.uk/img/og/my-website-has-a-test-suite.jpg",
-    "author": {
-      "@type": "Person",
-      "name": "Ken Reid",
-      "url": "https://www.kenreid.co.uk"
+    "description": "A Python script audits every page of this site for broken links, bad metadata, and missing alt text, and CI runs it on every push. Here's why a personal blog has a test suite.",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://www.kenreid.co.uk/img/og/my-website-has-a-test-suite.jpg",
+      "width": 1200,
+      "height": 630
     },
     "datePublished": "2026-07-17",
+    "dateModified": "2026-07-17",
+    "author": {
+      "@type": "Person",
+      "@id": "https://www.kenreid.co.uk/#ken",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk/"
+    },
     "publisher": {
       "@type": "Person",
-      "name": "Ken Reid"
+      "@id": "https://www.kenreid.co.uk/#ken",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk/"
     },
+    "isPartOf": [
+      { "@id": "https://www.kenreid.co.uk/#website" },
+      {
+        "@type": "CreativeWorkSeries",
+        "@id": "https://www.kenreid.co.uk/series-how-this-site-is-built.html#series",
+        "name": "How This Site Is Built",
+        "url": "https://www.kenreid.co.uk/series-how-this-site-is-built.html"
+      }
+    ],
+    "inLanguage": "en-GB",
+    "articleSection": "Technology",
+    "wordCount": 1721,
+    "timeRequired": "PT8M",
     "keywords": ["testing", "continuous integration", "static sites", "web development", "python"]
   }
   </script>
@@ -79,12 +111,10 @@
     ]
   }
   </script>
-  <script defer src="../js/theme.js"></script>
-  <script defer src="../js/palette.js"></script>
+  <script defer src="../js/theme.js?v=20260923a"></script>
+  <script defer src="../js/palette.js?v=20260923a"></script>
 </head>
 <body>
-  <div id="preloader"><div class="loader"></div></div>
-
   <div id="header-section"></div>
 
   <main id="main-content">
@@ -97,7 +127,7 @@
         <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
         <li class="breadcrumb-item active" aria-current="page">My Website Has a Test Suite</li>
       </ol></nav>
-      <p class="kr-opener__kicker">Technology &middot; 17 July 2026 &middot; 7 min read</p>
+      <p class="kr-opener__kicker">Technology &middot; <time datetime="2026-07-17">17 July 2026</time> &middot; 8 min read</p>
       <p class="kr-opener__title page-title">My Website Has a Test Suite</p>
       <p class="kr-opener__standfirst">A Python audit script and headless browser smoke tests run on every push. Here's why a personal blog has a test suite.</p>
       <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>
@@ -117,7 +147,7 @@
 
         <p>Deprecations, external dependency shutdowns, infrastructure changes, data changes and shifting standards. Websites rot: each broken piece sits there for months until a reader (or worse, a potential employer) finds it before you do. I got tired of discovering this stuff by accident, so I gave it a test suite.</p>
 
-        <p>This post covers a static audit script that reads every page like a very pedantic proofreader, and a headless browser test that loads the site like a very terminal focused nerd. These both run automatically on every push.</p>
+        <p>This post covers a static audit script that reads every page like a very pedantic proofreader, and a headless browser test that loads the site like a very terminal focused nerd. Those are the two halves I started with. Today one Python file, <code>run_checks.py</code>, lists 25 static checks and three browser suites, and GitHub runs all of them on every push and pull request.</p>
 
         <div class="plain-english-box">
           <h2>Quick jargon guide</h2>
@@ -147,35 +177,34 @@
         </ul>
 
         <figure>
-          <img src="../img/photography/thumb/4.webp" alt="Two wrecked wooden fishing boats rotting on a tidal mudflat under a heavy grey sky" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+          <img src="../img/photography/thumb/4.webp" alt="Two wrecked wooden fishing boats rotting on a tidal mudflat under a heavy grey sky" loading="lazy" class="kr-figure-img" width="400" height="266">
           <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> </figcaption>
         </figure>
 
         <h2>Headless smoke tests</h2>
 
-        <p>The audit reads files; it cannot tell you whether the page actually <em>works</em>. This site injects its header, footer, comments, and related posts with JavaScript, and it animates sections into view as you scroll. A one-character mistake in that JavaScript can leave a page technically valid and completely blank, and the audit wouldn't catch it.</p>
+        <p>The audit reads files; it cannot tell you whether the page actually <em>works</em>. This site injects its header, footer, comments, and related posts with JavaScript, and it animates each section heading in as you scroll. A one-character mistake in that JavaScript can leave a page technically valid and completely blank, and the audit wouldn't catch it.</p>
 
-        <p>So the second half is a smoke test built on <a href="https://playwright.dev/" target="_blank" rel="noopener noreferrer">Playwright</a>, which drives a real, invisible Chromium. The script serves the repository over a local web server, loads seven representative pages, waits a few seconds for the JavaScript and animations to settle, and then asserts on what a visitor would actually see:</p>
+        <p>So the second half is a smoke test built on <a href="https://playwright.dev/" target="_blank" rel="noopener noreferrer">Playwright</a>, which drives a real, invisible Chromium. The script serves the repository over a local web server, loads eight representative pages, waits on each one until the things it checks for have turned up (a page still not ready a couple of seconds past its budget fails, instead of being checked half-built), and then asserts on what a visitor would actually see:</p>
 
 <pre><code class="language-python"># A few of the checks, one page each:
 # index.html   - hero present, live-stats skeletons cleared, blog cards visible
 # blog.html    - at least 3 post cards and 3 tag filter buttons rendered
 # gallery.html - at least 12 photos in the grid
 # a blog post  - body text visible (opacity != 0), table of contents built
+# series page  - at least 4 parts, each with its part chip
 # quotes.html  - at least 500 quote cards
 # map.html     - the map initialised with at least 10 markers</code></pre>
 
-        <p>The site reveals sections with a fade-in animation, which means a JavaScript failure doesn't remove content, it leaves content sitting in the page at opacity zero: present in the HTML, invisible to humans. That is the failure a static checker can never catch. The check is a Python tuple holding a line of JavaScript, evaluated inside the live page:</p>
+        <p>The site used to reveal whole sections with a fade-in animation, which meant a JavaScript failure didn't remove content, it left content sitting in the page at opacity zero: present in the HTML, invisible to humans. That is the failure a static checker can never catch. The fade-ins are gone (only a section's heading animates now, on a CSS scroll timeline where the browser has one), but the check stays as a guard. It's a Python tuple holding a line of JavaScript, evaluated inside the live page:</p>
 
-<pre><code class="language-python">("post body visible",
- "(() => { const p = document.querySelector('.blog-post > p');"
- "  return p &amp;&amp; getComputedStyle(p).opacity !== '0'; })()"),</code></pre>
+<pre><code class="language-python">("post body visible", "(() => { const p = document.querySelector('.blog-post > p'); return p &amp;&amp; getComputedStyle(p).opacity !== '0'; })()"),</code></pre>
 
-        <p>The test also collects console errors, ignoring the third-party noise (analytics, embeds) and failing on anything from my own code.</p>
+        <p>The test also collects console errors, ignoring the third-party noise (analytics, embeds) and failing on anything from my own code. Past those eight pages, it loads every top-level page at phone width (360px) and desktop width (1280px) and fails if anything runs off the right edge, runs every interactive demo and 120 frames of every hover sketch on the blog cards, and replays a list of pins: one check for each bug that shipped and got fixed, each one proved against its bug before I trusted it.</p>
 
         <h2>The robot that runs it all</h2>
 
-        <p>Both halves run in GitHub Actions on every push. The workflow has two jobs: one installs Python and runs the audit plus a row of build checks: that the minified stylesheet is up to date (the CSS build is <a href="self-hosting-your-fonts.html">its own story</a>), that every post's read time matches its current word count, that the baked related-posts blocks still match a fresh ranking, and that every generated file (the feed, each post's share image and opening header, the colophon's figures, the gallery's photo sizes and its black and white tags) still agrees with its source; the other installs Playwright and runs the smoke tests. If either fails, I get an email and a red X on the commit within a few minutes. A local pre-commit hook runs the CSS check too, so most mistakes never even reach GitHub.</p>
+        <p>All of it runs in GitHub Actions on every push and pull request. The workflow has two jobs. One installs Python and works through 24 named steps, one per check: the data files against their schemas, the post markup, whether every generated file still agrees with its source (each post's read time, share image and opening header, the related-posts blocks, the feed, the sitemap, the gallery's photo sizes, the colophon's figures), the stylesheet's rules and whether the minified stylesheet is up to date (the CSS build is <a href="self-hosting-your-fonts.html">its own story</a>), the Python and JavaScript unit tests, and the audit itself. The other installs Playwright and runs the three browser suites: the smoke tests, a check that every post renders its template, and a set of performance budgets. The black and white tag check lives in that second job too, because it needs Pillow to read the pixels. One of the steps, <code>--ci-parity</code>, fails if the workflow and the list in <code>run_checks.py</code> ever disagree, because they used to be kept in three places and drifted apart. If anything fails, I get an email and a red X on the commit within a few minutes. The same list runs before a commit, too: the repository carries a pre-commit hook that runs every check needing nothing beyond Python itself, so most mistakes never even reach GitHub.</p>
 
         <p>Is this overkill for a personal site? No: it's <em>because</em> the site is a hobby that I need automation. Nobody is paid to notice when this site breaks (or, you know, paid for writing blogs, creating the site, etc.). There is no QA department, no on-call rota, just me, and I would rather spend my evenings writing posts than manually clicking every link on fifty pages. The test suite is what lets a one-person site behave like it has staff.</p>
 
@@ -188,16 +217,19 @@
         <p>Each gap you find becomes the next check you write. The fix here is a rule that any local file referenced by a tracked page must itself be tracked, which is one more function in the audit script. Here is that check as it runs today (lightly trimmed):</p>
 
 <pre><code class="language-python">def check_target(url, line, what="target"):
-    local = resolve_local(page, url)
+    local = resolve_local(c.page, url)
     if local is None:
-        return  # external URL, checked elsewhere
+        return
     if not local.exists():
-        add("ERROR", page, line, "broken-link", f"missing {what}: {url}")
-    elif page_is_tracked:
-        relp = local.resolve().relative_to(ROOT).as_posix()
-        if relp not in tracked:
-            add("ERROR", page, line, "untracked-ref",
-                f"{what} exists locally but is not tracked by git: {url}")</code></pre>
+        c.add("ERROR", c.page, line, "broken-link", f"missing {what}: {url}")
+    elif c.page_is_tracked:
+        try:
+            relp = local.resolve().relative_to(ROOT).as_posix()
+        except ValueError:
+            relp = None
+        if relp and relp not in c.tracked:
+            c.add("ERROR", c.page, line, "untracked-ref",
+                  f"{what} exists locally but is not tracked by git: {url}")</code></pre>
 
         <p>Fittingly, that check fired while I was preparing this very post: the hero image at the top of this page existed on my machine and had never been committed. Test suites are never finished, only extended.</p>
 
@@ -228,45 +260,44 @@
         <div class="related-posts">
           <h2>Related posts</h2>
           <div class="row related-posts-grid">
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="blog-engine-in-one-json-file.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/71.webp" alt="A Blog Engine in One JSON File" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/78.webp')">
+              <a href="invisible-half-of-a-blog-post.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/78.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">26 July 2026 · 6 min read</div>
-                  <h3 class="blog-card-title">A Blog Engine in One JSON File</h3>
-                  <p class="blog-card-excerpt">No database, no CMS, no Jekyll: this blog's search, tag filters, pagination, read times, and related posts all hang off one JSON file and two Python scripts.</p>
-                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
-                </div>
-              </a>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="invisible-half-of-a-blog-post.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/78.webp" alt="The Invisible Half of a Blog Post" loading="lazy"></div>
-                <div class="blog-card-body">
-                  <div class="blog-card-date">4 August 2026 · 5 min read</div>
+                  <div class="blog-card-date">4 August 2026 · 7 min read</div>
                   <h3 class="blog-card-title">The Invisible Half of a Blog Post</h3>
-                  <p class="blog-card-excerpt">Every post on this blog carries around eighty lines of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.</p>
+                  <p class="blog-card-excerpt">Every post on this blog carries a pile of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
                 </div>
               </a>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="letting-robots-update-your-homepage.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/12.webp" alt="Letting Robots Update Your Homepage" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/12.webp')">
+              <a href="letting-robots-update-your-homepage.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/12.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">14 August 2026 · 6 min read</div>
+                  <div class="blog-card-date">14 August 2026 · 8 min read</div>
                   <h3 class="blog-card-title">Letting Robots Update Your Homepage</h3>
-                  <p class="blog-card-excerpt">My homepage shows what I'm listening to and reading, updated every Monday by a GitHub Action that commits to its own repository. Live data on a static site, no server required.</p>
+                  <p class="blog-card-excerpt">My homepage shows what I&#x27;m listening to and reading, updated every Monday by a GitHub Action that commits to its own repository. Live data on a static site, no server required.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/367.webp')">
+              <a href="making-this-website-accessible.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/367.webp" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">30 August 2026 · 6 min read</div>
+                  <h3 class="blog-card-title">Making This Website Accessible</h3>
+                  <p class="blog-card-excerpt">Thirty small habits keep this site accessible: a skip link, screen-reader notes on new-tab links, reduced-motion fallbacks, and an audit that catches the many that I forget along the way.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
                 </div>
               </a>
             </div>
           </div>
         </div>
-
-
-        <hr style="margin: 40px 0;">
-        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
       </div>
     </div>
   </div>
@@ -276,14 +307,13 @@
   <div id="footer-section"></div>
 
   <script src="../js/jquery.min.js"></script>
-  <script src="../js/alime.bundle.js"></script>
-  <script src="../js/site.js"></script>
-  <script src="../js/lightbox.js"></script>
-  <script src="../js/prism-loader.js"></script>
-  <script src="../js/default-assets/active.js"></script>
-  <script src="../js/shared-components.js"></script>
+  <script src="../js/alime.bundle.js?v=20260923a"></script>
+  <script src="../js/site.js?v=20260923a"></script>
+  <script src="../js/lightbox.js?v=20260923a"></script>
+  <script src="../js/default-assets/active.js?v=20260923a"></script>
+  <script src="../js/shared-components.js?v=20260923a"></script>
   <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
 renderFooter('footer-section');
-loadPrism(['python']);</script>
+</script>
 </body>
 </html>

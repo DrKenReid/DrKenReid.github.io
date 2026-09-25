@@ -1,20 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
-  <meta name="description" content="This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.">
+  <meta name="description" content="This site now works offline: one hand-written service worker, no framework, no build step. Here's how.">
   <meta name="keywords" content="technology">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Reading This Site Offline - Ken Reid</title>
   <meta property="og:title" content="Reading This Site Offline">
-  <meta property="og:description" content="This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.">
+  <meta property="og:description" content="This site now works offline: one hand-written service worker, no framework, no build step. Here's how.">
   <meta property="og:image" content="https://www.kenreid.co.uk/img/og/reading-this-site-offline.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Reading This Site Offline">
   <meta property="og:url" content="https://www.kenreid.co.uk/blog/reading-this-site-offline.html">
   <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Ken Reid">
+  <meta property="og:locale" content="en_GB">
+  <meta property="article:published_time" content="2026-07-12">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Reading This Site Offline">
-  <meta name="twitter:description" content="This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.">
+  <meta name="twitter:description" content="This site now works offline: one hand-written service worker, no framework, no build step. Here's how.">
   <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/reading-this-site-offline.jpg">
   <meta name="citation_title" content="Reading This Site Offline">
   <meta name="citation_author" content="Reid, Kenneth N.">
@@ -24,33 +30,58 @@
   <meta name="DC.title" content="Reading This Site Offline">
   <meta name="DC.creator" content="Kenneth N. Reid">
   <meta name="DC.date" content="2026-07-12">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <script defer src="../js/analytics.js"></script>
   <link rel="icon" href="../img/core-img/favicon.png">
   <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
   <link rel="manifest" href="../manifest.json">
-  <link rel="preload" as="image" href="../img/photography/hero/62.webp">
-  <link rel="stylesheet" href="../style.min.css">
+  <link rel="preload" as="image" href="../img/photography/hero/62.webp" fetchpriority="high">
+  <link rel="stylesheet" href="../style.min.css?v=20260923a">
   <link rel="canonical" href="https://www.kenreid.co.uk/blog/reading-this-site-offline.html">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "mainEntityOfPage": "https://www.kenreid.co.uk/blog/reading-this-site-offline.html",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://www.kenreid.co.uk/blog/reading-this-site-offline.html"
+    },
+    "url": "https://www.kenreid.co.uk/blog/reading-this-site-offline.html",
     "headline": "Reading This Site Offline",
-    "description": "This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.",
-    "image": "https://www.kenreid.co.uk/img/og/reading-this-site-offline.jpg",
-    "author": {
-      "@type": "Person",
-      "name": "Ken Reid",
-      "url": "https://www.kenreid.co.uk"
+    "description": "This site now works offline: one hand-written service worker, no framework, no build step. Here's how.",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https://www.kenreid.co.uk/img/og/reading-this-site-offline.jpg",
+      "width": 1200,
+      "height": 630
     },
     "datePublished": "2026-07-12",
+    "dateModified": "2026-07-12",
+    "author": {
+      "@type": "Person",
+      "@id": "https://www.kenreid.co.uk/#ken",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk/"
+    },
     "publisher": {
       "@type": "Person",
-      "name": "Ken Reid"
+      "@id": "https://www.kenreid.co.uk/#ken",
+      "name": "Ken Reid",
+      "url": "https://www.kenreid.co.uk/"
     },
+    "isPartOf": [
+      { "@id": "https://www.kenreid.co.uk/#website" },
+      {
+        "@type": "CreativeWorkSeries",
+        "@id": "https://www.kenreid.co.uk/series-how-this-site-is-built.html#series",
+        "name": "How This Site Is Built",
+        "url": "https://www.kenreid.co.uk/series-how-this-site-is-built.html"
+      }
+    ],
+    "inLanguage": "en-GB",
+    "articleSection": "Technology",
+    "wordCount": 1700,
+    "timeRequired": "PT8M",
     "keywords": ["service worker", "offline", "web development", "pwa", "static sites"]
   }
   </script>
@@ -65,12 +96,10 @@
     ]
   }
   </script>
-  <script defer src="../js/theme.js"></script>
-  <script defer src="../js/palette.js"></script>
+  <script defer src="../js/theme.js?v=20260923a"></script>
+  <script defer src="../js/palette.js?v=20260923a"></script>
 </head>
 <body>
-  <div id="preloader"><div class="loader"></div></div>
-
   <div id="header-section"></div>
 
   <main id="main-content">
@@ -83,9 +112,9 @@
         <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
         <li class="breadcrumb-item active" aria-current="page">Reading This Site Offline</li>
       </ol></nav>
-      <p class="kr-opener__kicker">Technology &middot; 12 July 2026 &middot; 6 min read</p>
+      <p class="kr-opener__kicker">Technology &middot; <time datetime="2026-07-12">12 July 2026</time> &middot; 8 min read</p>
       <p class="kr-opener__title page-title">Reading This Site Offline</p>
-      <p class="kr-opener__standfirst">This site now works offline: a ~100-line service worker, no framework, no build step. Here's how.</p>
+      <p class="kr-opener__standfirst">This site now works offline: one hand-written service worker, no framework, no build step. Here's how.</p>
       <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>
     </div>
     <a class="kr-opener__cue" href="#main-content-body" aria-label="Scroll to the article"><span></span></a>
@@ -122,48 +151,80 @@
 
         <p>Everything the worker does comes down to one decision, made per request: <em>who do you trust more, the network or the cache?</em> </p>
 
-        <p><strong>Pages get network-first.</strong> HTML is where mistakes live: a typo fixed, a broken link repaired, a post updated. When you're online I always want you reading the newest deploy, so the worker tries the network, saves a copy of whatever comes back, and only reaches for that copy when the fetch fails:</p>
+        <p><strong>Pages get network-first.</strong> HTML is where mistakes live: a typo fixed, a broken link repaired, a post updated. When you're online I always want you reading the newest deploy, so the worker tries the network and saves a copy of whatever comes back. It reaches for that copy when the fetch fails, and also when the network has had three and a half seconds and still said nothing, because a connection that's barely there would otherwise leave you staring at a blank tab. The fresh page still goes into the cache when it finally turns up:</p>
 
-<pre><code class="language-js">// HTML: network-first
-fetch(req).then(function (res) {
-  var copy = res.clone();
-  caches.open(PAGES_CACHE).then(function (c) { c.put(req, copy); });
-  return res;
-}).catch(function () {
-  return caches.match(req).then(function (hit) {
-    return hit || caches.match('./offline.html');
+<pre><code class="language-js">// HTML: network-first, with a timeout
+function navigation(event) {
+  var req = event.request;
+  var key = pageKey(req.url);
+  var network = Promise.resolve(event.preloadResponse).then(function (pre) {
+    return pre || fetch(req);
   });
-});</code></pre>
+  event.waitUntil(network.then(function (res) {
+    return isHtml(res) ? store(PAGES, key, res.clone(), PAGES_LIMIT) : null;
+  }).catch(noop));
 
-        <p>The chain reads as a 'politeness ranking': fresh page if possible, your cached copy if not, and a dedicated offline page as the final backup. Every page you visit while online becomes a page you own while offline, the cache is your personal reading history.</p>
-
-        <p><strong>Assets get stale-while-revalidate.</strong> CSS, JavaScript, fonts, thumbnails, these change rarely and block rendering while they load, so the priorities invert. The worker answers from cache immediately and refreshes in the background:</p>
-
-<pre><code class="language-js">// Assets: stale-while-revalidate
-caches.match(req).then(function (hit) {
-  var fetching = fetch(req).then(function (res) {
-    if (res && res.status === 200) {
-      var copy = res.clone();
-      caches.open(ASSETS_CACHE).then(function (c) {
-        c.put(req, copy);
-        if (req.destination === 'image') trimCache(ASSETS_CACHE, IMG_LIMIT);
-      });
+  return new Promise(function (resolve) {
+    var done = false;
+    function answer(res, fromCache) {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      if (fromCache) rememberCachedClient(event.resultingClientId);
+      resolve(res);
     }
-    return res;
-  }).catch(function () { return hit; });
-  return hit || fetching;
-});</code></pre>
+    var timer = setTimeout(function () {
+      savedPage(key).then(function (hit) { if (hit) answer(hit, true); });
+    }, NAV_TIMEOUT_MS);
+    network.then(function (res) { answer(res, false); }, function () {
+      savedPage(key).then(function (hit) {
+        if (hit) answer(hit, true);
+        else offlinePage().then(function (res) { answer(res, true); });
+      });
+    });
+  });
+}</code></pre>
 
-        <p>Worst case, you see a stylesheet that's one visit out of date. In exchange, repeat visits render instantly, offline or not. That <code>trimCache</code> call is the one piece of housekeeping, meaning that image caches are capped at 200 entries, oldest evicted first, so browsing my whole <a href="../gallery.html">gallery</a> doesn't fill up your phone!</p>
+        <p>The chain reads as a 'politeness ranking': fresh page if possible, your cached copy if not, and a dedicated offline page as the final backup. Every page you visit while online becomes a page you own while offline, the cache is your personal reading history (the last 60 pages of it, anyway). Navigation preload starts that request while the worker is still waking up, instead of after. Pages are saved by their path, so <code>blog.html?tag=books</code> and <code>blog.html</code> share one copy rather than one per filter. And if the offline page itself has been cleared out, <code>offlinePage()</code> builds a tiny one on the spot, so the browser's own error page never gets to blame the site for your connection.</p>
+
+        <p><strong>Code and data get network-first too.</strong> Scripts, stylesheets and the <code>data/*.json</code> files go to the network first and only fall back to the cache when that fails. A page fetched fresh must never run last week's JavaScript against its new markup, and the data files change on a schedule (Last.fm, Goodreads), so served stale they showed last week's shelf. The one exception is a page that was itself served from the cache: its scripts come from the cache too, so an old page runs the code it was written against and doesn't sit blank on a bad connection waiting for a stylesheet.</p>
+
+        <p><strong>Images and fonts get stale-while-revalidate.</strong> Thumbnails and fonts change rarely, so the priorities invert. The worker answers from cache immediately and refreshes in the background:</p>
+
+<pre><code class="language-js">// Images and fonts: stale-while-revalidate
+function staleWhileRevalidate(event, cacheName, limit) {
+  var req = event.request;
+  var network = fetch(req);
+  event.waitUntil(network.then(function (res) {
+    return store(cacheName, req, res.clone(), limit);
+  }).catch(noop));
+  return lookup(req).then(function (hit) {
+    return hit || network.catch(function () { return Response.error(); });
+  });
+}
+
+function store(cacheName, req, res, limit) {
+  if (!cacheable(res)) return Promise.resolve();
+  return caches.open(cacheName).then(function (cache) {
+    return cache.put(req, res).then(function () {
+      if (cacheName === CORE) return dropOtherVersions(cache, req);
+      if (limit) return trim(cacheName, limit);
+    });
+  });
+}</code></pre>
+
+        <p>Worst case, you see an old thumbnail for one visit. In exchange, repeat visits render instantly, offline or not. That <code>limit</code> is the housekeeping, meaning that the image cache is capped at 200 entries, oldest evicted first, so browsing my whole <a href="../gallery.html">gallery</a> doesn't fill up your phone! <code>trim()</code> runs one pass per cache at a time, because a gallery scroll stores hundreds of thumbnails in a burst and overlapping trims would all read the same list and delete the same entries.</p>
+
+        <p>The worker keeps three caches: <code>core</code> for the precache plus every script, stylesheet, font and data file, <code>img</code> for images, and <code>pages</code> for HTML, capped at 60. Core is never trimmed, because the repo itself puts a ceiling on how big it can get.</p>
 
         <h2>What I deliberately don't cache</h2>
 
         <p>The worker ignores anything cross-origin; the full-size photographs stay on GitHub's release servers, caching those would mean warehousing megabytes per photo on your device for a click-through you probably won't repeat. Comments are <i>giscus</i>, which lives in an iframe and belongs to GitHub; offline, it simply doesn't appear, which is the correct behaviour. Analytics likewise gets no offline resurrection, if the network can't see you, neither should it.</p>
 
-        <p><strong>Offline mode should preserve the reading, not fake the internet.</strong> The precache reflects the same idea: it's just the offline page, the stylesheet, the core scripts, and <code>posts.json</code> (so the blog index still works), so about eleven files, everything else earns its place in your cache by you actually opening it.</p>
+        <p><strong>Offline mode should preserve the reading, not fake the internet.</strong> The precache reflects the same idea: it's just the offline page, the stylesheet, the core scripts, and <code>posts.json</code> (so the blog index still works), so twelve files, everything else earns its place in your cache by you actually opening it.</p>
 
         <figure>
-          <img src="../img/photography/thumb/62.webp" alt="A moody grey sea under heavy clouds, distant fish-farm pens near a rocky headland" loading="lazy" style="width:100%; max-width:760px; display:block; margin:0 auto; border-radius:8px;">
+          <img src="../img/photography/thumb/62.webp" alt="A moody grey sea under heavy clouds, distant fish-farm pens near a rocky headland" loading="lazy" class="kr-figure-img" width="400" height="266">
           <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
         </figure>
 
@@ -171,11 +232,13 @@ caches.match(req).then(function (hit) {
 
         <p>I'm not really a website developer or designer, beyond hobbyist endeavors like this website and a couple of landing pages for research labs I worked in, so much of this section is just what I learned while, well, learning this stuff. Service workers have a deserved reputation for one specific misery: <em>the cache that would not die.</em> Ship a worker with a careless cache-first strategy and your visitors can be pinned to an old version of your site for days: including, delightfully, an old version of the service worker itself. The classic developer experience is editing a file, refreshing, seeing no change, and spending an hour debugging to find it's actually working as intended and you just turn off your monitor for a break and see your sad reflection staring back at yourself. Ahem, anyway.</p>
 
+        <p>I've hit two of my own. An earlier version kept everything in one cache capped at 200 entries, and the oldest entries in it were always the precache, so a single scroll through the gallery pushed out the offline page and the stylesheet, and the offline page then had nothing to show. It also served scripts stale-while-revalidate, which for one view after a deploy ran the new markup against the old <code>shared-components.js</code>: an uncaught ReferenceError, no footer, no photo strip.</p>
+
         <p>I'll also admit what this isn't: it isn't a full progressive web app. There's no install banner, no background sync. Those are all possible and all, for a site whose job is being read, beside the point.</p>
 
         <h2>Try it</h2>
 
-        <p>Open a few posts, then turn on airplane mode and keep clicking. The pages you visited load; the search on the blog index still filters; the pages you didn't visit hand you a courteous offline page instead of a browser error. Turn the network back on and the whole arrangement dissolves back into an ordinary website. Much like an IT worker, if it's doing the job correctly, you won't even notice it's there. </p>
+        <p>Open a few posts, then turn on airplane mode and keep clicking. The pages you visited load; the search on the blog index still filters; the pages you didn't visit hand you a courteous offline page instead of a browser error, with a list of the posts you do have saved. Turn the network back on and the whole arrangement dissolves back into an ordinary website. Much like an IT worker, if it's doing the job correctly, you won't even notice it's there. </p>
 
         <div class="faq-section">
           <h2>Common questions</h2>
@@ -192,21 +255,22 @@ caches.match(req).then(function (hit) {
 
           <details class="faq-item">
             <summary>Why not use Workbox or a PWA framework?</summary>
-            <p>Workbox is excellent and I'd reach for it on a complex app. For a hundred-line worker on a static site, the abstraction would outweigh the logic: more configuration than code, and one more dependency to keep updated forever.</p>
+            <p>Workbox is excellent and I'd reach for it on a complex app. For one hand-written worker on a static site, where I can read every rule top to bottom, the abstraction would outweigh the logic: another layer to learn, and one more dependency to keep updated forever.</p>
           </details>
 
           <details class="faq-item">
             <summary>How do updates reach me if I'm serving from cache?</summary>
-            <p>Pages are network-first, so any online visit gets the latest deploy automatically, the cache only speaks when the network can't. </p>
+            <p>Pages are network-first, so any online visit gets the latest deploy automatically, the cache only speaks when the network can't, or when it has taken more than three and a half seconds to answer. Even then, the fresh page still lands in the cache when it arrives.</p>
           </details>
         </div>
 
         <div class="related-posts">
           <h2>Related posts</h2>
           <div class="row related-posts-grid">
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="free-comments-via-github-discussions.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/409.webp" alt="Free Comments via GitHub Discussions" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/409.webp')">
+              <a href="free-comments-via-github-discussions.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/409.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
                   <div class="blog-card-date">15 July 2026 · 5 min read</div>
                   <h3 class="blog-card-title">Free Comments via GitHub Discussions</h3>
@@ -215,34 +279,32 @@ caches.match(req).then(function (hit) {
                 </div>
               </a>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="dark-mode-that-doesnt-flash.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/20.webp" alt="Dark Mode That Doesn't Flash" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/12.webp')">
+              <a href="letting-robots-update-your-homepage.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/12.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">6 August 2026 · 8 min read</div>
-                  <h3 class="blog-card-title">Dark Mode That Doesn't Flash</h3>
-                  <p class="blog-card-excerpt">Dark mode is easy; dark mode without a white flash is more difficult. How this site stamps the theme before the first paint, and drags every chart and iframe along with it.</p>
+                  <div class="blog-card-date">14 August 2026 · 8 min read</div>
+                  <h3 class="blog-card-title">Letting Robots Update Your Homepage</h3>
+                  <p class="blog-card-excerpt">My homepage shows what I&#x27;m listening to and reading, updated every Monday by a GitHub Action that commits to its own repository. Live data on a static site, no server required.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
                 </div>
               </a>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30">
-              <a href="letting-robots-update-your-homepage.html" class="blog-card">
-                <div class="blog-card-img"><img src="../img/photography/thumb/12.webp" alt="Letting Robots Update Your Homepage" loading="lazy"></div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/4.webp')">
+              <a href="my-website-has-a-test-suite.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/4.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">14 August 2026 · 6 min read</div>
-                  <h3 class="blog-card-title">Letting Robots Update Your Homepage</h3>
-                  <p class="blog-card-excerpt">My homepage shows what I'm listening to and reading, updated every Monday by a GitHub Action that commits to its own repository. Live data on a static site, no server required.</p>
+                  <div class="blog-card-date">17 July 2026 · 8 min read</div>
+                  <h3 class="blog-card-title">My Website Has a Test Suite</h3>
+                  <p class="blog-card-excerpt">A Python audit script and headless browser smoke tests run on every push. Here&#x27;s why a personal blog has a test suite.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
                 </div>
               </a>
             </div>
           </div>
         </div>
-
-
-        <hr style="margin: 40px 0;">
-        <p style="text-align: center;"><a class="post-cta" href="../blog.html">Back to all posts</a></p>
       </div>
     </div>
   </div>
@@ -252,14 +314,13 @@ caches.match(req).then(function (hit) {
   <div id="footer-section"></div>
 
   <script src="../js/jquery.min.js"></script>
-  <script src="../js/alime.bundle.js"></script>
-  <script src="../js/site.js"></script>
-  <script src="../js/lightbox.js"></script>
-  <script src="../js/prism-loader.js"></script>
-  <script src="../js/default-assets/active.js"></script>
-  <script src="../js/shared-components.js"></script>
+  <script src="../js/alime.bundle.js?v=20260923a"></script>
+  <script src="../js/site.js?v=20260923a"></script>
+  <script src="../js/lightbox.js?v=20260923a"></script>
+  <script src="../js/default-assets/active.js?v=20260923a"></script>
+  <script src="../js/shared-components.js?v=20260923a"></script>
   <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
 renderFooter('footer-section');
-loadPrism();</script>
+</script>
 </body>
 </html>

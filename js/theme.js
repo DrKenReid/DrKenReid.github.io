@@ -1,12 +1,20 @@
 /**
- * theme.js — Site-wide dark/light mode toggle.
+ * theme.js: the site-wide dark/light mode toggle.
  *
  * Responsibilities:
  *   - Read stored preference from localStorage on DOMContentLoaded
  *   - Default to dark mode when there is no stored preference
  *   - Apply data-theme="dark"|"light" to <html>
- *   - Keep the #theme-toggle button aria state in sync
+ *   - Keep the #theme-toggle button's label on the action it performs
  *   - Persist choice across page loads
+ *
+ * The button is named by what it does ("Switch to light mode") and has no
+ * aria-pressed. A toggle button carries one or the other, never both: a
+ * label that changes with the state plus a pressed state is heard as
+ * "Switch to light mode, toggle button, pressed", which asks the reader to
+ * work out whether pressed means light or dark. Its sun and moon glyphs
+ * are inline SVG in the markup (shared-components.js, KR_THEME_ICONS),
+ * swapped by CSS on data-theme, so nothing here touches its contents.
  *
  * The switch itself is a circular reveal: the new theme washes across the
  * page from the button that was pressed, using the View Transitions API
@@ -39,9 +47,10 @@
 
     var btn = document.getElementById('theme-toggle');
     if (!btn) return;
-    btn.setAttribute('aria-pressed', String(dark));
-    btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
-    btn.setAttribute('title',      dark ? 'Switch to light mode' : 'Switch to dark mode');
+    var action = dark ? 'Switch to light mode' : 'Switch to dark mode';
+    btn.removeAttribute('aria-pressed');
+    btn.setAttribute('aria-label', action);
+    btn.setAttribute('title', action);
   }
 
   function reducedMotion() {
@@ -59,7 +68,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     apply(stored() || DEFAULT_THEME);
 
-    // Delegated click — works even if button is injected after this script runs
+    // Delegated, so it works although the button is injected after this runs.
     var switchTimer = null;
     document.addEventListener('click', function (e) {
       var btn = e.target.closest ? e.target.closest('#theme-toggle') : null;

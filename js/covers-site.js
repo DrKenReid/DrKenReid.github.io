@@ -324,6 +324,108 @@
         };
     });
 
+    /* Literature: books are shelved one at a time, each sliding in from
+       the right to stand beside the last, with a height and thickness of
+       its own. Spines take the colours the shelf on literature.html gives
+       a rating (the .kr-spine--r* rules): the rose-to-gold gradient for
+       five stars, then warm stone darkening to grey. When the next book
+       will not fit upright it leans on its neighbour instead (if it is too
+       short to reach, the row simply ends); the full shelf holds, fades
+       and starts again. Every duration is a count of steps, so the
+       engine's fixed sixty a second sets the pace on any display. The
+       stage is wide and short (about 110 by 56 on the homepage), so books
+       are sized from its height. */
+    def('explore:literature', function (w, h, rnd) {
+        var SLIDE = 22, TIP = 16, HOLD = 80, FADE = 30, LEAN = 0.3;
+        var shelfY = h * 0.86, left = w * 0.08, right = w * 0.92, gap = Math.max(1, w * 0.008);
+        var books, flying, state, t;
+
+        // Rating shades from style.css, lowest first; five stars is null
+        // and drawn as the gradient.
+        var SHADES = ['#57534d', '#6f6961', '#8f857a', '#b8a58f', null];
+        var ODDS = [0.06, 0.16, 0.4, 0.72, 1];   // cumulative: 1 to 5 stars
+        function makeBook(x) {
+            var roll = rnd(), r = 0;
+            while (roll > ODDS[r]) r++;
+            return {
+                x: x,
+                bw: Math.max(4, h * (0.09 + rnd() * 0.07)),
+                bh: h * (0.46 + rnd() * 0.28),
+                shade: SHADES[r],
+                lean: 0
+            };
+        }
+        /* Where a book has to stand so that, tipped left by LEAN about its
+           bottom left corner (as a real one tips), its left edge comes to
+           rest on the top corner of `prev`. A point s up that edge ends at
+           (-s sin, -s cos) from the corner, so the contact is at
+           s = prev.bh / cos, and the corner stands prev.bh * tan clear of
+           the neighbour. No lean if the book is too short to reach, or
+           would stand past the end of the shelf. */
+        function leanOn(book, prev) {
+            var reach = prev.bh / Math.cos(LEAN);
+            var x = prev.x + prev.bw + prev.bh * Math.tan(LEAN);
+            if (reach > book.bh * 0.92 || x + book.bw > (right + w) / 2) return false;
+            book.x = x;
+            book.leans = true;
+            return true;
+        }
+        function next() {
+            var last = books[books.length - 1];
+            var book = makeBook(last ? last.x + last.bw + gap : left);
+            if (book.x + book.bw <= right) return book;
+            return last && leanOn(book, last) ? book : null;
+        }
+        function reset() { books = []; state = 'shelve'; t = 0; flying = next(); }
+        reset();
+
+        function drawBook(ctx, b, slide) {
+            ctx.save();
+            ctx.translate(b.x + slide, shelfY);   // the bottom left corner, the pivot
+            if (b.lean) ctx.rotate(-b.lean);
+            var fill = b.shade;
+            if (!fill) {
+                fill = ctx.createLinearGradient(0, -b.bh, 0, 0);
+                fill.addColorStop(0, C.a);
+                fill.addColorStop(1, C.b);
+            }
+            rect(ctx, 0, -b.bh, b.bw, b.bh, fill);
+            // A band across the spine near the top, where a title would sit.
+            rect(ctx, 0, -b.bh * 0.84, b.bw, Math.max(1, h * 0.025), 'rgba(0,0,0,0.28)');
+            ctx.restore();
+        }
+
+        return {
+            step: function () {
+                t++;
+                if (state === 'shelve') {
+                    var landed = SLIDE + (flying.leans ? TIP : 0);
+                    if (flying.leans) flying.lean = LEAN * ease((t - SLIDE) / TIP);
+                    if (t < landed) return;
+                    books.push(flying);
+                    t = 0;
+                    flying = flying.leans ? null : next();
+                    if (!flying) state = 'hold';
+                } else if (state === 'hold' && t >= HOLD) {
+                    state = 'fade'; t = 0;
+                } else if (state === 'fade' && t >= FADE) {
+                    reset();
+                }
+            },
+            draw: function (ctx) {
+                ctx.globalAlpha = state === 'fade' ? 1 - t / FADE : 1;
+                line(ctx, left - w * 0.04, shelfY + 1, right + w * 0.04, shelfY + 1, C.dim, 2);
+                for (var i = 0; i < books.length; i++) drawBook(ctx, books[i], 0);
+                if (state === 'shelve' && flying) {
+                    // In from beyond the right edge, easing to a stop.
+                    var travel = (w - flying.x) + w * 0.1;
+                    drawBook(ctx, flying, travel * (1 - ease(Math.min(1, t / SLIDE))));
+                }
+                ctx.globalAlpha = 1;
+            }
+        };
+    });
+
     // A map pin drops onto a spot, then a second, then a dashed line joins them; repeats.
     def('explore:about', function (w, h, rnd) {
         var t = 0, CYCLE = 200;

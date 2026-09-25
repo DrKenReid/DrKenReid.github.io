@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.kenreid.co.uk/data/schema/publications.schema.json",
+  "title": "data/publications.json",
+  "description": "Every paper on data_science.html. Typed by hand; .github/scripts/generate_publications.py writes the publication list and its ScholarlyArticle JSON-LD from it, and checks what a schema cannot: that ids are unique and match their Scholar URL, that firstAuthor agrees with the author list, that each sketch and post exists, and that the profile total is at least the papers' sum.",
+  "type": "object",
+  "required": ["scholar", "selected", "publications"],
+  "additionalProperties": false,
+  "properties": {
+    "scholar": {
+      "type": "object",
+      "description": "The Google Scholar profile behind the citation pill.",
+      "required": ["profile", "citations"],
+      "additionalProperties": false,
+      "properties": {
+        "profile": {
+          "type": "string",
+          "pattern": "^https://scholar\\.google\\.com/citations\\?",
+          "description": "The profile's URL; the pill links to it."
+        },
+        "citations": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The profile's total citation count as Scholar shows it. Typed in, not summed: it also counts the thesis and anything not listed here."
+        }
+      }
+    },
+    "selected": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "How many papers the default Selected view shows (at most the number of papers; the generator checks that)."
+    },
+    "publications": {
+      "type": "array",
+      "description": "Newest first. Ties in year keep this order in the All, by year view and the JSON-LD.",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "authors", "etAl", "venue", "venueShort", "year",
+                     "citations", "url", "doi", "pdf", "firstAuthor", "live", "post"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]+:[A-Za-z0-9_-]+$",
+            "description": "Scholar's citation_for_view value, <user>:<paper>."
+          },
+          "title": {
+            "type": "string",
+            "pattern": "\\S",
+            "description": "As Scholar lists it."
+          },
+          "authors": {
+            "type": "array",
+            "items": {"type": "string", "pattern": "\\S"},
+            "description": "Names as Scholar abbreviates them (\"KN Reid\")."
+          },
+          "etAl": {
+            "type": "boolean",
+            "description": "True when Scholar truncated the author list."
+          },
+          "venue": {
+            "type": "string",
+            "pattern": "\\S",
+            "description": "The full venue line, verbatim; shown in venueShort's tooltip, or as the label when venueShort is null."
+          },
+          "venueShort": {
+            "type": ["string", "null"],
+            "pattern": "^(?!.*('[0-9]{2}\\b|\\b(19|20)[0-9]{2}\\b)).+$",
+            "description": "Short label for the list (\"GECCO\", \"JOSS\"), or null to show the venue itself. No year in it: the year is printed beside it, and \"GECCO '21 · 2021\" said it twice."
+          },
+          "year": {
+            "type": "integer",
+            "minimum": 1990,
+            "maximum": 2100,
+            "description": "Publication year."
+          },
+          "citations": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "This paper's Scholar count; 0 hides the badge."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https://scholar\\.google\\.com/citations\\?.*citation_for_view=",
+            "description": "The Scholar citation page the title links to; the generator checks it names this id."
+          },
+          "doi": {
+            "type": ["string", "null"],
+            "pattern": "^10\\.[0-9]{4,9}/\\S+$",
+            "description": "Bare DOI (10.xxxx/...), not a doi.org URL or a doi: prefix, or null."
+          },
+          "pdf": {
+            "type": ["string", "null"],
+            "pattern": "^https://",
+            "description": "A full-text link, or null."
+          },
+          "firstAuthor": {
+            "type": "boolean",
+            "description": "True when Ken is the first author; the generator checks it against authors."
+          },
+          "live": {
+            "type": "string",
+            "pattern": "^[a-z0-9:-]+$",
+            "description": "The data-live key for the row's hover sketch: pub:<name> from js/covers-site.js, or a post slug from js/covers.js."
+          },
+          "post": {
+            "type": ["string", "null"],
+            "pattern": "^blog/[a-z0-9-]+\\.html$",
+            "description": "The blog post that runs the paper, as its url in posts.json, or null; adds a Watch it run link."
+          }
+        }
+      }
+    }
+  }
+}

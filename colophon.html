@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -8,22 +8,27 @@
   <title>Colophon - Ken Reid</title>
   <meta property="og:title" content="Colophon - Ken Reid">
   <meta property="og:description" content="How kenreid.co.uk is built and what it weighs: no framework, no build step on the server, pruned CSS, subset icon fonts, and the numbers behind all of it.">
-  <meta property="og:image" content="https://www.kenreid.co.uk/img/photography/hero/141.webp">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/og/page-colophon.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Colophon: how the site is built and what it weighs, over one of Ken Reid's photographs">
   <meta property="og:url" content="https://www.kenreid.co.uk/colophon.html">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ken Reid">
+  <meta property="og:locale" content="en_GB">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Colophon - Ken Reid">
   <meta name="twitter:description" content="How kenreid.co.uk is built and what it weighs: no framework, no build step on the server, pruned CSS, subset icon fonts, and the numbers behind all of it.">
-  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/photography/hero/141.webp">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/page-colophon.jpg">
+  <meta name="twitter:image:alt" content="Colophon: how the site is built and what it weighs, over one of Ken Reid's photographs">
+  <script defer src="/js/analytics.js"></script>
   <link rel="icon" href="/img/core-img/favicon.png">
   <link rel="apple-touch-icon" href="/img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
   <link rel="manifest" href="/manifest.json">
   <link rel="canonical" href="https://www.kenreid.co.uk/colophon.html">
-  <link rel="preload" as="image" href="/img/photography/hero/141.webp">
-  <link rel="stylesheet" href="/style.min.css">
+  <link rel="preload" as="image" href="/img/photography/hero/141.webp" fetchpriority="high">
+  <link rel="stylesheet" href="/style.min.css?v=20260923a">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -34,33 +39,32 @@
     "author": {"@type": "Person", "name": "Ken Reid", "url": "https://www.kenreid.co.uk"}
   }
   </script>
-  <script defer src="/js/theme.js"></script>
-  <script defer src="/js/palette.js"></script>
+  <script defer src="/js/theme.js?v=20260923a"></script>
+  <script defer src="/js/palette.js?v=20260923a"></script>
 </head>
 <body>
-  <div id="preloader"><div class="loader"></div></div>
-
   <div id="header-section"></div>
 
   <main id="main-content">
 
+  <!-- Page opener (style.css §06, "Page opener") -->
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/141.webp);">
-    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
-      <div class="breadcrumb-content text-center">
-        <h1 class="page-title">Colophon</h1>
-        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+    <div class="container">
+      <div class="breadcrumb-content">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="/index.html"><i class="icon_house_alt"></i> Home</a></li>
           <li class="breadcrumb-item active" aria-current="page">Colophon</li>
         </ol></nav>
+        <h1 class="page-title">Colophon</h1>
       </div>
-    </div></div></div>
+    </div>
   </section>
 
   <div class="about-us-area section-padding-80-0 clearfix">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
-          <div class="text-center" style="margin-bottom: 40px;">
+          <div class="section-heading section-heading--snug text-center">
             <span class="section-eyebrow">Under the hood</span>
             <h2>How this is built</h2>
           </div>
@@ -69,6 +73,9 @@
             are reading. Everything below is measured from the repository itself by
             <code>generate_colophon.py</code> rather than typed in, so it cannot go out of date
             without a check failing.</p>
+          <div class="kr-btn-row">
+            <a href="https://github.com/DrKenReid/DrKenReid.github.io" target="_blank" rel="noopener noreferrer" class="kr-btn kr-btn--ghost">Read the source</a>
+          </div>
         </div>
       </div>
 
@@ -230,7 +237,7 @@
           <div class="kr-colo-stat">
             <dt>Checks per push</dt>
             <dd data-colo="ciChecks">&mdash;</dd>
-            <p>All must pass before the site deploys</p>
+            <p>Run on every push and pull request</p>
           </div>
           <div class="kr-colo-stat">
             <dt>Audit baseline</dt>
@@ -280,14 +287,14 @@
         </div>
         <p class="kr-colo-note">One accent does one job. Red means a control; the gradient is
           reserved for the two places the site signs its own name. Everything decorative is
-          neutral, because 492 photographs are colour enough for one website.</p>
+          neutral, because <span data-colo="photos">hundreds of</span> photographs are colour enough for one website.</p>
       </section>
 
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
           <p class="kr-colo-note">Photography is my own, shot on a Canon EOS 60D; the full-size
             files live in a GitHub release rather than the repository, because Pages has an
-            artifact limit and 492 originals do not fit inside it. Hosting is GitHub Pages on a
+            artifact limit and <span data-colo="photos">hundreds of</span> originals do not fit inside it. Hosting is GitHub Pages on a
             custom domain. The whole thing is written up, at considerably more length than this,
             in <a href="/series-how-this-site-is-built.html">How This Site Is Built</a>.</p>
         </div>
@@ -300,8 +307,8 @@
   <hr>
   <div id="footer-section"></div>
 
-  <script src="/js/site.js"></script>
-  <script src="/js/shared-components.js"></script>
+  <script src="/js/site.js?v=20260923a"></script>
+  <script src="/js/shared-components.js?v=20260923a"></script>
   <script>
     renderHeader('header-section', { basePath: '/' });
     renderFooter('footer-section');
@@ -350,9 +357,17 @@
           rect.appendChild(t);
           frag.appendChild(rect);
         });
-        // year ticks
+        // Year ticks: every January, and the first bar when it is not one.
+        // A label is about 26 units wide at font-size 11, so the first
+        // bar's is left out when a January follows closer than that: the
+        // history starts in December 2019, and "2019" and "2020" printed
+        // on top of each other as "20192020".
+        var LABEL_W = 30;
+        var isJan = function (r) { return r[0].slice(5) === '01'; };
+        var firstJan = rows.findIndex(isJan);
+        var crowded = firstJan > 0 && firstJan * bw < LABEL_W;
         rows.forEach(function (r, i) {
-          if (r[0].slice(5) !== '01' && i !== 0) return;
+          if (!isJan(r) && (i !== 0 || crowded)) return;
           var tx = document.createElementNS(ns, 'text');
           tx.setAttribute('x', (pad + i * bw).toFixed(1));
           tx.setAttribute('y', H - 6);
@@ -417,8 +432,11 @@
           });
         });
       }).catch(function () {
+        // Only the figures still showing their dash: a count bound inside a
+        // sentence keeps its words ("hundreds of") rather than reading
+        // "unavailable photographs".
         document.querySelectorAll('[data-colo]').forEach(function (el) {
-          el.textContent = 'unavailable';
+          if (el.textContent.trim() === '\u2014') el.textContent = 'unavailable';
         });
       });
     }());

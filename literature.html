@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -8,24 +8,31 @@
   <title>Literature - Ken Reid</title>
   <meta property="og:title" content="Literature - Ken Reid">
   <meta property="og:description" content="Ken Reid's reading: what is on the go now, a calendar of every book finished since 2021, the shelf in reading order, the numbers, and a few reviews.">
-  <meta property="og:image" content="https://www.kenreid.co.uk/img/bg-img/the-youth-dont-age.webp">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/og/page-literature.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Literature: reading now, the shelf and reviews, over one of Ken Reid's photographs">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Literature - Ken Reid">
   <meta name="twitter:description" content="What I am reading now, a calendar of every book finished since 2021, the shelf, the numbers, and a few reviews.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/page-literature.jpg">
+  <meta name="twitter:image:alt" content="Literature: reading now, the shelf and reviews, over one of Ken Reid's photographs">
   <meta property="og:url" content="https://www.kenreid.co.uk/literature.html">
   <meta property="og:type" content="website">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <meta property="og:site_name" content="Ken Reid">
+  <meta property="og:locale" content="en_GB">
+  <script defer src="/js/analytics.js"></script>
   <link rel="icon" href="/img/core-img/favicon.png">
   <link rel="apple-touch-icon" href="/img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
   <link rel="manifest" href="/manifest.json">
   <link rel="canonical" href="https://www.kenreid.co.uk/literature.html">
-  <link rel="stylesheet" href="/style.min.css">
-  <script defer src="/js/literature.js?v=20260919b"></script>
-  <script defer src="/js/bookshelf.js?v=20260919b"></script>
-  <script defer src="/js/theme.js"></script>
-  <script defer src="/js/palette.js"></script>
+  <link rel="preload" as="image" href="/img/photography/hero/207.webp" fetchpriority="high">
+  <link rel="stylesheet" href="/style.min.css?v=20260923a">
+  <script defer src="/js/literature.js?v=20260923"></script>
+  <script defer src="/js/bookshelf.js?v=20260923"></script>
+  <script defer src="/js/theme.js?v=20260923a"></script>
+  <script defer src="/js/palette.js?v=20260923a"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -37,41 +44,56 @@
   </script>
 </head>
 <body>
-  <div id="preloader"><div class="loader"></div></div>
-
   <!-- Header -->
   <div id="header-section"></div>
 
   <main id="main-content">
 
-  <!-- Breadcrumb -->
+  <!-- Page opener (style.css §06, "Page opener") -->
   <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/207.webp);">
-    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
-      <div class="breadcrumb-content text-center">
-        <h1 class="page-title">Literature</h1>
-        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+    <div class="container">
+      <div class="breadcrumb-content">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="/index.html"><i class="icon_house_alt"></i> Home</a></li>
           <li class="breadcrumb-item active" aria-current="page">Literature</li>
         </ol></nav>
+        <h1 class="page-title">Literature</h1>
       </div>
-    </div></div></div>
+    </div>
   </section>
 
-  <!-- Favorite Quotes -->
-  <div class="quote-carousel" id="quotes">
-    <button id="quote-prev-btn" class="quote-nav prev" aria-label="Previous quote">&#8249;</button>
-    <div class="quote-inner">
-      <p id="quote-text"></p>
-      <p id="quote-attr"></p>
+  <!-- Favourite quotations, rotating through data/quotes.json (js/literature.js),
+       in the homepage quotation's component. The controls stay hidden until
+       there is something to step through; the button stops the rotation
+       (WCAG 2.2.2) and --hold stops it while pointer or focus is inside. -->
+  <section class="kr-home-quote kr-home-quote--hold" id="quotes" aria-label="Quotations from my reading">
+    <div class="kr-home-quote__inner">
+      <div class="kr-home-quote__body" id="quote-body">
+        <p class="kr-home-quote__text" id="quote-text"></p>
+        <p class="kr-home-quote__attr" id="quote-attr"></p>
+      </div>
+      <div class="kr-home-quote__controls" hidden>
+        <div class="kr-home-quote__row">
+          <button type="button" class="kr-home-quote__nav" id="quote-prev-btn"
+                  aria-label="Previous quotation"><span aria-hidden="true"></span></button>
+          <span class="kr-home-quote__track" aria-hidden="true">
+            <span class="kr-home-quote__bar"></span>
+          </span>
+          <button type="button" class="kr-home-quote__nav kr-home-quote__nav--next" id="quote-next-btn"
+                  aria-label="Next quotation"><span aria-hidden="true"></span></button>
+        </div>
+        <button type="button" class="kr-home-quote__toggle" id="quote-toggle"
+                aria-label="Pause the quotations"><span aria-hidden="true"></span></button>
+      </div>
     </div>
-    <button id="quote-next-btn" class="quote-nav next" aria-label="Next quote">&#8250;</button>
-  </div>
+  </section>
 
-  <!-- Reading now: books in progress (data/now.json, refreshed by the bot),
-       the last one finished and this year's count (js/bookshelf.js) -->
+  <!-- Reading now: books in progress (data/now.json, refreshed weekly with
+       the live data), the last one finished and this year's count, all by
+       js/bookshelf.js -->
   <div class="about-us-area kr-reading-area clearfix" id="now">
     <div class="container">
-      <div class="text-center" style="margin-bottom: 28px;">
+      <div class="section-heading section-heading--snug text-center">
         <span class="section-eyebrow">Right now</span>
         <h2>Reading Now</h2>
       </div>
@@ -98,10 +120,13 @@
   <!-- Reading calendar: books finished per week since 2021 (js/bookshelf.js) -->
   <div class="about-us-area kr-cal-area clearfix" id="reading-calendar">
     <div class="container">
-      <div class="text-center" style="margin-bottom: 22px;">
-        <span class="section-eyebrow">Week by week</span>
+      <div class="section-heading section-heading--snug text-center">
+        <!-- Below 576px the calendar draws months, not weeks (js/bookshelf.js,
+             MONTH_VIEW); the eyebrow and the intro swap phrasings at the same
+             width. The eyebrow stays directly before the h2. -->
+        <span class="section-eyebrow"><span class="kr-cal-say--wide">Week by week</span><span class="kr-cal-say--narrow">Month by month</span></span>
         <h2>Reading Calendar</h2>
-        <p style="margin-top: 10px;">Every book I finished since 2021, one cell per week. Darker means more; the bar at the end of each row is the year's total. Hover a cell for the titles.</p>
+        <p class="section-heading__lede">Every book I finished since 2021, one cell per <span class="kr-cal-say--wide">week</span><span class="kr-cal-say--narrow">month</span>. Darker means more; the bar at the end of each row is the year's total. <span class="kr-cal-say--wide">Hover a cell</span><span class="kr-cal-say--narrow">Tap a month</span> for the titles.</p>
       </div>
       <div id="kr-reading-calendar" class="kr-cal"></div>
     </div>
@@ -110,10 +135,10 @@
   <!-- The shelf: every book as a spine, in reading order (js/bookshelf.js) -->
   <div class="about-us-area kr-shelf-area clearfix" id="shelf">
     <div class="container">
-      <div class="text-center" style="margin-bottom: 22px;">
+      <div class="section-heading section-heading--snug text-center">
         <span class="section-eyebrow">In reading order</span>
         <h2>The Shelf</h2>
-        <p style="margin-top: 10px;"><span id="kr-shelf-count">&mdash;</span> spines, oldest on the left. Width follows the title, colour follows my rating. Scroll along it; hover a spine for the book. Looking for one in particular? <a href="/books.html">Every cover, searchable</a>.</p>
+        <p class="section-heading__lede"><span id="kr-shelf-count">&mdash;</span> spines, oldest on the left. Width follows the title, colour follows my rating. Scroll along it; hover a spine for the book. Looking for one in particular? <a href="/books.html">Every cover, searchable</a>.</p>
       </div>
     </div>
     <div class="kr-shelf-scroll">
@@ -125,53 +150,56 @@
   <!-- The figures, worked out from books.json (js/bookshelf.js) -->
   <div class="about-us-area kr-figures-area clearfix" id="stats">
     <div class="container">
-      <div class="text-center" style="margin-bottom: 28px;">
+      <div class="section-heading section-heading--snug text-center">
         <span class="section-eyebrow">By the numbers</span>
         <h2>Reading Stats</h2>
-        <p style="margin-top: 10px;">Worked out from the Goodreads export each time it is refreshed, not typed in. The longer analysis, with charts, is in the <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" rel="noopener noreferrer">analysis repo</a>.</p>
+        <p class="section-heading__lede">Worked out from the Goodreads export each time it is refreshed, not typed in. The longer analysis, with charts, is in the <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" rel="noopener noreferrer">analysis repo</a>.</p>
       </div>
       <dl class="kr-figures" id="kr-figures"></dl>
     </div>
   </div>
 
   <!-- Selected Reviews -->
-  <div class="about-us-area section-padding-80-0 clearfix bg-tint" id="reviews" style="padding-top: 60px;">
+  <div class="about-us-area section-padding-80-0 clearfix bg-tint pt-5" id="reviews">
     <div class="container">
-      <div class="text-center" style="margin-bottom: 40px;">
+      <div class="section-heading section-heading--snug text-center">
         <span class="section-eyebrow">Books</span>
-        <h2 class="wow fadeInUp" data-wow-delay="100ms">Selected Reviews</h2>
-        <p class="wow fadeInUp" data-wow-delay="200ms" style="color: #636363;">Twelve picked from the <span data-lit="reviews">250</span> I have written: some favourites, a few I argued with. The rest are on <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" rel="noopener noreferrer">Goodreads</a>, the passages I saved are on the <a href="/quotes.html" style="color: #fc6060;">quote wall</a>, and the ones I press on friends are on the <a href="/blog/books-i-recommend-to-friends.html" style="color: #fc6060;">blog</a>.</p>
+        <h2>Selected Reviews</h2>
+        <p class="section-heading__lede">Twelve picked from the <span data-lit="reviews">250</span> I have written: some favourites, a few I argued with. The rest are on <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" rel="noopener noreferrer">Goodreads</a>, the passages I saved are on the <a href="/quotes.html">quote wall</a>, and the ones I press on friends are on the <a href="/blog/books-i-recommend-to-friends.html">blog</a>.</p>
       </div>
       <div class="row kr-reviews kr-reviews--collapsed" id="reviews-grid"></div>
-      <div class="text-center" style="margin-bottom: 40px;">
-        <button type="button" class="btn alime-btn btn-2 kr-reviews__more" id="reviews-more" aria-expanded="false" aria-controls="reviews-grid">Show more reviews</button>
+      <div class="kr-btn-row mb-5">
+        <button type="button" class="kr-btn kr-btn--ghost kr-reviews__more" id="reviews-more" aria-expanded="false" aria-controls="reviews-grid">Show more reviews</button>
       </div>
     </div>
   </div>
 
+  <!-- Posts about books (renderTopicPosts, shared-components.js) -->
+  <div id="topic-posts" data-topic-tags="books" data-topic-limit="3"></div>
+
   <!-- Find Me -->
   <div class="about-us-area section-padding-80-0 clearfix" id="find">
     <div class="container">
-      <div class="text-center" style="margin-bottom: 40px;">
+      <div class="section-heading section-heading--snug text-center">
         <span class="section-eyebrow">Elsewhere</span>
-        <h2 class="wow fadeInUp" data-wow-delay="100ms">Find Me</h2>
+        <h2>Find Me</h2>
       </div>
-      <div class="row justify-content-center" style="margin-bottom: 40px;">
-        <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center wow fadeInUp" data-wow-delay="100ms">
-          <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" rel="noopener noreferrer" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">📚 Goodreads</a>
-          <p style="color: #636363; font-size: 14px;"><span data-lit="books">600+</span> books tracked, <span data-lit="reviews">250</span> reviews, and my full reading history.</p>
+      <div class="row justify-content-center mb-5">
+        <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center">
+          <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" rel="noopener noreferrer" class="kr-btn kr-btn--ghost w-100 mb-3"><i class="ti-book" aria-hidden="true"></i> Goodreads</a>
+          <p class="kr-muted small"><span data-lit="books">600+</span> books tracked, <span data-lit="reviews">250</span> reviews, and my full reading history.</p>
         </div>
-        <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center wow fadeInUp" data-wow-delay="200ms">
-          <a href="https://www.tiktok.com/@drkenreid" target="_blank" rel="noopener noreferrer" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">🎵 TikTok</a>
-          <p style="color: #636363; font-size: 14px;">Book reviews and reading recommendations in short-form video.</p>
+        <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center">
+          <a href="https://www.tiktok.com/@drkenreid" target="_blank" rel="noopener noreferrer" class="kr-btn kr-btn--ghost w-100 mb-3"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg> TikTok</a>
+          <p class="kr-muted small">Book reviews and reading recommendations in short-form video.</p>
         </div>
-        <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center wow fadeInUp" data-wow-delay="300ms">
-          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" rel="noopener noreferrer" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">📊 Analysis Repo</a>
-          <p style="color: #636363; font-size: 14px;">Genre distributions, reading patterns, and visualisations from my Goodreads export.</p>
+        <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center">
+          <a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" rel="noopener noreferrer" class="kr-btn kr-btn--ghost w-100 mb-3"><i class="ti-bar-chart" aria-hidden="true"></i> Analysis Repo</a>
+          <p class="kr-muted small">Genre distributions, reading patterns, and visualisations from my Goodreads export.</p>
         </div>
-        <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center wow fadeInUp" data-wow-delay="400ms">
-          <a href="https://github.com/DrKenReid/GoodReads-Quotes-PDF" target="_blank" rel="noopener noreferrer" class="btn alime-btn btn-2" style="margin-bottom: 12px; width: 100%;">💬 Quotes Tool</a>
-          <p style="color: #636363; font-size: 14px;"><span data-lit="quotes">571</span> quotes I highlighted while reading, cleaned up and formatted into a printable PDF.</p>
+        <div class="col-12 col-sm-6 col-lg-3 mb-30 text-center">
+          <a href="https://github.com/DrKenReid/GoodReads-Quotes-PDF" target="_blank" rel="noopener noreferrer" class="kr-btn kr-btn--ghost w-100 mb-3"><i class="ti-comment-alt" aria-hidden="true"></i> Quotes Tool</a>
+          <p class="kr-muted small"><span data-lit="quotes">571</span> quotes I highlighted while reading, cleaned up and formatted into a printable PDF.</p>
         </div>
       </div>
     </div>
@@ -186,38 +214,22 @@
   <div id="footer-section"></div>
 
   <script src="/js/jquery.min.js"></script>
-  <script src="/js/alime.bundle.js"></script>
-  <script src="/js/site.js"></script>
-  <script src="/js/lightbox.js"></script>
-  <script src="/js/default-assets/active.js"></script>
-  <script src="/js/shared-components.js"></script>
+  <script src="/js/alime.bundle.js?v=20260923a"></script>
+  <script src="/js/site.js?v=20260923a"></script>
+  <script src="/js/lightbox.js?v=20260923a"></script>
+  <script src="/js/default-assets/active.js?v=20260923a"></script>
+  <script src="/js/shared-components.js?v=20260923a"></script>
   <script>
     // The cover wall moved to its own page; old links to it still land there.
     function krWallMoved() { if (location.hash === '#bookshelf') location.replace('/books.html'); }
     krWallMoved();
     window.addEventListener('hashchange', krWallMoved);
-    document.addEventListener('DOMContentLoaded', function() { initQuotes(); initReviews(); });
     renderHeader('header-section', { basePath: '/', active: 'hobbies', hobbiesChild: 'literature' });
-    renderInstagramSection('instagram-section');
+    renderPhotoStrip('instagram-section');
     renderFooter('footer-section');
-    /* Currently Reading straight from the daily bot (review 1c) */
-    fetch('/data/now.json').then(function(r) { return r.json(); }).then(function(now) {
-      var grid = document.getElementById('currently-reading-grid');
-      if (!grid) return;
-      if (!now || !Array.isArray(now.reading) || !now.reading.length) {
-        grid.innerHTML = '<p class="kr-reading__meta">Between books.</p>';
-        return;
-      }
-      grid.innerHTML = now.reading.map(function(b) {
-        var title = krEscapeHtml(b.title);
-        var author = krEscapeHtml(b.author || '');
-        var cover = b.img
-          ? '<img src="' + krEscapeHtml(b.img) + '" alt="" loading="lazy" onerror="this.outerHTML=\'<span class=&quot;kr-reading__cover--blank&quot;>' + title + '</span>\'">'
-          : '<span class="kr-reading__cover--blank">' + title + '</span>';
-        return '<a class="kr-reading__book" rel="nofollow noopener noreferrer" target="_blank" href="' + krEscapeHtml(b.link) + '">' +
-          cover + '<span><span class="kr-reading__title">' + title + '</span><span class="kr-reading__meta">' + author + '</span></span></a>';
-      }).join('');
-    }).catch(function() {});
+    // The page's own sections start themselves: the quotations and reviews
+    // in js/literature.js, Reading Now, the calendar, the shelf and the
+    // figures in js/bookshelf.js.
   </script>
 </body>
 </html>

@@ -22,7 +22,10 @@ from pathlib import Path
 
 from PIL import Image
 
-ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import sitelib  # noqa: E402
+
+ROOT = sitelib.ROOT
 THUMBS = ROOT / "img" / "photography" / "thumb"
 TAGS = ROOT / "data" / "photo-tags.json"
 
@@ -40,7 +43,11 @@ def is_monotone(path):
     with Image.open(path) as im:
         im = im.convert("RGB")
         im.thumbnail((96, 96))
-        px = list(im.getdata())
+        # get_flattened_data replaces getdata, which Pillow 12 deprecates
+        # and 14 removes; requirements.txt still allows Pillow 10, which
+        # has only getdata.
+        flat = getattr(im, "get_flattened_data", None) or im.getdata
+        px = list(flat())
     chromas = sorted((max(p) - min(p)) / 255.0 for p in px)
     p99 = chromas[int(len(chromas) * 0.99)]
     p999 = chromas[min(len(chromas) - 1, int(len(chromas) * 0.999))]
@@ -52,9 +59,14 @@ def is_monotone(path):
 
 
 def main(argv=None):
-    argv = argv if argv is not None else sys.argv[1:]
-    report = "--report" in argv
-    check = "--check" in argv
+    parser = sitelib.arg_parser(__doc__)
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--report", action="store_true",
+                      help="list what would change; write nothing")
+    mode.add_argument("--check", action="store_true",
+                      help="exit 1 if any bw tag disagrees with the pixels; write nothing")
+    args = parser.parse_args(argv)
+    report, check = args.report, args.check
     tags = json.loads(TAGS.read_text(encoding="utf-8"))
 
     add, drop, kept = [], [], 0

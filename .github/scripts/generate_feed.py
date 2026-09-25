@@ -9,11 +9,16 @@ absolutised) so feed readers can read whole posts without leaving.
 
 Run after updating data/posts.json:
     python .github/scripts/generate_feed.py
+    python .github/scripts/generate_feed.py --check   # exit 1 if feed.xml is stale
 Deterministic: dates come from posts.json, never from the clock.
+
+Fails, and writes nothing, when one of the full-content posts has no
+body it can find. It used to leave content:encoded out and carry on,
+and photographing-strangers went out to feed readers as a bare summary
+for as long as its body div carried a data-fullres attribute.
 """
 from __future__ import annotations
 
-import json
 import re
 import sys
 import xml.etree.ElementTree as ET
@@ -21,8 +26,11 @@ from datetime import datetime, timezone
 from html import escape
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-SITE = "https://www.kenreid.co.uk"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import sitelib  # noqa: E402
+
+ROOT = sitelib.ROOT
+SITE = sitelib.SITE
 FULL_CONTENT_ITEMS = 20
 
 CHANNEL_HEAD = """<?xml version="1.0" encoding="UTF-8"?>
@@ -43,20 +51,6 @@ CHANNEL_HEAD = """<?xml version="1.0" encoding="UTF-8"?>
 def rfc822(date_str: str) -> str:
     dt = datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=timezone.utc)
     return dt.strftime("%a, %d %b %Y 00:00:00 +0000")
-
-
-def extract_blog_post(html: str) -> str | None:
-    """Inner HTML of <div class="blog-post">, via div-depth counting."""
-    m = re.search(r'<div class="blog-post">', html)
-    if not m:
-        return None
-    depth = 1
-    pos = m.end()
-    for tag in re.finditer(r"<div\b|</div>", html[pos:]):
-        depth += 1 if tag.group().startswith("<div") else -1
-        if depth == 0:
-            return html[pos : pos + tag.start()]
-    return None
 
 
 def drop_balanced_divs(content: str, open_pattern: str) -> tuple[str, int]:
@@ -96,7 +90,9 @@ def clean_for_feed(content: str, post_url: str) -> str:
             '<p><em>This post includes an interactive demo that runs live in the '
             'browser. <a href="{u}">View it on the site</a> to play with it.</em></p>'
         ).format(u=post_url)
-        # Place the note where the first widget sat: after the first paragraph.
+        # The note opens the body rather than standing where the widget
+        # was, so a reader knows there is a live part before reaching the
+        # gap it leaves.
         content = note + content
 
     # Absolutise relative URLs (posts live one level deep in /blog/).
@@ -108,12 +104,18 @@ def clean_for_feed(content: str, post_url: str) -> str:
     return content.replace("]]>", "]]&gt;")
 
 
-def main() -> int:
-    posts = json.loads((ROOT / "data" / "posts.json").read_text(encoding="utf-8"))
+def main(argv=None) -> int:
+    parser = sitelib.arg_parser(__doc__)
+    parser.add_argument("--check", action="store_true",
+                        help="exit 1 if feed.xml differs from a fresh build; write nothing")
+    args = parser.parse_args(argv)
+
+    posts = sitelib.load_posts()
     posts.sort(key=lambda p: p["date"], reverse=True)
     build_date = rfc822(posts[0]["date"])
 
     out = [CHANNEL_HEAD.format(site=SITE, build_date=build_date)]
+    bodiless = []
     for i, p in enumerate(posts):
         url = f"{SITE}/{p['url']}"
         item = [
@@ -127,14 +129,24 @@ def main() -> int:
         for tag in p.get("tags", []):
             item.append(f"      <category>{escape(tag)}</category>")
         if i < FULL_CONTENT_ITEMS:
-            html = (ROOT / p["url"]).read_text(encoding="utf-8")
-            inner = extract_blog_post(html)
-            if inner:
+            path = ROOT / p["url"]
+            inner = sitelib.post_body(path.read_text(encoding="utf-8")) if path.is_file() else None
+            if inner and inner.strip():
                 body = clean_for_feed(inner, url)
                 item.append(f"      <content:encoded><![CDATA[{body}]]></content:encoded>")
+            else:
+                bodiless.append(p["url"])
         item.append("    </item>")
         out.append("\n".join(item) + "\n")
     out.append("  </channel>\n</rss>\n")
+
+    if bodiless:
+        print(f"{len(bodiless)} of the {FULL_CONTENT_ITEMS} newest posts have no "
+              "<div class=\"blog-post\"> body to put in the feed:")
+        for url in bodiless:
+            print(f"  {url}")
+        print("feed.xml was not written. Give each post a closed .blog-post div, then rerun.")
+        return 1
 
     feed = "".join(out)
     ET.fromstring(feed)  # dies loudly on malformed XML
@@ -144,7 +156,7 @@ def main() -> int:
     # --check is the convention every other generator honours, and this one
     # did not: it wrote regardless, so "check the feed" silently rebuilt it and
     # the committed feed drifted for weeks behind a post's class renames.
-    if "--check" in sys.argv:
+    if args.check:
         current = target.read_text(encoding="utf-8") if target.exists() else ""
         if current != feed:
             print("feed.xml is stale (regenerating would change it)")

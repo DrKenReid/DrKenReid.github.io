@@ -2,7 +2,12 @@
 """Site-wide audit: links, metadata, accessibility, feed, sitemap, posts.json.
 
 Audits only git-tracked HTML (published pages); untracked drafts are skipped.
-Run from the repo root:  python .github/scripts/audit_site.py [--include-drafts]
+Run from the repo root:
+
+  python .github/scripts/audit_site.py [--include-drafts] [--strict]
+
+Exits 1 on any ERROR. --strict also exits 1 on any WARN: zero warnings is
+the baseline, and a warning nothing fails on is one nobody reads.
 
 Checks:
   links      internal href/src targets exist; malformed URLs (double scheme etc.)
@@ -10,17 +15,37 @@ Checks:
   a11y       img alt, duplicate ids, heading order, single h1, landmark
              nesting (a landmark must not close over open containers),
              aria-label on a role-less div/span, img with no src
+  markup     attribute names are well formed (an unescaped quote inside a
+             value ends it early and spills the rest out as attributes)
+  components published posts use the post components: no literal colour
+             in a style attribute (WARN), no hand-coded back link, every
+             a.cite-ref resolves to ol.references > li#ref-N, every
+             pre > code names its language, no raw YouTube iframe
+  sw         every sw.js PRECACHE entry is a tracked file
   feed       feed.xml well-formed, items resolve to real files
   sitemap    sitemap.xml covers all published indexable pages, no ghosts
   posts      posts.json urls/images exist, tags in allowed set, readMinutes
   scripts    blog post script includes match the canonical set
   head       blog post heads carry the canonical elements (keywords, icons,
              manifest, BlogPosting + BreadcrumbList JSON-LD)
+  retired    no #preloader and no inline Google Analytics snippet on a
+             tracked page (analytics loads from js/analytics.js)
+  lengths    top-level pages: <title> at most 65 characters, meta
+             description at most 160 (WARN), where search results cut them
+  series     every series in posts.json has a tracked series-<slug>.html
+             page and a sitemap entry
+  site map   every tracked top-level page is in KR_PAGES
+             (js/shared-components.js), which the footer and palette read
+  jekyll     no tracked Markdown is published beside the site by Pages
+             (see _config.yml); blog/downloads/ is published on purpose
+  orphans    INFO only: tracked assets that nothing references
+  jsonld-ref every bare {"@id": ...} in any page's JSON-LD lands on a node
+             (one with a @type) that some audited page defines
 """
 
+import fnmatch
 import json
 import re
-import subprocess
 import sys
 import xml.etree.ElementTree as ET
 from collections import Counter
@@ -28,8 +53,10 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
-ROOT = Path(__file__).resolve().parents[2]
-SITE = "https://www.kenreid.co.uk"
+import sitelib
+
+ROOT = sitelib.ROOT
+SITE = sitelib.SITE
 ALLOWED_TAGS = {"data science", "personal", "photography", "books", "ai", "finance",
                 "philosophy", "advice", "science", "technology", "television", "writing",
                 "music"}
@@ -40,6 +67,29 @@ OPTIONAL_POST_SCRIPTS = {"../js/nerd-mode.js", "../js/prism-loader.js",
 
 # Pages exempt from content/metadata checks (verification stubs etc.).
 EXEMPT_PAGES = {"google1473b6928dc28ce6.html"}
+
+# Top-level pages the site map (KR_PAGES) leaves out on purpose: the page
+# served for every missing URL and the service worker's offline fallback.
+# Neither is somewhere a reader chooses to go.
+NOT_IN_SITE_MAP = {"404.html", "offline.html"}
+
+# Where search results cut a top-level page's title and description. A
+# longer one is shown truncated mid-word, usually losing the part that
+# said what the page is.
+TITLE_MAX = 65
+DESCRIPTION_MAX = 160
+
+# Top-level pages whose description is over DESCRIPTION_MAX and waiting on
+# shorter copy. Each is reported as INFO rather than WARN until it is
+# rewritten; once a listed page fits, its entry is a WARN until removed,
+# so the list can only shrink. Add nothing here: write shorter copy.
+LONG_META_PENDING = {
+    "data_science.html",
+    "series-algorithms-live.html",
+    "series-feedback.html",
+    "series-how-this-site-is-built.html",
+    "series-optimizing-your-schedule.html",
+}
 
 # Pages whose prose is quoted from someone else, so the house style rules
 # (banned words, em dashes, straight quotes) do not apply to it.
@@ -60,6 +110,11 @@ LANDMARKS = {"main", "article", "section", "nav", "aside", "header", "footer"}
 # implicit role is generic. Screen readers then announce nothing at all.
 GENERIC_TAGS = {"div", "span"}
 
+# What an attribute name may look like: the XML Name production restricted
+# to ASCII, which covers data-*, aria-* and the namespaced SVG names
+# (xlink:href). A name outside it is almost always the tail of a value whose
+# quotes were not escaped. See check_attributes.
+ATTR_NAME = re.compile(r"[A-Za-z_:][-A-Za-z0-9_:.]*")
 
 PROSE_EXCLUDED = {"blockquote", "cite", "footer", "code", "pre", "script",
                   "style", "h1", "h2", "h3", "h4", "h5", "h6", "title", "q"}
@@ -92,9 +147,14 @@ class PageParser(HTMLParser):
         self.bad_nesting = []    # (landmark, [open tags], line)
         self.label_no_role = []  # (tag, label, line)
         self.img_no_src = []     # lines of <img> with neither src nor srcset
+        self.bad_attrs = []      # (tag, [names failing ATTR_NAME], line)
         self._stack = []
         self._excl = 0
         self._in_title = False
+        # The document's title is its first <title>. An inline SVG carries
+        # titles of its own (the colophon's chart does), and appending
+        # those made the page title "Colophon - Ken ReidCommits per month".
+        self._title_done = False
         self._in_jsonld = False
         self._jsonld_buf = []
         self._jsonld_line = 0
@@ -102,6 +162,9 @@ class PageParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
         line = self.getpos()[0]
+        bad = [name for name, _v in attrs if not ATTR_NAME.fullmatch(name)]
+        if bad:
+            self.bad_attrs.append((tag, bad, line))
         if tag == "figure" and self._stack and self._stack[-1][0] in ("ul", "ol"):
             self.fig_in_list.append(line)
         if tag not in VOID:
@@ -149,7 +212,7 @@ class PageParser(HTMLParser):
                 self.metas[key] = a.get("content", "")
                 if key == "robots" and "noindex" in (a.get("content") or ""):
                     self.noindex = True
-        if tag == "title":
+        if tag == "title" and not self._title_done:
             self._in_title = True
         if re.fullmatch(r"h[1-6]", tag):
             self.headings.append((int(tag[1]), line))
@@ -162,8 +225,9 @@ class PageParser(HTMLParser):
                 self.scripts.append(a["src"])
 
     def handle_endtag(self, tag):
-        if tag == "title":
+        if tag == "title" and self._in_title:
             self._in_title = False
+            self._title_done = True
         if tag == "script" and self._in_jsonld:
             self._in_jsonld = False
             self.jsonld.append(("".join(self._jsonld_buf), self._jsonld_line))
@@ -193,13 +257,6 @@ class PageParser(HTMLParser):
         if (data.strip() and not self._in_title and not self._in_jsonld
                 and not any(t in ("script", "style") for t, _ in self._stack)):
             self.visible.append((data, self.getpos()[0]))
-
-
-def tracked_html():
-    out = subprocess.run(["git", "ls-files", "*.html"], cwd=ROOT,
-                         capture_output=True, text=True).stdout
-    # skip tracked files deleted from the worktree (deletion not yet committed)
-    return [f for f in (ROOT / p for p in out.split() if p) if f.exists()]
 
 
 def is_external(url):
@@ -234,9 +291,9 @@ def resolve_local(page: Path, url: str):
 
 
 def tracked_files():
-    out = subprocess.run(["git", "ls-files"], cwd=ROOT,
-                         capture_output=True, text=True).stdout
-    return set(out.split())
+    """Every tracked file that exists, as repo-relative posix paths: what
+    deploys, so what a link or a PRECACHE entry may point at."""
+    return {p.relative_to(ROOT).as_posix() for p in sitelib.tracked()}
 
 
 # Adverbs only for the last two. The adjectives earn their place: one post is
@@ -275,6 +332,11 @@ BANNED_PROSE = re.compile(
 # and are not audited here.
 CURLY_PROSE = re.compile(r"[‘’“”]")
 
+# The same four characters mapped to their straight forms, for comparing two
+# copies of a title where only one was typed with curly quotes.
+STRAIGHTEN = str.maketrans({"‘": "'", "’": "'",
+                            "“": '"', "”": '"'})
+
 # Scaffolding that must never be visible: a note-to-self left where the
 # writing should be. Two shapes, both seen in the corpus. First, anything
 # announcing itself (Placeholder:, TODO:, TBD, XXX, Lorem ipsum). Second, a
@@ -292,7 +354,6 @@ PLACEHOLDER_PROSE = re.compile(
     r"|\blorem ipsum\b"
     r"|(?:^|(?<=[.!?]\s)|(?<=^\s))\[[A-Z][^\]]{24,}\]",
     re.I | re.M)
-
 
 
 class PageCtx:
@@ -331,29 +392,48 @@ def check_ids(c):
             c.ids[i] = line
 
 
-
 def check_structure(c):
     # --- structure a screen reader depends on ---
     for landmark, forced, line in c.p.bad_nesting:
         c.add("ERROR", c.page, line, "landmark-nesting",
-            f"</{landmark}> closes with {len(forced)} element(s) still open "
-            f"({', '.join(forced[:4])}); the parser will close them here and "
-            f"push the rest of the content out of the landmark")
+              f"</{landmark}> closes with {len(forced)} element(s) still open "
+              f"({', '.join(forced[:4])}); the parser will close them here and "
+              f"push the rest of the content out of the landmark")
     for tag, label, line in c.p.label_no_role:
         c.add("ERROR", c.page, line, "label-no-role",
-            f"<{tag} aria-label=\"{label}\"> has no role, so the name is "
-            f"dropped; add role=\"group\" (or region/navigation as fits)")
+              f"<{tag} aria-label=\"{label}\"> has no role, so the name is "
+              f"dropped; add role=\"group\" (or region/navigation as fits)")
     for line in c.p.img_no_src:
         c.add("ERROR", c.page, line, "img-no-src",
-            "<img> has neither src nor srcset; use a placeholder data URI "
-            "if a script fills it in later")
+              "<img> has neither src nor srcset; use a placeholder data URI "
+              "if a script fills it in later")
 
+
+def check_attributes(c):
+    """ERROR on an attribute name that no author would write.
+
+    Incident: the related-posts block wrote a post title into an alt
+    attribute without escaping its double quotes, so three posts carried
+    alt="Why You Aren't a "Visual Learner"". The browser ends the value at
+    the second quote: a screen reader hears "Why You Aren't a", and the
+    rest becomes two attributes named visual and learner"". Nothing looks
+    wrong on the page, which is why it shipped. A hand-written alt with
+    "Path" in quotes did the same on what-was-i-made-for.html. The name
+    check catches every variant of this without knowing which attribute
+    the stray quote was in.
+    """
+    for tag, names, line in c.p.bad_attrs:
+        shown = ", ".join(repr(n[:40]) for n in names[:3])
+        c.add("ERROR", c.page, line, "bad-attribute",
+              f"<{tag}> has malformed attribute name(s) {shown}; a quote "
+              f"inside an earlier value probably ended it early (write &quot;)")
 
 
 def check_references(c):
-    # --- links / images resolve (and must be git-c.tracked: a file that
+    # --- links / images resolve (and must be git-tracked: a file that
     # exists locally but is untracked 404s in production) ---
     c.page_is_tracked = c.rel in c.tracked
+
     def check_target(url, line, what="target"):
         local = resolve_local(c.page, url)
         if local is None:
@@ -367,7 +447,7 @@ def check_references(c):
                 relp = None
             if relp and relp not in c.tracked:
                 c.add("ERROR", c.page, line, "untracked-ref",
-                    f"{what} exists locally but is not tracked by git: {url}")
+                      f"{what} exists locally but is not tracked by git: {url}")
 
     for url, line in c.p.links + [(u, l) for (_t, u, _a, _lz, l) in c.p.images]:
         shape = check_url_shape(url)
@@ -386,14 +466,12 @@ def check_references(c):
         check_target(u, c.text[:m.start()].count("\n") + 1, what="background")
 
 
-
 def check_fragments(c):
-    # --- same-c.page fragments ---
+    # --- same-page fragments ---
     c.idset = set(c.ids)
     for url, line in c.p.links:
         if url.startswith("#") and len(url) > 1 and url[1:] not in c.idset:
             c.add("WARN", c.page, line, "bad-fragment", f"no element with id '{url[1:]}'")
-
 
 
 def check_img_alt(c):
@@ -403,9 +481,8 @@ def check_img_alt(c):
             c.add("WARN", c.page, line, "no-alt", f"img missing alt: {src[:80]}")
 
 
-
 def check_dup_alt(c):
-    # --- duplicated alt c.text (screen readers hear it N times) ---
+    # --- duplicated alt text (screen readers hear it N times) ---
     alt_first = {}
     alt_seen = {}
     for alt, line in c.p.alts:
@@ -416,24 +493,204 @@ def check_dup_alt(c):
     for alt, n in alt_seen.items():
         if n >= 3:
             c.add("WARN", c.page, alt_first[alt], "dup-alt",
-                f"alt text repeated {n}x: '{alt[:70]}'")
-
+                  f"alt text repeated {n}x: '{alt[:70]}'")
 
 
 def check_img_dims(c):
     # --- external images without dimensions cause layout shift ---
     for src, line in c.p.ext_nodims:
         c.add("WARN", c.page, line, "ext-img-dims",
-            f"external img without width/height: {src[:90]}")
-
+              f"external img without width/height: {src[:90]}")
 
 
 def check_figures(c):
     # --- figures may not be direct children of lists ---
     for line in c.p.fig_in_list:
         c.add("ERROR", c.page, line, "figure-in-list",
-            "figure is a direct child of ul/ol (invalid HTML)")
+              "figure is a direct child of ul/ol (invalid HTML)")
 
+
+# --- post components ---------------------------------------------------------
+# Posts were written by copying the last one, so a style attribute or a
+# hand-built block travelled from post to post until
+# normalize_post_markup.py moved them onto the components in style.css
+# ("Post components"). These rules stop the old markup coming back with the
+# next copy. Every message names the style.css section whose comment shows
+# the markup to use instead, because the stylesheet travels with every
+# checkout and its banner is one search away; .github/docs/COMPONENTS.md
+# has the same components with fuller markup and the reasons. The names are
+# the sections' banner titles exactly (tests/test_audit_rules.py checks),
+# so a search for one lands on it.
+COMPONENT_DOC = "style.css"
+COMPONENT_SECTIONS = {
+    "quote": "Pull quote",
+    "table": "Table",
+    "figure": "Figures",
+    "audio": "Audio card",
+    "code": "Code",
+    "video": "Embeds (initEmbedFacades)",
+    "note": "Muted note and end note",
+    "warning": "Content warning",
+    "end": "The end band (renderPostEnd)",
+    "references": "References",
+    "components": "Post components",
+}
+
+# Where an inline colour on each element is most likely to have come from.
+COMPONENT_FOR_TAG = {
+    "blockquote": "quote", "footer": "quote",
+    "table": "table", "thead": "table", "tr": "table", "th": "table", "td": "table",
+    "img": "figure", "figure": "figure", "figcaption": "figure",
+    "audio": "audio", "pre": "code",
+    "p": "note", "strong": "warning",
+}
+
+CSS_NAMED_COLOURS = frozenset("""
+    aliceblue antiquewhite aqua aquamarine azure beige bisque black
+    blanchedalmond blue blueviolet brown burlywood cadetblue chartreuse
+    chocolate coral cornflowerblue cornsilk crimson cyan darkblue darkcyan
+    darkgoldenrod darkgray darkgreen darkgrey darkkhaki darkmagenta
+    darkolivegreen darkorange darkorchid darkred darksalmon darkseagreen
+    darkslateblue darkslategray darkslategrey darkturquoise darkviolet
+    deeppink deepskyblue dimgray dimgrey dodgerblue firebrick floralwhite
+    forestgreen fuchsia gainsboro ghostwhite gold goldenrod gray green
+    greenyellow grey honeydew hotpink indianred indigo ivory khaki lavender
+    lavenderblush lawngreen lemonchiffon lightblue lightcoral lightcyan
+    lightgoldenrodyellow lightgray lightgreen lightgrey lightpink
+    lightsalmon lightseagreen lightskyblue lightslategray lightslategrey
+    lightsteelblue lightyellow lime limegreen linen magenta maroon
+    mediumaquamarine mediumblue mediumorchid mediumpurple mediumseagreen
+    mediumslateblue mediumspringgreen mediumturquoise mediumvioletred
+    midnightblue mintcream mistyrose moccasin navajowhite navy oldlace
+    olive olivedrab orange orangered orchid palegoldenrod palegreen
+    paleturquoise palevioletred papayawhip peachpuff peru pink plum
+    powderblue purple rebeccapurple red rosybrown royalblue saddlebrown
+    salmon sandybrown seagreen seashell sienna silver skyblue slateblue
+    slategray slategrey snow springgreen steelblue tan teal thistle tomato
+    turquoise violet wheat white whitesmoke yellow yellowgreen
+""".split())
+
+# Properties that take a colour, custom properties included (an inline
+# --accent: #hex is as fixed as a colour: #hex).
+COLOUR_PROPERTY = re.compile(
+    r"--[\w-]+|color|background(?:-color|-image)?|fill|stroke|accent-color"
+    r"|caret-color|box-shadow|text-shadow|text-decoration(?:-color)?"
+    r"|column-rule(?:-color)?|outline(?:-color)?"
+    r"|border(?:-(?:top|right|bottom|left|block|inline)(?:-(?:start|end))?)?(?:-color)?")
+COLOUR_LITERAL = re.compile(
+    r"#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(|\b[a-z]+\b", re.I)
+# A token reference or a file name says nothing about colour, even when it
+# contains a colour's name (var(--kr-red), url(red-door.jpg)).
+NOT_A_COLOUR = re.compile(r"\b(?:var|url)\([^()]*\)")
+
+YOUTUBE_SRC = re.compile(r"//(?:www\.)?(?:youtube(?:-nocookie)?\.com|youtu\.be)/", re.I)
+
+
+def inline_colours(style):
+    """The declarations in a style attribute that set a literal colour.
+
+    A token (var(--kr-muted), var(--viz-s1)) follows the theme and passes.
+    A hex, rgb()/hsl() or named colour is the same on the light page and
+    the dark one, which is how an inline #555 quotation came to be 2.3:1
+    in the dark theme."""
+    found = []
+    for decl in style.split(";"):
+        prop, sep, value = decl.partition(":")
+        prop = prop.strip().lower()
+        if not sep or not COLOUR_PROPERTY.fullmatch(prop):
+            continue
+        for m in COLOUR_LITERAL.finditer(NOT_A_COLOUR.sub(" ", value)):
+            word = m.group(0).lower()
+            if word[0] == "#" or word[-1] == "(" or word in CSS_NAMED_COLOURS:
+                found.append(f"{prop}: {value.strip()}")
+                break
+    return found
+
+
+class ComponentParser(HTMLParser):
+    """The markup the post-component rules read, with enough nesting to
+    tell a list item in ol.references from one anywhere else."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.inline_colours = []   # (line, tag, [declarations])
+        self.back_links = []       # lines of a.post-cta
+        self.cite_refs = []        # (target id, line) of a.cite-ref
+        self.ref_items = set()     # ids of li that are children of ol.references
+        self.bare_code = []        # lines of pre > code with no language-*
+        self.youtube = []          # (src, line) of YouTube iframes
+        self._stack = []           # open (tag, classes)
+
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        line = self.getpos()[0]
+        classes = (a.get("class") or "").split()
+        # <li> and <p> may be left unclosed; the next one closes them.
+        if tag in ("li", "p") and self._stack and self._stack[-1][0] == tag:
+            self._stack.pop()
+        parent, parent_classes = self._stack[-1] if self._stack else ("", [])
+        found = inline_colours(a.get("style") or "")
+        if found:
+            self.inline_colours.append((line, tag, found))
+        if tag == "a" and "post-cta" in classes:
+            self.back_links.append(line)
+        if tag == "a" and "cite-ref" in classes and (a.get("href") or "").startswith("#"):
+            self.cite_refs.append((a["href"][1:], line))
+        if tag == "li" and parent == "ol" and "references" in parent_classes and a.get("id"):
+            self.ref_items.add(a["id"])
+        # Prism reads the language from the code element or from its pre.
+        if tag == "code" and parent == "pre" and not any(
+                c.startswith("language-") for c in classes + parent_classes):
+            self.bare_code.append(line)
+        if tag == "iframe" and YOUTUBE_SRC.search(a.get("src") or ""):
+            self.youtube.append((a["src"], line))
+        if tag not in VOID:
+            self._stack.append((tag, classes))
+
+    def handle_endtag(self, tag):
+        if any(t == tag for t, _c in self._stack):
+            while self._stack and self._stack.pop()[0] != tag:
+                pass
+
+
+def check_post_components(c):
+    # --- published posts use the post components, not their inline forms ---
+    if not (c.is_post and c.page_is_tracked) or c.is_redirect:
+        return
+    p = ComponentParser()
+    p.feed(c.text)
+
+    def doc(key):
+        return f"see {COMPONENT_DOC}, '{COMPONENT_SECTIONS[key]}'"
+
+    for line, tag, decls in p.inline_colours:
+        c.add("WARN", c.page, line, "inline-color",
+              f"<{tag}> sets {decls[0]} in its style attribute: the same colour in "
+              f"both themes; use the component or a --kr-* token instead "
+              f"({doc(COMPONENT_FOR_TAG.get(tag, 'components'))})")
+    for line in p.back_links:
+        c.add("ERROR", c.page, line, "back-link",
+              "hand-coded 'Back to all posts' link: the end band under every post "
+              "routes the reader on; delete this <p> and the <hr> beside it "
+              f"({doc('end')})")
+    reported = set()
+    for ref, line in p.cite_refs:
+        if ref not in p.ref_items and ref not in reported:
+            reported.add(ref)
+            c.add("ERROR", c.page, line, "references",
+                  f"a.cite-ref points at #{ref}, which is not an ol.references > "
+                  f"li#{ref}: sidenotes and citation previews read only that "
+                  f"shape ({doc('references')})")
+    for line in p.bare_code:
+        c.add("ERROR", c.page, line, "code-language",
+              "pre > code without a language-* class: Prism leaves it plain; "
+              "name the language (language-python, language-json), or "
+              f"language-text for program output ({doc('code')})")
+    for src, line in p.youtube:
+        c.add("ERROR", c.page, line, "youtube-iframe",
+              f"YouTube iframe in the markup ({src[:60]}): it loads the player "
+              "and its cookies before anyone presses play; use a "
+              f"button.kr-embed-facade ({doc('video')})")
 
 
 def check_placeholders(c):
@@ -451,8 +708,87 @@ def check_placeholders(c):
     for chunk, line in c.p.visible:
         for m in PLACEHOLDER_PROSE.finditer(chunk):
             c.add("ERROR", c.page, line, "placeholder",
-                f"unwritten placeholder in prose: {m.group(0)[:80]}")
+                  f"unwritten placeholder in prose: {m.group(0)[:80]}")
 
+
+def is_top_level(rel):
+    """A page at the site root (index.html, about.html, series-x.html)."""
+    return "/" not in rel
+
+
+# The Google Analytics snippet as it was pasted into every page: the
+# loader <script src=".../gtag/js?id=..."> and an inline block calling
+# gtag('config', ...). js/analytics.js replaced both.
+GTAG_LOADER = re.compile(r"<script\b[^>]*\bsrc=[\"'][^\"']*googletagmanager\.com", re.I)
+INLINE_SCRIPT = re.compile(r"<script\b(?![^>]*\bsrc=)[^>]*>(.*?)</script>", re.I | re.S)
+# The set-up calls, not gtag('event', ...): a page may still send an event
+# through the gtag() that analytics.js defines.
+GTAG_CALL = re.compile(
+    r"\bgtag\s*\(\s*['\"](?:config|js)['\"]|\bfunction\s+gtag\s*\(|googletagmanager\.com")
+
+
+def check_retired_markup(c):
+    """ERROR on two pieces of markup the site retired, on tracked pages.
+
+    #preloader: a full-screen cover that a script took away once the DOM
+    was ready, so every page, the homepage included, showed nothing until
+    JavaScript had run, and with the script blocked or failing it stayed up
+    until a four-second CSS failsafe gave up on it. The analytics snippet:
+    pasted into every page, it fetched gtag.js in the <head> ahead of the
+    page's own scripts; js/analytics.js now queues the config and loads
+    gtag.js once, after load, from one place. Both travelled into every new
+    page copied from an old one, which is what this rule stops.
+    """
+    if not c.page_is_tracked:
+        return
+    if "preloader" in c.ids:
+        c.add("ERROR", c.page, c.ids["preloader"], "preloader",
+              "id=\"preloader\": the preloader was retired (it hid the page until a "
+              "script removed it); delete the element")
+    loader = GTAG_LOADER.search(c.text)
+    inline = next((m for m in INLINE_SCRIPT.finditer(c.text)
+                   if GTAG_CALL.search(m.group(1))), None)
+    for m in (loader, inline):
+        if m:
+            c.add("ERROR", c.page, c.text.count("\n", 0, m.start()) + 1, "inline-analytics",
+                  "inline Google Analytics snippet: load analytics with "
+                  "<script defer src=\".../js/analytics.js\"></script> instead")
+            break
+
+
+def check_meta_length(c):
+    """Report a title or description that search results would cut off
+    (TITLE_MAX, DESCRIPTION_MAX). On a top-level page it is a WARN. On a
+    post it is INFO: a post's <title> and description are its own copy,
+    written with the post, and generate_post_head.py never rewrites them,
+    so the length is a note for the next edit rather than a failure.
+    noindex pages and redirects are never shown in results."""
+    if c.p.noindex or c.is_redirect or not c.page_is_tracked:
+        return
+    title = " ".join((c.p.title or "").split())
+    desc = c.p.metas.get("description", "")
+    long_title = len(title) > TITLE_MAX
+    long_desc = len(desc) > DESCRIPTION_MAX
+    if not is_top_level(c.rel):
+        if long_title:
+            c.add("INFO", c.page, 0, "long-title",
+                  f"<title> is {len(title)} characters (at most {TITLE_MAX})")
+        if long_desc:
+            c.add("INFO", c.page, 0, "long-desc",
+                  f"meta description is {len(desc)} characters (at most {DESCRIPTION_MAX})")
+        return
+    pending = c.rel in LONG_META_PENDING
+    if long_title:
+        c.add("WARN", c.page, 0, "long-title",
+              f"<title> is {len(title)} characters (at most {TITLE_MAX}): {title[:70]!r}")
+    if long_desc:
+        c.add("INFO" if pending else "WARN", c.page, 0, "long-desc",
+              f"meta description is {len(desc)} characters (at most {DESCRIPTION_MAX})"
+              + ("; listed in LONG_META_PENDING, awaiting shorter copy" if pending else ""))
+    elif pending:
+        c.add("WARN", c.page, 0, "long-desc",
+              f"description now fits ({len(desc)} characters): remove {c.rel} "
+              f"from LONG_META_PENDING in audit_site.py")
 
 
 def check_prose(c):
@@ -470,17 +806,16 @@ def check_prose(c):
         # on music.html while the check was posts-only.
         for m in BANNED_PROSE.finditer(chunk):
             c.add("WARN", c.page, line, "banned-word",
-                f"'{m.group(0)}' in prose (banned word)")
+                  f"'{m.group(0)}' in prose (banned word)")
         if CURLY_PROSE.search(chunk):
             c.add("WARN", c.page, line, "curly-quote",
-                f"curly quote/apostrophe in prose (use straight ' \"): ...{chunk.strip()[:60]}...")
+                  f"curly quote/apostrophe in prose (use straight ' \"): ...{chunk.strip()[:60]}...")
         # The em dash rule is written for blog prose. The top-level pages use
         # dashes in project and publication lines, which is a different
         # register, so widening this one is a decision rather than a fix.
         if c.is_post and "—" in chunk:
             c.add("WARN", c.page, line, "em-dash",
-                f"em dash in prose: ...{chunk.strip()[:60]}...")
-
+                  f"em dash in prose: ...{chunk.strip()[:60]}...")
 
 
 def check_headings(c):
@@ -498,7 +833,6 @@ def check_headings(c):
             prev = lv
 
 
-
 def check_metadata(c):
     # --- metadata (posts + top-level pages, not redirects) ---
     if not c.is_redirect and not c.p.noindex:
@@ -507,17 +841,16 @@ def check_metadata(c):
             c.add("ERROR", c.page, 0, "no-desc", "missing meta description")
         elif CURLY_PROSE.search(desc):
             c.add("WARN", c.page, 0, "curly-quote",
-                "curly quote/apostrophe in meta description (use straight ' \")")
+                  "curly quote/apostrophe in meta description (use straight ' \")")
         elif len(desc) < 50:
             c.add("WARN", c.page, 0, "short-desc", f"description only {len(desc)} chars")
-        elif len(desc) > 165:
-            c.add("INFO", c.page, 0, "long-desc", f"description {len(desc)} chars")
+        # The upper limit is check_meta_length's, for posts and pages alike.
         expected_canonical = f"{SITE}/{c.rel}".replace("/index.html", "/")
         if not c.p.canonical:
             c.add("WARN", c.page, 0, "no-canonical", "missing canonical link")
         elif c.p.canonical.rstrip("/") not in (expected_canonical.rstrip("/"), f"{SITE}/{c.rel}"):
             c.add("WARN", c.page, 0, "canonical-mismatch",
-                f"canonical {c.p.canonical} != {expected_canonical}")
+                  f"canonical {c.p.canonical} != {expected_canonical}")
         for k in ("og:title", "og:description", "og:image", "og:url"):
             if k not in c.p.metas:
                 c.add("WARN", c.page, 0, "no-og", f"missing {k}")
@@ -534,7 +867,6 @@ def check_metadata(c):
                     c.add("ERROR", c.page, 0, "bad-og-image", f"og:image file missing: {og_img}")
 
 
-
 def check_jsonld(c):
     # --- JSON-LD ---
     c.jsonld_headline = None
@@ -545,12 +877,18 @@ def check_jsonld(c):
         except json.JSONDecodeError as e:
             c.add("ERROR", c.page, line, "jsonld-parse", f"invalid JSON-LD: {e}")
             continue
-        for node in (data if isinstance(data, list) else [data]):
+        # Top-level nodes: a bare node, a list of them, or an @graph (the
+        # homepage's WebSite + Person), whose members count as top level.
+        top = data if isinstance(data, list) else [data]
+        if isinstance(data, dict) and isinstance(data.get("@graph"), list):
+            top = data["@graph"]
+        for node in top:
             if isinstance(node, dict) and isinstance(node.get("@type"), str):
                 c.p.jsonld_types.add(node["@type"])
         if isinstance(data, dict):
             c.jsonld_headline = data.get("headline") or c.jsonld_headline
             c.jsonld_date = data.get("datePublished") or c.jsonld_date
+
         def walk(node):
             if isinstance(node, dict):
                 for k, v in node.items():
@@ -570,7 +908,6 @@ def check_jsonld(c):
         walk(data)
 
 
-
 def check_consistency(c):
     # --- one fact, many places: dates and headlines must agree ---
     if c.is_post and not c.is_redirect:
@@ -581,18 +918,18 @@ def check_consistency(c):
                  if v}
         if len(set(dates.values())) > 1:
             c.add("WARN", c.page, 0, "date-mismatch",
-                "publication dates disagree: " +
-                ", ".join(f"{k}={v}" for k, v in dates.items()))
+                  "publication dates disagree: " +
+                  ", ".join(f"{k}={v}" for k, v in dates.items()))
         c.p.page_date = next(iter(set(dates.values())), None) \
             if len(set(dates.values())) == 1 else None
+
         def _norm_title(s):
-            return (s or "").strip().replace("’", "'").replace("‘", "'")                     .replace("“", '"').replace("”", '"')
+            return (s or "").strip().translate(STRAIGHTEN)
+
         cit_title = _norm_title(c.p.metas.get("citation_title"))
         if c.jsonld_headline and cit_title and _norm_title(c.jsonld_headline) != cit_title:
             c.add("WARN", c.page, 0, "headline-mismatch",
-                f"JSON-LD headline '{c.jsonld_headline[:50]}' != title '{cit_title[:50]}'")
-
-
+                  f"JSON-LD headline '{c.jsonld_headline[:50]}' != title '{cit_title[:50]}'")
 
 
 # Order is the contract: check_ids fills the id map that check_fragments reads,
@@ -601,24 +938,344 @@ def check_consistency(c):
 PAGE_CHECKS = [
     check_ids,
     check_structure,
+    check_attributes,
     check_references,
     check_fragments,
     check_img_alt,
     check_dup_alt,
     check_img_dims,
     check_figures,
+    check_post_components,
     check_placeholders,
+    check_retired_markup,
     check_prose,
     check_headings,
     check_metadata,
+    check_meta_length,
     check_jsonld,
     check_consistency,
 ]
 
 
-def main():
-    include_drafts = "--include-drafts" in sys.argv
-    pages = tracked_html()
+# The service worker's install list: `var PRECACHE = [ './a', './b' ];`.
+PRECACHE_LIST = re.compile(r"\b(?:var|let|const)\s+PRECACHE\s*=\s*\[(.*?)\]", re.S)
+PRECACHE_ENTRY = re.compile(r"""(['"])(.*?)\1""")
+
+
+def precache_entries(sw_text):
+    """The PRECACHE URLs in sw.js as repo-relative paths, or None when the
+    list cannot be found (which the caller must treat as a failure, or the
+    check would pass by finding nothing to check)."""
+    m = PRECACHE_LIST.search(sw_text)
+    if not m:
+        return None
+    out = []
+    for _q, url in PRECACHE_ENTRY.findall(m.group(1)):
+        path = unquote(urlparse(url).path)
+        path = path[2:] if path.startswith("./") else path.lstrip("/")
+        out.append(path + "index.html" if path == "" or path.endswith("/") else path)
+    return out
+
+
+def check_precache(tracked, add):
+    """ERROR when a sw.js PRECACHE entry is not a tracked file.
+
+    cache.addAll() is all or nothing: one entry that 404s rejects the whole
+    install, the new worker never activates, and offline reading stops for
+    every visitor while every page still works online. Nothing on screen
+    or in the console of a normal visit says so. The list is kept by hand
+    and has already had to change whenever the bundles did (site.js
+    replaced popper and bootstrap in it), and a file that exists only in a
+    working copy passes a local test and 404s on Pages. Tracked is the bar
+    because tracked is what deploys.
+    """
+    sw = ROOT / "sw.js"
+    if not sw.exists():
+        return
+    entries = precache_entries(sw.read_text(encoding="utf-8"))
+    if entries is None:
+        add("ERROR", "sw.js", 0, "precache",
+            "no PRECACHE list found; this check needs updating to match sw.js")
+        return
+    for path in entries:
+        if path not in tracked or not (ROOT / path).exists():
+            add("ERROR", "sw.js", 0, "precache",
+                f"PRECACHE entry {path} is not a tracked file, so the service "
+                f"worker install fails and offline reading stops")
+
+
+# --- site-level structure ------------------------------------------------------
+
+SITEMAP_NS = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+
+
+def sitemap_locs():
+    """The <loc> URLs in sitemap.xml, or None when it does not parse (the
+    sitemap check reports that on its own)."""
+    try:
+        root = ET.parse(ROOT / "sitemap.xml").getroot()
+    except (ET.ParseError, OSError):
+        return None
+    return {el.text.strip() for el in root.findall(".//s:loc", SITEMAP_NS) if el.text}
+
+
+def series_names(posts):
+    """Every series name in posts.json, sorted."""
+    return sorted({entry["name"] for post in posts
+                   for entry in sitelib.series_list(post) if entry.get("name")})
+
+
+def check_series_pages(posts, tracked, locs, add):
+    """ERROR when a series in posts.json has no page or no sitemap entry.
+
+    A post's series line, the series chip on its card and the palette all
+    link to seriesPageHref(name), which nobody checks until a reader
+    follows it: a series created in posts.json before its page is written,
+    or renamed there alone, is a live link to a 404 on every post in it.
+    The page is found by the same slug rule the links use.
+    """
+    for name in series_names(posts):
+        rel = sitelib.series_page(name)
+        if rel not in tracked:
+            add("ERROR", "posts.json", 0, "series-page",
+                f"series '{name}' has no tracked {rel}, which every post in it "
+                f"links to (copy an existing series page)")
+        elif locs is not None and f"{SITE}/{rel}" not in locs:
+            add("ERROR", "sitemap.xml", 0, "series-sitemap",
+                f"series page {rel} is not in the sitemap; run "
+                f"python .github/scripts/generate_sitemap.py")
+
+
+SITE_MAP_SOURCE = "js/shared-components.js"
+KR_PAGES_START = re.compile(r"\bKR_PAGES\s*=\s*\[")
+JS_STRING = re.compile(r"""(['"`])((?:\\.|(?!\1).)*)\1""", re.S)
+# '/about.html', 'about.html', './', '/', 'https://www.kenreid.co.uk/x.html'
+PAGE_HREF = re.compile(r"^(?:https://www\.kenreid\.co\.uk)?(?:\./|/)?(?:[\w-]+\.html)?(?:[?#]\S*)?$")
+
+
+def page_path(href):
+    """A page href as the repo-relative file it serves: '/about.html' and
+    './about.html' are about.html, '/' is index.html."""
+    path = urlparse(href.replace(SITE, "", 1)).path.lstrip("./").lstrip("/")
+    return path or "index.html"
+
+
+def kr_pages(js_text):
+    """The page files KR_PAGES lists, or None when there is no KR_PAGES.
+
+    Every quoted string in the array that looks like a page href counts,
+    rather than only `href: '...'`, so an entry that builds its link as
+    `root + 'about.html'` is still seen."""
+    m = KR_PAGES_START.search(js_text)
+    if not m:
+        return None
+    strings, depth, i = [], 0, m.end() - 1
+    while i < len(js_text):
+        ch = js_text[i]
+        if ch in "'\"`":
+            s = JS_STRING.match(js_text, i)
+            if s:
+                strings.append(s.group(2))
+            i = s.end() if s else i + 1
+            continue
+        if js_text.startswith(("//", "/*"), i):
+            # A commented-out entry is not a listed page.
+            end = js_text.find("\n" if js_text[i + 1] == "/" else "*/", i + 2)
+            i = len(js_text) if end < 0 else end + (0 if js_text[i + 1] == "/" else 2)
+            continue
+        depth += {"[": 1, "]": -1}.get(ch, 0)
+        i += 1
+        if depth == 0:
+            break
+    return {page_path(s) for s in strings
+            if s and PAGE_HREF.match(s) and (".html" in s or s in ("/", "./"))}
+
+
+def check_site_map(pages_rel, posts, add):
+    """ERROR when a tracked top-level page is missing from KR_PAGES.
+
+    KR_PAGES is the one list of the site's pages: the footer and the
+    command palette are drawn from it (the header is written by hand). A
+    page left out of it has no way in except a link someone remembered to
+    write, which is how the Series index was missing from the footer and
+    the palette before the list existed. Series pages may be listed there
+    or not: their links come from posts.json, and check_series_pages holds
+    those.
+    """
+    source = ROOT / SITE_MAP_SOURCE
+    listed = kr_pages(source.read_text(encoding="utf-8")) if source.exists() else None
+    if listed is None:
+        add("ERROR", SITE_MAP_SOURCE, 0, "site-map",
+            "no KR_PAGES array found; this check reads the site's page list from it")
+        return
+    series_pages = {sitelib.series_page(n) for n in series_names(posts)}
+    for rel in sorted(pages_rel):
+        if (is_top_level(rel) and rel not in listed and rel not in EXEMPT_PAGES
+                and rel not in NOT_IN_SITE_MAP and rel not in series_pages):
+            add("ERROR", rel, 0, "site-map",
+                f"{rel} is not in KR_PAGES ({SITE_MAP_SOURCE}), so neither the footer "
+                f"nor the command palette leads to it")
+
+
+# The one Markdown file published beside the site on purpose, besides the
+# downloads: the repository's front page. Pages serves it raw at
+# /README.md, which says nothing the public repository does not.
+PUBLISHED_MARKDOWN_OK = {"README.md"}
+
+# Internal docs waiting to move under .github/docs/. Each is INFO until it
+# moves; once the file has gone, its entry is a WARN until removed, so the
+# list can only shrink. The component and demo-engine docs were the last
+# two (now .github/docs/COMPONENTS.md and VIZ-ENGINE.md). Add nothing here.
+PUBLISHED_MARKDOWN_PENDING = set()
+
+
+def jekyll_excludes(config_text):
+    """The `exclude:` patterns in _config.yml, block or inline list."""
+    out, in_block = [], False
+    for raw in config_text.splitlines():
+        line = raw.split("#", 1)[0].rstrip()
+        if not line.strip():
+            continue
+        m = re.match(r"exclude\s*:\s*(.*)$", line)
+        if m:
+            inline = m.group(1).strip()
+            if inline.startswith("["):
+                out += [p.strip().strip("'\"") for p in inline.strip("[]").split(",") if p.strip()]
+            in_block = not inline
+            continue
+        if in_block and re.match(r"\s+-\s*", line):
+            out.append(line.split("-", 1)[1].strip().strip("'\""))
+        elif not line.startswith((" ", "\t")):
+            in_block = False
+    return out
+
+
+def jekyll_publishes(rel, excludes):
+    """Whether Jekyll on Pages would copy tracked file `rel` into the site.
+
+    Jekyll leaves out any path with a part starting with '.', '_' or '#' or
+    ending in '~' (which keeps .github/ private), and whatever _config.yml
+    excludes. Markdown without front matter is not rendered (the config's
+    require_front_matter) but is still copied, raw, as a static file."""
+    parts = rel.split("/")
+    if any(p.startswith((".", "_", "#")) or p.endswith("~") for p in parts):
+        return False
+    prefixes = ["/".join(parts[:i]) for i in range(1, len(parts) + 1)]
+    return not any(fnmatch.fnmatch(p, pat.rstrip("/")) for p in prefixes for pat in excludes)
+
+
+def check_published_markdown(tracked, add):
+    """ERROR when Pages would publish a tracked Markdown file it should not.
+
+    The component and viz-engine docs were kept in blog/, where Pages
+    published them with the site for anyone to read. Internal docs live
+    under .github/docs/, which Jekyll never publishes. blog/downloads/*.md
+    are published on purpose: they are the files offered as downloads
+    (_config.yml keeps them raw)."""
+    config = ROOT / "_config.yml"
+    excludes = jekyll_excludes(config.read_text(encoding="utf-8")) if config.exists() else []
+    for rel in sorted(tracked):
+        if (rel.lower().endswith(".md") and not rel.startswith("blog/downloads/")
+                and rel not in PUBLISHED_MARKDOWN_OK and jekyll_publishes(rel, excludes)):
+            pending = rel in PUBLISHED_MARKDOWN_PENDING
+            add("INFO" if pending else "ERROR", rel, 0, "published-markdown",
+                f"GitHub Pages would publish {rel} at {SITE}/{rel}; move internal docs "
+                f"under .github/docs/ or exclude the file in _config.yml"
+                + (" (listed in PUBLISHED_MARKDOWN_PENDING, due to move)" if pending else ""))
+    for rel in sorted(PUBLISHED_MARKDOWN_PENDING - set(tracked)):
+        add("WARN", "audit_site.py", 0, "published-markdown",
+            f"{rel} has moved: remove it from PUBLISHED_MARKDOWN_PENDING")
+
+
+# --- orphaned assets (INFO) ----------------------------------------------------
+# A picture or script nothing points at still deploys, still counts in the
+# colophon's byte totals, and reads to the next person as something in use.
+# The report is informational and never fails: some files are kept for a
+# reason the scan cannot see, and drafts that will use a file are untracked.
+
+ASSET_SUFFIXES = {".webp", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico", ".avif",
+                  ".pdf", ".woff", ".woff2", ".ttf", ".eot", ".otf", ".mp3", ".m4a",
+                  ".ogg", ".mp4", ".webm", ".json", ".css", ".js", ".tex", ".zip"}
+REFERENCE_SUFFIXES = {".html", ".css", ".js", ".json", ".xml", ".md", ".py", ".yml",
+                      ".yaml", ".webmanifest", ".txt", ".tex"}
+# Not assets: the build's own inputs and the files at the root, which the
+# host or the browser asks for by name (sw.js, manifest.json, robots.txt).
+ORPHAN_SKIP = (".github/", "tests/", "data/schema/")
+# Read when they exist locally, so a file only a draft uses is not called an
+# orphan: drafts, the unpublished Writing section, the old reading page.
+LOCAL_REFERENCES = ("blog/drafts", "writing", "writing.html", "reading.html")
+# Runs of characters a path can hold, tested for an asset suffix after the
+# match: one pattern with the suffixes in it backtracks through every long
+# word in the corpus and took seconds, this one reads it once.
+PATH_RUN = re.compile(r"[\w%./-]{5,}")
+# Photograph thumbnails are addressed by number from data files
+# (thumb/<n>.webp from photography-files.json's "<n>.png"), never by name.
+NUMBERED = re.compile(r"\d+")
+
+
+def referenced_names(texts):
+    """Every file name and 'parent/name' tail a text mentions."""
+    names, tails = set(), set()
+    suffixes = tuple(ASSET_SUFFIXES)
+    for text in texts:
+        for run in PATH_RUN.findall(text):
+            run = run.rstrip(".").lower()
+            if not run.endswith(suffixes):
+                continue
+            parts = unquote(run).split("/")
+            names.add(parts[-1])
+            if len(parts) > 1:
+                tails.add("/".join(parts[-2:]))
+    return names, tails
+
+
+def orphan_assets(tracked_rel):
+    """Tracked assets no page, script, stylesheet, data file or build
+    script mentions, drafts included when they are present locally."""
+    texts = []
+    for rel in tracked_rel:
+        if Path(rel).suffix.lower() in REFERENCE_SUFFIXES:
+            texts.append((ROOT / rel).read_text(encoding="utf-8", errors="replace"))
+    for extra in LOCAL_REFERENCES:
+        p = ROOT / extra
+        files = [p] if p.is_file() else (sorted(p.rglob("*")) if p.is_dir() else [])
+        texts += [f.read_text(encoding="utf-8", errors="replace") for f in files
+                  if f.suffix.lower() in REFERENCE_SUFFIXES]
+    names, tails = referenced_names(texts)
+    photos = set()
+    listing = ROOT / "data" / "photography-files.json"
+    if listing.exists():
+        photos = {Path(n).stem for n in json.loads(listing.read_text(encoding="utf-8"))}
+    out = []
+    for rel in sorted(tracked_rel):
+        p = Path(rel)
+        if (p.suffix.lower() not in ASSET_SUFFIXES or "/" not in rel
+                or rel.startswith(ORPHAN_SKIP)):
+            continue
+        name, tail = p.name.lower(), "/".join(rel.split("/")[-2:]).lower()
+        if p.parent.name == "thumb" and p.stem in photos:
+            continue
+        if tail in tails or (not NUMBERED.fullmatch(p.stem) and name in names):
+            continue
+        out.append(rel)
+    return out
+
+
+def main(argv=None):
+    parser = sitelib.arg_parser(__doc__)
+    parser.add_argument("--include-drafts", action="store_true",
+                        help="also audit untracked pages and every draft")
+    # Without --strict only an ERROR fails, so a new WARN (a banned word, a
+    # missing og: tag, a post left out of the feed) goes green in CI and
+    # stays until somebody next reads the whole report. Zero warnings is the
+    # baseline; --strict is how CI and the check runner hold it there. A
+    # parser rather than a look in sys.argv, so a misspelt --strict exits 2
+    # instead of quietly running the lenient audit and passing.
+    parser.add_argument("--strict", action="store_true",
+                        help="exit 1 on any WARN as well as any ERROR")
+    args = parser.parse_args(argv)
+    include_drafts, strict = args.include_drafts, args.strict
+    pages = sitelib.tracked("*.html")
     if include_drafts:
         # untracked pages sitting alongside published ones, plus the drafts
         # folders themselves (blog/drafts/, its per-series subfolders, and
@@ -634,7 +1291,7 @@ def main():
     page_info = {}
 
     def add(sev, page, line, code, msg):
-        rel = str(page.relative_to(ROOT)) if isinstance(page, Path) else page
+        rel = page.relative_to(ROOT).as_posix() if isinstance(page, Path) else page
         problems.append((sev, rel, line, code, msg))
 
     for page in pages:
@@ -647,10 +1304,7 @@ def main():
             continue
         page_info[page] = p
         rel = page.relative_to(ROOT).as_posix()
-        if rel in EXEMPT_PAGES:
-            continue
-        if rel.startswith("blog/downloads/"):
-            # download artifacts (standalone demo files), not site pages
+        if rel in EXEMPT_PAGES or not sitelib.is_page(rel):
             continue
 
         c = PageCtx(page, rel, text, p, tracked, add)
@@ -663,15 +1317,17 @@ def main():
     post_pages = [pg for pg in pages if pg.parent.name == "blog" and pg in page_info
                   and getattr(page_info[pg], "is_post", False)]
     if post_pages:
-        sigs = Counter()
-        for pg in post_pages:
-            sig = tuple(s for s in page_info[pg].scripts
-                        if not s.startswith("http") and s not in OPTIONAL_POST_SCRIPTS)
-            sigs[sig] += 1
+        # Compared without the query: a ?v= cache-buster is the same script,
+        # and a post whose copy was bumped (or not) has not drifted.
+        def script_sig(pg):
+            paths = (s.split("?", 1)[0] for s in page_info[pg].scripts)
+            return tuple(s for s in paths
+                         if not s.startswith("http") and s not in OPTIONAL_POST_SCRIPTS)
+
+        sigs = Counter(script_sig(pg) for pg in post_pages)
         canonical_sig = sigs.most_common(1)[0][0]
         for pg in post_pages:
-            sig = tuple(s for s in page_info[pg].scripts
-                        if not s.startswith("http") and s not in OPTIONAL_POST_SCRIPTS)
+            sig = script_sig(pg)
             if sig != canonical_sig:
                 missing = set(canonical_sig) - set(sig)
                 extra = set(sig) - set(canonical_sig)
@@ -711,9 +1367,40 @@ def main():
                 add("WARN", pg, 0, "head-drift",
                     "missing: " + ", ".join(sorted(missing)))
 
+    # --- JSON-LD references across pages ---
+    # Nodes are shared across pages by @id: every post's isPartOf is a bare
+    # {"@id": ".../#website"} (generate_post_head.py), and the homepage's
+    # WebSite names its publisher the same way. A search engine merges
+    # every node that shares an @id across the site, so a bare reference is
+    # only as good as the node it lands on: renaming the homepage's WebSite
+    # id would leave every post pointing at nothing, with each page still
+    # valid on its own. (A post's author and publisher carry @type and name
+    # beside the @id, so they are nodes in their own right; that the
+    # homepage still defines them is generate_post_head.py --check's job.)
+    defined_ids, id_refs = set(), []
+    for pg, info in page_info.items():
+        for raw, line in info.jsonld:
+            try:
+                stack = [json.loads(raw)]
+            except json.JSONDecodeError:
+                continue    # jsonld-parse has reported it
+            while stack:
+                node = stack.pop()
+                if isinstance(node, dict):
+                    if isinstance(node.get("@id"), str):
+                        if set(node) == {"@id"}:
+                            id_refs.append((pg, line, node["@id"]))
+                        elif "@type" in node:
+                            defined_ids.add(node["@id"])
+                    stack.extend(node.values())
+                elif isinstance(node, list):
+                    stack.extend(node)
+    for pg, line, ref in id_refs:
+        if ref not in defined_ids:
+            add("ERROR", pg, line, "jsonld-ref", f"@id {ref} is not defined on any audited page")
+
     # --- posts.json ---
-    posts_path = ROOT / "data" / "posts.json"
-    posts = json.loads(posts_path.read_text(encoding="utf-8"))
+    posts = sitelib.load_posts()
     seen_urls = set()
     for i, post in enumerate(posts):
         loc = f"posts.json[{i}]"
@@ -777,9 +1464,8 @@ def main():
             info = page_info.get(page)
             if info is None or info.noindex:
                 continue
-            if rel in ("404.html", "google1473b6928dc28ce6.html"):
-                continue
-            if rel.startswith("blog/downloads/"):
+            # 404.html is served for every missing URL and linked from none.
+            if rel in EXEMPT_PAGES or rel == "404.html" or not sitelib.is_page(rel):
                 continue
             candidates = {f"{SITE}/{rel}"}
             if rel == "index.html":
@@ -803,6 +1489,21 @@ def main():
                     "the subset font won't include it; use an icon class "
                     "or a plain text character")
 
+    # --- sw.js: the offline install list ---
+    check_precache(tracked, add)
+
+    # --- the site's structure: series pages, the page list, Jekyll ---
+    tracked_pages = {p.relative_to(ROOT).as_posix() for p in sitelib.tracked("*.html")}
+    check_series_pages(posts, tracked, sitemap_locs(), add)
+    check_site_map(tracked_pages, posts, add)
+    check_published_markdown(tracked, add)
+
+    # --- assets nothing references (INFO, never fails) ---
+    for rel in orphan_assets(tracked):
+        add("INFO", rel, 0, "orphan-asset",
+            "tracked, but no page, script, stylesheet, data file or build script "
+            "mentions it (drafts and writing/ included when present)")
+
     # --- report ---
     order = {"ERROR": 0, "WARN": 1, "INFO": 2}
     problems.sort(key=lambda x: (order[x[0]], x[1], x[2]))
@@ -813,7 +1514,12 @@ def main():
         print(f"{sev:5} [{code}] {loc} — {msg}")
     print(f"\n{len(pages)} pages audited. "
           f"{counts['ERROR']} errors, {counts['WARN']} warnings, {counts['INFO']} info.")
-    return 1 if counts["ERROR"] else 0
+    if counts["ERROR"]:
+        return 1
+    if strict and counts["WARN"]:
+        print("--strict: warnings fail the run")
+        return 1
+    return 0
 
 
 if __name__ == "__main__":

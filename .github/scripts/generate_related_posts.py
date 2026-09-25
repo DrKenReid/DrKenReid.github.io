@@ -3,25 +3,48 @@
 Ranking is TF-IDF cosine similarity over each post's actual body text
 (plus a small shared-tag boost), so recommendations reflect what a post
 is about rather than only its tag overlap. No external dependencies.
+The posts the end band's "Up next" pager already links to (up_next,
+which mirrors postNeighbours in js/shared-components.js) are left out, so
+the cards start where the pager stops instead of repeating it.
 
 Run after adding a post to data/posts.json:
     .venv/Scripts/python.exe .github/scripts/generate_related_posts.py
+    .venv/Scripts/python.exe .github/scripts/generate_related_posts.py --check
 
-Replaces either the <div id="related-posts-section"></div> placeholder
-or a previously baked <div class="related-posts"> block.
+Where the block goes: always inside the post's .blog-post element, as its
+last child unless it is already somewhere inside. The runtime chrome in
+js/shared-components.js (disclaimer, thanks card, comments) positions
+itself against a .related-posts it finds inside .blog-post, and a block
+left outside it once got a second, runtime block rendered on top. An
+existing block (inside or out) or a <div id="related-posts-section"></div>
+placeholder is replaced, so the script is idempotent.
+
+The cards are the stacked card that createBlogCardElement() in
+js/shared-components.js builds, attribute for attribute: the .kr-glow-host
+column with a site-absolute --kr-cover, the .kr-lit card with its
+.kr-lit__ring, and a decorative cover (alt=""; the title is the link's
+name). Change one and change the other. The runtime path there is only a
+fallback for drafts, which are not in posts.json and so never baked.
+
+Every published post must have a .blog-post body: one without fails the
+run (and --check), rather than quietly ranking on its title alone.
 """
 
-import json
+import html
 import math
 import re
 import sys
 from collections import Counter
 from datetime import datetime
-from pathlib import Path
+
+import sitelib
 
 
-ROOT = Path(__file__).resolve().parents[2]
-POSTS_PATH = ROOT / 'data' / 'posts.json'
+ROOT = sitelib.ROOT
+POSTS_PATH = sitelib.POSTS_JSON
+
+# Same fallback cover as DEFAULT_POST_IMAGE in js/shared-components.js.
+DEFAULT_POST_IMAGE = 'img/photography/hero/97.webp'
 
 TAG_BOOST = 0.06          # per shared tag, on top of cosine similarity
 STOPWORDS = set("""a about above after again against all also am an and any are as at be because been
@@ -36,31 +59,64 @@ one two three get got make made really thing things way years year day days time
 
 TOKEN_RE = re.compile(r"[a-z][a-z']{2,}")
 TAG_STRIP_RE = re.compile(r'<(script|style)[^>]*>.*?</\1>|<[^>]+>', re.DOTALL)
+PLACEHOLDER_RE = re.compile(r'[ \t]*<div id="related-posts-section"\s*></div>')
 
 
-def estimate_reading_minutes(post):
-    text = f"{post.get('title', '')} {post.get('excerpt', '')}".strip()
-    word_count = len(text.split()) if text else 0
-    return max(1, (word_count + 219) // 220)
+class PostBodyMissing(Exception):
+    """A published post whose file has no .blog-post element."""
+
+
+def esc(value):
+    return html.escape(str(value), quote=True)
 
 
 def format_post_date(date_str):
+    """"15 July 2026", as formatPostDate() prints it in the browser."""
     date_value = datetime.strptime(date_str, '%Y-%m-%d')
     return f'{date_value.day} {date_value.strftime("%B %Y")}'
 
 
+def display_minutes(post):
+    """The read time a card prints: posts.json's readMinutes as
+    postReadMinutes() in the browser shows it (Math.round), or None when
+    absent, so the card shows no read time rather than a guess. Not
+    sitelib.read_minutes, which turns a word count into the stored value;
+    this only displays that value."""
+    value = post.get('readMinutes')
+    if not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(value):
+        return None
+    return max(1, int(math.floor(value + 0.5)))
+
+
+def find_block(content, class_token, start=0):
+    """(start, end) of the whole first <div> at or after `start` with
+    `class_token` among its classes, or None when there is none or it
+    never closes. sitelib.div_span finds it, the same finder the feed
+    and the read times use for a post's body."""
+    span = sitelib.div_span(content, class_token, start)
+    return (span[0], span[3]) if span else None
+
+
+def body_span(content, url):
+    """sitelib.post_body_span of a published post, which must have one."""
+    span = sitelib.post_body_span(content)
+    if span is None:
+        raise PostBodyMissing(f'{url}: no .blog-post element, or one that never closes; '
+                              'every published post needs one')
+    return span
+
+
 def extract_body_text(post):
-    """Visible prose of a post: the .blog-post region with markup
-    stripped, cut before any previously baked related-posts block."""
-    path = ROOT / post['url']
-    html = path.read_text(encoding='utf-8')
-    start = html.find('<div class="blog-post">')
-    if start == -1:
-        return post.get('title', '') + ' ' + post.get('excerpt', '')
-    segment = html[start:]
-    cut = segment.find('<div class="related-posts">')
-    if cut != -1:
-        segment = segment[:cut]
+    """Visible prose of a post: its .blog-post element with markup
+    stripped and any related-posts block cut out, so the cards a post
+    recommends never feed back into what it is about."""
+    content, _newline = read_preserving_newlines(ROOT / post['url'])
+    content = content.replace('\r\n', '\n')
+    _open, inner_start, inner_end, _close = body_span(content, post['url'])
+    segment = content[inner_start:inner_end]
+    related = find_block(segment, 'related-posts')
+    if related:
+        segment = segment[:related[0]] + segment[related[1]:]
     text = TAG_STRIP_RE.sub(' ', segment)
     # title counts double: it is the strongest topical signal
     return f"{post.get('title', '')} {post.get('title', '')} {text}"
@@ -96,13 +152,46 @@ def cosine(a, b):
     return sum(w * b.get(t, 0.0) for t, w in a.items())
 
 
+def up_next(posts, current):
+    """The posts the end band's "Up next" pager links to for `current`:
+    postNeighbours() in js/shared-components.js, rule for rule, so a card
+    here never repeats a link directly above it. The first series with a
+    neighbour gives its adjacent parts; a side it cannot fill falls back
+    to the chronological neighbour in posts.json (newest first) unless
+    that post is already on the other side. Change one, change the other.
+    """
+    idx = posts.index(current) if current in posts else -1
+    older = posts[idx + 1] if 0 <= idx < len(posts) - 1 else None
+    newer = posts[idx - 1] if idx > 0 else None
+    prev = nxt = None
+    for entry in sitelib.series_list(current):
+        if not entry or not entry.get('name'):
+            continue
+        parts = sitelib.series_parts(posts, entry['name'])
+        at = parts.index(current) if current in parts else -1
+        before = parts[at - 1] if at > 0 else None
+        after = parts[at + 1] if 0 <= at < len(parts) - 1 else None
+        if not before and not after:
+            continue
+        prev, nxt = before, after
+        break
+    if prev is None and older is not None and older is not nxt:
+        prev = older
+    if nxt is None and newer is not None and newer is not prev:
+        nxt = newer
+    return [p for p in (prev, nxt) if p is not None]
+
+
 def build_related_posts(posts, current_post, vectors):
     current_url = current_post.get('url', '')
     current_tags = set(current_post.get('tags', []))
+    # The pager above the cards already offers these two; a card for
+    # either repeated a link the reader had just passed.
+    skip = {current_url} | {p.get('url', '') for p in up_next(posts, current_post)}
     ranked = []
     for post in posts:
         url = post.get('url', '')
-        if url == current_url:
+        if url in skip:
             continue
         sim = cosine(vectors[current_url], vectors[url])
         shared = len(current_tags.intersection(post.get('tags', [])))
@@ -111,49 +200,49 @@ def build_related_posts(posts, current_post, vectors):
     return [post for _score, _date, post in ranked[:3]]
 
 
-def build_related_html(related_posts):
-    cards = []
-    for post in related_posts:
-        tags_html = ''.join(
-            f'<span class="blog-tag">{tag}</span>' for tag in post.get('tags', [])
-        )
-        image = post.get('image', 'img/bg-img/2.png')
-        image_src = image if image.startswith('http') else '../' + image
-        href = post.get('url', '').replace('blog/', '')
-        read_minutes = post.get('readMinutes', estimate_reading_minutes(post))
-        card = (
-            '            <div class="col-12 col-md-6 col-lg-4 mb-30">\n'
-            f'              <a href="{href}" class="blog-card">\n'
-            f'                <div class="blog-card-img"><img src="{image_src}" alt="{post.get("title", "")}" loading="lazy"></div>\n'
-            '                <div class="blog-card-body">\n'
-            f'                  <div class="blog-card-date">{format_post_date(post.get("date", "1970-01-01"))} · {read_minutes} min read</div>\n'
-            f'                  <h3 class="blog-card-title">{post.get("title", "")}</h3>\n'
-            f'                  <p class="blog-card-excerpt">{post.get("excerpt", "")}</p>\n'
-            f'                  <div class="blog-card-tags">{tags_html}</div>\n'
-            '                </div>\n'
-            '              </a>\n'
-            '            </div>'
-        )
-        cards.append(card)
+def build_card_html(post):
+    """One stacked card, as createBlogCardElement(post) renders it from a
+    post page. Paths: the link and the <img> are relative to blog/, where
+    every published post lives; --kr-cover is site-absolute because a
+    relative url() inside a custom property resolves against the
+    stylesheet, not the page."""
+    image = post.get('image') or DEFAULT_POST_IMAGE
+    if image.startswith(('http://', 'https://', '//', '/')):
+        image_src = cover = image
+    else:
+        image_src, cover = '../' + image, '/' + image
+    url = post.get('url', '')
+    href = url[len('blog/'):] if url.startswith('blog/') else '../' + url
+    minutes = display_minutes(post)
+    date_line = format_post_date(post.get('date', '1970-01-01'))
+    if minutes:
+        date_line += f' · {minutes} min read'
+    tags_html = ''.join(f'<span class="blog-tag">{esc(tag)}</span>' for tag in post.get('tags', []))
+    return (
+        f'            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url(\'{esc(cover)}\')">\n'
+        f'              <a href="{esc(href)}" class="blog-card kr-lit">\n'
+        '                <span class="kr-lit__ring" aria-hidden="true"></span>\n'
+        f'                <div class="blog-card-img"><img src="{esc(image_src)}" alt="" loading="lazy"></div>\n'
+        '                <div class="blog-card-body">\n'
+        f'                  <div class="blog-card-date">{esc(date_line)}</div>\n'
+        f'                  <h3 class="blog-card-title">{esc(post.get("title", ""))}</h3>\n'
+        f'                  <p class="blog-card-excerpt">{esc(post.get("excerpt", ""))}</p>\n'
+        f'                  <div class="blog-card-tags">{tags_html}</div>\n'
+        '                </div>\n'
+        '              </a>\n'
+        '            </div>'
+    )
 
+
+def build_related_html(related_posts):
     return (
         '        <div class="related-posts">\n'
         '          <h2>Related posts</h2>\n'
         '          <div class="row related-posts-grid">\n'
-        + '\n'.join(cards)
+        + '\n'.join(build_card_html(post) for post in related_posts)
         + '\n          </div>\n'
         '        </div>'
     )
-
-
-def find_block_end(content, start):
-    """Index just past the </div> closing the div that starts at `start`."""
-    depth = 0
-    for m in re.finditer(r'<div\b|</div>', content[start:]):
-        depth += 1 if m.group(0) != '</div>' else -1
-        if depth == 0:
-            return start + m.end()
-    raise ValueError('unbalanced divs')
 
 
 def read_preserving_newlines(path):
@@ -173,9 +262,10 @@ def to_newline(text, newline):
 
 
 def render_post_content(post, related_html):
-    """Return what this post's file should contain, or None if there is no
-    insertion point. Split out from update_post_file so --check can compare
-    without writing."""
+    """(what the post's file holds now, what it should hold), both with LF
+    line endings, or (None, None) when the file is missing. Split out from
+    update_post_file so --check can compare without writing. Raises
+    PostBodyMissing for a post with no .blog-post element."""
     file_path = ROOT / post['url']
     if not file_path.exists():
         return None, None
@@ -183,20 +273,33 @@ def render_post_content(post, related_html):
     content = content.replace('\r\n', '\n')
     original = content
 
-    placeholder_re = re.compile(r'[ \t]*<div id="related-posts-section"></div>')
-    start = content.find('<div class="related-posts">')
+    body_start, _inner, _close, body_end = body_span(content, post['url'])
+    target = find_block(content, 'related-posts')
+    if target is None:
+        placeholder = PLACEHOLDER_RE.search(content)
+        target = placeholder.span() if placeholder else None
 
-    if placeholder_re.search(content):
-        content = placeholder_re.sub(lambda _m: related_html, content, count=1)
-    elif start != -1:
+    if target and body_start < target[0] < body_end:
+        # Already inside the body: replace it where it stands.
+        start, end = target
         line_start = content.rfind('\n', 0, start) + 1
-        end = find_block_end(content, start)
-        content = content[:line_start] + related_html + content[end:]
+        if not content[line_start:start].strip():
+            start = line_start
+        return original, content[:start] + related_html + content[end:]
+
+    if target:
+        # Outside the body: take it out, with the blank lines in front of it.
+        start, end = target
+        while start > 0 and content[start - 1] in ' \t\n':
+            start -= 1
+        content = content[:start] + content[end:]
+
+    # Last thing in the body, on its own lines before the closing tag.
+    close = body_span(content, post['url'])[2]
+    line_start = content.rfind('\n', 0, close) + 1
+    if content[line_start:close].strip():
+        content = content[:close] + '\n' + related_html + '\n' + content[close:]
     else:
-        anchor = content.rfind('<hr style="margin: 40px 0;">')
-        if anchor == -1:
-            return original, None
-        line_start = content.rfind('\n', 0, anchor) + 1
         content = content[:line_start] + related_html + '\n\n' + content[line_start:]
     return original, content
 
@@ -204,34 +307,39 @@ def render_post_content(post, related_html):
 def update_post_file(post, related_html):
     file_path = ROOT / post['url']
     _raw, newline = read_preserving_newlines(file_path)
-    _original, content = render_post_content(post, related_html)
+    original, content = render_post_content(post, related_html)
     if content is None:
-        print(f'  ! no insertion point in {post["url"]} — skipped')
+        print(f'  ! {post["url"]} is listed in posts.json but missing; skipped')
+        return
+    if content == original:
         return
     with open(file_path, 'w', encoding='utf-8', newline='') as fh:
         fh.write(to_newline(content, newline))
 
 
 def main(argv=None):
-    check_only = '--check' in (argv if argv is not None else sys.argv[1:])
-    posts = json.loads(POSTS_PATH.read_text(encoding='utf-8-sig'))
-    vectors = build_vectors(posts)
-    drift = []
-    for post in posts:
-        related = build_related_posts(posts, post, vectors)
-        html = build_related_html(related)
-        if check_only:
-            original, wanted = render_post_content(post, html)
-            if original is None or wanted is None:
+    parser = sitelib.arg_parser(__doc__)
+    parser.add_argument('--check', action='store_true',
+                        help='report stale blocks and exit 1, writing nothing')
+    check_only = parser.parse_args(argv).check
+    posts = sitelib.load_posts(POSTS_PATH)
+    try:
+        vectors = build_vectors(posts)
+        drift = []
+        for post in posts:
+            related = build_related_posts(posts, post, vectors)
+            related_html = build_related_html(related)
+            if check_only:
+                original, wanted = render_post_content(post, related_html)
+                if original is not None and original != wanted:
+                    drift.append(post['url'])
                 continue
-            # Normalise line endings: the generator writes LF, the checkout is
-            # CRLF, so a raw comparison would flag every file.
-            if original.replace('\r\n', '\n') != wanted.replace('\r\n', '\n'):
-                drift.append(post['url'])
-            continue
-        update_post_file(post, html)
-        titles = ' | '.join(p['title'][:34] for p in related)
-        print(f'{post["url"].split("/")[-1][:44]:44} -> {titles}')
+            update_post_file(post, related_html)
+            titles = ' | '.join(p['title'][:34] for p in related)
+            print(f'{post["url"].split("/")[-1][:44]:44} -> {titles}')
+    except PostBodyMissing as err:
+        print(f'error: {err}')
+        return 1
 
     if check_only:
         if drift:
@@ -243,7 +351,6 @@ def main(argv=None):
             print('run: python .github/scripts/generate_related_posts.py')
             return 1
         print('related-posts blocks are up to date.')
-        return 0
     return 0
 
 

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.kenreid.co.uk/data/schema/now.schema.json",
+  "title": "data/now.json",
+  "description": "What I am listening to and reading, for the homepage's Now strip and literature.html's Reading Now. Written weekly by .github/scripts/refresh_now.py from Last.fm (recent tracks) and the Goodreads currently-reading RSS. A source that fails keeps its previous value.",
+  "type": "object",
+  "required": ["track", "reading", "updated"],
+  "additionalProperties": false,
+  "properties": {
+    "track": {
+      "type": ["object", "null"],
+      "description": "The most recent Last.fm scrobble, or null when Last.fm has none and there was no previous one to keep.",
+      "required": ["name", "artist", "url", "nowPlaying"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Track title."
+        },
+        "artist": {
+          "type": "string",
+          "description": "Artist name."
+        },
+        "url": {
+          "type": "string",
+          "description": "The track's Last.fm page; the Now strip links to it, falling back to music.html when empty."
+        },
+        "nowPlaying": {
+          "type": "boolean",
+          "description": "True when Last.fm reported it as playing at fetch time. Only this makes the strip's equaliser bounce (.is-playing); with a weekly refresh it is almost always false."
+        }
+      }
+    },
+    "reading": {
+      "type": "array",
+      "description": "Books on the currently-reading shelf, at most three, in the feed's order. The Now strip shows the first and a count of the rest.",
+      "items": {
+        "type": "object",
+        "required": ["title", "author", "link"],
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title as the feed gives it, series in brackets."
+          },
+          "author": {
+            "type": "string",
+            "description": "Author."
+          },
+          "link": {
+            "type": "string",
+            "description": "My Goodreads review page for the book (review/show/<id>), with the feed's tracking parameters."
+          },
+          "img": {
+            "type": "string",
+            "description": "Cover thumbnail from Goodreads' image host, when the feed has one."
+          }
+        }
+      }
+    },
+    "updated": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Date of the refresh that wrote the file, YYYY-MM-DD."
+    }
+  }
+}

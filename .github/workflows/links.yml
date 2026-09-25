@@ -1,0 +1,49 @@
+name: External links
+
+# A weekly look at every link that leaves the site, reported in the job
+# summary and in one issue ("External link report") that opens when a
+# link has gone, is updated while any has, and closes when none has.
+# Report only: the job succeeds whatever it finds, because the answer
+# depends on other people's servers rather than on anything pushed here.
+# Internal links are the site audit's job, on every push (site-checks.yml).
+# Locally:
+#   python .github/scripts/check_external_links.py --limit 20
+
+on:
+  schedule:
+    # Mondays 07:17 UTC: after the 06:00 live-data refresh has committed,
+    # and off the top of the hour, when scheduled runs queue longest.
+    - cron: "17 7 * * 1"
+  workflow_dispatch:
+
+# Reads the repository and writes the one report issue; nothing else.
+permissions:
+  contents: read
+  issues: write
+
+# One report at a time: a manual run started while the weekly one is
+# going would race it to open the same issue.
+concurrency:
+  group: external-links
+  cancel-in-progress: false
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      # Only the tree: nothing here reads history.
+      - uses: actions/checkout@v4
+
+      # Standard library only, so no pip install and no cache.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Each external URL once (HEAD, then GET), one request at a time per
+      # host with a pause between, hosts in parallel. It exits 0 even when
+      # a request or the issue update fails, printing a warning instead.
+      - name: Report external links
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python .github/scripts/check_external_links.py

@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
-"""Render a share image for every blog post, in the site's own design.
+"""Render the site's share images, in the site's own design.
 
-Each post gets img/og/<slug>.jpg (1200x630): the post's opener photograph
-under a dark scrim, the kicker (category, date, read time), the title in
-Lora, the brand rule, and the site's name. The post's og:image,
+Every blog post gets img/og/<slug>.jpg (1200x630): the post's opener
+photograph under a dark scrim, the kicker (category, date, read time), the
+title in Lora, the brand rule, and the site's name. The post's og:image,
 twitter:image and JSON-LD image are pointed at it.
 
-The inputs that shape a card (title, kicker, hero path and size) are
-hashed into img/og/manifest.json, so `--check` can tell whether a card
-is stale without re-encoding JPEGs (which differ byte for byte between
-Pillow builds). Rendering is only needed when a post is added or its
-title, date or hero changes.
+The top-level pages in PAGES get img/og/page-<name>.jpg in the same design,
+with a kicker of their own. Those are rendered and checked here but pointed
+at by hand in each page's head: this script never edits a top-level page.
+
+The inputs that shape a card (title, kicker, hero path and size, the font
+files, RENDERER) are hashed into img/og/manifest.json, so `--check` can tell
+whether a card is stale without re-encoding JPEGs (which differ byte for
+byte between Pillow builds). --check needs only the standard library, so
+it runs in the audit job with nothing installed; rendering needs Pillow and
+fontTools (.github/scripts/requirements.txt).
 
     python .github/scripts/generate_og_images.py            # render stale
     python .github/scripts/generate_og_images.py --force    # render all
@@ -18,20 +23,31 @@ title, date or hero changes.
 """
 from __future__ import annotations
 
+import argparse
 import hashlib
 import io
 import json
 import re
 import sys
+from dataclasses import dataclass
 from datetime import date
+from functools import lru_cache
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-POSTS = ROOT / "data" / "posts.json"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import sitelib  # noqa: E402
+
+ROOT = sitelib.ROOT
+POSTS = sitelib.POSTS_JSON
 OUT = ROOT / "img" / "og"
 MANIFEST = OUT / "manifest.json"
-SITE = "https://www.kenreid.co.uk"
+SITE = sitelib.SITE
 W, H = 1200, 630
+
+# Bump when render() changes what a card looks like, so every card is
+# re-rendered and --check fails until they are. 2: titles set at weight 600
+# (Lora is a variable font; version 1 read the file at its default, 400).
+RENDERER = 2
 
 # Brand tokens (dark theme values: the card is always dark).
 INK = (255, 255, 255)
@@ -41,19 +57,61 @@ BRAND_TO = (255, 232, 158)       # --kr-brand-to, dark
 BASE = (14, 14, 14)
 
 FONTS = ROOT / "fonts" / "vendor"
+TITLE_FONT = ("lora-var.woff2", 600)      # the opener's title weight
+LABEL_FONT = ("poppins-600.woff2", None)  # static file, weight is baked in
+
+KICKER_SEP = "  ·  "
+
+# Top-level pages: title, kicker parts, hero. Titles are the pages' own
+# headings; kickers are taken from each page's meta description; heroes are
+# the page's banner photograph (the homepage uses its hero). A page uses its
+# card by pointing og:image and twitter:image at
+# {SITE}/img/og/page-<name>.jpg (1200x630).
+PAGES: dict[str, tuple[str, tuple[str, ...], str]] = {
+    "index": ("Ken Reid", ("Data scientist", "Photographer", "Writer"),
+              "img/bg-img/ken-hero.webp"),
+    "about": ("About Me", ("Pets", "Music", "Cooking", "Homelab"),
+              "img/photography/hero/203.webp"),
+    "blog": ("Blog", ("Data science", "Photography", "Books"),
+             "img/photography/hero/97.webp"),
+    "data_science": ("Data Science", ("Publications", "Projects", "Thesis"),
+                     "img/photography/hero/16.webp"),
+    "gallery": ("Photography", ("Landscape", "Urban", "Wildlife", "Abandoned"),
+                "img/photography/hero/108.webp"),
+    "literature": ("Literature", ("Reading now", "The shelf", "Reviews"),
+                   "img/photography/hero/207.webp"),
+    "books": ("Every Book", ("Every book rated on Goodreads",),
+              "img/photography/hero/230.webp"),
+    "music": ("Music", ("Last.fm", "Playlists", "Fingerstyle guitar"),
+              "img/photography/hero/13.webp"),
+    "map": ("Photo Map", ("Where the photographs were taken",),
+            "img/photography/hero/100.webp"),
+    "quotes": ("Quote Wall", ("Every quote saved while reading",),
+               "img/photography/hero/13.webp"),
+    "series": ("Series", ("Every blog series in one place",),
+               "img/photography/hero/290.webp"),
+    "colophon": ("Colophon", ("How the site is built", "What it weighs"),
+                 "img/photography/hero/141.webp"),
+    "contact": ("Contact", ("Email", "Social media"),
+                "img/photography/hero/117.webp"),
+}
 
 
-def load_font(name: str, size: int):
-    """Pillow reads TTF/OTF; the site ships woff2, so decompress in memory."""
-    from fontTools.ttLib import TTFont
-    from PIL import ImageFont
-    f = TTFont(FONTS / name)
-    f.flavor = None
-    buf = io.BytesIO()
-    f.save(buf)
-    buf.seek(0)
-    return ImageFont.truetype(buf, size)
+@dataclass(frozen=True)
+class Card:
+    """One share image: where it goes and everything drawn on it."""
+    key: str                 # manifest key, and the file name without .jpg
+    title: str
+    kicker: str
+    hero: Path | None
+    post_path: Path | None = None   # set for posts, which get repointed
 
+    @property
+    def out(self) -> Path:
+        return OUT / f"{self.key}.jpg"
+
+
+# ---- inputs ---------------------------------------------------------------
 
 def hero_of(post_html: str) -> str | None:
     m = re.search(r"--kr-opener-img:\s*url\(([^)]+)\)", post_html)
@@ -68,24 +126,71 @@ def kicker_of(post: dict) -> str:
              f"{d.day} {d.strftime('%B %Y')}"]
     if post.get("readMinutes"):
         parts.append(f"{post['readMinutes']} min read")
-    return "  ·  ".join(parts)
+    return KICKER_SEP.join(parts)
 
 
 def slug_of(post: dict) -> str:
     return Path(post["url"]).stem
 
 
-def signature(post: dict, hero: Path | None) -> str:
+def post_cards() -> list[Card]:
+    posts = sitelib.load_posts(POSTS)
+    posts = posts["posts"] if isinstance(posts, dict) else posts
+    cards = []
+    for post in posts:
+        post_path = ROOT / post["url"]
+        hero_rel = hero_of(post_path.read_text(encoding="utf-8"))
+        cards.append(Card(key=slug_of(post), title=post["title"],
+                          kicker=kicker_of(post),
+                          hero=ROOT / hero_rel if hero_rel else None,
+                          post_path=post_path))
+    return cards
+
+
+def page_cards() -> list[Card]:
+    return [Card(key=f"page-{name}", title=title, kicker=KICKER_SEP.join(kicker),
+                 hero=ROOT / hero)
+            for name, (title, kicker, hero) in PAGES.items()]
+
+
+def signature(card: Card) -> str:
     h = hashlib.sha1()
-    h.update(post["title"].encode())
-    h.update(kicker_of(post).encode())
-    if hero and hero.exists():
+    h.update(card.title.encode())
+    h.update(card.kicker.encode())
+    if card.hero and card.hero.exists():
         # as_posix: the same signature from a Windows working copy and the
         # Linux runner, which would otherwise disagree on every separator.
-        h.update(hero.relative_to(ROOT).as_posix().encode())
-        h.update(str(hero.stat().st_size).encode())
-    h.update(b"v1")
+        h.update(card.hero.relative_to(ROOT).as_posix().encode())
+        h.update(str(card.hero.stat().st_size).encode())
+    # A replaced font file changes every card without any code changing.
+    for name, _ in (TITLE_FONT, LABEL_FONT):
+        f = FONTS / name
+        h.update(f"{name}:{f.stat().st_size if f.exists() else 0}".encode())
+    h.update(f"renderer {RENDERER}".encode())
     return h.hexdigest()[:16]
+
+
+# ---- drawing --------------------------------------------------------------
+
+@lru_cache(maxsize=None)
+def load_font(name: str, size: int, weight: int | None = None):
+    """Pillow reads TTF/OTF; the site ships woff2, so decompress in memory.
+
+    weight selects an instance of a variable font. Without it Pillow draws
+    the font's default instance, which for Lora is 400: every card before
+    RENDERER 2 set its title at 400 while the opener it copies uses 600.
+    """
+    from fontTools.ttLib import TTFont
+    from PIL import ImageFont
+    f = TTFont(FONTS / name)
+    f.flavor = None
+    buf = io.BytesIO()
+    f.save(buf)
+    buf.seek(0)
+    font = ImageFont.truetype(buf, size)
+    if weight is not None:
+        font.set_variation_by_axes([weight])
+    return font
 
 
 def wrap(draw, text: str, font, max_w: int, max_lines: int) -> list[str]:
@@ -110,28 +215,48 @@ def wrap(draw, text: str, font, max_w: int, max_lines: int) -> list[str]:
     return lines
 
 
+def gradient_strip(size, c0, c1):
+    """A horizontal gradient, built one row wide and stretched down."""
+    from PIL import Image
+    w, h = size
+    row = Image.new("RGB", (w, 1))
+    row.putdata([tuple(round(c0[i] + (c1[i] - c0[i]) * x / max(1, w - 1))
+                       for i in range(3)) for x in range(w)])
+    return row.resize((w, h), Image.NEAREST)
+
+
 def gradient_text(size, text, font, c0, c1):
     """Text filled with a horizontal gradient: a gradient strip masked by
     the glyphs, the same trick as background-clip: text."""
     from PIL import Image, ImageDraw
     mask = Image.new("L", size, 0)
     ImageDraw.Draw(mask).text((0, 0), text, font=font, fill=255)
-    strip = Image.new("RGB", size, c0)
-    px = strip.load()
-    for x in range(size[0]):
-        t = x / max(1, size[0] - 1)
-        col = tuple(round(c0[i] + (c1[i] - c0[i]) * t) for i in range(3))
-        for y in range(size[1]):
-            px[x, y] = col
     out = Image.new("RGBA", size, (0, 0, 0, 0))
-    out.paste(strip, (0, 0), mask)
+    out.paste(gradient_strip(size, c0, c1), (0, 0), mask)
     return out
 
 
-def render(post: dict, hero: Path | None, out: Path) -> None:
+@lru_cache(maxsize=1)
+def scrim():
+    """The opener's scrim, bottom-heavy and stronger on the left where the
+    type sits. The same for every card, so it is computed once."""
+    from PIL import Image
+    mask = Image.new("L", (W, H), 0)
+    sp = mask.load()
+    for y in range(H):
+        vy = min(1.0, max(0.0, (y - H * 0.18) / (H * 0.82)))
+        for x in range(W):
+            vx = 1 - min(1.0, x / (W * 0.85))
+            a = 0.30 + 0.62 * (vy ** 1.4) * (0.55 + 0.45 * vx) + 0.12 * vx
+            sp[x, y] = round(255 * min(0.96, a))
+    return mask
+
+
+def render(card: Card) -> None:
     from PIL import Image, ImageDraw, ImageFilter
 
     canvas = Image.new("RGB", (W, H), BASE)
+    hero = card.hero
     if hero and hero.exists():
         im = Image.open(hero).convert("RGB")
         scale = max(W / im.width, H / im.height)
@@ -141,23 +266,13 @@ def render(post: dict, hero: Path | None, out: Path) -> None:
             im = im.filter(ImageFilter.GaussianBlur(1.2))
         canvas.paste(im, (0, 0))
 
-    # Scrim: the opener's, bottom-heavy and stronger on the left where
-    # the type sits.
-    scrim = Image.new("L", (W, H), 0)
-    sp = scrim.load()
-    for y in range(H):
-        vy = min(1.0, max(0.0, (y - H * 0.18) / (H * 0.82)))
-        for x in range(W):
-            vx = 1 - min(1.0, x / (W * 0.85))
-            a = 0.30 + 0.62 * (vy ** 1.4) * (0.55 + 0.45 * vx) + 0.12 * vx
-            sp[x, y] = round(255 * min(0.96, a))
-    canvas.paste(Image.new("RGB", (W, H), BASE), (0, 0), scrim)
+    canvas.paste(Image.new("RGB", (W, H), BASE), (0, 0), scrim())
 
     draw = ImageDraw.Draw(canvas)
     pad = 72
-    kicker_font = load_font("poppins-600.woff2", 22)
-    title_font = load_font("lora-600.woff2", 64)
-    site_font = load_font("poppins-600.woff2", 26)
+    kicker_font = load_font(LABEL_FONT[0], 22, LABEL_FONT[1])
+    title_font = load_font(TITLE_FONT[0], 64, TITLE_FONT[1])
+    site_font = load_font(LABEL_FONT[0], 26, LABEL_FONT[1])
 
     # Layout from the bottom up.
     y = H - pad
@@ -165,20 +280,16 @@ def render(post: dict, hero: Path | None, out: Path) -> None:
     name = "kenreid.co.uk"
     nw = int(draw.textlength(name, font=site_font)) + 4
     nh = site_font.size + 12
-    canvas.paste(gradient_text((nw, nh), name, site_font, BRAND_FROM, BRAND_TO), (pad, y - nh + 4), gradient_text((nw, nh), name, site_font, BRAND_FROM, BRAND_TO))
+    mark = gradient_text((nw, nh), name, site_font, BRAND_FROM, BRAND_TO)
+    canvas.paste(mark, (pad, y - nh + 4), mark)
     y -= nh + 26
 
     # Brand rule.
-    rule = Image.new("RGB", (72, 4), BRAND_FROM)
-    rp = rule.load()
-    for x in range(72):
-        t = x / 71
-        rp[x, 0] = rp[x, 1] = rp[x, 2] = rp[x, 3] = tuple(round(BRAND_FROM[i] + (BRAND_TO[i] - BRAND_FROM[i]) * t) for i in range(3))
-    canvas.paste(rule, (pad, y - 4))
+    canvas.paste(gradient_strip((72, 4), BRAND_FROM, BRAND_TO), (pad, y - 4))
     y -= 4 + 30
 
     # Title, up to three lines.
-    lines = wrap(draw, post["title"], title_font, W - pad * 2 - 40, 3)
+    lines = wrap(draw, card.title, title_font, W - pad * 2 - 40, 3)
     line_h = int(title_font.size * 1.18)
     y -= line_h * len(lines)
     ty = y
@@ -188,11 +299,10 @@ def render(post: dict, hero: Path | None, out: Path) -> None:
     y -= 22
 
     # Kicker.
-    kick = kicker_of(post).upper()
-    draw.text((pad, y - kicker_font.size), kick, font=kicker_font, fill=STONE)
+    draw.text((pad, y - kicker_font.size), card.kicker.upper(), font=kicker_font, fill=STONE)
 
-    out.parent.mkdir(parents=True, exist_ok=True)
-    canvas.save(out, "JPEG", quality=82, optimize=True, progressive=True)
+    card.out.parent.mkdir(parents=True, exist_ok=True)
+    canvas.save(card.out, "JPEG", quality=82, optimize=True, progressive=True)
 
 
 def repoint(post_path: Path, slug: str) -> bool:
@@ -207,37 +317,47 @@ def repoint(post_path: Path, slug: str) -> bool:
     return False
 
 
+# ---- entry point ----------------------------------------------------------
+
+def parse_args(argv: list[str]) -> argparse.Namespace:
+    ap = sitelib.arg_parser(
+        "Render share images for every post and the top-level pages, and "
+        "point each post's head at its card.",
+        prog="generate_og_images.py")
+    mode = ap.add_mutually_exclusive_group()
+    mode.add_argument("--check", action="store_true",
+                      help="render nothing; exit 1 if a card is stale or "
+                           "missing, or a post does not reference its card")
+    mode.add_argument("--force", action="store_true",
+                      help="render every card, stale or not")
+    return ap.parse_args(argv)
+
+
 def main(argv: list[str]) -> int:
-    check = "--check" in argv
-    force = "--force" in argv
-    posts = json.loads(POSTS.read_text(encoding="utf-8"))
-    posts = posts["posts"] if isinstance(posts, dict) else posts
+    args = parse_args(argv)
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.exists() else {}
+    posts = post_cards()
+    cards = posts + page_cards()
     stale: list[str] = []
     unpointed: list[str] = []
     fresh: dict[str, str] = {}
 
-    for post in posts:
-        slug = slug_of(post)
-        post_path = ROOT / post["url"]
-        html = post_path.read_text(encoding="utf-8")
-        hero_rel = hero_of(html)
-        hero = ROOT / hero_rel if hero_rel else None
-        sig = signature(post, hero)
-        fresh[slug] = sig
-        out = OUT / f"{slug}.jpg"
-        if force or manifest.get(slug) != sig or not out.exists():
-            stale.append(slug)
-        if f"/img/og/{slug}.jpg" not in html:
-            unpointed.append(slug)
-        if not check:
-            if slug in stale:
-                render(post, hero, out)
-                print(f"  rendered {out.relative_to(ROOT)}")
-            if repoint(post_path, slug):
-                print(f"  repointed {post['url']}")
+    for card in cards:
+        sig = signature(card)
+        fresh[card.key] = sig
+        if args.force or manifest.get(card.key) != sig or not card.out.exists():
+            stale.append(card.key)
+        if card.post_path and f"/img/og/{card.key}.jpg" not in card.post_path.read_text(encoding="utf-8"):
+            unpointed.append(card.key)
+        if args.check:
+            continue
+        if card.key in stale:
+            render(card)
+            print(f"  rendered {card.out.relative_to(ROOT).as_posix()}")
+        if card.post_path and repoint(card.post_path, card.key):
+            print(f"  repointed {card.post_path.relative_to(ROOT).as_posix()}")
 
-    if check:
+    if args.check:
         problems = [f"{s}: card is stale or missing" for s in stale] + \
                    [f"{s}: post does not reference its card" for s in unpointed]
         if problems:
@@ -245,11 +365,11 @@ def main(argv: list[str]) -> int:
             for p in problems:
                 print("  " + p)
             return 1
-        print(f"Share images are current ({len(posts)} posts).")
+        print(f"Share images are current ({len(posts)} posts, {len(PAGES)} pages).")
         return 0
 
     MANIFEST.write_text(json.dumps(fresh, indent=1, sort_keys=True) + "\n", encoding="utf-8")
-    print(f"{len(stale)} rendered, {len(posts)} posts, manifest written.")
+    print(f"{len(stale)} rendered, {len(posts)} posts and {len(PAGES)} pages, manifest written.")
     return 0
 
 

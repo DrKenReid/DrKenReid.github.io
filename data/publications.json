@@ -1,0 +1,240 @@
+{
+  "scholar": {
+    "profile": "https://scholar.google.com/citations?user=bwl2u00AAAAJ&hl=en",
+    "citations": 185
+  },
+  "selected": 6,
+  "publications": [
+    {
+      "id": "bwl2u00AAAAJ:9ZlFYXVOiuMC",
+      "title": "Temporal Coupling Between Linguistic Arousal and Heart Rate Variability During Emotional Sharing",
+      "authors": [
+        "MH Veiga",
+        "KN Reid",
+        "B Modenesi",
+        "J Boyko",
+        "N Fox",
+        "T Richter",
+        "D Kwon",
+        "A Omid"
+      ],
+      "etAl": true,
+      "venue": "Google Scholar listing",
+      "venueShort": null,
+      "year": 2026,
+      "citations": 0,
+      "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&sortby=pubdate&citation_for_view=bwl2u00AAAAJ:9ZlFYXVOiuMC",
+      "doi": null,
+      "pdf": null,
+      "firstAuthor": false,
+      "live": "pub:hrv",
+      "post": null
+    },
+    {
+      "id": "bwl2u00AAAAJ:Wp0gIr-vW9MC",
+      "title": "BatchPlanet: Batch access and processing of PlanetScope imagery for spatiotemporal analysis in R",
+      "authors": [
+        "Y Song",
+        "AR Bevington",
+        "KN Reid",
+        "J Zhu",
+        "Y Liu",
+        "K Zhu"
+      ],
+      "etAl": false,
+      "venue": "The Journal of Open Source Software 11(119):9268",
+      "venueShort": "JOSS",
+      "year": 2026,
+      "citations": 1,
+      "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:Wp0gIr-vW9MC",
+      "doi": "10.21105/joss.09268",
+      "pdf": null,
+      "firstAuthor": false,
+      "live": "pub:batchplanet",
+      "post": null
+    },
+    {
+      "id": "bwl2u00AAAAJ:M3ejUd6NZC8C",
+      "title": "An interdisciplinary outlook on large language models for scientific research",
+      "authors": [
+        "J Boyko",
+        "J Cohen",
+        "N Fox",
+        "MH Veiga",
+        "JI Li",
+        "J Liu",
+        "B Modenesi",
+        "AH Rauch"
+      ],
+      "etAl": true,
+      "venue": "arXiv preprint arXiv:2311.04929",
+      "venueShort": "arXiv",
+      "year": 2023,
+      "citations": 66,
+      "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:M3ejUd6NZC8C",
+      "doi": "10.48550/arXiv.2311.04929",
+      "pdf": "https://arxiv.org/pdf/2311.04929",
+      "firstAuthor": false,
+      "live": "pub:llm-outlook",
+      "post": null
+    },
+    {
+      "id": "bwl2u00AAAAJ:KlAtU1dfN6UC",
+      "title": "Genetic improvement in the Shackleton framework for optimizing LLVM pass sequences",
+      "authors": [
+        "SS Li",
+        "H Peeler",
+        "AN Sloss",
+        "KN Reid",
+        "W Banzhaf"
+      ],
+      "etAl": false,
+      "venue": "Proceedings of the Genetic and Evolutionary Computation Conference Companion",
+      "venueShort": "GECCO Companion",
+      "year": 2022,
+      "citations": 7,
+      "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:KlAtU1dfN6UC",
+      "doi": null,
+      "pdf": null,
+      "firstAuthor": false,
+      "live": "genetic-programming-live",
+      "post": null
+    },
+    {
+      "id": "bwl2u00AAAAJ:3fE2CSJIrl8C",
+      "title": "Optimizing LLVM Pass Sequences with Shackleton: A Linear Genetic Programming Framework",
+      "authors": [
+        "H Peeler",
+        "SS Li",
+        "AN Sloss",
+        "KN Reid",
+        "Y Yuan",
+        "W Banzhaf"
+      ],
+      "etAl": false,
+      "venue": "Google Scholar listing",
+      "venueShort": null,
+      "year": 2022,
+      "citations": 14,
+      "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:3fE2CSJIrl8C",
+      "doi": null,
+      "pdf": null,
+      "firstAuthor": false,
+      "live": "pub:llvm",
+      "post": null
+    },
+    {
+      "id": "bwl2u00AAAAJ:8k81kl-MbHgC",
+      "title": "The Factory Must Grow: Automation in Factorio",
+      "authors": [
+        "KN Reid",
+        "I Miralavy",
+        "S Kelly",
+        "W Banzhaf",
+        "C Gondro"
+      ],
+      "etAl": false,
+      "venue": "GECCO '21: Proceedings of the Genetic and Evolutionary Computation Conference",
+      "venueShort": "GECCO",
+      "year": 2021,
+      "citations": 9,
+      "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:8k81kl-MbHgC",
+      "doi": null,
+      "pdf": "https://arxiv.org/pdf/2102.04871",
+      "firstAuthor": true,
+      "live": "factorio-live",
+      "post": "blog/factorio-live.html"
+    },
+    {
+      "id": "bwl2u00AAAAJ:hqOjcs7Dif8C",
+      "title": "Heuristic hyperparameter optimization of deep learning models for genomic prediction",
+      "authors": [
+        "J Han",
+        "C Gondro",
+        "K Reid",
+        "JP Steibel"
+      ],
+      "etAl": false,
+      "venue": "G3 11(7), jkab032",
+      "venueShort": "G3",
+      "year": 2021,
+      "citations": 65,
+      "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:hqOjcs7Dif8C",
+      "doi": "10.1093/g3journal/jkab032",
+      "pdf": null,
+      "firstAuthor": false,
+      "live": "pub:genomic",
+      "post": null
+    },
+    {
+      "id": "bwl2u00AAAAJ:roLk4NBRz8UC",
+      "title": "A hybrid metaheuristic approach to a real world employee scheduling problem",
+      "authors": [
+        "KN Reid",
+        "J Li",
+        "A Brownlee",
+        "M Kern",
+        "N Veerapen",
+        "J Swan",
+        "G Owusu"
+      ],
+      "etAl": false,
+      "venue": "Proceedings of the Genetic and Evolutionary Computation Conference, 1311-1318",
+      "venueShort": "GECCO",
+      "year": 2019,
+      "citations": 11,
+      "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:roLk4NBRz8UC",
+      "doi": null,
+      "pdf": null,
+      "firstAuthor": true,
+      "live": "pub:hybrid",
+      "post": null
+    },
+    {
+      "id": "bwl2u00AAAAJ:Se3iqnhoufwC",
+      "title": "Shift Scheduling and Employee Rostering: An Evolutionary Ruin & Stochastic Recreate Solution",
+      "authors": [
+        "KN Reid",
+        "J Li",
+        "N Veerapen",
+        "J Swan",
+        "A McCormick",
+        "M Kern",
+        "G Owusu"
+      ],
+      "etAl": false,
+      "venue": "2018 10th Computer Science and Electronic Engineering (CEEC), 19-23",
+      "venueShort": "CEEC",
+      "year": 2018,
+      "citations": 2,
+      "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:Se3iqnhoufwC",
+      "doi": null,
+      "pdf": null,
+      "firstAuthor": true,
+      "live": "ruin-and-recreate-live",
+      "post": "blog/ruin-and-recreate-live.html"
+    },
+    {
+      "id": "bwl2u00AAAAJ:u5HHmVD_uO8C",
+      "title": "Variable Neighbourhood Search: A Case Study for a Highly-Constrained Workforce Scheduling Problem",
+      "authors": [
+        "KN Reid",
+        "J Li",
+        "J Swan",
+        "A McCormick",
+        "G Owusu"
+      ],
+      "etAl": false,
+      "venue": "IEEE SSCI 2016",
+      "venueShort": "IEEE SSCI",
+      "year": 2016,
+      "citations": 9,
+      "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:u5HHmVD_uO8C",
+      "doi": null,
+      "pdf": null,
+      "firstAuthor": true,
+      "live": "variable-neighbourhood-search-live",
+      "post": "blog/variable-neighbourhood-search-live.html"
+    }
+  ]
+}

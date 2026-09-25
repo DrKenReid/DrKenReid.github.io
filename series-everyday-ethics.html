@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -9,19 +9,25 @@
   <meta property="og:title" content="Everyday Ethics - Ken Reid">
   <meta property="og:description" content="Essays on the ethics of ordinary life: the phones in our pockets, the disasters that never happened, the guilt we're handed, and the limits of tolerance.">
   <meta property="og:image" content="https://www.kenreid.co.uk/img/photography/hero/316.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="800">
+  <meta property="og:image:alt" content="A black and white street photograph of a protester holding an orange sign reading Ban This Plastic Poison">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Everyday Ethics - Ken Reid">
   <meta name="twitter:description" content="Essays on the ethics of ordinary life: the phones in our pockets, the disasters that never happened, the guilt we're handed, and the limits of tolerance.">
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/photography/hero/316.webp">
+  <meta name="twitter:image:alt" content="A black and white street photograph of a protester holding an orange sign reading Ban This Plastic Poison">
   <meta property="og:url" content="https://www.kenreid.co.uk/series-everyday-ethics.html">
   <meta property="og:type" content="website">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <meta property="og:site_name" content="Ken Reid">
+  <meta property="og:locale" content="en_GB">
+  <script defer src="/js/analytics.js"></script>
   <link rel="icon" href="/img/core-img/favicon.png">
   <link rel="apple-touch-icon" href="/img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
   <link rel="manifest" href="/manifest.json">
-  <link rel="preload" as="image" href="/img/photography/hero/316.webp">
-  <link rel="stylesheet" href="/style.min.css">
+  <link rel="preload" as="image" href="/img/photography/hero/316.webp" fetchpriority="high">
+  <link rel="stylesheet" href="/style.min.css?v=20260923a">
   <link rel="canonical" href="https://www.kenreid.co.uk/series-everyday-ethics.html">
   <script type="application/ld+json">
   {
@@ -33,46 +39,56 @@
     "author": {"@type": "Person", "name": "Ken Reid", "url": "https://www.kenreid.co.uk"}
   }
   </script>
-  <script defer src="/js/theme.js"></script>
-  <script defer src="/js/palette.js"></script>
+  <script defer src="/js/theme.js?v=20260923a"></script>
+  <script defer src="/js/palette.js?v=20260923a"></script>
 </head>
 <body>
-  <div id="preloader"><div class="loader"></div></div>
-
   <div id="header-section"></div>
 
   <main id="main-content">
 
-  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/316.webp); background-size: cover; background-position: center center;">
-    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
-      <div class="breadcrumb-content text-center">
-        <h1 class="page-title">Everyday Ethics</h1>
-        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+  <!-- Page opener (style.css §06, "Page opener") -->
+  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/316.webp);">
+    <div class="container">
+      <div class="breadcrumb-content">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="/index.html"><i class="icon_house_alt"></i> Home</a></li>
           <li class="breadcrumb-item"><a href="/blog.html">Blog</a></li>
           <li class="breadcrumb-item active" aria-current="page">Everyday Ethics</li>
         </ol></nav>
+        <h1 class="page-title">Everyday Ethics</h1>
       </div>
-    </div></div></div>
+    </div>
   </section>
 
   <div class="about-us-area section-padding-80 clearfix">
     <div class="container">
-      <div class="text-center" style="margin-bottom: 36px;">
-        <span class="section-eyebrow">Series</span>
-        <h2>Everyday Ethics</h2>
-        <p style="max-width: 640px; margin: 12px auto 0;">Moral philosophy earns its keep when it leaves the seminar room. Each part of this series takes one ethical knot that ordinary life ties (the supply chain in your pocket, the credit nobody gives to prevention, the guilt industries hand to individuals, the limits of tolerating intolerance) and works through it without pretending the answers are easy.</p>
-        <p id="series-count" class="kr-muted" style="margin-top: 10px; font-size: 13px;"></p>
+      <div class="kr-series-intro">
+        <p class="kr-series-lede">Moral philosophy earns its keep when it leaves the seminar room. Each part of this series takes one ethical knot that ordinary life ties (the supply chain in your pocket, the credit nobody gives to prevention, the guilt industries hand to individuals, the limits of tolerating intolerance) and works through it without pretending the answers are easy.</p>
+        <p id="series-count" class="kr-series-count"></p>
       </div>
       <div id="series-page" class="kr-series-page" data-series="Everyday Ethics">
+        <h2 class="sr-only">Parts in this series</h2>
         <div class="row" id="series-grid"></div>
+        <!-- BEGIN listing-fallback: written by .github/scripts/generate_listing_fallback.py from data/posts.json; edits made here are overwritten. -->
+        <noscript>
+          <ol>
+            <li><a href="/blog/hidden-cost-of-cobalt-congo.html">The Hidden Cost of Cobalt</a>, <time class="kr-muted" datetime="2026-05-13">13 May 2026</time></li>
+            <li><a href="/blog/prevention-of-failure-is-unseen.html">Why Nobody Thanks the Person Who Stopped the Disaster</a>, <time class="kr-muted" datetime="2026-05-21">21 May 2026</time></li>
+            <li><a href="/blog/individualization-of-responsibility.html">The Individualization of Responsibility</a>, <time class="kr-muted" datetime="2026-05-27">27 May 2026</time></li>
+            <li><a href="/blog/the-paradox-of-tolerance.html">The Paradox of Tolerance</a>, <time class="kr-muted" datetime="2026-08-02">2 August 2026</time></li>
+          </ol>
+        </noscript>
+        <!-- END listing-fallback -->
       </div>
     </div>
   </div>
 
   <div class="kr-next-stop">
     <p>Prefer to wander? Every post lives on <a href="/blog.html">the blog</a>, series and strays alike.</p>
-    <a href="/blog.html" class="btn alime-btn btn-2">Browse all posts</a>
+    <div class="kr-btn-row">
+      <a href="/blog.html" class="kr-btn kr-btn--ghost">Browse all posts</a>
+    </div>
   </div>
 
   </main>
@@ -80,8 +96,8 @@
   <hr>
   <div id="footer-section"></div>
 
-  <script src="/js/site.js"></script>
-  <script src="/js/shared-components.js"></script>
+  <script src="/js/site.js?v=20260923a"></script>
+  <script src="/js/shared-components.js?v=20260923a"></script>
   <script>renderHeader('header-section', { basePath: '/', active: 'blog', blogChild: 'series-ethics' });
 renderFooter('footer-section');
 renderSeriesPage();</script>

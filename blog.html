@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -8,40 +8,30 @@
   <title>Blog - Ken Reid</title>
   <meta property="og:title" content="Blog - Ken Reid">
   <meta property="og:description" content="Ken Reid's blog — data science, photography, books, and other things on my mind.">
-  <meta property="og:image" content="https://www.kenreid.co.uk/img/photography/hero/97.webp">
+  <meta property="og:image" content="https://www.kenreid.co.uk/img/og/page-blog.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Blog: data science, photography and books, over one of Ken Reid's photographs">
   <meta property="og:url" content="https://www.kenreid.co.uk/blog.html">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ken Reid">
+  <meta property="og:locale" content="en_GB">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Blog - Ken Reid">
   <meta name="twitter:description" content="Ken Reid's blog — data science, photography, books, and other things on my mind.">
-  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/photography/hero/97.webp">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQK9NRXC9D"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-PQK9NRXC9D');</script>
+  <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/page-blog.jpg">
+  <meta name="twitter:image:alt" content="Blog: data science, photography and books, over one of Ken Reid's photographs">
+  <script defer src="/js/analytics.js"></script>
   <link rel="icon" href="/img/core-img/favicon.png">
   <link rel="apple-touch-icon" href="/img/core-img/apple-touch-icon.png">
   <meta name="theme-color" content="#1a1a1a">
   <link rel="manifest" href="/manifest.json">
   <link rel="canonical" href="https://www.kenreid.co.uk/blog.html">
   <link rel="alternate" type="application/rss+xml" title="Ken Reid's Blog" href="https://www.kenreid.co.uk/feed.xml">
-  <link rel="preload" as="image" href="/img/photography/hero/97.webp">
-  <link rel="stylesheet" href="/style.min.css">
-  <style>
-    .blog-card-img {
-      aspect-ratio: 16 / 10;
-      overflow: hidden;
-      border-radius: 8px 8px 0 0;
-      background: #f1f1f1;
-    }
-    .blog-card-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-  </style>
-  <script src="/js/blog.js?v=20260917a"></script>
-  <script defer src="/js/theme.js"></script>
-  <script defer src="/js/palette.js"></script>
+  <link rel="preload" as="image" href="/img/photography/hero/97.webp" fetchpriority="high">
+  <link rel="stylesheet" href="/style.min.css?v=20260923a">
+  <script defer src="/js/theme.js?v=20260923a"></script>
+  <script defer src="/js/palette.js?v=20260923a"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -57,44 +47,118 @@
   </script>
 </head>
 <body>
-  <div id="preloader"><div class="loader"></div></div>
-
   <!-- Header -->
   <div id="header-section"></div>
 
   <main id="main-content">
 
-  <!-- Breadcrumb -->
-  <section class="breadcrumb-area bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/97.webp);">
-    <div class="container h-100"><div class="row h-100 align-items-center"><div class="col-12">
-      <div class="breadcrumb-content text-center">
-        <h1 class="page-title">Blog</h1>
-        <nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-center">
+  <!-- Page opener (style.css §06, "Page opener") -->
+  <section class="breadcrumb-area breadcrumb-area--listing bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/97.webp);">
+    <div class="container">
+      <div class="breadcrumb-content">
+        <nav aria-label="breadcrumb"><ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="/index.html"><i class="icon_house_alt"></i> Home</a></li>
           <li class="breadcrumb-item active" aria-current="page">Blog</li>
         </ol></nav>
+        <h1 class="page-title">Blog</h1>
       </div>
-    </div></div></div>
+    </div>
   </section>
 
   <!-- Blog Listing -->
-  <div class="alime-blog-area section-padding-80-0 mb-70">
+  <div class="alime-blog-area kr-listing mb-70">
     <div class="container">
-      <div style="text-align:center; margin-bottom:16px;">
-        <input type="text" id="blog-search-static" class="kr-list-search" placeholder="Search posts..." />
+      <div class="kr-listing__search">
+        <input type="text" id="blog-search-static" class="kr-list-search" placeholder="Search posts..." aria-label="Search posts" />
       </div>
-      <div style="text-align:center; margin-bottom:24px;">
-        <a class="btn alime-btn btn-2" href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe by email</a>
-      </div>
+      <!-- Filled by blog.js: a label and one row of series pills that scrolls
+           sideways. Its height is reserved in style.css, so it cannot push
+           the posts down when it fills. -->
       <div id="series-shelf" class="kr-series-shelf" role="group" aria-label="Post series"></div>
-      <div class="kr-blog-toolbar text-center" style="margin-bottom:14px;">
+      <div class="kr-blog-toolbar text-center">
         <button type="button" id="kr-filter-toggle" class="btn gallery-filter-btn" aria-expanded="false" aria-controls="blog-filters">Filter &#9662;</button>
         <button type="button" id="kr-sort-toggle" class="btn gallery-filter-btn" aria-expanded="false" aria-controls="blog-sort">Sort: Date &darr;</button>
       </div>
-      <div id="blog-filters" class="gallery-filters kr-filter-panel text-center kr-collapse" style="margin-bottom:20px;" hidden></div>
-      <div id="blog-sort" class="gallery-filters text-center kr-collapse" style="margin-bottom:20px;" hidden></div>
+      <div id="blog-filters" class="gallery-filters kr-filter-panel text-center kr-collapse" hidden></div>
+      <div id="blog-sort" class="gallery-filters text-center kr-collapse" hidden></div>
       <p id="blog-counter" class="kr-list-counter" role="status" aria-live="polite" aria-atomic="true"></p>
+      <!-- Held at about a viewport tall while empty (style.css), so the
+           subscribe row and the footer never flash up and jump away. -->
       <div class="row" id="blog-grid"></div>
+      <!-- BEGIN listing-fallback: written by .github/scripts/generate_listing_fallback.py from data/posts.json; edits made here are overwritten. -->
+      <noscript>
+        <ul>
+          <li><a href="/blog/every-card-has-a-sketch.html">Every Card Has a Sketch</a>, <time class="kr-muted" datetime="2026-09-20">20 September 2026</time></li>
+          <li><a href="/blog/hyper-heuristics-live.html">Hyper-Heuristics, Live</a>, <time class="kr-muted" datetime="2026-09-19">19 September 2026</time></li>
+          <li><a href="/blog/photographing-strangers.html">Photographing Strangers</a>, <time class="kr-muted" datetime="2026-09-16">16 September 2026</time></li>
+          <li><a href="/blog/ruin-and-recreate-live.html">Ruin and Recreate, Live</a>, <time class="kr-muted" datetime="2026-09-13">13 September 2026</time></li>
+          <li><a href="/blog/leading-a-horse-to-water.html">Leading a Horse to Water</a>, <time class="kr-muted" datetime="2026-09-06">6 September 2026</time></li>
+          <li><a href="/blog/making-this-website-accessible.html">Making This Website Accessible</a>, <time class="kr-muted" datetime="2026-08-30">30 August 2026</time></li>
+          <li><a href="/blog/the-availability-heuristic-runs-the-news.html">The Availability Heuristic Runs the News</a>, <time class="kr-muted" datetime="2026-08-30">30 August 2026</time></li>
+          <li><a href="/blog/confirmation-bias-is-the-mother-bias.html">Confirmation Bias Is the Mother Bias</a>, <time class="kr-muted" datetime="2026-08-28">28 August 2026</time></li>
+          <li><a href="/blog/tabu-search-live.html">Tabu Search, Live</a>, <time class="kr-muted" datetime="2026-08-26">26 August 2026</time></li>
+          <li><a href="/blog/genetic-programming-live.html">Genetic Programming, Live</a>, <time class="kr-muted" datetime="2026-08-23">23 August 2026</time></li>
+          <li><a href="/blog/differential-evolution-live.html">Differential Evolution, Live</a>, <time class="kr-muted" datetime="2026-08-22">22 August 2026</time></li>
+          <li><a href="/blog/cma-es-live.html">CMA-ES, Live</a>, <time class="kr-muted" datetime="2026-08-19">19 August 2026</time></li>
+          <li><a href="/blog/factorio-live.html">Factorio, Live: a Game as an Optimisation Benchmark</a>, <time class="kr-muted" datetime="2026-08-16">16 August 2026</time></li>
+          <li><a href="/blog/how-the-interactive-posts-work.html">How the Interactive Posts Work</a>, <time class="kr-muted" datetime="2026-08-16">16 August 2026</time></li>
+          <li><a href="/blog/letting-robots-update-your-homepage.html">Letting Robots Update Your Homepage</a>, <time class="kr-muted" datetime="2026-08-14">14 August 2026</time></li>
+          <li><a href="/blog/variable-neighbourhood-search-live.html">Variable Neighbourhood Search, Live</a>, <time class="kr-muted" datetime="2026-08-12">12 August 2026</time></li>
+          <li><a href="/blog/particle-swarm-live.html">Particle Swarm, Live</a>, <time class="kr-muted" datetime="2026-08-11">11 August 2026</time></li>
+          <li><a href="/blog/50-blogs-an-infographic.html">50 Blogs: An Infographic</a>, <time class="kr-muted" datetime="2026-08-08">8 August 2026</time></li>
+          <li><a href="/blog/dark-mode-that-doesnt-flash.html">Dark Mode That Doesn't Flash</a>, <time class="kr-muted" datetime="2026-08-06">6 August 2026</time></li>
+          <li><a href="/blog/simulated-annealing-live.html">Simulated Annealing, Live</a>, <time class="kr-muted" datetime="2026-08-05">5 August 2026</time></li>
+          <li><a href="/blog/evolution-live.html">Evolution, Live</a>, <time class="kr-muted" datetime="2026-08-04">4 August 2026</time></li>
+          <li><a href="/blog/invisible-half-of-a-blog-post.html">The Invisible Half of a Blog Post</a>, <time class="kr-muted" datetime="2026-08-04">4 August 2026</time></li>
+          <li><a href="/blog/ctrl-k-for-a-static-site.html">Ctrl+K for a Static Site</a>, <time class="kr-muted" datetime="2026-08-03">3 August 2026</time></li>
+          <li><a href="/blog/the-paradox-of-tolerance.html">The Paradox of Tolerance</a>, <time class="kr-muted" datetime="2026-08-02">2 August 2026</time></li>
+          <li><a href="/blog/the-fermi-paradox-and-the-great-silence.html">The Fermi Paradox - Why are we alone in space?</a>, <time class="kr-muted" datetime="2026-07-28">28 July 2026</time></li>
+          <li><a href="/blog/blog-engine-in-one-json-file.html">A Blog Engine in One JSON File</a>, <time class="kr-muted" datetime="2026-07-26">26 July 2026</time></li>
+          <li><a href="/blog/ant-colony-live.html">Ant Colony, Live</a>, <time class="kr-muted" datetime="2026-07-19">19 July 2026</time></li>
+          <li><a href="/blog/my-website-has-a-test-suite.html">My Website Has a Test Suite</a>, <time class="kr-muted" datetime="2026-07-17">17 July 2026</time></li>
+          <li><a href="/blog/my-teacher-said-i-shouldnt-go-to-university.html">My Teacher Said I Shouldn't Go To University</a>, <time class="kr-muted" datetime="2026-07-16">16 July 2026</time></li>
+          <li><a href="/blog/free-comments-via-github-discussions.html">Free Comments via GitHub Discussions</a>, <time class="kr-muted" datetime="2026-07-15">15 July 2026</time></li>
+          <li><a href="/blog/putting-my-photos-on-a-map.html">Putting My Photos on a Map</a>, <time class="kr-muted" datetime="2026-07-14">14 July 2026</time></li>
+          <li><a href="/blog/self-hosting-your-fonts.html">Self-Hosting Your Fonts</a>, <time class="kr-muted" datetime="2026-07-12">12 July 2026</time></li>
+          <li><a href="/blog/reading-this-site-offline.html">Reading This Site Offline</a>, <time class="kr-muted" datetime="2026-07-12">12 July 2026</time></li>
+          <li><a href="/blog/abandoned-places-i-photograph.html">The Abandoned Places I Photograph</a>, <time class="kr-muted" datetime="2026-07-12">12 July 2026</time></li>
+          <li><a href="/blog/why-i-love-latex.html">Why I Love LaTeX</a>, <time class="kr-muted" datetime="2026-07-12">12 July 2026</time></li>
+          <li><a href="/blog/what-50000-scrobbles-say-about-me.html">What 50,000 Scrobbles Say About Me</a>, <time class="kr-muted" datetime="2026-07-06">6 July 2026</time></li>
+          <li><a href="/blog/hosting-photography-on-github-for-free.html">Hosting a Photography Portfolio on GitHub for Free</a>, <time class="kr-muted" datetime="2026-07-06">6 July 2026</time></li>
+          <li><a href="/blog/why-you-arent-a-visual-learner.html">Why You Aren't a "Visual Learner"</a>, <time class="kr-muted" datetime="2026-07-04">4 July 2026</time></li>
+          <li><a href="/blog/frodo-sam-and-love.html">Frodo, Sam, and love.</a>, <time class="kr-muted" datetime="2026-07-02">2 July 2026</time></li>
+          <li><a href="/blog/optimizing-your-schedule-ii.html">Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)</a>, <time class="kr-muted" datetime="2026-06-30">30 June 2026</time></li>
+          <li><a href="/blog/what-we-leave-behind.html">What We Leave Behind</a>, <time class="kr-muted" datetime="2026-06-27">27 June 2026</time></li>
+          <li><a href="/blog/optimizing-your-schedule.html">Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)</a>, <time class="kr-muted" datetime="2026-06-15">15 June 2026</time></li>
+          <li><a href="/blog/what-was-i-made-for.html">What Was I Made For?</a>, <time class="kr-muted" datetime="2026-06-12">12 June 2026</time></li>
+          <li><a href="/blog/mash-modern-perspective.html">M*A*S*H in the Modern Era: Comedy, Trauma, and the 4077th</a>, <time class="kr-muted" datetime="2026-06-01">1 June 2026</time></li>
+          <li><a href="/blog/the-culture-series.html">Iain M. Banks and The Culture</a>, <time class="kr-muted" datetime="2026-06-01">1 June 2026</time></li>
+          <li><a href="/blog/individualization-of-responsibility.html">The Individualization of Responsibility</a>, <time class="kr-muted" datetime="2026-05-27">27 May 2026</time></li>
+          <li><a href="/blog/advice-to-my-younger-self.html">Advice to My Younger Self</a>, <time class="kr-muted" datetime="2026-05-25">25 May 2026</time></li>
+          <li><a href="/blog/books-i-recommend-to-friends.html">The Books I Recommend to Friends</a>, <time class="kr-muted" datetime="2026-05-22">22 May 2026</time></li>
+          <li><a href="/blog/prevention-of-failure-is-unseen.html">Why Nobody Thanks the Person Who Stopped the Disaster</a>, <time class="kr-muted" datetime="2026-05-21">21 May 2026</time></li>
+          <li><a href="/blog/mistaken-identity-italy.html">When I Ended Up in Italy Because of Mistaken Identity</a>, <time class="kr-muted" datetime="2026-05-19">19 May 2026</time></li>
+          <li><a href="/blog/how-to-write-a-blog.html">How to Write a Blog (or: What I Learned By Doing It)</a>, <time class="kr-muted" datetime="2026-05-13">13 May 2026</time></li>
+          <li><a href="/blog/hidden-cost-of-cobalt-congo.html">The Hidden Cost of Cobalt</a>, <time class="kr-muted" datetime="2026-05-13">13 May 2026</time></li>
+          <li><a href="/blog/iso-8601-date-cult.html">ISO 8601 and the Date Cult I Happily Joined</a>, <time class="kr-muted" datetime="2026-05-12">12 May 2026</time></li>
+          <li><a href="/blog/accessibility-first-product-design-data-science.html">Accessibility-First Design in Data Science</a>, <time class="kr-muted" datetime="2026-05-11">11 May 2026</time></li>
+          <li><a href="/blog/life-and-death-of-the-early-internet.html">The Life and Death of the Early Internet</a>, <time class="kr-muted" datetime="2026-05-06">6 May 2026</time></li>
+          <li><a href="/blog/from-scotland-to-michigan.html">From Scotland to Michigan</a>, <time class="kr-muted" datetime="2026-05-04">4 May 2026</time></li>
+          <li><a href="/blog/ethics-of-llm-use-not-llms.html">The Ethics of LLM Use (Not LLMs)</a>, <time class="kr-muted" datetime="2026-04-29">29 April 2026</time></li>
+          <li><a href="/blog/dungeon-crawler-carl-litrpg-dignity.html">Dungeon Crawler Carl and the Strange Dignity of LitRPG</a>, <time class="kr-muted" datetime="2026-04-25">25 April 2026</time></li>
+          <li><a href="/blog/fifteen-years-of-silence-rothfuss-doors-of-stone.html">Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction</a>, <time class="kr-muted" datetime="2026-04-22">22 April 2026</time></li>
+          <li><a href="/blog/no-idea-no-problem-data-science-portfolio.html">No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio</a>, <time class="kr-muted" datetime="2026-04-20">20 April 2026</time></li>
+          <li><a href="/blog/evolutionary-computation-identity-crisis.html">Evolutionary Computation's Identity Crisis in the Age of GenAI</a>, <time class="kr-muted" datetime="2026-04-18">18 April 2026</time></li>
+          <li><a href="/blog/in-defense-of-audiobooks.html">In Defense of Audiobooks</a>, <time class="kr-muted" datetime="2026-04-17">17 April 2026</time></li>
+          <li><a href="/blog/why-learn-to-code-age-of-ai.html">Why It Still Matters to Learn to Code in the Age of AI</a>, <time class="kr-muted" datetime="2026-04-16">16 April 2026</time></li>
+          <li><a href="/blog/second-brain-local-llm-professional.html">Your Professional Second Brain for Local LLM Work</a>, <time class="kr-muted" datetime="2026-04-15">15 April 2026</time></li>
+          <li><a href="/blog/snowball-vs-avalanche.html">Snowball vs Avalanche: The Science of Paying Off Debt</a>, <time class="kr-muted" datetime="2026-04-14">14 April 2026</time></li>
+          <li><a href="/blog/rating-systems.html">Book Ratings Are Broken</a>, <time class="kr-muted" datetime="2026-04-12">12 April 2026</time></li>
+          <li><a href="/blog/self-help-books.html">Why Most Self-Help Books Are Trash (And Which Ones Aren't)</a>, <time class="kr-muted" datetime="2026-04-11">11 April 2026</time></li>
+          <li><a href="/blog/photo-tagging-with-clip.html">Building a Photo Tagging System with CLIP</a>, <time class="kr-muted" datetime="2026-04-10">10 April 2026</time></li>
+        </ul>
+      </noscript>
+      <!-- END listing-fallback -->
       <div class="kr-subscribe-row">
         <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe by email</a>
         &nbsp;&middot;&nbsp;
@@ -111,15 +175,20 @@
   <div id="footer-section"></div>
 
   <script src="/js/jquery.min.js"></script>
-  <script src="/js/alime.bundle.js"></script>
-  <script src="/js/site.js"></script>
-  <script src="/js/lightbox.js"></script>
-  <script src="/js/default-assets/active.js"></script>
-  <script src="/js/shared-components.js"></script>
+  <script src="/js/alime.bundle.js?v=20260923a"></script>
+  <script src="/js/site.js?v=20260923a"></script>
+  <script src="/js/lightbox.js?v=20260923a"></script>
+  <script src="/js/default-assets/active.js?v=20260923a"></script>
+  <script src="/js/shared-components.js?v=20260923a"></script>
+  <!-- Down here, not in <head>: it needs shared-components.js, and in the
+       head it held up the first paint for a script that only acts once
+       posts.json arrives. The ?v= stamp keeps a cached copy from running
+       against changed markup; bump it when the two change together. -->
+  <script src="/js/blog.js?v=20260923a"></script>
   <script>initBlog();</script>
   <script>
     renderHeader('header-section', { basePath: '/', active: 'blog' });
-    renderInstagramSection('instagram-section');
+    renderPhotoStrip('instagram-section');
     renderFooter('footer-section');
   </script>
 </body>

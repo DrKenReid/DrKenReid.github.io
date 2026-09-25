@@ -1,0 +1,52 @@
+#!/bin/sh
+# pre-commit: the quick half of the site checks, before anything is committed.
+#
+# Install into this clone (copies this file; post-commit is left alone):
+#   python .github/hooks/install.py
+#
+# Runs `run_checks.py --fast`: every check in the registry that needs no
+# third-party package, in the registry's dependency order, so the first
+# failure printed is the one to fix. Together they take a few seconds.
+# What it leaves to CI is the Pillow-backed monochrome check, the Python
+# and JavaScript unit tests and the browser suites (`run_checks.py
+# --browser` runs them all).
+#
+# The checks read the working tree, not the staged snapshot. They fail
+# when an output is stale on disk, but a regenerated file left unstaged
+# passes here and is left out of the commit, and CI, which reads only
+# what was committed, fails. Check `git status` for generated files
+# before committing.
+#
+# Skip it once with `git commit --no-verify`.
+
+# A commit that stages nothing new (a message-only amend, an empty commit)
+# changes no file any check reads, so there is nothing new to check.
+if git rev-parse --verify --quiet HEAD >/dev/null && git diff --cached --quiet HEAD --; then
+    exit 0
+fi
+
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+# The project's virtualenv first (Windows layout, then POSIX), so the
+# checks run under the interpreter the generators were run with.
+PY=""
+for candidate in .venv/Scripts/python.exe .venv/bin/python; do
+    if [ -x "$candidate" ]; then
+        PY="$candidate"
+        break
+    fi
+done
+[ -n "$PY" ] || PY="$(command -v python3 || command -v python)"
+if [ -z "$PY" ]; then
+    echo "pre-commit: no Python found; the site checks did not run." >&2
+    exit 1
+fi
+
+if "$PY" .github/scripts/run_checks.py --fast; then
+    exit 0
+fi
+echo >&2
+echo "pre-commit: the commit was stopped by the failures above." >&2
+echo "  Regenerate what is generated:  $PY .github/scripts/run_checks.py --fix" >&2
+echo "  then stage the files it rewrote and commit again." >&2
+exit 1
