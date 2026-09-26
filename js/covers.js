@@ -596,6 +596,37 @@
         };
     });
 
+    // A 2010 camera's price tag falls from $1,099 to $97 while it keeps
+    // firing and the pile of photographs grows.
+    def('the-inaccessibility-of-photography', function (w, h, rnd) {
+        var t = 0, flash = 0, shots = [];
+        return {
+            step: function () {
+                t++;
+                if (flash > 0) flash--;
+                if (t % 45 === 20) { flash = 8; shots.push({ x: w * (0.6 + rnd() * 0.3), y: h * (0.3 + rnd() * 0.4), r: (rnd() - 0.5) * 0.5, a: 0 }); }
+                shots.forEach(function (s) { s.a = Math.min(1, s.a + 0.06); });
+                if (t % 540 === 0) shots = [];
+            },
+            draw: function (ctx) {
+                var p = ease(clamp01(phase(t, 540) * 1.4)), price = Math.round(1099 - (1099 - 97) * p);
+                var bx = w * 0.1, by = h * 0.36, bw = w * 0.36, bh = h * 0.34;
+                rect(ctx, bx, by, bw, bh, 'rgba(255,255,255,0.18)');
+                rect(ctx, bx + bw * 0.12, by - h * 0.07, bw * 0.3, h * 0.07, 'rgba(255,255,255,0.18)');
+                dot(ctx, bx + bw * 0.55, by + bh * 0.52, bh * 0.36, C.ink);
+                dot(ctx, bx + bw * 0.55, by + bh * 0.52, bh * 0.22, flash ? C.b : 'rgba(0,0,0,0.6)');
+                text(ctx, '60D', bx + bw * 0.14, by + bh * 0.2, 10, C.dim, 700, 'left');
+                text(ctx, '$' + price.toLocaleString('en-US'), bx + bw / 2, h * 0.86, 16, p > 0.99 ? C.b : C.a, 700, 'center');
+                shots.forEach(function (s) {
+                    ctx.save(); ctx.translate(s.x, s.y); ctx.rotate(s.r); ctx.globalAlpha = s.a;
+                    rect(ctx, -17, -12, 34, 24, C.ink); rect(ctx, -14, -9, 28, 16, C.green);
+                    ctx.restore();
+                });
+                if (flash) rect(ctx, 0, 0, w, h, 'rgba(255,255,255,' + (flash / 8 * 0.35).toFixed(2) + ')');
+            }
+        };
+    });
+
     /* ----------------------------------------------------- site building */
 
     // A focus ring tabs through controls; the skip link is the first stop.

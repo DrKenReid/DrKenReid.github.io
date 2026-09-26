@@ -5,11 +5,154 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 20 Sep 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Sun, 20 Sep 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Sat, 26 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Sat, 26 Sep 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>The Inaccessibility of Photography</title>
+      <link>https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html</link>
+      <guid>https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html</guid>
+      <pubDate>Sat, 26 Sep 2026 00:00:00 +0000</pubDate>
+      <description>The gear treadmill makes photography look expensive, but my gallery was shot on a camera that now sells used from about a hundred dollars, and my phone.</description>
+      <category>photography</category>
+      <content:encoded><![CDATA[
+ <h1>The Inaccessibility of Photography</h1>
+ <div class="blog-meta">
+ 26 September 2026 &middot;
+ <span class="blog-tag">photography</span>
+ </div>
+
+ <p>In 1900 Eastman Kodak brought out a box camera called the Brownie and sold it for one dollar, which is about $40 in today's money (the name came partly from Frank Brownell of Rochester, New York, who made them for Eastman).<sup><a href="#ref-1" class="cite-ref">[1]</a></sup><sup><a href="#ref-2" class="cite-ref">[2]</a></sup> A hundred thousand of them sold in the first year, and the Franklin Institute, which has one in its collection, says it "helped to put photography into the hands of amateurs".</p>
+
+ <p>A hundred and twenty-six years later, photography looks like a hobby for people with money. And, well, it largely is. If you go to any big sporting event and look at the journalist section you'll see a bunch of people with lenses about the size of my arm, and cost about 4x the price of my car. For one lens. Then if you look at discussion boards online, most of what I see is about gear: which body, which lens, which upgrade, what this year's model does that last year's didn't. It puts people off of a hobby that can actually be done with very little. You can take good photos on a camera that sells used for about a hundred dollars, or on the phone you already own, and edit them in software that costs nothing (except some time to learn).</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Body:</strong> the camera itself, without a lens. Lenses are sold separately and swap between bodies of the same mount.</li>
+ <li><strong>DSLR:</strong> a digital single-lens reflex camera, the kind with a mirror that shows you the view through the lens. Generally refers to what people think of with regards to modern cameras.</li>
+ <li><strong>APS-C:</strong> a sensor size smaller than a frame of 35mm film, common in cheaper interchangeable-lens cameras.</li>
+ <li><strong>Raw file:</strong> the sensor's readings as recorded, before the camera turns them into a JPEG. More room to fix things when you edit.</li>
+ <li><strong>DNG:</strong> Adobe's "Digital Negative" open raw format; many phones save raw files as DNG.</li>
+ <li><strong>Open source:</strong> software whose code anyone can read, change and share, usually free to download.</li>
+ <li><strong>Non-destructive editing:</strong> the editor stores your changes as instructions and never alters the original file.</li>
+ </ul>
+ </div>
+
+ <h2>Musicians have a name for it</h2>
+
+ <p>Gear Acquisition Syndrome, or GAS, is "the musicians' unrelenting urge to buy and own instruments and equipment as an anticipated catalyst of creative energy and bringer of happiness". That's from Jan-Peter Herbst and Jonas Menze, who wrote a whole book about it in 2021. They also write: "The urge is directed by the belief that acquiring another instrument will make one a better player."<sup><a href="#ref-3" class="cite-ref">[3]</a></sup> With "camera" in place of "instrument", that describes a good chunk of photography YouTube and TikTok.</p>
+
+ <p>I've played guitar since I was about 11 and got into photography around 15. I get the urge to build up your gear library, who doesn't want new toys? It brings immediate satisfaction, fun, enjoyment, inspiration, while doing so with your existing gear is something of a chore before you actually enjoy it again. Plus - think of all the things new gear can do your current gear can't! But that is where creativity come into play, or sometimes, swallowing that urge and focusing on what your gear CAN do, putting new gear into the future. You'll enjoy your new gear even more with more skills and experience gained from your old gear.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/519.webp" alt="Blades of grass covered in raindrops, in dark blue-green light" loading="lazy" width="400" height="266">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> Canon EOS 60D, EF-S 55-250mm f/4-5.6 IS STM at 250mm, f/5.6, 1/400s, ISO 6400.</figcaption>
+ </figure>
+
+ <h2>My camera came out in 2010</h2>
+
+ <p>Almost every photo in my gallery was shot on a Canon EOS 60D (though I think a couple linger from my old 350D, and a couple of phone shots are there, too). Canon announced it on 26 August 2010, an 18 megapixel APS-C DSLR with a screen that flips out, and it went on sale in the US at $1,099 for the body, or $1,399 with an 18-135mm kit lens.<sup><a href="#ref-4" class="cite-ref">[4]</a></sup><sup><a href="#ref-5" class="cite-ref">[5]</a></sup> That was a lot of money in 2010. This week the used camera shop MPB lists 60D bodies from $97 to $214.<sup><a href="#ref-6" class="cite-ref">[6]</a></sup></p>
+
+ <p>Canon has replaced it three times since, with the 70D, the 80D and then the 90D in August 2019, and Wikipedia now lists a mirrorless camera, the EOS R10, as the 90D's successor, and that's excluding the myriad of better series out there.<sup><a href="#ref-7" class="cite-ref">[7]</a></sup><sup><a href="#ref-8" class="cite-ref">[8]</a></sup> At my old workplace, I had the opportunity to use a Canon EOS 5D Mark III. Here's a brief comparison:<sup><a href="#ref-7" class="cite-ref">[7]</a></sup><sup><a href="#ref-17" class="cite-ref">[17]</a></sup></p>
+
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/blog/img/inaccessibility/canon-60d.webp" alt="A black Canon EOS 60D with a 15-85mm zoom lens, seen from the front at an angle" loading="lazy" width="600" height="538">
+ <figcaption class="figure-note">EOS 60D. <a href="https://commons.wikimedia.org/wiki/File:Canon_EOS_60D_01.jpg" target="_blank" rel="noopener noreferrer">Maksim Sidorov</a>, CC BY 3.0.</figcaption>
+ </figure>
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/blog/img/inaccessibility/canon-5d-mark-iii.webp" alt="A black Canon EOS 5D Mark III with a large L-series lens, seen from the front at an angle" loading="lazy" width="600" height="538">
+ <figcaption class="figure-note">EOS 5D Mark III. <a href="https://commons.wikimedia.org/wiki/File:Canon_EOS_5D_Mark_III.jpg" target="_blank" rel="noopener noreferrer">decltype</a>, CC BY-SA 3.0.</figcaption>
+ </figure>
+
+ <div style="overflow-x:auto"><table class="kr-table">
+ <thead><tr><th scope="col"><span class="sr-only">Spec</span></th><th scope="col">EOS 60D</th><th scope="col">EOS 5D Mark III</th></tr></thead>
+ <tbody>
+ <tr><th scope="row">Announced</th><td>August 2010</td><td>March 2012</td></tr>
+ <tr><th scope="row">Launch price</th><td>$1,099</td><td>$3,499</td></tr>
+ <tr><th scope="row">Current price (used)</th><td>$97 to $214<sup><a href="#ref-6" class="cite-ref">[6]</a></sup></td><td>$154 to $579<sup><a href="#ref-18" class="cite-ref">[18]</a></sup></td></tr>
+ <tr><th scope="row">Sensor</th><td>18 MP, APS-C</td><td>22.3 MP, full frame</td></tr>
+ <tr><th scope="row">Autofocus points</th><td>9</td><td>61</td></tr>
+ <tr><th scope="row">Burst</th><td>5.3 frames/s</td><td>6 frames/s</td></tr>
+ <tr><th scope="row">ISO (expanded)</th><td>100 to 6400 (12800)</td><td>100 to 25600 (102400)</td></tr>
+ <tr><th scope="row">Screen</th><td>3in, flips out</td><td>3.2in, fixed</td></tr>
+ <tr><th scope="row">Cards</th><td>SD</td><td>CF + SD</td></tr>
+ <tr><th scope="row">Weight</th><td>675 g</td><td>860 g</td></tr>
+ </tbody>
+ </table></div>
+ <p class="kr-muted-note">Prices and weights are for the body alone, without a lens.</p>
+
+ <p>The gallery has ~500 photos in it, about a decade of self-taught landscapes, urban decay and pets, and I'm happy with them. I'm sure that a fancier camera and lens would have improved the shots, sure, but the grass is always greener. The 60D doesn't even have GPS, so I've been putting the <a href="https://www.kenreid.co.uk/blog/putting-my-photos-on-a-map.html">photo map</a> together by hand. It shoots 5.3 frames a second and tops out at ISO 6400 (12800 if you push it), which is plenty for a hill at sunset or a patient dog, and not what I'd take to a football match under floodlights (not that I'd go to a football match, anyhow).<sup><a href="#ref-7" class="cite-ref">[7]</a></sup> Most of a landscape photo is being in the right place when the light is good and pointing the thing in a sensible direction. The lenses I have are nothing fancy. I make use of a kit lens and a cheap telephoto lens I got for around $100. The only thing I need is more time, not gear! </p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/514.webp" alt="A red car parked behind a screen of dark green leaves" loading="lazy" width="400" height="266">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> Canon EOS 60D, EF-S 55-250mm f/4-5.6 IS STM at 55mm, f/4, 1/80s, ISO 800.</figcaption>
+ </figure>
+
+ <h2>The camera you already have</h2>
+
+ <p>Rise Above Research, who somehow came up with a number, estimate that around 1.95 trillion photos will be taken worldwide in 2026, with smartphones accounting for the vast majority.<sup><a href="#ref-9" class="cite-ref">[9]</a></sup></p>
+
+ <p>In 2009 the photographer Chase Jarvis published a book of pictures taken on his iPhone, a visual notebook of a year of his life, and called it <em>The Best Camera Is The One That's With You</em>.<sup><a href="#ref-10" class="cite-ref">[10]</a></sup></p>
+
+ <h2>Editing for nothing</h2>
+
+ <p>Snapseed is Google's photo editor for phones. The App Store listing promises "30+ pro tools and filters" with "no subscriptions, purchases, ads, or watermarks".<sup><a href="#ref-11" class="cite-ref">[11]</a></sup> It edits raw files too: DNG files on Android, and on an iPhone or iPad raw files from a list of cameras that includes the 60D (and my old 350D).<sup><a href="#ref-12" class="cite-ref">[12]</a></sup> Opening a raw file goes straight to the Develop tool, with exposure, shadows, highlights, contrast, structure, temperature and tint.</p>
+
+ <p>On a computer there's darktable, which calls itself "an open source photography workflow application and raw developer", free under the GPL, with builds for Windows, macOS and Linux.<sup><a href="#ref-13" class="cite-ref">[13]</a></sup><sup><a href="#ref-14" class="cite-ref">[14]</a></sup> Its editing is "fully non-destructive", so the original raw file is never changed and the full image is only worked out on export. Its camera support page lists the 60D with white balance presets and a noise profile.<sup><a href="#ref-15" class="cite-ref">[15]</a></sup> RawTherapee is the other big free one, also GPL, also on all three systems.<sup><a href="#ref-16" class="cite-ref">[16]</a></sup></p>
+
+ <p>Sharing photos doesn't have to cost anything either. The full-size files for my gallery are <a href="https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html">hosted for free</a>.</p>
+
+ <h2>If you're starting out</h2>
+
+ <p>This is what I'd tell a friend who wanted to get into photography and thought they couldn't afford it:</p>
+
+ <ul>
+ <li>Use your phone for a month first. Take far too many photos, delete most of them, as is tradition.</li>
+ <li>Put Snapseed on it and edit the ones you keep.</li>
+ <li>If you still want a camera with a viewfinder and lenses that come off, look at used bodies a few generations old, or borrow a friends. Check darktable's camera support page before you buy, so you know the raw files will open.</li>
+
+ </ul>
+
+ <p>If this gets you out with an old camera or your phone, show me what you took in the comments, and tell me what it was shot on.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Should I buy a 60D because you use one?</summary>
+ <p>No. Buy whatever older body you can find cheaply in good condition with a lens you like, and check that your editor opens its raw files first. The 60D is only in this post because it's the one I have.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+ <ol class="references">
+  <li id="ref-1">The Franklin Institute. Kodak Brownie camera. <em>Collections</em> (accessed September 2026). <a href="https://fi.edu/en/science-and-education/collection/kodak-brownie-camera" target="_blank" rel="noopener noreferrer">https://fi.edu/en/science-and-education/collection/kodak-brownie-camera</a></li>
+  <li id="ref-2">$1 in 1900 is worth $39.88 today. <em>CPI Inflation Calculator</em>, Official Data Foundation, based on US Bureau of Labor Statistics data (accessed September 2026). <a href="https://www.officialdata.org/us/inflation/1900?amount=1" target="_blank" rel="noopener noreferrer">https://www.officialdata.org/us/inflation/1900?amount=1</a></li>
+  <li id="ref-3">Herbst, J.-P., &amp; Menze, J. (2021). <em>Gear Acquisition Syndrome: Consumption of instruments and technology in popular music</em>. University of Huddersfield Press. <a href="https://doi.org/10.5920/GearAcquisition.fulltext" target="_blank" rel="noopener noreferrer">https://doi.org/10.5920/GearAcquisition.fulltext</a></li>
+  <li id="ref-4">Canon EOS 60D DSLR announced and previewed. (2010, 26 August). <em>DPReview</em>. <a href="https://www.dpreview.com/articles/1692435631/canoneos60d/" target="_blank" rel="noopener noreferrer">https://www.dpreview.com/articles/1692435631/canoneos60d/</a></li>
+  <li id="ref-5">Miller, R. (2010, 26 August). Canon EOS 60D: 18 megapixels and 1080p video flexes its articulating screen this September. <em>Engadget</em>. <a href="https://www.engadget.com/2010-08-26-canon-eos-60d-18-megapixels-and-1080p-video-flexes-its-articula.html" target="_blank" rel="noopener noreferrer">https://www.engadget.com/2010-08-26-canon-eos-60d-18-megapixels-and-1080p-video-flexes-its-articula.html</a></li>
+  <li id="ref-6">MPB. Used Canon EOS 60D (accessed 25 September 2026). <a href="https://www.mpb.com/en-us/product/canon-eos-60d" target="_blank" rel="noopener noreferrer">https://www.mpb.com/en-us/product/canon-eos-60d</a></li>
+  <li id="ref-7">Canon EOS 60D. <em>Wikipedia</em> (accessed September 2026). <a href="https://en.wikipedia.org/wiki/Canon_EOS_60D" target="_blank" rel="noopener noreferrer">https://en.wikipedia.org/wiki/Canon_EOS_60D</a></li>
+  <li id="ref-8">Canon EOS 90D. <em>Wikipedia</em> (accessed September 2026). <a href="https://en.wikipedia.org/wiki/Canon_EOS_90D" target="_blank" rel="noopener noreferrer">https://en.wikipedia.org/wiki/Canon_EOS_90D</a></li>
+  <li id="ref-9">Rise Above Research. (2026, February). 2026 worldwide image capture forecast: 2025&ndash;2030. <a href="https://riseaboveresearch.com/rar-reports/2026-worldwide-image-capture-forecast-2025-2030/" target="_blank" rel="noopener noreferrer">https://riseaboveresearch.com/rar-reports/2026-worldwide-image-capture-forecast-2025-2030/</a></li>
+  <li id="ref-10">Jarvis, C. (2009). <em>The Best Camera Is The One That's With You: iPhone photography</em>. New Riders. <a href="https://www.peachpit.com/store/best-camera-is-the-one-thats-with-you-iphone-photography-9780321684783" target="_blank" rel="noopener noreferrer">https://www.peachpit.com/store/best-camera-is-the-one-thats-with-you-iphone-photography-9780321684783</a></li>
+  <li id="ref-11">Google LLC. Snapseed. <em>App Store</em> (accessed September 2026). <a href="https://apps.apple.com/us/app/snapseed/id439438619" target="_blank" rel="noopener noreferrer">https://apps.apple.com/us/app/snapseed/id439438619</a></li>
+  <li id="ref-12">Google. Develop: RAW editing. <em>Snapseed Help</em> (accessed September 2026). <a href="https://support.google.com/snapseed/answer/6312515?hl=en" target="_blank" rel="noopener noreferrer">https://support.google.com/snapseed/answer/6312515?hl=en</a></li>
+  <li id="ref-13">darktable. About (accessed September 2026). <a href="https://www.darktable.org/about/" target="_blank" rel="noopener noreferrer">https://www.darktable.org/about/</a></li>
+  <li id="ref-14">darktable. Install (version 5.6.1, accessed September 2026). <a href="https://www.darktable.org/install/" target="_blank" rel="noopener noreferrer">https://www.darktable.org/install/</a></li>
+  <li id="ref-15">darktable. Camera support (accessed September 2026). <a href="https://www.darktable.org/resources/camera-support/" target="_blank" rel="noopener noreferrer">https://www.darktable.org/resources/camera-support/</a></li>
+  <li id="ref-16">RawTherapee (accessed September 2026). <a href="https://www.rawtherapee.com/" target="_blank" rel="noopener noreferrer">https://www.rawtherapee.com/</a></li>
+  <li id="ref-17">Canon EOS 5D Mark III. <em>Wikipedia</em> (accessed September 2026). <a href="https://en.wikipedia.org/wiki/Canon_EOS_5D_Mark_III" target="_blank" rel="noopener noreferrer">https://en.wikipedia.org/wiki/Canon_EOS_5D_Mark_III</a></li>
+  <li id="ref-18">MPB. Used Canon EOS 5D Mark III (accessed 26 September 2026). <a href="https://www.mpb.com/en-us/product/canon-eos-5d-mark-iii" target="_blank" rel="noopener noreferrer">https://www.mpb.com/en-us/product/canon-eos-5d-mark-iii</a></li>
+ </ol>
+
+        
+
+ ]]></content:encoded>
+    </item>
     <item>
       <title>Every Card Has a Sketch</title>
       <link>https://www.kenreid.co.uk/blog/every-card-has-a-sketch.html</link>
@@ -2673,1187 +2816,6 @@ frame.contentWindow.postMessage(
       <pubDate>Wed, 05 Aug 2026 00:00:00 +0000</pubDate>
       <description>An interactive introduction to simulated annealing: watch a ball escape local minima as you control the temperature, then race four algorithms live on the Travelling Salesman Problem in your browser.</description>
       <category>ai</category>
-      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">View it on the site</a> to play with it.</em></p>
- <h1>Simulated Annealing, Live</h1>
- <div class="blog-meta">
- 5 August 2026 &middot;
- <span class="blog-tag">ai</span>
- </div>
-
- 
-
- <p>The star of the show is <strong>simulated annealing</strong>, which I love the metaphor for. When I went to Disney some 12 years ago, I saw a live performance of an artist shaping molten glass into the shape of Mickey Mouse. It's a fascinating art, known as annealing: where you, a blacksmith or glassblower, heat up your material till it's incredibly hot, often a striking red color, then shape it as you please, and cool it strategically. As it cools, it hardens, so you have a more flexible material the hotter it is, and less so the cooler it is. This post shows a metaphor of this in optimization known as Simulated Annealing, it's a short algorithm that solves problems by exploring a search space of a problem (shaping the material that is wet and goopy), then cooling down as better solutions are found, modifying the medium less and less until you have a solution.</p>
-
- <div class="plain-english-box">
- <h2>Quick jargon guide</h2>
- <ul>
-
- <li><strong>Local optimum:</strong> a solution better than all its <em>neighbours</em> but not the best overall. The dip a greedy search falls into and can never leave.</li>
- <li><strong>Simulated annealing (SA):</strong> a search that sometimes accepts <em>worse</em> solutions, with a tolerance ("temperature") that starts high and slowly cools, letting it escape local optima early and commit late.</li>
- <li><strong>Cooling schedule:</strong> the recipe for how fast the temperature drops. Too fast and you're just a hill climber; too slow and you never settle.</li>
- <li><strong>Travelling Salesman Problem (TSP):</strong> given a set of cities, find the shortest round trip visiting each once. The classic hard optimization problem.</li>
- <li><strong>NP-hard:</strong> a class of problems where no known method finds guaranteed-best answers efficiently as size grows, so practical work means excellent-not-certified answers.</li>
- <li><strong>2-opt move:</strong> a small edit to a tour: pick two of its edges, reconnect them the other way round. The basic step all the movers in the race use.</li>
- <li><strong>Evaluation:</strong> one call to the scoring function ("how long is this tour?"). The fair currency for comparing search algorithms, everyone gets the same number of questions.</li>
- <li><strong>Metaheuristic:</strong> the umbrella term for general-purpose search strategies like annealing, hill climbing, and genetic algorithms that make few assumptions about the problem.</li>
- </ul>
- </div>
-
- <h2>The problem: greed gets stuck</h2>
-
- <p>Imagine a marble rolling on a bumpy curve, trying to find the lowest point. The obvious strategy is "only ever move downhill". This is the spirit of <a href="https://www.kenreid.co.uk/blog/evolution-live.html">gradient descent and hill climbing</a>, but the first dip the marble lands in, it stays in. Nearby there may be a valley ten times deeper, but it will never see it, because getting there requires briefly going <em>up</em>.</p>
-
- <p>Metallurgists solved this problem for atoms centuries before computer scientists had it: cool molten metal too fast and its atoms freeze wherever they happen to be, full of internal stress: a brittle mess stuck in a bad arrangement. But cool it <em>slowly</em>, annealing it, and the atoms, still hot enough to jiggle out of bad positions, gradually settle into a low-energy crystal. Randomness, early on, is what lets the system escape bad arrangements; the slow cooling is what lets it eventually commit to a good one.</p>
-
- <p>In 1983, Kirkpatrick, Gelatt and Vecchi published the algorithmic version in <em>Science</em><sup><a href="#ref-1" class="cite-ref">[1]</a></sup> (Černý found it independently<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>), building on a Monte Carlo method physicists had used since 1953.<sup><a href="#ref-3" class="cite-ref">[3]</a></sup> The recipe: search like a hill climber, but when a proposed move is <em>worse</em>, don't always refuse. Accept it with probability <code>P = exp(&minus;&Delta;/T)</code>, where &Delta; is how much worse and <code>T</code> is a temperature you slowly lower. Hot: almost anything goes, the search bounces freely across the landscape. Cold: only improvements survive, and the algorithm hardens into a plain hill climber.</p>
-
- <h2>Play with it: the marble and the thermostat</h2>
-
- <p>Below are two marbles on the same bumpy curve, started at the same spot. The <span style="white-space:nowrap;"><span class="kr-swatch sa-swatch-2"></span> green one</span> is a pure hill climber: it only accepts downhill moves. The <span style="white-space:nowrap;"><span class="kr-swatch sa-swatch-1"></span> blue one</span> anneals: you hold its thermostat. Run it a few times. Watch the greedy marble find the nearest dip and retire there, while the hot marble rattles across the whole curve; then drag the temperature down (or let auto-cool do it) and watch the blue marble crystallise, usually somewhere much deeper. The small dots mark the best point each marble has ever found. The strip under the curve records your run as you go: the temperature you are holding in amber and, in blue, the fraction of uphill moves the annealer is accepting, which is <code>P = exp(&minus;&Delta;/T)</code> made visible.</p>
-
- 
-
- <p>The blue marble isn't smarter, it's just <em>temporarily tolerant of bad moves</em>, on a schedule. And that single tweak converts the world's dumbest algorithm into one that, given a sensible cooling schedule, provably converges toward global optima and, more importantly, finds excellent solutions to real industrial problems in practice.</p>
-
- <h2>The main event: four algorithms, one map</h2>
-
- <p><strong>Travelling Salesman Problem</strong>: given a set of cities, find the shortest round trip that visits each once. It's the classic NP-hard problem, the number of possible tours explodes factorially (30 cities is already ~10<sup>30</sup> tours), and it's the kind of discrete, gradient-free terrain I wrote about in <a href="https://www.kenreid.co.uk/blog/evolution-live.html">the previous post</a>.</p>
-
- <p>The racers, each in its lane colour:</p>
-
- <ul>
- <li><span class="kr-swatch sa-swatch-1"></span> <strong>Simulated annealing</strong>: as above; proposes 2-opt moves (pick two edges of the tour, reconnect them the other way<sup><a href="#ref-4" class="cite-ref">[4]</a></sup>), accepting bad ones on the cooling schedule.</li>
- <li><span class="kr-swatch sa-swatch-2"></span> <strong>Hill climber</strong>, same 2-opt moves, zero tolerance: improvements only.</li>
- <li><span class="kr-swatch sa-swatch-3"></span> <strong>Genetic algorithm</strong>: a population of 40 tours; tournament selection, order crossover, swap mutation, elitism. The napkin algorithm from my <a href="https://www.kenreid.co.uk/blog/evolution-live.html">GA post</a>.</li>
- <li><span class="kr-swatch sa-swatch-4"></span> <strong>Random search</strong>, shuffles a fresh tour every try and keeps the best. The floor. Somebody has to be it.</li>
- </ul>
-
- <p>The race is scored in <strong>evaluations</strong>, not iterations. Every time any algorithm asks "how long is this tour?", its meter ticks. The GA evaluates 40 tours per generation, so it gets fewer generations; the annealer evaluates one tour per step, so it gets many steps.</p>
-
- 
-
- <h2>What to watch for</h2>
-
- <p>Every race is different (the map is random, and so are the algorithms), but a few patterns recur:</p>
-
- <p><strong>The hill climber sprints, then flatlines.</strong> Early on, greed looks brilliant: almost every 2-opt move on a random tour is an improvement, so the green line dives. Then it hits a tour where no single 2-opt move helps, a local optimum, and the line goes horizontal forever. Sometimes it gets lucky and the flatline is a good tour.</p>
-
- <p><strong>The annealer loses the early race, but that's by design.</strong> While hot, it accepts terrible moves, and its curve dawdles above the hill climber's. It's <em>supposed</em> to look bad early. It's spending the early budget on exploration, when the cooled annealer keeps improving long after the hill climber has frozen, and the blue line crosses below the green one. If you set cooling speed too high in the playground, you can watch that advantage die: quench it, and it becomes a hill climber with a lot more code! The telemetry strip under the chart shows it happening: while the amber temperature line is up the blue acceptance trace rides high too, and the moment amber flattens near zero, blue dies with it, leaving the annealer greedy from then on.</p>
-
- <p><strong>The GA is the tortoise.</strong> Forty tours sharing a budget means it always looks slow per-evaluation, and on a problem this small, 2-opt moves are so effective that the population approach rarely wins the sprint. But watch how <em>steadily</em> it improves, and how rarely it gets truly stuck: the population is insurance against the trap that eats the hill climber. On bigger, nastier, more constrained problems, that insurance is essential, and that is where <a href="https://www.kenreid.co.uk/blog/evolutionary-computation-identity-crisis.html">my own field</a> lives.</p>
-
- <p><strong>Random search is bad.</strong> It might find a great solution but it doesn't follow any strategy to improve upon. Every (real) metaheuristic beats random.</p>
-
- <h2>Why Simulated Annealing is still relevant</h2>
-
- <p>Simulated annealing is over forty years old, has no learned components, no data, no gradients, and can be setup in a couple of minutes. It is also, right now, in production: routing chips, scheduling factories and hospitals, packing containers, planning telescope observations. Its longevity comes from the same property that made the marble demo work: it makes almost no assumptions about the problem. Anything you can score and perturb, you can anneal, which in practice means nearly everything with discrete parts and hard constraints, the terrain where gradient methods can't get a foothold. It requires no training data or understanding of a problem, just some means to measure "goodness".</p>
-
- <p>I also like the general philosophy of it: explore wildly at the beginning, become pickier over time, and always remember the most important solution found. It's one of the best examples of "exploration vs. exploitation", a concept applicable to all optimization problems, and to life in general: explore while you can and make use of your search to find the best for you. Settling too early or too late is unwise, and always be willing to consider a better option. </p>
-
- <div class="downloads-block">
-   <p class="downloads-title">Download the standalone demos</p>
-   <div class="download-links">
-     <a class="download-link" href="https://www.kenreid.co.uk/blog/downloads/simulated-annealing-live-demo.html" download>simulated-annealing-live-demo.html</a>
-   </div>
- </div>
-
- <details class="code-example"><summary>The algorithms (JavaScript)</summary>
-<pre><code class="language-javascript">  /* ============================================================
-  Simulated Annealing, Live, all demo code for this post.
-  No dependencies. Everything renders to &lt;canvas&gt; and reads its
-  colours from the CSS custom properties on.kr-viz, so the
-  site's light/dark theme toggle restyles the demos live.
-  ============================================================ */
-  (function() {
-    'use strict';
-
-    function mulberry32(seed) {
-      var a = seed &gt;&gt;&gt; 0;
-      return function() {
-        a |= 0;
-        a = (a + 0x6D2B79F5) | 0;
-        var t = Math.imul(a ^ (a &gt;&gt;&gt; 15), 1 | a);
-        t = (t + Math.imul(t ^ (t &gt;&gt;&gt; 7), 61 | t)) ^ t;
-        return ((t ^ (t &gt;&gt;&gt; 14)) &gt;&gt;&gt; 0) / 4294967296;
-      };
-    }
-
-    function vizColors(el) {
-      var cs = getComputedStyle(el);
-
-      function v(name) {
-        return cs.getPropertyValue(name).trim();
-      }
-      return {
-        series: [v('--viz-s1'), v('--viz-s2'), v('--viz-s3'), v('--viz-s4')],
-        ink: v('--viz-ink'),
-        muted: v('--viz-muted'),
-        grid: v('--viz-grid'),
-        surface: v('--viz-surface')
-      };
-    }
-
-    function fitCanvas(cv) {
-      var dpr = window.devicePixelRatio || 1;
-      // the height attribute is the desktop height; on narrow screens clamp tall
-      // canvases to a sane aspect (never below 180px) while short telemetry
-      // strips keep their declared height
-      var w = cv.clientWidth;
-      var h = Math.min(parseInt(cv.getAttribute('height'), 10), Math.max(180, Math.round(w * 0.75)));
-      cv.style.height = h + 'px';
-      cv.width = Math.round(w * dpr);
-      cv.height = Math.round(h * dpr);
-      var ctx = cv.getContext('2d');
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      return ctx;
-    }
-
-    /* ============================================================
-    Widget A: the marble and the thermostat
-    ============================================================ */
-    (function marbleDemo() {
-      var wrap = document.getElementById('curve-demo');
-      if (!wrap) return;
-      var cv = document.getElementById('curveCanvas');
-      var runBtn = document.getElementById('curveRun');
-      var resetBtn = document.getElementById('curveReset');
-      var tempSlider = document.getElementById('curveTemp');
-      var tempVal = document.getElementById('curveTempVal');
-      var autoCool = document.getElementById('curveAuto');
-      var strip = document.getElementById('curveStrip');
-      var ctx = fitCanvas(cv);
-      var stripCtx = fitCanvas(strip);
-      var STRIP_N = 480; // rolling telemetry window, ~8s of frames
-      var running = false,
-        rafId = null;
-      var rng = mulberry32(12345);
-
-      function f(x) {
-        return 0.32 * Math.sin(x * 9) +
-          0.18 * Math.sin(x * 23 + 1.7) +
-          0.10 * Math.sin(x * 41 + 0.4) +
-          1.6 * (x - 0.72) * (x - 0.72);
-      }
-      var F_MIN = -0.55,
-        F_MAX = 1.15; // plotting range
-
-      var T_MAX = 0.4;
-      var state;
-
-      function reset() {
-        var x0 = 0.05 + rng() * 0.9;
-        state = {
-          hc: {
-            x: x0,
-            best: x0,
-            bestF: f(x0)
-          },
-          sa: {
-            x: x0,
-            best: x0,
-            bestF: f(x0)
-          },
-          T: (tempSlider.value / 100) * T_MAX,
-          hist: [],
-          accEma: null,
-          dEma: null
-        };
-        tempSlider.value = Math.round(state.T / T_MAX * 100);
-        draw();
-      }
-
-      function px(x, W) {
-        return 14 + x * (W - 28);
-      }
-
-      function py(y, H) {
-        return 16 + (1 - (y - F_MIN) / (F_MAX - F_MIN)) * (H - 44);
-      }
-
-      function step() {
-        var SIGMA = 0.02,
-          STEPS = 26;
-        var upProp = 0,
-          upAcc = 0,
-          upSum = 0;
-        for (var i = 0; i &lt; STEPS; i++) {
-          // hill climber
-          var nx = Math.min(1, Math.max(0, state.hc.x + (rng() * 2 - 1) * SIGMA));
-          if (f(nx) &lt;= f(state.hc.x)) state.hc.x = nx;
-          if (f(state.hc.x) &lt; state.hc.bestF) {
-            state.hc.bestF = f(state.hc.x);
-            state.hc.best = state.hc.x;
-          }
-          // annealer (uphill proposals are tallied for the telemetry strip)
-          var sx = Math.min(1, Math.max(0, state.sa.x + (rng() * 2 - 1) * SIGMA));
-          var d = f(sx) - f(state.sa.x);
-          if (d &lt;= 0) {
-            state.sa.x = sx;
-          } else {
-            upProp++;
-            upSum += d;
-            if (state.T &gt; 1e-6 &amp;&amp; rng() &lt; Math.exp(-d / state.T)) {
-              state.sa.x = sx;
-              upAcc++;
-            }
-          }
-          if (f(state.sa.x) &lt; state.sa.bestF) {
-            state.sa.bestF = f(state.sa.x);
-            state.sa.best = state.sa.x;
-          }
-          if (autoCool.checked) {
-            state.T *= 0.99965;
-            tempSlider.value = Math.round(state.T / T_MAX * 100);
-          }
-        }
-        // smooth the tallies into the telemetry (EMA so the traces don't jitter)
-        if (upProp) {
-          var K = 0.15;
-          var rate = upAcc / upProp;
-          state.accEma = state.accEma === null ? rate : state.accEma + K * (rate - state.accEma);
-          var dbar = upSum / upProp;
-          state.dEma = state.dEma === null ? dbar : state.dEma + K * (dbar - state.dEma);
-        }
-        state.hist.push({
-          t: state.T / T_MAX,
-          a: state.accEma === null ? 1 : state.accEma
-        });
-        if (state.hist.length &gt; STRIP_N) state.hist.shift();
-      }
-
-      function draw() {
-        var c = vizColors(wrap);
-        var W = cv.clientWidth,
-          H = cv.clientHeight;
-        ctx.clearRect(0, 0, W, H);
-        // curve
-        ctx.beginPath();
-        for (var i = 0; i &lt;= 300; i++) {
-          var x = i / 300,
-            X = px(x, W),
-            Y = py(f(x), H);
-          if (i === 0) ctx.moveTo(X, Y);
-          else ctx.lineTo(X, Y);
-        }
-        ctx.strokeStyle = c.muted;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        // best markers
-        [
-          ['hc', c.series[1]],
-          ['sa', c.series[0]]
-        ].forEach(function(pair) {
-          var a = state[pair[0]];
-          ctx.beginPath();
-          ctx.arc(px(a.best, W), py(f(a.best), H), 3.5, 0, Math.PI * 2);
-          ctx.fillStyle = pair[1];
-          ctx.globalAlpha = 0.45;
-          ctx.fill();
-          ctx.globalAlpha = 1;
-        });
-        // marbles (annealer drawn second, with a surface ring so overlaps stay legible)
-        [
-          ['hc', c.series[1]],
-          ['sa', c.series[0]]
-        ].forEach(function(pair) {
-          var a = state[pair[0]];
-          ctx.beginPath();
-          ctx.arc(px(a.x, W), py(f(a.x), H) - 8, 8, 0, Math.PI * 2);
-          ctx.fillStyle = pair[1];
-          ctx.fill();
-          ctx.lineWidth = 2;
-          ctx.strokeStyle = c.surface;
-          ctx.stroke();
-        });
-        // readouts (text in ink, swatch carries identity)
-        ctx.font = '12px Poppins, sans-serif';
-        ctx.fillStyle = c.series[0];
-        ctx.fillRect(14, 10, 9, 9);
-        ctx.fillStyle = c.ink;
-        ctx.fillText('annealer best: ' + state.sa.bestF.toFixed(3), 28, 19);
-        ctx.fillStyle = c.series[1];
-        ctx.fillRect(14, 26, 9, 9);
-        ctx.fillStyle = c.ink;
-        ctx.fillText('greedy best: ' + state.hc.bestF.toFixed(3), 28, 35);
-        tempVal.textContent = 'T = ' + state.T.toFixed(3);
-        drawStrip();
-      }
-
-      // the flight recorder: temperature (amber) and share of uphill proposals
-      // accepted (blue) over a rolling window, both on one 0-100% scale
-      function drawStrip() {
-        var c = vizColors(wrap);
-        var W = strip.clientWidth,
-          H = strip.clientHeight;
-        var padL = 14,
-          padR = 78,
-          padT = 10,
-          padB = 8;
-        stripCtx.clearRect(0, 0, W, H);
-
-        function X(i) {
-          return padL + (i / (STRIP_N - 1)) * (W - padL - padR);
-        }
-
-        function Y(v) {
-          return padT + (1 - v) * (H - padT - padB);
-        }
-        stripCtx.font = '11px Poppins, sans-serif';
-        [0, 0.5, 1].forEach(function(v) {
-          stripCtx.strokeStyle = c.grid;
-          stripCtx.lineWidth = 1;
-          stripCtx.beginPath();
-          stripCtx.moveTo(padL, Y(v));
-          stripCtx.lineTo(W - padR, Y(v));
-          stripCtx.stroke();
-        });
-        var start = STRIP_N - state.hist.length;
-        [
-          ['t', c.series[2]],
-          ['a', c.series[0]]
-        ].forEach(function(pair) {
-          if (!state.hist.length) return;
-          stripCtx.beginPath();
-          state.hist.forEach(function(h, i) {
-            var x = X(start + i),
-              y = Y(h[pair[0]]);
-            if (i === 0) stripCtx.moveTo(x, y);
-            else stripCtx.lineTo(x, y);
-          });
-          stripCtx.strokeStyle = pair[1];
-          stripCtx.lineWidth = 2;
-          stripCtx.stroke();
-        });
-        // live end labels (ink text, coloured dot), nudged apart if they collide
-        var labels = [{
-          y: Y(state.T / T_MAX),
-          color: c.series[2],
-          text: 'T ' + Math.round(state.T / T_MAX * 100) + '%'
-        }];
-        if (state.accEma !== null) labels.push({
-          y: Y(state.accEma),
-          color: c.series[0],
-          text: 'uphill ' + Math.round(state.accEma * 100) + '%'
-        });
-        labels.sort(function(p, q) {
-          return p.y - q.y;
-        });
-        labels.forEach(function(l) {
-          l.y = Math.max(padT + 5, Math.min(H - padB - 3, l.y));
-        });
-        if (labels.length === 2 &amp;&amp; labels[1].y - labels[0].y &lt; 13) labels[0].y = labels[1].y - 13;
-        labels.forEach(function(l) {
-          var x = W - padR + 6;
-          stripCtx.beginPath();
-          stripCtx.arc(x + 4, l.y, 3.5, 0, Math.PI * 2);
-          stripCtx.fillStyle = l.color;
-          stripCtx.fill();
-          stripCtx.fillStyle = c.ink;
-          stripCtx.fillText(l.text, x + 11, l.y + 4);
-        });
-        // the Metropolis rule with live numbers, for a typical uphill step
-        // (surface-coloured halo keeps it legible when the traces run hot)
-        if (state.dEma !== null) {
-          var p = state.T &gt; 1e-6 ? Math.exp(-state.dEma / state.T) : 0;
-          var txt = 'typical uphill Δ ' + state.dEma.toFixed(3) +
-            ' · P(accept) ' + Math.round(p * 100) + '%';
-          stripCtx.strokeStyle = c.surface;
-          stripCtx.lineWidth = 3;
-          stripCtx.strokeText(txt, padL + 4, padT + 12);
-          stripCtx.fillStyle = c.muted;
-          stripCtx.fillText(txt, padL + 4, padT + 12);
-        }
-      }
-
-      function loop() {
-        if (!running) return;
-        state.T = (tempSlider.value / 100) * T_MAX;
-        step();
-        draw();
-        rafId = requestAnimationFrame(loop);
-      }
-
-      runBtn.addEventListener('click', function() {
-        running = !running;
-        runBtn.textContent = running ? 'Pause' : 'Run';
-        if (running) loop();
-        else cancelAnimationFrame(rafId);
-      });
-      resetBtn.addEventListener('click', function() {
-        reset();
-      });
-      tempSlider.addEventListener('input', function() {
-        state.T = (tempSlider.value / 100) * T_MAX;
-        if (!running) draw();
-      });
-      window.addEventListener('resize', function() {
-        ctx = fitCanvas(cv);
-        stripCtx = fitCanvas(strip);
-        draw();
-      });
-      new MutationObserver(function() {
-          if (!running) draw();
-        })
-        .observe(document.documentElement, {
-          attributes: true,
-          attributeFilter: ['data-theme']
-        });
-      reset();
-    })();
-
-    /* ============================================================
-    Widget B: the four-way TSP race
-    ============================================================ */
-    (function raceDemo() {
-      var wrap = document.getElementById('race-demo');
-      if (!wrap) return;
-      var NAMES = ['Simulated annealing', 'Hill climber', 'Genetic algorithm', 'Random search'];
-      var SHORT = ['SA', 'Hill', 'GA', 'Rand'];
-      var MAX_EVALS = 200000;
-      var runBtn = document.getElementById('raceRun');
-      var resetBtn = document.getElementById('raceReset');
-      var speedSlider = document.getElementById('raceSpeed');
-      var statusEl = document.getElementById('raceStatus');
-      var tourCanvases = Array.prototype.slice.call(wrap.querySelectorAll('.tourCanvas'));
-      var scoreEls = Array.prototype.slice.call(wrap.querySelectorAll('.sa-score'));
-      var chartCv = document.getElementById('raceChart');
-      var stripCv = document.getElementById('raceStrip');
-      var tooltip = document.getElementById('raceTooltip');
-      var tableBody = document.getElementById('raceTable');
-      var pgCities = document.getElementById('pgCities'),
-        pgCitiesVal = document.getElementById('pgCitiesVal');
-      var pgCool = document.getElementById('pgCool'),
-        pgCoolVal = document.getElementById('pgCoolVal');
-      var pgMut = document.getElementById('pgMut'),
-        pgMutVal = document.getElementById('pgMutVal');
-
-      var tourCtx = tourCanvases.map(fitCanvas);
-      var chartCtx = fitCanvas(chartCv);
-      var stripCtx = fitCanvas(stripCv);
-      var seed = 20260706,
-        rng = mulberry32(seed);
-      var cities = [],
-        algs = [],
-        running = false,
-        rafId = null,
-        finished = false;
-
-      function tourLen(t) {
-        var L = 0;
-        for (var i = 0; i &lt; t.length; i++) {
-          var a = cities[t[i]],
-            b = cities[t[(i + 1) % t.length]];
-          L += Math.hypot(a[0] - b[0], a[1] - b[1]);
-        }
-        return L;
-      }
-
-      function randTour(r) {
-        var t = [];
-        for (var i = 0; i &lt; cities.length; i++) t.push(i);
-        for (var j = t.length - 1; j &gt; 0; j--) {
-          var k = Math.floor(r() * (j + 1)),
-            tmp = t[j];
-          t[j] = t[k];
-          t[k] = tmp;
-        }
-        return t;
-      }
-
-      function twoOpt(t, r) {
-        var n = t.length;
-        var i = 1 + Math.floor(r() * (n - 2));
-        var j = i + 1 + Math.floor(r() * (n - i - 1));
-        var nt = t.slice(0, i).concat(t.slice(i, j + 1).reverse(), t.slice(j + 1));
-        return nt;
-      }
-
-      function makeAlgs() {
-        var r1 = mulberry32(seed + 1),
-          r2 = mulberry32(seed + 2),
-          r3 = mulberry32(seed + 3),
-          r4 = mulberry32(seed + 4);
-        var start = randTour(mulberry32(seed + 9));
-        var startLen = tourLen(start);
-        var coolSpeed = parseInt(pgCool.value, 10); // decay exponent over full budget
-        var mutRate = parseInt(pgMut.value, 10) / 100; // per-child swap probability
-        var T0 = 2 * startLen / cities.length;
-
-        // Each algorithm: { evals, best, bestLen, hist:[{e,len}], step(budget) }
-        function record(a) {
-          a.hist.push({
-            e: a.evals,
-            len: a.bestLen
-          });
-        }
-
-        var sa = {
-          evals: 0,
-          cur: start.slice(),
-          curLen: startLen,
-          best: start.slice(),
-          bestLen: startLen,
-          hist: [],
-          pstrip: [],
-          upP: 0,
-          upA: 0,
-          tempAt: function(e) {
-            // deterministic schedule: T as a fraction of T0 after e evaluations
-            return Math.exp(-coolSpeed * e / MAX_EVALS);
-          },
-          rng: r1,
-          step: function(budget) {
-            for (var i = 0; i &lt; budget &amp;&amp; this.evals &lt; MAX_EVALS; i++) {
-              var cand = twoOpt(this.cur, this.rng);
-              var len = tourLen(cand);
-              this.evals++;
-              var T = T0 * this.tempAt(this.evals);
-              var d = len - this.curLen;
-              if (d &lt;= 0) {
-                this.cur = cand;
-                this.curLen = len;
-              } else {
-                this.upP++;
-                if (T &gt; 1e-9 &amp;&amp; this.rng() &lt; Math.exp(-d / T)) {
-                  this.cur = cand;
-                  this.curLen = len;
-                  this.upA++;
-                }
-              }
-              if (len &lt; this.bestLen) {
-                this.best = cand;
-                this.bestLen = len;
-              }
-            }
-          }
-        };
-        var hc = {
-          evals: 0,
-          cur: start.slice(),
-          curLen: startLen,
-          best: start.slice(),
-          bestLen: startLen,
-          hist: [],
-          rng: r2,
-          step: function(budget) {
-            for (var i = 0; i &lt; budget &amp;&amp; this.evals &lt; MAX_EVALS; i++) {
-              var cand = twoOpt(this.cur, this.rng);
-              var len = tourLen(cand);
-              this.evals++;
-              if (len &lt;= this.curLen) {
-                this.cur = cand;
-                this.curLen = len;
-              }
-              if (len &lt; this.bestLen) {
-                this.best = cand;
-                this.bestLen = len;
-              }
-            }
-          }
-        };
-        var ga = (function() {
-          var POP = 40,
-            ELITE = 2,
-            TOUR = 3;
-          var pop = [],
-            fit = [];
-          for (var i = 0; i &lt; POP; i++) pop.push(randTour(r3));
-          var g = {
-            evals: 0,
-            best: null,
-            bestLen: Infinity,
-            hist: [],
-            rng: r3,
-            pending: 0
-          };
-
-          function evalPop() {
-            fit = pop.map(function(t) {
-              g.evals++;
-              var L = tourLen(t);
-              if (L &lt; g.bestLen) {
-                g.bestLen = L;
-                g.best = t.slice();
-              }
-              return L;
-            });
-          }
-          evalPop();
-
-          function pick() {
-            var bi = -1,
-              bf = Infinity;
-            for (var k = 0; k &lt; TOUR; k++) {
-              var c = Math.floor(g.rng() * POP);
-              if (fit[c] &lt; bf) {
-                bf = fit[c];
-                bi = c;
-              }
-            }
-            return pop[bi];
-          }
-
-          function ox(p1, p2) {
-            var n = p1.length,
-              i = Math.floor(g.rng() * n),
-              j = Math.floor(g.rng() * n);
-            if (i &gt; j) {
-              var t = i;
-              i = j;
-              j = t;
-            }
-            var child = new Array(n),
-              used = {};
-            for (var k = i; k &lt;= j; k++) {
-              child[k] = p1[k];
-              used[p1[k]] = true;
-            }
-            var pos = (j + 1) % n;
-            for (var m = 0; m &lt; n; m++) {
-              var gene = p2[(j + 1 + m) % n];
-              if (!used[gene]) {
-                child[pos] = gene;
-                pos = (pos + 1) % n;
-              }
-            }
-            return child;
-          }
-          g.step = function(budget) {
-            this.pending += budget;
-            while (this.pending &gt;= POP &amp;&amp; this.evals &lt; MAX_EVALS) {
-              var next = [];
-              // elitism: carry the best tours forward untouched
-              var order = fit.map(function(f, idx) {
-                return [f, idx];
-              }).sort(function(a, b) {
-                return a[0] - b[0];
-              });
-              for (var e = 0; e &lt; ELITE; e++) next.push(pop[order[e][1]].slice());
-              while (next.length &lt; POP) {
-                var child = ox(pick(), pick());
-                if (g.rng() &lt; mutRate) {
-                  var a = Math.floor(g.rng() * child.length),
-                    b = Math.floor(g.rng() * child.length);
-                  var tmp = child[a];
-                  child[a] = child[b];
-                  child[b] = tmp;
-                }
-                next.push(child);
-              }
-              pop = next;
-              evalPop();
-              this.pending -= POP;
-            }
-          };
-          return g;
-        })();
-        var rs = {
-          evals: 0,
-          best: start.slice(),
-          bestLen: startLen,
-          hist: [],
-          rng: r4,
-          step: function(budget) {
-            for (var i = 0; i &lt; budget &amp;&amp; this.evals &lt; MAX_EVALS; i++) {
-              var cand = randTour(this.rng);
-              var len = tourLen(cand);
-              this.evals++;
-              if (len &lt; this.bestLen) {
-                this.best = cand;
-                this.bestLen = len;
-              }
-            }
-          }
-        };
-        [sa, hc, ga, rs].forEach(record);
-        return [sa, hc, ga, rs];
-      }
-
-      function newCities(n) {
-        rng = mulberry32(seed);
-        cities = [];
-        for (var i = 0; i &lt; n; i++) cities.push([0.06 + rng() * 0.88, 0.08 + rng() * 0.84]);
-      }
-
-      function resetRace(keepCities) {
-        running = false;
-        finished = false;
-        cancelAnimationFrame(rafId);
-        runBtn.textContent = 'Start race';
-        if (!keepCities) newCities(parseInt(pgCities.value, 10));
-        algs = makeAlgs();
-        statusEl.textContent = 'Press start, or click any map to add a city.';
-        drawAll();
-      }
-
-      function drawTour(idx) {
-        var c = vizColors(wrap);
-        var ctx = tourCtx[idx],
-          cv = tourCanvases[idx];
-        var W = cv.clientWidth,
-          H = cv.clientHeight;
-        ctx.clearRect(0, 0, W, H);
-        ctx.strokeStyle = c.grid;
-        ctx.strokeRect(0.5, 0.5, W - 1, H - 1);
-        var a = algs[idx];
-        // tour path
-        ctx.beginPath();
-        for (var i = 0; i &lt;= a.best.length; i++) {
-          var p = cities[a.best[i % a.best.length]];
-          var X = p[0] * W,
-            Y = p[1] * H;
-          if (i === 0) ctx.moveTo(X, Y);
-          else ctx.lineTo(X, Y);
-        }
-        ctx.strokeStyle = c.series[idx];
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        // cities
-        for (var j = 0; j &lt; cities.length; j++) {
-          ctx.beginPath();
-          ctx.arc(cities[j][0] * W, cities[j][1] * H, 3, 0, Math.PI * 2);
-          ctx.fillStyle = c.ink;
-          ctx.fill();
-        }
-        scoreEls[idx].textContent = a.bestLen.toFixed(2);
-      }
-
-      function drawChart() {
-        var c = vizColors(wrap);
-        var W = chartCv.clientWidth,
-          H = chartCv.clientHeight;
-        var ctx = chartCtx;
-        var padL = 44,
-          padR = 70,
-          padT = 12,
-          padB = 26;
-        ctx.clearRect(0, 0, W, H);
-        var maxLen = 0,
-          minLen = Infinity;
-        algs.forEach(function(a) {
-          a.hist.forEach(function(h) {
-            if (h.len &gt; maxLen) maxLen = h.len;
-            if (h.len &lt; minLen) minLen = h.len;
-          });
-        });
-        if (!isFinite(minLen)) return;
-        var lo = minLen * 0.95,
-          hi = maxLen * 1.02;
-
-        function X(e) {
-          return padL + (e / MAX_EVALS) * (W - padL - padR);
-        }
-
-        function Y(v) {
-          return padT + (1 - (v - lo) / (hi - lo)) * (H - padT - padB);
-        }
-        // grid + y ticks
-        ctx.font = '11px Poppins, sans-serif';
-        for (var g = 0; g &lt;= 4; g++) {
-          var v = lo + (g / 4) * (hi - lo),
-            y = Y(v);
-          ctx.strokeStyle = c.grid;
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(padL, y);
-          ctx.lineTo(W - padR, y);
-          ctx.stroke();
-          ctx.fillStyle = c.muted;
-          ctx.textAlign = 'right';
-          ctx.fillText(v.toFixed(1), padL - 6, y + 4);
-        }
-        // x ticks ("evals" suffix on the last tick names the axis)
-        ctx.textAlign = 'center';
-        for (var t = 0; t &lt;= 4; t++) {
-          var e = (t / 4) * MAX_EVALS;
-          ctx.fillStyle = c.muted;
-          ctx.fillText((e / 1000) + 'k' + (t === 4 ? ' evals' : ''), X(e), H - 8);
-        }
-        ctx.textAlign = 'left';
-        // series (best-so-far is a step function; draw as steps)
-        algs.forEach(function(a, i) {
-          ctx.beginPath();
-          var prevY = null;
-          a.hist.forEach(function(h, k) {
-            var x = X(h.e),
-              y = Y(h.len);
-            if (k === 0) ctx.moveTo(x, y);
-            else {
-              ctx.lineTo(x, prevY);
-              ctx.lineTo(x, y);
-            }
-            prevY = y;
-          });
-          // extend to current eval count
-          ctx.lineTo(X(a.evals), prevY);
-          ctx.strokeStyle = c.series[i];
-          ctx.lineWidth = 2;
-          ctx.stroke();
-        });
-        // direct labels at line ends (ink text + colored dot), collision-nudged
-        var ends = algs.map(function(a, i) {
-            return {
-              i: i,
-              y: Y(a.bestLen),
-              len: a.bestLen
-            };
-          })
-          .sort(function(p, q) {
-            return p.y - q.y;
-          });
-        var lastY = -Infinity;
-        ends.forEach(function(e) {
-          lastY = e.y = Math.max(e.y, lastY + 13);
-        });
-        var overflow = lastY - (H - padB - 4);
-        if (overflow &gt; 0) ends.forEach(function(e) {
-          e.y -= overflow;
-        });
-        ends.forEach(function(e) {
-          var y = e.y;
-          var x = W - padR + 6;
-          ctx.beginPath();
-          ctx.arc(x + 4, y, 3.5, 0, Math.PI * 2);
-          ctx.fillStyle = c.series[e.i];
-          ctx.fill();
-          ctx.fillStyle = c.ink;
-          ctx.fillText(SHORT[e.i], x + 11, y + 4);
-        });
-      }
-
-      // the annealer's telemetry, sharing the race chart's x-axis: planned
-      // cooling schedule (faint amber), temperature spent so far (solid amber)
-      // and observed share of uphill moves accepted (blue), all on 0-100%
-      function drawStrip() {
-        var c = vizColors(wrap);
-        var W = stripCv.clientWidth,
-          H = stripCv.clientHeight;
-        var ctx = stripCtx;
-        var padL = 44,
-          padR = 70,
-          padT = 10,
-          padB = 10;
-        ctx.clearRect(0, 0, W, H);
-        var sa = algs[0];
-
-        function X(e) {
-          return padL + (e / MAX_EVALS) * (W - padL - padR);
-        }
-
-        function Y(v) {
-          return padT + (1 - v) * (H - padT - padB);
-        }
-        ctx.font = '11px Poppins, sans-serif';
-        [0, 0.5, 1].forEach(function(v) {
-          ctx.strokeStyle = c.grid;
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(padL, Y(v));
-          ctx.lineTo(W - padR, Y(v));
-          ctx.stroke();
-          ctx.fillStyle = c.muted;
-          ctx.textAlign = 'right';
-          ctx.fillText(Math.round(v * 100) + '%', padL - 6, Y(v) + 4);
-        });
-        ctx.textAlign = 'left';
-        // planned cooling schedule, faint, across the whole budget
-        ctx.beginPath();
-        for (var i = 0; i &lt;= 120; i++) {
-          var e = (i / 120) * MAX_EVALS;
-          if (i === 0) ctx.moveTo(X(e), Y(sa.tempAt(e)));
-          else ctx.lineTo(X(e), Y(sa.tempAt(e)));
-        }
-        ctx.strokeStyle = c.series[2];
-        ctx.globalAlpha = 0.3;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        ctx.globalAlpha = 1;
-        // temperature actually spent, solid, up to the current evaluation
-        if (sa.evals &gt; 0) {
-          ctx.beginPath();
-          var segs = Math.max(2, Math.round(120 * sa.evals / MAX_EVALS));
-          for (var k = 0; k &lt;= segs; k++) {
-            var e2 = (k / segs) * sa.evals;
-            if (k === 0) ctx.moveTo(X(e2), Y(sa.tempAt(e2)));
-            else ctx.lineTo(X(e2), Y(sa.tempAt(e2)));
-          }
-          ctx.strokeStyle = c.series[2];
-          ctx.lineWidth = 2;
-          ctx.stroke();
-        }
-        // observed share of uphill moves accepted
-        if (sa.pstrip.length) {
-          ctx.beginPath();
-          sa.pstrip.forEach(function(h, k2) {
-            if (k2 === 0) ctx.moveTo(X(h.e), Y(h.a));
-            else ctx.lineTo(X(h.e), Y(h.a));
-          });
-          ctx.strokeStyle = c.series[0];
-          ctx.lineWidth = 2;
-          ctx.stroke();
-        }
-        // live end labels, matching the race chart's style
-        var labels = [{
-          y: Y(sa.tempAt(sa.evals)),
-          color: c.series[2],
-          text: 'T ' + Math.round(sa.tempAt(sa.evals) * 100) + '%'
-        }];
-        if (sa.pstrip.length) {
-          var lastA = sa.pstrip[sa.pstrip.length - 1].a;
-          labels.push({
-            y: Y(lastA),
-            color: c.series[0],
-            text: 'uphill ' + Math.round(lastA * 100) + '%'
-          });
-        }
-        labels.sort(function(p, q) {
-          return p.y - q.y;
-        });
-        labels.forEach(function(l) {
-          l.y = Math.max(padT + 5, Math.min(H - padB - 3, l.y));
-        });
-        if (labels.length === 2 &amp;&amp; labels[1].y - labels[0].y &lt; 13) labels[0].y = labels[1].y - 13;
-        labels.forEach(function(l) {
-          var x = W - padR + 6;
-          ctx.beginPath();
-          ctx.arc(x + 4, l.y, 3.5, 0, Math.PI * 2);
-          ctx.fillStyle = l.color;
-          ctx.fill();
-          ctx.fillStyle = c.ink;
-          ctx.fillText(l.text, x + 11, l.y + 4);
-        });
-      }
-
-      function drawTable() {
-        var c = vizColors(wrap);
-        var leader = Math.min.apply(null, algs.map(function(a) {
-          return a.bestLen;
-        }));
-        var rows = algs.map(function(a, i) {
-            return {
-              i: i,
-              len: a.bestLen
-            };
-          })
-          .sort(function(p, q) {
-            return p.len - q.len;
-          });
-        tableBody.innerHTML = rows.map(function(r) {
-          var gap = ((r.len / leader - 1) * 100);
-          return '&lt;div class="kr-stat"&gt;&lt;span class="kr-stat-lbl"&gt;' +
-            '&lt;span class="kr-swatch" style="background:' + c.series[r.i] + ';"&gt;&lt;/span&gt;' +
-            NAMES[r.i] + '&lt;/span&gt;&lt;span class="kr-stat-val"&gt;' + r.len.toFixed(2) +
-            ' &lt;span style="color:var(--viz-muted); font-weight:400;"&gt;' +
-            (gap &lt; 0.005 ? 'leader' : '+' + gap.toFixed(1) + '%') + '&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;';
-        }).join('');
-      }
-
-      function drawAll() {
-        algs.forEach(function(_, i) {
-          drawTour(i);
-        });
-        drawChart();
-        drawStrip();
-        drawTable();
-      }
-
-      var recordEvery = MAX_EVALS / 400;
-
-      function loop() {
-        if (!running) return;
-        var budget = parseInt(speedSlider.value, 10);
-        algs.forEach(function(a) {
-          var before = a.evals;
-          a.step(budget);
-          if (Math.floor(a.evals / recordEvery) &gt; Math.floor(before / recordEvery)) {
-            a.hist.push({
-              e: a.evals,
-              len: a.bestLen
-            });
-            if (a.pstrip) {
-              a.pstrip.push({
-                e: a.evals,
-                a: a.upP ? a.upA / a.upP : 0
-              });
-              a.upP = 0;
-              a.upA = 0;
-            }
-          }
-        });
-        drawAll();
-        var done = algs.every(function(a) {
-          return a.evals &gt;= MAX_EVALS;
-        });
-        if (done) {
-          running = false;
-          finished = true;
-          runBtn.textContent = 'Start race';
-          var leader = algs.slice().sort(function(p, q) {
-            return p.bestLen - q.bestLen;
-          })[0];
-          statusEl.textContent = 'Race finished. ' + NAMES[algs.indexOf(leader)] + ' wins. Press "New cities" to go again.';
-          algs.forEach(function(a) {
-            a.hist.push({
-              e: a.evals,
-              len: a.bestLen
-            });
-            if (a.pstrip) {
-              a.pstrip.push({
-                e: a.evals,
-                a: a.upP ? a.upA / a.upP : 0
-              });
-              a.upP = 0;
-              a.upA = 0;
-            }
-          });
-          drawAll();
-          return;
-        }
-        statusEl.textContent = Math.round(algs[0].evals / 1000) + 'k / ' + (MAX_EVALS / 1000) + 'k evaluations';
-        rafId = requestAnimationFrame(loop);
-      }
-
-      runBtn.addEventListener('click', function() {
-        if (finished) resetRace(true);
-        running = !running;
-        runBtn.textContent = running ? 'Pause' : 'Resume';
-        if (running) loop();
-        else {
-          cancelAnimationFrame(rafId);
-          statusEl.textContent = 'Paused.';
-        }
-      });
-      resetBtn.addEventListener('click', function() {
-        seed += 7;
-        resetRace(false);
-      });
-
-      tourCanvases.forEach(function(cv) {
-        cv.addEventListener('click', function(ev) {
-          if (cities.length &gt;= 80) return;
-          var rect = cv.getBoundingClientRect();
-          cities.push([(ev.clientX - rect.left) / rect.width, (ev.clientY - rect.top) / rect.height]);
-          resetRace(true);
-          statusEl.textContent = cities.length + ' cities, race reset. Press start.';
-        });
-      });
-
-      pgCities.addEventListener('input', function() {
-        pgCitiesVal.textContent = pgCities.value;
-      });
-      pgCities.addEventListener('change', function() {
-        resetRace(false);
-      });
-
-      function updateCool() {
-        pgCoolVal.textContent = (parseInt(pgCool.value, 10) / 10).toFixed(1) + '×';
-      }
-
-      function updateMut() {
-        pgMutVal.textContent = pgMut.value + '%';
-      }
-      pgCool.addEventListener('input', updateCool);
-      pgCool.addEventListener('change', function() {
-        resetRace(true);
-      });
-      pgMut.addEventListener('input', updateMut);
-      pgMut.addEventListener('change', function() {
-        resetRace(true);
-      });
-      updateCool();
-      updateMut();
-
-      // chart hover tooltip
-      chartCv.addEventListener('mousemove', function(ev) {
-        var rect = chartCv.getBoundingClientRect();
-        var padL = 44,
-          padR = 62;
-        var frac = (ev.clientX - rect.left - padL) / (rect.width - padL - padR);
-        if (frac &lt; 0 || frac &gt; 1) {
-          tooltip.style.display = 'none';
-          return;
-        }
-        var e = frac * MAX_EVALS;
-        var c = vizColors(wrap);
-        var lines = algs.map(function(a, i) {
-          var best = null;
-          for (var k = 0; k &lt; a.hist.length; k++) {
-            if (a.hist[k].e &lt;= e) best = a.hist[k].len;
-            else break;
-          }
-          return '&lt;span class="kr-swatch" style="background:' + c.series[i] + '; margin-right:6px;"&gt;&lt;/span&gt;' +
-            SHORT[i] + ': ' + (best === null ? ', ' : best.toFixed(2));
-        });
-        var accAt = null;
-        for (var k3 = 0; k3 &lt; algs[0].pstrip.length; k3++) {
-          if (algs[0].pstrip[k3].e &lt;= e) accAt = algs[0].pstrip[k3].a;
-          else break;
-        }
-        tooltip.innerHTML = '&lt;strong&gt;' + Math.round(e / 1000) + 'k evals&lt;/strong&gt;&lt;br&gt;' + lines.join('&lt;br&gt;') +
-          '&lt;br&gt;&lt;span style="color:var(--viz-muted);"&gt;SA telemetry: T ' + Math.round(algs[0].tempAt(e) * 100) + '%' +
-          (accAt === null ? '' : ', uphill ' + Math.round(accAt * 100) + '%') + '&lt;/span&gt;';
-        tooltip.style.display = 'block';
-        var tx = ev.clientX - rect.left + 14;
-        if (tx + 130 &gt; rect.width) tx = ev.clientX - rect.left - 144;
-        tooltip.style.left = tx + 'px';
-        tooltip.style.top = (ev.clientY - rect.top + 10) + 'px';
-      });
-      chartCv.addEventListener('mouseleave', function() {
-        tooltip.style.display = 'none';
-      });
-
-      window.addEventListener('resize', function() {
-        tourCtx = tourCanvases.map(fitCanvas);
-        chartCtx = fitCanvas(chartCv);
-        stripCtx = fitCanvas(stripCv);
-        drawAll();
-      });
-      new MutationObserver(function() {
-          drawAll();
-        })
-        .observe(document.documentElement, {
-          attributes: true,
-          attributeFilter: ['data-theme']
-        });
-
-      newCities(parseInt(pgCities.value, 10));
-      resetRace(true);
-    })();
-  })();
- </code></pre>
- </details>
-
- <div class="faq-section">
- <h2>Common questions</h2>
-
- <details class="faq-item">
- <summary>Is the annealer guaranteed to find the best tour?</summary>
- <p>In theory, with an infinitely slow logarithmic cooling schedule, yes, there's a lovely proof. In practice nobody has infinite time, so real schedules trade the guarantee for speed and settle for "excellent, quickly." On these maps the annealer routinely gets within a few percent of optimal; certifying <em>the</em> optimum is a different (and much more expensive) sport, played with exact solvers like Concorde.</p>
- </details>
-
- <details class="faq-item">
- <summary>Why does the GA lose here? Your other posts defend GAs!</summary>
- <p>Because this problem is small and 2-opt local moves are unusually powerful on Euclidean TSP, the landscape suits move-based searchers. Change the terrain (add time windows, vehicle capacities, multiple objectives, a simulator in the loop) and population methods perform better, generally. No Free Lunch theorem: the winner is a property of the landscape, not the algorithm. Never trust a benchmark with one problem on it, including mine.</p>
- </details>
-
- <details class="faq-item">
- <summary>What cooling schedule does the demo use?</summary>
- <p>Exponential decay: temperature starts near the average edge length of a random tour and decays smoothly so it's effectively frozen by the end of the 200,000-evaluation budget. The playground's "cooling speed" scales that decay exponent. </p>
- </details>
- </div>
-
- <h2 class="section-heading" id="references">References</h2>
-
- <ol class="references">
-          <li id="ref-1">Kirkpatrick, S., Gelatt, C. D., &amp; Vecchi, M. P. (1983). Optimization by simulated annealing. <em>Science, 220</em>(4598), 671&ndash;680. <a href="https://doi.org/10.1126/science.220.4598.671" target="_blank" rel="noopener">https://doi.org/10.1126/science.220.4598.671</a></li>
-          <li id="ref-2">&#268;ern&yacute;, V. (1985). Thermodynamical approach to the travelling salesman problem: An efficient simulation algorithm. <em>Journal of Optimization Theory and Applications, 45</em>, 41&ndash;51. <a href="https://doi.org/10.1007/BF00940812" target="_blank" rel="noopener">https://doi.org/10.1007/BF00940812</a></li>
-          <li id="ref-3">Metropolis, N., Rosenbluth, A. W., Rosenbluth, M. N., Teller, A. H., &amp; Teller, E. (1953). Equation of state calculations by fast computing machines. <em>The Journal of Chemical Physics, 21</em>(6), 1087&ndash;1092. <a href="https://doi.org/10.1063/1.1699114" target="_blank" rel="noopener">https://doi.org/10.1063/1.1699114</a></li>
-          <li id="ref-4">Croes, G. A. (1958). A method for solving traveling-salesman problems. <em>Operations Research, 6</em>(6), 791&ndash;812. <a href="https://doi.org/10.1287/opre.6.6.791" target="_blank" rel="noopener">https://doi.org/10.1287/opre.6.6.791</a></li>
-        </ol>
-
-        
-
- ]]></content:encoded>
     </item>
     <item>
       <title>Evolution, Live</title>
