@@ -3,7 +3,10 @@
     "profile": "https://scholar.google.com/citations?user=bwl2u00AAAAJ&hl=en",
     "citations": 185
   },
-  "selected": 6,
+  "selected": {
+    "mostCited": 4,
+    "mostRecent": 2
+  },
   "publications": [
     {
       "id": "bwl2u00AAAAJ:9ZlFYXVOiuMC",
@@ -25,7 +28,9 @@
       "pdf": null,
       "firstAuthor": false,
       "live": "pub:hrv",
-      "post": null
+      "post": null,
+      "kind": "preprint",
+      "date": "2026-05-29"
     },
     {
       "id": "bwl2u00AAAAJ:Wp0gIr-vW9MC",
@@ -48,7 +53,8 @@
       "pdf": null,
       "firstAuthor": false,
       "live": "pub:batchplanet",
-      "post": null
+      "post": null,
+      "date": "2026-03"
     },
     {
       "id": "bwl2u00AAAAJ:M3ejUd6NZC8C",
@@ -77,7 +83,9 @@
       "pdf": "https://arxiv.org/pdf/2311.04929",
       "firstAuthor": false,
       "live": "pub:llm-outlook",
-      "post": null
+      "post": null,
+      "kind": "preprint",
+      "date": "2023-11-03"
     },
     {
       "id": "bwl2u00AAAAJ:KlAtU1dfN6UC",
@@ -99,7 +107,8 @@
       "pdf": "https://arxiv.org/pdf/2204.13261",
       "firstAuthor": false,
       "live": "genetic-programming-live",
-      "post": null
+      "post": null,
+      "date": "2022-07-09"
     },
     {
       "id": "bwl2u00AAAAJ:3fE2CSJIrl8C",
@@ -122,7 +131,33 @@
       "pdf": null,
       "firstAuthor": false,
       "live": "pub:llvm",
-      "post": null
+      "post": null,
+      "date": "2022-07-09"
+    },
+    {
+      "id": "bwl2u00AAAAJ:kNdYIx-mwKoC",
+      "title": "Benchmarking of the Shackleton Genetic Programming Framework for LLVM Compiler Optimization",
+      "authors": [
+        "S Li",
+        "H Peeler",
+        "KN Reid",
+        "A Sloss",
+        "Y Yuan",
+        "W Banzhaf"
+      ],
+      "etAl": false,
+      "venue": "Poster, deposited on ResearchGate",
+      "venueShort": "Poster",
+      "year": 2021,
+      "citations": 0,
+      "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:kNdYIx-mwKoC",
+      "doi": "10.13140/RG.2.2.25956.71047",
+      "pdf": null,
+      "firstAuthor": false,
+      "live": "pub:llvm",
+      "post": null,
+      "kind": "poster",
+      "date": "2021-07-27"
     },
     {
       "id": "bwl2u00AAAAJ:8k81kl-MbHgC",
@@ -144,7 +179,8 @@
       "pdf": "https://arxiv.org/pdf/2102.04871",
       "firstAuthor": true,
       "live": "factorio-live",
-      "post": "blog/factorio-live.html"
+      "post": "blog/factorio-live.html",
+      "date": "2021-07-07"
     },
     {
       "id": "bwl2u00AAAAJ:hqOjcs7Dif8C",
@@ -165,7 +201,28 @@
       "pdf": null,
       "firstAuthor": false,
       "live": "pub:genomic",
-      "post": null
+      "post": null,
+      "date": "2021-07-01"
+    },
+    {
+      "id": "bwl2u00AAAAJ:UebtZRa9Y70C",
+      "title": "Metaheuristics For Solving Real World Employee Rostering and Shift Scheduling Problems",
+      "authors": [
+        "KN Reid"
+      ],
+      "etAl": false,
+      "venue": "PhD thesis, University of Stirling",
+      "venueShort": "PhD thesis",
+      "year": 2019,
+      "citations": 1,
+      "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=bwl2u00AAAAJ&citation_for_view=bwl2u00AAAAJ:UebtZRa9Y70C",
+      "doi": null,
+      "pdf": "https://www.kenreid.co.uk/docs/KenReidThesis.pdf",
+      "firstAuthor": true,
+      "live": "pub:hybrid",
+      "post": null,
+      "kind": "thesis",
+      "date": "2019-07-31"
     },
     {
       "id": "bwl2u00AAAAJ:roLk4NBRz8UC",
@@ -189,7 +246,8 @@
       "pdf": null,
       "firstAuthor": true,
       "live": "pub:hybrid",
-      "post": null
+      "post": null,
+      "date": "2019-07-13"
     },
     {
       "id": "bwl2u00AAAAJ:Se3iqnhoufwC",
@@ -213,7 +271,8 @@
       "pdf": null,
       "firstAuthor": true,
       "live": "ruin-and-recreate-live",
-      "post": "blog/ruin-and-recreate-live.html"
+      "post": "blog/ruin-and-recreate-live.html",
+      "date": "2018-09-19"
     },
     {
       "id": "bwl2u00AAAAJ:u5HHmVD_uO8C",
@@ -235,7 +294,8 @@
       "pdf": null,
       "firstAuthor": true,
       "live": "variable-neighbourhood-search-live",
-      "post": "blog/variable-neighbourhood-search-live.html"
+      "post": "blog/variable-neighbourhood-search-live.html",
+      "date": "2016-12"
     }
   ]
 }

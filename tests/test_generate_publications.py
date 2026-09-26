@@ -2,7 +2,7 @@
 
 The publication list and its JSON-LD are both written from
 data/publications.json. These cases pin the parts that are easy to break
-without noticing: the Selected order, the marker regex (one block name is
+without noticing: the Selected choice and order, the marker regex (one block name is
 a prefix of the other), the escaping, the newline style of the page, and
 the validation that stops a half-refreshed JSON reaching the page.
 
@@ -36,11 +36,11 @@ def paper(pid, year, citations, authors, **extra):
     return p
 
 
-def dataset(pubs, total=None, selected=2):
+def dataset(pubs, total=None, cited=2, recent=0):
     return {
         "scholar": {"profile": "https://scholar.google.com/citations?user=u",
                     "citations": sum(p["citations"] for p in pubs) if total is None else total},
-        "selected": selected,
+        "selected": {"mostCited": cited, "mostRecent": recent},
         "publications": pubs,
     }
 
@@ -66,10 +66,28 @@ class Order(unittest.TestCase):
         paper("e", 2016, 9, ["KN Reid"]),
     ]
 
-    def test_selected_puts_first_authored_papers_first(self):
-        # first-authored by citations (d and e tie on 9: newer first), then the rest
-        order = [p["id"][2:] for p in gp.selected_order(self.pubs)]
-        self.assertEqual(order, ["c", "d", "e", "b", "a"])
+    def ids(self, pubs, **kw):
+        order, shown = gp.selected_order(dataset(pubs, **kw), pubs)
+        return [p["id"][2:] for p in order], shown
+
+    def test_selected_is_the_most_cited_plus_the_newest(self):
+        # b and c by citations, a as the newest; the selection by citations,
+        # then the rest newest first
+        self.assertEqual(self.ids(self.pubs, cited=2, recent=1), (["b", "c", "a", "d", "e"], 3))
+
+    def test_a_paper_both_cited_and_new_counts_once(self):
+        pubs = self.pubs + [paper("f", 2026, 70, ["KN Reid"], date="2026-06")]
+        self.assertEqual(self.ids(pubs, cited=1, recent=1), (["f", "a", "b", "d", "c", "e"], 1))
+
+    def test_citation_ties_go_to_the_newer_paper(self):
+        # d (2021) and e (2016) both have 9
+        self.assertEqual(self.ids(self.pubs, cited=4)[0][:4], ["b", "c", "d", "e"])
+
+    def test_date_orders_papers_within_a_year(self):
+        pubs = [paper("x", 2022, 1, ["KN Reid"], date="2022-03"),
+                paper("y", 2022, 5, ["KN Reid"], date="2022-07-09"),
+                paper("z", 2022, 5, ["KN Reid"])]
+        self.assertEqual([p["id"] for p in gp.year_order(pubs)], ["u:y", "u:x", "u:z"])
 
     def test_year_order_is_stable(self):
         same = [paper("x", 2022, 1, ["KN Reid"]), paper("y", 2022, 5, ["KN Reid"])]
@@ -96,7 +114,7 @@ class Markup(unittest.TestCase):
 
     def test_papers_past_the_selection_are_marked(self):
         pubs = Order.pubs
-        lines = gp.list_lines(dataset(pubs, selected=2), pubs)
+        lines = gp.list_lines(dataset(pubs, cited=1, recent=1), pubs)
         rows = [ln for ln in lines if "<li " in ln]
         self.assertEqual(len(rows), 5)
         self.assertEqual(sum("data-pub-more" in r for r in rows), 3)
@@ -112,6 +130,14 @@ class Markup(unittest.TestCase):
         self.assertEqual(authors[1], {"@type": "Person", "name": "KN Reid", "@id": gp.PERSON_ID})
         self.assertNotIn("@id", authors[0])
         self.assertEqual(doc["itemListElement"][0]["item"]["headline"], "A </script> title")
+
+    def test_jsonld_type_and_date_follow_kind_and_date(self):
+        pubs = [paper("t", 2019, 1, ["KN Reid"], kind="thesis", date="2019-07-31"),
+                paper("p", 2018, 0, ["KN Reid"])]
+        doc = json.loads("\n".join(gp.jsonld_lines(pubs)[1:-1]))
+        items = [e["item"] for e in doc["itemListElement"]]
+        self.assertEqual([(i["@type"], i["datePublished"]) for i in items],
+                         [("Thesis", "2019-07-31"), ("ScholarlyArticle", "2018")])
 
 
 class Blocks(unittest.TestCase):
@@ -141,38 +167,44 @@ class Validation(unittest.TestCase):
         self.assertEqual(self.errors(Order.pubs), [])
 
     def test_first_author_flag_must_match_the_list(self):
-        errs = self.errors([paper("a", 2020, 0, ["X Other", "KN Reid"], firstAuthor=True)], selected=1)
+        errs = self.errors([paper("a", 2020, 0, ["X Other", "KN Reid"], firstAuthor=True)], cited=1)
         self.assertTrue(any("firstAuthor" in e for e in errs), errs)
 
     def test_unknown_sketch_and_post(self):
         errs = self.errors([paper("a", 2020, 0, ["KN Reid"], live="pub:nope",
-                                  post="blog/nope.html")], selected=1)
+                                  post="blog/nope.html")], cited=1)
         self.assertTrue(any("no sketch" in e for e in errs), errs)
         self.assertTrue(any("not in data/posts.json" in e for e in errs), errs)
 
     def test_url_must_be_the_papers_own(self):
-        errs = self.errors([paper("a", 2020, 0, ["KN Reid"], url=SCHOLAR + "u:zzz")], selected=1)
+        errs = self.errors([paper("a", 2020, 0, ["KN Reid"], url=SCHOLAR + "u:zzz")], cited=1)
         self.assertTrue(any("url" in e for e in errs), errs)
 
     def test_total_below_the_papers_sum(self):
-        errs = self.errors([paper("a", 2020, 10, ["KN Reid"])], total=5, selected=1)
+        errs = self.errors([paper("a", 2020, 10, ["KN Reid"])], total=5, cited=1)
         self.assertTrue(any("below the papers' own sum" in e for e in errs), errs)
 
     def test_a_boolean_is_not_a_count(self):
-        errs = self.errors([paper("a", 2020, True, ["KN Reid"])], total=1, selected=1)
+        errs = self.errors([paper("a", 2020, True, ["KN Reid"])], total=1, cited=1)
         self.assertTrue(any("citations: expected integer" in e for e in errs), errs)
 
     def test_venue_label_carries_no_year(self):
         # The year is printed beside it: "GECCO '21 · 2021" said it twice.
         for label in ("GECCO '21", "CEEC 2018"):
             with self.subTest(label=label):
-                errs = self.errors([paper("a", 2020, 0, ["KN Reid"], venueShort=label)], selected=1)
+                errs = self.errors([paper("a", 2020, 0, ["KN Reid"], venueShort=label)], cited=1)
                 self.assertTrue(any("venueShort" in e for e in errs), errs)
         self.assertEqual(self.errors([paper("a", 2020, 0, ["KN Reid"], venueShort="GECCO")],
-                                     selected=1), [])
+                                     cited=1), [])
+
+    def test_selection_counts_are_bounded(self):
+        errs = self.errors([paper("a", 2020, 0, ["KN Reid"])], cited=2)
+        self.assertTrue(any("selected.mostCited (2)" in e for e in errs), errs)
+        errs = self.errors([paper("a", 2020, 0, ["KN Reid"])], cited=0, recent=0)
+        self.assertTrue(any("picks no papers" in e for e in errs), errs)
 
     def test_doi_must_be_bare(self):
-        errs = self.errors([paper("a", 2020, 0, ["KN Reid"], doi="https://doi.org/10.1/x")], selected=1)
+        errs = self.errors([paper("a", 2020, 0, ["KN Reid"], doi="https://doi.org/10.1/x")], cited=1)
         self.assertTrue(any("doi" in e for e in errs), errs)
 
 

@@ -32,7 +32,10 @@ the papers' sum.
                     the sum of the papers' counts, and the script refuses a
                     total below that sum (a sign one side was refreshed
                     and the other forgotten).
-  selected          how many papers the default "Selected" view shows.
+  selected          which papers the default "Selected" view shows:
+                    {"mostCited": n, "mostRecent": m} picks the n most-cited
+                    and the m newest papers (their union; a paper that is
+                    both counts once).
 
 Each entry in "publications", in newest-first order (the order the
 "All, by year" view and the JSON-LD use; ties keep file order):
@@ -43,9 +46,9 @@ Each entry in "publications", in newest-first order (the order the
   authors      list of names as Scholar abbreviates them ("KN Reid");
                Ken's own name (KEN_NAMES below) is set in bold
   etAl         true when Scholar truncated the author list
-  venue        the full venue line, kept verbatim (two papers carry the
-               placeholder "Google Scholar listing"; leave it until the
-               real venue is confirmed)
+  venue        the full venue line, taken from the publisher's record
+               (Crossref, arXiv or the preprint server) rather than
+               Scholar's, which is sometimes garbled
   venueShort   short label shown in the list ("GECCO"), with the full
                venue in its <abbr title>; null shows the venue itself.
                No year: the year is printed beside it
@@ -61,12 +64,22 @@ Each entry in "publications", in newest-first order (the order the
                page exactly as given; the script checks the sketch exists.
   post         the blog post that runs the paper ("blog/x.html", as in
                posts.json) or null; adds a "Watch it run" link
+  kind         optional: paper (the default), preprint, report, poster or
+               thesis. Sets the JSON-LD type
+  date         optional "YYYY", "YYYY-MM" or "YYYY-MM-DD": orders papers
+               inside a year and decides which are the most recent
 
-Selected order is first-authored papers first, then by citations (most
-first), then newest; the page is written in that order so a reader
-without script sees it. The script in data_science.html only re-sorts to
-"All, by year" (data-pub-order) and hides the papers past `selected`
-(data-pub-more) until that view is chosen.
+The Selected view is the most-cited papers plus the newest ones, so the
+work the field uses and the work that is current both show without a
+click. Within it papers go by citations (most first), then newest; the
+rest of the list follows newest first. The page is written in that order
+so a reader without script sees it. The script in data_science.html only
+re-sorts to "All, by year" (data-pub-order) and hides the unselected
+papers (data-pub-more) until that view is chosen.
+
+Scholar also indexes two of the blog posts. They are left out on purpose:
+they are posts, not publications, and have no citations, so the papers'
+sum still matches the profile total.
 
 Refreshing citations (before every push): open the Scholar profile, copy
 the total into scholar.citations and each paper's count into its entry
@@ -166,8 +179,12 @@ def validate(data, pubs):
         return errors
     if not pubs:
         return ["no publications"]
-    if data["selected"] > len(pubs):
-        errors.append("selected (%d) is more than the %d papers listed" % (data["selected"], len(pubs)))
+    for key in ("mostCited", "mostRecent"):
+        if data["selected"][key] > len(pubs):
+            errors.append("selected.%s (%d) is more than the %d papers listed"
+                          % (key, data["selected"][key], len(pubs)))
+    if not selected_ids(data, pubs):
+        errors.append("selected picks no papers: raise mostCited or mostRecent")
 
     sketches = sketch_keys()
     post_urls = {p.get("url") for p in sitelib.load_posts(POSTS)}
@@ -197,17 +214,41 @@ def validate(data, pubs):
     return errors
 
 
-def selected_order(pubs):
-    """First-authored papers first, then most cited, then newest.
+def kind(p):
+    return p.get("kind") or "paper"
 
-    The profile is read by people deciding whether to hire or cite: the
-    papers Ken led come first, then the ones the field actually uses."""
-    return sorted(pubs, key=lambda p: (not p["firstAuthor"], -p["citations"], -p["year"]))
+
+def recency(p):
+    """A sortable (year, month, day) from `date`, or the year alone.
+    Missing parts count as 0, so newest first puts a paper dated only by
+    its year after the dated papers of that year."""
+    parts = [int(x) for x in (p.get("date") or str(p["year"])).split("-")]
+    return tuple(parts + [0] * (3 - len(parts)))
+
+
+def selected_ids(data, pubs):
+    """The ids of the papers the default view shows: the `mostCited` papers
+    with the most citations (newer first on a tie) plus the `mostRecent`
+    newest (more cited first on a tie)."""
+    cfg = data["selected"]
+    cited = sorted(pubs, key=lambda p: (-p["citations"], tuple(-x for x in recency(p))))
+    recent = sorted(pubs, key=lambda p: (tuple(-x for x in recency(p)), -p["citations"]))
+    return {p["id"] for p in cited[:cfg["mostCited"]] + recent[:cfg["mostRecent"]]}
+
+
+def selected_order(data, pubs):
+    """The selected papers by citations (most first, then newest), then
+    everything else newest first. Returns (ordered list, number selected)."""
+    chosen = selected_ids(data, pubs)
+    head = sorted((p for p in pubs if p["id"] in chosen),
+                  key=lambda p: (-p["citations"], tuple(-x for x in recency(p))))
+    tail = [p for p in year_order(pubs) if p["id"] not in chosen]
+    return head + tail, len(head)
 
 
 def year_order(pubs):
-    """Newest first; papers from the same year keep their file order."""
-    return sorted(pubs, key=lambda p: -p["year"])
+    """Newest first by date where given; equal dates keep their file order."""
+    return sorted(pubs, key=lambda p: tuple(-x for x in recency(p)))
 
 
 # --- the visible list -------------------------------------------------
@@ -260,7 +301,7 @@ def meta_html(p):
 
 def list_lines(data, pubs):
     order = {p["id"]: i + 1 for i, p in enumerate(year_order(pubs))}
-    shown = data["selected"]
+    ordered, shown = selected_order(data, pubs)
     total = data["scholar"]["citations"]
     lines = [
         '<div class="ds-pub-toolbar">',
@@ -275,7 +316,7 @@ def list_lines(data, pubs):
         '</div>',
         '<ol class="ds-pub-list" id="ds-pub-list" role="list">',
     ]
-    for rank, p in enumerate(selected_order(pubs)):
+    for rank, p in enumerate(ordered):
         more = " data-pub-more" if rank >= shown else ""
         lines += [
             '  <li data-live="%s" class="ds-pub-entry" data-pub-order="%d"%s>'
@@ -293,6 +334,12 @@ def list_lines(data, pubs):
 
 # --- the JSON-LD ------------------------------------------------------
 
+# schema.org types by kind; a preprint is still a ScholarlyArticle, and
+# schema.org has no poster type, so a poster is a plain CreativeWork.
+JSONLD_TYPE = {"paper": "ScholarlyArticle", "preprint": "ScholarlyArticle", "report": "Report",
+               "poster": "CreativeWork", "thesis": "Thesis"}
+
+
 def author_node(name):
     node = {"@type": "Person", "name": name}
     if name in KEN_NAMES:
@@ -304,11 +351,11 @@ def jsonld_lines(pubs):
     items = []
     for pos, p in enumerate(year_order(pubs), 1):
         art = {
-            "@type": "ScholarlyArticle",
+            "@type": JSONLD_TYPE[kind(p)],
             "headline": p["title"],
             "url": p["url"],
             "author": [author_node(a) for a in p["authors"]],
-            "datePublished": str(p["year"]),
+            "datePublished": p.get("date") or str(p["year"]),
             "isPartOf": p["venue"],
         }
         if p.get("doi"):
