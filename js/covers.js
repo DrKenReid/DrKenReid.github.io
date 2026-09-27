@@ -803,6 +803,44 @@
         };
     });
 
+    // A domain name is looked up: a query hops to DNS, fans out to four
+    // server addresses, and a padlock closes over the name.
+    def('what-a-custom-domain-actually-involves', function (w, h, rnd) {
+        var t = 0, cycle = 360;
+        var name = { x: w * 0.2, y: h * 0.5 }, dns = { x: w * 0.5, y: h * 0.5 };
+        var ips = [0, 1, 2, 3].map(function (i) { return { x: w * 0.82, y: h * (0.2 + i * 0.2) }; });
+        return {
+            step: function () { t++; },
+            draw: function (ctx) {
+                var p = phase(t, cycle);
+                text(ctx, 'kenreid.co.uk', name.x, name.y - 16, 11, C.ink, 700, 'center');
+                rect(ctx, name.x - 28, name.y - 4, 56, 8, 'rgba(255,255,255,0.18)');
+                dot(ctx, dns.x, dns.y, 13, 'rgba(255,255,255,0.14)');
+                text(ctx, 'DNS', dns.x, dns.y + 1, 9, C.dim, 700, 'center');
+                ips.forEach(function (ip) {
+                    rect(ctx, ip.x - 22, ip.y - 6, 44, 12, 'rgba(255,255,255,0.12)');
+                    line(ctx, dns.x, dns.y, ip.x - 22, ip.y, C.dim, 1);
+                });
+                var a = clamp01(p / 0.3);
+                if (p < 0.3) dot(ctx, name.x + 28 + (dns.x - 13 - name.x - 28) * ease(a), name.y, 4, C.b);
+                var b = clamp01((p - 0.3) / 0.3);
+                if (p >= 0.3) ips.forEach(function (ip) {
+                    var e = ease(b);
+                    if (b < 1) dot(ctx, dns.x + (ip.x - 22 - dns.x) * e, dns.y + (ip.y - dns.y) * e, 3.5, C.a);
+                    else rect(ctx, ip.x - 22, ip.y - 6, 44, 12, alpha(C.green, 0.55));
+                });
+                var c = clamp01((p - 0.62) / 0.15);
+                if (c > 0) {
+                    ctx.globalAlpha = c;
+                    ctx.strokeStyle = C.b; ctx.lineWidth = 2.5;
+                    ctx.beginPath(); ctx.arc(name.x, name.y + 22, 6, Math.PI, 0); ctx.stroke();
+                    rect(ctx, name.x - 9, name.y + 22, 18, 13, C.b);
+                    ctx.globalAlpha = 1;
+                }
+            }
+        };
+    });
+
     // Translucent triangles, nudged one at a time, settle into "Hi" while
     // a fitness bar fills underneath.
     def('a-headline-that-evolves-itself', function (w, h, rnd) {

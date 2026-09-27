@@ -1,5 +1,23 @@
 [
   {
+    "title": "What a Custom Domain Actually Involves",
+    "date": "2026-09-27",
+    "tags": [
+      "technology",
+      "advice"
+    ],
+    "category": "Technology",
+    "excerpt": "The custom domain takes about twenty minutes. Registrars, DNS records, HTTPS, and email at your own address, demystified.",
+    "url": "blog/what-a-custom-domain-actually-involves.html",
+    "image": "img/photography/thumb/42.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 18
+    },
+    "readMinutes": 6,
+    "words": 1300
+  },
+  {
     "title": "A Headline That Evolves Itself",
     "date": "2026-09-26",
     "tags": [
