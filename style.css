@@ -4032,7 +4032,11 @@ box-shadow: none; }
    glow can show, (hover: hover): a background image is fetched as soon as
    the style applies, even at opacity 0, so a phone fetched every card's
    cover at load, ahead of the card's own lazy <img>, for a glow it never
-   draws. */
+   draws. For the same reason the cover is only set while the card is
+   hovered or focused: set on every card, it raced the lazy <img> for the
+   same file at load and was sometimes downloaded twice (perf "no
+   refetch", blog desktop). The image comes off 0.5s late, a discrete
+   transition, so the glow still fades out rather than vanishing. */
 .kr-glow-host {
   position: relative;
   z-index: 0; }
@@ -4046,17 +4050,17 @@ box-shadow: none; }
   filter: blur(26px) saturate(1.6);
   opacity: 0;
   transform: scale(0.94);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition: opacity 0.5s ease, transform 0.5s ease, background-image 0s linear 0.5s;
+  transition-behavior: allow-discrete;
   pointer-events: none; }
 
 @media (hover: hover) {
-  .kr-glow-host::before {
-    background: var(--kr-cover) center / cover no-repeat; }
-
   .kr-glow-host:hover::before,
   .kr-glow-host:focus-within::before {
+    background: var(--kr-cover) center / cover no-repeat;
     opacity: 0.5;
-    transform: scale(1.03) translateY(10px); }
+    transform: scale(1.03) translateY(10px);
+    transition-delay: 0s; }
 
   [data-theme="dark"] .kr-glow-host:hover::before,
   [data-theme="dark"] .kr-glow-host:focus-within::before {
