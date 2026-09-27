@@ -8,7 +8,7 @@
     "category": "Technology",
     "excerpt": "The homepage headline is a hill climber painting 78 triangles until they read Hi, I'm Ken.",
     "url": "blog/a-headline-that-evolves-itself.html",
-    "image": "blog/img/headline/evolved-headline.webp",
+    "image": "blog/img/headline/evolved-headline-card.webp",
     "series": {
       "name": "How This Site Is Built",
       "part": 17
@@ -26,7 +26,7 @@
     "category": "Photography",
     "excerpt": "The gear treadmill makes photography look expensive, but my gallery was shot on a camera that now sells used from about a hundred dollars, and my phone.",
     "url": "blog/the-inaccessibility-of-photography.html",
-    "image": "img/photography/hero/501.webp",
+    "image": "img/photography/thumb/501.webp",
     "readMinutes": 8,
     "words": 1679
   },

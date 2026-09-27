@@ -6472,6 +6472,16 @@ box-shadow: none; }
 .blog-post .kr-evolve-stage .kr-hero-evolve {
   margin: 0 auto; }
 
+/* On a phone the column is too narrow for the homepage's proportions to
+   leave the canvas the 100px a demo canvas keeps (smoke, @360px): no side
+   padding, and a taller frame. */
+@media only screen and (max-width: 767px) {
+  .blog-post .kr-evolve-stage {
+    padding: 12px 0; }
+
+  .blog-post .kr-evolve-stage .kr-hero-evolve {
+    aspect-ratio: 640 / 205; } }
+
 /* --- Photo grid and full resolution ------------------------------------ */
 
 /* Photo grid: a contact sheet of full-bleed photographs inside one figure,
