@@ -230,10 +230,22 @@
             repaint();
         }
 
+        // Outside the carousel (the post about this script), run only while
+        // the canvas is on screen, so arriving at it builds the headline in
+        // front of the reader, as a slide arriving does.
+        var inCarousel = canvas.closest && canvas.closest('.owl-carousel');
+        var onScreen = true;
+        if (!inCarousel && 'IntersectionObserver' in window) {
+            onScreen = false;
+            new IntersectionObserver(function (entries) {
+                onScreen = entries[entries.length - 1].isIntersecting;
+            }, { threshold: 0.5 }).observe(canvas);
+        }
+
         function active() {
             var item = canvas.closest ? canvas.closest('.owl-item') : null;
-            // Outside a carousel, or in one that has not initialised, just run.
-            if (!item) return true;
+            // In a carousel that has not initialised, just run.
+            if (!item) return inCarousel ? true : onScreen;
             return item.classList.contains('active');
         }
 

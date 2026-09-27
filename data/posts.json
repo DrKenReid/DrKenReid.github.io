@@ -1,5 +1,23 @@
 [
   {
+    "title": "A Headline That Evolves Itself",
+    "date": "2026-09-26",
+    "tags": [
+      "technology"
+    ],
+    "category": "Technology",
+    "excerpt": "The homepage headline is a hill climber painting 78 triangles until they read Hi, I'm Ken.",
+    "url": "blog/a-headline-that-evolves-itself.html",
+    "image": "blog/img/headline/evolved-headline.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 17
+    },
+    "readMinutes": 5,
+    "words": 948,
+    "code": true
+  },
+  {
     "title": "The Inaccessibility of Photography",
     "date": "2026-09-26",
     "tags": [

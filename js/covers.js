@@ -803,6 +803,46 @@
         };
     });
 
+    // Translucent triangles, nudged one at a time, settle into "Hi" while
+    // a fitness bar fills underneath.
+    def('a-headline-that-evolves-itself', function (w, h, rnd) {
+        var strokes = [[0.30, 0.2, 0.30, 0.72], [0.30, 0.46, 0.46, 0.46], [0.46, 0.2, 0.46, 0.72], [0.60, 0.36, 0.60, 0.72], [0.60, 0.2, 0.60, 0.25]];
+        var n = 40, tris = [], t = 0;
+        function reset() {
+            tris = [];
+            for (var i = 0; i < n; i++) {
+                var s = strokes[i % strokes.length], k = rnd();
+                tris.push({ x: rnd() * w, y: rnd() * h * 0.8, tx: (s[0] + (s[2] - s[0]) * k) * w, ty: (s[1] + (s[3] - s[1]) * k) * h, r: rnd() * TAU, c: rnd() < 0.5 ? C.a : C.b });
+            }
+        }
+        reset();
+        return {
+            step: function () {
+                t++;
+                if (t % 600 === 0) reset();
+                for (var j = 0; j < 4; j++) {
+                    var p = tris[(rnd() * n) | 0];
+                    p.x += (p.tx - p.x) * 0.25 + (rnd() - 0.5) * 4;
+                    p.y += (p.ty - p.y) * 0.25 + (rnd() - 0.5) * 4;
+                }
+            },
+            draw: function (ctx) {
+                var err = 0;
+                tris.forEach(function (p) {
+                    err += Math.abs(p.tx - p.x) + Math.abs(p.ty - p.y);
+                    var s = h * 0.07;
+                    ctx.fillStyle = alpha(p.c, 0.45);
+                    ctx.beginPath();
+                    for (var v = 0; v < 3; v++) { var a = p.r + v * TAU / 3; ctx[v ? 'lineTo' : 'moveTo'](p.x + Math.cos(a) * s, p.y + Math.sin(a) * s); }
+                    ctx.fill();
+                });
+                var fit = clamp01(1 - err / (n * w * 0.35));
+                rect(ctx, w * 0.2, h * 0.86, w * 0.6, 4, 'rgba(255,255,255,0.12)');
+                rect(ctx, w * 0.2, h * 0.86, w * 0.6 * fit, 4, C.green);
+            }
+        };
+    });
+
     // The signal drops; the page keeps coming out of the cache.
     // A row of three cards; a pointer glides onto one and its cover wakes
     // (dots drifting, a small chart climbing) until the pointer moves on.

@@ -11,6 +11,102 @@
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>A Headline That Evolves Itself</title>
+      <link>https://www.kenreid.co.uk/blog/a-headline-that-evolves-itself.html</link>
+      <guid>https://www.kenreid.co.uk/blog/a-headline-that-evolves-itself.html</guid>
+      <pubDate>Sat, 26 Sep 2026 00:00:00 +0000</pubDate>
+      <description>The homepage headline is a hill climber painting 78 triangles until they read Hi, I&#x27;m Ken.</description>
+      <category>technology</category>
+      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/a-headline-that-evolves-itself.html">View it on the site</a> to play with it.</em></p>
+ <h1>A Headline That Evolves Itself</h1>
+ <div class="blog-meta">
+ 26 September 2026 &middot;
+ <span class="blog-tag">technology</span>
+ </div>
+
+ <p>My website has a bunch of different optimisers running in blog posts and a photograph of my face on the front. I think the optimisers are the best thing on this site, and I figured, why not show it right there on the homepage? So the second slide of the hero now runs one too, and what it's optimising itself into drawing the headline "Hi, I'm Ken". Here's how it works, and what it took to make it cheap enough to leave running on a homepage. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+ <figure class="kr-figure--solo">
+ <div class="kr-evolve-stage">
+ 
+ </div>
+ <figcaption class="figure-note">The homepage headline, running here in your browser. Scroll away and back to watch it build again.</figcaption>
+ </figure>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Hill climbing:</strong> the simplest optimiser there is. Change your answer a bit, keep the change if it scored better, throw it away if it didn't, repeat forever.</li>
+ <li><strong>(1+1) evolution strategy:</strong> hill climbing in evolution-strategy notation. One parent, one child per generation, and the better of the two survives.</li>
+ <li><strong>Fitness function:</strong> the score. It decides what "better" means.</li>
+ <li><strong>Genome:</strong> the numbers describing one candidate answer. Here, a list of triangles.</li>
+ <li><strong>getImageData:</strong> the browser call that hands you the raw pixels of a canvas. It's slow, so how often you call it decides whether the page stays usable.</li>
+ </ul>
+ </div>
+
+ <p>Roger Alsing's Mona Lisa came out in December 2008 and is one of the best demos of evolutionary computation. He took 50 semi-transparent polygons, changed one small thing at a time, kept the change only if the picture looked more like the painting than before, and after enough rounds of that he had something you'd recognise as da Vinci's.</p>
+
+ <p>Text, therefore, should be an easier target than a face. Letters are high contrast and built from straight-ish strokes, and people will read a word from a rough smear of ink in roughly the right place well before they notice it's made of shapes. So the slide has a canvas, and on the canvas are 78 translucent triangles being nudged toward the pixels of "Hi, I'm Ken."</p>
+
+ <h2>The whole algorithm</h2>
+
+ <p>There's no population, no crossover and no selection pressure to tune. It's one candidate and one mutation at a time:</p>
+
+ <pre><code class="language-javascript">for (var e = 0; e &lt; EVALS_PER_FRAME; e++) {
+    var cand = genome.map(cloneShape);
+    mutate(cand, scale);
+    var s2 = score(cand);
+    if (s2 &lt; best) {
+        best = s2;
+        genome = cand;
+    }
+}</code></pre>
+
+ <p>The fitness function draws the candidate and compares it with the target, pixel by pixel:</p>
+
+ <pre><code class="language-javascript">function score(g) {
+    paint(g, fit, FIT_W, FIT_H);
+    var d = fit.getImageData(0, 0, FIT_W, FIT_H).data;
+    var err = 0;
+    for (var i = 0, p = 0; i &lt; d.length; i += 4, p++) {
+        var lum = (d[i] * 0.2126 + d[i + 1] * 0.7152 + d[i + 2] * 0.0722) / 255;
+        var diff = lum * (d[i + 3] / 255) - target[p];
+        err += diff * diff;
+    }
+    return err;
+}</code></pre>
+
+ <p>It's squared error against the brightness of the target, with the alpha folded in because the canvas sits transparent over a photograph, and lower is better. The target is the headline itself, drawn once into an offscreen canvas in the site's own font (Poppins).</p>
+
+ <h2>Keeping it cheap</h2>
+
+ <p>I score on a canvas of 176 by 48 pixels that is hidden from users. The canvas you see is up to 560 pixels wide on the page, which is 1,120 real pixels on a retina screen, and scoring at that size would mean reading back over 370,000 pixels per evaluation, 170 evaluations a frame. At 176 by 48 it's 8,448, and the letters are still readable at that size.</p>
+
+ <p>I didn't let colour evolve either. Each triangle carries one number that puts it somewhere between the two ends of the site's photo gradient, which keeps the result on palette and takes three dimensions out of the search.</p>
+
+ <p>Most mutations get rejected, and a rejected mutation changes nothing anyone can see, so the visible canvas is repainted at most once a frame and only if at least one of that frame's mutations was kept.</p>
+
+ <p>The hero is a carousel of five slides, so four times out of five this one isn't on screen, and while it's off screen the loop checks whether its slide is the active one, sees it isn't, and does nothing. Once 1,800 evaluations in a row have failed to improve anything the loop idles, and when the slide comes back round it starts again from a fresh set of triangles, so whoever's looking gets to watch the headline being built instead of arriving at a finished one. The carousel can be paused, too, to give it more time.</p>
+
+ <h2>What a screen reader gets</h2>
+
+ <p>I marked the canvas <code>aria-hidden</code> so screen readers skip it, and put the real heading next to it as visually hidden text:</p>
+
+ <pre><code class="language-html">&lt;h2 class="sr-only"&gt;Hi, I'm Ken.&lt;/h2&gt;
+&lt;canvas class="kr-hero-evolve" aria-hidden="true"&gt;&lt;/canvas&gt;</code></pre>
+
+ <p>The document outline doesn't change, a crawler sees a normal heading, and nobody has to sit through a description of an animation they can't see.</p>
+
+ <h2>Was it worth it</h2>
+
+ <p>It's one small file, and most of it is comments and setup. It swapped a static line of text for a working demo of evolutionary computation, the field my research is in, inside the first few seconds on the site. I'm normally against homepage animations that are only there to move, because they cost the reader something and give nothing back, but this one is a real optimiser running on your machine and you can read its fitness function further up this page.</p>
+
+ <p>If you want the version with sliders and a population and all the knobs, that's <a href="https://www.kenreid.co.uk/blog/evolution-live.html">Evolution, Live</a>.</p>
+
+        
+ ]]></content:encoded>
+    </item>
+    <item>
       <title>The Inaccessibility of Photography</title>
       <link>https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html</link>
       <guid>https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html</guid>
@@ -2580,234 +2676,6 @@ jobs:
       <pubDate>Thu, 06 Aug 2026 00:00:00 +0000</pubDate>
       <description>Dark mode is easy; dark mode without a white flash is more difficult. How this site stamps the theme before the first paint, and drags every chart and iframe along with it.</description>
       <category>technology</category>
-      <content:encoded><![CDATA[
- <h1>Dark Mode That Doesn't Flash</h1>
- <div class="blog-meta">
- 6 August 2026 &middot;
- <span class="blog-tag">technology</span>
- </div>
-
- <p>I cannot stand light mode for pretty much anything. Many of my hobbies, my full time job, my masters and my honorary research position all require screentime. Wearing anti-glare glasses helps, but light mode just burns my retinas actively. So, one of the first things I did when making my website an active project rather than a passive one, was adding dark mode. What the tutorials tend to skip for "adding dark mode" is you pick dark mode, you click a link, and the next page blasts you with a white screen for a quarter of a second before remembering your choice. In a dark room, at night, that flash is scorching, and it happens way too often, even on big-name sites. This post covers how this site's theme system avoids it. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
-
- <div class="plain-english-box">
- <h2>Quick jargon guide</h2>
- <ul>
- <li><strong>FOUC / theme flash:</strong> "flash of unstyled content", the brief moment a page renders wrong (here: bright white) before correcting itself.</li>
- <li><strong>localStorage:</strong> a small key-value store in the browser, per site, that survives across visits. Where the theme choice lives.</li>
- <li><strong>data attribute:</strong> a custom label on an HTML element, like <code>data-theme="dark"</code> on the page's root. CSS rules can target it.</li>
- <li><strong>Render-blocking:</strong> code the browser must run before it paints anything. Usually a dirty word; here it's the fix.</li>
- <li><strong>iframe:</strong> a page embedded in another page. This site's comments are one, and they have opinions about their own colours that I had to navigate around.</li>
- </ul>
- </div>
-
- <h2>The process</h2>
-
- <p>The site's theme is a single attribute on the root element: <code>&lt;html data-theme="dark"&gt;</code> or <code>&lt;html data-theme="light"&gt;</code>. The stylesheet names every colour once, as a custom property (a token), with the light values as the defaults, and dark mode restates the same tokens under that attribute. These are the first two rules in this site's own stylesheet, after the imports, trimmed to the two colours that paint the page, plus the body rule that reads them:</p>
-
-<pre><code class="language-css">:root {
-  --kr-surface-0: #faf7f2;
-  --kr-ink: #252525; }
-
-:root[data-theme="dark"] {
-  --kr-surface-0: #1a1a1a;
-  --kr-ink: #e2e2e2; }
-
-body {
-  color: var(--kr-ink);
-  background-color: var(--kr-surface-0); }</code></pre>
-
- <p>The body rule has no dark version at all: the tokens change and it follows them. Some rules do still need a hand-written <code>[data-theme="dark"]</code> twin, wherever a colour was typed straight into a rule instead of read from a token. There are 189 of them, and a check in the build fails if that number ever goes up.</p>
-
- <p>The toggle button in the header flips the attribute, saves the choice to localStorage under a key (<code>kr-theme</code>), and everything restyles instantly, no reload. The new theme wipes out from the toggle button in a growing circle (a view transition clipped by a <code>clip-path</code> animation). Browsers without the API, and anyone who has asked their system for reduced motion, get a cross-fade instead, and it takes over a second on purpose: a whole page changing brightness at once is rough on photosensitive eyes. The browser's <code>theme-color</code> meta tag (which tints the address bar on phones) is updated to match, and the button is named by what it does ("Switch to light mode") with no pressed state, because a label that changes plus a pressed state leaves a screen-reader user working out whether pressed means light or dark. All of that is one short JavaScript file.</p>
-
- <details class="code-example"><summary>The whole toggle (js/theme.js)</summary>
-<pre><code class="language-javascript">/**
- * theme.js: the site-wide dark/light mode toggle.
- *
- * Responsibilities:
- *   - Read stored preference from localStorage on DOMContentLoaded
- *   - Default to dark mode when there is no stored preference
- *   - Apply data-theme="dark"|"light" to &lt;html&gt;
- *   - Keep the #theme-toggle button's label on the action it performs
- *   - Persist choice across page loads
- *
- * The button is named by what it does ("Switch to light mode") and has no
- * aria-pressed. A toggle button carries one or the other, never both: a
- * label that changes with the state plus a pressed state is heard as
- * "Switch to light mode, toggle button, pressed", which asks the reader to
- * work out whether pressed means light or dark. Its sun and moon glyphs
- * are inline SVG in the markup (shared-components.js, KR_THEME_ICONS),
- * swapped by CSS on data-theme, so nothing here touches its contents.
- *
- * The switch itself is a circular reveal: the new theme washes across the
- * page from the button that was pressed, using the View Transitions API
- * (document.startViewTransition, same-document form). Where that is not
- * supported, or where the reader has asked for reduced motion, it falls
- * back to the older slow cross-fade driven by the .theme-switching class.
- *
- * Flash-of-wrong-theme (FODT) prevention is handled by a tiny inline
- * script injected into every page's &lt;head&gt; (see the kr-theme check).
- */
-(function () {
-  var STORAGE_KEY = 'kr-theme';
-  var DEFAULT_THEME = 'dark';
-
-  function stored() {
-    try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
-  }
-
-  function save(t) {
-    try { localStorage.setItem(STORAGE_KEY, t); } catch (e) {}
-  }
-
-  function apply(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    var dark = theme === 'dark';
-
-    // Keep the browser UI (mobile address bar etc.) matching the page background.
-    var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', dark ? '#1a1a1a' : '#faf7f2');
-
-    var btn = document.getElementById('theme-toggle');
-    if (!btn) return;
-    var action = dark ? 'Switch to light mode' : 'Switch to dark mode';
-    btn.removeAttribute('aria-pressed');
-    btn.setAttribute('aria-label', action);
-    btn.setAttribute('title', action);
-  }
-
-  function reducedMotion() {
-    return window.matchMedia &amp;&amp;
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }
-
-  /* The circle has to reach the farthest corner of the viewport from the
-     button, whichever corner that is. */
-  function revealRadius(x, y) {
-    var w = window.innerWidth, h = window.innerHeight;
-    return Math.hypot(Math.max(x, w - x), Math.max(y, h - y));
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
-    apply(stored() || DEFAULT_THEME);
-
-    // Delegated, so it works although the button is injected after this runs.
-    var switchTimer = null;
-    document.addEventListener('click', function (e) {
-      var btn = e.target.closest ? e.target.closest('#theme-toggle') : null;
-      if (!btn) return;
-      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      save(next);
-
-      var canReveal = typeof document.startViewTransition === 'function' &amp;&amp; !reducedMotion();
-      if (!canReveal) {
-        // Cross-fade the swap (CSS scopes transitions to .theme-switching);
-        // kept slow so the full-page luminance change is gentle on
-        // photosensitive users
-        document.documentElement.classList.add('theme-switching');
-        if (switchTimer) clearTimeout(switchTimer);
-        switchTimer = setTimeout(function () {
-          document.documentElement.classList.remove('theme-switching');
-        }, 1100);
-        apply(next);
-        return;
-      }
-
-      // Circle origin: the button's centre, in viewport pixels. Written to
-      // custom properties so the CSS clip-path can read them.
-      var r = btn.getBoundingClientRect();
-      var x = r.left + r.width / 2;
-      var y = r.top + r.height / 2;
-      var root = document.documentElement;
-      root.style.setProperty('--kr-reveal-x', x + 'px');
-      root.style.setProperty('--kr-reveal-y', y + 'px');
-      root.style.setProperty('--kr-reveal-r', revealRadius(x, y) + 'px');
-      root.classList.add('kr-theme-reveal');
-
-      var vt = document.startViewTransition(function () { apply(next); });
-      vt.finished.catch(function () {}).then(function () {
-        root.classList.remove('kr-theme-reveal');
-      });
-    });
-  });
-}());</code></pre>
- </details>
-
- <h2>The hard part</h2>
-
- <p>The flash happens because of an ordering problem. The browser starts painting your page as soon as it has the HTML and CSS; your theme JavaScript, if it's a normal script loaded at the end, runs <em>after</em> that first paint. So the sequence in dark mode is: paint the default (light) page, run the script, discover the visitor wanted dark, restyle. Well, that's no good.</p>
-
- <p>The fix is to cheat the ordering. The very first thing in this site's <code>&lt;head&gt;</code>, before the stylesheet, before anything, is this inline script (unsquashed here for reading; the shipped version is one line):</p>
-
-<pre><code class="language-html">&lt;script&gt;
-(function () {
-  var t;
-  try { t = localStorage.getItem('kr-theme'); } catch (e) {}
-  if (!t) t = 'dark';
-  document.documentElement.setAttribute('data-theme', t);
-})();
-&lt;/script&gt;</code></pre>
-
- <p>Inline scripts in the head are render-blocking: the browser stops and runs them before painting a single pixel. Normally that's why performance guides tell you never to put scripts there. I broke the rules here because I made sure it's super efficient (it runs in well under a millisecond) and by doing the one job that must happen before paint: stamping the saved theme onto the root element to prevent harming the corneas of my few thousand readers (although the idea of my code having the power to burn eyeballs across the globe is kind of cool sounding). By the time the browser paints, the attribute is already correct, and there is nothing to flash. The <code>try/catch</code> is for browsers that block localStorage entirely; they get the default, which on this site is dark, on the fact that a light flash in a dark room is worse than a dark flash in a bright one.</p>
-
- <figure>
- <img src="https://www.kenreid.co.uk/img/photography/thumb/20.webp" alt="Old wooden floorboards in near darkness, low light catching the grain, black and white" loading="lazy" class="kr-figure-img" width="400" height="266">
- <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
- </figure>
-
- <h2>The extras: images and iframes</h2>
-
- <p><strong>Images with backgrounds don't theme themselves.</strong> My <a href="https://www.kenreid.co.uk/blog/what-50000-scrobbles-say-about-me.html">post about music listening data</a> includes charts rendered as images, with axis labels and backgrounds that only look right on the right theme. The fix is low-tech and bulletproof: export the chart twice, once per theme, put both in the page, and let three CSS rules choose:</p>
-
-<pre><code class="language-html">&lt;img class="theme-img-light" src="https://www.kenreid.co.uk/blog/chart-light.png" alt="Top artists chart"&gt;
-&lt;img class="theme-img-dark" src="https://www.kenreid.co.uk/blog/chart-dark.png" alt="Top artists chart"&gt;
-
-/* in the stylesheet */
-.theme-img-dark { display: none; }
-[data-theme="dark"] .theme-img-light { display: none; }
-[data-theme="dark"] .theme-img-dark { display: block; }</code></pre>
-
- <p>Two images, one visible at a time, swapping instantly with the toggle. It costs a second download for the chart a visitor actually views, which for the occasional plot is nothing. (For photographs none of this applies; a photo is a photo on any background, I don't use frames in photos of dark or white)</p>
-
- <p><strong>Iframes are other people's pages.</strong> The comments section is an embedded giscus frame (the free-comments-via-GitHub-Discussions setup has <a href="https://www.kenreid.co.uk/blog/free-comments-via-github-discussions.html">a post of its own</a>), and my CSS cannot reach inside it. giscus's answer is a message-passing API: when the toggle flips, the site posts a message into the frame telling it which stylesheet to use, and the comments swap themes in step with the page around them. Every embedded widget needs this conversation, which is one more argument for embedding as few widgets as possible.</p>
-
-<pre><code class="language-javascript">// runs after the toggle is clicked; giscusTheme() returns the stylesheet for the new mode
-var frame = document.querySelector('iframe.giscus-frame');
-frame.contentWindow.postMessage(
-  { giscus: { setConfig: { theme: giscusTheme() } } },
-  'https://giscus.app'
-);</code></pre>
-
- <h2>Respect the choice, remember the choice</h2>
-
- <p>The remaining design decision is what to do for a first-time visitor with no saved preference. The fashionable answer is to read the operating system's setting via a media query, and it's a good answer. This site instead defaults everyone to dark and makes the toggle obvious, partly because the photography looks better on dark, partly because the site had dark-first visuals long before it had a toggle, but mostly because I hate light theme and I force it upon everyone by default, because I care about your optical health, but you can opt into the pain if you prefer.</p>
-
- <div class="faq-section">
- <h2>Common questions</h2>
-
- <details class="faq-item">
- <summary>Why not the pure-CSS route with prefers-color-scheme?</summary>
- <p>A media query alone gives you automatic theming with zero JavaScript, and if you don't want a manual toggle it's the simplest answer. The moment you add a toggle (and users do ask for one; OS setting and site preference differ), you need somewhere to store the override and something to apply it before paint, and you're back to the inline script.</p>
- </details>
-
- <details class="faq-item">
- <summary>Does the render-blocking script hurt performance?</summary>
- <p>Technically yes, in reality no. It's a few dozen bytes reading one localStorage key; the cost is microseconds. The rule against render-blocking scripts is about network fetches and heavy work, not about five lines of inline code doing the job that must precede painting.</p>
- </details>
-
- <details class="faq-item">
- <summary>Why one data attribute instead of a CSS class?</summary>
- <p>Near-total taste. An attribute reads as "this page has one theme state" while classes invite accumulating several. It also keeps theme selectors visually distinct from styling classes in the stylesheet, which after a couple of hundred dark rules matters more than I expected.</p>
- </details>
-
- <details class="faq-item">
- <summary>How much CSS did dark mode actually take?</summary>
- <p>More than the tutorials imply: this site's dark theme grew as hundreds of override rules, because a template built light-first has hardcoded colours everywhere. Most of those have since become colour variables restated in one dark block, with 189 hand-written dark rules left over. Building theme-aware from day one (ideally with colour variables) is dramatically less work than retrofitting.</p>
- </details>
- </div>
-
-        
- ]]></content:encoded>
     </item>
     <item>
       <title>Simulated Annealing, Live</title>

@@ -6453,6 +6453,25 @@ box-shadow: none; }
   border-radius: 8px;
   box-sizing: border-box; }
 
+/* --- Evolving headline stage --------------------------------------------
+   The homepage's evolving headline (js/hero-evolve.js) running inside a
+   post, over the same photograph and opener scrim as its homepage slide,
+   so the triangles have the dark frame they were tuned against in both
+   themes. The script starts it when it scrolls into view.
+     <figure class="kr-figure--solo">
+       <div class="kr-evolve-stage">
+         <canvas class="kr-hero-evolve" width="640" height="190" aria-hidden="true"></canvas>
+       </div>
+       <figcaption class="figure-note">...</figcaption>
+     </figure> */
+.blog-post .kr-evolve-stage {
+  padding: clamp(18px, 4vw, 40px) 16px;
+  border-radius: var(--kr-radius-md);
+  background: var(--kr-opener-scrim), url("/img/photography/hero/141.webp") center / cover; }
+
+.blog-post .kr-evolve-stage .kr-hero-evolve {
+  margin: 0 auto; }
+
 /* --- Photo grid and full resolution ------------------------------------ */
 
 /* Photo grid: a contact sheet of full-bleed photographs inside one figure,
