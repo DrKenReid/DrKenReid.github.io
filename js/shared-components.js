@@ -4538,7 +4538,12 @@ function compactReference(li) {
     var marks = li.querySelectorAll('em, i, cite, a[href]');
     for (var i = 0; i < marks.length; i++) {
         var mark = squash(marks[i].textContent);
-        var at = mark ? rest.indexOf(mark) : -1;
+        // The mark as a whole segment: followed by punctuation or the end.
+        // A journal named "Sleep" also opens the title "Sleep regularity
+        // is...", and that first match cut the title down to one word.
+        var at = -1, from = 0;
+        while (mark && (at = rest.indexOf(mark, from)) >= 0 &&
+               !/^(\s*[.,:;?!(]|\s*$)/.test(rest.slice(at + mark.length))) from = at + 1;
         if (at < 0) continue;
         title = at <= 1 ? mark : rest.slice(0, at).replace(/[\s.,:;]*(\bIn)?\s*$/, '');
         break;

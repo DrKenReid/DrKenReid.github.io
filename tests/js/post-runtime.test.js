@@ -133,6 +133,13 @@ test('a sidenote shows first author, year, title and a short link', () => {
         ['Genetic Programming: On the Programming of Computers by Means of Natural Selection'], null));
     assert.equal(book.who, 'Koza, 1992');
     assert.equal(book.title, 'Genetic Programming: On the Programming of Computers by Means of Natural Selection');
+
+    // A venue whose name is also the title's first word.
+    const venue = rt.compactReference(fakeReference(
+        'Windred, D. P., et al. (2024). Sleep regularity is a stronger predictor of mortality risk than sleep duration. Sleep, 47(1), zsad253.',
+        ['Sleep'], null));
+    assert.equal(venue.who, 'Windred et al., 2024');
+    assert.equal(venue.title, 'Sleep regularity is a stronger predictor of mortality risk than sleep duration');
 });
 
 test('a reference that is not author-date is shown whole', () => {

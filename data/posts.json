@@ -1,5 +1,23 @@
 [
   {
+    "title": "Sleep Science",
+    "date": "2026-09-27",
+    "tags": [
+      "science",
+      "advice"
+    ],
+    "category": "Ideas",
+    "excerpt": "Sleep matters, and the sleep-influencer economy inflates certainty far past the evidence. What's solid, what's oversold, and why tracking sleep can ruin it.",
+    "url": "blog/sleep-science.html",
+    "image": "img/photography/thumb/62.webp",
+    "series": {
+      "name": "Wellness From the Science",
+      "part": 1
+    },
+    "readMinutes": 9,
+    "words": 1921
+  },
+  {
     "title": "What a Custom Domain Actually Involves",
     "date": "2026-09-27",
     "tags": [

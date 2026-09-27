@@ -1055,6 +1055,38 @@
 
     /* ------------------------------------------------- thinking and society */
 
+    // A night's sleep drawn as a hypnogram: four or five cycles down into
+    // deep sleep and back up to REM, while a moon crosses the sky.
+    def('sleep-science', function (w, h, rnd) {
+        var t = 0, cycle = 480;
+        // Stage per step: 0 awake, 1 REM, 2 light, 3 deep. Deep sleep comes
+        // early in the night and REM grows toward morning.
+        var stages = [0, 2, 3, 3, 2, 1, 2, 3, 3, 2, 1, 2, 3, 2, 1, 1, 2, 2, 1, 1, 2, 1, 1, 0]
+            .map(function (s) { return s / 3; });
+        return {
+            step: function () { t++; },
+            draw: function (ctx) {
+                var p = clamp01(phase(t, cycle) * 1.15), x0 = w * 0.17, x1 = w * 0.94, top = h * 0.4, bot = h * 0.86;
+                ['awake', 'REM', 'light', 'deep'].forEach(function (l, i) {
+                    var y = top + (bot - top) * i / 3;
+                    line(ctx, x0, y, x1, y, 'rgba(255,255,255,0.07)', 1);
+                    text(ctx, l, x0 - 4, y, 8, C.dim, 600, 'right');
+                });
+                ctx.strokeStyle = C.blue; ctx.lineWidth = 2; ctx.beginPath();
+                var n = stages.length, shown = Math.max(1, Math.floor(p * n));
+                for (var i = 0; i < shown; i++) {
+                    var xa = x0 + (x1 - x0) * i / n, xb = x0 + (x1 - x0) * (i + 1) / n, y = top + (bot - top) * stages[i];
+                    if (i === 0) ctx.moveTo(xa, y); else ctx.lineTo(xa, y);
+                    ctx.lineTo(xb, y);
+                }
+                ctx.stroke();
+                var m = phase(t, cycle);
+                dot(ctx, w * (0.12 + 0.76 * m), h * (0.3 - Math.sin(m * Math.PI) * 0.16), 9, C.b);
+                dot(ctx, w * (0.12 + 0.76 * m) + 4, h * (0.3 - Math.sin(m * Math.PI) * 0.16) - 3, 8, C.veil);
+            }
+        };
+    });
+
     // A fear meter driven by headlines: the rare and vivid beat the common.
     def('the-availability-heuristic-runs-the-news', function (w, h, rnd) {
         var t = 0, fear = 0.2, items = [];

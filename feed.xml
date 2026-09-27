@@ -11,6 +11,150 @@
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Sleep Science</title>
+      <link>https://www.kenreid.co.uk/blog/sleep-science.html</link>
+      <guid>https://www.kenreid.co.uk/blog/sleep-science.html</guid>
+      <pubDate>Sun, 27 Sep 2026 00:00:00 +0000</pubDate>
+      <description>Sleep matters, and the sleep-influencer economy inflates certainty far past the evidence. What&#x27;s solid, what&#x27;s oversold, and why tracking sleep can ruin it.</description>
+      <category>science</category>
+      <category>advice</category>
+      <content:encoded><![CDATA[
+ <h1>Sleep Science</h1>
+ <div class="blog-meta">
+ 27 September 2026 &middot;
+ <span class="blog-tag">science</span>
+ <span class="blog-tag">advice</span>
+ </div>
+
+<p>I've always had a strange relationship with sleep. I used to experience a lot of insomnia due to my thanatophobia, but nowadays (largely due to changes in life circumstances and being much happier) I tend to sleep soundly. However, I made the (mistake?) decision to read "Why We Sleep: Unlocking the Power of Sleep and Dreams" by Matthew Walker. Now, I have something of an obsession with making sure I have as good a sleep routine as possible.</p>
+
+ <p>In a 2024 paper, Windred and colleagues took more than 10 million hours of accelerometer data from 60,977 people in the UK Biobank and found that how regular someone's sleep was predicted their risk of dying over the following years better than how long they slept<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>. People are obsessed with sleeping pills, mattresses and spending insane amounts of money and time on these, when there are many much simpler (and healthier) solutions backed by actual science - and you can tell it's not some grift because no one is making money off of it (unlike the pills and mattresses).</p>
+
+ <p>I have the same problem with the 'sleep influencers' on YouTube shorts, Instagram reels and TikToks that I have with <a href="https://www.kenreid.co.uk/blog/self-help-books.html">most self-help books</a>. Their whole business is telling you that you're doing sleep wrong and dying faster because of it, and some of that is built on good science, but is driven by a will to make money off of you, through selling books, sleep accessories, diet plans or 1 on 1 mentoring for some obscene costs.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Sleep hygiene:</strong> the set of habits and conditions that support sleep: consistent timing, dark, cool, no screens, etc.</li>
+ <li><strong>Circadian rhythm:</strong> your body's roughly 24-hour internal clock, set largely by light exposure.</li>
+ <li><strong>Sleep architecture:</strong> the structure of a night's sleep in stages (light, deep, REM) cycling through the night.</li>
+ <li><strong>Polysomnography:</strong> the overnight sleep study done in a clinic, with sensors on your head and body, that trackers are compared against.</li>
+ <li><strong>Orthosomnia:</strong> a coined term for anxiety about achieving "perfect" sleep, often triggered by trackers, that itself wrecks your sleep.</li>
+ <li><strong>Sleep apnea:</strong> a serious disorder where breathing repeatedly stops during sleep. Underdiagnosed, and the one thing on this list to actually worry about.</li>
+ </ul>
+ </div>
+
+ <h2>What actually works</h2>
+
+ <p>The core of the science is solid, and fairly simple. Sleep is when a lot of important biology happens, memory consolidation for one and, going by more recent work, the brain clearing out metabolic waste. Chronic short sleep goes with worse heart health, worse mood, worse thinking and more accidents, and it keeps showing up that way study after study. The thing that really sold "better sleep" to me is that I've been working on my physical health and wellbeing, hitting the gym a lot - and it turns out good sleep is <i>essential</i> to maximize the gains you reap at the gym. What's the point in putting in all the effort to learn how to play guitar, or memorize content for class, or exhaust yourself at the gym, only to throw away a % of the gains from these things by sleeping poorly? So, here is some high level information I found backed by the science:</p>
+
+ <ul>
+ <li><strong>Regular times.</strong> Going to bed and waking at the same times every day is one of the best-supported habits there is, and in the Windred study it predicted the risk of dying better than total hours did.</li>
+ <li><strong>Light.</strong> Bright light in the morning and dim evenings do more for your body clock than most gadgets.</li>
+ <li><strong>Apnea.</strong> If you snore heavily, wake up unrefreshed, or someone has noticed you stop breathing in your sleep, get assessed. Untreated apnea is a real cardiovascular risk, and getting checked for it is covered by most health insurances (from what I've read: I am not your insurance specialist!)</li>
+ </ul>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/224.webp" alt="A small white heart-shaped tag reading Follow Your Dreams beside a tiny knitted doll, on a dark grey surface" loading="lazy" width="400" height="266">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+ </figure>
+
+ <h2>Oversold</h2>
+
+ <p>Matthew Walker's <em>Why We Sleep</em> did a lot of good for how seriously people take sleep. It changed my habits more than any other book I've read, and I gave it five stars (which is not particularly rare for me but still). Alexey Guzey went through it and argues that the World Health Organization "sleep loss epidemic" in it doesn't exist (he couldn't find a WHO document declaring one), and that a bar chart on sports injuries, adapted from another study, lost its 5-hour column, the one showing fewer injuries than 6 hours<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>, so some of it is fairly called out, but the central argument very much survives: sleep matters and most of us don't get enough of it.</p>
+
+ <p>Tracker "sleep scores" are largely guesswork. A consumer ring or watch estimates your sleep stages from movement and heart rate. These devices are bad at telling light, deep and REM sleep apart compared with polysomnography, and the app still shows you a confident number every morning. It runs largely guess work and validation.</p>
+
+ <p>Most sleep supplements have little behind them except marketing. Even melatonin, which does have real uses for shifting your body clock, is routinely sold at doses far higher than the evidence supports and taken as a sedative, which it isn't. In fact, the aforementioned book specifies that melatonin is a wonder-drug - for changing your sleep cycle when traveling - only. It's not intended for, nor good at, aiding people with sleep when they're not changing time zones. If you take it otherwise and find it useful, that's great, but it's likely as useful as a sugar pill, but with potential side effects. Think on it and settle for some of the other tips in this page.</p>
+
+ <h2>Orthosomnia</h2>
+
+ <p>Baron and colleagues described <strong>orthosomnia</strong> in 2017: patients so anxious about getting their tracker's numbers right that the anxiety itself was damaging their sleep<sup><a href="#ref-3" class="cite-ref">[3]</a></sup>. You lie awake worrying about whether you're getting enough deep sleep. Or you wake up feeling fine, check the app, find out you "slept badly", and feel worse all day than you would have if you'd never looked.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/326.webp" alt="A chipmunk peeking out of the end of a white pipe lying in the grass" loading="lazy" width="400" height="266">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+ </figure>
+
+ <h2>What to do</h2>
+
+ <p>You don't need to buy anything to sleep well. Roughly in order of how much they help:</p>
+
+ <ol>
+ <li><strong>Routine.</strong> Go to bed and get up at the same times every day, weekends included (I know, that's a hard ask). In the Windred study, regularity predicted the risk of dying better than total hours did<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>.</li>
+ <li><strong>Light.</strong> Get daylight in the morning, ideally outside, and keep the evenings dim. Light is the main thing that sets your body clock, and a bright screen at midnight tells it it's still daytime.</li>
+ <li><strong>Caffeine.</strong> It lasts much longer than it feels like it does. In healthy adults its half-life is between 3 and 7 hours<sup><a href="#ref-5" class="cite-ref">[5]</a></sup>, so half of a 3pm coffee can still be in you at 9pm, and a quarter at bedtime. Drake and colleagues gave people 400mg (two or three big coffees) six hours before bed and it still cut their sleep by more than an hour<sup><a href="#ref-4" class="cite-ref">[4]</a></sup>. If you drink it at all, drink it in the morning (after all, caffeine is actually great for you cognitively and physically<sup><a href="#ref-9" class="cite-ref">[9]</a></sup><sup><a href="#ref-10" class="cite-ref">[10]</a></sup>, hence the culture around it being a key ingredient in preworkouts, energy drinks and synonymous with studying!).</li>
+ <li><strong>Temperature.</strong> Keep the bedroom cool. Under a duvet, being too warm costs more deep and REM sleep than being cold does, and humid heat is worse again<sup><a href="#ref-6" class="cite-ref">[6]</a></sup>.</li>
+ <li><strong>Exercise.</strong> Regular exercise has a moderate effect on how well people say they sleep, and small effects on how long they sleep and how fast they drop off<sup><a href="#ref-7" class="cite-ref">[7]</a></sup>. It's good for everything else too.</li>
+ <li><strong>Hydration.</strong> Drink enough through the day, but not a pint right before bed unless you enjoy 3am trips to the toilet. People who slept six hours were more likely to be under-hydrated than people who slept eight<sup><a href="#ref-8" class="cite-ref">[8]</a></sup>.</li>
+ </ol>
+
+ <p>Everything past that (the scores, the supplements, the doom, the optimising) ranges from "might help" to overthinking and anxiety provoking. Unless your doctor says otherwise. </p>
+
+ <p>One major tip that I think lies overarching most of these but isn't directly stated so far: stress will keep you up. There isn't a single pill to fixing stress, but these other things can help regardless, and whether you need to lower your ambition, worry less about things not in your control (therapy? meditation? prayer? journal keeping?) or change your personal circumstances to less stressful ones (new job? cut off that toxic person? move to somewhere warmer or more beautiful?), lowering your stress is also wonderful for your sleep habits, your mental health, and your physical health - even if it's easier said than done.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/474.webp" alt="A person standing by a railing at a frozen park pond on a snowy winter morning, with ducks on the ice and bare trees behind" loading="lazy" width="400" height="266">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
+ </figure>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Do I really need eight hours?</summary>
+ <p>"Eight hours" is a population average, not a prescription for you. Adult sleep need varies, most people land somewhere in a 7-to-9-hour band, and a rare few are true short sleepers. Aim for routine over number of hours, and once you have that down, aim for the 7-9 band.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Should I throw out my sleep tracker, then?</summary>
+ <p>Not necessarily, but use it as a rough trend line rather than a true signal of sleep quality or amount of sleep. </p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Is it true that lost sleep can never be recovered?</summary>
+ <p>Somewhat. Chronic, long-term sleep deprivation does carry real cumulative risks, and you can't "bank" or "repay" sleep like money. But the harder claims (that one bad night causes permanent damage, or that catch-up sleep does nothing) go past the evidence. A rough night is survivable and normal, recovery sleep does help, and lying there convinced you've done irreversible harm is both wrong and terrible for tonight's sleep.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+ <ol class="references">
+          <li id="ref-1">
+            Windred, D. P., et al. (2024). Sleep regularity is a stronger predictor of mortality risk than sleep duration. <em>Sleep</em>, 47(1), zsad253. <a href="https://doi.org/10.1093/sleep/zsad253" target="_blank" rel="noopener">https://doi.org/10.1093/sleep/zsad253</a>
+          </li>
+          <li id="ref-2">
+            Guzey, A. (2019/2022). Matthew Walker's "Why We Sleep" is riddled with scientific and factual errors. <a href="https://guzey.com/books/why-we-sleep/" target="_blank" rel="noopener">https://guzey.com/books/why-we-sleep/</a> (a critique; treat as a starting point, not a final word, and read the exchanges it prompted)
+          </li>
+          <li id="ref-3">
+            Baron, K. G., Abbott, S., Jao, N., Manalo, N., &amp; Mullen, R. (2017). Orthosomnia: Are some patients taking the quantified self too far? <em>Journal of Clinical Sleep Medicine</em>, 13(2), 351&ndash;354. <a href="https://doi.org/10.5664/jcsm.6472" target="_blank" rel="noopener">https://doi.org/10.5664/jcsm.6472</a>
+          </li>
+          <li id="ref-4">
+            Drake, C., Roehrs, T., Shambroom, J., &amp; Roth, T. (2013). Caffeine effects on sleep taken 0, 3, or 6 hours before going to bed. <em>Journal of Clinical Sleep Medicine</em>, 9(11), 1195&ndash;1200. <a href="https://doi.org/10.5664/jcsm.3170" target="_blank" rel="noopener">https://doi.org/10.5664/jcsm.3170</a>
+          </li>
+          <li id="ref-5">
+            Caffeine. <em>Wikipedia</em> (accessed September 2026). <a href="https://en.wikipedia.org/wiki/Caffeine" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Caffeine</a>
+          </li>
+          <li id="ref-6">
+            Okamoto-Mizuno, K., &amp; Mizuno, K. (2012). Effects of thermal environment on sleep and circadian rhythm. <em>Journal of Physiological Anthropology</em>, 31, 14. <a href="https://doi.org/10.1186/1880-6805-31-14" target="_blank" rel="noopener">https://doi.org/10.1186/1880-6805-31-14</a>
+          </li>
+          <li id="ref-7">
+            Kredlow, M. A., Capozzoli, M. C., Hearon, B. A., Calkins, A. W., &amp; Otto, M. W. (2015). The effects of physical activity on sleep: a meta-analytic review. <em>Journal of Behavioral Medicine</em>, 38(3), 427&ndash;449. <a href="https://doi.org/10.1007/s10865-015-9617-6" target="_blank" rel="noopener">https://doi.org/10.1007/s10865-015-9617-6</a>
+          </li>
+          <li id="ref-8">
+            Rosinger, A. Y., Chang, A.-M., Buxton, O. M., Li, J., Wu, S., &amp; Gao, X. (2019). Short sleep duration is associated with inadequate hydration: cross-cultural evidence from US and Chinese adults. <em>Sleep</em>, 42(2), zsy210. <a href="https://doi.org/10.1093/sleep/zsy210" target="_blank" rel="noopener">https://doi.org/10.1093/sleep/zsy210</a>
+          </li>
+          <li id="ref-9">
+            McLellan, T. M., Caldwell, J. A., &amp; Lieberman, H. R. (2016). A review of caffeine's effects on cognitive, physical and occupational performance. <em>Neuroscience &amp; Biobehavioral Reviews</em>, 71, 294&ndash;312. <a href="https://doi.org/10.1016/j.neubiorev.2016.09.001" target="_blank" rel="noopener">https://doi.org/10.1016/j.neubiorev.2016.09.001</a>
+          </li>
+          <li id="ref-10">
+            Guest, N. S., VanDusseldorp, T. A., Nelson, M. T., Grgic, J., Schoenfeld, B. J., Jenkins, N. D. M., Arent, S. M., Antonio, J., et al. (2021). International Society of Sports Nutrition position stand: caffeine and exercise performance. <em>Journal of the International Society of Sports Nutrition</em>, 18(1), 1. <a href="https://doi.org/10.1186/s12970-020-00383-4" target="_blank" rel="noopener">https://doi.org/10.1186/s12970-020-00383-4</a>
+          </li>
+        </ol>
+
+        
+ ]]></content:encoded>
+    </item>
+    <item>
       <title>What a Custom Domain Actually Involves</title>
       <link>https://www.kenreid.co.uk/blog/what-a-custom-domain-actually-involves.html</link>
       <guid>https://www.kenreid.co.uk/blog/what-a-custom-domain-actually-involves.html</guid>
@@ -2494,128 +2638,6 @@ jobs:
       <pubDate>Tue, 11 Aug 2026 00:00:00 +0000</pubDate>
       <description>An interactive particle swarm optimiser in your browser: a flock of dots hunts a landscape none of them can see, steered by private memory and a single piece of gossip, and the sliders let you collapse the swarm on purpose.</description>
       <category>ai</category>
-      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">View it on the site</a> to play with it.</em></p>
- <h1>Particle Swarm, Live</h1>
- <div class="blog-meta">
- 11 August 2026 &middot;
- <span class="blog-tag">ai</span>
- </div>
-
- <p>In 1995, a social psychologist and an electrical engineer sat down to animate a flock of birds and accidentally invented one of the most popular optimisers of the next two decades, which is a story I love. I really believe that error is one of the most fruitful forms of novelty creation. Below, you can fly the result yourself. It's the sibling of <a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">the ant colony post</a>: another swarm, another crowd of simple agents solving a problem none of them can see individually, with the communication channel turned inside out.</p>
-
- 
-
- <p>In Ant Colony Optimisation, the ants coordinate through the environment, and no ant knows anything whatsoever. The knowledge lived in the pheromone map, written and read by thousands of insects who are basically automatons. Particles do the opposite, and each one privately remembers the best spot it has ever stood on, while the whole swarm shares a single piece of gossip: the best spot <em>any</em> member has ever found. That's the entire communication system, and it runs without a trail, a map, or a leader, just a telepathic link of where to find the dropped ice cream or sugar granules.</p>
-
- <div class="plain-english-box">
- <h2>Quick jargon guide</h2>
- <ul>
- <li><strong>Particle swarm optimisation (PSO):</strong> an optimiser inspired by bird flocking, where a population of candidate solutions ("particles") fly through the search space, each pulled toward its own best-known point and the swarm's best-known point.</li>
- <li><strong>Personal best:</strong> the best position a single particle has ever visited. Its private memory, and one of the two forces steering it.</li>
- <li><strong>Global best:</strong> the best position any particle in the swarm has ever visited. Shared knowledge: every particle feels its pull.</li>
- <li><strong>Inertia:</strong> how much of its current velocity a particle keeps each step. High inertia means momentum and wide exploration; low inertia means the social pulls dominate.</li>
- <li><strong>Velocity clamp:</strong> a cap on how fast a particle may move, stopping the update rule from flinging particles out of the search space entirely.</li>
- <li><strong>Premature convergence:</strong> the whole swarm collapsing onto one point before the space has been properly searched, then being unable to leave. The characteristic failure of anything that shares information too enthusiastically.</li>
- </ul>
- </div>
-
- <h2>The flock that forgot how to fly</h2>
-
- <p>James Kennedy was a social psychologist and Russell Eberhart was an electrical engineer. Their 1995 paper<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> opens with birds rather than mathematics. They wanted to simulate the choreography of a flock, in the tradition of the boids models, where each simulated bird matches its neighbours' speed, avoids collisions, and stays near the roost. They started deleting rules to see which ones mattered.</p>
-
- <p>Collision avoidance went, velocity matching went, nearest-neighbour tracking went. What survived would not fool a birdwatcher, or a pigeon, or a cat, just dots drifting toward places that had scored well. But the dots were doing something more interesting than flocking: they were finding the optimum of whatever function defined "good". The choreography fell away and the optimiser remained, and Kennedy and Eberhart named the agents <em>particles</em>, "birds" probably no longer felt right.</p>
-
- <p>The version below includes one refinement from 1998, when Shi and Eberhart added the inertia weight<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>: a knob controlling how much of its current velocity each particle carries into the next step. </p>
-
- <h2>Three kinds of pull</h2>
-
- <p>Every step, each particle updates its velocity as a weighted sum of three forces, which, to me at least, feel kind of like personality traits:</p>
-
- <ul>
- <li><strong>Habit (w):</strong> keep doing what you were doing. The inertia weight scales the particle's current velocity.</li>
- <li><strong>Own memory (c1):</strong> a pull back toward the best place <em>you</em> have ever found. Call it self-trust, or nostalgia.</li>
- <li><strong>Peer pressure (c2):</strong> a pull toward the best place <em>anyone</em> has ever found. Conformism, sheep-ery.</li>
- </ul>
-
- <p>The two social pulls are each multiplied by a fresh random number every step, so no two particles are likely to respond the same. That randomness is what keeps the swarm from collapsing into a single deterministic trajectory.</p>
-
- <p>The result is clamped to a maximum speed, the particle moves, the function gets evaluated at the new spot, memories get updated, and the loop repeats. That's it! </p>
-
- <h2>Watch the swarm hunt</h2>
-
- <p>Below, a swarm is minimising a two-dimensional landscape, where warm colours are low ground (better) and the dashed ring marks the true optimum, which the swarm does not know about. Watch the characteristic dance: particles overshoot the best-known point, get hauled back, overshoot the other way, and the whole cloud contracts around the answer like a slowing pendulum.</p>
-
- 
-
- <h2>Turning the swarm into a stampede</h2>
-
- <p><strong>Crank inertia past 1.</strong> Above w = 1 a particle's velocity grows every step instead of decaying, so the only thing stopping the swarm from leaving the map is the speed clamp. The swarm boils, with particles orbiting the best-known point at full speed, permanently overshooting, while the spread chart flatlines high and the fitness chart stalls on momentum.</p>
-
- <p><strong>Now do the opposite: inertia near 0, peer pressure at 3.</strong> This is the stampede: with no momentum to resist, every particle dives straight at the first decent global best, the spread chart crashes within a few dozen iterations, and the swarm becomes one throbbing dot.</p>
-
- <p>On the bowl this looks like efficiency, but switch to the egg carton and watch the same setting get eaten: the swarm piles into whichever dimple it saw first, the true optimum sits two ridges away, and nobody has enough independence left to go and look. Premature convergence.</p>
-
- <p><strong>Set own memory (c1) to zero.</strong> Pure conformism: particles have no attachment to their own discoveries, and the global best is the only guidance. </p>
-
- <p><strong>Set peer pressure (c2) to zero.</strong> Now nobody shares anything, and you get thirty hermits running thirty independent local searches, each rattling around its own personal best and improving it a little. </p>
-
- <h2>Now tune it back</h2>
-
- <p><strong>Then go back to the classic setting</strong> (w = 0.72, c1 = c2 = 1.5, numbers the field converged on after years of tuning) and watch the dance it buys you: overshoot, return, contract, with just enough disagreement to keep a few scouts out wide while the core closes in. On the egg carton it will still fail sometimes. The demo isn't broken, that just shows that it's not perfect, and there are still papers being published solving more complex landscapes with PSO.</p>
-
- <h2>Personality knobs</h2>
-
- <p>Kennedy never stopped pointing out that this is a model of social learning first and an optimiser second: individuals keep private experience, the group broadcasts its best result, and behaviour is a compromise between habit, self-trust and conformism.</p>
-
- <p>Every failure mode you just created is a recognisable social failure. The high-conformism swarm is an echo chamber stampeding to its first confident answer. The zero-gossip swarm is a room full of talented people who never talk. The overheated swarm is a committee that keeps relitigating and never makes an actual decision (sounds like many meetings I've been in).</p>
-
- <h2>Annealing, evolution, ants, particles</h2>
-
- <p>The through-line of the series:</p>
- <ul>
- <li><a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">simulated annealing</a> was one searcher learning when to accept a worse answer</li>
- <li><a href="https://www.kenreid.co.uk/blog/evolution-live.html">genetic algorithms</a> were a population improving by dying</li>
- <li><a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">the ants</a> stored the answer in the world</li>
- <li>and the particles store it in each other</li>
- </ul>
-
- <p>Four strategies, one shared problem: explore enough to find the right valley, exploit enough to reach the bottom of it. See some interesting overlaps in strategy, parameters, landscape advantages and disadvantages?</p>
-
- <p>Anyway. Go scoop up the swarm, drop it in a corner of the egg carton, and watch thirty dots argue their way out. Or fail to. </p>
-
- <div class="faq-section">
- <h2>Common questions</h2>
-
- <details class="faq-item">
- <summary>Is this actually how birds flock?</summary>
- <p>No. Real flocking is much closer to the boids rules Kennedy and Eberhart started from (local alignment, cohesion, separation among a handful of nearest neighbours), and modern starling studies suggest birds track a fixed number of neighbours rather than everyone in range. </p>
- </details>
-
- <details class="faq-item">
- <summary>How is this different from a genetic algorithm?</summary>
- <p>Both are population-based and gradient-free, but the mechanics are almost disjoint. In a genetic algorithm, individuals are born, breed and die: information moves between solutions by crossover, and progress comes from selection pressure. In PSO nobody dies and nobody breeds. The same thirty particles persist the whole run, and information moves through shared memory instead of inheritance. In practice PSO tends to converge faster on smooth continuous problems, while evolutionary methods are easier to adapt to weird, structured or combinatorial ones.</p>
- </details>
-
- <details class="faq-item">
- <summary>Does anyone still use PSO?</summary>
- <p>Yes, heavily, especially in engineering: antenna design, power systems, controller tuning, and any setting where evaluations are expensive, gradients are unavailable, and a decent answer soon beats a perfect answer never.</p>
- </details>
- </div>
-
- <h2 class="section-heading" id="references">References</h2>
-
- <ol class="references">
-          <li id="ref-1">
-            Kennedy, J., &amp; Eberhart, R. (1995). Particle swarm optimization. <em>Proceedings of ICNN'95 - International Conference on Neural Networks</em>, 4, 1942&ndash;1948. <a href="https://doi.org/10.1109/ICNN.1995.488968" target="_blank" rel="noopener">https://doi.org/10.1109/ICNN.1995.488968</a>
-          </li>
-          <li id="ref-2">
-            Shi, Y., &amp; Eberhart, R. (1998). A modified particle swarm optimizer. <em>1998 IEEE International Conference on Evolutionary Computation Proceedings, IEEE World Congress on Computational Intelligence</em>, 69&ndash;73. <a href="https://doi.org/10.1109/ICEC.1998.699146" target="_blank" rel="noopener">https://doi.org/10.1109/ICEC.1998.699146</a>
-          </li>
-        </ol>
-
-        
-
- ]]></content:encoded>
     </item>
     <item>
       <title>50 Blogs: An Infographic</title>
