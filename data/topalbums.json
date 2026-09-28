@@ -15,6 +15,13 @@
       "plays": 6
     },
     {
+      "name": "Maximum Yodel (Extended Edition)",
+      "artist": "The Institute of Quackology",
+      "url": "https://www.last.fm/music/The+Institute+of+Quackology/Maximum+Yodel+(Extended+Edition)",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/c5d3b9c0efea759c185bee8473321bae.jpg",
+      "plays": 4
+    },
+    {
       "name": "Barbie The Album",
       "artist": "Ava Max",
       "url": "https://www.last.fm/music/Ava+Max/Barbie+The+Album",
@@ -36,17 +43,17 @@
       "plays": 3
     },
     {
+      "name": "Colors Collide",
+      "artist": "French 79",
+      "url": "https://www.last.fm/music/French+79/Colors+Collide",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/ace982a07042cd1260bd4d62612b09b7.jpg",
+      "plays": 3
+    },
+    {
       "name": "Divenire (Deluxe Edition)",
       "artist": "Ludovico Einaudi",
       "url": "https://www.last.fm/music/Ludovico+Einaudi/Divenire+(Deluxe+Edition)",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/44d6abcfd8aed5439223f0e88d8e4626.jpg",
-      "plays": 3
-    },
-    {
-      "name": "Maximum Yodel (Extended Edition)",
-      "artist": "The Institute of Quackology",
-      "url": "https://www.last.fm/music/The+Institute+of+Quackology/Maximum+Yodel+(Extended+Edition)",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/c5d3b9c0efea759c185bee8473321bae.jpg",
       "plays": 3
     },
     {
@@ -64,10 +71,10 @@
       "plays": 2
     },
     {
-      "name": "Traces of Silver",
-      "artist": "Andrew White",
-      "url": "https://www.last.fm/music/Andrew+White/Traces+of+Silver",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/60bf2188df9c7445c8180fa6cd6e5393.jpg",
+      "name": "you never really cared",
+      "artist": "Anna Marx",
+      "url": "https://www.last.fm/music/Anna+Marx/you+never+really+cared",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/4ae1dc741318f9fb4a3ce5dcd72ec251.jpg",
       "plays": 2
     },
     {
@@ -78,52 +85,10 @@
       "plays": 2
     },
     {
-      "name": "The Secretary's Daughter",
-      "artist": "Benjamin Monday",
-      "url": "https://www.last.fm/music/Benjamin+Monday/The+Secretary%27s+Daughter",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/3b6f5c7f074f5ee0d37416a0f7869688.jpg",
-      "plays": 2
-    },
-    {
-      "name": "Trilogy",
-      "artist": "Carpenter Brut",
-      "url": "https://www.last.fm/music/Carpenter+Brut/Trilogy",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/d0c1914b6840db8f0bdeb105944e7933.jpg",
-      "plays": 2
-    },
-    {
       "name": "White Flag",
       "artist": "Dido",
       "url": "https://www.last.fm/music/Dido/White+Flag",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/eb0101b8308ecbef4b77bdc696817d8f.png",
-      "plays": 2
-    },
-    {
-      "name": "Unethical",
-      "artist": "Faouzia",
-      "url": "https://www.last.fm/music/Faouzia/Unethical",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/ca42388269f5ebcc69ad3f85474a3697.jpg",
-      "plays": 2
-    },
-    {
-      "name": "High Valley Demos",
-      "artist": "Fey Fili",
-      "url": "https://www.last.fm/music/Fey+Fili/High+Valley+Demos",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/01d34ed523f8706f4e2bb3270294dc62.jpg",
-      "plays": 2
-    },
-    {
-      "name": "Franz Ferdinand",
-      "artist": "Franz Ferdinand",
-      "url": "https://www.last.fm/music/Franz+Ferdinand/Franz+Ferdinand",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/963d2fd230d9c9727797dca40098dd71.png",
-      "plays": 2
-    },
-    {
-      "name": "Colors Collide",
-      "artist": "French 79",
-      "url": "https://www.last.fm/music/French+79/Colors+Collide",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/ace982a07042cd1260bd4d62612b09b7.jpg",
       "plays": 2
     },
     {
@@ -132,8 +97,36 @@
       "url": "https://www.last.fm/music/Jaroslav+Beck/Beat+Saber+(Original+Game+Soundtrack)",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/070f7c8133e30d9c0cc25efc4fdb6462.jpg",
       "plays": 2
+    },
+    {
+      "name": "The Elder Scrolls IV: Oblivion (Original Game Soundtrack)",
+      "artist": "Jeremy Soule",
+      "url": "https://www.last.fm/music/Jeremy+Soule/The+Elder+Scrolls+IV:+Oblivion+(Original+Game+Soundtrack)",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/263ef8870fb4908b76b574f178224aa3.jpg",
+      "plays": 2
+    },
+    {
+      "name": "I Giorni",
+      "artist": "Ludovico Einaudi",
+      "url": "https://www.last.fm/music/Ludovico+Einaudi/I+Giorni",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/19e634f2f0aacce136850e4dd6a7b0e1.jpg",
+      "plays": 2
+    },
+    {
+      "name": "Pronounced' Leh-'Nerd 'Skin-'Nerd",
+      "artist": "Lynyrd Skynyrd",
+      "url": "https://www.last.fm/music/Lynyrd+Skynyrd/Pronounced%27+Leh-%27Nerd+%27Skin-%27Nerd",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/31c0e29aba21f5442fc0a48958c91394.jpg",
+      "plays": 2
+    },
+    {
+      "name": "Dopamine (Split Brain Version)",
+      "artist": "Madelline",
+      "url": "https://www.last.fm/music/Madelline/Dopamine+(Split+Brain+Version)",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/4415ed4c7fafb84cdbfb0cad3cbd5028.jpg",
+      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-09-21"
+  "updated": "2026-09-28"
 }
