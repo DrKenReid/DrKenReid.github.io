@@ -67,7 +67,6 @@ class CardMarkup(unittest.TestCase):
         self.assertIn("url('https://example.org/a.jpg')", card)
 
     def test_date_and_read_time(self):
-        self.assertEqual(grp.format_post_date("2026-09-05"), "5 September 2026")
         self.assertIn("4 July 2026 · 8 min read", grp.build_card_html(post()))
         self.assertIn('<div class="blog-card-date">4 July 2026</div>',
                       grp.build_card_html(post(readMinutes=None)))

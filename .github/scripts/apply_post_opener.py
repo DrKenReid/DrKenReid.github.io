@@ -47,8 +47,6 @@ DRAFTS = ROOT / "blog" / "drafts"
 BANNER_RE = re.compile(r"[ \t]*<section class=\"breadcrumb-area[\s\S]*?</section>\n?")
 URL_RE = re.compile(r"url\(([^)]+)\)")
 TITLE_RE = re.compile(r"class=\"(?:[^\"]* )?page-title\">([^<]+)<")
-MONTHS = ["January", "February", "March", "April", "May", "June", "July",
-          "August", "September", "October", "November", "December"]
 
 # Characters of title (as read, entities decoded) beyond which the opener
 # sets it a step smaller. About fifteen characters fit a line of the
@@ -63,11 +61,6 @@ def tracked_posts():
     return sitelib.tracked("blog/*.html")
 
 
-def nice_date(iso):
-    y, m, d = iso.split("-")
-    return "%d %s %s" % (int(d), MONTHS[int(m) - 1], y)
-
-
 def esc(s):
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
@@ -75,7 +68,7 @@ def esc(s):
 def build_opener(post, img, title, prefix="../"):
     kicker = " &middot; ".join(x for x in [
         esc(post.get("category", "")),
-        '<time datetime="%s">%s</time>' % (post["date"], nice_date(post["date"])),
+        '<time datetime="%s">%s</time>' % (post["date"], sitelib.long_date(post["date"])),
         "%d min read" % post["readMinutes"] if post.get("readMinutes") else "",
     ] if x)
     credit = ('      <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>\n'

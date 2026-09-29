@@ -129,16 +129,9 @@ BLOCKS = {
     "publications-jsonld": "the ScholarlyArticle JSON-LD",
 }
 
-def block_re(name):
-    """The generated region of one block: group 1 is the start marker line,
-    group 2 its indentation, group 3 the body, group 4 the end marker line.
-    Both markers are anchored on the exact name ((?![\\w-]), not \\b, which
-    would let "publications" match the start of "publications-jsonld" and
-    swallow everything between the two blocks)."""
-    return re.compile(
-        r"(^([ \t]*)<!-- BEGIN %s(?![\w-])[^\n]*-->\n)(.*?)(^[ \t]*<!-- END %s -->)"
-        % (re.escape(name), re.escape(name)),
-        re.M | re.S)
+# The generated regions of the page. sitelib.block_re anchors each name
+# exactly: "publications" is a prefix of "publications-jsonld".
+block_re = sitelib.block_re
 
 
 # --- data -------------------------------------------------------------
@@ -386,17 +379,7 @@ def render(text, data, pubs):
     """The page with both blocks regenerated, or raise if a marker is missing."""
     wanted = {"publications": list_lines(data, pubs), "publications-jsonld": jsonld_lines(pubs)}
     for name, lines in wanted.items():
-        rx = block_re(name)
-        found = rx.findall(text)
-        if len(found) != 1:
-            raise SystemExit("data_science.html: expected one '%s' block (%s), found %d"
-                             % (name, BLOCKS[name], len(found)))
-
-        def fill(m, lines=lines):
-            pad = m.group(2)
-            body = "".join((pad + ln).rstrip() + "\n" for ln in lines)
-            return m.group(1) + body + m.group(4)
-        text = rx.sub(fill, text, count=1)
+        text = sitelib.fill_block(text, name, lines, where="data_science.html (%s)" % BLOCKS[name])
     return text
 
 

@@ -193,6 +193,13 @@ CHECKS: list[Check] = [
           script("generate_listing_fallback.py", "--check"),
           script("generate_listing_fallback.py"), fast=True),
 
+    # The "Read in order" band under the blog grid: three series from
+    # posts.json, each described by its series page's meta description.
+    # After the listing: a published part can change which series show.
+    Check("series-band", "blog.html's series band matches posts.json",
+          script("generate_series_band.py", "--check"),
+          script("generate_series_band.py"), fast=True),
+
     # sitemap.xml: every indexable tracked page, with a post's lastmod
     # taken from posts.json.
     Check("sitemap", "sitemap.xml lists every indexable page",

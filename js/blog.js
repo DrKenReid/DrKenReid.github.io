@@ -1,21 +1,31 @@
 /**
- * Blog listing (blog.html): search, the series shelf, a faceted filter
- * panel, sorting and pagination, all over data/posts.json.
+ * Blog listing (blog.html): search, a faceted filter panel, sorting and
+ * pagination, all over data/posts.json.
  *
  * STATE MODEL
  *   Everything a reader can change is one of the variables at the top of
  *   the closure below: searchQuery, activeTags, activeLengths, facetStates,
- *   seriesMode, activeSeries, sortKey/sortDir and currentPage. Controls
- *   never keep state of their own that the list reads back; each click
- *   changes a variable, then the same three steps follow: resync the
- *   controls that depend on it, syncUrl(), renderPosts(). renderPosts()
+ *   seriesMode, sortKey/sortDir and currentPage. Controls never keep
+ *   state of their own that the list reads back; each click changes a
+ *   variable, then the same three steps follow: resync the controls that
+ *   depend on it, syncUrl(), renderPosts(). renderPosts()
  *   draws the grid from state alone, so any mix of controls and a deep
  *   link produce the same page.
  *
  *   The groups combine as the panel reads: buttons within a group are
- *   OR'd, the groups are AND'd, search narrows further. A named series
- *   (the shelf) replaces the sort with part order, and it cannot coexist
- *   with "Standalone", so choosing either one releases the other.
+ *   OR'd, the groups are AND'd, search narrows further.
+ *
+ * SERIES
+ *   The listing does not filter by a named series: each series has a page
+ *   of its own (series-<slug>.html) with an introduction and every part in
+ *   order, and a grid filtered to the same posts was a worse copy of it.
+ *   The listing sends readers there instead: a card's "Part 3 · Everyday
+ *   Ethics" label links to its series page (addSeriesChip), the toolbar
+ *   links to the series index, and the "Read in order" band under the grid
+ *   (written into blog.html by generate_series_band.py, hidden here while
+ *   the list is narrowed) puts three longer series in front of a reader
+ *   who has scrolled past a page of posts. The Filter panel keeps "In a
+ *   series" and "Standalone".
  *
  * URL KEYS (syncUrl writes them, readStateFromUrl reads them back)
  *   q       search text                     ?q=annealing
@@ -24,7 +34,9 @@
  *   only    TRI_FACETS keys to require      ?only=interactive
  *   not     TRI_FACETS keys to exclude      ?not=code
  *   in      'series' or 'standalone'        ?in=standalone
- *   series  a series name as in posts.json  ?series=Algorithms%2C%20Live
+ *   series  not state: a link from when the listing filtered by series
+ *           (?series=Algorithms%2C%20Live) goes on to that series' page
+ *           (forwardSeriesLink)
  *   sort    SORT_OPTIONS key                ?sort=title
  *   dir     'asc' or 'desc'                 ?dir=asc
  *   page    1-based page number             ?page=3
@@ -66,8 +78,8 @@
  *   shared-components.js: loadBlogPosts, krFetchJson, createBlogCardElement,
  *   krInitTogglePanels, krBuildListSearchBox,
  *   krUpdateSearchCounter, krRenderListPagination, krParsePostDate,
- *   postSeriesList, postSeriesEntry, krSnapRowArrows, krEscapeHtml,
- *   DEFAULT_POST_IMAGE, and the panel parts krFacetRow, krFacetButton,
+ *   postSeriesList, postSeriesEntry, seriesPageHref, and the panel parts
+ *   krFacetRow, krFacetButton,
  *   krCountLabel, krSetPressed, krClearRow, krTagFacetRow, krSortPanel,
  *   krSortOption, krSortFromUrl, krSortToUrl, krToolbarLabels and
  *   krUrlList, which series-index.js shares.
@@ -80,7 +92,6 @@
 	var activeLengths = [];
 	var seriesMode = '';        // '' | 'series' | 'standalone'
 	var facetStates = {};       // tri-state facet key -> '' | 'only' | 'exclude'
-	var activeSeries = '';
 	var sortKey = 'date';
 	var sortDir = -1;
 	var popularViews = {};
@@ -89,7 +100,6 @@
 	var POSTS_PER_PAGE = 9;
 	var tagFilterBar = null;
 	var clearRow = null;        // krClearRow handle for the current panel
-	var sortPanel = null;       // krSortPanel handle, built once
 	var toolbar = null;         // krInitTogglePanels handle
 
 	// Reading-time bands. Boundaries follow the shape of the corpus rather
@@ -162,10 +172,9 @@
 				allPosts = data.slice().sort(function(a, b) {
 					return krParsePostDate(b.date) - krParsePostDate(a.date);
 				});
+				if (forwardSeriesLink()) return;
 				var startPage = readStateFromUrl();
 				buildSearchBox();
-				buildSeriesShelf();
-				syncSeriesShelf();
 				buildFilterPanel();
 				buildSortPanel();
 				initToolbar();
@@ -174,7 +183,7 @@
 				currentPage = startPage;
 				// Open the panel when the link arrived pre-filtered, so a short
 				// list never looks like the whole blog.
-				if (activeFilterCount() || activeSeries) toolbar.open('blog-filters');
+				if (activeFilterCount()) toolbar.open('blog-filters');
 				renderPosts();
 				// Write the validated state back once, after renderPosts has
 				// clamped the page, so the address bar never shows a filter
@@ -224,8 +233,7 @@
 		if (only.length) params.set('only', only.join(','));
 		if (excluded.length) params.set('not', excluded.join(','));
 
-		if (activeSeries) params.set('series', activeSeries);
-		else if (seriesMode) params.set('in', seriesMode);
+		if (seriesMode) params.set('in', seriesMode);
 
 		krSortToUrl(params, SORT_OPTIONS, sortKey, sortDir);
 		if (currentPage > 1) params.set('page', String(currentPage));
@@ -264,13 +272,6 @@
 		var mode = params.get('in');
 		seriesMode = (mode === 'series' || mode === 'standalone') ? mode : '';
 
-		var series = params.get('series') || '';
-		activeSeries = series && allPosts.some(function(p) {
-			return postSeriesEntry(p, series);
-		}) ? series : '';
-		// A named series and "standalone only" cannot both hold; the shelf wins.
-		if (activeSeries) seriesMode = '';
-
 		var sort = krSortFromUrl(params, SORT_OPTIONS);
 		sortKey = sort.key;
 		sortDir = sort.dir;
@@ -279,105 +280,21 @@
 		return page > 1 ? page : 1;
 	}
 
-	/* ------------------------------------------------------ series shelf */
+	/* ---------------------------------------------------- old series links */
 
 	/**
-	 * One pill per series, most recently updated first, in a single row that
-	 * scrolls sideways (.kr-snap-row) at every width. It used to wrap, which
-	 * made it two rows at desktop and five on a phone, and pushed the first
-	 * post below the fold. The label sits outside the scroller so it stays
-	 * put while the pills move. CSS reserves the shelf's height before this
-	 * runs (see "Series shelf" in style.css §09), so filling it moves
-	 * nothing on the page. Seven pills need more than a desktop row, so
-	 * krSnapRowArrows gives a mouse a way along it.
+	 * A link from when the listing filtered by series (?series=<name>) goes
+	 * to that series' own page, which lists the same parts in order under
+	 * the introduction the grid never had. replace(), so Back skips the
+	 * hop. A name no post carries is dropped like any other stale value
+	 * (see VALIDATION): the listing opens and syncUrl() writes the address
+	 * without it. True when the page is on its way out, so nothing is drawn.
 	 */
-	function buildSeriesShelf() {
-		var shelf = document.getElementById('series-shelf');
-		if (!shelf) return;
-		var series = {};
-		allPosts.forEach(function(p) {
-			postSeriesList(p).forEach(function(s) {
-				if (s && s.name) {
-					(series[s.name] = series[s.name] || []).push(p);
-				}
-			});
-		});
-		var names = Object.keys(series);
-		if (!names.length) { shelf.hidden = true; return; }
-
-		// Most recently updated series first (dates are YYYY-MM-DD, so string
-		// comparison is chronological)
-		function latestDate(name) {
-			return series[name].reduce(function(m, p) {
-				return p.date > m ? p.date : m;
-			}, '');
-		}
-		names.sort(function(a, b) { return latestDate(b).localeCompare(latestDate(a)); });
-
-		var pills = names.map(function(name) {
-			var parts = series[name].slice().sort(function(a, b) {
-				return postSeriesEntry(a, name).part - postSeriesEntry(b, name).part;
-			});
-			var cover = parts[0].image || DEFAULT_POST_IMAGE;
-			return '<button type="button" class="kr-series-card" data-series="' + krEscapeHtml(name) + '" aria-pressed="false">' +
-				'<img src="' + krEscapeHtml(cover) + '" alt="" width="38" height="38" loading="lazy">' +
-				'<span class="kr-series-card__text"><strong>' + krEscapeHtml(name) + '</strong>' +
-				'<span>' + parts.length + ' part' + (parts.length === 1 ? '' : 's') + '</span></span>' +
-				'</button>';
-		}).join('');
-		shelf.innerHTML =
-			'<span class="kr-series-shelf__label">Recent <a href="/series.html" title="All series">Series</a>:</span>' +
-			'<div class="kr-series-shelf__row kr-snap-row">' + pills + '</div>';
-		krSnapRowArrows(shelf.querySelector('.kr-snap-row'));
-
-		shelf.addEventListener('click', function(e) {
-			var card = e.target.closest ? e.target.closest('.kr-series-card') : null;
-			if (!card) return;
-			var name = card.getAttribute('data-series');
-			activeSeries = activeSeries === name ? '' : name;
-			// A named series contradicts "standalone only", so that button lets go.
-			if (activeSeries && seriesMode === 'standalone') {
-				seriesMode = '';
-				buildFilterPanel();
-			}
-			syncSeriesShelf();
-			currentPage = 1;
-			syncClearRow();
-			syncSortPanel();
-			updateToolbarLabels();
-			syncUrl();
-			renderPosts();
-		});
-	}
-
-	function syncSeriesShelf() {
-		var shelf = document.getElementById('series-shelf');
-		if (!shelf) return;
-		shelf.querySelectorAll('.kr-series-card').forEach(function(c) {
-			var on = c.getAttribute('data-series') === activeSeries;
-			krSetPressed(c, on);
-			if (on) revealPill(c);
-		});
-	}
-
-	/**
-	 * Scrolls the shelf's row, and only the row, so a pressed pill is in
-	 * sight: a deep link to a series far along the row would otherwise open
-	 * with its pill hidden. Not scrollIntoView, which also scrolls the page
-	 * and would yank a reader restored halfway down back up to the shelf.
-	 */
-	function revealPill(pill) {
-		var row = pill.parentNode;
-		if (!row || row.scrollWidth <= row.clientWidth) return;
-		var r = row.getBoundingClientRect(), p = pill.getBoundingClientRect();
-		if (p.left >= r.left && p.right <= r.right) return;
-		row.scrollLeft += p.left - r.left - (r.width - p.width) / 2;
-	}
-
-	function clearSeriesShelf() {
-		activeSeries = '';
-		syncSeriesShelf();
-		syncSortPanel();
+	function forwardSeriesLink() {
+		var name = new URLSearchParams(window.location.search).get('series');
+		if (!name || !allPosts.some(function(p) { return postSeriesEntry(p, name); })) return false;
+		window.location.replace(seriesPageHref(name));
+		return true;
 	}
 
 	/* ------------------------------------------------------ filter panel */
@@ -481,9 +398,6 @@
 			}).length;
 			var btn = krFacetButton(holder, krCountLabel(mode.label, count), function() {
 				seriesMode = seriesMode === mode.key ? '' : mode.key;
-				// A named series and "standalone only" cannot both hold, so
-				// choosing standalone releases the shelf selection.
-				if (seriesMode === 'standalone' && activeSeries) clearSeriesShelf();
 				syncSeriesButtons(holder);
 				onFilterChange();
 			});
@@ -508,7 +422,6 @@
 		activeLengths = [];
 		seriesMode = '';
 		TRI_FACETS.forEach(function(f) { facetStates[f.key] = ''; });
-		if (activeSeries) clearSeriesShelf();
 		buildFilterPanel();
 		onFilterChange();
 	}
@@ -570,29 +483,19 @@
 		});
 	}
 
-	// A series is always listed in part order, so the sort choice is inert
-	// there. Say so rather than showing a setting that is not being applied.
-	var SERIES_SORT_LOCK = 'Posts in a series are listed in part order';
-
 	function updateToolbarLabels() {
-		krToolbarLabels(activeFilterCount(),
-			activeSeries ? 'Part order' : krSortOption(SORT_OPTIONS, sortKey).label,
-			sortDir, activeSeries ? SERIES_SORT_LOCK : '');
+		krToolbarLabels(activeFilterCount(), krSortOption(SORT_OPTIONS, sortKey).label, sortDir);
 	}
 
-	/** Built once; syncSortPanel() redraws it in place after any state change. */
+	/** Built once; krSortPanel updates its own buttons when one is pressed. */
 	function buildSortPanel() {
 		var panel = document.getElementById('blog-sort');
 		if (!panel) return;
-		sortPanel = krSortPanel(panel, {
+		krSortPanel(panel, {
 			options: SORT_OPTIONS,
 			ariaLabel: 'Sort posts',
 			state: function() {
-				return {
-					key: sortKey,
-					dir: sortDir,
-					lockedBecause: activeSeries ? SERIES_SORT_LOCK : ''
-				};
+				return { key: sortKey, dir: sortDir };
 			},
 			onChange: function(key, dir) {
 				sortKey = key;
@@ -605,30 +508,17 @@
 		});
 	}
 
-	function syncSortPanel() {
-		if (sortPanel) sortPanel.sync();
-	}
-
 	function initToolbar() {
-		// The series shelf is a filtering control too, so clicking it counts as
-		// inside the panel rather than as a dismissing click elsewhere.
 		toolbar = krInitTogglePanels([
 			['kr-filter-toggle', 'blog-filters'],
 			['kr-sort-toggle', 'blog-sort']
-		], '#series-shelf');
+		]);
 		updateToolbarLabels();
 	}
 
 	/* ------------------------------------------------------------ render */
 
 	function getFilteredPosts() {
-		if (activeSeries) {
-			return allPosts.filter(function(p) {
-				return postSeriesEntry(p, activeSeries) && matchesFacets(p);
-			}).sort(function(a, b) {
-				return postSeriesEntry(a, activeSeries).part - postSeriesEntry(b, activeSeries).part;
-			});
-		}
 		return sortPosts(allPosts.filter(function(p) {
 			var matchesTag = activeTags.length === 0
 				|| activeTags.some(function(t) { return (p.tags || []).indexOf(t) !== -1; });
@@ -649,6 +539,7 @@
 		container.setAttribute('aria-busy', 'false');
 
 		var filtered = getFilteredPosts();
+		syncSeriesBand();
 		var totalPages = Math.ceil(filtered.length / POSTS_PER_PAGE);
 		if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
 
@@ -700,24 +591,48 @@
 	}
 
 	/**
-	 * "Part 3 · Everyday Ethics" on a card whose post belongs to a series (the
-	 * shelf's series when one is chosen, else the post's first).
+	 * "Part 3 · Everyday Ethics" on a card whose post belongs to a series
+	 * (its first, for a post in two), as a link to that series' page: the
+	 * reader meets the series at the moment one of its parts has caught
+	 * their eye, which is when "there is more of this, in order" is worth
+	 * knowing.
 	 *
 	 * It goes in the card's text block, above the date, rather than on the
 	 * photograph's corner where the series pages put theirs: the corner
 	 * opposite is the topic chip, and with the series named in full the two
 	 * collided on every quarter-width tile. The text block also sits above
 	 * a running hover sketch, so the chip stays readable while one plays.
-	 * It follows the title in source order, so the title is still heard first.
+	 * It follows the title in source order, so the title is still heard
+	 * first. The title's link is stretched over the whole card; style.css
+	 * lifts the chip above that stretch (".kr-series-chip--kicker"), so the
+	 * chip, and only the chip, goes to the series. Its name says where it
+	 * goes beyond the words on screen, which start it (WCAG 2.5.3).
 	 */
 	function addSeriesChip(col, post) {
-		var entry = activeSeries ? postSeriesEntry(post, activeSeries) : postSeriesList(post)[0];
+		var entry = postSeriesList(post)[0];
 		var content = col.querySelector('.post-content');
 		if (!entry || !entry.name || !content) return;
-		var chip = document.createElement('span');
+		var chip = document.createElement('a');
 		chip.className = 'kr-series-chip kr-series-chip--kicker';
+		chip.href = seriesPageHref(entry.name);
 		chip.textContent = 'Part ' + entry.part + ' · ' + entry.name;
+		chip.setAttribute('aria-label', chip.textContent + ': the whole series, in order');
 		content.appendChild(chip);
+	}
+
+	/**
+	 * The "Read in order" band (generate_series_band.py) is about the blog
+	 * as a whole, so it shows under the unfiltered listing only: under a
+	 * search or a filter it would sit below the answer to a question the
+	 * reader has just asked, about something else.
+	 */
+	function syncSeriesBand() {
+		var band = document.getElementById('series-band');
+		if (band) band.hidden = !isUnfiltered();
+	}
+
+	function isUnfiltered() {
+		return !searchQuery && activeFilterCount() === 0;
 	}
 
 	function columnClassFor(index, pageCount) {
@@ -732,8 +647,7 @@
 	}
 
 	function updateBlogCounter(filtered, total) {
-		krUpdateSearchCounter(filtered, total, 'posts',
-			!searchQuery && !activeSeries && activeFilterCount() === 0);
+		krUpdateSearchCounter(filtered, total, 'posts', isUnfiltered());
 	}
 
 	window.initBlog = initBlog;

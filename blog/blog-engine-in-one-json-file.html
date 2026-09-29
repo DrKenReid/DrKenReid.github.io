@@ -80,7 +80,7 @@
    ],
    "inLanguage": "en-GB",
    "articleSection": "Technology",
-   "wordCount": 1489,
+   "wordCount": 1492,
    "timeRequired": "PT7M",
    "keywords": ["static sites", "json", "blogging", "web development", "tf-idf"]
  }
@@ -183,7 +183,7 @@
 
  <p>The listing page fetches the JSON, sorts by date (or popularity, title or read time, if you ask), and renders cards nine to a page. Search is an ordinary text input that filters as you type, matching against title, excerpt, and tags. The tag buttons aren't hardcoded anywhere: the script counts how often each tag appears across all posts and renders one button per tag, labelled with its count, sorted by popularity, with the three busiest on show and the rest behind a "+N more" button. Click two tags and you get posts matching either; click "All" and you're back to everything.</p>
 
- <p>The tags are one row in a Filter panel, next to Length (from <code>readMinutes</code>), Format (the <code>code</code> and <code>interactive</code> flags) and Series. Buttons in the same row are OR'd, the rows are AND'd, so "books" plus "Quick read" gets you the short book posts. A series picked from the shelf above the list puts it in part order instead of by date. Every choice is written into the URL (<code>?tag=books&amp;len=short</code>), so a filtered list survives a reload and can be sent to someone.</p>
+ <p>The tags are one row in a Filter panel, next to Length (from <code>readMinutes</code>), Format (the <code>code</code> and <code>interactive</code> flags) and Series. Buttons in the same row are OR'd, the rows are AND'd, so "books" plus "Quick read" gets you the short book posts. A series has its own page with the parts in order, and the part label on a card links to it. Every choice is written into the URL (<code>?tag=books&amp;len=short</code>), so a filtered list survives a reload and can be sent to someone.</p>
 
  <p>Because tag buttons are generated from the data, a typo in the JSON doesn't produce an error, it produces a new button: misspell "photography" once and the blog begins offering a "phtography" filter containing one post. The fix is more careful typing, but it's also <a href="my-website-has-a-test-suite.html">a test suite</a>: my audit script holds the list of allowed tags, and anything outside it fails the build. This does mean adding a tag has an extra step, but so far my tags are broad so I've had no issues.</p>
 

@@ -37,8 +37,8 @@ classes, and the audit fails a published post that brings one back
    (`untracked-ref`). Then `python .github/scripts/run_checks.py --fix`.
    That builds the read time, the facets, the opener, the share image,
    the related-post cards, the image sizes, the feed, the no-script
-   listings, the sitemap, the head's JSON-LD and the stylesheet, in that
-   order, and then checks everything.
+   listings, the blog's series band, the sitemap, the head's JSON-LD and
+   the stylesheet, in that order, and then checks everything.
 6. **Look at it** in a browser, dark and light, at a phone width and a
    desktop width, and run the browser suites
    (`run_checks.py --browser`, or `check_post_template.py blog/<slug>.html`

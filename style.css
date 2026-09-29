@@ -3720,7 +3720,9 @@ box-shadow: none; }
   border-color: rgba(252, 96, 96, 0.45); }
 
 /* --- Overlay post card (.single-post-area) ---------------------------------
-   One link, the title's, stretched over the whole card. The stretch is the
+   One link, the title's, stretched over the whole card (on the blog
+   listing a card in a series has a second, its "Part 3 · Everyday
+   Ethics" label, lifted above the stretch: .kr-series-chip--kicker). The stretch is the
    title link's ::after at inset 0, and an absolute box is sized by its
    nearest positioned ancestor: that is .post-content, which covers the
    card and pushes its text to the bottom with padding, so the link's box
@@ -3846,7 +3848,7 @@ box-shadow: none; }
   font-weight: inherit; }
 
 /* Above the meta line (z-index 1) and the category chip (20), so every
-   point of the card is the link: middle-click and "open in new tab" work
+   point of the card but the listing's series label (31) is the link: middle-click and "open in new tab" work
    anywhere on it. */
 .single-post-area .post-title a::after {
   content: "";
@@ -3914,14 +3916,19 @@ box-shadow: none; }
     line-clamp: 2; } }
 
 /* --- Series chip -----------------------------------------------------------
-   "Part 3" on series pages and related posts, "12 parts" on the series
-   index, "Part 3 · Everyday Ethics" on the listing. It labels, it does not
-   link, so it is not red (red means clickable): neutral glass on the
+   "Part 3" on series pages and related posts, "12 parts · 95 min" on the
+   series index and the blog's series band: a label, neutral glass on the
    photograph, the same in both themes because a photograph is behind it
    in both. At 58% it keeps white 11px type at 4.7:1 over a white photo.
-   .kr-series-chip--kicker is the listing's placement: in the card's text
-   block above the date, not on the photo's corner (blog.js addSeriesChip
-   says why). */
+   .kr-series-chip--kicker is the listing's "Part 3 · Everyday Ethics", in
+   the card's text block above the date, not on the photo's corner
+   (blog.js addSeriesChip says why). There it is a link to the series
+   page: glass at rest like the other chips, filled with the action red
+   on hover (red means clickable), and lifted over the title's link,
+   which is stretched across the card at z-index 30, so a press on the
+   chip goes to the series and anywhere else to the post. Its focus ring
+   is the site's (§02); 11px type in a 3px-padded pill with a border is
+   24.5px tall, over the 24px target minimum. */
 .kr-series-chip {
   position: absolute;
   top: 10px;
@@ -3941,14 +3948,37 @@ box-shadow: none; }
   pointer-events: none; }
 
 .kr-series-chip--kicker {
-  position: static;
+  position: relative;
+  inset: auto;
+  z-index: 31;
   order: -2;
   align-self: flex-start;
   max-width: 100%;
   margin-bottom: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap; }
+  white-space: nowrap;
+  text-decoration: none;
+  pointer-events: auto;
+  transition: background-color 0.2s ease, border-color 0.2s ease; }
+
+/* The chip is an <a>, so the link rules of §02 reach it: the dark
+   theme's colours ([data-theme="dark"] a at (0,1,1), :hover and :focus
+   at (0,2,1)) would paint its type red, and red on the red fill on
+   hover, and the template's a:hover/a:focus/a:active drop it to weight
+   500 and slow its fade to 0.5s. a.kr-series-chip--kicker ties with the
+   first and with a:active, the :is() form with the rest, and both come
+   later, so the chip keeps its own type and timing in every state. */
+a.kr-series-chip--kicker,
+a.kr-series-chip--kicker:is(:hover, :focus) {
+  color: #ffffff;
+  font-weight: 600;
+  transition-duration: 0.2s; }
+
+.kr-series-chip--kicker:is(:hover, :focus-visible) {
+  border-color: var(--kr-action-fill);
+  background: var(--kr-action-fill);
+  text-decoration: none; }
 
 /* --- Social card (.social-card) --------------------------------------------
    The contact page's cards, one per network: a mark, a name and a line.
@@ -4085,24 +4115,24 @@ box-shadow: none; }
      .kr-list-search,
      .kr-list-counter         the search field and the live result count
      .kr-pagination           the pager under the blog grid
-     .kr-snap-row             one row that scrolls sideways, and its arrows
-     .kr-series-shelf         the blog's series pills
      .kr-series-intro         a series page's lede and count
+     .kr-series-band          "Read in order", three series under the blog grid
      .kr-topic-posts          a few posts on a page's own subject
    Built by: renderFilterBar, krInitTogglePanels, krBuildListSearchBox,
-   krRenderListPagination, krSnapRowArrows and renderTopicPosts
-   (shared-components.js); blog.js adds the excerpt and the series chip
-   to lead tiles. State lives in the query string.
+   krRenderListPagination and renderTopicPosts (shared-components.js);
+   blog.js adds the excerpt to lead tiles and the series link to every
+   card in a series; generate_series_band.py writes the band into
+   blog.html. State lives in the query string.
    Runtime classes: .active and .kr-facet-btn--excluded on pills, [hidden]
-   on collapsed rows and panels, .can-prev/.can-next on a snap row's
-   wrapper. The 16px size the search fields take on a phone is in §02
+   on collapsed rows and panels and on the band while the list is
+   narrowed. The 16px size the search fields take on a phone is in §02
    (Elements), stated once for every field. */
 
 /* --- Listing body ------------------------------------------------------------
    .kr-listing is the body of a listing page. Its spacing was inline
    styles and a template padding class; set here, it is one place to
    change, and the stack above the first card is budgeted: 48px, search,
-   16px, shelf, 12px, toolbar, 14px. */
+   16px, toolbar, 14px. */
 .kr-listing {
   padding-top: 48px; }
 
@@ -4253,7 +4283,8 @@ box-shadow: none; }
   justify-content: center;
   padding: 0 15px; }
 
-.gallery-filter-btn {
+.gallery-filter-btn,
+a.gallery-filter-btn:focus:not(:hover) {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -4302,7 +4333,14 @@ box-shadow: none; }
 
 /* The dark twins restate hover and .active because the dark base rule
    ties with them on specificity and would otherwise win on order. */
-[data-theme="dark"] .gallery-filter-btn {
+/* The blog toolbar's Series link is an <a> dressed as a pill, and the
+   link rules of §02 (a:focus, [data-theme="dark"] a:focus) outrank the
+   pill's colour, so a focused link would turn near-black or pink beside
+   buttons that stay grey. The a...:focus:not(:hover) selectors here and
+   in the light rule above give it the pill's colour back; hover still
+   wins, as it does on the buttons. */
+[data-theme="dark"] .gallery-filter-btn,
+[data-theme="dark"] a.gallery-filter-btn:focus:not(:hover) {
   background: transparent;
   border-color: #444;
   color: #c0c0c0; }
@@ -4535,263 +4573,6 @@ box-shadow: none; }
 .kr-list-counter:focus {
   outline: none; }
 
-/* --- Snap row (.kr-snap-row) -----------------------------------------------------
-   The filter rows' phone pattern (overflow-x, no wrap, snap each child's
-   start) as a class of its own, for anything that must stay a single row
-   at every width. The series shelf is the first user.
-     <div class="kr-snap-row"><button>...</button>...</div>
-   - The block size is fixed: --kr-snap-row-h, 73px unless the row's
-     container sets it (a container that reserves the row's room before
-     it is filled declares it, so the two cannot drift). A classic
-     scrollbar that appears once the row overflows then eats into the
-     bottom padding instead of making the row taller and moving the page
-     under it.
-   - krSnapRowArrows (shared-components.js) wraps the row in .kr-snap-nav
-     and adds a button at each end for a mouse, below.
-   - Top and side padding leave room for the site's focus ring (a 3px
-     outline 3px out), which the row's overflow would otherwise clip.
-   - Children centre while they fit and start at the left edge once they
-     overflow: auto margins on the first and last child come to nothing
-     when there is no spare room. justify-content: center would instead
-     push the first children past the start edge, out of reach.
-   - The edges fade where there is more to scroll to. With scroll-driven
-     animations the fades follow the scroll position: none when every
-     child fits, the leading one only once the row has moved. Without
-     them a fixed fade at the end hints at more, and the end padding is
-     as wide as the fade so the last child can scroll clear of it. */
-@property --kr-snap-fade-start {
-  syntax: '<length>';
-  inherits: false;
-  initial-value: 0px; }
-
-@property --kr-snap-fade-end {
-  syntax: '<length>';
-  inherits: false;
-  initial-value: 0px; }
-
-.kr-snap-row {
-  --kr-snap-fade: 32px;
-  --kr-snap-fade-end: var(--kr-snap-fade);
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 10px;
-  box-sizing: border-box;
-  height: var(--kr-snap-row-h, 73px);
-  padding: 7px var(--kr-snap-fade) 14px 7px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: 7px;
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--kr-muted) 45%, transparent) transparent;
-  -webkit-overflow-scrolling: touch;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--kr-snap-fade-start), #000 calc(100% - var(--kr-snap-fade-end)), transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0, #000 var(--kr-snap-fade-start), #000 calc(100% - var(--kr-snap-fade-end)), transparent 100%); }
-  .kr-snap-row > * {
-    flex: 0 0 auto;
-    scroll-snap-align: start; }
-  .kr-snap-row > :first-child {
-    margin-inline-start: auto; }
-  .kr-snap-row > :last-child {
-    margin-inline-end: auto; }
-
-@supports (animation-timeline: scroll()) {
-  .kr-snap-row {
-    --kr-snap-fade-end: 0px;
-    animation: kr-snap-fade linear both;
-    animation-timeline: scroll(self inline); } }
-
-@keyframes kr-snap-fade {
-  from {
-    --kr-snap-fade-start: 0px;
-    --kr-snap-fade-end: var(--kr-snap-fade); }
-  8% {
-    --kr-snap-fade-start: var(--kr-snap-fade); }
-  92% {
-    --kr-snap-fade-end: var(--kr-snap-fade); }
-  to {
-    --kr-snap-fade-start: var(--kr-snap-fade);
-    --kr-snap-fade-end: 0px; } }
-
-/* The end buttons (krSnapRowArrows). Only for a fine pointer that can
-   hover: touch scrolls the row directly, and keyboard focus scrolls each
-   item into view. Each sits over its fading edge, centred on the items
-   (the row's padding is 7px above and 14px below them), and shows only
-   while there is more to scroll to on its side. */
-.kr-snap-nav {
-  position: relative;
-  min-width: 0; }
-
-.kr-snap-nav__btn {
-  display: none; }
-
-@media (hover: hover) and (pointer: fine) {
-  .kr-snap-nav__btn {
-    position: absolute;
-    top: calc(7px + (var(--kr-snap-row-h, 73px) - 21px) / 2 - 16px);
-    z-index: 2;
-    display: grid;
-    place-items: center;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border: 1px solid var(--kr-hairline);
-    border-radius: 50%;
-    background: var(--kr-surface-card);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14);
-    color: var(--kr-ink);
-    cursor: pointer;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s ease, visibility 0s linear 0.2s, border-color 0.2s ease; }
-  .kr-snap-nav__btn--prev {
-    left: 0; }
-  .kr-snap-nav__btn--next {
-    right: 0; }
-  /* A chevron drawn from two borders, pointing the way the row will go. */
-  .kr-snap-nav__btn::before {
-    content: "";
-    width: 8px;
-    height: 8px;
-    border-top: 2px solid currentColor;
-    border-right: 2px solid currentColor;
-    transform: translateX(-2px) rotate(45deg); }
-  .kr-snap-nav__btn--prev::before {
-    transform: translateX(2px) rotate(-135deg); }
-  .kr-snap-nav__btn:hover {
-    border-color: var(--kr-action); }
-  .kr-snap-nav.can-prev .kr-snap-nav__btn--prev,
-  .kr-snap-nav.can-next .kr-snap-nav__btn--next {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.2s ease, visibility 0s linear 0s, border-color 0.2s ease; } }
-
-/* --- Series shelf (blog.js buildSeriesShelf) -----------------------------------
-   A label and one .kr-snap-row of series pills: beside each other from
-   768px, the label above the row on a phone, as the filter rows do. It
-   used to wrap, two rows at desktop and five on a phone, which alone put
-   the first post below the fold.
-   The shelf is empty until posts.json arrives, so its filled height is
-   reserved per breakpoint (the row's fixed height, --kr-snap-row-h,
-   declared here so the row and the reservation read the same number,
-   plus the label's 18px line and a 2px gap when stacked) and filling it
-   moves nothing below. Only under (scripting: enabled): without scripts
-   it never fills, and an empty band would be all a reader got.
-   At desktop the seven pills are wider than the row, so the mouse gets
-   arrow buttons (krSnapRowArrows); the row's wrapper, .kr-snap-nav, is
-   then the flex item beside the label.
-   The pills are buttons that filter the list, so their accent is the
-   action red; a pressed one is filled with the depth that carries white
-   type (#c53030, 5.47:1) in both themes, where #fc6060 gave 2.8:1. */
-.kr-series-shelf {
-  --kr-snap-row-h: 73px;
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
-  margin-bottom: 12px; }
-  .kr-series-shelf[hidden] {
-    display: none; }
-
-.kr-series-shelf__label {
-  flex: 0 0 auto;
-  margin-right: 0;
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 18px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--kr-eyebrow); }
-
-/* "Recent Series:" is a label; only the word that links is red. */
-.kr-series-shelf__label a {
-  color: var(--kr-action);
-  text-decoration: underline;
-  text-underline-offset: 3px; }
-.kr-series-shelf__label a:hover,
-.kr-series-shelf__label a:focus {
-  color: var(--kr-action-hover); }
-
-.kr-series-shelf__row,
-.kr-series-shelf > .kr-snap-nav {
-  flex: 1 1 auto;
-  min-width: 0; }
-
-@media (scripting: enabled) {
-  .kr-series-shelf {
-    min-height: var(--kr-snap-row-h); } }
-
-@media only screen and (max-width: 767px) {
-  .kr-series-shelf {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 2px; }
-  .kr-series-shelf__label {
-    padding-left: 7px; } }
-
-@media only screen and (max-width: 767px) and (scripting: enabled) {
-  .kr-series-shelf {
-    min-height: calc(var(--kr-snap-row-h) + 20px); } }
-
-.kr-series-card {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 18px 6px 6px;
-  border: 1px solid #e6e6e6;
-  border-radius: 999px;
-  background: #f7f7f7;
-  cursor: pointer;
-  font-family: inherit;
-  text-align: left;
-  white-space: nowrap;
-  transition: all 0.2s ease; }
-
-.kr-series-card img {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  object-fit: cover; }
-
-.kr-series-card__text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.3; }
-
-.kr-series-card__text strong {
-  font-size: 13.5px;
-  color: #252525; }
-
-.kr-series-card__text span {
-  font-size: 11px;
-  color: #6b6b6b; }
-
-[data-theme="dark"] .kr-series-card {
-  background: #242424;
-  border-color: #333; }
-
-[data-theme="dark"] .kr-series-card__text strong {
-  color: #e2e2e2; }
-
-[data-theme="dark"] .kr-series-card__text span {
-  color: #9e9e9e; }
-
-/* After the dark card, which ties with it on specificity. */
-.kr-series-card:hover {
-  border-color: var(--kr-action);
-  transform: translateY(-1px); }
-
-.kr-series-card.active,
-[data-theme="dark"] .kr-series-card.active {
-  background: var(--kr-action-fill);
-  border-color: var(--kr-action-fill); }
-
-.kr-series-card.active .kr-series-card__text strong,
-.kr-series-card.active .kr-series-card__text span {
-  color: #fff; }
-
 /* --- Series pages ------------------------------------------------------------
    The banner already carries the series' name, so the body opens with its
    description as a lede (the lede component, §05) instead of repeating
@@ -4825,6 +4606,36 @@ box-shadow: none; }
 .kr-series-intro--center {
   margin-inline: auto;
   text-align: center; }
+
+/* --- Series band (generate_series_band.py) -----------------------------------
+   "Read in order" under the blog grid: an eyebrow, heading and lede (the
+   section heading, §05), three series index cards (.blog-card, §08, with
+   the "N parts · M min" chip) and a button to the series index. Baked
+   into blog.html; blog.js sets [hidden] while the list is searched or
+   filtered. A hairline separates it from the pager, so it reads as a
+   step away from the list rather than more of it. Each summary is its
+   series page's meta description, one or two sentences, shown whole: a
+   clamp cut every one of them mid-sentence. The cards of a row are
+   stretched to one height (.blog-card is height: 100% in a flex row),
+   so they stay level however long each summary runs. */
+.kr-series-band {
+  margin-top: 56px;
+  padding-top: 56px;
+  border-top: 1px solid var(--kr-hairline); }
+
+.kr-series-band .section-heading {
+  margin-bottom: 36px; }
+
+.kr-series-band .blog-card-excerpt {
+  margin-bottom: 0; }
+
+.kr-series-band .kr-btn-row {
+  margin-top: 8px; }
+
+@media only screen and (max-width: 767px) {
+  .kr-series-band {
+    margin-top: 40px;
+    padding-top: 40px; } }
 
 /* --- Subscribe row -------------------------------------------------------------
    The quiet line of feed and email links under the blog grid. */

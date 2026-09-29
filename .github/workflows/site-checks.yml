@@ -150,6 +150,13 @@ jobs:
         if: ${{ !cancelled() }}
         run: python .github/scripts/generate_listing_fallback.py --check
 
+      # The "Read in order" band under the blog grid names three series
+      # and their totals from posts.json. A part published without
+      # rebuilding it would leave a stale count or the wrong three.
+      - name: Blog series band is current
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/generate_series_band.py --check
+
       # sitemap.xml is generated from the tracked pages, with each post's
       # lastmod from posts.json. Guards the step that used to be "add the
       # URL by hand": a published post missing from the sitemap, a

@@ -82,6 +82,7 @@ In registry order. "Fixer" is what `--fix` runs when the check fails.
 | `quote-wall` | `generate_quote_wall.py --check` | the script | A quotation added to `data/quotes-all.json` is missing from the static `quotes.html`. Fast. |
 | `publications` | `generate_publications.py --check` | the script | The publication list on `data_science.html` and its JSON-LD disagree with `data/publications.json`. Fast. |
 | `listing` | `generate_listing_fallback.py --check` | the script | A reader without JavaScript cannot find a new post: the `<noscript>` lists on `blog.html`, `series.html` and the series pages are stale. Fast. |
+| `series-band` | `generate_series_band.py --check` | the script | The "Read in order" band under the blog grid names the wrong three series, or a stale part count, reading time or summary: a part was published, or a series page's meta description changed, without rebuilding it. Fast. |
 | `sitemap` | `generate_sitemap.py --check` | the script | A new page or post is missing from `sitemap.xml`, a deleted one stays, or a `lastmod` is wrong. Fast. |
 | `monochrome` | `detect_monochrome.py --check` | the script | The gallery's B&W filter disagrees with the pixels. Needs Pillow, so CI runs it in the browser job. |
 | `post-head` | `generate_post_head.py --check` | `--fix` | A post's head is missing a canonical element (share card, BreadcrumbList, manifest, asset stamps) or its JSON-LD disagrees with `posts.json`. What it cannot derive (a missing share card, a bad `updated` date) stays a failure for a person. Before the stylesheet build, because the pruner reads the JSON-LD it rewrites. Fast. |
@@ -162,6 +163,7 @@ real files in a `vm` (`tests/js/runtime.js` is the shared loader).
 | `test_generate_post_head.py` | the post head template, one `--fix` pass from an old post, idempotence |
 | `test_generate_publications.py` | the publication list's order, markup and refusals |
 | `test_generate_related_posts.py` | the baked card stays `createBlogCardElement`'s card |
+| `test_generate_series_band.py` | which series the blog's "Read in order" band shows (three parts or more, most recently updated, ties by name), its escaped card, and the refusal of a series with no tracked page or no description |
 | `test_photo_dims.py` | the image header readers and the `--stamp-img` scanner |
 | `test_post_body.py` | finding a post's article in its HTML |
 | `test_post_components.py` | each markup transform, and the audit rules that hold them |

@@ -26,7 +26,7 @@
  *                                   [data-topic-tags] host starts itself
  *   renderSeriesPage()              a series landing page's grid of parts
  *   krBuildListSearchBox, krUpdateSearchCounter, krRenderListPagination,
- *   renderFilterBar, krInitTogglePanels, krSnapRowArrows
+ *   renderFilterBar, krInitTogglePanels
  *                                   listing furniture (blog, series)
  *   krFacetRow, krFacetButton, krCountLabel, krSetPressed, krClearRow,
  *   krTagFacetRow, krSortPanel, krSortOption, krSortFromUrl,
@@ -3848,54 +3848,12 @@ function openKrLightbox(items, index) {
 }
 
 /**
- * Arrow buttons at the ends of a .kr-snap-row (style.css), for a mouse. A
- * row that holds more than fits (the blog's series shelf: seven pills in
- * a 987px row at 1440) hinted at the rest only with a fading edge, and a
- * wheel without sideways scrolling could not reach it. Wraps the row in
- * .kr-snap-nav and adds a button at each end that pages the row along;
- * each shows only while there is more that way (.can-prev, .can-next),
- * and CSS shows them only where there is a fine pointer that can hover.
- * They are out of the Tab order and hidden from screen readers: keyboard
- * focus reaches every item in the row, which scrolls it into view. The
- * wrapper takes the row's place, so a parent's layout rules for the row
- * belong on the wrapper once this has run. Idempotent.
- */
-function krSnapRowArrows(row) {
-    if (!row || !row.parentNode || row.parentNode.classList.contains('kr-snap-nav')) return;
-    var wrap = document.createElement('div');
-    wrap.className = 'kr-snap-nav';
-    row.parentNode.insertBefore(wrap, row);
-    wrap.appendChild(row);
-    ['prev', 'next'].forEach(function(side) {
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'kr-snap-nav__btn kr-snap-nav__btn--' + side;
-        btn.tabIndex = -1;
-        btn.setAttribute('aria-hidden', 'true');
-        btn.addEventListener('click', function() {
-            var by = Math.max(120, row.clientWidth * 0.8) * (side === 'prev' ? -1 : 1);
-            row.scrollBy({ left: by, behavior: 'smooth' });
-        });
-        wrap.appendChild(btn);
-    });
-    function sync() {
-        var max = row.scrollWidth - row.clientWidth;
-        wrap.classList.toggle('can-prev', row.scrollLeft > 2);
-        wrap.classList.toggle('can-next', row.scrollLeft < max - 2);
-    }
-    row.addEventListener('scroll', sync, { passive: true });
-    window.addEventListener('resize', sync);
-    sync();
-}
-
-/**
  * Wires toolbar disclosure buttons to their panels: only one panel open at
  * a time, Escape closes the open one and hands focus back to its button,
  * and a click outside dismisses it.
  *
- * `pairs` is [[buttonId, panelId], ...]. `insideSelector` names the regions
- * that do not count as outside — the toolbar and panels are always included,
- * so it is for sibling controls such as a filter shelf.
+ * `pairs` is [[buttonId, panelId], ...]; a click on any of those buttons
+ * or inside any of those panels does not count as outside.
  *
  * The outside-click listener runs in the capture phase on purpose: filter
  * buttons that rewrite their own innerHTML would otherwise be detached by
@@ -3906,9 +3864,8 @@ function krSnapRowArrows(row) {
  * already filtered from a link: it shows that panel without moving focus,
  * so a short list never looks like the whole collection.
  */
-function krInitTogglePanels(pairs, insideSelector) {
+function krInitTogglePanels(pairs) {
     var inside = pairs.map(function(p) { return '#' + p[1]; });
-    if (insideSelector) inside.push(insideSelector);
 
     function close() {
         var toggle = null;
@@ -4051,9 +4008,7 @@ function krClearRow(container, onClear, focusAfter) {
  * panel  the (initially hidden) panel element; its contents are replaced
  * opts   options   [{ key, label, defaultDir }], dir 1 or -1
  *        ariaLabel the panel's name ("Sort posts")
- *        state()   -> { key, dir, lockedBecause } where lockedBecause, when
- *                  set, disables every option and says why in its tooltip
- *                  (the blog while a series is listed in part order)
+ *        state()   -> { key, dir }
  *        onChange(key, dir)  the caller stores the choice and re-renders
  * Returns { sync() } for the caller to run after changing state itself.
  *
@@ -4091,8 +4046,6 @@ function krSortPanel(panel, opts) {
             if (on) btn.setAttribute('aria-label', opt.label + (now.dir < 0 ? ', descending' : ', ascending'));
             else btn.removeAttribute('aria-label');
             krSetPressed(btn, on);
-            btn.disabled = !!now.lockedBecause;
-            btn.title = now.lockedBecause || '';
         });
     }
 
@@ -4135,18 +4088,13 @@ function krSortToUrl(params, options, key, dir) {
 
 /**
  * The toolbar's two labels: "Filter (n) ▾" on #kr-filter-toggle and
- * "Sort: Label ↓" on #kr-sort-toggle. With `lockedBecause` (the blog while
- * a series is listed in part order) the sort reads just "Sort: Label",
- * with no arrow, and the reason is its tooltip: a direction that is not
- * being applied should not be shown.
+ * "Sort: Label ↓" on #kr-sort-toggle.
  */
-function krToolbarLabels(filterCount, sortLabel, dir, lockedBecause) {
+function krToolbarLabels(filterCount, sortLabel, dir) {
     var f = document.getElementById('kr-filter-toggle');
     var s = document.getElementById('kr-sort-toggle');
     if (f) f.textContent = 'Filter' + (filterCount ? ' (' + filterCount + ')' : '') + ' ▾';
-    if (!s) return;
-    s.textContent = 'Sort: ' + sortLabel + (lockedBecause ? '' : ' ' + (dir < 0 ? '↓' : '↑'));
-    s.title = lockedBecause || '';
+    if (s) s.textContent = 'Sort: ' + sortLabel + ' ' + (dir < 0 ? '↓' : '↑');
 }
 
 /**
@@ -4305,6 +4253,9 @@ function renderFilterBar(container, items, opts) {
  * the post in another tab or window leaves this page where it is, so it
  * hands nothing over: a stale name would give the next click two
  * elements called kr-hero, and the browser skips a transition like that.
+ * Nor does a click on a link inside the card that goes somewhere else
+ * (the blog listing's series label, which opens the series page): the
+ * photograph belongs to the post, not to where that link leads.
  */
 function initHeroTransitions() {
     if (!window.CSS || !CSS.supports || !CSS.supports('view-transition-name', 'kr-hero')) return;
@@ -4316,6 +4267,8 @@ function initHeroTransitions() {
         if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
         var card = e.target.closest('.single-post-area[data-href], a.blog-card');
         if (!card) return;
+        var link = e.target.closest('a[href]');
+        if (link && link !== card && link.getAttribute('href') !== card.getAttribute('data-href')) return;
         var img = card.querySelector('img');
         if (!img) return;
         var banner = document.querySelector('.breadcrumb-area, .kr-opener__media');

@@ -12,7 +12,10 @@ generators, and the copies disagreed:
   * the opener built for a draft rounded its read time to the nearest
     minute while generate_read_times.py rounded up, so a draft could
     promise "4 min read" and publish as 5;
-  * three scripts each ran their own `git ls-files`.
+  * three scripts each ran their own `git ls-files`;
+  * four printed a date as "5 September 2026" four ways, one of them
+    through strftime("%B"), which follows the machine's locale;
+  * three found their generated region of a page with a regex each.
 
 One definition each, imported by name. The module name has no leading
 underscore on purpose: .gitignore ignores _*.py, and a helper that is
@@ -32,6 +35,10 @@ not committed breaks every generator in CI.
     sitelib.series_parts(posts, name)  # a series' posts in part order
     sitelib.series_slug(name)   # "Algorithms, Live" -> "algorithms-live"
     sitelib.series_page(name)   # -> "series-algorithms-live.html"
+    sitelib.long_date("2026-09-05")   # "5 September 2026"
+    sitelib.DEFAULT_POST_IMAGE  # the cover a post without an image gets
+    sitelib.block_re("listing-fallback")  # a generated region of a page
+    sitelib.fill_block(text, name, lines, note, where)
 """
 from __future__ import annotations
 
@@ -48,6 +55,14 @@ POSTS_JSON = ROOT / "data" / "posts.json"
 # (canonical, og:image, the feed, the sitemap, JSON-LD ids). No trailing
 # slash: callers join with "/".
 SITE = "https://www.kenreid.co.uk"
+
+# The cover a post without an image of its own is shown with, as
+# DEFAULT_POST_IMAGE in js/shared-components.js: a baked card and a card
+# the browser builds must fall back to the same photograph.
+DEFAULT_POST_IMAGE = "img/photography/hero/97.webp"
+
+MONTHS = ("January", "February", "March", "April", "May", "June", "July",
+          "August", "September", "October", "November", "December")
 
 # Reading speed behind every read time on the site. 220 words a minute is
 # the usual figure for adults reading prose on a screen.
@@ -216,6 +231,58 @@ def series_page(name: str) -> str:
     """The file of a series' index page, relative to the site root:
     series-<slug>.html."""
     return f"series-{series_slug(name)}.html"
+
+
+def long_date(iso: str) -> str:
+    """"5 September 2026" from "2026-09-05", as formatPostDate() prints a
+    post date in the browser. The month names are spelled out here rather
+    than taken from strftime("%B"), which follows the locale of whatever
+    machine runs the generator."""
+    year, month, day = (int(x) for x in iso[:10].split("-"))
+    return f"{day} {MONTHS[month - 1]} {year}"
+
+
+# --- generated regions ----------------------------------------------------
+# A generator that writes part of a hand-edited page owns the lines
+# between two marker comments, placed by hand once:
+#     <!-- BEGIN name: what writes it; edits made here are overwritten. -->
+#     <!-- END name -->
+# The generator never guesses a place for them: a page without exactly one
+# pair is an error, which --check reports.
+
+def block_re(name: str) -> re.Pattern:
+    """The generated region `name` of a page: group 1 is the BEGIN line,
+    group 2 its indentation, group 3 the body, group 4 the END line. The
+    name is anchored with (?![\\w-]), not \\b, so "publications" cannot
+    match the start of "publications-jsonld" and swallow everything
+    between the two blocks."""
+    return re.compile(
+        r"(^([ \t]*)<!-- BEGIN %s(?![\w-])[^\n]*-->\n)(.*?)(^[ \t]*<!-- END %s -->)"
+        % (re.escape(name), re.escape(name)),
+        re.M | re.S)
+
+
+def fill_block(text: str, name: str, lines: list[str], note: str | None = None,
+               where: str = "page") -> str:
+    """`text` (newlines normalised to \\n) with block `name` holding
+    `lines`, each indented to the BEGIN marker's depth. With `note`, the
+    BEGIN line is rewritten to carry it, so a marker copied by hand from an
+    older page states the current source. Raises SystemExit, naming
+    `where`, unless the page has exactly one such block."""
+    rx = block_re(name)
+    found = rx.findall(text)
+    if len(found) != 1:
+        raise SystemExit(
+            f"{where}: expected one <!-- BEGIN {name} --> ... <!-- END {name} --> pair, "
+            f"found {len(found)}. Place the two marker lines by hand where the block "
+            f"belongs (see the generator's docstring), then rerun.")
+
+    def fill(m):
+        pad = m.group(2)
+        begin = f"{pad}<!-- BEGIN {name}: {note} -->\n" if note else m.group(1)
+        body = "".join((pad + ln).rstrip() + "\n" for ln in lines)
+        return begin + body + m.group(4)
+    return rx.sub(fill, text, count=1)
 
 
 def arg_parser(doc: str | None, **kwargs) -> argparse.ArgumentParser:

@@ -267,6 +267,11 @@
 		// set in the card markup, names the part).
 	}
 
+	/**
+	 * One series card. generate_series_band.py bakes the same card into
+	 * blog.html's "Read in order" band (with an h3 and the series page's
+	 * description in place of "Latest: ..."): change both.
+	 */
 	function seriesCardHtml(s) {
 		var cover = krEscapeHtml('/' + (s.parts[0].image || DEFAULT_POST_IMAGE));
 		var name = krEscapeHtml(s.name);
@@ -278,12 +283,14 @@
 		return '<div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url(\'' + cover + '\')">' +
 			'<a href="' + seriesPageHref(s.name) + '" class="blog-card kr-lit"' + liveAttr + '>' +
 			'<span class="kr-lit__ring" aria-hidden="true"></span>' +
+			// The size of the run rides on the photograph, so the date line
+			// stays one line: "Updated 27 September 2026 · 144 min all told"
+			// wrapped on a third-width card and knocked the titles out of line.
 			'<div class="blog-card-img"><img src="' + cover + '" alt="" loading="lazy">' +
 			'<span class="kr-series-chip">' + s.parts.length +
-			(s.parts.length === 1 ? ' part' : ' parts') + '</span></div>' +
+			(s.parts.length === 1 ? ' part' : ' parts') + ' &middot; ' + s.minutes + ' min</span></div>' +
 			'<div class="blog-card-body">' +
-			'<div class="blog-card-date">Updated ' + formatPostDate(s.updated) +
-			' &middot; ' + s.minutes + ' min all told</div>' +
+			'<div class="blog-card-date">Updated ' + formatPostDate(s.updated) + '</div>' +
 			// Straight under the page's h1 (the intro has no heading of its own),
 			// so the series titles are h2s, as the blog listing's are.
 			'<h2 class="blog-card-title">' + name + '</h2>' +

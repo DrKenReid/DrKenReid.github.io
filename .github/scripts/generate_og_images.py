@@ -30,7 +30,6 @@ import json
 import re
 import sys
 from dataclasses import dataclass
-from datetime import date
 from functools import lru_cache
 from pathlib import Path
 
@@ -121,9 +120,8 @@ def hero_of(post_html: str) -> str | None:
 
 
 def kicker_of(post: dict) -> str:
-    d = date.fromisoformat(post["date"])
     parts = [post.get("category") or (post.get("tags") or ["Blog"])[0].title(),
-             f"{d.day} {d.strftime('%B %Y')}"]
+             sitelib.long_date(post["date"])]
     if post.get("readMinutes"):
         parts.append(f"{post['readMinutes']} min read")
     return KICKER_SEP.join(parts)

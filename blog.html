@@ -71,13 +71,11 @@
       <div class="kr-listing__search">
         <input type="text" id="blog-search-static" class="kr-list-search" placeholder="Search posts..." aria-label="Search posts" />
       </div>
-      <!-- Filled by blog.js: a label and one row of series pills that scrolls
-           sideways. Its height is reserved in style.css, so it cannot push
-           the posts down when it fills. -->
-      <div id="series-shelf" class="kr-series-shelf" role="group" aria-label="Post series"></div>
       <div class="kr-blog-toolbar text-center">
         <button type="button" id="kr-filter-toggle" class="btn gallery-filter-btn" aria-expanded="false" aria-controls="blog-filters">Filter &#9662;</button>
         <button type="button" id="kr-sort-toggle" class="btn gallery-filter-btn" aria-expanded="false" aria-controls="blog-sort">Sort: Date &darr;</button>
+        <!-- A link, not a toggle: it leaves for the series index. -->
+        <a href="/series.html" class="btn gallery-filter-btn">Series <span aria-hidden="true">&rarr;</span></a>
       </div>
       <div id="blog-filters" class="gallery-filters kr-filter-panel text-center kr-collapse" hidden></div>
       <div id="blog-sort" class="gallery-filters text-center kr-collapse" hidden></div>
@@ -163,6 +161,53 @@
         </ul>
       </noscript>
       <!-- END listing-fallback -->
+      <!-- BEGIN series-band: written by .github/scripts/generate_series_band.py from data/posts.json and the series pages; edits made here are overwritten. -->
+      <section id="series-band" class="kr-series-band" aria-labelledby="series-band-title">
+        <div class="section-heading section-heading--sm text-center">
+          <span class="section-eyebrow">Series</span>
+          <h2 id="series-band-title">Read in order</h2>
+          <p class="section-heading__lede">Some ideas take more than one post. Each series page has every part in order, with an introduction.</p>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/1.webp')">
+            <a href="/series-how-this-site-is-built.html" class="blog-card kr-lit" data-live-href="blog/photo-tagging-with-clip.html">
+              <span class="kr-lit__ring" aria-hidden="true"></span>
+              <div class="blog-card-img"><img src="/img/photography/thumb/1.webp" alt="" loading="lazy"><span class="kr-series-chip">18 parts &middot; 144 min</span></div>
+              <div class="blog-card-body">
+                <div class="blog-card-date">Updated 27 September 2026</div>
+                <h3 class="blog-card-title">How This Site Is Built</h3>
+                <p class="blog-card-excerpt">The series on how kenreid.co.uk works: plain HTML, CSS, and JavaScript on GitHub Pages, no framework, no build step. Photo hosting, offline reading, self-hosted fonts, and more.</p>
+              </div>
+            </a>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/blog/img/antcolony/antcolony-hero.webp')">
+            <a href="/series-algorithms-live.html" class="blog-card kr-lit" data-live-href="blog/ant-colony-live.html">
+              <span class="kr-lit__ring" aria-hidden="true"></span>
+              <div class="blog-card-img"><img src="/blog/img/antcolony/antcolony-hero.webp" alt="" loading="lazy"><span class="kr-series-chip">10 parts &middot; 107 min</span></div>
+              <div class="blog-card-body">
+                <div class="blog-card-date">Updated 19 September 2026</div>
+                <h3 class="blog-card-title">Algorithms, Live</h3>
+                <p class="blog-card-excerpt">Algorithms running live in your browser: ant colonies, annealing, evolution. Watch them work, then break them on purpose with the sliders. Vanilla JavaScript, no libraries, all code in the page source.</p>
+              </div>
+            </a>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/blog/img/vns/vns-hero.webp')">
+            <a href="/series-research-live.html" class="blog-card kr-lit" data-live-href="blog/variable-neighbourhood-search-live.html">
+              <span class="kr-lit__ring" aria-hidden="true"></span>
+              <div class="blog-card-img"><img src="/blog/img/vns/vns-hero.webp" alt="" loading="lazy"><span class="kr-series-chip">3 parts &middot; 28 min</span></div>
+              <div class="blog-card-body">
+                <div class="blog-card-date">Updated 13 September 2026</div>
+                <h3 class="blog-card-title">Research, Live</h3>
+                <p class="blog-card-excerpt">The papers I wrote, running in your browser. Each part takes one piece of my published research and puts it on a canvas you can interfere with.</p>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="kr-btn-row">
+          <a href="/series.html" class="kr-btn kr-btn--ghost">All 8 series</a>
+        </div>
+      </section>
+      <!-- END series-band -->
       <div class="kr-subscribe-row">
         <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">Subscribe by email</a>
         &nbsp;&middot;&nbsp;

@@ -228,7 +228,8 @@ flowchart LR
     feed --> quotes["generate_quote_wall.py"]
     quotes --> pubs["generate_publications.py"]
     pubs --> listing["generate_listing_fallback.py"]
-    listing --> sitemap["generate_sitemap.py"]
+    listing --> band["generate_series_band.py"]
+    band --> sitemap["generate_sitemap.py"]
     sitemap --> mono["detect_monochrome.py"]
     mono --> head["generate_post_head.py --fix"]
     head --> css["minify_css.py"]
@@ -377,6 +378,8 @@ plus a landing page.
    menu, the series index and the post's series line pick the series up
    from there.
 4. `git add -N series-<slug>.html`, then `run_checks.py --fix`: the
-   sitemap, the no-script listing (`generate_listing_fallback.py`) and
-   the post heads' series JSON-LD are regenerated. The audit fails a
+   sitemap, the no-script listing (`generate_listing_fallback.py`), the
+   blog's "Read in order" band (`generate_series_band.py`, which shows a
+   series once it has three parts and quotes the page's meta description)
+   and the post heads' series JSON-LD are regenerated. The audit fails a
    series without a tracked landing page or a sitemap entry.

@@ -62,19 +62,7 @@ MARKER = "listing-fallback"
 MARKER_NOTE = ("written by .github/scripts/generate_listing_fallback.py from "
                "data/posts.json; edits made here are overwritten.")
 
-# The block between the markers: group 1 is the BEGIN line, group 2 its
-# indentation (the list is indented from it), group 3 the generated body,
-# group 4 the END line. (?![\w-]) anchors the name exactly, so a later
-# block called listing-fallback-something could not be swallowed.
-BLOCK_RE = re.compile(
-    r"(^([ \t]*)<!-- BEGIN %s(?![\w-])[^\n]*-->\n)(.*?)(^[ \t]*<!-- END %s -->)"
-    % (re.escape(MARKER), re.escape(MARKER)),
-    re.M | re.S)
-
 SERIES_ATTR_RE = re.compile(r'\bdata-series="([^"]+)"')
-
-MONTHS = ("January", "February", "March", "April", "May", "June", "July",
-          "August", "September", "October", "November", "December")
 
 
 # --- the data -----------------------------------------------------------
@@ -98,12 +86,6 @@ def _ordinal(iso: str) -> int:
 
 # --- the markup ---------------------------------------------------------
 
-def long_date(iso: str) -> str:
-    """"20 September 2026", as formatPostDate() prints a post date."""
-    d = date.fromisoformat(iso)
-    return f"{d.day} {MONTHS[d.month - 1]} {d.year}"
-
-
 def text(value: str) -> str:
     return html.escape(value, quote=False)
 
@@ -119,7 +101,7 @@ def post_item(post: dict) -> str:
     as the site's links with nothing added to the stylesheet."""
     return ('<li><a href="/%s">%s</a>, <time class="kr-muted" datetime="%s">%s</time></li>'
             % (attr(post["url"]), text(post["title"]), attr(post["date"]),
-               long_date(post["date"])))
+               sitelib.long_date(post["date"])))
 
 
 def blog_lines(posts: list[dict]) -> list[str]:
@@ -177,19 +159,7 @@ def targets(posts: list[dict]) -> dict[Path, list[str]]:
 
 def render(page: Path, text_: str, lines: list[str]) -> str:
     """`text_` with its listing-fallback block rewritten to `lines`."""
-    found = BLOCK_RE.findall(text_)
-    if len(found) != 1:
-        raise SystemExit(
-            f"{page.name}: expected one <!-- BEGIN {MARKER} --> ... <!-- END {MARKER} --> pair, "
-            f"found {len(found)}. Add the two marker lines after the page's grid (see this "
-            f"script's docstring), then rerun.")
-
-    def fill(m):
-        pad = m.group(2)
-        body = "".join((pad + ln).rstrip() + "\n" for ln in wrap(lines))
-        begin = f"{pad}<!-- BEGIN {MARKER}: {MARKER_NOTE} -->\n"
-        return begin + body + m.group(4)
-    return BLOCK_RE.sub(fill, text_, count=1)
+    return sitelib.fill_block(text_, MARKER, wrap(lines), MARKER_NOTE, page.name)
 
 
 def main(argv=None) -> int:

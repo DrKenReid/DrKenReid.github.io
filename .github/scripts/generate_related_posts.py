@@ -35,7 +35,6 @@ import math
 import re
 import sys
 from collections import Counter
-from datetime import datetime
 
 import sitelib
 
@@ -43,8 +42,6 @@ import sitelib
 ROOT = sitelib.ROOT
 POSTS_PATH = sitelib.POSTS_JSON
 
-# Same fallback cover as DEFAULT_POST_IMAGE in js/shared-components.js.
-DEFAULT_POST_IMAGE = 'img/photography/hero/97.webp'
 
 TAG_BOOST = 0.06          # per shared tag, on top of cosine similarity
 STOPWORDS = set("""a about above after again against all also am an and any are as at be because been
@@ -68,12 +65,6 @@ class PostBodyMissing(Exception):
 
 def esc(value):
     return html.escape(str(value), quote=True)
-
-
-def format_post_date(date_str):
-    """"15 July 2026", as formatPostDate() prints it in the browser."""
-    date_value = datetime.strptime(date_str, '%Y-%m-%d')
-    return f'{date_value.day} {date_value.strftime("%B %Y")}'
 
 
 def display_minutes(post):
@@ -206,7 +197,7 @@ def build_card_html(post):
     every published post lives; --kr-cover is site-absolute because a
     relative url() inside a custom property resolves against the
     stylesheet, not the page."""
-    image = post.get('image') or DEFAULT_POST_IMAGE
+    image = post.get('image') or sitelib.DEFAULT_POST_IMAGE
     if image.startswith(('http://', 'https://', '//', '/')):
         image_src = cover = image
     else:
@@ -214,7 +205,7 @@ def build_card_html(post):
     url = post.get('url', '')
     href = url[len('blog/'):] if url.startswith('blog/') else '../' + url
     minutes = display_minutes(post)
-    date_line = format_post_date(post.get('date', '1970-01-01'))
+    date_line = sitelib.long_date(post.get('date', '1970-01-01'))
     if minutes:
         date_line += f' · {minutes} min read'
     tags_html = ''.join(f'<span class="blog-tag">{esc(tag)}</span>' for tag in post.get('tags', []))

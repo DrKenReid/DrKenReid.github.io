@@ -255,11 +255,14 @@ Lora, the gradient as a short rule under it, and an optional lede (§05).
 `.single-post-area` (overlay: title over the photograph) are the post
 cards, both built by `createBlogCardElement` (§08). Every point of an
 overlay card is its title's link, so middle-click and "open in new tab"
-work anywhere on it. Cards carry the cursor-lit ring (`.kr-lit`), the
+work anywhere on it, except the blog listing's series label, which sits
+above that link and goes to the series page. Cards carry the cursor-lit ring (`.kr-lit`), the
 cover glow (`.kr-glow-host`) and a live-cover sketch; a new card builder
 must add them itself. `.blog-tag` is a tag pill, red and outlined because
 a tag leads to the blog filtered by it; `.kr-series-chip` is neutral glass
-because it labels and does not link.
+because it labels. The one that links, the listing's "Part 3 · Everyday
+Ethics" (`.kr-series-chip--kicker`), keeps the glass at rest and fills
+with the action red on hover and focus.
 
 ### Labels
 
