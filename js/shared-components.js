@@ -875,7 +875,8 @@ function krUpdateSearchCounter(filtered, total, noun, unfiltered, ids) {
     counter.textContent = unfiltered
         ? ''
         : (filtered === 0
-            ? 'No ' + noun + ' match these filters'
+            // Not "these filters": a search alone can empty the list.
+            ? 'No ' + noun + ' match'
             : 'Showing ' + filtered + ' of ' + total + ' ' + noun);
 }
 

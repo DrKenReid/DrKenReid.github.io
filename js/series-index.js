@@ -3,19 +3,28 @@
  * with filtering and sorting.
  *
  * Deliberately lighter than the blog listing. There are single-figure
- * numbers of series, so there is no search box, no pagination, and no
- * length bands, and the format buttons are plain on/off rather than the
- * blog's off/only/exclude cycle — excluding one of seven cards earns
- * nothing. What a reader does want here is "which runs are about X", "which
- * ones have demos", and "which is the longest", so that is what is offered.
+ * numbers of series, so there is no pagination and no length bands, and
+ * the format buttons are plain on/off rather than the blog's
+ * off/only/exclude cycle — excluding one of seven cards earns nothing.
+ * What a reader does want here is "which runs are about X", "which ones
+ * have demos", and "which is the longest", so that is what is offered.
  *
- * URL keys: tag (topics, comma-separated), has (SERIES_FORMATS keys that
- * must all be present), sort (SERIES_SORTS key) and dir ('asc' | 'desc').
+ * Search answers "which series covers annealing?": it matches a series'
+ * name and topics and the title and summary of every part (searchText,
+ * built once in collectSeries), so a word that only one part mentions
+ * still finds its series. When the match is in a part rather than the
+ * name, the card names that part ("Includes: ...") where it would name
+ * the latest, so the reader sees why the card is there.
+ *
+ * URL keys: q (the search, lower case, as the blog's), tag (topics,
+ * comma-separated), has (SERIES_FORMATS keys that must all be present),
+ * sort (SERIES_SORTS key) and dir ('asc' | 'desc').
  * They are read, validated against the corpus and written back with
  * replaceState on the same terms as the blog listing; js/blog.js's header
  * gives the reasons.
  *
- * The panels are built from the same parts as the blog's (krFacetRow,
+ * The search box (krBuildListSearchBox, krUpdateSearchCounter) and the
+ * panels are built from the same parts as the blog's (krFacetRow,
  * krFacetButton, krCountLabel, krSetPressed, krClearRow, krTagFacetRow,
  * krSortPanel, krSortOption, krSortFromUrl, krSortToUrl, krToolbarLabels
  * and krUrlList in shared-components.js, beside krInitTogglePanels), so
@@ -28,6 +37,7 @@
 	'use strict';
 
 	var allSeries = [];
+	var seriesQuery = '';
 	var seriesTags = [];
 	var seriesFormats = {};
 	var seriesSortKey = 'updated';
@@ -52,6 +62,7 @@
 			if (!Array.isArray(posts)) return;
 			allSeries = collectSeries(posts);
 			readSeriesUrl();
+			buildSeriesSearchBox();
 			buildSeriesFilterPanel();
 			buildSeriesSortPanel();
 			var toolbar = krInitTogglePanels([
@@ -96,9 +107,48 @@
 				tags: Object.keys(tags).sort(),
 				// A series counts as interactive or code-carrying when any part is.
 				interactive: members.some(function(p) { return !!p.interactive; }),
-				code: members.some(function(p) { return !!p.code; })
+				code: members.some(function(p) { return !!p.code; }),
+				searchText: [name].concat(Object.keys(tags)).join(' ').toLowerCase()
 			};
 		});
+	}
+
+	/* ------------------------------------------------------------------- search */
+
+	function buildSeriesSearchBox() {
+		krBuildListSearchBox({
+			total: allSeries.length,
+			noun: 'series',
+			// ?q= arrives as a link from elsewhere, or from a reload.
+			onPresetQuery: function(q) { seriesQuery = q; },
+			onInput: function(q) {
+				seriesQuery = q;
+				syncSeriesUrl();
+				renderSeriesIndex();
+			}
+		});
+	}
+
+	/** True when a part's title or summary holds the search. */
+	function partMatches(p) {
+		return (p.title || '').toLowerCase().indexOf(seriesQuery) !== -1 ||
+			(p.excerpt || '').toLowerCase().indexOf(seriesQuery) !== -1;
+	}
+
+	function seriesMatches(s) {
+		return !seriesQuery || s.searchText.indexOf(seriesQuery) !== -1 || s.parts.some(partMatches);
+	}
+
+	/**
+	 * The part a search found this series by, first in part order, or null
+	 * when there is no search or the series' name or topics matched it.
+	 */
+	function matchedPart(s) {
+		if (!seriesQuery || s.searchText.indexOf(seriesQuery) !== -1) return null;
+		for (var i = 0; i < s.parts.length; i++) {
+			if (partMatches(s.parts[i])) return s.parts[i];
+		}
+		return null;
 	}
 
 	/* ------------------------------------------------------------------ filters */
@@ -188,6 +238,7 @@
 	function syncSeriesUrl() {
 		if (!window.history || !window.history.replaceState) return;
 		var params = new URLSearchParams();
+		if (seriesQuery) params.set('q', seriesQuery);
 		if (seriesTags.length) params.set('tag', seriesTags.join(','));
 		var formats = SERIES_FORMATS.filter(function(f) {
 			return seriesFormats[f.key];
@@ -234,7 +285,7 @@
 			var formatOk = SERIES_FORMATS.every(function(f) {
 				return !seriesFormats[f.key] || s[f.key];
 			});
-			return tagOk && formatOk;
+			return tagOk && formatOk && seriesMatches(s);
 		});
 
 		var dir = seriesSortDir;
@@ -257,11 +308,12 @@
 
 		if (!list.length) {
 			grid.innerHTML = '<div class="col-12 text-center"><p class="kr-muted">' +
-				'No series match these filters.</p></div>';
+				(seriesQuery ? 'No series match that search.' : 'No series match these filters.') + '</p></div>';
 		} else {
 			grid.innerHTML = list.map(seriesCardHtml).join('');
 		}
-		krUpdateSearchCounter(list.length, allSeries.length, 'series', seriesFilterCount() === 0);
+		krUpdateSearchCounter(list.length, allSeries.length, 'series',
+			seriesFilterCount() === 0 && !seriesQuery);
 
 		// Every series card runs part one's sketch on hover (data-live-href,
 		// set in the card markup, names the part).
@@ -294,8 +346,14 @@
 			// Straight under the page's h1 (the intro has no heading of its own),
 			// so the series titles are h2s, as the blog listing's are.
 			'<h2 class="blog-card-title">' + name + '</h2>' +
-			'<p class="blog-card-excerpt">Latest: ' + krEscapeHtml(s.latest.title) + '</p>' +
+			'<p class="blog-card-excerpt">' + cardLine(s) + '</p>' +
 			'</div></a></div>';
+	}
+
+	/** "Latest: <title>", or "Includes: <title>" for the part a search found. */
+	function cardLine(s) {
+		var hit = matchedPart(s);
+		return hit ? 'Includes: ' + krEscapeHtml(hit.title) : 'Latest: ' + krEscapeHtml(s.latest.title);
 	}
 
 	window.initSeriesIndex = initSeriesIndex;
