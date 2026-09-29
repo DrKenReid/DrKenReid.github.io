@@ -4283,8 +4283,8 @@ a.kr-series-chip--kicker:is(:hover, :focus) {
   justify-content: center;
   padding: 0 15px; }
 
-.gallery-filter-btn,
-a.gallery-filter-btn:focus:not(:hover) {
+.gallery-filter-btn {
+  --kr-pill-ink: #636363;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -4292,7 +4292,7 @@ a.gallery-filter-btn:focus:not(:hover) {
   border: 2px solid #ddd;
   border-radius: 25px;
   background: transparent;
-  color: #636363;
+  color: var(--kr-pill-ink);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -4333,17 +4333,23 @@ a.gallery-filter-btn:focus:not(:hover) {
 
 /* The dark twins restate hover and .active because the dark base rule
    ties with them on specificity and would otherwise win on order. */
-/* The blog toolbar's Series link is an <a> dressed as a pill, and the
-   link rules of §02 (a:focus, [data-theme="dark"] a:focus) outrank the
-   pill's colour, so a focused link would turn near-black or pink beside
-   buttons that stay grey. The a...:focus:not(:hover) selectors here and
-   in the light rule above give it the pill's colour back; hover still
-   wins, as it does on the buttons. */
-[data-theme="dark"] .gallery-filter-btn,
-[data-theme="dark"] a.gallery-filter-btn:focus:not(:hover) {
+[data-theme="dark"] .gallery-filter-btn {
+  --kr-pill-ink: #c0c0c0;
   background: transparent;
   border-color: #444;
-  color: #c0c0c0; }
+  color: var(--kr-pill-ink); }
+
+/* The listing toolbars' links (the blog's Series, the series index's
+   All posts) are <a>s dressed as pills, and the link rules of §02
+   (a:focus at (0,1,1), [data-theme="dark"] a:focus at (0,2,1)) outrank
+   the pill's colour and timing, so a focused link would turn near-black
+   or pink beside buttons that stay grey. This gives it back the pill's
+   ink for the theme (--kr-pill-ink, set on the pill above and in the
+   dark rule) and nothing else, so the phone sizes below still apply;
+   hover still wins, as it does on the buttons. */
+a.gallery-filter-btn:focus:not(:hover) {
+  color: var(--kr-pill-ink);
+  transition-duration: 300ms; }
 
 [data-theme="dark"] .gallery-filter-btn:hover {
   border-color: #fc6060;
