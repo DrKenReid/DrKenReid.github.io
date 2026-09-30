@@ -166,6 +166,13 @@ CHECKS: list[Check] = [
           script("generate_photo_dims.py", "--check"),
           script("generate_photo_dims.py", "--stamp-img"), fast=True),
 
+    # The sharp renditions: every thumb's @2x double and a hero for every
+    # frame a page shows, at the size data/photo-originals.json allows.
+    # The check is offline; the fixer fetches originals from the release.
+    Check("renditions", "every photo has its @2x thumb and, where shown large, its hero",
+          script("generate_photo_renditions.py", "--check"),
+          script("generate_photo_renditions.py"), fast=True),
+
     # feed.xml carries the full body of the twenty newest posts, so it
     # comes after every generator that writes into a post.
     Check("feed", "feed.xml matches posts.json and the posts",

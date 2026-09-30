@@ -154,7 +154,7 @@ def thumb_dims():
     """{stem: [width, height]} for every gallery thumbnail, in the order
     photo-dims.json is written (by number)."""
     dims = {}
-    for f in sorted(THUMBS.glob("*.webp"), key=lambda p: (len(p.stem), p.stem)):
+    for f in sitelib.thumb_files():
         try:
             w, h = webp_size(f)
         except Exception as exc:  # noqa: BLE001 - report and carry on

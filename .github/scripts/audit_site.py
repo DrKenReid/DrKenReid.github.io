@@ -1254,7 +1254,9 @@ def orphan_assets(tracked_rel):
                 or rel.startswith(ORPHAN_SKIP)):
             continue
         name, tail = p.name.lower(), "/".join(rel.split("/")[-2:]).lower()
-        if p.parent.name == "thumb" and p.stem in photos:
+        # A listed frame's thumb, and its @2x double (the same tile for
+        # high-density screens, which gallery.js names from the stem).
+        if p.parent.name == "thumb" and p.stem.removesuffix("@2x") in photos:
             continue
         if tail in tails or (not NUMBERED.fullmatch(p.stem) and name in names):
             continue

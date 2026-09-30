@@ -37,6 +37,7 @@ not committed breaks every generator in CI.
     sitelib.series_page(name)   # -> "series-algorithms-live.html"
     sitelib.long_date("2026-09-05")   # "5 September 2026"
     sitelib.DEFAULT_POST_IMAGE  # the cover a post without an image gets
+    sitelib.thumb_files()       # the 400px gallery thumbs, by number, no @2x
     sitelib.block_re("listing-fallback")  # a generated region of a page
     sitelib.fill_block(text, name, lines, note, where)
 """
@@ -231,6 +232,19 @@ def series_page(name: str) -> str:
     """The file of a series' index page, relative to the site root:
     series-<slug>.html."""
     return f"series-{series_slug(name)}.html"
+
+
+THUMBS = ROOT / "img" / "photography" / "thumb"
+
+
+def thumb_files() -> list[Path]:
+    """Every gallery thumbnail, img/photography/thumb/N.webp, in frame
+    order. The folder also holds each frame's N@2x.webp (the same tile
+    for high-density screens, generate_photo_renditions.py); those are
+    left out, so a script that walks the thumbs to find frames (the
+    sizes, the B&W tags) never takes a double for a photograph of its own."""
+    files = [p for p in THUMBS.glob("*.webp") if p.stem.isdigit()]
+    return sorted(files, key=lambda p: int(p.stem))
 
 
 def long_date(iso: str) -> str:

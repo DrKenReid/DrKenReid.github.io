@@ -78,6 +78,7 @@ In registry order. "Fixer" is what `--fix` runs when the check fails.
 | `og-images` | `generate_og_images.py --check` | the script (needs Pillow and fontTools) | A post has no share card, or a card drawn from an old title. Compares an input manifest, not JPEG bytes, so the check needs no package. Fast. |
 | `related` | `generate_related_posts.py --check` | the script | The related-post cards baked into each post fall behind: publishing a post changes what its neighbours should recommend. Fast. |
 | `photo-dims` | `generate_photo_dims.py --check` | `--stamp-img` | A new photograph has no recorded size (the gallery lays it out at 3:2 and the row jumps), or a post image has no `width` and `height` and shifts the page as it loads. Fast. |
+| `renditions` | `generate_photo_renditions.py --check` | the script (fetches originals from the release) | A photograph has no `@2x` thumb, so its gallery tile is soft on a high-density screen, or a photo a page shows large has no hero (or one smaller than its original allows), so its banner, share image or in-post copy is a stretched thumbnail. Offline. Fast. |
 | `feed` | `generate_feed.py --check` | the script | `feed.xml` carries the full body of the twenty newest posts, so any post edit makes it stale. Fast. |
 | `quote-wall` | `generate_quote_wall.py --check` | the script | A quotation added to `data/quotes-all.json` is missing from the static `quotes.html`. Fast. |
 | `publications` | `generate_publications.py --check` | the script | The publication list on `data_science.html` and its JSON-LD disagree with `data/publications.json`. Fast. |
@@ -165,6 +166,7 @@ real files in a `vm` (`tests/js/runtime.js` is the shared loader).
 | `test_generate_related_posts.py` | the baked card stays `createBlogCardElement`'s card |
 | `test_generate_series_band.py` | which series the blog's "Read in order" band shows (three parts or more, most recently updated, ties by name), its escaped card, and the refusal of a series with no tracked page or no description |
 | `test_photo_dims.py` | the image header readers and the `--stamp-img` scanner |
+| `test_photo_renditions.py` | the hero size (never enlarged), the edge a small original allows, the thumb list that leaves out the `@2x` doubles, and `--check` on a stand-in tree |
 | `test_post_body.py` | finding a post's article in its HTML |
 | `test_post_components.py` | each markup transform, and the audit rules that hold them |
 | `test_reading_parity.py` | `refresh_books.py` (`reading.json`'s `thisYear`) and `js/bookshelf.js` (the reading page's "this year" and calendar) count reading sessions the same way (needs Node) |

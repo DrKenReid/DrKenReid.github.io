@@ -70,7 +70,7 @@ def main(argv=None):
     tags = json.loads(TAGS.read_text(encoding="utf-8"))
 
     add, drop, kept = [], [], 0
-    for f in sorted(THUMBS.glob("*.webp"), key=lambda p: (len(p.stem), p.stem)):
+    for f in sitelib.thumb_files():
         stem = f.stem
         mono, why = is_monotone(f)
         current = tags.setdefault(stem, [])
