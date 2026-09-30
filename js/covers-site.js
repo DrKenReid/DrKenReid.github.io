@@ -486,6 +486,30 @@
         };
     });
 
+    // A shelf of spines of mixed heights; every two seconds one is pulled half out, held, and pushed back.
+    def('hobby:reading', function (w, h, rnd) {
+        var n = 7, t = 0, pick = Math.floor(rnd() * n), cycle = 120;
+        var cols = [C.a, C.b, C.blue, C.green, C.dim];
+        var books = [];
+        for (var i = 0; i < n; i++) books.push({ hh: 0.5 + 0.4 * rnd(), c: cols[Math.floor(rnd() * cols.length)] });
+        var shelf = h * 0.86, x0 = w * 0.1, bw = (w * 0.8) / n;
+        return {
+            step: function () {
+                t++;
+                if (t % cycle === 0) pick = (pick + 1 + Math.floor(rnd() * (n - 1))) % n;
+            },
+            draw: function (ctx) {
+                var p = (t % cycle) / cycle;
+                var lift = p < 0.3 ? ease(p / 0.3) : p < 0.7 ? 1 : 1 - ease((p - 0.7) / 0.3);
+                books.forEach(function (b, i) {
+                    var bh = h * 0.7 * b.hh, y = shelf - bh - (i === pick ? lift * h * 0.14 : 0);
+                    rect(ctx, x0 + i * bw + 1, y, Math.max(1, bw - 2), bh, b.c);
+                });
+                line(ctx, w * 0.05, shelf, w * 0.95, shelf, C.ink, 2);
+            }
+        };
+    });
+
     // A greeting cycles through languages, deleting and retyping letter by letter behind a blinking cursor.
     def('hobby:language', function (w, h, rnd) {
         var words = ['hello', 'hola', 'bonjour', 'hallo', 'ciao'];

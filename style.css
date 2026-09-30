@@ -10374,6 +10374,11 @@ a.ds-text-link:focus-visible {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 24px; }
 
+/* An odd card out at the end takes the whole row rather than leaving a
+   hole beside it; in one column it changes nothing. */
+.kr-hobby-grid > .about-card:last-child:nth-child(odd) {
+  grid-column: 1 / -1; }
+
 /* Each card is a live-cover host (data-live="hobby:…") whose sketch
    runs in a small .kr-hobby-stage pinned top right (§20), so the card is
    positioned even before the cover engine marks it .kr-live-host. The
@@ -10413,6 +10418,10 @@ a.ds-text-link:focus-visible {
     text-decoration-thickness: 1px;
     text-underline-offset: 3px;
     text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
+    /* A card with more than one way in (Reading) sets them in a row that
+       wraps flush left: the space goes after each link, not before. */
+    .about-card a.about-link:has(+ a.about-link) {
+      margin-right: 16px; }
     .about-card a.about-link:hover,
     .about-card a.about-link:focus-visible {
       color: var(--kr-action-hover);
