@@ -81,7 +81,7 @@ Scholar also indexes two of the blog posts. They are left out on purpose:
 they are posts, not publications, and have no citations, so the papers'
 sum still matches the profile total.
 
-Refreshing citations (before every push): open the Scholar profile, copy
+Refreshing citations (about once a month): open the Scholar profile, copy
 the total into scholar.citations and each paper's count into its entry
 (match on id), then run this script and commit the JSON and the page
 together.
