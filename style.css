@@ -4006,7 +4006,14 @@ box-shadow: none; }
   font-weight: 600;
   letter-spacing: 0.02em;
   line-height: 1.5;
-  pointer-events: none; }
+  pointer-events: none;
+  /* A related card's chip can name another series ("Part 14 · How This
+     Site Is Built"): on a narrow card it ends in an ellipsis rather than
+     running off the photograph. */
+  max-width: calc(100% - 20px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
 
 .kr-series-chip--kicker {
   position: relative;
@@ -4757,7 +4764,8 @@ a.gallery-filter-btn:focus:not(:hover) {
    .kr-has-sidenotes, .kr-sidenote--whole, .is-hot and .is-far on
    sidenotes, .is-visible, .is-tracking and .active on the contents,
    .is-copied on a share button, .is-spinning on the comments refresh,
-   body.kr-share-modal-open.
+   body.kr-share-modal-open, .cite-preview--docked, .cite-preview__go and
+   body.kr-cite-docked (a touch screen's citation card and its link).
    Tokens: --kr-post-width, --kr-post-bleed, --kr-prose-size and
    --kr-prose-leading (Measure), --kr-post-h-* (set per heading level),
    --kr-figure-inline (read by the figure rules in §11).
@@ -5236,17 +5244,34 @@ a.gallery-filter-btn:focus:not(:hover) {
 
 /* --- Contents (renderPostToc) -------------------------------------------
    Two forms of one list: a collapsible box at the top of the post below
-   1240px, and a rail fixed to the left of the text from there up. */
+   1240px, and a rail fixed to the left of the text from there up.
+   The rail is appended after the footer and has retired by the time Tab
+   gets there, so from 1240px the box stays for the keyboard, the way the
+   skip link does (§02): out of the flow and clipped like .sr-only until
+   focus is inside it, then a panel over the text below, so opening it
+   and following a link moves nothing on the page. A post with
+   data-no-toc has no rail and keeps the box in the text at every width. */
 .kr-toc-mobile {
-  display: none;
   margin: 20px 0 24px;
   border: 1px solid rgba(127, 127, 127, 0.25);
   border-radius: var(--kr-radius-md);
   overflow: hidden; }
 
-@media (max-width: 1239px) {
-  .kr-toc-mobile {
-    display: block; } }
+@media (min-width: 1240px) {
+  .blog-post:not([data-no-toc]) .kr-toc-mobile {
+    position: absolute;
+    z-index: 20;
+    width: var(--kr-post-width);
+    margin: 0;
+    background: var(--kr-surface-card);
+    box-shadow: var(--kr-shadow-2); }
+
+  .blog-post:not([data-no-toc]) .kr-toc-mobile:not(:focus-within) {
+    width: 1px;
+    height: 1px;
+    border: 0;
+    clip-path: inset(50%);
+    white-space: nowrap; } }
 
 .kr-toc-mobile summary {
   cursor: pointer;
@@ -5263,6 +5288,11 @@ a.gallery-filter-btn:focus:not(:hover) {
   content: '+';
   float: right;
   font-size: 15px; }
+
+/* The box clips its overflow (for the rounded corners), which cut off
+   the site's ring 3px outside the summary; drawn just inside instead. */
+.kr-toc-mobile summary:focus-visible {
+  outline-offset: -4px; }
 
 .kr-toc-mobile[open] summary::after {
   content: '\2212'; }
@@ -5418,7 +5448,11 @@ a.gallery-filter-btn:focus:not(:hover) {
    The card that shows a reference on hovering its citation. Where the
    browser supports anchor positioning it hangs off the citation itself
    (the script sets anchor-name on the hovered one) and flips below it
-   when there is no room above; elsewhere the script places it. */
+   when there is no room above; elsewhere the script places it. On a
+   touch screen a first tap opens it docked at the foot of the screen
+   (.cite-preview--docked) with a "Go to reference" link
+   (.cite-preview__go), and the citation's tap area reaches past its
+   superscript without moving the line. */
 .cite-preview {
   position: fixed;
   z-index: 5000;
@@ -5452,6 +5486,19 @@ a.gallery-filter-btn:focus:not(:hover) {
 [data-theme="dark"] .cite-preview a {
   color: #fc6060; }
 
+.cite-preview .cite-preview__go {
+  display: block;
+  width: max-content;
+  margin-top: 8px;
+  padding: 3px 0;
+  font-family: 'Poppins', 'Poppins Fallback', sans-serif;
+  font-weight: 600;
+  word-break: normal; }
+
+@media (hover: none) {
+  .blog-post a.cite-ref {
+    padding-block: 4px; } }
+
 @supports (position-area: top) {
   .cite-preview {
     position-anchor: --kr-cite;
@@ -5460,6 +5507,22 @@ a.gallery-filter-btn:focus:not(:hover) {
     margin: 0 0 10px;
     width: max-content;
     max-width: min(420px, calc(100vw - 24px)); } }
+
+/* A tapped card docks at the foot of the screen, centred and at most
+   560px wide, as the jargon card does on a phone (§11): hung off a
+   citation near the edge of a narrow screen, it ran into that edge. */
+.cite-preview.cite-preview--docked {
+  position-area: none;
+  inset: auto 12px 12px;
+  width: auto;
+  max-width: 560px;
+  margin: 0 auto; }
+
+/* The back-to-top button (§18) sits in the same corner above everything;
+   it steps aside, out of the Tab order too, while the card is docked. */
+body.kr-cite-docked #scrollUp {
+  opacity: 0;
+  visibility: hidden; }
 
 /* --- Sidenotes (initPostSidenotes) --------------------------------------
    Each reference copied beside its first citation, from 1360px
@@ -6142,7 +6205,10 @@ a.gallery-filter-btn:focus:not(:hover) {
    theme attribute sits on.
    Classes only script applies here: .copy-hint and .copied (the click to
    copy on quotations), .img-lightbox (the link lightbox.js wraps round a
-   photograph), the full-resolution switch and links (.fullres-*). */
+   photograph), the full-resolution switch and links (.fullres-*), the
+   code blocks' Copy button (.kr-code, .kr-code-copy, .is-copied), the
+   references' way back (.kr-ref-back) and .is-dismissed on a jargon term
+   whose card Escape put away. */
 
 /* --- Figures ------------------------------------------------------------
    Figure sizing and caption metrics. These lived only in an inline <style>
@@ -6683,7 +6749,56 @@ blockquote:hover .copy-hint {
    A code example folded into a <details> until asked for. The light
    theme's look once existed only inline in 3 of the 7 posts that use it,
    so the other 4 rendered unstyled; this is the base, and the dark theme's
-   twins follow it. */
+   twins follow it. Open, a listing is a window 70vh tall that scrolls
+   inside itself: the longest ran to 12,000px with its sideways scrollbar
+   at the far end, and folding it again meant scrolling back up to it.
+   Every code block has a Copy button (initCodeCopy wraps the <pre> in
+   .kr-code and adds .kr-code-copy, .is-copied for a moment after). It
+   sits over the block's top right corner, in the surface and ink of the
+   share row's buttons, so it reads in both themes on the dark panel, and
+   the code starts below it: the button stays put while the code scrolls
+   sideways, so over the first line it would hide that line's end. */
+.blog-post .kr-code {
+  position: relative; }
+
+.blog-post .kr-code > pre {
+  padding-top: 44px; }
+
+.kr-code .kr-code-copy {
+  --kr-share-ink: var(--kr-ink);
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 3px 11px 3px 9px;
+  border: 1px solid var(--kr-hairline);
+  border-radius: 999px;
+  background: var(--kr-surface-card);
+  color: var(--kr-share-ink);
+  font-family: 'Poppins', 'Poppins Fallback', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease; }
+
+.kr-code .kr-code-copy svg {
+  width: 14px;
+  height: 14px;
+  fill: var(--kr-share-ink); }
+
+.kr-code .kr-code-copy:is(:hover, :focus-visible) {
+  --kr-share-ink: var(--kr-action);
+  border-color: var(--kr-action); }
+
+.kr-code .kr-code-copy.is-copied {
+  --kr-share-ink: var(--kr-delta-up);
+  border-color: var(--kr-delta-up); }
+
 .blog-post details.code-example {
   margin: 16px 0 28px;
   border: 1px solid #e2e2e2;
@@ -6691,7 +6806,12 @@ blockquote:hover .copy-hint {
   background: #fafafa;
   overflow: hidden; }
 
+/* flow-root holds the floated "Show code" inside the bar. When the title
+   wraps on a phone the float drops a line, and outside the bar it hung
+   beside the listing, which (a scroller, so it keeps clear of floats)
+   lost that width and left the Copy button off its corner. */
 .blog-post details.code-example summary {
+  display: flow-root;
   cursor: pointer;
   padding: 12px 16px;
   font-weight: 600;
@@ -6700,6 +6820,10 @@ blockquote:hover .copy-hint {
 
 .blog-post details.code-example summary::-webkit-details-marker {
   display: none; }
+
+/* Inside the clipped box, so the ring is drawn just inside the bar. */
+.blog-post details.code-example summary:focus-visible {
+  outline-offset: -4px; }
 
 .blog-post details.code-example summary::after {
   content: "Show code";
@@ -6712,6 +6836,8 @@ blockquote:hover .copy-hint {
   content: "Hide code"; }
 
 .blog-post details.code-example pre {
+  max-height: 70vh;
+  overflow: auto;
   margin: 0;
   border-radius: 0;
   border-top: 1px solid #dedede;
@@ -6940,9 +7066,11 @@ blockquote:hover .copy-hint {
   background: #262222; }
 
 /* --- Jargon -------------------------------------------------------------
-   A term with its definition on hover: a native <abbr title>, drawn as a
-   card from the title attribute, so there is nothing to anchor. The
-   glossary box (.plain-english-box) collects a post's terms in one place.
+   A term with its definition on hover or keyboard focus: a native <abbr
+   title>, drawn as a card from the title attribute, so there is nothing
+   to anchor. applyJargonTooltips makes each one a Tab stop, and Escape
+   puts a showing card away. The glossary box (.plain-english-box)
+   collects a post's terms in one place.
      <abbr title="definition">Term</abbr> */
 .blog-post abbr {
   cursor: help;
@@ -6964,6 +7092,11 @@ blockquote:hover .copy-hint {
   font-size: 13px;
   font-weight: normal;
   font-style: normal;
+  /* A term in the small-caps lead-in (initDropCap) would pass its
+     capitals and tracking on to the whole definition. */
+  font-variant: normal;
+  letter-spacing: normal;
+  text-transform: none;
   z-index: 1000;
   opacity: 0;
   pointer-events: none;
@@ -7016,10 +7149,17 @@ blockquote:hover .copy-hint {
   z-index: 1000;
 }
 
-.blog-post abbr:hover::before,
-.blog-post abbr:hover::after {
+.blog-post abbr:is(:hover, :focus-visible)::before,
+.blog-post abbr:is(:hover, :focus-visible)::after {
   opacity: 1;
 }
+
+/* Escape puts the card away until the term loses hover and focus
+   (krDismissJargonCard): it covers the lines above the term. Same
+   weight as the rule above, so it comes after it. */
+.blog-post abbr.is-dismissed::before,
+.blog-post abbr.is-dismissed::after {
+  opacity: 0; }
 
 [data-theme="dark"] .blog-post abbr::before {
   background-color: #333;
@@ -7739,6 +7879,36 @@ ol.references {
 
 .blog-post .kr-references > ol.references {
   margin-top: 12px; }
+
+/* The way back (initReferenceBackLinks): after each reference a small
+   arrow links to where it is first cited, and the reference a citation
+   jumped to, or the citation the arrow returned to, is marked while it
+   is the page's target. The mark is a tint and its spread, so nothing
+   moves; it is still, so it needs no reduced-motion path. The arrow is a
+   link, so it is the action red, and 24px square for a finger. */
+.blog-post ol.references > li > a.kr-ref-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
+  margin-left: 2px;
+  vertical-align: middle;
+  background-image: none;
+  color: var(--kr-action);
+  line-height: 1;
+  text-decoration: none; }
+
+/* U+FE0E asks for the arrow as text: without it some phones draw the
+   emoji, a coloured tile at the end of a reference. */
+.blog-post ol.references > li > a.kr-ref-back::before {
+  content: "\21A9\FE0E"; }
+
+.blog-post ol.references > li:target,
+.blog-post a.cite-ref:target {
+  border-radius: var(--kr-radius-sm);
+  background: color-mix(in srgb, var(--kr-brand-to) 18%, transparent);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--kr-brand-to) 18%, transparent); }
 
 /* ==== :: §12 Interactive demos ==== */
 
@@ -11942,6 +12112,10 @@ html.kr-theme-reveal::view-transition-new(root) {
   .kr-sidenote,
   .cite-preview,
   .copy-hint,
+  .blog-post .blog-meta,
+  .kr-series__parts,
+  .kr-code-copy,
+  .kr-ref-back,
   .kr-live-cover,
   .kr-opener__media,
   .kr-opener__scrim,
@@ -12024,11 +12198,33 @@ html.kr-theme-reveal::view-transition-new(root) {
     color: #000 !important; }
 
   /* A code block is light type on a dark panel on screen; paper drops
-     the panel, so it prints as ink in a ruled box. */
+     the panel, so it prints as ink in a ruled box. A listing left open
+     prints whole, not as the screen's 70vh window (§11, Code), and
+     without its Copy button a block keeps no room above the code. */
   .blog-post pre {
     white-space: pre-wrap;
     background: none;
     border: 1px solid #999; }
+
+  .blog-post details.code-example pre {
+    max-height: none;
+    overflow: visible; }
+
+  .blog-post .kr-code > pre {
+    padding-top: 20px; }
+
+  /* The FAQ answers and the glossary are opened for the print
+     (initPrintExpand); the glossary prints open at once rather than
+     partway through its opening slide, and both print as ink on the
+     paper rather than in the dark theme's panels, which kept their fill
+     under the ink when background graphics were printed. */
+  .plain-english-box.collapsible-jargon-box::details-content {
+    transition: none; }
+
+  [data-theme] .faq-item,
+  [data-theme] .plain-english-box {
+    background: none;
+    box-shadow: none; }
 
   /* Only a prose link with a full address spells it out, and not one
      wrapped round a picture. !important because the screen's

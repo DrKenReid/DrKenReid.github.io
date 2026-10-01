@@ -68,8 +68,60 @@ test('the ends of a series fall back to the chronological neighbour', () => {
     assert.equal(pair.next.post, parts[1]);
     if (i < posts.length - 1) {
         assert.equal(pair.prev.post, posts[i + 1]);
-        assert.equal(pair.prev.label, 'Older');
+        assert.equal(pair.prev.label, 'Older, outside the series');
     }
+});
+
+// After the latest part a bare "Newer" read as if the series went on.
+test('a fallback that leaves the series says so', () => {
+    const series = [...new Set(posts.flatMap(p => rt.postSeriesList(p).map(e => e.name)))];
+    let checked = 0;
+    for (const name of series) {
+        const parts = rt.seriesParts(posts, name);
+        const last = parts[parts.length - 1];
+        const i = posts.indexOf(last);
+        const pair = rt.postNeighbours(posts, last);
+        if (parts.length > 1) assert.match(pair.prev.label, /^Part \d+$/, name);
+        if (i > 0 && pair.next && pair.next.post === posts[i - 1]) {
+            const inSeries = rt.postSeriesList(pair.next.post).some(e => e.name === name);
+            assert.equal(pair.next.label, inSeries ? 'Newer' : 'Newer, outside the series', name);
+            checked++;
+        }
+    }
+    assert.ok(checked, 'no series ends before a newer post');
+    // A made-up pair: the newer post shares no series, the older one does.
+    const a = { url: 'blog/a.html', series: { name: 'S', part: 2 } };
+    const b = { url: 'blog/b.html', series: { name: 'S', part: 1 } };
+    const n = { url: 'blog/n.html' };
+    const pair = rt.postNeighbours([n, a, b], a);
+    assert.equal(pair.prev.label, 'Part 1');
+    assert.equal(pair.next.label, 'Newer, outside the series');
+    const lone = { url: 'blog/l.html', series: { name: 'Solo', part: 1 } };
+    const both = rt.postNeighbours([n, lone, b], lone);
+    assert.deepEqual([both.prev.label, both.next.label], ['Older, outside the series', 'Newer, outside the series']);
+});
+
+test('the sign-off leads with the post\'s own series page', () => {
+    const inSeries = posts.find(p => rt.postSeriesList(p).length);
+    const name = rt.postSeriesList(inSeries)[0].name;
+    const routes = rt.postRoutes(inSeries);
+    assert.equal(routes.length, 3);
+    assert.equal(routes[0].label, name);
+    assert.equal(routes[0].href, rt.seriesPageHref(name).replace(/^\//, ''));
+    assert.equal(new Set(routes.map(r => r.href)).size, 3, 'a route is repeated');
+    const outside = posts.find(p => !rt.postSeriesList(p).length);
+    assert.deepEqual(JSON.parse(JSON.stringify(rt.postRoutes(outside))),
+        JSON.parse(JSON.stringify(rt.KR_ROUTES[outside.category])));
+});
+
+test('a related card names another series, not its own', () => {
+    const current = { url: 'blog/c.html', series: { name: 'Algorithms, Live', part: 3 } };
+    const sameSeries = { url: 'blog/s.html', series: [{ name: 'Research, Live', part: 2 }, { name: 'Algorithms, Live', part: 5 }] };
+    const other = { url: 'blog/o.html', series: { name: 'How This Site Is Built', part: 14 } };
+    assert.equal(rt.relatedSeriesChipText(sameSeries, current), 'Part 5');
+    assert.equal(rt.relatedSeriesChipText(other, current), 'Part 14 · How This Site Is Built');
+    assert.equal(rt.relatedSeriesChipText(other, null), 'Part 14 · How This Site Is Built');
+    assert.equal(rt.relatedSeriesChipText({ url: 'blog/x.html' }, current), '');
 });
 
 test('a post outside any series gets Older and Newer', () => {
@@ -149,6 +201,21 @@ test('a reference that is not author-date is shown whole', () => {
     assert.equal(ref.who, '');
     assert.equal(ref.title, text);
     assert.equal(ref.label, 'doi');
+});
+
+// initReferenceBackLinks appends a textless link back to the citation;
+// in a reference with no link of its own it is the first a[href], and the
+// sidenote must not offer it as the source.
+test('a sidenote ignores the reference\'s back link', () => {
+    const text = 'Kahneman, D. (2011). Thinking, fast and slow. Farrar, Straus and Giroux.';
+    const li = fakeReference(text, ['Thinking, fast and slow'], null);
+    const back = { getAttribute: () => '#cite-ref-4', textContent: '', classList: { contains: c => c === 'kr-ref-back' } };
+    li.querySelector = sel => (sel === 'a[href]' ? back : null);
+    const ref = rt.compactReference(li);
+    assert.equal(ref.href, '');
+    assert.equal(ref.label, '');
+    assert.equal(ref.who, 'Kahneman, 2011');
+    assert.equal(ref.title, 'Thinking, fast and slow');
 });
 
 test('a Goodreads title loses its series bracket for display', () => {

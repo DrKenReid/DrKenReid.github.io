@@ -191,7 +191,7 @@ page gains a component by writing HTML.
 | `data-topic-tags` | an empty `div` between sections | renders a "writing about" row (`renderTopicPosts`); also `data-topic-urls`, `data-topic-limit`, `data-topic-more`, `data-topic-eyebrow`, `data-topic-title` |
 | `data-embed-src`, `data-embed-title` | `button.kr-embed-facade` | swapped for the iframe on click (`initEmbedFacades`); `data-embed-height` overrides the 16:9 box for a non-video embed |
 | `data-fullres`, `data-fullres-size` | `.blog-post` | the full-resolution switch on a photography post (`initFullResMode`) |
-| `data-no-toc` | `.blog-post` | no contents rail for this post |
+| `data-no-toc` | `.blog-post` | no contents rail for this post; the contents box stays, at every width |
 | `data-kr-root` | `<html>` | the path back to the site root, for a page served at URLs it does not live at (`404.html`) |
 | `data-kr-toolbar`, `data-kr-sliders`, `data-kr-stats` | children of `.kr-viz` | where the demo engine builds its controls ([VIZ-ENGINE.md](VIZ-ENGINE.md)) |
 | `data-series` | `#series-page` | which series a landing page lists |

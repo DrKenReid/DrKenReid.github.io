@@ -97,6 +97,19 @@ without one class), and the pin seen to fail.
   check_print               A post printed from the dark theme keeps its
                             title (the print sheet hid every <header>, the
                             opener included) and prints headings in ink.
+  check_post_reach          Tab reaches the contents at 1440 and the share
+                            rail at 1200 (both fixed after the footer, and
+                            hidden by the time Tab got there); jargon terms
+                            are Tab stops that show their card, and Escape
+                            puts it away; a tapped
+                            citation on a phone shows its card instead of
+                            jumping; printing opens the FAQ answers.
+  check_code_blocks         At 320 and 1440 each code block's Copy button
+                            sits in its own top right corner, above the
+                            first line, and an open listing is a window no
+                            taller than 70vh (the button hung off a listing
+                            narrowed by its bar's wrapped label, and the
+                            longest listing opened 12,000px tall).
   check_desktop_geometry    At 1440x900: first blog post above 600px, gallery
                             grid above 900px, measure at most 78 characters,
                             no overflow, header transparent over an opener.
@@ -712,6 +725,23 @@ PIN_POST = "blog/rating-systems.html"
 # A second long read for the measure check, with a different layout
 # (paintings in figures between the paragraphs).
 PIN_POST_2 = "blog/frodo-sam-and-love.html"
+
+# The post the reading pins use: four or more sections (so a contents
+# rail), citations into a reference list, a glossary box and a FAQ.
+READING_POST = "blog/sleep-science.html"
+
+# Tab presses from the meta line's last link to the contents box: the
+# series line's name and its parts toggle come between.
+TOC_TAB_SLACK = 4
+
+# The code block pins: two folded listings, the first titled "The
+# JavaScript (js/palette.js)", which wraps its bar at 320, and at 600
+# lines the one that opened 12,000px tall.
+CODE_POST = "blog/ctrl-k-for-a-static-site.html"
+
+# How far in from the block's right edge the Copy button may sit (8px in
+# style.css, §11 "Code"), with a pixel either side for rounding.
+CODE_COPY_INSET = (7, 9)
 
 # theme-color follows the theme so the phone's browser chrome matches the
 # page (theme.js). Light is the warm off-white surface, not #fff.
@@ -1565,6 +1595,146 @@ def check_print(browser, base, rep):
     context.close()
 
 
+def keyboard_focus(page, js_element):
+    """Give an element keyboard focus, so :focus-visible matches: focus it
+    from script, step back one stop and return with a real Tab."""
+    page.evaluate(f"(() => {{ const e = {js_element}; e.scrollIntoView({{block: 'center', behavior: 'instant'}}); e.focus(); }})()")
+    page.keyboard.press("Shift+Tab")
+    page.keyboard.press("Tab")
+
+
+def check_post_reach(browser, base, rep):
+    """What a post offers beside its text can be reached without a mouse,
+    and a citation can be read on a touch screen without leaving the
+    sentence. Pins: from 1240px the contents lived only in the fixed rail,
+    appended after the footer and hidden by the time Tab got there (no
+    stop in 200 presses); from 992 to 1359px the share rail was built the
+    same way; a jargon card showed on :hover only, on an <abbr> that was
+    no Tab stop, and one shown on focus has to clear with Escape (WCAG
+    1.4.13); on a phone a tap on [1] jumped thousands of pixels into
+    the reference list; and a printed post lost its FAQ answers. Also
+    that the only part so far of a series names it (the series line was
+    drawn from the second part on)."""
+    scope = f"{READING_POST} reach"
+    # The pager and the series line fill in from the same posts.json.
+    ready = ("!!document.querySelector('.kr-toc-mobile') && !!document.querySelector('.post-pagination a')"
+             " && !!document.querySelector('.blog-post abbr')")
+    context = site_context(browser, base, "light", DESKTOP)
+    page, sink = open_page(context, base, READING_POST, rep, scope, ready)
+    if page:
+        line = page.evaluate("(document.querySelector('.kr-series') || {}).textContent || ''")
+        rep.check(scope, "a series' only part names its series", "Part 1" in line, line or "no series line")
+        keyboard_focus(page, "[...document.querySelectorAll('.blog-post .blog-meta a')].pop()")
+        reached = None
+        for _ in range(TOC_TAB_SLACK):
+            page.keyboard.press("Tab")
+            if page.evaluate("!!document.activeElement.closest('.kr-toc-mobile')"):
+                reached = page.evaluate("""() => { const r = document.querySelector('.kr-toc-mobile').getBoundingClientRect();
+                    return [Math.round(r.width), Math.round(r.height)]; }""")
+                break
+        rep.check(scope, f"Tab reaches the contents at 1440 within {TOC_TAB_SLACK} presses, drawn",
+                  bool(reached) and reached[0] > 100, reached)
+        abbrs = page.evaluate("[...document.querySelectorAll('.blog-post abbr')].map(a => a.tabIndex)")
+        rep.check(scope, "every jargon term is a Tab stop", abbrs and min(abbrs) >= 0, abbrs)
+        keyboard_focus(page, "document.querySelector('.blog-post abbr')")
+        page.wait_for_timeout(350)
+        card = page.evaluate("""() => { const a = document.activeElement;
+            return a.tagName === 'ABBR' ? getComputedStyle(a, '::before').opacity : 'focus on ' + a.tagName; }""")
+        rep.check(scope, "a focused term shows its card", card == "1", card)
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(350)
+        card = page.evaluate("""() => { const a = document.activeElement;
+            return a.tagName === 'ABBR' ? getComputedStyle(a, '::before').opacity : 'focus on ' + a.tagName; }""")
+        rep.check(scope, "Escape puts the card away, focus staying on the term", card == "0", card)
+        page.emulate_media(media="print")
+        page.evaluate("window.dispatchEvent(new Event('beforeprint'))")
+        opened = page.evaluate("[...document.querySelectorAll('.faq-item')].map(d => d.open)")
+        page.evaluate("window.dispatchEvent(new Event('afterprint'))")
+        closed = page.evaluate("[...document.querySelectorAll('.faq-item')].map(d => d.open)")
+        rep.check(scope, "print opens every FAQ answer, and closes them after",
+                  opened and all(opened) and not any(closed), {"print": opened, "after": closed})
+        rep.console_errors(scope, sink)
+        page.close()
+    context.close()
+
+    context = site_context(browser, base, "light", (1200, 900))
+    page, sink = open_page(context, base, READING_POST, rep, scope, ready)
+    if page:
+        # The last Tab stop in the text before the rail.
+        keyboard_focus(page, """(() => {
+            const rail = document.querySelector('.kr-share-rail');
+            const stops = [...document.querySelectorAll('.blog-post :is(a[href], button, summary, [tabindex="0"])')]
+                .filter(e => e.compareDocumentPosition(rail) & Node.DOCUMENT_POSITION_FOLLOWING)
+                .filter(e => e.getClientRects().length && !e.closest('details:not([open]) > :not(summary)'));
+            return stops.pop();
+        })()""")
+        page.keyboard.press("Tab")
+        next_frames(page)
+        got = page.evaluate("""() => { const a = document.activeElement, r = a.closest('.kr-share-rail');
+            return r ? [a.getAttribute('aria-label'), getComputedStyle(r).visibility] : [a.className, null]; }""")
+        rep.check(scope, "Tab reaches the share rail at 1200, shown", got[1] == "visible", got)
+        rep.console_errors(scope, sink)
+        page.close()
+    context.close()
+
+    context = site_context(browser, base, "light", (390, 844), has_touch=True, is_mobile=True)
+    page, sink = open_page(context, base, READING_POST, rep, scope, "!!document.querySelector('.cite-preview')")
+    if page:
+        page.evaluate("document.querySelector('a.cite-ref').scrollIntoView({block: 'center', behavior: 'instant'})")
+        next_frames(page)
+        before = page.evaluate("scrollY")
+        page.locator("a.cite-ref").first.tap()
+        next_frames(page)
+        got = page.evaluate("""() => ({hash: location.hash, y: scrollY,
+            card: !!document.querySelector('.cite-preview.is-visible .cite-preview__go')})""")
+        rep.check(scope, "a tapped citation shows its card and stays put",
+                  got["card"] and not got["hash"] and abs(got["y"] - before) < 2, got)
+        rep.console_errors(scope, sink)
+        page.close()
+    context.close()
+
+
+def check_code_blocks(browser, base, rep):
+    """Each code block's Copy button is over its own block's top right
+    corner and clear of the first line, and an open listing scrolls
+    inside a window of at most 70vh. Pins: at 320 the bar's floated
+    "Hide code" dropped below the wrapped title and hung beside the
+    listing, which (a scroller, so it keeps clear of floats) lost that
+    width and left the button 69px off its corner, over the page; the
+    button sat on the end of the first line, which the code scrolls
+    under; the palette.js listing opened 12,000px tall."""
+    facts = """() => [...document.querySelectorAll('.blog-post .kr-code')].map(w => {
+        const pre = w.querySelector(':scope > pre'), b = w.querySelector(':scope > .kr-code-copy');
+        if (!pre || !b) return {missing: true};
+        const p = pre.getBoundingClientRect(), r = b.getBoundingClientRect(), ww = w.getBoundingClientRect();
+        const pad = parseFloat(getComputedStyle(pre).paddingTop);
+        return {inset: Math.round(p.right - r.right), narrowed: Math.round(ww.width - p.width),
+                clear: r.bottom <= p.top + pad, height: Math.round(p.height),
+                listing: !!w.closest('details.code-example')};
+    })"""
+    for size in ((320, 640), DESKTOP):
+        scope = f"{CODE_POST} @{size[0]}"
+        context = site_context(browser, base, "light", size)
+        page, sink = open_page(context, base, CODE_POST, rep, scope,
+                               "!!document.querySelector('.kr-code-copy')")
+        if page:
+            page.evaluate("document.querySelectorAll('.blog-post details.code-example').forEach(d => { d.open = true; })")
+            next_frames(page)
+            blocks = page.evaluate(facts)
+            lo, hi = CODE_COPY_INSET
+            rep.check(scope, "every code block has its Copy button, in its own corner",
+                      blocks and all(not b.get("missing") and b["narrowed"] <= 1 and lo <= b["inset"] <= hi
+                                     for b in blocks), blocks)
+            rep.check(scope, "the code starts below the Copy button",
+                      blocks and all(b.get("clear") for b in blocks), blocks)
+            limit = round(size[1] * 0.7) + 2
+            rep.check(scope, f"an open listing is at most {limit}px tall",
+                      all(b.get("height", 0) <= limit for b in blocks if b.get("listing")), blocks)
+            rep.console_errors(scope, sink)
+            page.close()
+        context.close()
+
+
 def check_desktop_geometry(browser, base, rep):
     """At 1440x900: the blog's first post starts above BLOG_FIRST_CARD_MAX,
     the gallery grid starts on the first screen, two long posts keep a
@@ -1882,6 +2052,8 @@ def run_pins(browser, base, rep):
     check_phone_menu(browser, base, rep)
     check_blog_url_state(browser, base, rep)
     check_print(browser, base, rep)
+    check_post_reach(browser, base, rep)
+    check_code_blocks(browser, base, rep)
     check_desktop_geometry(browser, base, rep)
     check_contrast(browser, base, rep)
 

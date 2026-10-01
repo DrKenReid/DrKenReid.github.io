@@ -153,13 +153,15 @@ sequenceDiagram
 `renderBlogPostEssentials()`, `renderStoryPostEssentials()`,
 `renderFloatingBlogShare()`, `initDropCap()`,
 `autoCollapseTopJargonBox()`, `applyJargonTooltips()`,
-`initCopyQuotes()`, `initLightboxFix()`, `initFullResMode()` and
-`initCodeHighlighting()`. The script sits below the article, so the
-article is already in the DOM; running now means the end band, the meta
-line and the drop cap are in place before the first paint, and nothing
-the reader sees shifts when they arrive. Each returns at once on a page
-without a post: most key on `.blog-post`, `renderStoryPostEssentials` on
-`.story-post`, and `renderFloatingBlogShare` on either. `initCopyQuotes`
+`initCopyQuotes()`, `initLightboxFix()`, `initFullResMode()`,
+`initCodeHighlighting()`, `initCodeCopy()` and `initPrintExpand()`.
+The script sits below the article, so the article is already in the
+DOM; running now means the end band, the meta line, the drop cap and the
+code blocks' Copy buttons are in place before the first paint, and
+nothing the reader sees shifts when they arrive. Each returns at once on
+a page without a post: most key on `.blog-post`,
+`renderStoryPostEssentials` on `.story-post`, and
+`renderFloatingBlogShare` on either. `initCopyQuotes`
 is the exception: it applies to any `blockquote` on any page. Use this
 phase for anything that changes the layout of a post.
 

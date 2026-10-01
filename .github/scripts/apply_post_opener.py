@@ -16,10 +16,10 @@ Drafts (blog/drafts/, not in posts.json) get the same opener from their
 own head, so a preview looks like the published page: title from the
 banner, date from citation_publication_date, category from the first
 keyword (mapped the way posts.json maps tags), standfirst from the meta
-description, read time from sitelib.read_minutes (220 wpm, rounded up
-as posts.json's readMinutes is, so a draft's "4 min" does not publish
-as 5). At publish the opener is rebuilt from posts.json, so nothing a
-draft guessed survives.
+description, read time from generate_read_times.reading_minutes (the
+same count and rounding as posts.json's readMinutes, so a draft's
+"4 min" does not publish as 5). At publish the opener is rebuilt from
+posts.json, so nothing a draft guessed survives.
 
     python .github/scripts/apply_post_opener.py            # all tracked posts
     python .github/scripts/apply_post_opener.py blog/x.html
@@ -38,7 +38,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import sitelib  # noqa: E402
-from generate_read_times import count_words  # noqa: E402
+from generate_read_times import reading_minutes  # noqa: E402
 
 ROOT = sitelib.ROOT
 POSTS = sitelib.POSTS_JSON
@@ -149,12 +149,11 @@ def draft_post(path, text, categories):
     if not date:
         return None
     first_tag = (kw.group(1).split(",")[0].strip().lower() if kw else "")
-    words = count_words(path)
     return {
         "date": "%s-%s-%s" % date.groups(),
         "category": categories.get(first_tag, first_tag.title() if first_tag else ""),
         "excerpt": html.unescape(desc.group(1)) if desc else "",
-        "readMinutes": sitelib.read_minutes(words) if words else 0,
+        "readMinutes": reading_minutes(path),
     }
 
 

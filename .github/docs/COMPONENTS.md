@@ -115,7 +115,8 @@ renderFooter('footer-section');</script>
 - There is no back link at the end ("Back to all posts"): the end band's
   pager and the header do that job, and the audit rejects one.
 - `data-no-toc` on `.blog-post` turns the contents rail off for a post
-  whose layout it would crowd.
+  whose layout it would crowd. The contents box in the text stays, shown
+  at every width.
 
 ### The head
 
@@ -161,7 +162,7 @@ defines it (`additionalProperties: false`, so a misspelt key fails the
 | `url` | you | `blog/<slug>.html` |
 | `image` | you | the card picture: a gallery thumbnail, a `blog/img/` file, or a full URL |
 | `series` | you, optional | `{"name": "...", "part": n}`, or a list of them for a post in two series; each name needs a landing page ([ARCHITECTURE.md](ARCHITECTURE.md#adding-a-series)) |
-| `readMinutes`, `words` | `generate_read_times.py` | 220 words a minute, rounded up; `words` is the JSON-LD `wordCount` |
+| `readMinutes`, `words` | `generate_read_times.py` | `words` is every word in the article (the JSON-LD `wordCount`, the homepage total); `readMinutes` is 220 words a minute, rounded up, without the code in a folded listing (`details.code-example` with no `open`) |
 | `interactive`, `code` | `generate_post_facets.py` | present, as `true`, when the post mounts a demo (`KRViz.mount`) or has a `<pre><code>` block; the blog filter's Format row, the series index and the colophon read them |
 
 The tags in use today: advice, ai, books, data science, finance, music,
@@ -294,7 +295,14 @@ page.
 - From 1360px `initPostSidenotes` copies each reference beside its first
   citation (compact: number, author and year, title, one link). The list
   stays the canonical copy and the sidenotes are `aria-hidden`.
-- Hovering a citation shows the reference in a card (`initCitePreviews`).
+- Hovering or focusing a citation shows the reference in a card
+  (`initCitePreviews`). On a touch screen the first tap shows the card,
+  docked at the foot of the screen with a "Go to reference" link, and a
+  second tap on the citation makes the jump.
+- `initReferenceBackLinks` ends each reference with a small arrow
+  (`a.kr-ref-back`) back to its first citation, which gets an id
+  (`cite-ref-N`) when it has none; the reference or citation a link
+  lands on is tinted while it is the page's target.
 - A post that folds the list away uses
   `<details class="faq-item kr-references" id="references"><summary>References</summary><ol class="references">...</ol></details>`.
 - Do not: style a reference list by hand or use another list shape.
@@ -317,6 +325,12 @@ page.
   removes such calls. (The nerd-mode posts, which re-highlight from their
   own toggle, are the exception.)
 - `details.code-example` folds a long listing away until asked for.
+  Open, it is a window 70vh tall that scrolls inside itself. Its code
+  does not count towards the read time while it starts closed
+  (`generate_read_times.py`); one with `open` does.
+- Every `pre` in a post gets a Copy button (`initCodeCopy`, which wraps
+  it in `div.kr-code`), except the citation box's BibTeX, which has its
+  own.
 - Inline `<code>` in prose needs no class.
 
 ### Links, lists and inline code
@@ -357,9 +371,11 @@ A post's terms, defined once, explained where they are used.
 - `applyJargonTooltips` reads the box (a `.plain-english-box` whose
   heading says jargon, glossary or plain English, or any of whose list
   items holds a `<strong>` term) and wraps a term's first use in each
-  `h2` section in `<abbr title="definition">`, which the CSS draws as a
-  card on hover and focus. It skips the chrome: the meta line, summaries,
-  the reference list, sidenotes, captions, the pager and the end band.
+  `h2` section in `<abbr title="definition" tabindex="0">`, which the
+  CSS draws as a card on hover and keyboard focus; Escape puts a showing
+  card away until the term loses both. It skips the chrome: the meta
+  line, summaries, the reference list, sidenotes, captions, the pager and
+  the end band.
 - A short built-in list of site-wide terms (`GLOBAL_JARGON` in
   `applyJargonTooltips`: common abbreviations and tool names) is matched
   on every post, including a post with no glossary box; a post's own
@@ -384,8 +400,10 @@ A post's terms, defined once, explained where they are used.
 </div>
 ```
 
-Native `<details>`, no script. Keep the summary plain text: no heading
-inside a `<summary>`.
+Native `<details>`, no script, except that a printed post opens every
+answer and the glossary box for the print and closes them after it
+(`initPrintExpand`). Keep the summary plain text: no heading inside a
+`<summary>`.
 
 ### Scene box
 
@@ -547,20 +565,23 @@ none of it should be: a hand-written copy would be a second one.
 | Where | What | Built by |
 |---|---|---|
 | `.blog-meta` under the opener | the date and read time are dropped (the kicker has them); tags become links to `blog.html?tag=`; an RSS link | `renderPostMeta`, `renderTitleRssLink` |
-| after the meta line | the series line, "Part 3 of 10 · Name", with every part in a `<details>`, for each series the post is in | `renderSeriesNav` |
-| top of the post, under 1240px | the contents as a collapsible box (`details.kr-toc-mobile`) | `renderPostToc` |
+| after the meta line | the series line, "Part 3 of 10 · Name", with every part in a `<details>`, for each series the post is in; "Part 1 · Name" alone while the series has one part | `renderSeriesNav` |
+| top of the post, under 1240px | the contents as a collapsible box (`details.kr-toc-mobile`); from 1240px the same box is drawn only while keyboard focus is in it, and with `data-no-toc` at every width | `renderPostToc` |
 | fixed left, from 1240px | the contents rail (`nav.kr-toc`) with a gradient marker on the section in view | `renderPostToc` |
 | each `h2` | an anchor link (`a.kr-hlink`) | `renderHeadingAnchors` |
 | top of the window | the reading-progress bar, which reaches 100% when the end mark is in view | `renderReadingProgress` |
-| beside the post, 992 to 1359px | the share rail; on a phone, a share sheet that rises at the end | `renderFloatingBlogShare` |
+| beside the post, 992 to 1359px | the share rail, in the document just before the end band so Tab reaches it; on a phone, a share sheet over the sign-off that goes down when Up next comes on screen, and stays down for the session once dismissed | `renderFloatingBlogShare` |
 | the first paragraph | the drop cap (`p.drop-cap`, three lines or more) and a small-caps lead-in (`span.lead-in`) | `initDropCap` |
 | prose | `<abbr title>` on the first use of each glossary term per section, the post's own terms and the site-wide `GLOBAL_JARGON` | `applyJargonTooltips` |
 | the first glossary box | folded into a closed `<details>` | `autoCollapseTopJargonBox` |
 | beside the post, from 1360px | a sidenote for each cited reference (`aside.kr-sidenote`) | `initPostSidenotes` |
-| hovered citations | a preview card (`div.cite-preview`) | `initCitePreviews` |
+| hovered, focused or tapped citations | a preview card (`div.cite-preview`) | `initCitePreviews` |
+| each reference | an arrow back to its first citation (`a.kr-ref-back`) | `initReferenceBackLinks` |
 | gallery thumbnails | lightbox links to the release originals | `initLightboxFix` |
 | `.blog-post[data-fullres]` | the full-resolution panel and per-photo links | `initFullResMode` |
 | classed code blocks | Prism, with the languages named | `initCodeHighlighting` |
+| every code block | a Copy button (`div.kr-code > button.kr-code-copy`) | `initCodeCopy` |
+| printing | the FAQ answers and the glossary box opened, then closed again | `initPrintExpand` |
 | `.kr-embed-facade` | the iframe, on click | `initEmbedFacades` |
 | every `blockquote` | click to copy, with a hint | `initCopyQuotes` |
 | the last child of `.blog-post` | the end band, below | `renderPostEnd` |
@@ -573,8 +594,8 @@ created together, in this order, before any data arrives:
 | Slot | Markup | Contents |
 |---|---|---|
 | a. end mark | `div.kr-post-end__slot.kr-post-end__mark > .kr-fin` | the ⁂, in the brand gradient; the progress bar measures to it |
-| b. sign-off | `div.kr-post-end__slot.kr-signoff` (`buildSignOff`) | portrait, name and one line about the author (`KR_TAGLINE`), three routes onward chosen by the post's category (`KR_ROUTES`), the Subscribe and Coffee buttons, the share row (from 1360px only, where the rail has gone), and the disclaimer as fine print |
-| c. up next | `nav.kr-post-end__slot.kr-upnext` (`fillUpNext`) | the pager: the previous and next part when the post is in a series, otherwise the older and newer post (`postNeighbours`); each link runs its post's sketch under its text on hover |
+| b. sign-off | `div.kr-post-end__slot.kr-signoff` (`buildSignOff`) | portrait, name and one line about the author (`KR_TAGLINE`), three routes onward chosen by the post's category (`KR_ROUTES`), led by the post's own series page when it is in one (`postRoutes`), the Subscribe and Coffee buttons, the share row (from 1360px only, where the rail has gone), and the disclaimer as fine print |
+| c. up next | `nav.kr-post-end__slot.kr-upnext` (`fillUpNext`) | the pager: the previous and next part when the post is in a series, otherwise the older and newer post (`postNeighbours`), labelled "Newer, outside the series" when the fallback leaves the post's series; each link runs its post's sketch under its text on hover |
 | d. related | `div.kr-post-end__slot.kr-post-end__related` | the baked `.related-posts` block, moved in; a draft's is rendered here at runtime |
 | e. comments | `section#giscus-comments.kr-post-end__slot` (`buildGiscusSection`) | giscus, backed by GitHub Discussions, with a Refresh button; its theme follows the site's |
 

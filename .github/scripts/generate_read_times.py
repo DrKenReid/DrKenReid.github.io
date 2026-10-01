@@ -5,6 +5,15 @@ Counts the words inside each post's <div class="blog-post"> and writes
 readMinutes (sitelib.read_minutes: 220 wpm, rounded up) and words fields
 onto every entry. The browser only displays readMinutes, never
 recomputes it; the homepage stats bar sums the words fields.
+
+The two counts differ on purpose. `words` is everything in the article
+(the JSON-LD wordCount, the homepage total). readMinutes leaves out the
+code inside a folded listing, <details class="code-example"> without
+`open`: a reader skims past it closed, and a 600-line listing counted as
+prose made a seven-minute post read "27 min" and filed it as a deep dive
+on the Length filter. A listing that opens by default, and a <pre> in the
+flow of the text, still count.
+
 Run after adding or substantially editing a post:
 
     python .github/scripts/generate_read_times.py
@@ -42,7 +51,10 @@ class BlogPostTextExtractor(HTMLParser):
         self.div_depth = 0      # <div> nesting inside .blog-post (0 = outside)
         self.in_skip = None     # script/style tag we're currently inside
         self.skip_depth = 0     # <div> nesting inside a skipped block
+        self.folded = 0         # <details> nesting from a closed code listing
+        self.pre_depth = 0      # <pre> nesting inside that listing
         self.chunks = []
+        self.folded_chunks = []  # the code in closed listings, counted apart
 
     def handle_starttag(self, tag, attrs):
         if self.div_depth:
@@ -55,6 +67,14 @@ class BlogPostTextExtractor(HTMLParser):
                     self.skip_depth = 1
             elif tag in ("script", "style"):
                 self.in_skip = tag
+            elif tag == "details":
+                a = dict(attrs)
+                if self.folded:
+                    self.folded += 1
+                elif "code-example" in (a.get("class") or "").split() and "open" not in a:
+                    self.folded = 1
+            elif tag == "pre" and self.folded:
+                self.pre_depth += 1
         elif tag == "div" and "blog-post" in dict(attrs).get("class", "").split():
             self.div_depth = 1
 
@@ -67,14 +87,30 @@ class BlogPostTextExtractor(HTMLParser):
                 self.skip_depth -= 1
         elif tag == self.in_skip:
             self.in_skip = None
+        elif tag == "details" and self.folded:
+            self.folded -= 1
+            if not self.folded:
+                self.pre_depth = 0
+        elif tag == "pre" and self.pre_depth:
+            self.pre_depth -= 1
 
     def handle_data(self, data):
         if self.div_depth and not self.in_skip and not self.skip_depth:
-            self.chunks.append(data)
+            # Only the <pre> is set apart: the listing's summary line ("The
+            # JavaScript (js/palette.js)") is read on the way past.
+            (self.folded_chunks if self.pre_depth else self.chunks).append(data)
 
 
-def count_words(html_path: Path) -> int:
-    """Words a reader reads in the post's .blog-post div.
+def _words(chunks) -> int:
+    return len(re.findall(r"\S+", " ".join(chunks)))
+
+
+def word_counts(text: str) -> tuple[int, int]:
+    """(words, reading words) in a page's .blog-post div.
+
+    `words` is the whole article; reading words leave out the code in
+    folded listings (see the module docstring), and are what readMinutes
+    is worked out from.
 
     A parser rather than sitelib.post_body: post_body returns the body's
     markup, and counting words needs its text without scripts, styles or
@@ -83,8 +119,21 @@ def count_words(html_path: Path) -> int:
     the article is.
     """
     parser = BlogPostTextExtractor()
-    parser.feed(html_path.read_text(encoding="utf-8"))
-    return len(re.findall(r"\S+", " ".join(parser.chunks)))
+    parser.feed(text)
+    reading = _words(parser.chunks)
+    return reading + _words(parser.folded_chunks), reading
+
+
+def count_words(html_path: Path) -> int:
+    """Every word in the post's .blog-post div (posts.json `words`)."""
+    return word_counts(html_path.read_text(encoding="utf-8"))[0]
+
+
+def reading_minutes(html_path: Path) -> int:
+    """The read time the post's pages print, from its reading words.
+    0 when the body has no words at all."""
+    words, reading = word_counts(html_path.read_text(encoding="utf-8"))
+    return read_minutes(reading) if words else 0
 
 
 def main(argv=None):
@@ -109,11 +158,11 @@ def main(argv=None):
         if sitelib.post_body(html_path.read_text(encoding="utf-8")) is None:
             broken.append(f"{post['url']}: no .blog-post body, or one that never closes")
             continue
-        words = count_words(html_path)
+        words, reading = word_counts(html_path.read_text(encoding="utf-8"))
         if not words:
             broken.append(f"{post['url']}: the .blog-post body has no words")
             continue
-        minutes = read_minutes(words)
+        minutes = read_minutes(reading)
         if post.get("words") != words or post.get("readMinutes") != minutes:
             drift.append(
                 f"{post['url']}: words {post.get('words')} -> {words}, "

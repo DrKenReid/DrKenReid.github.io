@@ -39,10 +39,11 @@
  *   renderBlogPostEssentials, renderStoryPostEssentials, renderFloatingBlogShare,
  *   renderPostMeta, renderSeriesNav, renderPostToc, renderReadingProgress,
  *   renderPostEnd (the end band: mark, sign-off, up next, related, comments),
- *   initPostSidenotes, initCitePreviews, applyJargonTooltips,
- *   autoCollapseTopJargonBox, initDropCap, initFullResMode, initCopyQuotes,
- *   initCodeHighlighting, initEmbedFacades,
- *   KR_ROUTES (the sign-off's three links per category),
+ *   initPostSidenotes, initCitePreviews, initReferenceBackLinks,
+ *   applyJargonTooltips, autoCollapseTopJargonBox, initDropCap,
+ *   initFullResMode, initCopyQuotes, initCodeHighlighting, initCodeCopy,
+ *   initPrintExpand, initEmbedFacades,
+ *   KR_ROUTES (the sign-off's three links per category), postRoutes(post),
  *   KR_WIDE_POST, krWidePost()      the width of the wide post layout
  *
  * Post helpers (pure; tests/js/post-runtime.test.js runs them, and
@@ -50,7 +51,7 @@
  * them, so a rename or a changed rule breaks a caller)
  *   postByFile(posts, file), postSeriesList(post), postSeriesEntry(post, name),
  *   seriesParts(posts, name), postNeighbours(posts, post), leadInEnd(text),
- *   compactReference(li)
+ *   compactReference(li), relatedSeriesChipText(post, current)
  *   krTopicPosts(posts, o), krPageList(page, pages)
  *                                   (tests/js/site-chrome.test.js)
  *
@@ -453,11 +454,19 @@ function krWidePost() {
     return window.matchMedia ? window.matchMedia(KR_WIDE_POST) : { matches: false };
 }
 
+/* The sessionStorage key that holds the phone share sheet down once it is
+   dismissed. One key for the site, not one per page: kept per page, the
+   sheet came back at the end of every part of a series. */
+var KR_SHARE_DISMISSED = 'kr-share-dismissed';
+
 /**
  * The floating share UI, which depends on the width:
  *   below 992px   a sheet slides up from the bottom once the reader
- *                 reaches the end band; dismissed, it stays down for the
- *                 rest of the session (the close button or Escape)
+ *                 reaches the end band, over the sign-off, and goes back
+ *                 down when "Up next" (or whatever follows the sign-off)
+ *                 comes on screen, so it never sits over the pager or the
+ *                 footer's links; dismissed, it stays down on every page
+ *                 for the rest of the session (the close button or Escape)
  *   992-1359px    a rail beside the article while it is being read,
  *                 retiring when the end band arrives
  *   1360px and up nothing floats: the right gutter holds the sidenotes,
@@ -466,6 +475,13 @@ function krWidePost() {
  * buttons are out of the Tab order, not merely transparent. The sheet is
  * a labelled region rather than a dialog: it does not take focus or trap
  * it, it only offers the buttons.
+ *
+ * The rail sits in the document just before the end band, where the text
+ * ends, so Tab reaches it after the last link in the post; it is fixed, so
+ * that changes nothing on screen. It was appended after the footer, and by
+ * the time Tab got there it had retired and was skipped. While keyboard
+ * focus is in the post's text or in the rail itself, the rail stays out
+ * whatever the scroll position, so it is there when Tab arrives.
  */
 function renderFloatingBlogShare() {
     var blogPost = document.querySelector('.blog-post, .story-post');
@@ -477,7 +493,32 @@ function renderFloatingBlogShare() {
     rail.setAttribute('aria-label', 'Share this post');
     rail.innerHTML = '<div class="kr-share-label" aria-hidden="true">Share</div>';
     krShareRow(rail);
-    document.body.appendChild(rail);
+    var endBand = blogPost.querySelector(':scope > .kr-post-end');
+    if (endBand) {
+        blogPost.insertBefore(rail, endBand);
+    } else {
+        blogPost.appendChild(rail);
+    }
+
+    var phone = window.matchMedia('(max-width: 991px)');
+    var wide = krWidePost();
+    var keyboardInText = false;
+    blogPost.addEventListener('focusin', function(evt) {
+        var t = evt.target;
+        var byKeyboard = false;
+        try { byKeyboard = t.matches(':focus-visible'); } catch (e) {}
+        keyboardInText = byKeyboard && !t.closest('.kr-post-end, .blog-thanks-cta');
+        // Out at once, not on the next frame: a Tab pressed before that
+        // frame would find the rail still hidden and pass over it.
+        if (keyboardInText && !phone.matches && !wide.matches) rail.classList.add('is-visible');
+        krQueueScrollJobs();
+    });
+    blogPost.addEventListener('focusout', function(evt) {
+        if (!evt.relatedTarget || !blogPost.contains(evt.relatedTarget)) {
+            keyboardInText = false;
+            krQueueScrollJobs();
+        }
+    });
 
     var modal = document.createElement('div');
     modal.className = 'kr-share-modal kr-offstage';
@@ -492,10 +533,9 @@ function renderFloatingBlogShare() {
     krShareRow(modal.querySelector('.kr-share-modal-row'));
     document.body.appendChild(modal);
 
-    var dismissKey = 'kr-share-dismissed:' + window.location.pathname;
     var dismissed = false;
     try {
-        dismissed = sessionStorage.getItem(dismissKey) === '1';
+        dismissed = sessionStorage.getItem(KR_SHARE_DISMISSED) === '1';
     } catch (e) {}
 
     function setModalVisible(visible) {
@@ -507,7 +547,7 @@ function renderFloatingBlogShare() {
         setModalVisible(false);
         dismissed = true;
         try {
-            sessionStorage.setItem(dismissKey, '1');
+            sessionStorage.setItem(KR_SHARE_DISMISSED, '1');
         } catch (e) {}
     }
 
@@ -521,22 +561,21 @@ function renderFloatingBlogShare() {
         }
     });
 
-    var phone = window.matchMedia('(max-width: 991px)');
-    var wide = krWidePost();
     krOnScroll(function() {
         var rect = blogPost.getBoundingClientRect();
         var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
         var viewportWidth = document.documentElement.clientWidth || window.innerWidth;
         var railWidth = rail.offsetWidth || 40;
         var passed = postMainEndPassed(blogPost);
+        // What follows the sign-off, looked up each time because the pager
+        // and the related cards arrive late (or remove themselves); the
+        // footer is the last resort, so the sheet never covers its links.
+        var after = document.querySelector('.kr-upnext, .kr-post-end__related, .more-stories, .giscus-comments, #footer-section');
+        var afterOnScreen = !!after && after.getBoundingClientRect().top < viewportHeight;
         return function() {
             if (phone.matches) {
                 rail.classList.remove('is-visible');
-                if (!dismissed && passed) {
-                    setModalVisible(true);
-                } else if (!passed) {
-                    setModalVisible(false);
-                }
+                setModalVisible(!dismissed && passed && !afterOnScreen);
                 return;
             }
             setModalVisible(false);
@@ -551,7 +590,7 @@ function renderFloatingBlogShare() {
                 left = Math.max(8, rect.left - gap - railWidth);
             }
             rail.style.left = left + 'px';
-            rail.classList.toggle('is-visible', rect.top < viewportHeight * 0.7 && !passed);
+            rail.classList.toggle('is-visible', keyboardInText || (rect.top < viewportHeight * 0.7 && !passed));
         };
     });
 }
@@ -1416,6 +1455,22 @@ var KR_ROUTES_DEFAULT = [
 ];
 
 /**
+ * The sign-off's three routes for a posts.json record: its category's
+ * (KR_ROUTES), led by the page of the first series it is in, which is
+ * the nearest way on for a reader who finished one part. A route that
+ * is already that page is not repeated.
+ */
+function postRoutes(post) {
+    var routes = KR_ROUTES[postCategory(post)] || KR_ROUTES_DEFAULT;
+    var entry = postSeriesList(post)[0];
+    if (!entry || !entry.name) return routes;
+    var href = seriesPageHref(entry.name).replace(/^\//, '');
+    return [{ label: entry.name, href: href }].concat(routes.filter(function(r) {
+        return r.href !== href;
+    })).slice(0, 3);
+}
+
+/**
  * A post's category: from its posts.json record when it has one, else
  * from the first part of its opener kicker ("Books & Media · 1 June
  * 2026 · 14 min read"), which is how a draft names it.
@@ -1531,7 +1586,10 @@ function renderBlogThanksCta() {
  * has a neighbour decides. A side the series cannot fill (part 1 has no
  * previous part, the latest part no next) falls back to the post's
  * chronological neighbour in posts.json (newest first), unless that is
- * the post already on the other side.
+ * the post already on the other side. A fallback that leaves the post's
+ * series says so ("Newer, outside the series"): after the latest part a
+ * bare "Newer" read as if the series went on. It does not say the series
+ * has ended, which the data cannot know: most series are still running.
  *
  * up_next in .github/scripts/generate_related_posts.py applies the same
  * rules, so the baked related cards can leave these two posts out rather
@@ -1555,8 +1613,13 @@ function postNeighbours(posts, current) {
         return true;
     });
 
-    if (!prev && older && !(next && next.post === older)) prev = { post: older, label: 'Older' };
-    if (!next && newer && !(prev && prev.post === newer)) next = { post: newer, label: 'Newer' };
+    var names = postSeriesList(current).map(function(e) { return e && e.name; }).filter(Boolean);
+    function fallback(post, label) {
+        var leaves = names.length && !names.some(function(name) { return postSeriesEntry(post, name); });
+        return { post: post, label: leaves ? label + ', outside the series' : label };
+    }
+    if (!prev && older && !(next && next.post === older)) prev = fallback(older, 'Older');
+    if (!next && newer && !(prev && prev.post === newer)) next = fallback(newer, 'Newer');
     return { prev: prev, next: next };
 }
 
@@ -1760,7 +1823,7 @@ function renderPostEnd() {
 
     var neighbours = loadBlogPosts().then(function(posts) {
         var current = postByFile(posts, resolveCurrentPostFileName());
-        signOff.setRoutes(KR_ROUTES[postCategory(current)]);
+        signOff.setRoutes(postRoutes(current));
         fillUpNext(upNext, posts, current);
     }).catch(function() {
         if (upNext.parentNode) upNext.parentNode.removeChild(upNext);
@@ -1883,16 +1946,26 @@ function postMainEndPassed(blogPost) {
 
 /**
  * Sticky table of contents with scroll-spy, for posts with enough
- * sections to justify one. Rides the left gutter on wide screens,
- * mirroring the share rail on the right. Headings without ids get
- * slugs generated here.
+ * sections to justify one. Two forms of one list:
+ *
+ *   details.kr-toc-mobile  in the text under the meta and series lines.
+ *                          Below 1240px it is the contents. From 1240px it
+ *                          is still there for the keyboard, drawn only
+ *                          while focus is inside it (style.css §10,
+ *                          "Contents"), because the rail is not reachable
+ *                          by Tab: it is fixed, appended after the footer,
+ *                          and hidden by the time Tab gets there.
+ *   nav.kr-toc             the rail in the left gutter from 1240px,
+ *                          mirroring the share rail on the right.
+ *
+ * data-no-toc on .blog-post turns the rail off (a layout whose wide
+ * figures collide with it) and keeps the box, shown at every width: it
+ * used to turn both off, so the site's longest post had no contents at
+ * all. Headings without ids get slugs generated here.
  */
 function renderPostToc() {
     var blogPost = document.querySelector('.blog-post');
-    if (!blogPost || document.querySelector('.kr-toc')) return;
-    // Posts opt out with data-no-toc on .blog-post (e.g. layouts whose
-    // wide figures collide with the side rail).
-    if (blogPost.hasAttribute('data-no-toc')) return;
+    if (!blogPost || document.querySelector('.kr-toc, .kr-toc-mobile')) return;
 
     var headings = collectSectionHeadings(blogPost);
     if (headings.length < 4) return;
@@ -1902,29 +1975,29 @@ function renderPostToc() {
         return '<a href="#' + krEscapeHtml(h.id) + '">' + krEscapeHtml((h.textContent || '').trim()) + '</a>';
     }).join('');
 
+    // The box in the text: the contents below 1240px, and the keyboard's
+    // way to them above it.
+    var mobileToc = document.createElement('details');
+    mobileToc.className = 'kr-toc-mobile';
+    mobileToc.innerHTML = '<summary>Contents</summary><nav aria-label="Table of contents">' + linksHtml + '</nav>';
+    var anchorEl = blogPost.querySelector('.kr-series') ||
+        blogPost.querySelector('.blog-meta');
+    if (anchorEl && anchorEl.parentNode) {
+        anchorEl.parentNode.insertBefore(mobileToc, anchorEl.nextSibling);
+    }
+    mobileToc.addEventListener('click', function(e) {
+        var a = e.target.closest && e.target.closest('a');
+        if (a) mobileToc.removeAttribute('open');
+    });
+
+    if (blogPost.hasAttribute('data-no-toc')) return;
+
     var toc = document.createElement('nav');
     toc.className = 'kr-toc';
     toc.setAttribute('aria-label', 'Table of contents');
     toc.innerHTML = '<div class="kr-toc-label">Contents</div>' + linksHtml +
         '<span class="kr-toc__marker" aria-hidden="true"></span>';
     document.body.appendChild(toc);
-
-    // Narrow screens get a collapsible Contents block under the meta
-    // line instead of the side rail.
-    if (!document.querySelector('.kr-toc-mobile')) {
-        var mobileToc = document.createElement('details');
-        mobileToc.className = 'kr-toc-mobile';
-        mobileToc.innerHTML = '<summary>Contents</summary><nav aria-label="Table of contents">' + linksHtml + '</nav>';
-        var anchorEl = blogPost.querySelector('.kr-series') ||
-            blogPost.querySelector('.blog-meta');
-        if (anchorEl && anchorEl.parentNode) {
-            anchorEl.parentNode.insertBefore(mobileToc, anchorEl.nextSibling);
-        }
-        mobileToc.addEventListener('click', function(e) {
-            var a = e.target.closest && e.target.closest('a');
-            if (a) mobileToc.removeAttribute('open');
-        });
-    }
 
     // Scroll-spy. The section being read is the last one whose heading
     // has risen above 30% of the window: that is where the eye is once a
@@ -1982,9 +2055,16 @@ function renderPostToc() {
 }
 
 /**
- * Citation hover previews: hovering or focusing a [n] reference shows
- * the full citation in a floating card instead of forcing a jump.
- * Escape hides it.
+ * Citation previews: hovering or focusing a [n] reference shows the full
+ * citation in a floating card instead of forcing a jump. Escape hides it.
+ *
+ * On a touch screen (hover: none) there is no hover, and a tap on [n]
+ * used to drop the reader thousands of pixels down into the reference
+ * list. There the first tap shows the card instead, with a "Go to
+ * reference" link; a second tap on the same citation, or the link,
+ * makes the jump, and a tap anywhere else, a scroll or Escape closes
+ * it. The card copies the reference's own markup, minus its jargon
+ * <abbr>s and its back link (initReferenceBackLinks).
  */
 function initCitePreviews() {
     var refs = document.querySelectorAll('.blog-post a.cite-ref');
@@ -1996,26 +2076,50 @@ function initCitePreviews() {
     document.body.appendChild(tip);
     var hideTimer = null, anchored = null;
     var wide = krWidePost();
+    var touch = window.matchMedia ? window.matchMedia('(hover: none)') : { matches: false };
+    var tapped = null;     // the citation whose card a tap opened
 
-    function show(anchor) {
+    function show(anchor, withLink) {
         var href = anchor.getAttribute('href') || '';
-        if (href.charAt(0) !== '#') return;
+        if (href.charAt(0) !== '#') return false;
         // A citation whose sidenote is showing beside it lights the note
         // up instead (initPostSidenotes marks it data-kr-note="beside"); a
         // second copy would float over the text. Every other citation, a
         // repeat of a reference or one whose note was too far down to
         // show, gets the card.
-        if (wide.matches && anchor.getAttribute('data-kr-note') === 'beside') return;
+        if (wide.matches && anchor.getAttribute('data-kr-note') === 'beside') return false;
         var target = document.getElementById(href.slice(1));
-        if (!target) return;
+        if (!target) return false;
         tip.innerHTML = target.innerHTML;
         // A jargon tooltip copied in with the reference would be a
         // tooltip inside a tooltip; keep its words, drop the <abbr>.
         Array.prototype.forEach.call(tip.querySelectorAll('abbr'), function(abbr) {
             abbr.replaceWith(document.createTextNode(abbr.textContent));
         });
+        Array.prototype.forEach.call(tip.querySelectorAll('.kr-ref-back'), function(back) {
+            back.parentNode.removeChild(back);
+        });
+        if (withLink) {
+            var go = document.createElement('a');
+            go.className = 'cite-preview__go';
+            go.href = href;
+            go.textContent = 'Go to reference';
+            go.addEventListener('click', hide);
+            tip.appendChild(go);
+        }
         var rect = anchor.getBoundingClientRect();
         tip.classList.add('is-visible');
+        // A tapped card docks at the foot of the screen (style.css), as a
+        // jargon card does on a phone: hung off a citation near the edge
+        // of a narrow screen it ran into that edge.
+        tip.classList.toggle('cite-preview--docked', !!withLink);
+        document.body.classList.toggle('kr-cite-docked', !!withLink);
+        if (withLink) {
+            if (anchored) anchored.style.anchorName = '';
+            anchored = null;
+            tip.style.left = tip.style.top = tip.style.maxWidth = '';
+            return true;
+        }
         // Where the browser can anchor one element to another, the card
         // hangs off the citation itself and flips below it when there is
         // no room above; the arithmetic that follows is the fallback.
@@ -2024,7 +2128,7 @@ function initCitePreviews() {
             anchor.style.anchorName = '--kr-cite';
             anchored = anchor;
             tip.style.left = tip.style.top = '';
-            return;
+            return true;
         }
         var width = Math.min(420, (window.innerWidth || 1000) - 24);
         tip.style.maxWidth = width + 'px';
@@ -2034,26 +2138,88 @@ function initCitePreviews() {
         if (top < 12) top = rect.bottom + 10;
         tip.style.left = left + 'px';
         tip.style.top = top + 'px';
+        return true;
+    }
+
+    function hide() {
+        clearTimeout(hideTimer);
+        tapped = null;
+        tip.classList.remove('is-visible');
+        document.body.classList.remove('kr-cite-docked');
     }
 
     function scheduleHide() {
-        hideTimer = setTimeout(function() { tip.classList.remove('is-visible'); }, 150);
+        if (tapped) return;
+        hideTimer = setTimeout(hide, 150);
+    }
+
+    function byKeyboard(a) {
+        try { return a.matches(':focus-visible'); } catch (e) { return true; }
     }
 
     Array.prototype.forEach.call(refs, function(a) {
-        a.addEventListener('mouseenter', function() { clearTimeout(hideTimer); show(a); });
+        // A tap fires mouseenter and focus before its click; on a touch
+        // screen only the click decides, or the card would already be
+        // open when the click came and the first tap would jump.
+        a.addEventListener('mouseenter', function() {
+            if (touch.matches) return;
+            clearTimeout(hideTimer);
+            show(a);
+        });
         a.addEventListener('mouseleave', scheduleHide);
-        a.addEventListener('focus', function() { clearTimeout(hideTimer); show(a); });
+        a.addEventListener('focus', function() {
+            if (touch.matches && !byKeyboard(a)) return;
+            clearTimeout(hideTimer);
+            show(a);
+        });
         a.addEventListener('blur', scheduleHide);
+        a.addEventListener('click', function(e) {
+            if (!touch.matches) return;
+            if (tapped === a) { hide(); return; }       // second tap: jump
+            clearTimeout(hideTimer);
+            if (show(a, true)) {
+                e.preventDefault();
+                tapped = a;
+            }
+        });
     });
     tip.addEventListener('mouseenter', function() { clearTimeout(hideTimer); });
     tip.addEventListener('mouseleave', scheduleHide);
-    window.addEventListener('scroll', function() { tip.classList.remove('is-visible'); }, { passive: true });
+    document.addEventListener('click', function(e) {
+        if (!tapped) return;
+        var t = e.target;
+        if (tip.contains(t) || (t.closest && t.closest('a.cite-ref'))) return;
+        hide();
+    });
+    window.addEventListener('scroll', hide, { passive: true });
     document.addEventListener('keydown', function(e) {
-        if ((e.key === 'Escape' || e.key === 'Esc') && tip.classList.contains('is-visible')) {
-            clearTimeout(hideTimer);
-            tip.classList.remove('is-visible');
-        }
+        if ((e.key === 'Escape' || e.key === 'Esc') && tip.classList.contains('is-visible')) hide();
+    });
+}
+
+/**
+ * A way back from the reference list: each reference gets a small link
+ * (a.kr-ref-back, an arrow drawn by CSS, named for a screen reader) to
+ * the first place it is cited, which gets an id for it (cite-<ref id>)
+ * when it has none. A reader who jumped to [12] from the middle of the
+ * post was left in the list with nothing leading back to the sentence.
+ * The link has no text of its own, so the sidenotes and the citation
+ * card, which read the reference's text, are unchanged; both leave it
+ * out.
+ */
+function initReferenceBackLinks() {
+    var post = document.querySelector('.blog-post');
+    if (!post || post.querySelector('.kr-ref-back')) return;
+    Array.prototype.forEach.call(post.querySelectorAll(KR_REFERENCE_LISTS + ' > li[id]'), function(li) {
+        var cite = post.querySelector('a.cite-ref[href="#' + li.id + '"]');
+        if (!cite) return;
+        if (!cite.id) cite.id = 'cite-' + li.id;
+        var back = document.createElement('a');
+        back.className = 'kr-ref-back';
+        back.href = '#' + cite.id;
+        back.setAttribute('aria-label', 'Back to where this is cited');
+        back.title = 'Back to where this is cited';
+        li.appendChild(back);
     });
 }
 
@@ -2134,12 +2300,17 @@ function renderSeriesPage() {
 }
 
 /**
- * The series line under a post's meta line, for a post in a series of two
- * or more parts: one quiet line, "Part 3 of 10 · Algorithms, Live", the
- * name linking the series page, with every part listed in a native
- * <details> whose toggle sits at the end of the same line. It used to be
- * a bordered box listing up to seven parts above the first paragraph,
- * which pushed the article down the page on every part of every series.
+ * The series line under a post's meta line, for a post in a series: one
+ * quiet line, "Part 3 of 10 · Algorithms, Live", the name linking the
+ * series page, with every part listed in a native <details> whose toggle
+ * sits at the end of the same line. It used to be a bordered box listing
+ * up to seven parts above the first paragraph, which pushed the article
+ * down the page on every part of every series.
+ *
+ * The first part of a new series, while it is the only one, gets the line
+ * without the count or the toggle ("Part 1 · Wellness From the Science"):
+ * the series page is still worth a link, and a list of one part is not.
+ * It used to get nothing, so a series' first post never named its series.
  *
  * The toggle is the details' <summary>, positioned at the line's end by
  * CSS, so the list opens beneath the line and the toggle never moves. The
@@ -2165,7 +2336,10 @@ function renderSeriesNav() {
         var anchor = blogPost.querySelector('.blog-meta');
         seriesList.forEach(function(entry) {
             var parts = seriesParts(posts, entry.name);
-            if (parts.length < 2) return;
+            if (!parts.length) return;
+            var nameLink = '<a class="kr-series__name" href="' + krEscapeHtml(root + seriesPageHref(entry.name).replace(/^\//, '')) + '">' +
+                krEscapeHtml(entry.name) + '</a>';
+            var dot = ' <span aria-hidden="true">·</span> ';
 
             var items = parts.map(function(p) {
                 var isCurrent = p === current;
@@ -2179,16 +2353,14 @@ function renderSeriesNav() {
             var line = document.createElement('nav');
             line.className = 'kr-series';
             line.setAttribute('aria-label', 'Series: ' + entry.name);
-            line.innerHTML =
+            line.innerHTML = parts.length === 1
                 // A div, not a <p>: the post's prose rules would restyle it.
-                '<div class="kr-series__line">Part ' + entry.part + ' of ' + parts.length +
-                    ' <span aria-hidden="true">·</span> ' +
-                    '<a class="kr-series__name" href="' + krEscapeHtml(root + seriesPageHref(entry.name).replace(/^\//, '')) + '">' +
-                    krEscapeHtml(entry.name) + '</a></div>' +
-                '<details class="kr-series__parts">' +
-                    '<summary><span class="kr-series__toggle">All parts</span></summary>' +
-                    '<ol class="kr-series-parts">' + items.join('') + '</ol>' +
-                '</details>';
+                ? '<div class="kr-series__line">Part ' + entry.part + dot + nameLink + '</div>'
+                : '<div class="kr-series__line">Part ' + entry.part + ' of ' + parts.length + dot + nameLink + '</div>' +
+                    '<details class="kr-series__parts">' +
+                        '<summary><span class="kr-series__toggle">All parts</span></summary>' +
+                        '<ol class="kr-series-parts">' + items.join('') + '</ol>' +
+                    '</details>';
 
             if (anchor && anchor.parentNode) {
                 anchor.parentNode.insertBefore(line, anchor.nextSibling);
@@ -2275,8 +2447,28 @@ function renderPostMeta() {
 }
 
 /**
- * "Part N" series chips on related-post cards (both baked and
- * runtime-rendered), matching the listing and series pages.
+ * The series chip on a related card for `post`, read on the page of
+ * `current` (both posts.json records, `current` null on a draft): "Part 5"
+ * for a part of a series `current` is in, where the line under the title
+ * has already named it, and "Part 14 · How This Site Is Built", the
+ * listing's wording, for any other series. A bare number from another
+ * series read as a part of this one: the name was only in a title
+ * tooltip, which a touch screen never shows. '' for a post in no series.
+ */
+function relatedSeriesChipText(post, current) {
+    var list = postSeriesList(post).filter(function(e) { return e && e.name; });
+    if (!list.length) return '';
+    var shared = null;
+    postSeriesList(current).some(function(e) {
+        shared = e && e.name ? postSeriesEntry(post, e.name) : null;
+        return !!shared;
+    });
+    return shared ? 'Part ' + shared.part : 'Part ' + list[0].part + ' · ' + list[0].name;
+}
+
+/**
+ * Series chips on related-post cards (both baked and runtime-rendered),
+ * worded by relatedSeriesChipText.
  */
 function renderRelatedSeriesChips() {
     var cards = document.querySelectorAll('.related-posts .blog-card');
@@ -2286,16 +2478,16 @@ function renderRelatedSeriesChips() {
         posts.forEach(function(p) {
             byFile[(p.url || '').split('/').pop()] = p;
         });
+        var current = postByFile(posts, resolveCurrentPostFileName());
         Array.prototype.forEach.call(cards, function(card) {
             var imgWrap = card.querySelector('.blog-card-img');
             if (!imgWrap || imgWrap.querySelector('.kr-series-chip')) return;
             var file = (card.getAttribute('href') || '').split('/').pop().split('#')[0];
-            var entry = postSeriesList(byFile[file])[0];
-            if (!entry || !entry.name) return;
+            var text = relatedSeriesChipText(byFile[file], current);
+            if (!text) return;
             var chip = document.createElement('span');
             chip.className = 'kr-series-chip';
-            chip.textContent = 'Part ' + entry.part;
-            chip.title = entry.name;
+            chip.textContent = text;
             imgWrap.appendChild(chip);
         });
     }).catch(function() {});
@@ -2318,6 +2510,7 @@ function renderBlogPostEssentials() {
     renderPostToc();
     renderHeadingAnchors();
     renderSeriesNav();
+    initReferenceBackLinks();
     initCitePreviews();
 }
 
@@ -2545,11 +2738,12 @@ function applyJargonTooltips() {
     // (?:s|es)? allows the regex to match common plural forms (e.g. "LLMs", "algorithms", "processes").
     // match[1] captures the base term for the dictionary lookup while match[0] preserves the display form.
     var jargonRegex = new RegExp('\\b(' + sortedTerms.map(escapeRegex).join('|') + ')(?:s|es)?\\b', 'gi');
-    // Elements whose words are never underlined: links, code, scripts,
-    // and headings (a dotted term inside a title reads as accidental
-    // formatting). ABBR, JARGON and H2 are handled by the walk itself.
+    // Elements whose words are never underlined: links, buttons (a Tab
+    // stop inside a control), code, scripts, and headings (a dotted term
+    // inside a title reads as accidental formatting). ABBR, JARGON and H2
+    // are handled by the walk itself.
     var skipTags = {
-        A: true, CODE: true, PRE: true, SCRIPT: true, STYLE: true, TEXTAREA: true,
+        A: true, BUTTON: true, CODE: true, PRE: true, SCRIPT: true, STYLE: true, TEXTAREA: true,
         H1: true, H3: true, H4: true, H5: true, H6: true
     };
     // Chrome and furniture: the meta line, disclosure labels, the
@@ -2558,7 +2752,7 @@ function applyJargonTooltips() {
     // in something the reader scans rather than reads.
     var SKIP_SELECTOR = '.blog-meta, summary, ol.references, .kr-sidenote, ' +
         '.kr-series, figcaption, .post-pagination, .post-disclaimer, .kr-post-end, ' +
-        '.related-posts, .kr-toc-mobile, .fullres-card, .katex, .katex-display, .math-block';
+        '.related-posts, .kr-toc-mobile, .kr-share-rail, .fullres-card, .katex, .katex-display, .math-block';
 
     // One walk over the article in reading order, collecting what it
     // meets: text to scan, the post's own <jargon> markers, <abbr>s
@@ -2603,9 +2797,13 @@ function applyJargonTooltips() {
         return jargonDefinitions[key] || jargonDefinitions[key.replace(/es$/, '')] ||
             jargonDefinitions[key.replace(/s$/, '')] || '';
     }
+    // A Tab stop, so the definition card (drawn on :hover and
+    // :focus-visible, style.css §11 "Jargon") reaches a keyboard too;
+    // focused, a screen reader reads the title as the term's description.
     function makeAbbr(text, definition) {
         var abbr = document.createElement('abbr');
         abbr.setAttribute('title', definition);
+        abbr.setAttribute('tabindex', '0');
         abbr.textContent = text;
         return abbr;
     }
@@ -2617,6 +2815,11 @@ function applyJargonTooltips() {
         } else if (ev.existing) {
             var had = ev.existing.getAttribute('title') || definitionFor(ev.existing.textContent);
             if (had) seen[had] = true;
+            // A hand-written <abbr title> draws the same card, so it is a
+            // Tab stop too.
+            if (ev.existing.getAttribute('title') && !ev.existing.hasAttribute('tabindex')) {
+                ev.existing.setAttribute('tabindex', '0');
+            }
         } else if (ev.marker) {
             // <jargon key="wcag">WCAG</jargon> or <jargon>redundant coding</jargon>
             var node = ev.marker;
@@ -2654,6 +2857,35 @@ function applyJargonTooltips() {
     // keep their words and lose the tooltip.
     Array.prototype.forEach.call(blogPost.querySelectorAll('jargon'), function(node) {
         node.parentNode.replaceChild(document.createTextNode(node.textContent || ''), node);
+    });
+
+    if (!krJargonEscapeBound) {
+        krJargonEscapeBound = true;
+        document.addEventListener('keydown', krDismissJargonCard);
+    }
+}
+
+/* Escape puts away a jargon card that hover or focus is showing: it sits
+   over the lines above its term, and a reader must be able to clear it
+   without moving the pointer or the focus (WCAG 1.4.13). The card stays
+   away (.is-dismissed, style.css §11 "Jargon") until the term has lost
+   both. Bound once, however often applyJargonTooltips runs. */
+var krJargonEscapeBound = false;
+
+function krDismissJargonCard(e) {
+    if (e.key !== 'Escape' && e.key !== 'Esc') return;
+    Array.prototype.forEach.call(document.querySelectorAll('.blog-post abbr[title]'), function(abbr) {
+        if (abbr.classList.contains('is-dismissed')) return;
+        if (!abbr.matches(':hover') && abbr !== document.activeElement) return;
+        abbr.classList.add('is-dismissed');
+        function restore() {
+            if (abbr.matches(':hover') || abbr === document.activeElement) return;
+            abbr.classList.remove('is-dismissed');
+            abbr.removeEventListener('mouseleave', restore);
+            abbr.removeEventListener('blur', restore);
+        }
+        abbr.addEventListener('mouseleave', restore);
+        abbr.addEventListener('blur', restore);
     });
 }
 
@@ -3746,9 +3978,15 @@ function krLabelModKeys(scope) {
     });
 }
 
-/** Copies text to the clipboard (older browsers included); done(ok) reports how it went. */
+/**
+ * Copies text to the clipboard (older browsers included); done(ok) reports
+ * how it went. The fallback selects a hidden textarea, which takes focus;
+ * focus goes back to where it was, or a keyboard reader who pressed a Copy
+ * button would be left at the top of the page.
+ */
 function krCopyText(text, done) {
     function fallback() {
+        var was = document.activeElement;
         var ta = document.createElement('textarea');
         ta.value = text;
         ta.style.position = 'fixed';
@@ -3758,6 +3996,7 @@ function krCopyText(text, done) {
         var ok = false;
         try { ok = document.execCommand('copy'); } catch (e) {}
         document.body.removeChild(ta);
+        if (was && was.focus) was.focus({ preventScroll: true });
         if (done) done(ok);
     }
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -4381,6 +4620,84 @@ function initCodeHighlighting() {
     document.head.appendChild(script);
 }
 
+/**
+ * A Copy button on every code block in a post. Copying a 600-line
+ * listing by selecting it was close to impossible on a phone. Each
+ * <pre> is wrapped in div.kr-code, which holds the button over the
+ * block's top corner (style.css §11, "Code"); in a folded listing the
+ * wrapper is inside the <details>, so the button shows once it is open.
+ * The citation box's BibTeX (.kr-cite-this) has a button of its own.
+ *
+ * The button reads "Copy" and says "Copied" with a tick for a moment,
+ * as the share row's Copy link does (krCopyText, KR_SHARE_ICONS); a
+ * hidden polite status says it for a screen reader, since a label that
+ * changes under focus is not reliably read out.
+ */
+function initCodeCopy() {
+    var pres = document.querySelectorAll('.blog-post pre');
+    var status = null;
+    Array.prototype.forEach.call(pres, function(pre) {
+        if (pre.closest('.kr-cite-this, .kr-code')) return;
+        // One polite region for every block, in the page before the first
+        // copy: a region added at the moment it speaks is often not heard.
+        if (!status) {
+            status = document.createElement('div');
+            status.className = 'sr-only';
+            status.setAttribute('role', 'status');
+            document.body.appendChild(status);
+        }
+        var wrap = document.createElement('div');
+        wrap.className = 'kr-code';
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'kr-code-copy';
+        function label(done) {
+            btn.innerHTML = KR_SHARE_ICONS[done ? 'copyDone' : 'copy'] +
+                '<span>' + (done ? 'Copied' : 'Copy') + '</span><span class="sr-only"> code</span>';
+            btn.classList.toggle('is-copied', done);
+        }
+        label(false);
+        pre.parentNode.insertBefore(wrap, pre);
+        wrap.appendChild(btn);
+        wrap.appendChild(pre);
+        var timer = null;
+        btn.addEventListener('click', function() {
+            var code = pre.querySelector('code') || pre;
+            krCopyText(code.textContent.replace(/\n$/, ''), function(ok) {
+                if (!ok) return;
+                label(true);
+                status.textContent = '';
+                setTimeout(function() { status.textContent = 'Code copied'; }, 50);
+                clearTimeout(timer);
+                timer = setTimeout(function() { label(false); }, 1800);
+            });
+        });
+    });
+}
+
+/**
+ * A printed post carries the answers and definitions a reader opens on
+ * screen: the FAQ answers and the glossary box are opened for the print
+ * and closed again after it, as each was. On paper a closed <details> is
+ * its summary alone, so the questions printed without answers and "Quick
+ * jargon guide" with nothing under it. Code listings stay as they are: a
+ * folded listing is folded because it runs to pages.
+ */
+function initPrintExpand() {
+    if (!document.querySelector('.blog-post')) return;
+    var opened = [];
+    window.addEventListener('beforeprint', function() {
+        document.querySelectorAll('.blog-post details.faq-item:not([open]), .blog-post details.plain-english-box:not([open])').forEach(function(d) {
+            d.setAttribute('open', '');
+            opened.push(d);
+        });
+    });
+    window.addEventListener('afterprint', function() {
+        opened.forEach(function(d) { d.removeAttribute('open'); });
+        opened = [];
+    });
+}
+
 /* Players that are always 16:9, whatever height their facade names. */
 var KR_VIDEO_EMBED = /^https:\/\/(www\.)?(youtube(-nocookie)?\.com\/embed\/|player\.vimeo\.com\/)/;
 
@@ -4474,6 +4791,9 @@ function compactReference(li) {
     var out = { who: '', title: text, href: '', label: '' };
 
     var link = li.querySelector('a[href]');
+    // The back link (initReferenceBackLinks) comes last, so it is the
+    // first link only in a reference with none of its own.
+    if (link && link.classList && link.classList.contains('kr-ref-back')) link = null;
     if (link) {
         out.href = link.getAttribute('href');
         if (/doi\.org\//i.test(out.href) || /^doi:/i.test(squash(link.textContent))) {
@@ -4679,3 +4999,5 @@ initCopyQuotes();
 initLightboxFix();
 initFullResMode();
 initCodeHighlighting();
+initCodeCopy();
+initPrintExpand();

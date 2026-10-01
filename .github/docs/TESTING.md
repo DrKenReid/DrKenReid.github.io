@@ -163,6 +163,7 @@ real files in a `vm` (`tests/js/runtime.js` is the shared loader).
 | `test_decisions.py` | decisions that look like mistakes (`overflow: clip` on the opener, gradient text inside `@supports`, derived tokens restated in the dark block) |
 | `test_generate_post_head.py` | the post head template, one `--fix` pass from an old post, idempotence |
 | `test_generate_publications.py` | the publication list's order, markup and refusals, the All button's count, and every stated size of the site's own PDFs |
+| `test_generate_read_times.py` | which words count: every word for `words`, and for `readMinutes` all but the code in a folded listing |
 | `test_hero_caption.py` | the homepage's evolved-headline caption states the script's triangle count and has a reduced-motion wording |
 | `test_generate_related_posts.py` | the baked card stays `createBlogCardElement`'s card |
 | `test_generate_series_band.py` | which series the blog's "Read in order" band shows (three parts or more, most recently updated, ties by name), its escaped card, and the refusal of a series with no tracked page or no description |
@@ -178,7 +179,7 @@ real files in a `vm` (`tests/js/runtime.js` is the shared loader).
 | `test_external_links.py` | what the weekly link report counts as gone, a redirect that never arrives or stops at a sign-in page included |
 | `tests/js/bookshelf.test.js` | ISO weeks and reading sessions on the calendar |
 | `tests/js/kr-viz.test.js` | the demo engine's run button (Run again once finished), Restart playing on, Step, starting at half the main canvas, and the short-screen height cap |
-| `tests/js/post-runtime.test.js` | the end band's routes and neighbours, lead-ins, sidenote references |
+| `tests/js/post-runtime.test.js` | the end band's routes and neighbours (and the pager saying when it leaves the series), related cards' series chips, lead-ins, sidenote references |
 | `tests/js/site-chrome.test.js` | `KR_PAGES`, the pager's page list, topic rows, the prerender rules |
 
 ```sh
