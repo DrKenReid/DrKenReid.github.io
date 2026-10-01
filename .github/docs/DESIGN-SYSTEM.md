@@ -185,6 +185,10 @@ bottom left, crumbs above it, over `--kr-opener-scrim` (§06).
   takes about a third of the screen instead of half.
 - The photograph stays in the inline `background-image`, where the
   parallax (`.jarallax`, run by `js/site.js`) reads it.
+- Below 768px the crumbs keep to one line and the current page's name
+  ends in an ellipsis when the row is full (the title below repeats it):
+  a wrapping row changed height when the web font replaced its wider
+  fallback, and moved the whole opener.
 - Do keep the title to the page's name. Don't repeat it as the first
   `h2`, colour the title or crumbs per page, or give a second element the
   `kr-hero` view-transition name.

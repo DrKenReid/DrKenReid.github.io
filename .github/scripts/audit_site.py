@@ -33,7 +33,8 @@ Checks:
   lengths    top-level pages: <title> at most 65 characters, meta
              description at most 160 (WARN), where search results cut them
   series     every series in posts.json has a tracked series-<slug>.html
-             page and a sitemap entry
+             page and a sitemap entry, and the page has the Series crumb,
+             the feed link and the "All series" link (SERIES_PAGE_PARTS)
   site map   every tracked top-level page is in KR_PAGES
              (js/shared-components.js), which the footer and palette read
   jekyll     no tracked Markdown is published beside the site by Pages
@@ -1026,25 +1027,52 @@ def series_names(posts):
                    for entry in sitelib.series_list(post) if entry.get("name")})
 
 
-def check_series_pages(posts, tracked, locs, add):
-    """ERROR when a series in posts.json has no page or no sitemap entry.
+def check_series_pages(posts, tracked, locs, add, read=None):
+    """ERROR when a series in posts.json has no page or no sitemap entry,
+    or its page lacks a part every series page carries (series_page_gaps).
 
     A post's series line, the series chip on its card and the palette all
     link to seriesPageHref(name), which nobody checks until a reader
     follows it: a series created in posts.json before its page is written,
     or renamed there alone, is a live link to a 404 on every post in it.
-    The page is found by the same slug rule the links use.
+    The page is found by the same slug rule the links use. `read` returns
+    a page's text (the file on disk by default; tests pass their own).
     """
+    read = read or (lambda rel: (ROOT / rel).read_text(encoding="utf-8"))
     for name in series_names(posts):
         rel = sitelib.series_page(name)
         if rel not in tracked:
             add("ERROR", "posts.json", 0, "series-page",
                 f"series '{name}' has no tracked {rel}, which every post in it "
                 f"links to (copy an existing series page)")
-        elif locs is not None and f"{SITE}/{rel}" not in locs:
+            continue
+        if locs is not None and f"{SITE}/{rel}" not in locs:
             add("ERROR", "sitemap.xml", 0, "series-sitemap",
                 f"series page {rel} is not in the sitemap; run "
                 f"python .github/scripts/generate_sitemap.py")
+        for gap in series_page_gaps(read(rel)):
+            add("ERROR", rel, 0, "series-page-parts",
+                f"{gap}; copy it from an existing series page")
+
+
+# What every series landing page carries besides its own name and lede, so
+# a page copied from an older one, or from a template kept elsewhere, does
+# not quietly lose them: the crumbs pass through the series index as
+# series.html's own do, a feed reader given the page's URL finds the feed,
+# and the page ends with a way to the other series.
+SERIES_PAGE_PARTS = (
+    (re.compile(r'<li class="breadcrumb-item"><a href="/series\.html">Series</a></li>'),
+     'no "Series" crumb between Blog and the series name'),
+    (re.compile(r'<link rel="alternate" type="application/rss\+xml"[^>]*href="[^"]*/feed\.xml"'),
+     "no feed autodiscovery link in the head"),
+    (re.compile(r'<a href="/series\.html"[^>]*>All series</a>'),
+     'no "All series" link beside "Browse all posts" at the foot'),
+)
+
+
+def series_page_gaps(text):
+    """The SERIES_PAGE_PARTS a series page's markup lacks, as messages."""
+    return [message for pattern, message in SERIES_PAGE_PARTS if not pattern.search(text)]
 
 
 SITE_MAP_SOURCE = "js/shared-components.js"

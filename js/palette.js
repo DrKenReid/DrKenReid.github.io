@@ -62,8 +62,9 @@
  *   top-level reference would throw there and take Ctrl+K with it.
  *
  * PUBLIC
- *   window.krPalette = { open(), close(), isOpen(), ready(), search(query) }
- *   open/close for any other control that wants to summon it; ready()
+ *   window.krPalette = { open(query?), close(), isOpen(), ready(), search(query) }
+ *   open/close for any other control that wants to summon it (open with
+ *   a query starts the search on those words); ready()
  *   resolves once the JSON sources have loaded; search() returns the ranked
  *   results as data, which is what tests should assert on.
  */
@@ -550,7 +551,10 @@
 
     const isOpen = () => Boolean(overlay) && overlay.classList.contains('is-open');
 
-    function open() {
+    // `query`, when a caller passes one, is typed into the box: an empty
+    // listing's "Search the whole site" (krListEmpty) hands over the words
+    // the reader searched it for. The keys and the nav button open it empty.
+    function open(query) {
         if (!overlay) build();
         if (isOpen()) return;
         // Remembered so closing hands focus back to whatever summoned the
@@ -571,7 +575,7 @@
         loadIndex();
         overlay.classList.add('is-open');
         document.body.classList.add('kr-palette-open');
-        input.value = '';
+        input.value = typeof query === 'string' ? query : '';
         render(false);
         // Focus synchronously: mobile browsers only raise the soft keyboard
         // when focus happens inside the user gesture. The retry covers the

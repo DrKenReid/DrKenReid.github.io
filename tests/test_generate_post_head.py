@@ -107,7 +107,20 @@ class FixOldPost(unittest.TestCase):
         self.assertEqual(self.changed, ["lang", "preloader", "analytics", "asset-query",
                                         "open-graph", "preload",
                                         "keywords/icons/manifest", "jsonld-BlogPosting",
-                                        "jsonld-BreadcrumbList"])
+                                        "jsonld-BreadcrumbList", "feed-link"])
+
+    def test_feed_link_follows_the_canonical(self):
+        # Autodiscovery: a post's URL given to a feed reader finds the feed.
+        self.assertIn(' <link rel="canonical" href="https://www.kenreid.co.uk/blog/ant-colony-live.html">\n'
+                      ' <link rel="alternate" type="application/rss+xml" title="Ken Reid\'s Blog" '
+                      'href="https://www.kenreid.co.uk/feed.xml">\n', self.head)
+        self.assertEqual(self.head.count('application/rss+xml'), 1)
+
+    def test_a_drifted_feed_link_is_rewritten_in_place(self):
+        stale = self.new.replace("Ken Reid's Blog", "Old name").replace("/feed.xml", "/rss.xml")
+        again, changed = gph.canonicalise(stale, post())
+        self.assertEqual(changed, ["feed-link"])
+        self.assertEqual(again, self.new)
 
     def test_second_pass_changes_nothing(self):
         again, changed = gph.canonicalise(self.new, post())

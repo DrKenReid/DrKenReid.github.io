@@ -4,8 +4,15 @@
 Every post gets the usual title/link/guid/pubDate/description/category
 item; the newest FULL_CONTENT_ITEMS additionally get a content:encoded
 block carrying the full article HTML (scripts, canvases, and interactive
-widgets stripped and replaced with a "view it live" note; relative URLs
-absolutised) so feed readers can read whole posts without leaving.
+widgets stripped and replaced with a "view it live" note; the post's own
+<h1> and date-and-tags line dropped, since the reader prints the item's
+title and date; relative URLs absolutised, and #fragment links tied to
+the post's URL) so feed readers can read whole posts without leaving.
+
+Readers find the feed from any page that names it: blog.html,
+index.html and series.html, every series page (the audit's
+series-page-parts holds them to it), and every post
+(generate_post_head.py writes the link into each head).
 
 Run after updating data/posts.json:
     python .github/scripts/generate_feed.py
@@ -75,6 +82,14 @@ def drop_balanced_divs(content: str, open_pattern: str) -> tuple[str, int]:
 def clean_for_feed(content: str, post_url: str) -> str:
     had_interactive = bool(re.search(r"<canvas\b", content))
 
+    # The post's own <h1> and its date-and-tags line (.blog-meta) open
+    # every body. A feed reader prints the item's <title> and date above
+    # the content already, so they read twice, and the tags came through
+    # as bare words. Only the pair at the very top goes.
+    content = re.sub(r"^\s*<h1\b[^>]*>.*?</h1>\s*", "", content, count=1, flags=re.S)
+    if re.match(r'\s*<div class="blog-meta"', content):
+        content, _ = drop_balanced_divs(content, r'<div class="blog-meta"[^>]*>')
+
     # Interactive widget containers (their class ends in -viz by series
     # convention) and any stray canvases / scripts / noscript blocks.
     content, widgets = drop_balanced_divs(content, r'<div class="[a-z-]*-?viz"[^>]*>|<div class="[a-z]+-viz [^"]*"[^>]*>')
@@ -99,6 +114,10 @@ def clean_for_feed(content: str, post_url: str) -> str:
     content = re.sub(r'(src|href)="\.\./', r'\1="' + SITE + "/", content)
     content = re.sub(r'(src|href)="(?!https?://|#|mailto:|/)', r'\1="' + SITE + "/blog/", content)
     content = re.sub(r'(src|href)="/', r'\1="' + SITE + "/", content)
+    # A fragment link (a citation's href="#ref-3", a footnote) resolves
+    # against the feed reader's own page, where there is no #ref-3. Tied to
+    # the post's URL it opens the post at that reference.
+    content = re.sub(r'href="#', 'href="' + post_url + "#", content)
 
     # CDATA safety.
     return content.replace("]]>", "]]&gt;")

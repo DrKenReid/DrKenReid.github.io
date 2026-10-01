@@ -25,12 +25,18 @@
  *   renderTopicPosts(el, o)         a page's "writing about X" row; any
  *                                   [data-topic-tags] host starts itself
  *   renderSeriesPage()              a series landing page's grid of parts
+ *                                   and count (seriesNewestPart)
  *   krBuildListSearchBox, krUpdateSearchCounter, krRenderListPagination,
  *   renderFilterBar, krInitTogglePanels
  *                                   listing furniture (blog, series)
+ *   krListMatches(q, texts), krPostSearchTexts(post)
+ *                                   the listings' search, by word starts
+ *   krListEmpty(grid, o)            the ways on from an empty listing
+ *   krLoadFailed(host, msg, html), krNoscriptMarkup(el)
+ *                                   a list whose data did not arrive
  *   krFacetRow, krFacetButton, krCountLabel, krSetPressed, krClearRow,
  *   krTagFacetRow, krSortPanel, krSortOption, krSortFromUrl,
- *   krSortToUrl, krToolbarLabels, krUrlList
+ *   krSortToUrl, krToolbarLabels, krUrlList, krRevealPressed
  *                                   the filter and sort panels' parts
  *   krArmPostPrerender()            prerender posts on hover intent
  *   krShareRow(parent)              the share buttons, for the rail, sheet, sign-off
@@ -52,7 +58,7 @@
  *   postByFile(posts, file), postSeriesList(post), postSeriesEntry(post, name),
  *   seriesParts(posts, name), postNeighbours(posts, post), leadInEnd(text),
  *   compactReference(li), relatedSeriesChipText(post, current)
- *   krTopicPosts(posts, o), krPageList(page, pages)
+ *   krTopicPosts(posts, o), krPageList(page, pages), krListMatches(q, texts)
  *                                   (tests/js/site-chrome.test.js)
  *
  * Media
@@ -907,8 +913,15 @@ function krBuildListSearchBox(opts) {
  * blog listing's. input: null leaves a placeholder alone that says
  * something better than a count (books.html's "Search titles and
  * authors"). Give the counter class kr-list-counter and role="status".
+ *
+ * `detail`, when given, follows a count that is not zero: the filters in
+ * force, in words ("Showing 9 of 72 posts: tagged books"). A list that
+ * arrives narrowed from a link (a post's tag, a hobby page's "See all")
+ * then says by what right above the cards, where a phone reader looks,
+ * even with the filter panel shut or its pressed pill scrolled out of
+ * its row.
  */
-function krUpdateSearchCounter(filtered, total, noun, unfiltered, ids) {
+function krUpdateSearchCounter(filtered, total, noun, unfiltered, ids, detail) {
     var names = ids || { input: 'blog-search', counter: 'blog-counter' };
     var input = names.input ? document.getElementById(names.input) : null;
     if (input) {
@@ -923,7 +936,208 @@ function krUpdateSearchCounter(filtered, total, noun, unfiltered, ids) {
         : (filtered === 0
             // Not "these filters": a search alone can empty the list.
             ? 'No ' + noun + ' match'
-            : 'Showing ' + filtered + ' of ' + total + ' ' + noun);
+            : 'Showing ' + filtered + ' of ' + total + ' ' + noun + (detail ? ': ' + detail : ''));
+}
+
+// A letter or digit, the characters a word is made of for krListMatches.
+// Latin-1 and Latin Extended letters count, so "café" is one word.
+var KR_WORD_CHAR = /[a-z0-9\u00c0-\u024f]/;
+
+/** Lower case, with the curly apostrophes a phone keyboard types read as straight ones. */
+function krListFold(s) {
+    return String(s || '').toLowerCase().replace(/[\u2018\u2019]/g, "'");
+}
+
+/**
+ * The listings' search (blog.js, series-index.js): true when every word
+ * of `query` starts a word in one of `texts`, in any order and in any of
+ * them. "log" finds "Log files" but not "blog" or "technology", which a
+ * plain substring test counted (it returned 25 posts, 2 of them about
+ * logs); "everyday ethics" finds every part of that series once the
+ * series' name is among the texts (krPostSearchTexts). A
+ * word that starts with a character no word starts with ("+k", "#2") may
+ * sit anywhere. The palette ranks by a looser rule of its own (palette.js
+ * match()); a listing only decides in or out, and a reader narrowing a
+ * grid of cards expects each card left to carry the word. An empty query
+ * matches everything. Pure; tests/js/site-chrome.test.js runs it.
+ */
+function krListMatches(query, texts) {
+    var words = krListFold(query).split(/\s+/).filter(Boolean);
+    if (!words.length) return true;
+    var folded = (texts || []).map(krListFold);
+    return words.every(function(w) {
+        var anywhere = !KR_WORD_CHAR.test(w.charAt(0));
+        return folded.some(function(t) {
+            for (var i = t.indexOf(w); i !== -1; i = t.indexOf(w, i + 1)) {
+                if (anywhere || i === 0 || !KR_WORD_CHAR.test(t.charAt(i - 1))) return true;
+            }
+            return false;
+        });
+    });
+}
+
+/** What the listings search in a post: its title, summary, topics and the names of its series. */
+function krPostSearchTexts(post) {
+    return [post.title, post.excerpt]
+        .concat(post.tags || [])
+        .concat(postSeriesList(post).map(function(s) { return s && s.name; }));
+}
+
+/**
+ * What a listing shows in place of cards when nothing matches. The count
+ * above the grid (krUpdateSearchCounter) already says "No posts match",
+ * and it is the live region a screen reader hears, so this does not say
+ * it again: it offers the ways on, where a dead end used to be.
+ *   - a link to each series page whose name the search matches, when
+ *     `series` names any (the blog: a filter can hide a series' parts);
+ *   - Clear search, with a query: empties #blog-search and runs the
+ *     listing's own input handler, and leaves focus in the empty field;
+ *   - Clear all filters, when `clearFilters` is given (filters helped
+ *     empty the list), then hands focus to the Filter toggle as the
+ *     panel's own button does. The stylesheet shows it only while the
+ *     panel is shut (.kr-list-empty__filters, §09): open, the panel's
+ *     button is just above;
+ *   - Search the whole site, with a query: the palette (palette.js) on the
+ *     same words, which also finds pages, photographs and places.
+ * grid  the listing's .row; opts { query, series, clearFilters }
+ */
+function krListEmpty(grid, opts) {
+    var o = opts || {};
+    var col = document.createElement('div');
+    col.className = 'col-12 kr-list-empty';
+
+    var names = o.series || [];
+    if (names.length) {
+        var line = document.createElement('p');
+        line.appendChild(document.createTextNode(names.length === 1 ? 'Try the series page: ' : 'Try the series pages: '));
+        names.forEach(function(name, i) {
+            if (i) line.appendChild(document.createTextNode(i === names.length - 1 ? ' and ' : ', '));
+            var a = document.createElement('a');
+            a.href = seriesPageHref(name);
+            a.textContent = name;
+            line.appendChild(a);
+        });
+        line.appendChild(document.createTextNode('.'));
+        col.appendChild(line);
+    }
+
+    var row = document.createElement('div');
+    row.className = 'kr-btn-row';
+    function action(label, onClick) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'kr-btn kr-btn--ghost kr-btn--sm';
+        btn.textContent = label;
+        btn.addEventListener('click', onClick);
+        row.appendChild(btn);
+        return btn;
+    }
+    if (o.query) {
+        action('Clear search', function() {
+            var input = document.getElementById('blog-search');
+            if (!input) return;
+            input.value = '';
+            input.dispatchEvent(new Event('input'));
+            input.focus();
+        });
+    }
+    if (typeof o.clearFilters === 'function') {
+        action('Clear all filters', function() {
+            o.clearFilters();
+            var toggle = document.getElementById('kr-filter-toggle');
+            if (toggle) toggle.focus();
+        }).classList.add('kr-list-empty__filters');
+    }
+    if (o.query && window.krPalette && typeof window.krPalette.open === 'function') {
+        action('Search the whole site', function() { window.krPalette.open(o.query); });
+    }
+    if (row.children.length) col.appendChild(row);
+    grid.appendChild(col);
+}
+
+/**
+ * The markup of the no-script list that follows `el` (the listing's grid):
+ * generate_listing_fallback.py writes it after the grid, never inside, and
+ * with scripting on a <noscript>'s content is kept as text, so its
+ * textContent is that markup. '' when there is none.
+ */
+function krNoscriptMarkup(el) {
+    for (var n = el && el.nextElementSibling; n; n = n.nextElementSibling) {
+        if (n.tagName === 'NOSCRIPT') return n.textContent || '';
+    }
+    return '';
+}
+
+/**
+ * What a list whose data did not arrive shows where its content would
+ * have been: a note saying so and a Try again link, instead of an empty
+ * column, or a grid holding a screen of nothing (it keeps its height while
+ * empty, style.css §09). The link loads the page again: krFetchJson has
+ * already forgotten the failed request and the service worker fetches
+ * data network first, so the reload asks the network afresh.
+ *
+ * host      a grid (.row), which gets a full-width column, or a <ul>, which
+ *           gets one <li> (the footer's latest writing)
+ * message   what could not load, as a sentence
+ * fallback  markup to put under the note in a grid: a listing passes its
+ *           own no-script list (krNoscriptMarkup), so every post is still
+ *           there as a plain link
+ */
+function krLoadFailed(host, message, fallback) {
+    if (!host) return;
+    var again = '<a href="' + krEscapeHtml(window.location.pathname + window.location.search) + '">Try again</a>';
+    if (host.tagName === 'UL' || host.tagName === 'OL') {
+        host.innerHTML = '<li class="kr-load-failed"><span>' + krEscapeHtml(message) + '</span>' + again + '</li>';
+        return;
+    }
+    host.innerHTML = '<div class="col-12 kr-load-failed"><p class="kr-muted">' + krEscapeHtml(message) + ' ' +
+        again + '</p>' + (fallback || '') + '</div>';
+    host.setAttribute('aria-busy', 'false');
+}
+
+/**
+ * Scrolls each sideways row of a filter panel (.kr-facet-row__btns, a
+ * scroller on phones) so its first pressed button, the "All" reset aside,
+ * is in view. A link that arrives filtered (?tag=books) opens the panel,
+ * and on a phone the pressed pill sat past the right edge of its row, so
+ * nothing on screen said which filter was on. A pill already in view
+ * stays where it is; one out of view is brought to the start of its row
+ * (where the row's scroll snapping would put it anyway). Rows that fit,
+ * every row at desktop widths among them, never scroll. Run it after the
+ * panel is shown: a hidden row has no layout to measure.
+ *
+ * "Pressed" is by look, not by aria-pressed alone: the blog's Format
+ * buttons are three-way (only, excluded, off) and carry no aria-pressed
+ * (blog.js syncFormatButton), so an "only" button is found by .active,
+ * which krSetPressed also sets, and an excluded one by its class.
+ * ?not=code at 320 left "Code" past the row's edge.
+ *
+ * It looks again once the web fonts are in: they set about 3% wider
+ * than the fallback, so a pill that just fitted its row on arrival could
+ * end a few pixels past the edge (series.html?has=code at 360).
+ */
+var KR_PRESSED_PILL = '.active:not([data-filter-key="*"]), .kr-facet-btn--excluded';
+
+function krRevealPressed(container) {
+    if (!container) return;
+    krRevealPressedRows(container);
+    if (document.fonts && document.fonts.ready && document.fonts.status !== 'loaded') {
+        document.fonts.ready.then(function() { krRevealPressedRows(container); });
+    }
+}
+
+function krRevealPressedRows(container) {
+    var rows = container.querySelectorAll('.kr-facet-row__btns');
+    for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        if (row.scrollWidth <= row.clientWidth) continue;
+        var btn = row.querySelector(KR_PRESSED_PILL);
+        if (!btn) continue;
+        var box = row.getBoundingClientRect();
+        var pill = btn.getBoundingClientRect();
+        if (pill.left >= box.left && pill.right <= box.right) continue;
+        row.scrollLeft += pill.left - box.left;
+    }
 }
 
 /**
@@ -2265,6 +2479,19 @@ function seriesParts(posts, name) {
 /**
  * Series landing page: a container with id="series-page" and a
  * data-series name gets every part rendered as a card, in part order.
+ *
+ * #series-count, under the lede, gets the size of the run and, on a line
+ * of its own, its newest part as a link ("Latest: Part 18, What a Custom
+ * Domain Actually Involves", the word the series index's cards use): a
+ * reader coming back for the latest part of a long series otherwise
+ * scrolled past every earlier card to find it (Part 18 of How This Site
+ * Is Built sat 8,000px down on a phone). Newest is by date, the later
+ * part on a tie. A run of one part gets the line too, so the room the
+ * stylesheet holds for it (§09, "Series pages") is always used and the
+ * grid never moves down when the line arrives.
+ *
+ * If posts.json does not arrive, the grid says so and shows the page's
+ * own no-script list of the parts (krLoadFailed).
  */
 function renderSeriesPage() {
     var host = document.getElementById('series-page');
@@ -2295,8 +2522,31 @@ function renderSeriesPage() {
         if (count) {
             var mins = parts.reduce(function(s, p) { return s + (p.readMinutes || 0); }, 0);
             count.textContent = parts.length + (parts.length === 1 ? ' part · ' : ' parts · ') + mins + (mins === 1 ? ' minute all told' : ' minutes all told');
+            var newest = seriesNewestPart(parts);
+            if (newest) {
+                var line = document.createElement('span');
+                line.className = 'kr-series-count__newest';
+                line.appendChild(document.createTextNode('Latest: Part ' + postSeriesEntry(newest, name).part + ', '));
+                var a = document.createElement('a');
+                a.href = siteRootPrefix() + (newest.url || '');
+                a.textContent = newest.title;
+                line.appendChild(a);
+                count.appendChild(line);
+            }
         }
-    }).catch(function() {});
+    }).catch(function() {
+        krLoadFailed(grid, 'The parts could not load just now, so here they are as a plain list.',
+            krNoscriptMarkup(grid));
+    });
+}
+
+/** The part published last (the later part on the same day), from seriesParts' list. */
+function seriesNewestPart(parts) {
+    var newest = null;
+    (parts || []).forEach(function(p) {
+        if (!newest || krParsePostDate(p.date) >= krParsePostDate(newest.date)) newest = p;
+    });
+    return newest;
 }
 
 /**
@@ -3069,8 +3319,10 @@ function renderFooter(targetId) {
                 '<span>' + formatPostDate(p.date) + '</span></li>';
         }).join('');
     }).catch(function() {
-        var ul = document.getElementById('kr-footer-posts');
-        if (ul) ul.innerHTML = '';
+        // Said, rather than an empty column under "Latest writing". The
+        // note takes the date line's style and the link the titles'
+        // (.kr-footer-posts span and a, style.css §18).
+        krLoadFailed(document.getElementById('kr-footer-posts'), 'Could not load this just now.');
     });
 }
 
@@ -4406,6 +4658,14 @@ function krUrlList(params, key) {
  * DOM so selection state survives collapsing, and a selected one is pinned
  * visible whether the row is open or not, so a filter that is narrowing the
  * list can never be invisible.
+ *
+ * setActive(keys) is how a page applies a filter it did not get from a
+ * click (a ?tag= link): it also moves each of those that was behind "+N
+ * more" to just after the "All" reset, as one of the row's leading
+ * buttons from then on. Pinned where it was, the pressed tag came after
+ * the first few, and on a phone that put it past the edge of the
+ * sideways-scrolling row. Clicks never move a button: the one under the
+ * reader's pointer or focus stays put.
  */
 function renderFilterBar(container, items, opts) {
     var o = opts || {};
@@ -4491,9 +4751,26 @@ function renderFilterBar(container, items, opts) {
     container.addEventListener('click', onClick);
     syncCollapse();
 
+    // Selected overflow buttons move up to lead the row, in the order given,
+    // straight after "All" (see setActive above).
+    function promote(keys) {
+        var after = container.querySelector('button[data-filter-key="*"]');
+        if (!after) return;
+        keys.forEach(function(key) {
+            var btn = container.querySelector('button[data-filter-overflow][data-filter-key="' +
+                String(key).replace(/["\\]/g, '\\$&') + '"]');
+            if (!btn) return;
+            btn.removeAttribute('data-filter-overflow');
+            btn.hidden = false;
+            after.parentNode.insertBefore(btn, after.nextSibling);
+            after = btn;
+        });
+    }
+
     return {
         setActive: function (keys) {
             active = (keys || []).slice();
+            promote(active);
             refresh();
             emit();
         }

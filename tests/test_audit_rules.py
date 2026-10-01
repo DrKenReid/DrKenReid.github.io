@@ -226,10 +226,44 @@ class SeriesPages(unittest.TestCase):
         locs = {audit_site.SITE + "/series-has-page.html"}
         found = []
         audit_site.check_series_pages(posts, tracked, locs,
-                                      lambda s, f, l, code, m: found.append((code, m)))
+                                      lambda s, f, l, code, m: found.append((code, m)),
+                                      read=lambda rel: SERIES_PAGE)
         codes = sorted(code for code, _m in found)
         self.assertEqual(codes, ["series-page", "series-sitemap"])
         self.assertIn("series-no-page.html", " ".join(m for _c, m in found))
+
+    def test_a_series_page_missing_its_shared_parts(self):
+        # A page copied from before the Series crumb, the feed link and the
+        # "All series" button: each gap is its own error, on that page.
+        posts = [{"series": {"name": "Has Page", "part": 1}}]
+        old = (SERIES_PAGE.replace('<li class="breadcrumb-item"><a href="/series.html">Series</a></li>', "")
+               .replace("All series", "Every series"))
+        found = []
+        audit_site.check_series_pages(posts, {"series-has-page.html"}, None,
+                                      lambda s, f, l, code, m: found.append((f, code, m)),
+                                      read=lambda rel: old)
+        self.assertEqual([(f, code) for f, code, _m in found],
+                         [("series-has-page.html", "series-page-parts")] * 2)
+        self.assertIn("Series", found[0][2])
+        self.assertIn("All series", found[1][2])
+
+    def test_every_tracked_series_page_has_its_shared_parts(self):
+        for rel in sorted(audit_site.sitelib.series_page(n)
+                          for n in audit_site.series_names(audit_site.sitelib.load_posts())):
+            with self.subTest(page=rel):
+                text = (audit_site.ROOT / rel).read_text(encoding="utf-8")
+                self.assertEqual(audit_site.series_page_gaps(text), [])
+
+
+# The parts series_page_gaps looks for, as the tracked series pages write them.
+SERIES_PAGE = """
+<link rel="canonical" href="https://www.kenreid.co.uk/series-has-page.html">
+<link rel="alternate" type="application/rss+xml" title="Ken Reid's Blog" href="https://www.kenreid.co.uk/feed.xml">
+<li class="breadcrumb-item"><a href="/blog.html">Blog</a></li>
+<li class="breadcrumb-item"><a href="/series.html">Series</a></li>
+<a href="/blog.html" class="kr-btn kr-btn--ghost">Browse all posts</a>
+<a href="/series.html" class="kr-btn kr-btn--ghost">All series</a>
+"""
 
 
 class SiteMap(unittest.TestCase):

@@ -9,12 +9,21 @@
  * What a reader does want here is "which runs are about X", "which ones
  * have demos", and "which is the longest", so that is what is offered.
  *
- * Search answers "which series covers annealing?": it matches a series'
- * name and topics and the title and summary of every part (searchText,
- * built once in collectSeries), so a word that only one part mentions
- * still finds its series. When the match is in a part rather than the
- * name, the card names that part ("Includes: ...") where it would name
- * the latest, so the reader sees why the card is there.
+ * Search answers "which series covers annealing?": every word typed must
+ * start a word (krListMatches, the blog's rule) in the series' name and
+ * topics (own, built once in collectSeries), or in one part's title and
+ * summary with the name and topics beside them, so a word that only one
+ * part mentions still finds its series, and "ethics cobalt" finds
+ * Everyday Ethics through its part on cobalt. When the match needs a
+ * part, the card names that part ("Includes: ...") where it would name
+ * the latest, so the reader sees why the card is there. A search or
+ * filter that leaves nothing offers Clear search, Clear all filters and
+ * the whole-site search instead (krListEmpty).
+ *
+ * A link that arrives filtered opens the Filter panel with its pressed
+ * pills in view (krRevealPressed) and the count naming the filters, as
+ * the blog's does. If posts.json fails, the grid says so over the page's
+ * own no-script list of every series (krLoadFailed).
  *
  * URL keys: q (the search, lower case, as the blog's), tag (topics,
  * comma-separated), has (SERIES_FORMATS keys that must all be present),
@@ -26,8 +35,9 @@
  * The search box (krBuildListSearchBox, krUpdateSearchCounter) and the
  * panels are built from the same parts as the blog's (krFacetRow,
  * krFacetButton, krCountLabel, krSetPressed, krClearRow, krTagFacetRow,
- * krSortPanel, krSortOption, krSortFromUrl, krSortToUrl, krToolbarLabels
- * and krUrlList in shared-components.js, beside krInitTogglePanels), so
+ * krSortPanel, krSortOption, krSortFromUrl, krSortToUrl, krToolbarLabels,
+ * krRevealPressed and krUrlList in shared-components.js, beside
+ * krInitTogglePanels, krListMatches, krListEmpty and krLoadFailed), so
  * the two listings look and behave alike and a fix to one reaches both.
  *
  * Globals: only initSeriesIndex(), which series.html calls once
@@ -45,9 +55,10 @@
 	var seriesTagBar = null;
 	var clearRow = null;
 
+	// `words` is how the result count names a format that is on.
 	var SERIES_FORMATS = [
-		{ key: 'interactive', label: 'Interactive', noun: 'series with a live demo' },
-		{ key: 'code', label: 'Code', noun: 'series with code samples' }
+		{ key: 'interactive', label: 'Interactive', noun: 'series with a live demo', words: 'with a live demo' },
+		{ key: 'code', label: 'Code', noun: 'series with code samples', words: 'with code samples' }
 	];
 
 	var SERIES_SORTS = [
@@ -70,13 +81,19 @@
 				['kr-sort-toggle', 'blog-sort']
 			]);
 			updateSeriesToolbar();
-			if (seriesFilterCount()) toolbar.open('blog-filters');
+			if (seriesFilterCount()) {
+				toolbar.open('blog-filters');
+				krRevealPressed(document.getElementById('blog-filters'));
+			}
 			renderSeriesIndex();
 			// Values the corpus does not offer were dropped by readSeriesUrl;
 			// write what was kept, so the address bar matches the page.
 			syncSeriesUrl();
 		}).catch(function(e) {
 			console.error('Failed to load series:', e);
+			var grid = document.getElementById('series-index-grid');
+			krLoadFailed(grid, 'The series could not load just now, so here they are as a plain list.',
+				krNoscriptMarkup(grid));
 		});
 	}
 
@@ -108,7 +125,8 @@
 				// A series counts as interactive or code-carrying when any part is.
 				interactive: members.some(function(p) { return !!p.interactive; }),
 				code: members.some(function(p) { return !!p.code; }),
-				searchText: [name].concat(Object.keys(tags)).join(' ').toLowerCase()
+				// What search reads for the series itself; a part adds its own.
+				own: [name].concat(Object.keys(tags))
 			};
 		});
 	}
@@ -129,24 +147,24 @@
 		});
 	}
 
-	/** True when a part's title or summary holds the search. */
-	function partMatches(p) {
-		return (p.title || '').toLowerCase().indexOf(seriesQuery) !== -1 ||
-			(p.excerpt || '').toLowerCase().indexOf(seriesQuery) !== -1;
+	/** True when the search is found in a part's title or summary, with its series' name and topics. */
+	function partMatches(s, p) {
+		return krListMatches(seriesQuery, [p.title, p.excerpt].concat(s.own));
 	}
 
 	function seriesMatches(s) {
-		return !seriesQuery || s.searchText.indexOf(seriesQuery) !== -1 || s.parts.some(partMatches);
+		return !seriesQuery || krListMatches(seriesQuery, s.own) ||
+			s.parts.some(function(p) { return partMatches(s, p); });
 	}
 
 	/**
 	 * The part a search found this series by, first in part order, or null
-	 * when there is no search or the series' name or topics matched it.
+	 * when there is no search or the series' name and topics alone match it.
 	 */
 	function matchedPart(s) {
-		if (!seriesQuery || s.searchText.indexOf(seriesQuery) !== -1) return null;
+		if (!seriesQuery || krListMatches(seriesQuery, s.own)) return null;
 		for (var i = 0; i < s.parts.length; i++) {
-			if (partMatches(s.parts[i])) return s.parts[i];
+			if (partMatches(s, s.parts[i])) return s.parts[i];
 		}
 		return null;
 	}
@@ -159,13 +177,16 @@
 		container.innerHTML = '';
 		buildSeriesTagFilters(krFacetRow(container, 'Topic', 'Filter series by topic'));
 		buildSeriesFormatFilters(krFacetRow(container, 'Format', 'Filter series by format'));
-		clearRow = krClearRow(container, function() {
-			seriesTags = [];
-			SERIES_FORMATS.forEach(function(f) { seriesFormats[f.key] = false; });
-			buildSeriesFilterPanel();
-			onSeriesFilterChange();
-		});
+		clearRow = krClearRow(container, clearSeriesFilters);
 		syncSeriesClearRow();
+	}
+
+	/** Every filter off (the panel's Clear all filters, and the empty state's). */
+	function clearSeriesFilters() {
+		seriesTags = [];
+		SERIES_FORMATS.forEach(function(f) { seriesFormats[f.key] = false; });
+		buildSeriesFilterPanel();
+		onSeriesFilterChange();
 	}
 
 	function buildSeriesTagFilters(holder) {
@@ -307,16 +328,29 @@
 		var list = filteredSeries();
 
 		if (!list.length) {
-			grid.innerHTML = '<div class="col-12 text-center"><p class="kr-muted">' +
-				(seriesQuery ? 'No series match that search.' : 'No series match these filters.') + '</p></div>';
+			grid.innerHTML = '';
+			krListEmpty(grid, {
+				query: seriesQuery,
+				clearFilters: seriesFilterCount() ? clearSeriesFilters : null
+			});
 		} else {
 			grid.innerHTML = list.map(seriesCardHtml).join('');
 		}
 		krUpdateSearchCounter(list.length, allSeries.length, 'series',
-			seriesFilterCount() === 0 && !seriesQuery);
+			seriesFilterCount() === 0 && !seriesQuery, null, seriesFilterWords());
 
 		// Every series card runs part one's sketch on hover (data-live-href,
 		// set in the card markup, names the part).
+	}
+
+	/** The filters in force, in words, for the count ("tagged books · with a live demo"). */
+	function seriesFilterWords() {
+		var parts = [];
+		if (seriesTags.length) parts.push('tagged ' + seriesTags.join(' or '));
+		SERIES_FORMATS.forEach(function(f) {
+			if (seriesFormats[f.key]) parts.push(f.words);
+		});
+		return parts.join(' · ');
 	}
 
 	/**

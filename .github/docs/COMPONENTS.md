@@ -125,10 +125,12 @@ Written by `generate_post_head.py --fix`: `lang="en-GB"`, the removal of
 scripts, the Open Graph image (with its size and alt), URL, type, site
 name, locale and article dates, and `twitter:image` (both images are the
 share card `img/og/<slug>.jpg`),
-the hero preload, and the BlogPosting JSON-LD, rebuilt whole. It inserts
-the BreadcrumbList, keywords, icon and manifest when they are missing and
-never rewrites them. Its docstring lists every element and why it is
-there.
+the hero preload, the feed's autodiscovery link after the canonical
+(`<link rel="alternate" type="application/rss+xml">`, as `blog.html`,
+`index.html` and the series pages carry it), and the BlogPosting JSON-LD,
+rebuilt whole. It inserts the BreadcrumbList, keywords, icon and manifest
+when they are missing and never rewrites them. Its docstring lists every
+element and why it is there.
 
 What a person writes: the `<title>`, the meta description and keywords,
 the Open Graph and Twitter titles and descriptions, `citation_title` and

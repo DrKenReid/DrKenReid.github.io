@@ -142,6 +142,44 @@ test('krSortFromUrl / krSortToUrl: only offered orders, and a bare URL for the d
     assert.equal(rt.krSortOption(options, 'missing').key, 'date');
 });
 
+test('krListMatches: every word must start a word somewhere', () => {
+    const m = (q, texts) => rt.krListMatches(q, texts);
+    assert.equal(m('', ['anything']), true, 'no query matches everything');
+    assert.equal(m('log', ['Log files, read']), true);
+    assert.equal(m('log', ['A blog on technology']), false, 'not inside a word');
+    assert.equal(m('science', ['data-science']), true, 'a hyphen starts a word');
+    assert.equal(m('data sci', ['Data science']), true);
+    assert.equal(m('ethics cobalt', ['The Hidden Cost of Cobalt', 'Everyday Ethics']), true, 'words may sit in different texts');
+    assert.equal(m('ethics cobalt', ['The Hidden Cost of Cobalt']), false, 'every word must be found');
+    assert.equal(m('+k', ['Ctrl+K for a Static Site']), true, 'a word opening with punctuation may sit anywhere');
+    assert.equal(m('doesn\u2019t', ["Dark Mode That Doesn't Flash"]), true, 'a curly apostrophe reads as straight');
+    assert.equal(m('café', ['Notes from a café']), true);
+    assert.equal(m('fé', ['Notes from a café']), false, 'accented letters are part of the word');
+    assert.equal(m('x', [null, undefined]), false);
+});
+
+test('krListMatches over posts.json: "log" no longer finds every "blog" and "technology"', () => {
+    const found = posts.filter(p => rt.krListMatches('log', rt.krPostSearchTexts(p)));
+    const substring = posts.filter(p => [p.title, p.excerpt, ...(p.tags || [])]
+        .some(t => (t || '').toLowerCase().includes('log')));
+    assert.ok(found.length < substring.length, `${found.length} of ${substring.length}`);
+    for (const p of found) {
+        const words = rt.krPostSearchTexts(p).join(' ').toLowerCase();
+        assert.match(words, /(^|[^a-z0-9])log/, p.url);
+    }
+});
+
+test('krPostSearchTexts: a series name finds its parts', () => {
+    const named = posts.filter(p => rt.postSeriesList(p).some(s => s.name === 'Everyday Ethics'));
+    assert.ok(named.length >= 2, 'Everyday Ethics has parts in posts.json');
+    for (const p of named) {
+        assert.ok(rt.krListMatches('everyday ethics', rt.krPostSearchTexts(p)), p.url);
+    }
+    // At least one part never says "everyday" itself: the series name is
+    // what finds it.
+    assert.ok(named.some(p => !rt.krListMatches('everyday ethics', [p.title, p.excerpt, ...(p.tags || [])])));
+});
+
 test('krUrlList: comma lists, blanks dropped', () => {
     const params = new URLSearchParams('tag=books,%20ai,,&none=');
     assert.deepEqual([...rt.krUrlList(params, 'tag')], ['books', 'ai']);

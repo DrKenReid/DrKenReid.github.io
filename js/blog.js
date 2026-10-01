@@ -15,6 +15,28 @@
  *   The groups combine as the panel reads: buttons within a group are
  *   OR'd, the groups are AND'd, search narrows further.
  *
+ * SEARCH
+ *   Every word typed must start a word in the post's title, summary,
+ *   topics or series name (krListMatches, krPostSearchTexts): "log" no
+ *   longer finds every "blog", and "wellness" finds the parts of Wellness
+ *   From the Science. A search or filter that leaves nothing offers the
+ *   ways on instead of a dead end (krListEmpty): the series pages the
+ *   words name, Clear search, Clear all filters, and the whole-site
+ *   search on the same words.
+ *
+ * ARRIVING FILTERED
+ *   A link with filters on (a post's tag chip, a hobby page's "See all")
+ *   opens the Filter panel, leads the Topic row with the chosen tag
+ *   (renderFilterBar's setActive), scrolls each phone-width row to its
+ *   pressed pill (krRevealPressed) and names the filters in the count
+ *   above the cards (filterWords), so a short list never passes for the
+ *   whole blog.
+ *
+ * WHEN posts.json FAILS
+ *   The grid says so, with a Try again link, over the page's own no-script
+ *   list of every post (krLoadFailed), rather than holding a screen of
+ *   nothing.
+ *
  * SERIES
  *   The listing does not filter by a named series: each series has a page
  *   of its own (series-<slug>.html) with an introduction and every part in
@@ -78,11 +100,12 @@
  *   shared-components.js: loadBlogPosts, krFetchJson, createBlogCardElement,
  *   krInitTogglePanels, krBuildListSearchBox,
  *   krUpdateSearchCounter, krRenderListPagination, krParsePostDate,
- *   postSeriesList, postSeriesEntry, seriesPageHref, and the panel parts
- *   krFacetRow, krFacetButton,
+ *   postSeriesList, postSeriesEntry, seriesPageHref, krListMatches,
+ *   krPostSearchTexts, krListEmpty, krLoadFailed, krNoscriptMarkup, and
+ *   the panel parts krFacetRow, krFacetButton,
  *   krCountLabel, krSetPressed, krClearRow, krTagFacetRow, krSortPanel,
- *   krSortOption, krSortFromUrl, krSortToUrl, krToolbarLabels and
- *   krUrlList, which series-index.js shares.
+ *   krSortOption, krSortFromUrl, krSortToUrl, krToolbarLabels,
+ *   krRevealPressed and krUrlList, which series-index.js shares.
  */
 (function() {
 	'use strict';
@@ -114,14 +137,18 @@
 	// Facets a reader may want to seek out OR avoid, so each button cycles
 	// off -> only -> exclude rather than toggling. Keys match the flags
 	// .github/scripts/generate_post_facets.py writes into posts.json.
+	// `only` and `exclude` are how the result count names those states
+	// (filterWords).
 	var TRI_FACETS = [
-		{ key: 'interactive', label: 'Interactive', noun: 'posts with a live demo' },
-		{ key: 'code', label: 'Code', noun: 'posts with code samples' }
+		{ key: 'interactive', label: 'Interactive', noun: 'posts with a live demo',
+			only: 'with a live demo', exclude: 'without a live demo' },
+		{ key: 'code', label: 'Code', noun: 'posts with code samples',
+			only: 'with code samples', exclude: 'without code samples' }
 	];
 
 	var SERIES_MODES = [
-		{ key: 'series', label: 'In a series' },
-		{ key: 'standalone', label: 'Standalone' }
+		{ key: 'series', label: 'In a series', words: 'in a series' },
+		{ key: 'standalone', label: 'Standalone', words: 'standalone' }
 	];
 
 	var SORT_OPTIONS = [
@@ -182,8 +209,11 @@
 				// reset the page, so a deep-linked page is applied afterwards.
 				currentPage = startPage;
 				// Open the panel when the link arrived pre-filtered, so a short
-				// list never looks like the whole blog.
-				if (activeFilterCount()) toolbar.open('blog-filters');
+				// list never looks like the whole blog (see ARRIVING FILTERED).
+				if (activeFilterCount()) {
+					toolbar.open('blog-filters');
+					krRevealPressed(document.getElementById('blog-filters'));
+				}
 				renderPosts();
 				// Write the validated state back once, after renderPosts has
 				// clamped the page, so the address bar never shows a filter
@@ -196,7 +226,8 @@
 			})
 			.catch(function(e) {
 				console.error('Failed to load posts:', e);
-				if (grid) grid.setAttribute('aria-busy', 'false');
+				krLoadFailed(grid, 'The listing could not load just now, so here is every post as a plain list.',
+					krNoscriptMarkup(grid));
 			});
 	}
 
@@ -523,13 +554,26 @@
 			var matchesTag = activeTags.length === 0
 				|| activeTags.some(function(t) { return (p.tags || []).indexOf(t) !== -1; });
 
-			var matchesSearch = !searchQuery
-				|| (p.title || '').toLowerCase().indexOf(searchQuery) !== -1
-				|| (p.excerpt || '').toLowerCase().indexOf(searchQuery) !== -1
-				|| (p.tags || []).some(function(t) { return t.toLowerCase().indexOf(searchQuery) !== -1; });
-
-			return matchesTag && matchesSearch && matchesFacets(p);
+			return matchesTag && krListMatches(searchQuery, krPostSearchTexts(p)) && matchesFacets(p);
 		}));
+	}
+
+	/**
+	 * The series whose names the search matches, for the empty state: with
+	 * a filter on, a series can match while every one of its parts is
+	 * filtered out, and its page is then the better answer.
+	 */
+	function seriesNamedBySearch() {
+		if (!searchQuery) return [];
+		var names = [];
+		allPosts.forEach(function(p) {
+			postSeriesList(p).forEach(function(s) {
+				if (s && s.name && names.indexOf(s.name) === -1 && krListMatches(searchQuery, [s.name])) {
+					names.push(s.name);
+				}
+			});
+		});
+		return names;
 	}
 
 	function renderPosts() {
@@ -547,9 +591,16 @@
 		var pagePosts = filtered.slice(start, start + POSTS_PER_PAGE);
 
 		if (filtered.length === 0) {
-			container.innerHTML = '<div class="col-12 text-center"><p class="kr-muted">No posts found.</p></div>';
+			krListEmpty(container, {
+				query: searchQuery,
+				series: seriesNamedBySearch(),
+				clearFilters: activeFilterCount() ? clearAllFilters : null
+			});
 			krRenderListPagination(0, 0, setBlogPage);
-			updateBlogCounter(0, filtered.length);
+			// Out of every post, as the count with results says: passing
+			// the empty list's own length left the search box reading
+			// "0 of 0 posts" when filters alone emptied it.
+			updateBlogCounter(0, allPosts.length);
 			return;
 		}
 
@@ -647,7 +698,29 @@
 	}
 
 	function updateBlogCounter(filtered, total) {
-		krUpdateSearchCounter(filtered, total, 'posts', isUnfiltered());
+		krUpdateSearchCounter(filtered, total, 'posts', isUnfiltered(), null, filterWords());
+	}
+
+	/**
+	 * The filters in force, in words, for the count above the cards
+	 * ("tagged books · Deep dive · with a live demo"), in the panel's
+	 * order; '' when none is on. The search is left out: its words are in
+	 * the box just above.
+	 */
+	function filterWords() {
+		var parts = [];
+		if (activeTags.length) parts.push('tagged ' + activeTags.join(' or '));
+		var lengths = LENGTH_BUCKETS.filter(function(b) {
+			return activeLengths.indexOf(b.key) !== -1;
+		}).map(function(b) { return b.label; });
+		if (lengths.length) parts.push(lengths.join(' or '));
+		TRI_FACETS.forEach(function(f) {
+			if (facetStates[f.key]) parts.push(f[facetStates[f.key]]);
+		});
+		SERIES_MODES.forEach(function(m) {
+			if (seriesMode === m.key) parts.push(m.words);
+		});
+		return parts.join(' · ');
 	}
 
 	window.initBlog = initBlog;

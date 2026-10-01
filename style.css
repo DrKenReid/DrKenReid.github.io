@@ -2121,9 +2121,14 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   max-width: 1000px;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 3px 10px rgba(0, 0, 0, 0.7), 0 10px 40px rgba(0, 0, 0, 0.6); }
 
-/* In the template's markup the nav follows the h1. */
+/* In the template's markup the nav follows the h1. The column's items
+   shrink to their content (align-items: flex-start), so the nav is held
+   to the column's width here, or the one-line crumb row on a phone
+   (below) would run past the screen edge instead of ending in an
+   ellipsis. */
 .breadcrumb-content > nav {
-  order: -1; }
+  order: -1;
+  max-width: 100%; }
 
 .breadcrumb-area .page-title {
   font-family: 'Lora', 'Lora Fallback', Georgia, serif;
@@ -2165,9 +2170,26 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   margin: 0 0 12px;
   background: none;
   font-size: 13px; }
+  /* On a phone the crumbs keep to one line, and the current page's name,
+     which the title repeats just below, gives way with an ellipsis. A
+     series page's four crumbs (Home, Blog, Series, its name) all but fill
+     a 320-390px row, and wrapped, the row's height hung on the font: the
+     fallback sets about 3% wider, so the row took two lines until the
+     web font arrived and the whole opener then jumped up a line (a
+     layout shift of 0.23 at 320). The other pages' crumbs fit either
+     way, so they look as before. */
   @media only screen and (max-width: 767px) {
     .breadcrumb-area .breadcrumb {
-      margin-bottom: 6px; } }
+      flex-wrap: nowrap;
+      margin-bottom: 6px; }
+    .breadcrumb-area .breadcrumb-item {
+      flex: none;
+      white-space: nowrap; }
+    .breadcrumb-area .breadcrumb-item.active {
+      flex: 0 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis; } }
 
 /* Crumbs on a photograph, pages and posts alike: white links, and the
    current page in the photograph's gold. Not red, since it is not a
@@ -4182,6 +4204,8 @@ a.kr-series-chip--kicker:is(:hover, :focus) {
      .kr-filter-panel         the faceted panel: one labelled row a group
      .kr-list-search,
      .kr-list-counter         the search field and the live result count
+     .kr-list-empty,
+     .kr-load-failed          a listing with nothing to show, or no data
      .kr-pagination           the pager under the blog grid
      .kr-series-intro         a series page's lede and count
      .kr-series-band          "Read in order", three series under the blog grid
@@ -4232,8 +4256,8 @@ a.kr-series-chip--kicker:is(:hover, :focus) {
    blog.html's layout shift (0.18 at 1440, 0.27 at 412). While the grid is
    :empty it holds about a viewport, so what follows starts below the fold
    and the render only grows the grid down there. :empty ends the hold on
-   the first render by itself, the "No posts found" message included, with
-   no script to forget. Under (scripting: enabled) because without scripts
+   the first render by itself, an empty or failed listing's note included
+   (below), with no script to forget. Under (scripting: enabled) because without scripts
    the grid never fills, and a viewport of nothing would be all a reader
    got.
    The series index (#series-index-grid, js/series-index.js) and each
@@ -4249,6 +4273,35 @@ a.kr-series-chip--kicker:is(:hover, :focus) {
   #series-index-grid:empty,
   #series-grid:empty {
     min-height: 100vh; } }
+
+/* --- Empty and failed listings ---------------------------------------------
+   What krListEmpty and krLoadFailed (shared-components.js) put in a grid
+   where the cards would be.
+   .kr-list-empty: a search or filter left nothing. The count above
+   already says "No posts match", so this holds only the ways on: a link
+   to a series page the search names, then a row of small ghost buttons
+   (Clear search, Clear all filters, Search the whole site).
+   .kr-load-failed: posts.json did not arrive. A muted note with a Try
+   again link, then the page's own no-script list, so every post is still
+   a plain link. The footer's "Latest writing" takes the same note as one
+   <li> (li.kr-load-failed), dressed by that list's own rules (§18), so
+   only the grid's column is styled here. */
+.kr-list-empty {
+  padding: 4px 0 48px;
+  text-align: center; }
+  .kr-list-empty p {
+    margin-bottom: 16px; }
+
+/* Its Clear all filters only while the filter panel is shut: open, the
+   panel's own button sits just above. The panel is an earlier sibling of
+   the grid on both listings. */
+.kr-filter-panel:not([hidden]) ~ .row .kr-list-empty__filters {
+  display: none; }
+
+.row > .kr-load-failed {
+  max-width: 680px;
+  margin: 0 auto;
+  padding-bottom: 48px; }
 
 /* --- Overlay cards on the listing ------------------------------------------
    #blog-grid scoping outranks the template's five-class card rules
@@ -4441,7 +4494,12 @@ a.gallery-filter-btn:focus:not(:hover) {
    labelled row per filter group, the rows stacked, each row's buttons
    scrolling on their own at phone widths so the labels stay aligned.
    Topic, Length, Format and Series; buttons OR within a row and AND across
-   rows; Format is tri-state (off, only, excluded). */
+   rows; Format is tri-state (off, only, excluded).
+   On a phone the label sits at the left of its row rather than above it:
+   a link that arrives filtered opens the panel, and stacked it stood
+   350px tall, which put the first matching post below the fold of a
+   390x844 screen. krRevealPressed (shared-components.js) scrolls a row
+   to its pressed pill; its scrollLeft is the only thing script sets. */
 .kr-filter-panel {
   display: flex;
   flex-direction: column;
@@ -4516,16 +4574,18 @@ a.gallery-filter-btn:focus:not(:hover) {
   color: #8f8f8f; }
 
 @media only screen and (max-width: 767px) {
+  .kr-filter-panel {
+    gap: 6px; }
   .kr-facet-row {
-    align-items: flex-start;
-    gap: 4px;
-    flex-direction: column; }
+    justify-content: flex-start;
+    gap: 8px; }
   .kr-facet-row__label {
+    min-width: 56px;
     text-align: left;
-    min-width: 0;
     padding-left: 2px; }
   .kr-facet-row__btns {
-    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
     overflow-x: auto;
     overflow-y: hidden;
     flex-wrap: nowrap;
@@ -4653,7 +4713,16 @@ a.gallery-filter-btn:focus:not(:hover) {
    the name as an h2. The grid keeps an h2 for the outline (h1 name, h2,
    then each part's h3), visually hidden because on screen the lede and
    the count already introduce it. The count is filled in by
-   renderSeriesPage, so its line is reserved.
+   renderSeriesPage, with a second line, .kr-series-count__newest,
+   "Latest: Part N," and that part's title as a link, so a reader back for
+   the latest part need not scroll past every card before it. Both lines
+   are reserved (three on a phone, where the title usually wraps), so the
+   grid does not move down when they arrive. The room is held only under
+   (scripting: enabled), as the grid's own is ("Holding the grid's
+   place", above): without scripts the count stays empty, and held room
+   was a blank band between the lede and the no-script list of parts.
+   The opener's crumbs run Home, Blog, Series, then the series; the page
+   ends on "Browse all posts" and "All series" (.kr-next-stop).
      <div class="kr-series-intro">
        <p class="kr-series-lede">...</p>
        <p id="series-count" class="kr-series-count"></p>
@@ -4672,6 +4741,20 @@ a.gallery-filter-btn:focus:not(:hover) {
   line-height: 20px;
   letter-spacing: 0.04em;
   color: var(--kr-muted); }
+
+.kr-series-count__newest {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  letter-spacing: 0; }
+
+@media (scripting: enabled) {
+  .kr-series-count {
+    min-height: 44px; } }
+
+@media (scripting: enabled) and (max-width: 575.98px) {
+  .kr-series-count {
+    min-height: 64px; } }
 
 .kr-series-intro__cta {
   margin: 20px 0 0; }

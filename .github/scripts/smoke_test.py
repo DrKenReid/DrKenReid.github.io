@@ -94,7 +94,27 @@ without one class), and the pin seen to fail.
                             gets focus back, from the open menu too.
   check_blog_url_state      blog.html's filters round-trip through the query
                             string, and values the corpus lacks are dropped.
-  check_print               A post printed from the dark theme keeps its
+  check_listing_arrivals    At 390 (320 for ?not=code), a filtered link's
+                            pressed pills are in view and the count names
+                            the filter (the tag, or an excluded Format
+                            button, sat past the row's edge); an empty
+                            search offers Clear search and the palette on
+                            the same words ("No posts found." was the end).
+  check_listing_load_failure
+                            With posts.json failing, the blog, series index
+                            and a series page show a note, Try again and
+                            their no-script list, and the footer says so
+                            (the grids were a blank screen, the footer an
+                            empty column).
+  check_series_crumbs       At 320 with the web fonts refused, each series
+                            page's crumbs stay on one line (in the wider
+                            fallback font they wrapped, and the opener
+                            jumped when the web font arrived).
+  check_series_without_scripts
+                            With scripts off, a series page's empty count
+                            holds one line at most (the room kept for its
+                            "Latest" line was a blank band on a phone).
+  check_print              A post printed from the dark theme keeps its
                             title (the print sheet hid every <header>, the
                             opener included) and prints headings in ink.
   check_post_reach          Tab reaches the contents at 1440 and the share
@@ -293,6 +313,13 @@ CHECKS = [
     ("series-how-this-site-is-built.html", [
         ("series parts render", "document.querySelectorAll('#series-grid .blog-card').length >= 4"),
         ("part chips", "document.querySelectorAll('#series-grid .kr-series-chip').length >= 4"),
+        # A long run's newest part is one tap from the top, and the crumbs
+        # pass through the series index, as series.html's own do.
+        ("newest part linked under the count",
+         "!!document.querySelector('#series-count .kr-series-count__newest a[href$=\".html\"]')"),
+        ("crumbs run Home, Blog, Series",
+         "[...document.querySelectorAll('.breadcrumb-item')].map(e => e.textContent.trim()).slice(0, 3).join()"
+         " === 'Home,Blog,Series'"),
     ]),
     ("quotes.html", [
         ("quote cards", "document.querySelectorAll('.kr-quote-card').length >= 500"),
@@ -1571,6 +1598,153 @@ def check_blog_url_state(browser, base, rep):
     context.close()
 
 
+# Where each pressed filter pill sits against its sideways-scrolling row,
+# and what the count above the cards says.
+# Pressed by look: the Format buttons are three-way and carry no
+# aria-pressed ("only" is .active, as every pressed button is, and
+# excluded has its own class), as krRevealPressed finds them.
+PRESSED_IN_VIEW = """() => {
+    const rows = [...document.querySelectorAll('#blog-filters .kr-facet-row__btns')];
+    const pressed = rows.flatMap(row => [...row.querySelectorAll('.active, .kr-facet-btn--excluded')]
+        .filter(b => b.dataset.filterKey !== '*').map(b => {
+            const r = row.getBoundingClientRect(), p = b.getBoundingClientRect();
+            return { label: b.textContent.trim(), inView: p.left >= r.left - 1 && p.right <= r.right + 1 };
+        }));
+    return { pressed, counter: document.getElementById('blog-counter').textContent };
+}"""
+
+
+def check_listing_arrivals(browser, base, rep):
+    """A link that arrives filtered, at 390 wide (and 320 for an excluded
+    Format button): every pressed pill is in view in its row and the count
+    above the cards names the filter; a search that finds nothing offers
+    the ways on, and the whole-site one opens the palette on the same
+    words. Pins: the pressed tag sat past the right edge of the Topic row,
+    with nothing on screen naming it ("books" at x=487 in a row ending at
+    360), an excluded "Code" past the Format row's edge at 320, and "No
+    posts found." was a dead end. The tag is the one the Topic row lists
+    last, behind "+N more"."""
+    posts = sitelib.load_posts()
+    counts = {}
+    for post in posts:
+        for tag in post.get("tags", []):
+            counts[tag] = counts.get(tag, 0) + 1
+    last_tag = sorted(counts, key=lambda t: (-counts[t], t))[-1]
+    arrivals = {390: ((f"tag={last_tag}", f"tagged {last_tag}"), ("len=long", "Deep dive")),
+                320: (("not=code", "without code samples"),)}
+    for width, cases in arrivals.items():
+        context = site_context(browser, base, "light", (width, 844))
+        for query, words in cases:
+            scope = f"blog.html?{query} at {width}"
+            page, sink = open_page(context, base, f"blog.html?{query}", rep, scope, LISTING_DRAWN)
+            if not page:
+                continue
+            facts = page.evaluate(PRESSED_IN_VIEW)
+            rep.check(scope, "the pressed pill is in view in its row",
+                      bool(facts["pressed"]) and all(p["inView"] for p in facts["pressed"]), facts["pressed"])
+            rep.check(scope, "the count names the filter", facts["counter"].endswith(words), facts["counter"])
+            rep.console_errors(scope, sink)
+            page.close()
+        context.close()
+
+    context = site_context(browser, base, "light", (390, 844))
+    scope = "blog.html empty search"
+    page, sink = open_page(context, base, "blog.html?q=zzzqqq", rep, scope, LISTING_DRAWN)
+    if page:
+        labels = page.evaluate("[...document.querySelectorAll('#blog-grid .kr-list-empty button')]"
+                               ".map(b => b.textContent)")
+        rep.check(scope, "offers Clear search and Search the whole site",
+                  "Clear search" in labels and "Search the whole site" in labels, labels)
+        # The box's placeholder, which a reader sees when filters alone
+        # empty the list: out of every post, not "0 of 0 posts".
+        hint = page.evaluate("document.getElementById('blog-search').placeholder")
+        rep.check(scope, "the search box counts out of every post",
+                  hint == f"0 of {len(posts)} posts", hint)
+        if "Search the whole site" in labels:
+            page.get_by_role("button", name="Search the whole site").click()
+            opened = wait_until(page, "window.krPalette.isOpen() && "
+                                      "document.querySelector('.kr-palette-input').value === 'zzzqqq'", 1000)
+            rep.check(scope, "the palette opens on the same words", opened)
+        rep.console_errors(scope, sink)
+        page.close()
+    context.close()
+
+
+def check_listing_load_failure(browser, base, rep):
+    """With data/posts.json failing, the listings show a note, a Try again
+    link and their own no-script list, and the footer's Latest writing
+    says so too. Pins: the blog and series grids stayed a blank screen-tall
+    hole, with only a console line, and Latest writing an empty column."""
+    context = site_context(browser, base, "dark", (390, 844))
+    context.route("**/data/posts.json", lambda route: route.abort())
+    for path, grid, least in (("blog.html", "#blog-grid", 20), ("series.html", "#series-index-grid", 10),
+                              ("series-how-this-site-is-built.html", "#series-grid", 4)):
+        scope = f"{path} without posts.json"
+        page, _sink = open_page(context, base, path, rep, scope,
+                                f"!!document.querySelector('{grid} > .kr-load-failed')")
+        if not page:
+            continue
+        facts = page.evaluate("""grid => {
+            const box = document.querySelector(grid + ' > .kr-load-failed');
+            const again = box.querySelector('p > a');
+            return { links: box.querySelectorAll('li a').length,
+                     again: again ? again.textContent : null,
+                     footer: !!document.querySelector('#kr-footer-posts .kr-load-failed a') };
+        }""", grid)
+        rep.check(scope, "a Try again link", facts["again"] == "Try again", facts["again"])
+        rep.check(scope, f"the no-script list, {least}+ links", facts["links"] >= least, facts["links"])
+        rep.check(scope, "the footer says so too", facts["footer"])
+        page.close()
+    context.close()
+
+
+def check_series_crumbs(browser, base, rep):
+    """At 320 wide, with the web fonts refused, every series page keeps
+    its crumbs (Home, Blog, Series, its name) on one line inside the
+    column, the name ending in an ellipsis where it must. Pin: in the
+    fallback font, which sets about 3% wider, six of the eight rows took
+    two lines, and on three of them the opener jumped up a line when the
+    web font arrived (a layout shift of 0.23 at 320)."""
+    names = sorted({entry["name"] for post in sitelib.load_posts()
+                    for entry in sitelib.series_list(post) if entry.get("name")})
+    context = site_context(browser, base, "dark", (320, 640))
+    context.route(re.compile(r"\.(woff2?|ttf)(\?|$)"), lambda route: route.abort())
+    for rel in [sitelib.series_page(name) for name in names] + ["series.html"]:
+        scope = f"{rel} at 320, no web fonts"
+        page, _sink = open_page(context, base, rel, rep, scope,
+                                "!!document.querySelector('.breadcrumb-area .breadcrumb')")
+        if not page:
+            continue
+        row = page.evaluate("""() => {
+            const ol = document.querySelector('.breadcrumb-area .breadcrumb');
+            const col = ol.closest('.breadcrumb-content').getBoundingClientRect();
+            const tops = [...ol.children].map(li => Math.round(li.getBoundingClientRect().top));
+            return { lines: new Set(tops).size, right: Math.round(ol.getBoundingClientRect().right),
+                     column: Math.round(col.right) };
+        }""")
+        rep.check(scope, "the crumbs keep to one line inside the column",
+                  row["lines"] == 1 and row["right"] <= row["column"], row)
+        page.close()
+    context.close()
+
+
+def check_series_without_scripts(browser, base, rep):
+    """A series page with scripts off, at 390: the count under the lede,
+    which only renderSeriesPage fills, holds one line at most, so the
+    no-script list of parts follows the lede as it did. Pin: the room held
+    for the count and its "Latest" line applied without scripts too, a
+    64px blank band on a phone (44px at 1440)."""
+    context = site_context(browser, base, "light", (390, 844), java_script_enabled=False)
+    rel = "series-how-this-site-is-built.html"
+    scope = f"{rel} without scripts"
+    page, _sink = open_page(context, base, rel, rep, scope)
+    if page:
+        height = page.evaluate("Math.round(document.getElementById('series-count').getBoundingClientRect().height)")
+        rep.check(scope, "the empty count holds one line at most", height <= 20, f"{height}px")
+        page.close()
+    context.close()
+
+
 def check_print(browser, base, rep):
     """A post printed from the dark theme: the opener's title prints, and
     headings print in ink. Pins: the print sheet hiding the bare <header>
@@ -2051,6 +2225,10 @@ def run_pins(browser, base, rep):
     check_theme_toggle(browser, base, rep)
     check_phone_menu(browser, base, rep)
     check_blog_url_state(browser, base, rep)
+    check_listing_arrivals(browser, base, rep)
+    check_listing_load_failure(browser, base, rep)
+    check_series_crumbs(browser, base, rep)
+    check_series_without_scripts(browser, base, rep)
     check_print(browser, base, rep)
     check_post_reach(browser, base, rep)
     check_code_blocks(browser, base, rep)

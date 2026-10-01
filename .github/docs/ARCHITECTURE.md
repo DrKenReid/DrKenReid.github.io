@@ -376,7 +376,12 @@ plus a landing page.
    ("Algorithms, Live" is `algorithms-live`), the same rule as
    `seriesPageHref` in the browser. The copy carries the
    `data-series` attribute to change, the `renderSeriesPage()` call and
-   the no-script listing markers.
+   the no-script listing markers, and keeps what every series page has:
+   the crumbs Home, Blog, Series, then the series; the feed's
+   autodiscovery link after the canonical; "Browse all posts" and "All
+   series" at the foot. The audit fails a series page that lacks one of
+   those three (`series-page-parts`). `renderSeriesPage` fills the count
+   and the "Latest: Part N" line under the lede.
 2. Set `blogChild` in its `renderHeader` call, as the other landing
    pages do.
 3. Give the first post its `series` entry in `data/posts.json`. The blog

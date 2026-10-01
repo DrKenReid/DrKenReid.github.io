@@ -89,6 +89,10 @@ WHAT --fix WRITES, AND --check REQUIRES
   when missing
       The four this script was first written to restore; inserted, never
       rewritten.
+  <link rel="alternate" type="application/rss+xml"> after the canonical
+      The feed, as blog.html and index.html name it (FEED_LINE), so a
+      feed reader given a post's URL finds the feed. Before this only
+      those two pages carried it.
 
 WHAT --check ALSO REPORTS, AND ONLY A PERSON CAN FIX
 
@@ -171,6 +175,11 @@ MANIFEST_LINE = '<link rel="manifest" href="../manifest.json">'
 # `async`: the file is tiny and only queues work for after load, so there
 # is nothing to gain from running it before the document is parsed.
 ANALYTICS_LINE = '<script defer src="../js/analytics.js"></script>'
+# The feed, named in every post's head as blog.html and index.html name it,
+# so a post's URL pasted into a feed reader finds the blog's feed. The same
+# title and absolute href as those pages (generate_feed.py's channel title).
+FEED_LINE = ('<link rel="alternate" type="application/rss+xml" title="Ken Reid\'s Blog" '
+             f'href="{SITE}/feed.xml">')
 
 # The version query every page puts on the stylesheet and the shared
 # scripts. It exists for one handover: the service worker before kr-v11
@@ -419,6 +428,7 @@ def render_head(post):
         f'  <link rel="preload" as="image" href="{preload_image(post)}" fetchpriority="high">',
         f'  <link rel="stylesheet" href="../style.min.css{ASSET_QUERY}">',
         f'  <link rel="canonical" href="{url}">',
+        f'  {FEED_LINE}',
         ld_block(blogposting(post)),
         ld_block(breadcrumb_node(post)),
         f'  <script defer src="../js/theme.js{ASSET_QUERY}"></script>',
@@ -792,6 +802,20 @@ def rule_missing_links(page):
     return head != before
 
 
+FEED_LINK_RE = _line_re(r'<link rel="alternate" type="application/rss\+xml"[^>]*>')
+
+
+def rule_feed_link(page):
+    """The feed's autodiscovery link (FEED_LINE), straight after the
+    canonical link; one that has drifted (another title or href) is
+    rewritten in place."""
+    head = page.head
+    new = upsert_line(head, FEED_LINK_RE, FEED_LINE, [_line_re(r'<link rel="canonical"[^>]*>'),
+                                                      _line_re(r'<link rel="stylesheet"[^>]*>')])
+    page.head = new
+    return new != head
+
+
 # Order matters only where one rule anchors on another's output: the
 # breadcrumb goes after the BlogPosting block, and reads its nesting step.
 POST_RULES = [
@@ -804,6 +828,7 @@ POST_RULES = [
     ('keywords/icons/manifest', rule_missing_links),
     ('jsonld-BlogPosting', rule_blogposting),
     ('jsonld-BreadcrumbList', rule_breadcrumb),
+    ('feed-link', rule_feed_link),
 ]
 # A redirect stub (a moved post) is a page with no template to speak of.
 REDIRECT_RULES = [('lang', rule_lang)]
