@@ -9064,14 +9064,16 @@ button.mfp-arrow {
    series lines under titles, the cover wall, the typographic cover that
    stands in for a missing jacket, the review cards and the quote wall.
    The quotation carousel at the top of literature.html is the homepage's
-   band (§07, .kr-home-quote--hold).
-   Scripts: js/bookshelf.js (Reading Now, figures, calendar, shelf,
-   krTypeCover), js/bookwall.js, js/literature.js; the quote wall is baked
-   by .github/scripts/generate_quote_wall.py.
+   band (§07, .kr-home-quote--hold), held open here by
+   .kr-home-quote--reading.
+   Scripts: js/bookshelf.js (Reading Now, figures, calendar, shelf and
+   its year buttons, krTypeCover), js/bookwall.js, js/literature.js; the
+   quote wall is baked by .github/scripts/generate_quote_wall.py.
    Classes only script applies: .kr-spine--r0 to --r5 (built as
    'kr-spine--r' + rating, which the pruner keeps by its prefix rule;
-   a name it cannot see that way goes in RUNTIME_TOKENS), .is-visible
-   on the week card, .kr-cal__tip--month, .kr-reviews--collapsed, and
+   a name it cannot see that way goes in RUNTIME_TOKENS), .kr-shelf__slot,
+   .is-visible on the week card, .kr-cal__tip--month and --compact,
+   .kr-reading__asof, .kr-reading__failed, .kr-reviews--collapsed, and
    .is-target and .is-copied on a quote card; the cell whose card is
    showing carries anchor-name: --kr-cal.
    Tokens: --kr-cal-0..3 (the calendar's ramp), --kr-tc-* (the
@@ -9084,6 +9086,82 @@ button.mfp-arrow {
   max-width: 680px;
   margin: 0 auto 28px;
   text-align: center; }
+
+/* --- Quotation band (literature.html) -----------------------------------
+   The homepage's band (§07), with .kr-home-quote--reading, which holds
+   its height before data/quotes.json arrives. krQuoteRotator measures
+   the tallest quotation and sets that as the text block's min-height;
+   until then the block holds these, measured from quotes.json at every
+   width from 320 to 1440: each min-width is where the tallest passage
+   loses a line. From 1002px the tallest is four lines of the regular
+   size, whose type grows with the screen (2.4vw) until 1210px, so the
+   hold grows with it: four lines of 1.55 x 2.4vw, and 41px for the
+   attribution and the margin over it. Padding holds the controls'
+   place while they are [hidden] (their rows and margin: 86px, or 50px
+   under reduced motion, which drops the pause button). Without the hold
+   the band grew from nothing to 400px at the top of a phone's first
+   screen, and the whole page under it jumped (a layout shift of 0.28).
+   If the list changes, the script's measurement still wins; only these
+   starting heights go out, and are worth measuring again.
+   Under (scripting: enabled), as the listings' holds are (§09): without
+   scripts the band stays empty. */
+@media (scripting: enabled) {
+  .kr-home-quote--reading .kr-home-quote__body {
+    min-height: 407px; }
+  .kr-home-quote--reading .kr-home-quote__inner:has(> .kr-home-quote__controls[hidden]) {
+    padding-bottom: 86px; } }
+
+@media (scripting: enabled) and (prefers-reduced-motion: reduce) {
+  .kr-home-quote--reading .kr-home-quote__inner:has(> .kr-home-quote__controls[hidden]) {
+    padding-bottom: 50px; } }
+
+@media (scripting: enabled) and (min-width: 323px) {
+  .kr-home-quote--reading .kr-home-quote__body {
+    min-height: 379px; } }
+
+@media (scripting: enabled) and (min-width: 350px) {
+  .kr-home-quote--reading .kr-home-quote__body {
+    min-height: 358px; } }
+
+@media (scripting: enabled) and (min-width: 355px) {
+  .kr-home-quote--reading .kr-home-quote__body {
+    min-height: 329px; } }
+
+@media (scripting: enabled) and (min-width: 383px) {
+  .kr-home-quote--reading .kr-home-quote__body {
+    min-height: 300px; } }
+
+@media (scripting: enabled) and (min-width: 429px) {
+  .kr-home-quote--reading .kr-home-quote__body {
+    min-height: 271px; } }
+
+@media (scripting: enabled) and (min-width: 482px) {
+  .kr-home-quote--reading .kr-home-quote__body {
+    min-height: 242px; } }
+
+@media (scripting: enabled) and (min-width: 557px) {
+  .kr-home-quote--reading .kr-home-quote__body {
+    min-height: 214px; } }
+
+@media (scripting: enabled) and (min-width: 654px) {
+  .kr-home-quote--reading .kr-home-quote__body {
+    min-height: 192px; } }
+
+@media (scripting: enabled) and (min-width: 661px) {
+  .kr-home-quote--reading .kr-home-quote__body {
+    min-height: 185px; } }
+
+@media (scripting: enabled) and (min-width: 806px) {
+  .kr-home-quote--reading .kr-home-quote__body {
+    min-height: 156px; } }
+
+@media (scripting: enabled) and (min-width: 1002px) {
+  .kr-home-quote--reading .kr-home-quote__body {
+    min-height: calc(14.88vw + 41px); } }
+
+@media (scripting: enabled) and (min-width: 1210px) {
+  .kr-home-quote--reading .kr-home-quote__body {
+    min-height: 221px; } }
 
 /* --- Reading Now and the figures ----------------------------------------
    The page opens on what is live: the books in progress from now.json,
@@ -9178,6 +9256,23 @@ button.mfp-arrow {
 [data-theme="dark"] .kr-figure__sub,
 [data-theme="dark"] .kr-reading__series {
   color: #9a9389; }
+
+/* The date of the weekly refresh, under the books in progress
+   (renderCurrentlyReading): a line of its own in their wrapping row. */
+.kr-reading__asof {
+  flex-basis: 100%; }
+
+/* When books.json does not arrive (showFailure in bookshelf.js): a line
+   after each section it feeds, with a button to try again. */
+.kr-reading__failed {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 12px;
+  margin: 12px 0;
+  font-size: 14px;
+  color: var(--kr-muted); }
 
 .kr-reading__big {
   font-size: clamp(36px, 4vw, 54px);
@@ -9394,6 +9489,15 @@ button.kr-cal__cell {
   grid-template-columns: repeat(12, minmax(22px, 1fr));
   gap: 4px; }
 
+/* Twelve 22px cells and their 4px gaps need 308px, which a 320px screen
+   (290px inside the container) does not have: December ran 3px off the
+   edge. There the gaps close to 2px, which fits, and a cell's centre is
+   still 24px from the next, so each is a 24px target by its spacing. */
+@media (max-width: 359.98px) {
+  .kr-cal__months,
+  .kr-cal__monthnames {
+    gap: 2px; } }
+
 .kr-cal__months {
   grid-area: cells; }
 
@@ -9545,10 +9649,33 @@ button.kr-cal__cell {
   max-height: calc(50dvh - 24px);
   overflow: hidden; }
 
+/* A month with more books than that (up to 14) is listed compactly
+   instead of cut short: a line a book, its title with an ellipsis where
+   it runs long and its stars beside it (.kr-cal__tip--compact, which
+   the script adds with the series and author left out). */
+.kr-cal__tip--compact .kr-cal__tip-list li {
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 3px 0; }
+
+.kr-cal__tip--compact .kr-cal__tip-title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; }
+
+.kr-cal__tip--compact .kr-cal__tip-stars {
+  grid-row: 1; }
+
 /* --- The shelf ----------------------------------------------------------
    Spines sit on a board and scroll sideways. Rating decides the colour
    band: fives take the gradient, fours warm stone, the rest cooler stone,
-   so a good year reads as a warm stretch of shelf. */
+   so a good year reads as a warm stretch of shelf.
+     <div class="kr-shelf-scroll">
+       <div id="kr-shelf" class="kr-shelf" role="list">
+         <span class="kr-shelf__year" aria-hidden="true">2021</span>
+         <span class="kr-shelf__slot" role="listitem"><a class="kr-spine
+           kr-spine--r4" tabindex="0">...</a></span> ...
+   bookshelf.js draws the spines (render) and gives the list one Tab
+   stop, moved by the arrow keys, Home and End (initShelfKeys). */
 .kr-shelf-area {
   padding: 70px 0 40px; }
 
@@ -9560,22 +9687,83 @@ button.kr-cal__cell {
   scrollbar-width: thin;
   -webkit-overflow-scrolling: touch; }
 
+/* The list keeps a margin under it for the board, and holds the tallest
+   spine's height (bookshelf.js draws them 200 to 255px) before the books
+   arrive, so nothing under it moves when they do. The hold is under
+   (scripting: enabled), as the listings' holds are (§09): without
+   scripts no spine comes, and it would leave the board under 255px of
+   nothing. */
 .kr-shelf {
+  position: relative;
   display: flex;
   align-items: flex-end;
   gap: 2px;
   width: max-content;
   min-width: 100%;
+  margin-bottom: 18px;
   padding-bottom: 0; }
 
-.kr-shelf__board {
+@media (scripting: enabled) {
+  .kr-shelf {
+    min-height: 255px; } }
+
+/* The board, drawn by the list itself so it runs under every spine, out
+   to the scroller's padding at both ends. It was an element of its own
+   after the list, as wide as the screen, so it lay under the oldest
+   books while the shelf opens at the newest, which then stood on
+   nothing. */
+.kr-shelf::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: -24px;
+  right: -24px;
   height: 18px;
-  margin: 0 -24px;
   background: linear-gradient(#5a4a3a, #3a2f24);
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35); }
 
-[data-theme="dark"] .kr-shelf__board {
+[data-theme="dark"] .kr-shelf::after {
   background: linear-gradient(#3b3129, #221c17); }
+
+/* A spine's list item: the spine stands at its foot. */
+.kr-shelf__slot {
+  display: flex;
+  align-items: flex-end;
+  flex: 0 0 auto; }
+
+/* The year buttons over the shelf (renderShelfYears): the filter pill
+   (§09), in one row at every width, scrolling sideways where it does
+   not fit (as a listing's facet row does on a phone) and centred where
+   it does. It keeps a row's height while it waits for the data. */
+.kr-shelf-years {
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  justify-content: safe center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: -6px auto 16px;
+  padding-top: 4px;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch; }
+
+.kr-shelf-years .gallery-filter-btn {
+  flex: 0 0 auto; }
+
+@media (scripting: enabled) {
+  .kr-shelf-years:empty {
+    min-height: 48px; } }
+
+@media (scripting: enabled) and (min-width: 576px) {
+  .kr-shelf-years:empty {
+    min-height: 51px; } }
+
+/* If books.json fails, the shelf says so under its board (showFailure in
+   bookshelf.js). No spine and no year is coming, so neither holds its
+   place: the holds left 300px of nothing above the note. */
+.kr-shelf:has(+ .kr-reading__failed),
+.kr-shelf-area:has(.kr-reading__failed) .kr-shelf-years:empty {
+  min-height: 0; }
 
 .kr-shelf__year {
   align-self: flex-end;
@@ -9678,7 +9866,10 @@ button.kr-cal__cell {
 .kr-spine--r0 .kr-spine__series {
   color: #fffaf4; }
 
-/* --- Cover wall (books.html, js/bookwall.js) ---------------------------- */
+/* --- Cover wall (books.html, js/bookwall.js) ----------------------------
+   Every rated book as a tile: its Open Library cover, or for a book with
+   no ISBN the typographic cover (below), which fills the tile the same
+   way. The stars show on hover. */
 .book-wall {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
@@ -9721,6 +9912,39 @@ button.kr-cal__cell {
 
 .book-wall-item:hover .book-wall-stars {
   opacity: 1; }
+
+/* Holding the wall's place while books.json loads. The skeleton tiles are
+   in books.html itself, so the grid is tall from the first paint; the
+   rating pills are drawn with the data, so their row keeps its height
+   while :empty: three rows up to 373px, two to 991px (the larger pills
+   from 576px make those rows 2px taller), then one; the six pills wrap
+   at those widths. Under (scripting: enabled), as the listings' holds
+   are (§09); without scripts the skeletons would shimmer for ever, so
+   they go. */
+@media (scripting: enabled) {
+  #book-wall-filters:empty {
+    min-height: 136px; } }
+
+@media (scripting: enabled) and (min-width: 374px) {
+  #book-wall-filters:empty {
+    min-height: 88px; } }
+
+@media (scripting: enabled) and (min-width: 576px) {
+  #book-wall-filters:empty {
+    min-height: 90px; } }
+
+@media (scripting: enabled) and (min-width: 992px) {
+  #book-wall-filters:empty {
+    min-height: 41px; } }
+
+/* If books.json fails, bookwall.js empties the grid and no pills come,
+   so the row lets its height go rather than stand over the message. */
+#book-wall-filters:empty:has(~ #book-wall-grid:empty) {
+  min-height: 0; }
+
+@media (scripting: none) {
+  #book-wall-grid .kr-skeleton {
+    display: none; } }
 
 /* --- Typographic cover (krTypeCover in bookshelf.js) --------------------
    What a book shows when there is no picture of it: Open Library has no
@@ -10049,10 +10273,20 @@ button.kr-cal__cell {
   font-size: 12px;
   color: var(--kr-muted); }
 
+/* The copy-link "#": a 24px square (WCAG 2.5.8) centred where the glyph
+   has always sat, in the card's top right corner. It shows on hover or
+   focus where there is hover; on a touch screen there is no hover to
+   find it by, so it stays in full. */
 .kr-quote-link {
   position: absolute;
-  top: 8px;
-  right: 10px;
+  top: 6px;
+  right: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--kr-radius-sm);
   font-family: 'Poppins', 'Poppins Fallback', sans-serif;
   font-size: 13px;
   font-weight: 600;
@@ -10070,7 +10304,7 @@ button.kr-cal__cell {
 
 @media (hover: none) {
   .kr-quote-link {
-    opacity: 0.45; } }
+    opacity: 1; } }
 
 .kr-quote-card.is-target {
   border-color: #fc6060;
@@ -10126,6 +10360,31 @@ button.kr-cal__cell {
   border-color: #444;
   color: #a5a5a5; }
 
+/* Holding the author pills' place. The page's script draws them at the
+   foot of a long document, so on a slow connection the first cards paint
+   under an empty row and the pills then push the wall down (most of the
+   page's layout shift on a phone). While the row is :empty it keeps the
+   height the pills take: three rows from 992px, four from 768px, and
+   below that the one sideways-scrolling row (.gallery-filters--scroll,
+   §09): 50px under 576px and 57px from there, measured.
+   Under (scripting: enabled), as the listings' holds are (§09): without
+   scripts the row stays empty and would hold room for nothing. */
+@media (scripting: enabled) {
+  #quote-filters:empty {
+    min-height: 50px; } }
+
+@media (scripting: enabled) and (min-width: 576px) {
+  #quote-filters:empty {
+    min-height: 57px; } }
+
+@media (scripting: enabled) and (min-width: 768px) {
+  #quote-filters:empty {
+    min-height: 188px; } }
+
+@media (scripting: enabled) and (min-width: 992px) {
+  #quote-filters:empty {
+    min-height: 139px; } }
+
 /* ==== :: §15 Music ==== */
 
 /* music.html: the record crate of the most played albums (js/albums.js,
@@ -10138,9 +10397,17 @@ button.kr-cal__cell {
 /* --- Record crate -------------------------------------------------------
    Sleeves are absolutely placed along the crate by --i, tilted back, and
    filed with the most played at the front (highest --i, highest z). A
-   hovered sleeve lifts clear of the front board and shows its label. */
+   hovered sleeve lifts clear of the front board and shows its label; on
+   a touch screen, where nothing hovers, a tap pulls one out instead
+   (.is-out, which albums.js adds, drawn the same).
+   Classes only script applies: .kr-crate__slot (each sleeve's list
+   item, an inline wrapper the absolute sleeve ignores), .is-out.
+   --kr-crate-out and --kr-crate-out-shadow are a sleeve out of the
+   crate, set once for the two rules below that draw it. */
 .kr-crate {
   --kr-sleeve: clamp(150px, 22vw, 250px);
+  --kr-crate-out: translateY(-84px) rotateY(-6deg) rotateX(0deg) scale(1.06);
+  --kr-crate-out-shadow: 0 30px 50px rgba(0, 0, 0, 0.5);
   position: relative;
   height: calc(var(--kr-sleeve) + 130px);
   max-width: 1000px;
@@ -10169,11 +10436,23 @@ button.kr-cal__cell {
   object-fit: cover;
   border-radius: 3px; }
 
-.kr-crate__sleeve:hover,
-.kr-crate__sleeve:focus-visible {
+/* Out: focused, tapped (.is-out), or hovered where there is real hover.
+   A tap sets :hover just before its click, so on a touch screen a hover
+   lift moved the sleeve before the click landed: under reduced motion,
+   with no transition, a phone's sleeve left the finger at once and the
+   click pulled out the one behind it. There a tap lifts by .is-out
+   alone (albums.js), which the click itself sets. */
+.kr-crate__sleeve:focus-visible,
+.kr-crate__sleeve.is-out {
   z-index: 200;
-  transform: translateY(-84px) rotateY(-6deg) rotateX(0deg) scale(1.06);
-  box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5); }
+  transform: var(--kr-crate-out);
+  box-shadow: var(--kr-crate-out-shadow); }
+
+@media (hover: hover) {
+  .kr-crate__sleeve:hover {
+    z-index: 200;
+    transform: var(--kr-crate-out);
+    box-shadow: var(--kr-crate-out-shadow); } }
 
 .kr-crate__label {
   position: absolute;
@@ -10194,10 +10473,15 @@ button.kr-cal__cell {
   pointer-events: none;
   transition: opacity 0.25s ease, transform 0.25s ease; }
 
-.kr-crate__sleeve:hover .kr-crate__label,
-.kr-crate__sleeve:focus-visible .kr-crate__label {
+.kr-crate__sleeve:focus-visible .kr-crate__label,
+.kr-crate__sleeve.is-out .kr-crate__label {
   opacity: 1;
   transform: translateX(-50%) translateY(0); }
+
+@media (hover: hover) {
+  .kr-crate__sleeve:hover .kr-crate__label {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0); } }
 
 .kr-crate__name {
   display: block;
@@ -10242,25 +10526,45 @@ button.kr-cal__cell {
   .kr-crate__label {
     transition: none; } }
 
-/* On a phone the desktop spacing (sleeves spread over 74% of the crate,
-   plus a sleeve's width) put the front sleeves up to 75px past a 375px
-   screen. Here the spread is whatever the crate has left once the front
-   sleeve, pulled out and scaled 1.06, still ends inside it; each label
-   slides from left-aligned under the back sleeve to right-aligned under
-   the front one, so no label runs off either edge. Above 576px the
-   desktop layout already fits and is left exactly as it was. */
-@media only screen and (max-width: 575.98px) {
+/* On a phone there is no room to spread the sleeves over the crate's
+   width: squeezed into it, each showed a strip 10px wide (6px at 320),
+   far under a 24px target, and the right one could not be picked. Here
+   each sleeve steps --kr-crate-strip along from the last and the crate
+   scrolls sideways; albums.js opens it at the front, the most played
+   end. The board runs the whole length, and the crate is 38px taller
+   so a pulled-out sleeve and its focus ring clear the top of the scroll
+   box, which clips them. Each label slides from left-aligned under the
+   back sleeve to right-aligned under the front one, so it stays inside
+   the crate. Up to 767px, not only on the narrowest phones: the 510px
+   container from 576px still spread the sleeves 22px apart. From 768px
+   the desktop layout gives each 30px or more and is left as it was. */
+@media only screen and (max-width: 767.98px) {
+  .kr-crate {
+    --kr-crate-strip: 28px;
+    --kr-crate-inset: 16px;
+    height: calc(var(--kr-sleeve) + 168px);
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch; }
+
   .kr-crate__sleeve {
-    left: calc(4% + var(--i) * ((92% - var(--kr-sleeve) * 1.06) / max(1, var(--kr-n) - 1))); }
+    left: calc(var(--kr-crate-inset) + var(--i) * var(--kr-crate-strip)); }
+
+  .kr-crate__board {
+    right: auto;
+    width: max(100%, calc(var(--kr-crate-inset) * 2 + (var(--kr-n) - 1) * var(--kr-crate-strip) + var(--kr-sleeve) * 1.06)); }
 
   .kr-crate__label {
     --kr-crate-at: calc(var(--i) / max(1, var(--kr-n) - 1));
     left: calc(var(--kr-crate-at) * 100%);
-    max-width: min(300px, calc(100vw - 48px));
+    max-width: min(300px, calc(100vw - 64px));
     transform: translateX(calc(var(--kr-crate-at) * -100%)) translateY(-6px); }
 
   .kr-crate__sleeve:hover .kr-crate__label,
-  .kr-crate__sleeve:focus-visible .kr-crate__label {
+  .kr-crate__sleeve:focus-visible .kr-crate__label,
+  .kr-crate__sleeve.is-out .kr-crate__label {
     transform: translateX(calc(var(--kr-crate-at) * -100%)); } }
 
 /* --- Find Me cards ------------------------------------------------------

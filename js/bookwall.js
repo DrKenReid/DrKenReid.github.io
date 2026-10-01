@@ -1,32 +1,42 @@
 /**
  * bookwall.js: the cover wall on books.html ("Every Book").
  *
- * Every rated book in data/books.json that has an ISBN, as its Open
- * Library cover, searchable by title and author and filterable by my
- * rating. The filter is the documented one: books.json holds every book
- * read, and the wall shows the rated ones Goodreads has an ISBN for,
- * since a cover is looked up by ISBN.
+ * Every rated book in data/books.json, searchable by title and author and
+ * filterable by my rating. A book with an ISBN hangs as its Open Library
+ * cover, looked up by that ISBN; a book Goodreads has no ISBN for (most
+ * of the Kindle series) hangs as a cover set in type (krTypeCover), so
+ * the wall and its counts cover the whole reading history, not only the
+ * books a cover can be found for.
  *
  * Links, cover URLs and tooltips come from krBookshelf (js/bookshelf.js,
  * loaded first), so a tile says and links what the shelf does.
- * A cover Open Library has no scan of is not dropped: js/bookshelf.js
+ * A cover Open Library has no scan of is not dropped either: js/bookshelf.js
  * sets it in type, from the data- attributes on the <img>,
  * so every tile the counts promise is on the wall. The counts are the
  * filter buttons' (built by renderFilterBar, which gives them
  * aria-pressed), the total in the lede, and #book-wall-count, the shared
  * .kr-list-counter live region, empty unless something narrows the wall.
+ *
+ * The address bar carries the search (?q=) and the rating (?rating=, 1
+ * to 5), read once books.json is in and rewritten as they change, with
+ * replaceState as on the blog listing (js/blog.js, "WHY replaceState"),
+ * so "every five-star book" can be linked to and survives a reload. A
+ * rating no book has is dropped rather than obeyed.
+ *
+ * The skeleton tiles the wall shows while books.json loads are in the
+ * page's markup, so the grid has its height from the first paint and
+ * nothing below it moves when the covers arrive.
  */
 (function () {
     'use strict';
 
     var SEARCH_DEBOUNCE_MS = 120;
-    var SKELETON_TILES = 18;
 
     var books = [];         // books.json, shared with other readers: read only
     var activeRating = 0;   // 0 = every rating
     var searchQuery = '';
 
-    function onTheWall(b) { return !!(b.i && b.r); }
+    function onTheWall(b) { return !!b.r; }
 
     function stars(n) {
         return '★'.repeat(n);
@@ -45,15 +55,38 @@
         return 'genre:fiction';
     }
 
+    /* A tile is one link: the cover, then the stars that show on hover.
+       Its name is "Title by Author, rated N of 5" either way: the <img>'s
+       alt text, or for a book with no ISBN a hidden line beside a cover
+       set in type, which is itself hidden so the title is not read twice. */
     function tile(b) {
         var name = krBookTitle(b.t);
+        var called = krEscapeHtml(name.title + ' by ' + b.a);
+        var cover = b.i
+            ? '<img src="' + krEscapeHtml(krBookshelf.coverUrl(b.i, 'M')) + '" alt="' + called + '" loading="lazy"' +
+                krTypeCover.dataAttrs(b) + '>'
+            : krTypeCover(b, { decorative: true }).outerHTML + '<span class="sr-only">' + called + '</span>';
         return '<a class="book-wall-item" data-live="' + genreOf(b) + '" href="' + krEscapeHtml(krBookshelf.goodreadsUrl(b)) + '"' +
             ' target="_blank" rel="noopener noreferrer" title="' + krEscapeHtml(krBookshelf.label(b)) + '">' +
-            '<img src="' + krEscapeHtml(krBookshelf.coverUrl(b.i, 'M')) + '" alt="' + krEscapeHtml(name.title + ' by ' + b.a) + '" loading="lazy"' +
-            krTypeCover.dataAttrs(b) + '>' +
+            cover +
             '<span class="book-wall-stars"><span aria-hidden="true">' + stars(b.r) + '</span>' +
             '<span class="sr-only">, rated ' + b.r + ' of 5</span></span>' +
             '</a>';
+    }
+
+    /* Writes the search and the rating into the address bar (see the
+       header). The query is kept as typed, trimmed; a key at its default
+       is left out, so the whole wall is plain /books.html. */
+    function syncUrl() {
+        if (!window.history || !window.history.replaceState) return;
+        var params = new URLSearchParams();
+        var q = searchQuery.trim();
+        if (q) params.set('q', q);
+        if (activeRating) params.set('rating', String(activeRating));
+        var qs = params.toString();
+        try {
+            window.history.replaceState(window.history.state, '', window.location.pathname + (qs ? '?' + qs : '') + window.location.hash);
+        } catch (e) {}
     }
 
     function renderWall() {
@@ -65,14 +98,17 @@
             if (activeRating !== 0 && b.r !== activeRating) return false;
             return !q || (b.t + ' ' + b.a).toLowerCase().indexOf(q) !== -1;
         });
+        grid.removeAttribute('aria-busy');
         grid.innerHTML = subset.map(tile).join('');
         krUpdateSearchCounter(subset.length, wall.length, 'books', !q && !activeRating,
             { input: null, counter: 'book-wall-count' });
+        syncUrl();
     }
 
+    /* Returns renderFilterBar's { setActive }, or null with no bar. */
     function renderFilters() {
         var bar = document.getElementById('book-wall-filters');
-        if (!bar) return;
+        if (!bar) return null;
         var wall = books.filter(onTheWall);
         var items = [5, 4, 3, 2, 1].map(function (r) {
             return {
@@ -83,7 +119,9 @@
             };
         }).filter(function (it) { return it.count > 0; });
         bar.setAttribute('aria-label', 'Filter by my rating');
-        renderFilterBar(bar, items, {
+        var total = document.getElementById('book-wall-total');
+        if (total) total.textContent = wall.length + ' books';
+        var control = renderFilterBar(bar, items, {
             multi: false,
             allLabel: 'All (' + wall.length + ')',
             onChange: function (keys) {
@@ -91,16 +129,20 @@
                 renderWall();
             }
         });
-        var total = document.getElementById('book-wall-total');
-        if (total) total.textContent = wall.length + ' books';
+        control.keys = items.map(function (it) { return it.key; });
+        return control;
     }
 
     document.addEventListener('DOMContentLoaded', function () {
         var grid = document.getElementById('book-wall-grid');
         if (!grid) return;
         var search = document.getElementById('book-wall-search');
+        var params = new URLSearchParams(window.location.search);
+        var presetQuery = (params.get('q') || '').trim();
+        var presetRating = (params.get('rating') || '').trim();
         var debounce = null;
         if (search) {
+            if (presetQuery) search.value = presetQuery;
             search.addEventListener('input', function () {
                 clearTimeout(debounce);
                 debounce = setTimeout(function () {
@@ -109,14 +151,18 @@
                 }, SEARCH_DEBOUNCE_MS);
             });
         }
-        // Skeleton covers while books.json and the covers arrive.
-        grid.innerHTML = new Array(SKELETON_TILES).fill('<span class="book-wall-item kr-skeleton"></span>').join('');
+        searchQuery = presetQuery;
+        grid.setAttribute('aria-busy', 'true');
         // The same request js/bookshelf.js would make, shared through krFetchJson.
         krFetchJson('data/books.json').then(function (data) {
             books = Array.isArray(data) ? data : [];
-            renderFilters();
-            renderWall();
+            var bar = renderFilters();
+            // setActive draws the wall through onChange; a stale rating
+            // falls through to the whole wall.
+            if (bar && bar.keys.indexOf(presetRating) !== -1) bar.setActive([presetRating]);
+            else renderWall();
         }).catch(function () {
+            grid.removeAttribute('aria-busy');
             grid.innerHTML = '';
             var counter = document.getElementById('book-wall-count');
             if (counter) counter.textContent = 'The books could not be loaded just now.';

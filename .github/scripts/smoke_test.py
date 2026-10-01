@@ -132,6 +132,19 @@ without one class), and the pin seen to fail.
                             With scripts off, a series page's empty count
                             holds one line at most (the room kept for its
                             "Latest" line was a blank band on a phone).
+  check_reading_walls       On a phone: a shared quotes.html#q-N link ends
+                            with its card on screen (it glided through
+                            undrawn cards and stopped 3,025px short); the
+                            book wall hangs every rated book (it left out
+                            those with no ISBN) and restores ?q= and
+                            ?rating=; the quote wall restores ?author=;
+                            the shelf is one Tab stop (it was 604); a tap
+                            on a crate sleeve pulls that sleeve out and
+                            stays on the page (it went straight to Last.fm,
+                            and under reduced motion pulled out the one
+                            behind), and a second tap opens it; each sleeve
+                            Tab reaches is in view with its label (the
+                            browser's scroll left half of them cut off).
   check_print              A post printed from the dark theme keeps its
                             title (the print sheet hid every <header>, the
                             opener included) and prints headings in ink.
@@ -1985,6 +1998,163 @@ def check_series_without_scripts(browser, base, rep):
     context.close()
 
 
+# The reading and music pages' pin (check_reading_walls) runs on a phone.
+READING_PHONE = {"viewport": {"width": 390, "height": 844}, "is_mobile": True, "has_touch": True}
+
+# The quote a shared link is opened at: near the foot of the wall, where
+# the estimated height of every undrawn card above it adds up to the
+# widest miss.
+QUOTE_LINK = "q-560"
+
+# Resolves once the page has not scrolled for 30 frames (or after 600),
+# with the box of the element whose id is given: where a #q-N link ended.
+SCROLL_SETTLED = """id => new Promise(done => {
+    let last = scrollY, still = 0, frames = 0;
+    const tick = () => {
+        frames++;
+        if (scrollY === last) still++; else { still = 0; last = scrollY; }
+        if (still < 30 && frames < 600) { requestAnimationFrame(tick); return; }
+        const r = document.getElementById(id).getBoundingClientRect();
+        done({top: Math.round(r.top), bottom: Math.round(r.bottom), height: innerHeight});
+    };
+    requestAnimationFrame(tick);
+})"""
+
+
+def check_reading_walls(browser, base, rep):
+    """The collections on a phone, one regression each: a #q-N link that
+    lands short, a book wall missing the books with no ISBN, the walls'
+    filters lost from the address bar, a shelf of 604 Tab stops, and a
+    crate whose tap left for Last.fm before any label showed, or (under
+    reduced motion) pulled out the sleeve behind the one tapped, or whose
+    sleeves Tab reached sat past its edge."""
+    context = site_context(browser, base, "dark", None, **READING_PHONE)
+
+    scope = f"quotes.html#{QUOTE_LINK}"
+    page, sink = open_page(context, base, f"quotes.html#{QUOTE_LINK}", rep, scope)
+    if page:
+        box = page.evaluate(SCROLL_SETTLED, QUOTE_LINK)
+        rep.check(scope, "the linked quote is on screen once the page settles",
+                  box["top"] >= 0 and box["bottom"] <= box["height"], box)
+        rep.console_errors(scope, sink)
+        page.close()
+
+    scope = "quotes.html?author="
+    page, sink = open_page(context, base, "quotes.html?author=ursula+k.+le+guin", rep, scope,
+                           "!!document.querySelector('#quote-filters button')")
+    if page:
+        got = page.evaluate("""() => ({
+            pressed: [...document.querySelectorAll('#quote-filters [aria-pressed=true]')].map(b => b.dataset.filterKey),
+            count: (document.getElementById('quote-wall-count') || {}).textContent || '',
+            search: location.search })""")
+        rep.check(scope, "the author is pressed, counted and kept in the address bar",
+                  got["pressed"] == ["ursula k. le guin"] and got["count"].startswith("Showing")
+                  and got["search"] == "?author=ursula+k.+le+guin", got)
+        page.close()
+
+    rated = sum(1 for b in json.loads((ROOT / "data" / "books.json").read_text(encoding="utf-8"))
+                if b.get("r"))
+    tiles = "document.querySelectorAll('#book-wall-grid a.book-wall-item').length"
+    scope = "books.html"
+    page, sink = open_page(context, base, "books.html", rep, scope, f"{tiles} > 0")
+    if page:
+        got = page.evaluate(tiles)
+        rep.check(scope, f"every rated book is on the wall ({rated})", got == rated, got)
+        page.close()
+    scope = "books.html?q=&rating="
+    page, sink = open_page(context, base, "books.html?q=the&rating=4", rep, scope, f"{tiles} > 0")
+    if page:
+        got = page.evaluate("""() => ({
+            pressed: [...document.querySelectorAll('#book-wall-filters [aria-pressed=true]')].map(b => b.dataset.filterKey),
+            input: document.getElementById('book-wall-search').value, search: location.search })""")
+        rep.check(scope, "the search and the rating are applied and kept",
+                  got == {"pressed": ["4"], "input": "the", "search": "?q=the&rating=4"}, got)
+        page.close()
+
+    scope = "literature.html shelf"
+    page, sink = open_page(context, base, "literature.html", rep, scope,
+                           "document.querySelectorAll('.kr-spine').length > 0")
+    if page:
+        stops = page.evaluate("[...document.querySelectorAll('#kr-shelf a')].filter(a => a.tabIndex >= 0).length")
+        rep.check(scope, "the shelf is one Tab stop", stops == 1, f"{stops} stops")
+        rep.console_errors(scope, sink)
+        page.close()
+
+    context.close()
+
+    # The crate, under reduced motion: with no transition to wait for, a
+    # hover lift set by the tap took the sleeve from under the finger
+    # before its click, which then pulled out the sleeve behind.
+    context = site_context(browser, base, "dark", None, reduced_motion="reduce", **READING_PHONE)
+    # The crate's sleeves are Last.fm's images, and a sleeve whose image
+    # fails is taken out, so they are answered with one of ours.
+    thumb = (ROOT / "img" / "photography" / "thumb" / "1.webp").read_bytes()
+    context.route("https://lastfm*/**", lambda r: r.fulfill(body=thumb, content_type="image/webp"))
+    scope = "music.html crate"
+    page, sink = open_page(context, base, "music.html", rep, scope,
+                           "document.querySelectorAll('.kr-crate__sleeve').length > 1")
+    if page:
+        page.evaluate("document.getElementById('kr-crate').scrollIntoView({block: 'center', behavior: 'instant'})")
+        next_frames(page)
+        # The crate opens at its front, so the sleeve behind the front one
+        # is on screen at any width; it is tapped in the middle of the strip
+        # it shows.
+        at = page.evaluate("""() => { const all = document.querySelectorAll('.kr-crate__sleeve');
+            const s = all[all.length - 2].getBoundingClientRect(), n = all[all.length - 1].getBoundingClientRect();
+            return {x: (s.left + Math.min(n.left, s.right)) / 2, y: s.top + s.height * 0.45}; }""")
+        out = """[...document.querySelectorAll('.kr-crate__sleeve')].map((s, i, all) =>
+            s.classList.contains('is-out') ? all.length - i : 0).filter(Boolean)"""
+        opened = []
+        page.on("popup", lambda pg: opened.append(pg.url))
+        page.touchscreen.tap(at["x"], at["y"])
+        wait_until(page, "!!document.querySelector('.kr-crate__sleeve.is-out')", 1000)
+        got = page.evaluate(out)
+        rep.check(scope, "a tap pulls out the sleeve tapped and stays on the page",
+                  got == [2] and not opened,
+                  f"opened {opened}" if opened else f"out, counting from the front: {got}")
+        if got == [2]:
+            at = page.evaluate("""() => { const s = document.querySelector('.kr-crate__sleeve.is-out').getBoundingClientRect();
+                return {x: s.left + s.width / 2, y: s.top + s.height / 2}; }""")
+            try:
+                with page.expect_popup(timeout=PAGE_BUDGET_MS):
+                    page.touchscreen.tap(at["x"], at["y"])
+                second = True
+            except PlaywrightTimeout:
+                second = False
+            rep.check(scope, "a second tap on it opens it", second, "nothing opened")
+        rep.console_errors(scope, sink)
+        page.close()
+    context.close()
+
+    # The same crate from the keyboard, at the phone width where it
+    # scrolls: the browser's own scroll to a focused sleeve left the
+    # lifted sleeve or its label past the crate's edge for half of them.
+    context = site_context(browser, base, "dark", (390, 844), reduced_motion="reduce")
+    context.route("https://lastfm*/**", lambda r: r.fulfill(body=thumb, content_type="image/webp"))
+    scope = "music.html crate, keyboard"
+    page, sink = open_page(context, base, "music.html", rep, scope,
+                           "document.querySelectorAll('.kr-crate__sleeve').length > 1")
+    if page:
+        page.focus("#kr-crate .kr-crate__sleeve")
+        page.keyboard.press("Shift+Tab")
+        cut = []
+        for _ in range(page.evaluate("document.querySelectorAll('.kr-crate__sleeve').length")):
+            page.keyboard.press("Tab")
+            next_frames(page, 3)
+            got = page.evaluate("""() => {
+                const s = document.activeElement.closest('.kr-crate__sleeve');
+                if (!s) return 'focus left the crate';
+                const c = s.closest('.kr-crate').getBoundingClientRect();
+                const inside = r => r.left >= c.left - 1 && r.right <= c.right + 1;
+                return inside(s.getBoundingClientRect()) && inside(s.querySelector('.kr-crate__label').getBoundingClientRect())
+                    ? '' : 'sleeve ' + s.style.getPropertyValue('--i'); }""")
+            if got:
+                cut.append(got)
+        rep.check(scope, "each sleeve Tab reaches is in view with its label", not cut, ", ".join(cut))
+        page.close()
+    context.close()
+
+
 def check_print(browser, base, rep):
     """A post printed from the dark theme: the opener's title prints, and
     headings print in ink. Pins: the print sheet hiding the bare <header>
@@ -2472,6 +2642,7 @@ def run_pins(browser, base, rep):
     check_listing_load_failure(browser, base, rep)
     check_series_crumbs(browser, base, rep)
     check_series_without_scripts(browser, base, rep)
+    check_reading_walls(browser, base, rep)
     check_print(browser, base, rep)
     check_post_reach(browser, base, rep)
     check_code_blocks(browser, base, rep)

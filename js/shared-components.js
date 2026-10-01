@@ -3869,6 +3869,12 @@ function krQuoteRotator(section, quotes, opts) {
         body.parentNode.appendChild(ghost);
         var gt = ghost.querySelector('.kr-home-quote__text');
         var ga = ghost.querySelector('.kr-home-quote__attr');
+        // Under reduced motion every transition lasts 0.01ms rather than
+        // none (style.css §21), so a class change starts a transition and
+        // a measurement taken at once reads the old size: a long passage
+        // was measured at full size, and the band held 134px too much.
+        // Inline and important, to outrank that rule.
+        [gt, ga].forEach(function(el) { el.style.setProperty('transition', 'none', 'important'); });
         var tall = 0;
         quotes.forEach(function(q) {
             set(gt, ga, q);

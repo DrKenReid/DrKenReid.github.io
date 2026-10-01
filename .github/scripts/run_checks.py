@@ -297,8 +297,9 @@ CHECKS: list[Check] = [
           script("check_post_template.py"), browser=True),
 
     # Layout shift, first-party weight and requests per page template at a
-    # phone and a desktop size (.github/perf-budgets.json), then the
-    # offline scenario and the web app manifest.
+    # phone and a desktop size (.github/perf-budgets.json), layout shift
+    # on a slow phone for the reading pages, then the offline scenario and
+    # the web app manifest.
     Check("perf", "page templates hold their performance budgets",
           script("perf_budget.py"), browser=True),
 

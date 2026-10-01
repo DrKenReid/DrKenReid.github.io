@@ -37,16 +37,25 @@
         var section = document.getElementById('quotes');
         if (section) {
             krFetchJson('data/quotes.json').then(function (data) {
-                if (Array.isArray(data) && data.length) krQuoteRotator(section, shuffle(data));
-            }).catch(function () {});
+                if (!Array.isArray(data) || !data.length) throw new Error('data/quotes.json has no quotations');
+                krQuoteRotator(section, shuffle(data));
+            }).catch(function () {
+                // The band holds a quotation's height until one arrives
+                // (style.css, "Quotation band"); with none coming it would
+                // stand empty at the top of the page, so it goes.
+                section.hidden = true;
+            });
         }
         // The band draws on a short list; the count in the prose is the
-        // whole collection, the same file the homepage counts.
+        // whole collection, as the homepage gives it: colophon.json's
+        // count of quotes-all.json (generate_colophon.py), a few KB, where
+        // the collection itself is 147 KB fetched for one number. The
+        // figure in the markup stands until it arrives.
         var counts = document.querySelectorAll('[data-lit="quotes"]');
         if (counts.length) {
-            krFetchJson('data/quotes-all.json').then(function (all) {
-                if (!Array.isArray(all)) return;
-                counts.forEach(function (el) { el.textContent = String(all.length); });
+            krFetchJson('data/colophon.json').then(function (site) {
+                if (!site || !(site.quotes > 0)) return;
+                counts.forEach(function (el) { el.textContent = String(site.quotes); });
             }).catch(function () {});
         }
     }

@@ -4,15 +4,20 @@
  *
  * On literature.html it draws:
  *   - the shelf: every book read, as a spine, in the order it was first
- *     read (render). Width from the length of the title, height varied by
- *     author, colour band by rating. It is a picture of a reading life
- *     rather than a table, which is what a shelf is for. Widths follow the
- *     title because that is the data to hand; page counts would be truer,
- *     and are one Goodreads field away.
- *   - the reading calendar (renderCalendar): weeks, or months on a phone.
- *   - Reading Now: the books in progress from now.json, the last one
- *     finished and this year's count (renderCurrentlyReading, renderNow).
+ *     read (render), with buttons that jump along it by year
+ *     (renderShelfYears). Width from the length of the title, height
+ *     varied by author, colour band by rating. It is a picture of a
+ *     reading life rather than a table, which is what a shelf is for.
+ *     Widths follow the title because that is the data to hand; page
+ *     counts would be truer, and are one Goodreads field away.
+ *   - the reading calendar (initCalendar): weeks, or months on a phone,
+ *     its empty frame drawn before the data arrives.
+ *   - Reading Now: the books in progress from now.json, with the date of
+ *     the refresh, the last one finished and this year's count
+ *     (renderCurrentlyReading, renderNow).
  *   - the six figures, and the counts quoted in the prose (renderFigures).
+ *   - if books.json fails, a note in each of those places with a button
+ *     that asks again (showFailure).
  * books.html loads it for the book helpers and the typographic covers,
  * which the cover wall (js/bookwall.js) falls back to.
  *
@@ -42,6 +47,8 @@
  *         isoWeek(date)   -> {year, week}, the ISO 8601 year and week
  *         weeksIn(year)   -> 52 or 53
  *         parseDate(s)    -> a local Date for 'YYYY/MM/DD' (or -), else null
+ *         yearGroups(years) -> the shelf's year buttons, spans of years
+ *                            that each hold enough books to be worth one
  *       It is set before the file touches the document, so a test can
  *       load this file with a stub window (and a krBookTitle) and nothing
  *       else.
@@ -112,6 +119,32 @@
         return isoWeek(new Date(year, 11, 28)).week;
     }
 
+    /* ------------------------------------------------------ year buttons
+       The shelf's year buttons (renderShelfYears) cover spans of years:
+       oldest first, a span closes once it holds YEAR_GROUP_MIN books, so
+       the thin early years (one to five books each) share a button and
+       the busy ones get their own. The newest year always has its own.
+       `years` is [{year, first, count}] oldest first: the year, the index
+       of its first spine, and how many books it files. Returns
+       [{label, year, first}]: "1997–2010" or "2024", the span's first
+       year (whose marker the button scrolls to) and its first spine. */
+    var YEAR_GROUP_MIN = 30;
+
+    function yearGroups(years) {
+        var groups = [], open = null;
+        years.forEach(function (y, i) {
+            var newest = i === years.length - 1;
+            if (newest && open) { groups.push(open); open = null; }
+            if (!open) open = { from: y.year, to: y.year, first: y.first, count: 0 };
+            open.to = y.year;
+            open.count += y.count;
+            if (open.count >= YEAR_GROUP_MIN || newest) { groups.push(open); open = null; }
+        });
+        return groups.map(function (g) {
+            return { label: g.from === g.to ? g.from : g.from + '–' + g.to, year: g.from, first: g.first };
+        });
+    }
+
     window.krBookshelf = {
         goodreadsUrl: goodreadsUrl,
         coverUrl: coverUrl,
@@ -120,7 +153,8 @@
         firstRead: firstRead,
         isoWeek: isoWeek,
         weeksIn: weeksIn,
-        parseDate: parseDate
+        parseDate: parseDate,
+        yearGroups: yearGroups
     };
 
     /* ------------------------------------------------- typographic cover
@@ -193,7 +227,13 @@
         return h >>> 0;
     }
 
-    /* ------------------------------------------------------------- shelf */
+    /* ------------------------------------------------------------- shelf
+       Each spine is a link in a list item. The list is one Tab stop, not
+       six hundred: a roving tabindex (initShelfKeys) leaves one spine in
+       the Tab order, the newest to begin with since that is where the
+       shelf opens, and the arrow keys, Home and End move between them, so
+       every book is still in reach of the keyboard. A row of buttons over
+       the shelf jumps along it by year (renderShelfYears). */
     // A series name is a second, smaller column of type down the spine.
     var SPINE_SERIES_W = 12;
 
@@ -204,33 +244,108 @@
             return firstRead(a).localeCompare(firstRead(b));
         });
         var years = {};
-        var html = sorted.map(function (b) {
+        var yearList = [];   // [{year, first (spine index), count}], oldest first
+        var html = sorted.map(function (b, i) {
             var name = krBookTitle(b.t);
             var w = Math.max(26, Math.min(74, 18 + name.title.length * 0.85)) + (name.series ? SPINE_SERIES_W : 0);
             var h = 200 + (hash(b.a || '') % 56);
             var year = firstRead(b).slice(0, 4);
             var marker = '';
             if (year && !years[year]) {
-                years[year] = true;
-                marker = '<span class="kr-shelf__year" aria-hidden="true">' + year + '</span>';
+                years[year] = { year: year, first: i, count: 0 };
+                yearList.push(years[year]);
+                marker = '<span class="kr-shelf__year" aria-hidden="true" data-year="' + krEscapeHtml(year) + '">' + krEscapeHtml(year) + '</span>';
             }
+            if (years[year]) years[year].count++;
             var label = krEscapeHtml(bookLabel(b));
             return marker +
+                '<span class="kr-shelf__slot" role="listitem">' +
                 '<a class="kr-spine kr-spine--r' + (b.r || 0) + '" href="' + krEscapeHtml(goodreadsUrl(b)) + '"' +
-                ' target="_blank" rel="noopener noreferrer"' +
+                ' target="_blank" rel="noopener noreferrer" tabindex="-1" data-i="' + i + '"' +
                 ' style="width:' + w.toFixed(0) + 'px;height:' + h + 'px"' +
                 ' title="' + label + '" aria-label="' + label + '">' +
                 '<span class="kr-spine__title">' + krEscapeHtml(name.title) + '</span>' +
                 (name.series ? '<span class="kr-spine__series">' + krEscapeHtml(name.series) + '</span>' : '') +
-                '</a>';
+                '</a></span>';
         }).join('');
         shelf.innerHTML = html;
         var count = document.getElementById('kr-shelf-count');
         if (count) count.textContent = sorted.length.toLocaleString();
+        var keys = initShelfKeys(shelf);
         // Start at the most recent end: that is the part of the shelf that
         // changes. The list itself does not scroll; its wrapper does.
         var scroller = shelf.parentNode;
         if (scroller) scroller.scrollLeft = scroller.scrollWidth;
+        renderShelfYears(document.getElementById('kr-shelf-years'), shelf, scroller, yearGroups(yearList), keys);
+    }
+
+    /* One Tab stop for the whole shelf (see the shelf's comment above).
+       Returns {moveTo(index, focus)} so the year buttons can hand the stop
+       to the first book of the year they jump to. */
+    function initShelfKeys(shelf) {
+        var spines = shelf.querySelectorAll('.kr-spine');
+        if (!spines.length) return { moveTo: function () {} };
+        var current = spines.length - 1;
+        spines[current].tabIndex = 0;
+        function moveTo(i, focus) {
+            i = Math.max(0, Math.min(spines.length - 1, i));
+            if (i !== current) {
+                spines[current].tabIndex = -1;
+                spines[i].tabIndex = 0;
+                current = i;
+            }
+            if (focus) spines[i].focus();
+        }
+        shelf.addEventListener('keydown', function (e) {
+            var spine = e.target.closest ? e.target.closest('.kr-spine') : null;
+            if (!spine || e.altKey || e.ctrlKey || e.metaKey) return;
+            var i = +spine.getAttribute('data-i');
+            var to = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: spines.length - 1 }[e.key];
+            if (to === undefined) return;
+            e.preventDefault();
+            moveTo(to, true);
+        });
+        // A spine clicked or tapped becomes the stop, so Tab and the arrows
+        // carry on from where the reader is.
+        shelf.addEventListener('focusin', function (e) {
+            var spine = e.target.closest ? e.target.closest('.kr-spine') : null;
+            if (spine) moveTo(+spine.getAttribute('data-i'), false);
+        });
+        return { moveTo: moveTo };
+    }
+
+    /* The year buttons over the shelf, and a last one back to the newest
+       end, where the shelf opens. A button scrolls the shelf (not the
+       page) to put its year's marker at the left edge, and makes that
+       year's first book the shelf's Tab stop; focus stays on the button,
+       so another press can follow. Plain buttons: they jump, they do not
+       filter, so nothing is pressed. */
+    function renderShelfYears(host, shelf, scroller, groups, keys) {
+        if (!host || !scroller || !groups.length) return;
+        var spines = shelf.querySelectorAll('.kr-spine');
+        function button(label, attrs) {
+            return '<button type="button" class="btn gallery-filter-btn"' + attrs + '>' + krEscapeHtml(label) + '</button>';
+        }
+        host.innerHTML = groups.map(function (g) {
+            return button(g.label, ' data-year="' + krEscapeHtml(g.year) + '" data-first="' + g.first + '"');
+        }).join('') + button('Newest', ' data-first="' + (spines.length - 1) + '"');
+        // Where the row scrolls (a phone), it starts at its newest end, as
+        // the shelf does, with the older years off to the left.
+        host.scrollLeft = host.scrollWidth;
+        host.addEventListener('click', function (e) {
+            var btn = e.target.closest ? e.target.closest('button[data-first]') : null;
+            if (!btn) return;
+            var year = btn.getAttribute('data-year');
+            var marker = year ? shelf.querySelector('.kr-shelf__year[data-year="' + year + '"]') : null;
+            var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            // Offsets are measured from the scroller's edge, which the
+            // shelf's own left margin sits inside.
+            var left = marker
+                ? marker.getBoundingClientRect().left - scroller.getBoundingClientRect().left + scroller.scrollLeft - 12
+                : scroller.scrollWidth;
+            scroller.scrollTo({ left: Math.max(0, left), behavior: still ? 'auto' : 'smooth' });
+            keys.moveTo(+btn.getAttribute('data-first'), false);
+        });
     }
 
     /* ---------------------------------------------------- reading calendar
@@ -261,15 +376,24 @@
        so a wider layout would get week buttons with no change here. A grid
        of buttons is a group; a grid of spans is an image, named with the
        year totals. (role="img" hides its children, so it can never hold
-       buttons.) */
+       buttons.)
+
+       Before books.json arrives. The rows are known without it (one per
+       year from CAL_FROM to this one), so the calendar is drawn at once
+       with every cell empty and no totals, marked aria-busy, and drawn
+       again when the data lands: the section has its final height from
+       the start, and nothing below it moves. */
     var CAL_FROM = 2021;
     var MONTH_VIEW = '(max-width: 575.98px)';
     var TARGET_MIN = 24;
     var WEEKS_PER_MONTH = 52.1775 / 12;
     var TIP_LIMIT = 8;
-    // Books a month's card lists on a phone. The card must fit on one side
-    // of the tapped cell (style.css caps it at half the screen, see
-    // .kr-cal__tip--month); eight ran to 490px and covered the cell.
+    // Books a month's card lists in full on a phone. The card must fit on
+    // one side of the tapped cell (style.css caps it at half the screen,
+    // see .kr-cal__tip--month); eight ran to 490px and covered the cell.
+    // A busier month (up to 14 books) is listed compactly instead, a line
+    // a book with its title and stars (.kr-cal__tip--compact), and only a
+    // screen too short even for that ends the list in "and N more".
     var TIP_LIMIT_MONTH = 4;
     var MONTH_NAMES = [];
     for (var mi = 0; mi < 12; mi++) {
@@ -325,14 +449,17 @@
 
     function countLabel(n) { return n + (n === 1 ? ' book' : ' books'); }
 
+    /* model.loading draws the frame without the data: empty cells, no
+       totals, and a name that says it is still coming. */
     function calendarHtml(model, mode, buttons) {
         var view = CAL_VIEWS[mode], cells = model[view.cells];
         var totals = model.years.map(function (y) { return model.byYear[y] || 0; });
+        var shown = function (i) { return model.loading ? '' : String(totals[i]); };
         var maxYear = Math.max.apply(null, totals) || 1;
         var name = 'Books finished per ' + mode + ' since ' + CAL_FROM;
         var html = '<div class="kr-cal__grid kr-cal__grid--' + mode + '"' + (buttons
             ? ' role="group" aria-label="' + name + '">'
-            : ' role="img" aria-label="' + krEscapeHtml(name + ': ' + model.years.map(function (y, i) {
+            : ' role="img" aria-label="' + krEscapeHtml(model.loading ? name + ', loading' : name + ': ' + model.years.map(function (y, i) {
                 return totals[i] + ' in ' + y;
             }).join(', ')) + '">');
         if (mode === 'month') {
@@ -361,22 +488,26 @@
                 }
             }
             html += '</span><span class="kr-cal__total"><span class="kr-cal__bar" style="width:' +
-                Math.round(100 * totals[i] / maxYear) + '%"></span><span class="kr-cal__n">' + totals[i] + '</span></span></div>';
+                Math.round(100 * totals[i] / maxYear) + '%"></span><span class="kr-cal__n">' + shown(i) + '</span></span></div>';
         });
         html += '</div>' +
             '<div class="kr-cal__legend" aria-hidden="true"><span>Fewer</span>' +
             '<span class="kr-cal__cell" data-l="0"></span><span class="kr-cal__cell" data-l="1"></span>' +
             '<span class="kr-cal__cell" data-l="2"></span><span class="kr-cal__cell" data-l="3"></span><span>More</span></div>' +
             '<details class="kr-cal__table"><summary>The same numbers as a table</summary><table><thead><tr><th scope="col">Year</th><th scope="col">Books finished</th></tr></thead><tbody>' +
-            model.years.map(function (y, i) { return '<tr><th scope="row">' + y + '</th><td>' + totals[i] + '</td></tr>'; }).join('') +
+            model.years.map(function (y, i) { return '<tr><th scope="row">' + y + '</th><td>' + shown(i) + '</td></tr>'; }).join('') +
             '</tbody></table></details>';
         return html;
     }
 
-    function renderCalendar(books) {
-        var host = document.getElementById('kr-reading-calendar');
-        if (!host) return;
-        var model = calendarModel(books, new Date());
+    /* Draws the empty calendar now (see "Before books.json arrives" above)
+       and returns, or null without a host:
+         update(books)  draw the real calendar
+         clear()        empty the host (books.json failed)
+         frame()        the empty calendar again (a retry) */
+    function initCalendar(host) {
+        if (!host) return null;
+        var model = null;
         var monthQuery = window.matchMedia ? window.matchMedia(MONTH_VIEW) : null;
         var drawn = '';   // 'week', 'week+buttons' or 'month+buttons'
         var mode = 'week';
@@ -396,19 +527,42 @@
             host.classList.toggle('kr-cal--months', mode === 'month');
         }
         function fit() {
+            if (!model) return;
             if (monthQuery && monthQuery.matches) { draw('month', true); return; }
             // Draw the weeks, then measure what the grid made of them.
             if (mode !== 'week' || !drawn) draw('week', false);
             var cell = host.querySelector('.kr-cal__weeks .kr-cal__cell');
             draw('week', !!cell && cell.getBoundingClientRect().width >= TARGET_MIN);
         }
-        fit();
+        function redraw(next, busy) {
+            model = next;
+            if (busy) host.setAttribute('aria-busy', 'true'); else host.removeAttribute('aria-busy');
+            drawn = '';
+            fit();
+        }
+        function frame() {
+            var empty = calendarModel([], new Date());
+            empty.loading = true;
+            redraw(empty, true);
+        }
+        frame();
         var queued = false;
         window.addEventListener('resize', function () {
             if (queued) return;
             queued = true;
             requestAnimationFrame(function () { queued = false; fit(); });
         });
+        return {
+            update: function (books) { redraw(calendarModel(books, new Date()), false); },
+            clear: function () {
+                model = null;
+                drawn = '';
+                tip.hide(true);
+                host.innerHTML = '';
+                host.removeAttribute('aria-busy');
+            },
+            frame: frame
+        };
     }
 
     /* The card that opens over a cell: the week or month, then each book
@@ -433,20 +587,33 @@
             for (var i = 1; i <= 5; i++) out += '<span class="' + (i <= n ? 'is-on' : '') + '">' + (i <= n ? '★' : '☆') + '</span>';
             return '<span class="kr-cal__tip-stars" aria-hidden="true">' + out + '</span>';
         }
-        function show(cell) {
-            var info = describe(cell), list = info.list;
-            if (!list.length) return;
-            var shown = list.slice(0, info.month ? TIP_LIMIT_MONTH : TIP_LIMIT);
-            tip.classList.toggle('kr-cal__tip--month', !!info.month);
+        function fill(info, compact, limit) {
+            var list = info.list, shown = list.slice(0, limit);
             tip.innerHTML = '<div class="kr-cal__tip-head">' + krEscapeHtml(info.heading) +
                 '<span>' + countLabel(list.length) + '</span></div>' +
                 '<ul class="kr-cal__tip-list">' + shown.map(function (b) {
                     var name = krBookTitle(b.t);
                     return '<li><span class="kr-cal__tip-title">' + krEscapeHtml(name.title) + '</span>' +
-                        (name.series ? '<span class="kr-cal__tip-series">' + krEscapeHtml(name.series) + '</span>' : '') +
-                        (b.a ? '<span class="kr-cal__tip-author">' + krEscapeHtml(b.a) + '</span>' : '') + stars(b.r) + '</li>';
+                        (!compact && name.series ? '<span class="kr-cal__tip-series">' + krEscapeHtml(name.series) + '</span>' : '') +
+                        (!compact && b.a ? '<span class="kr-cal__tip-author">' + krEscapeHtml(b.a) + '</span>' : '') + stars(b.r) + '</li>';
                 }).join('') + '</ul>' +
                 (list.length > shown.length ? '<div class="kr-cal__tip-more">and ' + (list.length - shown.length) + ' more</div>' : '');
+        }
+        function show(cell) {
+            var info = describe(cell), list = info.list;
+            if (!list.length) return;
+            // A month with more books than its card lists in full goes
+            // compact and lists them all (see TIP_LIMIT_MONTH).
+            var compact = !!info.month && list.length > TIP_LIMIT_MONTH;
+            var limit = !info.month ? TIP_LIMIT : compact ? list.length : TIP_LIMIT_MONTH;
+            tip.classList.toggle('kr-cal__tip--month', !!info.month);
+            tip.classList.toggle('kr-cal__tip--compact', compact);
+            fill(info, compact, limit);
+            // Only a screen too short for the whole list shortens it, a
+            // book at a time, until the card fits under its cap.
+            while (compact && limit > TIP_LIMIT_MONTH && tip.scrollHeight > tip.clientHeight + 1) {
+                fill(info, compact, --limit);
+            }
             clearTimeout(hideTimer);
             if (current && current !== cell) current.style.anchorName = '';
             current = cell;
@@ -504,20 +671,24 @@
         return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
     }
 
+    /* The list ends on the date of the weekly refresh that wrote it, so a
+       stalled refresh shows its age instead of passing for this week. */
     function renderCurrentlyReading() {
         var grid = document.getElementById('currently-reading-grid');
         if (!grid) return;
         krFetchJson('data/now.json').then(function (now) {
             var reading = now && Array.isArray(now.reading) ? now.reading : [];
+            var asOf = now && now.updated && typeof formatPostDate === 'function'
+                ? '<p class="kr-reading__meta kr-reading__asof">Updated ' + krEscapeHtml(formatPostDate(now.updated)) + '</p>' : '';
             if (!reading.length) {
-                grid.innerHTML = '<p class="kr-reading__meta">Between books.</p>';
+                grid.innerHTML = '<p class="kr-reading__meta">Between books.</p>' + asOf;
                 return;
             }
             grid.innerHTML = reading.map(function (r) {
                 var b = { t: r.title, a: r.author };
                 return readingBook(r.link, 'nofollow noopener noreferrer', b,
                     r.img ? coverImg(r.img, b) : typeCoverHtml(b), krEscapeHtml(r.author || ''));
-            }).join('');
+            }).join('') + asOf;
         }).catch(function () {
             grid.innerHTML = '<p class="kr-reading__meta">Could not load this just now.</p>';
         });
@@ -608,19 +779,92 @@
         }).join('');
     }
 
+    /* ---------------------------------------------------------- failure
+       When books.json does not arrive, each section it feeds says so in
+       place of an empty card or a dash, with a button that asks again
+       (krFetchJson forgets a failed request, so the retry is a real one).
+       The note goes after the section's own element, which may be a list
+       or a <dl> that cannot hold a paragraph.
+       The notes stay until the retry is answered, and then the reader's
+       place is kept: a button that had focus would otherwise go from
+       under it and leave focus on the page itself. Focus goes to the
+       heading of the section whose button was pressed, or to its new
+       button if the retry failed too. */
+    var FAILED = 'kr-reading__failed';
+    var FED = ['kr-last-finished', 'kr-reading-calendar', 'kr-shelf', 'kr-figures'];
+
+    /* retry(id) asks again; `from` is the id of the section whose button
+       was pressed, if one was. */
+    function showFailure(retry, from) {
+        FED.forEach(function (id) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            var note = document.createElement('p');
+            note.className = FAILED;
+            note.innerHTML = '<span>Could not load the books just now.</span> ' +
+                '<button type="button" class="kr-btn kr-btn--ghost kr-btn--sm">Try again</button>';
+            var button = note.querySelector('button');
+            button.addEventListener('click', function () { retry(id); });
+            el.parentNode.insertBefore(note, el.nextSibling);
+            if (id === from) button.focus();
+        });
+        var sub = document.getElementById('kr-year-sub');
+        if (sub) sub.textContent = 'Could not load the books just now.';
+    }
+
+    function clearFailure() {
+        Array.prototype.forEach.call(document.querySelectorAll('.' + FAILED), function (n) { n.remove(); });
+        var sub = document.getElementById('kr-year-sub');
+        if (sub) sub.textContent = '';
+    }
+
+    /* The heading a section's content sits under: its column's h3 in
+       Reading Now, else its band's h2. Focusable from script only, and
+       scrolled to if it is off screen, so the focus is seen. */
+    function focusHeading(id) {
+        var el = document.getElementById(id);
+        var area = el && el.closest ? el.closest('.kr-reading__col, .about-us-area') : null;
+        var heading = area ? area.querySelector('h2, h3') : null;
+        if (!heading) return;
+        if (!heading.hasAttribute('tabindex')) heading.setAttribute('tabindex', '-1');
+        heading.focus();
+    }
+
     function init() {
         renderCurrentlyReading();
         if (!document.getElementById('kr-shelf') && !document.getElementById('kr-reading-calendar') &&
             !document.getElementById('kr-figures') && !document.getElementById('kr-last-finished')) return;
-        // Shared with literature.js's reviews, so the page asks for it once.
-        krFetchJson('data/books.json').then(function (books) {
-            if (!Array.isArray(books)) return;
-            var read = books.filter(function (b) { return b && b.t; });
-            render(read);
-            renderCalendar(read);
-            renderNow(read);
-            renderFigures(read);
-        }).catch(function () {});
+        // The calendar's frame goes up before the data (see initCalendar).
+        var calendar = initCalendar(document.getElementById('kr-reading-calendar'));
+        var asking = false;
+        // `from`: the section whose Try again was pressed (see "failure").
+        function load(from) {
+            asking = true;
+            // Shared with literature.js's reviews, so the page asks for it once.
+            krFetchJson('data/books.json').then(function (books) {
+                if (!Array.isArray(books)) throw new Error('data/books.json is not a list');
+                var read = books.filter(function (b) { return b && b.t; });
+                clearFailure();
+                render(read);
+                if (calendar) calendar.update(read);
+                renderNow(read);
+                renderFigures(read);
+                asking = false;
+                if (from) focusHeading(from);
+            }).catch(function () {
+                // The empty calendar goes, rather than stand there as a
+                // year of nothing read; a retry puts the frame back.
+                if (calendar) calendar.clear();
+                clearFailure();
+                asking = false;
+                showFailure(function (id) {
+                    if (asking) return;
+                    if (calendar) calendar.frame();
+                    load(id);
+                }, from);
+            });
+        }
+        load();
     }
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

@@ -65,8 +65,10 @@
   <!-- Favourite quotations, rotating through data/quotes.json (js/literature.js),
        in the homepage quotation's component. The controls stay hidden until
        there is something to step through; the button stops the rotation
-       (WCAG 2.2.2) and --hold stops it while pointer or focus is inside. -->
-  <section class="kr-home-quote kr-home-quote--hold" id="quotes" aria-label="Quotations from my reading">
+       (WCAG 2.2.2) and --hold stops it while pointer or focus is inside.
+       --reading holds the band's height before the quotations arrive
+       (style.css §14), so the page below it does not jump. -->
+  <section class="kr-home-quote kr-home-quote--hold kr-home-quote--reading" id="quotes" aria-label="Quotations from my reading">
     <div class="kr-home-quote__inner">
       <div class="kr-home-quote__body" id="quote-body">
         <p class="kr-home-quote__text" id="quote-text"></p>
@@ -132,18 +134,20 @@
     </div>
   </div>
 
-  <!-- The shelf: every book as a spine, in reading order (js/bookshelf.js) -->
+  <!-- The shelf: every book as a spine, in reading order, and a row of
+       buttons that jump along it by year (js/bookshelf.js). The spines are
+       one Tab stop; the arrow keys, Home and End move between them. -->
   <div class="about-us-area kr-shelf-area clearfix" id="shelf">
     <div class="container">
       <div class="section-heading section-heading--snug text-center">
         <span class="section-eyebrow">In reading order</span>
         <h2>The Shelf</h2>
-        <p class="section-heading__lede"><span id="kr-shelf-count">&mdash;</span> spines, oldest on the left. Width follows the title, colour follows my rating. Scroll along it; hover a spine for the book. Looking for one in particular? <a href="/books.html">Every cover, searchable</a>.</p>
+        <p class="section-heading__lede"><span id="kr-shelf-count">&mdash;</span> spines, oldest on the left. Width follows the title, colour follows my rating. Scroll along it or jump to a year; <span class="kr-for-hover">hover a spine for the book, or Tab to the shelf and step along it with the arrow keys.</span><span class="kr-for-touch">tap a spine to open it on Goodreads.</span> Looking for one in particular? <a href="/books.html">Every cover, searchable</a>.</p>
       </div>
+      <div id="kr-shelf-years" class="gallery-filters kr-shelf-years" role="group" aria-label="Jump along the shelf to a year"></div>
     </div>
     <div class="kr-shelf-scroll">
       <div id="kr-shelf" class="kr-shelf" role="list" aria-label="Every book I have read, as spines on a shelf"></div>
-      <div class="kr-shelf__board" aria-hidden="true"></div>
     </div>
   </div>
 

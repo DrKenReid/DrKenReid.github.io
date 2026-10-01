@@ -80,7 +80,7 @@ In registry order. "Fixer" is what `--fix` runs when the check fails.
 | `photo-dims` | `generate_photo_dims.py --check` | `--stamp-img` | A new photograph has no recorded size (the gallery lays it out at 3:2 and the row jumps), or a post image has no `width` and `height` and shifts the page as it loads. Fast. |
 | `renditions` | `generate_photo_renditions.py --check` | the script (fetches originals from the release) | A photograph has no `@2x` thumb, so its gallery tile is soft on a high-density screen, or a photo a page shows large has no hero (or one smaller than its original allows), so its banner, share image or in-post copy is a stretched thumbnail. Offline. Fast. |
 | `feed` | `generate_feed.py --check` | the script | `feed.xml` carries the full body of the twenty newest posts, so any post edit makes it stale. Fast. |
-| `quote-wall` | `generate_quote_wall.py --check` | the script | A quotation added to `data/quotes-all.json` is missing from the static `quotes.html`. Fast. |
+| `quote-wall` | `generate_quote_wall.py --check` | the script | A quotation added to `data/quotes-all.json` is missing from the static `quotes.html`, or the count in its lede is stale. Fast. |
 | `publications` | `generate_publications.py --check` | the script | The publication list on `data_science.html` and its JSON-LD disagree with `data/publications.json`. Fast. |
 | `listing` | `generate_listing_fallback.py --check` | the script | A reader without JavaScript cannot find a new post: the `<noscript>` lists on `blog.html`, `series.html` and the series pages are stale. Fast. |
 | `series-band` | `generate_series_band.py --check` | the script | The "Read in order" band under the blog grid names the wrong three series, or a stale part count, reading time or summary: a part was published, or a series page's meta description changed, without rebuilding it. Fast. |
@@ -98,7 +98,7 @@ In registry order. "Fixer" is what `--fix` runs when the check fails.
 | `audit` | `audit_site.py --strict` | none | Broken links, missing metadata, invalid JSON-LD, accessibility basics, feed and sitemap coverage, post component rules, retired markup (`#preloader`, an inline analytics snippet), a page missing from `KR_PAGES`, a series without a page (or a series page without its Series crumb, feed link or "All series" link), a Markdown file Pages would publish, and the house-style prose rules (banned words and curly quotes in posts and pages, em dashes in posts). `--strict` fails on warnings too: the baseline is zero of both. Fast. |
 | `smoke` | `smoke_test.py` | browser | See [The browser suites](#the-browser-suites). |
 | `template` | `check_post_template.py` | browser | Every post against the one post template. |
-| `perf` | `perf_budget.py` | browser | Layout shift, weight and requests per template, the offline scenario, the manifest. |
+| `perf` | `perf_budget.py` | browser | Layout shift, weight and requests per template, layout shift on a slow phone for the pages drawn from data, the offline scenario, the manifest. |
 | `colophon` | `generate_colophon.py --check` | the script | `colophon.html` publishes measurements of the repository; any change to what it measures makes a figure false. Always last. Fast. |
 
 **The colophon moves with almost everything.** It counts and weighs the
@@ -136,10 +136,13 @@ where a suite asks it to.
 - **`perf_budget.py`** measures six templates at a phone and a desktop
   size against `.github/perf-budgets.json`: median layout shift, first-party
   bytes and requests at load, nothing fetched twice, no font twice under
-  two names, no blocking script in the head. Then the offline scenario
-  (the service worker must still answer after the gallery overfills its
-  image cache) and the web app manifest. `--report` prints a table,
-  `--only gallery,blog` runs some templates.
+  two names, no blocking script in the head. Then layout shift on a slow
+  phone (throttled network and CPU) for the reading pages, whose sections
+  wait on JSON that lands long after the first paint there; then the
+  offline scenario (the service worker must still answer after the
+  gallery overfills its image cache) and the web app manifest.
+  `--report` prints a table, `--only gallery,blog` runs some templates,
+  `--only slow-phone` the slow-phone pass alone.
 
 For one interactive demo while you build it,
 `python .github/scripts/viz_verify.py blog/tabu-search-live.html "#tabu-demo"`
@@ -163,6 +166,7 @@ real files in a `vm` (`tests/js/runtime.js` is the shared loader).
 | `test_decisions.py` | decisions that look like mistakes (`overflow: clip` on the opener, gradient text inside `@supports`, derived tokens restated in the dark block) |
 | `test_generate_post_head.py` | the post head template, one `--fix` pass from an old post, idempotence |
 | `test_generate_publications.py` | the publication list's order, markup and refusals, the All button's count, and every stated size of the site's own PDFs |
+| `test_generate_quote_wall.py` | the baked quote wall: cards in order, and the lede's count following the collection |
 | `test_generate_read_times.py` | which words count: every word for `words`, and for `readMinutes` all but the code in a folded listing |
 | `test_hero_caption.py` | the homepage's evolved-headline caption states the script's triangle count and has a reduced-motion wording |
 | `test_generate_related_posts.py` | the baked card stays `createBlogCardElement`'s card |
@@ -177,7 +181,7 @@ real files in a `vm` (`tests/js/runtime.js` is the shared loader).
 | `test_sitelib.py` | the shared helpers, on the cases their old copies disagreed on |
 | `test_structured_data.py` | the homepage and Data Science describe the same person |
 | `test_external_links.py` | what the weekly link report counts as gone, a redirect that never arrives or stops at a sign-in page included |
-| `tests/js/bookshelf.test.js` | ISO weeks and reading sessions on the calendar |
+| `tests/js/bookshelf.test.js` | ISO weeks and reading sessions on the calendar; how the shelf's year buttons group the years |
 | `tests/js/kr-viz.test.js` | the demo engine's run button (Run again once finished), Restart playing on, Step, starting at half the main canvas, and the short-screen height cap |
 | `tests/js/lightbox.test.js` | the photographs' lightbox caption markup, and which thumbnail stands in while a full frame loads |
 | `tests/js/post-runtime.test.js` | the end band's routes and neighbours (and the pager saying when it leaves the series), related cards' series chips, lead-ins, sidenote references |

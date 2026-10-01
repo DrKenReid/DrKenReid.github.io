@@ -124,13 +124,15 @@
     </div>
   </div>
 
-  <!-- Top Albums (data/topalbums.json, refreshed weekly by the lastfm-refresh workflow) -->
+  <!-- Top Albums (data/topalbums.json, refreshed weekly by the lastfm-refresh
+       workflow; js/albums.js). On a touch screen a tap pulls a sleeve out and
+       a second tap opens it; on a phone the crate scrolls sideways. -->
   <div class="about-us-area section-padding-80-0 clearfix bg-tint pt-5">
     <div class="container">
       <div class="section-heading section-heading--snug text-center">
         <span class="section-eyebrow">Heavy rotation</span>
         <h2>Top Albums</h2>
-        <p class="section-heading__lede">What I've had on repeat over the last three months, straight from Last.fm: a crate of <span id="kr-crate-count"></span> sleeves, most played at the front. <span class="kr-for-hover">Hover one to pull it out.</span><span class="kr-for-touch">Tap one to pull it out.</span></p>
+        <p class="section-heading__lede">What I've had on repeat over the last three months, straight from Last.fm<span id="kr-crate-asof"></span>: a crate of <span id="kr-crate-count"></span> sleeves, most played at the front. <span class="kr-for-hover">Hover one to pull it out.</span><span class="kr-for-touch">Tap one to pull it out, and tap it again to open it on Last.fm.</span></p>
       </div>
       <div id="kr-crate" class="kr-crate" role="list" aria-label="Albums on heavy rotation, most played at the front"></div>
     </div>

@@ -30,6 +30,19 @@ RUNS times each from a cold cache, and must hold to:
   no preloader   No #preloader. It hid every page until its scripts ran,
                  which cost a second of blank screen for nothing.
 
+Then the pages that draw from data files are loaded again on a slow phone:
+
+  slow phone     literature.html, books.html and quotes.html (SLOW_PAGES)
+                 at the phone size on Lighthouse's mobile profile (150ms
+                 round trips, 1.6 Mbps down, a CPU four times slower),
+                 where the first paint comes seconds before the scripts
+                 and the JSON they draw. CLS over the load must stay under
+                 the same budget. At full speed the data lands before the
+                 first paint, so a section with nothing holding its place
+                 cannot shift and the pass above never sees it: these
+                 three measured 0.14 to 0.28 on a slow phone while passing
+                 there. Runs with the templates (or --only slow-phone).
+
 Then two checks of the site as an installed, offline-capable thing:
 
   offline        With the service worker in control, read two posts and
@@ -67,6 +80,7 @@ same way.
     python .github/scripts/perf_budget.py            # check every budget
     python .github/scripts/perf_budget.py --report   # and print a Markdown table
     python .github/scripts/perf_budget.py --only gallery,blog
+    python .github/scripts/perf_budget.py --only slow-phone
 
 Exit status 0 when everything holds, 1 otherwise.
 """
@@ -100,6 +114,17 @@ VIEWPORTS = {
     "phone": {"viewport": {"width": 412, "height": 823}, "is_mobile": True, "has_touch": True},
     "desktop": {"viewport": {"width": 1440, "height": 900}},
 }
+
+# The slow-phone pass (see the docstring): the pages, the network and CPU
+# as Chrome's DevTools protocol takes them (throughput in bytes a second),
+# and how many loads of each the median is taken over. Two, not RUNS: a
+# throttled load takes several seconds, and its shifts repeat closely.
+SLOW_PAGES = ("literature.html", "books.html", "quotes.html")
+SLOW_NETWORK = {"offline": False, "latency": 150,
+                "downloadThroughput": 1.6e6 / 8, "uploadThroughput": 750e3 / 8}
+SLOW_CPU = 4
+SLOW_RUNS = 2
+SLOW_ONLY = "slow-phone"   # its name for --only
 
 # Playwright's resource types, grouped the way the budgets are written.
 # Data files (fetch), the manifest and the document itself count towards
@@ -202,13 +227,19 @@ class Visit:
     Construction only starts the navigation; settle() waits for the load.
     A template's runs are started together and settled in turn, so the
     later runs load while the first is being scrolled and measured.
+    `slow` loads it on the slow phone's network and CPU (SLOW_NETWORK).
     """
 
-    def __init__(self, browser, base, path, size):
+    def __init__(self, browser, base, path, size, slow=False):
         self.base = base
         self.context = site_context(browser, base, None, None, **VIEWPORTS[size])
         self.context.add_init_script(CLS_OBSERVER)
         self.page = self.context.new_page()
+        if slow:
+            cdp = self.context.new_cdp_session(self.page)
+            cdp.send("Network.enable")
+            cdp.send("Network.emulateNetworkConditions", SLOW_NETWORK)
+            cdp.send("Emulation.setCPUThrottlingRate", {"rate": SLOW_CPU})
         self.sink = []
         watch_console(self.page, self.sink, base)
         self.responses = []
@@ -325,6 +356,33 @@ def check_template(browser, base, name, spec, budgets, rep, table):
                   median < budgets["cls"], "; ".join(worst["worst"]))
         if first is not None:
             table.append((name, size, median, first, budget))
+
+
+def check_slow_phone(browser, base, budgets, rep):
+    """CLS on the slow phone (see the docstring), for each of SLOW_PAGES:
+    the load only, since the pass at full speed has already scrolled."""
+    for path in SLOW_PAGES:
+        scope = f"{path} slow phone"
+        shifts = []
+        for _ in range(SLOW_RUNS):
+            visit = None
+            try:
+                visit = Visit(browser, base, path, "phone", slow=True)
+                visit.settle()
+                visit.page.wait_for_timeout(SETTLE_MS)
+                shifts.append(visit.layout_shift())
+            except Exception as e:  # noqa: BLE001 - reported, the other pages still run
+                rep.check(scope, "loads", False, e)
+            finally:
+                if visit:
+                    visit.close()
+        if not shifts or any(s is None for s in shifts):
+            rep.check(scope, "layout shift measured", False, "no layout-shift observer")
+            continue
+        median = statistics.median(s["cls"] for s in shifts)
+        worst = max(shifts, key=lambda s: s["cls"])
+        rep.check(scope, f"CLS {median:.3f} under {budgets['cls']} (median of {len(shifts)})",
+                  median < budgets["cls"], "; ".join(worst["worst"]))
 
 
 def check_first_visit(visit, scope, weight, budget, rep):
@@ -494,19 +552,23 @@ def main(argv=None):
     parser.add_argument("--report", action="store_true",
                         help="print the measurements as a Markdown table as well")
     parser.add_argument("--only", metavar="NAME[,NAME]",
-                        help="templates to measure (by their name in perf-budgets.json);"
+                        help="templates to measure (by their name in perf-budgets.json),"
+                             f" and {SLOW_ONLY} for the slow-phone pass;"
                              " skips the offline and manifest checks")
     args = parser.parse_args(argv)
 
     budgets = load_budgets()
     templates = budgets["templates"]
     chosen = templates
+    slow = True
     if args.only:
         names = [n.strip() for n in args.only.split(",") if n.strip()]
-        unknown = [n for n in names if n not in templates]
+        unknown = [n for n in names if n not in templates and n != SLOW_ONLY]
         if unknown:
-            parser.error(f"unknown template(s): {', '.join(unknown)}; choose from {', '.join(templates)}")
-        chosen = {n: templates[n] for n in names}
+            parser.error(f"unknown template(s): {', '.join(unknown)};"
+                         f" choose from {', '.join(templates)}, {SLOW_ONLY}")
+        chosen = {n: templates[n] for n in names if n in templates}
+        slow = SLOW_ONLY in names
 
     rep = Reporter()
     table = []
@@ -515,6 +577,8 @@ def main(argv=None):
         browser = pw.chromium.launch()
         for name, spec in chosen.items():
             check_template(browser, base, name, spec, budgets, rep, table)
+        if slow:
+            check_slow_phone(browser, base, budgets, rep)
         if not args.only:
             check_offline(browser, base, rep)
             check_manifest(browser, base, templates, rep)

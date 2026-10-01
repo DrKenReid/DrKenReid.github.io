@@ -65,8 +65,11 @@
     </div>
   </section>
 
-  <!-- The wall: every rated book with a cover, searchable (js/bookwall.js).
-       The banner is the page's heading, so the section opens on its lede. -->
+  <!-- The wall: every rated book, searchable (js/bookwall.js). The banner
+       is the page's heading, so the section opens on its lede. The
+       skeleton tiles hold the grid's place from the first paint, and the
+       filter row keeps its height while empty (style.css, "Cover wall"),
+       so nothing moves when books.json arrives. -->
   <div class="about-us-area section-padding-80-0 clearfix pt-5" id="bookshelf">
     <div class="container">
       <p class="kr-reading-lede"><span id="book-wall-total">Rated books</span> from my Goodreads history, filterable by my rating. Click a cover for the review page. The <a href="/literature.html">reading page</a> has the calendar, the shelf and a few reviews.</p>
@@ -75,8 +78,9 @@
       </div>
       <div id="book-wall-filters" class="gallery-filters text-center mb-4"></div>
       <p id="book-wall-count" class="kr-list-counter" role="status" aria-live="polite" aria-atomic="true"></p>
-      <div id="book-wall-grid" class="book-wall"></div>
-      <p class="text-center kr-muted small mt-4">Books Goodreads has no ISBN for (most of the Kindle series) are on the shelf and the calendar but have no cover to hang here.</p>
+      <div id="book-wall-grid" class="book-wall"><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span></div>
+      <noscript><p class="text-center kr-muted small">The wall is drawn by a script, so it needs JavaScript. My whole reading history is also on <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" rel="noopener noreferrer">Goodreads</a>.</p></noscript>
+      <p class="text-center kr-muted small mt-4">A book Goodreads has no ISBN for (most of the Kindle series) has no cover to look up, so it hangs here set in type.</p>
     </div>
   </div>
 

@@ -1,5 +1,6 @@
 /**
- * The reading calendar's arithmetic (window.krBookshelf in js/bookshelf.js),
+ * The reading calendar's arithmetic and the shelf's year buttons
+ * (window.krBookshelf in js/bookshelf.js),
  * run with Node's own test runner:  node --test "tests/js/*.test.js"
  *
  * The calendar puts each book in an ISO 8601 week, and ISO years do not
@@ -116,4 +117,32 @@ test('parseDate reads slashes or dashes, and nothing else', () => {
     assert.equal(shelf.parseDate('2026-01-02').getMonth(), 0);
     assert.equal(shelf.parseDate(''), null);
     assert.equal(shelf.parseDate('02/01/2026'), null);
+});
+
+/* The shelf's year buttons. 28 years of reading, most of them a handful of
+   books, made a row of 28 buttons; a span of years now shares a button
+   until it holds YEAR_GROUP_MIN (30) books, and the newest year always
+   has its own, since that is where the shelf opens. */
+function years(counts) {
+    let first = 0;
+    return Object.entries(counts).map(([year, count]) => {
+        const y = { year, first, count };
+        first += count;
+        return y;
+    });
+}
+
+test('yearGroups: thin years share a button, busy ones have their own', () => {
+    const groups = shelf.yearGroups(years({ 2009: 10, 2010: 12, 2011: 9, 2012: 40, 2013: 31, 2014: 5, 2015: 3 }));
+    assert.deepEqual([...groups.map((g) => g.label)], ['2009–2011', '2012', '2013', '2014', '2015']);
+    // Each button goes to its span's first year and that year's first book.
+    assert.deepEqual({ ...groups[0] }, { label: '2009–2011', year: '2009', first: 0 });
+    assert.deepEqual({ ...groups[1] }, { label: '2012', year: '2012', first: 31 });
+});
+
+test('yearGroups: the newest year stands alone, and one year is one button', () => {
+    const groups = shelf.yearGroups(years({ 2024: 4, 2025: 6, 2026: 2 }));
+    assert.deepEqual([...groups.map((g) => g.label)], ['2024–2025', '2026']);
+    assert.deepEqual([...shelf.yearGroups(years({ 2026: 1 })).map((g) => g.label)], ['2026']);
+    assert.deepEqual([...shelf.yearGroups([])], []);
 });
