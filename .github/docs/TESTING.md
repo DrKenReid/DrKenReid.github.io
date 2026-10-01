@@ -177,6 +177,7 @@ real files in a `vm` (`tests/js/runtime.js` is the shared loader).
 | `test_structured_data.py` | the homepage and Data Science describe the same person |
 | `test_external_links.py` | what the weekly link report counts as gone, a redirect that never arrives or stops at a sign-in page included |
 | `tests/js/bookshelf.test.js` | ISO weeks and reading sessions on the calendar |
+| `tests/js/kr-viz.test.js` | the demo engine's run button (Run again once finished), Restart playing on, Step, starting at half the main canvas, and the short-screen height cap |
 | `tests/js/post-runtime.test.js` | the end band's routes and neighbours, lead-ins, sidenote references |
 | `tests/js/site-chrome.test.js` | `KR_PAGES`, the pager's page list, topic rows, the prerender rules |
 

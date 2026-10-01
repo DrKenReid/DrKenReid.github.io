@@ -182,11 +182,12 @@
 
  <div class="kr-viz" id="aco-demo">
    <canvas id="acoCanvas" height="360" role="img" aria-label="Animated ant colony optimisation demo: ants forage across a network of nodes between a nest and a food source, laying pheromone that glows on the shortest route as it emerges" class="kr-interactive kr-drag"></canvas>
+   <p class="kr-note"><strong>Drag anywhere on the map</strong> to move the food to the nearest node and watch the colony re-route.</p>
    <div class="kr-toolbar" data-kr-toolbar></div>
    <div class="kr-sliders" data-kr-sliders></div>
    <div class="kr-stats" data-kr-stats></div>
    <canvas id="acoChart" class="kr-chart" height="120" role="img" aria-label="Live charts: average and best route length as a multiple of the optimum, and pheromone focus, both over time"></canvas>
-   <p class="kr-note"><strong>Drag anywhere on the map</strong> to move the food to the nearest node and watch the colony re-route. Pheromone (the amber glow) is the shared memory; the green line is the route the colony currently agrees on. Route numbers are multiples of the shortest possible path, so 1.00&times; is perfect; pheromone focus is how much of the smell sits on a few trails, and it climbs as the colony commits. <em>Double bridge</em> is the classic lab experiment (two routes, one shorter); <em>City grid</em> offers many equally good routes, so watch the colony break the tie and commit to one anyway; in the <em>Maze</em>, watch evaporation erase the trails that lead into dead ends; and in the <em>Spider web</em>, the colony discovers that the fast way around is through the middle.</p>
+   <p class="kr-note">Pheromone (the amber glow) is the shared memory; the green line is the route the colony currently agrees on. Route numbers are multiples of the shortest possible path, so 1.00&times; is perfect; pheromone focus is how much of the smell sits on a few trails, and it climbs as the colony commits. <em>Double bridge</em> is the classic lab experiment (two routes, one shorter); <em>City grid</em> offers many equally good routes, so watch the colony break the tie and commit to one anyway; in the <em>Maze</em>, watch evaporation erase the trails that lead into dead ends; and in the <em>Spider web</em>, the colony discovers that the fast way around is through the middle.</p>
  </div>
 
  <h2>A colony that can't forget</h2>

@@ -55,10 +55,22 @@ draws its first frame so it is not a blank box, and says "Paused for
 reduced motion." The Play button is the way in. Before the engine, not
 one widget did this, and thirteen autostarted.
 
-**Pausing offscreen.** An `IntersectionObserver` stops the loop when the
-demo scrolls out of view and resumes it on return, unless the reader
-paused it. A demo near the top of a long post no longer runs for the
-whole read.
+**Starting on screen, pausing offscreen.** A demo starts once half of its
+main canvas (the first one in `canvases`) is on screen, not on the first
+visible pixel of its frame: on a phone a frame is 1,200 to 1,600px tall,
+and a strip of it at the foot of the screen used to start a short demo
+that had finished before the reader got there. It pauses once no part of
+the frame is on screen, so it keeps running while the reader is down
+among its sliders and chart. Coming back, it resumes the same way, unless
+the reader paused it. A demo near the top of a long post no longer runs
+for the whole read.
+
+**Finishing, and running again.** Once `ctx.finish` has stopped a demo,
+the run button reads Run again and starts a fresh run in one press, and
+Restart (or anything that restarts, a select or a post's own Scramble)
+plays the new run straight away unless the reader had paused. Before,
+a finished demo showed a Play button that did nothing, and Restart came
+back paused.
 
 **Announcing the status, and only that.** The visible status line is not
 a live region. Posts that wrote a counter every step were changing it
@@ -96,10 +108,16 @@ stacks under the first below 480px instead of squeezing beside it.
 
 **Canvas sizing.** Height is a function of the measured width, never a
 constant, so a phone gets a taller canvas instead of a squashed strip.
-The backing store follows `devicePixelRatio` up to `MAX_DPR` (2), is
-reallocated only when the box or the density changes (a phone's address
-bar firing `resize` no longer blanks a paused demo), and the palette is
-read again when the theme changes.
+On a screen wider than it is tall (a phone on its side, a laptop) every
+canvas but a chart is held to `SHORT_SHARE` (0.65) of the screen under
+the fixed header, and no less than `SHORT_MIN` (160px), so the canvas and
+its buttons fit on screen together; a drawing that must stay square sizes
+itself by `Math.min(c.w, c.h)`, not by the width. An upright phone is not
+capped: its narrow canvases stack their panes and need the height they
+ask for. The backing store follows `devicePixelRatio` up to `MAX_DPR`
+(2), is reallocated only when the box or the density changes (a phone's
+address bar firing `resize` no longer blanks a paused demo), and the
+palette is read again when the theme changes.
 
 ### How the demos moved onto it
 
@@ -119,6 +137,7 @@ their markup differs from the rest.
 <div class="kr-viz" id="hello-demo">
   <canvas id="helloMain" class="kr-interactive" height="300" role="img"
           aria-label="What is drawn, and what clicking it does"></canvas>
+  <p class="kr-note">What tapping the canvas does.</p>
   <div class="kr-toolbar" data-kr-toolbar></div>
   <div class="kr-sliders" data-kr-sliders></div>
   <div class="kr-stats" data-kr-stats></div>
@@ -144,6 +163,17 @@ their markup differs from the rest.
   reader gets while the demo runs, so it earns its length.
 - `.kr-interactive` on a canvas that takes clicks or taps: the crosshair
   cursor and keyboard operation. Not on the chart.
+- The toolbar comes straight after the main canvas (and its hint), before
+  any panel of the post's own, so Pause is on screen with the canvas even
+  on a phone turned on its side. Hyper-heuristics once put its probability
+  bars and chart in between, and at 844 x 390 its buttons ended 533px
+  below the top of the canvas, with 320px of screen under the header.
+- What tapping or dragging does goes in a short `.kr-note` straight after
+  that canvas, before the toolbar. A touch screen shows no crosshair, and
+  the caption at the foot sits below the controls, tiles and chart, where
+  a phone reader who has not been told the map responds never looks.
+- `.kr-note` is the frame's small print (UI face, muted ink, 0.78em),
+  whatever the post's paragraph rules say.
 - `.kr-drag` only on a canvas dragged in two dimensions. It sets
   `touch-action: none`, which on a phone, where these demos are full width
   and nearly square, would trap a reader trying to scroll past a
@@ -181,7 +211,7 @@ the target is not on the page.
 |---|---|---|
 | `seed` | 1 | seed for `ctx.rng`; the same seed gives the same run |
 | `canvases` | | `{name: {el, height, mobile}}`: `el` a selector (looked up inside the mount first) or an element; `height` a number or a function of the measured width; `mobile: {height}` replaces it below 480px |
-| `buttons` | | `'run'` (Pause/Play), `'restart'`, or `{id, label, onClick(handle)}`; an `onClick` replaces the default behaviour |
+| `buttons` | | `'run'` (Pause, Play, or Run again once finished), `'step'` (one step, then paused; from the start again once finished), `'restart'`, or `{id, label, onClick(handle)}`; an `onClick` replaces the default behaviour. Give Step to a demo whose text asks the reader to look at a particular iteration |
 | `controls` | | sliders `{id, label, min, max, step, value, fmt, unit, restart}`; `'speed'` (or `{id: 'speed', min, max, value}`) for steps per second; `{id, label, type: 'check', value, restart}`; `{id, label, type: 'select', options, value, restart}`. A slider or checkbox redraws on change and restarts only with `restart: true`; a select restarts unless `restart: false` |
 | `stats` | | `{id, label, tone, fmt}`: a tile; `tone` (`'s1'`...) adds a swatch |
 | `charts` | | `[{canvas, panes: [...]}]`, see below |
@@ -229,12 +259,12 @@ The object `mount` returns is also on the element as `el.krViz`:
 
 | Method | Does |
 |---|---|
-| `run()` | start or resume |
+| `run()` | start or resume (and forget that the reader paused it; a finished run stays put until a restart) |
 | `pause()` | pause (and remember that the reader paused it) |
-| `restart()` | re-seed, rebuild the state with `init`, redraw |
+| `restart()` | re-seed, rebuild the state with `init`, redraw, and play on unless the reader paused it or it is off screen |
 | `draw()` | redraw now, for a post that changes the state from its own input handler |
 | `seed(n)` | set a new seed and restart |
-| `stepTo(n)` | pause, then step synchronously to iteration `n` (restarting first if `n` is behind, stopping early if the run finishes), drawing once; returns the iteration reached |
+| `stepTo(n)` | pause, then step synchronously to iteration `n` (going back to iteration 0 first if `n` is behind, stopping early if the run finishes), drawing once; returns the iteration reached and leaves the demo paused |
 | `read()` | `{iteration, finished, stats, controls, status}` |
 | `ctx` | the context above |
 
@@ -255,6 +285,7 @@ keyboard works with no further code.
 <div class="kr-viz" id="hello-demo">
   <canvas id="helloMain" class="kr-interactive" height="300" role="img"
           aria-label="Dots drifting toward the centre. Click to add a dot."></canvas>
+  <p class="kr-note">Click or tap anywhere to add a dot.</p>
   <div class="kr-toolbar" data-kr-toolbar></div>
   <div class="kr-sliders" data-kr-sliders></div>
   <div class="kr-stats" data-kr-stats></div>
@@ -342,3 +373,7 @@ keyboard works with no further code.
   (`check_reduced_motion`).
 - `check_post_template.py` then holds the post to the site's post template
   like any other.
+- After a change to the engine itself, `node --test tests/js/kr-viz.test.js`
+  holds its run rules without a browser: the run button's three labels,
+  Restart playing on, Step, starting at half the main canvas, pausing
+  offscreen, and the short-screen cap.

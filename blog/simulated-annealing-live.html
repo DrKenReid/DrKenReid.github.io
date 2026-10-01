@@ -117,7 +117,7 @@
    /* Overrides of the shared .kr-viz component in style.css. */
    .kr-viz{ --viz-s4:#008300; }
    [data-theme="dark"] .kr-viz{ --viz-s4:#2fae2f; }
-   .kr-note{ margin:8px 0 0; }
+   :root .kr-viz .kr-note{ margin-top:8px; }
    .kr-swatch{ width:10px; height:10px; border-radius:3px; }
    .kr-stats{ margin-top:12px; }
    .kr-stat-lbl{ display:flex; align-items:center; gap:5px; }
@@ -125,21 +125,40 @@
    /* Particular to this post's widget. */
    .sa-strip{ margin-top:10px; }
    .sa-controls{ display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center; margin-top:12px; font-size:0.85em; color:var(--viz-ink); }
-   .sa-controls label{ display:flex; align-items:center; gap:7px; margin:0; font-weight:400; }
-   .sa-controls input[type=range]{ width:110px; accent-color:var(--viz-s3); }
+   .sa-controls label{ display:flex; align-items:center; gap:7px; margin:0; font-weight:400; min-height:24px; }
+   .sa-controls input[type=range]{ width:110px; height:24px; accent-color:var(--viz-s3); }
+   /* the same tap targets as the shared demo controls (style.css §12) */
+   @media (pointer: coarse) { .sa-controls label{ min-height:32px; } .sa-controls input[type=range]{ height:32px; } }
    .sa-controls input[type=checkbox]{ accent-color:var(--viz-s3); width:15px; height:15px; margin:0; }
    .sa-controls .val{ min-width:2.8em; color:var(--viz-muted); font-variant-numeric:tabular-nums; }
    #curveRun, #raceRun{ min-width:76px; }
+   /* Two by two at every width. Stacked in one column on a phone, the four
+      maps made a column a screen and a half tall, so the race showed two
+      and a half of them and none of the chart that compares them. */
    .sa-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
-   @media (max-width:640px) { .sa-grid{ grid-template-columns:1fr; } }
+   @media (max-width:520px) { .sa-grid{ gap:8px; } }
    @media (max-width:520px) { .kr-viz{ padding:12px; } }
    @media (max-width:520px) { .sa-controls{ gap:10px 0; } }
    @media (max-width:520px) { .sa-controls label{ width:100%; } }
-   @media (max-width:520px) { .sa-controls input[type=range]{ flex:1; width:auto; } }
+   /* min-width:0, or a range keeps its built-in width as a floor and the
+      temperature readout runs past the frame at 320px */
+   @media (max-width:520px) { .sa-controls input[type=range]{ flex:1; width:auto; min-width:0; } }
    .sa-cell{ position:relative; }
    .sa-cell canvas{ border:1px solid var(--viz-border); }
    .sa-cell .sa-tag{ position:absolute; top:8px; left:10px; font-size:0.72em; color:var(--viz-ink); display:flex; align-items:center; gap:6px; pointer-events:none; }
    .sa-score{ position:absolute; top:8px; right:10px; font-size:0.72em; color:var(--viz-muted); pointer-events:none; font-variant-numeric:tabular-nums; }
+   /* The name and score sit on the map itself, and on a phone's small map
+      a tour line often runs under them; a halo in the frame's own surface
+      colour keeps them readable over it. */
+   .sa-cell .sa-tag, .sa-score{ text-shadow:0 0 2px var(--viz-surface), 0 0 2px var(--viz-surface), 0 0 3px var(--viz-surface), 0 0 4px var(--viz-surface); }
+   /* A phone's map is too narrow for the name and the score on one line, so
+      the score drops to the foot; below 360px a long name takes two lines,
+      with its swatch beside the first. */
+   @media (max-width:520px) {
+     .sa-cell .sa-tag{ top:6px; left:8px; right:8px; align-items:flex-start; line-height:1.25; }
+     .sa-cell .sa-tag .kr-swatch{ flex:none; margin-top:2px; }
+     .sa-score{ top:auto; bottom:6px; right:8px; }
+   }
    .sa-chartwrap{ position:relative; margin-top:12px; }
    .sa-tooltip{ position:absolute; display:none; pointer-events:none; z-index:5; background:var(--viz-surface); border:1px solid var(--viz-border); border-radius:6px; padding:8px 10px; font-size:0.75em; color:var(--viz-ink); line-height:1.8; box-shadow:0 4px 14px rgba(0,0,0,0.25); white-space:nowrap; }
    .sa-swatch-1{ background:#2a78d6; }
@@ -248,7 +267,7 @@
  <button class="kr-btn" id="raceRun" type="button">Start race</button>
  <button class="kr-btn secondary" id="raceReset" type="button">New cities</button>
  <label>Speed <input type="range" id="raceSpeed" min="100" max="3000" step="100" value="600"></label>
- <span class="kr-status" id="raceStatus">Press start, or click any map to add a city.</span>
+ <span class="kr-status" id="raceStatus">Press start, or tap or click any map to add a city.</span>
  </div>
  <div class="sa-grid" id="raceGrid">
  <div class="sa-cell"><canvas class="tourCanvas" data-alg="0" height="240" role="img" aria-label="Best tour found so far by simulated annealing"></canvas><span class="sa-tag"><span class="kr-swatch" style="background:var(--viz-s1);"></span>Simulated annealing</span><span class="sa-score" data-score="0"></span></div>
@@ -922,7 +941,7 @@
         runBtn.textContent = 'Start race';
         if (!keepCities) newCities(parseInt(pgCities.value, 10));
         algs = makeAlgs();
-        statusEl.textContent = 'Press start, or click any map to add a city.';
+        statusEl.textContent = 'Press start, or tap or click any map to add a city.';
         drawAll();
       }
 
@@ -2063,7 +2082,7 @@ renderFooter('footer-section');
         runBtn.textContent = 'Start race';
         if (!keepCities) newCities(parseInt(pgCities.value, 10));
         algs = makeAlgs();
-        statusEl.textContent = 'Press start, or click any map to add a city.';
+        statusEl.textContent = 'Press start, or tap or click any map to add a city.';
         drawAll();
       }
 
@@ -2391,15 +2410,18 @@ renderFooter('footer-section');
         statusEl.textContent = Math.round(algs[0].evals / 1000) + 'k / ' + (MAX_EVALS / 1000) + 'k evaluations';
       }
 
+      // The maps stay two by two on a phone, where each is 130 to 160px wide;
+      // fitH's 180px floor would stand each one on end there.
+      function tourH(w) { return Math.min(240, Math.max(140, Math.round(w * 0.75))); }
       var VIZ = KRViz.mount('#race-demo', {
         seed: 20260706,
         speed: 60,
         autostart: false,          // the race starts when the reader says so
         canvases: {
-          t0: {el: '.tourCanvas[data-alg="0"]', height: fitH(240)},
-          t1: {el: '.tourCanvas[data-alg="1"]', height: fitH(240)},
-          t2: {el: '.tourCanvas[data-alg="2"]', height: fitH(240)},
-          t3: {el: '.tourCanvas[data-alg="3"]', height: fitH(240)},
+          t0: {el: '.tourCanvas[data-alg="0"]', height: tourH},
+          t1: {el: '.tourCanvas[data-alg="1"]', height: tourH},
+          t2: {el: '.tourCanvas[data-alg="2"]', height: tourH},
+          t3: {el: '.tourCanvas[data-alg="3"]', height: tourH},
           chart: {el: '#raceChart', height: fitH(260)},
           strip: {el: '#raceStrip', height: fitH(120)}
         },

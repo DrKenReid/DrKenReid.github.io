@@ -204,11 +204,12 @@
 
  <div class="kr-viz" id="de-demo">
    <canvas id="deCanvas" height="360" role="img" aria-label="Animated differential evolution demo: a population of dots hunts the minimum of a coloured fitness landscape. Each generation one dot is spotlighted with its donor construction: three population members, the dashed difference vector between two of them, that vector scaled and attached to the third, and the resulting mutant and trial points." class="kr-interactive"></canvas>
+   <p class="kr-note"><strong>Click (or tap) anywhere on the landscape</strong> to re-seed the whole population as a tight cluster around that spot and watch it fan out or slide home.</p>
    <div class="kr-toolbar" data-kr-toolbar></div>
    <div class="kr-sliders" data-kr-sliders></div>
    <div class="kr-stats" data-kr-stats></div>
    <canvas id="deChart" class="kr-chart" height="120" role="img" aria-label="Live charts on logarithmic scales: best fitness over generations, and population spread over generations."></canvas>
-   <p class="kr-note"><strong>Click (or tap) anywhere on the landscape</strong> to re-seed the whole population as a tight cluster around that spot and watch it fan out or slide home. Spread is the mean distance from each member to the population's centre. Mean step is the average length of \(F(b - c)\) this generation. Both charts use log scales, so self-scaling convergence shows up as a roughly straight downhill line. On the <em>Egg carton</em>, watch the population straddle several dimples before it commits. On the <em>Banana valley</em>, watch the difference vectors line up with the curve of the valley floor.</p>
+   <p class="kr-note">Spread is the mean distance from each member to the population's centre. Mean step is the average length of \(F(b - c)\) this generation. Both charts use log scales, so self-scaling convergence shows up as a roughly straight downhill line. On the <em>Egg carton</em>, watch the population straddle several dimples before it commits. On the <em>Banana valley</em>, watch the difference vectors line up with the curve of the valley floor.</p>
  </div>
 
  <h2>F, CR, and a population of eight</h2>
@@ -439,7 +440,7 @@ renderFooter('footer-section');</script>
              height: function (w) { return Math.max(260, Math.min(360, w * 0.6)); }},
        chart: {el: '#deChart', height: 120, mobile: {height: 220}}
      },
-     buttons: ['run', 'restart'],
+     buttons: ['run', 'step', 'restart'],
      controls: [
        {id: 'land', type: 'select', label: 'Landscape', value: 'bowl', options: [
          {value: 'bowl', label: 'Bowl'}, {value: 'banana', label: 'Banana valley'},
@@ -624,8 +625,9 @@ renderFooter('footer-section');</script>
 
    // click or tap to re-seed the population as a tight cluster
    document.getElementById('deCanvas').addEventListener('pointerdown', function (ev) {
-     // a finished run is paused and the Play button is inert until a restart,
-     // so a click has to revive the demo or the landscape would stop responding
+     // a finished run takes no more steps, so a click starts a new one or the
+     // landscape would stop responding; it runs even if the reader had
+     // paused, since re-seeding the population is asking to watch it
      if (viz.read().finished) { viz.restart(); viz.run(); }
      var ctx = viz.ctx, st = ctx.state, cv = ctx.canvas.map;
      var land = st.land, rect = cv.node.getBoundingClientRect();

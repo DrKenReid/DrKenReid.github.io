@@ -237,6 +237,7 @@
 
  <div class="kr-viz" id="hh-demo">
    <canvas id="hhCanvas" height="360" role="img" aria-label="Animated exam timetabling demo: twenty lettered exam tiles arranged in seven timeslot columns, tinted by how much penalty each contributes, with red links joining conflicting exams that share a timeslot, sliding between slots as heuristics move them"></canvas>
+   <div class="kr-toolbar" data-kr-toolbar></div>
    <div class="hh-heur" id="hhHeur" role="group" aria-label="Live selection probabilities for the four low-level heuristics">
      <div class="hh-heur-row" data-h="0"><span class="hh-heur-name">H1 nudge one exam</span><div class="hh-bar"><div class="hh-bar-fill"></div></div><span class="hh-heur-pct">25%</span></div>
      <div class="hh-heur-row" data-h="1"><span class="hh-heur-name">H2 swap two exams</span><div class="hh-bar"><div class="hh-bar-fill"></div></div><span class="hh-heur-pct">25%</span></div>
@@ -244,7 +245,6 @@
      <div class="hh-heur-row" data-h="3"><span class="hh-heur-name">H4 ruin &amp; recreate</span><div class="hh-bar"><div class="hh-bar-fill"></div></div><span class="hh-heur-pct">25%</span></div>
    </div>
    <canvas id="hhChart" class="kr-chart" height="160" role="img" aria-label="Live charts: total cost over time with the draining Great Deluge water level shown as a shaded flood area, and the percentage of proposed moves being accepted"></canvas>
-   <div class="kr-toolbar" data-kr-toolbar></div>
    <div class="kr-sliders" data-kr-sliders></div>
    <div class="kr-stats" data-kr-stats></div>
    <p class="kr-note">Columns are timeslots; tiles are exams, tinted from green (harmless) to red (expensive) by the penalty each currently contributes. A red link joins two conflicting exams caught in the same slot; the dashed line marks the three-room capacity. In the chart, the shaded flood is the Great Deluge acceptance region draining away, the amber line is the cost living inside it, and the second pane tracks what share of proposed moves is being accepted. Speed is moves per second. The run stops itself when the timetable is perfect, or when the tide has passed the search and nothing has been accepted for 600 moves in a row.</p>

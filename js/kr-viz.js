@@ -27,6 +27,20 @@
   // A 3x phone would otherwise allocate 9 pixels per CSS pixel and redraw
   // all of them every frame, for detail nobody can see at that size.
   var MAX_DPR = 2;
+  // On a screen wider than it is tall, a drawing canvas is never taller
+  // than this share of the screen under the fixed header (--kr-bar-h), and
+  // never shorter than SHORT_MIN for it. Heights come from the width, so a
+  // phone on its side (844 x 390) got a canvas taller than the whole usable
+  // screen, and its Pause and Restart buttons were never on screen with it.
+  // A tall desktop sits under the cap; a laptop's shorter window trims the
+  // tallest boards (440px to about 380 at 657px). An upright phone is left
+  // alone: its narrow canvases stack their panes (the program tree under
+  // the plot in genetic programming) and need the height they ask for.
+  var SHORT_SHARE = 0.65;
+  var SHORT_MIN = 160;
+  // How much of the main canvas must be on screen before a demo starts by
+  // itself; see the observers under "environment".
+  var START_SHARE = 0.5;
   var uid = 0;             // for the ids aria-describedby needs
 
   /* Seeded PRNG. Every demo runs from a seed so a reader who reloads sees
@@ -133,6 +147,15 @@
     }
 
     var runBtn = null;
+
+    /* The run button names what it will do: Pause while running, Play
+       while paused, and Run again once the demo has finished. Finished used
+       to read Play, and Play did nothing, because run() refuses a finished
+       demo; the reader had to find Restart and then press Play as well. */
+    function syncRunButton() {
+      if (runBtn) runBtn.textContent = running ? 'Pause' : finished ? 'Run again' : 'Play';
+    }
+
     function addButton(spec) {
       var s = typeof spec === 'string' ? {id: spec} : spec;
       var label = s.label || (s.id === 'run' ? 'Pause' :
@@ -143,8 +166,12 @@
         // an explicit handler wins, so a post can give Restart its own
         // meaning (a fresh draw rather than a replay of the same seed)
         if (s.onClick) { s.onClick(api); }
-        else if (s.id === 'run') { userPaused = running; running ? pause() : run(); }
+        else if (s.id === 'run') {
+          if (finished) { userPaused = false; reset(); run(); }
+          else { userPaused = running; running ? pause() : run(); }
+        }
         else if (s.id === 'restart') { restart(); }
+        else if (s.id === 'step') { stepOnce(); }
       });
       slot.toolbar.appendChild(b);
       if (s.id === 'run') runBtn = b;
@@ -241,12 +268,17 @@
 
     /* ---- canvases ---------------------------------------------------- */
 
+    var chartNames = (cfg.charts || []).map(function (ch) { return ch.canvas; });
     Object.keys(cfg.canvases || {}).forEach(function (name) {
       var spec = cfg.canvases[name];
       var node = typeof spec.el === 'string'
         ? (root.querySelector(spec.el) || document.querySelector(spec.el))
         : spec.el;
-      canvases[name] = {node: node, spec: spec, g: null, w: 0, h: 0, dpr: 0};
+      // a chart keeps the height it asked for on a short screen: it is
+      // short already, and a stacked pair of panes needs every pixel
+      var chart = chartNames.indexOf(name) >= 0 ||
+        !!(node && (' ' + node.className + ' ').indexOf(' kr-chart ') >= 0);
+      canvases[name] = {node: node, spec: spec, chart: chart, g: null, w: 0, h: 0, dpr: 0};
     });
 
     /* ---- keyboard access to a clickable canvas ------------------------ */
@@ -322,6 +354,24 @@
       });
     }
 
+    /* The tallest a drawing canvas may be on this screen (SHORT_SHARE), or
+       no limit on an upright one. The screen is the root element's client
+       box, not innerHeight: a phone's innerHeight changes whenever its
+       address bar slides in or out, which would change the cap, reallocate
+       the canvas and shift the page on every change of scroll direction,
+       while the root element keeps one size until the phone is turned.
+       Capped on an upright phone, the stacked panes of a narrow canvas
+       were squeezed until the program tree in genetic programming lost
+       its labels (433px to 314 at 375 x 553). */
+    function shortCap() {
+      var de = document.documentElement;
+      var vh = de.clientHeight || global.innerHeight || 0;
+      var vw = de.clientWidth || global.innerWidth || 0;
+      if (!vh || vw <= vh) return Infinity;
+      var bar = parseFloat(getComputedStyle(de).getPropertyValue('--kr-bar-h')) || 0;
+      return Math.max(SHORT_MIN, SHORT_SHARE * (vh - bar));
+    }
+
     /* Size each canvas's backing store to its box. Returns true when any
        canvas was reallocated, so the caller knows whether to redraw.
 
@@ -332,11 +382,13 @@
        the guard each of those reallocated every canvas and blanked a paused
        or finished demo until something redrew it. The height is compared
        as well as the width because a post's height function can change its
-       answer at STACK_BELOW, and the ratio because dragging the window to a
+       answer at STACK_BELOW (and the short-screen cap changes when a phone
+       is turned), and the ratio because dragging the window to a
        monitor with a different density changes the store without changing
        the box. */
     function fit() {
       var dpr = Math.min(global.devicePixelRatio || 1, MAX_DPR);
+      var cap = shortCap();
       var changed = false;
       Object.keys(canvases).forEach(function (name) {
         var c = canvases[name];
@@ -344,6 +396,7 @@
         var w = c.node.clientWidth || 600;
         var spec = (w < STACK_BELOW && c.spec.mobile) ? c.spec.mobile : c.spec;
         var h = typeof spec.height === 'function' ? spec.height(w) : spec.height;
+        if (!c.chart) h = Math.min(h, cap);
         h = Math.round(h);
         if (c.g && w === c.w && h === c.h && dpr === c.dpr) return;
         c.node.style.height = h + 'px';
@@ -512,7 +565,7 @@
       },
       finish: function (text) {
         finished = true;
-        pause();
+        pause();                   // and the run button now says Run again
         if (text) ctx.status(text);
         // the one moment worth interrupting for: say what it found
         var sum = summarise();
@@ -571,7 +624,7 @@
       if (running || finished) return;
       reduceNotice = '';
       running = true; lastT = 0;
-      if (runBtn) runBtn.textContent = 'Pause';
+      syncRunButton();
       ctx.status('');
       raf = global.requestAnimationFrame(frame);
     }
@@ -579,17 +632,46 @@
     function pause() {
       running = false;
       if (raf) global.cancelAnimationFrame(raf);
-      if (runBtn) runBtn.textContent = 'Play';
+      syncRunButton();
     }
 
-    function restart() {
+    /* Back to iteration 0 on the same seed, without touching whether it
+       runs. stepTo needs exactly this: a test that steps backwards must
+       not find the demo running again afterwards. */
+    function reset() {
       samples.length = 0;
       iteration = 0; ctx.iteration = 0; finished = false;
       rng = mulberry32(seed); ctx.rng = rng;
       ctx.status('');
       ctx.state = cfg.init(ctx);
       redraw();
-      if (runBtn) runBtn.textContent = running ? 'Pause' : 'Play';
+      syncRunButton();
+    }
+
+    /* What Restart means to a reader: start over, and keep playing unless
+       they had paused it. A demo that had finished by itself came back
+       paused, so replaying one took Restart and then Play. */
+    function restart() {
+      reset();
+      if (!userPaused && visible) run();
+    }
+
+    /* One step and stop, for a reader who wants to look at a particular
+       iteration (the text of a post names one) rather than catch it with a
+       quick tap on Pause. It counts as the reader pausing, so the demo
+       stays put when it scrolls away and back. A finished demo has no next
+       step, so Step starts it over from the beginning, one step at a time.
+       The glide between steps (ctx.phase) is completed, since the loop that
+       would have finished it is not running. */
+    function stepOnce() {
+      userPaused = true;
+      pause();
+      if (finished) reset();
+      doStep();
+      ctx.phase = 1;
+      redraw();
+      // the tiles are what changed; a screen reader hears them, not silence
+      if (!finished) announce(summarise() || 'Step ' + iteration + '.');
     }
 
     /* ---- environment ------------------------------------------------- */
@@ -612,29 +694,52 @@
       redraw();
     }).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
 
-    // a demo near the top of a long post should not run while the reader is
-    // three thousand words further down
-    if (global.IntersectionObserver) {
+    /* Stopping and starting by visibility, with two observers, because the
+       two edges want different amounts of the demo on screen.
+
+       Stop: once no part of the mount is on screen. A demo near the top of
+       a long post should not run while the reader is three thousand words
+       further down, but it should keep running while they are down among
+       its own sliders and chart with the canvas scrolled away.
+
+       Start: once START_SHARE of the main canvas (the first one named) is
+       on screen. Starting on the mount's first visible pixel meant that on
+       a phone, where a panel is 1,200 to 1,600px tall, a strip of it at the
+       foot of the screen started the demo while the reader was still on
+       the paragraph above, and the short ones (tabu search solves in about
+       six seconds) had finished before anyone looked at them. */
+    var ioOk = !!global.IntersectionObserver;
+    if (ioOk) {
       new global.IntersectionObserver(function (entries) {
         visible = entries[0].isIntersecting;
-        // pause() already relabels the button to Play; saying Pause here left
-        // a stopped demo claiming it was running
-        if (!visible) { if (running) pause(); }
-        else if (!userPaused && !finished) run();
-      }, {threshold: 0.05}).observe(root);
+        if (!visible && running) pause();
+      }, {threshold: 0}).observe(root);
+
+      var lead = null;
+      Object.keys(canvases).some(function (n) { lead = canvases[n].node; return !!lead; });
+      new global.IntersectionObserver(function (entries) {
+        // a hair under the threshold, since a box at a fractional pixel
+        // position can report 0.4999 on the entry that crossed it
+        var e = entries[0];
+        if (e.isIntersecting && e.intersectionRatio >= START_SHARE - 0.01 &&
+            !userPaused && !finished) run();
+      }, {threshold: START_SHARE}).observe(lead || root);
     }
 
     /* ---- the handle tests drive -------------------------------------- */
 
     var api = {
-      run: run,
+      // run and pause are the reader's say-so, so each sets what the
+      // visibility observers respect: a demo started through the handle (a
+      // post's own Run button) resumes when it scrolls back into view
+      run: function () { userPaused = false; run(); },
       pause: function () { userPaused = true; pause(); },
       restart: restart,
       draw: redraw,          // for a post that mutates state from its own input handler
       seed: function (n) { seed = n; restart(); },
       stepTo: function (n) {
         pause();
-        if (n < iteration) restart();
+        if (n < iteration) reset();
         while (iteration < n && !finished) doStep();
         redraw();
         return iteration;
@@ -660,17 +765,18 @@
     if (reduce) {
       // the preference is set: show the first frame, let the reader start it
       userPaused = true;
-      if (runBtn) runBtn.textContent = 'Play';
       reduceNotice = 'Paused for reduced motion.';
       ctx.status(reduceNotice);
     } else if (cfg.autostart !== false) {
-      run();
+      // the start observer runs it once the canvas is on screen; with no
+      // observer to wait for, run now
+      if (!ioOk) run();
     } else {
       // a demo that waits for its own Start button must not be started by
       // the visibility observer either
       userPaused = true;
-      if (runBtn) runBtn.textContent = 'Play';
     }
+    syncRunButton();
     return api;
   }
 

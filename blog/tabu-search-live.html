@@ -489,7 +489,9 @@ renderFooter('footer-section');</script>
 
     draw: function (ctx) {
       var st = ctx.state, c = ctx.colors, cv = ctx.canvas.board, g = cv.g, N = st.N;
-      var boardPx = Math.min(cv.w, 440), cell = boardPx / N;
+      // square, and as big as the canvas allows: the engine keeps the canvas
+      // shorter than its width on a phone turned on its side
+      var boardPx = Math.min(cv.w, cv.h), cell = boardPx / N;
       var bx = (cv.w - boardPx) / 2, by = 0;
 
       g.fillStyle = c.grid;

@@ -200,11 +200,12 @@
 
  <div class="kr-viz" id="pso-demo">
    <canvas id="psoCanvas" height="360" role="img" aria-label="Animated particle swarm optimisation demo: particles fly over a coloured fitness landscape, pulled toward their personal bests and the swarm's global best, contracting onto the minimum" class="kr-interactive kr-drag"></canvas>
+   <p class="kr-note"><strong>Drag anywhere on the map</strong> to scoop the swarm up and drop it there; personal and global bests reset, so the hunt starts over from wherever you left them.</p>
    <div class="kr-toolbar" data-kr-toolbar></div>
    <div class="kr-sliders" data-kr-sliders></div>
    <div class="kr-stats" data-kr-stats></div>
    <canvas id="psoChart" class="kr-chart" height="120" role="img" aria-label="Live charts: best fitness so far on a log scale, and swarm spread as a percentage of the landscape, both over time"></canvas>
-   <p class="kr-note"><strong>Drag anywhere on the map</strong> to scoop the swarm up and drop it there; personal and global bests reset, so the hunt starts over from wherever you left them. The blue dots are particles (with short motion trails), the faint dots are their personal bests, the green ring is the global best (the one piece of gossip everybody shares), and the dashed ring is the true optimum. <em>Shifted bowl</em> is the warm-up; the <em>Banana valley</em> hides its optimum along a curved ridge that the swarm must creep along; the <em>Egg carton</em> is riddled with local minima that swallow overconfident swarms; and the <em>Funnel</em> is nearly flat everywhere except one deep spike, so gossip about the spike is the only useful signal there is.</p>
+   <p class="kr-note">The blue dots are particles (with short motion trails), the faint dots are their personal bests, the green ring is the global best (the one piece of gossip everybody shares), and the dashed ring is the true optimum. <em>Shifted bowl</em> is the warm-up; the <em>Banana valley</em> hides its optimum along a curved ridge that the swarm must creep along; the <em>Egg carton</em> is riddled with local minima that swallow overconfident swarms; and the <em>Funnel</em> is nearly flat everywhere except one deep spike, so gossip about the spike is the only useful signal there is.</p>
  </div>
 
  <h2>Turning the swarm into a stampede</h2>
@@ -458,7 +459,7 @@ renderFooter('footer-section');</script>
              height: function (w) { return Math.max(250, Math.min(380, w * 0.62)); }},
        chart: {el: '#psoChart', height: 120, mobile: {height: 230}}
      },
-     buttons: ['run', 'restart'],
+     buttons: ['run', 'step', 'restart'],
      controls: [
        {id: 'land', type: 'select', label: 'Landscape', value: 'bowl', options: [
          {value: 'bowl', label: 'Shifted bowl'},
@@ -611,8 +612,9 @@ renderFooter('footer-section');</script>
    // the hunt starts over from wherever you left them
    var cv = document.getElementById('psoCanvas'), dragging = false;
    function scatter(ev) {
-     // a finished run is paused and the Play button is inert until a restart,
-     // so a drag has to revive the demo or the map would stop responding
+     // a finished run takes no more steps, so a drag starts a new one or
+     // the map would stop responding; it runs even if the reader had paused,
+     // since dropping the swarm somewhere is asking to watch it
      if (viz.read().finished) { viz.restart(); viz.run(); }
      var st = viz.ctx.state, cvs = viz.ctx.canvas.map, land = st.land;
      var r = cv.getBoundingClientRect();
