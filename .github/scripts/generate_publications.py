@@ -38,7 +38,7 @@ the papers' sum.
                     both counts once).
 
 Each entry in "publications", in newest-first order (the order the
-"All, by year" view and the JSON-LD use; ties keep file order):
+all-papers view and the JSON-LD use; ties keep file order):
   id           Scholar's citation_for_view value ("<user>:<paper>"); must
                appear in url, which is how an entry is matched to Scholar
                when the counts are refreshed
@@ -56,7 +56,11 @@ Each entry in "publications", in newest-first order (the order the
   citations    this paper's Scholar count (int; 0 hides the badge)
   url          the Scholar citation page the title links to
   doi          bare DOI ("10.1093/g3journal/jkab032") or null
-  pdf          a full-text link or null
+  pdf          a full-text link or null. A PDF this site serves
+               (SITE/docs/...) is labelled with its size, measured from
+               the file ("PDF (6.7 MB)"), so a reader on a phone knows
+               what the tap costs; replacing the file makes --check fail
+               until the page is regenerated
   firstAuthor  true when Ken is the first author; checked against authors
   live         the data-live key for the hover sketch: "pub:<name>" from
                js/covers-site.js, or a post slug from js/covers.js when a
@@ -74,8 +78,10 @@ work the field uses and the work that is current both show without a
 click. Within it papers go by citations (most first), then newest; the
 rest of the list follows newest first. The page is written in that order
 so a reader without script sees it. The script in data_science.html only
-re-sorts to "All, by year" (data-pub-order) and hides the unselected
-papers (data-pub-more) until that view is chosen.
+re-sorts to the all-papers view (data-pub-order) and hides the
+unselected papers (data-pub-more) until that view is chosen. That view's
+button carries the number of papers ("All 12, by year"), so a reader can
+see that Selected is not everything.
 
 Scholar also indexes two of the blog posts. They are left out on purpose:
 they are posts, not publications, and have no citations, so the papers'
@@ -199,6 +205,9 @@ def validate(data, pubs):
             errors.append("%s: no sketch registered as '%s' in js/covers*.js" % (where, p["live"]))
         if p["post"] and p["post"] not in post_urls:
             errors.append("%s: post %s is not in data/posts.json" % (where, p["post"]))
+        own = local_file(p["pdf"]) if p["pdf"] else None
+        if own is not None and not own.is_file():
+            errors.append("%s: pdf %s is on this site but not in the repository" % (where, p["pdf"]))
     if not errors:
         total = sum(p["citations"] for p in pubs)
         if data["scholar"]["citations"] < total:
@@ -261,6 +270,30 @@ def plural(n, word):
     return "%d %s%s" % (n, word, "" if n == 1 else "s")
 
 
+def local_file(url):
+    """The file behind a link to this site ("https://www.kenreid.co.uk/docs/x.pdf"
+    or "/docs/x.pdf"), or None for a link elsewhere."""
+    for prefix in (SITE + "/", "/"):
+        if url.startswith(prefix) and not url.startswith("//"):
+            return ROOT / url[len(prefix):].split("#")[0].split("?")[0]
+    return None
+
+
+def size_label(n):
+    """A download's size as a link states it: "26 KB", "6.7 MB". Decimal
+    units, as most download dialogs count them."""
+    if n < 1000 * 1000:
+        return "%d KB" % max(1, round(n / 1000))
+    return "%.1f MB" % (n / (1000 * 1000))
+
+
+def pdf_label(url):
+    """The PDF link's text: with the size when this site serves the file,
+    since a thesis runs to megabytes; a publisher's PDF is left as it is."""
+    own = local_file(url)
+    return "PDF (%s)" % size_label(own.stat().st_size) if own is not None else "PDF"
+
+
 def authors_html(p):
     names = [("<strong>%s</strong>" % text(a)) if a in KEN_NAMES else text(a) for a in p["authors"]]
     # A no-break space keeps "et al." from splitting over two lines.
@@ -283,7 +316,8 @@ def meta_html(p):
         items.append('<a class="ds-pub-link" href="https://doi.org/%s" target="_blank" rel="noopener">DOI</a>'
                      % attr(p["doi"]))
     if p.get("pdf"):
-        items.append('<a class="ds-pub-link" href="%s" target="_blank" rel="noopener">PDF</a>' % attr(p["pdf"]))
+        items.append('<a class="ds-pub-link" href="%s" target="_blank" rel="noopener">%s</a>'
+                     % (attr(p["pdf"]), pdf_label(p["pdf"])))
     if p.get("post"):
         items.append('<a class="ds-pub-link ds-pub-watch" href="/%s">Watch it run <span aria-hidden="true">&rarr;</span></a>'
                      % attr(p["post"]))
@@ -304,7 +338,7 @@ def list_lines(data, pubs):
         '    <button type="button" class="gallery-filter-btn active" data-pub-sort="selected" '
         'aria-pressed="true" aria-controls="ds-pub-list">Selected</button>',
         '    <button type="button" class="gallery-filter-btn" data-pub-sort="year" '
-        'aria-pressed="false" aria-controls="ds-pub-list">All, by year</button>',
+        'aria-pressed="false" aria-controls="ds-pub-list">All %d, by year</button>' % len(pubs),
         '  </div>',
         '</div>',
         '<ol class="ds-pub-list" id="ds-pub-list" role="list">',

@@ -163,7 +163,10 @@ def main(argv=None):
     data_files = [f for f in sitelib.tracked("data/*.json") if f.parent == ROOT / "data"]
 
     dates = sorted(p["date"] for p in posts)
-    word_counts = sorted(((p.get("words", 0), p["title"]) for p in posts), reverse=True)
+    # (words, title, url), longest first: the page names the longest and
+    # the shortest post and links each by its url ("blog/x.html").
+    word_counts = sorted(((p.get("words", 0), p["title"], p.get("url", "")) for p in posts),
+                         reverse=True)
     tags = {t for p in posts for t in p.get("tags", [])}
 
     # Icon fonts are subset at build time; report what that actually saved.
@@ -217,9 +220,11 @@ def main(argv=None):
                           if dates else 0),
         "longestPostWords": word_counts[0][0] if word_counts else 0,
         "longestPostTitle": word_counts[0][1] if word_counts else "",
+        "longestPostUrl": word_counts[0][2] if word_counts else "",
         "shortestPostWords": word_counts[-1][0] if word_counts else 0,
         "shortestPostTitle": word_counts[-1][1] if word_counts else "",
-        "averagePostWords": round(sum(w for w, _ in word_counts) / len(word_counts))
+        "shortestPostUrl": word_counts[-1][2] if word_counts else "",
+        "averagePostWords": round(sum(w for w, _t, _u in word_counts) / len(word_counts))
                             if word_counts else 0,
         "commits": int(git_line(["git", "rev-list", "--count", "HEAD"]) or 0),
         "commitsByMonth": commits_by_month(),

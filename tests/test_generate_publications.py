@@ -3,8 +3,9 @@
 The publication list and its JSON-LD are both written from
 data/publications.json. These cases pin the parts that are easy to break
 without noticing: the Selected choice and order, the marker regex (one block name is
-a prefix of the other), the escaping, the newline style of the page, and
-the validation that stops a half-refreshed JSON reaching the page.
+a prefix of the other), the escaping, the newline style of the page, the
+validation that stops a half-refreshed JSON reaching the page, the count
+on the All button, and the sizes stated for the site's own PDFs.
 
 Run from the repo root:
     python -m unittest discover -s tests -v
@@ -13,6 +14,7 @@ Run from the repo root:
 import contextlib
 import io
 import json
+import re
 import sys
 import tempfile
 import unittest
@@ -120,6 +122,27 @@ class Markup(unittest.TestCase):
         self.assertEqual(sum("data-pub-more" in r for r in rows), 3)
         self.assertIn('data-live="pub:hybrid"', rows[0])
 
+    def test_the_all_view_says_how_many_papers_it_holds(self):
+        # "All, by year" did not say it held more than Selected showed.
+        pubs = Order.pubs
+        toolbar = "\n".join(gp.list_lines(dataset(pubs, cited=1, recent=1), pubs)[:8])
+        self.assertIn('data-pub-sort="year"', toolbar)
+        self.assertIn(">All 5, by year</button>", toolbar)
+
+    def test_a_pdf_this_site_serves_states_its_size(self):
+        thesis = gp.ROOT / "docs" / "KenReidThesis.pdf"
+        label = gp.size_label(thesis.stat().st_size)
+        for url in (gp.SITE + "/docs/KenReidThesis.pdf", "/docs/KenReidThesis.pdf"):
+            with self.subTest(url=url):
+                meta = gp.meta_html(paper("t", 2019, 1, ["KN Reid"], pdf=url))
+                self.assertIn(">PDF (%s)</a>" % label, meta)
+        meta = gp.meta_html(paper("a", 2021, 1, ["KN Reid"], pdf="https://arxiv.org/pdf/1"))
+        self.assertIn(">PDF</a>", meta)
+
+    def test_size_label(self):
+        self.assertEqual([gp.size_label(n) for n in (300, 26329, 999_499, 6_658_553, 12_000_000)],
+                         ["1 KB", "26 KB", "999 KB", "6.7 MB", "12.0 MB"])
+
     def test_jsonld_parses_and_names_ken(self):
         p = paper("a", 2020, 0, ["X Other", "KN Reid"], title="A </script> title")
         lines = gp.jsonld_lines([p])
@@ -206,6 +229,33 @@ class Validation(unittest.TestCase):
     def test_doi_must_be_bare(self):
         errs = self.errors([paper("a", 2020, 0, ["KN Reid"], doi="https://doi.org/10.1/x")], cited=1)
         self.assertTrue(any("doi" in e for e in errs), errs)
+
+    def test_a_pdf_on_this_site_must_be_in_the_repository(self):
+        errs = self.errors([paper("a", 2020, 0, ["KN Reid"], pdf=gp.SITE + "/docs/nope.pdf")], cited=1)
+        self.assertTrue(any("not in the repository" in e for e in errs), errs)
+
+
+class StatedSizes(unittest.TestCase):
+    """A link to one of the site's own PDFs that states a size states the
+    file's size. The generator measures the publication rows; the thesis
+    block's link is typed by hand, and a replaced PDF would leave it
+    claiming the old size."""
+
+    LINK = r'<a [^>]*href="(?:%s)?/(docs/[^"#?]+\.pdf)"[^>]*>(.*?)</a>'
+
+    def test_every_stated_size_is_the_files(self):
+        pages = [gp.PAGE, gp.ROOT / "contact.html"]
+        found = 0
+        for page in pages:
+            text = page.read_text(encoding="utf-8")
+            for rel, label in re.findall(self.LINK % re.escape(gp.SITE), text, re.S):
+                size = re.search(r"\d+(?:\.\d)? [KM]B", label)
+                if not size:
+                    continue
+                found += 1
+                with self.subTest(page=page.name, file=rel):
+                    self.assertEqual(size.group(0), gp.size_label((gp.ROOT / rel).stat().st_size))
+        self.assertGreaterEqual(found, 2, "the thesis links should state their size")
 
 
 class NewlineStyle(unittest.TestCase):

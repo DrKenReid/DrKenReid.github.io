@@ -357,15 +357,25 @@
   </div>
 
   <!-- The three things a recruiter or a collaborator comes for, straight
-       under the introduction rather than at the foot of the page. -->
+       under the introduction rather than at the foot of the page. Then a
+       row of jumps to the page's sections (style.css §16, "Jump row"):
+       on a phone the page runs to thirteen thousand pixels. -->
   <section class="clearfix pb-5">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 kr-btn-row">
-          <a href="/docs/ken-cv.pdf" download class="kr-btn kr-btn--ghost"><i class="ti-download" aria-hidden="true"></i> Download Resume</a>
+          <a href="/docs/ken-cv.pdf" download class="kr-btn kr-btn--ghost"><i class="ti-download" aria-hidden="true"></i> Download CV (PDF)</a>
           <a href="mailto:ken@kenreid.co.uk?subject=Work%20enquiry" class="kr-btn kr-btn--ghost"><i class="ti-email" aria-hidden="true"></i> Email Me</a>
           <a href="https://www.linkedin.com/in/kennethneilreid" target="_blank" rel="noopener noreferrer" class="kr-btn kr-btn--ghost"><i class="ti-linkedin" aria-hidden="true"></i> LinkedIn</a>
         </div>
+        <nav class="col-12 ds-jump" aria-label="On this page">
+          <a href="#publications" class="kr-btn kr-btn--ghost kr-btn--sm">Publications</a>
+          <a href="#thesis" class="kr-btn kr-btn--ghost kr-btn--sm">Thesis</a>
+          <a href="#talk" class="kr-btn kr-btn--ghost kr-btn--sm">Talk</a>
+          <a href="#portfolio" class="kr-btn kr-btn--ghost kr-btn--sm">Portfolio</a>
+          <a href="#ds-blog" class="kr-btn kr-btn--ghost kr-btn--sm">Blog</a>
+          <a href="#collaborate" class="kr-btn kr-btn--ghost kr-btn--sm">Collaborate</a>
+        </nav>
       </div>
     </div>
   </section>
@@ -425,7 +435,7 @@
             <a href="https://scholar.google.com/citations?user=bwl2u00AAAAJ&amp;hl=en" target="_blank" rel="noopener" class="ds-cite-pill">185 citations on Google Scholar</a>
             <div class="ds-pub-sort" role="group" aria-label="Which papers to show" hidden>
               <button type="button" class="gallery-filter-btn active" data-pub-sort="selected" aria-pressed="true" aria-controls="ds-pub-list">Selected</button>
-              <button type="button" class="gallery-filter-btn" data-pub-sort="year" aria-pressed="false" aria-controls="ds-pub-list">All, by year</button>
+              <button type="button" class="gallery-filter-btn" data-pub-sort="year" aria-pressed="false" aria-controls="ds-pub-list">All 12, by year</button>
             </div>
           </div>
           <ol class="ds-pub-list" id="ds-pub-list" role="list">
@@ -487,7 +497,7 @@
               <span class="kr-pub-stage" data-live-host aria-hidden="true"></span>
               <h3 class="ds-pub-title"><a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:UebtZRa9Y70C" target="_blank" rel="noopener">Metaheuristics For Solving Real World Employee Rostering and Shift Scheduling Problems</a></h3>
               <p class="ds-pub-authors"><strong>KN Reid</strong></p>
-              <p class="ds-pub-meta"><abbr class="ds-pub-venue" title="PhD thesis, University of Stirling">PhD thesis</abbr> <span class="ds-pub-year">2019</span> <span class="ds-citation-badge">1 citation</span> <a class="ds-pub-link" href="https://www.kenreid.co.uk/docs/KenReidThesis.pdf" target="_blank" rel="noopener">PDF</a></p>
+              <p class="ds-pub-meta"><abbr class="ds-pub-venue" title="PhD thesis, University of Stirling">PhD thesis</abbr> <span class="ds-pub-year">2019</span> <span class="ds-citation-badge">1 citation</span> <a class="ds-pub-link" href="https://www.kenreid.co.uk/docs/KenReidThesis.pdf" target="_blank" rel="noopener">PDF (6.7 MB)</a></p>
             </li>
             <li data-live="ruin-and-recreate-live" class="ds-pub-entry" data-pub-order="11" data-pub-more>
               <span class="kr-pub-stage" data-live-host aria-hidden="true"></span>
@@ -508,7 +518,7 @@
           </div>
         </div>
         <div class="col-12 col-xl-5 mb-30">
-          <div class="ds-col-head ds-col-head--sm">
+          <div class="ds-col-head ds-col-head--sm" id="thesis">
             <span class="section-eyebrow">Ph.D., 2019</span>
             <h2>Doctoral Thesis</h2>
           </div>
@@ -516,9 +526,9 @@
             <h3 class="ds-pub-title">Metaheuristics for Solving Real World Employee Rostering and Shift Scheduling Problems</h3>
             <p class="ds-pub-authors">University of Stirling &middot; July 2019 &middot; Supervised by Dr Jingpeng Li &middot; Funded by BT and the EPSRC DAASE Project</p>
             <p class="ds-thesis-abstract">Real-world employee rostering and shift scheduling, solved with state-of-the-art metaheuristics: Variable Neighbourhood Search, Evolutionary Ruin &amp; Stochastic Recreate, and hybrid matheuristics combining metaheuristics with Integer Programming, evaluated against real-world data provided by BT.</p>
-            <a href="/docs/KenReidThesis.pdf" target="_blank" rel="noopener" class="ds-text-link">Read the full thesis (PDF) &rarr;</a>
+            <a href="/docs/KenReidThesis.pdf" target="_blank" rel="noopener" class="ds-text-link">Read the full thesis (PDF, 6.7 MB) &rarr;</a>
           </div>
-          <div class="ds-col-head ds-col-head--sm">
+          <div class="ds-col-head ds-col-head--sm" id="talk">
             <span class="section-eyebrow">On video</span>
             <h2>Featured Talk</h2>
           </div>
@@ -543,6 +553,7 @@
         <p class="section-heading__lede">Projects and interactive tools</p>
       </div>
       <h3 class="ds-group-title">Things you can run</h3>
+      <p class="ds-group-note">The apps live on Streamlit's free hosting, which puts an app to sleep when nobody has used it for a while. If one opens on a sleep screen, press its button to wake it and give it about thirty seconds.</p>
       <div class="row">
         <div class="col-12 col-md-6 col-xl-3">
           <div class="ds-project-card ds-project-card--link">
@@ -664,16 +675,6 @@
 
         <div class="col-12 col-md-6 col-lg-4 col-xl-3">
           <div class="ds-project-card ds-project-card--link">
-            <h4><a href="https://github.com/DrKenReid/Debt-Payoff-Simulator" target="_blank" rel="noopener">Debt Payoff Simulator</a></h4>
-            <p>Python simulator for comparing debt payoff strategies — avalanche vs snowball methods with financial data analysis and visualizations.</p>
-            <div class="ds-project-meta">
-              <span class="ds-lang-dot" style="background: #DA5B0B;"></span> Jupyter Notebook
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-          <div class="ds-project-card ds-project-card--link">
             <h4><a href="https://github.com/DrKenReid/global-temperature-analysis" target="_blank" rel="noopener">Global Temperature Analysis</a></h4>
             <p>Data pipeline using R, SQL Server, and Tableau to analyze long-term global temperature trends and climate patterns.</p>
             <div class="ds-project-meta">
@@ -705,7 +706,7 @@
   </section>
 
   <!-- 6. Let's Collaborate -->
-  <div class="about-us-area section-padding-80-0 clearfix">
+  <div class="about-us-area section-padding-80-0 clearfix" id="collaborate">
     <div class="container">
       <div class="row align-items-center">
         <div class="col-12 col-lg-6">
@@ -721,6 +722,7 @@
             </div>
             <p class="kr-body-text">The fastest route is email: <a href="mailto:ken@kenreid.co.uk?subject=Work%20enquiry">ken@kenreid.co.uk</a>, or the <a href="/contact.html">contact page</a>. New posts on data science land in the <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">free newsletter</a>. Profiles, for the diligent:</p>
             <ul class="ds-profiles" role="list">
+              <li><a href="/docs/ken-cv.pdf" download><i class="ti-download" aria-hidden="true"></i>CV (PDF)</a></li>
               <li><a href="https://github.com/DrKenReid" target="_blank" rel="noopener"><img src="/img/core-img/gh.png" alt="" loading="lazy" width="16" height="16">GitHub</a></li>
               <li><a href="https://scholar.google.com/citations?user=bwl2u00AAAAJ&amp;hl=en" target="_blank" rel="noopener"><img src="/img/core-img/scholar.png" alt="" loading="lazy" width="40" height="40">Google Scholar</a></li>
               <li><a href="https://www.linkedin.com/in/kennethneilreid" target="_blank" rel="noopener"><img src="/img/core-img/li.png" alt="" loading="lazy" width="16" height="16">LinkedIn</a></li>
@@ -753,7 +755,7 @@
     renderFooter('footer-section');
 
     /* Publications: "Selected" (the order the page is written in, which
-       generate_publications.py decides) or "All, by year". The generator
+       generate_publications.py decides) or "All N, by year". The generator
        marks each paper's place in the year order (data-pub-order) and the
        ones past the selection (data-pub-more); this only moves and hides
        what is already there, so without script the reader gets every

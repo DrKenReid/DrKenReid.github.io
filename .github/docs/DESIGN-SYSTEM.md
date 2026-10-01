@@ -148,7 +148,7 @@ ElegantIcons, each subset at build time to the glyphs the site uses
 
 | Width | What changes | Where |
 |---|---|---|
-| 576px | the reading calendar switches to months; the photo grid goes one up | §14, §11 |
+| 576px | the reading calendar switches to months; the photo grid goes one up; the About timeline's years move from a column beside the cards to above them | §14, §11, §17 |
 | 768px | the page opener grows to its full height; paired figures sit side by side | §06, §11 |
 | 992px | the desktop menu replaces the phone menu (`NAV_BREAKPOINT` 991 in `js/site.js`); the share rail appears beside a post; demos and figures run to the wide measure | §04, §10 |
 | 1240px | the contents rail appears to the left of a post | §10, `renderPostToc` |

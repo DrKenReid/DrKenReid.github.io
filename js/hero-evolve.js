@@ -18,7 +18,13 @@
  *
  * Accessibility: the real heading is in the DOM as visually-hidden text,
  * the canvas is aria-hidden decoration, and prefers-reduced-motion skips
- * the search entirely and draws the words as type instead.
+ * the search entirely and draws the words as type instead. The homepage
+ * caption says so in its reduced-motion wording (.kr-for-still), chosen
+ * by the same media query in CSS, so it never calls type triangles.
+ *
+ * The caption's triangle count is written from SHAPES into every
+ * [data-kr-evolve-shapes], so the page cannot state a number the canvas
+ * does not draw (it once said a hundred and ten while this drew 78).
  */
 (function () {
     'use strict';
@@ -302,6 +308,13 @@
 
         requestAnimationFrame(step);
     }
+
+    /* The count in the caption, straight away: it does not wait on the
+       font, and the markup already holds the same number for a reader
+       without script. */
+    Array.prototype.forEach.call(document.querySelectorAll('[data-kr-evolve-shapes]'), function (el) {
+        el.textContent = String(SHAPES);
+    });
 
     function init() {
         var canvases = document.querySelectorAll('.kr-hero-evolve');

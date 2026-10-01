@@ -152,7 +152,10 @@
 
       <!-- Slide 2: the headline is evolved rather than typed (js/hero-evolve.js).
            Second rather than last: as the fifth slide it only came round
-           after forty seconds in the hero. -->
+           after forty seconds in the hero. The caption has a second
+           wording for reduced motion, where the script draws the words as
+           type (.kr-for-motion / .kr-for-still, style.css §02), and the
+           script writes its own triangle count into data-kr-evolve-shapes. -->
       <div class="single-welcome-slide bg-overlay">
         <div class="slide-bg bg-img" data-bg="/img/photography/hero/141.webp"></div>
         <div class="container h-100">
@@ -162,8 +165,11 @@
                 <span class="kr-hero-kicker" data-animation="bounceInDown" data-delay="200ms">Researcher &amp; Data Scientist</span>
                 <h2 class="sr-only">Hi, I'm Ken.</h2>
                 <canvas class="kr-hero-evolve" width="640" height="190" aria-hidden="true"></canvas>
-                <p data-animation="bounceInDown" data-delay="300ms">That headline is not a font. It is a hundred and ten translucent triangles being evolved toward the words, one accepted mutation at a time, in your browser.</p>
-                <a href="/data_science.html" class="kr-btn kr-btn--on-photo mt-30" data-animation="bounceInDown" data-delay="500ms">See the research</a>
+                <p data-animation="bounceInDown" data-delay="300ms"><span class="kr-for-motion">That headline is not a font. It is <span data-kr-evolve-shapes>78</span> translucent triangles being evolved toward the words, one accepted mutation at a time, in your browser.</span><span class="kr-for-still">With reduced motion on, that headline is drawn as ordinary type. Otherwise it is <span data-kr-evolve-shapes>78</span> translucent triangles being evolved toward the words, one accepted mutation at a time, in your browser.</span></p>
+                <div class="kr-btn-row kr-btn-row--start mt-30" data-animation="bounceInDown" data-delay="500ms">
+                  <a href="/data_science.html" class="kr-btn kr-btn--on-photo">See the research</a>
+                  <a href="/blog/a-headline-that-evolves-itself.html" class="kr-btn kr-btn--on-photo">How it works</a>
+                </div>
               </div>
             </div>
           </div>

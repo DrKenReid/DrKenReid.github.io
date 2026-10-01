@@ -37,7 +37,7 @@
     },
     "publications": {
       "type": "array",
-      "description": "Newest first. Papers with the same date (or year, when undated) keep this order in the All, by year view and the JSON-LD.",
+      "description": "Newest first. Papers with the same date (or year, when undated) keep this order in the all-papers view and the JSON-LD.",
       "items": {
         "type": "object",
         "required": ["id", "title", "authors", "etAl", "venue", "venueShort", "year",

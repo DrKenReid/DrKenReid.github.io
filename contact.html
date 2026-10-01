@@ -118,9 +118,16 @@
           <p class="kr-lede contact-lede">
             I like hearing from people. Questions about my work, book recommendations, photography, or anything else on this site are all welcome.
           </p>
-          <p class="mb-5">
+          <!-- The address as a mailto link, and a button that copies it
+               for a reader with no mail app set up. The button stays
+               hidden without script, which it needs; its status line
+               tells a screen reader the copy worked. -->
+          <p class="kr-mail-row">
             <a href="mailto:ken@kenreid.co.uk?subject=Hello%20from%20kenreid.co.uk" class="kr-mail-link">ken@kenreid.co.uk</a>
+            <button type="button" class="kr-btn kr-btn--ghost kr-btn--sm kr-mail-copy" data-copy="ken@kenreid.co.uk" hidden>Copy address</button>
+            <span class="sr-only" role="status" id="kr-mail-status"></span>
           </p>
+          <p class="kr-contact-work mb-5">For work: my <a href="/docs/ken-cv.pdf" download>CV (PDF)</a> and the <a href="/data_science.html">Data Science</a> page.</p>
         </div>
       </div>
     </div>
@@ -230,6 +237,38 @@
     renderPhotoStrip('instagram-section');
     renderFooter('footer-section');
     renderBlueskyFeed(document.getElementById('bsky-posts'), { limit: 5 });
+
+    /* Copy address: krCopyText (shared-components.js), then the label says
+       it worked for two seconds and the status line says it once. The
+       button keeps its width while it says so: the row is centred, and a
+       shorter label moved the address under the pointer (at 320px it
+       pulled the button up beside the address). */
+    (function() {
+      var btn = document.querySelector('.kr-mail-copy');
+      var status = document.getElementById('kr-mail-status');
+      if (!btn || typeof krCopyText !== 'function') return;
+      var label = btn.textContent;
+      var timer;
+      btn.hidden = false;
+      btn.addEventListener('click', function() {
+        krCopyText(btn.getAttribute('data-copy'), function(ok) {
+          var msg = ok ? 'Address copied' : 'Could not copy: select the address instead';
+          if (!btn.style.minWidth) btn.style.minWidth = btn.getBoundingClientRect().width + 'px';
+          btn.textContent = ok ? 'Copied' : 'Not copied';
+          // Emptied first, so a second copy in a row is announced again.
+          if (status) {
+            status.textContent = '';
+            requestAnimationFrame(function() { status.textContent = msg; });
+          }
+          clearTimeout(timer);
+          timer = setTimeout(function() {
+            btn.textContent = label;
+            btn.style.minWidth = '';
+            if (status) status.textContent = '';
+          }, 2000);
+        });
+      });
+    })();
   </script>
 </body>
 </html>

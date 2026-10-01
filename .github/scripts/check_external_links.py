@@ -17,14 +17,24 @@ report lists every page and line that carries it.
 
 How a URL is judged. A HEAD request first, redirects followed; when the
 server refuses HEAD or answers it with an error, a GET, because plenty of
-servers answer the two differently. Then:
+servers answer the two differently. Each request carries a cookie jar of
+its own while it follows redirects: Streamlit sends every visitor through
+a sign-in hop that sets a cookie and redirects back, and without the
+cookie the hop repeats until the client gives up. Then:
 
-  gone         404 or 410, or a host that no longer resolves. These are
-               the broken links; they open the issue.
+  gone         404 or 410, or a host that no longer resolves; a redirect
+               chain that never reaches a page (it loops, or a hop has
+               nowhere to go); or a chain that ends on a sign-in page
+               listed in LOGIN_WALLS, which is where Streamlit leaves a
+               deleted or private app. These are the broken links; they
+               open the issue.
   no answer    401, 403, 429, a 5xx, a timeout or a TLS failure. Often a
                server turning away scripts rather than a dead page, so
                they are listed for a look but do not open the issue.
-  fine         anything else that ends in a 2xx or 3xx.
+  fine         anything else that ends in a 2xx.
+
+Before the cookie jar, the dead Streamlit app's loop ended in a 303 that
+was counted as fine, and the report called a missing app a working link.
 
 doi.org is judged by its own answer, without following the redirect: a
 DOI that resolves is a working citation even when the publisher's page
@@ -55,6 +65,7 @@ import urllib.error
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
+from http.cookiejar import CookieJar
 from pathlib import Path
 from urllib.parse import urldefrag, urlparse
 
@@ -74,6 +85,13 @@ WORKERS = 8             # hosts checked at once
 SKIP_HOSTS = ("scholar.google.com", "goodreads.com", "linkedin.com")
 # Hosts judged by their own redirect: a resolving DOI is a working link.
 NO_FOLLOW_HOSTS = ("doi.org",)
+# Sign-in pages that stand in for a missing page: {host: path prefixes}.
+# A public Streamlit app passes through /-/login and comes back to itself;
+# a deleted or private one stops there. Hosts match with their subdomains.
+LOGIN_WALLS = {
+    "streamlit.app": ("/-/login",),
+    "share.streamlit.io": ("/-/login", "/-/auth"),
+}
 
 GONE = "gone"
 NO_ANSWER = "no answer"
@@ -122,10 +140,15 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def request(method: str, url: str, follow: bool = True) -> int:
-    """HTTP status for one request. Raises OSError (URLError, timeouts,
-    TLS) when there is no HTTP answer at all."""
-    handlers = [] if follow else [_NoRedirect()]
+def request(method: str, url: str, follow: bool = True) -> tuple[int, str]:
+    """(HTTP status, the URL that gave it) for one request. The cookie jar
+    lives for this request only, so no answer depends on an earlier one.
+    A redirect loop comes back as its last 3xx, which judge() counts as a
+    chain that never arrived. Raises OSError (URLError, timeouts, TLS)
+    when there is no HTTP answer at all."""
+    handlers = [urllib.request.HTTPCookieProcessor(CookieJar())]
+    if not follow:
+        handlers.append(_NoRedirect())
     opener = urllib.request.build_opener(*handlers)
     req = urllib.request.Request(url, method=method, headers={
         "User-Agent": USER_AGENT, "Accept": "text/html,*/*;q=0.8"})
@@ -133,9 +156,9 @@ def request(method: str, url: str, follow: bool = True) -> int:
         with opener.open(req, timeout=TIMEOUT) as res:
             if method == "GET":
                 res.read(1024)
-            return res.status
+            return res.status, res.geturl()
     except urllib.error.HTTPError as e:
-        return e.code
+        return e.code, e.geturl() or url
 
 
 class Throttle:
@@ -167,13 +190,25 @@ class Result:
     where: list = field(default_factory=list)
 
 
-def judge(status: int | None, error: str = "") -> str:
+def behind_login(url: str) -> bool:
+    """True when `url` is one of the LOGIN_WALLS sign-in pages."""
+    host, path = host_of(url), urlparse(url).path or "/"
+    return any(host_matches(host, (wall,)) and path.startswith(prefixes)
+               for wall, prefixes in LOGIN_WALLS.items())
+
+
+def judge(status: int | None, error: str = "", followed: bool = True, final: str = "") -> str:
+    """The verdict for one answer. `followed` says whether redirects were
+    followed (a 3xx is then a chain that never arrived); `final` is the
+    URL that answered."""
     if status is None:
         return GONE if error == "no such host" else NO_ANSWER
     if status in (404, 410):
         return GONE
+    if 300 <= status < 400 and followed:
+        return GONE
     if status < 400:
-        return FINE
+        return GONE if behind_login(final) else FINE
     return NO_ANSWER
 
 
@@ -193,18 +228,20 @@ def check_url(url: str, throttle: Throttle, send=request) -> Result:
     host = host_of(url)
     follow = not host_matches(host, NO_FOLLOW_HOSTS)
     tried = []
-    status, error = None, ""
+    status, error, final = None, "", url
     for method in ("HEAD", "GET"):
         throttle.wait(host)
         try:
-            status, error = send(method, url, follow), ""
-            tried.append(f"{method} {status}")
+            (status, final), error = send(method, url, follow), ""
+            note = (" (redirects never arrived)" if follow and 300 <= status < 400
+                    else " (a sign-in page)" if status < 400 and behind_login(final) else "")
+            tried.append(f"{method} {status}{note}")
         except (OSError, ValueError) as e:        # URLError is an OSError
             status, error = None, describe(e)
             tried.append(f"{method} {error}")
-        if judge(status, error) == FINE:
+        if judge(status, error, follow, final) == FINE:
             break
-    return Result(url, judge(status, error), ", ".join(tried))
+    return Result(url, judge(status, error, follow, final), ", ".join(tried))
 
 
 def check_all(urls: dict[str, list[str]], send=request, throttle=None,

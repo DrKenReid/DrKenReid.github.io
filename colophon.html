@@ -169,6 +169,7 @@
         <figure class="kr-colo-chart">
           <svg id="kr-colo-commits" viewBox="0 0 900 180" preserveAspectRatio="none"
                role="img" aria-labelledby="kr-colo-commits-title"><title id="kr-colo-commits-title">Commits per month since the repository began</title></svg>
+          <div class="kr-colo-ticks" aria-hidden="true"></div>
           <figcaption class="kr-colo-caption" id="kr-colo-commits-cap">&mdash;</figcaption>
         </figure>
         <p class="kr-colo-note">Every commit to the repository, by month. The site was a
@@ -330,7 +331,9 @@
         var svg = document.getElementById('kr-colo-commits');
         var cap = document.getElementById('kr-colo-commits-cap');
         if (!svg || !rows.length) return;
-        var W = 900, H = 180, pad = 4, base = H - 22;
+        // The bars reach the foot of the drawing; the year labels are a row
+        // of their own underneath (placeTicks).
+        var W = 900, H = 180, pad = 4, base = H - 1;
         var max = Math.max.apply(null, rows.map(function (r) { return r[1]; })) || 1;
         var bw = (W - pad * 2) / rows.length;
         var peak = rows.reduce(function (a, r) { return r[1] > a[1] ? r : a; }, rows[0]);
@@ -357,29 +360,73 @@
           rect.appendChild(t);
           frag.appendChild(rect);
         });
-        // Year ticks: every January, and the first bar when it is not one.
-        // A label is about 26 units wide at font-size 11, so the first
-        // bar's is left out when a January follows closer than that: the
-        // history starts in December 2019, and "2019" and "2020" printed
-        // on top of each other as "20192020".
-        var LABEL_W = 30;
-        var isJan = function (r) { return r[0].slice(5) === '01'; };
-        var firstJan = rows.findIndex(isJan);
-        var crowded = firstJan > 0 && firstJan * bw < LABEL_W;
-        rows.forEach(function (r, i) {
-          if (!isJan(r) && (i !== 0 || crowded)) return;
-          var tx = document.createElementNS(ns, 'text');
-          tx.setAttribute('x', (pad + i * bw).toFixed(1));
-          tx.setAttribute('y', H - 6);
-          tx.setAttribute('font-size', '11');
-          tx.setAttribute('fill', 'currentColor');
-          tx.setAttribute('opacity', '0.7');
-          tx.textContent = r[0].slice(0, 4);
-          frag.appendChild(tx);
-        });
         svg.appendChild(frag);
+        placeTicks(rows, function (i) { return (pad + i * bw) / W; });
         if (cap) cap.textContent = 'Busiest month: ' + month(peak[0]) + ', ' + peak[1] + ' commits. ' +
           rows.filter(function (r) { return r[1] === 0; }).length + ' months with none.';
+      }
+      /* Year labels under the chart: every January, and the first bar when
+         it is not one. They are HTML rather than SVG text because the
+         drawing stretches to the column (preserveAspectRatio="none"), which
+         squeezed SVG labels to a third of their width on a phone. at(i) is
+         bar i's left edge as a fraction of the width. Every other year is
+         dropped once the years are narrower than a label, and where two
+         labels would still collide the earlier gives way: the first bar's
+         when a January follows too closely (the history starts in December
+         2019, and "2019" and "2020" once printed as "20192020"), and the
+         year before a January in the last few bars, which is pulled in
+         from the right edge. Placed again when the width changes, since
+         what fits depends on it. */
+      function placeTicks(rows, at) {
+        var row = document.querySelector('.kr-colo-ticks');
+        if (!row) return;
+        var LABEL_PX = 32;
+        var isJan = function (r) { return r[0].slice(5) === '01'; };
+        var firstJan = rows.findIndex(isJan);
+        function place() {
+          var width = row.clientWidth;
+          if (!width) return;
+          var monthPx = width * (at(1) - at(0));
+          var step = Math.max(1, Math.ceil(LABEL_PX / (12 * monthPx)));
+          var firstYear = Number(rows[Math.max(firstJan, 0)][0].slice(0, 4));
+          var placed = [];
+          rows.forEach(function (r, i) {
+            var keep = isJan(r) ? (Number(r[0].slice(0, 4)) - firstYear) % step === 0 : i === 0;
+            if (!keep) return;
+            // Kept inside the row: a January in the last few bars would
+            // otherwise run off the right edge.
+            var left = Math.min(at(i) * width, width - LABEL_PX);
+            var prev = placed[placed.length - 1];
+            if (prev && left < prev.left + LABEL_PX) placed.pop();
+            placed.push({ left: left, year: r[0].slice(0, 4) });
+          });
+          row.textContent = '';
+          placed.forEach(function (p) {
+            var label = document.createElement('span');
+            label.textContent = p.year;
+            label.style.left = p.left + 'px';
+            row.appendChild(label);
+          });
+        }
+        place();
+        if ('ResizeObserver' in window) {
+          var lastWidth = row.clientWidth;
+          new ResizeObserver(function () {
+            if (row.clientWidth !== lastWidth) { lastWidth = row.clientWidth; place(); }
+          }).observe(row);
+        }
+      }
+      /* A figure that names a post links to it, when the measurement says
+         which post it is (longestPostUrl, shortestPostUrl). */
+      function linkTitle(key, url) {
+        if (!/^blog\/[a-z0-9-]+\.html$/.test(url || '')) return;
+        document.querySelectorAll('[data-colo="' + key + '"]').forEach(function (el) {
+          var a = document.createElement('a');
+          a.href = '/' + url;
+          a.textContent = el.textContent;
+          el.textContent = '';
+          el.appendChild(a);
+        });
       }
       function month(iso) {
         if (!iso) return '';
@@ -431,6 +478,8 @@
             el.textContent = out[k];
           });
         });
+        linkTitle('longestTitle', d.longestPostUrl);
+        linkTitle('shortestTitle', d.shortestPostUrl);
       }).catch(function () {
         // Only the figures still showing their dash: a count bound inside a
         // sentence keeps its words ("hundreds of") rather than reading

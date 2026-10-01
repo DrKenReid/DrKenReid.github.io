@@ -832,6 +832,18 @@ svg.kr-glyph {
   .kr-for-touch {
     display: none; } }
 
+/* Wording for the motion setting, the same way: .kr-for-motion unless the
+   reader has asked for reduced motion, .kr-for-still when they have. For
+   copy that describes something moving, such as the homepage's evolved
+   headline, which a reader with reduced motion sees drawn as type. */
+@media (prefers-reduced-motion: reduce) {
+  .kr-for-motion {
+    display: none; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .kr-for-still {
+    display: none; } }
+
 /* Lazy images fade in rather than pop. shared-components.js adds
    .img-lazy-fade to an image below the fold and .img-loaded once it has
    decoded. Early in the file on purpose: a component that sets its own
@@ -9966,6 +9978,7 @@ button.kr-cal__cell {
                         the gradient rule, drawn by scroll like the rule
                         under a centred .section-heading (which the
                         centred sections here use as they are)
+     .ds-jump           the row of links to the page's sections
      .ds-panel          the research-interests card: .ds-tag for fields,
                         .ds-skill-badge for tools and methods
      .ds-pub-*          the publication list. Everything between the
@@ -9977,8 +9990,11 @@ button.kr-cal__cell {
      .ds-thesis-*,
      .ds-talk-embed     the thesis and the talk beside the papers
      .ds-group-title,
-     .ds-project-card   the portfolio's two groups and their cards
-     .ds-profiles       the profile links under Let's Collaborate
+     .ds-group-note,
+     .ds-project-card   the portfolio's two groups, a note under a group's
+                        title, and the cards
+     .ds-profiles       the CV and the profile links under Let's
+                        Collaborate
    The centred heads, their ledes and the button rows are the shared
    .section-heading, .section-heading__lede and .kr-btn-row.
 
@@ -10022,6 +10038,18 @@ html.kr-js.kr-scroll-fallback .ds-col-head > .section-eyebrow + h2::after {
    their heads step down to the smaller display size. */
 .ds-col-head--sm > .section-eyebrow + h2 {
   font-size: var(--kr-display-sm); }
+
+/* --- Jump row -----------------------------------------------------------
+   Links to the page's sections, under the CV, email and LinkedIn
+   buttons: small ghost buttons, a size down from those three so the two
+   rows do not read as one. Plain markup in data_science.html; the
+   targets' [id] scroll margin (§02) clears the fixed header. */
+.ds-jump {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px; }
 
 /* --- Research interests ---------------------------------------------- */
 .ds-panel {
@@ -10273,6 +10301,15 @@ a.ds-text-link:focus-visible {
 .row + .ds-group-title {
   margin-top: 22px; }
 
+/* A line under a group's title: the Streamlit apps' note that an idle
+   app sleeps and takes a while to wake. */
+.ds-group-note {
+  max-width: 62em;
+  margin: -6px 0 18px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--kr-muted); }
+
 .ds-project-card {
   display: flex;
   flex-direction: column;
@@ -10316,12 +10353,11 @@ a.ds-text-link:focus-visible {
 .ds-project-card--link h4 a:focus-visible {
   color: var(--kr-action); }
 
+/* A blurb is shown whole. A three-line clamp cut nine of fifteen short
+   at 390px (every one at 320) with no way to read the rest on the page;
+   the cards of a row still share one height, since the columns stretch. */
 .ds-project-card p {
-  display: -webkit-box;
   margin-bottom: 12px;
-  overflow: hidden;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
   font-size: 13px;
   line-height: 1.55;
   color: var(--kr-muted); }
@@ -10376,6 +10412,11 @@ a.ds-text-link:focus-visible {
   height: 1.1em;
   object-fit: contain;
   border-radius: 3px; }
+
+/* The CV's download glyph, in the same column as the profiles' marks. */
+.ds-profiles i {
+  width: 1.1em;
+  text-align: center; }
 
 @media only screen and (max-width: 767px) {
   .ds-panel {
@@ -10546,6 +10587,35 @@ a.ds-text-link:focus-visible {
 [data-theme="dark"] .kr-timeline li .tl-dot::after {
   border-color: #1a1a1a; }
 
+/* On a phone the year moves above its card, beside the dot, and the rail
+   runs down the left edge: in the desktop row the year column, the dot
+   and the gaps took 155px, and at 320px the cards were 135px wide, two
+   or three words to a line. */
+@media (max-width: 575.98px) {
+  .kr-timeline {
+    --tl-pad: 0px;
+    --tl-gap: 12px; }
+  .kr-timeline::before {
+    left: calc(var(--tl-dot) / 2 - 1px); }
+  .kr-timeline li {
+    display: grid;
+    grid-template-columns: var(--tl-dot) minmax(0, 1fr);
+    column-gap: var(--tl-gap);
+    row-gap: 6px; }
+  .kr-timeline li .tl-dot {
+    grid-column: 1;
+    grid-row: 1;
+    padding-top: 4px; }
+  .kr-timeline li .tl-year {
+    grid-column: 2;
+    grid-row: 1;
+    padding-top: 1px;
+    text-align: left;
+    white-space: normal; }
+  .kr-timeline li .tl-body {
+    grid-column: 2;
+    grid-row: 2; } }
+
 /* Muted body copy (data_science.html). */
 .kr-body-text {
   font-size: 15px;
@@ -10570,7 +10640,23 @@ a.ds-text-link:focus-visible {
   color: #ddd; }
 
 /* --- Contact ------------------------------------------------------------
-   The static map card: a picture of the map, not a live one. */
+   The address and its Copy address button (contact.html's script unhides
+   the button and wires it to krCopyText), then a line of links for work.
+   The mailto link itself is .kr-mail-link (§02). */
+.kr-mail-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 16px;
+  margin-bottom: 14px; }
+
+.kr-contact-work {
+  font-size: 15px;
+  text-wrap: balance;
+  color: var(--kr-muted); }
+
+/* The static map card: a picture of the map, not a live one. */
 .kr-static-map {
   display: block;
   position: relative;
@@ -10658,6 +10744,23 @@ a.ds-text-link:focus-visible {
   display: block;
   width: 100%;
   height: 180px; }
+
+/* The chart's year labels, a row under the drawing that colophon.html's
+   placeTicks fills with absolutely placed spans: the drawing stretches
+   to the column, and labels inside it were squeezed with it. */
+.kr-colo-ticks {
+  position: relative;
+  height: 18px;
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 18px;
+  font-variant-numeric: tabular-nums;
+  color: var(--kr-muted); }
+
+.kr-colo-ticks span {
+  position: absolute;
+  top: 0;
+  white-space: nowrap; }
 
 .kr-colo-chart figcaption {
   text-align: center;
@@ -11824,6 +11927,8 @@ html.kr-theme-reveal::view-transition-new(root) {
   .kr-home-quote,
   .gallery-filters,
   #load-more-btn,
+  .ds-jump,
+  .kr-mail-copy,
   hr {
     display: none !important; }
 
