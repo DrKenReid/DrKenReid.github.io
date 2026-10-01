@@ -19,16 +19,10 @@
       <category>science</category>
       <category>advice</category>
       <content:encoded><![CDATA[
- <h1>Sleep Science</h1>
- <div class="blog-meta">
- 27 September 2026 &middot;
- <span class="blog-tag">science</span>
- <span class="blog-tag">advice</span>
- </div>
 
 <p>I've always had a strange relationship with sleep. I used to experience a lot of insomnia due to my thanatophobia, but nowadays (largely due to changes in life circumstances and being much happier) I tend to sleep soundly. However, I made the (mistake?) decision to read "Why We Sleep: Unlocking the Power of Sleep and Dreams" by Matthew Walker. Now, I have something of an obsession with making sure I have as good a sleep routine as possible.</p>
 
- <p>In a 2024 paper, Windred and colleagues took more than 10 million hours of accelerometer data from 60,977 people in the UK Biobank and found that how regular someone's sleep was predicted their risk of dying over the following years better than how long they slept<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>. People are obsessed with sleeping pills, mattresses and spending insane amounts of money and time on these, when there are many much simpler (and healthier) solutions backed by actual science - and you can tell it's not some grift because no one is making money off of it (unlike the pills and mattresses).</p>
+ <p>In a 2024 paper, Windred and colleagues took more than 10 million hours of accelerometer data from 60,977 people in the UK Biobank and found that how regular someone's sleep was predicted their risk of dying over the following years better than how long they slept<sup><a href="https://www.kenreid.co.uk/blog/sleep-science.html#ref-1" class="cite-ref">[1]</a></sup>. People are obsessed with sleeping pills, mattresses and spending insane amounts of money and time on these, when there are many much simpler (and healthier) solutions backed by actual science - and you can tell it's not some grift because no one is making money off of it (unlike the pills and mattresses).</p>
 
  <p>I have the same problem with the 'sleep influencers' on YouTube shorts, Instagram reels and TikToks that I have with <a href="https://www.kenreid.co.uk/blog/self-help-books.html">most self-help books</a>. Their whole business is telling you that you're doing sleep wrong and dying faster because of it, and some of that is built on good science, but is driven by a will to make money off of you, through selling books, sleep accessories, diet plans or 1 on 1 mentoring for some obscene costs.</p>
 
@@ -61,7 +55,7 @@
 
  <h2>Oversold</h2>
 
- <p>Matthew Walker's <em>Why We Sleep</em> did a lot of good for how seriously people take sleep. It changed my habits more than any other book I've read, and I gave it five stars (which is not particularly rare for me but still). Alexey Guzey went through it and argues that the World Health Organization "sleep loss epidemic" in it doesn't exist (he couldn't find a WHO document declaring one), and that a bar chart on sports injuries, adapted from another study, lost its 5-hour column, the one showing fewer injuries than 6 hours<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>, so some of it is fairly called out, but the central argument very much survives: sleep matters and most of us don't get enough of it.</p>
+ <p>Matthew Walker's <em>Why We Sleep</em> did a lot of good for how seriously people take sleep. It changed my habits more than any other book I've read, and I gave it five stars (which is not particularly rare for me but still). Alexey Guzey went through it and argues that the World Health Organization "sleep loss epidemic" in it doesn't exist (he couldn't find a WHO document declaring one), and that a bar chart on sports injuries, adapted from another study, lost its 5-hour column, the one showing fewer injuries than 6 hours<sup><a href="https://www.kenreid.co.uk/blog/sleep-science.html#ref-2" class="cite-ref">[2]</a></sup>, so some of it is fairly called out, but the central argument very much survives: sleep matters and most of us don't get enough of it.</p>
 
  <p>Tracker "sleep scores" are largely guesswork. A consumer ring or watch estimates your sleep stages from movement and heart rate. These devices are bad at telling light, deep and REM sleep apart compared with polysomnography, and the app still shows you a confident number every morning. It runs largely guess work and validation.</p>
 
@@ -69,7 +63,7 @@
 
  <h2>Orthosomnia</h2>
 
- <p>Baron and colleagues described <strong>orthosomnia</strong> in 2017: patients so anxious about getting their tracker's numbers right that the anxiety itself was damaging their sleep<sup><a href="#ref-3" class="cite-ref">[3]</a></sup>. You lie awake worrying about whether you're getting enough deep sleep. Or you wake up feeling fine, check the app, find out you "slept badly", and feel worse all day than you would have if you'd never looked.</p>
+ <p>Baron and colleagues described <strong>orthosomnia</strong> in 2017: patients so anxious about getting their tracker's numbers right that the anxiety itself was damaging their sleep<sup><a href="https://www.kenreid.co.uk/blog/sleep-science.html#ref-3" class="cite-ref">[3]</a></sup>. You lie awake worrying about whether you're getting enough deep sleep. Or you wake up feeling fine, check the app, find out you "slept badly", and feel worse all day than you would have if you'd never looked.</p>
 
  <figure class="kr-figure--solo">
  <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/326.webp" alt="A chipmunk peeking out of the end of a white pipe lying in the grass" loading="lazy" width="400" height="266">
@@ -81,12 +75,12 @@
  <p>You don't need to buy anything to sleep well. Roughly in order of how much they help:</p>
 
  <ol>
- <li><strong>Routine.</strong> Go to bed and get up at the same times every day, weekends included (I know, that's a hard ask). In the Windred study, regularity predicted the risk of dying better than total hours did<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>.</li>
+ <li><strong>Routine.</strong> Go to bed and get up at the same times every day, weekends included (I know, that's a hard ask). In the Windred study, regularity predicted the risk of dying better than total hours did<sup><a href="https://www.kenreid.co.uk/blog/sleep-science.html#ref-1" class="cite-ref">[1]</a></sup>.</li>
  <li><strong>Light.</strong> Get daylight in the morning, ideally outside, and keep the evenings dim. Light is the main thing that sets your body clock, and a bright screen at midnight tells it it's still daytime.</li>
- <li><strong>Caffeine.</strong> It lasts much longer than it feels like it does. In healthy adults its half-life is between 3 and 7 hours<sup><a href="#ref-5" class="cite-ref">[5]</a></sup>, so half of a 3pm coffee can still be in you at 9pm, and a quarter at bedtime. Drake and colleagues gave people 400mg (two or three big coffees) six hours before bed and it still cut their sleep by more than an hour<sup><a href="#ref-4" class="cite-ref">[4]</a></sup>. If you drink it at all, drink it in the morning (after all, caffeine is actually great for you cognitively and physically<sup><a href="#ref-9" class="cite-ref">[9]</a></sup><sup><a href="#ref-10" class="cite-ref">[10]</a></sup>, hence the culture around it being a key ingredient in preworkouts, energy drinks and synonymous with studying!).</li>
- <li><strong>Temperature.</strong> Keep the bedroom cool. Under a duvet, being too warm costs more deep and REM sleep than being cold does, and humid heat is worse again<sup><a href="#ref-6" class="cite-ref">[6]</a></sup>.</li>
- <li><strong>Exercise.</strong> Regular exercise has a moderate effect on how well people say they sleep, and small effects on how long they sleep and how fast they drop off<sup><a href="#ref-7" class="cite-ref">[7]</a></sup>. It's good for everything else too.</li>
- <li><strong>Hydration.</strong> Drink enough through the day, but not a pint right before bed unless you enjoy 3am trips to the toilet. People who slept six hours were more likely to be under-hydrated than people who slept eight<sup><a href="#ref-8" class="cite-ref">[8]</a></sup>.</li>
+ <li><strong>Caffeine.</strong> It lasts much longer than it feels like it does. In healthy adults its half-life is between 3 and 7 hours<sup><a href="https://www.kenreid.co.uk/blog/sleep-science.html#ref-5" class="cite-ref">[5]</a></sup>, so half of a 3pm coffee can still be in you at 9pm, and a quarter at bedtime. Drake and colleagues gave people 400mg (two or three big coffees) six hours before bed and it still cut their sleep by more than an hour<sup><a href="https://www.kenreid.co.uk/blog/sleep-science.html#ref-4" class="cite-ref">[4]</a></sup>. If you drink it at all, drink it in the morning (after all, caffeine is actually great for you cognitively and physically<sup><a href="https://www.kenreid.co.uk/blog/sleep-science.html#ref-9" class="cite-ref">[9]</a></sup><sup><a href="https://www.kenreid.co.uk/blog/sleep-science.html#ref-10" class="cite-ref">[10]</a></sup>, hence the culture around it being a key ingredient in preworkouts, energy drinks and synonymous with studying!).</li>
+ <li><strong>Temperature.</strong> Keep the bedroom cool. Under a duvet, being too warm costs more deep and REM sleep than being cold does, and humid heat is worse again<sup><a href="https://www.kenreid.co.uk/blog/sleep-science.html#ref-6" class="cite-ref">[6]</a></sup>.</li>
+ <li><strong>Exercise.</strong> Regular exercise has a moderate effect on how well people say they sleep, and small effects on how long they sleep and how fast they drop off<sup><a href="https://www.kenreid.co.uk/blog/sleep-science.html#ref-7" class="cite-ref">[7]</a></sup>. It's good for everything else too.</li>
+ <li><strong>Hydration.</strong> Drink enough through the day, but not a pint right before bed unless you enjoy 3am trips to the toilet. People who slept six hours were more likely to be under-hydrated than people who slept eight<sup><a href="https://www.kenreid.co.uk/blog/sleep-science.html#ref-8" class="cite-ref">[8]</a></sup>.</li>
  </ol>
 
  <p>Everything past that (the scores, the supplements, the doom, the optimising) ranges from "might help" to overthinking and anxiety provoking. Unless your doctor says otherwise. </p>
@@ -163,12 +157,6 @@
       <category>technology</category>
       <category>advice</category>
       <content:encoded><![CDATA[
- <h1>What a Custom Domain Actually Involves</h1>
- <div class="blog-meta">
- 27 September 2026 &middot;
- <span class="blog-tag">technology</span>
- <span class="blog-tag">advice</span>
- </div>
 
  <p>I first made my website when I did my undergraduate degree, in 2012-2013. I hosted it via my university, as they had a means to drop an html file into your main directory and it would become your student homepage. It was a very simple affair, nothing like it is today. The thing I hated most about it was having to give my university's URL to let people see my page. I wanted it to represent me professionally, act as a CV / resume of sorts for future employers - and I knew upon leaving university I would lose the benefits of their hosting, so one of the things I had to look into was custom domains.</p>
 
@@ -279,11 +267,6 @@
       <description>The homepage headline is a hill climber painting 78 triangles until they read Hi, I&#x27;m Ken.</description>
       <category>technology</category>
       <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/a-headline-that-evolves-itself.html">View it on the site</a> to play with it.</em></p>
- <h1>A Headline That Evolves Itself</h1>
- <div class="blog-meta">
- 26 September 2026 &middot;
- <span class="blog-tag">technology</span>
- </div>
 
  <p>My website has a bunch of different optimisers running in blog posts and a photograph of my face on the front. I think the optimisers are the best thing on this site, and I figured, why not show it right there on the homepage? So the second slide of the hero now runs one too, and what it's optimising itself into drawing the headline "Hi, I'm Ken". Here's how it works, and what it took to make it cheap enough to leave running on a homepage. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
 
@@ -375,13 +358,8 @@
       <description>The gear treadmill makes photography look expensive, but my gallery was shot on a camera that now sells used from about a hundred dollars, and my phone.</description>
       <category>photography</category>
       <content:encoded><![CDATA[
- <h1>The Inaccessibility of Photography</h1>
- <div class="blog-meta">
- 26 September 2026 &middot;
- <span class="blog-tag">photography</span>
- </div>
 
- <p>In 1900 Eastman Kodak brought out a box camera called the Brownie and sold it for one dollar, which is about $40 in today's money (the name came partly from Frank Brownell of Rochester, New York, who made them for Eastman).<sup><a href="#ref-1" class="cite-ref">[1]</a></sup><sup><a href="#ref-2" class="cite-ref">[2]</a></sup> A hundred thousand of them sold in the first year, and the Franklin Institute, which has one in its collection, says it "helped to put photography into the hands of amateurs".</p>
+ <p>In 1900 Eastman Kodak brought out a box camera called the Brownie and sold it for one dollar, which is about $40 in today's money (the name came partly from Frank Brownell of Rochester, New York, who made them for Eastman).<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-1" class="cite-ref">[1]</a></sup><sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-2" class="cite-ref">[2]</a></sup> A hundred thousand of them sold in the first year, and the Franklin Institute, which has one in its collection, says it "helped to put photography into the hands of amateurs".</p>
 
  <p>A hundred and twenty-six years later, photography looks like a hobby for people with money. And, well, it largely is. If you go to any big sporting event and look at the journalist section you'll see a bunch of people with lenses about the size of my arm, and cost about 4x the price of my car. For one lens. Then if you look at discussion boards online, most of what I see is about gear: which body, which lens, which upgrade, what this year's model does that last year's didn't. It puts people off of a hobby that can actually be done with very little. You can take good photos on a camera that sells used for about a hundred dollars, or on the phone you already own, and edit them in software that costs nothing (except some time to learn).</p>
 
@@ -400,7 +378,7 @@
 
  <h2>Musicians have a name for it</h2>
 
- <p>Gear Acquisition Syndrome, or GAS, is "the musicians' unrelenting urge to buy and own instruments and equipment as an anticipated catalyst of creative energy and bringer of happiness". That's from Jan-Peter Herbst and Jonas Menze, who wrote a whole book about it in 2021. They also write: "The urge is directed by the belief that acquiring another instrument will make one a better player."<sup><a href="#ref-3" class="cite-ref">[3]</a></sup> With "camera" in place of "instrument", that describes a good chunk of photography YouTube and TikTok.</p>
+ <p>Gear Acquisition Syndrome, or GAS, is "the musicians' unrelenting urge to buy and own instruments and equipment as an anticipated catalyst of creative energy and bringer of happiness". That's from Jan-Peter Herbst and Jonas Menze, who wrote a whole book about it in 2021. They also write: "The urge is directed by the belief that acquiring another instrument will make one a better player."<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-3" class="cite-ref">[3]</a></sup> With "camera" in place of "instrument", that describes a good chunk of photography YouTube and TikTok.</p>
 
  <p>I've played guitar since I was about 11 and got into photography around 15. I get the urge to build up your gear library, who doesn't want new toys? It brings immediate satisfaction, fun, enjoyment, inspiration, while doing so with your existing gear is something of a chore before you actually enjoy it again. Plus - think of all the things new gear can do your current gear can't! But that is where creativity come into play, or sometimes, swallowing that urge and focusing on what your gear CAN do, putting new gear into the future. You'll enjoy your new gear even more with more skills and experience gained from your old gear.</p>
 
@@ -411,9 +389,9 @@
 
  <h2>My camera came out in 2010</h2>
 
- <p>Almost every photo in my gallery was shot on a Canon EOS 60D (though I think a couple linger from my old 350D, and a couple of phone shots are there, too). Canon announced it on 26 August 2010, an 18 megapixel APS-C DSLR with a screen that flips out, and it went on sale in the US at $1,099 for the body, or $1,399 with an 18-135mm kit lens.<sup><a href="#ref-4" class="cite-ref">[4]</a></sup><sup><a href="#ref-5" class="cite-ref">[5]</a></sup> That was a lot of money in 2010. This week the used camera shop MPB lists 60D bodies from $97 to $214.<sup><a href="#ref-6" class="cite-ref">[6]</a></sup></p>
+ <p>Almost every photo in my gallery was shot on a Canon EOS 60D (though I think a couple linger from my old 350D, and a couple of phone shots are there, too). Canon announced it on 26 August 2010, an 18 megapixel APS-C DSLR with a screen that flips out, and it went on sale in the US at $1,099 for the body, or $1,399 with an 18-135mm kit lens.<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-4" class="cite-ref">[4]</a></sup><sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-5" class="cite-ref">[5]</a></sup> That was a lot of money in 2010. This week the used camera shop MPB lists 60D bodies from $97 to $214.<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-6" class="cite-ref">[6]</a></sup></p>
 
- <p>Canon has replaced it three times since, with the 70D, the 80D and then the 90D in August 2019, and Wikipedia now lists a mirrorless camera, the EOS R10, as the 90D's successor, and that's excluding the myriad of better series out there.<sup><a href="#ref-7" class="cite-ref">[7]</a></sup><sup><a href="#ref-8" class="cite-ref">[8]</a></sup> At my old workplace, I had the opportunity to use a Canon EOS 5D Mark III. Here's a brief comparison:<sup><a href="#ref-7" class="cite-ref">[7]</a></sup><sup><a href="#ref-17" class="cite-ref">[17]</a></sup></p>
+ <p>Canon has replaced it three times since, with the 70D, the 80D and then the 90D in August 2019, and Wikipedia now lists a mirrorless camera, the EOS R10, as the 90D's successor, and that's excluding the myriad of better series out there.<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-7" class="cite-ref">[7]</a></sup><sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-8" class="cite-ref">[8]</a></sup> At my old workplace, I had the opportunity to use a Canon EOS 5D Mark III. Here's a brief comparison:<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-7" class="cite-ref">[7]</a></sup><sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-17" class="cite-ref">[17]</a></sup></p>
 
  <figure>
  <img class="kr-figure-img" src="https://www.kenreid.co.uk/blog/img/inaccessibility/canon-60d.webp" alt="A black Canon EOS 60D with a 15-85mm zoom lens, seen from the front at an angle" loading="lazy" width="600" height="538">
@@ -429,7 +407,7 @@
  <tbody>
  <tr><th scope="row">Announced</th><td>August 2010</td><td>March 2012</td></tr>
  <tr><th scope="row">Launch price</th><td>$1,099</td><td>$3,499</td></tr>
- <tr><th scope="row">Current price (used)</th><td>$97 to $214<sup><a href="#ref-6" class="cite-ref">[6]</a></sup></td><td>$154 to $579<sup><a href="#ref-18" class="cite-ref">[18]</a></sup></td></tr>
+ <tr><th scope="row">Current price (used)</th><td>$97 to $214<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-6" class="cite-ref">[6]</a></sup></td><td>$154 to $579<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-18" class="cite-ref">[18]</a></sup></td></tr>
  <tr><th scope="row">Sensor</th><td>18 MP, APS-C</td><td>22.3 MP, full frame</td></tr>
  <tr><th scope="row">Autofocus points</th><td>9</td><td>61</td></tr>
  <tr><th scope="row">Burst</th><td>5.3 frames/s</td><td>6 frames/s</td></tr>
@@ -441,7 +419,7 @@
  </table></div>
  <p class="kr-muted-note">Prices and weights are for the body alone, without a lens.</p>
 
- <p>The gallery has ~500 photos in it, about a decade of self-taught landscapes, urban decay and pets, and I'm happy with them. I'm sure that a fancier camera and lens would have improved the shots, sure, but the grass is always greener. The 60D doesn't even have GPS, so I've been putting the <a href="https://www.kenreid.co.uk/blog/putting-my-photos-on-a-map.html">photo map</a> together by hand. It shoots 5.3 frames a second and tops out at ISO 6400 (12800 if you push it), which is plenty for a hill at sunset or a patient dog, and not what I'd take to a football match under floodlights (not that I'd go to a football match, anyhow).<sup><a href="#ref-7" class="cite-ref">[7]</a></sup> Most of a landscape photo is being in the right place when the light is good and pointing the thing in a sensible direction. The lenses I have are nothing fancy. I make use of a kit lens and a cheap telephoto lens I got for around $100. The only thing I need is more time, not gear! </p>
+ <p>The gallery has ~500 photos in it, about a decade of self-taught landscapes, urban decay and pets, and I'm happy with them. I'm sure that a fancier camera and lens would have improved the shots, sure, but the grass is always greener. The 60D doesn't even have GPS, so I've been putting the <a href="https://www.kenreid.co.uk/blog/putting-my-photos-on-a-map.html">photo map</a> together by hand. It shoots 5.3 frames a second and tops out at ISO 6400 (12800 if you push it), which is plenty for a hill at sunset or a patient dog, and not what I'd take to a football match under floodlights (not that I'd go to a football match, anyhow).<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-7" class="cite-ref">[7]</a></sup> Most of a landscape photo is being in the right place when the light is good and pointing the thing in a sensible direction. The lenses I have are nothing fancy. I make use of a kit lens and a cheap telephoto lens I got for around $100. The only thing I need is more time, not gear! </p>
 
  <figure class="kr-figure--solo">
  <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/514.webp" alt="A red car parked behind a screen of dark green leaves" loading="lazy" width="400" height="266">
@@ -450,15 +428,15 @@
 
  <h2>The camera you already have</h2>
 
- <p>Rise Above Research, who somehow came up with a number, estimate that around 1.95 trillion photos will be taken worldwide in 2026, with smartphones accounting for the vast majority.<sup><a href="#ref-9" class="cite-ref">[9]</a></sup></p>
+ <p>Rise Above Research, who somehow came up with a number, estimate that around 1.95 trillion photos will be taken worldwide in 2026, with smartphones accounting for the vast majority.<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-9" class="cite-ref">[9]</a></sup></p>
 
- <p>In 2009 the photographer Chase Jarvis published a book of pictures taken on his iPhone, a visual notebook of a year of his life, and called it <em>The Best Camera Is The One That's With You</em>.<sup><a href="#ref-10" class="cite-ref">[10]</a></sup></p>
+ <p>In 2009 the photographer Chase Jarvis published a book of pictures taken on his iPhone, a visual notebook of a year of his life, and called it <em>The Best Camera Is The One That's With You</em>.<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-10" class="cite-ref">[10]</a></sup></p>
 
  <h2>Editing for nothing</h2>
 
- <p>Snapseed is Google's photo editor for phones. The App Store listing promises "30+ pro tools and filters" with "no subscriptions, purchases, ads, or watermarks".<sup><a href="#ref-11" class="cite-ref">[11]</a></sup> It edits raw files too: DNG files on Android, and on an iPhone or iPad raw files from a list of cameras that includes the 60D (and my old 350D).<sup><a href="#ref-12" class="cite-ref">[12]</a></sup> Opening a raw file goes straight to the Develop tool, with exposure, shadows, highlights, contrast, structure, temperature and tint.</p>
+ <p>Snapseed is Google's photo editor for phones. The App Store listing promises "30+ pro tools and filters" with "no subscriptions, purchases, ads, or watermarks".<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-11" class="cite-ref">[11]</a></sup> It edits raw files too: DNG files on Android, and on an iPhone or iPad raw files from a list of cameras that includes the 60D (and my old 350D).<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-12" class="cite-ref">[12]</a></sup> Opening a raw file goes straight to the Develop tool, with exposure, shadows, highlights, contrast, structure, temperature and tint.</p>
 
- <p>On a computer there's darktable, which calls itself "an open source photography workflow application and raw developer", free under the GPL, with builds for Windows, macOS and Linux.<sup><a href="#ref-13" class="cite-ref">[13]</a></sup><sup><a href="#ref-14" class="cite-ref">[14]</a></sup> Its editing is "fully non-destructive", so the original raw file is never changed and the full image is only worked out on export. Its camera support page lists the 60D with white balance presets and a noise profile.<sup><a href="#ref-15" class="cite-ref">[15]</a></sup> RawTherapee is the other big free one, also GPL, also on all three systems.<sup><a href="#ref-16" class="cite-ref">[16]</a></sup></p>
+ <p>On a computer there's darktable, which calls itself "an open source photography workflow application and raw developer", free under the GPL, with builds for Windows, macOS and Linux.<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-13" class="cite-ref">[13]</a></sup><sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-14" class="cite-ref">[14]</a></sup> Its editing is "fully non-destructive", so the original raw file is never changed and the full image is only worked out on export. Its camera support page lists the 60D with white balance presets and a noise profile.<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-15" class="cite-ref">[15]</a></sup> RawTherapee is the other big free one, also GPL, also on all three systems.<sup><a href="https://www.kenreid.co.uk/blog/the-inaccessibility-of-photography.html#ref-16" class="cite-ref">[16]</a></sup></p>
 
  <p>Sharing photos doesn't have to cost anything either. The full-size files for my gallery are <a href="https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html">hosted for free</a>.</p>
 
@@ -518,11 +496,6 @@
       <description>Move your mouse over a card on the blog and the cover starts doing something. How the sketches work.</description>
       <category>technology</category>
       <content:encoded><![CDATA[
- <h1>Every Card Has a Sketch</h1>
- <div class="blog-meta">
- 20 September 2026 &middot;
- <span class="blog-tag">technology</span>
- </div>
 
  <p>Move your mouse over any card on the <a href="https://www.kenreid.co.uk/blog.html">blog listing</a> and the cover starts doing something. The <a href="https://www.kenreid.co.uk/blog/tabu-search-live.html">tabu search</a> one has queens on a chessboard getting banned from squares they just left. The <a href="https://www.kenreid.co.uk/blog/why-i-love-latex.html">LaTeX</a> one types out <code>\section{Why}</code> on the left while a little page sets itself on the right. I made one for every post (67 at the time of writing), then got a bit carried away and did the homepage stats, the publications and the book wall as well. This is how they work. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
 
@@ -589,11 +562,6 @@
       <description>A hyper-heuristic timetabling exams live in your browser: four move heuristics compete for a learning manager&#x27;s attention while a Great Deluge water level drains.</description>
       <category>ai</category>
       <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/hyper-heuristics-live.html">View it on the site</a> to play with it.</em></p>
- <h1>Hyper-Heuristics, Live</h1>
- <div class="blog-meta">
- 19 September 2026 &middot;
- <span class="blog-tag">ai</span>
- </div>
 
  <p>Nine posts in, every search strategy in this series has handed you its dials and waited:</p>
  <ul>
@@ -645,7 +613,7 @@
 
  <p>Above them sits the manager - it keeps a score for each worker, rewards a worker whenever its move is accepted and improves the cost, and lets every score decay over time. Even the manager's least favourite heuristic keeps getting the odd chance, because a heuristic useless so far might be useful later down the line when the circumstances change.</p>
 
- <p>Cowling, Kendall and Soubeiga used the same pattern to schedule a sales summit<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>, in the paper that named the modern field.</p>
+ <p>Cowling, Kendall and Soubeiga used the same pattern to schedule a sales summit<sup><a href="https://www.kenreid.co.uk/blog/hyper-heuristics-live.html#ref-2" class="cite-ref">[2]</a></sup>, in the paper that named the modern field.</p>
 
  <h2>Intentionally Blind</h2>
 
@@ -653,11 +621,11 @@
 
  <p>All it ever observes is "I pulled lever three and the cost went down by 40" or "I pulled lever one and the move was rejected". That blindness is called the domain barrier, and it sounds like a handicap but it's necessary.</p>
 
- <p>Because the manager only ever hears cost deltas, you can unplug the four timetabling workers, plug in "move a nurse to another shift" and "swap two delivery routes", and the same manager, unchanged, starts learning which of <em>those</em> levers earns its keep. The domain knowledge lives entirely in the cheap, disposable workers. Burke (who was briefly my supervisor at Stirling) and colleagues' survey<sup><a href="#ref-3" class="cite-ref">[3]</a></sup> maps how far that one trick works.</p>
+ <p>Because the manager only ever hears cost deltas, you can unplug the four timetabling workers, plug in "move a nurse to another shift" and "swap two delivery routes", and the same manager, unchanged, starts learning which of <em>those</em> levers earns its keep. The domain knowledge lives entirely in the cheap, disposable workers. Burke (who was briefly my supervisor at Stirling) and colleagues' survey<sup><a href="https://www.kenreid.co.uk/blog/hyper-heuristics-live.html#ref-3" class="cite-ref">[3]</a></sup> maps how far that one trick works.</p>
 
  <h2>Great Deluge: the tide going out</h2>
 
- <p>The manager decides which move to try. Something still has to decide which results to keep: Gunter Dueck's Great Deluge, published in 1993<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> does the trick.</p>
+ <p>The manager decides which move to try. Something still has to decide which results to keep: Gunter Dueck's Great Deluge, published in 1993<sup><a href="https://www.kenreid.co.uk/blog/hyper-heuristics-live.html#ref-1" class="cite-ref">[1]</a></sup> does the trick.</p>
 
  <p>Dueck told it as a story about rain - it rains without end, the water rises, and a hiker who wants to end up on a high peak just has one goal: keep their feet dry!</p>
 
@@ -733,11 +701,6 @@
       <category>photography</category>
       <category>philosophy</category>
       <content:encoded><![CDATA[
- <h1>Photographing Strangers</h1>
- <div class="blog-meta">
- 16 September 2026 &middot;
- <span class="blog-tag">photography</span>
- </div>
 
  <p>I've taken photos of many people without them knowing or consenting. Sometimes, they do know, but don't consent - I'll take a photo and they turn around and see my lens pointing at them. So far no one has asked me to delete any photos, but I've definitely had stares and glares.</p>
 
@@ -879,17 +842,12 @@
       <description>Most search algorithms improve a solution by nudging it. Ruin and recreate demolishes part of it and rebuilds, which works better on rosters. The method behind my 2018 rostering paper, running in your browser.</description>
       <category>data science</category>
       <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/ruin-and-recreate-live.html">View it on the site</a> to play with it.</em></p>
- <h1>Ruin and Recreate, Live</h1>
- <div class="blog-meta">
- 13 September 2026 &middot;
- <span class="blog-tag">data science</span>
- </div>
 
  <p>I started my Ph.D. in 2015 under Dr. Jingpeng Li, a kindly and intelligent man who was very patient with me going down the wrong roads and floundering over fairly fundamental and basic math. He had some interesting ideas on how to modify existing algorithms to improve their capabilities, and let me toy with them to begin to understand some of that fundamental math, as well as get a feel for how search algorithms, at their core, actually function.</p>
 
 <p>Most search algorithms take a working solution, change one thing, and keep the change if it helped. That works until the solution is tangled, at which point every single change makes things worse and the search sits there, surrounded by improvements it cannot reach because each one requires three simultaneous moves.</p>
 
- <p>Ruin and recreate knocks a hole in the solution and rebuilds the solution. This is the method behind <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:Se3iqnhoufwC" target="_blank" rel="noopener">a rostering paper I wrote in 2018</a><sup><a href="#ref-1" class="cite-ref">[1]</a></sup> with colleagues at Stirling, York and BT, using a variant of Jingpeng's own algorithm: Evolutionary Ruin and Stochastic Recreate<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>, where the wrecking ball is aimed by fitness rather than swung blindly. The demo below is that method on a simple roster. Part of the series on <a href="https://www.kenreid.co.uk/series-research-live.html">research, live</a>.</p>
+ <p>Ruin and recreate knocks a hole in the solution and rebuilds the solution. This is the method behind <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:Se3iqnhoufwC" target="_blank" rel="noopener">a rostering paper I wrote in 2018</a><sup><a href="https://www.kenreid.co.uk/blog/ruin-and-recreate-live.html#ref-1" class="cite-ref">[1]</a></sup> with colleagues at Stirling, York and BT, using a variant of Jingpeng's own algorithm: Evolutionary Ruin and Stochastic Recreate<sup><a href="https://www.kenreid.co.uk/blog/ruin-and-recreate-live.html#ref-2" class="cite-ref">[2]</a></sup>, where the wrecking ball is aimed by fitness rather than swung blindly. The demo below is that method on a simple roster. Part of the series on <a href="https://www.kenreid.co.uk/series-research-live.html">research, live</a>.</p>
 
  <div class="plain-english-box">
  <h2>Quick jargon guide</h2>
@@ -898,7 +856,7 @@
  <li><strong>Fitness:</strong> one number saying how good a roster is, out of 100. Following the paper, hard constraints (covering demand, legal rest) are 95% of the score and soft ones (fair shares, no long runs) are the last 5%.</li>
  <li><strong>Local search:</strong> repeatedly make a small change and keep it if the fitness rises.</li>
  <li><strong>Local optimum:</strong> a solution where every small change makes things worse, which does not mean it is any good.</li>
- <li><strong>Large neighbourhood search:</strong> the family this belongs to<sup><a href="#ref-3" class="cite-ref">[3]</a></sup>. Instead of small changes, make one enormous change and repair the damage intelligently.</li>
+ <li><strong>Large neighbourhood search:</strong> the family this belongs to<sup><a href="https://www.kenreid.co.uk/blog/ruin-and-recreate-live.html#ref-3" class="cite-ref">[3]</a></sup>. Instead of small changes, make one enormous change and repair the damage intelligently.</li>
  <li><strong>Evolutionary ruin:</strong> the paper's twist. Every allocation gets its own fitness score, and the weaker an allocation, the more likely the ruin phase is to demolish it.</li>
  </ul>
  </div>
@@ -1000,11 +958,6 @@
       <description>You give feedback to a colleague. They thank you for it, and a week later nothing has changed. Three checks before you push harder, one change of approach, a budget, and a date.</description>
       <category>advice</category>
       <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html">View it on the site</a> to play with it.</em></p>
-        <h1>Leading a Horse to Water</h1>
-        <div class="blog-meta">
-          6 September 2026 &middot;
-          <span class="blog-tag">advice</span>
-        </div>
 
         <p>I'm doing a master's in organizational leadership, and one of the first things I've learned is that leadership is not a status only found in specific roles, it's something we all do every day. Leading projects, leading people, making decisions on next steps, risk assessments, and practicing your social skills. One such example I have been thinking much about recently is providing feedback - generally, but also when you give the same feedback multiple times to someone. You find they nod, say it was fair, thank you for being direct, and then do the thing again the following week.</p>
 
@@ -1026,7 +979,7 @@
 
         <h2>The proverb</h2>
 
-        <p>It is the oldest English proverb still in daily use, recorded as early as 1175 in the Old English Homilies:<sup><a href="#ref-1" class="cite-ref">[1]</a></sup></p>
+        <p>It is the oldest English proverb still in daily use, recorded as early as 1175 in the Old English Homilies:<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-1" class="cite-ref">[1]</a></sup></p>
 
         <blockquote>
           <p>Hwa is thet mei thet hors wettrien the him self nule drinken?</p>
@@ -1058,21 +1011,21 @@
 
         <h2>First, check the water</h2>
 
-        <p>Before anything else: was the feedback actually constructive? In Kluger and DeNisi's 1996 meta-analysis, which pooled 607 effect sizes from feedback studies, feedback improved performance on average, but in over a third of cases it made performance worse.<sup><a href="#ref-2" class="cite-ref">[2]</a></sup> The feedback that hurt was the kind that pulled attention towards the self (who you are, how you compare) rather than the task (what to do differently, next time, at this step). No one wants to hear what is wrong with their character, but many are happy to hear how they can improve the technique, the strategy or the steps. </p>
+        <p>Before anything else: was the feedback actually constructive? In Kluger and DeNisi's 1996 meta-analysis, which pooled 607 effect sizes from feedback studies, feedback improved performance on average, but in over a third of cases it made performance worse.<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-2" class="cite-ref">[2]</a></sup> The feedback that hurt was the kind that pulled attention towards the self (who you are, how you compare) rather than the task (what to do differently, next time, at this step). No one wants to hear what is wrong with their character, but many are happy to hear how they can improve the technique, the strategy or the steps. </p>
 
         <p>It's always satisfying when a scientific study rings true. I know that I have this problem when I receive feedback: I feel attacked, if it's about my underlying drive or passion, but when I am given feedback on specific actions or tasks, I feel motivated. So, now I try to do the following when giving other people feedback: can they repeat back, in their own words, what they are meant to do differently, by when, and how they will know they've done it? If the answer to any of the three is a shrug, then I did not lead a horse to water, I led a horse to a description of water. "Be more proactive" is a high-level descriptor and nowhere near specific enough.</p>
 
         <h2>Second, check whether the horse is thirsty</h2>
 
-        <p>The second question is whether the person thinks there is anything to fix. Prochaska and DiClemente's stages of change model, built on decades of watching people quit smoking and fail to, puts a stage before "thinking about it": precontemplation, where the person does not see a problem at all.<sup><a href="#ref-3" class="cite-ref">[3]</a></sup> Advice delivered to someone in precontemplation is like telling someone it will eventually rain in a city fifty miles away, at least to them. The smoking example also rings true for me: I remember begging my parents to stop smoking, even threatening to start myself if they didn't stop. Ultimately, a person needs to want to change a habit, otherwise any well-meaning, well-informed, kind and considered advice is utterly for naught. </p>
+        <p>The second question is whether the person thinks there is anything to fix. Prochaska and DiClemente's stages of change model, built on decades of watching people quit smoking and fail to, puts a stage before "thinking about it": precontemplation, where the person does not see a problem at all.<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-3" class="cite-ref">[3]</a></sup> Advice delivered to someone in precontemplation is like telling someone it will eventually rain in a city fifty miles away, at least to them. The smoking example also rings true for me: I remember begging my parents to stop smoking, even threatening to start myself if they didn't stop. Ultimately, a person needs to want to change a habit, otherwise any well-meaning, well-informed, kind and considered advice is utterly for naught. </p>
 
-        <p>"Yeah, fair, thanks for saying" is what a person says when they agree and intend to act, and it is also what they say to make the meeting end while being polite. This means we can't really settle on that as the finale to the feedback conversation. Klein and colleagues' meta-analysis of goal commitment says: goals predict performance when people are committed to them, and barely at all when they are not, and commitment is not the same as having heard the goal read aloud.<sup><a href="#ref-4" class="cite-ref">[4]</a></sup></p>
+        <p>"Yeah, fair, thanks for saying" is what a person says when they agree and intend to act, and it is also what they say to make the meeting end while being polite. This means we can't really settle on that as the finale to the feedback conversation. Klein and colleagues' meta-analysis of goal commitment says: goals predict performance when people are committed to them, and barely at all when they are not, and commitment is not the same as having heard the goal read aloud.<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-4" class="cite-ref">[4]</a></sup></p>
 
-        <p>Worse, pushing harder at this stage makes it worse. Miller and Rollnick, the motivational interviewing people, call the helper's urge to fix the "righting reflex," and their central finding, replicated across addiction, health and now management, is that when you argue for change, the other person starts arguing against it, and hearing themselves argue against it makes them believe it.<sup><a href="#ref-5" class="cite-ref">[5]</a></sup> Brehm named the underlying push-back in 1966: reactance, the instinct to reclaim a freedom someone is trying to take.<sup><a href="#ref-6" class="cite-ref">[6]</a></sup> You can't tell a horse it's thirsty and expect it to believe you.</p>
+        <p>Worse, pushing harder at this stage makes it worse. Miller and Rollnick, the motivational interviewing people, call the helper's urge to fix the "righting reflex," and their central finding, replicated across addiction, health and now management, is that when you argue for change, the other person starts arguing against it, and hearing themselves argue against it makes them believe it.<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-5" class="cite-ref">[5]</a></sup> Brehm named the underlying push-back in 1966: reactance, the instinct to reclaim a freedom someone is trying to take.<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-6" class="cite-ref">[6]</a></sup> You can't tell a horse it's thirsty and expect it to believe you.</p>
 
         <h2>Third, check whether the horse can drink</h2>
 
-        <p>Someone agreeing and then not doing is what inspired me to write this, and it is usually read as a will problem when it is often a capability or environment problem. Landsberg's skill/will matrix is a two-by-two from a coaching book.<sup><a href="#ref-7" class="cite-ref">[7]</a></sup> Low skill needs teaching while low will needs reasoning, and low both needs direction. Getting these wrong is like trying to inspire a fish to walk.</p>
+        <p>Someone agreeing and then not doing is what inspired me to write this, and it is usually read as a will problem when it is often a capability or environment problem. Landsberg's skill/will matrix is a two-by-two from a coaching book.<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-7" class="cite-ref">[7]</a></sup> Low skill needs teaching while low will needs reasoning, and low both needs direction. Getting these wrong is like trying to inspire a fish to walk.</p>
 
         <p>How to know if it's a "will" problem:</p>
 
@@ -1096,7 +1049,7 @@
         <p>Given a horse that is capable, not obviously ill, and not thirsty, here are some of my thoughts and learnings compiled together:</p>
 
         <ol>
-          <li>Listen to them, don't assume. Ask them to say what they'll do, and write down what they said, not what you wanted them to say. A plan in someone else's words is often very different from what you think they know. Locke and Latham's goal-setting work has been saying this for forty years: participation in setting the goal raises commitment to it.<sup><a href="#ref-8" class="cite-ref">[8]</a></sup></li>
+          <li>Listen to them, don't assume. Ask them to say what they'll do, and write down what they said, not what you wanted them to say. A plan in someone else's words is often very different from what you think they know. Locke and Latham's goal-setting work has been saying this for forty years: participation in setting the goal raises commitment to it.<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-8" class="cite-ref">[8]</a></sup></li>
           <li>One behaviour, one fortnight, one checkpoint. "Be a better communicator" is useless. "Send the summary before the meeting, for the next three meetings, and we'll look at it on the 20th" is tangible, measurable and clear - the outcome is "becoming a better communicator" but the steps are clearly stated.</li>
           <li>If they don't see shortcomings they don't see a problem to fix. If the report is late and you fix it for them at eleven at night, the report is never late from their standpoint. </li>
           <li>Changing a person's behaviour is difficult. Changing a template, a checklist, a pairing session, a definition of done, is straightforward and easy.</li>
@@ -1195,11 +1148,6 @@
       <description>Thirty small habits keep this site accessible: a skip link, screen-reader notes on new-tab links, reduced-motion fallbacks, and an audit that catches the many that I forget along the way.</description>
       <category>technology</category>
       <content:encoded><![CDATA[
- <h1>Making This Website Accessible</h1>
- <div class="blog-meta">
- 30 August 2026 &middot;
- <span class="blog-tag">technology</span>
- </div>
 
  <p>I have <a href="https://www.kenreid.co.uk/blog/accessibility-first-product-design-data-science.html">banged on before</a> about accessibility working best as a starting constraint rather than a retrofit. This site is where I get to practise that habit continually: my core philosophy is that if something is inaccessible to some it may as well be inaccessible to all. I make sure of this with a pile of small habits, and an audit script that catches the bits I inevitably miss. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
 
@@ -1295,12 +1243,6 @@ link.appendChild(span);</code></pre>
       <category>philosophy</category>
       <category>science</category>
       <content:encoded><![CDATA[
- <h1>The Availability Heuristic Runs the News</h1>
- <div class="blog-meta">
- 30 August 2026 &middot;
- <span class="blog-tag">science</span>
- <span class="blog-tag">philosophy</span>
- </div>
 
  <p>The news is a list of the least representative things that happened yesterday, which you might think - great, that's interesting! The problem is, our minds calibrate to work out how dangerous the world is with this information. Quick: which is more dangerous, flying or driving? Sharks or vending machines? Terrorism or heart disease? If your gut said "flying, sharks, terrorism", your gut is confidently and dramatically wrong.</p>
 
@@ -1319,7 +1261,7 @@ link.appendChild(span);</code></pre>
 
  <h2>The shortcut</h2>
 
- <p>The availability heuristic, named by Tversky and Kahneman, is the brain's habit of estimating how frequent or likely something is by how readily instances spring to mind<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>. Most of the time it's a decent shortcut: common things usually <em>are</em> easier to recall than rare ones, so "easy to remember" tracks "actually frequent" well enough to get you through a Tuesday.</p>
+ <p>The availability heuristic, named by Tversky and Kahneman, is the brain's habit of estimating how frequent or likely something is by how readily instances spring to mind<sup><a href="https://www.kenreid.co.uk/blog/the-availability-heuristic-runs-the-news.html#ref-1" class="cite-ref">[1]</a></sup>. Most of the time it's a decent shortcut: common things usually <em>are</em> easier to recall than rare ones, so "easy to remember" tracks "actually frequent" well enough to get you through a Tuesday.</p>
 
  <p>It fails when ease of recall is driven by something <em>other</em> than frequency. In the modern world that is constant: vividness, emotional intensity and media coverage all make an event easier to recall without making it any more common.</p>
 
@@ -1329,7 +1271,7 @@ link.appendChild(span);</code></pre>
 
  <p>Shark attacks get a summer of headlines out of a handful of incidents, while the far deadlier risks (heart disease, the drive to the beach) produce no images at all. Terrorism reshapes whole societies' fears and budgets while killing a tiny fraction of the number who die of the mundane, unphotogenic causes nobody panics about. That last one makes me angry.</p>
 
- <p>The mismatch between what we fear and what actually harms us is, in large part, the availability heuristic reading the news as if it were a frequency table<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+ <p>The mismatch between what we fear and what actually harms us is, in large part, the availability heuristic reading the news as if it were a frequency table<sup><a href="https://www.kenreid.co.uk/blog/the-availability-heuristic-runs-the-news.html#ref-2" class="cite-ref">[2]</a></sup>.</p>
 
  <h2>The news is an availability machine</h2>
 
@@ -1403,12 +1345,6 @@ link.appendChild(span);</code></pre>
       <category>philosophy</category>
       <category>science</category>
       <content:encoded><![CDATA[
- <h1>Confirmation Bias Is the Mother Bias</h1>
- <div class="blog-meta">
- 28 August 2026 &middot;
- <span class="blog-tag">science</span>
- <span class="blog-tag">philosophy</span>
- </div>
 
  <p>Nobody googles "reasons I am wrong about this". We google "reasons I am right about this", and we smugly nod at how wise we are.</p>
 
@@ -1428,7 +1364,7 @@ link.appendChild(span);</code></pre>
 
  <p>The comforting model of the mind is a courtroom: you gather evidence, weigh it impartially, and reach a verdict. The actual mind runs the process backwards most of the time. You start with the verdict (the belief you already hold, or want to hold) and then work as its defence lawyer, scouring for supporting evidence and cross-examining anything inconsistent into silence. </p>
 
- <p>You search for confirming information. You read ambiguous evidence as supporting your side. You remember the hits and forget the misses. You let confirming evidence in over a doorstep and make disconfirming evidence climb a wall<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>. </p>
+ <p>You search for confirming information. You read ambiguous evidence as supporting your side. You remember the hits and forget the misses. You let confirming evidence in over a doorstep and make disconfirming evidence climb a wall<sup><a href="https://www.kenreid.co.uk/blog/confirmation-bias-is-the-mother-bias.html#ref-1" class="cite-ref">[1]</a></sup>. </p>
 
  <h2>Setting the stage</h2>
 
@@ -1458,7 +1394,7 @@ link.appendChild(span);</code></pre>
 
  <p>Being clever, educated or numerate does not protect you (despite what most of us tell ourselves), and can make things <em>worse</em>. A smarter person is a better lawyer: quicker at generating persuasive arguments for what they already believe, better at spotting the flaw in inconvenient evidence, more fluent at explaining away the anomaly. It's funny how we assume intelligent people are wiser. There's a reason wisdom and intelligence are separate ability scores in pathfinder and dungeons and dragons: intelligence is knowing that a tomato is a fruit, wisdom is not adding it to your cereal.</p>
 
- <p>Studies find that greater numeracy and reasoning ability can <em>increase</em> polarisation on politically charged questions, because people put their cognitive horsepower to work for their existing side rather than for the truth<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>. The ignorant are overconfident, fine, we all knew that. The capable are better at rationalising, which is not a great thing for society.</p>
+ <p>Studies find that greater numeracy and reasoning ability can <em>increase</em> polarisation on politically charged questions, because people put their cognitive horsepower to work for their existing side rather than for the truth<sup><a href="https://www.kenreid.co.uk/blog/confirmation-bias-is-the-mother-bias.html#ref-2" class="cite-ref">[2]</a></sup>. The ignorant are overconfident, fine, we all knew that. The capable are better at rationalising, which is not a great thing for society.</p>
 
  <h2>The one habit that helps (apparently)</h2>
 
@@ -1521,11 +1457,6 @@ link.appendChild(span);</code></pre>
       <description>An interactive tabu search in your browser: watch a search with a memory solve N-Queens live, ban its own best moves, and escape the traps that stop every other method in this series.</description>
       <category>ai</category>
       <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/tabu-search-live.html">View it on the site</a> to play with it.</em></p>
- <h1>Tabu Search, Live</h1>
- <div class="blog-meta">
- 26 August 2026 &middot;
- <span class="blog-tag">ai</span>
- </div>
 
  <p>Eight posts in, every escape from a trap in this series has been some flavour of randomness:</p>
  <ul>
@@ -1541,7 +1472,7 @@ link.appendChild(span);</code></pre>
 
  
 
- <p>Fred Glover sketched the idea in 1986<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> and built it out properly in 1989<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>. The core of it is simple: run a greedy search, but make the recent past forbidden. That one addition turns the dumbest search strategy going into something that can walk out of a local optimum, cross a plateau, and keep improving. It needs no temperature and no coin to flip, which makes it something of an oddity in this series.</p>
+ <p>Fred Glover sketched the idea in 1986<sup><a href="https://www.kenreid.co.uk/blog/tabu-search-live.html#ref-1" class="cite-ref">[1]</a></sup> and built it out properly in 1989<sup><a href="https://www.kenreid.co.uk/blog/tabu-search-live.html#ref-2" class="cite-ref">[2]</a></sup>. The core of it is simple: run a greedy search, but make the recent past forbidden. That one addition turns the dumbest search strategy going into something that can walk out of a local optimum, cross a plateau, and keep improving. It needs no temperature and no coin to flip, which makes it something of an oddity in this series.</p>
 
  <div class="plain-english-box">
  <h2>Quick jargon guide</h2>
@@ -1650,11 +1581,6 @@ link.appendChild(span);</code></pre>
       <description>Genetic programming in your browser: watch a population of expression trees evolve to fit a hidden curve, read the best program as it grows, and give it bloat with the sliders.</description>
       <category>ai</category>
       <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/genetic-programming-live.html">View it on the site</a> to play with it.</em></p>
- <h1>Genetic Programming, Live</h1>
- <div class="blog-meta">
- 23 August 2026 &middot;
- <span class="blog-tag">ai</span>
- </div>
 
  <p>Genetic programming evolves programs. What gets bred is the program itself rather than the settings of a program: a working formula nobody wrote, assembled out of worse ones. I've published with this one: the belt-laying search in <a href="https://www.kenreid.co.uk/blog/factorio-live.html">the Factorio post</a> is a genetic programming system, and it came out ahead of both other methods in the paper.</p>
 
@@ -1740,13 +1666,13 @@ link.appendChild(span);</code></pre>
 
  <p>GP-based systems have rediscovered conservation laws from raw motion-capture data, and they get used to propose compact models in physics, materials science and ecology. When you want insight rather than raw predictive power, a ten-node formula beats a million-weight network, contrary to what many machine learning specialists would say.</p>
 
- <p>NASA's ST5 mission needed a small satellite antenna with an awkward radiation pattern, and an evolutionary algorithm designed one<sup><a href="#ref-3" class="cite-ref">[3]</a></sup>. The result looks like a bent paperclip. No engineer would have drawn it, and it outperformed the conventionally designed alternative.</p>
+ <p>NASA's ST5 mission needed a small satellite antenna with an awkward radiation pattern, and an evolutionary algorithm designed one<sup><a href="https://www.kenreid.co.uk/blog/genetic-programming-live.html#ref-3" class="cite-ref">[3]</a></sup>. The result looks like a bent paperclip. No engineer would have drawn it, and it outperformed the conventionally designed alternative.</p>
 
  <p>It flew in 2006. There is evolved hardware in space!</p>
 
- <p>John Koza launched the field with his 1992 book<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> and then spent years compiling "human-competitive" results: GP runs that reinvented patented circuits and produced patentable designs of their own. </p>
+ <p>John Koza launched the field with his 1992 book<sup><a href="https://www.kenreid.co.uk/blog/genetic-programming-live.html#ref-1" class="cite-ref">[1]</a></sup> and then spent years compiling "human-competitive" results: GP runs that reinvented patented circuits and produced patentable designs of their own. </p>
 
- <p>Every one of them lived in a domain with a fast, automatic, well-behaved fitness function. GP never became a general way to write software, and the field guide I recommend below<sup><a href="#ref-2" class="cite-ref">[2]</a></sup> is refreshingly frank about why. Where a score is cheap to compute and means what you want, GP is a live option. Everywhere else, the fitness function is the really hard part.</p>
+ <p>Every one of them lived in a domain with a fast, automatic, well-behaved fitness function. GP never became a general way to write software, and the field guide I recommend below<sup><a href="https://www.kenreid.co.uk/blog/genetic-programming-live.html#ref-2" class="cite-ref">[2]</a></sup> is refreshingly frank about why. Where a score is cheap to compute and means what you want, GP is a live option. Everywhere else, the fitness function is the really hard part.</p>
 
  <h2>Structure is a freedom</h2>
 
@@ -1795,11 +1721,6 @@ link.appendChild(span);</code></pre>
       <description>Differential evolution running live in your browser: a population whose own spread sets its step size hunts minima on four landscapes.</description>
       <category>ai</category>
       <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/differential-evolution-live.html">View it on the site</a> to play with it.</em></p>
- <h1>Differential Evolution, Live</h1>
- <div class="blog-meta">
- 22 August 2026 &middot;
- <span class="blog-tag">ai</span>
- </div>
 
  <p>This is part seven of the Algorithms, Live series. So far:</p>
  <ul>
@@ -1829,7 +1750,7 @@ link.appendChild(span);</code></pre>
 
  <h2>Subtraction as a search strategy</h2>
 
- <p>Here is DE/rand/1/bin<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>: keep a population of points scattered over the landscape. To improve any one of them:</p>
+ <p>Here is DE/rand/1/bin<sup><a href="https://www.kenreid.co.uk/blog/differential-evolution-live.html#ref-1" class="cite-ref">[1]</a></sup>: keep a population of points scattered over the landscape. To improve any one of them:</p>
 
  <ol>
  <li>Pick three other members at random: \(a\), \(b\), and \(c\).</li>
@@ -1886,7 +1807,7 @@ link.appendChild(span);</code></pre>
 
  <h2>Where DE turns up in practice</h2>
 
- <p>Storn and Price introduced it in 1997<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>, it won early optimisation competitions, and it is still a default first try in engineering optimisation: antenna design, power systems, chemical process tuning, anywhere someone has a black-box simulator with a dozen real-valued dials. The survey literature on its variants runs to hundreds of papers<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+ <p>Storn and Price introduced it in 1997<sup><a href="https://www.kenreid.co.uk/blog/differential-evolution-live.html#ref-1" class="cite-ref">[1]</a></sup>, it won early optimisation competitions, and it is still a default first try in engineering optimisation: antenna design, power systems, chemical process tuning, anywhere someone has a black-box simulator with a dozen real-valued dials. The survey literature on its variants runs to hundreds of papers<sup><a href="https://www.kenreid.co.uk/blog/differential-evolution-live.html#ref-2" class="cite-ref">[2]</a></sup>.</p>
 
  <p>You can buy adaptivity: learned models, schedules, meta-parameters. Or you can arrange the algorithm so the state it already keeps <em>is</em> the adaptation. DE gets self-scaling search out of a subtraction.</p>
 
@@ -1902,7 +1823,7 @@ link.appendChild(span);</code></pre>
 
  <details class="faq-item">
  <summary>How do I pick F and CR in practice?</summary>
- <p>The folklore defaults hold up surprisingly well: \(F\) between 0.5 and 0.9, \(\mathit{CR}\) around 0.9. This demo starts at \(F = 0.8\), \(\mathit{CR} = 0.9\). Low \(\mathit{CR}\) only helps when your variables are independent of each other, which you rarely know in advance, so high \(\mathit{CR}\) is the safer bet. If you'd rather not choose at all, self-adaptive variants such as jDE and SaDE evolve \(F\) and \(\mathit{CR}\) alongside the solutions, and the Das and Suganthan survey covers them at length<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+ <p>The folklore defaults hold up surprisingly well: \(F\) between 0.5 and 0.9, \(\mathit{CR}\) around 0.9. This demo starts at \(F = 0.8\), \(\mathit{CR} = 0.9\). Low \(\mathit{CR}\) only helps when your variables are independent of each other, which you rarely know in advance, so high \(\mathit{CR}\) is the safer bet. If you'd rather not choose at all, self-adaptive variants such as jDE and SaDE evolve \(F\) and \(\mathit{CR}\) alongside the solutions, and the Das and Suganthan survey covers them at length<sup><a href="https://www.kenreid.co.uk/blog/differential-evolution-live.html#ref-2" class="cite-ref">[2]</a></sup>.</p>
  </details>
 
  <details class="faq-item">
@@ -1934,11 +1855,6 @@ link.appendChild(span);</code></pre>
       <description>CMA-ES live in your browser: watch an optimiser learn the shape of a valley by stretching and rotating its search cloud until the narrow floor costs it nothing to walk along.</description>
       <category>ai</category>
       <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/cma-es-live.html">View it on the site</a> to play with it.</em></p>
- <h1>CMA-ES, Live</h1>
- <div class="blog-meta">
- 19 August 2026 &middot;
- <span class="blog-tag">ai</span>
- </div>
 
  <p>There is a shape of problem that many optimisers struggle with: a long, thin, tilted valley. </p>
 
@@ -1978,7 +1894,7 @@ link.appendChild(span);</code></pre>
 
  <p>Instead of a fixed cooling schedule, CMA-ES watches its own recent movement. If successive generations keep marching the same way, the steps were too small, so sigma grows. If the path folds back on itself, the steps were too big, so sigma shrinks. Exploration vs exploitation.</p>
 
- <p>Hansen and Ostermeier formalised all of this in 2001<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>, and the design is careful enough that the standard version has no parameters you are expected to tune. But, in this version, for fun, there are sliders so you can override that.</p>
+ <p>Hansen and Ostermeier formalised all of this in 2001<sup><a href="https://www.kenreid.co.uk/blog/cma-es-live.html#ref-1" class="cite-ref">[1]</a></sup>, and the design is careful enough that the standard version has no parameters you are expected to tune. But, in this version, for fun, there are sliders so you can override that.</p>
 
  <h2>The loop on a napkin</h2>
 
@@ -2025,7 +1941,7 @@ link.appendChild(span);</code></pre>
 
  <p>For continuous black-box problems, where the objective is a simulator or a physical measurement or a hyperparameter score with no gradient in sight, CMA-ES is the default serious tool up to a few hundred dimensions (yes, you read that correctly!!). </p>
 
- <p>It has tuned aircraft geometry, robot gaits, controller parameters, and the settings of other learning systems. Hansen's tutorial<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+ <p>It has tuned aircraft geometry, robot gaits, controller parameters, and the settings of other learning systems. Hansen's tutorial<sup><a href="https://www.kenreid.co.uk/blog/cma-es-live.html#ref-2" class="cite-ref">[2]</a></sup>.</p>
 
  <p>When progress stalls, the instinct is to push harder in the direction you were already going. CMA-ES keeps an estimate of which directions have been rewarding you lately, and spends your effort along those, even when they aren't the ones you set off in. Which is surprisingly good life advice to get from a pile of linear algebra.</p>
 
@@ -2071,11 +1987,6 @@ link.appendChild(span);</code></pre>
       <description>The logistic transport belt problem from my GECCO 2021 paper, running live in your browser: watch simulated annealing and genetic programming lay belts across a walled grid until the items get through.</description>
       <category>data science</category>
       <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/factorio-live.html">View it on the site</a> to play with it.</em></p>
- <h1>Factorio, Live: a Game as an Optimisation Benchmark</h1>
- <div class="blog-meta">
- 13 August 2026 &middot;
- <span class="blog-tag">data science</span>
- </div>
 
  <p>Factorio is a game I've loved since it was released. It's my most-played game on Steam, and there's something so deeply satisfying about playing a game all about optimization, exploring and solving problems. When I started thinking about the psychology behind this, I realized that video games, puzzles, board games and the like mirror a satisfaction I find when programming, conducting research and solving real-world problems. It scratches an itch in a particular way unfound in other walks of life: defeating challenges beyond a grind in an RPG, lifting a heavier weight at the gym or accomplishing projects based more on time than difficulty. It's the slow accrual of problems solved into a portfolio of solutions working in tandem, so you can zoom out to the map and say "look at my base! it's a bit of a mess, but it's mine, and I love it."</p>
 
@@ -2218,11 +2129,6 @@ link.appendChild(span);</code></pre>
       <description>Several blogs I&#x27;ve written run simulations in your browser. The chassis underneath them: theme-reactive canvases, seeded randomness, phone-width rules, and a smoke test.</description>
       <category>technology</category>
       <content:encoded><![CDATA[
- <h1>How the Interactive Posts Work</h1>
- <div class="blog-meta">
- 16 August 2026 &middot;
- <span class="blog-tag">technology</span>
- </div>
 
  <p>Someone on Cyberspace (new social media website that has such a cool vibe to it) recently asked me how I set up the simulators on my website, if I used a specific library. I responded saying how it's raw javascript, but that got me thinking: I intend to keep making these kind of educational and fun blogs, so why not make a little framework to make it easier on myself?</p>
 
@@ -2330,11 +2236,6 @@ new MutationObserver(function () {
       <description>My homepage shows what I&#x27;m listening to and reading, updated every Monday by a GitHub Action that commits to its own repository. Live data on a static site, no server required.</description>
       <category>technology</category>
       <content:encoded><![CDATA[
- <h1>Letting Robots Update Your Homepage</h1>
- <div class="blog-meta">
- 14 August 2026 &middot;
- <span class="blog-tag">technology</span>
- </div>
 
  <p><a href="https://www.kenreid.co.uk/index.html">My homepage</a> shows my scrobble count, the book I'm reading through, the last song I played, and whatever I last posted on Bluesky. This is a static site, meaning it can't just run dynamic scripts on a whim. I set up a system to dynamically update my HTML weekly, however, and it works for free. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
 
@@ -2512,11 +2413,6 @@ jobs:
       <description>An interactive variable neighbourhood search solving the Travelling Salesman Problem in your browser: watch a tour untangle itself, then watch the search escape a local optimum by changing what counts as a nearby move.</description>
       <category>ai</category>
       <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html">View it on the site</a> to play with it.</em></p>
- <h1>Variable Neighbourhood Search, Live</h1>
- <div class="blog-meta">
- 12 August 2026 &middot;
- <span class="blog-tag">ai</span>
- </div>
 
  <p>Every algorithm in this series so far has had its own way of not getting stuck:</p>
  <ul>
@@ -2552,7 +2448,7 @@ jobs:
 
  <p>A 2-opt local optimum only means that none of the roughly n&sup2; tours reachable by one segment reversal is shorter. Offer a different move, say lifting three consecutive cities out and reinserting them elsewhere (Or-opt), and the same tour suddenly has a completely different set of neighbours, some of which may well be better.</p>
 
- <p>Mladenović and Hansen built this idea in 1997<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>, called it variable neighbourhood search, and it has been a fixture of the routing and scheduling literature ever since.</p>
+ <p>Mladenović and Hansen built this idea in 1997<sup><a href="https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html#ref-1" class="cite-ref">[1]</a></sup>, called it variable neighbourhood search, and it has been a fixture of the routing and scheduling literature ever since.</p>
 
  <p>A local optimum is a property of the neighbourhood, not of the solution.</p>
 
@@ -2569,7 +2465,7 @@ jobs:
 
  <p>That is to say: descend with plain first-improvement 2-opt until you hit a local optimum. That's your incumbent, so set k to 1. Now: <em>shake</em> the incumbent with a random move from neighbourhood N<sub>k</sub>, descend again with 2-opt from wherever that landed, and compare. If the re-descended tour beats the incumbent, move there and reset k to 1. If it doesn't, throw it away and increment k, up to k<sub>max</sub>, then wrap back round.</p>
 
- <p>This runs without a temperature, an acceptance probability, or a crossover operator. Hansen and Mladenović later distilled the design principles in a survey which is a great starting point <sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+ <p>This runs without a temperature, an acceptance probability, or a crossover operator. Hansen and Mladenović later distilled the design principles in a survey which is a great starting point <sup><a href="https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html#ref-2" class="cite-ref">[2]</a></sup>.</p>
 
  <p>This means the algorithm, by its very nature, will reach for a bigger hammer, as needed. The moment <em>anything</em> works, it drops straight back to the smallest hammer.</p>
 
@@ -2607,7 +2503,7 @@ jobs:
 
  <details class="faq-item">
  <summary>Is VNS used in the real world?</summary>
- <p>Very much so. It has a strong record on vehicle routing, facility location (the p-median problem was one of its earliest wins), job-shop and nurse scheduling, timetabling, and graph problems, and Hansen and Mladenović's survey<sup><a href="#ref-2" class="cite-ref">[2]</a></sup> catalogues dozens of applications. </p>
+ <p>Very much so. It has a strong record on vehicle routing, facility location (the p-median problem was one of its earliest wins), job-shop and nurse scheduling, timetabling, and graph problems, and Hansen and Mladenović's survey<sup><a href="https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html#ref-2" class="cite-ref">[2]</a></sup> catalogues dozens of applications. </p>
  </details>
 
  <details class="faq-item">
