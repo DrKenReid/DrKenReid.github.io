@@ -24,6 +24,12 @@
  *
  * Flash-of-wrong-theme (FODT) prevention is handled by a tiny inline
  * script injected into every page's <head> (see the kr-theme check).
+ *
+ * A switch reaches the site's other open tabs through the 'storage'
+ * event, and a page restored from the back/forward cache (where the head
+ * script does not run again) re-reads the stored choice on 'pageshow'.
+ * Both apply it at once, with no reveal: nobody is watching that tab
+ * switch.
  */
 (function () {
   var STORAGE_KEY = 'kr-theme';
@@ -57,6 +63,21 @@
     return window.matchMedia &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
+
+  // The stored choice, applied only if the page is not already showing it.
+  function follow() {
+    var t = stored() || DEFAULT_THEME;
+    if (document.documentElement.getAttribute('data-theme') !== t) apply(t);
+  }
+
+  // Another tab switched (or cleared the key, which is the default again).
+  window.addEventListener('storage', function (e) {
+    if (e.key === STORAGE_KEY || e.key === null) follow();
+  });
+
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) follow();
+  });
 
   /* The circle has to reach the farthest corner of the viewport from the
      button, whichever corner that is. */

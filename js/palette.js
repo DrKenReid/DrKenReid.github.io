@@ -21,9 +21,10 @@
  * LOADED BY
  *   A deferred <script> in the <head> of every page, the 404 page included
  *   (generate_post_head.py writes it into posts); offline.html, the service
- *   worker's no-network page, has nothing to search and goes without. It
- *   builds no DOM and fetches nothing until the first open, because most
- *   visitors never press the key.
+ *   worker's no-network page, has nothing to search and goes without.
+ *   Beyond its two buttons in the header (the Search pill, and the phone
+ *   bar's search button) it builds no DOM and fetches nothing until the
+ *   first open, because most visitors never press the key.
  *
  * RANKING (match(), below)
  *   Where the query sits in a field decides the score, each field's weight
@@ -37,7 +38,10 @@
  *   gap between two words of a title the same happens on a smaller scale
  *   ("ant" matched "and The" in five titles). Outside titles a hit must also
  *   start a word. Initials count anywhere ("tsp", Travelling Salesman
- *   Problem), within the limits initials() sets out.
+ *   Problem), within the limits initials() sets out. A plural that misses
+ *   an entry is tried again as a singular, at a small discount
+ *   (singular()), and a page can carry `also` words in KR_PAGES for what
+ *   people type that its name does not say ("cv", "email", "rss").
  *
  * PATHS
  *   Every href goes through siteRootPrefix() and every fetch through
@@ -79,6 +83,12 @@
     // page of the same name should come first.
     const WEIGHT = { title: 1, name: 0.9, tag: 0.7, excerpt: 0.6, subtitle: 0.5 };
 
+    // A plural retried as a singular (singular(), below) scores this much
+    // of a match on the word as typed, so the entries that hold the plural
+    // come first. And the fewest letters a cut word may keep.
+    const SINGULAR_FACTOR = 0.9;
+    const SINGULAR_MIN = 4;
+
     // Subtitles worked out from the loaded data, by KR_PAGES key, in place
     // of the page's written blurb. Counts are only ever counted, never
     // typed in, so they cannot drift from the site; each returns null
@@ -92,12 +102,15 @@
     };
 
     // The palette's pages, from the site map. Read when the catalogue is
-    // built, never at parse time (see SHARED HELPERS).
+    // built, never at parse time (see SHARED HELPERS). `also` is the words
+    // someone types for a page that its name and blurb do not hold ("cv",
+    // "email", "rss"), matched as tags.
     function pages() {
         return KR_PAGES.filter((p) => p.inPalette).map((p) => ({
             title: p.label,
             sub: (LIVE_SUB[p.key] && LIVE_SUB[p.key]()) || p.blurb,
-            url: p.href
+            url: p.href,
+            also: p.also
         }));
     }
 
@@ -247,9 +260,15 @@
         };
 
         for (const p of pages()) {
+            // Each `also` word is a tag of its own, so "books" matches
+            // Literature's "books" whole, as it does a post tagged books
+            // (and on the tie the page comes first); the words together
+            // are one more, for a query of several ("email me").
+            const also = p.also ? [p.also, ...p.also.split(' ')] : [];
             add('Page', p.title, p.sub, p.url, [
                 { text: p.title, weight: WEIGHT.title, title: true },
-                { text: p.sub, weight: WEIGHT.subtitle }
+                { text: p.sub, weight: WEIGHT.subtitle },
+                ...also.map((text) => ({ text, weight: WEIGHT.tag }))
             ]);
         }
         // Series before posts: a series and one of its parts often share a
@@ -297,20 +316,51 @@
         return id;
     }
 
+    // The query with its plurals made singular ("photos" to "photo",
+    // "watches" to "watch"), or null when it has none. Only words that keep
+    // SINGULAR_MIN letters once cut: "news" cut to "new" would find every
+    // excerpt with "new" in it, and "lens" to "len" every "length". A cut
+    // word is matched as typed, so it still finds what starts with it:
+    // "photo" finds Photography, and "quote" Quote Wall.
+    function singular(q) {
+        let changed = false;
+        const words = q.split(' ').map((w) => {
+            if (!w.endsWith('s') || w.endsWith('ss')) return w;
+            const cut = /(?:[sxz]|[cs]h)es$/.test(w) ? w.slice(0, -2) : w.slice(0, -1);
+            if (cut.length < SINGULAR_MIN) return w;
+            changed = true;
+            return cut;
+        });
+        return changed ? words.join(' ') : null;
+    }
+
+    // An entry's best field for the query, scaled by `factor`, or null.
+    function best(e, q, factor) {
+        let top = null;
+        for (const f of e.fields) {
+            const m = match(q, f.text, f.title);
+            const score = m ? m.score * f.weight * factor : 0;
+            if (m && (!top || score > top.score)) top = { score, hits: m.hits, field: f };
+        }
+        return top;
+    }
+
     function search(query) {
         const q = String(query || '').trim().toLowerCase().replace(/\s+/g, ' ');
         const all = catalogue();
         // No query: the pages, as a menu.
         if (!q) return all.filter((e) => e.kind === 'Page').map((e) => ({ entry: e, score: 0 }));
 
+        // An entry the query misses gets a second try with its plurals
+        // made singular, a little below what the word as typed would score:
+        // "photos" finds Photography, "quotes" Quote Wall.
+        const one = singular(q);
         const results = [];
         for (const e of all) {
-            let top = null;
-            for (const f of e.fields) {
-                const m = match(q, f.text, f.title);
-                if (m && (!top || m.score * f.weight > top.score)) {
-                    top = { score: m.score * f.weight, hits: m.hits, field: f };
-                }
+            let top = best(e, q, 1);
+            if (one && (!top || top.score < MIN_SCORE)) {
+                const again = best(e, one, SINGULAR_FACTOR);
+                if (again && (!top || again.score > top.score)) top = again;
             }
             if (top && top.score >= MIN_SCORE) results.push({ entry: e, ...top });
         }
@@ -503,14 +553,21 @@
     function open() {
         if (!overlay) build();
         if (isOpen()) return;
-        // Summoned from the phone menu's Search item: the menu makes the
-        // rest of the page inert, this overlay included, so it closes
-        // first. Closing hands focus to the menu button, which then
-        // becomes the place focus returns to.
-        if (window.krNavMenu && window.krNavMenu.isOpen()) window.krNavMenu.close();
         // Remembered so closing hands focus back to whatever summoned the
-        // palette (the nav button, or the link the reader was on).
+        // palette (the nav button, the bar's search button, or the link
+        // the reader was on).
         returnFocus = document.activeElement;
+        // Summoned with the phone menu open: the menu makes the rest of
+        // the page inert, this overlay included, so it closes first.
+        // Closing hands focus to the menu button, which stands in for
+        // anything inside the menu (its Search item is hidden with it);
+        // the bar's search button is still there, so focus goes back to it.
+        if (window.krNavMenu && window.krNavMenu.isOpen()) {
+            window.krNavMenu.close();
+            if (!returnFocus || !returnFocus.closest || returnFocus.closest('.classy-menu')) {
+                returnFocus = document.activeElement;
+            }
+        }
         loadIndex();
         overlay.classList.add('is-open');
         document.body.classList.add('kr-palette-open');
@@ -547,16 +604,43 @@
         }
     });
 
+    const SEARCH_ICON = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false">' +
+        '<path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>';
+
+    // The phone bar's search button, just before the theme toggle. CSS
+    // shows it at 991px and under only (style.css §04, "Search button"),
+    // where the bar otherwise holds nothing that says the site can be
+    // searched: the Search row is inside the closed menu, and the Ctrl K
+    // hints are hidden where nothing hovers. Focused before opening so
+    // the palette hands focus back to it, which a tap alone does not do
+    // in every browser.
+    function insertBarButton() {
+        const toggle = document.getElementById('theme-toggle');
+        if (!toggle || document.querySelector('.kr-bar-search')) return;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'kr-bar-search';
+        button.setAttribute('aria-label', 'Search the site');
+        button.setAttribute('aria-haspopup', 'dialog');
+        button.innerHTML = SEARCH_ICON;
+        button.addEventListener('click', () => {
+            button.focus({ preventScroll: true });
+            open();
+        });
+        toggle.parentNode.insertBefore(button, toggle);
+    }
+
     // The nav's Search button. The header is injected by shared-components.js,
     // so wait for #nav to exist before appending it.
     function insertNavButton() {
         const nav = document.getElementById('nav');
         if (!nav || document.querySelector('.kr-palette-hint')) return Boolean(nav);
+        insertBarButton();
         const mac = krIsMac();
         const li = document.createElement('li');
         li.innerHTML = `<a href="#" class="kr-palette-hint" role="button" aria-label="Search the site" ` +
             `aria-haspopup="dialog" aria-keyshortcuts="${mac ? 'Meta+K' : 'Control+K'}">` +
-            '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>' +
+            SEARCH_ICON +
             '<span class="kr-palette-word">Search</span>' +
             `<span class="kr-palette-kbd" aria-hidden="true">${mac ? '⌘K' : 'Ctrl K'}</span></a>`;
         const button = li.querySelector('a');

@@ -103,12 +103,13 @@ var KR_THEME_ICONS =
  * design decision about this one component, not a list of pages.
  *
  * Inside the nav, in source order: the wordmark, the menu, the theme
- * toggle, the menu button. That order is the Tab order at every width,
- * and CSS only has to move the menu itself: beside the wordmark on a
- * desktop, off-canvas behind the menu button at 991px and under. The
- * theme toggle sits in the bar's flow, never fixed over it, so it cannot
- * cover the menu button or the Search hint at any width. js/site.js
- * (krInitNav) documents the phone menu's focus contract.
+ * toggle, the menu button (palette.js adds a search button, shown at
+ * 991px and under, before the toggle). That order is the Tab order at
+ * every width, and CSS only has to move the menu itself: beside the
+ * wordmark on a desktop, off-canvas behind the menu button at 991px and
+ * under. The theme toggle sits in the bar's flow, never fixed over it, so
+ * it cannot cover the menu button or the Search hint at any width.
+ * js/site.js (krInitNav) documents the phone menu's focus contract.
  */
 function renderHeader(targetId, options) {
     var el = document.getElementById(targetId);
@@ -195,12 +196,18 @@ function renderHeader(targetId, options) {
             });
         }
 
+        // The title sits in a span of its own, which is what the two-line
+        // clamp is set on (style.css §04): clamped on the link, a third
+        // line showed through the link's bottom padding.
         slotUnder('kr-nav-label-blogs', posts.slice(0, 3), function(p) {
             var li = document.createElement('li');
             li.className = 'kr-nav-series kr-nav-recent';
             var a = document.createElement('a');
             a.href = basePath + (p.url || 'blog.html');
-            a.textContent = p.title;
+            var title = document.createElement('span');
+            title.className = 'kr-nav-recent__title';
+            title.textContent = p.title;
+            a.appendChild(title);
             li.appendChild(a);
             return li;
         });
@@ -2716,27 +2723,39 @@ function initCopyQuotes() {
  *   parent     optional: the key of the page this one is filed under, as
  *              the header files it (kr-nav-sub). The footer keeps a page
  *              and its children in one column.
+ *   also       optional: words someone would type to find this page that
+ *              its label and blurb do not hold, as the palette's tags.
+ *              Only what the page has: a CV to download, an RSS link.
  *
  * Who reads what: renderFooter reads label, href, inFooter and parent; palette.js
- * reads label, href, blurb and inPalette (it swaps a few blurbs for live
- * counts once its data loads); renderHeader reads nothing, see its note.
- * tests/js/site-chrome.test.js checks every href exists.
+ * reads label, href, blurb, also and inPalette (it swaps a few blurbs for
+ * live counts once its data loads); renderHeader reads nothing, see its
+ * note. tests/js/site-chrome.test.js checks every href exists.
  */
 var KR_PAGES = [
     { key: 'home', label: 'Home', href: 'index.html', blurb: 'Intro and latest posts', inFooter: false, inPalette: true },
     { key: 'about', label: 'About', href: 'about.html', blurb: 'Who I am', inFooter: 'explore', inPalette: true },
-    { key: 'data_science', label: 'Data Science', href: 'data_science.html', blurb: 'Projects & publications', inFooter: 'explore', inPalette: true },
-    { key: 'gallery', label: 'Photography', href: 'gallery.html', blurb: 'Every photograph, filterable by subject', inFooter: 'explore', inPalette: true },
+    { key: 'data_science', label: 'Data Science', href: 'data_science.html', blurb: 'Projects & publications', inFooter: 'explore', inPalette: true,
+        also: 'research papers publications phd thesis scholar orcid cv resume' },
+    { key: 'gallery', label: 'Photography', href: 'gallery.html', blurb: 'Every photograph, filterable by subject', inFooter: 'explore', inPalette: true,
+        also: 'pictures images' },
     { key: 'map', label: 'Photo Map', href: 'map.html', blurb: 'Photographs by place', inFooter: 'explore', inPalette: true, parent: 'gallery' },
-    { key: 'music', label: 'Music', href: 'music.html', blurb: 'Guitar & listening stats', inFooter: 'explore', inPalette: true },
-    { key: 'literature', label: 'Literature', href: 'literature.html', blurb: 'Reading now, calendar, shelf, reviews', inFooter: 'explore', inPalette: true },
-    { key: 'books', label: 'Every Book', href: 'books.html', blurb: 'Every cover, searchable by title and author', inFooter: 'explore', inPalette: true, parent: 'literature' },
-    { key: 'quotes', label: 'Quote Wall', href: 'quotes.html', blurb: 'Passages saved while reading', inFooter: 'explore', inPalette: true, parent: 'literature' },
-    { key: 'blog', label: 'Blog', href: 'blog.html', blurb: 'All posts', inFooter: 'explore', inPalette: true },
+    { key: 'music', label: 'Music', href: 'music.html', blurb: 'Guitar & listening stats', inFooter: 'explore', inPalette: true,
+        also: 'last.fm lastfm scrobbles' },
+    { key: 'literature', label: 'Literature', href: 'literature.html', blurb: 'Reading now, calendar, shelf, reviews', inFooter: 'explore', inPalette: true,
+        also: 'books goodreads' },
+    { key: 'books', label: 'Every Book', href: 'books.html', blurb: 'Every cover, searchable by title and author', inFooter: 'explore', inPalette: true, parent: 'literature',
+        also: 'books' },
+    { key: 'quotes', label: 'Quote Wall', href: 'quotes.html', blurb: 'Passages saved while reading', inFooter: 'explore', inPalette: true, parent: 'literature',
+        also: 'quotations' },
+    { key: 'blog', label: 'Blog', href: 'blog.html', blurb: 'All posts', inFooter: 'explore', inPalette: true,
+        also: 'articles rss feed newsletter substack subscribe' },
     { key: 'series', label: 'Series', href: 'series.html', blurb: 'Posts that run in parts', inFooter: 'explore', inPalette: true },
-    { key: 'contact', label: 'Contact', href: 'contact.html', blurb: 'Get in touch', inFooter: 'explore', inPalette: true },
+    { key: 'contact', label: 'Contact', href: 'contact.html', blurb: 'Get in touch', inFooter: 'explore', inPalette: true,
+        also: 'email message linkedin instagram bluesky' },
     { key: 'colophon', label: 'Colophon', href: 'colophon.html', blurb: 'How this site is built, measured', inFooter: 'fine', inPalette: true },
-    { key: 'privacy', label: 'Privacy', href: 'privacy.html', blurb: 'What this site collects and the services it uses', inFooter: 'fine', inPalette: true }
+    { key: 'privacy', label: 'Privacy', href: 'privacy.html', blurb: 'What this site collects and the services it uses', inFooter: 'fine', inPalette: true,
+        also: 'cookies analytics tracking' }
 ];
 
 /**

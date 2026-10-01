@@ -62,7 +62,19 @@ without one class), and the pin seen to fail.
                             focus back (it was left on the body).
   check_not_found_page      404.html at /blog/no-such-post.html: footer links
                             and posts.json answer 200 (relative paths broke
-                            one folder down).
+                            one folder down); a mistyped post and a retired
+                            page name get guesses from their own words (the
+                            page offered only the three newest posts).
+  check_nav_dropdowns       At 1440 a click on Hobbies leaves no dropdown
+                            open once the pointer goes, hovering Blog opens
+                            Blog's alone, and Escape shuts a hovered or a
+                            keyboard-opened one (click focus held Hobbies
+                            open under Blog, and Escape did nothing).
+  check_back_to_top         At 390 the back-to-top button hides while the
+                            reader scrolls down, shows on the way up, and
+                            hides under a jargon card (it sat over the text
+                            and the jargon sheet for the whole read); the
+                            focus a press leaves on it does not keep it up.
   check_data_fetched_once   Each data/*.json requested once per load on the
                             homepage, the listing and a post (the homepage
                             fetched posts.json twice).
@@ -71,10 +83,15 @@ without one class), and the pin seen to fail.
                             touch screen a tap on Pause holds (Owl's touch
                             handlers restarted autoplay).
   check_theme_toggle        The toggle flips data-theme and theme-color
-                            (#faf7f2 in light, not white) and persists.
+                            (#faf7f2 in light, not white) and persists, and
+                            another open tab follows (it kept the old theme
+                            until reloaded).
   check_phone_menu          At 390 the open menu hangs from the bar's foot:
                             the theme toggle clear of it, bar and panel one
-                            colour (the panel cut through the bar's row).
+                            colour (the panel cut through the bar's row);
+                            the bar's search button opens the palette
+                            (nothing outside the menu offered search) and
+                            gets focus back, from the open menu too.
   check_blog_url_state      blog.html's filters round-trip through the query
                             string, and values the corpus lacks are dropped.
   check_print               A post printed from the dark theme keeps its
@@ -1072,7 +1089,157 @@ def check_not_found_page(browser, base, rep):
     # The page's own address is the one 404 that is meant to happen.
     rep.console_errors(scope, [e for e in sink if not e.endswith(f"/{path}")])
     page.close()
+
+    # A mistyped or retired address gets guesses from its own words.
+    for missed, want, box in NOT_FOUND_GUESSES:
+        scope = f"404 at /{missed}"
+        page, sink = open_page(context, base, missed, rep, scope,
+                               "(g => !!g && !g.hidden)(document.getElementById('lost-guess'))"
+                               " && !!(document.querySelector('.kr-lost__search input') || {}).value")
+        if page:
+            got = page.evaluate("""() => ({
+                guesses: [...document.querySelectorAll('#lost-guess-list a')].map(a => a.getAttribute('href')),
+                box: document.querySelector('.kr-lost__search input').value})""")
+            rep.check(scope, f"guesses /{want} and fills the search with '{box}'",
+                      f"/{want}" in got["guesses"] and got["box"] == box, got)
+            rep.console_errors(scope, [e for e in sink if not e.endswith(f"/{missed}")])
+            page.close()
     context.close()
+
+
+# (missed address, a page it should guess, what fills the blog search).
+# A typo in a post's slug, and a page that never existed under that name.
+NOT_FOUND_GUESSES = (
+    ("blog/sleep-sciense.html", "blog/sleep-science.html", "sleep"),
+    ("research.html", "data_science.html", "research"),
+)
+
+
+# The desktop dropdown under the top-level item `label`, once its
+# transition has ended, is open (or shut). Settled, because visibility
+# reads hidden on the first frame of the fade in: a check made then passed
+# with the dropdown on its way open.
+def dropdown_is(label, want_open):
+    return (f"(d => !d.getAnimations().length && (getComputedStyle(d).visibility === 'visible') === {str(want_open).lower()})"
+            "([...document.querySelectorAll('.classynav > ul > li')]"
+            f".find(li => li.firstElementChild.textContent.trim() === '{label}').querySelector(':scope > .dropdown'))")
+
+
+def check_nav_dropdowns(browser, base, rep):
+    """At 1440 a mouse click on Hobbies leaves its dropdown shut once the
+    pointer has gone, so hovering Blog opens Blog's alone; Escape closes a
+    dropdown the pointer holds open, and one keyboard focus opened, with
+    focus handed back to its parent link. Pins: the focus a click leaves
+    on Hobbies (href="#") held its dropdown open under the next one
+    hovered, and Escape closed neither."""
+    context = site_context(browser, base, size=(1440, 900))
+    scope = "desktop dropdowns"
+    page, sink = open_page(context, base, "about.html", rep, scope,
+                           "!!document.querySelector('.kr-palette-hint')")
+    if page:
+        away = (700, 600)
+        page.locator(".classynav > ul > li > a", has_text="Hobbies").click()
+        page.mouse.move(*away)
+        rep.check(scope, "a click on Hobbies leaves nothing open once the pointer goes",
+                  wait_until(page, dropdown_is("Hobbies", False), 1000))
+        page.locator(".classynav > ul > li > a", has_text="Blog").first.hover()
+        alone = wait_until(page, f"{dropdown_is('Blog', True)} && {dropdown_is('Hobbies', False)}", 1000)
+        rep.check(scope, "hovering Blog opens Blog's alone", alone)
+        page.keyboard.press("Escape")
+        rep.check(scope, "Escape shuts the dropdown the pointer holds open",
+                  wait_until(page, dropdown_is("Blog", False), 1000))
+        page.mouse.move(*away)
+        wait_until(page, dropdown_is("Blog", False), 1000)
+        page.locator(".classynav > ul > li > a", has_text="Data Science").focus()
+        page.keyboard.press("Tab")
+        opened = wait_until(page, dropdown_is("Hobbies", True), 1000)
+        page.keyboard.press("Tab")
+        page.keyboard.press("Escape")
+        back = wait_until(page, f"{dropdown_is('Hobbies', False)}"
+                                " && document.activeElement.textContent.trim() === 'Hobbies'", 1000)
+        rep.check(scope, "Tab opens Hobbies; Escape inside it shuts it and focuses Hobbies",
+                  opened and back, page.evaluate("document.activeElement.textContent.trim()"))
+        rep.console_errors(scope, sink)
+        page.close()
+    context.close()
+
+
+# The back-to-top button, once any fade has ended: 'shown' (displayed,
+# visible and opaque), 'hidden', or 'moving' while it fades.
+SCROLL_UP_STATE = """(b => {
+    if (b.getAnimations().length) return 'moving';
+    const s = getComputedStyle(b);
+    return s.display !== 'none' && s.visibility === 'visible' && +s.opacity > 0 ? 'shown' : 'hidden';
+})(document.getElementById('scrollUp'))"""
+SCROLL_UP_SHOWN = f"({SCROLL_UP_STATE}) === 'shown'"
+SCROLL_UP_HIDDEN = f"({SCROLL_UP_STATE}) === 'hidden'"
+
+
+def check_back_to_top(browser, base, rep):
+    """On a phone, the back-to-top button stays hidden while the reader
+    scrolls down a post, shows once they scroll back up, and hides again
+    while a jargon card is docked at the foot of the screen. Focus left on
+    it by a press does not hold it up; only keyboard focus does. Pins:
+    shown for the whole read past 300px, it sat over the ends of lines,
+    and on top of the jargon sheet."""
+    context = site_context(browser, base, "light", (390, 844), has_touch=True, is_mobile=True)
+    scope = f"back to top on {PIN_POST} at 390"
+    page, sink = open_page(context, base, PIN_POST, rep, scope,
+                           "!!document.getElementById('scrollUp') && !!document.querySelector('.blog-post abbr')")
+    if page:
+        for _ in range(12):
+            page.mouse.wheel(0, 200)
+            next_frames(page)
+        rep.check(scope, "hidden while the reader scrolls down",
+                  wait_until(page, f"scrollY > 1500 && {SCROLL_UP_HIDDEN}", 1000),
+                  page.evaluate("scrollY"))
+        page.mouse.wheel(0, -120)
+        rep.check(scope, "shown once they scroll back up", wait_until(page, SCROLL_UP_SHOWN, 1000))
+        # Pressed and let go off it, so it has the focus a click leaves
+        # but nothing scrolled to the top; that focus must not hold it up.
+        box = page.locator("#scrollUp").bounding_box()
+        if box:
+            page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
+            page.mouse.down()
+            page.mouse.move(8, 400)
+            page.mouse.up()
+            page.mouse.wheel(0, 200)
+            rep.check(scope, "the focus a press leaves on it does not keep it up",
+                      wait_until(page, f"document.activeElement.id === 'scrollUp' && {SCROLL_UP_HIDDEN}", 1000),
+                      page.evaluate("document.activeElement.id || document.activeElement.tagName"))
+        term = page.evaluate(VISIBLE_ABBR)
+        if term > -1:
+            # Down and back up, so the button is showing, then onto the
+            # term. A wheel does not wait for its scroll, so each step
+            # waits for scrollY to move before the term is measured.
+            y = page.evaluate("scrollY")
+            page.mouse.wheel(0, 200)
+            wait_until(page, f"scrollY > {y}", 1000)
+            y = page.evaluate("scrollY")
+            page.mouse.wheel(0, -120)
+            wait_until(page, f"scrollY < {y} && {SCROLL_UP_SHOWN}", 1000)
+            page.mouse.move(*page.evaluate(ABBR_CENTRE, term))
+            rep.check(scope, "hidden while a jargon card is up",
+                      wait_until(page, SCROLL_UP_HIDDEN, 1000))
+        else:
+            rep.check(scope, "the post has a jargon term on screen to hover", False)
+        rep.console_errors(scope, sink)
+        page.close()
+    context.close()
+
+
+# The first jargon term that, scrolled to 300px from the top, has nothing
+# over it: its index among the post's terms, or -1. Instant, because the
+# page scrolls smoothly and a smooth scroll has not moved yet on return.
+VISIBLE_ABBR = """() => [...document.querySelectorAll('.blog-post abbr')].findIndex(a => {
+    window.scrollTo({top: a.getBoundingClientRect().top + scrollY - 300, behavior: 'instant'});
+    const r = a.getBoundingClientRect();
+    return document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2) === a;
+})"""
+
+# The centre of the post's jargon term number `i`, where it is now.
+ABBR_CENTRE = """i => { const r = document.querySelectorAll('.blog-post abbr')[i].getBoundingClientRect();
+    return [r.left + r.width / 2, r.top + r.height / 2]; }"""
 
 
 def check_data_fetched_once(browser, base, rep):
@@ -1201,11 +1368,15 @@ PLAIN_POINT = """() => {
 def check_theme_toggle(browser, base, rep):
     """The toggle flips data-theme both ways and keeps <meta
     name=theme-color> in step (THEME_COLOR_LIGHT in light, the page's own
-    dark value back again), and the choice survives a reload. Pins: the
-    light theme-color left at #fff when the light surface became warm,
-    and a toggle whose label and meta fell out of step with the page."""
+    dark value back again), and the choice survives a reload. Another open
+    tab of the site follows the switch. Pins: the light theme-color left
+    at #fff when the light surface became warm, a toggle whose label and
+    meta fell out of step with the page, and other tabs left in the old
+    theme until they were reloaded."""
     context = site_context(browser, base, theme=None)
     scope = "theme toggle"
+    other, other_sink = open_page(context, base, "about.html", rep, scope,
+                                  "!!document.getElementById('theme-toggle')")
     page, sink = open_page(context, base, "index.html", rep, scope,
                            "!!document.getElementById('theme-toggle')")
     if page:
@@ -1216,6 +1387,14 @@ def check_theme_toggle(browser, base, rep):
         light = page.evaluate(state)
         rep.check(scope, f"dark to light, theme-color {THEME_COLOR_LIGHT}",
                   start[0] == "dark" and flipped and light[1].lower() == THEME_COLOR_LIGHT, f"{start} -> {light}")
+        if other:
+            followed = wait_until(other, "document.documentElement.dataset.theme === 'light'"
+                                         " && document.getElementById('theme-toggle').getAttribute('aria-label')"
+                                         " === 'Switch to dark mode'", 1000)
+            rep.check(scope, "another open tab follows the switch", followed,
+                      other.evaluate("document.documentElement.dataset.theme"))
+            rep.console_errors(scope, other_sink)
+            other.close()
         page.reload(wait_until="domcontentloaded")
         rep.check(scope, "the choice survives a reload",
                   page.evaluate("document.documentElement.dataset.theme") == "light")
@@ -1246,10 +1425,13 @@ PHONE_MENU_FACTS = """() => {
 
 def check_phone_menu(browser, base, rep):
     """At 390px the open menu hangs from the bar's foot, so the bar's row
-    (wordmark, theme toggle, menu button) is one surface in the menu's own
-    colour. Pins: the panel slid in from the top of the screen and cut
-    through the bar's row, leaving the theme toggle half on the panel and
-    half on the bar, with the panel's shadow across the bar."""
+    (wordmark, search button, theme toggle, menu button) is one surface in
+    the menu's own colour. The bar's search button opens the palette, with
+    the menu open or shut, and gets focus back when it closes. Pins: the
+    panel slid in from the top of the screen and cut through the bar's
+    row, leaving the theme toggle half on the panel and half on the bar,
+    with the panel's shadow across the bar; with the menu open, closing
+    the palette sent focus to the menu button instead."""
     for theme in THEMES:
         context = site_context(browser, base, theme, (390, 844), reduced_motion="reduce")
         scope = f"phone menu ({theme})"
@@ -1269,9 +1451,45 @@ def check_phone_menu(browser, base, rep):
             rep.check(scope, "bar and panel are one colour",
                       facts["barColour"] == facts["panelColour"],
                       (facts["barColour"], facts["panelColour"]))
+            # With the menu shut, the bar's own search button opens the
+            # palette: nothing else in the phone bar said there was one.
+            page.click(".classy-navbar-toggler")
+            wait_until(page, "!window.krNavMenu.isOpen()", 1000)
+            search = page.evaluate(BAR_SEARCH_FACTS)
+            rep.check(scope, "the bar has a search button beside the theme toggle",
+                      search and search["shown"] and search["size"] >= 24 and search["clear"], search)
+            if search and search["shown"]:
+                page.click(".kr-bar-search")
+                rep.check(scope, "the bar's search button opens the palette",
+                          wait_until(page, "window.krPalette.isOpen()", 1000))
+                page.keyboard.press("Escape")
+                # With the menu open too: the menu closes, and closing the
+                # palette hands focus back to the search button, not the
+                # menu button that stands in for the menu's own Search row.
+                page.click(".classy-navbar-toggler")
+                wait_until(page, "window.krNavMenu.isOpen()", 1000)
+                page.click(".kr-bar-search")
+                opened = wait_until(page, "window.krPalette.isOpen() && !window.krNavMenu.isOpen()", 1000)
+                page.keyboard.press("Escape")
+                back = wait_until(page, "!window.krPalette.isOpen()"
+                                        " && document.activeElement.matches('.kr-bar-search')", 1000)
+                rep.check(scope, "from the open menu it shuts the menu, and focus comes back to it",
+                          opened and back, page.evaluate("document.activeElement.className"))
             rep.console_errors(scope, sink)
             page.close()
         context.close()
+
+
+# The phone bar's search button (palette.js): shown, its smaller side, and
+# clear of the theme toggle beside it.
+BAR_SEARCH_FACTS = """() => {
+    const b = document.querySelector('.kr-bar-search');
+    if (!b) return null;
+    const r = b.getBoundingClientRect();
+    const t = document.getElementById('theme-toggle').getBoundingClientRect();
+    return {shown: getComputedStyle(b).display !== 'none' && r.width > 0,
+            size: Math.min(r.width, r.height), clear: r.right <= t.left};
+}"""
 
 
 # (query string, what the address bar must say after the first render).
@@ -1656,6 +1874,8 @@ def run_pins(browser, base, rep):
     check_gallery_keyboard_and_rows(browser, base, rep)
     check_palette_paths(browser, base, rep)
     check_not_found_page(browser, base, rep)
+    check_nav_dropdowns(browser, base, rep)
+    check_back_to_top(browser, base, rep)
     check_data_fetched_once(browser, base, rep)
     check_hero_holds(browser, base, rep)
     check_theme_toggle(browser, base, rep)

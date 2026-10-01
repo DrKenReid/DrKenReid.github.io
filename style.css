@@ -1146,8 +1146,10 @@ svg.kr-glyph {
    (site.js); in classy-nav's names, which site.js applies,
    .breakpoint-on/-off, .menu-on, .has-down, .cn-dropdown-item and the
    .dd-trigger it adds; .kr-sub-open and data-kr-page-active on a
-   submenu's item (open, or holding the current page); .active on the
-   current page's item; .theme-switching (theme.js, see §21). */
+   submenu's item (open, or holding the current page); .kr-dd-dismissed
+   on a desktop item whose hover dropdown Escape closed; .active on the
+   current page's item; .kr-bar-search, the phone bar's search button
+   (palette.js); .theme-switching (theme.js, see §21). */
 
 /* --- Tokens ---------------------------------------------------------------
    --kr-bar-photo-* is the bar over a photograph, the same in both themes.
@@ -1382,6 +1384,14 @@ svg.kr-glyph {
 .breakpoint-off .classynav ul li .dropdown li a {
   border-bottom-color: color-mix(in srgb, var(--kr-ink) 6%, transparent); }
 
+/* Escape closes a dropdown the pointer is holding open: site.js puts
+   .kr-dd-dismissed on its item and takes it off when the pointer leaves.
+   One class more than classy-nav.css's li:hover rule. */
+.breakpoint-off .classy-navbar .classynav ul li.kr-dd-dismissed .dropdown {
+  opacity: 0;
+  visibility: hidden;
+  top: 120%; }
+
 .classy-nav-container .classy-navbar .classynav ul li.cn-dropdown-item ul li a {
   height: 42px;
   padding: 0 30px;
@@ -1455,10 +1465,21 @@ svg.kr-glyph {
   height: auto !important;
   line-height: 1.6 !important; }
 
-.classynav ul li .dropdown li.kr-nav-recent a {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis; }
+/* Post titles and series names keep the case they were written in: the
+   template's capitalize (the (0,4,5) rule above, hence the long selector)
+   made "What a Custom Domain" read "What A Custom Domain". */
+.classy-nav-container .classy-navbar .classynav ul li.cn-dropdown-item .dropdown li.kr-nav-series a {
+  text-transform: none; }
+
+/* A recent post's title wraps and is cut after its second line, rather
+   than mid-word on the first. The clamp is on the title's own span
+   (renderHeader): on the link, a third line showed through its bottom
+   padding. */
+.kr-nav-recent__title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden; }
 
 /* --- Search hint pill ------------------------------------------------------ */
 .kr-palette-hint {
@@ -1525,8 +1546,10 @@ svg.kr-glyph {
    In the bar's flow, after the menu (see renderHeader), rather than fixed
    over the bar's corner, where it covered the hamburger from 768 to 799px
    and the Search hint at 992 and 1200px. Its glyphs are inline SVG: the
-   one shown is the theme it switches to. */
-.theme-toggle {
+   one shown is the theme it switches to. The phone bar's search button
+   (below) is the same round control. */
+.theme-toggle,
+.kr-bar-search {
   position: relative;
   flex: 0 0 auto;
   display: flex;
@@ -1544,11 +1567,13 @@ svg.kr-glyph {
   cursor: pointer;
   transition: background-color 0.25s ease, border-color 0.25s ease, color 0.3s ease, transform 0.2s ease; }
 
-.theme-toggle:hover {
+.theme-toggle:hover,
+.kr-bar-search:hover {
   background: var(--kr-bar-fill-hover);
   transform: scale(1.06); }
 
-.theme-toggle:focus-visible {
+.theme-toggle:focus-visible,
+.kr-bar-search:focus-visible {
   outline: 3px solid var(--site-focus-ring);
   outline-offset: 2px; }
 
@@ -1571,9 +1596,33 @@ svg.kr-glyph {
 .breakpoint-off .classy-navbar > .classy-menu {
   margin-left: auto; }
 
+/* --- Search button (phone bar) -------------------------------------------
+   palette.js puts a <button class="kr-bar-search"> before the theme
+   toggle; it opens the command palette. Only the phone bar shows it:
+   there the bar is otherwise the wordmark, the toggle and the menu
+   button, and the key hints that tell a desktop reader about Ctrl K are
+   hidden where nothing hovers. The desktop bar has its Search pill, and
+   the phone menu keeps its Search row. */
+.kr-bar-search {
+  display: none; }
+
+.kr-bar-search svg {
+  display: block;
+  width: 18px;
+  height: 18px; }
+
+.breakpoint-on .classy-navbar > .kr-bar-search {
+  display: flex;
+  margin-left: auto; }
+
 /* --- The phone bar and its menu (breakpoint-on, 991px and under) ------ */
 .breakpoint-on .classy-navbar > .theme-toggle {
   margin-left: auto; }
+
+/* The search button takes the free space instead, so the toggle sits
+   beside it. */
+.breakpoint-on .classy-navbar > .kr-bar-search + .theme-toggle {
+  margin-left: 10px; }
 
 /* The menu button is its own close button, so no second close icon is
    drawn in the panel. */
@@ -5677,10 +5726,11 @@ a.gallery-filter-btn:focus:not(:hover) {
     display: none !important; }
 }
 
+/* Hidden, not just transparent, so it leaves the Tab order too. */
 @media only screen and (max-width: 991px) {
   body.kr-share-modal-open #scrollUp {
     opacity: 0;
-    pointer-events: none;
+    visibility: hidden;
   }
 }
 
@@ -10787,6 +10837,43 @@ p.kr-lost__lede {
   line-height: 1.7;
   color: var(--kr-ink); }
 
+/* "Were you looking for": up to three pages or posts guessed from the
+   words in the missed address (the script at the foot of 404.html, through
+   the command palette's search). Hidden until there is a guess. */
+.kr-lost__guess {
+  max-width: 34em;
+  margin: -8px auto 28px; }
+
+p.kr-lost__guess-lead {
+  margin: 0 0 4px;
+  font-size: 15px;
+  color: var(--kr-muted); }
+
+.kr-lost__guess-list {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+
+.kr-lost__guess-list li {
+  font-size: 17px;
+  line-height: 1.5; }
+
+/* A block of its own on each line, so each is a 24px target. */
+.kr-lost__guess-list a {
+  display: inline-block;
+  padding: 3px 0;
+  color: var(--kr-action);
+  text-decoration: underline;
+  text-underline-offset: 3px; }
+
+.kr-lost__guess-kind {
+  margin-left: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--kr-muted); }
+
 /* The blog search under the canvas: the listing's own field
    (.kr-list-search), so it takes both themes and the site's focus ring. */
 .kr-lost__search {
@@ -11056,7 +11143,11 @@ hr:has(+ #footer-section) {
     justify-content: center;
     text-align: center; } }
 
-/* Back to top. */
+/* --- Back to top -----------------------------------------------------------
+   site.js (initScrollUp) builds it as a.kr-offstage and adds .is-visible
+   while the reader scrolls back up; the recipe (§10) keeps it out of the
+   Tab order while hidden. No transition of its own: one here would
+   override the recipe's timing, visibility's included. */
 #scrollUp {
   position: fixed;
   right: 40px;
@@ -11068,10 +11159,14 @@ hr:has(+ #footer-section) {
   background-color: #fc6060;
   color: #ffffff;
   text-align: center;
-  transition-duration: 500ms;
   border-radius: 50%;
   box-shadow: 0 2px 40px 8px rgba(15, 15, 15, 0.15);
-  z-index: 15962536; }
+  z-index: 15962536;
+  opacity: 0;
+  transform: translateY(12px); }
+  #scrollUp.is-visible {
+    opacity: 1;
+    transform: none; }
   @media only screen and (max-width: 767px) {
     #scrollUp {
       right: 20px;
@@ -11079,6 +11174,13 @@ hr:has(+ #footer-section) {
   #scrollUp:focus, #scrollUp:hover {
     background-color: #000000;
     color: #ffffff; }
+
+/* A jargon card docks as a sheet along the foot of a phone's screen
+   (§11, "Jargon", at the same width); the button would sit on it. */
+@media (max-width: 768px) {
+  body:has(.blog-post abbr:hover) #scrollUp {
+    opacity: 0;
+    visibility: hidden; } }
 
 /* ==== :: §19 Command palette and key hints ==== */
 

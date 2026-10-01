@@ -105,14 +105,29 @@
     // KEYBOARD
     //   The menu button (.classy-navbar-toggler, a <button>) and every
     //   dd-trigger work with Enter and Space. On a desktop a dropdown opens
-    //   when focus enters its parent item: the stylesheet only opens them on
-    //   :hover, and visibility:hidden keeps their links out of the Tab order.
+    //   when keyboard focus enters its parent item: the stylesheet only
+    //   opens them on :hover, and visibility:hidden keeps their links out
+    //   of the Tab order.
+    //
+    // THE DESKTOP DROPDOWNS (breakpoint-off, 992px and up)
+    //   Hover opens one (CSS); keyboard focus opens one (below). Focus from
+    //   a mouse click does not: clicking Hobbies (href="#") focuses it, and
+    //   a dropdown opened by that stayed open after the pointer left, under
+    //   the next one hovered. Hovering another top-level item closes a
+    //   focus-opened dropdown. Escape closes either kind: a focus-opened one
+    //   hands focus back to its parent link and stays shut until focus
+    //   leaves the item or the reader presses ArrowDown (or Enter or Space
+    //   on Hobbies); a hover-opened one gets .kr-dd-dismissed on its item
+    //   until the pointer leaves it.
     //
     // THE PHONE MENU'S FOCUS CONTRACT (breakpoint-on, 991px and under)
     //   Closed: the panel is visibility:hidden (style.css, "Header and
     //     chrome"), so none of its links is a Tab stop; the bar's own
-    //     controls (wordmark, theme toggle, menu button) are all that Tab
-    //     reaches before the page.
+    //     controls (wordmark, search button, theme toggle, menu button)
+    //     are all that Tab reaches before the page. The search button is
+    //     palette.js's, and a tap on it with the menu open closes the menu
+    //     as the palette opens (krPalette.open), which hands focus back to
+    //     that button, not the menu button, when it closes.
     //   Opening: focus moves to the first link in the menu, and everything
     //     outside the header (the skip link, <main>, the footer, anything
     //     else under <body>) is made inert, so Tab cycles through the
@@ -413,11 +428,14 @@
             }
         });
 
-        // --- Escape closes the off-canvas menu ---
+        // --- Escape closes the off-canvas menu, or a desktop dropdown ---
         document.addEventListener('keydown', function (e) {
             if (e.key !== 'Escape' && e.key !== 'Esc') return;
-            if (!isOpen()) return;
-            setMenu(false);
+            if (isOpen()) {
+                setMenu(false);
+            } else if (isDesktop()) {
+                escapeDropdowns();
+            }
         });
 
         // --- a tap outside the open menu closes it ---
@@ -440,11 +458,33 @@
             if (e.persisted && isOpen()) setMenu(false, { returnFocus: false });
         });
 
-        // --- desktop: open a dropdown when focus enters its parent item ---
+        // --- desktop: open a dropdown when keyboard focus enters its item ---
         // The stylesheet only reveals dropdowns on :hover, and
         // visibility:hidden keeps their links out of the tab order, so
-        // without this a keyboard user can never reach them.
+        // without this a keyboard user can never reach them. See "THE
+        // DESKTOP DROPDOWNS" above for what closes one.
         var focusOpened = null;
+        // The top-level item whose focus-opened dropdown Escape closed.
+        var escaped = null;
+
+        function topItem(node) {
+            return node && node.closest ? node.closest('.classynav > ul > li') : null;
+        }
+
+        function dropdownOf(item) {
+            var sub = item ? childSubmenu(item) : null;
+            return sub && sub.classList.contains('dropdown') ? sub : null;
+        }
+
+        // Keyboard focus, not the focus a mouse click leaves behind. Where
+        // :focus-visible is unknown, every focus counts, as it used to.
+        function keyboardFocus(el) {
+            try {
+                return el.matches(':focus-visible');
+            } catch (err) {
+                return true;
+            }
+        }
 
         function hideFocusDropdown() {
             if (!focusOpened) return;
@@ -465,23 +505,68 @@
 
         nav.addEventListener('focusin', function (e) {
             if (!isDesktop()) return;
-            var item = e.target.closest
-                ? e.target.closest('.classynav > ul > li')
-                : null;
-            if (!item) {
-                hideFocusDropdown();
-                return;
-            }
-            var sub = childSubmenu(item);
-            if (sub && sub.classList.contains('dropdown')) {
+            var item = topItem(e.target);
+            if (item !== escaped) escaped = null;
+            var sub = dropdownOf(item);
+            if (sub && !escaped && keyboardFocus(e.target)) {
                 showFocusDropdown(sub);
-            } else {
+            } else if (!sub || focusOpened !== sub) {
                 hideFocusDropdown();
             }
         });
         nav.addEventListener('focusout', function (e) {
-            if (!nav.contains(e.relatedTarget)) hideFocusDropdown();
+            if (nav.contains(e.relatedTarget)) return;
+            hideFocusDropdown();
+            escaped = null;
         });
+
+        // ArrowDown on a top-level link, or Enter or Space on a placeholder
+        // one (Hobbies), opens its dropdown: the way back in after Escape,
+        // or after a click left focus there without opening it.
+        nav.addEventListener('keydown', function (e) {
+            if (!isDesktop()) return;
+            var item = topItem(e.target);
+            var sub = dropdownOf(item);
+            if (!sub || e.target !== item.firstElementChild) return;
+            var opens = e.key === 'ArrowDown' || e.key === 'Down' ||
+                (placeholderLink(item) && isActivationKey(e));
+            if (!opens) return;
+            e.preventDefault();
+            escaped = null;
+            showFocusDropdown(sub);
+        });
+
+        // Pointing at another top-level item closes a focus-opened dropdown,
+        // so two are never open at once.
+        nav.addEventListener('mouseover', function (e) {
+            if (!focusOpened || !isDesktop()) return;
+            var item = topItem(e.target);
+            if (item && item !== focusOpened.parentNode) hideFocusDropdown();
+        });
+
+        // A dismissed hover dropdown opens again once the pointer has left.
+        var ddItems = nav.querySelectorAll('.classynav > ul > li');
+        for (i = 0; i < ddItems.length; i++) {
+            if (!dropdownOf(ddItems[i])) continue;
+            ddItems[i].addEventListener('mouseleave', function () {
+                this.classList.remove('kr-dd-dismissed');
+            });
+        }
+
+        function escapeDropdowns() {
+            if (focusOpened) {
+                var item = focusOpened.parentNode;
+                var link = item.firstElementChild;
+                hideFocusDropdown();
+                escaped = item;
+                if (link && item.contains(document.activeElement) &&
+                    document.activeElement !== link) {
+                    link.focus();
+                }
+            }
+            var hovered = nav.querySelector('.classynav > ul > li:hover');
+            if (hovered && dropdownOf(hovered)) hovered.classList.add('kr-dd-dismissed');
+        }
 
         // --- breakpoint tracking ---
         var wasDesktop = null;
@@ -500,6 +585,7 @@
                 closeAllSubmenus();
             } else {
                 hideFocusDropdown();
+                escaped = null;
             }
             applyRowRoles(desktop);
         }
@@ -624,41 +710,70 @@
     // ------------------------------------------------------------------
     // 4. Scroll-to-top
     // ------------------------------------------------------------------
-    // Same element the scrollUp plugin built (#scrollUp is already styled in
-    // style.css), minus the inline positioning the plugin duplicated and
-    // plus the accessible name the icon-only control was missing.
+    // Same element the scrollUp plugin built (#scrollUp, style.css §18),
+    // minus the inline positioning the plugin duplicated and plus the
+    // accessible name the icon-only control was missing.
+    //
+    // It shows while the reader scrolls back up, once past SCROLLUP_AT,
+    // and goes when they scroll on down: shown for the whole read, it sat
+    // over the ends of lines on a phone and the foot of a sidenote on a
+    // wide screen. A direction counts after SCROLL_INTENT pixels of travel,
+    // so the jitter of a momentum scroll or an image loading above does
+    // not flicker it, and it is not hidden while it has keyboard focus. The
+    // stylesheet hides it by itself while a jargon card is up on a phone.
+    // Shown and hidden with .kr-offstage and .is-visible (style.css §10),
+    // so a hidden button is out of the Tab order, and still under reduced
+    // motion, where the recipe drops its transitions.
+
+    var SCROLL_INTENT = 24;
 
     function initScrollUp() {
         if (document.getElementById('scrollUp')) return;
 
         var btn = document.createElement('a');
         btn.id = 'scrollUp';
+        btn.className = 'kr-offstage';
         btn.href = '#top';
         btn.setAttribute('aria-label', 'Scroll to top');
         btn.innerHTML = '<i class="arrow_carrot-up" aria-hidden="true"></i>';
-        btn.style.display = 'none';
         document.body.appendChild(btn);
 
-        var shown = false;
+        var lastY = window.pageYOffset;
+        // Pixels moved in the current direction: negative is up.
+        var travel = 0;
+
+        function show(want) {
+            btn.classList.toggle('is-visible', want);
+        }
+
+        // A keyboard reader on the button keeps it: hiding it would drop
+        // their focus. The focus a click leaves (a link takes it in some
+        // browsers) does not, or a scroll down just after a click would
+        // leave the button up.
+        function held() {
+            if (document.activeElement !== btn) return false;
+            try {
+                return btn.matches(':focus-visible');
+            } catch (err) {
+                return true;
+            }
+        }
 
         function apply() {
-            var want = window.pageYOffset > SCROLLUP_AT;
-            if (want === shown) return;
-            shown = want;
-            if (!canAnimate || reduceMotion) {
-                btn.style.display = want ? 'block' : 'none';
+            var y = window.pageYOffset;
+            var dy = y - lastY;
+            lastY = y;
+            if (y <= SCROLLUP_AT) {
+                travel = 0;
+                show(false);
                 return;
             }
-            if (want) {
-                btn.style.display = 'block';
-                // Animated rather than set inline, so the stylesheet keeps
-                // control of opacity (the share modal hides #scrollUp that way).
-                btn.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200 });
-            } else {
-                btn.animate([{ opacity: 1 }, { opacity: 0 }],
-                    { duration: 200 }).onfinish = function () {
-                        if (!shown) btn.style.display = 'none';
-                    };
+            if (!dy) return;
+            travel = (dy < 0) === (travel < 0) ? travel + dy : dy;
+            if (travel <= -SCROLL_INTENT) {
+                show(true);
+            } else if (travel >= SCROLL_INTENT && !held()) {
+                show(false);
             }
         }
 

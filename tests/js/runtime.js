@@ -9,6 +9,11 @@
  * returns early). The helpers under test touch no DOM, or only the few
  * element methods the stubs provide. One copy, so a global the script
  * starts to need at load (URLSearchParams did) is added for every suite.
+ *
+ * `scripts` names more files under js/ to run after it in the same
+ * context, as a page loads them (palette.js for its search). The
+ * document reports itself still loading, so a script that waits for
+ * DOMContentLoaded to build its DOM waits for ever and builds none.
  */
 'use strict';
 
@@ -18,7 +23,7 @@ const vm = require('node:vm');
 
 const ROOT = path.join(__dirname, '..', '..');
 
-function loadRuntime(pathname = '/index.html') {
+function loadRuntime(pathname = '/index.html', scripts = []) {
     const noop = () => {};
     const element = {
         classList: { add: noop, remove: noop, toggle: noop, contains: () => false },
@@ -31,6 +36,7 @@ function loadRuntime(pathname = '/index.html') {
         body: element,
         head: element,
         baseURI: 'https://www.kenreid.co.uk' + pathname,
+        readyState: 'loading',
         querySelector: () => null,
         querySelectorAll: () => [],
         getElementById: () => null,
@@ -48,8 +54,10 @@ function loadRuntime(pathname = '/index.html') {
         console, URL, URLSearchParams, setTimeout, clearTimeout, Promise,
     });
     window.document = document;
-    const source = fs.readFileSync(path.join(ROOT, 'js', 'shared-components.js'), 'utf8');
-    vm.runInContext(source, context, { filename: 'shared-components.js' });
+    for (const name of ['shared-components.js', ...scripts]) {
+        const source = fs.readFileSync(path.join(ROOT, 'js', name), 'utf8');
+        vm.runInContext(source, context, { filename: name });
+    }
     return context;
 }
 

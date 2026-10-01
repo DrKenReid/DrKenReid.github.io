@@ -31,6 +31,13 @@ test('KR_PAGES: unique keys, pages that exist, known footer slots', () => {
     }
 });
 
+test('KR_PAGES: also is lower-case words, only on pages the palette offers', () => {
+    for (const page of rt.KR_PAGES.filter(p => 'also' in p)) {
+        assert.match(page.also, /^[a-z0-9.]+( [a-z0-9.]+)*$/, `${page.key}: also "${page.also}"`);
+        assert.equal(page.inPalette, true, `${page.key} has also words but is not in the palette`);
+    }
+});
+
 test('KR_PAGES: a parent is another listed page in the same footer slot', () => {
     const byKey = new Map(rt.KR_PAGES.map(p => [p.key, p]));
     for (const page of rt.KR_PAGES.filter(p => p.parent)) {

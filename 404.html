@@ -44,6 +44,13 @@
         <div class="col-12 col-lg-8 text-center">
           <p class="kr-lost__lede">The page you're looking for doesn't exist, was moved, or I broke something. <a href="/contact.html">Please let me know!</a></p>
 
+          <!-- Best guesses from the words in the missed address, filled in
+               by the script at the foot; hidden until it has one. -->
+          <div class="kr-lost__guess" id="lost-guess" hidden>
+            <p class="kr-lost__guess-lead">Were you looking for:</p>
+            <ul class="kr-lost__guess-list" id="lost-guess-list"></ul>
+          </div>
+
           <!-- A hill climber looking for the page. It never finds it, because
                there is nothing to find; the joke is the algorithm's problem. -->
           <figure class="kr-lost" aria-hidden="true">
@@ -181,6 +188,83 @@
       var more = document.getElementById('lost-photo-more');
       if (more && Array.isArray(files) && files.length > 1) more.textContent = files.length - 1;
     }).catch(function() {});
+
+    // "Were you looking for": each word of the missed address (three
+    // letters or more, less the ones any address has) goes to the command
+    // palette's search, and the guesses are what the most words found, by
+    // their summed score, leaving out any under half the best (a word
+    // that only turns up in an excerpt). /research.html finds Data Science
+    // through the palette's `also` words (KR_PAGES). The longest word the
+    // blog search can use fills its box, so one Enter searches for it.
+    // palette.js is deferred, so it has run by DOMContentLoaded.
+    var LOST_NOISE = ['html', 'htm', 'php', 'asp', 'aspx', 'index', 'blog', 'www', 'the', 'and', 'for', 'with'];
+    var LOST_GUESSES = 3;
+
+    function lostWords(path) {
+      var text;
+      try { text = decodeURIComponent(path); } catch (e) { text = path; }
+      var seen = {};
+      return text.toLowerCase().split(/[^a-z0-9]+/).filter(function(w) {
+        if (w.length < 3 || /^[0-9]+$/.test(w) || LOST_NOISE.indexOf(w) !== -1 || seen[w]) return false;
+        seen[w] = true;
+        return true;
+      });
+    }
+
+    function showGuesses(guesses) {
+      var list = document.getElementById('lost-guess-list');
+      if (!list || !guesses.length) return;
+      guesses.forEach(function(g) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = g.href;
+        a.textContent = g.title;
+        var kind = document.createElement('span');
+        kind.className = 'kr-lost__guess-kind';
+        kind.textContent = g.kind;
+        li.appendChild(a);
+        li.appendChild(document.createTextNode(' '));
+        li.appendChild(kind);
+        list.appendChild(li);
+      });
+      document.getElementById('lost-guess').hidden = false;
+    }
+
+    // blog.js's own test: the word inside a title, an excerpt or a tag.
+    function blogFinds(posts, word) {
+      return posts.some(function(p) {
+        return [p.title, p.excerpt].concat(p.tags || []).some(function(t) {
+          return String(t || '').toLowerCase().indexOf(word) !== -1;
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var words = lostWords(location.pathname);
+      if (!words.length || !window.krPalette) return;
+      window.krPalette.ready().then(function() {
+        var found = {};
+        words.forEach(function(w) {
+          window.krPalette.search(w).forEach(function(r) {
+            var f = found[r.href] || (found[r.href] = { result: r, words: 0, score: 0 });
+            f.words += 1;
+            f.score += r.score;
+          });
+        });
+        var ranked = Object.keys(found).map(function(k) { return found[k]; })
+          .sort(function(a, b) { return b.words - a.words || b.score - a.score; });
+        var top = ranked[0];
+        showGuesses(ranked.filter(function(f) { return f.words === top.words && f.score >= top.score / 2; })
+          .slice(0, LOST_GUESSES).map(function(f) { return f.result; }));
+      }).catch(function() {});
+      loadBlogPosts().then(function(posts) {
+        if (!Array.isArray(posts)) return;
+        var usable = words.filter(function(w) { return blogFinds(posts, w); })
+          .sort(function(a, b) { return b.length - a.length; });
+        var box = document.querySelector('.kr-lost__search input[name="q"]');
+        if (box && usable.length && !box.value) box.value = usable[0];
+      }).catch(function() {});
+    });
   </script>
 </body>
 </html>

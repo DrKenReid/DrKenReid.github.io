@@ -347,9 +347,11 @@ checks that. (The essay:
    out for a page that is not in the menu, as `colophon.html` and
    `404.html` do.
 3. Add an entry to `KR_PAGES` in `js/shared-components.js`:
-   `{key, label, href, blurb, inFooter, inPalette, parent?}`. It reaches
-   the footer only with `inFooter` set (`'explore'` or `'fine'`) and the
-   palette only with `inPalette: true`. The audit fails a top-level page
+   `{key, label, href, blurb, inFooter, inPalette, parent?, also?}`. It
+   reaches the footer only with `inFooter` set (`'explore'` or `'fine'`)
+   and the palette only with `inPalette: true`; `also` holds the words
+   people type for it that its label and blurb do not ("cv", "rss"),
+   which the palette matches as tags. The audit fails a top-level page
    with no entry (the `site-map` rule); the pages left out on purpose,
    `404.html` and `offline.html`, are listed in `NOT_IN_SITE_MAP` in
    `audit_site.py`. The header menu is written by hand, not built from
