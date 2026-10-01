@@ -209,11 +209,13 @@ def build_card_html(post):
     if minutes:
         date_line += f' · {minutes} min read'
     tags_html = ''.join(f'<span class="blog-tag">{esc(tag)}</span>' for tag in post.get('tags', []))
+    srcset = sitelib.thumb_srcset(image_src)
+    srcset_attr = f' srcset="{esc(srcset)}"' if srcset else ''
     return (
         f'            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url(\'{esc(cover)}\')">\n'
         f'              <a href="{esc(href)}" class="blog-card kr-lit">\n'
         '                <span class="kr-lit__ring" aria-hidden="true"></span>\n'
-        f'                <div class="blog-card-img"><img src="{esc(image_src)}" alt="" loading="lazy"></div>\n'
+        f'                <div class="blog-card-img"><img src="{esc(image_src)}"{srcset_attr} alt="" loading="lazy"></div>\n'
         '                <div class="blog-card-body">\n'
         f'                  <div class="blog-card-date">{esc(date_line)}</div>\n'
         f'                  <h3 class="blog-card-title">{esc(post.get("title", ""))}</h3>\n'

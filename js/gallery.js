@@ -528,6 +528,9 @@ function buildTile(filename) {
     // The link carries the name, so the picture inside it is decorative.
     var img = document.createElement('img');
     img.src = '/img/photography/thumb/' + stem + '.webp';
+    // Sharp on a high-density screen: the tile's 800px double at 2x.
+    var set = krThumbSrcset(img.getAttribute('src'));
+    if (set) img.srcset = set;
     img.alt = '';
     img.loading = 'lazy';
     img.onerror = function() {

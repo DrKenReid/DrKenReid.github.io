@@ -13,6 +13,7 @@ import struct
 import sys
 import tempfile
 import unittest
+from unittest import mock
 import zlib
 from pathlib import Path
 
@@ -133,6 +134,60 @@ class Stamp(unittest.TestCase):
         self.page.write_text('<img src="../img/photography/thumb/7.webp" alt="">', encoding="utf-8")
         gpd.stamp_post(self.page, {"7": [400, 266]})
         self.assertIn('width="400" height="266"', self.page.read_text(encoding="utf-8"))
+
+
+class Srcset(unittest.TestCase):
+    """A post photo that is a gallery frame names its tracked sharper sizes."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name)
+        (self.root / "blog").mkdir()
+        self.page = self.root / "blog" / "post.html"
+        self._root = gpd.ROOT
+        gpd.ROOT = self.root
+        thumb = self.root / "img" / "photography" / "thumb"
+        thumb.mkdir(parents=True)
+        (thumb / "7.webp").write_bytes(b"recorded size wins")
+        self.patches = [
+            mock.patch.object(gpd, "tracked_renditions",
+                              lambda: {"img/photography/thumb/7@2x.webp", "img/photography/hero/7.webp"}),
+            mock.patch.object(gpd, "webp_size", lambda path: (1920, 1277)),
+        ]
+        for p in self.patches:
+            p.start()
+
+    def tearDown(self):
+        for p in reversed(self.patches):
+            p.stop()
+        gpd.ROOT = self._root
+        self.tmp.cleanup()
+
+    def test_thumb_double_and_hero_with_the_column_sizes(self):
+        self.page.write_text('<div class="blog-post"><img src="../img/photography/thumb/7.webp" alt=""></div>',
+                             encoding="utf-8")
+        self.assertEqual(gpd.stamp_post(self.page, {"7": [400, 266]}), 1)
+        text = self.page.read_text(encoding="utf-8")
+        self.assertIn('width="400" height="266" srcset="../img/photography/thumb/7.webp 400w, '
+                      '../img/photography/thumb/7@2x.webp 800w, ../img/photography/hero/7.webp 1920w" '
+                      'sizes="(min-width: 800px) 760px, 100vw"', text)
+        self.assertEqual(gpd.stamp_post(self.page, {"7": [400, 266]}), 0)
+        self.assertEqual(gpd.examine_srcset(self.page, {"7": [400, 266]}), [])
+
+    def test_a_photo_grid_takes_half_the_column(self):
+        self.page.write_text('<div class="photo-grid"><a><img src="../img/photography/thumb/7.webp" '
+                             'width="400" height="266"></a></div>', encoding="utf-8")
+        gpd.stamp_post(self.page, {"7": [400, 266]})
+        self.assertIn('sizes="' + gpd.GRID_SIZES + '"', self.page.read_text(encoding="utf-8"))
+
+    def test_untracked_sizes_and_other_images_are_left_alone(self):
+        with mock.patch.object(gpd, "tracked_renditions", lambda: set()):
+            self.page.write_text('<img src="../img/photography/thumb/7.webp" width="400" height="266">',
+                                 encoding="utf-8")
+            self.assertEqual(gpd.stamp_post(self.page, {"7": [400, 266]}), 0)
+        self.page.write_text('<div class="kr-viz"><img src="../img/photography/thumb/7.webp"></div>',
+                             encoding="utf-8")
+        self.assertEqual(gpd.examine_srcset(self.page, {"7": [400, 266]}), [])
 
 
 if __name__ == "__main__":

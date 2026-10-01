@@ -257,7 +257,9 @@ Lora, the gradient as a short rule under it, and an optional lede (§05).
 
 `.blog-card` (stacked: picture, date, title, excerpt, tags) and
 `.single-post-area` (overlay: title over the photograph) are the post
-cards, both built by `createBlogCardElement` (§08). Every point of an
+cards, both built by `createBlogCardElement` (§08). A cover that is a gallery
+thumb carries its 800px double for 2x screens (`krThumbSrcset`), as the
+baked related cards, the series cards and the gallery tiles do. Every point of an
 overlay card is its title's link, so middle-click and "open in new tab"
 work anywhere on it, except the blog listing's series label, which sits
 above that link and goes to the series page. Cards carry the cursor-lit ring (`.kr-lit`), the

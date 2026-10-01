@@ -1290,12 +1290,18 @@ def check_filter_rows(browser, base, rep):
         if more.count():
             more.click()
         row.locator("button[data-filter-key]").nth(1).click()
-        # Scroll on, then press a pill in the middle of what is on screen.
-        row.evaluate("r => { r.scrollLeft = r.scrollWidth / 2; }")
+        # Scroll on so that a pill from the middle of the row starts at the
+        # row's edge, wholly in view: the row snaps each pill's start there
+        # on a phone, so that is a place it can rest (at 390 the row is
+        # ~266px and a pill up to ~155px, so a fixed scroll can leave none
+        # wholly inside, and snapping moves a centred one). Then press it.
+        pill = row.evaluate_handle("""r => {
+            const all = [...r.querySelectorAll('button[data-filter-key]')];
+            const x = all[Math.floor(all.length / 2)];
+            r.scrollLeft += x.getBoundingClientRect().left - r.getBoundingClientRect().left;
+            return x; }""")
+        next_frames(page, 3)
         before = row.evaluate("r => r.scrollLeft")
-        pill = row.evaluate_handle("""r => { const b = r.getBoundingClientRect();
-            return [...r.querySelectorAll('button[data-filter-key]')].find(x => {
-                const q = x.getBoundingClientRect(); return q.left > b.left + 20 && q.right < b.right - 20; }); }""")
         pill.as_element().click()
         after = row.evaluate("r => r.scrollLeft")
         got = page.evaluate(PILL_INSET, pill)
@@ -1919,6 +1925,28 @@ def check_listing_arrivals(browser, base, rep):
                                       "document.querySelector('.kr-palette-input').value === 'zzzqqq'", 1000)
             rep.check(scope, "the palette opens on the same words", opened)
         rep.console_errors(scope, sink)
+        page.close()
+    context.close()
+
+
+def check_card_cover_fallback(browser, base, rep):
+    """A post card whose cover fails shows the fallback photograph. Pin:
+    with a srcset on the cover (its @2x double), the error handler's new
+    src was never used, and the card stayed a broken image."""
+    context = site_context(browser, base, "dark", (1280, 900), device_scale_factor=2)
+    context.route(re.compile(r"/img/photography/thumb/\d+(@2x)?\.webp$"), lambda route: route.fulfill(status=404))
+    scope = "blog.html, thumb covers missing"
+    page, _sink = open_page(context, base, "blog.html", rep, scope, LISTING_DRAWN)
+    if page:
+        # The cards' images are lazy: bring them all in, then let them settle.
+        page.evaluate("document.querySelectorAll('#blog-grid img').forEach(i => { i.loading = 'eager'; })")
+        wait_until(page, "[...document.querySelectorAll('#blog-grid img')].every(i => i.complete && i.naturalWidth > 0)", 4000)
+        got = page.evaluate("""() => [...document.querySelectorAll('#blog-grid img')].map(i => ({
+            src: (i.currentSrc || '').split('/img/').pop(), ok: i.naturalWidth > 0 }))""")
+        broken = [g for g in got if not g["ok"]]
+        fell_back = [g for g in got if g["src"].endswith("hero/97.webp")]
+        rep.check(scope, "every card shows a picture, the fallback where its cover failed",
+                  bool(got) and not broken and bool(fell_back), {"broken": broken[:3], "fallbacks": len(fell_back)})
         page.close()
     context.close()
 
@@ -2640,6 +2668,7 @@ def run_pins(browser, base, rep):
     check_blog_url_state(browser, base, rep)
     check_listing_arrivals(browser, base, rep)
     check_listing_load_failure(browser, base, rep)
+    check_card_cover_fallback(browser, base, rep)
     check_series_crumbs(browser, base, rep)
     check_series_without_scripts(browser, base, rep)
     check_reading_walls(browser, base, rep)

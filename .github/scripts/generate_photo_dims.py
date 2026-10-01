@@ -13,8 +13,16 @@ Two places need an image's shape before its file has loaded:
     browser reserves the box from their ratio, because the stylesheet's
     `img { width: 100%; height: auto }` sizes it by width.
 
+A post photo that is a gallery frame (src .../thumb/N.webp) also gets a
+srcset naming the frame's sharper sizes (generate_photo_renditions.py:
+the 800px double and the hero), with sizes for the 760px column, so the
+browser draws one that fills the column instead of stretching the 400px
+thumb. The src stays the thumb, the fallback everywhere. Only tracked
+files are named: a hero that exists only as an untracked file here would
+404 on the live site.
+
     python .github/scripts/generate_photo_dims.py              # photo-dims.json
-    python .github/scripts/generate_photo_dims.py --stamp-img  # and post images
+    python .github/scripts/generate_photo_dims.py --stamp-img  # and post images (sizes, srcset)
     python .github/scripts/generate_photo_dims.py --check      # both current?
 
 --check writes nothing and needs only the standard library (the CI job
@@ -28,6 +36,7 @@ Sizes are read from the file headers (WebP, PNG, JPEG, GIF), so neither
 mode needs an image library; Pillow is only a fallback for a format the
 readers do not know.
 """
+import functools
 import json
 import posixpath
 import re
@@ -60,6 +69,24 @@ RATIO_TOLERANCE = 0.01
 #                  would reserve anything, and stamping them would make
 #                  that generator's --check fail.
 SKIP_INSIDE = ("kr-viz", "related-posts")
+
+# A post photo whose src is a gallery thumb, as written in the page
+# (../img/photography/thumb/12.webp, or site-absolute).
+THUMB_SRC_RE = re.compile(r"^(?P<pre>.*img/photography/)thumb/(?P<n>\d+)\.webp$")
+# How wide a post photo is drawn, for the browser to pick from its srcset:
+# the post column is 760px from 800px up and the screen below that; a
+# .photo-grid sets two side by side (373px each) from 576px; a portrait
+# figure (.kr-figure-img--portrait) is held to PORTRAIT_MAX_H tall (style.css
+# §11) with its width following, so about 338px for a 2:3 frame. PORTRAIT_MAX_H is
+# that rule's max-height: change both.
+POST_SIZES = "(min-width: 800px) 760px, 100vw"
+GRID_SIZES = "(min-width: 800px) 373px, (min-width: 576px) 50vw, 100vw"
+GRID_INSIDE = "photo-grid"
+PORTRAIT_CLASS = "kr-figure-img--portrait"
+PORTRAIT_MAX_H = 507
+# A sizes this script wrote; any other was written by hand for a layout it
+# cannot see (a photo in an inline grid) and is left as it is.
+GENERATED_SIZES_RE = re.compile(r"^\(min-width: 800px\) (760|373)px,|^\(min-width: \d+px\) \d+px, 100vw$")
 
 
 # --------------------------------------------------------------------------
@@ -173,8 +200,9 @@ class ImgTag:
     text and attributes, and the class of the ancestor that exempts it
     (None when it must carry dimensions)."""
 
-    def __init__(self, start, raw, attrs, skip):
+    def __init__(self, start, raw, attrs, skip, grid=False):
         self.start, self.raw, self.attrs, self.skip = start, raw, attrs, skip
+        self.grid = grid
 
     @property
     def has_dims(self):
@@ -192,11 +220,14 @@ class _ImgScanner(HTMLParser):
         for i, ch in enumerate(text):
             if ch == "\n":
                 self.line_starts.append(i + 1)
-        self.stack = []     # (tag, exempting class or None)
+        self.stack = []     # (tag, exempting class or None, in a .photo-grid)
         self.images = []
 
     def _skip(self):
-        return next((cls for _tag, cls in reversed(self.stack) if cls), None)
+        return next((cls for _tag, cls, _grid in reversed(self.stack) if cls), None)
+
+    def _grid(self):
+        return any(grid for _tag, _cls, grid in self.stack)
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
@@ -208,13 +239,13 @@ class _ImgScanner(HTMLParser):
                 # Never expected; stamping at a wrong offset would corrupt
                 # the page, so stop rather than guess.
                 raise RuntimeError("cannot locate <img> at line %d, column %d" % (line, col))
-            self.images.append(ImgTag(start, raw, attrs, self._skip()))
+            self.images.append(ImgTag(start, raw, attrs, self._skip(), self._grid()))
             return
         if tag in self.VOID:
             return
         classes = (attrs.get("class") or "").split()
         own = next((c for c in SKIP_INSIDE if c in classes), None)
-        self.stack.append((tag, own))
+        self.stack.append((tag, own, GRID_INSIDE in classes))
 
     def handle_startendtag(self, tag, attrs):
         if tag == "img":
@@ -281,21 +312,84 @@ def ratio_off(width, height, size):
 ATTR_RE = re.compile(r'(\s+)([^\s=/>"\']+)(?:\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>"\']+))?')
 
 
-def with_dims(raw, width, height):
-    """`raw` <img ...> with width and height set. Missing attributes go at
-    the end of the tag, where the posts that had them already put them;
-    one that is present keeps its place and gets the new value."""
+def with_attrs(raw, pairs):
+    """`raw` <img ...> with each (name, value) in `pairs` set. A missing
+    attribute goes at the end of the tag; one that is present keeps its
+    place and gets the new value."""
     out = raw
-    for name, value in (("width", width), ("height", height)):
+    for name, value in pairs:
         found = next((m for m in ATTR_RE.finditer(out, len("<img"))
                       if m.group(2).lower() == name), None)
         if found:
-            out = (out[:found.start()] + found.group(1) + '%s="%d"' % (name, value)
+            out = (out[:found.start()] + found.group(1) + '%s="%s"' % (name, value)
                    + out[found.end():])
         else:
             end = len(out) - (2 if out.endswith("/>") else 1)
             body = out[:end].rstrip()
-            out = body + ' %s="%d"' % (name, value) + out[len(body):]
+            out = body + ' %s="%s"' % (name, value) + out[len(body):]
+    return out
+
+
+def with_dims(raw, width, height):
+    """`raw` <img ...> with width and height set, where the posts that had
+    them already put them (see with_attrs)."""
+    return with_attrs(raw, (("width", "%d" % width), ("height", "%d" % height)))
+
+
+@functools.lru_cache(maxsize=1)
+def tracked_renditions():
+    """The tracked thumbs, doubles and heroes, as repository paths."""
+    return {p.relative_to(sitelib.ROOT).as_posix()
+            for p in sitelib.tracked("img/photography/thumb/*", "img/photography/hero/*")}
+
+
+def expected_srcset(img, dims):
+    """(srcset, sizes) a post photo should carry, or None when its src is
+    not a gallery thumb or the frame has no tracked size sharper than it.
+    Widths are the files' own: the thumb's from photo-dims, the double
+    twice that, the hero's from its header."""
+    src = img.attrs.get("src") or ""
+    m = THUMB_SRC_RE.match(src)
+    if not m or m.group("n") not in dims:
+        return None
+    n, pre, width = m.group("n"), m.group("pre"), dims[m.group("n")][0]
+    tracked = tracked_renditions()
+    parts = ["%s %dw" % (src, width)]
+    if "%s%s@2x.webp" % (THUMB_DIR, n) in tracked:
+        parts.append("%sthumb/%s@2x.webp %dw" % (pre, n, width * 2))
+    hero = "img/photography/hero/%s.webp" % n
+    if hero in tracked:
+        hero_width = webp_size(sitelib.ROOT / hero)[0]
+        if hero_width > width * 2:
+            parts.append("%shero/%s.webp %dw" % (pre, n, hero_width))
+    if len(parts) == 1:
+        return None
+    return ", ".join(parts), sizes_for(img, dims[n])
+
+
+def sizes_for(img, thumb):
+    """The sizes for a post photo: a hand-written one stays; otherwise the
+    layout's (a portrait figure's width from its shape, a .photo-grid's
+    half column, the post column)."""
+    own = img.attrs.get("sizes")
+    if own and not GENERATED_SIZES_RE.search(own):
+        return own
+    if PORTRAIT_CLASS in (img.attrs.get("class") or "").split():
+        width = round(PORTRAIT_MAX_H * thumb[0] / thumb[1])
+        return "(min-width: %dpx) %dpx, 100vw" % (width + 40, width)
+    return GRID_SIZES if img.grid else POST_SIZES
+
+
+def examine_srcset(page, dims):
+    """(img, (srcset, sizes)) for each post photo outside SKIP_INSIDE whose
+    srcset or sizes is not what expected_srcset gives."""
+    out = []
+    for img in post_images(page.read_text(encoding="utf-8")):
+        if img.skip:
+            continue
+        want = expected_srcset(img, dims)
+        if want and (img.attrs.get("srcset"), img.attrs.get("sizes")) != want:
+            out.append((img, want))
     return out
 
 
@@ -329,7 +423,7 @@ def stamp_post(page, dims):
     with open(page, encoding="utf-8", newline="") as fh:
         raw_text = fh.read()
     missing, mismatched, _unreadable = examine_post(page, dims)
-    edits = []
+    new = {}            # tag start -> (old raw, new raw)
     for img, (w, h) in missing + mismatched:
         width, height = _int(img.attrs.get("width")), _int(img.attrs.get("height"))
         if width:           # a width someone chose: keep it, fix the height
@@ -338,7 +432,11 @@ def stamp_post(page, dims):
             width = round(height * w / h)
         else:
             width, height = w, h
-        edits.append((img.start, img.raw, with_dims(img.raw, width, height)))
+        new[img.start] = (img.raw, with_dims(img.raw, width, height))
+    for img, (srcset, sizes) in examine_srcset(page, dims):
+        old, cur = new.get(img.start, (img.raw, img.raw))
+        new[img.start] = (old, with_attrs(cur, (("srcset", srcset), ("sizes", sizes))))
+    edits = [(start, old, raw) for start, (old, raw) in new.items()]
     if not edits:
         return 0
     # Offsets come from the \n text the parser saw; the file may be CRLF.
@@ -393,7 +491,11 @@ def check_post_images(dims):
             print("%s:%d: <img src=%s> has no width/height and its file cannot be read "
                   "here (remote or missing): add them by hand"
                   % (rel, line_of(img), img.attrs.get("src")))
-        bad += len(missing) + len(mismatched) + len(unmeasurable)
+        stale = examine_srcset(page, dims)
+        for img, _want in stale:
+            print("%s:%d: <img src=%s> lacks the srcset of its sharper sizes"
+                  % (rel, line_of(img), img.attrs.get("src")))
+        bad += len(missing) + len(mismatched) + len(unmeasurable) + len(stale)
     return bad == 0
 
 

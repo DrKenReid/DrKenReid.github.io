@@ -79,6 +79,19 @@ def drop_balanced_divs(content: str, open_pattern: str) -> tuple[str, int]:
             return content, removed
 
 
+def absolute_candidate(candidate: str) -> str:
+    """One srcset entry ("../img/a.webp 800w") with its URL made absolute
+    by the rules clean_for_feed applies to src and href."""
+    url, _, descriptor = candidate.strip().partition(" ")
+    if url.startswith("../"):
+        url = SITE + "/" + url[3:]
+    elif url.startswith("/"):
+        url = SITE + url
+    elif not url.startswith(("http://", "https://")):
+        url = SITE + "/blog/" + url
+    return url + (" " + descriptor.strip() if descriptor.strip() else "")
+
+
 def clean_for_feed(content: str, post_url: str) -> str:
     had_interactive = bool(re.search(r"<canvas\b", content))
 
@@ -114,6 +127,11 @@ def clean_for_feed(content: str, post_url: str) -> str:
     content = re.sub(r'(src|href)="\.\./', r'\1="' + SITE + "/", content)
     content = re.sub(r'(src|href)="(?!https?://|#|mailto:|/)', r'\1="' + SITE + "/blog/", content)
     content = re.sub(r'(src|href)="/', r'\1="' + SITE + "/", content)
+    # A srcset is a list of URLs, each with its width; the same rules make
+    # each one absolute, so a reader that picks from it gets a picture.
+    content = re.sub(r'srcset="([^"]*)"',
+                     lambda m: 'srcset="%s"' % ", ".join(absolute_candidate(c) for c in m.group(1).split(",")),
+                     content)
     # A fragment link (a citation's href="#ref-3", a footnote) resolves
     # against the feed reader's own page, where there is no #ref-3. Tied to
     # the post's URL it opens the post at that reference.

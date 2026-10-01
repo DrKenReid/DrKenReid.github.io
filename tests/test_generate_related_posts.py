@@ -61,6 +61,12 @@ class CardMarkup(unittest.TestCase):
         # against the stylesheet, not the page.
         self.assertIn("--kr-cover: url('/img/photography/thumb/366.webp')", card)
 
+    def test_a_thumb_cover_has_its_double(self):
+        card = grp.build_card_html(post())
+        self.assertIn('srcset="../img/photography/thumb/366.webp 1x, '
+                      '../img/photography/thumb/366@2x.webp 2x"', card)
+        self.assertNotIn("srcset", grp.build_card_html(post(image="blog/img/x/hero.webp")))
+
     def test_full_url_cover_passes_through(self):
         card = grp.build_card_html(post(image="https://example.org/a.jpg"))
         self.assertIn('src="https://example.org/a.jpg"', card)

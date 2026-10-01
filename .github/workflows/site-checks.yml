@@ -113,14 +113,6 @@ jobs:
         if: ${{ !cancelled() }}
         run: python .github/scripts/generate_related_posts.py --check
 
-      # The justified gallery lays frames out from recorded thumbnail
-      # sizes; a new photograph without one falls back to 3:2. Every post
-      # image carries its width and height too, so it reserves its box
-      # before it loads (the fix, --stamp-img, writes them into the post).
-      - name: Photo dimensions are current
-        if: ${{ !cancelled() }}
-        run: python .github/scripts/generate_photo_dims.py --check
-
       # Every thumbnail has its @2x double for high-density screens, and
       # every photograph a page shows large has a hero at the size its
       # original allows (offline: sizes come from the files and
@@ -129,6 +121,13 @@ jobs:
         if: ${{ !cancelled() }}
         run: python .github/scripts/generate_photo_renditions.py --check
 
+      # The justified gallery lays frames out from recorded thumbnail
+      # sizes; a new photograph without one falls back to 3:2. Every post
+      # image carries its width and height too, so it reserves its box
+      # before it loads (the fix, --stamp-img, writes them into the post).
+      - name: Photo dimensions are current
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/generate_photo_dims.py --check
       # The feed embeds the full body of the twenty newest posts, so editing a
       # post changes it. This was the one generator with no --check, and the
       # feed duly drifted behind a set of class renames without anyone noticing.

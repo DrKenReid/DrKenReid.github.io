@@ -111,6 +111,13 @@ def attr(value: str) -> str:
     return html.escape(value, quote=True)
 
 
+def srcset_attr(src: str) -> str:
+    """' srcset="..."' for a thumbnail cover, as the series index's card
+    has it (krSrcsetAttr), or ""."""
+    srcset = sitelib.thumb_srcset(src)
+    return ' srcset="%s"' % attr(srcset) if srcset else ""
+
+
 def card_lines(record: dict, blurb: str) -> list[str]:
     """One series card: the markup seriesCardHtml() builds on series.html,
     with an h3 (the band's own heading is the h2) and the series' summary
@@ -126,9 +133,9 @@ def card_lines(record: dict, blurb: str) -> list[str]:
         '  <a href="/%s" class="blog-card kr-lit" data-live-href="%s">'
         % (attr(sitelib.series_page(record["name"])), attr(first["url"])),
         '    <span class="kr-lit__ring" aria-hidden="true"></span>',
-        '    <div class="blog-card-img"><img src="%s" alt="" loading="lazy">'
+        '    <div class="blog-card-img"><img src="%s"%s alt="" loading="lazy">'
         '<span class="kr-series-chip">%d %s &middot; %d min</span></div>'
-        % (attr(cover), count, "part" if count == 1 else "parts", record["minutes"]),
+        % (attr(cover), srcset_attr(cover), count, "part" if count == 1 else "parts", record["minutes"]),
         '    <div class="blog-card-body">',
         '      <div class="blog-card-date">Updated %s</div>' % sitelib.long_date(record["updated"]),
         '      <h3 class="blog-card-title">%s</h3>' % text(record["name"]),

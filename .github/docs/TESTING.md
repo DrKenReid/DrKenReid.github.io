@@ -77,7 +77,7 @@ In registry order. "Fixer" is what `--fix` runs when the check fails.
 | `opener` | `apply_post_opener.py --check` | the script | A post keeps an old banner, or its opener disagrees with `posts.json` (title, kicker, read time). Fast. |
 | `og-images` | `generate_og_images.py --check` | the script (needs Pillow and fontTools) | A post has no share card, or a card drawn from an old title. Compares an input manifest, not JPEG bytes, so the check needs no package. Fast. |
 | `related` | `generate_related_posts.py --check` | the script | The related-post cards baked into each post fall behind: publishing a post changes what its neighbours should recommend. Fast. |
-| `photo-dims` | `generate_photo_dims.py --check` | `--stamp-img` | A new photograph has no recorded size (the gallery lays it out at 3:2 and the row jumps), or a post image has no `width` and `height` and shifts the page as it loads. Fast. |
+| `photo-dims` | `generate_photo_dims.py --check` | `--stamp-img` | A new photograph has no recorded size (the gallery lays it out at 3:2 and the row jumps), or a post image has no `width` and `height` and shifts the page as it loads. Fast. A post photo that is a gallery frame must also carry the srcset of its tracked double and hero, with sizes for its layout; a hand-written sizes is kept. After `renditions`. |
 | `renditions` | `generate_photo_renditions.py --check` | the script (fetches originals from the release) | A photograph has no `@2x` thumb, so its gallery tile is soft on a high-density screen, or a photo a page shows large has no hero (or one smaller than its original allows), so its banner, share image or in-post copy is a stretched thumbnail. Offline. Fast. |
 | `feed` | `generate_feed.py --check` | the script | `feed.xml` carries the full body of the twenty newest posts, so any post edit makes it stale. Fast. |
 | `quote-wall` | `generate_quote_wall.py --check` | the script | A quotation added to `data/quotes-all.json` is missing from the static `quotes.html`, or the count in its lede is stale. Fast. |
@@ -185,7 +185,7 @@ real files in a `vm` (`tests/js/runtime.js` is the shared loader).
 | `tests/js/kr-viz.test.js` | the demo engine's run button (Run again once finished), Restart playing on, Step, starting at half the main canvas, and the short-screen height cap |
 | `tests/js/lightbox.test.js` | the photographs' lightbox caption markup, and which thumbnail stands in while a full frame loads |
 | `tests/js/post-runtime.test.js` | the end band's routes and neighbours (and the pager saying when it leaves the series), related cards' series chips, lead-ins, sidenote references |
-| `tests/js/site-chrome.test.js` | `KR_PAGES`, the pager's page list, topic rows, the prerender rules |
+| `tests/js/site-chrome.test.js` | `KR_PAGES`, the pager's page list, topic rows, the prerender rules, `krThumbSrcset` |
 
 ```sh
 python -m unittest discover -s tests -v            # all

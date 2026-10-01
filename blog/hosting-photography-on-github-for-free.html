@@ -224,7 +224,7 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
         <p>At view time, the gallery JavaScript loads the manifest, adds thumbnails about 24 at a time as you scroll (each batch runs on to the end of its row, and after 72 a Load More button takes over, so you can still reach the bottom of the page), and each lightbox link points at the release URL for the original. The visitor's browser talks to GitHub's release servers directly; my Pages bandwidth only ever carries the thumbnails.</p>
 
         <figure>
-          <img src="../img/photography/thumb/387.webp" alt="Ferris wheel lit up at night in Edinburgh, Scotland" loading="lazy" class="kr-figure-img" width="400" height="256">
+          <img src="../img/photography/thumb/387.webp" alt="Ferris wheel lit up at night in Edinburgh, Scotland" loading="lazy" class="kr-figure-img" width="400" height="256" srcset="../img/photography/thumb/387.webp 400w, ../img/photography/thumb/387@2x.webp 800w, ../img/photography/hero/387.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
           <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> This thumbnail weighs a few dozen kilobytes and comes from my repository. Click-through to the original in the gallery, and GitHub's release servers hand you the full-size file at no cost to my hosting budget.</figcaption>
         </figure>
 
@@ -333,7 +333,7 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
             <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/4.webp')">
               <a href="my-website-has-a-test-suite.html" class="blog-card kr-lit">
                 <span class="kr-lit__ring" aria-hidden="true"></span>
-                <div class="blog-card-img"><img src="../img/photography/thumb/4.webp" alt="" loading="lazy"></div>
+                <div class="blog-card-img"><img src="../img/photography/thumb/4.webp" srcset="../img/photography/thumb/4.webp 1x, ../img/photography/thumb/4@2x.webp 2x" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
                   <div class="blog-card-date">17 July 2026 · 8 min read</div>
                   <h3 class="blog-card-title">My Website Has a Test Suite</h3>
@@ -345,7 +345,7 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
             <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/12.webp')">
               <a href="letting-robots-update-your-homepage.html" class="blog-card kr-lit">
                 <span class="kr-lit__ring" aria-hidden="true"></span>
-                <div class="blog-card-img"><img src="../img/photography/thumb/12.webp" alt="" loading="lazy"></div>
+                <div class="blog-card-img"><img src="../img/photography/thumb/12.webp" srcset="../img/photography/thumb/12.webp 1x, ../img/photography/thumb/12@2x.webp 2x" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
                   <div class="blog-card-date">14 August 2026 · 8 min read</div>
                   <h3 class="blog-card-title">Letting Robots Update Your Homepage</h3>

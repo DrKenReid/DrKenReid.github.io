@@ -58,6 +58,13 @@ class CleanForFeed(unittest.TestCase):
     def test_relative_links_still_resolve_against_blog(self):
         self.assertIn(f'href="{SITE}/blog/other-post.html"', self.out)
 
+    def test_every_srcset_candidate_is_absolute(self):
+        body = ('<img src="../img/photography/thumb/7.webp" srcset="../img/photography/thumb/7.webp 400w, '
+                '/img/photography/hero/7.webp 1920w, img/local.webp 2x" sizes="100vw">')
+        out = generate_feed.clean_for_feed(body, URL)
+        self.assertIn(f'srcset="{SITE}/img/photography/thumb/7.webp 400w, '
+                      f'{SITE}/img/photography/hero/7.webp 1920w, {SITE}/blog/img/local.webp 2x"', out)
+
 
 if __name__ == "__main__":
     unittest.main()

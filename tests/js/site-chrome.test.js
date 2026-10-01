@@ -55,6 +55,17 @@ test('KR_PAGES: the series index is in the footer and the palette', () => {
     assert.equal(series.inPalette, true);
 });
 
+test('krThumbSrcset: a gallery thumb gets its @2x double, nothing else does', () => {
+    assert.equal(rt.krThumbSrcset('/img/photography/thumb/12.webp'),
+        '/img/photography/thumb/12.webp 1x, /img/photography/thumb/12@2x.webp 2x');
+    assert.equal(rt.krThumbSrcset('../img/photography/thumb/7.webp'),
+        '../img/photography/thumb/7.webp 1x, ../img/photography/thumb/7@2x.webp 2x');
+    assert.equal(rt.krThumbSrcset('img/photography/hero/7.webp'), '');
+    assert.equal(rt.krThumbSrcset('blog/img/antcolony/antcolony-hero.webp'), '');
+    assert.equal(rt.krSrcsetAttr('blog/img/x.webp'), '');
+    assert.match(rt.krSrcsetAttr('/img/photography/thumb/3.webp'), /^ srcset="[^"]+ 2x"$/);
+});
+
 test('krPageList: every page up to seven, then ends, neighbours and gaps', () => {
     assert.deepEqual([...rt.krPageList(1, 1)], [1]);
     assert.deepEqual([...rt.krPageList(3, 7)], [1, 2, 3, 4, 5, 6, 7]);

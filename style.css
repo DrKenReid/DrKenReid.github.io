@@ -4623,7 +4623,11 @@ a.gallery-filter-btn:focus:not(:hover) {
     overflow-y: hidden;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    padding-bottom: 6px;
+    /* Room for the focus ring (3px out, 3px thick) inside the scroller,
+       which clips it: a pill snapped to the start rests 6px in, as the
+       sideways pill rows above do. */
+    padding: 0 6px 6px;
+    scroll-padding-inline: 6px;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch; }
   .kr-facet-row__btns .gallery-filter-btn {
@@ -6467,7 +6471,8 @@ body.kr-cite-docked #scrollUp {
 
 /* A portrait frame capped at 507px, the height of a 3:2 frame in the
    760px column these posts were laid out in, so an upright photograph
-   does not tower over the landscapes around it. */
+   does not tower over the landscapes around it. generate_photo_dims.py
+   (PORTRAIT_MAX_H) works out the frame's sizes from this height. */
 .blog-post .kr-figure-img--portrait {
   width: auto;
   max-height: 507px; }

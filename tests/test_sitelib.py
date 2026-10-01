@@ -39,6 +39,19 @@ class LongDate(unittest.TestCase):
                 self.assertEqual(sitelib.long_date(iso), want)
 
 
+class ThumbSrcset(unittest.TestCase):
+    """thumb_srcset: krThumbSrcset's rule for the cards the generators bake."""
+
+    def test_thumbs_only(self):
+        self.assertEqual(sitelib.thumb_srcset("../img/photography/thumb/7.webp"),
+                         "../img/photography/thumb/7.webp 1x, ../img/photography/thumb/7@2x.webp 2x")
+        self.assertEqual(sitelib.thumb_srcset("/img/photography/hero/7.webp"), "")
+        self.assertEqual(sitelib.thumb_srcset("../blog/img/a/hero.webp"), "")
+
+    def test_the_doubles_are_not_frames(self):
+        self.assertFalse([p for p in sitelib.thumb_files() if "@" in p.name])
+
+
 class GeneratedBlocks(unittest.TestCase):
     """block_re and fill_block: the marker pair a generator owns."""
 

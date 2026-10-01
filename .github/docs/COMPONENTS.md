@@ -27,7 +27,11 @@ classes, and the audit fails a published post that brings one back
 3. **Write the body** from the [skeleton](#the-skeleton), using the
    components below. Every photograph of your own gets the copyright
    caption; every `<img>` gets `alt`, `loading="lazy"`, and a `width` and
-   `height` (the photo-dimensions generator can stamp them).
+   `height` (the photo-dimensions generator can stamp them). A photo that is
+   a gallery frame (`img/photography/thumb/N.webp`) also gets a `srcset` of
+   its 800px double and its hero, with `sizes` for the 760px column, from
+   the same `--stamp-img`: the thumb stays the `src`, and the full-resolution
+   toggle sets the `srcset` aside while it shows the original.
 4. **Write the hover sketch** for the post's card in `js/covers.js`
    ([The hover sketch](#the-hover-sketch)). The build fails without one.
 5. **`git add -N blog/<slug>.html` and every new file it references**

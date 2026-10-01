@@ -111,11 +111,35 @@ def twice(thumb: Path) -> Path:
 
 # --- sizes ------------------------------------------------------------------
 
-def hero_size(original: tuple[int, int]) -> tuple[int, int]:
-    """The frame scaled so its long edge is HERO_EDGE (never enlarged)."""
+def hero_size(original: tuple[int, int], thumb: tuple[int, int] | None = None) -> tuple[int, int]:
+    """The frame scaled so its long edge is HERO_EDGE (never enlarged).
+
+    Given the thumb's size, the short edge follows the thumb's shape, not
+    the original's: a post photo's width and height attributes are the
+    thumb's (400x266), and a hero of the original's own shape (1200x800)
+    made the photo's box grow a pixel or two when the hero loaded on a
+    high-density screen. The rounding this moves is under half a percent
+    of the short edge, which no one can see in the picture."""
     w, h = original
     scale = min(1.0, HERO_EDGE / max(w, h))
-    return max(1, round(w * scale)), max(1, round(h * scale))
+    if thumb is None:
+        return max(1, round(w * scale)), max(1, round(h * scale))
+    tw, th = thumb
+    if w >= h:
+        hw = max(1, round(w * scale))
+        return hw, max(1, round(hw * th / tw))
+    hh = max(1, round(h * scale))
+    return max(1, round(hh * tw / th)), hh
+
+
+def shaped_like(size: tuple[int, int], thumb: tuple[int, int]) -> bool:
+    """True when a hero's short edge is exactly what the thumb's shape gives
+    for its long edge (hero_size with the thumb)."""
+    hw, hh = size
+    tw, th = thumb
+    if hw >= hh:
+        return hh == max(1, round(hw * th / tw))
+    return hw == max(1, round(hh * tw / th))
 
 
 # --- making ---------------------------------------------------------------
@@ -133,13 +157,13 @@ def make(n: str, want_2x: bool, want_hero: bool, skip: set[Path]) -> str:
     im, nbytes = fetch(n)
     done = []
     thumb = THUMBS / f"{n}.webp"
+    tw, th = webp_size(thumb)
     if want_2x and twice(thumb) not in skip:
-        tw, th = webp_size(thumb)
         im.resize((tw * 2, th * 2), Image.LANCZOS).save(twice(thumb), "WEBP", quality=THUMB_QUALITY, method=6)
         done.append(f"@2x {tw * 2}x{th * 2}")
     hero = HEROES / f"{n}.webp"
     if want_hero and hero not in skip:
-        size = hero_size(im.size)
+        size = hero_size(im.size, (tw, th))
         im.resize(size, Image.LANCZOS).save(hero, "WEBP", quality=HERO_QUALITY, method=6)
         done.append(f"hero {size[0]}x{size[1]}")
     return f"{n}: {', '.join(done) or 'nothing'} (from a {nbytes // 1024} KB original)"
@@ -238,7 +262,9 @@ def plan(remake_heroes: bool, originals: dict[str, list[int]]):
         hero = HEROES / f"{n}.webp"
         if hero in skip:
             continue
-        if remake_heroes or not hero.exists() or max(webp_size(hero)) < hero_edge_for(n, originals) - 1:
+        if (remake_heroes or not hero.exists()
+                or max(webp_size(hero)) < hero_edge_for(n, originals) - 1
+                or not shaped_like(webp_size(hero), webp_size(THUMBS / f"{n}.webp"))):
             jobs.setdefault(n, [False, False])[1] = True
     return jobs, skip
 
@@ -269,9 +295,9 @@ def check() -> list[str]:
             continue
         tw, th = webp_size(THUMBS / f"{n}.webp")
         hw, hh = webp_size(hero)
-        # Same shape, to within the thumb's own rounding: one thumb pixel,
-        # scaled up, is the most a short panorama's thumb can be off by.
-        if abs(hh - hw * th / tw) > hw / tw + 1:
+        # The thumb's shape exactly (hero_size says why), so the box a post
+        # photo's width and height reserve is the box the hero fills.
+        if not shaped_like((hw, hh), (tw, th)):
             problems.append(f"hero/{n}.webp is not the thumb's shape ({hw}x{hh} vs {tw}x{th})")
         elif n in originals and max(hw, hh) < hero_edge_for(n, originals) - 1:
             problems.append(f"hero/{n}.webp is {hw}x{hh}; its original allows "

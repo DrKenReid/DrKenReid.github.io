@@ -38,6 +38,7 @@ not committed breaks every generator in CI.
     sitelib.long_date("2026-09-05")   # "5 September 2026"
     sitelib.DEFAULT_POST_IMAGE  # the cover a post without an image gets
     sitelib.thumb_files()       # the 400px gallery thumbs, by number, no @2x
+    sitelib.thumb_srcset(src)   # "thumb 1x, double 2x" for a thumb, else ""
     sitelib.block_re("listing-fallback")  # a generated region of a page
     sitelib.fill_block(text, name, lines, note, where)
 """
@@ -245,6 +246,19 @@ def thumb_files() -> list[Path]:
     sizes, the B&W tags) never takes a double for a photograph of its own."""
     files = [p for p in THUMBS.glob("*.webp") if p.stem.isdigit()]
     return sorted(files, key=lambda p: int(p.stem))
+
+
+THUMB_SRC_RE = re.compile(r"(^|/)img/photography/thumb/\d+\.webp$")
+
+
+def thumb_srcset(src: str) -> str:
+    """The srcset for a gallery thumbnail: the thumb at 1x and its 800px
+    double at 2x (generate_photo_renditions.py), or "" for any other image.
+    krThumbSrcset in js/shared-components.js is the same rule; the cards
+    baked here must match the ones the browser builds."""
+    if not THUMB_SRC_RE.search(src or ""):
+        return ""
+    return f"{src} 1x, {src[:-len('.webp')]}@2x.webp 2x"
 
 
 def long_date(iso: str) -> str:

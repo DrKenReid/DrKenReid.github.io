@@ -611,6 +611,30 @@ function resolveAssetPath(src, prefix) {
     return /^(https?:)?\/\//.test(src) || src.charAt(0) === '/' ? src : prefix + src;
 }
 
+/**
+ * The srcset for a gallery thumbnail (.../img/photography/thumb/N.webp):
+ * the thumb at 1x and its 800px double at 2x (generate_photo_renditions.py
+ * makes one for every frame), so a card, tile or strip is sharp on a
+ * high-density screen and costs a 1x screen nothing more. '' for any other
+ * image. Not for a small tile (the photo strip, the map's popup grid): the
+ * thumb is already two device pixels a CSS pixel there, and the double
+ * would only cost bytes. sitelib.thumb_srcset is the same rule for the cards the
+ * generators bake, which must match these (createBlogCardElement and
+ * generate_related_posts.py, seriesCardHtml and generate_series_band.py).
+ */
+function krThumbSrcset(src) {
+    var s = String(src || '');
+    return /(^|\/)img\/photography\/thumb\/\d+\.webp$/.test(s)
+        ? s + ' 1x, ' + s.replace(/\.webp$/, '@2x.webp') + ' 2x'
+        : '';
+}
+
+/** ' srcset="..."' for an <img> built as a string, or '' (krThumbSrcset). */
+function krSrcsetAttr(src) {
+    var set = krThumbSrcset(src);
+    return set ? ' srcset="' + krEscapeHtml(set) + '"' : '';
+}
+
 // readMinutes is precomputed into data/posts.json by
 // .github/scripts/generate_read_times.py; this only reads it. Returns null
 // when absent (e.g. a stale cached posts.json): callers hide the read time
@@ -673,7 +697,7 @@ function createBlogCardElement(post, options) {
     var level = opts.headingLevel >= 2 && opts.headingLevel <= 6 ? Math.floor(opts.headingLevel) : 3;
     var title = krEscapeHtml(post.title);
     var link = krEscapeHtml(href);
-    var cover = '<img src="' + krEscapeHtml(imageSrc) + '" alt="" loading="lazy">';
+    var cover = '<img src="' + krEscapeHtml(imageSrc) + '"' + krSrcsetAttr(imageSrc) + ' alt="" loading="lazy">';
 
     // No scroll reveal on cards. A grid of nine replayed a staggered fade
     // on every filter click and every page change, which read as a
@@ -721,8 +745,13 @@ function createBlogCardElement(post, options) {
 
     // A listener rather than an inline onerror, so no path is ever spliced
     // into a string of script. Once: a missing fallback must not loop.
+    // The srcset goes first: while an <img> has one the browser draws from
+    // it whatever src says, so the fallback would never be shown.
     var img = col.querySelector('img');
-    img.addEventListener('error', function() { img.src = fallback; }, { once: true });
+    img.addEventListener('error', function() {
+        img.removeAttribute('srcset');
+        img.src = fallback;
+    }, { once: true });
     return col;
 }
 
@@ -3517,6 +3546,11 @@ function initLightboxFix() {
  * link under each photo for a reader who only wants one of them. The
  * estimate in the panel assumes ~2.7 MB an original; a post whose files
  * are heavier or lighter can override it with data-fullres-size (in MB).
+ *
+ * A post photo also carries a srcset of the frame's sharper sizes
+ * (generate_photo_dims.py --stamp-img), and while an <img> has a srcset
+ * the browser draws from it whatever src says. So the swap sets the
+ * srcset aside (data-srcset) with the src and puts both back on revert.
  */
 function initFullResMode() {
     var post = document.querySelector('.blog-post[data-fullres]');
@@ -3533,10 +3567,22 @@ function initFullResMode() {
         return m ? m[1] : null;
     }
 
+    function restoreThumb(img) {
+        if (img.dataset.srcset) {
+            img.setAttribute('srcset', img.dataset.srcset);
+            delete img.dataset.srcset;
+        }
+        img.src = img.dataset.thumb;
+    }
+
     function setHiRes(img, btn, on) {
         if (on === (img.dataset.hires || '0')) return;
         if (on === '1') {
             img.dataset.thumb = img.dataset.thumb || img.getAttribute('src');
+            if (img.hasAttribute('srcset')) {
+                img.dataset.srcset = img.getAttribute('srcset');
+                img.removeAttribute('srcset');
+            }
             img.style.opacity = '0.4';
             btn.textContent = 'loading original...';
             var cleanup = function() {
@@ -3550,7 +3596,7 @@ function initFullResMode() {
             };
             var fail = function() {
                 cleanup();
-                img.src = img.dataset.thumb;
+                restoreThumb(img);
                 btn.textContent = 'could not load original';
                 delete img.dataset.hires;
             };
@@ -3560,7 +3606,7 @@ function initFullResMode() {
             img.src = RELEASE + stem(img) + '.png';
         } else {
             delete img.dataset.hires;
-            img.src = img.dataset.thumb;
+            restoreThumb(img);
             img.style.opacity = '';
             btn.textContent = 'load full resolution';
         }

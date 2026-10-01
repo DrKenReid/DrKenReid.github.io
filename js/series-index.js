@@ -372,7 +372,8 @@
 			// The size of the run rides on the photograph, so the date line
 			// stays one line: "Updated 27 September 2026 · 144 min all told"
 			// wrapped on a third-width card and knocked the titles out of line.
-			'<div class="blog-card-img"><img src="' + cover + '" alt="" loading="lazy">' +
+			'<div class="blog-card-img"><img src="' + cover + '"' +
+			krSrcsetAttr('/' + (s.parts[0].image || DEFAULT_POST_IMAGE)) + ' alt="" loading="lazy">' +
 			'<span class="kr-series-chip">' + s.parts.length +
 			(s.parts.length === 1 ? ' part' : ' parts') + ' &middot; ' + s.minutes + ' min</span></div>' +
 			'<div class="blog-card-body">' +

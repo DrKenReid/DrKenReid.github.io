@@ -157,21 +157,23 @@ CHECKS: list[Check] = [
           script("generate_related_posts.py", "--check"),
           script("generate_related_posts.py"), fast=True),
 
-    # data/photo-dims.json, the recorded thumbnail sizes the justified
-    # gallery lays out from (a frame without one is drawn at 3:2), and the
-    # width and height on every post image outside .kr-viz and the baked
-    # related cards. The fixer stamps those attributes into post bodies,
-    # so it runs before the feed, which copies the bodies.
-    Check("photo-dims", "every thumbnail and post image has recorded dimensions",
-          script("generate_photo_dims.py", "--check"),
-          script("generate_photo_dims.py", "--stamp-img"), fast=True),
-
     # The sharp renditions: every thumb's @2x double and a hero for every
     # frame a page shows, at the size data/photo-originals.json allows.
     # The check is offline; the fixer fetches originals from the release.
     Check("renditions", "every photo has its @2x thumb and, where shown large, its hero",
           script("generate_photo_renditions.py", "--check"),
           script("generate_photo_renditions.py"), fast=True),
+
+    # data/photo-dims.json, the recorded thumbnail sizes the justified
+    # gallery lays out from (a frame without one is drawn at 3:2), and the
+    # width and height on every post image outside .kr-viz and the baked
+    # related cards. The fixer stamps those attributes into post bodies,
+    # so it runs before the feed, which copies the bodies.
+    # After the renditions: a post photo's srcset names the frame's tracked
+    # @2x double and hero, so photo-dims reads what renditions made.
+    Check("photo-dims", "every thumbnail and post image has recorded dimensions and srcset",
+          script("generate_photo_dims.py", "--check"),
+          script("generate_photo_dims.py", "--stamp-img"), fast=True),
 
     # feed.xml carries the full body of the twenty newest posts, so it
     # comes after every generator that writes into a post.
