@@ -1,11 +1,12 @@
 """Structural rules in audit_site.py that are easy to get subtly wrong.
 
 Each rule is checked against small inputs here (the attribute-name rule,
-the service worker's install list, the retired preloader and analytics
-snippet, title and description lengths, series pages and their slug,
-KR_PAGES, what Jekyll would publish, the orphan scan's reading of a
-mention), so a change to a parser or to the shape of a source file fails
-in one obvious place instead of as a silent pass over the site.
+a link the parser splits in two, the service worker's install list, the
+retired preloader and analytics snippet, title and description lengths,
+series pages and their slug, KR_PAGES, what Jekyll would publish, the
+orphan scan's reading of a mention), so a change to a parser or to the
+shape of a source file fails in one obvious place instead of as a silent
+pass over the site.
 
 Run from the repo root:
     python -m unittest discover -s tests -v
@@ -59,6 +60,39 @@ class MalformedAttributes(unittest.TestCase):
         for name in ('learner""', 'path",', "@click", "1st", "a/b"):
             with self.subTest(name=name):
                 self.assertFalse(audit_site.ATTR_NAME.fullmatch(name))
+
+
+class SplitLinks(unittest.TestCase):
+    """check_structure: a link closed while an element opened inside it is
+    still open. The parser splits it in two, and the empty copy is a Tab
+    stop of its own (a post's figures, opened inside their lightbox links,
+    left one beside every photograph and a blank frame in its set)."""
+
+    @staticmethod
+    def split(html):
+        parser = audit_site.PageParser()
+        parser.feed(html)
+        return parser.split_links
+
+    def test_a_figure_opened_inside_the_link(self):
+        html = ('<a href="1.png" class="img-lightbox"><figure><img src="1.webp" alt="x">'
+                '</a><figcaption>c</figcaption></figure>')
+        (forced, _line), = self.split(html)
+        self.assertEqual(forced, ["figure"])
+
+    def test_the_link_inside_the_figure_is_fine(self):
+        html = ('<figure><a href="1.png"><img src="1.webp" alt="x"></a>'
+                '<figcaption>c</figcaption></figure>')
+        self.assertEqual(self.split(html), [])
+
+    def test_a_whole_figure_inside_the_link_is_fine(self):
+        html = '<a href="x"><figure><img src="1.webp" alt="x"></figure></a>'
+        self.assertEqual(self.split(html), [])
+
+    def test_an_inline_element_left_open_is_not_a_split(self):
+        # The parser closes the <span> early and the link stays one link.
+        html = '<a href="x"><span>more</a></span>'
+        self.assertEqual(self.split(html), [])
 
 
 class PrecacheList(unittest.TestCase):

@@ -67,6 +67,12 @@
         height: min(72vh, 512px);
       }
     }
+    /* The marker is Leaflet's own icon element (.kr-map-pin), which is the
+       one tab stop and carries the name; the photograph inside it is
+       drawing. Round, so the focus ring is. */
+    .kr-map-pin {
+      border-radius: 50%;
+    }
     /* Markers and their counts are controls, so the action red, as the
        fill that carries white type (--kr-action-fill, 5.47:1). */
     .kr-map-marker {
@@ -90,11 +96,16 @@
       border-width: 3px;
       transition: transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.25s ease;
     }
-    .kr-map-marker--photo:hover,
-    .kr-map-marker--photo:focus-visible {
+    .kr-map-pin:hover .kr-map-marker--photo,
+    .kr-map-pin:focus-visible .kr-map-marker--photo {
       transform: scale(1.18);
       box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
-      z-index: 5;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .kr-map-marker--photo,
+      .kr-map-popup .kr-map-grid img {
+        transition: none;
+      }
     }
     .kr-map-marker__n {
       position: absolute;
@@ -117,9 +128,12 @@
       font-size: 14px;
       margin-bottom: 8px;
     }
+    /* Three columns of up to 86px. The popup is capped at the map's width
+       less 60px (popupOptions below), so at 320 wide the columns narrow
+       rather than the popup running off the map. */
     .kr-map-popup .kr-map-grid {
       display: grid;
-      grid-template-columns: repeat(3, 86px);
+      grid-template-columns: repeat(3, minmax(0, 86px));
       gap: 6px;
     }
     .kr-map-popup .kr-map-grid a {
@@ -128,8 +142,9 @@
       overflow: hidden;
     }
     .kr-map-popup .kr-map-grid img {
-      width: 86px;
-      height: 64px;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 86 / 64;
       object-fit: cover;
       display: block;
       transition: transform 0.25s ease;
@@ -137,10 +152,27 @@
     .kr-map-popup .kr-map-grid a:hover img {
       transform: scale(1.06);
     }
+    /* The action red of every link on the site: Leaflet's own blue fell
+       to 3.1:1 on the dark theme's popup. */
     .kr-map-popup .kr-map-more {
       display: inline-block;
       margin-top: 6px;
       font-size: 12px;
+      color: var(--kr-action);
+    }
+    /* Leaflet hides a popup while it lays it out and shows it again, and
+       every link on the site transitions all of its properties (style.css
+       §02), visibility included, so a popup's links spent their first
+       moment hidden and could not take the focus that opening one from
+       the keyboard hands them. Colour is all they need to animate. */
+    .leaflet-popup a {
+      transition-property: color, background-color, border-color;
+    }
+    /* The map's data could not be loaded (showFailure below). */
+    .kr-map-failed {
+      margin: 12px 0 0;
+      text-align: center;
+      color: var(--kr-muted);
     }
     [data-theme="dark"] .leaflet-popup-content-wrapper,
     [data-theme="dark"] .leaflet-popup-tip {
@@ -242,10 +274,11 @@
       // dragged past the poles.
       var mapEl = document.getElementById('photo-map');
       var minZoom = Math.max(1, Math.ceil(Math.log2((mapEl.clientHeight || 512) / 256)));
+      var WORLD = [[-85.0511, -540], [85.0511, 540]];
       var map = L.map('photo-map', {
         scrollWheelZoom: false,
         minZoom: minZoom,
-        maxBounds: [[-85.0511, -540], [85.0511, 540]],
+        maxBounds: WORLD,
         maxBoundsViscosity: 1
       }).setView([50, -30], Math.max(3, minZoom));
       // Wheel zoom only after deliberate interaction, so the page scroll
@@ -272,21 +305,28 @@
       var regionsByName = {};
 
       // Popup thumbs open the site lightbox as a gallery of the whole
-      // region (falls back to the plain link when jQuery/magnific are
-      // unavailable).
+      // region, each frame captioned with its place, a link to it in the
+      // gallery and Copy link (krLightboxCaption, js/lightbox.js). Without
+      // the lightbox a thumb is a plain link to that frame in the gallery.
       function openRegionLightbox(regionName, startStem) {
         var region = regionsByName[regionName];
         if (!region || typeof openKrLightbox !== 'function') return false;
         var items = region.photos.map(function (stem) {
           return {
             src: RELEASE + stem + '.png',
-            title: region.name + ' <span class="kr-lightbox-num">#' + stem + '</span>'
+            title: typeof krLightboxCaption === 'function'
+              ? krLightboxCaption({ text: region.name, stem: stem, gallery: true })
+              : krEscapeHtml(region.name) + ' <span class="kr-lightbox-num">#' + stem + '</span>'
           };
         });
         return openKrLightbox(items, Math.max(0, region.photos.indexOf(startStem)));
       }
 
+      // A click with a modifier key is a reader asking for a new tab or
+      // window, which the thumb's href (the frame in the gallery) serves;
+      // Magnific's own links leave those alone the same way.
       document.addEventListener('click', function (e) {
+        if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return;
         var a = e.target.closest && e.target.closest('.kr-map-grid a, a.kr-map-more');
         if (!a) return;
         var popup = a.closest('.kr-map-popup');
@@ -296,58 +336,167 @@
         }
       });
 
-      // Through krFetchJson, so the command palette's copy of the same
-      // file is this request rather than a second one.
-      krFetchJson('data/photo-locations.json').then(function (data) {
+      // ?region=<name> opens that place's popup on load, and is written
+      // while a popup is open, so the address bar always shares the place
+      // on screen. replaceState, as the gallery does, so Back leaves the
+      // page rather than walking back through every popup.
+      function writeRegion(name) {
+        if (!window.history || !window.history.replaceState) return;
+        try {
+          var params = new URLSearchParams(window.location.search);
+          if (name) params.set('region', name); else params.delete('region');
+          var qs = params.toString();
+          window.history.replaceState(window.history.state, '',
+            window.location.pathname + (qs ? '?' + qs : '') + window.location.hash);
+        } catch (e) {}
+      }
+
+      // On a phone the zoom buttons move to the lower right, where the
+      // popups (which open above their marker) do not reach: at the upper
+      // left they covered the start of a place's name. A popup is as wide
+      // as the map allows, less 60px, so at 320 it narrows its thumbnails
+      // instead of running off the map with its close button, and pans
+      // clear of the zoom buttons wherever they are. While one is open the
+      // map may pan past the poles: at the world's smallest zoom a phone's
+      // map is the world's height, a northern place's popup has no room
+      // above it, and the bounds pulled the map straight back, leaving the
+      // place's name above the map's edge. Closing it puts them back.
+      var PHONE = window.matchMedia('(max-width: 767px)');
+      function popupOptions() {
+        var w = Math.max(180, Math.min(290, mapEl.clientWidth - 60));
+        return {
+          minWidth: w,
+          maxWidth: w,
+          autoPanPaddingTopLeft: L.point(PHONE.matches ? 5 : 54, 5),
+          autoPanPaddingBottomRight: L.point(5, PHONE.matches ? 96 : 5)
+        };
+      }
+      function fitToScreen() {
+        map.zoomControl.setPosition(PHONE.matches ? 'bottomright' : 'topleft');
+        var options = popupOptions();
+        Object.keys(regionsByName).forEach(function (name) {
+          var popup = regionsByName[name]._marker && regionsByName[name]._marker.getPopup();
+          if (!popup) return;
+          L.setOptions(popup, options);
+          if (popup.isOpen()) popup.update();
+        });
+      }
+      fitToScreen();
+      if (PHONE.addEventListener) PHONE.addEventListener('change', fitToScreen);
+      // Leaflet announces a popup's pan just before making it.
+      map.on('autopanstart', function () { map.setMaxBounds(null); });
+      var resizeTimer = null;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(fitToScreen, 150);
+      });
+
+      // Keyboard. Each marker is one tab stop, Leaflet's own icon element,
+      // named for its place. Enter or Space opens its popup and moves focus
+      // to the first photograph in it (the popups are drawn after every
+      // marker, so Tab alone reached them only past all the others).
+      // Escape closes the popup, and focus returns to the marker whenever
+      // it was inside the popup as it closed (the close button included).
+      // Focus moves with preventScroll: Leaflet clips the map with
+      // overflow: hidden, and a browser scrolling that box to show a
+      // focused popup still panning into view would knock every tile out
+      // of place.
+      var openMarker = null;
+      mapEl.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape' && openMarker) map.closePopup();
+      });
+
+      function focusPopup(marker) {
+        var popupEl = marker.getPopup().getElement();
+        var first = popupEl && popupEl.querySelector('.kr-map-grid a');
+        if (first) first.focus({ preventScroll: true });
+      }
+
+      function addRegions(data) {
         var regions = (data.regions || []).filter(function (r) { return r.photos && r.photos.length; });
         if (!regions.length) return;
         var bounds = [];
         regions.forEach(function (region) {
           regionsByName[region.name] = region;
           bounds.push([region.lat, region.lng]);
+          var count = region.photos.length;
           // The marker is the place's first frame, with the count as a badge:
           // a map of photographs should show photographs.
-          var size = Math.max(44, Math.min(64, 40 + region.photos.length));
+          var size = Math.max(44, Math.min(64, 40 + count));
           var marker = L.marker([region.lat, region.lng], {
             icon: L.divIcon({
-              className: '',
-              html: '<div class="kr-map-marker kr-map-marker--photo" role="button" tabindex="0" aria-label="' +
-                  region.name + ', ' + region.photos.length + ' photos" style="width:' + size + 'px;height:' + size + 'px;' +
+              className: 'kr-map-pin',
+              html: '<div class="kr-map-marker kr-map-marker--photo" style="width:' + size + 'px;height:' + size + 'px;' +
                   'background-image:url(/img/photography/thumb/' + region.photos[0] + '.webp)">' +
-                  '<span class="kr-map-marker__n">' + region.photos.length + '</span></div>',
+                  '<span class="kr-map-marker__n">' + count + '</span></div>',
               iconSize: [size, size],
               iconAnchor: [size / 2, size / 2]
             }),
             keyboard: true,
+            riseOnHover: true,
             title: region.name
-          }).addTo(map);
+          });
+          var openedByKey = false;
           marker.on('add', function () {
-            var el = marker.getElement && marker.getElement();
-            if (!el) return;
+            var el = marker.getElement();
+            el.setAttribute('aria-label', region.name + ', ' + count + ' photo' + (count === 1 ? '' : 's'));
+            // A focused marker comes to the front, as a hovered one does
+            // (riseOnHover), so its ring is not half under a neighbour.
+            el.addEventListener('focus', function () { marker.setZIndexOffset(1000); });
+            el.addEventListener('blur', function () { marker.setZIndexOffset(0); });
             el.addEventListener('keydown', function (ev) {
-              if (ev.key === 'Enter' || ev.key === ' ') {
-                ev.preventDefault();
+              if (ev.key !== 'Enter' && ev.key !== ' ') return;
+              ev.preventDefault();
+              if (marker.isPopupOpen()) {
+                focusPopup(marker);
+              } else {
+                openedByKey = true;
                 marker.openPopup();
               }
             });
           });
+          marker.on('popupopen', function () {
+            openMarker = marker;
+            map.setMaxBounds(null);
+            writeRegion(region.name);
+            if (openedByKey) focusPopup(marker);
+            openedByKey = false;
+          });
+          marker.on('popupclose', function (e) {
+            if (openMarker === marker) openMarker = null;
+            writeRegion(null);
+            // After this task, in case this popup is closing because
+            // another is opening.
+            setTimeout(function () { if (!openMarker) map.setMaxBounds(WORLD); }, 0);
+            // Leaflet fades a popup out before removing it, so focus is
+            // still inside it here; without the fade it has already fallen
+            // to the body.
+            var popupEl = e.popup.getElement();
+            var active = document.activeElement;
+            if ((popupEl && popupEl.contains(active)) || !active || active === document.body) {
+              marker.getElement().focus({ preventScroll: true });
+            }
+          });
+          marker.addTo(map);
 
           var shown = region.photos.slice(0, 9);
-          var safeName = typeof krEscapeHtml === 'function' ? krEscapeHtml(region.name) : region.name;
+          var safeName = krEscapeHtml(region.name);
+          // The thumbs' hrefs are the frames in the gallery: the lightbox
+          // takes the click, and a new tab or a copied link gets a page.
           var html = '<div class="kr-map-popup" data-region="' + safeName + '">' +
               '<div class="kr-map-region">' + safeName +
-              ' · ' + region.photos.length + ' photo' + (region.photos.length === 1 ? '' : 's') + '</div>' +
+              ' · ' + count + ' photo' + (count === 1 ? '' : 's') + '</div>' +
               '<div class="kr-map-grid">' +
               shown.map(function (stem) {
-                  return '<a href="' + RELEASE + stem + '.png" data-stem="' + stem + '" target="_blank" rel="noopener noreferrer">' +
-                      '<img src="/img/photography/thumb/' + stem + '.webp" alt="Photo ' + stem + ' taken in ' + safeName + '" width="86" height="64" loading="lazy"></a>';
+                  return '<a href="/gallery.html?photo=' + encodeURIComponent(stem) + '" data-stem="' + krEscapeHtml(stem) + '">' +
+                      '<img src="/img/photography/thumb/' + krEscapeHtml(stem) + '.webp" alt="Photo ' + krEscapeHtml(stem) + ' taken in ' + safeName + '" width="86" height="64" loading="lazy"></a>';
               }).join('') +
               '</div>' +
-              (region.photos.length > 9
-                  ? '<a href="#" class="kr-map-more" data-stem="' + region.photos[9] + '">View all ' + region.photos.length + ' &rarr;</a>'
+              (count > 9
+                  ? '<a href="/gallery.html?photo=' + encodeURIComponent(region.photos[9]) + '" class="kr-map-more" data-stem="' + krEscapeHtml(region.photos[9]) + '">View all ' + count + ' &rarr;</a>'
                   : '') +
               '</div>';
-          marker.bindPopup(html, { minWidth: 290 });
+          marker.bindPopup(html, popupOptions());
           region._marker = marker;
         });
 
@@ -358,12 +507,44 @@
           map.setView([target.lat, target.lng], 9);
           setTimeout(function () { target._marker.openPopup(); }, 350);
         } else {
+          if (wanted) writeRegion(null);
           // A tenth of the width, up to 60px: a fixed 60 on each side left
           // a phone too little room to fit both continents.
           var pad = Math.min(60, Math.round(mapEl.clientWidth / 10));
           map.fitBounds(bounds, { padding: [pad, pad], maxZoom: 6 });
         }
-      }).catch(function () {});
+      }
+
+      // The places could not be loaded: say so under the map, with a link
+      // that tries again in place (krFetchJson forgets a failure); its
+      // href reloads the page, which is the same thing. A reader who tried
+      // again from the keyboard is put on the map when it works and back
+      // on the link when it does not.
+      function showFailure(refocus) {
+        var note = document.createElement('p');
+        note.className = 'kr-map-failed';
+        note.innerHTML = 'Could not load this just now. <a href="/map.html">Try again</a>';
+        mapEl.parentNode.insertBefore(note, mapEl.nextSibling);
+        var link = note.querySelector('a');
+        if (refocus === true) link.focus();
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          var hadFocus = document.activeElement === link;
+          link.textContent = 'Trying again…';
+          krFetchJson('data/photo-locations.json').then(function (data) {
+            note.parentNode.removeChild(note);
+            addRegions(data);
+            if (hadFocus) mapEl.focus({ preventScroll: true });
+          }, function () {
+            note.parentNode.removeChild(note);
+            showFailure(hadFocus);
+          });
+        });
+      }
+
+      // Through krFetchJson, so the command palette's copy of the same
+      // file is this request rather than a second one.
+      krFetchJson('data/photo-locations.json').then(addRegions, function () { showFailure(); });
     }());
   </script>
 </body>

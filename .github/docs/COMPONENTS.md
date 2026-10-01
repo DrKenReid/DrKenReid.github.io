@@ -204,8 +204,11 @@ accessibility, and what not to do.
 - **Lightbox.** A gallery thumbnail (`img/photography/thumb/<n>.webp`)
   opens the full-size original from the `photos-v1` release in the
   lightbox: `initLightboxFix` wraps it in a link at runtime and
-  `js/lightbox.js` binds it. Do not link a photograph yourself, and never
-  link the release PNG as a download.
+  `js/lightbox.js` binds it. A post's photographs open as one set (arrows,
+  swiping, a counter), each captioned with its image's `alt`, and show
+  their thumbnail until the original arrives; charts and diagrams open
+  one at a time. Do not link a photograph yourself, and never link the
+  release PNG as a download.
 - **Two themes.** A picture drawn once for each theme goes in one figure
   as `img.theme-img-light` and `img.theme-img-dark`; only the theme's own
   shows. A dark chart that should read as a card in the light theme takes

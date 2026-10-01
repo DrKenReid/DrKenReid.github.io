@@ -14,6 +14,7 @@ Checks:
   meta       description, canonical, og:*, twitter:*, JSON-LD validity per post
   a11y       img alt, duplicate ids, heading order, single h1, landmark
              nesting (a landmark must not close over open containers),
+             link nesting (nor a link: the parser splits it in two),
              aria-label on a role-less div/span, img with no src
   markup     attribute names are well formed (an unescaped quote inside a
              value ends it early and spills the rest out as attributes)
@@ -108,6 +109,17 @@ OPTIONAL_END = {"p", "li", "dt", "dd", "tr", "td", "th", "thead", "tbody",
 
 LANDMARKS = {"main", "article", "section", "nav", "aside", "header", "footer"}
 
+# The containers a link cannot close over without being split in two: the
+# block-level members of the HTML parser's "special" category, which its
+# adoption agency algorithm answers by ending the link and opening a copy
+# of it inside them. An inline element left open (a <span>) is only
+# closed early, and the link stays whole.
+LINK_SPLITTERS = {"address", "article", "aside", "blockquote", "button", "center",
+                  "details", "dir", "div", "dl", "fieldset", "figcaption", "figure",
+                  "footer", "form", "h1", "h2", "h3", "h4", "h5", "h6", "header",
+                  "hgroup", "main", "menu", "nav", "ol", "pre", "search", "section",
+                  "summary", "table", "ul"}
+
 # aria-label is dropped on these unless a role is present, because their
 # implicit role is generic. Screen readers then announce nothing at all.
 GENERIC_TAGS = {"div", "span"}
@@ -147,6 +159,7 @@ class PageParser(HTMLParser):
         # a reference slot went unseen by the style checks.
         self.visible = []
         self.bad_nesting = []    # (landmark, [open tags], line)
+        self.split_links = []    # ([open tags], line) for a </a> closed over them
         self.label_no_role = []  # (tag, label, line)
         self.img_no_src = []     # lines of <img> with neither src nor srcset
         self.bad_attrs = []      # (tag, [names failing ATTR_NAME], line)
@@ -248,6 +261,12 @@ class PageParser(HTMLParser):
             # and turns the author's own closing tags into stray ones.
             if forced and tag in LANDMARKS:
                 self.bad_nesting.append((tag, forced, self.getpos()[0]))
+            # A link closing over them is worse: the parser ends the link
+            # early and opens a copy of it inside each one, so the page has
+            # two links where the author wrote one (an empty one is still a
+            # Tab stop, and one more frame in a post's photograph set).
+            if tag == "a" and LINK_SPLITTERS.intersection(forced):
+                self.split_links.append((forced, self.getpos()[0]))
 
     def handle_data(self, data):
         if self._in_title:
@@ -401,6 +420,11 @@ def check_structure(c):
               f"</{landmark}> closes with {len(forced)} element(s) still open "
               f"({', '.join(forced[:4])}); the parser will close them here and "
               f"push the rest of the content out of the landmark")
+    for forced, line in c.p.split_links:
+        c.add("ERROR", c.page, line, "link-nesting",
+              f"</a> closes with {', '.join(forced[:4])} still open; the "
+              f"parser will split the link in two, leaving an empty copy "
+              f"of it; close them before the link, or open it inside them")
     for tag, label, line in c.p.label_no_role:
         c.add("ERROR", c.page, line, "label-no-role",
               f"<{tag} aria-label=\"{label}\"> has no role, so the name is "

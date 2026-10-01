@@ -55,6 +55,22 @@
  *   set would otherwise leave a history entry per frame, and Back would
  *   walk through every photograph viewed before leaving the page.
  *
+ * The lightbox's set
+ *   Magnific's set is the tiles in the grid when a tile is clicked, which
+ *   is only the batches loaded so far. The set is the whole view instead:
+ *   paging to within SET_LOOKAHEAD frames of the last loaded tile loads
+ *   the next batch into the grid and onto the set (growSet), and paging
+ *   back from the first frame loads the rest of the view and goes to its
+ *   true last frame, rather than to the last tile that happened to be
+ *   loaded. The counter and the "Photograph n of N" announcement count
+ *   the whole view throughout.
+ *
+ * A failed load
+ *   When neither the file list nor the tags arrive there is nothing to
+ *   show, and the grid says so, with a Try again link that fetches them
+ *   again in place (krFetchJson forgets a failure), rather than a count
+ *   of 0 photos.
+ *
  * Design notes: where the tags come from, in "Building a Photo Tagging
  * System with CLIP",
  * https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html
@@ -66,8 +82,10 @@
 /*
  * shared-components.js is loaded synchronously at the foot of
  * gallery.html and this file is deferred, so its globals (KR_RELEASE,
- * KR_PHOTO_CATEGORIES, krFetchJson, krEscapeHtml, krCopyText) are
- * always defined by the time anything here runs, and are used directly.
+ * KR_PHOTO_CATEGORIES, krFetchJson, krEscapeHtml) are always defined by
+ * the time anything here runs, and are used directly; so are
+ * lightbox.js's (krLightboxA11y, krLightboxPreview, krLightboxCaption),
+ * which loads before it.
  */
 var galleryAll = [];
 var galleryView = [];
@@ -82,6 +100,10 @@ var AUTO_LOAD_MARGIN = 800;
 // A ?photo= deep link gives the tile's thumbnail THUMB_WAIT_MS to arrive
 // for the morph before opening without it.
 var THUMB_WAIT_MS = 1500;
+// The lightbox adds the next batch to its set once the viewer is this
+// many frames from the last one it holds: past Magnific's preload of two,
+// so the frames it fetches ahead are the real next ones.
+var SET_LOOKAHEAD = 3;
 var GAP = 6;                 // px between frames; matches .kr-justified's gap
 var photoDims = {};          // stem -> [w, h], from data/photo-dims.json
 var photoTags = {};
@@ -157,14 +179,19 @@ function writeUrl(changes) {
  * captions, without places no place names, without dims every frame is
  * laid out as 3:2; without the file list, the tagged stems are the next
  * best inventory (the originals in the release are all N.png). Only
- * when both of those are missing is the grid empty.
+ * when both of those are missing is there nothing to show, and the grid
+ * says so (showLoadFailure).
  */
 function initGallery() {
     bindLoadMoreButton();
+    loadGallery();
+}
+
+function loadGallery() {
     function soft(path) {
         return krFetchJson(path).catch(function() { return null; });
     }
-    Promise.all([
+    return Promise.all([
         soft('data/photo-tags.json'),
         soft('data/photography-files.json'),
         soft('data/photo-locations.json'),
@@ -176,6 +203,10 @@ function initGallery() {
         // list is copied before it is sorted.
         var files = Array.isArray(results[1]) ? results[1].slice()
             : Object.keys(photoTags).map(function(stem) { return stem + '.png'; });
+        if (!files.length) {
+            showLoadFailure();
+            return;
+        }
         galleryAll = files.sort(compareFileNames);
         photoPlaces = {};
         ((results[2] || {}).regions || []).forEach(function(region) {
@@ -185,6 +216,37 @@ function initGallery() {
             });
         });
         startGallery();
+    });
+}
+
+/**
+ * Neither the file list nor the tags arrived: say so in the grid, with a
+ * link that tries again in place. Its href is this page, so it still
+ * works as a reload. A reader who tried again from the keyboard keeps
+ * their place: focus goes to the first photograph when it works and back
+ * to the link when it does not.
+ */
+function showLoadFailure(refocus) {
+    var grid = document.getElementById('gallery-grid');
+    var btn = document.getElementById('load-more-btn');
+    if (btn) btn.hidden = true;
+    if (!grid) return;
+    grid.innerHTML = '<p class="kr-gallery-failed">Could not load this just now. ' +
+        '<a href="' + krEscapeHtml(window.location.href) + '">Try again</a></p>';
+    var link = grid.querySelector('a');
+    if (refocus) link.focus();
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var hadFocus = document.activeElement === link;
+        link.textContent = 'Trying again…';
+        loadGallery().then(function() {
+            if (!galleryAll.length) {
+                showLoadFailure(hadFocus);
+            } else if (hadFocus) {
+                var first = grid.querySelector('.portfolio-img');
+                if (first) first.focus({ preventScroll: true });
+            }
+        });
     });
 }
 
@@ -598,15 +660,43 @@ function autoLoadIfNear() {
 // Lightbox
 // ----------------------------------------------------------------------
 
-// lightbox.js names the popup; these are photographs, so it says so.
+// lightbox.js names the popup; these are photographs, so it says so, and
+// counts the whole view rather than the tiles loaded so far.
 function a11y(mfp) {
-    if (window.krLightboxA11y) window.krLightboxA11y(mfp, { noun: 'Photograph' });
+    if (window.krLightboxA11y) window.krLightboxA11y(mfp, { noun: 'Photograph', total: galleryView.length });
+}
+
+/**
+ * Add tiles to the open set (see "The lightbox's set" at the top): the
+ * next batch when the viewer is near the last frame the set holds, or
+ * with `all`, the rest of the view. The new tiles go into the grid as a
+ * batch always does, so closing the lightbox morphs back into a real
+ * tile, and onto the set in grid order. True when the set grew.
+ */
+function growSet(mfp, all) {
+    if (galleryIndex >= galleryView.length) return false;
+    if (!all && mfp.index < mfp.items.length - SET_LOOKAHEAD) return false;
+    do {
+        loadMoreImages(true);
+    } while (all && galleryIndex < galleryView.length);
+    // Magnific keeps a link until it parses it, then an object holding it.
+    var held = mfp.items.map(function(it) { return it && it.el ? it.el[0] : it; });
+    var grew = false;
+    var links = document.querySelectorAll('#gallery-grid .portfolio-img');
+    Array.prototype.forEach.call(links, function(link) {
+        if (held.indexOf(link) === -1) {
+            mfp.items.push(link);
+            grew = true;
+        }
+    });
+    return grew;
 }
 
 /**
  * One delegated binding on the grid, made once: whatever tiles the grid
  * holds when a tile is clicked are the set, so batches and filters need
- * no rebinding, and nothing outside the grid is touched.
+ * no rebinding, and nothing outside the grid is touched. The set then
+ * grows as the viewer pages (growSet).
  */
 function bindGalleryLightbox() {
     if (typeof jQuery === 'undefined' || !jQuery.fn.magnificPopup) return;
@@ -618,16 +708,33 @@ function bindGalleryLightbox() {
         removalDelay: krLightboxMorph.enabled() ? 340 : 0,
         callbacks: {
             open: function() {
-                a11y(this);
-                krLightboxStrip.open(this);
-                krLightboxMorph.open(this);
-                writeUrl({ photo: stemOf(this.currItem.src) });
+                var mfp = this;
+                // Magnific wraps from the first frame to the last item it
+                // holds, which is only the last tile loaded so far. Every
+                // way back (the arrow, the key, a swipe) calls prev(), so
+                // this one override covers them; afterClose removes it.
+                mfp.prev = function() {
+                    if (mfp.index === 0) growSet(mfp, true);
+                    jQuery.magnificPopup.proto.prev.call(mfp);
+                };
+                a11y(mfp);
+                krLightboxStrip.open(mfp);
+                krLightboxMorph.open(mfp);
+                writeUrl({ photo: stemOf(mfp.currItem.src) });
             },
+            // After Magnific's own counter, which counts only the tiles
+            // loaded so far.
+            markupParse: function(template, values, item) {
+                if (galleryView.length > 1) values.counter = (item.index + 1) + ' of ' + galleryView.length;
+            },
+            imageHasSize: function() { krLightboxMorph.settle(this); },
             imageLoadComplete: function() { krLightboxMorph.settle(this); },
             change: function() {
+                growSet(this);
                 a11y(this);
+                window.krLightboxPreview(this);
                 krLightboxMorph.change(this);
-                krLightboxStrip.change(this);
+                krLightboxStrip.sync(this);
                 writeUrl({ photo: stemOf(this.currItem.src) });
             },
             beforeClose: function() {
@@ -639,41 +746,27 @@ function bindGalleryLightbox() {
                 krLightboxMorph.close(this);
             },
             afterClose: function() {
+                delete this.prev;
                 krLightboxStrip.close();
                 writeUrl({ photo: null });
+                // Batches the set loaded went in silently.
+                updateCounter();
             }
         },
         image: {
             titleSrc: function(item) {
-                var caption = item.el.attr('data-caption') || '';
-                var place = item.el.attr('data-place') || '';
-                var stem = krEscapeHtml(stemOf(item.src));
-                return (caption ? krEscapeHtml(caption) + ' ' : '') +
-                    '<span class="kr-lightbox-num">#' + stem + '</span>' +
-                    (place ? ' <a class="kr-lightbox-map" href="map.html?region=' + encodeURIComponent(place) + '">See this place on the map &rarr;</a>' : '') +
-                    ' <button type="button" class="kr-lightbox-copy" data-stem="' + stem + '">Copy link</button>';
+                var stem = stemOf(item.src);
+                return window.krLightboxCaption({
+                    text: item.el.attr('data-caption') || '',
+                    stem: stem,
+                    place: item.el.attr('data-place') || '',
+                    url: galleryHref({ photo: stem })
+                });
             }
         },
         gallery: {enabled: true, preload: [0, 2], navigateByImgClick: false, tPrev: 'Previous', tNext: 'Next'}
     });
 }
-
-// Copy link, in the lightbox title. Delegated once, because Magnific
-// rewrites the title for every frame.
-document.addEventListener('click', function(e) {
-    var btn = e.target && e.target.closest ? e.target.closest('.kr-lightbox-copy') : null;
-    if (!btn) return;
-    var url = new URL(galleryHref({ photo: btn.getAttribute('data-stem') }), window.location.href).href;
-    function done(ok) {
-        var msg = ok ? 'Link copied' : 'Could not copy the link';
-        btn.textContent = msg;
-        if (window.krLightboxA11y && window.krLightboxA11y.announce && typeof jQuery !== 'undefined') {
-            window.krLightboxA11y.announce(jQuery.magnificPopup.instance, msg);
-        }
-        setTimeout(function() { if (btn.isConnected) btn.textContent = 'Copy link'; }, 2000);
-    }
-    krCopyText(url, done);
-});
 
 /**
  * ?photo=<stem>: load batches until the frame is in the grid, bring its
@@ -733,12 +826,15 @@ function openTile(grid, link) {
  *
  * A ghost <img> (the thumbnail's own source, so it is already decoded)
  * is fixed over the tile, then animated to where the full image will
- * sit. That box is predicted from photo-dims.json because the full
- * frame comes from the photos release and can take a moment; once it
- * has loaded the ghost is nudged to the real box and removed, and the
- * lightbox content is revealed underneath. Closing does the same in
- * reverse, aimed at whichever tile matches the frame on screen (the
- * viewer may have paged through). Off under reduced motion.
+ * sit. That box is predicted from photo-dims.json and the lightbox's own
+ * paddings, because the full frame comes from the photos release and can
+ * take a moment. As soon as the frame's size is known (imageHasSize,
+ * long before a large PNG has finished) the ghost is nudged to the real
+ * box and faded out over the lightbox's own image, which shows the same
+ * thumbnail until the full frame has arrived (krLightboxPreview in
+ * lightbox.js), so nothing grey ever shows between the two. Closing does
+ * the same in reverse, aimed at whichever tile matches the frame on
+ * screen (the viewer may have paged through). Off under reduced motion.
  */
 var krLightboxMorph = (function() {
     var ghost = null, anim = null, DUR = 380, EASE = 'cubic-bezier(0.22, 0.61, 0.36, 1)';
@@ -752,17 +848,34 @@ var krLightboxMorph = (function() {
         return tile ? tile.querySelector('img') : null;
     }
     function rect(el) { var r = el.getBoundingClientRect(); return { left: r.left, top: r.top, width: r.width, height: r.height }; }
+    function px(v) { return parseFloat(v) || 0; }
+    // The picture inside the full frame's box: the box has room for the
+    // caption above and below it as padding (style.css §13).
+    function pictureRect(img) {
+        var r = rect(img), cs = getComputedStyle(img);
+        var top = px(cs.paddingTop), bottom = px(cs.paddingBottom);
+        return { left: r.left, top: r.top + top, width: r.width, height: Math.max(0, r.height - top - bottom) };
+    }
     function stemOfItem(item) { return ((item && item.src) || '').split('/').pop().replace(/\.\w+$/, ''); }
-    // Where Magnific will put the frame: fitted to the viewport height
-    // (verticalFit) and the container width, centred.
+    // Where Magnific will put the picture: the frame's box fitted to its
+    // max-height (the viewport, less the filmstrip's room when it shows)
+    // and the container's width, centred in the container. The image
+    // element exists by now, still loading, so its paddings and max-height
+    // are read rather than repeated here.
     function predicted(item, thumb) {
         var d = photoDims[stemOfItem(item)];
         var ar = d && d[1] ? d[0] / d[1] : (thumb ? thumb.naturalWidth / (thumb.naturalHeight || 1) : 1.5);
         var vw = window.innerWidth, vh = window.innerHeight;
-        var maxW = vw - 16, maxH = vh - (krLightboxStrip.fits() ? 112 : 80);
+        var img = item && item.img && item.img[0];
+        var cs = img ? getComputedStyle(img) : null;
+        var padT = cs ? px(cs.paddingTop) : 40, padB = cs ? px(cs.paddingBottom) : 40;
+        var box = cs && /px$/.test(cs.maxHeight) ? px(cs.maxHeight) : vh;
+        var container = img && img.closest ? img.closest('.mfp-container') : null;
+        var room = vh - (container ? px(getComputedStyle(container).paddingBottom) : 0);
+        var maxW = vw - 16, maxH = Math.min(box, room) - padT - padB;
         var w = maxW, h = w / ar;
         if (h > maxH) { h = maxH; w = h * ar; }
-        return { left: (vw - w) / 2, top: (vh - h) / 2 - 12, width: w, height: h };
+        return { left: (vw - w) / 2, top: (room - h - padT - padB) / 2 + padT, width: w, height: h };
     }
     function frame(r) { return { left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px' }; }
     function makeGhost(src, r) {
@@ -789,18 +902,29 @@ var krLightboxMorph = (function() {
         var g = makeGhost(thumb.currentSrc || thumb.src, from);
         anim = g.animate([frame(from), frame(to)], { duration: DUR, easing: EASE, fill: 'forwards' });
         anim.onfinish = function() { anim = null; if (ghost === g) settle(mfp); };
-        // A frame that never arrives (offline, a missing release file) must
-        // not leave the viewer staring at a ghost: hand over to Magnific's
-        // own error message after a while.
+        // A frame whose size never arrives (offline, a missing release
+        // file) must not leave the viewer staring at a ghost: hand over to
+        // Magnific's own spinner or error message after a while.
         setTimeout(function() { if (ghost === g) { kill(); reveal(mfp); } }, 5000);
     }
-    // The full frame has arrived (or the ghost has landed): match the
-    // real box, then hand over to the lightbox's own image.
-    function settle(mfp) {
+    // The frame's size is known (or the ghost has landed): match the real
+    // box, then hand over to the lightbox's own image. ImageHasSize comes
+    // a moment before Magnific shows the figure, so a box not laid out
+    // yet is measured again on the next frames.
+    function settle(mfp, tries) {
         if (!ghost) { reveal(mfp); return; }
         var img = mfp.currItem && mfp.currItem.img && mfp.currItem.img[0];
-        if (!img || !img.naturalWidth || anim) return;   // still travelling, or still loading
-        var g = ghost, real = rect(img);
+        if (!img || !img.naturalWidth || anim) return;   // still travelling, or no size yet
+        var g = ghost, real = pictureRect(img);
+        if (!real.height) {
+            if ((tries || 0) < 10) {
+                requestAnimationFrame(function() { if (ghost === g) settle(mfp, (tries || 0) + 1); });
+            } else {
+                kill();
+                reveal(mfp);
+            }
+            return;
+        }
         anim = g.animate([frame(rect(g)), frame(real)], { duration: 140, easing: 'ease-out', fill: 'forwards' });
         anim.onfinish = function() {
             anim = null;
@@ -813,7 +937,7 @@ var krLightboxMorph = (function() {
         if (!enabled()) return;
         var item = mfp.currItem, thumb = thumbFor(item), img = item && item.img && item.img[0];
         if (!thumb || !img || !img.naturalWidth) { kill(); return; }
-        var from = rect(img);
+        var from = pictureRect(img);
         // The viewer may have paged well past the tile they opened.
         var tr = thumb.getBoundingClientRect();
         if (tr.bottom < 0 || tr.top > window.innerHeight) {
@@ -839,6 +963,7 @@ var krLightboxMorph = (function() {
  */
 var krLightboxStrip = (function() {
     var strip = null;
+    var builtFor = 0;    // how many frames the set held when the strip was built
     function fits() {
         return window.innerWidth >= 720 && window.innerHeight >= 560;
     }
@@ -849,15 +974,20 @@ var krLightboxStrip = (function() {
         return img ? (img.currentSrc || img.src) : '';
     }
     function open(mfp) {
+        // A rebuild (the set grew) keeps a keyboard user's place in it.
+        var hadFocus = !!(strip && strip.contains(document.activeElement));
+        var rebuilding = !!strip;
         close();
         if (!fits() || !mfp.items || mfp.items.length < 2) return;
         strip = document.createElement('div');
         strip.className = 'kr-lightbox-strip';
         strip.setAttribute('role', 'group');
         strip.setAttribute('aria-label', 'Frames in this set');
+        var total = Math.max(mfp.items.length, galleryView.length);
+        builtFor = mfp.items.length;
         strip.innerHTML = mfp.items.map(function(it, i) {
             var src = thumbOf(it);
-            return src ? '<button type="button" class="kr-lightbox-strip__item" data-i="' + i + '" aria-label="Frame ' + (i + 1) + ' of ' + mfp.items.length + '">' +
+            return src ? '<button type="button" class="kr-lightbox-strip__item" data-i="' + i + '" aria-label="Frame ' + (i + 1) + ' of ' + total + '">' +
                 '<img src="' + src + '" alt="" loading="lazy"></button>' : '';
         }).join('');
         strip.addEventListener('click', function(e) {
@@ -871,21 +1001,39 @@ var krLightboxStrip = (function() {
         strip.classList.add('mfp-prevent-close');
         mfp.wrap.append(strip);
         mfp.wrap.addClass('kr-strip');
-        change(mfp);
+        var current = change(mfp, rebuilding);
+        if (hadFocus && current) current.focus({ preventScroll: true });
     }
-    function change(mfp) {
-        if (!strip) return;
+    // Ring the current frame and bring it to the middle of the strip:
+    // smoothly as the viewer pages, at once when the strip was just
+    // rebuilt (it would otherwise glide in from the first frame) or under
+    // reduced motion. Returns the current frame's button.
+    function change(mfp, instant) {
+        if (!strip) return null;
+        var still = instant || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+        var current = null;
         var items = strip.querySelectorAll('.kr-lightbox-strip__item');
         Array.prototype.forEach.call(items, function(b) {
             var on = +b.getAttribute('data-i') === mfp.index;
             b.classList.toggle('is-current', on);
             b.setAttribute('aria-current', on ? 'true' : 'false');
-            if (on) b.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+            if (on) {
+                current = b;
+                b.scrollIntoView({ inline: 'center', block: 'nearest', behavior: still ? 'instant' : 'smooth' });
+            }
         });
+        return current;
+    }
+    // A frame changed: ring it, or rebuild the strip when the set has grown
+    // since it was drawn (growSet). Nothing before open() has built one.
+    function sync(mfp) {
+        if (!strip) return;
+        if (mfp.items.length !== builtFor) open(mfp);
+        else change(mfp);
     }
     function close() {
         if (strip && strip.parentNode) strip.parentNode.removeChild(strip);
         strip = null;
     }
-    return { fits: fits, open: open, change: change, close: close };
+    return { fits: fits, open: open, sync: sync, close: close };
 }());

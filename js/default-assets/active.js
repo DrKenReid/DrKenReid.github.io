@@ -10,15 +10,18 @@
  * of js/alime.bundle.js:
  *   - owlCarousel  : the homepage welcome slider, and the photo strip
  *                    shared-components.js injects
- *   - magnificPopup: .portfolio-img links written into a page's markup
- *                    (js/lightbox.js binds content images, js/gallery.js
- *                    the gallery grid)
+ * Magnific popups are bound elsewhere: js/lightbox.js binds every link a
+ * page's content opens larger (a post's photographs as one set, anything
+ * else as a single image), js/gallery.js the gallery grid, and
+ * openKrLightbox in shared-components.js the photo map's sets.
  *
  * Removed as dead rather than ported: the .video-play-btn iframe popup
  * (replaced by the kr-embed facade), the .search-btn / .search-form toggle
  * and the .portfolio-menu isotope filter (no such markup on the site), the
- * Bootstrap tooltip init (no data-toggle attribute anywhere), and the
- * isotope masonry init (gallery.js lays the grid out in justified rows).
+ * Bootstrap tooltip init (no data-toggle attribute anywhere), the isotope
+ * masonry init (gallery.js lays the grid out in justified rows), and the
+ * .portfolio-img set, which lightbox.js rebound as single images on every
+ * page that loaded this file, and which it now binds itself.
  */
 (function ($) {
     'use strict';
@@ -212,34 +215,5 @@
 
     // The photo strip is injected (and its carousel initialised) by
     // shared-components.js after this script runs, so no init happens here.
-
-    // *********************************
-    // :: Static lightbox links
-    // *********************************
-
-    // .portfolio-img links written into a page's markup open as one set.
-    // Most of them also carry img-lightbox, which js/lightbox.js rebinds
-    // as single images once the DOM is ready, so in practice this set is
-    // what a page gets only where lightbox.js is absent. The gallery grid
-    // is excluded: gallery.js binds its tiles itself, and two bindings on
-    // one link would open two popups.
-    if ($.fn.magnificPopup) {
-        $('.portfolio-img').not('#gallery-grid .portfolio-img').magnificPopup({
-            type: 'image',
-            gallery: {
-                enabled: true,
-                preload: [0, 2],
-                navigateByImgClick: true,
-                tPrev: 'Previous',
-                tNext: 'Next'
-            },
-            // Every such set on the site is photographs (about.html and
-            // the posts' release frames), so the viewer says so.
-            callbacks: {
-                open: function () { if (window.krLightboxA11y) window.krLightboxA11y(this, { noun: 'Photograph' }); },
-                change: function () { if (window.krLightboxA11y) window.krLightboxA11y(this, { noun: 'Photograph' }); }
-            }
-        });
-    }
 
 })(jQuery);

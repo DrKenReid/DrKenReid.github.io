@@ -4338,22 +4338,28 @@ function krOnScroll(fn) {
 /**
  * Shared Magnific lightbox opener for sets built from data rather than
  * links (the photo map's regions). items: [{src, title}], index: starting
- * slide. The callbacks hand the popup to krLightboxA11y (js/lightbox.js),
- * as every other popup on the site does, so this one is a named dialog
- * that announces its position and hides the theme toggle, which would
- * otherwise sit on the close button. A page that opens it loads
- * lightbox.js; without it the popup still works, just unnamed.
+ * slide; a title is caption markup, which krLightboxCaption builds. The
+ * callbacks hand the popup to js/lightbox.js, as every other popup on the
+ * site does: krLightboxA11y makes it a named dialog that announces its
+ * position and hides the theme toggle, which would otherwise sit on the
+ * close button, and krLightboxPreview shows each frame's thumbnail until
+ * the full frame arrives. A page that opens it loads lightbox.js; without
+ * it the popup still works, just unnamed and without the stand-in.
  */
 function openKrLightbox(items, index) {
     if (typeof jQuery === 'undefined' || !jQuery.magnificPopup) return false;
     function a11y() { if (window.krLightboxA11y) window.krLightboxA11y(this, { noun: 'Photograph' }); }
+    function change() {
+        a11y.call(this);
+        if (window.krLightboxPreview) window.krLightboxPreview(this);
+    }
     jQuery.magnificPopup.open({
         items: items,
         type: 'image',
         mainClass: 'kr-lightbox mfp-fade',
         image: { verticalFit: true },
         gallery: { enabled: true, preload: [0, 2], navigateByImgClick: true },
-        callbacks: { open: a11y, change: a11y }
+        callbacks: { open: a11y, change: change }
     }, index || 0);
     return true;
 }
@@ -4666,6 +4672,12 @@ function krUrlList(params, key) {
  * the first few, and on a phone that put it past the edge of the
  * sideways-scrolling row. Clicks never move a button: the one under the
  * reader's pointer or focus stays put.
+ *
+ * A row that scrolls sideways instead (the listings' facet rows, and on a
+ * phone .gallery-filters--scroll, style.css §09) keeps in view the button
+ * just clicked, the first pressed one when the selection is set from
+ * outside (?tag=winter must not arrive with Winter pressed off the edge),
+ * and the one keyboard focus moves to.
  */
 function renderFilterBar(container, items, opts) {
     var o = opts || {};
@@ -4676,13 +4688,31 @@ function renderFilterBar(container, items, opts) {
 
     function emit() { if (o.onChange) o.onChange(active.slice()); }
 
-    function refresh() {
+    // `shown` is the button to keep in view: the one just clicked, or by
+    // default (setActive, a deep link) the first one pressed. Never the
+    // first pressed after a click: in a multi-select row that would pull
+    // the row back to an earlier choice, away from the one just made.
+    function refresh(shown) {
         var btns = container.querySelectorAll('button[data-filter-key]');
         for (var i = 0; i < btns.length; i++) {
             var key = btns[i].getAttribute('data-filter-key');
             krSetPressed(btns[i], key === '*' ? active.length === 0 : active.indexOf(key) !== -1);
         }
         syncCollapse();
+        reveal(shown || container.querySelector('button[aria-pressed="true"]:not([hidden])'));
+    }
+
+    // The row's own scroll only, never the page's: scrollIntoView would
+    // also scroll the window to the row. Also run for the button keyboard
+    // focus moves to: a browser moving focus along the row leaves one that
+    // is already partly in view half past the edge, its ring clipped.
+    function reveal(btn) {
+        if (!btn || btn.hidden || container.scrollWidth <= container.clientWidth + 1) return;
+        var box = container.getBoundingClientRect(), r = btn.getBoundingClientRect();
+        var pad = 16;
+        var by = r.left < box.left + pad ? r.left - box.left - pad
+            : r.right > box.right - pad ? r.right - box.right + pad : 0;
+        if (by) container.scrollLeft += by;
     }
 
     function syncCollapse() {
@@ -4725,7 +4755,7 @@ function renderFilterBar(container, items, opts) {
         } else {
             active = active.length === 1 && active[0] === key ? [] : [key];
         }
-        refresh();
+        refresh(btn);
         emit();
     }
 
@@ -4749,6 +4779,16 @@ function renderFilterBar(container, items, opts) {
     container.setAttribute('role', 'group');
     if (!container.getAttribute('aria-label')) container.setAttribute('aria-label', 'Filters');
     container.addEventListener('click', onClick);
+    // Keyboard focus only: a pointer focuses a button between press and
+    // release, and scrolling the row then would move the button out from
+    // under the release and lose the click. A click reveals its button
+    // once it has landed (refresh).
+    container.addEventListener('focusin', function(e) {
+        var btn = e.target.closest ? e.target.closest('button') : null;
+        var keyboard = false;
+        try { keyboard = !!btn && btn.matches(':focus-visible'); } catch (err) {}
+        if (keyboard) reveal(btn);
+    });
     syncCollapse();
 
     // Selected overflow buttons move up to lead the row, in the order given,

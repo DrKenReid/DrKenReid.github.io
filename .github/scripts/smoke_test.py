@@ -57,6 +57,24 @@ without one class), and the pin seen to fail.
                             photograph on a row at 375 and 393 but the last
                             (rounding pushed frames onto rows of their own);
                             ?photo=<stem> opens that frame as a modal dialog.
+  check_photo_lightboxes    A post's photographs open as one set with their
+                            caption (each opened alone, captionless); the
+                            gallery lightbox counts and wraps the whole view
+                            ("1 of 25", then back to the last tile loaded);
+                            a map marker is one tab stop, Enter puts focus
+                            in its popup and Escape hands it back (two stops
+                            a marker, the popup reached past every other).
+  check_photo_swipes        At 390 on a touch screen a sideways swipe pages a
+                            post's set, not while zoomed, and again on the
+                            frame after a zoomed one (it stopped there for
+                            good).
+  check_filter_rows         At 390 the quote wall's author pills are one row
+                            that scrolls (they stood 376px tall); ?tag=winter
+                            shows Winter pressed in the gallery's row; Tab
+                            along a row keeps each ring inside it (a pill
+                            half past the edge kept focus there); a click in
+                            the blog's facet row leaves it where it was (it
+                            jumped back to the first pressed pill).
   check_palette_paths       Ctrl+K on a post: every destination answers 200
                             (links resolved against /blog/) and Escape hands
                             focus back (it was left on the body).
@@ -810,6 +828,14 @@ GALLERY_TAB_SLACK = 2
 # gave phones a column of lone frames.
 GALLERY_PHONE_WIDTHS = (375, 393)
 
+# A post with a run of release photographs, for the lightbox pin: they
+# must open as one set (js/lightbox.js, PHOTO_SET).
+PHOTO_POST = "blog/abandoned-places-i-photograph.html"
+
+# The photos release, whose originals the swipe check serves from the
+# repository's thumbnails: a frame must have loaded to be zoomed.
+RELEASE_GLOB = "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/*"
+
 # Fixed lengths for the hero checks: longer than the carousel's
 # autoplayTimeout (10s, js/default-assets/active.js), so a rotation the
 # pause failed to stop has had time to happen. Run on Playwright's fake
@@ -1050,6 +1076,220 @@ def check_gallery_keyboard_and_rows(browser, base, rep):
                                        search: location.search})""")
         rep.check(scope, "opens the frame as a named modal dialog",
                   bool(got["label"]) and f"photo={stem}" in got["search"], got)
+        page.close()
+    context.close()
+
+
+LIGHTBOX_OPEN = "typeof jQuery !== 'undefined' && jQuery.magnificPopup.instance.isOpen"
+LIGHTBOX_STATE = """() => { const m = jQuery.magnificPopup.instance, q = s => document.querySelector(s);
+    const bar = q('.kr-lightbox .mfp-bottom-bar');
+    return {open: m.isOpen, index: m.index, set: !!(m.st.gallery && m.st.gallery.enabled),
+            skin: !!q('.mfp-wrap.kr-lightbox'), counter: (q('.mfp-counter') || {}).textContent || '',
+            caption: !!bar && getComputedStyle(bar).display !== 'none'
+                     && !!(q('.mfp-title') || {}).textContent}; }"""
+
+
+def check_photo_lightboxes(browser, base, rep):
+    """The photographs' lightboxes, three regressions. A post's photographs
+    open as one set in the site's skin, with their caption showing (each
+    opened alone, captionless, with a 30px close button: lightbox.js
+    rebound them as single images). The gallery's lightbox pages the whole
+    view (it held only the tiles loaded so far, said "1 of 25", and wrapped
+    from the first frame to the last loaded tile). Each photo map marker is
+    one tab stop, and Enter puts focus in its popup and Escape hands it
+    back (two stops a marker, and a popup's photographs came after every
+    other marker). The originals are third-party requests the context
+    aborts; none of this waits for one."""
+    context = site_context(browser, base)
+    scope = f"{PHOTO_POST} lightbox"
+    page, sink = open_page(context, base, PHOTO_POST, rep, scope,
+                           "typeof jQuery !== 'undefined' && document.querySelectorAll("
+                           "'.blog-post a.img-lightbox.portfolio-img').length >= 3")
+    if page:
+        page.locator(".blog-post a.img-lightbox.portfolio-img").nth(1).click()
+        got = page.evaluate(LIGHTBOX_STATE) if wait_until(page, LIGHTBOX_OPEN, PAGE_BUDGET_MS) else {}
+        rep.check(scope, "a photograph opens in a skinned set with its caption",
+                  got.get("set") and got["skin"] and got["caption"] and got["counter"].startswith("2 of "), got)
+        page.keyboard.press("ArrowRight")
+        rep.check(scope, "the arrow key pages the set",
+                  wait_until(page, "jQuery.magnificPopup.instance.index === 2", PAGE_BUDGET_MS))
+        page.keyboard.press("Escape")
+        rep.console_errors(scope, sink)
+        page.close()
+
+    scope = "gallery.html lightbox"
+    page, sink = open_page(context, base, "gallery.html", rep, scope,
+                           "document.querySelectorAll('#gallery-grid a.portfolio-img').length >= 12")
+    if page:
+        total = page.evaluate("galleryView.length")
+        page.locator("#gallery-grid a.portfolio-img").first.click()
+        first = page.evaluate(LIGHTBOX_STATE)["counter"] if wait_until(page, LIGHTBOX_OPEN, PAGE_BUDGET_MS) else None
+        page.keyboard.press("ArrowLeft")
+        wait_until(page, f"jQuery.magnificPopup.instance.index === {total - 1}", PAGE_BUDGET_MS)
+        got = page.evaluate(LIGHTBOX_STATE)
+        rep.check(scope, f"counts the whole view and wraps to its last frame ({total})",
+                  first == f"1 of {total}" and got["index"] == total - 1 and got["counter"] == f"{total} of {total}",
+                  f"opened at {first!r}, back one: {got['counter']!r}")
+        page.keyboard.press("Escape")
+        rep.console_errors(scope, sink)
+        page.close()
+
+    scope = "map.html keyboard"
+    page, sink = open_page(context, base, "map.html", rep, scope,
+                           "document.querySelectorAll('.leaflet-marker-pane .leaflet-marker-icon').length >= 10")
+    if page:
+        stops = page.evaluate("""() => { const pins = [...document.querySelectorAll('.leaflet-marker-pane .leaflet-marker-icon')];
+            const stops = [...document.querySelectorAll('.leaflet-marker-pane *')].filter(e => e.tabIndex >= 0);
+            return {pins: pins.length, stops: stops.length, named: pins.every(p => stops.includes(p) && !!p.getAttribute('aria-label'))}; }""")
+        rep.check(scope, "each marker is one named tab stop",
+                  stops["stops"] == stops["pins"] and stops["named"], stops)
+        page.focus(".leaflet-marker-pane .leaflet-marker-icon")
+        page.keyboard.press("Enter")
+        inside = wait_until(page, "!!document.activeElement.closest('.leaflet-popup .kr-map-grid')", PAGE_BUDGET_MS)
+        rep.check(scope, "Enter opens the popup with focus on its first photograph", inside)
+        page.keyboard.press("Escape")
+        back = wait_until(page, "!document.querySelector('.leaflet-popup')"
+                                " && document.activeElement.matches('.leaflet-marker-icon')", PAGE_BUDGET_MS)
+        rep.check(scope, "Escape closes it and focus returns to the marker", back)
+        rep.console_errors(scope, sink)
+        page.close()
+    context.close()
+
+
+def swipe(cdp, x0, x1, y):
+    """One finger dragged from x0 to x1 at height y, in steps, as a phone
+    reports it."""
+    cdp.send("Input.dispatchTouchEvent", {"type": "touchStart", "touchPoints": [{"x": x0, "y": y}]})
+    for k in range(1, 7):
+        cdp.send("Input.dispatchTouchEvent", {"type": "touchMove", "touchPoints": [{"x": x0 + (x1 - x0) * k / 6, "y": y}]})
+    cdp.send("Input.dispatchTouchEvent", {"type": "touchEnd", "touchPoints": []})
+
+
+def check_photo_swipes(browser, base, rep):
+    """Swiping through a post's set on a phone (js/lightbox.js, Swiping):
+    a swipe to the left pages on, none pages a zoomed frame (its drag pans
+    it), and the frame after a zoomed one swipes again. Pin: the zoom test
+    read a class the zoom leaves on the dialog when its frame is paged
+    away by an arrow, so swiping stopped on every frame after it. The
+    originals come from the repository's thumbnails here."""
+    context = site_context(browser, base, size=(390, 844), has_touch=True, is_mobile=True)
+
+    def thumb_for_original(route):
+        stem = route.request.url.rsplit("/", 1)[-1].rsplit(".", 1)[0]
+        thumb = ROOT / "img" / "photography" / "thumb" / f"{stem}.webp"
+        if stem.isdigit() and thumb.exists():
+            route.fulfill(status=200, body=thumb.read_bytes(), headers={"content-type": "image/webp"})
+        else:
+            route.abort()
+    context.route(RELEASE_GLOB, thumb_for_original)
+    scope = f"{PHOTO_POST} swipe @390"
+    page, sink = open_page(context, base, PHOTO_POST, rep, scope,
+                           "typeof jQuery !== 'undefined' && document.querySelectorAll("
+                           "'.blog-post a.img-lightbox.portfolio-img').length >= 4")
+    if page:
+        cdp = context.new_cdp_session(page)
+        page.locator(".blog-post a.img-lightbox.portfolio-img").first.click()
+        loaded = "!!document.querySelector('.mfp-img') && document.querySelector('.mfp-img').complete"
+        wait_until(page, f"{LIGHTBOX_OPEN} && {loaded}", PAGE_BUDGET_MS)
+        index = "jQuery.magnificPopup.instance.index"
+        swipe(cdp, 300, 100, 420)
+        rep.check(scope, "a swipe to the left pages on",
+                  wait_until(page, f"{index} === 1", PAGE_BUDGET_MS), page.evaluate(index))
+        wait_until(page, loaded, PAGE_BUDGET_MS)
+        box = page.locator(".mfp-img").bounding_box()
+        page.mouse.click(box["x"] + box["width"] / 2, box["y"] + box["height"] / 3)
+        zoomed = wait_until(page, "!!document.querySelector('.mfp-img.kr-zoomed')", PAGE_BUDGET_MS)
+        swipe(cdp, 300, 100, 420)
+        page.wait_for_timeout(300)
+        rep.check(scope, "not while the frame is zoomed",
+                  zoomed and page.evaluate(index) == 1, f"zoomed {zoomed}, at {page.evaluate(index)}")
+        page.keyboard.press("ArrowRight")
+        wait_until(page, f"{index} === 2 && {loaded}", PAGE_BUDGET_MS)
+        swipe(cdp, 300, 100, 420)
+        rep.check(scope, "the frame after a zoomed one swipes",
+                  wait_until(page, f"{index} === 3", PAGE_BUDGET_MS), page.evaluate(index))
+        page.keyboard.press("Escape")
+        rep.console_errors(scope, sink)
+        page.close()
+    context.close()
+
+
+# The phone width for the filter rows pin, and the most a row of pills that
+# scrolls sideways may stand: one row of pills and its padding, where the
+# wrapping rows stood 232 to 568px.
+FILTER_ROW_WIDTH = 390
+FILTER_ROW_MAX_H = 64
+
+# Where a pill sits in its row, in px from the row's edges less the focus
+# ring (3px out, 3px thick): negative is clipped.
+PILL_INSET = """(pill) => { const row = pill.parentElement, r = pill.getBoundingClientRect(),
+    b = row.getBoundingClientRect(), ring = 6;
+    return {label: pill.textContent.trim(), left: Math.round(r.left - ring - b.left),
+            right: Math.round(b.right - r.right - ring)}; }"""
+
+
+def check_filter_rows(browser, base, rep):
+    """The pill rows that scroll sideways on a phone (.gallery-filters--scroll
+    and the listings' facet rows, renderFilterBar in shared-components.js).
+    Pins: the quote wall's thirteen author pills wrapping to 376px and
+    pushing the first quotation below the fold; a ?tag= deep link arriving
+    with its pill pressed off the edge; Tab leaving a pill that was partly
+    in view half past the edge, its ring clipped (the browser scrolls a row
+    only for a pill wholly out of view); and a click in a multi-select facet
+    row scrolling the row back to the first pressed pill, away from the one
+    just clicked."""
+    context = site_context(browser, base, size=(FILTER_ROW_WIDTH, 844))
+    scope = f"quotes.html @{FILTER_ROW_WIDTH}"
+    page, sink = open_page(context, base, "quotes.html", rep, scope,
+                           "document.querySelectorAll('#quote-filters button').length >= 5")
+    if page:
+        height = page.evaluate("document.getElementById('quote-filters').getBoundingClientRect().height")
+        rep.check(scope, f"the author pills are one row (at most {FILTER_ROW_MAX_H}px)",
+                  height <= FILTER_ROW_MAX_H, f"{height:.0f}px")
+        pills = page.locator("#quote-filters button")
+        pills.first.focus()
+        clipped = []
+        for i in range(1, pills.count()):
+            page.keyboard.press("Tab")
+            got = page.evaluate(PILL_INSET, pills.nth(i).element_handle())
+            if got["left"] < 0 or got["right"] < 0:
+                clipped.append(got)
+        rep.check(scope, "Tab along the row keeps each ring inside it", not clipped, clipped[:2])
+        rep.console_errors(scope, sink)
+        page.close()
+
+    scope = f"gallery.html?tag=winter @{FILTER_ROW_WIDTH}"
+    page, sink = open_page(context, base, "gallery.html?tag=winter", rep, scope,
+                           "!!document.querySelector('#gallery-filters button[data-filter-key=winter][aria-pressed=true]')")
+    if page:
+        got = page.evaluate(PILL_INSET, page.locator("#gallery-filters button[data-filter-key=winter]").element_handle())
+        rep.check(scope, "the linked pill is in view", got["left"] >= 0 and got["right"] >= 0, got)
+        rep.console_errors(scope, sink)
+        page.close()
+
+    scope = f"blog.html facet row @{FILTER_ROW_WIDTH}"
+    page, sink = open_page(context, base, "blog.html", rep, scope,
+                           f"{LISTING_DRAWN} && document.querySelectorAll('.kr-facet-row__btns button').length >= 3")
+    if page:
+        page.click("#kr-filter-toggle")
+        row = page.locator(".kr-facet-row__btns").first
+        more = row.locator("button[data-filter-more]")
+        if more.count():
+            more.click()
+        row.locator("button[data-filter-key]").nth(1).click()
+        # Scroll on, then press a pill in the middle of what is on screen.
+        row.evaluate("r => { r.scrollLeft = r.scrollWidth / 2; }")
+        before = row.evaluate("r => r.scrollLeft")
+        pill = row.evaluate_handle("""r => { const b = r.getBoundingClientRect();
+            return [...r.querySelectorAll('button[data-filter-key]')].find(x => {
+                const q = x.getBoundingClientRect(); return q.left > b.left + 20 && q.right < b.right - 20; }); }""")
+        pill.as_element().click()
+        after = row.evaluate("r => r.scrollLeft")
+        got = page.evaluate(PILL_INSET, pill)
+        rep.check(scope, "a click leaves the row where it was",
+                  abs(after - before) < 2 and got["left"] >= 0 and got["right"] >= 0,
+                  f"scrollLeft {before:.0f} -> {after:.0f}, {got}")
+        rep.console_errors(scope, sink)
         page.close()
     context.close()
 
@@ -2216,6 +2456,9 @@ def run_pins(browser, base, rep):
     check_opener_colours(browser, base, rep)
     check_focus_rings(browser, base, rep)
     check_gallery_keyboard_and_rows(browser, base, rep)
+    check_photo_lightboxes(browser, base, rep)
+    check_photo_swipes(browser, base, rep)
+    check_filter_rows(browser, base, rep)
     check_palette_paths(browser, base, rep)
     check_not_found_page(browser, base, rep)
     check_nav_dropdowns(browser, base, rep)

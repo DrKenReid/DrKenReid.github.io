@@ -4452,6 +4452,39 @@ a.kr-series-chip--kicker:is(:hover, :focus) {
     padding: 5px 10px;
     margin: 3px 2px; } }
 
+/* --- Filter pill row that scrolls (.gallery-filters--scroll) -----------------
+   The gallery's subjects and the quote wall's authors, in the markup of
+   gallery.html and quotes.html. On a phone a wrapping row of eleven or
+   thirteen pills stood 230 to 570px tall and pushed the first photograph
+   or quotation below the fold, so under 768px the row is one line that
+   scrolls sideways, as the listings' facet rows do (.kr-facet-row__btns,
+   below). The padding keeps the focus ring (3px out, 3px thick) inside
+   the scroller, which clips it. The auto margins on the end pills centre
+   the row while it fits and fall to zero once it overflows, where
+   justify-content: center would push the first pills out of reach.
+   renderFilterBar (shared-components.js) scrolls the row to keep in view
+   the pill just pressed, a ?tag= deep link's, and the one keyboard focus
+   moves to. */
+@media only screen and (max-width: 767px) {
+  .gallery-filters.gallery-filters--scroll {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 7px 8px 9px;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch; }
+  .gallery-filters--scroll .gallery-filter-btn {
+    flex: 0 0 auto;
+    white-space: nowrap; }
+  .gallery-filters.gallery-filters--scroll .gallery-filter-btn {
+    margin: 0; }
+  .gallery-filters.gallery-filters--scroll .gallery-filter-btn:first-child {
+    margin-left: auto; }
+  .gallery-filters.gallery-filters--scroll .gallery-filter-btn:last-child {
+    margin-right: auto; } }
+
 /* The dark twins restate hover and .active because the dark base rule
    ties with them on specificity and would otherwise win on order. */
 [data-theme="dark"] .gallery-filter-btn {
@@ -8302,14 +8335,16 @@ html.nerd-mode-on .non-nerd {
 
 /* gallery.html's photographs (js/gallery.js builds every tile from
    data/photo-tags.json and data/photo-dims.json) and the Magnific
-   lightbox that the gallery and post photographs open in (gallery.js,
-   and lightbox.js / shared-components.js for posts, both with mainClass
-   "kr-lightbox mfp-fade"). The photo map's own styles are inline in
-   map.html.
+   lightbox that every popup on the site opens in, with mainClass
+   "kr-lightbox mfp-fade": the gallery (gallery.js), a post's photographs
+   and content images (lightbox.js, after shared-components.js wraps the
+   photographs), and the photo map (openKrLightbox). The photo map's own
+   styles are inline in map.html.
    Classes only script applies: .kr-justified__loose, .kr-js (on html),
    html.kr-gallery-vt, .kr-zoomed and .kr-zoom-wrap, .kr-morph,
    .kr-morph-in, .kr-morph-out, .kr-strip, .is-current on a filmstrip
-   frame, and Magnific's own mfp-* state classes. */
+   frame, .kr-lightbox-preview and .kr-lightbox-loading (lightbox.js),
+   .kr-gallery-failed, and Magnific's own mfp-* state classes. */
 
 /* --- Gallery grid -------------------------------------------------------
    The photographs lead the page, so on a desktop the grid breaks out of
@@ -8557,6 +8592,16 @@ html.nerd-mode-on .non-nerd {
 #gallery-counter {
   margin-bottom: 12px; }
 
+/* When the photographs' data could not be loaded, the grid holds this
+   note and its Try again link (gallery.js showLoadFailure) in place of a
+   count of nothing. A whole row of the flex grid. */
+.kr-gallery-failed {
+  flex: 1 1 100%;
+  margin: 0;
+  padding: 48px 16px;
+  text-align: center;
+  color: var(--kr-muted); }
+
 /* Content images lightbox.js wraps, and the post photographs
    shared-components.js wraps, open larger: say so with the cursor. */
 a.img-lightbox {
@@ -8705,21 +8750,59 @@ button.mfp-arrow {
 .kr-lightbox.mfp-bg {
   background: #0b0b0b; }
 
+/* The caption sits in the frame's bottom padding, under the picture.
+   Magnific leaves it 40px, one line; on a phone the caption wraps to two
+   or three rows (the words, then the map link and Copy link), which ran
+   off the foot of the screen under a tall picture, so the room grows
+   there. --kr-lightbox-room is that padding, read by the image, the
+   shadow box behind it, the caption bar and the loading spinner. */
+.kr-lightbox {
+  --kr-lightbox-room: 40px; }
+
+@media only screen and (max-width: 767px) {
+  .kr-lightbox {
+    --kr-lightbox-room: 100px; } }
+
+.kr-lightbox img.mfp-img {
+  padding-bottom: var(--kr-lightbox-room); }
+
+.kr-lightbox .mfp-figure::after {
+  bottom: var(--kr-lightbox-room); }
+
 .kr-lightbox .mfp-bottom-bar {
   display: block !important;
-  margin-top: -30px;
+  margin-top: calc(10px - var(--kr-lightbox-room));
   text-align: center; }
 
+/* One wrapping row: the words and number (.kr-lightbox-what), the links
+   and Copy link, with a gap between rows as well as between items, clear
+   of the counter at the right. */
 .kr-lightbox .mfp-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 12px;
   color: #e0e0e0;
   font-size: 13px;
   letter-spacing: 0.04em;
-  padding-right: 0; }
+  padding-right: 64px; }
 
 .kr-lightbox .kr-lightbox-num {
+  margin-left: 4px;
   color: #8a8a8a;
-  font-size: 12px;
-  margin-left: 8px; }
+  font-size: 12px; }
+
+/* On a phone the words take the first row, beside the counter, and the
+   links and Copy link the full width of the next: at 320 wide a caption
+   kept clear of the counter on every row stood four rows tall, more than
+   the room under a tall picture. A caption of plain words (a post's alt
+   text) keeps the title's own padding. */
+@media only screen and (max-width: 767px) {
+  .kr-lightbox .mfp-title:has(> .kr-lightbox-what) {
+    padding-right: 0; }
+  .kr-lightbox .kr-lightbox-what {
+    flex: 1 0 100%;
+    padding-right: 64px; } }
 
 .kr-lightbox .mfp-counter {
   color: #8a8a8a;
@@ -8782,21 +8865,27 @@ button.mfp-arrow {
   right: 16px;
   top: 16px; }
 
-.kr-lightbox .mfp-title .kr-lightbox-map {
-  display: inline-block;
-  margin-left: 12px;
-  color: #ffe89e;
+/* The caption's links (krLightboxCaption in lightbox.js): the place on
+   the photo map, or on the map the frame in the gallery. In the gold of
+   type on a photograph, since the lightbox is dark in both themes, and
+   28px tall so each is a target of its own when the row wraps. */
+.kr-lightbox .mfp-title .kr-lightbox-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  color: var(--kr-photo-to);
   text-decoration: underline;
   text-underline-offset: 3px; }
 
 /* --- Lightbox title actions ---------------------------------------------
-   "Copy link" sits beside the map link in the caption bar and copies
-   gallery.html?photo=<stem> for the frame on screen. A button, not a
-   link: it acts rather than goes. */
+   "Copy link" sits beside the link in the caption bar and copies the
+   gallery.html?photo=<stem> address of the frame on screen (lightbox.js).
+   A button, not a link: it acts rather than goes. */
 .kr-lightbox .mfp-title .kr-lightbox-copy {
-  display: inline-block;
-  margin-left: 12px;
-  padding: 1px 10px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 2px 12px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 999px;
   background: transparent;
@@ -8853,6 +8942,32 @@ button.mfp-arrow {
 @media (prefers-reduced-motion: reduce) {
   .mfp-preloader::after {
     animation-duration: 2.5s; } }
+
+/* --- Lightbox preview (lightbox.js krLightboxPreview) -------------------
+   Magnific shows a frame as soon as its size is known, and a large PNG
+   then paints in from the top over seconds, over the grey box behind it.
+   Until it has loaded, the thumbnail the reader clicked (already cached)
+   fills the picture's box instead, stretched to it (a thumbnail has its
+   frame's proportions), and the frame's rows arrive over it. The box's
+   padding is the caption's room, so the thumbnail covers the content box
+   only. A small spinner turns in the picture's lower corner meanwhile;
+   under reduced motion §21 stops it, and it stays a still ring. */
+.mfp-container img.mfp-img.kr-lightbox-preview {
+  background: var(--kr-lightbox-thumb) center / 100% 100% no-repeat content-box; }
+
+.kr-lightbox-loading .mfp-figure::before {
+  content: '';
+  position: absolute;
+  right: 12px;
+  bottom: calc(var(--kr-lightbox-room) + 12px);
+  z-index: 1;
+  width: 22px;
+  height: 22px;
+  border: 2px solid color-mix(in srgb, white 30%, transparent);
+  border-top-color: var(--kr-photo-to);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: kr-spin 0.9s linear infinite; }
 
 /* --- Lightbox morph (gallery.js krLightboxMorph) ----------------------
    The ghost is the clicked thumbnail, fixed and animated between the
