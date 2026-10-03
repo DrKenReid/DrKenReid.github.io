@@ -615,17 +615,13 @@ var KR_SHARE_GLYPH = '<svg viewBox="0 0 24 24" width="20" height="20" fill="curr
  * browser without one copies the link instead, shows a tick, and says
  * "Link copied" through a polite status inside the button.
  *
- * It follows the back-to-top button's rule (site.js, initScrollUp): out
- * at the top of a page and whenever the reader scrolls back up, away
- * while they scroll on down, so it never sits over the ends of lines
- * mid-read. A direction counts after KR_SHARE_TAB_INTENT pixels of
- * travel, and keyboard focus on it holds it out. The stylesheet hides it
- * while a sheet holds the foot of the screen (the end-of-post share
- * sheet, the newsletter pop-up, a docked jargon card), and from 992px.
- * .kr-offstage, so while it is away it is out of the Tab order.
+ * It is always there, whatever the scroll position, so it is slim: it
+ * reaches past the page's 16px gutter only a little way into the ends
+ * of lines. The stylesheet hides it (visibility, so it also leaves the
+ * Tab order) while a sheet holds the foot of the screen, which it would
+ * otherwise sit on (the end-of-post share sheet, the newsletter pop-up,
+ * a docked jargon card), and from 992px.
  */
-var KR_SHARE_TAB_INTENT = 24;
-var KR_SHARE_TAB_TOP = 120;
 
 function renderShareButton() {
     // Every page that loads this file has the footer's slot; a page
@@ -636,7 +632,7 @@ function renderShareButton() {
 
     var btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'kr-share-tab kr-offstage';
+    btn.className = 'kr-share-tab';
     btn.setAttribute('aria-label', label);
     btn.innerHTML = '<span class="kr-share-tab__mark">' + KR_SHARE_GLYPH + '</span>' +
         '<span class="kr-sr-only" role="status"></span>';
@@ -662,33 +658,6 @@ function renderShareButton() {
                 status.textContent = '';
             }, 1800);
         });
-    });
-
-    function held() {
-        if (document.activeElement !== btn) return false;
-        try { return btn.matches(':focus-visible'); } catch (e) { return true; }
-    }
-
-    var lastY = window.pageYOffset || 0;
-    var travel = 0;
-    var out = true;
-    krOnScroll(function() {
-        var y = window.pageYOffset || 0;
-        var dy = y - lastY;
-        lastY = y;
-        if (y <= KR_SHARE_TAB_TOP) {
-            travel = 0;
-            out = true;
-        } else if (dy) {
-            // Pixels moved in the current direction: negative is up.
-            travel = (dy < 0) === (travel < 0) ? travel + dy : dy;
-            if (travel <= -KR_SHARE_TAB_INTENT) out = true;
-            else if (travel >= KR_SHARE_TAB_INTENT && !held()) out = false;
-        }
-        var want = out;
-        return function() {
-            btn.classList.toggle('is-visible', want);
-        };
     });
 }
 

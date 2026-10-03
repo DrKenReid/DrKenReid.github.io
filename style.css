@@ -5931,11 +5931,10 @@ body.kr-cite-docked #scrollUp {
 
 /* --- Share tab (renderShareButton) ---------------------------------------
    A small tab on the right edge of a phone or tablet's window, on every
-   page, above the back-to-top button. Out at the top of a page and while
-   the reader scrolls back up, away while they scroll down (script applies
-   .is-visible and .is-copied); .kr-offstage, so away means out of the Tab
-   order. It stands aside for whatever holds the foot of the screen, and
-   from 992px, where posts have the share rail. */
+   page, above the back-to-top button, always there; slim, because it
+   reaches past the gutter into the ends of lines. Script applies
+   .is-copied. It stands aside for whatever holds the foot of the screen,
+   and from 992px, where posts have the share rail. */
 .kr-share-tab {
   position: fixed;
   right: 0;
@@ -5943,7 +5942,7 @@ body.kr-cite-docked #scrollUp {
   z-index: 90;
   display: grid;
   place-items: center;
-  width: 40px;
+  width: 32px;
   height: 44px;
   padding: 0 0 0 3px;
   border: 1px solid var(--kr-hairline);
@@ -5952,13 +5951,7 @@ body.kr-cite-docked #scrollUp {
   background: var(--kr-surface-card);
   color: var(--kr-ink);
   box-shadow: var(--kr-shadow-1);
-  cursor: pointer;
-  opacity: 0;
-  transform: translateX(100%); }
-
-.kr-share-tab.is-visible {
-  opacity: 1;
-  transform: none; }
+  cursor: pointer; }
 
 .kr-share-tab:hover,
 .kr-share-tab.is-copied {
@@ -5967,8 +5960,8 @@ body.kr-cite-docked #scrollUp {
 .kr-share-tab .kr-share-tab__mark,
 .kr-share-tab svg {
   display: block;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   fill: currentColor; }
 
 @media (min-width: 768px) {
