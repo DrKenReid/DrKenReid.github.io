@@ -183,6 +183,23 @@ class UpNext(unittest.TestCase):
         self.assertEqual(self.urls("mid"), ["blog/p2.html", "blog/p3.html"])
         self.assertEqual(self.urls("new"), ["blog/p3.html"])
 
+    def test_a_post_is_offered_neighbours_on_its_subject(self):
+        posts = [
+            {"url": "blog/b2.html", "category": "Books & Media"},
+            {"url": "blog/d2.html", "category": "Data Science"},
+            {"url": "blog/x.html", "category": "Books & Media"},
+            {"url": "blog/d1.html", "category": "Data & AI"},
+            {"url": "blog/b1.html", "category": "Books & Media"},
+            {"url": "blog/m.html", "category": "Money"},
+        ]
+        urls = lambda i: [p["url"] for p in grp.up_next(posts, posts[i])]
+        self.assertEqual(urls(2), ["blog/b1.html", "blog/b2.html"])
+        # One subject under two names, newer; nothing older on it, so
+        # the date order that way.
+        self.assertEqual(urls(3), ["blog/b1.html", "blog/d2.html"])
+        # None on its subject: the date order.
+        self.assertEqual(urls(5), ["blog/b1.html"])
+
     def test_related_cards_skip_the_pager(self):
         vectors = {p["url"]: {"x": 1.0} for p in self.posts}
         related = grp.build_related_posts(self.posts, self.by["p2"], vectors)

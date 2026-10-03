@@ -1879,6 +1879,25 @@ function renderBlogThanksCta() {
     }
 }
 
+/* Categories that are one subject under two names, for Up next. */
+var KR_SAME_CATEGORY = { 'Data Science': 'Data & AI' };
+
+function categoryKey(post) {
+    var c = post && post.category;
+    return c ? (KR_SAME_CATEGORY[c] || c) : '';
+}
+
+/** The nearest post to posts[idx] in `step`'s direction (1 older, -1
+    newer, posts.json being newest first) in the same category, or null. */
+function nearestInCategory(posts, current, idx, step) {
+    var key = categoryKey(current);
+    if (!key || idx < 0) return null;
+    for (var i = idx + step; i >= 0 && i < posts.length; i += step) {
+        if (categoryKey(posts[i]) === key) return posts[i];
+    }
+    return null;
+}
+
 /**
  * The two "Up next" links for `current`, a posts.json record:
  * { prev: {post, label} | null, next: {post, label} | null }.
@@ -1887,8 +1906,12 @@ function renderBlogThanksCta() {
  * reader of part 3 wants to go, rather than at whatever happened to be
  * published the week before. The first series the post belongs to that
  * has a neighbour decides. A side the series cannot fill (part 1 has no
- * previous part, the latest part no next) falls back to the post's
- * chronological neighbour in posts.json (newest first), unless that is
+ * previous part, the latest part no next), and both sides of a post in
+ * no series, fall back to the nearest older or newer post in the same
+ * category (KR_SAME_CATEGORY joins the two names for data science), so a
+ * reader who came for a book post is offered another book post rather
+ * than whatever was published that week; with none that way, to the
+ * chronological neighbour in posts.json (newest first). Either way not
  * the post already on the other side. A fallback that leaves the post's
  * series says so ("Newer, outside the series"): after the latest part a
  * bare "Newer" read as if the series went on. It does not say the series
@@ -1900,8 +1923,9 @@ function renderBlogThanksCta() {
  */
 function postNeighbours(posts, current) {
     var idx = posts.indexOf(current);
-    var older = idx >= 0 && idx < posts.length - 1 ? posts[idx + 1] : null;
-    var newer = idx > 0 ? posts[idx - 1] : null;
+    var older = nearestInCategory(posts, current, idx, 1) ||
+        (idx >= 0 && idx < posts.length - 1 ? posts[idx + 1] : null);
+    var newer = nearestInCategory(posts, current, idx, -1) || (idx > 0 ? posts[idx - 1] : null);
     var prev = null, next = null;
 
     postSeriesList(current).some(function(entry) {

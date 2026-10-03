@@ -143,17 +143,45 @@ def cosine(a, b):
     return sum(w * b.get(t, 0.0) for t, w in a.items())
 
 
+# Categories that are one subject under two names (KR_SAME_CATEGORY in
+# js/shared-components.js).
+SAME_CATEGORY = {'Data Science': 'Data & AI'}
+
+
+def category_key(post):
+    c = (post or {}).get('category') or ''
+    return SAME_CATEGORY.get(c, c)
+
+
+def nearest_in_category(posts, current, idx, step):
+    """The nearest post to posts[idx] in step's direction (1 older, -1
+    newer) in the same category, or None (nearestInCategory)."""
+    key = category_key(current)
+    if not key or idx < 0:
+        return None
+    i = idx + step
+    while 0 <= i < len(posts):
+        if category_key(posts[i]) == key:
+            return posts[i]
+        i += step
+    return None
+
+
 def up_next(posts, current):
     """The posts the end band's "Up next" pager links to for `current`:
     postNeighbours() in js/shared-components.js, rule for rule, so a card
     here never repeats a link directly above it. The first series with a
-    neighbour gives its adjacent parts; a side it cannot fill falls back
-    to the chronological neighbour in posts.json (newest first) unless
-    that post is already on the other side. Change one, change the other.
+    neighbour gives its adjacent parts; a side it cannot fill (and both
+    sides of a post in no series) falls back to the nearest post that way
+    in the same category (SAME_CATEGORY), else to the chronological
+    neighbour in posts.json (newest first), unless that post is already
+    on the other side. Change one, change the other.
     """
     idx = posts.index(current) if current in posts else -1
-    older = posts[idx + 1] if 0 <= idx < len(posts) - 1 else None
-    newer = posts[idx - 1] if idx > 0 else None
+    older = (nearest_in_category(posts, current, idx, 1)
+             or (posts[idx + 1] if 0 <= idx < len(posts) - 1 else None))
+    newer = (nearest_in_category(posts, current, idx, -1)
+             or (posts[idx - 1] if idx > 0 else None))
     prev = nxt = None
     for entry in sitelib.series_list(current):
         if not entry or not entry.get('name'):

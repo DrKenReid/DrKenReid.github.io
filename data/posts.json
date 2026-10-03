@@ -1055,7 +1055,7 @@
     "url": "blog/no-idea-no-problem-data-science-portfolio.html",
     "image": "img/photography/thumb/19.webp",
     "readMinutes": 10,
-    "words": 2125
+    "words": 2126
   },
   {
     "title": "Evolutionary Computation's Identity Crisis in the Age of GenAI",
@@ -1081,7 +1081,7 @@
     "url": "blog/in-defense-of-audiobooks.html",
     "image": "img/photography/thumb/366.webp",
     "readMinutes": 12,
-    "words": 2448
+    "words": 2449
   },
   {
     "title": "Why It Still Matters to Learn to Code in the Age of AI",
@@ -1132,9 +1132,10 @@
     "category": "Books & Media",
     "excerpt": "569 books rated, and the star system fails at all of them. A data-driven look at my own Goodreads ratings, review lengths, genre bias, and the silence problem.",
     "url": "blog/rating-systems.html",
+    "updated": "2026-10-03",
     "image": "blog/img/rating_distribution.png",
     "readMinutes": 12,
-    "words": 2488
+    "words": 2513
   },
   {
     "title": "Why Most Self-Help Books Are Trash (And Which Ones Aren't)",

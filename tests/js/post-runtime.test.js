@@ -60,16 +60,40 @@ test('the baked related cards never repeat an Up next link', () => {
     }
 });
 
-test('the ends of a series fall back to the chronological neighbour', () => {
+test('the ends of a series fall back to the nearest older post on the subject', () => {
     const parts = rt.seriesParts(posts, 'Algorithms, Live');
     const first = parts[0];
     const pair = rt.postNeighbours(posts, first);
     const i = posts.indexOf(first);
     assert.equal(pair.next.post, parts[1]);
-    if (i < posts.length - 1) {
-        assert.equal(pair.prev.post, posts[i + 1]);
+    const want = posts.slice(i + 1).find(p => rt.categoryKey(p) === rt.categoryKey(first)) || posts[i + 1];
+    if (want) {
+        assert.equal(pair.prev.post, want);
         assert.equal(pair.prev.label, 'Older, outside the series');
     }
+});
+
+// A reader who came for a book post is offered another book post, not
+// whatever was published that week.
+test('a post in no series is offered its nearest neighbours on the same subject', () => {
+    let checked = 0;
+    for (const post of posts.filter(p => !rt.postSeriesList(p).length)) {
+        const i = posts.indexOf(post);
+        const key = rt.categoryKey(post);
+        const older = posts.slice(i + 1).find(p => rt.categoryKey(p) === key);
+        const newer = posts.slice(0, i).reverse().find(p => rt.categoryKey(p) === key);
+        const pair = rt.postNeighbours(posts, post);
+        if (older) { assert.equal(pair.prev.post, older, post.url); checked++; }
+        if (newer) { assert.equal(pair.next.post, newer, post.url); checked++; }
+    }
+    assert.ok(checked > 20, 'too few posts with a neighbour on their subject');
+    // With none on its subject, the date order: a made-up lone category.
+    const x = { url: 'blog/x.html', category: 'Ideas' };
+    const y = { url: 'blog/y.html', category: 'Books & Media' };
+    const z = { url: 'blog/z.html', category: 'Money' };
+    const pair = rt.postNeighbours([x, y, z], y);
+    assert.equal(pair.prev.post, z);
+    assert.equal(pair.next.post, x);
 });
 
 // After the latest part a bare "Newer" read as if the series went on.
@@ -127,9 +151,8 @@ test('a related card names another series, not its own', () => {
 test('a post outside any series gets Older and Newer', () => {
     const i = posts.findIndex((p, k) => !p.series && k > 0 && k < posts.length - 1);
     const pair = rt.postNeighbours(posts, posts[i]);
+    // Which two posts: the subject test above.
     assert.deepEqual([pair.prev.label, pair.next.label], ['Older', 'Newer']);
-    assert.equal(pair.prev.post, posts[i + 1]);
-    assert.equal(pair.next.post, posts[i - 1]);
 });
 
 test('the lead-in stops at five words or the first sentence', () => {
