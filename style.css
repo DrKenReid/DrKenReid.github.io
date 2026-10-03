@@ -5929,6 +5929,68 @@ body.kr-cite-docked #scrollUp {
   }
 }
 
+/* --- Share tab (renderShareButton) ---------------------------------------
+   A small tab on the right edge of a phone or tablet's window, on every
+   page, above the back-to-top button. Out at the top of a page and while
+   the reader scrolls back up, away while they scroll down (script applies
+   .is-visible and .is-copied); .kr-offstage, so away means out of the Tab
+   order. It stands aside for whatever holds the foot of the screen, and
+   from 992px, where posts have the share rail. */
+.kr-share-tab {
+  position: fixed;
+  right: 0;
+  bottom: 84px;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 44px;
+  padding: 0 0 0 3px;
+  border: 1px solid var(--kr-hairline);
+  border-right: 0;
+  border-radius: 22px 0 0 22px;
+  background: var(--kr-surface-card);
+  color: var(--kr-ink);
+  box-shadow: var(--kr-shadow-1);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateX(100%); }
+
+.kr-share-tab.is-visible {
+  opacity: 1;
+  transform: none; }
+
+.kr-share-tab:hover,
+.kr-share-tab.is-copied {
+  color: var(--kr-action); }
+
+.kr-share-tab .kr-share-tab__mark,
+.kr-share-tab svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  fill: currentColor; }
+
+@media (min-width: 768px) {
+  .kr-share-tab {
+    bottom: 100px; } }
+
+@media (min-width: 992px) {
+  .kr-share-tab {
+    display: none; } }
+
+/* Hidden, not just transparent, so it leaves the Tab order too. */
+body.kr-share-modal-open .kr-share-tab,
+body.kr-invite-open .kr-share-tab,
+body.kr-cite-docked .kr-share-tab {
+  opacity: 0;
+  visibility: hidden; }
+
+@media (max-width: 768px) {
+  body:has(.blog-post abbr:hover) .kr-share-tab {
+    opacity: 0;
+    visibility: hidden; } }
+
 /* --- The end band (renderPostEnd) ---------------------------------------
    <footer class="kr-post-end"> closes every post: the end mark, the
    sign-off, "Up next", related posts, comments. The slots share one
@@ -12616,6 +12678,7 @@ html.kr-theme-reveal::view-transition-new(root) {
   .kr-toc-mobile,
   .kr-share-rail,
   .kr-share-modal,
+  .kr-share-tab,
   .kr-sidenote,
   .cite-preview,
   .copy-hint,

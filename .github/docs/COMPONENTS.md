@@ -580,6 +580,7 @@ none of it should be: a hand-written copy would be a second one.
 | each `h2` | an anchor link (`a.kr-hlink`) | `renderHeadingAnchors` |
 | top of the window | the reading-progress bar, which reaches 100% when the end mark is in view | `renderReadingProgress` |
 | beside the post, 992 to 1359px | the share rail, in the document just before the end band so Tab reaches it; on a phone, a share sheet over the sign-off that goes down when Up next comes on screen, and stays down for the session once dismissed | `renderFloatingBlogShare` |
+| the right edge of the window, below 992px, on every page | the share tab: the device's share sheet (Web Share) with the page's title and canonical address, or Copy link where there is none; out at the top of a page and while the reader scrolls up, away while they scroll down (the back-to-top rule), and aside while a sheet holds the foot of the screen | `renderShareButton` |
 | the first paragraph | the drop cap (`p.drop-cap`, three lines or more) and a small-caps lead-in (`span.lead-in`) | `initDropCap` |
 | prose | `<abbr title>` on the first use of each glossary term per section, the post's own terms and the site-wide `GLOBAL_JARGON` | `applyJargonTooltips` |
 | the first glossary box | folded into a closed `<details>` | `autoCollapseTopJargonBox` |

@@ -377,7 +377,7 @@ var KR_SHARE_ICONS = {
 };
 
 /**
- * The page's share targets: { url, networks: [{id, label, href}] }, from
+ * The page's share targets: { url, title, networks: [{id, label, href}] }, from
  * the canonical link and og:title. The 'copy' entry has no href: its
  * button copies `url` instead of leaving the page.
  */
@@ -397,6 +397,7 @@ function krShareTargets() {
     var encTextUrl = encodeURIComponent(shareText + ' ' + pageUrl);
     return {
         url: pageUrl,
+        title: title,
         networks: [
             { id: 'bluesky', label: 'Share on Bluesky', href: 'https://bsky.app/intent/compose?text=' + encTextUrl },
             { id: 'facebook', label: 'Share on Facebook', href: 'https://www.facebook.com/sharer/sharer.php?u=' + encUrl },
@@ -597,6 +598,96 @@ function renderFloatingBlogShare() {
             }
             rail.style.left = left + 'px';
             rail.classList.toggle('is-visible', keyboardInText || (rect.top < viewportHeight * 0.7 && !passed));
+        };
+    });
+}
+
+/* The share button's mark: three linked nodes, drawn in currentColor. */
+var KR_SHARE_GLYPH = '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false">' +
+    '<circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/>' +
+    '<path d="M8.3 10.8l7.4-4.3M8.3 13.2l7.4 4.3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
+
+/**
+ * The share button on a phone or tablet (below 992px, where no share rail
+ * floats beside the text): a small tab on the right edge of the window,
+ * on every page. A tap opens the device's own share sheet (the Web Share
+ * API) with the page's title and canonical address (krShareTargets); a
+ * browser without one copies the link instead, shows a tick, and says
+ * "Link copied" through a polite status inside the button.
+ *
+ * It follows the back-to-top button's rule (site.js, initScrollUp): out
+ * at the top of a page and whenever the reader scrolls back up, away
+ * while they scroll on down, so it never sits over the ends of lines
+ * mid-read. A direction counts after KR_SHARE_TAB_INTENT pixels of
+ * travel, and keyboard focus on it holds it out. The stylesheet hides it
+ * while a sheet holds the foot of the screen (the end-of-post share
+ * sheet, the newsletter pop-up, a docked jargon card), and from 992px.
+ * .kr-offstage, so while it is away it is out of the Tab order.
+ */
+var KR_SHARE_TAB_INTENT = 24;
+var KR_SHARE_TAB_TOP = 120;
+
+function renderShareButton() {
+    // Every page that loads this file has the footer's slot; a page
+    // without one is not a site page (or is a test's stand-in document).
+    if (document.querySelector('.kr-share-tab') || !document.getElementById('footer-section')) return;
+    var post = !!document.querySelector('.blog-post, .story-post');
+    var label = post ? 'Share this post' : 'Share this page';
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'kr-share-tab kr-offstage';
+    btn.setAttribute('aria-label', label);
+    btn.innerHTML = '<span class="kr-share-tab__mark">' + KR_SHARE_GLYPH + '</span>' +
+        '<span class="kr-sr-only" role="status"></span>';
+    document.body.appendChild(btn);
+    var mark = btn.querySelector('.kr-share-tab__mark');
+    var status = btn.querySelector('[role="status"]');
+
+    btn.addEventListener('click', function() {
+        var targets = krShareTargets();
+        if (navigator.share) {
+            // A cancelled sheet rejects with AbortError; nothing to do.
+            navigator.share({ title: targets.title, url: targets.url }).catch(function() {});
+            return;
+        }
+        krCopyText(targets.url, function(ok) {
+            if (!ok) return;
+            mark.innerHTML = KR_SHARE_ICONS.copyDone;
+            btn.classList.add('is-copied');
+            status.textContent = 'Link copied';
+            setTimeout(function() {
+                mark.innerHTML = KR_SHARE_GLYPH;
+                btn.classList.remove('is-copied');
+                status.textContent = '';
+            }, 1800);
+        });
+    });
+
+    function held() {
+        if (document.activeElement !== btn) return false;
+        try { return btn.matches(':focus-visible'); } catch (e) { return true; }
+    }
+
+    var lastY = window.pageYOffset || 0;
+    var travel = 0;
+    var out = true;
+    krOnScroll(function() {
+        var y = window.pageYOffset || 0;
+        var dy = y - lastY;
+        lastY = y;
+        if (y <= KR_SHARE_TAB_TOP) {
+            travel = 0;
+            out = true;
+        } else if (dy) {
+            // Pixels moved in the current direction: negative is up.
+            travel = (dy < 0) === (travel < 0) ? travel + dy : dy;
+            if (travel <= -KR_SHARE_TAB_INTENT) out = true;
+            else if (travel >= KR_SHARE_TAB_INTENT && !held()) out = false;
+        }
+        var want = out;
+        return function() {
+            btn.classList.toggle('is-visible', want);
         };
     });
 }
@@ -5359,6 +5450,7 @@ document.addEventListener('DOMContentLoaded', function() {
 renderBlogPostEssentials();
 renderStoryPostEssentials();
 renderFloatingBlogShare();
+renderShareButton();
 // The lead-in reads the opening paragraph's first run of text, so it goes
 // before the jargon tooltips split that text around an <abbr>.
 initDropCap();
