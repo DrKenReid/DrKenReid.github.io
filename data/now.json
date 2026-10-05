@@ -1,22 +1,22 @@
 {
   "track": {
-    "name": "A Boy And His Dog Audiobook Read by Harlan Ellison",
-    "artist": "BakeliteLife",
-    "url": "https://www.last.fm/music/BakeliteLife/_/A+Boy+And+His+Dog+Audiobook+Read+by+Harlan+Ellison",
+    "name": "Over the Hills and Far Away (Hurdy Gurdy Version)",
+    "artist": "Patty Gurdy",
+    "url": "https://www.last.fm/music/Patty+Gurdy/_/Over+the+Hills+and+Far+Away+(Hurdy+Gurdy+Version)",
     "nowPlaying": false
   },
   "reading": [
+    {
+      "title": "Return of the Runebound Professor (The Return of the Runebound Professor #1)",
+      "author": "Actus",
+      "link": "https://www.goodreads.com/review/show/8971566499?utm_medium=api&utm_source=rss",
+      "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1710951089l/210201005._SY75_.jpg"
+    },
     {
       "title": "A Boy and His Dog",
       "author": "Harlan Ellison",
       "link": "https://www.goodreads.com/review/show/6228436685?utm_medium=api&utm_source=rss",
       "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464225429l/30286680._SY75_.jpg"
-    },
-    {
-      "title": "Vicious (Villains, #1)",
-      "author": "V.E. Schwab",
-      "link": "https://www.goodreads.com/review/show/6846576427?utm_medium=api&utm_source=rss",
-      "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1670752670l/40874032._SY75_.jpg"
     },
     {
       "title": "Dungeon Crawler Carl (Dungeon Crawler Carl, #1)",
@@ -25,5 +25,5 @@
       "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1715780755l/211721806._SY75_.jpg"
     }
   ],
-  "updated": "2026-09-28"
+  "updated": "2026-10-05"
 }
