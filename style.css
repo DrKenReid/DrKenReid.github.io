@@ -8079,19 +8079,176 @@ blockquote:hover .copy-hint {
 .kr-rating__crowd .kr-rating__stars::after {
   color: var(--kr-eyebrow); }
 
+/* On a phone the column becomes a card: every cover at one height (a
+   wide audiobook cover and a narrow paperback line up), the ratings
+   centred beside it. The cover may sit in the lightbox's link
+   (initLightboxFix wraps it at run time), so the flex item is whichever
+   is the direct child. */
 @media only screen and (max-width: 767px) {
   .kr-book-side,
   .kr-book-side--right {
     float: none;
     display: flex;
-    align-items: flex-end;
-    gap: 18px;
+    align-items: center;
+    gap: 20px;
     width: auto;
-    margin: 0 0 18px; }
+    margin: 4px 0 20px;
+    padding: 14px;
+    border: 1px solid var(--kr-hairline);
+    border-radius: var(--kr-radius-md);
+    background: var(--kr-surface-card); }
+  .kr-book-side > * {
+    flex: 0 0 auto; }
+  .kr-book-side > .kr-rating {
+    flex: 1 1 auto;
+    min-width: 0; }
+  .blog-post .kr-book-side .kr-rating dd {
+    flex-wrap: wrap; }
   .blog-post .kr-book-side .book-cover {
-    flex: 0 0 110px;
-    width: 110px;
+    width: auto;
+    height: 150px;
+    max-width: 130px;
+    object-fit: cover;
     margin: 0; } }
+
+/* --- Ratings dot plot (.kr-dotplot) -------------------------------------
+   A chart written in the post: one row per book, my rating and the
+   Goodreads average as two dots on a 1 to 5 track with a line between
+   them. Each row's style sets --kr-dot-me and --kr-dot-crowd (1 to 5);
+   the row's text, with a .sr-only sentence of both values, is what a
+   screen reader hears, and the track is aria-hidden. Colours match the
+   cover-with-ratings block: mine amber, the crowd's stone. Real text, so
+   it reads at a phone's width where a picture of a chart would not.
+     <figure class="kr-figure--solo kr-dotplot">
+       <p class="kr-dotplot__legend" aria-hidden="true">
+         <span class="kr-dotplot__key">My rating</span>
+         <span class="kr-dotplot__key kr-dotplot__key--crowd">Goodreads average</span></p>
+       <ol class="kr-dotplot__rows">
+         <li style="--kr-dot-me: 5; --kr-dot-crowd: 4.28">
+           <span class="kr-dotplot__label"><em>The Shining</em><span class="sr-only">: me 5, Goodreads 4.28</span></span>
+           <span class="kr-dotplot__track" aria-hidden="true"><span class="kr-dotplot__gap"></span>
+             <span class="kr-dotplot__dot kr-dotplot__dot--crowd"></span><span class="kr-dotplot__dot"></span></span></li>
+       </ol>
+       <p class="kr-dotplot__axis" aria-hidden="true"><span class="kr-dotplot__ticks"><span>1</span>...<span>5</span></span></p>
+       <figcaption class="figure-note">...</figcaption>
+     </figure> */
+.kr-dotplot {
+  --kr-dotplot-label: minmax(7.5em, 32%);
+  margin: 28px 0 32px; }
+
+.blog-post .kr-dotplot__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: var(--kr-muted); }
+
+.kr-dotplot__key::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 7px;
+  border-radius: 50%;
+  vertical-align: -1px;
+  background: var(--kr-brand-to); }
+
+.kr-dotplot__key--crowd::before {
+  background: var(--kr-eyebrow); }
+
+.blog-post .kr-dotplot__rows {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+
+.blog-post .kr-dotplot__rows li {
+  --kr-dot-me: 1;
+  --kr-dot-crowd: 1;
+  display: grid;
+  grid-template-columns: var(--kr-dotplot-label) 1fr;
+  align-items: center;
+  gap: 14px;
+  min-height: 30px;
+  margin: 0;
+  padding: 0; }
+
+.blog-post .kr-dotplot__label {
+  font-size: 14px;
+  line-height: 1.25;
+  text-align: right;
+  color: var(--kr-ink); }
+
+/* The track runs 1 to 5 stars; dots and the gap are placed as a share of
+   it. The inline margin keeps a dot at 1 or 5 inside the column. */
+.kr-dotplot__track {
+  position: relative;
+  height: 30px;
+  margin: 0 7px; }
+
+.kr-dotplot__track::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--kr-hairline); }
+
+.kr-dotplot__gap {
+  position: absolute;
+  top: calc(50% - 1px);
+  left: calc((min(var(--kr-dot-me), var(--kr-dot-crowd)) - 1) / 4 * 100%);
+  width: calc((max(var(--kr-dot-me), var(--kr-dot-crowd)) - min(var(--kr-dot-me), var(--kr-dot-crowd))) / 4 * 100%);
+  border-top: 2px solid var(--kr-rule-strong); }
+
+.kr-dotplot__dot {
+  position: absolute;
+  top: 50%;
+  left: calc((var(--kr-dot-me) - 1) / 4 * 100%);
+  width: 13px;
+  height: 13px;
+  margin: -6.5px 0 0 -6.5px;
+  border-radius: 50%;
+  background: var(--kr-brand-to); }
+
+.kr-dotplot__dot--crowd {
+  left: calc((var(--kr-dot-crowd) - 1) / 4 * 100%);
+  background: var(--kr-eyebrow); }
+
+.blog-post .kr-dotplot__axis {
+  display: grid;
+  grid-template-columns: var(--kr-dotplot-label) 1fr;
+  gap: 14px;
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--kr-muted); }
+
+/* The five star labels sit under the track's column, a quarter apart,
+   with the track's inline margin so 1 and 5 line up with the dots. */
+.kr-dotplot__ticks {
+  grid-column: 2;
+  position: relative;
+  height: 1.4em;
+  margin: 0 7px; }
+
+.kr-dotplot__ticks span {
+  position: absolute;
+  left: 0;
+  transform: translateX(-50%); }
+
+.kr-dotplot__ticks span:nth-child(2) { left: 25%; }
+.kr-dotplot__ticks span:nth-child(3) { left: 50%; }
+.kr-dotplot__ticks span:nth-child(4) { left: 75%; }
+.kr-dotplot__ticks span:nth-child(5) { left: 100%; }
+
+@media only screen and (max-width: 575.98px) {
+  .kr-dotplot {
+    --kr-dotplot-label: minmax(6.5em, 36%); }
+  .blog-post .kr-dotplot__label {
+    font-size: 13px; }
+  .blog-post .kr-dotplot__rows li,
+  .blog-post .kr-dotplot__axis {
+    gap: 10px; } }
 
 /* Book cover grid: two columns of cover cards at every width */
 .book-cover-grid {
