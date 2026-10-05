@@ -38,6 +38,7 @@ builds on it, which is why a hand edit there is dangerous.
 | `quotes.json` | `[{quote, author, book, popularity}]` | as above | `js/literature.js` (the rotating quotation) | rarely | none | yes |
 | `quotes-home.json` | `[{quote, author, book}]` | you | `index.html` (the homepage quotation) | rarely | none | yes |
 | `reviews.json` | `[{title, author, rating, review, isbn, isbn13}]`: the selected reviews | an export tool kept outside the repository | `js/literature.js` | rarely | none | yes |
+| `invites.json` | `{_help, invites: {"<slug>": {title, line}}}` | you, one entry per post when it is published | `renderNewsletterPopup` (the newsletter pop-up at the end of a post; a post without one gets its category's words) | with every new post | `unit-tests` (`tests/test_invites.py`: every post has one, house style) | yes |
 | `popular.json` | `[{url, views}]` | a tool kept outside the repository, from an analytics export | `js/blog.js` (the Popularity sort) | occasionally | none | yes |
 | `stories.json` | `[]` | reserved for the short-story section | `renderMoreStories` | not yet | none | |
 

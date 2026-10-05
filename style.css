@@ -757,6 +757,7 @@ button:focus:not(:focus-visible) {
 .kr-colo-subh,
 .kr-reading__h,
 .kr-figure dt,
+.kr-rating dt,
 .ds-panel__title,
 .ds-group-title,
 .kr-post-end .kr-post-end__slot h2,
@@ -5984,6 +5985,112 @@ body.kr-cite-docked .kr-share-tab {
     opacity: 0;
     visibility: hidden; } }
 
+/* --- Newsletter pop-up (renderNewsletterPopup) --------------------------
+   A card that rises when the reader reaches the end of a post: centred
+   at the foot of the window from 768px, over the reading column, and a
+   sheet along the foot of a phone. .kr-offstage, like the share sheet,
+   so while it is down its links leave the Tab order. Script applies
+   .is-visible and body.kr-invite-open. The brand gradient runs along its
+   top edge. */
+.kr-invite {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 955;
+  width: min(460px, calc(100vw - 48px));
+  padding: 26px 24px 20px;
+  border: 1px solid var(--kr-hairline);
+  border-radius: var(--kr-radius-lg);
+  background: var(--kr-surface-card);
+  color: var(--kr-ink);
+  box-shadow: var(--kr-shadow-2), var(--kr-shadow-1);
+  overflow: clip;
+  opacity: 0;
+  transform: translate(-50%, 24px); }
+
+.kr-invite.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0); }
+
+.kr-invite::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--kr-brand-gradient); }
+
+.kr-invite .kr-invite__title {
+  margin: 0 40px 8px 0;
+  font-family: 'Lora', 'Lora Fallback', Georgia, serif;
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--kr-ink); }
+
+.kr-invite .kr-invite__line {
+  font-family: 'Poppins', 'Poppins Fallback', sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--kr-ink); }
+
+.kr-invite .kr-invite__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px; }
+
+.kr-invite .kr-invite__actions .kr-btn {
+  flex: 1 1 auto; }
+
+.kr-invite .kr-invite__note {
+  margin-top: 12px;
+  font-family: 'Poppins', 'Poppins Fallback', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--kr-muted); }
+
+.kr-invite .kr-invite__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--kr-muted);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 180ms ease, background-color 180ms ease; }
+
+.kr-invite .kr-invite__close:hover {
+  color: var(--kr-ink);
+  background: var(--kr-surface-1); }
+
+@media (max-width: 767.98px) {
+  .kr-invite {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    padding: 22px 16px calc(18px + env(safe-area-inset-bottom, 0px));
+    border-width: 1px 0 0;
+    border-radius: var(--kr-radius-lg) var(--kr-radius-lg) 0 0;
+    transform: translateY(110%); }
+
+  .kr-invite.is-visible {
+    transform: none; }
+
+  /* Hidden, not just transparent, so it leaves the Tab order too. */
+  body.kr-invite-open #scrollUp {
+    opacity: 0;
+    visibility: hidden; } }
+
 /* --- The end band (renderPostEnd) ---------------------------------------
    <footer class="kr-post-end"> closes every post: the end mark, the
    sign-off, "Up next", related posts, comments. The slots share one
@@ -7890,7 +7997,10 @@ blockquote:hover .copy-hint {
   float: right;
   margin: 8px 0 15px 24px; }
 
+/* The post selector matches the --left / --right rules above, so on a phone
+   the margin centres a cover instead of keeping the side margin. */
 @media only screen and (max-width: 767px) {
+  .blog-post img.book-cover,
   .book-cover {
     float: none !important;
     display: block;
@@ -7903,6 +8013,85 @@ blockquote:hover .copy-hint {
 .blog-post .bsec blockquote {
   clear: both;
 }
+
+/* --- Cover with ratings (.kr-book-side) ---------------------------------
+   A review's floated column: the cover, then my rating against the
+   Goodreads average as two rows of stars. Written in the post:
+     <div class="kr-book-side kr-book-side--right">
+       <img class="book-cover" src="..." alt="..." width="294" height="500">
+       <dl class="kr-rating">
+         <div><dt>Me</dt><dd><span class="kr-rating__stars" style="--kr-stars: 5" aria-hidden="true"></span>5<span class="sr-only"> out of 5</span></dd></div>
+         <div class="kr-rating__crowd"><dt>Goodreads</dt><dd>...4.28...</dd></div>
+       </dl>
+     </div>
+   --kr-stars (0 to 5) fills that share of five stars, so 3.94 reads as
+   nearly four; the number beside it carries the value, the stars are
+   decoration. Mine are amber, the crowd's stone. On a phone the column
+   becomes a row: a smaller cover with the ratings beside it. */
+.kr-book-side {
+  float: left;
+  width: 140px;
+  margin: 8px 24px 15px 0; }
+.kr-book-side--right {
+  float: right;
+  margin: 8px 0 15px 24px; }
+.blog-post .kr-book-side .book-cover {
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 0 0 12px; }
+
+.kr-rating {
+  margin: 0; }
+.kr-rating > div + div {
+  margin-top: 8px; }
+.kr-rating dt {
+  margin: 0 0 2px; }
+.blog-post .kr-rating dd {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--kr-ink);
+  font-variant-numeric: tabular-nums; }
+
+.kr-rating__stars {
+  --kr-stars: 0;
+  position: relative;
+  display: inline-block;
+  font-size: 19px;
+  line-height: 1;
+  letter-spacing: 1px;
+  color: var(--kr-hairline); }
+.kr-rating__stars::before,
+.kr-rating__stars::after {
+  content: "\2605\2605\2605\2605\2605"; }
+.kr-rating__stars::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--kr-stars) / 5 * 100%);
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--kr-brand-to); }
+.kr-rating__crowd .kr-rating__stars::after {
+  color: var(--kr-eyebrow); }
+
+@media only screen and (max-width: 767px) {
+  .kr-book-side,
+  .kr-book-side--right {
+    float: none;
+    display: flex;
+    align-items: flex-end;
+    gap: 18px;
+    width: auto;
+    margin: 0 0 18px; }
+  .blog-post .kr-book-side .book-cover {
+    flex: 0 0 110px;
+    width: 110px;
+    margin: 0; } }
 
 /* Book cover grid: two columns of cover cards at every width */
 .book-cover-grid {
@@ -11209,16 +11398,13 @@ a.ds-text-link:focus-visible {
     transform: translateY(-4px);
     box-shadow: 0 8px 35px rgba(0,0,0,0.16); }
 
-/* The intro portrait is a full-length frame beside a few lines of text;
-   uncropped it stood 1,300px tall and pushed the heading beside it below
-   the fold. Cropped to 4:5 from near the top, it keeps the face and
-   stops about the waist. */
+/* The intro portrait beside a few lines of text: a near-square frame,
+   shown whole at the column's width with the house corners. */
 .about-portrait {
+  display: block;
   width: 100%;
-  aspect-ratio: 4 / 5;
-  max-height: 620px;
-  object-fit: cover;
-  object-position: 50% 12%; }
+  height: auto;
+  border-radius: var(--kr-radius-md); }
 
 /* Hobby cards: as many 240px-or-wider columns as fit, so two beside
    the photograph on a desktop and one on a phone, without Bootstrap
@@ -11401,6 +11587,440 @@ a.ds-text-link:focus-visible {
 
 [data-theme="dark"] .kr-caption {
   color: #ddd; }
+
+/* --- About page (about.html, js/about.js) ----------------------------------
+   Nine sections, each a component used once:
+     .kr-about-hello      portrait, "I'm Ken", the lede and the numbers
+                          (.kr-about-stats, the homepage stat tiles laid
+                          out as a grid; about.js fills today's figures)
+     .kr-about-home       the household (.kr-about-pets)
+     .kr-journey          the road so far: the stops, an ordered list, and
+                          a map beside them (about.js; .kr-journey--map
+                          once drawn, .is-active on the stop it shows)
+     .kr-now              this week, a definition list of four
+     .kr-about-quote      Epictetus over a photograph (.kr-photo-band)
+     .kr-creed            three numbered principles
+     .kr-made             the work elsewhere on the site, About cards with
+                          a hover sketch, the whole card one link
+     .kr-hobby-grid--wide the hobby cards, three to a row from 992px
+     .kr-ask              topics as pills, each to a post
+   Colours are tokens throughout, so both themes come from §01. */
+
+/* Hello: the portrait beside the words from 992px; words first on a
+   phone, so the introduction is read before the photograph is scrolled
+   past. */
+.kr-about-hello__grid {
+  display: grid;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center; }
+
+@media (min-width: 992px) {
+  .kr-about-hello__grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); } }
+
+.kr-about-hello__portrait {
+  margin: 0; }
+
+@media (max-width: 991.98px) {
+  .kr-about-hello__portrait {
+    order: 2;
+    max-width: 420px;
+    margin: 0 auto; } }
+
+/* (0,2,0), past `.section-eyebrow + h2` (0,1,1), which would set the
+   section-heading size and drop the margin. */
+.kr-about-hello .kr-about-hello__title {
+  font-size: clamp(40px, 6vw, 72px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin: 6px 0 20px; }
+
+.kr-about-lede {
+  font-size: clamp(18px, 1.5vw, 21px);
+  line-height: 1.7;
+  color: var(--kr-ink);
+  margin-bottom: 12px; }
+
+.kr-about-sub {
+  color: var(--kr-muted);
+  margin-bottom: 28px; }
+
+/* Six figures: two rows of three, or three rows of two on a phone,
+   never a row of four over a row of two. */
+.kr-about-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0; }
+
+@media (min-width: 576px) {
+  .kr-about-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.kr-about-stats .home-stat {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  padding: 16px 18px;
+  border: 1px solid var(--kr-hairline);
+  border-radius: var(--kr-radius-md);
+  background: var(--kr-surface-card);
+  transition: border-color 0.2s ease, transform 0.2s ease; }
+
+.kr-about-stats .home-stat:hover {
+  border-color: var(--kr-action);
+  transform: translateY(-2px); }
+
+.kr-about-stats dd {
+  margin: 0 0 4px; }
+
+.kr-about-household {
+  text-align: center; }
+
+.kr-about-pets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+
+.kr-about-pets li {
+  margin: 0; }
+
+.kr-about-pets img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--kr-radius-md); }
+
+.kr-about-pets span {
+  display: block;
+  margin-top: 8px;
+  font-weight: 600;
+  color: var(--kr-ink); }
+
+/* The road so far. The stops alone on a phone, the map above them once
+   drawn; from 992px two columns, the map in the right one held in view
+   (sticky) while the stops scroll past it. */
+.kr-journey {
+  display: grid;
+  gap: 32px; }
+
+@media (min-width: 992px) {
+  .kr-journey {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    align-items: start; } }
+
+.kr-journey__stops {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+
+.kr-journey__stop {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  margin: 0 0 16px;
+  padding: 16px;
+  border: 1px solid var(--kr-hairline);
+  border-left: 3px solid var(--kr-hairline);
+  border-radius: var(--kr-radius-md);
+  background: var(--kr-surface-card);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+
+.kr-journey__stop.is-active {
+  border-left-color: var(--kr-action);
+  box-shadow: var(--kr-shadow-1); }
+
+.kr-journey__stop img,
+.kr-journey__mark {
+  width: 120px;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--kr-radius-sm);
+  object-fit: cover; }
+
+.kr-journey__mark {
+  display: grid;
+  place-items: center;
+  background: var(--kr-brand-gradient);
+  color: var(--kr-surface-3);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase; }
+
+.kr-journey__stop h3 {
+  margin: 0 0 2px;
+  font-size: 19px; }
+
+/* The stop's title is the button that moves the map: it reads as the
+   title, and turns the action red on hover and focus, the cue that it
+   does something. At least 24px tall (WCAG 2.5.8). */
+.kr-journey__go {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  min-height: 24px;
+  cursor: pointer; }
+
+.kr-journey__go:hover,
+.kr-journey__go:focus-visible {
+  color: var(--kr-action);
+  text-decoration: underline;
+  text-underline-offset: 3px; }
+
+.kr-journey__when {
+  margin: 0 0 6px;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--kr-eyebrow); }
+
+.kr-journey__stop p:last-child {
+  margin: 0;
+  line-height: 1.7; }
+
+@media (max-width: 575.98px) {
+  .kr-journey__stop {
+    grid-template-columns: 84px minmax(0, 1fr);
+    gap: 14px;
+    padding: 14px; }
+  .kr-journey__stop img,
+  .kr-journey__mark {
+    width: 84px; } }
+
+/* The map column stays hidden until the map is drawn: a box held open
+   for a script that may not run would be an empty frame. */
+.kr-journey__map-col {
+  display: none; }
+
+.kr-journey--map .kr-journey__map-col {
+  display: block; }
+
+@media (max-width: 991.98px) {
+  .kr-journey__map-col {
+    order: -1; } }
+
+@media (min-width: 992px) {
+  .kr-journey__map-col {
+    position: sticky;
+    top: 96px; } }
+
+/* .leaflet-container paints its own light grey until the tiles arrive;
+   the doubled class outranks it, so a dark page shows a dark box. */
+.kr-journey__map,
+.kr-journey__map.leaflet-container {
+  height: clamp(260px, 60vh, 560px);
+  border-radius: var(--kr-radius-lg);
+  border: 1px solid var(--kr-hairline);
+  overflow: hidden;
+  background: var(--kr-surface-1); }
+
+@media (max-width: 991.98px) {
+  .kr-journey__map {
+    height: 280px; } }
+
+.kr-journey__credit {
+  margin: 8px 0 0;
+  font-size: 11px;
+  color: var(--kr-muted); }
+
+/* Now: four tiles, two to a row on a tablet, one on a phone. */
+.kr-about-now__updated {
+  font-size: 14px; }
+
+.kr-now {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 0; }
+
+.kr-now__item {
+  padding: 20px 22px;
+  border: 1px solid var(--kr-hairline);
+  border-radius: var(--kr-radius-md);
+  background: var(--kr-surface-card); }
+
+.kr-now dt {
+  margin-bottom: 10px;
+  font-size: var(--kr-label-size, 11px);
+  letter-spacing: var(--kr-label-tracking, 0.14em);
+  text-transform: uppercase;
+  color: var(--kr-eyebrow); }
+
+.kr-now dt i {
+  margin-right: 6px;
+  color: var(--kr-action); }
+
+.kr-now dd {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--kr-ink); }
+
+/* Epictetus over a photograph. The band's white (.kr-photo-band) carries
+   the type; the quotation is set large, in Lora, like a pull quote. */
+.kr-about-quote__figure {
+  max-width: 820px;
+  margin: 0 auto;
+  text-align: center; }
+
+.kr-about-quote blockquote {
+  margin: 0;
+  padding: 0;
+  border: 0; }
+
+.kr-about-quote blockquote p {
+  font-family: 'Lora', 'Lora Fallback', Georgia, 'Times New Roman', serif;
+  font-size: clamp(26px, 3.6vw, 44px);
+  line-height: 1.25;
+  font-style: italic;
+  color: currentColor; }
+
+.kr-about-quote figcaption {
+  margin-top: 18px;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  color: currentColor;
+  opacity: 0.85; }
+
+/* What I try to live by: three numbered principles. */
+.kr-creed {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+
+.kr-creed__item {
+  position: relative;
+  margin: 0;
+  padding: 28px 26px 26px;
+  border-top: 3px solid var(--kr-action);
+  border-radius: var(--kr-radius-md);
+  background: var(--kr-surface-card);
+  box-shadow: var(--kr-shadow-1); }
+
+.kr-creed__num {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--kr-eyebrow); }
+
+.kr-creed__item h3 {
+  font-size: 20px;
+  margin-bottom: 10px; }
+
+.kr-creed__item p {
+  margin: 0;
+  line-height: 1.75; }
+
+/* Things I've made: About cards in a grid, each card one link (the
+   title's, stretched over the card) with the card's own inline links
+   lifted above it. */
+.kr-made {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+
+/* Six cards: three to a row from 992px, so two full rows. */
+@media (min-width: 992px) {
+  .kr-made {
+    grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.kr-made__card {
+  margin: 0; }
+
+.kr-made__card h3 {
+  padding-right: 92px; }
+
+a.kr-made__link {
+  color: inherit;
+  text-decoration: none; }
+
+a.kr-made__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit; }
+
+.kr-made__card p a {
+  position: relative;
+  z-index: 2; }
+
+.kr-made__card:hover a.kr-made__link,
+a.kr-made__link:focus-visible {
+  color: var(--kr-action); }
+
+a.kr-made__link:focus-visible {
+  outline: none; }
+
+a.kr-made__link:focus-visible::after {
+  outline: 3px solid var(--kr-focus);
+  outline-offset: -3px; }
+
+/* Off the clock: three to a row from 992px, where the grid has the
+   page's width rather than a column beside a photograph. */
+@media (min-width: 992px) {
+  .kr-hobby-grid--wide {
+    grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .kr-hobby-grid--wide > .about-card:last-child:nth-child(odd) {
+    grid-column: auto; }
+  /* A card alone on the last row of three takes the row. */
+  .kr-hobby-grid--wide > .about-card:last-child:nth-child(3n+1) {
+    grid-column: 1 / -1; } }
+
+/* Ask me about: pills that wrap and centre, each a link. */
+.kr-ask {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none; }
+
+.kr-ask li {
+  margin: 0; }
+
+.kr-ask a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 20px;
+  border: 1px solid var(--kr-hairline);
+  border-radius: 999px;
+  background: var(--kr-surface-card);
+  color: var(--kr-ink);
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease; }
+
+.kr-ask a:hover,
+.kr-ask a:focus-visible {
+  border-color: var(--kr-action);
+  color: var(--kr-action);
+  transform: translateY(-2px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-about-stats .home-stat,
+  .kr-ask a {
+    transition: none; }
+  .kr-about-stats .home-stat:hover,
+  .kr-ask a:hover,
+  .kr-ask a:focus-visible {
+    transform: none; } }
 
 /* --- Contact ------------------------------------------------------------
    The address and its Copy address button (contact.html's script unhides
@@ -12672,6 +13292,7 @@ html.kr-theme-reveal::view-transition-new(root) {
   .kr-share-rail,
   .kr-share-modal,
   .kr-share-tab,
+  .kr-invite,
   .kr-sidenote,
   .cite-preview,
   .copy-hint,

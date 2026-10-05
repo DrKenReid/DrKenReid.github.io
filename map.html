@@ -244,23 +244,12 @@
   <script src="/js/default-assets/active.js?v=20260923a"></script>
   <script src="/js/shared-components.js?v=20260923a"></script>
   <script src="/js/vendor/leaflet/leaflet.js"></script>
+  <script src="/js/kr-map.js?v=20260923a"></script>
   <script>
     renderHeader('header-section', { basePath: '/', active: 'hobbies', hobbiesChild: 'map' });
     renderFooter('footer-section');
 
     (function () {
-      // Esri's grey canvases: a quiet base in both themes, and no API key
-      // (CARTO's basemaps started watermarking keyless tiles in 2026).
-      var TILES = {
-        light: {
-          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-          attribution: 'Tiles &copy; <a href="https://www.esri.com/">Esri</a> &mdash; Esri, HERE, Garmin, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        },
-        dark: {
-          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-          attribution: 'Tiles &copy; <a href="https://www.esri.com/">Esri</a> &mdash; Esri, HERE, Garmin, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }
-      };
       var RELEASE = typeof KR_RELEASE !== 'undefined' ? KR_RELEASE : 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/';
 
       // The world is 256px tall at zoom 0 and doubles with each level, so
@@ -285,22 +274,8 @@
       // is not hijacked on the way down (review 6c).
       map.on('click focus', function () { map.scrollWheelZoom.enable(); });
       map.on('mouseout', function () { map.scrollWheelZoom.disable(); });
-      var currentTiles = null;
-
-      function applyTiles() {
-        var theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-        if (currentTiles) map.removeLayer(currentTiles);
-        currentTiles = L.tileLayer(TILES[theme].url, {
-          attribution: TILES[theme].attribution,
-          maxZoom: 16
-        }).addTo(map);
-      }
-      applyTiles();
-      document.addEventListener('click', function (e) {
-        if (e.target.closest && e.target.closest('#theme-toggle')) {
-          setTimeout(applyTiles, 60);
-        }
-      });
+      // The base layer, in step with the theme (js/kr-map.js).
+      krMapTiles(map);
 
       var regionsByName = {};
 

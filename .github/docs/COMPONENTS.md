@@ -163,7 +163,7 @@ defines it (`additionalProperties: false`, so a misspelt key fails the
 | `date` | you | publication date, YYYY-MM-DD |
 | `updated` | you, optional | the last change in substance, YYYY-MM-DD; never taken from git |
 | `tags` | you | lower-case topics, one to three (most posts need one); each must be in `ALLOWED_TAGS` in `audit_site.py` (a new tag would become a new filter button) |
-| `category` | you | the opener's kicker and the JSON-LD `articleSection`: one of the schema's enum; each has sign-off routes in `KR_ROUTES` in `js/shared-components.js` |
+| `category` | you | the opener's kicker and the JSON-LD `articleSection`: one of the schema's enum; each has sign-off routes in `KR_ROUTES` and newsletter words in `KR_INVITES` in `js/shared-components.js` |
 | `excerpt` | you | the standfirst under the opener, and the card excerpt |
 | `url` | you | `blog/<slug>.html` |
 | `image` | you | the card picture: a gallery thumbnail, a `blog/img/` file, or a full URL |
@@ -533,6 +533,15 @@ is not the real one yet (a fan's art for an unreleased book) adds
 `.book-cover--left` or `--right` inside a `.bsec` section, which contains
 the float.
 
+A review that rates the book puts the cover in `.kr-book-side` (add
+`--right` to float it right) with a `dl.kr-rating` under it: my rating,
+then the Goodreads average in a `div.kr-rating__crowd`. Each row's
+`.kr-rating__stars` span takes `style="--kr-stars: 4.21"` (0 to 5) and
+fills that share of five stars; the number beside it is the value, with
+`<span class="sr-only"> out of 5</span>` after it. On a phone the column
+becomes a row, the cover with the ratings beside it. The style.css
+banner "Cover with ratings" has the full markup.
+
 ### Cite this post
 
 A BibTeX box with a copy button, for posts likely to be referenced:
@@ -579,8 +588,9 @@ none of it should be: a hand-written copy would be a second one.
 | fixed left, from 1240px | the contents rail (`nav.kr-toc`) with a gradient marker on the section in view | `renderPostToc` |
 | each `h2` | an anchor link (`a.kr-hlink`) | `renderHeadingAnchors` |
 | top of the window | the reading-progress bar, which reaches 100% when the end mark is in view | `renderReadingProgress` |
-| beside the post, 992 to 1359px | the share rail, in the document just before the end band so Tab reaches it; on a phone, a share sheet over the sign-off that goes down when Up next comes on screen, and stays down for the session once dismissed | `renderFloatingBlogShare` |
+| beside the post, 992 to 1359px | the share rail, in the document just before the end band so Tab reaches it; on a phone, a share sheet over the sign-off that goes down when Up next comes on screen, and stays down for the session once dismissed; the sheet waits while the newsletter pop-up is up | `renderFloatingBlogShare` |
 | the right edge of the window, below 992px, on every page | the share tab: the device's share sheet (Web Share) with the page's title and canonical address, or Copy link where there is none; always there, and slim for it, except while a sheet holds the foot of the screen | `renderShareButton` |
+| over the page, from the end of the text | the newsletter pop-up: a card centred at the foot of the window from 768px, a sheet on a phone, rising when the end mark is wholly on screen (the progress bar at 100%) and going down when the footer arrives. Its words are the post's own, from `data/invites.json`, with its category's (`KR_INVITES`) as the fallback for a draft; a How This Site Is Built part offers RSS first, since that series is not emailed. A labelled region that never takes focus, in the document just before the end band. Closed (button or Escape), it rests 30 days; followed, it does not come back (`kr-invite-closed`, `kr-invite-followed` in localStorage). The Substack link carries `utm_` parameters naming the post; analytics gets `newsletter_invite_shown` and `newsletter_invite` | `renderNewsletterPopup` |
 | the first paragraph | the drop cap (`p.drop-cap`, three lines or more) and a small-caps lead-in (`span.lead-in`) | `initDropCap` |
 | prose | `<abbr title>` on the first use of each glossary term per section, the post's own terms and the site-wide `GLOBAL_JARGON` | `applyJargonTooltips` |
 | the first glossary box | folded into a closed `<details>` | `autoCollapseTopJargonBox` |

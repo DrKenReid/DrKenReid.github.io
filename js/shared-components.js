@@ -579,10 +579,11 @@ function renderFloatingBlogShare() {
         // footer is the last resort, so the sheet never covers its links.
         var after = document.querySelector('.kr-upnext, .kr-post-end__related, .more-stories, .giscus-comments, #footer-section');
         var afterOnScreen = !!after && after.getBoundingClientRect().top < viewportHeight;
+        var inviteUp = krInviteUp;
         return function() {
             if (phone.matches) {
                 rail.classList.remove('is-visible');
-                setModalVisible(!dismissed && passed && !afterOnScreen);
+                setModalVisible(!dismissed && !inviteUp && passed && !afterOnScreen);
                 return;
             }
             setModalVisible(false);
@@ -1707,7 +1708,7 @@ var KR_TAGLINE = 'Data scientist, photographer, guitarist, and avid reader. Scot
  * Every category in posts.json needs an entry; one that has none, and a
  * draft whose kicker names none, get KR_ROUTES_DEFAULT. hrefs are
  * site-relative and get siteRootPrefix() when drawn. A new category
- * means a new key here.
+ * means a new key here, and in KR_INVITES.
  *
  * @type {Object<string, Array<{label: string, href: string}>>}
  */
@@ -1855,6 +1856,234 @@ function thanksActionsHtml() {
         '</svg>' +
         '<span>Buy me a coffee</span></a>' +
         '</div>';
+}
+
+/**
+ * The newsletter pop-up (renderNewsletterPopup), worded for what the
+ * reader just finished. Most readers arrive on one post from a search or
+ * a share and never come back, and the end of that post is where they
+ * decide, so the ask names what else they would get rather than saying
+ * "Subscribe" the same way on every page.
+ *
+ * Every published post has its own words in data/invites.json, keyed by
+ * slug ({ title, line }; tests/test_invites.py holds every post to one).
+ * KR_INVITES, keyed by the posts.json `category` like KR_ROUTES, is the
+ * fallback: a draft, or a post whose entry has not loaded. A part of a
+ * KR_INVITE_RSS_SERIES series gets the RSS feed first and that series'
+ * small print, because the series is not sent out by email; its words
+ * there are the fallback for that series.
+ */
+var KR_INVITES = {
+    'Books & Media': {
+        title: 'More books, by email',
+        line: "I write about the books and shows I can't stop thinking about, from LitRPG to the Culture, alongside data science and photography."
+    },
+    'Data & AI': {
+        title: 'Get the next one by email',
+        line: 'I write about data science and AI from inside the job, with live demos you can break, alongside books and photography.'
+    },
+    'Technology': {
+        title: 'Get the next one by email',
+        line: 'I write about the tech I build and use, alongside books, data science and photography.'
+    },
+    'Ideas': {
+        title: 'Get the next one by email',
+        line: 'I write about ideas like this one, from everyday ethics to the Fermi paradox, alongside books and data science.'
+    },
+    'Personal': {
+        title: 'Get the next one by email',
+        line: 'I write about life as a Scot in Michigan, alongside books, data science and photography.'
+    },
+    'Photography': {
+        title: 'Get the next one by email',
+        line: 'I write about photography and the stories behind the pictures, alongside books and data science.'
+    },
+    'Money': {
+        title: 'Get the next one by email',
+        line: 'I write about money, time and everyday decisions, alongside books and data science.'
+    }
+};
+KR_INVITES['Data Science'] = KR_INVITES['Data & AI'];
+
+var KR_INVITE_DEFAULT = {
+    title: 'Get the next post by email',
+    line: "I write about data science, books, photography and whatever else I'm thinking through."
+};
+
+var KR_INVITE_RSS_SERIES = {
+    'How This Site Is Built': {
+        title: 'Follow the build',
+        line: "This series doesn't go out in the newsletter, so the RSS feed is the way to keep up with it.",
+        note: "This series isn't sent by email. The newsletter carries everything else, and the feed has every post."
+    }
+};
+
+var KR_INVITE_NOTE = 'New posts go out in full, free. Unsubscribe whenever you like.';
+
+/* localStorage keys, each holding a YYYY-MM-DD: the day the reader
+   followed the pop-up (it never comes back) and the day they closed it
+   (it rests for KR_INVITE_REST_DAYS, then asks again). */
+var KR_INVITE_FOLLOWED = 'kr-invite-followed';
+var KR_INVITE_CLOSED = 'kr-invite-closed';
+var KR_INVITE_REST_DAYS = 30;
+
+/* True while the pop-up is up or about to be, set in the measuring half
+   of its scroll job. The phone share sheet, which rises at the same
+   moment, reads it in its own measuring half and waits its turn; the
+   pop-up's job is registered first, so the flag is current by then. */
+var krInviteUp = false;
+
+/** True when the pop-up should not be offered on this visit. */
+function krInviteResting() {
+    try {
+        if (localStorage.getItem(KR_INVITE_FOLLOWED)) return true;
+        var closed = Date.parse(localStorage.getItem(KR_INVITE_CLOSED) || '');
+        return !isNaN(closed) && Date.now() - closed < KR_INVITE_REST_DAYS * 864e5;
+    } catch (e) {
+        return false;
+    }
+}
+
+function krInviteRemember(key) {
+    try { localStorage.setItem(key, new Date().toISOString().slice(0, 10)); } catch (e) {}
+}
+
+/**
+ * The newsletter pop-up: a card that slides up when the reader reaches
+ * the end of a post, the moment the end mark (the ⁂) is wholly on screen
+ * and the progress bar reads 100% (a jargon box or FAQ above it has been
+ * read too), centred at the foot of the window from 768px and as a
+ * sheet along the foot of a phone. It stays while the reader is in the
+ * end band and steps down when the footer comes on screen, so it never
+ * covers the footer's links, or when they scroll back up into the text.
+ *
+ * It is a labelled region, not a dialog, like the share sheet: it never
+ * takes focus or traps it, and the post can be read and scrolled around
+ * it. It sits in the document just before the end band, so Tab reaches
+ * it straight after the last link in the text, and it is .kr-offstage,
+ * so while it is down its buttons are out of the Tab order. The close
+ * button or Escape puts it away for KR_INVITE_REST_DAYS; following
+ * either link puts it away for good. If focus was inside it, focus moves
+ * on to the sign-off, where Tab would have gone next. The sign-off's own
+ * Subscribe button stays, so the newsletter is never reachable only
+ * through something that moves.
+ *
+ * Its words start from the opener's kicker's category and are settled
+ * once posts.json and data/invites.json answer (the post's own words).
+ * Only a post page fetches the invites file. Built from divs, not <p>s or a heading:
+ * inside .blog-post the prose rules would restyle them, and a heading
+ * would join the contents. The Substack link carries utm_ parameters
+ * naming the post, so the newsletter's subscriber sources show which
+ * posts bring readers in; analytics gets `newsletter_invite_shown` the
+ * first time it rises on a page and `newsletter_invite` on a follow.
+ */
+function renderNewsletterPopup() {
+    var blogPost = document.querySelector('.blog-post');
+    if (!blogPost || document.querySelector('.kr-invite') || krInviteResting()) return;
+    var root = siteRootPrefix();
+    var slug = resolveCurrentPostFileName().replace(/\.html$/, '');
+
+    var el = document.createElement('div');
+    el.className = 'kr-invite kr-offstage';
+    el.setAttribute('role', 'region');
+    el.setAttribute('aria-labelledby', 'kr-invite-title');
+    el.innerHTML = '<div class="kr-invite__body"></div>' +
+        '<button type="button" class="kr-invite__close" aria-label="Close the newsletter invitation">' +
+        '<span aria-hidden="true">&times;</span></button>';
+    var body = el.querySelector('.kr-invite__body');
+    var endBand = blogPost.querySelector(':scope > .kr-post-end');
+    blogPost.insertBefore(el, endBand || null);
+
+    function track(name, params) {
+        if (typeof window.gtag === 'function') window.gtag('event', name, params);
+    }
+
+    function draw(copy, rss) {
+        var email = '<a class="kr-btn' + (rss ? ' kr-btn--ghost' : '') + ' kr-invite__email" href="' +
+            'https://drkenreid.substack.com/subscribe?utm_source=kenreid.co.uk&amp;utm_medium=post-popup&amp;utm_campaign=' +
+            encodeURIComponent(slug) + '" target="_blank" rel="noopener noreferrer">' + SUBSTACK_SVG +
+            '<span>Subscribe by email</span></a>';
+        var feed = '<a class="kr-btn' + (rss ? '' : ' kr-btn--ghost') + ' kr-invite__rss" href="' + root + 'feed.xml">' +
+            '<i class="ti-rss" aria-hidden="true"></i><span>Follow by RSS</span></a>';
+        body.innerHTML =
+            '<div class="kr-invite__title" id="kr-invite-title">' + krEscapeHtml(copy.title) + '</div>' +
+            '<div class="kr-invite__line">' + krEscapeHtml(copy.line) + '</div>' +
+            '<div class="kr-invite__actions">' + (rss ? feed + email : email + feed) + '</div>' +
+            '<div class="kr-invite__note">' + krEscapeHtml(copy.note || KR_INVITE_NOTE) + '</div>';
+    }
+
+    function setPost(post, own) {
+        var rssSeries = postSeriesList(post).map(function(s) { return s.name; })
+            .filter(function(name) { return KR_INVITE_RSS_SERIES[name]; })[0];
+        var series = rssSeries ? KR_INVITE_RSS_SERIES[rssSeries] : null;
+        var copy = own || series || KR_INVITES[postCategory(post)] || KR_INVITE_DEFAULT;
+        draw({ title: copy.title, line: copy.line, note: series ? series.note : null }, !!series);
+    }
+    setPost(null, null);
+    var record = loadBlogPosts().then(function(posts) {
+        return postByFile(posts, resolveCurrentPostFileName());
+    }).catch(function() { return null; });
+    var words = krFetchJson('data/invites.json').then(function(data) {
+        var own = data && data.invites && data.invites[slug];
+        return own && own.title && own.line ? own : null;
+    }).catch(function() { return null; });
+    Promise.all([record, words]).then(function(got) { setPost(got[0], got[1]); });
+
+    var done = false;
+    var shown = false;
+
+    function setVisible(visible) {
+        el.classList.toggle('is-visible', visible);
+        document.body.classList.toggle('kr-invite-open', visible);
+        if (visible && !shown) {
+            shown = true;
+            track('newsletter_invite_shown', { post: slug });
+        }
+    }
+
+    function putAway(key) {
+        var hadFocus = el.contains(document.activeElement);
+        done = true;
+        krInviteUp = false;
+        setVisible(false);
+        krInviteRemember(key);
+        if (hadFocus) {
+            var next = document.querySelector('.kr-signoff a');
+            if (next) next.focus();
+        }
+        // The share sheet may rise now that the pop-up has gone.
+        krQueueScrollJobs();
+    }
+
+    el.querySelector('.kr-invite__close').addEventListener('click', function() {
+        putAway(KR_INVITE_CLOSED);
+    });
+    // Escape answers only while the pop-up is up, as the share sheet's does.
+    document.addEventListener('keydown', function(evt) {
+        if ((evt.key === 'Escape' || evt.key === 'Esc') && el.classList.contains('is-visible')) {
+            putAway(KR_INVITE_CLOSED);
+        }
+    });
+    el.addEventListener('click', function(evt) {
+        var a = evt.target.closest && evt.target.closest('.kr-invite__email, .kr-invite__rss');
+        if (!a) return;
+        track('newsletter_invite', { post: slug, via: a.classList.contains('kr-invite__rss') ? 'rss' : 'email' });
+        putAway(KR_INVITE_FOLLOWED);
+    });
+
+    krOnScroll(function() {
+        if (done) return;
+        var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        var fin = blogPost.querySelector('.kr-post-end .kr-fin');
+        var read = fin ? fin.getBoundingClientRect().bottom <= viewportHeight : postMainEndPassed(blogPost);
+        var footer = document.getElementById('footer-section');
+        var footerOnScreen = !!footer && footer.getBoundingClientRect().top < viewportHeight;
+        var up = read && !footerOnScreen;
+        krInviteUp = up;
+        return function() {
+            setVisible(up);
+        };
+    });
 }
 
 /**
@@ -2859,7 +3088,8 @@ function renderRelatedSeriesChips() {
 /**
  * Everything a blog post gets around its text: the meta line (tags and
  * RSS), the end band (renderPostEnd, built before the progress bar so the
- * bar has its end mark to measure to), the progress bar, the contents
+ * bar has its end mark to measure to), the newsletter pop-up (before
+ * renderFloatingBlogShare, whose sheet waits on it), the progress bar, the contents
  * rail, heading links, the series line and citation previews.
  */
 function renderBlogPostEssentials() {
@@ -2869,6 +3099,7 @@ function renderBlogPostEssentials() {
     renderTitleRssLink();
     renderPostMeta();
     renderPostEnd();
+    renderNewsletterPopup();
     renderReadingProgress();
     renderPostToc();
     renderHeadingAnchors();

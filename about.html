@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
-  <meta name="description" content="About Ken Reid — pets, music, cooking, homelab, blogging, and everything beyond data science.">
+  <meta name="description" content="About Ken Reid, a Scottish-born data scientist in Michigan: home, the road from Stirling, what I'm reading now and what I try to live by.">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>About Me - Ken Reid</title>
 
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="About Me - Ken Reid">
-  <meta property="og:description" content="The rest of Ken — pets, music, cooking, homelab, blogging, and more.">
+  <meta property="og:description" content="A Scottish-born data scientist in Michigan: home, the road here, what I'm reading now, what I've made, and what I try to live by.">
   <meta property="og:image" content="https://www.kenreid.co.uk/img/og/page-about.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="About Me: pets, music, cooking and homelab, over one of Ken Reid's photographs">
+  <meta property="og:image:alt" content="About Me, over one of Ken Reid's photographs">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="About Me - Ken Reid">
-  <meta name="twitter:description" content="The rest of Ken — pets, music, cooking, homelab, blogging, and more.">
+  <meta name="twitter:description" content="A Scottish-born data scientist in Michigan: home, the road here, what I'm reading now, what I've made, and what I try to live by.">
   <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/page-about.jpg">
-  <meta name="twitter:image:alt" content="About Me: pets, music, cooking and homelab, over one of Ken Reid's photographs">
+  <meta name="twitter:image:alt" content="About Me, over one of Ken Reid's photographs">
   <meta property="og:url" content="https://www.kenreid.co.uk/about.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Ken Reid">
@@ -48,8 +48,19 @@
     "url": "https://www.kenreid.co.uk/about.html",
     "mainEntity": {
       "@type": "Person",
+      "@id": "https://www.kenreid.co.uk/#ken",
       "name": "Ken Reid",
-      "url": "https://www.kenreid.co.uk"
+      "url": "https://www.kenreid.co.uk",
+      "jobTitle": "Senior Data Scientist",
+      "worksFor": { "@type": "Organization", "name": "Rocket Mortgage" },
+      "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Stirling" },
+      "homeLocation": { "@type": "Place", "name": "Ann Arbor, Michigan" },
+      "knowsAbout": ["Data science", "Evolutionary computation", "Optimisation", "Photography", "Accessibility"],
+      "sameAs": [
+        "https://www.linkedin.com/in/kennethneilreid",
+        "https://github.com/DrKenReid",
+        "https://bsky.app/profile/kenreid.co.uk"
+      ]
     }
   }
   </script>
@@ -74,221 +85,366 @@
     </div>
   </section>
 
-  <!-- Intro -->
-  <section class="about-us-area section-padding-80-0 clearfix">
+  <!-- 1. Hello: who I am in a paragraph, and the site's own numbers.
+       The figures are written here so the page reads whole without
+       script; js/about.js replaces them with today's from the data files,
+       and the shared count-up animates them on first sight. -->
+  <section class="kr-about-hello section-padding-80-0 clearfix" aria-labelledby="about-hello-title">
     <div class="container">
-      <!-- Text first, so a phone reads the introduction before the
-           portrait; from 992px the portrait moves to the left column. -->
-      <div class="row">
-        <div class="col-12 col-lg-7">
-          <div class="section-heading section-heading--left mb-50">
-            <h2>The Rest of Me</h2>
-            <p class="section-heading__lede">I'm Ken, a Scottish-born data scientist with a Ph.D. in AI, now living in the United States. My research background is in niche areas of artificial intelligence, and I care deeply about ethical AI and environmental sustainability in computing. If you're here for the professional side, head over to <a href="/data_science.html">Data Science</a>. This page is everything else.</p>
-          </div>
-        </div>
-        <div class="col-12 col-lg-5 order-lg-first">
-          <div class="mb-80">
-            <img src="/img/bg-img/ken2.webp" alt="Ken Reid smiling, holding two vegetable skewers" class="about-photo about-portrait" width="587" height="1271">
-          </div>
+      <div class="kr-about-hello__grid">
+        <figure class="kr-about-hello__portrait">
+          <img src="/img/bg-img/ken-neeharika-window.webp" srcset="/img/bg-img/ken-neeharika-window.webp 800w, /img/bg-img/ken-neeharika-window@2x.webp 1600w" sizes="(min-width: 992px) 460px, (min-width: 576px) 420px, 100vw" alt="Ken and Neeharika by a window in plaid scarves, his arm around her, a grey and white cat standing on his shoulder" class="about-photo about-portrait" width="800" height="755">
+        </figure>
+        <div class="kr-about-hello__text">
+          <span class="section-eyebrow">Hello</span>
+          <h2 id="about-hello-title" class="kr-about-hello__title">I'm Ken.</h2>
+          <p class="kr-about-lede">A Scottish-born data scientist with a Ph.D. in AI, living in Ann Arbor, Michigan, with my partner Neeharika, a dog, four cats and a small flock of chickens. By day I'm a Senior Data Scientist at Rocket Mortgage. By night I am a visiting fellow at the University of Stirling, and I'm also taking an MA in Organizational Leadership. The rest of the time I read, take photographs, play guitar and build things like this website.</p>
+          <p class="kr-about-sub">Here for the professional side? <a href="/data_science.html">See my papers and projects.</a></p>
+          <dl class="kr-about-stats">
+            <div class="home-stat" data-live="stat:books">
+              <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
+              <dt class="home-stat-label">Books read</dt>
+              <dd class="home-stat-value" data-about-stat="books">600+</dd>
+            </div>
+            <div class="home-stat" data-live="stat:photos">
+              <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
+              <dt class="home-stat-label">Photographs</dt>
+              <dd class="home-stat-value" data-about-stat="photos">517</dd>
+            </div>
+            <div class="home-stat" data-live="stat:posts">
+              <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
+              <dt class="home-stat-label">Blog posts</dt>
+              <dd class="home-stat-value" data-about-stat="posts">72</dd>
+            </div>
+            <div class="home-stat" data-live="stat:words">
+              <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
+              <dt class="home-stat-label">Words written</dt>
+              <dd class="home-stat-value" data-about-stat="words">174K</dd>
+            </div>
+            <div class="home-stat" data-live="stat:scrobbles">
+              <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
+              <dt class="home-stat-label">Songs played</dt>
+              <dd class="home-stat-value" data-about-stat="scrobbles">50K</dd>
+            </div>
+            <div class="home-stat" data-live="pub:llm-outlook">
+              <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
+              <dt class="home-stat-label">Citations</dt>
+              <dd class="home-stat-value" data-about-stat="citations">185</dd>
+            </div>
+          </dl>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- The Road So Far -->
-  <section class="section-padding-80-0 clearfix">
+  <!-- 2. Home: the household. -->
+  <section class="kr-about-home section-padding-80 clearfix" aria-labelledby="about-home-title">
+    <div class="container">
+      <div class="section-heading text-center">
+        <span class="section-eyebrow">Home</span>
+        <h2 id="about-home-title">The household</h2>
+        <p class="section-heading__lede">Brutey, the brindle pup I brought over from Scotland, four cats and a small flock of chickens. Most of my <a href="/gallery.html">photography</a> ends up being of them.</p>
+      </div>
+      <div class="kr-about-household">
+        <ul class="kr-about-pets" role="list">
+          <li>
+            <img src="/img/photography/thumb/318.webp" srcset="/img/photography/thumb/318.webp 1x, /img/photography/thumb/318@2x.webp 2x" alt="Brutey, a brindle Staffordshire bull terrier, gazing at the camera" width="400" height="266" loading="lazy">
+            <span>Brutey</span>
+          </li>
+          <li><img src="/img/bg-img/kwee.webp" alt="Kwee the cat" width="500" height="500" loading="lazy"><span>Kwee</span></li>
+          <li><img src="/img/bg-img/chaos.webp" alt="Chaos the cat" width="500" height="512" loading="lazy"><span>Chaos</span></li>
+          <li><img src="/img/bg-img/yoyo.webp" alt="Yoyo the cat" width="500" height="500" loading="lazy"><span>Yoyo</span></li>
+          <li><img src="/img/bg-img/nila.webp" alt="Nila the cat" width="500" height="500" loading="lazy"><span>Nila</span></li>
+          <li><img src="/img/bg-img/chickens.webp" alt="The chickens" width="587" height="1271" loading="lazy"><span>The flock</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. The road so far. The stops are the content: an ordered list
+       that reads whole without script or a map. js/about.js adds the map
+       beside it (Leaflet, loaded only when the section comes near) and
+       follows the reader down the list; each stop's button moves the map
+       to it. The map is a picture of the list, so it is hidden from
+       assistive technology and takes no keyboard focus. -->
+  <section class="kr-about-road bg-tint section-padding-80 clearfix" aria-labelledby="about-road-title">
     <div class="container">
       <div class="section-heading text-center">
         <span class="section-eyebrow">The road so far</span>
-        <h2>A Short Timeline</h2>
+        <h2 id="about-road-title">From Stirling to Ann Arbor</h2>
       </div>
-      <div class="row align-items-center justify-content-center">
-        <div class="col-12 col-lg-7">
-          <ul class="blog-timeline kr-timeline mb-5">
-            <li>
-              <span class="tl-year">2009&ndash;2013</span>
-              <span class="tl-dot"></span>
-              <span class="tl-body">BSc (Hons) Computer Science.</span>
-            </li>
-            <li>
-              <span class="tl-year">2015&ndash;2019</span>
-              <span class="tl-dot"></span>
-              <span class="tl-body">Ph.D. in a niche corner of artificial intelligence at the University of Stirling, Scotland.</span>
-            </li>
-            <li>
-              <span class="tl-year">Then</span>
-              <span class="tl-dot"></span>
-              <span class="tl-body">Postdocs applying AI to genomics, satellite imagery, evolution, and video games.</span>
-            </li>
-            <li>
-              <span class="tl-year text-wrap">Across the pond</span>
-              <span class="tl-dot"></span>
-              <span class="tl-body">Moved from Scotland to Michigan; data scientist at the University of Michigan right at the start of the GenAI boom.</span>
-            </li>
-            <li>
-              <span class="tl-year">Now</span>
-              <span class="tl-dot"></span>
-              <span class="tl-body">Senior Data Scientist at Rocket Mortgage, working on a master's in Organizational Leadership on the side.</span>
-            </li>
-          </ul>
-        </div>
-        <div class="col-12 col-lg-5">
-          <div class="mb-5">
-            <a href="/img/bg-img/ken-timeline.webp" class="img-lightbox portfolio-img"><img src="/img/bg-img/ken-timeline.webp" alt="A younger Ken in black and white, looking off to the side" class="about-photo" loading="lazy" width="800" height="533"></a>
-          </div>
+      <div class="kr-journey">
+        <ol class="kr-journey__stops" role="list">
+          <li class="kr-journey__stop" data-stop="scotland" data-lat="56.6" data-lng="-4.2" data-zoom="6">
+            <img src="/img/photography/thumb/8.webp" srcset="/img/photography/thumb/8.webp 1x, /img/photography/thumb/8@2x.webp 2x" alt="A bird skimming the water of Loch Ard, Scotland" width="400" height="266" loading="lazy">
+            <div>
+              <h3><button type="button" class="kr-journey__go">Scotland</button></h3>
+              <p class="kr-journey__when">Where I grew up</p>
+              <p>A small town in Scotland, which gave me my directness, my dry sense of humour and a love of hills and the cold.</p>
+            </div>
+          </li>
+          <li class="kr-journey__stop" data-stop="bsc" data-lat="56.1451" data-lng="-3.9204" data-zoom="12">
+            <img src="/img/photography/thumb/9.webp" srcset="/img/photography/thumb/9.webp 1x, /img/photography/thumb/9@2x.webp 2x" alt="The loch on the University of Stirling campus under a blue sky" width="400" height="266" loading="lazy">
+            <div>
+              <h3><button type="button" class="kr-journey__go">University of Stirling</button></h3>
+              <p class="kr-journey__when">2009&ndash;2013</p>
+              <p>BSc (Hons) in Computer Science, on a campus with a loch in the middle and a castle up the road.</p>
+            </div>
+          </li>
+          <li class="kr-journey__stop" data-stop="hp" data-lat="55.9086" data-lng="-4.4471" data-zoom="11">
+            <img src="/img/photography/thumb/423.webp" srcset="/img/photography/thumb/423.webp 1x, /img/photography/thumb/423@2x.webp 2x" alt="A speaker on a video call projected above a conference audience in Trento, Italy" width="400" height="266" loading="lazy">
+            <div>
+              <h3><button type="button" class="kr-journey__go">A first job</button></h3>
+              <p class="kr-journey__when">2013&ndash;2015, Erskine</p>
+              <p>Hewlett Packard Enterprise Services, in a small town just outside Glasgow. A <a href="/blog/mistaken-identity-italy.html">mistaken email</a> sent me to Trento to photograph a conference, and being unhappy at work <a href="/blog/what-was-i-made-for.html">turned a Ph.D.</a> from "one day" into a plan.</p>
+            </div>
+          </li>
+          <li class="kr-journey__stop" data-stop="phd" data-lat="56.1381" data-lng="-3.9182" data-zoom="11">
+            <img src="/img/photography/thumb/125.webp" srcset="/img/photography/thumb/125.webp 1x, /img/photography/thumb/125@2x.webp 2x" alt="A circle of sparks from spun steel wool around a figure at night, Stirling" width="400" height="266" loading="lazy">
+            <div>
+              <h3><button type="button" class="kr-journey__go">A Ph.D. in AI</button></h3>
+              <p class="kr-journey__when">2015&ndash;2019, Stirling</p>
+              <p>Metaheuristics for real-world employee rostering: teaching computers to build workable shift patterns. Stirling will always be a home.</p>
+            </div>
+          </li>
+          <li class="kr-journey__stop" data-stop="msu" data-lat="42.7251" data-lng="-84.4791" data-zoom="11">
+            <img src="/img/photography/thumb/233.webp" srcset="/img/photography/thumb/233.webp 1x, /img/photography/thumb/233@2x.webp 2x" alt="Lightning over a lit street in East Lansing at night" width="400" height="266" loading="lazy">
+            <div>
+              <h3><button type="button" class="kr-journey__go">Across the pond</button></h3>
+              <p class="kr-journey__when">Michigan State University, East Lansing</p>
+              <p>A postdoc applying AI to genomics, satellite imagery, evolution and video games. I had never driven an automatic, or on the right.</p>
+            </div>
+          </li>
+          <li class="kr-journey__stop" data-stop="umich" data-lat="42.2808" data-lng="-83.743" data-zoom="11">
+            <img src="/img/photography/thumb/390.webp" srcset="/img/photography/thumb/390.webp 1x, /img/photography/thumb/390@2x.webp 2x" alt="Pink redbud blossom on a branch in spring, Ann Arbor" width="400" height="266" loading="lazy">
+            <div>
+              <h3><button type="button" class="kr-journey__go">University of Michigan</button></h3>
+              <p class="kr-journey__when">Ann Arbor</p>
+              <p>Data scientist at the University of Michigan, right at the start of the generative AI boom.</p>
+            </div>
+          </li>
+          <li class="kr-journey__stop" data-stop="now" data-lat="42.2808" data-lng="-83.743" data-zoom="9">
+            <div class="kr-journey__mark" aria-hidden="true">Now</div>
+            <div>
+              <h3><button type="button" class="kr-journey__go">Now</button></h3>
+              <p class="kr-journey__when">Ann Arbor, and home</p>
+              <p>Senior Data Scientist at Rocket Mortgage, working on a master's in Organizational Leadership on the side. Michigan has been home long enough to feel like it.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="kr-journey__map-col" aria-hidden="true">
+          <div class="kr-journey__map" id="journey-map"></div>
+          <p class="kr-journey__credit">Map tiles &copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Pets -->
-  <section class="bg-tint section-padding-80 clearfix">
+  <!-- 4. Now. Written here as of the last weekly data refresh;
+       js/about.js redraws it from data/now.json, data/topalbums.json and
+       the newest post. -->
+  <section class="kr-about-now section-padding-80 clearfix" aria-labelledby="about-now-title">
     <div class="container">
       <div class="section-heading text-center">
-        <h2>Pets</h2>
-        <p class="section-heading__lede">The household includes Brutey, a brindle pup I brought over from Scotland, four cats (Kwee, Chaos, Yoyo, and Nila), plus a small flock of chickens. They're not pets, really; they're family. Most of my <a href="/gallery.html">photography</a> ends up being of them, and I wouldn't have it any other way.</p>
+        <span class="section-eyebrow">This week</span>
+        <h2 id="about-now-title">Now</h2>
+        <p class="section-heading__lede kr-about-now__updated" id="about-now-updated">From the weekly refresh of 28 September 2026.</p>
       </div>
-      <div class="row align-items-center">
-        <div class="col-12 col-md-6 col-lg-4 mb-30">
-          <img src="/img/photography/thumb/318.webp" alt="Brutey — brindle pup" class="about-photo" style="height: 350px; object-fit: cover;" loading="lazy" width="400" height="266">
-          <p class="kr-caption">Brutey <svg class="kr-glyph" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><ellipse cx="5.4" cy="10.6" rx="1.9" ry="2.3"/><ellipse cx="9.3" cy="5.9" rx="2" ry="2.5"/><ellipse cx="14.7" cy="5.9" rx="2" ry="2.5"/><ellipse cx="18.6" cy="10.6" rx="1.9" ry="2.3"/><path d="M12 11.6c-2.7 0-5.8 3.8-5.8 6.3 0 1.7 1.3 2.8 2.9 2.8 1.2 0 2-.6 2.9-.6s1.7.6 2.9.6c1.6 0 2.9-1.1 2.9-2.8 0-2.5-3.1-6.3-5.8-6.3z"/></svg></p>
+      <dl class="kr-now">
+        <div class="kr-now__item">
+          <dt><i class="ti-book" aria-hidden="true"></i> Reading</dt>
+          <dd id="now-reading"><a href="/literature.html"><cite>A Boy and His Dog</cite></a> by Harlan Ellison, and <cite>Vicious</cite> by V.E. Schwab</dd>
         </div>
-        <div class="col-12 col-md-6 col-lg-4 mb-30">
-          <div class="row">
-            <div class="col-6 mb-15">
-              <img src="/img/bg-img/kwee.webp" alt="Kwee the cat" class="about-photo" style="height: 165px; object-fit: cover;" loading="lazy" width="500" height="500">
-              <p class="kr-caption kr-caption--sm">Kwee</p>
-            </div>
-            <div class="col-6 mb-15">
-              <img src="/img/bg-img/chaos.webp" alt="Chaos the cat" class="about-photo" style="height: 165px; object-fit: cover;" loading="lazy" width="500" height="512">
-              <p class="kr-caption kr-caption--sm">Chaos</p>
-            </div>
-            <div class="col-6">
-              <img src="/img/bg-img/yoyo.webp" alt="Yoyo the cat" class="about-photo" style="height: 165px; object-fit: cover;" loading="lazy" width="500" height="500">
-              <p class="kr-caption kr-caption--sm">Yoyo</p>
-            </div>
-            <div class="col-6">
-              <img src="/img/bg-img/nila.webp" alt="Nila the cat" class="about-photo" style="height: 165px; object-fit: cover;" loading="lazy" width="500" height="500">
-              <p class="kr-caption kr-caption--sm">Nila</p>
-            </div>
-          </div>
+        <div class="kr-now__item">
+          <dt><i class="ti-headphone" aria-hidden="true"></i> Listening</dt>
+          <dd id="now-listening"><a href="/music.html"><cite>Is This It</cite></a> by The Strokes, my most played album of the last three months</dd>
         </div>
-        <div class="col-12 col-md-12 col-lg-4 mb-30">
-          <img src="/img/bg-img/chickens.webp" alt="The chickens" class="about-photo" style="height: 350px; object-fit: cover;" loading="lazy" width="587" height="1271">
-          <p class="kr-caption">The Flock <svg class="kr-glyph" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><path d="M16 8 2 22"/><path d="M17.5 15H9"/></svg></p>
+        <div class="kr-now__item">
+          <dt><i class="ti-pencil-alt" aria-hidden="true"></i> Writing</dt>
+          <dd id="now-writing"><a href="/blog/sleep-science.html">Sleep Science</a>, the first part of Wellness From the Science</dd>
         </div>
-      </div>
+        <div class="kr-now__item">
+          <dt><i class="ti-light-bulb" aria-hidden="true"></i> Learning</dt>
+          <dd>A master's in Organizational Leadership, and Tamil, at a rate of roughly one word a month</dd>
+        </div>
+      </dl>
     </div>
   </section>
 
-  <!-- Card Grid: Music, Language, Cooking, Writing -->
-  <section class="section-padding-80 clearfix">
+  <!-- 5. What I try to live by: Epictetus over one of my photographs (a
+       dark stairway, quiet enough for the words),
+       then three cards. -->
+  <section class="kr-photo-band kr-about-quote bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/141.webp);" aria-labelledby="about-creed-title">
+    <div class="container">
+      <figure class="kr-about-quote__figure">
+        <blockquote>
+          <p>Of things some are in our power, and others are not.</p>
+        </blockquote>
+        <figcaption>Epictetus, <cite>Enchiridion</cite>, translated by George Long</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="kr-about-creed section-padding-80 clearfix">
     <div class="container">
       <div class="section-heading text-center">
-        <h2>Hobbies &amp; Interests</h2>
+        <span class="section-eyebrow">What I try to live by</span>
+        <h2 id="about-creed-title">Mind what's mine, then look outward</h2>
+        <p class="section-heading__lede">I'm a Stoic in the everyday sense more than the marble-bust one. Epictetus is a favourite: a man born into slavery who worked out the one thing nobody could take from him, his own judgement and what he chose to do next. Most of what happens to me is out of my hands. My effort, my attention and how I treat people are not.</p>
       </div>
-      <div class="row align-items-center">
-        <div class="col-12 col-lg-7 mb-30">
-          <div class="kr-hobby-grid">
-            <!-- Music -->
-            <div class="about-card" data-live="hobby:music">
-              <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
-              <h3>Music</h3>
-              <p>I've played guitar since I was about 11, though I still can't tell you what key I'm in. These days it's mostly fingerstyle, learning covers from players like Andy McKee and Antoine Dufour. I'd like to start writing my own music at some point. I've also been <a href="https://www.last.fm/user/gohex" target="_blank" rel="noopener">tracking my listening on Last.fm</a> since 2014. The top artists are a mess: Ludovico Einaudi, Alkaline Trio, Jeremy Soule, Rammstein. Make of that what you will.</p>
-              <a href="/music.html" class="about-link">Listening stats &rarr;</a>
-            </div>
-
-            <!-- Reading -->
-            <div class="about-card" data-live="hobby:reading">
-              <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
-              <h3>Reading</h3>
-              <p>I spend a lot of time reading, be it audiobooks or physical. I read awful LitRPG, classic Sci Fi and Fantasy, classics, social justice, and non-fiction, and also practically anything recommended to me.</p>
-              <a href="/literature.html" class="about-link">Reading log &rarr;</a>
-              <a href="/books.html" class="about-link">All 600+ books &rarr;</a>
-              <a href="/quotes.html" class="about-link">Quote wall &rarr;</a>
-            </div>
-
-            <!-- Language -->
-            <div class="about-card" data-live="hobby:language">
-              <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
-              <h3>Language</h3>
-              <p>I'm learning Tamil. Theoretically. At my current rate of roughly one word per month, the more accurate phrasing is "I want to learn Tamil."</p>
-            </div>
-
-            <!-- Cooking -->
-            <div class="about-card" data-live="hobby:cooking">
-              <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
-              <h3>Cooking</h3>
-              <p>I'm vegan and I cook with a mix of South Asian and Scottish influence. Lots of dals, soups, stews, kale salads. I batch-cook most things and enjoy healthy, tasty and batch-able meals most of all. That way I can enjoy good food without spending every day in the kitchen. Except when I burn things then I have to eat it for a week.</p>
-            </div>
-
-            <!-- Writing -->
-            <div class="about-card" data-live="hobby:writing">
-              <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
-              <h3>Writing</h3>
-              <p>I write fiction, very passively. I have many ideas written down and a few chapters of different stories. I'm not sure where I want to go with it yet, but I like writing.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-lg-5 mb-30">
-          <img src="/img/bg-img/ken1.webp" alt="Ken in a beanie with a grey and white cat perched on his shoulder" class="about-photo" loading="lazy" width="1143" height="1271">
-        </div>
-      </div>
+      <ol class="kr-creed" role="list">
+        <li class="kr-creed__item">
+          <span class="kr-creed__num" aria-hidden="true">01</span>
+          <h3>What's in my control</h3>
+          <p>My effort, my judgements and what I do next. I try to spend my energy there and let the rest go, which is much easier to write than to do.</p>
+        </li>
+        <li class="kr-creed__item">
+          <span class="kr-creed__num" aria-hidden="true">02</span>
+          <h3>Spending it on other people</h3>
+          <p>Not fighting what I can't change leaves room for the people in front of me. I would rather assume someone is having a hard day than that they are a bad person, and ask what would help.</p>
+        </li>
+        <li class="kr-creed__item">
+          <span class="kr-creed__num" aria-hidden="true">03</span>
+          <h3>In the work</h3>
+          <p>It's why this site is built <a href="/blog/accessibility-first-product-design-data-science.html">accessibility first</a>, why I write about <a href="/blog/ethics-of-llm-use-not-llms.html">how we use AI</a> rather than whether it is good or bad, and why I ask who a system leaves out before who it serves.</p>
+        </li>
+      </ol>
     </div>
   </section>
 
-  <!-- Homelab & Tech -->
-  <section class="bg-tint section-padding-80 clearfix">
+  <!-- 6. Things I've made: the work elsewhere on the site, each card
+       with its own hover sketch (js/covers.js, covers-site.js). -->
+  <section class="kr-about-made bg-tint section-padding-80 clearfix" aria-labelledby="about-made-title">
     <div class="container">
-      <div class="row align-items-center">
-        <div class="col-12 col-lg-5">
-          <div class="mb-30">
-            <img src="/img/photography/thumb/16.webp" alt="Code on a monitor, photographed at an angle" class="about-photo" loading="lazy" width="400" height="533">
-          </div>
-        </div>
-        <div class="col-12 col-lg-7">
-          <div class="section-heading section-heading--left mb-30">
-            <h2>Homelab &amp; Tech</h2>
-            <p class="section-heading__lede">I run a self-hosted media setup I call <strong>KenPlex</strong>: Plex plus about 20 Dockerized services handling automation, transcoding, metadata, and monitoring. The music library alone is around 230,000 tracks, managed with beets and Mp3tag. I've written PowerShell and Python scripts for bulk audiobook conversion to <code>.m4b</code>, automated cover art lookups, and various other things that probably didn't need automating but were fun to build. More of my projects are on <a href="https://github.com/DrKenReid" target="_blank" rel="noopener">GitHub</a>.</p>
-          </div>
-        </div>
+      <div class="section-heading text-center">
+        <span class="section-eyebrow">Things I've made</span>
+        <h2 id="about-made-title">Have a poke around</h2>
       </div>
+      <ul class="kr-made" role="list">
+        <li class="about-card kr-made__card" data-live="ant-colony-live">
+          <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+          <h3><a href="/series-algorithms-live.html" class="kr-made__link">Algorithms, Live</a></h3>
+          <p>Ten algorithms running in your browser, with the sliders to break them on purpose.</p>
+        </li>
+        <li class="about-card kr-made__card" data-live="pub:hybrid">
+          <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+          <h3><a href="/series-research-live.html" class="kr-made__link">Research, Live</a></h3>
+          <p>The papers I wrote, each one running on a canvas you can interfere with.</p>
+        </li>
+        <li class="about-card kr-made__card" data-live="gallery:globe">
+          <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+          <h3><a href="/map.html" class="kr-made__link">The photo map</a></h3>
+          <p>My photographs pinned where they were taken, from Inverness to Colorado.</p>
+        </li>
+        <li class="about-card kr-made__card" data-live="explore:series">
+          <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+          <h3><a href="/series-how-this-site-is-built.html" class="kr-made__link">This website</a></h3>
+          <p>Hand-built HTML, CSS and JavaScript with no framework, and a series on how it works. The <a href="/colophon.html">colophon</a> measures it.</p>
+        </li>
+        <li class="about-card kr-made__card" data-live="genre:scifi">
+          <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+          <h3><a href="/books.html" class="kr-made__link">Every book I've read</a></h3>
+          <p>A wall of 600+ covers, searchable, with a <a href="/quotes.html">wall of quotes</a> beside it.</p>
+        </li>
+        <li class="about-card kr-made__card" data-live="pub:llm-outlook">
+          <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+          <h3><a href="/data_science.html#publications" class="kr-made__link">Research papers</a></h3>
+          <p>Optimisation, genetic programming and machine learning, from rostering to compilers to genomics.</p>
+        </li>
+      </ul>
     </div>
   </section>
 
-  <!-- Blogging -->
-  <section class="section-padding-80 clearfix">
+  <!-- 7. Off the clock: the hobbies, the homelab and the blog, one grid. -->
+  <section class="kr-about-off section-padding-80 clearfix" aria-labelledby="about-off-title">
     <div class="container">
-      <div class="row align-items-center">
-        <div class="col-12 col-lg-7">
-          <div class="section-heading section-heading--left mb-30">
-            <h2>Blogging</h2>
-            <p class="section-heading__lede">I write <a href="/blog.html">a lot</a>: data science, books, photography, music, moving countries, and whatever else I'm currently thinking through. Writing is how I find out whether I actually understand something, and the posts that survive that test end up here. If you'd rather have new posts arrive by themselves, there's a <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">free email newsletter</a> too. The site itself is hand-built and measured on its <a href="/colophon.html">colophon</a>.</p>
-          </div>
+      <div class="section-heading text-center">
+        <span class="section-eyebrow">Off the clock</span>
+        <h2 id="about-off-title">Everything else</h2>
+      </div>
+      <div class="kr-hobby-grid kr-hobby-grid--wide">
+        <div class="about-card" data-live="hobby:music">
+          <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+          <h3>Music</h3>
+          <p>I've played guitar since I was about 11, though I still can't tell you what key I'm in. These days it's mostly fingerstyle, learning covers from players like Andy McKee and Antoine Dufour. I've been <a href="https://www.last.fm/user/gohex" target="_blank" rel="noopener">tracking my listening on Last.fm</a> since 2014, and the top artists are a mess: Ludovico Einaudi, Alkaline Trio, Jeremy Soule, Rammstein. Make of that what you will.</p>
+          <a href="/music.html" class="about-link">Listening stats &rarr;</a>
         </div>
-        <div class="col-12 col-lg-5">
-          <div class="mb-30">
-            <img src="/img/bg-img/ken-blogging.webp" alt="Ken with a grey and white cat perched on his shoulder" class="about-photo" loading="lazy" width="800" height="600">
-          </div>
+        <div class="about-card" data-live="hobby:reading">
+          <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+          <h3>Reading</h3>
+          <p>I spend a lot of time reading, be it audiobooks or physical. I read awful LitRPG, classic Sci Fi and Fantasy, classics, social justice, and non-fiction, and also practically anything recommended to me.</p>
+          <a href="/literature.html" class="about-link">Reading log &rarr;</a>
+          <a href="/books.html" class="about-link">All 600+ books &rarr;</a>
+          <a href="/quotes.html" class="about-link">Quote wall &rarr;</a>
+        </div>
+        <div class="about-card" data-live="hobby:cooking">
+          <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+          <h3>Cooking</h3>
+          <p>I'm vegan and I cook with a mix of South Asian and Scottish influence: lots of dals, soups, stews and kale salads. I batch-cook most things, so I can eat well without spending every day in the kitchen. Except when I burn things, then I have to eat it for a week.</p>
+        </div>
+        <div class="about-card" data-live="hobby:homelab">
+          <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+          <h3>Homelab</h3>
+          <p>A self-hosted media setup I call <strong>KenPlex</strong>: Plex plus about 20 Dockerized services for automation, transcoding, metadata and monitoring, and a music library of around 230,000 tracks. Plus scripts for things that probably didn't need automating but were fun to build.</p>
+          <a href="https://github.com/DrKenReid" class="about-link" target="_blank" rel="noopener">GitHub &rarr;</a>
+        </div>
+        <div class="about-card" data-live="explore:blog">
+          <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+          <h3>Blogging</h3>
+          <p>I write a lot: data science, books, photography, music, moving countries, and whatever else I'm thinking through. Writing is how I find out whether I understand something.</p>
+          <a href="/blog.html" class="about-link">The blog &rarr;</a>
+          <a href="https://drkenreid.substack.com/subscribe" class="about-link" target="_blank" rel="noopener noreferrer">Newsletter &rarr;</a>
+        </div>
+        <div class="about-card" data-live="hobby:language">
+          <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+          <h3>Language</h3>
+          <p>I'm learning Tamil. Theoretically. At my current rate of roughly one word per month, the more accurate phrasing is "I want to learn Tamil."</p>
+        </div>
+        <div class="about-card" data-live="hobby:writing">
+          <span class="kr-hobby-stage" data-live-host aria-hidden="true"></span>
+          <h3>Writing fiction</h3>
+          <p>Very passively. I have many ideas written down and a few chapters of different stories. I'm not sure where I want to go with it yet, but I like writing.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Get in Touch -->
-  <section class="kr-photo-band bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/158.webp);">
+  <!-- 8. Ask me about: topics, each to the post that says the most. -->
+  <section class="kr-about-ask bg-tint section-padding-80 clearfix" aria-labelledby="about-ask-title">
+    <div class="container">
+      <div class="section-heading text-center">
+        <span class="section-eyebrow">Conversation starters</span>
+        <h2 id="about-ask-title">Ask me about</h2>
+      </div>
+      <ul class="kr-ask" role="list">
+        <li><a href="/blog/evolutionary-computation-identity-crisis.html">Evolutionary computation</a></li>
+        <li><a href="/blog/leading-a-horse-to-water.html">Stoicism and Epictetus</a></li>
+        <li><a href="/blog/accessibility-first-product-design-data-science.html">Accessible design</a></li>
+        <li><a href="/blog/ethics-of-llm-use-not-llms.html">The ethics of using AI</a></li>
+        <li><a href="/blog/the-inaccessibility-of-photography.html">Photography on a budget</a></li>
+        <li><a href="/blog/dungeon-crawler-carl-litrpg-dignity.html">LitRPG, unashamedly</a></li>
+        <li><a href="/blog/from-scotland-to-michigan.html">Moving countries</a></li>
+        <li><a href="/blog/hosting-photography-on-github-for-free.html">Running things for free</a></li>
+        <li><a href="/blog/what-50000-scrobbles-say-about-me.html">What 50,000 songs say about me</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 9. Say hello. -->
+  <section class="kr-photo-band bg-img bg-overlay jarallax" style="background-image: url(/img/photography/hero/158.webp);" aria-labelledby="about-hello-again-title">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
           <div class="section-heading section-heading--on-photo text-center">
-            <h2>Get in Touch</h2>
-            <p class="section-heading__lede">Say hello, ask about a photo, or tell me my code is wrong. I like hearing from people.</p>
+            <h2 id="about-hello-again-title">Say hello</h2>
+            <p class="section-heading__lede">Ask about a photo, a paper or a book, or tell me my code is wrong. I like hearing from people.</p>
           </div>
           <div class="kr-btn-row">
             <a href="mailto:ken@kenreid.co.uk" class="kr-btn kr-btn--primary">Email me</a>
-            <a href="/contact.html" class="kr-btn kr-btn--on-photo">Contact page</a>
+            <a href="https://www.linkedin.com/in/kennethneilreid" class="kr-btn kr-btn--on-photo" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://drkenreid.substack.com/subscribe" class="kr-btn kr-btn--on-photo" target="_blank" rel="noopener noreferrer">Get new posts by email</a>
           </div>
-          <p class="kr-photo-band__note">Or follow along on <a href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer">Bluesky</a> or by <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">email newsletter</a>.</p>
+          <p class="kr-photo-band__note">Or read my <a href="/docs/ken-cv.pdf">CV (PDF)</a>, see the <a href="/contact.html">contact page</a>, or follow along on <a href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer">Bluesky</a>.</p>
         </div>
       </div>
     </div>
@@ -308,10 +464,12 @@
   <script src="/js/lightbox.js?v=20260923a"></script>
   <script src="/js/default-assets/active.js?v=20260923a"></script>
   <script src="/js/shared-components.js?v=20260923a"></script>
+  <script src="/js/about.js?v=20260923a"></script>
   <script>
     renderHeader('header-section', { basePath: '/', active: 'about' });
     renderPhotoStrip('instagram-section');
     renderFooter('footer-section');
+    initAbout();
   </script>
 
 </body>

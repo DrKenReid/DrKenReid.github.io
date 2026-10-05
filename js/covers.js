@@ -1467,6 +1467,30 @@
         };
     });
 
+    // Ten King books slide onto a star scale: my rating in gold, Goodreads in pink, It the gap.
+    def('stephen-king-ranked', function (w, h, rnd) {
+        var rows = [['Shining', 5, 4.28], ['Pet Sematary', 4, 4.21], ['Gunslinger', 4, 3.94], ['Apt Pupil', 4, 3.92], ['Left Behind', 4, 3.80],
+                    ['The Jaunt', 4, 4.16], ['Maple St', 3, 3.60], ['Carrie', 3, 4.00], ['Cujo', 3, 3.80], ['It', 2, 4.27]];
+        var t = 0;
+        return {
+            step: function () { t++; },
+            draw: function (ctx) {
+                var p = phase(t, 480) * 480, x0 = w * 0.34, x1 = w * 0.9;
+                var sx = function (r) { return x0 + (x1 - x0) * (r - 1) / 4; };
+                for (var s = 1; s <= 5; s++) text(ctx, s + '', sx(s), h * 0.08, 7, C.dim, 600, 'center');
+                rows.forEach(function (r, i) {
+                    var y = h * (0.16 + i * 0.081), k = ease((p - i * 8) / 70), gap = i === 9;
+                    text(ctx, r[0], x0 - 8, y + 3, 7, gap ? C.red : C.ink, 500, 'right');
+                    line(ctx, x0, y, x1, y, alpha(C.dim, 0.35), 1);
+                    var me = x0 + (sx(r[1]) - x0) * k, gr = x0 + (sx(r[2]) - x0) * k;
+                    if (k > 0.6) line(ctx, me, y, gr, y, gap ? C.red : alpha(C.ink, 0.5), gap ? 2 : 1);
+                    dot(ctx, gr, y, 3, C.a);
+                    dot(ctx, me, y, 3.5, C.b);
+                });
+            }
+        };
+    });
+
     // Every rating piles onto four stars; the bars say what the stars cannot.
     def('rating-systems', function (w, h, rnd) {
         var counts = [0, 0, 0, 0, 0], t = 0;

@@ -102,6 +102,9 @@ RUNTIME_TOKENS = {
     # Authoring helpers used by unpublished drafts: keep so drafts preview
     # correctly before their classes join the tracked corpus.
     "theme-img-light", "theme-img-dark", "latex-logo",
+    # A book review's cover with my rating and the Goodreads average.
+    "kr-book-side", "kr-book-side--right", "kr-rating", "kr-rating__stars",
+    "kr-rating__crowd",
 }
 
 # ---------------------------------------------------------------------------

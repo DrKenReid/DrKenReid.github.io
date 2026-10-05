@@ -1,0 +1,297 @@
+{
+  "_help": "The newsletter pop-up's words for each post, keyed by slug (renderNewsletterPopup in js/shared-components.js). title: the card's heading; line: one or two sentences on what else the reader would get. A How This Site Is Built part gets the RSS feed first and its own small print, so its line is about following the series by feed. A post with no entry falls back to its category's words (KR_INVITES). tests/test_invites.py checks every post has one.",
+  "invites": {
+    "stephen-king-ranked": {
+      "title": "More books, ranked and rated?",
+      "line": "I write about what I read, the five-star ones and the ones that lost me, alongside data science and photography."
+    },
+    "photo-tagging-with-clip": {
+      "title": "Want the next build post?",
+      "line": "The photo tagger is one piece of how this site works. The series covers the rest, from the photo map to the test suite, and the feed is the way to follow it."
+    },
+    "self-help-books": {
+      "title": "Want the good ones, not the trash?",
+      "line": "I write about the books worth your time, and say so when one isn't, alongside data science and photography."
+    },
+    "rating-systems": {
+      "title": "More books, fewer stars",
+      "line": "I write about books with my own reading data behind it, from ratings to recommendations, alongside data science and photography."
+    },
+    "snowball-vs-avalanche": {
+      "title": "More maths for everyday decisions",
+      "line": "I write about money, time and the choices in between, usually with a chart or a simulator, alongside books and data science."
+    },
+    "second-brain-local-llm-professional": {
+      "title": "Working with local LLMs too?",
+      "line": "I write about the day-to-day of data science work, from documentation habits to the tools, alongside books and photography."
+    },
+    "why-learn-to-code-age-of-ai": {
+      "title": "Still learning to code?",
+      "line": "I write about data science, AI and the skills underneath them, alongside books and photography."
+    },
+    "in-defense-of-audiobooks": {
+      "title": "More for audiobook listeners",
+      "line": "I write about books, however you get through them, alongside data science and photography."
+    },
+    "evolutionary-computation-identity-crisis": {
+      "title": "Evolutionary computation, still here",
+      "line": "I write about EC and optimisation from inside the field, including live demos you can run in your browser, alongside books and photography."
+    },
+    "no-idea-no-problem-data-science-portfolio": {
+      "title": "Starting out in data science?",
+      "line": "I write about the job, the tools and the algorithms behind them, with live demos you can poke at, alongside books and photography."
+    },
+    "fifteen-years-of-silence-rothfuss-doors-of-stone": {
+      "title": "Still waiting on The Doors of Stone?",
+      "line": "Me too. In the meantime I write about fantasy, sci-fi, LitRPG and the other books I can't put down, alongside data science and photography."
+    },
+    "dungeon-crawler-carl-litrpg-dignity": {
+      "title": "More LitRPG, and books like it",
+      "line": "I write about the books I can't stop thinking about, snobbery included, alongside data science and photography."
+    },
+    "ethics-of-llm-use-not-llms": {
+      "title": "More on how we use AI",
+      "line": "I write about AI from the research side, numbers included, alongside books and photography."
+    },
+    "from-scotland-to-michigan": {
+      "title": "More from a Scot in Michigan",
+      "line": "I write about life after the move, alongside books, data science and photography."
+    },
+    "life-and-death-of-the-early-internet": {
+      "title": "Remember MSN Messenger?",
+      "line": "I write about the internet I grew up on and the one we have now, alongside books, data science and photography."
+    },
+    "accessibility-first-product-design-data-science": {
+      "title": "Making data readable by everyone",
+      "line": "I write about data science with accessibility in mind, from plots to dashboards, alongside books and photography."
+    },
+    "iso-8601-date-cult": {
+      "title": "Fellow YYYY-MM-DD person?",
+      "line": "I write about the small technical opinions I hold far too strongly, alongside books, data science and photography."
+    },
+    "how-to-write-a-blog": {
+      "title": "Follow along as I write",
+      "line": "This blog is built and written in the open, and the feed has every post as it goes up, this series included."
+    },
+    "hidden-cost-of-cobalt-congo": {
+      "title": "More from Everyday Ethics",
+      "line": "I write about the costs we don't see in ordinary choices, alongside books, data science and photography."
+    },
+    "mistaken-identity-italy": {
+      "title": "More stories like this one",
+      "line": "I write about the odd turns life takes, alongside books, data science and photography."
+    },
+    "prevention-of-failure-is-unseen": {
+      "title": "More on the work nobody sees",
+      "line": "I write about ethics in everyday life and work, alongside books, data science and photography."
+    },
+    "books-i-recommend-to-friends": {
+      "title": "Want the next recommendation?",
+      "line": "I write about the books I push on friends, and the ones I don't, alongside data science and photography."
+    },
+    "advice-to-my-younger-self": {
+      "title": "More advice, slightly less late",
+      "line": "I write about the things I learned the slow way, alongside books, data science and photography."
+    },
+    "individualization-of-responsibility": {
+      "title": "More on who carries the blame",
+      "line": "I write about systems that hand their problems to individuals, alongside books, data science and photography."
+    },
+    "mash-modern-perspective": {
+      "title": "More TV worth rewatching",
+      "line": "I write about the books and shows I still think about years later, alongside data science and photography."
+    },
+    "the-culture-series": {
+      "title": "More Culture, more sci-fi",
+      "line": "I write about science fiction that imagines a better future, and plenty that doesn't, alongside data science and photography."
+    },
+    "what-was-i-made-for": {
+      "title": "Turning 'one day' into a plan?",
+      "line": "I write about time, ambition and getting things done, alongside books, data science and photography."
+    },
+    "optimizing-your-schedule": {
+      "title": "More operations research for real life",
+      "line": "I write about treating everyday problems like optimisation problems, alongside books, data science and photography."
+    },
+    "what-we-leave-behind": {
+      "title": "More big questions",
+      "line": "I write about ideas like this one, from deep time to deep space, alongside books and data science."
+    },
+    "optimizing-your-schedule-ii": {
+      "title": "More on energy, time and rest",
+      "line": "I write about the models behind everyday decisions, alongside books, data science and photography."
+    },
+    "frodo-sam-and-love": {
+      "title": "More Tolkien, and more books",
+      "line": "I write about the stories I love and what they say about us, alongside data science and photography."
+    },
+    "why-you-arent-a-visual-learner": {
+      "title": "More myths, checked against the evidence",
+      "line": "I write about what the research says, especially when it isn't what we were told, alongside books and data science."
+    },
+    "what-50000-scrobbles-say-about-me": {
+      "title": "More life, measured",
+      "line": "I write about my own data, from music to books, alongside data science and photography."
+    },
+    "hosting-photography-on-github-for-free": {
+      "title": "More free hosting tricks",
+      "line": "This site runs on GitHub Pages for nothing, and the series covers how. The feed is the way to follow it."
+    },
+    "self-hosting-your-fonts": {
+      "title": "More from under the hood",
+      "line": "The series covers every part of how this site is built, from fonts to the service worker, and the feed is the way to follow it."
+    },
+    "reading-this-site-offline": {
+      "title": "Follow the build, online or off",
+      "line": "Every part of how this site works gets a post in this series, and the feed brings each one to you."
+    },
+    "abandoned-places-i-photograph": {
+      "title": "More photographs, more stories",
+      "line": "I write about photography and the places behind the pictures, alongside books and data science."
+    },
+    "why-i-love-latex": {
+      "title": "Another LaTeX person?",
+      "line": "I write about the tools I use and why, alongside books, data science and photography."
+    },
+    "putting-my-photos-on-a-map": {
+      "title": "More from the build",
+      "line": "The photo map is one post in a series on how this site works, and the feed is the way to follow the rest."
+    },
+    "free-comments-via-github-discussions": {
+      "title": "No database, no tracking, no sign-up",
+      "line": "The feed has every post in this series as it goes up, and following it asks for nothing."
+    },
+    "my-teacher-said-i-shouldnt-go-to-university": {
+      "title": "More stories from the long way round",
+      "line": "I write about the people and moments that changed my path, alongside books, data science and photography."
+    },
+    "my-website-has-a-test-suite": {
+      "title": "Tests pass. Next post?",
+      "line": "The series covers the rest of how this site is built and checked, and the feed is the way to follow it."
+    },
+    "ant-colony-live": {
+      "title": "Want the next algorithm, live?",
+      "line": "I write interactive posts where you can break the algorithm yourself, alongside books and photography."
+    },
+    "blog-engine-in-one-json-file": {
+      "title": "More from one JSON file",
+      "line": "The feed has every post in this series as it goes up, and the series covers the rest of how the site works."
+    },
+    "the-fermi-paradox-and-the-great-silence": {
+      "title": "Still looking up?",
+      "line": "I write about the big questions and the sci-fi that asks them, from the dark forest to the Culture, alongside data science."
+    },
+    "the-paradox-of-tolerance": {
+      "title": "More on the hard questions",
+      "line": "I write about ethics in public life and everyday choices, alongside books, data science and photography."
+    },
+    "ctrl-k-for-a-static-site": {
+      "title": "Want the next one to steal?",
+      "line": "Posts in this series come with the code, and the feed is the way to get each one as it goes up."
+    },
+    "evolution-live": {
+      "title": "More evolution in your browser",
+      "line": "I write interactive posts on algorithms like this one, sliders included, alongside books and photography."
+    },
+    "invisible-half-of-a-blog-post": {
+      "title": "Yes, there's a feed for this",
+      "line": "The RSS feed this post describes is the way to follow the series, since it doesn't go out by email."
+    },
+    "simulated-annealing-live": {
+      "title": "Want the next one, live?",
+      "line": "I write interactive posts where the algorithm runs in your browser and the sliders are yours, alongside books and photography."
+    },
+    "dark-mode-that-doesnt-flash": {
+      "title": "More fixes nobody notices",
+      "line": "This series is about the small details of how the site works, and the feed is the way to follow it."
+    },
+    "50-blogs-an-infographic": {
+      "title": "Fifty down",
+      "line": "I write about whatever I'm thinking through, from books to data science to photography, and there are plenty of drafts still waiting."
+    },
+    "particle-swarm-live": {
+      "title": "Want the next swarm?",
+      "line": "I write interactive posts on optimisation algorithms you can poke at, alongside books and photography."
+    },
+    "variable-neighbourhood-search-live": {
+      "title": "More algorithms you can watch",
+      "line": "I write interactive posts on the methods I've researched and used, running live in your browser, alongside books and photography."
+    },
+    "letting-robots-update-your-homepage": {
+      "title": "Let a robot deliver the next one",
+      "line": "The RSS feed is how to follow this series, since it isn't sent by email."
+    },
+    "factorio-live": {
+      "title": "More research you can play with",
+      "line": "I write interactive posts on my own papers, running live in your browser, alongside books and photography."
+    },
+    "how-the-interactive-posts-work": {
+      "title": "See the next demo first",
+      "line": "The interactive posts and the code behind them all land in the feed as they go up."
+    },
+    "cma-es-live": {
+      "title": "More optimisers, live",
+      "line": "I write interactive posts where the algorithms run in your browser, alongside books and photography."
+    },
+    "differential-evolution-live": {
+      "title": "More live algorithms",
+      "line": "I write interactive posts that let you break an algorithm on purpose, alongside books and photography."
+    },
+    "genetic-programming-live": {
+      "title": "More programs that write themselves",
+      "line": "I write interactive posts on evolutionary computation and optimisation, my research field, alongside books and photography."
+    },
+    "tabu-search-live": {
+      "title": "More search, with memory",
+      "line": "I write interactive posts on the search methods I've used in research, alongside books and photography."
+    },
+    "confirmation-bias-is-the-mother-bias": {
+      "title": "More on how we fool ourselves",
+      "line": "I write about cognitive biases and the evidence behind them, alongside books, data science and photography."
+    },
+    "making-this-website-accessible": {
+      "title": "Follow the accessibility work",
+      "line": "This series covers how the site is built and kept usable for everyone, and the feed is the way to follow it."
+    },
+    "the-availability-heuristic-runs-the-news": {
+      "title": "More on what we get wrong",
+      "line": "I write about cognitive biases and how to catch them, alongside books, data science and photography."
+    },
+    "leading-a-horse-to-water": {
+      "title": "More on feedback that lands",
+      "line": "I write about work, people and getting through to them, alongside books, data science and photography."
+    },
+    "ruin-and-recreate-live": {
+      "title": "More of my research, live",
+      "line": "I write interactive posts on my own papers, from rostering to games, alongside books and photography."
+    },
+    "photographing-strangers": {
+      "title": "More on the ethics of the camera",
+      "line": "I write about photography, the law and the people in front of the lens, alongside books and data science."
+    },
+    "hyper-heuristics-live": {
+      "title": "More algorithms that pick algorithms",
+      "line": "I write interactive posts on optimisation, running live in your browser, alongside books and photography."
+    },
+    "every-card-has-a-sketch": {
+      "title": "Like the sketches?",
+      "line": "The series covers how they and the rest of the site are built, and the feed is the way to follow it."
+    },
+    "a-headline-that-evolves-itself": {
+      "title": "More evolution on the homepage",
+      "line": "The series covers how this site is built, triangles included, and the feed is the way to follow it."
+    },
+    "the-inaccessibility-of-photography": {
+      "title": "Photography for the rest of us",
+      "line": "I write about photography without the gear treadmill, alongside books and data science."
+    },
+    "sleep-science": {
+      "title": "More science, less influencer",
+      "line": "I write about what the evidence says about everyday health and habits, alongside books, data science and photography."
+    },
+    "what-a-custom-domain-actually-involves": {
+      "title": "Follow the build",
+      "line": "From the domain to the test suite, this series covers how the site works, and the feed is the way to follow it."
+    }
+  }
+}
