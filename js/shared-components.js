@@ -2754,6 +2754,169 @@ function initCitePreviews() {
 }
 
 /**
+ * Ratings dot plots (.kr-dotplot, style.css "Ratings dot plot"): each row
+ * becomes a link to its review, and hovering or focusing a row lights it
+ * up and shows a card above it with the book's year, its place in the
+ * ranking, both ratings and the gap between them. The row's own text
+ * (with its .sr-only sentence) already says all of that to a screen
+ * reader, so the card is aria-hidden. A row finds its review by
+ * data-href, or by data-rank: the post heading that starts "<rank>.".
+ *
+ * As with citation previews: Escape or leaving the row puts the card
+ * away, the pointer can move onto the card without losing it, and on a
+ * touch screen the first tap shows the card with a "Read the review"
+ * link and a second tap on the same row makes the jump.
+ */
+/** 1st, 2nd, 3rd, 4th ... 11th, 12th, 13th ... 21st. */
+function krOrdinal(n) {
+    var s = ['th', 'st', 'nd', 'rd'], v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+/** A dot plot row's gap in words, and the kr-delta class that colours it:
+ * the sign is in the words too, so the colour is never the only cue. */
+function krDotplotGap(me, crowd) {
+    var gap = Math.round((me - crowd) * 100) / 100;
+    if (gap === 0) return { text: 'Level with Goodreads', cls: 'kr-delta--zero' };
+    return {
+        text: Math.abs(gap).toFixed(2) + (gap > 0 ? ' above' : ' below') + ' Goodreads',
+        cls: gap > 0 ? 'kr-delta--up' : 'kr-delta--down'
+    };
+}
+
+function initDotplots() {
+    var plots = document.querySelectorAll('.blog-post .kr-dotplot');
+    if (!plots.length) return;
+    var touch = window.matchMedia ? window.matchMedia('(hover: none)') : { matches: false };
+    var headings = document.querySelectorAll('.blog-post h2[id], .blog-post h3[id]');
+
+    function reviewHref(li) {
+        if (li.getAttribute('data-href')) return li.getAttribute('data-href');
+        var rank = li.getAttribute('data-rank');
+        if (!rank) return '';
+        for (var i = 0; i < headings.length; i++) {
+            if (headings[i].textContent.trim().indexOf(rank + '.') === 0) return '#' + headings[i].id;
+        }
+        return '';
+    }
+    function value(li, name) {
+        return parseFloat(getComputedStyle(li).getPropertyValue(name)) || 0;
+    }
+
+    Array.prototype.forEach.call(plots, function(plot) {
+        var list = plot.querySelector('.kr-dotplot__rows');
+        if (!list || plot.querySelector('.kr-dotplot__card')) return;
+        var rows = list.querySelectorAll('li');
+        var card = document.createElement('div');
+        card.className = 'kr-dotplot__card kr-offstage';
+        card.setAttribute('aria-hidden', 'true');
+        plot.appendChild(card);
+        var active = null, tapped = null, hideTimer = null;
+
+        function show(li, withLink) {
+            clearTimeout(hideTimer);
+            if (active && active !== li) active.classList.remove('is-active');
+            active = li;
+            li.classList.add('is-active');
+            list.classList.add('has-active');
+            var label = li.querySelector('.kr-dotplot__label em');
+            var me = value(li, '--kr-dot-me'), crowd = value(li, '--kr-dot-crowd');
+            var gap = krDotplotGap(me, crowd);
+            var rank = parseInt(li.getAttribute('data-rank'), 10);
+            var year = li.getAttribute('data-year');
+            var href = reviewHref(li);
+            card.innerHTML =
+                '<p class="kr-dotplot__card-title"><em>' + krEscapeHtml(label ? label.textContent : '') + '</em>' +
+                (year ? ' <span>(' + krEscapeHtml(year) + ')</span>' : '') + '</p>' +
+                (rank ? '<p class="kr-dotplot__card-rank">Ranked ' + krOrdinal(rank) + ' of ' + rows.length + '</p>' : '') +
+                '<p class="kr-dotplot__card-vals"><span class="kr-dotplot__card-me">Me ' + krEscapeHtml(String(me)) + '</span>' +
+                '<span class="kr-dotplot__card-crowd">Goodreads ' + krEscapeHtml(crowd.toFixed(2)) + '</span></p>' +
+                '<p class="kr-dotplot__card-gap ' + gap.cls + '">' + gap.text + '</p>' +
+                (withLink && href ? '<a class="kr-dotplot__card-go" href="' + krEscapeHtml(href) + '">Read the review</a>' : '');
+            var go = card.querySelector('.kr-dotplot__card-go');
+            if (go) {
+                card.removeAttribute('aria-hidden');
+                go.addEventListener('click', hide);
+            } else {
+                card.setAttribute('aria-hidden', 'true');
+            }
+            card.classList.add('is-visible');
+            // Above the row, centred on the middle of its two dots, kept
+            // inside the figure; below the row when there is no room above.
+            var box = plot.getBoundingClientRect(), r = li.getBoundingClientRect();
+            var dots = li.querySelectorAll('.kr-dotplot__dot');
+            var a = dots[0].getBoundingClientRect(), b = dots[dots.length - 1].getBoundingClientRect();
+            var mid = (a.left + a.right + b.left + b.right) / 4 - box.left;
+            var w = card.offsetWidth, h = card.offsetHeight;
+            var left = Math.max(0, Math.min(mid - w / 2, box.width - w));
+            var top = r.top - box.top - h - 6;
+            if (top < 0) top = r.bottom - box.top + 6;
+            card.style.left = left + 'px';
+            card.style.top = top + 'px';
+        }
+        function hide() {
+            clearTimeout(hideTimer);
+            tapped = null;
+            card.classList.remove('is-visible');
+            list.classList.remove('has-active');
+            if (active) active.classList.remove('is-active');
+            active = null;
+        }
+        function scheduleHide() {
+            if (tapped) return;
+            clearTimeout(hideTimer);
+            hideTimer = setTimeout(hide, 150);
+        }
+
+        Array.prototype.forEach.call(rows, function(li) {
+            var label = li.querySelector('.kr-dotplot__label');
+            var href = reviewHref(li);
+            if (label && href && label.tagName !== 'A') {
+                var link = document.createElement('a');
+                link.className = label.className;
+                link.href = href;
+                while (label.firstChild) link.appendChild(label.firstChild);
+                label.parentNode.replaceChild(link, label);
+                label = link;
+            }
+            li.addEventListener('mouseenter', function() { if (!touch.matches) show(li); });
+            li.addEventListener('mouseleave', scheduleHide);
+            if (label && label.tagName === 'A') {
+                label.addEventListener('focus', function() {
+                    var kb = true;
+                    try { kb = label.matches(':focus-visible'); } catch (e) {}
+                    if (!touch.matches || kb) show(li);
+                });
+                label.addEventListener('blur', scheduleHide);
+            }
+            // The whole row is the target; a click on the track follows the
+            // row's link as one on the title does.
+            li.addEventListener('click', function(e) {
+                var link = li.querySelector('a.kr-dotplot__label');
+                if (!link) return;
+                var onLink = !!(e.target.closest && e.target.closest('a.kr-dotplot__label'));
+                if (touch.matches && tapped !== li) {
+                    e.preventDefault();
+                    show(li, true);
+                    tapped = li;
+                    return;
+                }
+                hide();
+                if (!onLink) window.location.href = link.href;
+            });
+        });
+        card.addEventListener('mouseenter', function() { clearTimeout(hideTimer); });
+        card.addEventListener('mouseleave', scheduleHide);
+        document.addEventListener('click', function(e) {
+            if (tapped && !plot.contains(e.target)) hide();
+        });
+        document.addEventListener('keydown', function(e) {
+            if ((e.key === 'Escape' || e.key === 'Esc') && card.classList.contains('is-visible')) hide();
+        });
+    });
+}
+
+/**
  * A way back from the reference list: each reference gets a small link
  * (a.kr-ref-back, an arrow drawn by CSS, named for a screen reader) to
  * the first place it is cited, which gets an id for it (cite-<ref id>)
@@ -3090,7 +3253,8 @@ function renderRelatedSeriesChips() {
  * RSS), the end band (renderPostEnd, built before the progress bar so the
  * bar has its end mark to measure to), the newsletter pop-up (before
  * renderFloatingBlogShare, whose sheet waits on it), the progress bar, the contents
- * rail, heading links, the series line and citation previews.
+ * rail, heading links, the series line, citation previews and the
+ * ratings dot plots' hover cards.
  */
 function renderBlogPostEssentials() {
     var blogPost = document.querySelector('.blog-post');
@@ -3106,6 +3270,7 @@ function renderBlogPostEssentials() {
     renderSeriesNav();
     initReferenceBackLinks();
     initCitePreviews();
+    initDotplots();
 }
 
 /**

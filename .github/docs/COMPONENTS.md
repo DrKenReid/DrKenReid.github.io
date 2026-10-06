@@ -542,6 +542,18 @@ fills that share of five stars; the number beside it is the value, with
 becomes a row, the cover with the ratings beside it. The style.css
 banner "Cover with ratings" has the full markup.
 
+A ranked list of books can open with a ratings dot plot,
+`figure.kr-dotplot`: one `li` per book with `style="--kr-dot-me: 4;
+--kr-dot-crowd: 3.94"`, `data-rank` and `data-year`, the title in
+`.kr-dotplot__label` with a `.sr-only` sentence of the same facts, and
+an aria-hidden track. It is real text, so it reads at a phone's width
+where a picture of a chart does not. `initDotplots` (shared-components.js)
+makes each label a link to the review whose heading starts
+"<rank>." (or to the row's `data-href`), and shows a card with the
+year, the rank, both ratings and the gap on hover, focus or a first tap.
+`tests/js/post-runtime.test.js` holds the plot to the rating cards. The
+style.css banner "Ratings dot plot" has the markup.
+
 ### Cite this post
 
 A BibTeX box with a copy button, for posts likely to be referenced:

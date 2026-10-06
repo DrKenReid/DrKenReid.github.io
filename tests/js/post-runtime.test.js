@@ -241,6 +241,42 @@ test('a sidenote ignores the reference\'s back link', () => {
     assert.equal(ref.title, 'Thinking, fast and slow');
 });
 
+test('ranks read as ordinals', () => {
+    assert.deepEqual([1, 2, 3, 4, 10, 11, 12, 13, 21, 22, 101, 111].map(rt.krOrdinal),
+        ['1st', '2nd', '3rd', '4th', '10th', '11th', '12th', '13th', '21st', '22nd', '101st', '111th']);
+});
+
+test('a dot plot gap says its direction in words as well as colour', () => {
+    assert.deepEqual({ ...rt.krDotplotGap(2, 4.27) }, { text: '2.27 below Goodreads', cls: 'kr-delta--down' });
+    assert.deepEqual({ ...rt.krDotplotGap(5, 4.28) }, { text: '0.72 above Goodreads', cls: 'kr-delta--up' });
+    assert.deepEqual({ ...rt.krDotplotGap(4, 4.0) }, { text: 'Level with Goodreads', cls: 'kr-delta--zero' });
+    // Floating-point noise is not a gap.
+    assert.equal(rt.krDotplotGap(3.8, 3.8000000001).cls, 'kr-delta--zero');
+});
+
+// A ranked post shows each book's ratings twice: in the dot plot at the
+// top and in the rating card beside the book's own review. initDotplots
+// finds the review by the heading that starts "<rank>.", so each row's
+// rank must have that heading, and both places must agree on the numbers.
+test('a dot plot agrees with the rating card in each review', () => {
+    let checked = 0;
+    for (const post of posts) {
+        const html = fs.readFileSync(path.join(ROOT, post.url), 'utf8');
+        if (!html.includes('kr-dotplot__rows')) continue;
+        const sections = html.split('<div class="bsec">').slice(1);
+        const rows = [...html.matchAll(/<li style="--kr-dot-me: ([\d.]+); --kr-dot-crowd: ([\d.]+)" data-rank="(\d+)"/g)];
+        assert.ok(rows.length, `${post.url}: a dot plot with no rows`);
+        for (const [, me, crowd, rank] of rows) {
+            const section = sections.find(s => new RegExp('<h2[^>]*>\\s*' + rank + '\\.').test(s));
+            assert.ok(section, `${post.url}: no review heading starts "${rank}."`);
+            const stars = [...section.matchAll(/--kr-stars: ([\d.]+)/g)].map(m => Number(m[1]));
+            assert.deepEqual(stars, [Number(me), Number(crowd)], `${post.url}: rank ${rank} disagrees with its rating card`);
+            checked++;
+        }
+    }
+    assert.ok(checked > 0, 'no post has a dot plot to check');
+});
+
 test('a Goodreads title loses its series bracket for display', () => {
     const t = s => { const r = rt.krBookTitle(s); return [r.title, r.series]; };
     assert.deepEqual(t('Clockwork Angel (The Infernal Devices, #1)'), ['Clockwork Angel', 'The Infernal Devices #1']);
