@@ -76,7 +76,7 @@ use it.
 | Page type | Example | Its own scripts, and where they load |
 |---|---|---|
 | Top-level page | `about.html` | none; the inline script calls `renderHeader`, `renderPhotoStrip`, `renderFooter` |
-| Homepage | `index.html` | inline renderers for its figures and quotation; `js/hero-evolve.js` deferred after the shared scripts |
+| Homepage | `index.html` | inline renderers for its figures, quotation, the Latest Photos band (`#latest-photos`, the three newest frames) and the "New" badges; `js/hero-evolve.js` deferred after the shared scripts |
 | Blog listing | `blog.html` | `js/blog.js` after `js/shared-components.js`, then `initBlog()` |
 | Series index | `series.html` | `js/series-index.js` after the shared scripts, then `initSeriesIndex()` |
 | Series landing | `series-feedback.html` | `renderSeriesPage()` in the inline script |

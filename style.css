@@ -3240,6 +3240,12 @@ box-shadow: none; }
   text-transform: uppercase;
   pointer-events: none; }
 
+/* Forced colours (Windows contrast themes) drop the red fill; a border
+   keeps the badge a chip rather than loose text over the photograph. */
+@media (forced-colors: active) {
+  .kr-new-badge {
+    border: 1px solid CanvasText; } }
+
 /* --- The quotation band ------------------------------------------------------
    One quotation at a time from data/quotes-home.json, rotating: Lora at
    display size, the source as a label, and one big quotation mark hanging

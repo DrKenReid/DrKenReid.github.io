@@ -73,6 +73,7 @@ text tokens again on every run.
 | `--kr-action-hover` | `#a52424` | `#ff8f8f` | hover and focus of an action | 6.83, 6.38, 7.19 | 7.94, 7.52, 6.99 |
 | `--kr-action-fill` | `#c53030` | same | a red fill under white type | white on it 5.47 | same |
 | `--kr-action-fill-hover` | `#a52424` | same | its hover | white on it 7.30 | same |
+| `--kr-on-action-fill` | `#ffffff` | same | type on the action fill (the "New" badge) | 5.47 on the fill | same |
 | `--kr-focus` | `#c53030` | `#fc6060` | the keyboard focus ring | as `--kr-action` | as `--kr-action` |
 | `--kr-caution` | `#8a4b00` | `#f0b454` | content warnings, spoiler labels | 6.37 page | 9.42 page |
 | `--kr-caution-edge` | `#b86e0e` | `#e0a84a` | their rule and tint | 3.73 (a mark needs 3:1) | 8.18 |
@@ -276,6 +277,15 @@ with the action red on hover and focus.
 `--kr-eyebrow` (§02). The eyebrow, the footer headings, the colophon's
 stat labels and the end band's slot titles are members of the same rule.
 A label is never a link.
+
+`.kr-new-badge` (§07) is the homepage's "New" chip: white capitals on
+`--kr-action-fill`, pinned to the top left of a Latest Photos frame from
+the newest upload and of a latest-post card's cover while the post is
+under `NEW_POST_DAYS` (7) old. The script in `index.html` adds it. It is
+red because it sits inside a link (the frame or the card) and is never a
+link itself. On a photo tile it is `aria-hidden` and the link's name says
+"new"; on a card it is text inside the link. Under forced colours it
+keeps a `CanvasText` border.
 
 ### Stages
 

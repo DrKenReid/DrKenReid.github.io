@@ -28,11 +28,11 @@ builds on it, which is why a hand edit there is dangerous.
 | `topalbums.json` | `{albums: [{name, artist, url, img, plays}], period, updated}` | `refresh_now.py`, weekly | `js/albums.js` (the crate on `music.html`, dated by `updated`) | weekly | `data-schemas` | no |
 | `publications.json` | `{scholar: {profile, citations}, selected: {mostCited, mostRecent}, publications: [...]}` | you | `generate_publications.py`, which writes the list and its JSON-LD into `data_science.html` | when a citation count or a paper changes | `data-schemas`, `publications` | yes, then regenerate |
 | `colophon.json` | measurements of the repository | `generate_colophon.py` | `colophon.html`; `index.html` (photographs, quotations, series); `js/literature.js` (quotations) | whenever a measured file changes | `colophon` | never |
-| `photo-dims.json` | `{"<n>": [width, height]}` | `generate_photo_dims.py` | `js/gallery.js` | when thumbnails are added | `photo-dims` | never |
+| `photo-dims.json` | `{"<n>": [width, height]}` | `generate_photo_dims.py` | `js/gallery.js`, `index.html` (the Latest Photos row) | when thumbnails are added | `photo-dims` | never |
 | `photo-originals.json` | `{"<n>": [width, height]}`, the full-size frame on the release | `generate_photo_renditions.py` (reads each PNG's header with a ranged request) | the same script: a hero is made at `HERO_EDGE` or the original's own size, whichever is smaller | when frames are added | `renditions` | never |
 | `photo-tags.json` | `{"<n>": [tags]}` | a tagging tool kept outside the repository; `bw` rewritten by `detect_monochrome.py` | `js/gallery.js` (its filter buttons are `KR_PHOTO_CATEGORIES` in `js/shared-components.js`) | when photographs are added | `monochrome` | subject tags yes; `bw` never |
-| `photo-locations.json` | `{_help, regions: [{name, lat, lng, photos: ["<n>"]}]}` | you (its `_help` field says how) | `map.html`, `js/gallery.js` (tile captions, the globe badge), `js/palette.js` (places) | when photographs are placed | none | yes |
-| `photography-files.json` | `["<n>.png"]`, newest first: every frame | a filename tool kept outside the repository, or by hand | `js/gallery.js`, `404.html`, `generate_colophon.py`, the audit's orphan report | when photographs are added | the smoke suite (the gallery renders) | yes, carefully |
+| `photo-locations.json` | `{_help, regions: [{name, lat, lng, photos: ["<n>"]}]}` | you (its `_help` field says how) | `map.html`, `js/gallery.js` (tile captions, the globe badge), `js/palette.js` (places), `index.html` (the Latest Photos line: the newest frame's region and its run) | when photographs are placed | none | yes |
+| `photography-files.json` | `["<n>.png"]`, newest first: every frame | a filename tool kept outside the repository, or by hand | `js/gallery.js`, `404.html`, `index.html` (the three newest, the Latest Photos band), `generate_colophon.py`, the audit's orphan report | when photographs are added | the smoke suite (the gallery renders) | yes, carefully |
 | `photography-standard-files.json` | `["<n>.png"]`: the frames the photo strip may show | as above | `renderPhotoStrip`, `404.html` | rarely | none | yes |
 | `quotes-all.json` | `[{q, a, b}]`: every saved passage (quote, author, book) | an export tool kept outside the repository | `generate_quote_wall.py` (bakes `quotes.html`) and `generate_colophon.py` (the count the pages read from `colophon.json`) | occasionally | `quote-wall` | yes, then regenerate |
 | `quotes.json` | `[{quote, author, book, popularity}]` | as above | `js/literature.js` (the rotating quotation) | rarely | none | yes |
@@ -137,7 +137,10 @@ Adding photographs touches every file in this group:
    it will open a page).
 3. Add `"<n>.png"` to the top of `photography-files.json` (newest first),
    and to `photography-standard-files.json` if the photo strip may show
-   it.
+   it. The homepage's Latest Photos band ignores that pool: it shows the
+   three newest frames of all, with a "New" badge on each one from the
+   newest upload, so the last frames added lead the homepage whatever
+   they are.
 4. Give it subject tags in `photo-tags.json`. The tags come from a
    tagging model run outside the repository (the essay
    [Building a Photo Tagging System with CLIP](https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html)
