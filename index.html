@@ -510,8 +510,9 @@
        Each tile grows by its thumbnail's width over height (photo-dims),
        so portraits and landscapes share the row uncropped. The lede names
        the newest frame's region and counts the run of frames before it
-       that share it: one upload, usually. The band stays hidden unless
-       the list arrives; the regions and sizes only refine it. */
+       that share it: one upload, usually; the frames of that run wear the
+       "New" badge. The band stays hidden unless the list arrives; the
+       regions and sizes only refine it. */
     (function renderLatestPhotos() {
       var LATEST_PHOTOS = 3;
       var section = document.getElementById('latest-photos');
@@ -545,14 +546,16 @@
 
         // The link carries the name, so the image is decorative (alt=""),
         // as in the photo strip.
-        row.innerHTML = stems.slice(0, LATEST_PHOTOS).map(function(raw) {
+        row.innerHTML = stems.slice(0, LATEST_PHOTOS).map(function(raw, i) {
           var stem = krEscapeHtml(raw);
           var size = dims[raw] || [400, 267];
           var ratio = (size[0] / size[1]).toFixed(4);
           var thumb = '/img/photography/thumb/' + stem;
+          var isNew = i < run;
           return '<a class="kr-latest-photos__tile" href="/gallery.html?photo=' + stem + '"' +
             ' style="flex-grow: ' + ratio + '"' +
-            ' aria-label="Photograph ' + stem + ', open it in the gallery">' +
+            ' aria-label="Photograph ' + stem + (isNew ? ', new' : '') + ', open it in the gallery">' +
+            (isNew ? '<span class="kr-new-badge" aria-hidden="true">New</span>' : '') +
             '<img src="' + thumb + '.webp" srcset="' + thumb + '.webp 400w, ' + thumb + '@2x.webp 800w"' +
             ' sizes="(max-width: 575.98px) 100vw, 34vw" width="' + size[0] + '" height="' + size[1] + '"' +
             ' alt="" loading="lazy" decoding="async"></a>';
@@ -629,13 +632,22 @@
       });
 
       // The cards bind their posts' hover sketches by themselves
-      // (live-covers.js watches the page for cards rendered late).
+      // (live-covers.js watches the page for cards rendered late). A post
+      // under NEW_POST_DAYS old gets the "New" badge on its cover; it is
+      // text inside the card's link, so the link's name says it too.
       var list = document.getElementById('latest-posts');
       if (!list) return;
+      var NEW_POST_DAYS = 7;
+      var newSince = Date.now() - NEW_POST_DAYS * 864e5;
       var row = document.createElement('div');
       row.className = 'row';
       posts.slice(0, 3).forEach(function(post) {
-        row.appendChild(createBlogCardElement(post, { colClass: 'col-12 mb-30', showReadTime: false }));
+        var card = createBlogCardElement(post, { colClass: 'col-12 mb-30', showReadTime: false });
+        var cover = card.querySelector('.blog-card-img');
+        if (cover && krParsePostDate(post.date).getTime() >= newSince) {
+          cover.insertAdjacentHTML('afterbegin', '<span class="kr-new-badge">New</span>');
+        }
+        row.appendChild(card);
       });
       list.appendChild(row);
     }).catch(function() {});
