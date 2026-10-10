@@ -333,6 +333,24 @@
     </div>
   </section>
 
+  <!-- Latest photographs: the newest frames in the gallery, filled by the
+       script at the foot of the page and shown once they are in. Without
+       the script it stays hidden; the strip below and the Explore tiles
+       still lead to the gallery. -->
+  <section class="kr-latest-photos" id="latest-photos" aria-labelledby="latest-photos-title" hidden>
+    <div class="container">
+      <div class="section-heading text-center">
+        <span class="section-eyebrow">New in the gallery</span>
+        <h2 id="latest-photos-title">Latest Photos</h2>
+        <p class="kr-latest-photos__lede" id="latest-photos-lede"></p>
+      </div>
+      <div class="kr-latest-photos__row" id="latest-photos-row"></div>
+      <div class="text-center">
+        <a class="kr-btn kr-btn--ghost" href="/gallery.html">See them in the gallery</a>
+      </div>
+    </div>
+  </section>
+
   <!-- Photography (injected by shared-components.js), promoted above the
        secondary sections: it is the best work on the site. -->
   <div id="instagram-section"></div>
@@ -486,6 +504,62 @@
     renderPhotoStrip('instagram-section');
     renderFooter('footer-section');
     renderBlueskyFeed(document.getElementById('bsky-posts'), { limit: 2 });
+
+    /* Latest photographs: the first LATEST_PHOTOS frames of
+       photography-files.json (newest first), in one row at one height.
+       Each tile grows by its thumbnail's width over height (photo-dims),
+       so portraits and landscapes share the row uncropped. The lede names
+       the newest frame's region and counts the run of frames before it
+       that share it: one upload, usually. The band stays hidden unless
+       the list arrives; the regions and sizes only refine it. */
+    (function renderLatestPhotos() {
+      var LATEST_PHOTOS = 3;
+      var section = document.getElementById('latest-photos');
+      var row = document.getElementById('latest-photos-row');
+      var lede = document.getElementById('latest-photos-lede');
+      if (!section || !row) return;
+      var optional = function(path) { return krFetchJson(path).catch(function() { return null; }); };
+      Promise.all([
+        krFetchJson('data/photography-files.json'),
+        optional('data/photo-locations.json'),
+        optional('data/photo-dims.json')
+      ]).then(function(results) {
+        var stems = (Array.isArray(results[0]) ? results[0] : []).map(function(f) {
+          return String(f).replace(/\.[^.]+$/, '');
+        });
+        if (!stems.length) return;
+        var regionOf = {};
+        ((results[1] && results[1].regions) || []).forEach(function(region) {
+          (region.photos || []).forEach(function(stem) { regionOf[stem] = region.name; });
+        });
+        var dims = results[2] || {};
+
+        var place = regionOf[stems[0]];
+        var run = 0;
+        while (place && run < stems.length && regionOf[stems[run]] === place) run++;
+        if (lede) {
+          lede.textContent = place
+            ? run + ' new photograph' + (run === 1 ? '' : 's') + ' from ' + place + '.'
+            : 'The newest photographs in the gallery.';
+        }
+
+        // The link carries the name, so the image is decorative (alt=""),
+        // as in the photo strip.
+        row.innerHTML = stems.slice(0, LATEST_PHOTOS).map(function(raw) {
+          var stem = krEscapeHtml(raw);
+          var size = dims[raw] || [400, 267];
+          var ratio = (size[0] / size[1]).toFixed(4);
+          var thumb = '/img/photography/thumb/' + stem;
+          return '<a class="kr-latest-photos__tile" href="/gallery.html?photo=' + stem + '"' +
+            ' style="flex-grow: ' + ratio + '"' +
+            ' aria-label="Photograph ' + stem + ', open it in the gallery">' +
+            '<img src="' + thumb + '.webp" srcset="' + thumb + '.webp 400w, ' + thumb + '@2x.webp 800w"' +
+            ' sizes="(max-width: 575.98px) 100vw, 34vw" width="' + size[0] + '" height="' + size[1] + '"' +
+            ' alt="" loading="lazy" decoding="async"></a>';
+        }).join('');
+        section.hidden = false;
+      }).catch(function() { /* no list, no band */ });
+    })();
 
     /** Writes a figure into each element named in `ids` that exists. */
     function setFigure(ids, value) {

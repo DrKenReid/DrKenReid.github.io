@@ -3158,6 +3158,61 @@ outline: 3px solid #ffffff;
 outline-offset: -3px;
 box-shadow: none; }
 
+/* --- Latest photos band (index.html's inline script) ------------------------
+   The three newest frames in the gallery, above the photo strip, in one
+   row at one height: the script gives each tile a flex-grow of its
+   thumbnail's width over height, and with a zero basis the widths follow
+   the ratios, so a portrait and a landscape share the row uncropped. Below
+   576px the first frame takes the row (100% plus the gap cannot share a
+   line) and the other two share the next. The section starts [hidden] and
+   the script shows it once the frames are in. Tiles take the site's focus
+   ring; the zoom on hover has a reduced-motion path. */
+.kr-latest-photos {
+  padding: 64px 0 10px; }
+
+.kr-latest-photos .section-heading {
+  margin-bottom: 34px; }
+
+.kr-latest-photos__lede {
+  color: var(--kr-muted); }
+
+.kr-latest-photos__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 30px; }
+
+.kr-latest-photos__tile {
+  display: block;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--kr-radius-md);
+  box-shadow: var(--kr-shadow-1); }
+
+.kr-latest-photos__tile img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 600ms ease; }
+
+.kr-latest-photos__tile:hover img {
+  transform: scale(1.04); }
+
+@media (min-width: 576px) {
+  .kr-latest-photos__row {
+    flex-wrap: nowrap; } }
+
+@media (max-width: 575.98px) {
+  .kr-latest-photos__tile:first-child {
+    flex-basis: 100%; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-latest-photos__tile img {
+    transition: none; }
+  .kr-latest-photos__tile:hover img {
+    transform: none; } }
+
 /* --- The quotation band ------------------------------------------------------
    One quotation at a time from data/quotes-home.json, rotating: Lora at
    display size, the source as a label, and one big quotation mark hanging

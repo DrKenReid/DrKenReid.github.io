@@ -9,9 +9,9 @@
   "series": 8,
   "photos": 545,
   "quotes": 571,
-  "cssSourceBytes": 436727,
-  "cssInputBytes": 753113,
-  "cssServedBytes": 253313,
+  "cssSourceBytes": 438339,
+  "cssInputBytes": 754725,
+  "cssServedBytes": 254129,
   "jsFiles": 25,
   "jsBytes": 988913,
   "iconFontBeforeBytes": 133268,
@@ -20,12 +20,12 @@
   "ciChecks": 30,
   "dependencies": 0,
   "buildStep": false,
-  "htmlBytes": 5958326,
+  "htmlBytes": 5962057,
   "imageCount": 1500,
   "imageBytes": 82779339,
   "webFontCount": 9,
   "webFontBytes": 133264,
-  "cssLines": 13693,
+  "cssLines": 13748,
   "jsLines": 16227,
   "dataFiles": 22,
   "tags": 13,
@@ -39,7 +39,7 @@
   "shortestPostTitle": "Every Card Has a Sketch",
   "shortestPostUrl": "blog/every-card-has-a-sketch.html",
   "averagePostWords": 2418,
-  "commits": 654,
+  "commits": 655,
   "commitsByMonth": [
     [
       "2019-12",
@@ -371,7 +371,7 @@
     ],
     [
       "2026-10",
-      18
+      19
     ]
   ],
   "repoStart": "2019-12"
