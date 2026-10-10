@@ -516,10 +516,11 @@ function buildTile(filename) {
     var wrapper = document.createElement('div');
     wrapper.className = 'single-portfolio-content';
 
+    var isNew = krIsNewPhoto(stem);
     var link = document.createElement('a');
     link.className = 'portfolio-img';
     link.href = KR_RELEASE + filename;
-    link.setAttribute('aria-label', 'Photograph ' + stem +
+    link.setAttribute('aria-label', 'Photograph ' + stem + (isNew ? ', new' : '') +
         (labels.length ? ': ' + labels.join(', ') : '') +
         (place ? (labels.length ? ', ' : ': ') + 'taken near ' + place : ''));
     link.setAttribute('data-caption', labels.concat(place ? [place] : []).join(' · '));
@@ -561,6 +562,15 @@ function buildTile(filename) {
 
     wrapper.appendChild(link);
     wrapper.appendChild(hover);
+    // The newest set (KR_NEW_PHOTOS) wears the "New" badge; the link's
+    // name already says it, so the badge itself is hidden from readers.
+    if (isNew) {
+        var badge = document.createElement('span');
+        badge.className = 'kr-new-badge';
+        badge.setAttribute('aria-hidden', 'true');
+        badge.textContent = 'New';
+        wrapper.appendChild(badge);
+    }
     // A placed frame gets a small globe in its corner on hover, turned
     // to where the photograph was taken (js/covers-site.js, gallery:globe).
     // The column is the host; the badge is only where the canvas goes.

@@ -278,14 +278,16 @@ with the action red on hover and focus.
 stat labels and the end band's slot titles are members of the same rule.
 A label is never a link.
 
-`.kr-new-badge` (§07) is the homepage's "New" chip: white capitals on
-`--kr-action-fill`, pinned to the top left of a Latest Photos frame from
-the newest upload and of a latest-post card's cover while the post is
-under `NEW_POST_DAYS` (7) old. The script in `index.html` adds it. It is
-red because it sits inside a link (the frame or the card) and is never a
-link itself. On a photo tile it is `aria-hidden` and the link's name says
-"new"; on a card it is text inside the link. Under forced colours it
-keeps a `CanvasText` border.
+`.kr-new-badge` (§02) is the "New" chip: white capitals on
+`--kr-action-fill`. It marks the newest photoset, which is set by hand
+(`KR_NEW_PHOTOS` in `js/shared-components.js`, tested by
+`krIsNewPhoto`), on the homepage's Latest Photos frames (top left) and
+the gallery's tiles (top right, clear of the place globe). It also marks
+a latest-post card's cover while the post is under `NEW_POST_DAYS` (7)
+old. It is red because it sits inside a link (the frame, tile or card)
+and is never a link itself. On a photo it is `aria-hidden` and the
+link's name says "new"; on a card it is text inside the link. Under
+forced colours it keeps a `CanvasText` border.
 
 ### Stages
 

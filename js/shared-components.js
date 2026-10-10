@@ -4671,6 +4671,20 @@ function initLightboxZoom() {
 var KR_RELEASE = 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/';
 
 /**
+ * The newest photoset, set by hand each time one is added. Every frame
+ * numbered `from` or higher wears the "New" badge in the gallery and on
+ * the homepage's Latest Photos band, whose line reads "<count> new
+ * photographs from <place>." `from: 0` marks nothing new.
+ */
+var KR_NEW_PHOTOS = { from: 525, place: 'Holland and Ann Arbor, Michigan' };
+
+/** Whether a frame (its number, as a string or a number) is in the newest set. */
+function krIsNewPhoto(stem) {
+    var n = parseInt(stem, 10);
+    return KR_NEW_PHOTOS.from > 0 && n >= KR_NEW_PHOTOS.from;
+}
+
+/**
  * The gallery's subject filters, in the order they are offered. `key` is
  * the tag in photo-tags.json and the ?tag= value; `label` is what the
  * filter button says; `also` holds the words someone would type for a

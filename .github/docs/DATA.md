@@ -31,7 +31,7 @@ builds on it, which is why a hand edit there is dangerous.
 | `photo-dims.json` | `{"<n>": [width, height]}` | `generate_photo_dims.py` | `js/gallery.js`, `index.html` (the Latest Photos row) | when thumbnails are added | `photo-dims` | never |
 | `photo-originals.json` | `{"<n>": [width, height]}`, the full-size frame on the release | `generate_photo_renditions.py` (reads each PNG's header with a ranged request) | the same script: a hero is made at `HERO_EDGE` or the original's own size, whichever is smaller | when frames are added | `renditions` | never |
 | `photo-tags.json` | `{"<n>": [tags]}` | a tagging tool kept outside the repository; `bw` rewritten by `detect_monochrome.py` | `js/gallery.js` (its filter buttons are `KR_PHOTO_CATEGORIES` in `js/shared-components.js`) | when photographs are added | `monochrome` | subject tags yes; `bw` never |
-| `photo-locations.json` | `{_help, regions: [{name, lat, lng, photos: ["<n>"]}]}` | you (its `_help` field says how) | `map.html`, `js/gallery.js` (tile captions, the globe badge), `js/palette.js` (places), `index.html` (the Latest Photos line: the newest frame's region and its run) | when photographs are placed | none | yes |
+| `photo-locations.json` | `{_help, regions: [{name, lat, lng, photos: ["<n>"]}]}` | you (its `_help` field says how) | `map.html`, `js/gallery.js` (tile captions, the globe badge), `js/palette.js` (places) | when photographs are placed | none | yes |
 | `photography-files.json` | `["<n>.png"]`, newest first: every frame | a filename tool kept outside the repository, or by hand | `js/gallery.js`, `404.html`, `index.html` (the three newest, the Latest Photos band), `generate_colophon.py`, the audit's orphan report | when photographs are added | the smoke suite (the gallery renders) | yes, carefully |
 | `photography-standard-files.json` | `["<n>.png"]`: the frames the photo strip may show | as above | `renderPhotoStrip`, `404.html` | rarely | none | yes |
 | `quotes-all.json` | `[{q, a, b}]`: every saved passage (quote, author, book) | an export tool kept outside the repository | `generate_quote_wall.py` (bakes `quotes.html`) and `generate_colophon.py` (the count the pages read from `colophon.json`) | occasionally | `quote-wall` | yes, then regenerate |
@@ -138,9 +138,8 @@ Adding photographs touches every file in this group:
 3. Add `"<n>.png"` to the top of `photography-files.json` (newest first),
    and to `photography-standard-files.json` if the photo strip may show
    it. The homepage's Latest Photos band ignores that pool: it shows the
-   three newest frames of all, with a "New" badge on each one from the
-   newest upload, so the last frames added lead the homepage whatever
-   they are.
+   three newest frames of all, so the last frames added lead the homepage
+   whatever they are.
 4. Give it subject tags in `photo-tags.json`. The tags come from a
    tagging model run outside the repository (the essay
    [Building a Photo Tagging System with CLIP](https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html)
@@ -148,7 +147,12 @@ Adding photographs touches every file in this group:
    in `js/shared-components.js`.
 5. Place it in a region of `photo-locations.json` if it belongs on the
    map ([Putting My Photos on a Map](https://www.kenreid.co.uk/blog/putting-my-photos-on-a-map.html)).
-6. `git add -N` the new images, then run `run_checks.py --fix`:
+6. Mark the set as new: `KR_NEW_PHOTOS` in `js/shared-components.js`
+   takes the set's first frame number (`from`) and where it was taken
+   (`place`). Every frame from `from` up wears the "New" badge in the
+   gallery and on the homepage, whose Latest Photos line reads "<count>
+   new photographs from <place>." Set by hand, once per set.
+7. `git add -N` the new images, then run `run_checks.py --fix`:
    `generate_photo_dims.py` records the thumbnail's size (the gallery lays
    out rows from it; a frame without one is assumed 3:2),
    `detect_monochrome.py` decides its `bw` tag from its pixels, and the

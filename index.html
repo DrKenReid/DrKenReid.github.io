@@ -508,50 +508,43 @@
     /* Latest photographs: the first LATEST_PHOTOS frames of
        photography-files.json (newest first), in one row at one height.
        Each tile grows by its thumbnail's width over height (photo-dims),
-       so portraits and landscapes share the row uncropped. The lede names
-       the newest frame's region and counts the run of frames before it
-       that share it: one upload, usually; the frames of that run wear the
-       "New" badge. The band stays hidden unless the list arrives; the
-       regions and sizes only refine it. */
+       so portraits and landscapes share the row uncropped. The newest set
+       is set by hand (KR_NEW_PHOTOS in shared-components.js): its frames
+       wear the "New" badge, and the lede counts them and names its place.
+       The band stays hidden unless the list arrives; the sizes only
+       refine it. */
     (function renderLatestPhotos() {
       var LATEST_PHOTOS = 3;
       var section = document.getElementById('latest-photos');
       var row = document.getElementById('latest-photos-row');
       var lede = document.getElementById('latest-photos-lede');
       if (!section || !row) return;
-      var optional = function(path) { return krFetchJson(path).catch(function() { return null; }); };
       Promise.all([
         krFetchJson('data/photography-files.json'),
-        optional('data/photo-locations.json'),
-        optional('data/photo-dims.json')
+        krFetchJson('data/photo-dims.json').catch(function() { return null; })
       ]).then(function(results) {
         var stems = (Array.isArray(results[0]) ? results[0] : []).map(function(f) {
           return String(f).replace(/\.[^.]+$/, '');
         });
         if (!stems.length) return;
-        var regionOf = {};
-        ((results[1] && results[1].regions) || []).forEach(function(region) {
-          (region.photos || []).forEach(function(stem) { regionOf[stem] = region.name; });
-        });
-        var dims = results[2] || {};
+        var dims = results[1] || {};
 
-        var place = regionOf[stems[0]];
-        var run = 0;
-        while (place && run < stems.length && regionOf[stems[run]] === place) run++;
+        var count = stems.filter(krIsNewPhoto).length;
         if (lede) {
-          lede.textContent = place
-            ? run + ' new photograph' + (run === 1 ? '' : 's') + ' from ' + place + '.'
+          lede.textContent = count
+            ? count + ' new photograph' + (count === 1 ? '' : 's') +
+              (KR_NEW_PHOTOS.place ? ' from ' + KR_NEW_PHOTOS.place : '') + '.'
             : 'The newest photographs in the gallery.';
         }
 
         // The link carries the name, so the image is decorative (alt=""),
         // as in the photo strip.
-        row.innerHTML = stems.slice(0, LATEST_PHOTOS).map(function(raw, i) {
+        row.innerHTML = stems.slice(0, LATEST_PHOTOS).map(function(raw) {
           var stem = krEscapeHtml(raw);
           var size = dims[raw] || [400, 267];
           var ratio = (size[0] / size[1]).toFixed(4);
           var thumb = '/img/photography/thumb/' + stem;
-          var isNew = i < run;
+          var isNew = krIsNewPhoto(raw);
           return '<a class="kr-latest-photos__tile" href="/gallery.html?photo=' + stem + '"' +
             ' style="flex-grow: ' + ratio + '"' +
             ' aria-label="Photograph ' + stem + (isNew ? ', new' : '') + ', open it in the gallery">' +

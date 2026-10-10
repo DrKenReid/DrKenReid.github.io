@@ -193,7 +193,7 @@
      white on the dark theme's #fc6060 is 2.9:1. */
   --kr-action-fill: #c53030;
   --kr-action-fill-hover: #a52424;
-  /* The type on that fill: white in both themes (the "New" badge, §07). */
+  /* The type on that fill: white in both themes (the "New" badge, §02). */
   --kr-on-action-fill: #ffffff;
   /* Ink: body copy and headings, the colour the reset has always set.
        light #252525  14.34 page, 15.10 card, 15.33 white
@@ -894,6 +894,38 @@ svg.kr-glyph {
   border-radius: var(--kr-radius-sm);
   background: rgba(127, 127, 127, 0.16);
   margin: 4px 0; }
+
+/* --- "New" badge (krIsNewPhoto; index.html and gallery.js) -----------------
+   The hero's "New post" chip in small: red fill, white capitals. It marks
+   the newest photoset (KR_NEW_PHOTOS, set by hand in shared-components.js)
+   on the homepage's Latest Photos frames and the gallery's tiles, and a
+   latest-post card's cover while the post is under a week old. Scripts
+   add it; it is never a link of its own (the frame or card around it is).
+   Top left here; the gallery moves it top right, clear of the place globe
+   (§13). White 11px bold type is 5.47:1 on --kr-action-fill in both
+   themes. It sits above a running hover sketch (.kr-live-cover, z-index 5). */
+.kr-new-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 6;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--kr-action-fill);
+  color: var(--kr-on-action-fill);
+  box-shadow: var(--kr-shadow-1);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none; }
+
+/* Forced colours (Windows contrast themes) drop the red fill; a border
+   keeps the badge a chip rather than loose text over the photograph. */
+@media (forced-colors: active) {
+  .kr-new-badge {
+    border: 1px solid CanvasText; } }
 
 /* --- Spacing helpers -------------------------------------------------------
    The template's spacing classes that pages still use. Unused ones have
@@ -3215,36 +3247,6 @@ box-shadow: none; }
     transition: none; }
   .kr-latest-photos__tile:hover img {
     transform: none; } }
-
-/* --- "New" badge (index.html's inline script) -------------------------------
-   The hero's "New post" chip in small: red fill, white capitals, pinned to
-   the top left of a Latest Photos frame from the newest upload and of a
-   latest-post card's cover when the post is under a week old. The script
-   adds it; it is not a link of its own (the frame or card around it is).
-   White 11px bold type is 5.47:1 on --kr-action-fill in both themes. It
-   sits above a running hover sketch (.kr-live-cover, z-index 5). */
-.kr-new-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 6;
-  padding: 3px 10px;
-  border-radius: 999px;
-  background: var(--kr-action-fill);
-  color: var(--kr-on-action-fill);
-  box-shadow: var(--kr-shadow-1);
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  pointer-events: none; }
-
-/* Forced colours (Windows contrast themes) drop the red fill; a border
-   keeps the badge a chip rather than loose text over the photograph. */
-@media (forced-colors: active) {
-  .kr-new-badge {
-    border: 1px solid CanvasText; } }
 
 /* --- The quotation band ------------------------------------------------------
    One quotation at a time from data/quotes-home.json, rotating: Lora at
@@ -9165,6 +9167,15 @@ html.nerd-mode-on .non-nerd {
 .single-portfolio-content:hover .kr-tile-globe,
 .single-portfolio-content:focus-within .kr-tile-globe {
   opacity: 1; }
+
+/* The "New" badge (§02) on a tile sits top right, since the globe has the
+   top left, and above the hover panel (z-index 10), so it stays bright
+   while the caption shows. */
+.single-portfolio-content .kr-new-badge {
+  top: 8px;
+  right: 8px;
+  left: auto;
+  z-index: 11; }
 
 /* --- Gallery filter morph (gallery.js krGalleryMorph) -----------------
    During a filter change every tile carries a view-transition-name, so
