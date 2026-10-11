@@ -21,6 +21,8 @@
  *
  * Cards and lists
  *   createBlogCardElement(post, o)  THE post card, stacked or overlay
+ *   krMarkNewPost(col, post)        the "New" badge on a card under
+ *                                   KR_NEW_POST_DAYS old
  *   renderRelatedPosts(id)          related cards at runtime (drafts only)
  *   renderTopicPosts(el, o)         a page's "writing about X" row; any
  *                                   [data-topic-tags] host starts itself
@@ -936,6 +938,31 @@ function krParsePostDate(dateValue) {
         return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
     }
     return new Date(dateValue);
+}
+
+/** A post this many days old or less wears the "New" badge on its card. */
+var KR_NEW_POST_DAYS = 7;
+
+/** Whether a post is under KR_NEW_POST_DAYS old. */
+function krIsNewPost(post) {
+    var t = krParsePostDate(post && post.date).getTime();
+    return !isNaN(t) && t >= Date.now() - KR_NEW_POST_DAYS * 864e5;
+}
+
+/**
+ * The "New" badge on a post card's cover when the post is new (style.css
+ * §02): in a stacked card's .blog-card-img, which is inside the card's
+ * link, so the link's name says "New" too; in an overlay card's
+ * .post-thumbnail, ahead of the title in reading order. The homepage's
+ * latest posts, the blog listing and the series pages call it on the
+ * cards they list; other card rows (related posts, topic rows) do not,
+ * and the baked related cards never carry it. Once per card.
+ */
+function krMarkNewPost(col, post) {
+    if (!col || !krIsNewPost(post)) return;
+    var cover = col.querySelector('.blog-card-img, .post-thumbnail');
+    if (!cover || cover.querySelector('.kr-new-badge')) return;
+    cover.insertAdjacentHTML('afterbegin', '<span class="kr-new-badge">New</span>');
 }
 
 /** A post date as the site shows it everywhere: "20 September 2026". */
@@ -3018,6 +3045,8 @@ function renderSeriesPage() {
                 chip.textContent = 'Part ' + postSeriesEntry(p, name).part;
                 imgWrap.appendChild(chip);
             }
+            // Top right here (style.css §09): the part chip has the top left.
+            krMarkNewPost(col, p);
             grid.appendChild(col);
         });
 
@@ -4671,10 +4700,12 @@ function initLightboxZoom() {
 var KR_RELEASE = 'https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/';
 
 /**
- * The newest photoset, set by hand each time one is added. Every frame
+ * The newest photoset. Do not edit this line: generate_photo_feed.py
+ * writes it from the first set in data/photosets.json, which is edited by
+ * hand when a set goes up (run_checks.py --fix runs it). Every frame
  * numbered `from` or higher wears the "New" badge in the gallery and on
  * the homepage's Latest Photos band, whose line reads "<count> new
- * photographs from <place>." `from: 0` marks nothing new.
+ * photographs from <place>."
  */
 var KR_NEW_PHOTOS = { from: 525, place: 'Holland and Ann Arbor, Michigan' };
 

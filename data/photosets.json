@@ -1,0 +1,29 @@
+{
+  "_help": "One entry per photoset added to the gallery, newest first, written by hand when a set goes up. from and to are its first and last frame numbers (photography-files.json), date the day it was added, place where it was taken (it ends the line \"28 new photographs from <place>.\"). generate_photo_feed.py builds feed-photos.xml from this and copies the newest set into KR_NEW_PHOTOS in js/shared-components.js, which marks those frames New in the gallery and on the homepage.",
+  "sets": [
+    {
+      "date": "2026-10-10",
+      "from": 525,
+      "to": 552,
+      "place": "Holland and Ann Arbor, Michigan"
+    },
+    {
+      "date": "2026-09-21",
+      "from": 500,
+      "to": 524,
+      "place": "Ann Arbor and Ypsilanti, Michigan"
+    },
+    {
+      "date": "2026-06-10",
+      "from": 477,
+      "to": 499,
+      "place": "Glenwood Springs, Colorado and Chicago, Illinois"
+    },
+    {
+      "date": "2026-05-25",
+      "from": 420,
+      "to": 476,
+      "place": "the archive: Scotland, Italy, London and Lansing"
+    }
+  ]
+}

@@ -181,6 +181,13 @@ CHECKS: list[Check] = [
           script("generate_feed.py", "--check"),
           script("generate_feed.py"), fast=True),
 
+    # feed-photos.xml, the photography feed, and KR_NEW_PHOTOS in
+    # shared-components.js (the newest set, badged New), both from
+    # data/photosets.json. Fails when frames were added without their set.
+    Check("photo-feed", "feed-photos.xml and KR_NEW_PHOTOS match data/photosets.json",
+          script("generate_photo_feed.py", "--check"),
+          script("generate_photo_feed.py"), fast=True),
+
     # The next three bake data into a page's HTML, so they come before the
     # stylesheet pruner and the audit, which read it.
     # quotes.html carries every saved passage as HTML, so the wall reads

@@ -613,6 +613,7 @@
 			});
 			addExcerpt(col, post);
 			addSeriesChip(col, post);
+			krMarkNewPost(col, post);
 			container.appendChild(col);
 		});
 

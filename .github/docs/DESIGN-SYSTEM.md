@@ -279,15 +279,19 @@ stat labels and the end band's slot titles are members of the same rule.
 A label is never a link.
 
 `.kr-new-badge` (§02) is the "New" chip: white capitals on
-`--kr-action-fill`. It marks the newest photoset, which is set by hand
-(`KR_NEW_PHOTOS` in `js/shared-components.js`, tested by
-`krIsNewPhoto`), on the homepage's Latest Photos frames (top left) and
-the gallery's tiles (top right, clear of the place globe). It also marks
-a latest-post card's cover while the post is under `NEW_POST_DAYS` (7)
-old. It is red because it sits inside a link (the frame, tile or card)
-and is never a link itself. On a photo it is `aria-hidden` and the
-link's name says "new"; on a card it is text inside the link. Under
-forced colours it keeps a `CanvasText` border.
+`--kr-action-fill`. It marks the newest photoset (`KR_NEW_PHOTOS`,
+written from `data/photosets.json`, tested by `krIsNewPhoto`) on the
+homepage's Latest Photos frames (top left) and the gallery's tiles (top
+right, clear of the place globe). It marks a post card's cover while the
+post is under `KR_NEW_POST_DAYS` (7) old (`krMarkNewPost`): on the
+homepage's latest posts and the blog listing (top left, clear of the
+topic chip) and on the series pages (top right, clear of the part
+chip). Related cards and topic rows do not carry it. It is red because
+it sits inside a link (the frame, tile or card) and is never a link
+itself. On a photo it is `aria-hidden` and the link's name says "new";
+on a stacked card it is text inside the link, and on an overlay card
+text read just before the title. Under forced colours it keeps a
+`CanvasText` border.
 
 ### Stages
 

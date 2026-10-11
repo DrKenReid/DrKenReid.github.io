@@ -33,6 +33,7 @@
 
   <!-- Stylesheet -->
   <link rel="alternate" type="application/rss+xml" title="Ken Reid's Blog" href="https://www.kenreid.co.uk/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Ken Reid's Photographs" href="https://www.kenreid.co.uk/feed-photos.xml">
   <link rel="preload" as="image" href="/img/bg-img/ken-hero.webp" fetchpriority="high">
   <link rel="stylesheet" href="/style.min.css?v=20260923a">
   <style>
@@ -626,20 +627,14 @@
 
       // The cards bind their posts' hover sketches by themselves
       // (live-covers.js watches the page for cards rendered late). A post
-      // under NEW_POST_DAYS old gets the "New" badge on its cover; it is
-      // text inside the card's link, so the link's name says it too.
+      // under a week old gets the "New" badge on its cover (krMarkNewPost).
       var list = document.getElementById('latest-posts');
       if (!list) return;
-      var NEW_POST_DAYS = 7;
-      var newSince = Date.now() - NEW_POST_DAYS * 864e5;
       var row = document.createElement('div');
       row.className = 'row';
       posts.slice(0, 3).forEach(function(post) {
         var card = createBlogCardElement(post, { colClass: 'col-12 mb-30', showReadTime: false });
-        var cover = card.querySelector('.blog-card-img');
-        if (cover && krParsePostDate(post.date).getTime() >= newSince) {
-          cover.insertAdjacentHTML('afterbegin', '<span class="kr-new-badge">New</span>');
-        }
+        krMarkNewPost(card, post);
         row.appendChild(card);
       });
       list.appendChild(row);

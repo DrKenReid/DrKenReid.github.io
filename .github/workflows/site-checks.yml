@@ -134,6 +134,12 @@ jobs:
       - name: Feed is current
         if: ${{ !cancelled() }}
         run: python .github/scripts/generate_feed.py --check
+      # The photography feed and the "New" marker on the newest photoset,
+      # both from data/photosets.json; also fails when frames were added
+      # to the gallery without their set.
+      - name: Photo feed is current
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/generate_photo_feed.py --check
 
       # quotes.html carries every saved passage as HTML, baked from
       # data/quotes-all.json; a quote added to the file and not rebuilt

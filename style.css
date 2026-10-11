@@ -895,14 +895,15 @@ svg.kr-glyph {
   background: rgba(127, 127, 127, 0.16);
   margin: 4px 0; }
 
-/* --- "New" badge (krIsNewPhoto; index.html and gallery.js) -----------------
+/* --- "New" badge (krIsNewPhoto, krMarkNewPost) --------------------------
    The hero's "New post" chip in small: red fill, white capitals. It marks
-   the newest photoset (KR_NEW_PHOTOS, set by hand in shared-components.js)
+   the newest photoset (KR_NEW_PHOTOS, written from data/photosets.json)
    on the homepage's Latest Photos frames and the gallery's tiles, and a
-   latest-post card's cover while the post is under a week old. Scripts
-   add it; it is never a link of its own (the frame or card around it is).
-   Top left here; the gallery moves it top right, clear of the place globe
-   (§13). White 11px bold type is 5.47:1 on --kr-action-fill in both
+   post card's cover while the post is under a week old (krMarkNewPost:
+   the homepage, the blog listing, the series pages). Scripts add it; it
+   is never a link of its own (the frame or card around it is). Top left
+   here; the gallery (§13) and the series pages (§09) move it top right,
+   clear of the place globe and the part chip. White 11px bold type is 5.47:1 on --kr-action-fill in both
    themes. It sits above a running hover sketch (.kr-live-cover, z-index 5). */
 .kr-new-badge {
   position: absolute;
@@ -4891,6 +4892,12 @@ a.gallery-filter-btn:focus:not(:hover) {
 .kr-series-intro--center {
   margin-inline: auto;
   text-align: center; }
+
+/* A new part's "New" badge (§02, krMarkNewPost) sits top right: the part
+   chip has the top left. */
+#series-grid .kr-new-badge {
+  right: 10px;
+  left: auto; }
 
 /* --- Series band (generate_series_band.py) -----------------------------------
    "Read in order" under the blog grid: an eyebrow, heading and lede (the

@@ -33,6 +33,7 @@ builds on it, which is why a hand edit there is dangerous.
 | `photo-tags.json` | `{"<n>": [tags]}` | a tagging tool kept outside the repository; `bw` rewritten by `detect_monochrome.py` | `js/gallery.js` (its filter buttons are `KR_PHOTO_CATEGORIES` in `js/shared-components.js`) | when photographs are added | `monochrome` | subject tags yes; `bw` never |
 | `photo-locations.json` | `{_help, regions: [{name, lat, lng, photos: ["<n>"]}]}` | you (its `_help` field says how) | `map.html`, `js/gallery.js` (tile captions, the globe badge), `js/palette.js` (places) | when photographs are placed | none | yes |
 | `photography-files.json` | `["<n>.png"]`, newest first: every frame | a filename tool kept outside the repository, or by hand | `js/gallery.js`, `404.html`, `index.html` (the three newest, the Latest Photos band), `generate_colophon.py`, the audit's orphan report | when photographs are added | the smoke suite (the gallery renders) | yes, carefully |
+| `photosets.json` | `{_help, sets: [{date, from, to, place}]}`, newest first: one entry per photoset added | you, when a set goes up | `generate_photo_feed.py`, which writes `feed-photos.xml` and the `KR_NEW_PHOTOS` line in `js/shared-components.js` from it | when photographs are added | `photo-feed`, `data-schemas` | yes |
 | `photography-standard-files.json` | `["<n>.png"]`: the frames the photo strip may show | as above | `renderPhotoStrip`, `404.html` | rarely | none | yes |
 | `quotes-all.json` | `[{q, a, b}]`: every saved passage (quote, author, book) | an export tool kept outside the repository | `generate_quote_wall.py` (bakes `quotes.html`) and `generate_colophon.py` (the count the pages read from `colophon.json`) | occasionally | `quote-wall` | yes, then regenerate |
 | `quotes.json` | `[{quote, author, book, popularity}]` | as above | `js/literature.js` (the rotating quotation) | rarely | none | yes |
@@ -147,11 +148,15 @@ Adding photographs touches every file in this group:
    in `js/shared-components.js`.
 5. Place it in a region of `photo-locations.json` if it belongs on the
    map ([Putting My Photos on a Map](https://www.kenreid.co.uk/blog/putting-my-photos-on-a-map.html)).
-6. Mark the set as new: `KR_NEW_PHOTOS` in `js/shared-components.js`
-   takes the set's first frame number (`from`) and where it was taken
-   (`place`). Every frame from `from` up wears the "New" badge in the
-   gallery and on the homepage, whose Latest Photos line reads "<count>
-   new photographs from <place>." Set by hand, once per set.
+6. Add the set to the top of `photosets.json`: the day it went up,
+   its first and last frame numbers and where it was taken. From it
+   `generate_photo_feed.py` (run by step 7) writes the set's item in
+   `feed-photos.xml`, the photography feed, and copies the newest set
+   into `KR_NEW_PHOTOS` in `js/shared-components.js`: every frame from
+   `from` up wears the "New" badge in the gallery and on the homepage,
+   whose Latest Photos line reads "<count> new photographs from
+   <place>." The `photo-feed` check fails while frames sit past the
+   newest set, so a set cannot go up without its entry.
 7. `git add -N` the new images, then run `run_checks.py --fix`:
    `generate_photo_dims.py` records the thumbnail's size (the gallery lays
    out rows from it; a frame without one is assumed 3:2),
