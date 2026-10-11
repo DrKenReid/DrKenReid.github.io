@@ -246,31 +246,34 @@
     </div>
   </section>
 
-  <!-- Latest Blog Posts -->
-  <section class="about-us-area kr-latest-area clearfix">
+  <!-- Latest: what is new on the site, a lane per kind, filled by the
+       script at the foot of the page. Blog: the three newest posts.
+       Photography: the newest set's line and frames (KR_NEW_PHOTOS).
+       Writing: the newest story, and hidden until data/stories.json has
+       one. A lane whose data does not arrive stays hidden, except the
+       blog's, whose links still lead to the posts. -->
+  <section class="about-us-area kr-latest-area clearfix" aria-labelledby="latest-title">
     <div class="container">
       <div class="section-heading text-center">
-        <span class="section-eyebrow">From the blog</span>
-        <h2>Latest Blog Posts</h2>
+        <span class="section-eyebrow">New on the site</span>
+        <h2 id="latest-title">Latest</h2>
       </div>
-      <div class="row justify-content-center">
-        <div class="col-12 col-lg-7 kr-latest-list" id="latest-posts"></div>
-        <div class="col-12 col-lg-5 mb-30">
-          <div class="kr-blog-promo" style="background-image: url(/img/bg-img/ken-train.webp);">
-            <span class="sr-only">Background photo: Ken Reid on a train, lit by the window.</span>
-            <div class="kr-blog-promo__content">
-              <!-- The card sits on a photograph, so its heading takes the
-                   on-photo colours (the gold eyebrow) in both themes; the
-                   theme's stone eyebrow was 2.5:1 on the card's dark glass. -->
-              <div class="section-heading section-heading--on-photo mb-0">
-                <span class="section-eyebrow">The blog</span>
-                <h3>Writing to find out <span class="text-nowrap">what I think</span></h3>
-              </div>
-              <p>Data science, books, photography, music, moving countries: whatever I'm currently thinking through ends up written down here, with citations where I can find them.</p>
-              <a class="kr-btn kr-btn--on-photo" href="/blog.html">Browse all posts</a>
-              <p class="kr-blog-promo__sub">Or get new posts <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">by email</a>.</p>
-            </div>
+      <div class="row">
+        <div class="col-12 col-lg-7">
+          <div class="kr-latest-lane">
+            <h3 class="kr-label kr-latest-lane__title">Blog</h3>
+            <div class="kr-latest-list" id="latest-posts"></div>
+            <p class="kr-latest-lane__more"><a href="/blog.html">All posts <span aria-hidden="true">&rarr;</span></a> <span class="kr-latest-lane__sep" aria-hidden="true">&middot;</span> <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">New posts by email</a></p>
           </div>
+        </div>
+        <div class="col-12 col-lg-5">
+          <div class="kr-latest-lane" id="latest-photos" hidden>
+            <h3 class="kr-label kr-latest-lane__title">Photography</h3>
+            <p class="kr-latest-photos__lede" id="latest-photos-lede"></p>
+            <div class="kr-latest-photos__row" id="latest-photos-row"></div>
+            <p class="kr-latest-lane__more"><a href="/gallery.html">The gallery <span aria-hidden="true">&rarr;</span></a> <span class="kr-latest-lane__sep" aria-hidden="true">&middot;</span> <a href="/feed-photos.xml">New photosets by RSS</a></p>
+          </div>
+          <div class="kr-latest-lane" id="latest-writing" hidden></div>
         </div>
       </div>
     </div>
@@ -331,24 +334,6 @@
           <i class="ti-star home-stat-icon" aria-hidden="true"></i>
         </div>
       </dl>
-    </div>
-  </section>
-
-  <!-- Latest photographs: the newest frames in the gallery, filled by the
-       script at the foot of the page and shown once they are in. Without
-       the script it stays hidden; the strip below and the Explore tiles
-       still lead to the gallery. -->
-  <section class="kr-latest-photos" id="latest-photos" aria-labelledby="latest-photos-title" hidden>
-    <div class="container">
-      <div class="section-heading text-center">
-        <span class="section-eyebrow">New in the gallery</span>
-        <h2 id="latest-photos-title">Latest Photos</h2>
-        <p class="kr-latest-photos__lede" id="latest-photos-lede"></p>
-      </div>
-      <div class="kr-latest-photos__row" id="latest-photos-row"></div>
-      <div class="text-center">
-        <a class="kr-btn kr-btn--ghost" href="/gallery.html">See them in the gallery</a>
-      </div>
     </div>
   </section>
 
@@ -506,14 +491,14 @@
     renderFooter('footer-section');
     renderBlueskyFeed(document.getElementById('bsky-posts'), { limit: 2 });
 
-    /* Latest photographs: the first LATEST_PHOTOS frames of
-       photography-files.json (newest first), in one row at one height.
-       Each tile grows by its thumbnail's width over height (photo-dims),
-       so portraits and landscapes share the row uncropped. The newest set
-       is set by hand (KR_NEW_PHOTOS in shared-components.js): its frames
-       wear the "New" badge, and the lede counts them and names its place.
-       The band stays hidden unless the list arrives; the sizes only
-       refine it. */
+    /* The Latest section's photography lane: the first LATEST_PHOTOS
+       frames of photography-files.json (newest first), the first across
+       the lane and the next two sharing a row, each row at one height:
+       a tile grows by its thumbnail's width over height (photo-dims), so
+       portraits and landscapes sit together uncropped. The newest set
+       (KR_NEW_PHOTOS, written from data/photosets.json) wears the "New"
+       badge, and the lede counts it and names its place. The lane stays
+       hidden unless the list arrives; the sizes only refine it. */
     (function renderLatestPhotos() {
       var LATEST_PHOTOS = 3;
       var section = document.getElementById('latest-photos');
@@ -551,11 +536,37 @@
             ' aria-label="Photograph ' + stem + (isNew ? ', new' : '') + ', open it in the gallery">' +
             (isNew ? '<span class="kr-new-badge" aria-hidden="true">New</span>' : '') +
             '<img src="' + thumb + '.webp" srcset="' + thumb + '.webp 400w, ' + thumb + '@2x.webp 800w"' +
-            ' sizes="(max-width: 575.98px) 100vw, 34vw" width="' + size[0] + '" height="' + size[1] + '"' +
+            ' sizes="(max-width: 991.98px) 100vw, 460px" width="' + size[0] + '" height="' + size[1] + '"' +
             ' alt="" loading="lazy" decoding="async"></a>';
         }).join('');
         section.hidden = false;
-      }).catch(function() { /* no list, no band */ });
+      }).catch(function() { /* no list, no lane */ });
+    })();
+
+    /* The writing lane: the newest story in data/stories.json as a card,
+       the same card the blog lane uses (and its "New" badge under a week
+       old), with a link to every story. Hidden while there are none, so
+       it appears with the first story and needs no change then. */
+    (function renderLatestWriting() {
+      var lane = document.getElementById('latest-writing');
+      if (!lane) return;
+      krFetchJson('data/stories.json').then(function(all) {
+        var stories = (Array.isArray(all) ? all : []).slice().sort(function(a, b) {
+          return krParsePostDate(b.date) - krParsePostDate(a.date);
+        });
+        if (!stories.length) return;
+        lane.innerHTML = '<h3 class="kr-label kr-latest-lane__title">Writing</h3>' +
+          '<div class="kr-latest-list"><div class="row"></div></div>' +
+          '<p class="kr-latest-lane__more"><a href="/writing.html">All stories <span aria-hidden="true">&rarr;</span></a></p>';
+        var card = createBlogCardElement(stories[0], {
+          colClass: 'col-12 mb-30',
+          showReadTime: false,
+          imageSrc: stories[0].image || 'img/photography/hero/158.webp'
+        });
+        krMarkNewPost(card, stories[0]);
+        lane.querySelector('.row').appendChild(card);
+        lane.hidden = false;
+      }).catch(function() { /* no stories, no lane */ });
     })();
 
     /** Writes a figure into each element named in `ids` that exists. */

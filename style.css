@@ -898,7 +898,7 @@ svg.kr-glyph {
 /* --- "New" badge (krIsNewPhoto, krMarkNewPost) --------------------------
    The hero's "New post" chip in small: red fill, white capitals. It marks
    the newest photoset (KR_NEW_PHOTOS, written from data/photosets.json)
-   on the homepage's Latest Photos frames and the gallery's tiles, and a
+   on the homepage's Latest photography frames and the gallery's tiles, and a
    post card's cover while the post is under a week old (krMarkNewPost:
    the homepage, the blog listing, the series pages). Scripts add it; it
    is never a link of its own (the frame or card around it is). Top left
@@ -1062,7 +1062,7 @@ svg.kr-glyph {
   --kr-btn-border-hover: var(--kr-action-fill); }
 
 .kr-btn--on-photo,
-:is(.bg-overlay, .welcome-text, .kr-blog-promo__content) .alime-btn {
+:is(.bg-overlay, .welcome-text) .alime-btn {
   --kr-btn-fg: #fff;
   --kr-btn-bg: rgba(0, 0, 0, 0.28);
   --kr-btn-border: rgba(255, 255, 255, 0.85);
@@ -1108,7 +1108,7 @@ svg.kr-glyph {
 /* (0,3,0): the site's focus ring for .kr-btn (§02, 0,2,0) would
    otherwise put the red ring back. */
 .kr-btn.kr-btn--on-photo:focus-visible,
-:is(.bg-overlay, .welcome-text, .kr-blog-promo__content) .alime-btn:focus-visible {
+:is(.bg-overlay, .welcome-text) .alime-btn:focus-visible {
   outline-color: #fff; }
 
 .kr-btn[disabled],
@@ -2906,12 +2906,31 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   opacity: 0.45;
   font-size: 15px; }
 
-/* --- Latest posts and the blog promo ---------------------------------------
-   Three full-width cards stacked beside the promo panel ran to 1,534px,
-   the tallest thing on the page by a factor of two. Turned on their side
-   they read as an editorial list and cost a third of the height. The
-   markup is the stacked post card's (§08); only this column's cards lie
-   down, and a phone stands them up again. */
+/* --- Latest (index.html) -----------------------------------------------------
+   What is new on the site, a lane per kind: the blog's three newest posts
+   on the left, the photography lane (the newest set's line and frames,
+   "Latest photos" below) on the right, and under it the writing lane,
+   which the script shows only once data/stories.json has a story. Each
+   lane is a .kr-label title, its content and a line of links. Three
+   full-width post cards ran to 1,534px, the tallest thing on the page by
+   a factor of two; turned on their side they read as an editorial list
+   and cost a third of the height. The markup is the stacked post card's
+   (§08); only these lanes' cards lie down, and a phone stands them up
+   again. */
+.kr-latest-lane__title {
+  margin: 0 0 16px; }
+
+.kr-latest-lane__more {
+  margin: 0 0 30px;
+  font-size: 14px; }
+
+.kr-latest-lane__sep {
+  margin: 0 6px;
+  color: var(--kr-muted); }
+
+/* Below 992px the two columns stack, blog first; the links line's 30px
+   margin spaces each lane from the next, there and in the right column. */
+
 .kr-latest-list .blog-card {
   display: flex;
   align-items: stretch;
@@ -2958,62 +2977,6 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
     max-width: 100%;
     aspect-ratio: 16 / 10;
     border-radius: 8px 8px 0 0; } }
-
-/* The blog promo: a photograph under a dark wash, with a frosted panel of
-   words and buttons (on-photo, §03) on top. */
-.kr-blog-promo {
-  position: relative;
-  height: 100%;
-  min-height: 420px;
-  border-radius: 8px;
-  overflow: hidden;
-  background-size: cover;
-  background-position: 50% 12%;
-  display: flex;
-  align-items: center;
-  justify-content: center; }
-
-.kr-blog-promo::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(20, 20, 22, 0.35); }
-
-.kr-blog-promo__content {
-  position: relative;
-  z-index: 1;
-  width: calc(100% - 48px);
-  max-width: 380px;
-  text-align: center;
-  padding: 30px 26px;
-  background: rgba(22, 22, 25, 0.6);
-  -webkit-backdrop-filter: blur(9px);
-  backdrop-filter: blur(9px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--kr-radius-lg);
-  color: #fff; }
-
-.kr-blog-promo__content h3 {
-  color: #fff;
-  font-size: 24px;
-  margin: 6px 0 14px; }
-
-.kr-blog-promo__content p {
-  color: rgba(255, 255, 255, 0.88);
-  font-size: 15px;
-  line-height: 1.8;
-  margin-bottom: 20px; }
-
-.kr-blog-promo__sub {
-  font-size: 13px;
-  margin: 14px 0 0; }
-
-.kr-blog-promo__sub a {
-  color: #fc9a9a;
-  text-decoration: underline; }
-
-.kr-blog-promo__sub a:hover {
-  color: #fff; }
 
 /* --- Explore ---------------------------------------------------------------
    Seven links to the site's parts, each an icon and two lines of text with
@@ -3193,29 +3156,24 @@ outline: 3px solid #ffffff;
 outline-offset: -3px;
 box-shadow: none; }
 
-/* --- Latest photos band (index.html's inline script) ------------------------
-   The three newest frames in the gallery, above the photo strip, in one
-   row at one height: the script gives each tile a flex-grow of its
+/* --- Latest photos (the Latest section's photography lane) ------------------
+   The three newest frames in the gallery: the first across the lane (100%
+   plus the gap cannot share a line) and the other two sharing the next
+   row at one height. The script gives each tile a flex-grow of its
    thumbnail's width over height, and with a zero basis the widths follow
-   the ratios, so a portrait and a landscape share the row uncropped. Below
-   576px the first frame takes the row (100% plus the gap cannot share a
-   line) and the other two share the next. The section starts [hidden] and
-   the script shows it once the frames are in. Tiles take the site's focus
-   ring; the zoom on hover has a reduced-motion path. */
-.kr-latest-photos {
-  padding: 64px 0 10px; }
-
-.kr-latest-photos .section-heading {
-  margin-bottom: 34px; }
-
+   the ratios, so a portrait and a landscape share a row uncropped. The
+   lane starts [hidden] and the script shows it once the frames are in.
+   Tiles take the site's focus ring; the zoom on hover has a
+   reduced-motion path. */
 .kr-latest-photos__lede {
+  margin: 0 0 14px;
   color: var(--kr-muted); }
 
 .kr-latest-photos__row {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 30px; }
+  gap: 10px;
+  margin-bottom: 16px; }
 
 .kr-latest-photos__tile {
   position: relative;
@@ -3235,13 +3193,8 @@ box-shadow: none; }
 .kr-latest-photos__tile:hover img {
   transform: scale(1.04); }
 
-@media (min-width: 576px) {
-  .kr-latest-photos__row {
-    flex-wrap: nowrap; } }
-
-@media (max-width: 575.98px) {
-  .kr-latest-photos__tile:first-child {
-    flex-basis: 100%; } }
+.kr-latest-photos__tile:first-child {
+  flex-basis: 100%; }
 
 @media (prefers-reduced-motion: reduce) {
   .kr-latest-photos__tile img {
@@ -3746,10 +3699,10 @@ box-shadow: none; }
   padding-top: var(--kr-section-y);
   padding-bottom: var(--kr-section-y); }
 
-/* The numbers close the latest posts, and the Now strip follows the
+/* The numbers close the Latest section, and the Now strip follows the
    photographs, so both take the tight unit where they meet the section
-   they belong to. Above the numbers the cards' own 30px (.mb-30, on the
-   promo too) counts towards the gap, hence the subtraction. */
+   they belong to. Above the numbers the lanes' last 30px (the links
+   line's margin) counts towards the gap, hence the subtraction. */
 .kr-home .kr-latest-area {
   padding-top: var(--kr-section-y);
   padding-bottom: calc(var(--kr-section-y-tight) - 30px); }

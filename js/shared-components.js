@@ -4704,7 +4704,7 @@ var KR_RELEASE = 'https://github.com/DrKenReid/DrKenReid.github.io/releases/down
  * writes it from the first set in data/photosets.json, which is edited by
  * hand when a set goes up (run_checks.py --fix runs it). Every frame
  * numbered `from` or higher wears the "New" badge in the gallery and on
- * the homepage's Latest Photos band, whose line reads "<count> new
+ * the homepage's Latest section, whose photography line reads "<count> new
  * photographs from <place>."
  */
 var KR_NEW_PHOTOS = { from: 525, place: 'Holland and Ann Arbor, Michigan' };

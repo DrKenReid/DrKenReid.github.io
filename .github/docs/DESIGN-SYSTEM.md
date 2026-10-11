@@ -281,7 +281,7 @@ A label is never a link.
 `.kr-new-badge` (§02) is the "New" chip: white capitals on
 `--kr-action-fill`. It marks the newest photoset (`KR_NEW_PHOTOS`,
 written from `data/photosets.json`, tested by `krIsNewPhoto`) on the
-homepage's Latest Photos frames (top left) and the gallery's tiles (top
+homepage's Latest photography frames (top left) and the gallery's tiles (top
 right, clear of the place globe). It marks a post card's cover while the
 post is under `KR_NEW_POST_DAYS` (7) old (`krMarkNewPost`): on the
 homepage's latest posts and the blog listing (top left, clear of the

@@ -28,11 +28,11 @@ builds on it, which is why a hand edit there is dangerous.
 | `topalbums.json` | `{albums: [{name, artist, url, img, plays}], period, updated}` | `refresh_now.py`, weekly | `js/albums.js` (the crate on `music.html`, dated by `updated`) | weekly | `data-schemas` | no |
 | `publications.json` | `{scholar: {profile, citations}, selected: {mostCited, mostRecent}, publications: [...]}` | you | `generate_publications.py`, which writes the list and its JSON-LD into `data_science.html` | when a citation count or a paper changes | `data-schemas`, `publications` | yes, then regenerate |
 | `colophon.json` | measurements of the repository | `generate_colophon.py` | `colophon.html`; `index.html` (photographs, quotations, series); `js/literature.js` (quotations) | whenever a measured file changes | `colophon` | never |
-| `photo-dims.json` | `{"<n>": [width, height]}` | `generate_photo_dims.py` | `js/gallery.js`, `index.html` (the Latest Photos row) | when thumbnails are added | `photo-dims` | never |
+| `photo-dims.json` | `{"<n>": [width, height]}` | `generate_photo_dims.py` | `js/gallery.js`, `index.html` (the Latest section's photography lane) | when thumbnails are added | `photo-dims` | never |
 | `photo-originals.json` | `{"<n>": [width, height]}`, the full-size frame on the release | `generate_photo_renditions.py` (reads each PNG's header with a ranged request) | the same script: a hero is made at `HERO_EDGE` or the original's own size, whichever is smaller | when frames are added | `renditions` | never |
 | `photo-tags.json` | `{"<n>": [tags]}` | a tagging tool kept outside the repository; `bw` rewritten by `detect_monochrome.py` | `js/gallery.js` (its filter buttons are `KR_PHOTO_CATEGORIES` in `js/shared-components.js`) | when photographs are added | `monochrome` | subject tags yes; `bw` never |
 | `photo-locations.json` | `{_help, regions: [{name, lat, lng, photos: ["<n>"]}]}` | you (its `_help` field says how) | `map.html`, `js/gallery.js` (tile captions, the globe badge), `js/palette.js` (places) | when photographs are placed | none | yes |
-| `photography-files.json` | `["<n>.png"]`, newest first: every frame | a filename tool kept outside the repository, or by hand | `js/gallery.js`, `404.html`, `index.html` (the three newest, the Latest Photos band), `generate_colophon.py`, the audit's orphan report | when photographs are added | the smoke suite (the gallery renders) | yes, carefully |
+| `photography-files.json` | `["<n>.png"]`, newest first: every frame | a filename tool kept outside the repository, or by hand | `js/gallery.js`, `404.html`, `index.html` (the three newest, the Latest section), `generate_colophon.py`, the audit's orphan report | when photographs are added | the smoke suite (the gallery renders) | yes, carefully |
 | `photosets.json` | `{_help, sets: [{date, from, to, place}]}`, newest first: one entry per photoset added | you, when a set goes up | `generate_photo_feed.py`, which writes `feed-photos.xml` and the `KR_NEW_PHOTOS` line in `js/shared-components.js` from it | when photographs are added | `photo-feed`, `data-schemas` | yes |
 | `photography-standard-files.json` | `["<n>.png"]`: the frames the photo strip may show | as above | `renderPhotoStrip`, `404.html` | rarely | none | yes |
 | `quotes-all.json` | `[{q, a, b}]`: every saved passage (quote, author, book) | an export tool kept outside the repository | `generate_quote_wall.py` (bakes `quotes.html`) and `generate_colophon.py` (the count the pages read from `colophon.json`) | occasionally | `quote-wall` | yes, then regenerate |
@@ -41,7 +41,7 @@ builds on it, which is why a hand edit there is dangerous.
 | `reviews.json` | `[{title, author, rating, review, isbn, isbn13}]`: the selected reviews | an export tool kept outside the repository | `js/literature.js` | rarely | none | yes |
 | `invites.json` | `{_help, invites: {"<slug>": {title, line}}}` | you, one entry per post when it is published | `renderNewsletterPopup` (the newsletter pop-up at the end of a post; a post without one gets its category's words) | with every new post | `unit-tests` (`tests/test_invites.py`: every post has one, house style) | yes |
 | `popular.json` | `[{url, views}]` | a tool kept outside the repository, from an analytics export | `js/blog.js` (the Popularity sort) | occasionally | none | yes |
-| `stories.json` | `[]` | reserved for the short-story section | `renderMoreStories` | not yet | none | |
+| `stories.json` | `[]` | reserved for the short-story section | `renderMoreStories`, `index.html` (the Latest section's writing lane, shown once there is a story) | not yet | none | |
 
 `data/schema/` holds a schema for every file the pages parse with no
 fallback, and for the two central hand-edited files: books, reading, now,
@@ -138,7 +138,7 @@ Adding photographs touches every file in this group:
    it will open a page).
 3. Add `"<n>.png"` to the top of `photography-files.json` (newest first),
    and to `photography-standard-files.json` if the photo strip may show
-   it. The homepage's Latest Photos band ignores that pool: it shows the
+   it. The homepage's Latest section ignores that pool: it shows the
    three newest frames of all, so the last frames added lead the homepage
    whatever they are.
 4. Give it subject tags in `photo-tags.json`. The tags come from a
@@ -154,7 +154,7 @@ Adding photographs touches every file in this group:
    `feed-photos.xml`, the photography feed, and copies the newest set
    into `KR_NEW_PHOTOS` in `js/shared-components.js`: every frame from
    `from` up wears the "New" badge in the gallery and on the homepage,
-   whose Latest Photos line reads "<count> new photographs from
+   whose Latest section reads "<count> new photographs from
    <place>." The `photo-feed` check fails while frames sit past the
    newest set, so a set cannot go up without its entry.
 7. `git add -N` the new images, then run `run_checks.py --fix`:

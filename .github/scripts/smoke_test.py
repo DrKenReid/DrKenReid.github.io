@@ -885,7 +885,7 @@ CONTRAST_SAMPLE = 5
 # openers, the hero, the photo bands, the overlay post cards. Text inside
 # one of these without an opaque colour of its own is judged on pixels.
 PHOTO_GROUNDS = (".kr-opener, .breadcrumb-area, .welcome-area, .kr-photo-band,"
-                 " .kr-blog-promo, .single-post-area, .bg-overlay")
+                 " .single-post-area, .bg-overlay")
 # On a photograph, the ground is the lightest 10% of the pixels under the
 # letters for light text (the darkest 10% for dark text): the worst of
 # the photo that the letters actually cross, not its average.
