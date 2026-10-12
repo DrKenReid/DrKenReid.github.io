@@ -258,8 +258,8 @@
         <span class="section-eyebrow">New on the site</span>
         <h2 id="latest-title">Latest</h2>
       </div>
-      <div class="row">
-        <div class="col-12 col-lg-7">
+      <div class="row" id="latest-row">
+        <div class="col-12 col-lg-6 kr-latest-col">
           <div class="kr-latest-lane" aria-labelledby="latest-blog-title">
             <div class="kr-latest-lane__head">
               <span class="kr-latest-lane__icon" aria-hidden="true"><i class="ti-pencil-alt"></i></span>
@@ -272,7 +272,7 @@
             <p class="kr-latest-lane__more"><a class="kr-btn kr-btn--ghost kr-btn--sm" href="/blog.html">All posts</a> <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">New posts by email</a></p>
           </div>
         </div>
-        <div class="col-12 col-lg-5">
+        <div class="col-12 col-lg-6 kr-latest-col">
           <div class="kr-latest-lane" id="latest-photos" aria-labelledby="latest-photos-title" hidden>
             <div class="kr-latest-lane__head">
               <span class="kr-latest-lane__icon" aria-hidden="true"><i class="ti-camera"></i></span>
@@ -284,7 +284,9 @@
             <div class="kr-latest-photos__row" id="latest-photos-row"></div>
             <p class="kr-latest-lane__more"><a class="kr-btn kr-btn--ghost kr-btn--sm" href="/gallery.html">The gallery</a> <a href="/feed-photos.xml">New photosets by RSS</a></p>
           </div>
-          <div class="kr-latest-lane" id="latest-writing" aria-labelledby="latest-writing-title" hidden></div>
+        </div>
+        <div class="col-12 col-lg-4 kr-latest-col" id="latest-writing-col" hidden>
+          <div class="kr-latest-lane" id="latest-writing" aria-labelledby="latest-writing-title"></div>
         </div>
       </div>
     </div>
@@ -317,7 +319,7 @@
         <div class="col-6 col-md-auto home-stat" data-live="stat:photos">
           <span class="kr-stat-stage" data-live-host aria-hidden="true"></span>
           <dt class="home-stat-label">Photos</dt>
-          <dd id="photo-count" class="home-stat-value">517</dd>
+          <dd id="photo-count" class="home-stat-value">500+</dd>
           <i class="ti-camera home-stat-icon" aria-hidden="true"></i>
         </div>
         <div class="col-6 col-md-auto home-stat" data-live="stat:books">
@@ -379,7 +381,7 @@
           <a href="/gallery.html" class="kr-explore-link" data-live="explore:photography">
             <i class="ti-camera kr-explore-link__icon" aria-hidden="true"></i>
             <h3>Photography</h3>
-            <p><span id="explore-photo-count">517</span> photos</p>
+            <p><span id="explore-photo-count">500+</span> photos</p>
             <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
           </a>
         </div>
@@ -547,20 +549,25 @@
             ' aria-label="Photograph ' + stem + (isNew ? ', new' : '') + ', open it in the gallery">' +
             (isNew ? '<span class="kr-new-badge" aria-hidden="true">New</span>' : '') +
             '<img src="' + thumb + '.webp" srcset="' + thumb + '.webp 400w, ' + thumb + '@2x.webp 800w"' +
-            ' sizes="(max-width: 991.98px) 100vw, 460px" width="' + size[0] + '" height="' + size[1] + '"' +
+            ' sizes="(max-width: 991.98px) 100vw, 500px" width="' + size[0] + '" height="' + size[1] + '"' +
             ' alt="" loading="lazy" decoding="async"></a>';
         }).join('');
         section.hidden = false;
       }).catch(function() { /* no list, no lane */ });
     })();
 
-    /* The writing lane: the newest story in data/stories.json as a card,
+    /* The writing lane: the three newest stories in data/stories.json as cards,
        the same card the blog lane uses (and its "New" badge under a week
-       old), with a link to every story. Hidden while there are none, so
-       it appears with the first story and needs no change then. */
+       old), with a link to every story. Its column stays hidden while there
+       are none, and Blog and Photography share the row in halves; with a
+       story the row becomes three equal columns, Writing on the right
+       (.kr-latest-row--three, whose cards are compact rows, style.css). It
+       appears with the first story and needs no change then. */
     (function renderLatestWriting() {
       var lane = document.getElementById('latest-writing');
-      if (!lane) return;
+      var col = document.getElementById('latest-writing-col');
+      var row = document.getElementById('latest-row');
+      if (!lane || !col || !row) return;
       krFetchJson('data/stories.json').then(function(all) {
         var stories = (Array.isArray(all) ? all : []).slice().sort(function(a, b) {
           return krParsePostDate(b.date) - krParsePostDate(a.date);
@@ -574,14 +581,21 @@
           '<p class="kr-latest-lane__sub">Short stories.</p></div></div>' +
           '<div class="kr-latest-list"><div class="row"></div></div>' +
           '<p class="kr-latest-lane__more"><a class="kr-btn kr-btn--ghost kr-btn--sm" href="/writing.html">All stories</a></p>';
-        var card = createBlogCardElement(stories[0], {
-          colClass: 'col-12 mb-30',
-          showReadTime: false,
-          imageSrc: stories[0].image || 'img/photography/hero/158.webp'
+        stories.slice(0, 3).forEach(function(story) {
+          var card = createBlogCardElement(story, {
+            colClass: 'col-12 mb-30',
+            showReadTime: false,
+            imageSrc: story.image || 'img/photography/hero/158.webp'
+          });
+          krMarkNewPost(card, story);
+          lane.querySelector('.row').appendChild(card);
         });
-        krMarkNewPost(card, stories[0]);
-        lane.querySelector('.row').appendChild(card);
-        lane.hidden = false;
+        Array.prototype.forEach.call(row.children, function(c) {
+          c.classList.remove('col-lg-6');
+          c.classList.add('col-lg-4');
+        });
+        row.classList.add('kr-latest-row--three');
+        col.hidden = false;
       }).catch(function() { /* no stories, no lane */ });
     })();
 

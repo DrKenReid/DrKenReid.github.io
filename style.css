@@ -2909,7 +2909,7 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
 /* --- Latest (index.html) -----------------------------------------------------
    What is new on the site, a lane per kind: the blog's three newest posts
    on the left, the photography lane (the newest set's line and frames,
-   "Latest photos" below) on the right, and under it the writing lane,
+   "Latest photos" below) beside it, and the writing lane on the right,
    which the script shows only once data/stories.json has a story. Each
    lane is a tinted panel, so the kinds read apart at a glance: a head
    (an icon in a disc, the kind as an h3, a line saying what it holds),
@@ -2926,6 +2926,25 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   border: 1px solid var(--kr-hairline);
   border-radius: var(--kr-radius-lg);
   background: var(--kr-surface-1); }
+
+/* From 992px the columns are equal (halves, or thirds once the writing
+   column shows, .kr-latest-row--three) and their panels end level:
+   each column is a flex column whose panels grow to fill it, and a
+   panel's links line takes margin-top: auto, so the spare room sits
+   above the links rather than under them. */
+@media (min-width: 992px) {
+  .kr-latest-col {
+    display: flex;
+    flex-direction: column; }
+  .kr-latest-col > .kr-latest-lane {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column; }
+  .kr-latest-col[hidden],
+  .kr-latest-col > .kr-latest-lane[hidden] {
+    display: none; }
+  .kr-latest-col > .kr-latest-lane > .kr-latest-lane__more {
+    margin-top: auto; } }
 
 .kr-latest-lane__head {
   display: flex;
@@ -3012,12 +3031,20 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   overflow: hidden;
   margin-bottom: 10px; }
 
-/* On a phone the cards stay on their side and shrink to a list row: a
-   square thumbnail, the date and the title. Standing up, three of them
-   ran to 1,500px and pushed the photography panel off the first screens;
-   the excerpt and tags are one tap away on the post. The "New" badge
-   keeps to the thumbnail's corner. */
+/* On a phone each panel shows only its newest item: one post, one story,
+   one photograph, as a list row (a square thumbnail, the date and the
+   title) or the frame on its own. Three cards standing up ran to 1,500px
+   and pushed the photography panel off the first screens; the rest are
+   one tap away through each panel's button. The "New" badge keeps to the
+   thumbnail's corner. */
 @media only screen and (max-width: 575px) {
+  .kr-latest-list .row > :nth-child(n+2),
+  .kr-latest-photos__tile:nth-child(n+2) {
+    display: none; }
+  .kr-latest-lane .kr-latest-list .row > :first-child {
+    margin-bottom: 20px; }
+  .kr-latest-photos__row {
+    margin-bottom: 20px; }
   .kr-latest-list .blog-card-img {
     flex: 0 0 96px;
     max-width: 96px;
@@ -3037,6 +3064,31 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
     padding: 2px 7px;
     font-size: 10px; }
   .kr-latest-list .mb-30 {
+    margin-bottom: 12px; } }
+
+/* Three columns (a story in the writing lane) are too narrow for a card on
+   its side with its excerpt, so from 992px they take the phone's compact
+   rows too: thumbnail, date, title. */
+@media (min-width: 992px) {
+  .kr-latest-row--three .kr-latest-list .blog-card-img {
+    flex: 0 0 96px;
+    max-width: 96px;
+    aspect-ratio: 1; }
+  .kr-latest-row--three .kr-latest-list .blog-card-body {
+    align-self: center;
+    padding: 12px 14px; }
+  .kr-latest-row--three .kr-latest-list .blog-card-title {
+    margin-bottom: 0;
+    font-size: 16px; }
+  .kr-latest-row--three .kr-latest-list .blog-card-excerpt,
+  .kr-latest-row--three .kr-latest-list .blog-card-tags {
+    display: none; }
+  .kr-latest-row--three .kr-latest-list .kr-new-badge {
+    top: 6px;
+    left: 6px;
+    padding: 2px 7px;
+    font-size: 10px; }
+  .kr-latest-row--three .kr-latest-list .mb-30 {
     margin-bottom: 12px; } }
 
 /* --- Explore ---------------------------------------------------------------
