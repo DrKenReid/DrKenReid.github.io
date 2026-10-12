@@ -2911,25 +2911,68 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
    on the left, the photography lane (the newest set's line and frames,
    "Latest photos" below) on the right, and under it the writing lane,
    which the script shows only once data/stories.json has a story. Each
-   lane is a .kr-label title, its content and a line of links. Three
-   full-width post cards ran to 1,534px, the tallest thing on the page by
-   a factor of two; turned on their side they read as an editorial list
-   and cost a third of the height. The markup is the stacked post card's
-   (§08); only these lanes' cards lie down, and a phone stands them up
-   again. */
+   lane is a tinted panel, so the kinds read apart at a glance: a head
+   (an icon in a disc, the kind as an h3, a line saying what it holds),
+   its content, and a foot (a small ghost button to all of that kind and
+   a secondary link). The icon is decoration in the eyebrow colour, not
+   red: it is not a link. Three full-width post cards ran to 1,534px, the
+   tallest thing on the page by a factor of two; turned on their side
+   they read as an editorial list and cost a third of the height. The
+   markup is the stacked post card's (§08); only these lanes' cards lie
+   down, and a phone stands them up again. */
+.kr-latest-lane {
+  margin-bottom: 30px;
+  padding: 24px;
+  border: 1px solid var(--kr-hairline);
+  border-radius: var(--kr-radius-lg);
+  background: var(--kr-surface-1); }
+
+.kr-latest-lane__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px; }
+
+.kr-latest-lane__icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--kr-hairline);
+  border-radius: 50%;
+  background: var(--kr-surface-3);
+  color: var(--kr-eyebrow);
+  font-size: 18px; }
+
 .kr-latest-lane__title {
-  margin: 0 0 16px; }
+  margin: 0;
+  font-size: var(--kr-display-sm);
+  line-height: 1.15; }
 
-.kr-latest-lane__more {
-  margin: 0 0 30px;
-  font-size: 14px; }
-
-.kr-latest-lane__sep {
-  margin: 0 6px;
+.kr-latest-lane__sub {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
   color: var(--kr-muted); }
 
-/* Below 992px the two columns stack, blog first; the links line's 30px
-   margin spaces each lane from the next, there and in the right column. */
+.kr-latest-lane__more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  margin: 0;
+  font-size: 14px; }
+
+/* The cards' own bottom margin is the gap above the foot; the last one
+   needs less inside a panel. */
+.kr-latest-lane .kr-latest-list .row > :last-child {
+  margin-bottom: 20px; }
+
+@media (max-width: 575.98px) {
+  .kr-latest-lane {
+    padding: 18px 16px; } }
 
 .kr-latest-list .blog-card {
   display: flex;
@@ -2969,14 +3012,32 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   overflow: hidden;
   margin-bottom: 10px; }
 
+/* On a phone the cards stay on their side and shrink to a list row: a
+   square thumbnail, the date and the title. Standing up, three of them
+   ran to 1,500px and pushed the photography panel off the first screens;
+   the excerpt and tags are one tap away on the post. The "New" badge
+   keeps to the thumbnail's corner. */
 @media only screen and (max-width: 575px) {
-  .kr-latest-list .blog-card {
-    display: block; }
   .kr-latest-list .blog-card-img {
-    flex-basis: auto;
-    max-width: 100%;
-    aspect-ratio: 16 / 10;
-    border-radius: 8px 8px 0 0; } }
+    flex: 0 0 96px;
+    max-width: 96px;
+    aspect-ratio: 1; }
+  .kr-latest-list .blog-card-body {
+    align-self: center;
+    padding: 12px 14px; }
+  .kr-latest-list .blog-card-title {
+    margin-bottom: 0;
+    font-size: 16px; }
+  .kr-latest-list .blog-card-excerpt,
+  .kr-latest-list .blog-card-tags {
+    display: none; }
+  .kr-latest-list .kr-new-badge {
+    top: 6px;
+    left: 6px;
+    padding: 2px 7px;
+    font-size: 10px; }
+  .kr-latest-list .mb-30 {
+    margin-bottom: 12px; } }
 
 /* --- Explore ---------------------------------------------------------------
    Seven links to the site's parts, each an icon and two lines of text with
@@ -3165,10 +3226,6 @@ box-shadow: none; }
    lane starts [hidden] and the script shows it once the frames are in.
    Tiles take the site's focus ring; the zoom on hover has a
    reduced-motion path. */
-.kr-latest-photos__lede {
-  margin: 0 0 14px;
-  color: var(--kr-muted); }
-
 .kr-latest-photos__row {
   display: flex;
   flex-wrap: wrap;

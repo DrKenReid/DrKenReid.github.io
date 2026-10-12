@@ -260,20 +260,31 @@
       </div>
       <div class="row">
         <div class="col-12 col-lg-7">
-          <div class="kr-latest-lane">
-            <h3 class="kr-label kr-latest-lane__title">Blog</h3>
+          <div class="kr-latest-lane" aria-labelledby="latest-blog-title">
+            <div class="kr-latest-lane__head">
+              <span class="kr-latest-lane__icon" aria-hidden="true"><i class="ti-pencil-alt"></i></span>
+              <div>
+                <h3 class="kr-latest-lane__title" id="latest-blog-title">Blog</h3>
+                <p class="kr-latest-lane__sub">Data science, books, music, moving countries: whatever I'm thinking through.</p>
+              </div>
+            </div>
             <div class="kr-latest-list" id="latest-posts"></div>
-            <p class="kr-latest-lane__more"><a href="/blog.html">All posts <span aria-hidden="true">&rarr;</span></a> <span class="kr-latest-lane__sep" aria-hidden="true">&middot;</span> <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">New posts by email</a></p>
+            <p class="kr-latest-lane__more"><a class="kr-btn kr-btn--ghost kr-btn--sm" href="/blog.html">All posts</a> <a href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">New posts by email</a></p>
           </div>
         </div>
         <div class="col-12 col-lg-5">
-          <div class="kr-latest-lane" id="latest-photos" hidden>
-            <h3 class="kr-label kr-latest-lane__title">Photography</h3>
-            <p class="kr-latest-photos__lede" id="latest-photos-lede"></p>
+          <div class="kr-latest-lane" id="latest-photos" aria-labelledby="latest-photos-title" hidden>
+            <div class="kr-latest-lane__head">
+              <span class="kr-latest-lane__icon" aria-hidden="true"><i class="ti-camera"></i></span>
+              <div>
+                <h3 class="kr-latest-lane__title" id="latest-photos-title">Photography</h3>
+                <p class="kr-latest-lane__sub" id="latest-photos-lede"></p>
+              </div>
+            </div>
             <div class="kr-latest-photos__row" id="latest-photos-row"></div>
-            <p class="kr-latest-lane__more"><a href="/gallery.html">The gallery <span aria-hidden="true">&rarr;</span></a> <span class="kr-latest-lane__sep" aria-hidden="true">&middot;</span> <a href="/feed-photos.xml">New photosets by RSS</a></p>
+            <p class="kr-latest-lane__more"><a class="kr-btn kr-btn--ghost kr-btn--sm" href="/gallery.html">The gallery</a> <a href="/feed-photos.xml">New photosets by RSS</a></p>
           </div>
-          <div class="kr-latest-lane" id="latest-writing" hidden></div>
+          <div class="kr-latest-lane" id="latest-writing" aria-labelledby="latest-writing-title" hidden></div>
         </div>
       </div>
     </div>
@@ -555,9 +566,14 @@
           return krParsePostDate(b.date) - krParsePostDate(a.date);
         });
         if (!stories.length) return;
-        lane.innerHTML = '<h3 class="kr-label kr-latest-lane__title">Writing</h3>' +
+        // Built here rather than written into the page, so the writing
+        // page is not linked before it has a story to show.
+        lane.innerHTML = '<div class="kr-latest-lane__head">' +
+          '<span class="kr-latest-lane__icon" aria-hidden="true"><i class="ti-book"></i></span>' +
+          '<div><h3 class="kr-latest-lane__title" id="latest-writing-title">Writing</h3>' +
+          '<p class="kr-latest-lane__sub">Short stories.</p></div></div>' +
           '<div class="kr-latest-list"><div class="row"></div></div>' +
-          '<p class="kr-latest-lane__more"><a href="/writing.html">All stories <span aria-hidden="true">&rarr;</span></a></p>';
+          '<p class="kr-latest-lane__more"><a class="kr-btn kr-btn--ghost kr-btn--sm" href="/writing.html">All stories</a></p>';
         var card = createBlogCardElement(stories[0], {
           colClass: 'col-12 mb-30',
           showReadTime: false,
