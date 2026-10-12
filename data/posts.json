@@ -78,7 +78,7 @@
     "updated": "2026-10-12",
     "image": "img/photography/thumb/501.webp",
     "readMinutes": 8,
-    "words": 1694
+    "words": 1695
   },
   {
     "title": "Every Card Has a Sketch",
@@ -620,7 +620,7 @@
       "photography"
     ],
     "category": "Technology",
-    "excerpt": "264 of my photographs plotted on an interactive world map, this is how the photo map works.",
+    "excerpt": "Hundreds of my photographs plotted on an interactive world map, this is how the photo map works.",
     "url": "blog/putting-my-photos-on-a-map.html",
     "image": "blog/img/map/photo-map-dark.webp",
     "series": {
@@ -628,7 +628,7 @@
       "part": 6
     },
     "readMinutes": 5,
-    "words": 1072,
+    "words": 1074,
     "code": true
   },
   {
@@ -726,7 +726,7 @@
       "name": "How This Site Is Built",
       "part": 3
     },
-    "words": 2060,
+    "words": 2057,
     "code": true
   },
   {
@@ -1056,7 +1056,7 @@
     "updated": "2026-10-03",
     "image": "img/photography/thumb/109.webp",
     "readMinutes": 13,
-    "words": 2742
+    "words": 2743
   },
   {
     "title": "No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio",
@@ -1144,12 +1144,12 @@
       "books"
     ],
     "category": "Books & Media",
-    "excerpt": "569 books rated, and the star system fails at all of them. A data-driven look at my own Goodreads ratings, review lengths, genre bias, and the silence problem.",
+    "excerpt": "Hundreds of books rated, and the star system fails at all of them. A data-driven look at my own Goodreads ratings, review lengths, genre bias, and the silence problem.",
     "url": "blog/rating-systems.html",
     "updated": "2026-10-03",
     "image": "blog/img/rating_distribution.png",
     "readMinutes": 12,
-    "words": 2513
+    "words": 2509
   },
   {
     "title": "Why Most Self-Help Books Are Trash (And Which Ones Aren't)",

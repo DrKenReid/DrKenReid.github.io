@@ -81,7 +81,7 @@
     ],
     "inLanguage": "en-GB",
     "articleSection": "Photography",
-    "wordCount": 2060,
+    "wordCount": 2057,
     "timeRequired": "PT10M",
     "keywords": ["photography", "github", "web development", "hosting"]
   }
@@ -131,7 +131,7 @@
           <span class="blog-tag">photography</span>
         </div>
 
-        <p>My <a href="../gallery.html">photography gallery</a> currently serves 517 full-resolution photos, about 2.1&nbsp;GB of images, to anyone who clicks on them. My monthly hosting bill for this is zero. </p>
+        <p>My <a href="../gallery.html">photography gallery</a> currently serves hundreds of full-resolution photos, several gigabytes of images, to anyone who clicks on them. My monthly hosting bill for this is zero. </p>
 
         <p>The catch is that GitHub Pages, which hosts this entire site, has a hard rule: a published site may be no larger than 1&nbsp;GB. My photo collection is bigger than my entire allowance, ignoring all the blog content, and the rest of this website. The workaround is GitHub <strong>releases</strong>.</p>
 
@@ -175,7 +175,7 @@
         <p style="overflow-x:auto;"><code>gh release create photos-v1 --title "Full-size photography" --notes "Gallery originals"</code><br>
         <code>gh release upload photos-v1 photos/*.png</code></p>
 
-        <p>That release now holds all 517 originals, 2.12&nbsp;GB of them, which is to say: <strong>the "attachment" stapled to my repository is bigger than the entire website is allowed to be.</strong> GitHub is fine with this. Releases are a supported way to distribute a repository's files, and these are, quite literally, the files this repository's site is built around.</p>
+        <p>That release now holds every original, several gigabytes of them, which is to say: <strong>the "attachment" stapled to my repository is bigger than the entire website is allowed to be.</strong> GitHub is fine with this. Releases are a supported way to distribute a repository's files, and these are, quite literally, the files this repository's site is built around.</p>
 
         <h2>The full pipeline</h2>
 
@@ -219,7 +219,7 @@ for photo in tqdm(photos):
 print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
       f"({1 - after/before:.0%} saved)")</code></pre>
 
-        <p>Three choices doing the work. <code>LANCZOS</code> is the slowest and best-looking of Pillow's resampling filters, at thumbnail sizes the difference from the default is visible, and the extra seconds are irrelevant for a batch job. <code>convert("RGB")</code> drops the alpha channel the PNGs carry but the thumbnails don't need. And WebP at quality 80 is the sweet spot where artefacts stop being visible at 400px before the bytes stop shrinking. Net effect: a ~4&nbsp;MB PNG becomes a ~17&nbsp;KB thumbnail, and the whole gallery's browsing layer, all 517 thumbnails, weighs 9&nbsp;MB, less than three originals.</p>
+        <p>Three choices doing the work. <code>LANCZOS</code> is the slowest and best-looking of Pillow's resampling filters, at thumbnail sizes the difference from the default is visible, and the extra seconds are irrelevant for a batch job. <code>convert("RGB")</code> drops the alpha channel the PNGs carry but the thumbnails don't need. And WebP at quality 80 is the sweet spot where artefacts stop being visible at 400px before the bytes stop shrinking. Net effect: a ~4&nbsp;MB PNG becomes a ~17&nbsp;KB thumbnail, and the whole gallery's browsing layer, every thumbnail together, weighs less than three originals.</p>
 
         <p>At view time, the gallery JavaScript loads the manifest, adds thumbnails about 24 at a time as you scroll (each batch runs on to the end of its row, and after 72 a Load More button takes over, so you can still reach the bottom of the page), and each lightbox link points at the release URL for the original. The visitor's browser talks to GitHub's release servers directly; my Pages bandwidth only ever carries the thumbnails.</p>
 
@@ -301,7 +301,7 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
 
           <details class="faq-item">
             <summary>What happens if GitHub kills the loophole?</summary>
-            <p>Then I run one script to re-upload 517 files somewhere else (probably Cloudflare R2) and change one URL prefix, <code>KR_RELEASE</code> in <code>js/shared-components.js</code>. Then a find-and-replace for the places that spell the whole URL out: the lightbox code, the map page's fallback, and a handful of posts that link an original directly. </p>
+            <p>Then I run one script to re-upload every original somewhere else (probably Cloudflare R2) and change one URL prefix, <code>KR_RELEASE</code> in <code>js/shared-components.js</code>. Then a find-and-replace for the places that spell the whole URL out: the lightbox code, the map page's fallback, and a handful of posts that link an original directly. </p>
           </details>
 
           <details class="faq-item">
@@ -325,7 +325,7 @@ print(f"{len(photos)} photos, {before/1e6:.0f} MB -> {after/1e6:.1f} MB "
                 <div class="blog-card-body">
                   <div class="blog-card-date">14 July 2026 · 5 min read</div>
                   <h3 class="blog-card-title">Putting My Photos on a Map</h3>
-                  <p class="blog-card-excerpt">264 of my photographs plotted on an interactive world map, this is how the photo map works.</p>
+                  <p class="blog-card-excerpt">Hundreds of my photographs plotted on an interactive world map, this is how the photo map works.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">photography</span></div>
                 </div>
               </a>
