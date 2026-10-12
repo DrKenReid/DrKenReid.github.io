@@ -151,11 +151,13 @@ Adding photographs touches every file in this group:
 6. Add the set to the top of `photosets.json`: the day it went up,
    its first and last frame numbers and where it was taken. From it
    `generate_photo_feed.py` (run by step 7) writes the set's item in
-   `feed-photos.xml`, the photography feed, and copies the newest set
-   into `KR_NEW_PHOTOS` in `js/shared-components.js`: every frame from
-   `from` up wears the "New" badge in the gallery and on the homepage,
+   `feed-photos.xml`, the photography feed, and copies the newest day's
+   sets into `KR_NEW_PHOTOS` in `js/shared-components.js`: every frame
+   from the first of them up wears the "New" badge in the gallery and on the homepage,
    whose Latest section reads "<count> new photographs from
-   <place>." The `photo-feed` check fails while frames sit past the
+   <place>." Frames from two places added on one day go in as two sets
+   with the same date (one feed item each, both New, the line naming
+   both places). The `photo-feed` check fails while frames sit past the
    newest set, so a set cannot go up without its entry.
 7. `git add -N` the new images, then run `run_checks.py --fix`:
    `generate_photo_dims.py` records the thumbnail's size (the gallery lays

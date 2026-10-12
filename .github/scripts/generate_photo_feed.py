@@ -7,9 +7,11 @@ dated the day the set went up, with up to THUMBS_PER_ITEM of its frames as
 thumbnails, each linking to that frame in the gallery. Readers who follow
 the photographs subscribe here without the blog's posts, and the reverse.
 
-It also writes the newest set into KR_NEW_PHOTOS in
-js/shared-components.js (its first frame and its place), which marks those
-frames New in the gallery and on the homepage. data/photosets.json is the
+It also writes the newest day's sets into KR_NEW_PHOTOS in
+js/shared-components.js (their first frame and their places together,
+"Ann Arbor and Holland, Michigan"), which marks those frames New in the
+gallery and on the homepage. Sets from two places go up on one day as two
+entries: each gets its own feed item, and both are New. data/photosets.json is the
 one thing edited by hand when a set is added; this script carries it to
 the feed and to the badge.
 
@@ -111,9 +113,25 @@ def item(s: dict, frames: list[int]) -> str:
     ]) + "\n"
 
 
-def marker_line(newest: dict) -> str:
-    place = newest["place"].replace("\\", "\\\\").replace("'", "\\'")
-    return f"var KR_NEW_PHOTOS = {{ from: {newest['from']}, place: '{place}' }};"
+def joined_places(places: list[str]) -> str:
+    """"Ann Arbor, Michigan" and "Holland, Michigan" -> "Ann Arbor and Holland, Michigan"."""
+    unique = list(dict.fromkeys(places))
+    if len(unique) == 1:
+        return unique[0]
+    pairs = [p.rsplit(", ", 1) if ", " in p else [p, ""] for p in unique]
+    tails = {tail for _, tail in pairs}
+    if len(tails) == 1 and pairs[0][1]:
+        heads = [head for head, _ in pairs]
+        return ", ".join(heads[:-1]) + " and " + heads[-1] + ", " + pairs[0][1]
+    return ", ".join(unique[:-1]) + " and " + unique[-1]
+
+
+def marker_line(sets: list[dict]) -> str:
+    """The KR_NEW_PHOTOS line: every set added on the newest set's day."""
+    newest = [s for s in sets if s["date"] == sets[0]["date"]]
+    start = min(s["from"] for s in newest)
+    place = joined_places([s["place"] for s in newest]).replace("\\", "\\\\").replace("'", "\\'")
+    return f"var KR_NEW_PHOTOS = {{ from: {start}, place: '{place}' }};"
 
 
 def main(argv=None) -> int:
@@ -140,7 +158,7 @@ def main(argv=None) -> int:
     if not MARKER.search(js):
         print("js/shared-components.js has no `var KR_NEW_PHOTOS = {...};` line to update")
         return 1
-    new_js = MARKER.sub(marker_line(sets[0]), js, count=1)
+    new_js = MARKER.sub(marker_line(sets), js, count=1)
 
     if args.check:
         stale = []
@@ -158,7 +176,7 @@ def main(argv=None) -> int:
     FEED.write_text(feed, encoding="utf-8", newline="\n")
     if new_js != js:
         SHARED_JS.write_text(new_js, encoding="utf-8", newline="\n")
-    print(f"Wrote feed-photos.xml: {len(sets)} sets; KR_NEW_PHOTOS from {sets[0]['from']}")
+    print(f"Wrote feed-photos.xml: {len(sets)} sets; {marker_line(sets)}")
     return 0
 
 

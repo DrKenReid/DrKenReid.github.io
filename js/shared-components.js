@@ -4707,7 +4707,7 @@ var KR_RELEASE = 'https://github.com/DrKenReid/DrKenReid.github.io/releases/down
  * the homepage's Latest section, whose photography line reads "<count> new
  * photographs from <place>."
  */
-var KR_NEW_PHOTOS = { from: 525, place: 'Holland and Ann Arbor, Michigan' };
+var KR_NEW_PHOTOS = { from: 553, place: 'Ann Arbor and Holland, Michigan' };
 
 /** Whether a frame (its number, as a string or a number) is in the newest set. */
 function krIsNewPhoto(stem) {
