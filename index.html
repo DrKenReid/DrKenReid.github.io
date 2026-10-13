@@ -429,24 +429,6 @@
     </div>
   </section>
 
-  <!-- Bluesky feed (renderBlueskyFeed, shared-components.js) -->
-  <section class="about-us-area kr-social-area clearfix">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-12 col-lg-8">
-          <div class="section-heading text-center">
-            <span class="section-eyebrow">Social</span>
-            <h2>Recent on Bluesky</h2>
-            <p class="section-heading__lede">
-              <a href="https://bsky.app/profile/kenreid.co.uk" target="_blank" rel="noopener noreferrer">@kenreid.co.uk</a>
-            </p>
-          </div>
-          <div id="bsky-posts" class="kr-social-feed"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Random Quote. The same .kr-home-quote component, and the same
        rotator (krQuoteRotator), carry the literature page's quotations
        (with .kr-home-quote--hold), so a change here shows there too. -->
@@ -495,14 +477,13 @@
        and the hover sketches) lives in shared-components.js; this script
        does only what no other page does. Every data file is read through
        krFetchJson, which requests a URL once per page, so the header's
-       recent posts, the Now strip and the code below share one posts.json
-       and one Bluesky request. Each part fails on its own without taking
+       recent posts, the Now strip and the code below share one posts.json.
+       Each part fails on its own without taking
        the others with it; a figure whose file fails keeps the value it
        was painted with. */
     renderHeader('header-section', { basePath: '/', active: 'home' });
     renderPhotoStrip('instagram-section');
     renderFooter('footer-section');
-    renderBlueskyFeed(document.getElementById('bsky-posts'), { limit: 2 });
 
     /* Filling the Latest columns. From 992px the columns are equal and
        their panels end level, so a panel with less in it showed a gap

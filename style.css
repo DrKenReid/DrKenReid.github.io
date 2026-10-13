@@ -2510,8 +2510,8 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
    addCarouselPauseControl); slides after the first get their photograph
    from data-bg once the page has loaded (an inline script in index.html);
    js/hero-evolve.js paints the evolved headline; shared-components.js
-   renders the photo strip, the quotation band (krQuoteRotator), the Now
-   strip (renderNowStrip) and the Bluesky cards (renderBlueskyFeed).
+   renders the photo strip, the quotation band (krQuoteRotator) and the
+   Now strip (renderNowStrip).
    Runtime classes: .owl-loaded and .owl-item.active (Owl),
    .kr-hero-latest--pending (removed when posts.json arrives),
    .kr-home-quote--running and --paused, .kr-home-quote__text--long,
@@ -3684,16 +3684,10 @@ box-shadow: none; }
   .kr-eq span:nth-child(3) {
     height: 40%; } }
 
-/* --- Recent on Bluesky (renderBlueskyFeed) ----------------------------------
-   The site's own renderer for the last two posts, in place of Bluesky's
-   cross-origin embed. Two rather than three: the most disposable content
-   on the page was taking a screen and a half of it. A post runs long and
-   the card links out to the whole thing, so its text and pictures are
-   capped here. Placeholders first (.kr-skel-bar, §02), then the cards. */
-.kr-social-feed {
-  max-width: 600px;
-  margin: 0 auto; }
-
+/* --- Bluesky cards (renderBlueskyFeed) --------------------------------------
+   The site's own renderer for recent Bluesky posts, in place of Bluesky's
+   cross-origin embed, on the contact page. Placeholders first
+   (.kr-skel-bar, §02), then the cards. */
 .bsky-post-card {
   padding: 16px 18px;
   margin-bottom: 14px;
@@ -3777,16 +3771,6 @@ box-shadow: none; }
   color: var(--kr-action-hover);
   text-decoration: underline; }
 
-.kr-social-area .bsky-post-text {
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-  overflow: hidden; }
-
-.kr-social-area .bsky-post-images {
-  max-height: 210px;
-  overflow: hidden; }
-
 [data-theme="dark"] .bsky-post-card {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.24); }
 
@@ -3816,10 +3800,16 @@ box-shadow: none; }
    section before a band closes with the same space, so the edge sits
    midway between the two blocks of content. */
 .kr-home .kr-explore-area,
-.kr-home .kr-social-area,
 .kr-home .kr-home-quote {
   padding-top: var(--kr-section-y);
   padding-bottom: var(--kr-section-y); }
+
+/* The homepage's quotation band follows the tinted Explore band, so it
+   takes the page's own surface there and keeps its hairlines: the bands
+   still alternate (Now plain, Explore tinted, the quotation plain, then
+   the dark footer). literature.html keeps the tint. */
+.kr-home .kr-home-quote {
+  background: var(--kr-surface-0); }
 
 /* The numbers close the Latest section, and the Now strip follows the
    photographs, so both take the tight unit where they meet the section
