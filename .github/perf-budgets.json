@@ -1,12 +1,12 @@
 {
-  "_about": "Budgets for .github/scripts/perf_budget.py: first-party bytes (uncompressed) and requests at load, per template and viewport, about 15% above the heaviest of four measurements on 2026-09-24. Raise one only for a change that is meant to cost more, and say why in the commit; the script's docstring has the procedure. JS raised 25 KB on every template on 2026-10-01: the shared script grew about 40 KB with the reading, search, listing, photo and collection fixes of that week (keyboard contents, citation previews, code copy, word-start search, load-failure notes, the photo lightbox, sharper images).",
+  "_about": "Budgets for .github/scripts/perf_budget.py: first-party bytes (uncompressed) and requests at load, per template and viewport, about 15% above the heaviest of four measurements on 2026-09-24. Raise one only for a change that is meant to cost more, and say why in the commit; the script's docstring has the procedure. JS raised 25 KB on every template on 2026-10-01: the shared script grew about 40 KB with the reading, search, listing, photo and collection fixes of that week (keyboard contents, citation previews, code copy, word-start search, load-failure notes, the photo lightbox, sharper images). The homepage desktop requests went from 54 to 63 on 2026-10-13: the Latest section fills its photography panel to the height of the tallest column, which loads three to five more thumbnails (measured 55).",
   "cls": 0.1,
   "runs": 3,
   "templates": {
     "index": {
       "page": "index.html",
       "phone":   {"js": 555000, "css": 290000, "font": 90000,  "img": 620000,  "requests": 49},
-      "desktop": {"js": 555000, "css": 290000, "font": 90000,  "img": 730000,  "requests": 54}
+      "desktop": {"js": 555000, "css": 290000, "font": 90000,  "img": 730000,  "requests": 63}
     },
     "blog": {
       "page": "blog.html",
