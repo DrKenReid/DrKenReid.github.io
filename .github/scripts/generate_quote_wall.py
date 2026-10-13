@@ -22,6 +22,7 @@ import html
 import json
 import re
 import sys
+import urllib.parse
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -40,6 +41,14 @@ def card(idx, q):
     quote = html.escape(q["q"])
     author = html.escape(q["a"])
     book = html.escape(q.get("b") or "")
+    if book:
+        if q.get("g"):
+            href = "https://www.goodreads.com/book/show/" + urllib.parse.quote(str(q["g"]))
+        else:
+            title = re.sub(r"\s*\([^)]*#[^)]*\)\s*$", "", q["b"])
+            href = "https://www.goodreads.com/search?q=" + urllib.parse.quote_plus(f"{title} {q['a']}".strip())
+        book = (f'<a class="kr-quote-book" href="{html.escape(href, quote=True)}" '
+                f'target="_blank" rel="noopener noreferrer">{book}</a>')
     footer = f"&mdash; {author}" + (f", <em>{book}</em>" if book else "")
     return (
         f'<article class="kr-quote-card" id="q-{idx}" data-a="{html.escape(q["a"].lower(), quote=True)}">'

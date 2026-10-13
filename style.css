@@ -895,6 +895,52 @@ svg.kr-glyph {
   background: rgba(127, 127, 127, 0.16);
   margin: 4px 0; }
 
+/* --- Heading links and whole-tile links ------------------------------------
+   .kr-heading-link: a heading that is also a way in (the Latest lanes,
+   the Data Science column heads). It keeps the heading's colour and type
+   and says it is a link the site's way, with an underline in the action
+   red, turning red itself on hover and focus.
+   .kr-tile-link: a card that goes one place is clickable all over. Its
+   main link (.kr-tile-link__main) stretches an invisible layer across the
+   card, so one tab stop and one name cover the whole tile, and any other
+   link in the card sits above that layer and still works on its own. The
+   focus ring goes round the card. Used where a card has one destination;
+   a card with several keeps its separate links. */
+/* (0,2,0) and (0,3,0): the dark theme's [data-theme="dark"] a (0,1,1) and
+   a:hover (0,2,1) would otherwise colour the whole heading red. */
+:root .kr-heading-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--kr-action);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.16em; }
+
+:root .kr-heading-link:hover,
+:root .kr-heading-link:focus-visible {
+  color: var(--kr-action); }
+
+.kr-tile-link {
+  position: relative; }
+
+.kr-tile-link__main::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit; }
+
+.kr-tile-link a:not(.kr-tile-link__main) {
+  position: relative;
+  z-index: 2; }
+
+.kr-tile-link__main:focus-visible {
+  outline: none; }
+
+.kr-tile-link__main:focus-visible::after {
+  outline: 2px solid var(--site-focus-ring);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px var(--site-focus-shadow); }
+
 /* --- "New" badge (krIsNewPhoto, krMarkNewPost) --------------------------
    The hero's "New post" chip in small: red fill, white capitals. It marks
    the newest photoset (KR_NEW_PHOTOS, written from data/photosets.json)
@@ -1885,6 +1931,20 @@ svg.kr-glyph {
   --kr-label-tracking: 0.18em;
   display: block;
   margin-bottom: 10px; }
+
+/* An eyebrow that leads somewhere (the photo strip's "Photography", to the
+   gallery) is a link like any other: action red and underlined, never the
+   stone --kr-eyebrow, which is decoration only. */
+.kr-eyebrow-link {
+  width: fit-content;
+  margin-inline: auto;
+  color: var(--kr-action);
+  text-decoration: underline;
+  text-underline-offset: 4px; }
+
+.kr-eyebrow-link:hover,
+.kr-eyebrow-link:focus-visible {
+  color: var(--kr-action-hover); }
 
 .section-eyebrow + h2,
 .section-heading h2 {
@@ -3400,6 +3460,18 @@ box-shadow: none; }
 /* The source, a .kr-label (§02). */
 .kr-home-quote__attr {
   margin: 0; }
+
+/* The book in the attribution links to it on Goodreads (krQuoteRotator):
+   red, as every link is, underlined clear of the capitals. Its focus
+   ring is the site's (§02). */
+.kr-home-quote__book {
+  color: var(--kr-action);
+  text-decoration: underline;
+  text-underline-offset: 3px; }
+
+.kr-home-quote__book:hover,
+.kr-home-quote__book:focus-visible {
+  color: var(--kr-action-hover); }
 
 /* The quotations rotate. The bar is the countdown to the next one, so a
    change is never a surprise, and the button stops the rotation (WCAG
@@ -9971,6 +10043,12 @@ button.mfp-arrow {
   max-width: 1000px;
   margin: 0 auto; }
 
+/* Eight figures (with the page counts) sit four to a row from 992px. */
+@media (min-width: 992px) {
+  .kr-figures:has(> :nth-child(7)) {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1140px; } }
+
 @media (max-width: 700px) {
   .kr-figures {
     grid-template-columns: repeat(2, 1fr);
@@ -9980,7 +10058,23 @@ button.mfp-arrow {
   margin: 0;
   padding: 20px 22px;
   border: 1px solid var(--kr-hairline);
-  border-radius: 12px; }
+  border-radius: 12px;
+  cursor: default;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+
+/* Each figure opens a hover card of the books behind it (bookshelf.js,
+   the calendar's card): it lifts and takes the accent edge while it does,
+   on hover and on keyboard focus (the figures are focusable for it). */
+.kr-figure[data-fig]:hover,
+.kr-figure[data-fig]:focus-visible {
+  transform: translateY(-3px);
+  border-color: var(--kr-brand-from);
+  box-shadow: var(--kr-shadow-2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-figure[data-fig]:hover,
+  .kr-figure[data-fig]:focus-visible {
+    transform: none; } }
 
 .kr-figure dd {
   margin: 0; }
@@ -10247,6 +10341,37 @@ button.kr-cal__cell {
     position-try-fallbacks: flip-block;
     position-try-order: most-height;
     margin: 0 8px 10px; } }
+
+/* The average rating's card: a bar per star count. */
+.kr-tip-bars {
+  display: grid;
+  gap: 4px;
+  min-width: 200px;
+  margin: 6px 0 4px;
+  padding: 0;
+  list-style: none; }
+
+.kr-tip-bars li {
+  display: grid;
+  grid-template-columns: 2.4em 1fr 2.6em;
+  align-items: center;
+  gap: 8px; }
+
+.kr-tip-bars__bar {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--kr-surface-2);
+  overflow: hidden; }
+
+.kr-tip-bars__bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--kr-brand-gradient); }
+
+.kr-tip-bars__n {
+  text-align: right;
+  font-variant-numeric: tabular-nums; }
 
 .kr-cal__tip-head {
   display: flex;
@@ -10788,6 +10913,100 @@ button.kr-cal__cell {
   border-radius: 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); }
 
+
+/* --- Find Me (literature.html) -----------------------------------------------
+   Where the reading lives elsewhere: four cards, each one link all over
+   (.kr-tile-link, §02), an icon in a disc, the name, a line, and "Visit".
+   On hover or focus the card lifts, the disc fills with the action red and
+   its icon turns a little, and the arrow slides out; under reduced motion
+   only the colours change. */
+.kr-find {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin: 0 0 48px;
+  padding: 0;
+  list-style: none; }
+
+.kr-find__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 26px 22px 20px;
+  border: 1px solid var(--kr-hairline);
+  border-radius: var(--kr-radius-lg);
+  background: var(--kr-surface-card);
+  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
+
+.kr-find__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 14px;
+  border: 1px solid var(--kr-hairline);
+  border-radius: 50%;
+  background: var(--kr-surface-3);
+  color: var(--kr-action);
+  font-size: 22px;
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.35s ease; }
+
+.kr-find__card h3 {
+  margin: 0 0 6px;
+  font-size: 18px; }
+
+.kr-find__card h3 a {
+  color: var(--kr-ink); }
+
+.kr-find__card p {
+  margin: 0 0 14px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--kr-muted); }
+
+.kr-find__go {
+  margin-top: auto;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--kr-action); }
+
+.kr-find__go::after {
+  content: " \2192";
+  display: inline-block;
+  transition: transform 0.25s ease; }
+
+.kr-find__card:hover,
+.kr-find__card:focus-within {
+  transform: translateY(-4px);
+  border-color: var(--kr-action);
+  box-shadow: var(--kr-shadow-2); }
+
+.kr-find__card:hover .kr-find__icon,
+.kr-find__card:focus-within .kr-find__icon {
+  border-color: var(--kr-action-fill);
+  background: var(--kr-action-fill);
+  color: var(--kr-on-action-fill);
+  transform: rotate(-8deg) scale(1.06); }
+
+.kr-find__card:hover .kr-find__go::after,
+.kr-find__card:focus-within .kr-find__go::after {
+  transform: translateX(4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-find__card,
+  .kr-find__icon,
+  .kr-find__go::after {
+    transition: none; }
+  .kr-find__card:hover,
+  .kr-find__card:focus-within,
+  .kr-find__card:hover .kr-find__icon,
+  .kr-find__card:focus-within .kr-find__icon,
+  .kr-find__card:hover .kr-find__go::after,
+  .kr-find__card:focus-within .kr-find__go::after {
+    transform: none; } }
+
 /* --- Reviews (literature.html, js/literature.js) ------------------------
    A card per review: the cover on a pale band, stars, title, author and
    the start of the text. */
@@ -10952,6 +11171,20 @@ button.kr-cal__cell {
 .kr-quote-card footer {
   font-size: 12px;
   color: var(--kr-muted); }
+
+/* The book's title links to it on Goodreads (generate_quote_wall.py);
+   the wall's click-to-copy lets it through. It sits above the card's
+   own click target. */
+.kr-quote-card .kr-quote-book {
+  position: relative;
+  z-index: 1;
+  color: var(--kr-action);
+  text-decoration: underline;
+  text-underline-offset: 2px; }
+
+.kr-quote-card .kr-quote-book:hover,
+.kr-quote-card .kr-quote-book:focus-visible {
+  color: var(--kr-action-hover); }
 
 /* The copy-link "#": a 24px square (WCAG 2.5.8) centred where the glyph
    has always sat, in the card's top right corner. It shows on hover or
@@ -11761,11 +11994,107 @@ a.ds-text-link:focus-visible {
 .ds-stars {
   margin-left: 12px; }
 
-.ds-try-btn {
+/* The apps and the series (.ds-app): a poster in the card's own colours
+   (--ds-a to --ds-b, set on the card in the markup, the way a language
+   dot's colour is) with its icon, then the title, one line, and a foot:
+   "Open the app", which is the stretched title link's promise, and the
+   source on GitHub, a small link of its own above the stretch. A series
+   card's poster is its hover stage too (data-live, js/covers*.js): the
+   sketch runs over the colours, and they stay where sketches do not. */
+.ds-app {
+  padding: 0;
+  overflow: hidden; }
+
+.ds-app > :not(.ds-app__poster),
+.ds-app__text {
+  padding-inline: 20px; }
+
+.ds-app__poster {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 104px;
+  margin-bottom: 16px;
+  overflow: clip;
+  background: linear-gradient(135deg, var(--ds-a), var(--ds-b));
+  color: var(--kr-on-action-fill);
+  font-size: 40px;
+  transition: filter 0.3s ease; }
+
+.ds-app__poster .kr-glyph {
+  width: 40px;
+  height: 40px;
+  color: inherit; }
+
+.ds-app__stage {
+  position: absolute;
+  inset: 0; }
+
+.ds-project-card--link.ds-app:hover .ds-app__poster,
+.ds-project-card--link.ds-app:focus-within .ds-app__poster {
+  filter: saturate(1.2) brightness(1.08); }
+
+.ds-app__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-bottom: 16px;
+  font-size: 13px; }
+
+.ds-project-card .ds-app__foot {
+  margin-bottom: 0; }
+
+.ds-app__open {
+  font-weight: 600;
+  color: var(--kr-action); }
+
+.ds-app__open::after {
+  content: " \2192"; }
+
+.ds-app__src {
   position: relative;
   z-index: 1;
-  align-self: flex-start;
-  margin-top: auto; }
+  color: var(--kr-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px; }
+
+.ds-app__src:hover,
+.ds-app__src:focus-visible {
+  color: var(--kr-action); }
+
+/* A series card lies on its side from 768px: the poster on the left. */
+.ds-app--wide .ds-app__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding-bottom: 16px; }
+
+@media (min-width: 768px) {
+  .ds-app--wide {
+    flex-direction: row; }
+  .ds-app--wide .ds-app__poster {
+    flex: 0 0 34%;
+    height: auto;
+    min-height: 132px;
+    margin-bottom: 0; }
+  .ds-app--wide .ds-app__text {
+    padding-top: 18px; } }
+
+/* The code: compact tiles, a top edge in the main language's colour
+   (--ds-lang, set in the markup) and the GitHub mark by the name. */
+.ds-repo {
+  border-top: 3px solid var(--ds-lang); }
+
+.ds-repo h4 .kr-glyph {
+  margin-right: 4px;
+  color: var(--kr-muted); }
+
+.ds-lang {
+  margin-right: 10px;
+  white-space: nowrap; }
 
 /* --- Links out ------------------------------------------------------- */
 .ds-profiles {
@@ -12319,6 +12648,11 @@ a.ds-text-link:focus-visible {
   opacity: 0.85; }
 
 /* What I try to live by: three numbered principles. */
+/* The recommended reading under the creed's lede. */
+.kr-about-creed__read {
+  margin-top: 14px;
+  color: var(--kr-muted); }
+
 .kr-creed {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));

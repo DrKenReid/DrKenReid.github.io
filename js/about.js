@@ -65,9 +65,12 @@
 
     /* -------------------------------------------------------------- now */
 
+    /** A title, linked when there is somewhere to go: an outside page
+        (Goodreads, Last.fm) opens in a new tab. */
     function cite(title, author, href) {
         var t = '<cite>' + krEscapeHtml(title) + '</cite>';
-        return (href ? '<a href="' + href + '">' + t + '</a>' : t) + (author ? ' by ' + krEscapeHtml(author) : '');
+        var out = /^https?:/.test(href || '') ? ' target="_blank" rel="noopener noreferrer"' : '';
+        return (href ? '<a href="' + krEscapeHtml(href) + '"' + out + '>' + t + '</a>' : t) + (author ? ' by ' + krEscapeHtml(author) : '');
     }
 
     /** A Goodreads title without its series note: "Vicious (Villains, #1)". */
@@ -80,8 +83,11 @@
             var books = (now.reading || []).slice(0, 2);
             var el = document.getElementById('now-reading');
             if (el && books.length) {
-                el.innerHTML = books.map(function (b, i) {
-                    return cite(bareTitle(b.title), b.author, i === 0 ? '/literature.html' : null);
+                // Each book to its Goodreads page (the weekly refresh's
+                // link, without its tracking query), or a search for it.
+                el.innerHTML = books.map(function (b) {
+                    var href = b.link ? String(b.link).split('?')[0] : krGoodreadsHref(b.title, b.author);
+                    return cite(bareTitle(b.title), b.author, href);
                 }).join(books.length === 2 ? ', and ' : ', ');
             }
             var when = document.getElementById('about-now-updated');
@@ -92,7 +98,7 @@
             var album = (top.albums || [])[0];
             var el = document.getElementById('now-listening');
             if (el && album) {
-                el.innerHTML = cite(album.name, album.artist, '/music.html') +
+                el.innerHTML = cite(album.name, album.artist, album.url || '/music.html') +
                     ', my most played album of the last three months';
             }
         }).catch(function () {});

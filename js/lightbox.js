@@ -381,6 +381,11 @@
             if ($img.closest('a').length) return;
             if (alt === '') return;
             if ($img.width() < MIN_WIDTH) return;
+            // A gallery thumbnail or hero crop opens its full frame on the
+            // photos-v1 release, not the small file on the page (which
+            // shows as the preview while the frame loads).
+            var frame = /\/img\/photography\/(?:thumb|hero)\/(\d+)(?:@2x)?\.webp(?:\?.*)?$/.exec(src);
+            if (frame && typeof KR_RELEASE === 'string') src = KR_RELEASE + frame[1] + '.png';
             var link = $('<a class="img-lightbox"></a>').attr('href', src);
             // An image with no alt at all is an authoring slip, but its
             // link still needs a name.

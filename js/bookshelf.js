@@ -237,6 +237,10 @@
     // A series name is a second, smaller column of type down the spine.
     var SPINE_SERIES_W = 12;
 
+    // What the hover cards describe: the shelf in reading order and the
+    // figures' books, kept here so a retry's redraw updates them in place.
+    var shelfBooks = [], figureTips = [];
+
     function render(books) {
         var shelf = document.getElementById('kr-shelf');
         if (!shelf) return;
@@ -263,12 +267,27 @@
                 '<a class="kr-spine kr-spine--r' + (b.r || 0) + '" href="' + krEscapeHtml(goodreadsUrl(b)) + '"' +
                 ' target="_blank" rel="noopener noreferrer" tabindex="-1" data-i="' + i + '"' +
                 ' style="width:' + w.toFixed(0) + 'px;height:' + h + 'px"' +
-                ' title="' + label + '" aria-label="' + label + '">' +
+                ' aria-label="' + label + '">' +
                 '<span class="kr-spine__title">' + krEscapeHtml(name.title) + '</span>' +
                 (name.series ? '<span class="kr-spine__series">' + krEscapeHtml(name.series) + '</span>' : '') +
                 '</a></span>';
         }).join('');
         shelf.innerHTML = html;
+        // The calendar's hover card on every spine: title, series, author,
+        // stars and when it was read, on hover, focus or a tap.
+        shelfBooks = sorted;
+        if (!shelf.hasAttribute('data-tip')) {
+            shelf.setAttribute('data-tip', '');
+            initCalendarTip(shelf, function (spine) {
+                var b = shelfBooks[+spine.getAttribute('data-i')];
+                var d = b ? parseDate(firstRead(b)) : null;
+                return {
+                    heading: d ? 'Read ' + d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }) : 'On the shelf',
+                    list: b ? [b] : [],
+                    count: ''
+                };
+            }, '.kr-spine[data-i]');
+        }
         var count = document.getElementById('kr-shelf-count');
         if (count) count.textContent = sorted.length.toLocaleString();
         var keys = initShelfKeys(shelf);
@@ -573,14 +592,16 @@
        focuses a tapped button nor always sends it a mouseover. A tap
        anywhere else, Escape or a scroll closes it. `describe(cell)` gives
        {heading, list} for the view on screen. */
-    function initCalendarTip(host, describe) {
+    var tipCount = 0;
+    function initCalendarTip(host, describe, selector) {
         var tip = document.createElement('div');
         tip.className = 'kr-cal__tip';
+        tip.id = 'kr-tip-' + (++tipCount);
         tip.setAttribute('role', 'tooltip');
         document.body.appendChild(tip);
         var anchored = !!(window.CSS && CSS.supports && CSS.supports('position-area', 'top'));
         var current = null, hideTimer = null;
-        var CELL = '.kr-cal__cell[data-k]';
+        var CELL = selector || '.kr-cal__cell[data-k]';
 
         function stars(r) {
             var n = Math.max(0, Math.min(5, +r || 0)), out = '';
@@ -588,9 +609,13 @@
             return '<span class="kr-cal__tip-stars" aria-hidden="true">' + out + '</span>';
         }
         function fill(info, compact, limit) {
-            var list = info.list, shown = list.slice(0, limit);
+            var list = info.list || [], shown = list.slice(0, limit);
+            if (info.body) {
+                tip.innerHTML = '<div class="kr-cal__tip-head">' + krEscapeHtml(info.heading) + '</div>' + info.body;
+                return;
+            }
             tip.innerHTML = '<div class="kr-cal__tip-head">' + krEscapeHtml(info.heading) +
-                '<span>' + countLabel(list.length) + '</span></div>' +
+                '<span>' + (info.count != null ? info.count : countLabel(list.length)) + '</span></div>' +
                 '<ul class="kr-cal__tip-list">' + shown.map(function (b) {
                     var name = krBookTitle(b.t);
                     return '<li><span class="kr-cal__tip-title">' + krEscapeHtml(name.title) + '</span>' +
@@ -600,8 +625,8 @@
                 (list.length > shown.length ? '<div class="kr-cal__tip-more">and ' + (list.length - shown.length) + ' more</div>' : '');
         }
         function show(cell) {
-            var info = describe(cell), list = info.list;
-            if (!list.length) return;
+            var info = describe(cell), list = info.list || [];
+            if (!list.length && !info.body) return;
             // A month with more books than its card lists in full goes
             // compact and lists them all (see TIP_LIMIT_MONTH).
             var compact = !!info.month && list.length > TIP_LIMIT_MONTH;
@@ -615,8 +640,9 @@
                 fill(info, compact, --limit);
             }
             clearTimeout(hideTimer);
-            if (current && current !== cell) current.style.anchorName = '';
+            if (current && current !== cell) { current.style.anchorName = ''; current.removeAttribute('aria-describedby'); }
             current = cell;
+            cell.setAttribute('aria-describedby', tip.id);
             tip.classList.add('is-visible');
             if (anchored) { cell.style.anchorName = '--kr-cal'; tip.style.left = tip.style.top = ''; return; }
             var r = cell.getBoundingClientRect(), tr = tip.getBoundingClientRect();
@@ -644,7 +670,8 @@
             if (c && host.contains(c)) show(c); else hide(true);
         });
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(true); });
-        window.addEventListener('scroll', function () { hide(true); }, { passive: true });
+        // Any scroll, the page's or a strip's (the shelf scrolls sideways).
+        document.addEventListener('scroll', function () { hide(true); }, { passive: true, capture: true });
         return { hide: hide };
     }
 
@@ -773,10 +800,74 @@
             ['Busiest year', topYear, byYear[topYear] + ' books finished'],
             ['Longest streak', best + (best === 1 ? ' week' : ' weeks'), streakEnd ? 'in a row with a book finished, ending ' + streakEnd.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '']
         ];
-        host.innerHTML = figures.map(function (f) {
-            return '<div class="kr-figure"><dt>' + krEscapeHtml(f[0]) + '</dt><dd><span class="kr-figure__n">' + krEscapeHtml(f[1]) + '</span>' +
+        // Pages (n, from the feed): the total across every read, re-reads
+        // included, and the longest book. Left out if no book has a count.
+        var paged = books.filter(function (b) { return b.n > 0; });
+        var pagesByYear = {};
+        var pageTotal = 0;
+        paged.forEach(function (b) {
+            sessions(b).forEach(function (sd) {
+                if (!parseDate(sd)) return;
+                pageTotal += b.n;
+                pagesByYear[sd.slice(0, 4)] = (pagesByYear[sd.slice(0, 4)] || 0) + b.n;
+            });
+        });
+        var longest = paged.slice().sort(function (a, b) { return b.n - a.n; });
+        if (pageTotal) {
+            figures.push(['Pages read', pageTotal.toLocaleString('en-GB'), 'across ' + paged.length + ' books with a page count']);
+            figures.push(['Longest book', longest[0].n.toLocaleString('en-GB') + ' pages', krBookTitle(longest[0].t).title]);
+        }
+        host.innerHTML = figures.map(function (f, i) {
+            return '<div class="kr-figure" tabindex="0" data-fig="' + i + '"><dt>' + krEscapeHtml(f[0]) + '</dt><dd><span class="kr-figure__n">' + krEscapeHtml(f[1]) + '</span>' +
                 (f[2] ? '<span class="kr-figure__sub">' + krEscapeHtml(f[2]) + '</span>' : '') + '</dd></div>';
         }).join('');
+
+        // What each figure's hover card shows: the books behind it, newest
+        // first, or for the average how the stars fall.
+        var byFinish = books.filter(function (b) { return parseDate(firstRead(b)); })
+            .sort(function (a, b) { return firstRead(b).localeCompare(firstRead(a)); });
+        var dist = [5, 4, 3, 2, 1].map(function (n) {
+            return [n, rated.filter(function (b) { return b.r === n; }).length];
+        });
+        var most = Math.max.apply(null, dist.map(function (d) { return d[1]; })) || 1;
+        var streakBooks = [];
+        if (streakEnd) {
+            var from = new Date(bestEnd - (best - 1) * 7 * 86400000), to = new Date(bestEnd + 7 * 86400000);
+            streakBooks = byFinish.filter(function (b) {
+                return sessions(b).some(function (s) { var d = parseDate(s); return d && d >= from && d < to; });
+            });
+        }
+        figureTips = [
+            { heading: 'Most recently finished', list: byFinish, count: countLabel(books.length) },
+            { heading: 'Five stars, newest first', list: byFinish.filter(function (b) { return b.r === 5; }), count: countLabel(five) },
+            { heading: 'How the stars fall', body: '<ul class="kr-tip-bars">' + dist.map(function (d) {
+                return '<li><span class="kr-tip-bars__k">' + d[0] + ' ★</span>' +
+                    '<span class="kr-tip-bars__bar"><span style="width:' + Math.round(100 * d[1] / most) + '%"></span></span>' +
+                    '<span class="kr-tip-bars__n">' + d[1] + '</span></li>';
+            }).join('') + '</ul>' },
+            { heading: topAuthor, list: byFinish.filter(function (b) { return b.a === topAuthor; }) },
+            { heading: 'Best of ' + topYear, list: byFinish.filter(function (b) { return firstRead(b).slice(0, 4) === topYear; })
+                .sort(function (a, b) { return (b.r || 0) - (a.r || 0); }) },
+            { heading: 'During the streak', list: streakBooks },
+            { heading: 'Pages by year', body: (function () {
+                var ys = Object.keys(pagesByYear).sort().reverse().slice(0, 8);
+                var top = Math.max.apply(null, ys.map(function (y) { return pagesByYear[y]; })) || 1;
+                return '<ul class="kr-tip-bars">' + ys.map(function (y) {
+                    return '<li><span class="kr-tip-bars__k">' + y + '</span>' +
+                        '<span class="kr-tip-bars__bar"><span style="width:' + Math.round(100 * pagesByYear[y] / top) + '%"></span></span>' +
+                        '<span class="kr-tip-bars__n">' + pagesByYear[y].toLocaleString('en-GB') + '</span></li>';
+                }).join('') + '</ul>';
+            })() },
+            { heading: 'The longest', body: '<ul class="kr-cal__tip-list">' + longest.slice(0, 6).map(function (b) {
+                var name = krBookTitle(b.t);
+                return '<li><span class="kr-cal__tip-title">' + krEscapeHtml(name.title) + '</span>' +
+                    '<span class="kr-cal__tip-author">' + krEscapeHtml(b.a || '') + ', ' + b.n.toLocaleString('en-GB') + ' pages</span></li>';
+            }).join('') + '</ul>' }
+        ];
+        if (!host.hasAttribute('data-tip')) {
+            host.setAttribute('data-tip', '');
+            initCalendarTip(host, function (fig) { return figureTips[+fig.getAttribute('data-fig')] || { list: [] }; }, '.kr-figure[data-fig]');
+        }
     }
 
     /* ---------------------------------------------------------- failure

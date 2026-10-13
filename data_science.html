@@ -428,7 +428,7 @@
         <div class="col-12 col-xl-7 mb-30">
           <div class="ds-col-head">
             <span class="section-eyebrow">Research</span>
-            <h2>Publications</h2>
+            <h2><a class="kr-heading-link" href="https://scholar.google.com/citations?user=bwl2u00AAAAJ&amp;hl=en" target="_blank" rel="noopener">Publications</a></h2>
           </div>
           <!-- BEGIN publications: written by .github/scripts/generate_publications.py from data/publications.json. Edit the JSON and rerun; edits made here are overwritten. -->
           <div class="ds-pub-toolbar">
@@ -520,7 +520,7 @@
         <div class="col-12 col-xl-5 mb-30">
           <div class="ds-col-head ds-col-head--sm" id="thesis">
             <span class="section-eyebrow">Ph.D., 2019</span>
-            <h2>Doctoral Thesis</h2>
+            <h2><a class="kr-heading-link" href="/docs/KenReidThesis.pdf" target="_blank" rel="noopener">Doctoral Thesis</a></h2>
           </div>
           <div data-live="pub:hybrid" class="ds-pub-entry"><span class="kr-pub-stage" data-live-host aria-hidden="true"></span>
             <h3 class="ds-pub-title">Metaheuristics for Solving Real World Employee Rostering and Shift Scheduling Problems</h3>
@@ -530,7 +530,7 @@
           </div>
           <div class="ds-col-head ds-col-head--sm" id="talk">
             <span class="section-eyebrow">On video</span>
-            <h2>Featured Talk</h2>
+            <h2><a class="kr-heading-link" href="https://www.youtube.com/watch?v=9ie01GLGB5s" target="_blank" rel="noopener">Featured Talk</a></h2>
           </div>
           <div class="ds-pub-entry">
             <h3 class="ds-pub-title">"The Factory Must Grow: Automation in Factorio"</h3>
@@ -553,134 +553,117 @@
         <p class="section-heading__lede">Projects and interactive tools</p>
       </div>
       <h3 class="ds-group-title">Things you can run</h3>
-      <p class="ds-group-note">The apps live on Streamlit's free hosting, which puts an app to sleep when nobody has used it for a while. If one opens on a sleep screen, press its button to wake it and give it about thirty seconds.</p>
+      <p class="ds-group-note">Hosted free on Streamlit, so an app nobody has used for a while opens on a wake-up screen: press its button and give it half a minute.</p>
       <div class="row">
-        <div class="col-12 col-md-6 col-xl-3">
-          <div class="ds-project-card ds-project-card--link">
-            <h4><a href="https://github.com/DrKenReid/steam-stats-visualized" target="_blank" rel="noopener"><i class="ti-game kr-glyph" aria-hidden="true"></i> Steam Stats Visualized</a></h4>
-            <p>Paste your Steam profile and get your gaming life roasted. Gaming personality, head-to-head comparisons, achievement stats, account value estimation, genre breakdown, and downloadable summary cards.</p>
-            <a href="https://drkenreid-steam-stats-visualized.streamlit.app/" target="_blank" rel="noopener" class="kr-btn kr-btn--ghost kr-btn--sm ds-try-btn">Try it on Streamlit &rarr;</a>
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="ds-project-card ds-project-card--link ds-app" style="--ds-a: #1b2838; --ds-b: #2a6f97;">
+            <div class="ds-app__poster" aria-hidden="true"><i class="ti-game"></i></div>
+            <h4><a href="https://drkenreid-steam-stats-visualized.streamlit.app/" target="_blank" rel="noopener">Steam Stats Visualized</a></h4>
+            <p>Paste your Steam profile and get your gaming life roasted, with stats and shareable cards.</p>
+            <p class="ds-app__foot"><span class="ds-app__open">Open the app</span><a class="ds-app__src" href="https://github.com/DrKenReid/steam-stats-visualized" target="_blank" rel="noopener">Source</a></p>
           </div>
         </div>
-        <div class="col-12 col-md-6 col-xl-3">
-          <div class="ds-project-card ds-project-card--link">
-            <h4><a href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" rel="noopener"><i class="ti-book kr-glyph" aria-hidden="true"></i> GoodReads Reading Stats</a></h4>
-            <p>Upload your GoodReads export and discover your reading personality, genre breakdown, rating analysis, fun page facts, and a quotes collection tool with themed PDF/HTML/Markdown export.</p>
-            <a href="https://goodreads-analysis.streamlit.app/" target="_blank" rel="noopener" class="kr-btn kr-btn--ghost kr-btn--sm ds-try-btn">Try it on Streamlit &rarr;</a>
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="ds-project-card ds-project-card--link ds-app" style="--ds-a: #5a3d1c; --ds-b: #a8783c;">
+            <div class="ds-app__poster" aria-hidden="true"><i class="ti-book"></i></div>
+            <h4><a href="https://goodreads-analysis.streamlit.app/" target="_blank" rel="noopener">GoodReads Reading Stats</a></h4>
+            <p>Upload your Goodreads export for your reading personality, genres, ratings and a quotes tool.</p>
+            <p class="ds-app__foot"><span class="ds-app__open">Open the app</span><a class="ds-app__src" href="https://github.com/DrKenReid/GoodReads-Analysis" target="_blank" rel="noopener">Source</a></p>
           </div>
         </div>
-        <div class="col-12 col-md-6 col-xl-3">
-          <div class="ds-project-card ds-project-card--link">
-            <h4><a href="https://github.com/DrKenReid/Debt-Payoff-Simulator" target="_blank" rel="noopener"><i class="ti-credit-card kr-glyph" aria-hidden="true"></i> Debt Payoff Simulator</a></h4>
-            <p>Compare Avalanche vs Snowball debt repayment strategies with interactive charts. Balance transfer analysis, sensitivity modeling, bi-weekly payments, and customizable summary cards.</p>
-            <a href="https://debt-payoff-simulator.streamlit.app" target="_blank" rel="noopener" class="kr-btn kr-btn--ghost kr-btn--sm ds-try-btn">Try it on Streamlit &rarr;</a>
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="ds-project-card ds-project-card--link ds-app" style="--ds-a: #145c3c; --ds-b: #2fa36b;">
+            <div class="ds-app__poster" aria-hidden="true"><i class="ti-credit-card"></i></div>
+            <h4><a href="https://debt-payoff-simulator.streamlit.app" target="_blank" rel="noopener">Debt Payoff Simulator</a></h4>
+            <p>Avalanche against Snowball, with charts, balance transfers and bi-weekly payments.</p>
+            <p class="ds-app__foot"><span class="ds-app__open">Open the app</span><a class="ds-app__src" href="https://github.com/DrKenReid/Debt-Payoff-Simulator" target="_blank" rel="noopener">Source</a></p>
           </div>
         </div>
-        <div class="col-12 col-md-6 col-xl-3">
-          <div class="ds-project-card ds-project-card--link">
-            <h4><a href="https://github.com/DrKenReid/Letterboxd-Roasted" target="_blank" rel="noopener"><svg class="kr-glyph" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22c-3.9 0-7-2.8-7-6.6 0-2.6 1.3-4.6 3-6.4.3 1.7 1.1 2.9 2.2 3.5C9.7 9 11 5.6 14 3c.3 2.7 1.6 4.5 3 6.2 1.4 1.7 2 3.6 2 5.9C19 19.1 15.9 22 12 22z"/><path d="M12 22c-1.7 0-3-1.3-3-3 0-1.6 1-2.7 2.2-3.8.2 1 .7 1.7 1.5 2 .1-1.2.5-2.2 1.3-3 .6 1.2 1 2.4 1 3.8 0 2.2-1.3 4-3 4z"/></svg> Letterboxd Roasted</a></h4>
-            <p>Upload your Letterboxd data export and get absolutely roasted. Film personality types, data-driven roast commentary, multi-user comparison, contrarian scores, and shareable summary cards.</p>
-            <a href="https://letterboxd-roasted.streamlit.app/" target="_blank" rel="noopener" class="kr-btn kr-btn--ghost kr-btn--sm ds-try-btn">Try it on Streamlit &rarr;</a>
-          </div>
-        </div>
-        <div class="col-12 col-md-6">
-          <div class="ds-project-card ds-project-card--link ds-project-card--series" data-ds-series="Research, Live">
-            <h4><a href="/series-research-live.html">Research, Live</a></h4>
-            <p>Each part takes one piece of my published research, rebuilds it as something running in your browser, and hands you the parameters.</p>
-            <div class="ds-project-meta"><span class="ds-series-count">A series on the blog</span></div>
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="ds-project-card ds-project-card--link ds-app" style="--ds-a: #d26a00; --ds-b: #1f8f57;">
+            <div class="ds-app__poster" aria-hidden="true"><svg class="kr-glyph" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22c-3.9 0-7-2.8-7-6.6 0-2.6 1.3-4.6 3-6.4.3 1.7 1.1 2.9 2.2 3.5C9.7 9 11 5.6 14 3c.3 2.7 1.6 4.5 3 6.2 1.4 1.7 2 3.6 2 5.9C19 19.1 15.9 22 12 22z"/><path d="M12 22c-1.7 0-3-1.3-3-3 0-1.6 1-2.7 2.2-3.8.2 1 .7 1.7 1.5 2 .1-1.2.5-2.2 1.3-3 .6 1.2 1 2.4 1 3.8 0 2.2-1.3 4-3 4z"/></svg></div>
+            <h4><a href="https://letterboxd-roasted.streamlit.app/" target="_blank" rel="noopener">Letterboxd Roasted</a></h4>
+            <p>Upload your Letterboxd export and get roasted: film personality, contrarian score and more.</p>
+            <p class="ds-app__foot"><span class="ds-app__open">Open the app</span><a class="ds-app__src" href="https://github.com/DrKenReid/Letterboxd-Roasted" target="_blank" rel="noopener">Source</a></p>
           </div>
         </div>
         <div class="col-12 col-md-6">
-          <div class="ds-project-card ds-project-card--link ds-project-card--series" data-ds-series="Algorithms, Live">
-            <h4><a href="/series-algorithms-live.html">Algorithms, Live</a></h4>
-            <p>Each part puts one algorithm running live in your browser, with the important parameters as sliders, so you can cause the famous failure modes yourself.</p>
-            <div class="ds-project-meta"><span class="ds-series-count">A series on the blog</span></div>
+          <div class="ds-project-card ds-project-card--link ds-project-card--series ds-app ds-app--wide" data-ds-series="Research, Live" data-live="pub:hybrid" style="--ds-a: #1f5fa8; --ds-b: #1baf7a;">
+            <div class="ds-app__poster" aria-hidden="true"><span class="ds-app__stage" data-live-host></span><i class="ti-pulse"></i></div>
+            <div class="ds-app__text">
+              <h4><a href="/series-research-live.html">Research, Live</a></h4>
+              <p>My published research, rebuilt to run in your browser, with the parameters in your hands.</p>
+              <div class="ds-project-meta"><span class="ds-series-count">A series on the blog</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="ds-project-card ds-project-card--link ds-project-card--series ds-app ds-app--wide" data-ds-series="Algorithms, Live" data-live="ant-colony-live" style="--ds-a: #b83a45; --ds-b: #e09a00;">
+            <div class="ds-app__poster" aria-hidden="true"><span class="ds-app__stage" data-live-host></span><i class="ti-bolt-alt"></i></div>
+            <div class="ds-app__text">
+              <h4><a href="/series-algorithms-live.html">Algorithms, Live</a></h4>
+              <p>Algorithms running live, with sliders to cause their famous failures yourself.</p>
+              <div class="ds-project-meta"><span class="ds-series-count">A series on the blog</span></div>
+            </div>
           </div>
         </div>
       </div>
       <h3 class="ds-group-title">Code and notebooks</h3>
       <div class="row">
-        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-          <div class="ds-project-card ds-project-card--link">
-            <h4><a href="https://github.com/DrKenReid/EasyViewerPDF" target="_blank" rel="noopener">EasyViewerPDF</a></h4>
-            <p>Electron desktop app for PDF workflows: split documents into pages and compare multiple pages side by side in a malleable, keyboard-accessible grid.</p>
-            <div class="ds-project-meta">
-              <span class="ds-lang-dot" style="background: #f1e05a;"></span> JavaScript
-              <span class="ds-lang-dot ml-2" style="background: #47848f;"></span> Electron
-            </div>
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="ds-project-card ds-project-card--link ds-repo" style="--ds-lang: #f1e05a;">
+            <h4><a href="https://github.com/DrKenReid/EasyViewerPDF" target="_blank" rel="noopener"><i class="ti-github kr-glyph" aria-hidden="true"></i> EasyViewerPDF</a></h4>
+            <p>An Electron app to split PDFs and compare pages side by side.</p>
+            <div class="ds-project-meta"><span class="ds-lang"><span class="ds-lang-dot" style="background: #f1e05a;"></span>JavaScript</span> <span class="ds-lang"><span class="ds-lang-dot" style="background: #47848f;"></span>Electron</span></div>
           </div>
         </div>
-
-        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-          <div class="ds-project-card ds-project-card--link">
-            <h4><a href="https://github.com/DrKenReid/FactorioBeltProblemGECCO" target="_blank" rel="noopener">FactorioBeltProblemGECCO</a></h4>
-            <p>Factorio game interface for optimizing belt balancer layouts using evolutionary computation. Companion code for the GECCO '21 paper.</p>
-            <div class="ds-project-meta">
-              <span class="ds-lang-dot" style="background: #3572A5;"></span> Python
-              <span class="ds-lang-dot ml-2" style="background: #000080;"></span> Lua
-              <span class="ds-stars">&#9733; 30</span>
-            </div>
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="ds-project-card ds-project-card--link ds-repo" style="--ds-lang: #3572A5;">
+            <h4><a href="https://github.com/DrKenReid/FactorioBeltProblemGECCO" target="_blank" rel="noopener"><i class="ti-github kr-glyph" aria-hidden="true"></i> FactorioBeltProblemGECCO</a></h4>
+            <p>Evolving Factorio belt balancers: the code behind the GECCO '21 paper.</p>
+            <div class="ds-project-meta"><span class="ds-lang"><span class="ds-lang-dot" style="background: #3572A5;"></span>Python</span> <span class="ds-lang"><span class="ds-lang-dot" style="background: #000080;"></span>Lua</span> <span class="ds-stars">&#9733; 30</span></div>
           </div>
         </div>
-
-        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-          <div class="ds-project-card ds-project-card--link">
-            <h4><a href="https://github.com/DrKenReid/VAE-for-Molecule-Discovery" target="_blank" rel="noopener">VAE for Molecule Discovery</a></h4>
-            <p>Variational Autoencoder for drug discovery — generating novel molecular structures using deep generative models.</p>
-            <div class="ds-project-meta">
-              <span class="ds-lang-dot" style="background: #DA5B0B;"></span> Jupyter Notebook
-            </div>
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="ds-project-card ds-project-card--link ds-repo" style="--ds-lang: #DA5B0B;">
+            <h4><a href="https://github.com/DrKenReid/VAE-for-Molecule-Discovery" target="_blank" rel="noopener"><i class="ti-github kr-glyph" aria-hidden="true"></i> VAE for Molecule Discovery</a></h4>
+            <p>A variational autoencoder that generates new molecular structures.</p>
+            <div class="ds-project-meta"><span class="ds-lang"><span class="ds-lang-dot" style="background: #DA5B0B;"></span>Jupyter Notebook</span></div>
           </div>
         </div>
-
-        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-          <div class="ds-project-card ds-project-card--link">
-            <h4><a href="https://github.com/DrKenReid/CNN-Tutorial---X-ray-image-classifier" target="_blank" rel="noopener">CNN X-Ray Classifier</a></h4>
-            <p>Convolutional Neural Network for pneumonia detection from chest X-ray images — a deep learning tutorial for medical imaging.</p>
-            <div class="ds-project-meta">
-              <span class="ds-lang-dot" style="background: #DA5B0B;"></span> Jupyter Notebook
-            </div>
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="ds-project-card ds-project-card--link ds-repo" style="--ds-lang: #DA5B0B;">
+            <h4><a href="https://github.com/DrKenReid/CNN-Tutorial---X-ray-image-classifier" target="_blank" rel="noopener"><i class="ti-github kr-glyph" aria-hidden="true"></i> CNN X-Ray Classifier</a></h4>
+            <p>Pneumonia detection from chest X-rays, as a deep learning tutorial.</p>
+            <div class="ds-project-meta"><span class="ds-lang"><span class="ds-lang-dot" style="background: #DA5B0B;"></span>Jupyter Notebook</span></div>
           </div>
         </div>
-
-        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-          <div class="ds-project-card ds-project-card--link">
-            <h4><a href="https://github.com/DrKenReid/Generalized-Analysis-of-Text-Data" target="_blank" rel="noopener">NLP Text Analysis Toolkit</a></h4>
-            <p>Generalized NLP pipeline — topic modeling, sentiment analysis, and text classification using modern natural language processing techniques.</p>
-            <div class="ds-project-meta">
-              <span class="ds-lang-dot" style="background: #DA5B0B;"></span> Jupyter Notebook
-            </div>
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="ds-project-card ds-project-card--link ds-repo" style="--ds-lang: #DA5B0B;">
+            <h4><a href="https://github.com/DrKenReid/Generalized-Analysis-of-Text-Data" target="_blank" rel="noopener"><i class="ti-github kr-glyph" aria-hidden="true"></i> NLP Text Analysis Toolkit</a></h4>
+            <p>Topic modelling, sentiment and classification for any text.</p>
+            <div class="ds-project-meta"><span class="ds-lang"><span class="ds-lang-dot" style="background: #DA5B0B;"></span>Jupyter Notebook</span></div>
           </div>
         </div>
-
-        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-          <div class="ds-project-card ds-project-card--link">
-            <h4><a href="https://github.com/DrKenReid/SimulatedAnnealingExample" target="_blank" rel="noopener">Simulated Annealing</a></h4>
-            <p>Interactive Google Colab demonstration of Simulated Annealing — reconstructing a target string with visualized convergence, temperature decay, and acceptance probability.</p>
-            <div class="ds-project-meta">
-              <span class="ds-lang-dot" style="background: #DA5B0B;"></span> Jupyter Notebook
-            </div>
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="ds-project-card ds-project-card--link ds-repo" style="--ds-lang: #DA5B0B;">
+            <h4><a href="https://github.com/DrKenReid/SimulatedAnnealingExample" target="_blank" rel="noopener"><i class="ti-github kr-glyph" aria-hidden="true"></i> Simulated Annealing</a></h4>
+            <p>A Colab demo that anneals its way to a target string, step by step.</p>
+            <div class="ds-project-meta"><span class="ds-lang"><span class="ds-lang-dot" style="background: #DA5B0B;"></span>Jupyter Notebook</span></div>
           </div>
         </div>
-
-        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-          <div class="ds-project-card ds-project-card--link">
-            <h4><a href="https://github.com/DrKenReid/Introductory-Data-Science" target="_blank" rel="noopener">Introductory Data Science</a></h4>
-            <p>Hands-on machine learning tutorials in Google Colab — covering classification, regression, unsupervised learning, MLPs, CNNs, and RNNs.</p>
-            <div class="ds-project-meta">
-              <span class="ds-lang-dot" style="background: #DA5B0B;"></span> Jupyter Notebook
-            </div>
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="ds-project-card ds-project-card--link ds-repo" style="--ds-lang: #DA5B0B;">
+            <h4><a href="https://github.com/DrKenReid/Introductory-Data-Science" target="_blank" rel="noopener"><i class="ti-github kr-glyph" aria-hidden="true"></i> Introductory Data Science</a></h4>
+            <p>Colab tutorials from regression and clustering to CNNs and RNNs.</p>
+            <div class="ds-project-meta"><span class="ds-lang"><span class="ds-lang-dot" style="background: #DA5B0B;"></span>Jupyter Notebook</span></div>
           </div>
         </div>
-
-        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-          <div class="ds-project-card ds-project-card--link">
-            <h4><a href="https://github.com/DrKenReid/global-temperature-analysis" target="_blank" rel="noopener">Global Temperature Analysis</a></h4>
-            <p>Data pipeline using R, SQL Server, and Tableau to analyze long-term global temperature trends and climate patterns.</p>
-            <div class="ds-project-meta">
-              <span class="ds-lang-dot" style="background: #198CE7;"></span> R
-              <span class="ds-lang-dot ml-2" style="background: #e38c00;"></span> SQL
-            </div>
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="ds-project-card ds-project-card--link ds-repo" style="--ds-lang: #198CE7;">
+            <h4><a href="https://github.com/DrKenReid/global-temperature-analysis" target="_blank" rel="noopener"><i class="ti-github kr-glyph" aria-hidden="true"></i> Global Temperature Analysis</a></h4>
+            <p>R, SQL Server and Tableau on long-term global temperature trends.</p>
+            <div class="ds-project-meta"><span class="ds-lang"><span class="ds-lang-dot" style="background: #198CE7;"></span>R</span> <span class="ds-lang"><span class="ds-lang-dot" style="background: #e38c00;"></span>SQL</span></div>
           </div>
         </div>
       </div>

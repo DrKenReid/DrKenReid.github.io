@@ -301,7 +301,7 @@ function renderPhotoStrip(targetId) {
     el.innerHTML = '<section class="follow-area clearfix" aria-label="Photography highlights">' +
         '<div class="container"><div class="row"><div class="col-12">' +
         '<div class="section-heading text-center">' +
-        '<span class="section-eyebrow">Photography</span>' +
+        '<a class="section-eyebrow kr-eyebrow-link" href="' + root + 'gallery.html">Photography</a>' +
         '<h2>Photo Highlights</h2>' +
         '<p><a href="' + instagramUrl + '">Follow @drkenreid on Instagram</a></p>' +
         '</div></div></div></div>' +
@@ -4383,7 +4383,10 @@ var KR_QUOTE = { FADE_MS: 340, DWELL_PER_WORD: 260, DWELL_MIN: 7000, DWELL_MAX: 
  *   - The band holds the height of its tallest quotation, measured, so a
  *     change never moves the page or the arrows under the pointer.
  * The attribution is the author and the book's title without its
- * Goodreads series bracket (krBookTitle).
+ * Goodreads series bracket (krBookTitle), the title a link to the book on
+ * Goodreads (krGoodreadsHref). While that link has the pointer or the
+ * keyboard focus the band holds, so the link is never swapped out from
+ * under the reader; the countdown starts again when they leave.
  */
 function krQuoteRotator(section, quotes, opts) {
     if (!section || !quotes || !quotes.length) return;
@@ -4397,6 +4400,7 @@ function krQuoteRotator(section, quotes, opts) {
     var reduceMotion = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
     var still = !!(reduceMotion && reduceMotion.matches);
     var paused = false;
+    var held = false;
     var count = quotes.length;
     var start = ((((opts && opts.start) || 0) % count) + count) % count;
     var pending = start, fading = null;
@@ -4404,13 +4408,16 @@ function krQuoteRotator(section, quotes, opts) {
     function line(q) {
         // Middot, not a comma: in letterspaced caps, "Kahneman, Thinking,
         // Fast and Slow" has two commas doing two different jobs.
-        return q.book ? q.author + ' · ' + krBookTitle(q.book).title : q.author;
+        if (!q.book) return krEscapeHtml(q.author);
+        return krEscapeHtml(q.author) + ' · <a class="kr-home-quote__book" href="' +
+            krEscapeHtml(krGoodreadsHref(q.book, q.author, q.g)) +
+            '" target="_blank" rel="noopener noreferrer">' + krEscapeHtml(krBookTitle(q.book).title) + '</a>';
     }
     function words(q) { return String(q.quote).split(/\s+/).length; }
     function set(textEl, attrEl, q) {
         textEl.textContent = '“' + q.quote + '”';
         textEl.classList.toggle('kr-home-quote__text--long', words(q) > KR_QUOTE.LONG_WORDS);
-        attrEl.textContent = line(q);
+        attrEl.innerHTML = line(q);
     }
 
     // A hidden twin of the block takes every quotation in turn at the
@@ -4499,7 +4506,21 @@ function krQuoteRotator(section, quotes, opts) {
 
     if (still) return;
     section.classList.add('kr-home-quote--running');
-    if (bar) bar.addEventListener('animationend', function() { if (!paused && !still) step(1, false); });
+    if (bar) bar.addEventListener('animationend', function() {
+        if (paused || still) return;
+        if (!held) { step(1, false); return; }
+        bar.style.animation = 'none';
+        void bar.offsetWidth;
+        bar.style.animation = '';
+    });
+    // Hold while the book link has the pointer or the focus.
+    var hold = function(on) { return function(e) {
+        if (e.target.closest && e.target.closest('.kr-home-quote__book')) held = on;
+    }; };
+    attr.addEventListener('mouseover', hold(true));
+    attr.addEventListener('mouseout', hold(false));
+    attr.addEventListener('focusin', hold(true));
+    attr.addEventListener('focusout', hold(false));
     if (toggle) {
         toggle.addEventListener('click', function() {
             paused = !paused;
@@ -4769,6 +4790,18 @@ function krEscapeHtml(s) {
 var KR_SERIES_BRACKET = /\s*\(([^()]+?),?(?:\s*#\s*|\s+Book\s+)(\d+(?:\.\d+)?(?:\s*[-–]\s*\d+(?:\.\d+)?)?)\)\s*$/i;
 
 /** The display form of a Goodreads title: {title, series}. */
+/**
+ * Where a book opens on Goodreads: its own page when the quote or entry
+ * carries its Goodreads id (`g`, matched from data/books.json), otherwise
+ * a Goodreads search for its title (without the series bracket) and
+ * author, which lands on it for a book not on the shelf.
+ */
+function krGoodreadsHref(title, author, id) {
+    if (id) return 'https://www.goodreads.com/book/show/' + encodeURIComponent(id);
+    var q = (krBookTitle(title).title + ' ' + (author || '')).trim();
+    return 'https://www.goodreads.com/search?q=' + encodeURIComponent(q);
+}
+
 function krBookTitle(t) {
     var raw = String(t == null ? '' : t).trim();
     var m = KR_SERIES_BRACKET.exec(raw);
