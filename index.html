@@ -504,20 +504,106 @@
     renderFooter('footer-section');
     renderBlueskyFeed(document.getElementById('bsky-posts'), { limit: 2 });
 
-    /* The Latest section's photography lane: the first LATEST_PHOTOS
-       frames of photography-files.json (newest first), the first across
-       the lane and the next two sharing a row, each row at one height:
-       a tile grows by its thumbnail's width over height (photo-dims), so
-       portraits and landscapes sit together uncropped. The newest set
-       (KR_NEW_PHOTOS, written from data/photosets.json) wears the "New"
-       badge, and the lede counts it and names its place. The lane stays
-       hidden unless the list arrives; the sizes only refine it. */
+    /* Filling the Latest columns. From 992px the columns are equal and
+       their panels end level, so a panel with less in it showed a gap
+       above its links. Each lane registers how much it can show (`min`
+       to `max` units: posts, stories, lines of frames) and a `show(n)`
+       that sets it. fill() shows every lane at its minimum, lets the
+       columns take their natural heights (.kr-latest-row--measuring
+       stops the row stretching them), takes the tallest as the target,
+       then adds units to each lane while its column stays within it.
+       Below 992px every lane stays at its minimum (and a phone shows one
+       item of each, style.css). It runs again when a lane arrives, when
+       the web fonts land, and when the width changes. */
+    var latestFill = (function() {
+      var lanes = [];
+      var queued = false;
+      var lastWidth = 0;
+      function fill() {
+        queued = false;
+        var row = document.getElementById('latest-row');
+        if (!row) return;
+        lanes.forEach(function(lane) { lane.show(lane.min); });
+        if (!window.matchMedia('(min-width: 992px)').matches) return;
+        row.classList.add('kr-latest-row--measuring');
+        var height = function(el) { return el.getBoundingClientRect().height; };
+        var cols = Array.prototype.filter.call(row.children, function(c) { return !c.hidden; });
+        var target = Math.max.apply(null, cols.map(height));
+        lanes.forEach(function(lane) {
+          for (var n = lane.min + 1; n <= lane.max; n++) {
+            lane.show(n);
+            if (height(lane.col) > target + 1) { lane.show(n - 1); break; }
+          }
+          // A lane that can stretch its last unit to the exact room left
+          // (the photographs: one more line, cropped to fit) does so.
+          if (lane.fit) lane.fit(Math.floor(target - height(lane.col)));
+        });
+        row.classList.remove('kr-latest-row--measuring');
+      }
+      function queue() {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(fill);
+      }
+      window.addEventListener('resize', function() {
+        if (window.innerWidth === lastWidth) return;
+        lastWidth = window.innerWidth;
+        queue();
+      });
+      window.addEventListener('load', queue);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(queue);
+      return {
+        add: function(lane) { lanes.push(lane); queue(); }
+      };
+    })();
+
+    /* A lane of cards (posts or stories): the cards are built on demand
+       and added to or taken from the lane's .row so that `n` show. */
+    function latestCardLane(list, items, opts) {
+      var cards = [];
+      return function(n) {
+        n = Math.min(n, items.length);
+        while (list.children.length < n) {
+          var i = list.children.length;
+          if (!cards[i]) {
+            cards[i] = createBlogCardElement(items[i], {
+              colClass: 'col-12 mb-30',
+              showReadTime: false,
+              imageSrc: opts.image ? opts.image(items[i]) : undefined
+            });
+            krMarkNewPost(cards[i], items[i]);
+          }
+          list.appendChild(cards[i]);
+        }
+        while (list.children.length > n) list.removeChild(list.lastChild);
+      };
+    }
+
+    /* The Latest section's photography lane: the newest frames of
+       photography-files.json in justified lines of one height, uncropped:
+       the newest across the lane, then lines of two landscapes or three
+       or four portraits (a line closes once its width-over-height ratios,
+       from photo-dims, reach LINE_RATIO). Inside a line a tile grows by
+       its ratio from a zero basis, so the widths follow the ratios and
+       the heights match. latestFill decides how many lines show: two on
+       a tablet, as many as the tallest column allows on a desktop, and
+       there the room left under the last whole line goes to the frames:
+       FIT_NEW or more takes one more line at exactly that height, less
+       makes the last line that much taller; either way the line's frames
+       crop at the edges to fit (.kr-latest-photos__line--fit). The
+       newest set (KR_NEW_PHOTOS, written from data/photosets.json) wears
+       the "New" badge, and the lede counts it and names its place. The
+       lane stays hidden unless the list arrives. */
     (function renderLatestPhotos() {
-      var LATEST_PHOTOS = 3;
+      var HERO_RATIO = 1.3;
+      var LINE_RATIO = 2.2;
+      var MAX_LINES = 9;
+      var FIT_NEW = 120;
+      var GAP = 10;
       var section = document.getElementById('latest-photos');
-      var row = document.getElementById('latest-photos-row');
+      var box = document.getElementById('latest-photos-row');
       var lede = document.getElementById('latest-photos-lede');
-      if (!section || !row) return;
+      if (!section || !box) return;
       Promise.all([
         krFetchJson('data/photography-files.json'),
         krFetchJson('data/photo-dims.json').catch(function() { return null; })
@@ -527,6 +613,8 @@
         });
         if (!stems.length) return;
         var dims = results[1] || {};
+        var sizeOf = function(raw) { return dims[raw] || [400, 267]; };
+        var ratioOf = function(raw) { var d = sizeOf(raw); return d[0] / d[1]; };
 
         var count = stems.filter(krIsNewPhoto).length;
         if (lede) {
@@ -536,27 +624,91 @@
             : 'The newest photographs in the gallery.';
         }
 
+        // Pack the frames into lines, newest first.
+        var lines = [];
+        var at = 0;
+        while (at < stems.length && lines.length < MAX_LINES) {
+          var want = lines.length ? LINE_RATIO : HERO_RATIO;
+          var line = [];
+          var sum = 0;
+          while (at < stems.length && (sum < want || !line.length) && line.length < 4) {
+            line.push(stems[at]);
+            sum += ratioOf(stems[at]);
+            at++;
+          }
+          lines.push({ stems: line, sum: sum });
+        }
+
         // The link carries the name, so the image is decorative (alt=""),
         // as in the photo strip.
-        row.innerHTML = stems.slice(0, LATEST_PHOTOS).map(function(raw) {
-          var stem = krEscapeHtml(raw);
-          var size = dims[raw] || [400, 267];
-          var ratio = (size[0] / size[1]).toFixed(4);
-          var thumb = '/img/photography/thumb/' + stem;
-          var isNew = krIsNewPhoto(raw);
-          return '<a class="kr-latest-photos__tile" href="/gallery.html?photo=' + stem + '"' +
-            ' style="flex-grow: ' + ratio + '"' +
-            ' aria-label="Photograph ' + stem + (isNew ? ', new' : '') + ', open it in the gallery">' +
-            (isNew ? '<span class="kr-new-badge" aria-hidden="true">New</span>' : '') +
-            '<img src="' + thumb + '.webp" srcset="' + thumb + '.webp 400w, ' + thumb + '@2x.webp 800w"' +
-            ' sizes="(max-width: 991.98px) 100vw, 500px" width="' + size[0] + '" height="' + size[1] + '"' +
-            ' alt="" loading="lazy" decoding="async"></a>';
-        }).join('');
+        function lineElement(line) {
+          var el = document.createElement('div');
+          el.className = 'kr-latest-photos__line';
+          el.innerHTML = line.stems.map(function(raw) {
+            var stem = krEscapeHtml(raw);
+            var size = sizeOf(raw);
+            var ratio = ratioOf(raw);
+            var thumb = '/img/photography/thumb/' + stem;
+            var isNew = krIsNewPhoto(raw);
+            var share = Math.round(520 * ratio / line.sum);
+            return '<a class="kr-latest-photos__tile" href="/gallery.html?photo=' + stem + '"' +
+              ' style="flex-grow: ' + ratio.toFixed(4) + '"' +
+              ' aria-label="Photograph ' + stem + (isNew ? ', new' : '') + ', open it in the gallery">' +
+              (isNew ? '<span class="kr-new-badge" aria-hidden="true">New</span>' : '') +
+              '<img src="' + thumb + '.webp" srcset="' + thumb + '.webp 400w, ' + thumb + '@2x.webp 800w"' +
+              ' sizes="(max-width: 991.98px) 100vw, ' + share + 'px" width="' + size[0] + '" height="' + size[1] + '"' +
+              ' alt="" loading="lazy" decoding="async"></a>';
+          }).join('');
+          return el;
+        }
+        var built = [];
+        var fitLine = null;
+        var fitAdded = false;
         section.hidden = false;
+        latestFill.add({
+          col: section.parentNode,
+          min: Math.min(2, lines.length),
+          max: lines.length,
+          fit: function(room) {
+            var i = box.children.length;
+            if (room < 2 || !i) return;
+            if (room - GAP >= FIT_NEW && i < lines.length) {
+              fitLine = lineElement(lines[i]);
+              fitAdded = true;
+              fitLine.style.height = (room - GAP) + 'px';
+              box.appendChild(fitLine);
+            } else {
+              fitLine = box.lastChild;
+              fitLine.style.height = (fitLine.getBoundingClientRect().height + room) + 'px';
+            }
+            fitLine.classList.add('kr-latest-photos__line--fit');
+          },
+          show: function(n) {
+            // Undo the last fit: an added line goes, a stretched one
+            // returns to its own height.
+            if (fitLine) {
+              if (fitAdded) {
+                fitLine.remove();
+              } else {
+                fitLine.classList.remove('kr-latest-photos__line--fit');
+                fitLine.style.height = '';
+              }
+              fitLine = null;
+              fitAdded = false;
+            }
+            while (box.children.length < n) {
+              var i = box.children.length;
+              if (!built[i]) built[i] = lineElement(lines[i]);
+              box.appendChild(built[i]);
+            }
+            while (box.children.length > n) box.removeChild(box.lastChild);
+          }
+        });
       }).catch(function() { /* no list, no lane */ });
     })();
 
-    /* The writing lane: the three newest stories in data/stories.json as cards,
+    /* The writing lane: the newest stories in data/stories.json as cards
+       (three, or more on a desktop if the column has room: latestFill),
        the same card the blog lane uses (and its "New" badge under a week
        old), with a link to every story. Its column stays hidden while there
        are none, and Blog and Photography share the row in halves; with a
@@ -581,21 +733,20 @@
           '<p class="kr-latest-lane__sub">Short stories.</p></div></div>' +
           '<div class="kr-latest-list"><div class="row"></div></div>' +
           '<p class="kr-latest-lane__more"><a class="kr-btn kr-btn--ghost kr-btn--sm" href="/writing.html">All stories</a></p>';
-        stories.slice(0, 3).forEach(function(story) {
-          var card = createBlogCardElement(story, {
-            colClass: 'col-12 mb-30',
-            showReadTime: false,
-            imageSrc: story.image || 'img/photography/hero/158.webp'
-          });
-          krMarkNewPost(card, story);
-          lane.querySelector('.row').appendChild(card);
-        });
         Array.prototype.forEach.call(row.children, function(c) {
           c.classList.remove('col-lg-6');
           c.classList.add('col-lg-4');
         });
         row.classList.add('kr-latest-row--three');
         col.hidden = false;
+        latestFill.add({
+          col: col,
+          min: Math.min(3, stories.length),
+          max: Math.min(8, stories.length),
+          show: latestCardLane(lane.querySelector('.row'), stories, {
+            image: function(story) { return story.image || 'img/photography/hero/158.webp'; }
+          })
+        });
       }).catch(function() { /* no stories, no lane */ });
     })();
 
@@ -669,16 +820,19 @@
       // The cards bind their posts' hover sketches by themselves
       // (live-covers.js watches the page for cards rendered late). A post
       // under a week old gets the "New" badge on its cover (krMarkNewPost).
+      // Three posts, or more on a desktop if the column has room
+      // (latestFill).
       var list = document.getElementById('latest-posts');
       if (!list) return;
       var row = document.createElement('div');
       row.className = 'row';
-      posts.slice(0, 3).forEach(function(post) {
-        var card = createBlogCardElement(post, { colClass: 'col-12 mb-30', showReadTime: false });
-        krMarkNewPost(card, post);
-        row.appendChild(card);
-      });
       list.appendChild(row);
+      latestFill.add({
+        col: list.closest('.kr-latest-col'),
+        min: Math.min(3, posts.length),
+        max: Math.min(8, posts.length),
+        show: latestCardLane(row, posts, {})
+      });
     }).catch(function() {});
 
     /* Counts that other files already hold. colophon.json is measured by

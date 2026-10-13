@@ -2944,7 +2944,11 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   .kr-latest-col > .kr-latest-lane[hidden] {
     display: none; }
   .kr-latest-col > .kr-latest-lane > .kr-latest-lane__more {
-    margin-top: auto; } }
+    margin-top: auto; }
+  /* While the script measures the columns' natural heights (latestFill
+     in index.html), the row stops stretching them. */
+  .kr-latest-row--measuring {
+    align-items: flex-start; } }
 
 .kr-latest-lane__head {
   display: flex;
@@ -3039,7 +3043,7 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
    thumbnail's corner. */
 @media only screen and (max-width: 575px) {
   .kr-latest-list .row > :nth-child(n+2),
-  .kr-latest-photos__tile:nth-child(n+2) {
+  .kr-latest-photos__line:nth-child(n+2) {
     display: none; }
   .kr-latest-lane .kr-latest-list .row > :first-child {
     margin-bottom: 20px; }
@@ -3270,19 +3274,31 @@ outline-offset: -3px;
 box-shadow: none; }
 
 /* --- Latest photos (the Latest section's photography lane) ------------------
-   The three newest frames in the gallery: the first across the lane (100%
-   plus the gap cannot share a line) and the other two sharing the next
-   row at one height. The script gives each tile a flex-grow of its
-   thumbnail's width over height, and with a zero basis the widths follow
-   the ratios, so a portrait and a landscape share a row uncropped. The
-   lane starts [hidden] and the script shows it once the frames are in.
-   Tiles take the site's focus ring; the zoom on hover has a
-   reduced-motion path. */
+   The newest frames in the gallery, in justified lines (.kr-latest-photos__line,
+   built by index.html's script): the newest across the lane, then lines of
+   two landscapes or three or four portraits. The script gives each tile a
+   flex-grow of its thumbnail's width over height, and with a zero basis
+   the widths follow the ratios, so a line's frames share one height
+   uncropped. How many lines show is the script's (latestFill): two on a
+   tablet, enough to match the tallest column on a desktop, one on a
+   phone. The lane starts [hidden] and the script shows it once the
+   frames are in. Tiles take the site's focus ring; the zoom on hover has
+   a reduced-motion path. */
 .kr-latest-photos__row {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 10px;
   margin-bottom: 16px; }
+
+.kr-latest-photos__line {
+  display: flex;
+  gap: 10px; }
+
+/* The last line on a desktop, set by the script to the exact room left
+   in the column: its frames fill the height and crop at the edges. */
+.kr-latest-photos__line--fit .kr-latest-photos__tile img {
+  height: 100%;
+  object-fit: cover; }
 
 .kr-latest-photos__tile {
   position: relative;
@@ -3301,9 +3317,6 @@ box-shadow: none; }
 
 .kr-latest-photos__tile:hover img {
   transform: scale(1.04); }
-
-.kr-latest-photos__tile:first-child {
-  flex-basis: 100%; }
 
 @media (prefers-reduced-motion: reduce) {
   .kr-latest-photos__tile img {
