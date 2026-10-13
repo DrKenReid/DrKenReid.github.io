@@ -19,6 +19,7 @@ Record fields (data/schema/books.schema.json has the full descriptions):
     d  date last finished, or the date added when Goodreads has no date
     e  1 when d is only the date added (the calendar leaves it out)
     p  earlier finish dates, oldest first
+    n  pages, from the feed's book/num_pages (kept when a week has none)
     m  consecutive refreshes this book was missing from the feed
 
 Also writes data/reading.json, the figures the homepage shows.
@@ -100,7 +101,7 @@ MIN_FEED_SHARE = 0.9
 # The item fields merge() reads; fetch_items() returns dicts of exactly
 # these, so a test can build items without any XML.
 FIELDS = ("book_id", "title", "author_name", "user_rating", "user_review",
-          "isbn", "link", "user_read_at", "user_date_added")
+          "isbn", "link", "user_read_at", "user_date_added", "book/num_pages")
 
 
 class FeedError(RuntimeError):
@@ -204,6 +205,10 @@ def merge_one(prev: dict, item: dict) -> dict:
     if isbn:
         b["i"] = isbn
     b["g"] = item["book_id"]
+    pages = item.get("book/num_pages") or ""
+    n = int(pages) if pages.isdigit() and int(pages) > 0 else prev.get("n")
+    if n:
+        b["n"] = n
     w = review_id(item["link"]) or prev.get("w")
     if w:
         b["w"] = w

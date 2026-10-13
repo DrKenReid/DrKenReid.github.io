@@ -1,42 +1,294 @@
 [
   {
     "url": "blog/fifteen-years-of-silence-rothfuss-doors-of-stone.html",
-    "views": 27857
+    "views": 31003
   },
   {
     "url": "blog/dungeon-crawler-carl-litrpg-dignity.html",
-    "views": 832
+    "views": 897
   },
   {
     "url": "blog/no-idea-no-problem-data-science-portfolio.html",
-    "views": 630
+    "views": 676
   },
   {
     "url": "blog/books-i-recommend-to-friends.html",
-    "views": 164
+    "views": 225
   },
   {
     "url": "blog/mash-modern-perspective.html",
-    "views": 144
+    "views": 150
   },
   {
     "url": "blog/the-fermi-paradox-and-the-great-silence.html",
-    "views": 115
+    "views": 136
   },
   {
     "url": "blog/the-culture-series.html",
-    "views": 90
+    "views": 107
   },
   {
     "url": "blog/what-we-leave-behind.html",
-    "views": 87
-  },
-  {
-    "url": "blog/rating-systems.html",
-    "views": 84
+    "views": 99
   },
   {
     "url": "blog/in-defense-of-audiobooks.html",
-    "views": 78
+    "views": 93
+  },
+  {
+    "url": "blog/rating-systems.html",
+    "views": 91
+  },
+  {
+    "url": "blog/stephen-king-ranked.html",
+    "views": 47
+  },
+  {
+    "url": "blog/evolution-live.html",
+    "views": 38
+  },
+  {
+    "url": "blog/hosting-photography-on-github-for-free.html",
+    "views": 31
+  },
+  {
+    "url": "blog/photographing-strangers.html",
+    "views": 27
+  },
+  {
+    "url": "blog/factorio-live.html",
+    "views": 25
+  },
+  {
+    "url": "blog/advice-to-my-younger-self.html",
+    "views": 22
+  },
+  {
+    "url": "blog/sleep-science.html",
+    "views": 22
+  },
+  {
+    "url": "blog/the-inaccessibility-of-photography.html",
+    "views": 20
+  },
+  {
+    "url": "blog/accessibility-first-product-design-data-science.html",
+    "views": 19
+  },
+  {
+    "url": "blog/genetic-programming-live.html",
+    "views": 18
+  },
+  {
+    "url": "blog/differential-evolution-live.html",
+    "views": 14
+  },
+  {
+    "url": "blog/particle-swarm-live.html",
+    "views": 14
+  },
+  {
+    "url": "blog/ant-colony-live.html",
+    "views": 13
+  },
+  {
+    "url": "blog/tabu-search-live.html",
+    "views": 13
+  },
+  {
+    "url": "blog/individualization-of-responsibility.html",
+    "views": 12
+  },
+  {
+    "url": "blog/free-comments-via-github-discussions.html",
+    "views": 11
+  },
+  {
+    "url": "blog/hyper-heuristics-live.html",
+    "views": 11
+  },
+  {
+    "url": "blog/leading-a-horse-to-water.html",
+    "views": 10
+  },
+  {
+    "url": "blog/cma-es-live.html",
+    "views": 9
+  },
+  {
+    "url": "blog/confirmation-bias-is-the-mother-bias.html",
+    "views": 9
+  },
+  {
+    "url": "blog/every-card-has-a-sketch.html",
+    "views": 9
+  },
+  {
+    "url": "blog/optimizing-your-schedule.html",
+    "views": 9
+  },
+  {
+    "url": "blog/variable-neighbourhood-search-live.html",
+    "views": 9
+  },
+  {
+    "url": "blog/a-headline-that-evolves-itself.html",
+    "views": 8
+  },
+  {
+    "url": "blog/evolutionary-computation-identity-crisis.html",
+    "views": 8
+  },
+  {
+    "url": "blog/ruin-and-recreate-live.html",
+    "views": 8
+  },
+  {
+    "url": "blog/the-availability-heuristic-runs-the-news.html",
+    "views": 8
+  },
+  {
+    "url": "blog/the-paradox-of-tolerance.html",
+    "views": 8
+  },
+  {
+    "url": "blog/50-blogs-an-infographic.html",
+    "views": 7
+  },
+  {
+    "url": "blog/ethics-of-llm-use-not-llms.html",
+    "views": 7
+  },
+  {
+    "url": "blog/letting-robots-update-your-homepage.html",
+    "views": 7
+  },
+  {
+    "url": "blog/life-and-death-of-the-early-internet.html",
+    "views": 7
+  },
+  {
+    "url": "blog/simulated-annealing-live.html",
+    "views": 7
+  },
+  {
+    "url": "blog/abandoned-places-i-photograph.html",
+    "views": 6
+  },
+  {
+    "url": "blog/blog-engine-in-one-json-file.html",
+    "views": 6
+  },
+  {
+    "url": "blog/putting-my-photos-on-a-map.html",
+    "views": 6
+  },
+  {
+    "url": "blog/second-brain-local-llm-professional.html",
+    "views": 6
+  },
+  {
+    "url": "blog/ctrl-k-for-a-static-site.html",
+    "views": 5
+  },
+  {
+    "url": "blog/prevention-of-failure-is-unseen.html",
+    "views": 5
+  },
+  {
+    "url": "blog/self-help-books.html",
+    "views": 5
+  },
+  {
+    "url": "blog/what-50000-scrobbles-say-about-me.html",
+    "views": 5
+  },
+  {
+    "url": "blog/what-a-custom-domain-actually-involves.html",
+    "views": 5
+  },
+  {
+    "url": "blog/iso-8601-date-cult.html",
+    "views": 4
+  },
+  {
+    "url": "blog/photo-tagging-with-clip.html",
+    "views": 4
+  },
+  {
+    "url": "blog/reading-this-site-offline.html",
+    "views": 4
+  },
+  {
+    "url": "blog/why-learn-to-code-age-of-ai.html",
+    "views": 4
+  },
+  {
+    "url": "blog/dark-mode-that-doesnt-flash.html",
+    "views": 3
+  },
+  {
+    "url": "blog/hidden-cost-of-cobalt-congo.html",
+    "views": 3
+  },
+  {
+    "url": "blog/how-the-interactive-posts-work.html",
+    "views": 3
+  },
+  {
+    "url": "blog/invisible-half-of-a-blog-post.html",
+    "views": 3
+  },
+  {
+    "url": "blog/making-this-website-accessible.html",
+    "views": 3
+  },
+  {
+    "url": "blog/my-teacher-said-i-shouldnt-go-to-university.html",
+    "views": 3
+  },
+  {
+    "url": "blog/my-website-has-a-test-suite.html",
+    "views": 3
+  },
+  {
+    "url": "blog/self-hosting-your-fonts.html",
+    "views": 3
+  },
+  {
+    "url": "blog/why-you-arent-a-visual-learner.html",
+    "views": 3
+  },
+  {
+    "url": "blog/frodo-sam-and-love.html",
+    "views": 2
+  },
+  {
+    "url": "blog/from-scotland-to-michigan.html",
+    "views": 2
+  },
+  {
+    "url": "blog/mistaken-identity-italy.html",
+    "views": 2
+  },
+  {
+    "url": "blog/optimizing-your-schedule-ii.html",
+    "views": 2
+  },
+  {
+    "url": "blog/snowball-vs-avalanche.html",
+    "views": 2
+  },
+  {
+    "url": "blog/what-was-i-made-for.html",
+    "views": 2
+  },
+  {
+    "url": "blog/why-i-love-latex.html",
+    "views": 2
+  },
+  {
+    "url": "blog/how-to-write-a-blog.html",
+    "views": 1
   }
 ]

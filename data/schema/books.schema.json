@@ -6,7 +6,14 @@
   "type": "array",
   "items": {
     "type": "object",
-    "required": ["t", "a", "r", "g", "w", "d"],
+    "required": [
+      "t",
+      "a",
+      "r",
+      "g",
+      "w",
+      "d"
+    ],
     "additionalProperties": false,
     "properties": {
       "t": {
@@ -19,12 +26,21 @@
       },
       "r": {
         "type": "integer",
-        "enum": [0, 1, 2, 3, 4, 5],
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
         "description": "My star rating; 0 when the book is unrated. The shelf styles each spine by it (kr-spine--r<n>)."
       },
       "v": {
         "type": "integer",
-        "enum": [1],
+        "enum": [
+          1
+        ],
         "description": "Present, as 1, when I wrote a review. Absent otherwise; reading.json's reviews counts these."
       },
       "i": {
@@ -49,7 +65,9 @@
       },
       "e": {
         "type": "integer",
-        "enum": [1],
+        "enum": [
+          1
+        ],
         "description": "Present, as 1, when d is only the date added. The calendar and the year counts leave such a book out."
       },
       "p": {
@@ -59,6 +77,11 @@
           "pattern": "^[0-9]{4}/[0-9]{2}/[0-9]{2}$"
         },
         "description": "Earlier finish dates, oldest first, one per earlier read. The feed reports only the latest finish and the full session list needs a login, so these exist only here and in this file's git history: refresh_books.py never drops one while the book is on file."
+      },
+      "n": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Pages, from the feed's book/num_pages (seeded from the Goodreads export). Kept from the record when a week's feed has none. Reading Stats sums and ranks them."
       },
       "m": {
         "type": "integer",

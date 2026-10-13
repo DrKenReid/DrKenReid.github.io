@@ -95,6 +95,16 @@ class ReRead(unittest.TestCase):
         self.assertNotIn("p", new)
         self.assertEqual(rb.lost_history(old, [new]), [])
 
+    def test_pages_come_from_the_feed_and_are_kept_when_it_has_none(self):
+        it = item("1", read="2024/02/01")
+        it["book/num_pages"] = "320"
+        b = rb.merge_one({}, it)
+        self.assertEqual(b["n"], 320)
+        it["book/num_pages"] = ""
+        self.assertEqual(rb.merge_one(b, it)["n"], 320)
+        it["book/num_pages"] = "0"
+        self.assertNotIn("n", rb.merge_one({}, it))
+
     def test_the_same_date_again_changes_nothing(self):
         old = rb.merge([], [item("1", read="2026/09/01")])
         self.assertEqual(rb.merge(old, [item("1", read="2026/09/01")]), old)
