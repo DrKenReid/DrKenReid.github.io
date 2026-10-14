@@ -1240,6 +1240,41 @@ def check_published_markdown(tracked, add):
             f"{rel} has moved: remove it from PUBLISHED_MARKDOWN_PENDING")
 
 
+# --- photograph edit groups ---------------------------------------------------
+# data/photo-variants.json folds the edits of one photograph into one gallery
+# tile. A stem the listing does not hold would make a group whose tile never
+# appears, and a stem in two groups would be shown by both.
+
+VARIANTS = "data/photo-variants.json"
+
+
+def check_photo_variants(add, variants=None, listed=None):
+    """ERROR when a group names a frame that is not listed, names one twice,
+    or has fewer than two frames."""
+    if variants is None:
+        path = ROOT / VARIANTS
+        if not path.exists():
+            return
+        variants = json.loads(path.read_text(encoding="utf-8"))
+    if listed is None:
+        listed = {Path(n).stem for n in
+                  json.loads((ROOT / "data" / "photography-files.json").read_text(encoding="utf-8"))}
+    seen = {}
+    for i, group in enumerate(variants.get("groups", [])):
+        stems = [str(s) for s in group]
+        if len(stems) < 2:
+            add("ERROR", VARIANTS, 0, "photo-variants",
+                f"group {i + 1} ({', '.join(stems) or 'empty'}) needs at least two frames")
+        for stem in stems:
+            if stem not in listed:
+                add("ERROR", VARIANTS, 0, "photo-variants",
+                    f"frame {stem} (group {i + 1}) is not in data/photography-files.json")
+            if stem in seen:
+                add("ERROR", VARIANTS, 0, "photo-variants",
+                    f"frame {stem} is in group {seen[stem]} and group {i + 1}")
+            seen.setdefault(stem, i + 1)
+
+
 # --- orphaned assets (INFO) ----------------------------------------------------
 # A picture or script nothing points at still deploys, still counts in the
 # colophon's byte totals, and reads to the next person as something in use.
@@ -1552,6 +1587,7 @@ def main(argv=None):
     check_series_pages(posts, tracked, sitemap_locs(), add)
     check_site_map(tracked_pages, posts, add)
     check_published_markdown(tracked, add)
+    check_photo_variants(add)
 
     # --- assets nothing references (INFO, never fails) ---
     for rel in orphan_assets(tracked):

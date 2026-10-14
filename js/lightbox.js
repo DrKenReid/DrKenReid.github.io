@@ -323,6 +323,26 @@
     });
 
     // ------------------------------------------------------------------
+    // The page stays put under a popup
+    // ------------------------------------------------------------------
+
+    // Magnific's fixedContentPos defaults to 'auto', which on anything it
+    // takes for a phone lays the popup absolutely over the page at the
+    // current scroll position and leaves the page free to scroll: a swipe
+    // up on an open photograph scrolled the gallery away underneath it.
+    // Fixed, the popup covers the viewport and Magnific sets overflow:
+    // hidden on <html> while it is open, so the page cannot move; the
+    // popup scrolls inside itself when a tall frame and its caption need
+    // it (.mfp-wrap's overscroll-behavior in style.css §13 keeps that
+    // scroll from running on into the page). Set as the default, here and
+    // before anything binds, so the gallery's, the photo map's and every
+    // content popup get it.
+    if ($.magnificPopup) {
+        $.magnificPopup.defaults.fixedContentPos = true;
+        $.magnificPopup.defaults.fixedBgPos = true;
+    }
+
+    // ------------------------------------------------------------------
     // Swiping
     // ------------------------------------------------------------------
 

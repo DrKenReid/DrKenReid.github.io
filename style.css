@@ -124,6 +124,12 @@
     rgba(8, 8, 8, 0.38) 52%,
     rgba(8, 8, 8, 0.86) 76%,
     rgba(8, 8, 8, 0.96) 100%);
+  /* A small label set on a gallery tile (the "2 edits" chip): white 11px
+     type on this clears 4.5:1 over any frame. And the lighter hover veil a
+     tile with edits takes, so the edits fading in stay comparable.
+     Theme-independent: the photograph is the surface in both themes. */
+  --kr-photo-chip: rgba(11, 11, 11, 0.8);
+  --kr-photo-veil-light: rgba(0, 0, 0, 0.18);
   /* Decorative accent: eyebrows, stat labels, icons. Never a link.
      Deliberately neutral stone rather than a second hue: on a site
      carrying 492 photographs, every decorative colour competes with the
@@ -9321,6 +9327,58 @@ html.nerd-mode-on .non-nerd {
   left: auto;
   z-index: 11; }
 
+/* --- Edits (gallery.js buildTile, bindEditCycle, editButtons) -----------
+   A photograph with several edits is one tile (data/photo-variants.json).
+   Script applies .kr-has-edits, .kr-tile-edits, .kr-tile-edit and its
+   .is-showing. The chip sits top right like the New badge, below it on a
+   tile that has both. While a mouse is over the tile the next edit
+   (.kr-tile-edit) fades in over the shown one, and the hover veil lightens
+   so the edits can be told apart; the caption keeps its own gradient. */
+.single-portfolio-content .kr-tile-edits {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 11;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--kr-photo-chip);
+  color: var(--kr-on-action-fill);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none; }
+
+.single-portfolio-content .kr-new-badge + .kr-tile-edits {
+  top: 36px; }
+
+.single-portfolio-content .kr-tile-edit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  pointer-events: none;
+  transition-property: opacity, transform;
+  transition-duration: 350ms, 500ms; }
+
+.single-portfolio-content .kr-tile-edit.is-showing {
+  opacity: 1; }
+
+.single-portfolio-content.kr-has-edits .hover-content {
+  background-color: var(--kr-photo-veil-light); }
+
+@media (prefers-reduced-motion: reduce) {
+  .single-portfolio-content .kr-tile-edit {
+    transition: none; } }
+
+@media (forced-colors: active) {
+  .single-portfolio-content .kr-tile-edits {
+    border: 1px solid CanvasText; } }
+
 /* --- Gallery filter morph (gallery.js krGalleryMorph) -----------------
    During a filter change every tile carries a view-transition-name, so
    the frames that survive slide to their new rows. Scoped to the html
@@ -9465,6 +9523,13 @@ button.mfp-arrow {
 
 .mfp-bg {
   background-color: #000000; }
+
+/* Every popup is fixed over the viewport (lightbox.js sets Magnific's
+   fixedContentPos), with the page locked beneath it. When a tall frame and
+   its caption scroll inside the popup, the scroll stops at its ends rather
+   than running on into the page behind. */
+.mfp-wrap {
+  overscroll-behavior: contain; }
 
 .mfp-arrow-left::after {
   border-right-color: transparent; }
@@ -9633,7 +9698,8 @@ button.mfp-arrow {
    "Copy link" sits beside the link in the caption bar and copies the
    gallery.html?photo=<stem> address of the frame on screen (lightbox.js).
    A button, not a link: it acts rather than goes. */
-.kr-lightbox .mfp-title .kr-lightbox-copy {
+.kr-lightbox .mfp-title .kr-lightbox-copy,
+.kr-lightbox .mfp-title .kr-lightbox-edit {
   display: inline-flex;
   align-items: center;
   min-height: 28px;
@@ -9650,9 +9716,24 @@ button.mfp-arrow {
 
 /* The lightbox is dark in both themes, so the hover is the gold that
    type on a photograph uses (--kr-photo-to), not a theme colour. */
-.kr-lightbox .mfp-title .kr-lightbox-copy:hover {
+.kr-lightbox .mfp-title .kr-lightbox-copy:hover,
+.kr-lightbox .mfp-title .kr-lightbox-edit:hover {
   border-color: var(--kr-photo-to);
   color: var(--kr-photo-to); }
+
+/* The Edit buttons (gallery.js editButtons): one per edit of the photograph
+   on screen, drawn as Copy link is, the shown edit ringed and set in the
+   same gold. Grouped so they wrap together. */
+.kr-lightbox .mfp-title .kr-lightbox-edits {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px; }
+
+.kr-lightbox .mfp-title .kr-lightbox-edit[aria-pressed="true"] {
+  border-color: var(--kr-photo-to);
+  box-shadow: inset 0 0 0 1px var(--kr-photo-to);
+  color: var(--kr-photo-to);
+  font-weight: 700; }
 
 /* Lightbox click-to-zoom (initLightboxZoom) */
 .mfp-container img.mfp-img {

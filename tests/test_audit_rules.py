@@ -328,6 +328,30 @@ class SiteMap(unittest.TestCase):
         self.assertEqual(found, [("new-page.html", "site-map")])
 
 
+class PhotoVariants(unittest.TestCase):
+    """check_photo_variants: every edit group is listed, two frames or more,
+    and no frame in two groups."""
+
+    def found(self, groups, listed=("1", "2", "3", "4")):
+        out = []
+        add = lambda s, f, l, code, m: out.append((code, m))  # noqa: E731
+        audit_site.check_photo_variants(add, {"groups": groups}, set(listed))
+        return out
+
+    def test_good_groups_pass(self):
+        self.assertEqual(self.found([["2", "1"], ["4", "3"]]), [])
+
+    def test_each_fault_is_an_error(self):
+        self.assertIn("not in data/photography-files.json", self.found([["2", "9"]])[0][1])
+        self.assertIn("in group 1 and group 2", self.found([["2", "1"], ["3", "1"]])[0][1])
+        self.assertIn("at least two frames", self.found([["2"]])[0][1])
+
+    def test_the_tracked_file_passes(self):
+        out = []
+        audit_site.check_photo_variants(lambda s, f, l, code, m: out.append(m))
+        self.assertEqual(out, [])
+
+
 class PublishedMarkdown(unittest.TestCase):
     """jekyll_publishes: which tracked files Pages would serve."""
 

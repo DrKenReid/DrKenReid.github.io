@@ -32,6 +32,7 @@ builds on it, which is why a hand edit there is dangerous.
 | `photo-originals.json` | `{"<n>": [width, height]}`, the full-size frame on the release | `generate_photo_renditions.py` (reads each PNG's header with a ranged request) | the same script: a hero is made at `HERO_EDGE` or the original's own size, whichever is smaller | when frames are added | `renditions` | never |
 | `photo-tags.json` | `{"<n>": [tags]}` | a tagging tool kept outside the repository; `bw` rewritten by `detect_monochrome.py` | `js/gallery.js` (its filter buttons are `KR_PHOTO_CATEGORIES` in `js/shared-components.js`) | when photographs are added | `monochrome` | subject tags yes; `bw` never |
 | `photo-locations.json` | `{_help, regions: [{name, lat, lng, photos: ["<n>"]}]}` | you (its `_help` field says how) | `map.html`, `js/gallery.js` (tile captions, the globe badge), `js/palette.js` (places) | when photographs are placed | none | yes |
+| `photo-variants.json` | `{_help, groups: [["<n>", "<n>", ...]]}`: frames that are one photograph, the shown edit first | you (its `_help` field says how) | `js/gallery.js` (one tile per group, the edits on hover and in the lightbox) | when a re-edit goes up | `audit` (`photo-variants`) | yes |
 | `photography-files.json` | `["<n>.png"]`, newest first: every frame | a filename tool kept outside the repository, or by hand | `js/gallery.js`, `404.html`, `index.html` (the three newest, the Latest section), `generate_colophon.py`, the audit's orphan report | when photographs are added | the smoke suite (the gallery renders) | yes, carefully |
 | `photosets.json` | `{_help, sets: [{date, from, to, place}]}`, newest first: one entry per photoset added | you, when a set goes up | `generate_photo_feed.py`, which writes `feed-photos.xml` and the `KR_NEW_PHOTOS` line in `js/shared-components.js` from it | when photographs are added | `photo-feed`, `data-schemas` | yes |
 | `photography-standard-files.json` | `["<n>.png"]`: the frames the photo strip may show | as above | `renderPhotoStrip`, `404.html` | rarely | none | yes |
@@ -164,6 +165,18 @@ Adding photographs touches every file in this group:
    out rows from it; a frame without one is assumed 3:2),
    `detect_monochrome.py` decides its `bw` tag from its pixels, and the
    colophon counts it.
+
+Re-edits of one photograph (a colour and a black and white version, a
+different grade, a double exposure of a portrait) and a file listed twice
+are grouped in `photo-variants.json`. Each group is one tile in the
+gallery: its first stem is the edit the tile shows, and the others fade
+in while the tile is hovered and have their own Edit buttons in the
+lightbox. A group matches a subject filter when any of its edits has the
+tag, and shows that edit. Every frame stays in `photography-files.json`
+and keeps its tags, place and release file, so `?photo=` works for any of
+them. The audit's `photo-variants` rule fails a group naming an unlisted
+frame, a frame in two groups, or a group of one. A new edit of an old
+frame goes up as a new frame, then into the old frame's group.
 
 The `bw` tag is decided by pixels only: a frame counts when its chroma is
 low almost everywhere, so a selective-colour photograph (a grey street and

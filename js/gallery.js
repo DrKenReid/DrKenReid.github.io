@@ -6,6 +6,7 @@
  *   photo-tags.json         stem -> subject tags (CLIP-generated)
  *   photo-locations.json    regions, for tile captions and the globe badge
  *   photo-dims.json         stem -> [width, height] of the full frame
+ *   photo-variants.json     groups of frames that are one photograph
  *
  * Layout
  *   Justified rows (packRows, layoutJustified): every row fills the width
@@ -42,6 +43,19 @@
  *   "+") is decoration over it, aria-hidden and click-through; the place
  *   name is a mouse shortcut to the photo map, out of the tab order
  *   because the lightbox carries the same link.
+ *
+ * Edits
+ *   Frames that are one photograph (a colour and a black and white edit,
+ *   a different grade, the same file listed twice) are one tile, from
+ *   photo-variants.json. The view, the counts and the filters work on
+ *   tiles: a group matches a subject when any of its edits has the tag,
+ *   and shows that edit (the B&W filter shows the B&W one). The tile
+ *   wears an "N edits" chip; with a mouse over it the other edits fade in
+ *   one after another (bindEditCycle). The lightbox has an Edit button
+ *   per edit (editButtons), and the edit chosen there becomes the tile's
+ *   face (setTileFace), so the preview, the filmstrip and the morph back
+ *   all show the frame on screen. ?photo= takes any edit's number and
+ *   opens its group showing that edit.
  *
  * Deep links
  *   ?tag=<subject> opens with that filter; ?photo=<stem> opens that frame
@@ -109,6 +123,12 @@ var photoDims = {};          // stem -> [w, h], from data/photo-dims.json
 var photoTags = {};
 var photoPlaces = {};
 var photoCoords = {};        // stem -> [lat, lng], for the tile's globe badge
+var editsOf = {};            // the shown stem of a group -> every stem in it, shown first
+var groupOf = {};            // any stem in a group -> the group's shown stem
+// A hovered tile shows its next edit after EDIT_FIRST_MS, then every
+// EDIT_STEP_MS until the pointer leaves.
+var EDIT_FIRST_MS = 450;
+var EDIT_STEP_MS = 1500;
 var activeCat = '*';
 var filterBar = null;
 var quietFilter = false;     // true while the page sets the bar itself
@@ -133,6 +153,32 @@ function stemOf(filename) {
 function ratioOf(stem) {
     var d = photoDims[stem];
     return d && d[1] ? d[0] / d[1] : 1.5;   // unrecorded frames are assumed 3:2
+}
+
+/** Every edit of the photograph a tile stands for, the shown one first. */
+function editsFor(stem) {
+    return editsOf[stem] || [stem];
+}
+
+/** The edit a tile shows: under a subject filter, the first edit that has
+    the subject; otherwise the group's own first. */
+function faceOf(stem) {
+    var edits = editsFor(stem);
+    if (activeCat !== '*') {
+        for (var i = 0; i < edits.length; i++) {
+            if ((photoTags[edits[i]] || []).indexOf(activeCat) !== -1) return edits[i];
+        }
+    }
+    return edits[0];
+}
+
+/** A view entry's aspect ratio: the ratio of the edit its tile shows. */
+function tileRatio(filename) {
+    return ratioOf(faceOf(stemOf(filename)));
+}
+
+function thumbOfStem(stem) {
+    return '/img/photography/thumb/' + stem + '.webp';
 }
 
 function labelOf(tag) {
@@ -195,7 +241,8 @@ function loadGallery() {
         soft('data/photo-tags.json'),
         soft('data/photography-files.json'),
         soft('data/photo-locations.json'),
-        soft('data/photo-dims.json')
+        soft('data/photo-dims.json'),
+        soft('data/photo-variants.json')
     ]).then(function(results) {
         photoTags = results[0] || {};
         photoDims = results[3] || {};
@@ -207,7 +254,20 @@ function loadGallery() {
             showLoadFailure();
             return;
         }
-        galleryAll = files.sort(compareFileNames);
+        // One tile per photograph: a group's other edits leave the view
+        // and travel with its first (see "Edits" at the top).
+        editsOf = {};
+        groupOf = {};
+        ((results[4] || {}).groups || []).forEach(function(group) {
+            var stems = group.map(String);
+            if (stems.length < 2) return;
+            editsOf[stems[0]] = stems;
+            stems.forEach(function(s) { groupOf[s] = stems[0]; });
+        });
+        galleryAll = files.filter(function(f) {
+            var g = groupOf[stemOf(f)];
+            return !g || g === stemOf(f);
+        }).sort(compareFileNames);
         photoPlaces = {};
         ((results[2] || {}).regions || []).forEach(function(region) {
             (region.photos || []).forEach(function(stem) {
@@ -285,17 +345,26 @@ function bindLoadMoreButton() {
 // Filters
 // ----------------------------------------------------------------------
 
+// A tile has a subject when any of its edits has it.
 function hasTag(filename, cat) {
-    return (photoTags[stemOf(filename)] || []).indexOf(cat) !== -1;
+    return editsFor(stemOf(filename)).some(function(stem) {
+        return (photoTags[stem] || []).indexOf(cat) !== -1;
+    });
 }
 
 function buildFilterButtons() {
     var container = document.getElementById('gallery-filters');
     if (!container || typeof renderFilterBar !== 'function') return null;
 
+    // Counted in tiles, as the view is: a group counts once for a subject
+    // any of its edits has.
     var counts = {};
-    Object.keys(photoTags).forEach(function(key) {
-        photoTags[key].forEach(function(tag) {
+    galleryAll.forEach(function(filename) {
+        var tags = {};
+        editsFor(stemOf(filename)).forEach(function(stem) {
+            (photoTags[stem] || []).forEach(function(tag) { tags[tag] = true; });
+        });
+        Object.keys(tags).forEach(function(tag) {
             counts[tag] = (counts[tag] || 0) + 1;
         });
     });
@@ -453,7 +522,7 @@ function layoutJustified() {
     var tiles = Array.prototype.filter.call(grid.children, function(el) {
         return el.classList.contains('single_gallery_item');
     });
-    var ratios = tiles.map(function(t) { return ratioOf(t.getAttribute('data-stem')); });
+    var ratios = tiles.map(function(t) { return ratioOf(t.getAttribute('data-face') || t.getAttribute('data-stem')); });
     packRows(ratios, width, target, GAP).forEach(function(row) {
         for (var i = row.start; i < row.start + row.count; i++) {
             tiles[i].style.width = Math.floor(ratios[i] * row.height) + 'px';
@@ -473,7 +542,7 @@ function layoutJustified() {
  */
 function reserveGridHeight(grid, width, target) {
     var count = Math.max(galleryIndex, rowAlignedEnd(Math.min(galleryView.length, AUTO_LOAD_LIMIT)));
-    var ratios = galleryView.slice(0, count).map(function(f) { return ratioOf(stemOf(f)); });
+    var ratios = galleryView.slice(0, count).map(tileRatio);
     grid.style.minHeight = rowsHeight(packRows(ratios, width, target, GAP), GAP) + 'px';
 }
 
@@ -503,35 +572,54 @@ function watchGridWidth() {
 // Tiles and batches
 // ----------------------------------------------------------------------
 
+/** The link's name and caption for the edit `stem` of a tile with `count`
+    edits: the number, New, how many edits, the subjects and the place. */
+function describeLink(link, stem, count) {
+    var labels = (photoTags[stem] || []).map(labelOf);
+    var place = photoPlaces[stem] || '';
+    link.setAttribute('aria-label', 'Photograph ' + stem + (krIsNewPhoto(stem) ? ', new' : '') +
+        (count > 1 ? ', one of ' + count + ' edits' : '') +
+        (labels.length ? ': ' + labels.join(', ') : '') +
+        (place ? (labels.length ? ', ' : ': ') + 'taken near ' + place : ''));
+    link.setAttribute('data-caption', labels.concat(place ? [place] : []).join(' · '));
+    if (place) link.setAttribute('data-place', place);
+    else link.removeAttribute('data-place');
+}
+
+function setThumb(img, stem) {
+    img.src = thumbOfStem(stem);
+    // Sharp on a high-density screen: the tile's 800px double at 2x.
+    var set = krThumbSrcset(img.getAttribute('src'));
+    if (set) img.srcset = set;
+    else img.removeAttribute('srcset');
+}
+
 function buildTile(filename) {
-    var stem = String(stemOf(filename));
+    var lead = String(stemOf(filename));
+    var edits = editsFor(lead);
+    var stem = faceOf(lead);
     var tags = photoTags[stem] || [];
     var labels = tags.map(labelOf);
     var place = photoPlaces[stem] || '';
 
     var col = document.createElement('div');
     col.className = 'single_gallery_item ' + tags.join(' ');
-    col.setAttribute('data-stem', stem);
+    // data-stem names the photograph (the group), data-face the edit shown.
+    col.setAttribute('data-stem', lead);
+    col.setAttribute('data-face', stem);
 
     var wrapper = document.createElement('div');
     wrapper.className = 'single-portfolio-content';
 
-    var isNew = krIsNewPhoto(stem);
+    var isNew = edits.some(krIsNewPhoto);
     var link = document.createElement('a');
     link.className = 'portfolio-img';
-    link.href = KR_RELEASE + filename;
-    link.setAttribute('aria-label', 'Photograph ' + stem + (isNew ? ', new' : '') +
-        (labels.length ? ': ' + labels.join(', ') : '') +
-        (place ? (labels.length ? ', ' : ': ') + 'taken near ' + place : ''));
-    link.setAttribute('data-caption', labels.concat(place ? [place] : []).join(' · '));
-    if (place) link.setAttribute('data-place', place);
+    link.href = KR_RELEASE + stem + '.png';
+    describeLink(link, stem, edits.length);
 
     // The link carries the name, so the picture inside it is decorative.
     var img = document.createElement('img');
-    img.src = '/img/photography/thumb/' + stem + '.webp';
-    // Sharp on a high-density screen: the tile's 800px double at 2x.
-    var set = krThumbSrcset(img.getAttribute('src'));
-    if (set) img.srcset = set;
+    setThumb(img, stem);
     img.alt = '';
     img.loading = 'lazy';
     img.onerror = function() {
@@ -571,6 +659,18 @@ function buildTile(filename) {
         badge.textContent = 'New';
         wrapper.appendChild(badge);
     }
+    // A photograph with more than one edit says how many, and shows the
+    // others while hovered (see "Edits" at the top). The link's name
+    // already gives the count, so the chip is hidden from readers.
+    if (edits.length > 1) {
+        wrapper.classList.add('kr-has-edits');
+        var chip = document.createElement('span');
+        chip.className = 'kr-tile-edits';
+        chip.setAttribute('aria-hidden', 'true');
+        chip.textContent = edits.length + ' edits';
+        wrapper.appendChild(chip);
+        bindEditCycle(wrapper, col);
+    }
     // A placed frame gets a small globe in its corner on hover, turned
     // to where the photograph was taken (js/covers-site.js, gallery:globe).
     // The column is the host; the badge is only where the canvas goes.
@@ -589,6 +689,83 @@ function buildTile(filename) {
 }
 
 /**
+ * With a mouse over a tile that has edits, fade the next edit in over the
+ * shown one after EDIT_FIRST_MS and step on every EDIT_STEP_MS; leaving
+ * puts the shown edit back. The chip counts along ("Edit 2 of 3"). Mouse
+ * only: a tap opens the photograph, and its Edit buttons are the way
+ * through on a touch screen or a keyboard. The fade is the stylesheet's,
+ * and goes under reduced motion; the swap itself stays, since it only
+ * runs while the pointer is held there.
+ */
+function bindEditCycle(wrapper, col) {
+    var timer = null;
+    var layer = null;
+    function chipText(text) {
+        var chip = wrapper.querySelector('.kr-tile-edits');
+        if (chip) chip.textContent = text;
+    }
+    function show(edits, i) {
+        var face = col.getAttribute('data-face');
+        chipText('Edit ' + (i + 1) + ' of ' + edits.length);
+        if (edits[i] === face) {
+            if (layer) layer.classList.remove('is-showing');
+            return;
+        }
+        if (!layer) {
+            layer = document.createElement('img');
+            layer.className = 'kr-tile-edit';
+            layer.alt = '';
+            layer.setAttribute('aria-hidden', 'true');
+            layer.addEventListener('load', function() {
+                if (timer) layer.classList.add('is-showing');
+            });
+            wrapper.insertBefore(layer, wrapper.querySelector('.hover-content'));
+        }
+        layer.classList.remove('is-showing');
+        setThumb(layer, edits[i]);
+        if (layer.complete && layer.naturalWidth) layer.classList.add('is-showing');
+    }
+    function stop() {
+        clearTimeout(timer);
+        timer = null;
+        if (layer) layer.classList.remove('is-showing');
+        chipText(editsFor(col.getAttribute('data-stem')).length + ' edits');
+    }
+    wrapper.addEventListener('pointerenter', function(e) {
+        if (e.pointerType !== 'mouse') return;
+        stop();
+        var edits = editsFor(col.getAttribute('data-stem'));
+        var i = edits.indexOf(col.getAttribute('data-face'));
+        timer = setTimeout(function step() {
+            i = (i + 1) % edits.length;
+            show(edits, i);
+            timer = setTimeout(step, EDIT_STEP_MS);
+        }, EDIT_FIRST_MS);
+    });
+    wrapper.addEventListener('pointerleave', stop);
+}
+
+/**
+ * Make `stem` the edit a tile shows: its thumbnail, the full frame its
+ * link opens, its name and caption. The lightbox calls this when an Edit
+ * button is pressed, and a ?photo= deep link before it opens, so the tile
+ * under the lightbox always matches the frame on screen. A re-edit can be
+ * cropped differently, so the rows are laid out again.
+ */
+function setTileFace(link, stem) {
+    var col = link && link.closest ? link.closest('.single_gallery_item') : null;
+    if (!col || col.getAttribute('data-face') === stem) return;
+    col.setAttribute('data-face', stem);
+    link.href = KR_RELEASE + stem + '.png';
+    describeLink(link, stem, editsFor(col.getAttribute('data-stem')).length);
+    var img = link.querySelector('img');
+    if (img) setThumb(img, stem);
+    var tags = col.querySelector('.kr-tile-tags');
+    if (tags) tags.textContent = (photoTags[stem] || []).map(labelOf).join(' · ');
+    scheduleRelayout();
+}
+
+/**
  * Where a batch that would stop at `end` should stop instead, so that it
  * ends on a full row. Rows do not care about batches: cut at frame 24 and
  * the grid ends on a stub, a lone frame at the target height, until the
@@ -604,7 +781,7 @@ function rowAlignedEnd(end) {
     var grid = document.getElementById('gallery-grid');
     var width = grid ? rowWidth(grid) : 0;
     if (!width || end >= galleryView.length) return end;
-    var ratios = galleryView.map(function(f) { return ratioOf(stemOf(f)); });
+    var ratios = galleryView.map(tileRatio);
     var rows = packRows(ratios, width, targetRowHeight(width), GAP);
     for (var i = 0; i < rows.length; i++) {
         var rowEnd = rows[i].start + rows[i].count;
@@ -774,12 +951,68 @@ function bindGalleryLightbox() {
                     stem: stem,
                     place: item.el.attr('data-place') || '',
                     url: galleryHref({ photo: stem })
-                });
+                }) + editButtons(stem);
             }
         },
         gallery: {enabled: true, preload: [0, 2], navigateByImgClick: false, tPrev: 'Previous', tNext: 'Next'}
     });
 }
+
+/**
+ * The caption's Edit buttons, one per edit of the photograph on screen,
+ * the one shown pressed. A fixed label with aria-pressed, as the filter
+ * pills are. Nothing for a photograph with one edit.
+ */
+function editButtons(stem) {
+    var edits = editsFor(groupOf[stem] || stem);
+    if (edits.length < 2) return '';
+    return ' <span class="kr-lightbox-edits" role="group" aria-label="Edits of this photograph">' +
+        edits.map(function(s, i) {
+            return '<button type="button" class="kr-lightbox-edit" data-edit="' + krEscapeHtml(s) +
+                '" aria-pressed="' + (s === stem) + '">Edit ' + (i + 1) + '</button>';
+        }).join('') + '</span>';
+}
+
+/**
+ * An Edit button: show that edit in place. The tile takes it as its face
+ * first (setTileFace), so the preview lightbox.js shows while the full
+ * frame loads is the right thumbnail; then the item's source changes and
+ * Magnific draws it again, which also runs the change callback (the
+ * address, the filmstrip, the reader's announcement). Focus returns to
+ * the pressed button, which the redraw replaced.
+ */
+function showEdit(stem) {
+    var mfp = jQuery.magnificPopup && jQuery.magnificPopup.instance;
+    var item = mfp && mfp.isOpen ? mfp.currItem : null;
+    if (!item || stemOf(item.src) === stem) return;
+    setTileFace(item.el && item.el[0], stem);
+    item.src = KR_RELEASE + stem + '.png';
+    item.hasSize = false;
+    item.loaded = false;
+    item.loadError = false;
+    mfp.updateItemHTML();
+    // The filmstrip drew its thumbnails from the tiles when it opened.
+    krLightboxStrip.open(mfp);
+    var edits = editsFor(groupOf[stem] || stem);
+    if (window.krLightboxA11y && krLightboxA11y.announce) {
+        krLightboxA11y.announce(mfp, 'Edit ' + (edits.indexOf(stem) + 1) + ' of ' + edits.length);
+    }
+    // The redraw took the pressed button away with the old caption, and
+    // the new one is hidden until Magnific knows the frame's size, so
+    // keep trying for a moment.
+    var sel = window.CSS && CSS.escape ? CSS.escape(stem) : stem;
+    var tries = 0;
+    (function refocus() {
+        var btn = mfp.wrap && mfp.wrap[0].querySelector('.kr-lightbox-edit[data-edit="' + sel + '"]');
+        if (btn) btn.focus();
+        if ((!btn || document.activeElement !== btn) && mfp.isOpen && ++tries < 40) setTimeout(refocus, 50);
+    })();
+}
+
+document.addEventListener('click', function(e) {
+    var btn = e.target && e.target.closest ? e.target.closest('.kr-lightbox-edit') : null;
+    if (btn) showEdit(btn.getAttribute('data-edit'));
+});
 
 /**
  * ?photo=<stem>: load batches until the frame is in the grid, bring its
@@ -790,8 +1023,10 @@ function bindGalleryLightbox() {
 function openFromUrl() {
     var stem = readParam('photo');
     if (!stem) return;
+    // Any edit's number opens its photograph's tile, showing that edit.
+    var lead = groupOf[stem] || stem;
     function indexIn(list) {
-        for (var i = 0; i < list.length; i++) if (stemOf(list[i]) === stem) return i;
+        for (var i = 0; i < list.length; i++) if (stemOf(list[i]) === lead) return i;
         return -1;
     }
     var at = indexIn(galleryView);
@@ -806,9 +1041,11 @@ function openFromUrl() {
     updateCounter();
 
     var grid = document.getElementById('gallery-grid');
-    var sel = window.CSS && CSS.escape ? CSS.escape(stem) : stem;
+    var sel = window.CSS && CSS.escape ? CSS.escape(lead) : lead;
     var link = grid.querySelector('.single_gallery_item[data-stem="' + sel + '"] .portfolio-img');
-    if (link) openTile(grid, link);
+    if (!link) return;
+    setTileFace(link, stem);
+    openTile(grid, link);
 }
 
 function openTile(grid, link) {
