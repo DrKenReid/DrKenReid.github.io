@@ -1,5 +1,5 @@
 {
-  "_about": "Budgets for .github/scripts/perf_budget.py: first-party bytes (uncompressed) and requests at load, per template and viewport, about 15% above the heaviest of four measurements on 2026-09-24. Raise one only for a change that is meant to cost more, and say why in the commit; the script's docstring has the procedure. JS raised 25 KB on every template on 2026-10-01: the shared script grew about 40 KB with the reading, search, listing, photo and collection fixes of that week (keyboard contents, citation previews, code copy, word-start search, load-failure notes, the photo lightbox, sharper images). The homepage desktop requests went from 54 to 63 on 2026-10-13: the Latest section fills its photography panel to the height of the tallest column, which loads three to five more thumbnails (measured 55). The literature page JS went from 595 to 605 KB the same day: the shelf's spines and the reading figures gained the calendar's hover card (measured 595.5 KB).",
+  "_about": "Budgets for .github/scripts/perf_budget.py: first-party bytes (uncompressed) and requests at load, per template and viewport, about 15% above the heaviest of four measurements on 2026-09-24. Raise one only for a change that is meant to cost more, and say why in the commit; the script's docstring has the procedure. JS raised 25 KB on every template on 2026-10-01: the shared script grew about 40 KB with the reading, search, listing, photo and collection fixes of that week (keyboard contents, citation previews, code copy, word-start search, load-failure notes, the photo lightbox, sharper images). The homepage desktop requests went from 54 to 63 on 2026-10-13: the Latest section fills its photography panel to the height of the tallest column, which loads three to five more thumbnails (measured 55). The literature page JS went from 595 to 605 KB the same day: the shelf's spines and the reading figures gained the calendar's hover card (measured 595.5 KB). The gallery JS went from 585 to 600 KB on 2026-10-14: gallery.js shows each photograph's edits as one tile, with the edits on hover and in the lightbox (measured 590.8 KB).",
   "cls": 0.1,
   "runs": 3,
   "templates": {
@@ -15,8 +15,8 @@
     },
     "gallery": {
       "page": "gallery.html",
-      "phone":   {"js": 585000, "css": 290000, "font": 90000,  "img": 1110000, "requests": 82},
-      "desktop": {"js": 585000, "css": 290000, "font": 90000,  "img": 1120000, "requests": 83}
+      "phone":   {"js": 600000, "css": 290000, "font": 90000,  "img": 1110000, "requests": 82},
+      "desktop": {"js": 600000, "css": 290000, "font": 90000,  "img": 1120000, "requests": 83}
     },
     "literature": {
       "page": "literature.html",
