@@ -30,11 +30,11 @@ builds on it, which is why a hand edit there is dangerous.
 | `colophon.json` | measurements of the repository | `generate_colophon.py` | `colophon.html`; `index.html` (photographs, quotations, series); `js/literature.js` (quotations) | whenever a measured file changes | `colophon` | never |
 | `photo-dims.json` | `{"<n>": [width, height]}` | `generate_photo_dims.py` | `js/gallery.js`, `index.html` (the Latest section's photography lane) | when thumbnails are added | `photo-dims` | never |
 | `photo-originals.json` | `{"<n>": [width, height]}`, the full-size frame on the release | `generate_photo_renditions.py` (reads each PNG's header with a ranged request) | the same script: a hero is made at `HERO_EDGE` or the original's own size, whichever is smaller | when frames are added | `renditions` | never |
-| `photo-tags.json` | `{"<n>": [tags]}` | a tagging tool kept outside the repository; `bw` rewritten by `detect_monochrome.py` | `js/gallery.js` (its filter buttons are `KR_PHOTO_CATEGORIES` in `js/shared-components.js`) | when photographs are added | `monochrome` | subject tags yes; `bw` never |
-| `photo-locations.json` | `{_help, regions: [{name, lat, lng, photos: ["<n>"]}]}` | you (its `_help` field says how) | `map.html`, `js/gallery.js` (tile captions, the globe badge), `js/palette.js` (places) | when photographs are placed | none | yes |
-| `photo-variants.json` | `{_help, groups: [["<n>", "<n>", ...]]}`: frames that are one photograph, the shown edit first | you (its `_help` field says how) | `js/gallery.js` (one tile per group, the edits on hover and in the lightbox) | when a re-edit goes up | `audit` (`photo-variants`) | yes |
-| `photography-files.json` | `["<n>.png"]`, newest first: every frame | a filename tool kept outside the repository, or by hand | `js/gallery.js`, `404.html`, `index.html` (the three newest, the Latest section), `generate_colophon.py`, the audit's orphan report | when photographs are added | the smoke suite (the gallery renders) | yes, carefully |
-| `photosets.json` | `{_help, sets: [{date, from, to, place}]}`, newest first: one entry per photoset added | you, when a set goes up | `generate_photo_feed.py`, which writes `feed-photos.xml` and the `KR_NEW_PHOTOS` line in `js/shared-components.js` from it | when photographs are added | `photo-feed`, `data-schemas` | yes |
+| `photo-tags.json` | `{"<n>": [tags]}` | a tagging tool kept outside the repository; `bw` rewritten by `detect_monochrome.py` | `js/gallery.js`, `js/slideshow.js` (the gallery's filter buttons are `KR_PHOTO_CATEGORIES` in `js/shared-components.js`) | when photographs are added | `monochrome` | subject tags yes; `bw` never |
+| `photo-locations.json` | `{_help, regions: [{name, lat, lng, photos: ["<n>"]}]}` | you (its `_help` field says how) | `map.html`, `js/gallery.js` (tile captions, the globe badge), `js/palette.js` (places), `js/slideshow.js` (its Place setting and caption) | when photographs are placed | none | yes |
+| `photo-variants.json` | `{_help, groups: [["<n>", "<n>", ...]]}`: frames that are one photograph, the shown edit first | you (its `_help` field says how) | `js/gallery.js` (one tile per group, the edits on hover and in the lightbox), `js/slideshow.js` (one slide per group) | when a re-edit goes up | `audit` (`photo-variants`) | yes |
+| `photography-files.json` | `["<n>.png"]`, newest first: every frame | a filename tool kept outside the repository, or by hand | `js/gallery.js`, `js/slideshow.js`, `404.html`, `index.html` (the three newest, the Latest section), `generate_colophon.py`, the audit's orphan report | when photographs are added | the smoke suite (the gallery renders) | yes, carefully |
+| `photosets.json` | `{_help, sets: [{date, from, to, place}]}`, newest first: one entry per photoset added | you, when a set goes up | `generate_photo_feed.py`, which writes `feed-photos.xml` and the `KR_NEW_PHOTOS` line in `js/shared-components.js` from it; `js/slideshow.js` (its "Added to the gallery" setting) | when photographs are added | `photo-feed`, `data-schemas` | yes |
 | `photography-standard-files.json` | `["<n>.png"]`: the frames the photo strip may show | as above | `renderPhotoStrip`, `404.html` | rarely | none | yes |
 | `quotes-all.json` | `[{q, a, b, g?}]`: every saved passage (quote, author, book, and the book's Goodreads id when it is on the shelf, which the wall links; without it the link is a Goodreads search) | an export tool kept outside the repository | `generate_quote_wall.py` (bakes `quotes.html`) and `generate_colophon.py` (the count the pages read from `colophon.json`) | occasionally | `quote-wall` | yes, then regenerate |
 | `quotes.json` | `[{quote, author, book, g?, popularity}]` (`g` as in `quotes-all.json`, for the attribution's link) | as above | `js/literature.js` (the rotating quotation) | rarely | none | yes |
@@ -126,17 +126,23 @@ site at 1 GB, and the originals alone are larger, so they live as assets
 of the `photos-v1` release
 (`https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/<n>.png`,
 `KR_RELEASE` in `js/shared-components.js`). The repository holds the
-400px thumbnails (`img/photography/thumb/<n>.webp`) and the wide hero
-crops the openers use (`img/photography/hero/<n>.webp`). A post links a
-thumbnail and the runtime opens the original in the lightbox. (The essay:
+400px thumbnails (`img/photography/thumb/<n>.webp`, with an 800px
+`<n>@2x.webp` beside each) and a hero of every frame
+(`img/photography/hero/<n>.webp`, 1920px on the long edge, about 100 KB),
+which the openers, the photographs in posts and the slideshow use. A post
+links a thumbnail and the runtime opens the original in the lightbox. The
+slideshow never streams the originals: the release answers every request
+for one with `no-cache`, and a slideshow left running as a wallpaper
+would fetch gigabytes a day. (The essay:
 [Hosting a Photography Portfolio on GitHub for Free](https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html).)
 
 Adding photographs touches every file in this group:
 
 1. Upload each original to the `photos-v1` release as `<n>.png`, numbering
    on from the highest.
-2. Add the thumbnail `img/photography/thumb/<n>.webp` (and a hero crop if
-   it will open a page).
+2. Add the thumbnail `img/photography/thumb/<n>.webp`; once the original
+   is on the release, `generate_photo_renditions.py` makes its `@2x` and
+   its hero (the `renditions` check fails a frame without them).
 3. Add `"<n>.png"` to the top of `photography-files.json` (newest first),
    and to `photography-standard-files.json` if the photo strip may show
    it. The homepage's Latest section ignores that pool: it shows the

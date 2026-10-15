@@ -79,6 +79,14 @@
  *   loaded. The counter and the "Photograph n of N" announcement count
  *   the whole view throughout.
  *
+ * Slideshow
+ *   The Slideshow button is a link to slideshow.html carrying the filter
+ *   (?tag=), kept current as the filter changes, so it opens in a new tab
+ *   as it is. A plain click instead asks for full screen there and then
+ *   (the browser grants it only during the click), fetches
+ *   js/slideshow.js and opens the slideshow over the gallery on the same
+ *   photographs; if the script cannot be fetched, the link is followed.
+ *
  * A failed load
  *   When neither the file list nor the tags arrive there is nothing to
  *   show, and the grid says so, with a Try again link that fetches them
@@ -230,6 +238,7 @@ function writeUrl(changes) {
  */
 function initGallery() {
     bindLoadMoreButton();
+    bindSlideshowButton();
     loadGallery();
 }
 
@@ -331,6 +340,53 @@ function startGallery() {
     openFromUrl();
 }
 
+// ----------------------------------------------------------------------
+// Slideshow (see "Slideshow" at the top)
+// ----------------------------------------------------------------------
+
+var slideshowScript = null;
+
+function slideshowHref() {
+    return '/slideshow.html' + (activeCat === '*' ? '' : '?tag=' + encodeURIComponent(activeCat));
+}
+
+function loadSlideshowScript() {
+    if (window.krSlideshow) return Promise.resolve();
+    if (!slideshowScript) {
+        slideshowScript = new Promise(function(resolve, reject) {
+            var s = document.createElement('script');
+            s.src = '/js/slideshow.js?v=20260923a';
+            s.onload = resolve;
+            s.onerror = function() { slideshowScript = null; s.remove(); reject(); };
+            document.head.appendChild(s);
+        });
+    }
+    return slideshowScript;
+}
+
+function bindSlideshowButton() {
+    var link = document.getElementById('gallery-slideshow');
+    if (!link || link.dataset.bound) return;
+    link.dataset.bound = 'true';
+    link.href = slideshowHref();
+    link.addEventListener('click', function(e) {
+        if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        e.preventDefault();
+        if (document.fullscreenEnabled && !document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(function() {});
+        }
+        loadSlideshowScript().then(function() {
+            window.krSlideshow.open({
+                settings: { tag: activeCat === '*' ? '' : activeCat },
+                returnFocus: link
+            });
+        }, function() {
+            if (document.fullscreenElement) document.exitFullscreen().catch(function() {});
+            window.location.href = link.href;
+        });
+    });
+}
+
 function bindLoadMoreButton() {
     var btn = document.getElementById('load-more-btn');
     if (btn && !btn.dataset.bound) {
@@ -414,6 +470,8 @@ function applyFilter(cat) {
     galleryIndex = 0;
     var container = document.getElementById('gallery-grid');
     if (container) container.innerHTML = '';
+    var show = document.getElementById('gallery-slideshow');
+    if (show) show.href = slideshowHref();
     loadMoreImages();
 }
 

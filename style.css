@@ -130,6 +130,17 @@
      Theme-independent: the photograph is the surface in both themes. */
   --kr-photo-chip: rgba(11, 11, 11, 0.8);
   --kr-photo-veil-light: rgba(0, 0, 0, 0.18);
+  /* The slideshow (js/slideshow.js): a dark stage in both themes, its
+     controls white on a smoked panel that keeps them above 4.5:1 whatever
+     photograph is behind. Theme-independent, like the chip above. */
+  --kr-show-stage: #050505;
+  --kr-show-ink: #f4f4f4;
+  --kr-show-muted: #c8c8c8;
+  --kr-show-panel: rgba(14, 14, 14, 0.86);
+  --kr-show-line: rgba(255, 255, 255, 0.24);
+  --kr-show-fill: rgba(255, 255, 255, 0.1);
+  --kr-show-fill-hover: rgba(255, 255, 255, 0.2);
+  --kr-show-accent: #fc6060;
   /* Decorative accent: eyebrows, stat labels, icons. Never a link.
      Deliberately neutral stone rather than a second hue: on a site
      carrying 492 photographs, every decorative colour competes with the
@@ -9889,6 +9900,355 @@ button.mfp-arrow {
 
 .kr-lightbox.kr-strip .mfp-container {
   padding-bottom: 66px; }
+
+/* --- Slideshow (js/slideshow.js) -------------------------------------------
+   The photographs full screen, over the gallery (its Slideshow button) or
+   as slideshow.html. All of it is built by script, and every class below
+   is set there. Two slides cross-fade: .is-current is the one on screen,
+   .is-drifting runs its slow zoom (none under reduced motion or with
+   drift=0, .kr-show--drift off). .kr-show--fill crops the photograph to
+   the screen; otherwise the whole frame sits over a blurred copy of
+   itself. .is-idle hides the pointer; the bar, the settings panel and the
+   sound hint are .kr-offstage (§10) shown with .is-visible, and
+   .kr-show--bare (controls=off, a wallpaper) never shows the bar. */
+html.kr-show-open,
+html.kr-show-open body {
+  overflow: hidden; }
+
+.kr-show {
+  --site-focus-ring: var(--kr-show-accent);
+  --site-focus-shadow: color-mix(in srgb, var(--kr-show-accent) 30%, transparent);
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  overflow: hidden;
+  background: var(--kr-show-stage);
+  color: var(--kr-show-ink); }
+
+.kr-show.is-idle {
+  cursor: none; }
+
+.kr-show__stage,
+.kr-show__slide {
+  position: absolute;
+  inset: 0; }
+
+.kr-show__slide {
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 1.4s ease; }
+
+.kr-show__slide.is-current {
+  opacity: 1; }
+
+.kr-show__backdrop {
+  position: absolute;
+  top: -8%;
+  left: -8%;
+  width: 116%;
+  height: 116%;
+  object-fit: cover;
+  filter: blur(48px) brightness(0.5) saturate(1.2); }
+
+.kr-show__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; }
+
+.kr-show--fill .kr-show__photo {
+  object-fit: cover; }
+
+.kr-show--fill .kr-show__backdrop {
+  display: none; }
+
+.kr-show--drift .kr-show__slide.is-drifting .kr-show__photo {
+  animation: kr-show-drift var(--kr-show-dur, 23s) linear forwards; }
+
+@keyframes kr-show-drift {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.07) translate(var(--kr-show-dx, 1%), var(--kr-show-dy, 1%)); } }
+
+.kr-show__message {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 24px;
+  text-align: center;
+  font-size: 16px;
+  color: var(--kr-show-muted); }
+
+.kr-show__message[hidden] {
+  display: none; }
+
+/* Top right: a desktop's icons sit down the left and its taskbar along
+   the foot, so a wallpaper's caption stays clear of both. */
+.kr-show__caption {
+  position: absolute;
+  top: clamp(16px, 3vw, 32px);
+  right: clamp(16px, 3vw, 32px);
+  max-width: min(60vw, 420px);
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: var(--kr-radius-sm);
+  background: var(--kr-photo-chip);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--kr-show-ink);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease; }
+
+.kr-show--captions .kr-show__caption:not([hidden]) {
+  opacity: 1; }
+
+.kr-show__hint {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  margin: 0;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--kr-show-panel);
+  font-size: 13px;
+  color: var(--kr-show-ink);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%); }
+
+.kr-show__hint.is-visible {
+  opacity: 1; }
+
+.kr-show__bar {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(12px, 3vh, 28px);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: min(860px, calc(100% - 32px));
+  padding: 8px 10px;
+  border: 1px solid var(--kr-show-line);
+  border-radius: var(--kr-radius-lg);
+  background: var(--kr-show-panel);
+  color: var(--kr-show-ink);
+  opacity: 0;
+  transform: translate(-50%, 12px);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px); }
+
+.kr-show__bar.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0); }
+
+.kr-show--bare .kr-show__bar {
+  display: none; }
+
+.kr-show__btn,
+.kr-show a.kr-show__btn {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 16px;
+  color: var(--kr-show-ink);
+  cursor: pointer;
+  transition: background-color 0.2s ease; }
+
+.kr-show__btn--main,
+.kr-show__btn.is-on,
+.kr-show__btn[aria-expanded="true"] {
+  background: var(--kr-show-fill); }
+
+.kr-show__btn:hover,
+.kr-show a.kr-show__btn:hover {
+  background: var(--kr-show-fill-hover);
+  color: var(--kr-show-ink); }
+
+.kr-show__count {
+  margin-left: 6px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--kr-show-muted); }
+
+.kr-show__spacer {
+  flex: 1; }
+
+.kr-show__sound {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--kr-show-muted); }
+
+.kr-show select,
+.kr-show input[type="text"] {
+  min-height: 32px;
+  padding: 4px 8px;
+  border: 1px solid var(--kr-show-line);
+  border-radius: var(--kr-radius-sm);
+  background: var(--kr-show-stage);
+  font: inherit;
+  font-size: 14px;
+  color: var(--kr-show-ink); }
+
+.kr-show__volume {
+  width: 90px;
+  accent-color: var(--kr-show-accent); }
+
+.kr-show__panel {
+  position: absolute;
+  left: 50%;
+  bottom: calc(clamp(12px, 3vh, 28px) + 68px);
+  width: min(560px, calc(100% - 32px));
+  max-height: calc(100% - 120px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 20px 22px;
+  border: 1px solid var(--kr-show-line);
+  border-radius: var(--kr-radius-lg);
+  background: var(--kr-show-panel);
+  color: var(--kr-show-ink);
+  opacity: 0;
+  transform: translate(-50%, 8px);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px); }
+
+.kr-show__panel.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0); }
+
+.kr-show .kr-show__panel-title {
+  margin: 0;
+  font-size: 20px;
+  color: var(--kr-show-ink); }
+
+.kr-show .kr-show__panel-count {
+  margin: 2px 0 14px;
+  font-size: 13px;
+  color: var(--kr-show-muted); }
+
+.kr-show__fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px 16px;
+  margin-bottom: 14px; }
+
+.kr-show__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--kr-show-muted); }
+
+.kr-show__field select {
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none; }
+
+.kr-show__check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 24px;
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--kr-show-ink); }
+
+.kr-show__check input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--kr-show-accent); }
+
+.kr-show__share {
+  margin: 16px 0 0;
+  padding: 14px 0 0;
+  border: 0;
+  border-top: 1px solid var(--kr-show-line); }
+
+.kr-show__share legend {
+  float: left;
+  width: 100%;
+  margin: 0 0 6px;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--kr-show-ink); }
+
+.kr-show .kr-show__share p {
+  clear: both;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--kr-show-muted); }
+
+.kr-show__link {
+  display: flex;
+  gap: 8px; }
+
+.kr-show__link input {
+  flex: 1;
+  min-width: 0; }
+
+.kr-show__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: var(--kr-radius-sm);
+  background: var(--kr-action-fill);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--kr-on-action-fill);
+  cursor: pointer; }
+
+.kr-show__copy:hover {
+  background: var(--kr-action-fill-hover); }
+
+/* A phone keeps the buttons and the sound menu; the count, the volume
+   (the phone's own buttons do that) and the speaker glyph go. */
+@media (max-width: 575.98px) {
+  .kr-show__bar {
+    gap: 2px;
+    padding: 6px; }
+  .kr-show__count,
+  .kr-show__volume,
+  .kr-show__sound i {
+    display: none; }
+  .kr-show__btn,
+  .kr-show a.kr-show__btn {
+    width: 34px;
+    height: 34px; }
+  .kr-show__sound {
+    flex: 0 1 96px;
+    min-width: 56px; }
+  .kr-show__sound select {
+    width: 100%; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-show__slide,
+  .kr-show__caption {
+    transition: none; }
+  .kr-show--drift .kr-show__slide.is-drifting .kr-show__photo {
+    animation: none; } }
 
 /* ==== :: §14 Reading pages ==== */
 

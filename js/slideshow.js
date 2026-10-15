@@ -1,0 +1,1160 @@
+/**
+ * slideshow.js: the photographs one at a time, full screen, with an
+ * optional sound of a fire, rain or a forest underneath.
+ *
+ * Two ways in
+ *   The gallery's Slideshow button (gallery.js) opens it over the gallery,
+ *   on the photographs its filter shows, and asks for full screen on the
+ *   same click. slideshow.html is the same slideshow as a page of its own,
+ *   set up entirely from its address: for a browser in full screen (F11),
+ *   or for a desktop wallpaper app that shows a web page (Lively Wallpaper
+ *   on Windows), or an iframe.
+ *
+ * The address (every setting is in it, so a link is the whole slideshow)
+ *   tag=      a subject, a KR_PHOTO_CATEGORIES key, as the gallery's ?tag=
+ *   place=    a region name from data/photo-locations.json
+ *   added=    a photoset, "<from>-<to>" from data/photosets.json, or
+ *             "earlier" for the frames from before the first set
+ *   order=    shuffle (the default) | newest | oldest
+ *   every=    seconds per photograph (default 20)
+ *   sound=    off (the default) | fire | rain | forest
+ *   volume=   0 to 100 (default 50)
+ *   fit=      whole (the default: the whole frame over a blurred copy of
+ *             itself) | fill (cropped to fill the screen)
+ *   drift=0   no slow zoom
+ *   captions=0  no place line
+ *   controls=off  never show the controls (a wallpaper); the keys still work
+ *   Values that mean nothing (a subject with no photographs, an unknown
+ *   place) are dropped rather than showing an empty screen.
+ *
+ * Photographs
+ *   One per gallery tile: a group in data/photo-variants.json shows its
+ *   first edit, or under a subject the first edit that has it, as the
+ *   gallery does. Each is the frame's hero (1920px on the long edge, about
+ *   100 KB; generate_photo_renditions.py makes one for every frame), never
+ *   the original on the release: a wallpaper runs for hours, and the
+ *   release serves every original uncached. The next photograph is fetched
+ *   and decoded while the current one is up, so a change never shows a
+ *   half-drawn picture; a frame whose hero fails falls back to its 800px
+ *   thumb, and one with neither is skipped. At the end of every pass the
+ *   lists are fetched again, so a wallpaper left running picks up a new
+ *   photoset, and a shuffle is dealt afresh.
+ *
+ * Sound
+ *   Made in the browser with the Web Audio API (krAmbience, below): no
+ *   recordings to download, and nothing that loops audibly, because every
+ *   drop, crackle and bird call is drawn at random as it plays. Browsers
+ *   allow sound only after a click or a key press on the page, so when a
+ *   link asks for sound= the slideshow says it is waiting for one; wallpaper
+ *   apps usually allow it from the start.
+ *
+ * Accessibility
+ *   Over the gallery it is a modal dialog: the page behind is inert and
+ *   focus returns to the button on close. The controls are buttons with
+ *   action labels (Pause slideshow / Play slideshow), shown on any pointer
+ *   movement or key press and hidden again (.kr-offstage) after IDLE_MS
+ *   with the pointer, so they leave the Tab order when they leave the
+ *   screen. The photographs change on their own, so nothing is announced
+ *   then; a change the viewer asks for (next, previous) is announced in a
+ *   hidden polite region. Space pauses, the arrow keys step, F toggles full
+ *   screen, M the sound, Escape closes the settings and then the slideshow.
+ *   Under reduced motion there is no slow zoom and the change is a cut.
+ */
+(function() {
+    'use strict';
+
+    const SOUNDS = [
+        { key: 'off', label: 'No sound' },
+        { key: 'fire', label: 'Crackling fire' },
+        { key: 'rain', label: 'Rain' },
+        { key: 'forest', label: 'Forest' }
+    ];
+    const ORDERS = [
+        { key: 'shuffle', label: 'Shuffled' },
+        { key: 'newest', label: 'Newest first' },
+        { key: 'oldest', label: 'Oldest first' }
+    ];
+    const SPEEDS = [8, 15, 20, 30, 60, 120, 300];
+    const DEFAULTS = {
+        tag: '', place: '', added: '', order: 'shuffle', every: 20,
+        sound: 'off', volume: 50, fit: 'whole', drift: true, captions: true,
+        controls: 'auto'
+    };
+    // The cross-fade between photographs, matching .kr-show__slide's
+    // transition; the slow zoom runs for the photograph's time plus this.
+    const FADE_MS = 1400;
+    // The controls and the pointer hide after this long without movement.
+    const IDLE_MS = 2600;
+    // A photograph that has not arrived by now is skipped.
+    const LOAD_WAIT_MS = 20000;
+
+    const DATA = ['data/photography-files.json', 'data/photo-tags.json', 'data/photo-locations.json',
+        'data/photo-variants.json', 'data/photosets.json'];
+    const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+        'September', 'October', 'November', 'December'];
+
+    const heroOf = stem => '/img/photography/hero/' + stem + '.webp';
+    const thumbOf = stem => '/img/photography/thumb/' + stem + '@2x.webp';
+    const subjects = () => (typeof KR_PHOTO_CATEGORIES !== 'undefined' ? KR_PHOTO_CATEGORIES : []);
+    const subjectLabel = key => (subjects().find(c => c.key === key) || { label: key }).label;
+
+    // ------------------------------------------------------------------
+    // Settings <-> address
+    // ------------------------------------------------------------------
+
+    function readSettings(search) {
+        const q = new URLSearchParams(search || '');
+        const s = Object.assign({}, DEFAULTS);
+        ['tag', 'place', 'added'].forEach(k => { if (q.get(k)) s[k] = q.get(k); });
+        if (ORDERS.some(o => o.key === q.get('order'))) s.order = q.get('order');
+        if (SOUNDS.some(o => o.key === q.get('sound'))) s.sound = q.get('sound');
+        const every = parseInt(q.get('every'), 10);
+        if (every >= 3 && every <= 3600) s.every = every;
+        const volume = parseInt(q.get('volume'), 10);
+        if (volume >= 0 && volume <= 100) s.volume = volume;
+        if (q.get('fit') === 'fill') s.fit = 'fill';
+        if (q.get('drift') === '0') s.drift = false;
+        if (q.get('captions') === '0') s.captions = false;
+        if (q.get('controls') === 'off') s.controls = 'off';
+        return s;
+    }
+
+    /** The query string for a set of settings: only what differs from the defaults. */
+    function settingsQuery(s) {
+        const q = new URLSearchParams();
+        ['tag', 'place', 'added'].forEach(k => { if (s[k]) q.set(k, s[k]); });
+        if (s.order !== DEFAULTS.order) q.set('order', s.order);
+        if (s.every !== DEFAULTS.every) q.set('every', String(s.every));
+        if (s.sound !== DEFAULTS.sound) q.set('sound', s.sound);
+        if (s.volume !== DEFAULTS.volume) q.set('volume', String(s.volume));
+        if (s.fit !== DEFAULTS.fit) q.set('fit', s.fit);
+        if (!s.drift) q.set('drift', '0');
+        if (!s.captions) q.set('captions', '0');
+        if (s.controls === 'off') q.set('controls', 'off');
+        const qs = q.toString();
+        return qs ? '?' + qs : '';
+    }
+
+    function pageUrl(s) {
+        return new URL('/slideshow.html' + settingsQuery(s), window.location.href).href;
+    }
+
+    // ------------------------------------------------------------------
+    // The photographs
+    // ------------------------------------------------------------------
+
+    function fetchJson(path, fresh) {
+        const got = !fresh && typeof krFetchJson === 'function'
+            ? krFetchJson(path)
+            : fetch('/' + path, { cache: fresh ? 'no-cache' : 'default' }).then(r => {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json();
+            });
+        return got.catch(() => null);
+    }
+
+    function loadLibrary(fresh) {
+        return Promise.all(DATA.map(p => fetchJson(p, fresh))).then(buildLibrary);
+    }
+
+    function setLabel(set) {
+        const d = /^(\d{4})-(\d{2})/.exec(set.date || '');
+        const when = d ? MONTHS[+d[2] - 1] + ' ' + d[1] : set.date;
+        return when + ': ' + set.place.replace(/^the archive: /, '');
+    }
+
+    /** Tiles, as the gallery has them, with what the filters need to know. */
+    function buildLibrary(results) {
+        const files = results[0], tags = results[1] || {}, locations = results[2] || {};
+        const variants = results[3] || {}, photosets = results[4] || {};
+        const editsOf = {}, groupOf = {};
+        (variants.groups || []).forEach(group => {
+            const stems = group.map(String);
+            if (stems.length < 2) return;
+            editsOf[stems[0]] = stems;
+            stems.forEach(s => { groupOf[s] = stems[0]; });
+        });
+        let stems = Array.isArray(files)
+            ? files.map(f => String(f).split('/').pop().replace(/\.\w+$/, ''))
+            : Object.keys(tags);
+        stems = stems.filter(s => /^\d+$/.test(s) && (!groupOf[s] || groupOf[s] === s));
+        stems.sort((a, b) => b - a);
+        const placeOf = {};
+        (locations.regions || []).forEach(r => (r.photos || []).forEach(p => { placeOf[String(p)] = r.name; }));
+        const tiles = stems.map(stem => {
+            const edits = editsOf[stem] || [stem];
+            const tagSet = {};
+            edits.forEach(e => (tags[e] || []).forEach(t => { tagSet[t] = true; }));
+            return { stem: stem, n: +stem, edits: edits, tags: Object.keys(tagSet),
+                place: edits.map(e => placeOf[e]).find(Boolean) || '' };
+        });
+        const sets = (photosets.sets || []).map(x => ({
+            key: x.from + '-' + x.to, from: +x.from, to: +x.to, date: x.date, place: x.place || ''
+        }));
+        const earliest = sets.length ? Math.min.apply(null, sets.map(x => x.from)) : 0;
+        const first = sets.find(x => x.from === earliest);
+        return { tiles: tiles, tags: tags, sets: sets, earliest: earliest, firstSet: first };
+    }
+
+    function inAdded(tile, added, lib) {
+        if (!added) return true;
+        if (added === 'earlier') return !!lib.earliest && tile.n < lib.earliest;
+        const set = lib.sets.find(x => x.key === added);
+        return !!set && tile.n >= set.from && tile.n <= set.to;
+    }
+
+    function matches(tile, s, lib) {
+        return (!s.tag || tile.tags.indexOf(s.tag) !== -1) &&
+            (!s.place || tile.place === s.place) &&
+            inAdded(tile, s.added, lib);
+    }
+
+    /** Drop the filter values that would leave nothing to show on their own. */
+    function sanitise(s, lib) {
+        if (s.tag && !lib.tiles.some(t => t.tags.indexOf(s.tag) !== -1)) s.tag = '';
+        if (s.place && !lib.tiles.some(t => t.place === s.place)) s.place = '';
+        if (s.added && !lib.tiles.some(t => inAdded(t, s.added, lib))) s.added = '';
+        return s;
+    }
+
+    /** The edit a tile shows: under a subject, the first edit that has it. */
+    function faceOf(tile, s, lib) {
+        if (s.tag) {
+            const hit = tile.edits.find(e => (lib.tags[e] || []).indexOf(s.tag) !== -1);
+            if (hit) return hit;
+        }
+        return tile.edits[0];
+    }
+
+    function shuffled(list) {
+        const a = list.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const t = a[i]; a[i] = a[j]; a[j] = t;
+        }
+        return a;
+    }
+
+    function deal(s, lib, avoidFirst) {
+        const view = lib.tiles.filter(t => matches(t, s, lib));
+        if (s.order === 'oldest') return view.slice().reverse();
+        if (s.order === 'newest') return view;
+        const deck = shuffled(view);
+        // A new pass never opens on the photograph the last one ended with.
+        if (deck.length > 1 && avoidFirst && deck[0].stem === avoidFirst) deck.push(deck.shift());
+        return deck;
+    }
+
+    /** The photograph decoded and ready to draw: its hero, or its thumb. */
+    function loadFrame(stem) {
+        return new Promise(resolve => {
+            let settled = false;
+            const done = v => { if (!settled) { settled = true; resolve(v); } };
+            const timer = setTimeout(() => done(null), LOAD_WAIT_MS);
+            const attempt = urls => {
+                if (!urls.length) { clearTimeout(timer); done(null); return; }
+                const img = new Image();
+                img.decoding = 'async';
+                img.onload = () => {
+                    const ready = img.decode ? img.decode().catch(() => {}) : Promise.resolve();
+                    ready.then(() => { clearTimeout(timer); done({ stem: stem, src: img.src }); });
+                };
+                img.onerror = () => attempt(urls.slice(1));
+                img.src = urls[0];
+            };
+            attempt([heroOf(stem), thumbOf(stem)]);
+        });
+    }
+
+    // ------------------------------------------------------------------
+    // The view
+    // ------------------------------------------------------------------
+
+    function el(tag, attrs, html) {
+        const node = document.createElement(tag);
+        Object.keys(attrs || {}).forEach(k => node.setAttribute(k, attrs[k]));
+        if (html) node.innerHTML = html;
+        return node;
+    }
+
+    function esc(s) {
+        return typeof krEscapeHtml === 'function' ? krEscapeHtml(s)
+            : String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function option(value, label, selected) {
+        return '<option value="' + esc(value) + '"' + (selected ? ' selected' : '') + '>' + esc(label) + '</option>';
+    }
+
+    function speedLabel(sec) {
+        if (sec < 60) return sec + ' seconds';
+        const m = Math.round(sec / 60);
+        return m + (m === 1 ? ' minute' : ' minutes');
+    }
+
+    function icon(name) {
+        return '<i class="' + name + '" aria-hidden="true"></i>';
+    }
+
+    let active = null;
+
+    /**
+     * Open the slideshow. opts: { settings, standalone, returnFocus }.
+     * settings may be partial (the gallery passes its tag); the rest are
+     * the defaults.
+     */
+    function open(opts) {
+        opts = opts || {};
+        if (active) active.close();
+        const s = Object.assign({}, DEFAULTS, opts.settings || {});
+        active = new Show(s, !!opts.standalone, opts.returnFocus || null);
+        return active;
+    }
+
+    function Show(settings, standalone, returnFocus) {
+        this.s = settings;
+        this.standalone = standalone;
+        this.returnFocus = returnFocus;
+        this.lib = null;
+        this.deck = [];
+        this.pos = -1;
+        this.playing = true;
+        this.timer = 0;
+        this.idleTimer = 0;
+        this.front = 0;
+        this.next = null;          // { pos, promise } of the photograph being fetched ahead
+        this.token = 0;            // bumps on every change, so a late load cannot draw over a newer one
+        this.inerted = [];
+        this.wakeLock = null;
+        this.listeners = [];
+        this.build();
+        this.bind();
+        this.setPlaying(true);
+        this.wake();
+        loadLibrary(false).then(lib => this.start(lib));
+    }
+
+    Show.prototype.on = function(target, type, fn, opts) {
+        target.addEventListener(type, fn, opts);
+        this.listeners.push([target, type, fn, opts]);
+    };
+
+    Show.prototype.build = function() {
+        const s = this.s;
+        const id = 'kr-show-settings';
+        const root = el('div', {
+            class: 'kr-show',
+            role: 'dialog',
+            'aria-modal': 'true',
+            'aria-label': 'Slideshow of photographs',
+            tabindex: '-1'
+        });
+        const close = this.standalone
+            ? '<a class="kr-show__btn" href="/gallery.html" data-act="gallery" aria-label="Back to the gallery">' + icon('ti-close') + '</a>'
+            : '<button type="button" class="kr-show__btn" data-act="close" aria-label="Close slideshow">' + icon('ti-close') + '</button>';
+        const full = document.fullscreenEnabled
+            ? '<button type="button" class="kr-show__btn" data-act="fullscreen" aria-label="Full screen">' + icon('ti-fullscreen') + '</button>'
+            : '';
+        root.innerHTML =
+            '<div class="kr-show__stage">' +
+                '<div class="kr-show__slide"><img class="kr-show__backdrop" alt=""><img class="kr-show__photo" alt=""></div>' +
+                '<div class="kr-show__slide"><img class="kr-show__backdrop" alt=""><img class="kr-show__photo" alt=""></div>' +
+                '<p class="kr-show__message" hidden></p>' +
+            '</div>' +
+            '<p class="kr-show__caption" aria-hidden="true"></p>' +
+            '<p class="kr-show__hint kr-offstage" aria-hidden="true">Click anywhere for sound</p>' +
+            '<p class="kr-sr-only" aria-live="polite" data-announce></p>' +
+            '<div class="kr-show__bar kr-offstage is-visible" role="group" aria-label="Slideshow controls">' +
+                '<button type="button" class="kr-show__btn" data-act="prev" aria-label="Previous photograph">' + icon('ti-control-skip-backward') + '</button>' +
+                '<button type="button" class="kr-show__btn kr-show__btn--main" data-act="play" aria-label="Pause slideshow">' + icon('ti-control-pause') + '</button>' +
+                '<button type="button" class="kr-show__btn" data-act="next" aria-label="Next photograph">' + icon('ti-control-skip-forward') + '</button>' +
+                '<span class="kr-show__count" data-count></span>' +
+                '<span class="kr-show__spacer"></span>' +
+                '<label class="kr-show__sound">' + icon('ti-volume') + '<span class="kr-sr-only">Sound</span>' +
+                    '<select data-set="sound">' + SOUNDS.map(o => option(o.key, o.label, o.key === s.sound)).join('') + '</select></label>' +
+                '<input class="kr-show__volume" type="range" min="0" max="100" step="5" value="' + s.volume + '" data-set="volume" aria-label="Volume">' +
+                '<button type="button" class="kr-show__btn" data-act="settings" aria-label="Slideshow settings" aria-expanded="false" aria-controls="' + id + '">' + icon('ti-settings') + '</button>' +
+                full + close +
+            '</div>' +
+            '<form class="kr-show__panel kr-offstage" id="' + id + '" aria-label="Slideshow settings" novalidate></form>';
+        this.root = root;
+        this.slides = root.querySelectorAll('.kr-show__slide');
+        this.bar = root.querySelector('.kr-show__bar');
+        this.panel = root.querySelector('.kr-show__panel');
+        this.caption = root.querySelector('.kr-show__caption');
+        this.message = root.querySelector('.kr-show__message');
+        this.hint = root.querySelector('.kr-show__hint');
+        this.live = root.querySelector('[data-announce]');
+        this.count = root.querySelector('[data-count]');
+        this.applyLook();
+
+        document.body.appendChild(root);
+        document.documentElement.classList.add('kr-show-open');
+        if (!this.standalone) {
+            Array.prototype.forEach.call(document.body.children, node => {
+                if (node !== root && !node.inert) { node.inert = true; this.inerted.push(node); }
+            });
+        }
+        root.focus({ preventScroll: true });
+    };
+
+    /** The settings form, drawn once the photograph lists are in. */
+    Show.prototype.renderPanel = function() {
+        const s = this.s, lib = this.lib;
+        const counts = {}, places = {};
+        lib.tiles.forEach(t => {
+            t.tags.forEach(k => { counts[k] = (counts[k] || 0) + 1; });
+            if (t.place) places[t.place] = (places[t.place] || 0) + 1;
+        });
+        const subjectOptions = subjects().filter(c => counts[c.key])
+            .map(c => option(c.key, c.label + ' (' + counts[c.key] + ')', c.key === s.tag)).join('');
+        const placeOptions = Object.keys(places).sort((a, b) => a.localeCompare(b))
+            .map(p => option(p, p + ' (' + places[p] + ')', p === s.place)).join('');
+        const setOptions = lib.sets.map(x => option(x.key, setLabel(x), x.key === s.added)).join('') +
+            (lib.firstSet ? option('earlier', 'Before ' + setLabel(lib.firstSet).split(':')[0], s.added === 'earlier') : '');
+        const speeds = SPEEDS.indexOf(s.every) === -1 ? SPEEDS.concat([s.every]).sort((a, b) => a - b) : SPEEDS;
+        this.panel.innerHTML =
+            '<h2 class="kr-show__panel-title">Slideshow</h2>' +
+            '<p class="kr-show__panel-count" data-panel-count></p>' +
+            '<div class="kr-show__fields">' +
+                '<label class="kr-show__field">Subject<select data-set="tag">' + option('', 'Any subject', !s.tag) + subjectOptions + '</select></label>' +
+                '<label class="kr-show__field">Place<select data-set="place">' + option('', 'Anywhere', !s.place) + placeOptions + '</select></label>' +
+                '<label class="kr-show__field">Added to the gallery<select data-set="added">' + option('', 'Any time', !s.added) + setOptions + '</select></label>' +
+                '<label class="kr-show__field">Order<select data-set="order">' + ORDERS.map(o => option(o.key, o.label, o.key === s.order)).join('') + '</select></label>' +
+                '<label class="kr-show__field">Each photograph<select data-set="every">' + speeds.map(v => option(String(v), speedLabel(v), v === s.every)).join('') + '</select></label>' +
+                '<label class="kr-show__field">Framing<select data-set="fit">' + option('whole', 'Whole photograph', s.fit === 'whole') + option('fill', 'Fill the screen', s.fit === 'fill') + '</select></label>' +
+            '</div>' +
+            '<label class="kr-show__check"><input type="checkbox" data-set="drift"' + (s.drift ? ' checked' : '') + '> Slow zoom</label>' +
+            '<label class="kr-show__check"><input type="checkbox" data-set="captions"' + (s.captions ? ' checked' : '') + '> Show where each was taken</label>' +
+            '<fieldset class="kr-show__share">' +
+                '<legend>As a wallpaper</legend>' +
+                '<p>This link opens the slideshow as it is set up here. Open it and press F11, or give it to a wallpaper app that shows web pages, such as Lively Wallpaper on Windows.</p>' +
+                '<label class="kr-show__check"><input type="checkbox" data-set="controls"' + (s.controls === 'off' ? ' checked' : '') + '> Never show the controls (keys still work)</label>' +
+                '<div class="kr-show__link"><input type="text" readonly data-url aria-label="Slideshow link">' +
+                '<button type="button" class="kr-show__copy" data-act="copy">' + icon('ti-link') + ' Copy link</button></div>' +
+            '</fieldset>';
+        this.updateLink();
+    };
+
+    Show.prototype.updateLink = function() {
+        const field = this.panel.querySelector('[data-url]');
+        if (field) field.value = pageUrl(this.s);
+        const n = this.panel.querySelector('[data-panel-count]');
+        if (n) n.textContent = this.deck.length === 1 ? '1 photograph' : this.deck.length + ' photographs';
+        if (this.standalone && window.history && window.history.replaceState) {
+            try { window.history.replaceState(null, '', settingsQuery(this.s) || window.location.pathname); } catch (e) {}
+        }
+        const back = this.root.querySelector('[data-act="gallery"]');
+        if (back) back.href = '/gallery.html' + (this.s.tag ? '?tag=' + encodeURIComponent(this.s.tag) : '');
+    };
+
+    Show.prototype.applyLook = function() {
+        const r = this.root.classList;
+        r.toggle('kr-show--fill', this.s.fit === 'fill');
+        r.toggle('kr-show--drift', !!this.s.drift);
+        r.toggle('kr-show--captions', !!this.s.captions);
+        r.toggle('kr-show--bare', this.s.controls === 'off');
+        this.root.style.setProperty('--kr-show-dur', (this.s.every * 1000 + FADE_MS * 2) + 'ms');
+    };
+
+    Show.prototype.start = function(lib) {
+        if (!this.root) return;
+        if (!lib.tiles.length) {
+            this.say('The photographs could not be loaded just now.');
+            return;
+        }
+        this.lib = lib;
+        sanitise(this.s, lib);
+        this.deck = deal(this.s, lib);
+        this.renderPanel();
+        this.ambience = window.krAmbience;
+        this.setSound(this.s.sound, true);
+        this.go(0, false);
+        this.poke();
+    };
+
+    Show.prototype.say = function(text) {
+        this.message.textContent = text;
+        this.message.hidden = !text;
+    };
+
+    // --- moving through the deck --------------------------------------
+
+    Show.prototype.fetchAhead = function(pos) {
+        if (!this.deck.length) return null;
+        const p = ((pos % this.deck.length) + this.deck.length) % this.deck.length;
+        if (this.next && this.next.pos === p && this.next.deck === this.deck) return this.next.promise;
+        const tile = this.deck[p];
+        const promise = loadFrame(faceOf(tile, this.s, this.lib));
+        this.next = { pos: p, deck: this.deck, promise: promise };
+        return promise;
+    };
+
+    /** Show deck[pos]; asked is true when the viewer stepped there. */
+    Show.prototype.go = function(pos, asked, skipped) {
+        clearTimeout(this.timer);
+        const n = this.deck.length;
+        if (!n) {
+            this.say('Nothing matches these settings. Open the settings to choose others.');
+            this.count.textContent = '';
+            this.slides.forEach(sl => sl.classList.remove('is-current'));
+            return;
+        }
+        this.say('');
+        if (pos >= n && !asked) { this.newPass(); return; }
+        const p = ((pos % n) + n) % n;
+        const token = ++this.token;
+        const tile = this.deck[p];
+        this.fetchAhead(p).then(frame => {
+            if (token !== this.token || !this.root) return;
+            if (!frame) {
+                // Neither size arrived: skip it, unless every photograph fails.
+                if ((skipped || 0) + 1 >= n) { this.say('The photographs could not be loaded just now.'); return; }
+                this.go(asked && pos < this.pos ? p - 1 : p + 1, asked, (skipped || 0) + 1);
+                return;
+            }
+            this.pos = p;
+            this.draw(tile, frame);
+            if (asked) this.live.textContent = this.describe(tile, frame.stem, true);
+            this.schedule();
+            this.fetchAhead(p + 1);
+        });
+    };
+
+    /** End of a pass: fetch the lists again (new photosets) and deal again. */
+    Show.prototype.newPass = function() {
+        const last = this.deck.length ? this.deck[this.deck.length - 1].stem : '';
+        loadLibrary(true).then(lib => {
+            if (!this.root) return;
+            if (lib.tiles.length) { this.lib = lib; sanitise(this.s, lib); }
+            this.deck = deal(this.s, this.lib, last);
+            this.next = null;
+            this.updateLink();
+            this.go(0, false);
+        });
+    };
+
+    Show.prototype.describe = function(tile, stem, withPosition) {
+        const parts = ['Photograph ' + stem];
+        if (tile.place) parts.push(tile.place);
+        const text = parts.join(', ');
+        return withPosition ? text + '. ' + (this.pos + 1) + ' of ' + this.deck.length : text;
+    };
+
+    Show.prototype.draw = function(tile, frame) {
+        const back = this.slides[1 - this.front], front = this.slides[this.front];
+        const photo = back.querySelector('.kr-show__photo');
+        const backdrop = back.querySelector('.kr-show__backdrop');
+        photo.src = frame.src;
+        photo.alt = this.describe(tile, frame.stem, false);
+        backdrop.src = thumbOf(frame.stem);
+        // A fresh direction for the slow zoom each time: toward a corner.
+        back.style.setProperty('--kr-show-dx', (Math.random() < 0.5 ? -1 : 1) * (1 + Math.random() * 2).toFixed(2) + '%');
+        back.style.setProperty('--kr-show-dy', (Math.random() < 0.5 ? -1 : 1) * (1 + Math.random() * 1.5).toFixed(2) + '%');
+        back.classList.remove('is-drifting');
+        void back.offsetWidth;    // restart the zoom from its first frame
+        back.classList.add('is-drifting', 'is-current');
+        front.classList.remove('is-current');
+        this.front = 1 - this.front;
+        const caption = tile.place || '';
+        this.caption.textContent = caption;
+        this.caption.hidden = !caption;
+        this.count.textContent = (this.pos + 1) + ' of ' + this.deck.length;
+    };
+
+    Show.prototype.schedule = function() {
+        clearTimeout(this.timer);
+        if (!this.playing || document.hidden || !this.deck.length) return;
+        this.timer = setTimeout(() => this.go(this.pos + 1, false), this.s.every * 1000);
+    };
+
+    Show.prototype.step = function(delta) {
+        this.go(this.pos + delta, true);
+    };
+
+    Show.prototype.setPlaying = function(on) {
+        this.playing = on;
+        const btn = this.root.querySelector('[data-act="play"]');
+        btn.setAttribute('aria-label', on ? 'Pause slideshow' : 'Play slideshow');
+        btn.innerHTML = icon(on ? 'ti-control-pause' : 'ti-control-play');
+        this.root.classList.toggle('is-paused', !on);
+        if (on) this.schedule(); else clearTimeout(this.timer);
+        this.wake();
+    };
+
+    // --- settings ---------------------------------------------------------
+
+    Show.prototype.change = function(key, value) {
+        const s = this.s;
+        if (key === 'every') s.every = parseInt(value, 10) || DEFAULTS.every;
+        else if (key === 'volume') s.volume = Math.max(0, Math.min(100, parseInt(value, 10) || 0));
+        else if (key === 'drift' || key === 'captions') s[key] = !!value;
+        else if (key === 'controls') s.controls = value ? 'off' : 'auto';
+        else s[key] = value;
+        if (key === 'sound') this.setSound(value, false);
+        if (key === 'volume' && this.ambience) this.ambience.volume(s.volume / 100);
+        this.applyLook();
+        if (key === 'tag' || key === 'place' || key === 'added' || key === 'order') {
+            this.deck = deal(s, this.lib);
+            this.next = null;
+            this.go(0, false);
+        } else if (key === 'every') {
+            this.schedule();
+        }
+        this.updateLink();
+    };
+
+    Show.prototype.setSound = function(key, fromLink) {
+        this.s.sound = key;
+        const select = this.root.querySelector('select[data-set="sound"]');
+        if (select) select.value = key;
+        this.lastSound = key !== 'off' ? key : this.lastSound;
+        const amb = this.ambience;
+        if (!amb) return;
+        if (key === 'off') { amb.stop(); this.showHint(false); return; }
+        amb.play(key, this.s.volume / 100).then(running => {
+            // A link asked for sound before anyone touched the page: the
+            // browser holds it until a click or key press (see "Sound").
+            if (!running && fromLink) this.showHint(true);
+        });
+    };
+
+    Show.prototype.showHint = function(on) {
+        this.hint.classList.toggle('is-visible', on);
+        this.waitingForSound = on;
+    };
+
+    Show.prototype.togglePanel = function(on) {
+        const open = on === undefined ? !this.panel.classList.contains('is-visible') : on;
+        this.panel.classList.toggle('is-visible', open);
+        this.root.querySelector('[data-act="settings"]').setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open) {
+            this.poke();
+            const first = this.panel.querySelector('select');
+            if (first) first.focus();
+        } else if (this.panel.contains(document.activeElement)) {
+            this.root.querySelector('[data-act="settings"]').focus();
+        }
+    };
+
+    Show.prototype.copyLink = function(btn) {
+        const url = pageUrl(this.s);
+        const done = ok => {
+            btn.innerHTML = icon(ok ? 'ti-check' : 'ti-link') + (ok ? ' Copied' : ' Select and copy the link');
+            setTimeout(() => { btn.innerHTML = icon('ti-link') + ' Copy link'; }, 2200);
+            if (!ok) this.panel.querySelector('[data-url]').select();
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(() => done(true), () => done(false));
+        else done(false);
+    };
+
+    // --- full screen, idle, wake ---------------------------------------
+
+    Show.prototype.toggleFullscreen = function() {
+        if (!document.fullscreenEnabled) return;
+        if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+        else document.documentElement.requestFullscreen().catch(() => {});
+    };
+
+    Show.prototype.syncFullscreen = function() {
+        const btn = this.root.querySelector('[data-act="fullscreen"]');
+        if (!btn) return;
+        const on = !!document.fullscreenElement;
+        btn.setAttribute('aria-label', on ? 'Leave full screen' : 'Full screen');
+        btn.classList.toggle('is-on', on);
+    };
+
+    /** Something moved: show the controls and the pointer, then hide them again. */
+    Show.prototype.poke = function() {
+        if (!this.root) return;
+        clearTimeout(this.idleTimer);
+        this.root.classList.remove('is-idle');
+        if (this.s.controls !== 'off') this.bar.classList.add('is-visible');
+        this.idleTimer = setTimeout(() => this.idle(), IDLE_MS);
+    };
+
+    Show.prototype.idle = function() {
+        if (!this.root) return;
+        if (this.panel.classList.contains('is-visible') || this.bar.matches(':hover')) {
+            this.idleTimer = setTimeout(() => this.idle(), IDLE_MS);
+            return;
+        }
+        this.root.classList.add('is-idle');
+        // Hidden controls leave the Tab order; focus waits on the dialog.
+        if (this.bar.contains(document.activeElement)) this.root.focus({ preventScroll: true });
+        this.bar.classList.remove('is-visible');
+    };
+
+    Show.prototype.wake = function() {
+        const want = this.root && this.playing && !document.hidden;
+        if (want && !this.wakeLock && navigator.wakeLock && navigator.wakeLock.request) {
+            navigator.wakeLock.request('screen').then(lock => {
+                if (!this.root || !this.playing) { lock.release(); return; }
+                this.wakeLock = lock;
+                lock.addEventListener('release', () => { if (this.wakeLock === lock) this.wakeLock = null; });
+            }, () => {});
+        } else if (!want && this.wakeLock) {
+            this.wakeLock.release().catch(() => {});
+            this.wakeLock = null;
+        }
+    };
+
+    // --- events -----------------------------------------------------------
+
+    Show.prototype.bind = function() {
+        const root = this.root;
+        this.on(root, 'click', e => {
+            const btn = e.target.closest('[data-act]');
+            if (this.waitingForSound) this.resumeSound();
+            if (!btn) {
+                // A click on the photograph itself: the controls, or close the settings.
+                if (!e.target.closest('.kr-show__panel, .kr-show__bar')) {
+                    if (this.panel.classList.contains('is-visible')) this.togglePanel(false);
+                    else this.poke();
+                }
+                return;
+            }
+            const act = btn.getAttribute('data-act');
+            if (act === 'gallery') return;     // a plain link
+            e.preventDefault();
+            if (act === 'prev') this.step(-1);
+            else if (act === 'next') this.step(1);
+            else if (act === 'play') this.setPlaying(!this.playing);
+            else if (act === 'settings') this.togglePanel();
+            else if (act === 'fullscreen') this.toggleFullscreen();
+            else if (act === 'close') this.close();
+            else if (act === 'copy') this.copyLink(btn);
+        });
+        this.on(root, 'change', e => {
+            const key = e.target.getAttribute('data-set');
+            if (!key) return;
+            this.change(key, e.target.type === 'checkbox' ? e.target.checked : e.target.value);
+        });
+        this.on(root, 'input', e => {
+            if (e.target.getAttribute('data-set') === 'volume') this.change('volume', e.target.value);
+        });
+        this.on(root, 'submit', e => e.preventDefault());
+        this.on(root, 'pointermove', () => this.poke(), { passive: true });
+        this.on(root, 'pointerdown', () => { if (this.waitingForSound) this.resumeSound(); this.poke(); }, { passive: true });
+        this.on(root, 'keydown', e => this.key(e));
+        this.on(document, 'visibilitychange', () => {
+            if (document.hidden) clearTimeout(this.timer); else this.schedule();
+            this.wake();
+        });
+        this.on(document, 'fullscreenchange', () => this.syncFullscreen());
+    };
+
+    Show.prototype.resumeSound = function() {
+        this.showHint(false);
+        if (this.ambience && this.s.sound !== 'off') this.ambience.play(this.s.sound, this.s.volume / 100);
+    };
+
+    Show.prototype.key = function(e) {
+        if (this.waitingForSound) this.resumeSound();
+        this.poke();
+        const t = e.target;
+        const field = t.closest && t.closest('select, input, textarea');
+        const onButton = t.closest && t.closest('button, a');
+        if (e.key === 'Escape') {
+            if (this.panel.classList.contains('is-visible')) { e.preventDefault(); this.togglePanel(false); }
+            else if (!this.standalone) { e.preventDefault(); this.close(); }
+            return;
+        }
+        if (e.key === 'Tab') { this.trap(e); return; }
+        if (field || e.ctrlKey || e.metaKey || e.altKey) return;
+        if (e.key === 'ArrowRight') { e.preventDefault(); this.step(1); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); this.step(-1); }
+        else if ((e.key === ' ' || e.key === 'k') && !onButton) { e.preventDefault(); this.setPlaying(!this.playing); }
+        else if (e.key === 'f' || e.key === 'F') { e.preventDefault(); this.toggleFullscreen(); }
+        else if (e.key === 'm' || e.key === 'M') {
+            e.preventDefault();
+            this.setSound(this.s.sound === 'off' ? (this.lastSound || 'fire') : 'off', false);
+            this.updateLink();
+        }
+    };
+
+    /** Tab stays inside the slideshow: the page behind is inert, the browser chrome is not. */
+    Show.prototype.trap = function(e) {
+        const items = Array.prototype.filter.call(
+            this.root.querySelectorAll('button, a[href], select, input'),
+            node => node.getClientRects().length && getComputedStyle(node).visibility !== 'hidden');
+        if (!items.length) { e.preventDefault(); return; }
+        const first = items[0], last = items[items.length - 1];
+        if (e.shiftKey && (document.activeElement === first || document.activeElement === this.root)) {
+            e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault(); first.focus();
+        }
+    };
+
+    Show.prototype.close = function() {
+        if (!this.root) return;
+        clearTimeout(this.timer);
+        clearTimeout(this.idleTimer);
+        this.token++;
+        this.listeners.forEach(l => l[0].removeEventListener(l[1], l[2], l[3]));
+        this.listeners = [];
+        if (this.ambience) this.ambience.stop();
+        this.playing = false;
+        this.wake();
+        this.inerted.forEach(node => { node.inert = false; });
+        document.documentElement.classList.remove('kr-show-open');
+        if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+        this.root.remove();
+        this.root = null;
+        if (active === this) active = null;
+        if (this.returnFocus) this.returnFocus.focus({ preventScroll: true });
+    };
+
+    // ------------------------------------------------------------------
+    // krAmbience: the sounds, made as they play
+    // ------------------------------------------------------------------
+    //
+    // Each sound is a steady bed (filtered noise) with events scattered over
+    // it at random: rain drops and drips, a fire's crackles and pops, a
+    // forest's bird calls over wind in the leaves. A scheduler wakes every
+    // TICK_MS and books the events for the next AHEAD seconds on the audio
+    // clock, which keeps time even when a hidden tab's timers slow to once
+    // a second. Noise comes from three 8-second stereo buffers made once;
+    // eight seconds of noise has no rhythm the ear can catch on.
+
+    const TICK_MS = 250;
+    const AHEAD = 1.6;
+    const NOISE_SECONDS = 8;
+
+    function Ambience() {
+        this.ctx = null;
+        this.master = null;
+        this.voice = null;      // { key, nodes, out, events }
+        this.level = 0.5;
+        this.tick = 0;
+        this.noise = {};
+    }
+
+    Ambience.prototype.ensure = function() {
+        if (this.ctx) return this.ctx;
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        this.ctx = new AC();
+        this.master = this.ctx.createGain();
+        this.master.gain.value = 0;
+        // A limiter after the volume, so a loud cluster of crackles or a
+        // near bird at full volume is held under clipping.
+        const limit = this.ctx.createDynamicsCompressor();
+        limit.threshold.value = -6;
+        limit.knee.value = 4;
+        limit.ratio.value = 12;
+        limit.attack.value = 0.003;
+        limit.release.value = 0.25;
+        // Synthetic noise is brighter than a recording; a shelf takes the
+        // hiss out of the top octaves.
+        const shelf = this.ctx.createBiquadFilter();
+        shelf.type = 'highshelf';
+        shelf.frequency.value = 7000;
+        shelf.gain.value = -8;
+        this.master.connect(shelf);
+        shelf.connect(limit);
+        limit.connect(this.ctx.destination);
+        this.output = limit;
+        return this.ctx;
+    };
+
+    /** A looping 8-second stereo noise buffer: white, pink or brown. */
+    Ambience.prototype.buffer = function(kind) {
+        if (this.noise[kind]) return this.noise[kind];
+        const ctx = this.ctx, len = Math.floor(ctx.sampleRate * NOISE_SECONDS);
+        const buf = ctx.createBuffer(2, len, ctx.sampleRate);
+        for (let ch = 0; ch < 2; ch++) {
+            const d = buf.getChannelData(ch);
+            let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0, last = 0;
+            for (let i = 0; i < len; i++) {
+                const w = Math.random() * 2 - 1;
+                if (kind === 'white') d[i] = w * 0.5;
+                else if (kind === 'pink') {
+                    // Paul Kellet's filter: -3 dB per octave.
+                    b0 = 0.99886 * b0 + w * 0.0555179; b1 = 0.99332 * b1 + w * 0.0750759;
+                    b2 = 0.96900 * b2 + w * 0.1538520; b3 = 0.86650 * b3 + w * 0.3104856;
+                    b4 = 0.55000 * b4 + w * 0.5329522; b5 = -0.7616 * b5 - w * 0.0168980;
+                    d[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.11;
+                    b6 = w * 0.115926;
+                } else {
+                    // Brown: integrated white, leaking back to zero.
+                    last = (last + 0.02 * w) / 1.02;
+                    d[i] = last * 3.5;
+                }
+            }
+            // Fade the seam so the loop point does not click.
+            const fade = Math.floor(ctx.sampleRate * 0.05);
+            for (let i = 0; i < fade; i++) {
+                const k = i / fade;
+                d[len - fade + i] = d[len - fade + i] * (1 - k) + d[i] * k;
+            }
+        }
+        this.noise[kind] = buf;
+        return buf;
+    };
+
+    Ambience.prototype.loop = function(kind, out) {
+        const src = this.ctx.createBufferSource();
+        src.buffer = this.buffer(kind);
+        src.loop = true;
+        src.loopStart = 0.05;
+        src.loopEnd = NOISE_SECONDS;
+        src.connect(out);
+        src.start(this.ctx.currentTime, Math.random() * (NOISE_SECONDS - 1));
+        return src;
+    };
+
+    Ambience.prototype.filter = function(type, freq, q, out) {
+        const f = this.ctx.createBiquadFilter();
+        f.type = type;
+        f.frequency.value = freq;
+        if (q != null) f.Q.value = q;
+        f.connect(out);
+        return f;
+    };
+
+    Ambience.prototype.gain = function(value, out) {
+        const g = this.ctx.createGain();
+        g.gain.value = value;
+        g.connect(out);
+        return g;
+    };
+
+    Ambience.prototype.pan = function(value, out) {
+        if (!this.ctx.createStereoPanner) return out;
+        const p = this.ctx.createStereoPanner();
+        p.pan.value = value;
+        p.connect(out);
+        return p;
+    };
+
+    /** A short burst of filtered noise: one drop, one crackle. */
+    Ambience.prototype.burst = function(at, o) {
+        const ctx = this.ctx;
+        const env = ctx.createGain();
+        env.gain.setValueAtTime(0, at);
+        env.gain.linearRampToValueAtTime(o.gain, at + (o.attack || 0.001));
+        env.gain.exponentialRampToValueAtTime(0.0001, at + (o.attack || 0.001) + o.decay);
+        env.connect(this.pan(o.pan || 0, this.voice.out));
+        const f = this.filter(o.type || 'bandpass', o.freq, o.q, env);
+        const src = ctx.createBufferSource();
+        src.buffer = this.buffer(o.noise || 'white');
+        src.connect(f);
+        const len = (o.attack || 0.001) + o.decay + 0.02;
+        src.start(at, Math.random() * (NOISE_SECONDS - 1), len);
+    };
+
+    /** A bird's note: a sine swept from one pitch to another. */
+    Ambience.prototype.chirp = function(at, o) {
+        const ctx = this.ctx;
+        const osc = ctx.createOscillator();
+        const env = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(o.from, at);
+        osc.frequency.exponentialRampToValueAtTime(o.to, at + o.dur);
+        if (o.vibrato) {
+            const lfo = ctx.createOscillator(), depth = ctx.createGain();
+            lfo.frequency.value = o.vibrato;
+            depth.gain.value = o.from * 0.03;
+            lfo.connect(depth);
+            depth.connect(osc.frequency);
+            lfo.start(at);
+            lfo.stop(at + o.dur + 0.05);
+        }
+        env.gain.setValueAtTime(0, at);
+        env.gain.linearRampToValueAtTime(o.gain, at + Math.min(0.02, o.dur / 4));
+        env.gain.setValueAtTime(o.gain, at + o.dur * 0.6);
+        env.gain.exponentialRampToValueAtTime(0.0001, at + o.dur);
+        osc.connect(env);
+        env.connect(this.pan(o.pan || 0, this.voice.out));
+        osc.start(at);
+        osc.stop(at + o.dur + 0.05);
+    };
+
+    const rand = (a, b) => a + Math.random() * (b - a);
+    const chance = p => Math.random() < p;
+
+    // The three sounds. bed() starts the steady part and returns its
+    // nodes; events(from, to) books what happens between two audio times;
+    // drift() runs every tick to move the bed (gusts, flicker). level
+    // brings each to the same loudness, about 0.2 RMS before the volume
+    // (measured in the browser), so switching sounds keeps the volume.
+    const VOICES = {
+        rain: {
+            level: 3.8,
+            bed(a, out) {
+                const body = a.gain(0.55, out);
+                const lp = a.filter('lowpass', 5200, 0.4, body);
+                const hp = a.filter('highpass', 380, 0.5, lp);
+                const hiss = a.gain(0.07, out);
+                const bp = a.filter('bandpass', 7000, 0.5, hiss);
+                return { body: body, nodes: [a.loop('pink', hp), a.loop('white', bp)] };
+            },
+            drift(a, v, now) {
+                if (chance(0.04)) v.bed.body.gain.setTargetAtTime(rand(0.4, 0.75), now, rand(1.5, 4));
+            },
+            events(a, from, to) {
+                // Drops close by, about 30 a second; a heavier drip now and then.
+                for (let t = from + rand(0, 0.06); t < to; t += rand(0.005, 0.065)) {
+                    a.burst(t, { freq: rand(1800, 6500), q: rand(3, 9), gain: rand(0.03, 0.16), decay: rand(0.015, 0.05), pan: rand(-0.9, 0.9) });
+                }
+                if (chance((to - from) * 0.35)) {
+                    const t = rand(from, to);
+                    a.burst(t, { freq: rand(500, 1100), q: rand(6, 12), gain: rand(0.2, 0.4), decay: rand(0.06, 0.14), pan: rand(-0.6, 0.6) });
+                }
+            }
+        },
+        fire: {
+            level: 2.7,
+            bed(a, out) {
+                const roar = a.gain(0.5, out);
+                const lp = a.filter('lowpass', 420, 0.7, roar);
+                const hiss = a.gain(0.025, out);
+                const bp = a.filter('bandpass', 3200, 0.6, hiss);
+                return { roar: roar, nodes: [a.loop('brown', lp), a.loop('white', bp)] };
+            },
+            drift(a, v, now) {
+                // The flames breathe: the roar wanders every tick.
+                v.bed.roar.gain.setTargetAtTime(rand(0.3, 0.75), now, rand(0.15, 0.6));
+            },
+            events(a, from, to) {
+                let t = from + rand(0, 0.2);
+                while (t < to) {
+                    // A crackle is a cluster of tiny snaps; between them, quiet.
+                    const snaps = chance(0.25) ? Math.floor(rand(4, 12)) : Math.floor(rand(1, 4));
+                    let s = t;
+                    for (let i = 0; i < snaps; i++) {
+                        a.burst(s, { type: 'highpass', freq: rand(1200, 4200), q: 0.7, gain: rand(0.08, 0.45), decay: rand(0.004, 0.022), pan: rand(-0.5, 0.5) });
+                        s += rand(0.008, 0.06);
+                    }
+                    if (chance(0.08)) {
+                        a.burst(s + rand(0.05, 0.2), { freq: rand(250, 700), q: 2, gain: rand(0.25, 0.5), decay: rand(0.03, 0.08), pan: rand(-0.4, 0.4) });
+                    }
+                    t = s + rand(0.05, 0.5);
+                }
+            }
+        },
+        forest: {
+            level: 1,
+            bed(a, out) {
+                const wind = a.gain(3, out);
+                const bp = a.filter('bandpass', 600, 0.8, wind);
+                const leaves = a.gain(0.1, out);
+                const hp = a.filter('highpass', 3800, 0.5, leaves);
+                return { wind: wind, windFilter: bp, leaves: leaves, nodes: [a.loop('pink', bp), a.loop('white', hp)] };
+            },
+            drift(a, v, now) {
+                if (chance(0.03)) {
+                    const level = rand(1.5, 5), tc = rand(2, 5);
+                    v.bed.wind.gain.setTargetAtTime(level, now, tc);
+                    v.bed.leaves.gain.setTargetAtTime(level * 0.03, now, tc);
+                    v.bed.windFilter.frequency.setTargetAtTime(rand(350, 1100), now, tc);
+                }
+            },
+            events(a, from, to) {
+                // A bird every few seconds, each one a call of its own.
+                if (!chance((to - from) / 4.5)) return;
+                const at = rand(from, to), pan = rand(-0.85, 0.85), gain = rand(0.2, 0.55);
+                const kind = Math.random();
+                if (kind < 0.45) {
+                    // Chirps: a few short notes, each swept.
+                    const f = rand(2600, 5200), n = Math.floor(rand(2, 7)), dur = rand(0.06, 0.13);
+                    for (let i = 0, t = at; i < n; i++, t += dur + rand(0.05, 0.14)) {
+                        a.chirp(t, { from: f * rand(0.95, 1.05), to: f * rand(0.7, 1.3), dur: dur, gain: gain, pan: pan });
+                    }
+                } else if (kind < 0.8) {
+                    // A whistle: two longer notes, falling, with a little vibrato.
+                    const f = rand(1800, 3200);
+                    a.chirp(at, { from: f, to: f * rand(1.05, 1.2), dur: rand(0.22, 0.38), gain: gain, pan: pan, vibrato: rand(5, 9) });
+                    a.chirp(at + rand(0.35, 0.55), { from: f * 1.1, to: f * rand(0.75, 0.9), dur: rand(0.25, 0.45), gain: gain * 0.9, pan: pan, vibrato: rand(5, 9) });
+                } else {
+                    // A trill: fast notes that rise and fall.
+                    const f = rand(3500, 5500), n = Math.floor(rand(10, 24));
+                    for (let i = 0, t = at; i < n; i++, t += 0.032) {
+                        a.chirp(t, { from: f + (i % 2 ? 250 : -250), to: f + (i % 2 ? -150 : 150), dur: 0.026, gain: gain * 0.8, pan: pan });
+                    }
+                }
+            }
+        }
+    };
+
+    /** Start a sound (or switch to it). Resolves true once it is audible. */
+    Ambience.prototype.play = function(key, level) {
+        const ctx = this.ensure();
+        if (!ctx || !VOICES[key]) return Promise.resolve(false);
+        this.level = level;
+        if (!this.voice || this.voice.key !== key) {
+            this.release();
+            const out = this.gain(VOICES[key].level, this.master);
+            this.voice = { key: key, out: out, until: ctx.currentTime };
+            this.voice.bed = VOICES[key].bed(this, out);
+        }
+        clearInterval(this.tick);
+        this.tick = setInterval(() => this.book(), TICK_MS);
+        // A browser that holds sound until a click leaves resume() pending,
+        // so it gets a moment and no more.
+        const wait = new Promise(r => setTimeout(r, 400));
+        return Promise.race([ctx.resume().catch(() => {}), wait]).then(() => {
+            const running = ctx.state === 'running';
+            if (running) this.ramp(this.level, 2.5);
+            return running;
+        });
+    };
+
+    Ambience.prototype.book = function() {
+        const v = this.voice, ctx = this.ctx;
+        if (!v || ctx.state !== 'running') return;
+        const now = ctx.currentTime;
+        VOICES[v.key].drift(this, v, now);
+        const from = Math.max(v.until, now + 0.05), to = now + AHEAD;
+        if (to > from) VOICES[v.key].events(this, from, to);
+        v.until = Math.max(v.until, to);
+    };
+
+    Ambience.prototype.ramp = function(level, seconds) {
+        if (!this.ctx) return;
+        const g = this.master.gain, now = this.ctx.currentTime;
+        g.cancelScheduledValues(now);
+        g.setValueAtTime(g.value, now);
+        // Perceived loudness: the slider's square, kept under full scale.
+        g.linearRampToValueAtTime(level * level * 0.8, now + seconds);
+    };
+
+    Ambience.prototype.volume = function(level) {
+        this.level = level;
+        if (this.voice) this.ramp(level, 0.15);
+    };
+
+    Ambience.prototype.release = function() {
+        const v = this.voice;
+        if (!v) return;
+        const at = this.ctx.currentTime + 0.7;
+        v.out.gain.setTargetAtTime(0, this.ctx.currentTime, 0.2);
+        setTimeout(() => {
+            v.bed.nodes.forEach(n => { try { n.stop(); } catch (e) {} });
+            v.out.disconnect();
+        }, Math.max(0, (at - this.ctx.currentTime) * 1000) + 100);
+        this.voice = null;
+    };
+
+    Ambience.prototype.stop = function() {
+        clearInterval(this.tick);
+        this.release();
+        if (this.ctx) {
+            this.ramp(0, 0.6);
+            const ctx = this.ctx;
+            setTimeout(() => { if (!this.voice) ctx.suspend().catch(() => {}); }, 800);
+        }
+    };
+
+    window.krAmbience = new Ambience();
+    window.krSlideshow = { open: open, readSettings: readSettings, settingsQuery: settingsQuery };
+
+    // slideshow.html: the whole page is the slideshow, set up from its address.
+    if (document.documentElement.hasAttribute('data-slideshow-page')) {
+        const boot = () => open({ standalone: true, settings: readSettings(window.location.search) });
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+        else boot();
+    }
+})();

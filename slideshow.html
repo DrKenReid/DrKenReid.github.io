@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en-GB" data-slideshow-page>
+<head>
+  <meta charset="UTF-8">
+  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+  <meta name="description" content="Ken Reid's photographs one at a time, full screen, with a fire, rain or a forest to listen to. Open it in a browser or use it as a wallpaper.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="robots" content="noindex">
+  <title>Slideshow - Ken Reid</title>
+  <script defer src="/js/analytics.js"></script>
+  <link rel="icon" href="/img/core-img/favicon.png">
+  <link rel="apple-touch-icon" href="/img/core-img/apple-touch-icon.png">
+  <meta name="theme-color" content="#050505">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="canonical" href="https://www.kenreid.co.uk/slideshow.html">
+  <link rel="stylesheet" href="/style.min.css?v=20260923a">
+  <style>
+    /* The page is the slideshow (js/slideshow.js, style.css §13
+       "Slideshow"); this only keeps it dark while the script starts. */
+    body {
+      margin: 0;
+      background: var(--kr-show-stage, #050505);
+      color: var(--kr-show-ink, #f4f4f4);
+    }
+    .kr-slideshow-nojs {
+      max-width: 36rem;
+      margin: 0 auto;
+      padding: 30vh 16px 0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <main id="main-content">
+    <h1 class="kr-sr-only">Slideshow of photographs</h1>
+    <noscript>
+      <p class="kr-slideshow-nojs">The slideshow needs JavaScript. The photographs are all in the <a href="/gallery.html">gallery</a>.</p>
+    </noscript>
+  </main>
+
+  <!-- Every setting is in the address: see the header of js/slideshow.js. -->
+  <script src="/js/shared-components.js?v=20260923a"></script>
+  <script src="/js/slideshow.js?v=20260923a"></script>
+</body>
+</html>
