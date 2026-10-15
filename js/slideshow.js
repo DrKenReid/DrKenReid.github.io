@@ -17,7 +17,8 @@
  *             "earlier" for the frames from before the first set
  *   order=    shuffle (the default) | newest | oldest
  *   every=    seconds per photograph (default 20)
- *   sound=    off (the default) | fire | rain | storm (rain and thunder) | forest
+ *   sound=    off (the default) | fire | rain | storm (rain and thunder) |
+ *             forest | river | cafe | city (a city at night)
  *   volume=   0 to 100 (default 50)
  *   fit=      whole (the default: the whole frame over a blurred copy of
  *             itself) | fill (cropped to fill the screen)
@@ -43,8 +44,9 @@
  * Sound
  *   Made in the browser with the Web Audio API (krAmbience, below): no
  *   recordings to download, and nothing that loops audibly. Every crackle,
- *   bird call and roll of thunder is drawn at random as it plays, and the
- *   rain's drops are drawn into loops of different lengths that only line
+ *   bird call, clink, car and roll of thunder is drawn at random as it
+ *   plays, and the rain's drops, the river's bubbles and the café's
+ *   conversation are drawn into loops of different lengths that only line
  *   up again after minutes. Browsers allow sound only after a click or a
  *   key press on the page, so when a link asks for sound= the slideshow
  *   says it is waiting for one; a wallpaper app may allow it from the
@@ -80,7 +82,10 @@
         { key: 'fire', label: 'Crackling fire' },
         { key: 'rain', label: 'Rain' },
         { key: 'storm', label: 'Rain and thunder' },
-        { key: 'forest', label: 'Forest' }
+        { key: 'forest', label: 'Forest' },
+        { key: 'river', label: 'River' },
+        { key: 'cafe', label: 'Café' },
+        { key: 'city', label: 'City at night' }
     ];
     const ORDERS = [
         { key: 'shuffle', label: 'Shuffled' },
@@ -884,7 +889,9 @@
     //
     // Each sound is a steady bed with events scattered over it at random: a
     // fire's crackles and pops over a roar, a forest's bird calls over wind
-    // in the leaves, rain's big drops and thunder over the patter. A
+    // in the leaves, rain's big drops and thunder over the patter, a river's
+    // gloops over its bubbling, a café's cups over its conversation, a
+    // city's cars, footsteps, horns and sirens over its distant traffic. A
     // scheduler wakes every TICK_MS and books the events for the next AHEAD
     // seconds on the audio clock, which keeps time even when a hidden tab's
     // timers slow to once a second. Noise comes from three 8-second stereo
@@ -913,7 +920,12 @@
     const TEXTURES = {
         near: { seconds: 19, rate: 120, skew: 3, plink: 0.35, lo: 1300, hi: 5000, rise: 0.9, tau: [0.003, 0.012], tick: [0.0004, 0.0015] },
         heavy: { seconds: 17, rate: 340, skew: 2.6, plink: 0.25, lo: 1100, hi: 4600, rise: 0.8, tau: [0.003, 0.01], tick: [0.0004, 0.0015] },
-        far: { seconds: 23, rate: 1100, skew: 2, plink: 0.08, lo: 1800, hi: 6500, rise: 0.5, tau: [0.001, 0.004], tick: [0.0002, 0.0008] }
+        far: { seconds: 23, rate: 1100, skew: 2, plink: 0.08, lo: 1800, hi: 6500, rise: 0.5, tau: [0.001, 0.004], tick: [0.0002, 0.0008] },
+        // A river is the same thing lower and wetter: nearly every "drop" a
+        // bubble, ringing longer and rising further. Little of it is above
+        // 3 kHz, so it is made at a lower sample rate (sr), which is quicker.
+        river: { seconds: 21, rate: 420, skew: 2, plink: 0.9, lo: 220, hi: 1300, rise: 1.6, tau: [0.004, 0.018], tick: [0.0006, 0.002], sr: 16000 },
+        brook: { seconds: 26, rate: 260, skew: 2.4, plink: 0.75, lo: 700, hi: 2600, rise: 1.2, tau: [0.002, 0.01], tick: [0.0004, 0.0015], sr: 16000 }
     };
     const TEXTURE_RMS = 0.1;
     const TEXTURE_PEAK = 0.4;
@@ -922,7 +934,7 @@
         that run past the end wrap round to the start, so the loop has no
         seam. */
     function patter(ctx, o) {
-        const sr = ctx.sampleRate, len = Math.floor(sr * o.seconds);
+        const sr = o.sr || ctx.sampleRate, len = Math.floor(sr * o.seconds);
         const buf = ctx.createBuffer(2, len, sr);
         const L = buf.getChannelData(0), R = buf.getChannelData(1);
         const count = Math.floor(o.seconds * o.rate);
@@ -936,10 +948,11 @@
                 const rise = Math.random() * o.rise;
                 const tau = (o.tau[0] + Math.random() * (o.tau[1] - o.tau[0])) * sr;
                 const dur = Math.floor(tau * 5);
-                let phase = 0;
-                for (let i = 0; i < dur; i++) {
+                const fade = Math.exp(-1 / tau);
+                let phase = 0, env = 1;
+                for (let i = 0; i < dur; i++, env *= fade) {
                     phase += 2 * Math.PI * f0 * (1 + rise * i / dur) / sr;
-                    const v = Math.sin(phase) * Math.exp(-i / tau);
+                    const v = Math.sin(phase) * env;
                     const k = (start + i) % len;
                     L[k] += v * gl;
                     R[k] += v * gr;
@@ -947,11 +960,12 @@
             } else {
                 const tau = (o.tick[0] + Math.random() * (o.tick[1] - o.tick[0])) * sr;
                 const dur = Math.floor(tau * 6);
-                let prev = 0;
-                for (let i = 0; i < dur; i++) {
+                const fade = Math.exp(-1 / tau);
+                let prev = 0, env = 0.7;
+                for (let i = 0; i < dur; i++, env *= fade) {
                     // Differenced noise: a click with its lows taken out.
                     const w = Math.random() * 2 - 1;
-                    const v = (w - prev) * 0.7 * Math.exp(-i / tau);
+                    const v = (w - prev) * env;
                     prev = w;
                     const k = (start + i) % len;
                     L[k] += v * gl;
@@ -959,16 +973,103 @@
                 }
             }
         }
+        settle(L, R);
+        return buf;
+    }
+
+    /** A texture scaled to TEXTURE_RMS, then its loudest moments rounded
+        off (a soft clip at TEXTURE_PEAK), so turning it up to the other
+        sounds' loudness does not leave a few drops to hit the limiter. */
+    function settle(L, R) {
+        const len = L.length;
         let sum = 0;
         for (let i = 0; i < len; i++) sum += L[i] * L[i] + R[i] * R[i];
-        // Scaled to TEXTURE_RMS, then the loudest drops rounded off (a
-        // soft clip at TEXTURE_PEAK), so turning rain up to the others'
-        // loudness does not leave a few drops to hit the limiter.
         const scale = TEXTURE_RMS / Math.max(1e-9, Math.sqrt(sum / (2 * len)));
         for (let i = 0; i < len; i++) {
             L[i] = TEXTURE_PEAK * Math.tanh(L[i] * scale / TEXTURE_PEAK);
             R[i] = TEXTURE_PEAK * Math.tanh(R[i] * scale / TEXTURE_PEAK);
         }
+    }
+
+    // The café's conversation: voices people talking in phrases of a few
+    // syllables, talk of the time, with pauses between. Too many at once to
+    // follow any of them, which is the point of a café.
+    const BABBLES = {
+        chatter: { seconds: 22, voices: 8, talk: 0.5 },
+        crowd: { seconds: 29, voices: 16, talk: 0.45 }
+    };
+    // Speech carries little above 4 kHz, so it is made at this rate and the
+    // browser resamples it.
+    const BABBLE_SR = 16000;
+    // Vowels as their first two formants, the resonances that tell one vowel
+    // from another, in Hz: Peterson and Barney's 1952 averages for men's
+    // voices. Higher voices are scaled up by FORMANT_LIFT.
+    const VOWELS = [[270, 2290], [390, 1990], [530, 1840], [660, 1720], [730, 1090],
+        [570, 840], [440, 1020], [300, 870], [640, 1190], [490, 1350]];
+    const FORMANT_LIFT = 1.15;
+
+    /** A band-pass filter's coefficients [b0, b2, a1, a2] (b1 is 0, a0 1). */
+    function bandpass(f, q, sr) {
+        const w = 2 * Math.PI * f / sr, al = Math.sin(w) / (2 * q), a0 = 1 + al;
+        return [al / a0, -al / a0, -2 * Math.cos(w) / a0, (1 - al) / a0];
+    }
+
+    /**
+     * Conversation too far off to make out. Each syllable is a buzz at the
+     * speaker's pitch (a sawtooth with a little breath in it) through two
+     * resonances that glide from one vowel to the next, swelling and fading
+     * over a tenth to a quarter of a second; a phrase's pitch falls towards
+     * its end, as speech does. Syllables wrap round the loop like patter's
+     * drops, so it has no seam.
+     */
+    function babble(ctx, o) {
+        const sr = BABBLE_SR, len = Math.floor(sr * o.seconds);
+        const buf = ctx.createBuffer(2, len, sr);
+        const L = buf.getChannelData(0), R = buf.getChannelData(1);
+        const vowel = () => VOWELS[Math.floor(Math.random() * VOWELS.length)];
+        for (let v = 0; v < o.voices; v++) {
+            const high = Math.random() < 0.5;
+            const pitch = high ? rand(175, 235) : rand(95, 140);
+            const lift = high ? FORMANT_LIFT : 1;
+            const loud = 0.25 + 0.75 * Math.pow(Math.random(), 1.5);   // most of them further off
+            const side = Math.random() * Math.PI / 2;
+            const gl = Math.cos(side) * loud, gr = Math.sin(side) * loud;
+            let t = Math.floor(Math.random() * len), talked = 0;
+            while (talked < len * o.talk) {
+                const syllables = 2 + Math.floor(Math.random() * 10);
+                const tune = rand(0.9, 1.15);
+                let from = vowel();
+                for (let n = 0; n < syllables; n++) {
+                    const dur = Math.floor(rand(0.11, 0.26) * sr);
+                    const to = vowel();
+                    const f0a = pitch * tune * (1 - 0.12 * n / syllables), f0b = f0a * rand(0.92, 1.06);
+                    let phase = 0, x1 = 0, x2 = 0, y1 = 0, y2 = 0, w1 = 0, w2 = 0, c1 = null, c2 = null;
+                    for (let i = 0; i < dur; i++) {
+                        const k = i / dur;
+                        if ((i & 31) === 0) {
+                            c1 = bandpass((from[0] + (to[0] - from[0]) * k) * lift, 6, sr);
+                            c2 = bandpass((from[1] + (to[1] - from[1]) * k) * lift, 9, sr);
+                        }
+                        phase += (f0a + (f0b - f0a) * k) / sr;
+                        if (phase >= 1) phase -= 1;
+                        const x = 2 * phase - 1 + (Math.random() * 2 - 1) * 0.3;
+                        const a = c1[0] * x + c1[1] * x2 - c1[2] * y1 - c1[3] * y2;
+                        const b = c2[0] * x + c2[1] * x2 - c2[2] * w1 - c2[3] * w2;
+                        x2 = x1; x1 = x; y2 = y1; y1 = a; w2 = w1; w1 = b;
+                        const env = Math.sin(Math.PI * k);
+                        const val = (a + 0.6 * b) * env * env;
+                        const at = (t + i) % len;
+                        L[at] += val * gl;
+                        R[at] += val * gr;
+                    }
+                    t += dur + Math.floor(rand(0, 0.05) * sr);
+                    talked += dur;
+                    from = to;
+                }
+                t += Math.floor(rand(0.4, 2.5) * sr);    // listening, or a sip of coffee
+            }
+        }
+        settle(L, R);
         return buf;
     }
 
@@ -1017,6 +1118,10 @@
             this.noise[kind] = patter(this.ctx, TEXTURES[kind]);
             return this.noise[kind];
         }
+        if (BABBLES[kind]) {
+            this.noise[kind] = babble(this.ctx, BABBLES[kind]);
+            return this.noise[kind];
+        }
         const ctx = this.ctx, len = Math.floor(ctx.sampleRate * NOISE_SECONDS);
         const buf = ctx.createBuffer(2, len, ctx.sampleRate);
         for (let ch = 0; ch < 2; ch++) {
@@ -1056,7 +1161,7 @@
         src.loop = true;
         // A noise buffer's last 50 ms are faded into its first (buffer());
         // a texture wraps by itself.
-        src.loopStart = TEXTURES[kind] ? 0 : 0.05;
+        src.loopStart = TEXTURES[kind] || BABBLES[kind] ? 0 : 0.05;
         src.loopEnd = buf.duration;
         src.connect(out);
         src.start(this.ctx.currentTime, Math.random() * (buf.duration - 1));
@@ -1087,6 +1192,172 @@
         return p;
     };
 
+    /** Send a sound's event out at a place between the speakers, and into
+        the sound's room if it has one (a café's echo, a street's). */
+    Ambience.prototype.place = function(node, pan) {
+        node.connect(this.pan(pan, this.voice.out));
+        if (this.voice.send) node.connect(this.voice.send);
+    };
+
+    /** A room's echo: noise dying away over `seconds`, different in each
+        ear, through a convolver. Made once per length. */
+    Ambience.prototype.room = function(seconds, out) {
+        const key = 'room-' + seconds;
+        if (!this.noise[key]) {
+            const sr = this.ctx.sampleRate, len = Math.floor(sr * seconds);
+            const ir = this.ctx.createBuffer(2, len, sr);
+            for (let ch = 0; ch < 2; ch++) {
+                const d = ir.getChannelData(ch);
+                for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-6 * i / len);
+            }
+            this.noise[key] = ir;
+        }
+        const conv = this.ctx.createConvolver();
+        conv.buffer = this.noise[key];
+        conv.connect(out);
+        return conv;
+    };
+
+    /** Something struck that rings: a cup, a spoon, a glass. Partials at
+        o.ratios of o.f, each quieter and shorter than the one below. */
+    Ambience.prototype.ring = function(at, o) {
+        const ctx = this.ctx, env = ctx.createGain();
+        this.place(env, o.pan || 0);
+        o.ratios.forEach((r, i) => {
+            const osc = ctx.createOscillator(), g = ctx.createGain();
+            const end = at + o.decay / (1 + i * 0.6);
+            osc.frequency.value = o.f * r;
+            g.gain.setValueAtTime(0, at);
+            g.gain.linearRampToValueAtTime(o.gain / (i + 1), at + 0.002);
+            g.gain.exponentialRampToValueAtTime(0.0001, end);
+            osc.connect(g);
+            g.connect(env);
+            osc.start(at);
+            osc.stop(end + 0.05);
+        });
+    };
+
+    /** A stretch of looped noise through a filter and an envelope, for the
+        longer events (steam, cars); returns the parts to shape. */
+    Ambience.prototype.noiseEvent = function(kind, at, dur, filterType) {
+        const ctx = this.ctx;
+        const f = ctx.createBiquadFilter();
+        f.type = filterType;
+        const env = ctx.createGain();
+        env.gain.setValueAtTime(0.0001, at);
+        f.connect(env);
+        const src = ctx.createBufferSource();
+        src.buffer = this.buffer(kind);
+        src.loop = true;
+        src.connect(f);
+        src.start(at, Math.random() * (NOISE_SECONDS - 1));
+        src.stop(at + dur + 0.1);
+        return { filter: f, env: env };
+    };
+
+    /** The espresso machine's steam wand: a hiss that rises in pitch as
+        the milk heats, gurgling as it goes. */
+    Ambience.prototype.steam = function(at) {
+        const dur = rand(4, 8);
+        const n = this.noiseEvent('white', at, dur, 'bandpass');
+        n.filter.Q.value = 0.8;
+        n.filter.frequency.setValueAtTime(rand(2500, 3500), at);
+        n.filter.frequency.linearRampToValueAtTime(rand(4000, 6000), at + dur);
+        n.env.gain.exponentialRampToValueAtTime(rand(0.05, 0.08), at + 0.3);
+        for (let t = at + 0.6; t < at + dur - 0.6; t += rand(0.15, 0.5)) {
+            n.env.gain.linearRampToValueAtTime(rand(0.03, 0.08), t);
+        }
+        n.env.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+        this.place(n.env, rand(-0.5, 0.5));
+    };
+
+    /** A car going by: road noise that swells and brightens as it nears,
+        crosses from one side to the other, and fades as it goes. */
+    Ambience.prototype.passBy = function(at) {
+        const ctx = this.ctx, far = Math.random(), dur = 3 + far * 5;
+        const mid = at + dur * rand(0.4, 0.6), dir = chance(0.5) ? -1 : 1, width = 0.85 * (1 - far * 0.5);
+        const n = this.noiseEvent('pink', at, dur, 'lowpass');
+        n.filter.Q.value = 0.6;
+        n.filter.frequency.setValueAtTime(250, at);
+        n.filter.frequency.exponentialRampToValueAtTime(2200 - far * 1500, mid);
+        n.filter.frequency.exponentialRampToValueAtTime(250, at + dur);
+        n.env.gain.exponentialRampToValueAtTime(2 * (1 - far * 0.7), mid);
+        n.env.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+        if (ctx.createStereoPanner) {
+            const p = ctx.createStereoPanner();
+            p.pan.setValueAtTime(-width * dir, at);
+            p.pan.linearRampToValueAtTime(width * dir, at + dur);
+            p.connect(this.voice.out);
+            n.env.connect(p);
+            if (this.voice.send) n.env.connect(this.voice.send);
+        } else {
+            this.place(n.env, 0);
+        }
+    };
+
+    /** Someone walking past: heels on the pavement, louder as they pass. */
+    Ambience.prototype.footsteps = function(at) {
+        const n = 8 + Math.floor(rand(0, 10)), step = rand(0.45, 0.6), dir = chance(0.5) ? -1 : 1, gain = rand(0.15, 0.35);
+        for (let i = 0; i < n; i++) {
+            const k = i / (n - 1);
+            this.burst(at + i * step + rand(-0.02, 0.02), { freq: rand(1800, 2600), q: 1.5,
+                gain: gain * (0.3 + 0.7 * Math.sin(Math.PI * k)), decay: rand(0.03, 0.06), pan: dir * (k * 1.6 - 0.8) });
+        }
+    };
+
+    /** A car horn a street or two away: two notes a third apart, once or twice. */
+    Ambience.prototype.horn = function(at) {
+        const ctx = this.ctx, f = rand(330, 420);
+        const lp = ctx.createBiquadFilter();
+        lp.type = 'lowpass';
+        lp.frequency.value = rand(900, 1500);
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0, at);
+        lp.connect(g);
+        this.place(g, rand(-0.7, 0.7));
+        let t = at;
+        for (let h = chance(0.4) ? 2 : 1; h > 0; h--) {
+            const len = rand(0.15, 0.45), level = rand(0.05, 0.1);
+            g.gain.setValueAtTime(0, t);
+            g.gain.linearRampToValueAtTime(level, t + 0.02);
+            g.gain.setValueAtTime(level, t + len - 0.03);
+            g.gain.linearRampToValueAtTime(0, t + len);
+            t += len + rand(0.1, 0.2);
+        }
+        [f, f * 1.26].forEach(fr => {
+            const o = ctx.createOscillator();
+            o.type = 'sawtooth';
+            o.frequency.value = fr;
+            o.connect(lp);
+            o.start(at);
+            o.stop(t + 0.05);
+        });
+    };
+
+    /** A siren a long way off: a wail rising and falling, coming and going. */
+    Ambience.prototype.siren = function(at) {
+        const ctx = this.ctx, dur = rand(9, 16), lo = rand(600, 700), hi = lo * rand(1.7, 1.9), cycle = rand(2.5, 4);
+        const osc = ctx.createOscillator();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(lo, at);
+        for (let t = at; t < at + dur; t += cycle) {
+            osc.frequency.linearRampToValueAtTime(hi, t + cycle * 0.5);
+            osc.frequency.linearRampToValueAtTime(lo, t + cycle);
+        }
+        const lp = ctx.createBiquadFilter();
+        lp.type = 'lowpass';
+        lp.frequency.value = 1400;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, at);
+        g.gain.exponentialRampToValueAtTime(rand(0.04, 0.07), at + dur * 0.4);
+        g.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+        osc.connect(lp);
+        lp.connect(g);
+        this.place(g, rand(-0.6, 0.6));
+        osc.start(at);
+        osc.stop(at + dur + 0.05);
+    };
+
     /** A short burst of filtered noise: one drop, one crackle. */
     Ambience.prototype.burst = function(at, o) {
         const ctx = this.ctx;
@@ -1094,7 +1365,7 @@
         env.gain.setValueAtTime(0, at);
         env.gain.linearRampToValueAtTime(o.gain, at + (o.attack || 0.001));
         env.gain.exponentialRampToValueAtTime(0.0001, at + (o.attack || 0.001) + o.decay);
-        env.connect(this.pan(o.pan || 0, this.voice.out));
+        this.place(env, o.pan || 0);
         const f = this.filter(o.type || 'bandpass', o.freq, o.q, env);
         const src = ctx.createBufferSource();
         src.buffer = this.buffer(o.noise || 'white');
@@ -1314,6 +1585,112 @@
                     for (let i = 0, t = at; i < n; i++, t += 0.032) {
                         a.chirp(t, { from: f + (i % 2 ? 250 : -250), to: f + (i % 2 ? -150 : 150), dur: 0.026, gain: gain * 0.8, pan: pan });
                     }
+                }
+            }
+        },
+        river: {
+            level: 1.8,
+            bed(a, out) {
+                // Bubbling low and high, over the rush of the water and a deep roll.
+                const low = a.gain(0.9, out);
+                const high = a.gain(0.45, out);
+                const rush = a.gain(0.35, out);
+                const rushLp = a.filter('lowpass', 900, 0.5, rush);
+                const deep = a.gain(0.5, out);
+                const deepLp = a.filter('lowpass', 180, 0.7, deep);
+                return { rush: rush, high: high,
+                    nodes: [a.loop('river', low), a.loop('brook', high), a.loop('pink', rushLp), a.loop('brown', deepLp)] };
+            },
+            drift(a, v, now) {
+                if (chance(0.03)) {
+                    const tc = rand(2, 6);
+                    v.bed.rush.gain.setTargetAtTime(rand(0.25, 0.45), now, tc);
+                    v.bed.high.gain.setTargetAtTime(rand(0.3, 0.55), now, tc);
+                }
+            },
+            events(a, from, to) {
+                // A deeper gloop every few seconds, where the water folds over a stone.
+                if (chance((to - from) / 3)) {
+                    const f = rand(180, 400);
+                    a.chirp(rand(from, to), { from: f, to: f * rand(1.6, 2.4), dur: rand(0.05, 0.1), gain: rand(0.15, 0.35), pan: rand(-0.7, 0.7) });
+                }
+            }
+        },
+        cafe: {
+            level: 2,
+            bed(a, out) {
+                // Everything goes through a small room's echo as well.
+                const send = a.gain(1, a.room(1.2, a.gain(0.3, out)));
+                a.voice.send = send;
+                const near = a.gain(0.8, out);
+                near.connect(send);
+                const far = a.gain(0.6, out);
+                far.connect(send);
+                const farLp = a.filter('lowpass', 1600, 0.6, far);
+                const tone = a.gain(0.4, out);
+                const toneLp = a.filter('lowpass', 250, 0.7, tone);
+                return { near: near, nodes: [a.loop('chatter', near), a.loop('crowd', farLp), a.loop('brown', toneLp)] };
+            },
+            drift(a, v, now) {
+                // The nearer tables get louder and quieter.
+                if (chance(0.03)) v.bed.near.gain.setTargetAtTime(rand(0.55, 1), now, rand(2, 5));
+            },
+            events(a, from, to) {
+                // A cup, a spoon or a glass every couple of seconds.
+                if (chance((to - from) / 2)) {
+                    const t = rand(from, to), pan = rand(-0.8, 0.8), kind = Math.random();
+                    if (kind < 0.45) {
+                        // A spoon stirring against a cup: a few quick tinks.
+                        const f = rand(2800, 4200);
+                        for (let i = 0, n = 2 + Math.floor(rand(0, 4)); i < n; i++) {
+                            a.ring(t + i * rand(0.12, 0.2), { f: f * rand(0.97, 1.03), ratios: [1, 2.4], decay: 0.12, gain: rand(0.03, 0.08), pan: pan });
+                        }
+                    } else if (kind < 0.85) {
+                        // A cup set down on its saucer.
+                        a.ring(t, { f: rand(1300, 2400), ratios: [1, 2.32, 4.25], decay: rand(0.25, 0.5), gain: rand(0.05, 0.1), pan: pan });
+                    } else {
+                        // A glass.
+                        a.ring(t, { f: rand(1800, 3000), ratios: [1, 2.9, 5.1], decay: rand(0.6, 1.1), gain: rand(0.03, 0.06), pan: pan });
+                    }
+                }
+                // The steam wand, a little while in and then every minute or two.
+                const v = a.voice;
+                if (v.nextSteam == null) v.nextSteam = from + rand(15, 40);
+                if (v.nextSteam < to) {
+                    a.steam(Math.max(from, v.nextSteam));
+                    v.nextSteam += rand(60, 150);
+                }
+            }
+        },
+        city: {
+            level: 1.5,
+            bed(a, out) {
+                // Traffic too far off to hear as cars, and the city's hum; a
+                // street's echo for what happens nearer.
+                a.voice.send = a.gain(1, a.room(2.2, a.gain(0.25, out)));
+                const rumble = a.gain(1.2, out);
+                const rumbleLp = a.filter('lowpass', 160, 0.7, rumble);
+                const hum = a.gain(0.12, out);
+                const humBp = a.filter('bandpass', 450, 0.9, hum);
+                return { rumble: rumble, hum: hum, nodes: [a.loop('brown', rumbleLp), a.loop('pink', humBp)] };
+            },
+            drift(a, v, now) {
+                if (chance(0.02)) {
+                    const tc = rand(3, 8);
+                    v.bed.rumble.gain.setTargetAtTime(rand(0.8, 1.5), now, tc);
+                    v.bed.hum.gain.setTargetAtTime(rand(0.08, 0.16), now, tc);
+                }
+            },
+            events(a, from, to) {
+                const v = a.voice, span = to - from;
+                if (chance(span / 7)) a.passBy(rand(from, to));           // a car every seven seconds or so
+                if (chance(span / 70)) a.footsteps(rand(from, to));
+                if (chance(span / 120)) a.horn(rand(from, to));
+                // A siren a minute or so in, then every few minutes.
+                if (v.nextSiren == null) v.nextSiren = from + rand(60, 150);
+                if (v.nextSiren < to) {
+                    a.siren(Math.max(from, v.nextSiren));
+                    v.nextSiren += rand(180, 420);
                 }
             }
         }
