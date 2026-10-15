@@ -3760,7 +3760,7 @@ var KR_PAGES = [
     { key: 'gallery', label: 'Photography', href: 'gallery.html', blurb: 'Every photograph, filterable by subject', inFooter: 'explore', inPalette: true,
         also: 'pictures images' },
     { key: 'map', label: 'Photo Map', href: 'map.html', blurb: 'Photographs by place', inFooter: 'explore', inPalette: true, parent: 'gallery' },
-    { key: 'slideshow', label: 'Slideshow', href: 'slideshow.html', blurb: 'The photographs full screen, with a fire, rain or a forest', inFooter: 'explore', inPalette: true, parent: 'gallery',
+    { key: 'slideshow', label: 'Slideshow', href: 'slideshow.html', blurb: 'The photographs full screen, with a fire, rain, a thunderstorm or a forest', inFooter: 'explore', inPalette: true, parent: 'gallery',
         also: 'wallpaper screensaver presentation' },
     { key: 'music', label: 'Music', href: 'music.html', blurb: 'Guitar & listening stats', inFooter: 'explore', inPalette: true,
         also: 'last.fm lastfm scrobbles' },

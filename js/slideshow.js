@@ -17,7 +17,7 @@
  *             "earlier" for the frames from before the first set
  *   order=    shuffle (the default) | newest | oldest
  *   every=    seconds per photograph (default 20)
- *   sound=    off (the default) | fire | rain | forest
+ *   sound=    off (the default) | fire | rain | storm (rain and thunder) | forest
  *   volume=   0 to 100 (default 50)
  *   fit=      whole (the default: the whole frame over a blurred copy of
  *             itself) | fill (cropped to fill the screen)
@@ -42,11 +42,13 @@
  *
  * Sound
  *   Made in the browser with the Web Audio API (krAmbience, below): no
- *   recordings to download, and nothing that loops audibly, because every
- *   drop, crackle and bird call is drawn at random as it plays. Browsers
- *   allow sound only after a click or a key press on the page, so when a
- *   link asks for sound= the slideshow says it is waiting for one; wallpaper
- *   apps usually allow it from the start.
+ *   recordings to download, and nothing that loops audibly. Every crackle,
+ *   bird call and roll of thunder is drawn at random as it plays, and the
+ *   rain's drops are drawn into loops of different lengths that only line
+ *   up again after minutes. Browsers allow sound only after a click or a
+ *   key press on the page, so when a link asks for sound= the slideshow
+ *   says it is waiting for one; a wallpaper app may allow it from the
+ *   start.
  *
  * Accessibility
  *   Over the gallery it is a modal dialog: the page behind is inert and
@@ -77,6 +79,7 @@
         { key: 'off', label: 'No sound' },
         { key: 'fire', label: 'Crackling fire' },
         { key: 'rain', label: 'Rain' },
+        { key: 'storm', label: 'Rain and thunder' },
         { key: 'forest', label: 'Forest' }
     ];
     const ORDERS = [
@@ -879,17 +882,95 @@
     // krAmbience: the sounds, made as they play
     // ------------------------------------------------------------------
     //
-    // Each sound is a steady bed (filtered noise) with events scattered over
-    // it at random: rain drops and drips, a fire's crackles and pops, a
-    // forest's bird calls over wind in the leaves. A scheduler wakes every
-    // TICK_MS and books the events for the next AHEAD seconds on the audio
-    // clock, which keeps time even when a hidden tab's timers slow to once
-    // a second. Noise comes from three 8-second stereo buffers made once;
-    // eight seconds of noise has no rhythm the ear can catch on.
+    // Each sound is a steady bed with events scattered over it at random: a
+    // fire's crackles and pops over a roar, a forest's bird calls over wind
+    // in the leaves, rain's big drops and thunder over the patter. A
+    // scheduler wakes every TICK_MS and books the events for the next AHEAD
+    // seconds on the audio clock, which keeps time even when a hidden tab's
+    // timers slow to once a second. Noise comes from three 8-second stereo
+    // buffers made once; eight seconds of noise has no rhythm the ear can
+    // catch on.
+    //
+    // Rain is not noise. Filtered noise sounds like a detuned radio; rain
+    // is thousands of separate drops, most of them faint, a few loud. So
+    // its bed is drops (patter, below), drawn sample by sample into
+    // textures and looped: one of drops a few metres away, one of far more
+    // and fainter drops further off. Each drop is either a click of a
+    // millisecond or so (a leaf, the ground) or a short ring that rises in
+    // pitch as it fades (a drop into water: the bubble it traps rings, and
+    // rises as it closes). The loops are 17, 19 and 23 seconds, lengths
+    // that share no factor, so a pair only lines up again after six or
+    // seven minutes.
 
     const TICK_MS = 250;
     const AHEAD = 1.6;
     const NOISE_SECONDS = 8;
+    // The rain textures. rate is drops a second; skew how many are faint
+    // (the loudness is a uniform draw raised to this power); plink the
+    // share that ring rather than click, at lo to hi Hz, rising by up to
+    // rise of their pitch, dying away over tau seconds; tick the decay of
+    // a click. Each is scaled to TEXTURE_RMS once made (patter).
+    const TEXTURES = {
+        near: { seconds: 19, rate: 120, skew: 3, plink: 0.35, lo: 1300, hi: 5000, rise: 0.9, tau: [0.003, 0.012], tick: [0.0004, 0.0015] },
+        heavy: { seconds: 17, rate: 340, skew: 2.6, plink: 0.25, lo: 1100, hi: 4600, rise: 0.8, tau: [0.003, 0.01], tick: [0.0004, 0.0015] },
+        far: { seconds: 23, rate: 1100, skew: 2, plink: 0.08, lo: 1800, hi: 6500, rise: 0.5, tau: [0.001, 0.004], tick: [0.0002, 0.0008] }
+    };
+    const TEXTURE_RMS = 0.1;
+    const TEXTURE_PEAK = 0.4;
+
+    /** A stereo texture of drops (see "Rain is not noise" above). Drops
+        that run past the end wrap round to the start, so the loop has no
+        seam. */
+    function patter(ctx, o) {
+        const sr = ctx.sampleRate, len = Math.floor(sr * o.seconds);
+        const buf = ctx.createBuffer(2, len, sr);
+        const L = buf.getChannelData(0), R = buf.getChannelData(1);
+        const count = Math.floor(o.seconds * o.rate);
+        for (let n = 0; n < count; n++) {
+            const start = Math.floor(Math.random() * len);
+            const loud = Math.pow(Math.random(), o.skew);
+            const side = Math.random() * Math.PI / 2;
+            const gl = Math.cos(side) * loud, gr = Math.sin(side) * loud;
+            if (Math.random() < o.plink) {
+                const f0 = o.lo * Math.pow(o.hi / o.lo, Math.random());
+                const rise = Math.random() * o.rise;
+                const tau = (o.tau[0] + Math.random() * (o.tau[1] - o.tau[0])) * sr;
+                const dur = Math.floor(tau * 5);
+                let phase = 0;
+                for (let i = 0; i < dur; i++) {
+                    phase += 2 * Math.PI * f0 * (1 + rise * i / dur) / sr;
+                    const v = Math.sin(phase) * Math.exp(-i / tau);
+                    const k = (start + i) % len;
+                    L[k] += v * gl;
+                    R[k] += v * gr;
+                }
+            } else {
+                const tau = (o.tick[0] + Math.random() * (o.tick[1] - o.tick[0])) * sr;
+                const dur = Math.floor(tau * 6);
+                let prev = 0;
+                for (let i = 0; i < dur; i++) {
+                    // Differenced noise: a click with its lows taken out.
+                    const w = Math.random() * 2 - 1;
+                    const v = (w - prev) * 0.7 * Math.exp(-i / tau);
+                    prev = w;
+                    const k = (start + i) % len;
+                    L[k] += v * gl;
+                    R[k] += v * gr;
+                }
+            }
+        }
+        let sum = 0;
+        for (let i = 0; i < len; i++) sum += L[i] * L[i] + R[i] * R[i];
+        // Scaled to TEXTURE_RMS, then the loudest drops rounded off (a
+        // soft clip at TEXTURE_PEAK), so turning rain up to the others'
+        // loudness does not leave a few drops to hit the limiter.
+        const scale = TEXTURE_RMS / Math.max(1e-9, Math.sqrt(sum / (2 * len)));
+        for (let i = 0; i < len; i++) {
+            L[i] = TEXTURE_PEAK * Math.tanh(L[i] * scale / TEXTURE_PEAK);
+            R[i] = TEXTURE_PEAK * Math.tanh(R[i] * scale / TEXTURE_PEAK);
+        }
+        return buf;
+    }
 
     function Ambience() {
         this.ctx = null;
@@ -928,9 +1009,14 @@
         return this.ctx;
     };
 
-    /** A looping 8-second stereo noise buffer: white, pink or brown. */
+    /** A looping stereo buffer: 8 seconds of white, pink or brown noise,
+        or a rain texture (TEXTURES). */
     Ambience.prototype.buffer = function(kind) {
         if (this.noise[kind]) return this.noise[kind];
+        if (TEXTURES[kind]) {
+            this.noise[kind] = patter(this.ctx, TEXTURES[kind]);
+            return this.noise[kind];
+        }
         const ctx = this.ctx, len = Math.floor(ctx.sampleRate * NOISE_SECONDS);
         const buf = ctx.createBuffer(2, len, ctx.sampleRate);
         for (let ch = 0; ch < 2; ch++) {
@@ -965,12 +1051,15 @@
 
     Ambience.prototype.loop = function(kind, out) {
         const src = this.ctx.createBufferSource();
-        src.buffer = this.buffer(kind);
+        const buf = this.buffer(kind);
+        src.buffer = buf;
         src.loop = true;
-        src.loopStart = 0.05;
-        src.loopEnd = NOISE_SECONDS;
+        // A noise buffer's last 50 ms are faded into its first (buffer());
+        // a texture wraps by itself.
+        src.loopStart = TEXTURES[kind] ? 0 : 0.05;
+        src.loopEnd = buf.duration;
         src.connect(out);
-        src.start(this.ctx.currentTime, Math.random() * (NOISE_SECONDS - 1));
+        src.start(this.ctx.currentTime, Math.random() * (buf.duration - 1));
         return src;
     };
 
@@ -1041,36 +1130,118 @@
         osc.stop(at + o.dur + 0.05);
     };
 
+    /**
+     * Thunder. A strike close by starts with a crack, a few bursts of high
+     * noise; then, near or far, a rumble of brown noise that swells and
+     * sags for several seconds as the sound arrives from different parts
+     * of the bolt, darker and longer the further away it is.
+     */
+    Ambience.prototype.thunder = function(at) {
+        const ctx = this.ctx, far = Math.random(), near = far < 0.3;
+        const dur = 5 + far * 7;
+        const side = rand(-0.6, 0.6);
+        if (near) {
+            for (let i = 0, t = at, n = 3 + Math.floor(rand(0, 3)); i < n; i++, t += rand(0.03, 0.12)) {
+                this.burst(t, { type: 'highpass', freq: rand(800, 2000), q: 0.5, gain: rand(0.3, 0.6), decay: rand(0.12, 0.35), pan: side });
+            }
+        }
+        const lp = this.ctx.createBiquadFilter();
+        lp.type = 'lowpass';
+        lp.Q.value = 0.7;
+        lp.frequency.setValueAtTime(near ? 700 : 380 - far * 180, at);
+        lp.frequency.exponentialRampToValueAtTime(70, at + dur);
+        const env = ctx.createGain();
+        const peak = (near ? 3.2 : 2.4) * (1 - far * 0.45);
+        const start = at + (near ? rand(0.1, 0.3) : 0);
+        env.gain.setValueAtTime(0.0001, at);
+        env.gain.exponentialRampToValueAtTime(peak, start + rand(0.25, 0.8));
+        for (let t = start + 1; t < at + dur * 0.75; t += rand(0.3, 1.1)) {
+            env.gain.exponentialRampToValueAtTime(peak * rand(0.25, 0.95), t);
+        }
+        env.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+        lp.connect(env);
+        env.connect(this.pan(side, this.voice.out));
+        const src = ctx.createBufferSource();
+        src.buffer = this.buffer('brown');
+        src.loop = true;
+        src.connect(lp);
+        src.start(at, Math.random() * (NOISE_SECONDS - 1));
+        src.stop(at + dur + 0.1);
+    };
+
     const rand = (a, b) => a + Math.random() * (b - a);
     const chance = p => Math.random() < p;
 
-    // The three sounds. bed() starts the steady part and returns its
+    /** A drop close by, or one off a roof: a short ring that rises. */
+    function bigDrop(a, at, gain) {
+        const f = rand(900, 2200);
+        a.chirp(at, { from: f, to: f * rand(1.3, 2), dur: rand(0.025, 0.06), gain: gain, pan: rand(-0.8, 0.8) });
+    }
+
+    // The sounds. bed() starts the steady part and returns its
     // nodes; events(from, to) books what happens between two audio times;
     // drift() runs every tick to move the bed (gusts, flicker). level
     // brings each to the same loudness, about 0.2 RMS before the volume
     // (measured in the browser), so switching sounds keeps the volume.
     const VOICES = {
         rain: {
-            level: 3.8,
+            level: 2.5,
             bed(a, out) {
-                const body = a.gain(0.55, out);
-                const lp = a.filter('lowpass', 5200, 0.4, body);
-                const hp = a.filter('highpass', 380, 0.5, lp);
-                const hiss = a.gain(0.07, out);
-                const bp = a.filter('bandpass', 7000, 0.5, hiss);
-                return { body: body, nodes: [a.loop('pink', hp), a.loop('white', bp)] };
+                const near = a.gain(0.9, out);
+                const far = a.gain(0.7, out);
+                const farLp = a.filter('lowpass', 3400, 0.5, far);
+                // A little wash under the drops, for the rain too far off to
+                // hear as drops at all.
+                const wash = a.gain(0.05, out);
+                const washLp = a.filter('lowpass', 2400, 0.5, wash);
+                const washHp = a.filter('highpass', 400, 0.5, washLp);
+                return { far: far, wash: wash, nodes: [a.loop('near', near), a.loop('far', farLp), a.loop('pink', washHp)] };
             },
             drift(a, v, now) {
-                if (chance(0.04)) v.bed.body.gain.setTargetAtTime(rand(0.4, 0.75), now, rand(1.5, 4));
+                // The shower comes and goes a little.
+                if (chance(0.03)) {
+                    const k = rand(0.65, 1.15), tc = rand(2, 5);
+                    v.bed.far.gain.setTargetAtTime(0.7 * k, now, tc);
+                    v.bed.wash.gain.setTargetAtTime(0.05 * k, now, tc);
+                }
             },
             events(a, from, to) {
-                // Drops close by, about 30 a second; a heavier drip now and then.
-                for (let t = from + rand(0, 0.06); t < to; t += rand(0.005, 0.065)) {
-                    a.burst(t, { freq: rand(1800, 6500), q: rand(3, 9), gain: rand(0.03, 0.16), decay: rand(0.015, 0.05), pan: rand(-0.9, 0.9) });
+                // A big drop close by now and then, about one a second.
+                for (let t = from + rand(0, 1.2); t < to; t += rand(0.4, 2)) bigDrop(a, t, rand(0.05, 0.18));
+            }
+        },
+        storm: {
+            level: 1.8,
+            bed(a, out) {
+                const near = a.gain(0.9, out);
+                const far = a.gain(0.9, out);
+                const farLp = a.filter('lowpass', 3000, 0.5, far);
+                const wash = a.gain(0.14, out);
+                const washLp = a.filter('lowpass', 1800, 0.5, wash);
+                const washHp = a.filter('highpass', 250, 0.5, washLp);
+                const wind = a.gain(0.2, out);
+                const windLp = a.filter('lowpass', 260, 0.7, wind);
+                return { far: far, wash: wash, wind: wind,
+                    nodes: [a.loop('heavy', near), a.loop('far', farLp), a.loop('pink', washHp), a.loop('brown', windLp)] };
+            },
+            drift(a, v, now) {
+                // Gusts: the wind and the wash of rain rise and fall together.
+                if (chance(0.04)) {
+                    const k = rand(0.6, 1.3), tc = rand(1.5, 4);
+                    v.bed.wash.gain.setTargetAtTime(0.14 * k, now, tc);
+                    v.bed.wind.gain.setTargetAtTime(0.2 * k, now, tc);
+                    v.bed.far.gain.setTargetAtTime(0.9 * Math.sqrt(k), now, tc);
                 }
-                if (chance((to - from) * 0.35)) {
-                    const t = rand(from, to);
-                    a.burst(t, { freq: rand(500, 1100), q: rand(6, 12), gain: rand(0.2, 0.4), decay: rand(0.06, 0.14), pan: rand(-0.6, 0.6) });
+            },
+            events(a, from, to) {
+                for (let t = from + rand(0, 0.8); t < to; t += rand(0.25, 1.2)) bigDrop(a, t, rand(0.05, 0.2));
+                // The first thunder a few seconds in, so it is heard; then
+                // every half minute or so.
+                const v = a.voice;
+                if (v.nextThunder == null) v.nextThunder = from + rand(4, 9);
+                if (v.nextThunder < to) {
+                    a.thunder(Math.max(from, v.nextThunder));
+                    v.nextThunder += rand(18, 45);
                 }
             }
         },
