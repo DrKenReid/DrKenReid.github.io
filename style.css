@@ -10259,6 +10259,18 @@ html.kr-show-open body {
 .kr-show__copy:hover {
   background: var(--kr-action-fill-hover); }
 
+/* Whose recording the sound playing is (updateCredit). */
+.kr-show .kr-show__credit {
+  margin: 14px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--kr-show-muted); }
+
+.kr-show .kr-show__credit a,
+.kr-show .kr-show__credit a:hover {
+  color: var(--kr-show-accent);
+  text-decoration: underline; }
+
 /* A phone keeps the buttons and the sound menu; the count, the volume
    (the phone's own buttons do that) and the speaker glyph go. */
 @media (max-width: 575.98px) {

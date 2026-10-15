@@ -326,7 +326,7 @@ checks that. (The essay:
 | Share images | `generate_og_images.py` (bump `RENDERER`) | `generate_og_images.py` |
 | Blog filters, search, sort | `js/blog.js`; the shared panel parts in `js/shared-components.js` | smoke suite |
 | Gallery layout or lightbox | `js/gallery.js`, `js/lightbox.js`, CSS in §13 | smoke suite |
-| The slideshow and its sounds | `js/slideshow.js` (the header lists its address settings), `slideshow.html`, CSS in §13 ("Slideshow") | a browser: the smoke sweep only loads the page |
+| The slideshow and its sounds | `js/slideshow.js` (the header lists its address settings; `SOUNDS` lists each sound's file, loop length and credit), `slideshow.html`, CSS in §13 ("Slideshow"), the loops in `sounds/` (recordings under free licences, credited on the colophon under `#colo-sounds`) | a browser: the smoke sweep only loads the page |
 | The photo map | `map.html` (its script and styles are inline), `data/photo-locations.json` | smoke suite |
 | Reading pages | `js/bookshelf.js`, `js/literature.js`, `js/bookwall.js`, CSS in §14 | `js-tests`, smoke suite |
 | The music crate | `js/albums.js`, CSS in §15 | smoke suite |
