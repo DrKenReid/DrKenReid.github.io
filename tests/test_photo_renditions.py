@@ -65,15 +65,15 @@ class Check(unittest.TestCase):
         fake_webp(self.thumbs / "2.webp", 400, 110)
         fake_webp(self.thumbs / "2@2x.webp", 800, 220)
         fake_webp(self.heroes / "1.webp", 1200, 798)
+        fake_webp(self.heroes / "2.webp", 1920, 528)
         self.originals.write_text(json.dumps({"1": [1200, 798], "2": [5000, 1375]}))
-        tracked = list(self.thumbs.iterdir()) + list(self.heroes.iterdir())
+        self.tracked = list(self.thumbs.iterdir()) + list(self.heroes.iterdir())
         self.patches = [
             mock.patch.object(gpr, "THUMBS", self.thumbs),
             mock.patch.object(gpr, "HEROES", self.heroes),
             mock.patch.object(gpr, "ORIGINALS", self.originals),
             mock.patch.object(sitelib, "THUMBS", self.thumbs),
-            mock.patch.object(gpr, "referenced_frames", lambda: ["1"]),
-            mock.patch.object(gpr.sitelib, "tracked", lambda *a: tracked),
+            mock.patch.object(gpr.sitelib, "tracked", lambda *a: self.tracked),
         ]
         for p in self.patches:
             p.start()
@@ -86,6 +86,11 @@ class Check(unittest.TestCase):
     def test_a_complete_tree_passes(self):
         # Frame 1's original is only 1200px, so a 1200px hero is as sharp as it gets.
         self.assertEqual(gpr.check(), [])
+
+    def test_a_frame_with_no_hero_fails(self):
+        # Every frame has one: the slideshow can show any of them.
+        self.tracked.remove(self.heroes / "2.webp")
+        self.assertTrue(any("hero/2.webp is missing" in p for p in gpr.check()))
 
     def test_a_double_of_the_wrong_size_fails(self):
         fake_webp(self.thumbs / "2@2x.webp", 800, 400)

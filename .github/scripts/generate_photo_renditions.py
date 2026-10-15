@@ -11,7 +11,7 @@ A frame N has three sizes on the site:
   img/photography/hero/N.webp       HERO_EDGE on the long edge, for a
                                     photograph shown large: a page or post
                                     banner, a photo inside a post, a share
-                                    image
+                                    image, the slideshow (js/slideshow.js)
 
 The full-size frames are PNGs on the photos-v1 release (KR_RELEASE in
 js/shared-components.js), 2.2 GB for 540 frames, which is why none of
@@ -20,11 +20,12 @@ renditions every tile was drawn from the 400px thumb whatever the
 screen's density, and 50 of the posts used that thumb as their banner
 and share image, stretched to 1200 or 1440px: soft in all three places.
 
-Which frames get what:
-  @2x   every frame that has a thumb (the gallery can show any of them)
-  hero  every frame a tracked page or data/posts.json refers to (as a
-        thumb, a hero or a release PNG), so a photo that appears only in
-        the gallery costs the repository nothing more than its @2x
+Which frames get what: every frame that has a thumb gets both. The
+gallery can show any frame as a tile (@2x), and the slideshow any frame
+full screen (hero): the slideshow runs for hours as a desktop wallpaper,
+and the release answers every request for an original with "no-cache",
+so streaming the originals would fetch gigabytes a day. A hero is about
+100 KB.
 
 Sizes are derived, never typed: the @2x is the thumb's own width and
 height doubled, so the two are the same shape to the pixel and srcset
@@ -49,7 +50,6 @@ add-photographs has made their thumbs.
 from __future__ import annotations
 
 import io
-import re
 import sys
 import urllib.error
 import urllib.request
@@ -82,22 +82,11 @@ WORKERS = 6
 # until then the pages show the frame at thumb size, as they always have.
 AWAITING_OWNER = {"90", "127", "149"}
 
-REF_RE = re.compile(r"img/photography/(?:thumb|hero)/(\d+)(?:@2x)?\.webp|photos-v1/(\d+)\.png")
-
 
 # --- which frames -------------------------------------------------------
 
 def frames_with_thumbs() -> list[str]:
     return [p.stem for p in sitelib.thumb_files()]
-
-
-def referenced_frames() -> list[str]:
-    """Every frame a tracked page or posts.json points at."""
-    found: set[str] = set()
-    for path in sitelib.tracked("*.html", "blog/*.html", "data/posts.json"):
-        for a, b in REF_RE.findall(path.read_text(encoding="utf-8", errors="ignore")):
-            found.add(a or b)
-    return sorted(found, key=int)
 
 
 def untracked(paths: list[Path]) -> set[Path]:
@@ -252,13 +241,12 @@ def record_originals() -> dict[str, list[int]]:
 
 def plan(remake_heroes: bool, originals: dict[str, list[int]]):
     thumbs = frames_with_thumbs()
-    refs = [n for n in referenced_frames() if (THUMBS / f"{n}.webp").exists()]
-    skip = untracked([HEROES / f"{n}.webp" for n in refs] + [twice(THUMBS / f"{n}.webp") for n in thumbs])
+    skip = untracked([HEROES / f"{n}.webp" for n in thumbs] + [twice(THUMBS / f"{n}.webp") for n in thumbs])
     jobs = {}
     for n in thumbs:
         if not twice(THUMBS / f"{n}.webp").exists():
             jobs.setdefault(n, [False, False])[0] = True
-    for n in refs:
+    for n in thumbs:
         hero = HEROES / f"{n}.webp"
         if hero in skip:
             continue
@@ -286,12 +274,12 @@ def check() -> list[str]:
         tw, th = webp_size(thumb)
         if webp_size(dbl) != (tw * 2, th * 2):
             problems.append(f"thumb/{n}@2x.webp is {webp_size(dbl)}, not twice the thumb ({tw * 2}, {th * 2})")
-    for n in referenced_frames():
-        if not (THUMBS / f"{n}.webp").exists() or n in AWAITING_OWNER:
+    for n in frames_with_thumbs():
+        if n in AWAITING_OWNER:
             continue
         hero = HEROES / f"{n}.webp"
         if hero not in tracked:
-            problems.append(f"hero/{n}.webp is missing or untracked (a tracked page shows frame {n})")
+            problems.append(f"hero/{n}.webp is missing or untracked")
             continue
         tw, th = webp_size(THUMBS / f"{n}.webp")
         hw, hh = webp_size(hero)
@@ -308,7 +296,7 @@ def check() -> list[str]:
 def main(argv=None) -> int:
     ap = sitelib.arg_parser(__doc__)
     ap.add_argument("--check", action="store_true", help="report missing or wrong-sized renditions; write nothing")
-    ap.add_argument("--heroes", action="store_true", help=f"remake every referenced hero at {HERO_EDGE}px")
+    ap.add_argument("--heroes", action="store_true", help=f"remake every hero at {HERO_EDGE}px")
     args = ap.parse_args(argv)
 
     if args.check:
@@ -318,8 +306,8 @@ def main(argv=None) -> int:
         if problems:
             print(f"{len(problems)} rendition problem(s). run: python .github/scripts/generate_photo_renditions.py")
             return 1
-        print(f"photo renditions are current ({len(frames_with_thumbs())} @2x thumbs, "
-              f"{len(referenced_frames())} referenced frames).")
+        print(f"photo renditions are current ({len(frames_with_thumbs())} frames, "
+              "each with its @2x thumb and hero).")
         return 0
 
     originals = record_originals()
