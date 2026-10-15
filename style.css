@@ -9917,9 +9917,13 @@ html.kr-show-open,
 html.kr-show-open body {
   overflow: hidden; }
 
+/* The stage is dark in both themes, and so are its controls: without
+   color-scheme the light theme drew the selects' open lists, the slider and
+   the tickboxes light, with the stage's near-white option text on them. */
 .kr-show {
   --site-focus-ring: var(--kr-show-accent);
   --site-focus-shadow: color-mix(in srgb, var(--kr-show-accent) 30%, transparent);
+  color-scheme: dark;
   position: fixed;
   inset: 0;
   z-index: 100000;
@@ -10129,6 +10133,10 @@ html.kr-show-open body {
   background: var(--kr-show-stage);
   font: inherit;
   font-size: 14px;
+  color: var(--kr-show-ink); }
+
+.kr-show option {
+  background: var(--kr-show-stage);
   color: var(--kr-show-ink); }
 
 .kr-show__volume {
