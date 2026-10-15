@@ -167,9 +167,6 @@
   "143": [
     "abandoned"
   ],
-  "144": [
-    "portrait"
-  ],
   "145": [
     "abandoned"
   ],
@@ -320,9 +317,6 @@
     "portrait"
   ],
   "186": [],
-  "187": [
-    "architecture"
-  ],
   "188": [
     "silhouette"
   ],
@@ -364,10 +358,6 @@
   ],
   "199": [
     "silhouette"
-  ],
-  "2": [
-    "bw",
-    "portrait"
   ],
   "20": [
     "architecture",
@@ -464,9 +454,6 @@
   "225": [
     "bw"
   ],
-  "226": [
-    "portrait"
-  ],
   "227": [
     "bw",
     "portrait"
@@ -479,9 +466,6 @@
   ],
   "23": [
     "portrait"
-  ],
-  "230": [
-    "urban"
   ],
   "231": [
     "bw",
@@ -661,11 +645,6 @@
   "278": [
     "bw"
   ],
-  "279": [
-    "abandoned",
-    "architecture",
-    "bw"
-  ],
   "28": [
     "wildlife"
   ],
@@ -674,9 +653,6 @@
     "wildlife"
   ],
   "281": [
-    "wildlife"
-  ],
-  "282": [
     "wildlife"
   ],
   "283": [
@@ -690,10 +666,6 @@
   ],
   "285": [
     "abandoned"
-  ],
-  "286": [
-    "abandoned",
-    "nature"
   ],
   "287": [
     "portrait"
@@ -809,9 +781,6 @@
   "316": [
     "portrait"
   ],
-  "317": [
-    "silhouette"
-  ],
   "318": [
     "portrait"
   ],
@@ -915,9 +884,6 @@
   "349": [
     "wildlife"
   ],
-  "35": [
-    "bw"
-  ],
   "350": [
     "wildlife"
   ],
@@ -946,9 +912,6 @@
     "wildlife"
   ],
   "359": [],
-  "36": [
-    "silhouette"
-  ],
   "360": [
     "wildlife"
   ],
@@ -992,9 +955,6 @@
   ],
   "372": [
     "silhouette"
-  ],
-  "373": [
-    "wildlife"
   ],
   "374": [
     "abandoned"
@@ -1196,9 +1156,6 @@
   "437": [
     "nature"
   ],
-  "438": [
-    "nature"
-  ],
   "439": [
     "wildlife"
   ],
@@ -1235,9 +1192,6 @@
   "449": [],
   "45": [
     "wildlife"
-  ],
-  "450": [
-    "nature"
   ],
   "451": [
     "silhouette"
@@ -1278,10 +1232,6 @@
   "461": [],
   "462": [
     "landscape"
-  ],
-  "463": [
-    "abandoned",
-    "architecture"
   ],
   "464": [
     "bw"

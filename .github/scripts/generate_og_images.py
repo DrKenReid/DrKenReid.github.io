@@ -80,7 +80,7 @@ PAGES: dict[str, tuple[str, tuple[str, ...], str]] = {
     "literature": ("Literature", ("Reading now", "The shelf", "Reviews"),
                    "img/photography/hero/207.webp"),
     "books": ("Every Book", ("Every book rated on Goodreads",),
-              "img/photography/hero/230.webp"),
+              "img/photography/hero/455.webp"),
     "music": ("Music", ("Last.fm", "Playlists", "Fingerstyle guitar"),
               "img/photography/hero/13.webp"),
     "map": ("Photo Map", ("Where the photographs were taken",),
