@@ -9908,9 +9908,11 @@ button.mfp-arrow {
    .is-drifting runs its slow zoom (none under reduced motion or with
    drift=0, .kr-show--drift off). .kr-show--fill crops the photograph to
    the screen; otherwise the whole frame sits over a blurred copy of
-   itself. .is-idle hides the pointer; the bar, the settings panel and the
-   sound hint are .kr-offstage (§10) shown with .is-visible, and
-   .kr-show--bare (controls=off, a wallpaper) never shows the bar. */
+   itself. .is-idle hides the pointer; the bar, the settings panel, the
+   sound hint and the tip (a swipe, or F11) are .kr-offstage (§10) shown
+   with .is-visible, and .kr-show--bare (controls=off, a wallpaper) never
+   shows the bar. The stage keeps sideways swipes for itself (they step)
+   and leaves pinch zoom to the browser. */
 html.kr-show-open,
 html.kr-show-open body {
   overflow: hidden; }
@@ -9932,6 +9934,9 @@ html.kr-show-open body {
 .kr-show__slide {
   position: absolute;
   inset: 0; }
+
+.kr-show__stage {
+  touch-action: pan-y pinch-zoom; }
 
 .kr-show__slide {
   overflow: hidden;
@@ -10010,6 +10015,8 @@ html.kr-show-open body {
   position: absolute;
   top: 20px;
   left: 50%;
+  width: max-content;
+  max-width: calc(100% - 32px);
   margin: 0;
   padding: 8px 16px;
   border-radius: 999px;
@@ -10021,6 +10028,27 @@ html.kr-show-open body {
   transform: translateX(-50%); }
 
 .kr-show__hint.is-visible {
+  opacity: 1; }
+
+/* Above the bar, so it reads with the controls or without them. */
+.kr-show__tip {
+  position: absolute;
+  bottom: calc(clamp(12px, 3vh, 28px) + 72px);
+  left: 50%;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  margin: 0;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--kr-show-panel);
+  font-size: 14px;
+  text-align: center;
+  color: var(--kr-show-ink);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%); }
+
+.kr-show__tip.is-visible {
   opacity: 1; }
 
 .kr-show__bar {

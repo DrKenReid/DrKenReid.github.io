@@ -58,7 +58,17 @@
  *   then; a change the viewer asks for (next, previous) is announced in a
  *   hidden polite region. Space pauses, the arrow keys step, F toggles full
  *   screen, M the sound, Escape closes the settings and then the slideshow.
- *   Under reduced motion there is no slow zoom and the change is a cut.
+ *   On a touch screen a sideways swipe steps (SWIPE_MIN). Under reduced
+ *   motion there is no slow zoom and the change is a cut.
+ *
+ * Tips
+ *   One line near the foot, for a few seconds after the start, where it
+ *   helps (offerTips): on a touch screen "Swipe for the next photograph",
+ *   until the viewer has swiped once (remembered in localStorage); on a
+ *   desktop browser that is not already full screen, the browser's own
+ *   full-screen key (F11, or Control+Command+F on a Mac), which, unlike
+ *   the Full screen button, lasts through a reload. None under
+ *   controls=off, in an iframe, or once the window fills the screen.
  */
 (function() {
     'use strict';
@@ -85,6 +95,11 @@
     const FADE_MS = 1400;
     // The controls and the pointer hide after this long without movement.
     const IDLE_MS = 2600;
+    // A swipe is a sideways move of at least this many pixels, clearly more
+    // sideways than up or down, within SWIPE_MS.
+    const SWIPE_MIN = 50;
+    const SWIPE_MS = 800;
+    const SWIPED_KEY = 'kr-show-swiped';
     // A photograph that has not arrived by now is skipped.
     const LOAD_WAIT_MS = 20000;
 
@@ -96,7 +111,12 @@
     const heroOf = stem => '/img/photography/hero/' + stem + '.webp';
     const thumbOf = stem => '/img/photography/thumb/' + stem + '@2x.webp';
     const subjects = () => (typeof KR_PHOTO_CATEGORIES !== 'undefined' ? KR_PHOTO_CATEGORIES : []);
-    const subjectLabel = key => (subjects().find(c => c.key === key) || { label: key }).label;
+    const coarsePointer = () => !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+    const isMac = () => /mac/i.test((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '');
+    // Full screen by the API, or by the browser's own key (F11), which the
+    // API cannot see: the window is then the size of the screen.
+    const fillsScreen = () => !!document.fullscreenElement ||
+        (Math.abs(window.innerWidth - screen.width) < 4 && Math.abs(window.innerHeight - screen.height) < 4);
 
     // ------------------------------------------------------------------
     // Settings <-> address
@@ -362,7 +382,8 @@
                 '<p class="kr-show__message" hidden></p>' +
             '</div>' +
             '<p class="kr-show__caption" aria-hidden="true"></p>' +
-            '<p class="kr-show__hint kr-offstage" aria-hidden="true">Click anywhere for sound</p>' +
+            '<p class="kr-show__hint kr-offstage" aria-hidden="true">' + (coarsePointer() ? 'Tap' : 'Click') + ' anywhere for sound</p>' +
+            '<p class="kr-show__tip kr-offstage" aria-hidden="true"></p>' +
             '<p class="kr-sr-only" aria-live="polite" data-announce></p>' +
             '<div class="kr-show__bar kr-offstage is-visible" role="group" aria-label="Slideshow controls">' +
                 '<button type="button" class="kr-show__btn" data-act="prev" aria-label="Previous photograph">' + icon('ti-control-skip-backward') + '</button>' +
@@ -384,6 +405,7 @@
         this.caption = root.querySelector('.kr-show__caption');
         this.message = root.querySelector('.kr-show__message');
         this.hint = root.querySelector('.kr-show__hint');
+        this.tipEl = root.querySelector('.kr-show__tip');
         this.live = root.querySelector('[data-announce]');
         this.count = root.querySelector('[data-count]');
         this.applyLook();
@@ -471,6 +493,32 @@
         this.setSound(this.s.sound, true);
         this.go(0, false);
         this.poke();
+        this.offerTips();
+    };
+
+    // --- tips (see "Tips" at the top) ------------------------------------
+
+    Show.prototype.offerTips = function() {
+        if (this.s.controls === 'off' || window.top !== window) return;
+        if (coarsePointer()) {
+            let swiped = false;
+            try { swiped = window.localStorage.getItem(SWIPED_KEY) === '1'; } catch (e) {}
+            if (!swiped) this.tip('Swipe for the next photograph', 5000);
+        } else if (!fillsScreen()) {
+            this.tip(isMac() ? 'Press Control + Command + F for full screen' : 'Press F11 for full screen', 7000);
+        }
+    };
+
+    Show.prototype.tip = function(text, ms) {
+        this.tipEl.textContent = text;
+        this.tipEl.classList.add('is-visible');
+        clearTimeout(this.tipTimer);
+        this.tipTimer = setTimeout(() => this.hideTip(), ms);
+    };
+
+    Show.prototype.hideTip = function() {
+        clearTimeout(this.tipTimer);
+        if (this.tipEl) this.tipEl.classList.remove('is-visible');
     };
 
     Show.prototype.say = function(text) {
@@ -707,6 +755,7 @@
             const btn = e.target.closest('[data-act]');
             if (this.waitingForSound) this.resumeSound();
             if (!btn) {
+                if (this.swipedAt && Date.now() - this.swipedAt < 400) return;
                 // A click on the photograph itself: the controls, or close the settings.
                 if (!e.target.closest('.kr-show__panel, .kr-show__bar')) {
                     if (this.panel.classList.contains('is-visible')) this.togglePanel(false);
@@ -741,7 +790,26 @@
             if (document.hidden) clearTimeout(this.timer); else this.schedule();
             this.wake();
         });
-        this.on(document, 'fullscreenchange', () => this.syncFullscreen());
+        this.on(document, 'fullscreenchange', () => { this.syncFullscreen(); if (fillsScreen()) this.hideTip(); });
+        this.on(window, 'resize', () => { if (fillsScreen()) this.hideTip(); });
+        // A sideways swipe on the photograph steps, as the arrow keys do.
+        this.on(root, 'touchstart', e => {
+            const t = e.touches[0];
+            this.touch = e.touches.length === 1 && e.target.closest('.kr-show__stage')
+                ? { x: t.clientX, y: t.clientY, at: Date.now() } : null;
+        }, { passive: true });
+        this.on(root, 'touchend', e => {
+            const start = this.touch, t = e.changedTouches[0];
+            this.touch = null;
+            if (!start || !t || Date.now() - start.at > SWIPE_MS) return;
+            const dx = t.clientX - start.x, dy = t.clientY - start.y;
+            if (Math.abs(dx) < SWIPE_MIN || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+            this.swipedAt = Date.now();
+            this.step(dx < 0 ? 1 : -1);
+            this.hideTip();
+            try { window.localStorage.setItem(SWIPED_KEY, '1'); } catch (err) {}
+        }, { passive: true });
+        this.on(root, 'touchcancel', () => { this.touch = null; }, { passive: true });
     };
 
     Show.prototype.resumeSound = function() {
@@ -791,6 +859,7 @@
         if (!this.root) return;
         clearTimeout(this.timer);
         clearTimeout(this.idleTimer);
+        clearTimeout(this.tipTimer);
         this.token++;
         this.listeners.forEach(l => l[0].removeEventListener(l[1], l[2], l[3]));
         this.listeners = [];
