@@ -17,7 +17,9 @@
  *          out offline.html and the stylesheet, and the fallback page then
  *          had nothing to show.
  *   img    Images. The gallery alone has hundreds of thumbnails, so this
- *          one is capped at IMG_LIMIT, oldest write first.
+ *          one is capped at IMG_LIMIT, oldest write first. The slideshow's
+ *          photographs (?slideshow) never enter it: the worker leaves them
+ *          to the browser.
  *   pages  HTML, keyed on the path alone (see pageKey), capped at
  *          PAGES_LIMIT. offline.html reads it to list what is saved.
  *
@@ -141,6 +143,11 @@ self.addEventListener('fetch', function (event) {
   if (req.method !== 'GET') return;
   var url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
+  // The slideshow's photographs (js/slideshow.js asks for them with
+  // ?slideshow): left to the browser's own HTTP cache, because a slideshow
+  // runs through hundreds of them and would flush IMG_LIMIT of the images
+  // in posts saved to read offline.
+  if (url.searchParams.has('slideshow')) return;
 
   if (req.mode === 'navigate') {
     event.respondWith(navigation(event));

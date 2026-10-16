@@ -140,6 +140,11 @@ jobs:
       - name: Photo feed is current
         if: ${{ !cancelled() }}
         run: python .github/scripts/generate_photo_feed.py --check
+      # The slideshow's Lively wallpaper package lists the subjects, places
+      # and sounds in its Customise menu; a new one makes it stale.
+      - name: Lively package is current
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/build_lively_package.py --check
 
       # quotes.html carries every saved passage as HTML, baked from
       # data/quotes-all.json; a quote added to the file and not rebuilt

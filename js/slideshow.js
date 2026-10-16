@@ -25,8 +25,19 @@
  *   drift=0   no slow zoom
  *   captions=0  no place line
  *   controls=off  never show the controls (a wallpaper); the keys still work
+ *   pool=all  every photograph, not only the selection the homepage's
+ *             photo strip draws from (data/photography-standard-files.json,
+ *             which leaves out most portraits of people)
+ *   sleep=    minutes after which the sound fades out (SLEEPS; 0, never,
+ *             is the default)
+ *   info=1    show each photograph's details (number, place, subjects,
+ *             when it was added, a link to it in the gallery)
+ *   dim=      darken the photographs by this percentage (DIMS)
+ *   clock=1   show the time and date, top right
  *   Values that mean nothing (a subject with no photographs, an unknown
- *   place) are dropped rather than showing an empty screen.
+ *   place) are dropped rather than showing an empty screen, and when the
+ *   selection has nothing for the other filters (Portrait, say), every
+ *   photograph is used instead.
  *
  * Photographs
  *   One per gallery tile: a group in data/photo-variants.json shows its
@@ -39,7 +50,14 @@
  *   half-drawn picture; a frame whose hero fails falls back to its 800px
  *   thumb, and one with neither is skipped. At the end of every pass the
  *   lists are fetched again, so a wallpaper left running picks up a new
- *   photoset, and a shuffle is dealt afresh.
+ *   photoset, and a shuffle is dealt afresh. Under fit=fill, a photograph
+ *   whose shape is more than FILL_RATIO away from the screen's (a portrait
+ *   on a wide monitor) is left out, as filling the screen would crop most
+ *   of it; the deck is dealt again when the screen turns between landscape
+ *   and portrait. Both sizes are asked for with ?slideshow on the end,
+ *   which sw.js leaves to the browser's own cache: a slideshow runs through
+ *   hundreds of photographs, and the worker's image cache, capped at a few
+ *   hundred, would lose the pictures of every post saved to read offline.
  *
  * Sound
  *   Recordings under free licences (SOUNDS, with whose each is), each a
@@ -49,7 +67,14 @@
  *   The settings panel credits the recordings, as CC BY requires.
  *   Browsers allow sound only after a click or a key press on the page, so
  *   when a link asks for sound= the slideshow says it is waiting for one;
- *   a wallpaper app may allow it from the start.
+ *   a wallpaper app may allow it from the start. sleep= fades the sound out
+ *   over SLEEP_FADE seconds once its minutes are up, and turns it off.
+ *
+ * Lively Wallpaper
+ *   wallpaper/kenreid-slideshow-lively.zip, built by
+ *   .github/scripts/build_lively_package.py, is a Lively wallpaper: a page
+ *   that shows this one in a frame, with a Customise menu for these
+ *   settings. The settings panel links to it.
  *
  * Accessibility
  *   Over the gallery it is a modal dialog: the page behind is inert and
@@ -63,7 +88,10 @@
  *   key. The photographs change on their own, so nothing is announced
  *   then; a change the viewer asks for (next, previous) is announced in a
  *   hidden polite region. Space pauses, the arrow keys step, F toggles full
- *   screen, M the sound, Escape closes the settings and then the slideshow.
+ *   screen, M the sound, I the details, Escape closes the settings and then
+ *   the slideshow. The details are a region of their own, never announced
+ *   when the photograph changes by itself; the clock and the caption are
+ *   decoration (aria-hidden), the details carry the same place.
  *   On a touch screen a sideways swipe steps (SWIPE_MIN). Under reduced
  *   motion there is no slow zoom and the change is a cut.
  *
@@ -105,11 +133,20 @@
         { key: 'oldest', label: 'Oldest first' }
     ];
     const SPEEDS = [8, 15, 20, 30, 60, 120, 300];
+    const SLEEPS = [0, 15, 30, 45, 60, 90, 120];
+    const DIMS = [0, 15, 30, 45, 60];
     const DEFAULTS = {
         tag: '', place: '', added: '', order: 'shuffle', every: 20,
         sound: 'off', volume: 50, fit: 'whole', drift: true, captions: true,
-        controls: 'auto'
+        controls: 'auto', pool: 'selected', sleep: 0, info: false, dim: 0,
+        clock: false
     };
+    // Under fit=fill, the furthest a photograph's shape may be from the
+    // screen's, as a ratio of the two: 1.5 lets a 3:2 frame fill a 16:9
+    // screen and a 4:3 one too, and leaves out portraits and square frames.
+    const FILL_RATIO = 1.5;
+    // The sleep timer's fade, in seconds.
+    const SLEEP_FADE = 30;
     // The cross-fade between photographs, matching .kr-show__slide's
     // transition; the slow zoom runs for the photograph's time plus this.
     const FADE_MS = 1400;
@@ -125,12 +162,17 @@
     const LOAD_WAIT_MS = 20000;
 
     const DATA = ['data/photography-files.json', 'data/photo-tags.json', 'data/photo-locations.json',
-        'data/photo-variants.json', 'data/photosets.json'];
+        'data/photo-variants.json', 'data/photosets.json', 'data/photography-standard-files.json',
+        'data/photo-dims.json'];
     const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
         'September', 'October', 'November', 'December'];
 
-    const heroOf = stem => '/img/photography/hero/' + stem + '.webp';
-    const thumbOf = stem => '/img/photography/thumb/' + stem + '@2x.webp';
+    // ?slideshow keeps these out of the service worker's image cache (see
+    // "Photographs" at the top).
+    const heroOf = stem => '/img/photography/hero/' + stem + '.webp?slideshow';
+    const thumbOf = stem => '/img/photography/thumb/' + stem + '@2x.webp?slideshow';
+    const stemOf = f => String(f).split('/').pop().replace(/\.\w+$/, '');
+    const landscape = () => window.innerWidth >= window.innerHeight;
     const subjects = () => (typeof KR_PHOTO_CATEGORIES !== 'undefined' ? KR_PHOTO_CATEGORIES : []);
     const coarsePointer = () => !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
     const isMac = () => /mac/i.test((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '');
@@ -157,6 +199,13 @@
         if (q.get('drift') === '0') s.drift = false;
         if (q.get('captions') === '0') s.captions = false;
         if (q.get('controls') === 'off') s.controls = 'off';
+        if (q.get('pool') === 'all') s.pool = 'all';
+        const sleep = parseInt(q.get('sleep'), 10);
+        if (SLEEPS.indexOf(sleep) !== -1) s.sleep = sleep;
+        const dim = parseInt(q.get('dim'), 10);
+        if (dim >= 0 && dim <= 80) s.dim = dim;
+        if (q.get('info') === '1') s.info = true;
+        if (q.get('clock') === '1') s.clock = true;
         return s;
     }
 
@@ -172,6 +221,11 @@
         if (!s.drift) q.set('drift', '0');
         if (!s.captions) q.set('captions', '0');
         if (s.controls === 'off') q.set('controls', 'off');
+        if (s.pool === 'all') q.set('pool', 'all');
+        if (s.sleep) q.set('sleep', String(s.sleep));
+        if (s.dim) q.set('dim', String(s.dim));
+        if (s.info) q.set('info', '1');
+        if (s.clock) q.set('clock', '1');
         const qs = q.toString();
         return qs ? '?' + qs : '';
     }
@@ -208,6 +262,7 @@
     function buildLibrary(results) {
         const files = results[0], tags = results[1] || {}, locations = results[2] || {};
         const variants = results[3] || {}, photosets = results[4] || {};
+        const standard = Array.isArray(results[5]) ? new Set(results[5].map(stemOf)) : null;
         const editsOf = {}, groupOf = {};
         (variants.groups || []).forEach(group => {
             const stems = group.map(String);
@@ -216,7 +271,7 @@
             stems.forEach(s => { groupOf[s] = stems[0]; });
         });
         let stems = Array.isArray(files)
-            ? files.map(f => String(f).split('/').pop().replace(/\.\w+$/, ''))
+            ? files.map(stemOf)
             : Object.keys(tags);
         stems = stems.filter(s => /^\d+$/.test(s) && (!groupOf[s] || groupOf[s] === s));
         stems.sort((a, b) => b - a);
@@ -227,14 +282,15 @@
             const tagSet = {};
             edits.forEach(e => (tags[e] || []).forEach(t => { tagSet[t] = true; }));
             return { stem: stem, n: +stem, edits: edits, tags: Object.keys(tagSet),
-                place: edits.map(e => placeOf[e]).find(Boolean) || '' };
+                place: edits.map(e => placeOf[e]).find(Boolean) || '',
+                selected: !standard || edits.some(e => standard.has(e)) };
         });
         const sets = (photosets.sets || []).map(x => ({
             key: x.from + '-' + x.to, from: +x.from, to: +x.to, date: x.date, place: x.place || ''
         }));
         const earliest = sets.length ? Math.min.apply(null, sets.map(x => x.from)) : 0;
         const first = sets.find(x => x.from === earliest);
-        return { tiles: tiles, tags: tags, sets: sets, earliest: earliest, firstSet: first };
+        return { tiles: tiles, tags: tags, sets: sets, earliest: earliest, firstSet: first, dims: results[6] || {} };
     }
 
     function inAdded(tile, added, lib) {
@@ -245,7 +301,8 @@
     }
 
     function matches(tile, s, lib) {
-        return (!s.tag || tile.tags.indexOf(s.tag) !== -1) &&
+        return (s.pool === 'all' || tile.selected) &&
+            (!s.tag || tile.tags.indexOf(s.tag) !== -1) &&
             (!s.place || tile.place === s.place) &&
             inAdded(tile, s.added, lib);
     }
@@ -255,7 +312,14 @@
         if (s.tag && !lib.tiles.some(t => t.tags.indexOf(s.tag) !== -1)) s.tag = '';
         if (s.place && !lib.tiles.some(t => t.place === s.place)) s.place = '';
         if (s.added && !lib.tiles.some(t => inAdded(t, s.added, lib))) s.added = '';
+        if (s.pool !== 'all' && !lib.tiles.some(t => matches(t, s, lib)) &&
+            lib.tiles.some(t => matches(t, Object.assign({}, s, { pool: 'all' }), lib))) s.pool = 'all';
         return s;
+    }
+
+    /** The photoset a frame arrived in, if it came with one. */
+    function setOf(tile, lib) {
+        return lib.sets.find(x => tile.n >= x.from && tile.n <= x.to) || null;
     }
 
     /** The edit a tile shows: under a subject, the first edit that has it. */
@@ -277,7 +341,19 @@
     }
 
     function deal(s, lib, avoidFirst) {
-        const view = lib.tiles.filter(t => matches(t, s, lib));
+        let view = lib.tiles.filter(t => matches(t, s, lib));
+        if (s.fit === 'fill') {
+            // Only the frames that fill this screen without losing most of
+            // themselves; all of them if none do.
+            const screenRatio = window.innerWidth / Math.max(1, window.innerHeight);
+            const fit = view.filter(t => {
+                const d = lib.dims[faceOf(t, s, lib)];
+                if (!d || !d[1]) return true;
+                const k = d[0] / d[1] / screenRatio;
+                return k <= FILL_RATIO && k >= 1 / FILL_RATIO;
+            });
+            if (fit.length) view = fit;
+        }
         if (s.order === 'oldest') return view.slice().reverse();
         if (s.order === 'newest') return view;
         const deck = shuffled(view);
@@ -331,6 +407,12 @@
         if (sec < 60) return sec + ' seconds';
         const m = Math.round(sec / 60);
         return m + (m === 1 ? ' minute' : ' minutes');
+    }
+
+    function sleepLabel(minutes) {
+        if (!minutes) return 'Never';
+        if (minutes % 60 === 0) return minutes === 60 ? '1 hour' : minutes / 60 + ' hours';
+        return minutes > 60 ? Math.floor(minutes / 60) + ' hours ' + (minutes % 60) + ' minutes' : minutes + ' minutes';
     }
 
     function icon(name) {
@@ -402,7 +484,12 @@
                 '<div class="kr-show__slide"><img class="kr-show__backdrop" alt=""><img class="kr-show__photo" alt=""></div>' +
                 '<p class="kr-show__message" hidden></p>' +
             '</div>' +
-            '<p class="kr-show__caption" aria-hidden="true"></p>' +
+            '<div class="kr-show__dim" aria-hidden="true"></div>' +
+            '<div class="kr-show__corner" aria-hidden="true">' +
+                '<p class="kr-show__clock" hidden><span class="kr-show__time" data-time></span><span class="kr-show__date" data-date></span></p>' +
+                '<p class="kr-show__caption"></p>' +
+            '</div>' +
+            '<div class="kr-show__info kr-offstage" role="region" aria-label="Photo details" data-info></div>' +
             '<p class="kr-show__hint kr-offstage" aria-hidden="true">' + (coarsePointer() ? 'Tap' : 'Click') + ' anywhere for sound</p>' +
             '<p class="kr-show__tip kr-offstage" aria-hidden="true"></p>' +
             '<p class="kr-sr-only" aria-live="polite" data-announce></p>' +
@@ -415,6 +502,7 @@
                 '<label class="kr-show__sound">' + icon('ti-volume') + '<span class="kr-sr-only">Sound</span>' +
                     '<select data-set="sound">' + SOUNDS.map(o => option(o.key, o.label, o.key === s.sound)).join('') + '</select></label>' +
                 '<input class="kr-show__volume" type="range" min="0" max="100" step="5" value="' + s.volume + '" data-set="volume" aria-label="Volume">' +
+                '<button type="button" class="kr-show__btn" data-act="info" aria-label="Show photo details">' + icon('ti-info-alt') + '</button>' +
                 '<button type="button" class="kr-show__btn" data-act="settings" aria-label="Slideshow settings" aria-expanded="false" aria-controls="' + id + '">' + icon('ti-settings') + '</button>' +
                 full + close +
             '</div>' +
@@ -429,6 +517,8 @@
         this.tipEl = root.querySelector('.kr-show__tip');
         this.live = root.querySelector('[data-announce]');
         this.count = root.querySelector('[data-count]');
+        this.info = root.querySelector('[data-info]');
+        this.clock = root.querySelector('.kr-show__clock');
         this.applyLook();
 
         document.body.appendChild(root);
@@ -466,12 +556,17 @@
                 '<label class="kr-show__field">Order<select data-set="order">' + ORDERS.map(o => option(o.key, o.label, o.key === s.order)).join('') + '</select></label>' +
                 '<label class="kr-show__field">Each photograph<select data-set="every">' + speeds.map(v => option(String(v), speedLabel(v), v === s.every)).join('') + '</select></label>' +
                 '<label class="kr-show__field">Framing<select data-set="fit">' + option('whole', 'Whole photograph', s.fit === 'whole') + option('fill', 'Fill the screen', s.fit === 'fill') + '</select></label>' +
+                '<label class="kr-show__field">Photographs<select data-set="pool">' + option('selected', 'My selection', s.pool !== 'all') + option('all', 'Every photograph', s.pool === 'all') + '</select></label>' +
+                '<label class="kr-show__field">Dim the photographs<select data-set="dim">' + DIMS.concat(DIMS.indexOf(s.dim) === -1 ? [s.dim] : []).sort((a, b) => a - b).map(v => option(String(v), v ? v + '%' : 'No', v === s.dim)).join('') + '</select></label>' +
+                '<label class="kr-show__field">Sound stops after<select data-set="sleep">' + SLEEPS.map(v => option(String(v), sleepLabel(v), v === s.sleep)).join('') + '</select></label>' +
             '</div>' +
             '<label class="kr-show__check"><input type="checkbox" data-set="drift"' + (s.drift ? ' checked' : '') + '> Slow zoom</label>' +
             '<label class="kr-show__check"><input type="checkbox" data-set="captions"' + (s.captions ? ' checked' : '') + '> Show where each was taken</label>' +
+            '<label class="kr-show__check"><input type="checkbox" data-set="info"' + (s.info ? ' checked' : '') + '> Show each photograph\'s details</label>' +
+            '<label class="kr-show__check"><input type="checkbox" data-set="clock"' + (s.clock ? ' checked' : '') + '> Show the time</label>' +
             '<fieldset class="kr-show__share">' +
                 '<legend>As a wallpaper</legend>' +
-                '<p>This link opens the slideshow as it is set up here. Open it and press F11, or give it to a wallpaper app that shows web pages, such as Lively Wallpaper on Windows.</p>' +
+                '<p>This link opens the slideshow as it is set up here. Open it and press F11, or give it to a wallpaper app that shows web pages. For Lively Wallpaper on Windows, <a href="/wallpaper/kenreid-slideshow-lively.zip" download>download the Lively package</a> and drag it into Lively: its Customise menu has these settings.</p>' +
                 '<label class="kr-show__check"><input type="checkbox" data-set="controls"' + (s.controls === 'off' ? ' checked' : '') + '> Never show the controls (keys still work)</label>' +
                 '<div class="kr-show__link"><input type="text" readonly data-url aria-label="Slideshow link">' +
                 '<button type="button" class="kr-show__copy" data-act="copy">' + icon('ti-link') + ' Copy link</button></div>' +
@@ -512,6 +607,67 @@
         r.toggle('kr-show--captions', !!this.s.captions);
         r.toggle('kr-show--bare', this.s.controls === 'off');
         this.root.style.setProperty('--kr-show-dur', (this.s.every * 1000 + FADE_MS * 2) + 'ms');
+        this.root.style.setProperty('--kr-show-dim', String((this.s.dim || 0) / 100));
+        this.clock.hidden = !this.s.clock;
+        this.tickClock();
+        this.showInfo(!!this.s.info);
+    };
+
+    // --- the clock and the details ----------------------------------------
+
+    let timeFormat = null, dateFormat = null;
+
+    /** The time, on the minute, while the clock is shown. */
+    Show.prototype.tickClock = function() {
+        clearTimeout(this.clockTimer);
+        if (!this.root || !this.s.clock) return;
+        if (!timeFormat) {
+            timeFormat = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' });
+            dateFormat = new Intl.DateTimeFormat(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
+        }
+        const now = new Date();
+        this.root.querySelector('[data-time]').textContent = timeFormat.format(now);
+        this.root.querySelector('[data-date]').textContent = dateFormat.format(now);
+        this.clockTimer = setTimeout(() => this.tickClock(), 60000 - now.getSeconds() * 1000 - now.getMilliseconds() + 50);
+    };
+
+    Show.prototype.showInfo = function(on) {
+        this.s.info = on;
+        this.info.classList.toggle('is-visible', on);
+        const btn = this.root.querySelector('[data-act="info"]');
+        btn.setAttribute('aria-label', on ? 'Hide photo details' : 'Show photo details');
+        btn.classList.toggle('is-on', on);
+        const box = this.panel && this.panel.querySelector('input[data-set="info"]');
+        if (box) box.checked = on;
+        if (on) this.updateInfo();
+    };
+
+    /** The details of the photograph on screen. */
+    Show.prototype.updateInfo = function() {
+        const cur = this.current;
+        if (!cur || !this.lib) { this.info.innerHTML = ''; return; }
+        const lines = ['<p class="kr-show__info-title">Photograph ' + esc(cur.stem) + '</p>'];
+        if (cur.tile.place) lines.push('<p>' + esc(cur.tile.place) + '</p>');
+        const labels = (this.lib.tags[cur.stem] || []).map(k => (subjects().find(c => c.key === k) || {}).label).filter(Boolean);
+        if (labels.length) lines.push('<p>' + esc(labels.join(', ')) + '</p>');
+        const set = setOf(cur.tile, this.lib);
+        if (set) lines.push('<p>Added ' + esc(setLabel(set).split(':')[0]) + '</p>');
+        // In a frame (a wallpaper), the gallery opens in a tab of its own.
+        const framed = window.top !== window;
+        lines.push('<p><a href="/gallery.html?photo=' + encodeURIComponent(cur.stem) + '"' +
+            (framed ? ' target="_blank" rel="noopener"' : '') + '>View in the gallery</a></p>');
+        this.info.innerHTML = lines.join('');
+    };
+
+    // --- the sleep timer ------------------------------------------------------
+
+    Show.prototype.armSleep = function() {
+        clearTimeout(this.sleepTimer);
+        if (!this.s.sleep || this.s.sound === 'off') return;
+        this.sleepTimer = setTimeout(() => {
+            if (!this.root || this.s.sound === 'off' || !this.ambience) return;
+            this.ambience.fadeOut(SLEEP_FADE, () => { if (this.root) this.setSound('off', false); });
+        }, this.s.sleep * 60000);
     };
 
     Show.prototype.start = function(lib) {
@@ -522,6 +678,7 @@
         }
         this.lib = lib;
         sanitise(this.s, lib);
+        this.dealtLandscape = landscape();
         this.deck = deal(this.s, lib);
         this.renderPanel();
         this.ambience = window.krAmbience;
@@ -642,6 +799,8 @@
         const caption = tile.place || '';
         this.caption.textContent = caption;
         this.caption.hidden = !caption;
+        this.current = { tile: tile, stem: frame.stem };
+        if (this.s.info) this.updateInfo();
         this.count.textContent = (this.pos + 1) + ' of ' + this.deck.length;
     };
 
@@ -671,13 +830,16 @@
         const s = this.s;
         if (key === 'every') s.every = parseInt(value, 10) || DEFAULTS.every;
         else if (key === 'volume') s.volume = Math.max(0, Math.min(100, parseInt(value, 10) || 0));
-        else if (key === 'drift' || key === 'captions') s[key] = !!value;
+        else if (key === 'drift' || key === 'captions' || key === 'info' || key === 'clock') s[key] = !!value;
         else if (key === 'controls') s.controls = value ? 'off' : 'auto';
+        else if (key === 'sleep' || key === 'dim') s[key] = parseInt(value, 10) || 0;
         else s[key] = value;
+        if (key === 'sleep') this.armSleep();
         if (key === 'sound') this.setSound(value, false);
         if (key === 'volume' && this.ambience) this.ambience.volume(s.volume / 100);
         this.applyLook();
-        if (key === 'tag' || key === 'place' || key === 'added' || key === 'order') {
+        if (key === 'tag' || key === 'place' || key === 'added' || key === 'order' || key === 'pool' || key === 'fit') {
+            this.dealtLandscape = landscape();
             this.deck = deal(s, this.lib);
             this.next = null;
             this.go(0, false);
@@ -695,7 +857,8 @@
         if (this.panel) this.updateCredit();
         const amb = this.ambience;
         if (!amb) return;
-        if (key === 'off') { amb.stop(); this.showHint(false); return; }
+        if (key === 'off') { clearTimeout(this.sleepTimer); amb.stop(); this.showHint(false); return; }
+        this.armSleep();
         amb.play(key, this.s.volume / 100).then(running => {
             // A link asked for sound before anyone touched the page: the
             // browser holds it until a click or key press (see "Sound").
@@ -821,6 +984,7 @@
             else if (act === 'next') this.step(1);
             else if (act === 'play') this.setPlaying(!this.playing);
             else if (act === 'settings') this.togglePanel();
+            else if (act === 'info') { this.showInfo(!this.s.info); this.updateLink(); }
             else if (act === 'fullscreen') this.toggleFullscreen();
             else if (act === 'close') this.close();
             else if (act === 'copy') this.copyLink(btn);
@@ -854,7 +1018,17 @@
             this.wake();
         });
         this.on(document, 'fullscreenchange', () => { this.syncFullscreen(); if (fillsScreen()) this.hideTip(); });
-        this.on(window, 'resize', () => { if (fillsScreen()) this.hideTip(); });
+        this.on(window, 'resize', () => {
+            if (fillsScreen()) this.hideTip();
+            // Filling the screen picks frames by its shape: deal again when it turns.
+            if (this.lib && this.s.fit === 'fill' && landscape() !== this.dealtLandscape) {
+                this.dealtLandscape = landscape();
+                this.deck = deal(this.s, this.lib);
+                this.next = null;
+                this.updateLink();
+                this.go(0, false);
+            }
+        });
         // A sideways swipe on the photograph steps, as the arrow keys do.
         this.on(root, 'touchstart', e => {
             const t = e.touches[0];
@@ -897,6 +1071,7 @@
         else if (e.key === 'ArrowLeft') { e.preventDefault(); this.step(-1); }
         else if ((e.key === ' ' || e.key === 'k') && !onButton) { e.preventDefault(); this.setPlaying(!this.playing); }
         else if (e.key === 'f' || e.key === 'F') { e.preventDefault(); this.toggleFullscreen(); }
+        else if (e.key === 'i' || e.key === 'I') { e.preventDefault(); this.showInfo(!this.s.info); this.updateLink(); }
         else if (e.key === 'm' || e.key === 'M') {
             e.preventDefault();
             this.setSound(this.s.sound === 'off' ? (this.lastSound || 'fire') : 'off', false);
@@ -923,6 +1098,8 @@
         clearTimeout(this.timer);
         clearTimeout(this.idleTimer);
         clearTimeout(this.tipTimer);
+        clearTimeout(this.clockTimer);
+        clearTimeout(this.sleepTimer);
         this.token++;
         this.listeners.forEach(l => l[0].removeEventListener(l[1], l[2], l[3]));
         this.listeners = [];
@@ -1032,6 +1209,16 @@
         // The loops are levelled to -20 LUFS; the slider's power of 1.5 keeps
         // its lower half usable (half way is about 9 dB down).
         g.linearRampToValueAtTime(Math.pow(level, 1.5), now + seconds);
+    };
+
+    /** Fade the sound to nothing over `seconds`, then call done. */
+    Ambience.prototype.fadeOut = function(seconds, done) {
+        if (!this.ctx) { done(); return; }
+        const g = this.master.gain, now = this.ctx.currentTime;
+        g.cancelScheduledValues(now);
+        g.setValueAtTime(g.value, now);
+        g.linearRampToValueAtTime(0, now + seconds);
+        setTimeout(done, seconds * 1000);
     };
 
     Ambience.prototype.volume = function(level) {

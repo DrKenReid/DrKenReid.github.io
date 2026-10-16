@@ -157,10 +157,10 @@ CHECKS: list[Check] = [
           script("generate_related_posts.py", "--check"),
           script("generate_related_posts.py"), fast=True),
 
-    # The sharp renditions: every thumb's @2x double and a hero for every
-    # frame a page shows, at the size data/photo-originals.json allows.
+    # The sharp renditions: every thumb's @2x double and every frame's hero
+    # (the slideshow shows any of them), at the size data/photo-originals.json allows.
     # The check is offline; the fixer fetches originals from the release.
-    Check("renditions", "every photo has its @2x thumb and, where shown large, its hero",
+    Check("renditions", "every photo has its @2x thumb and its hero",
           script("generate_photo_renditions.py", "--check"),
           script("generate_photo_renditions.py"), fast=True),
 
@@ -187,6 +187,12 @@ CHECKS: list[Check] = [
     Check("photo-feed", "feed-photos.xml and KR_NEW_PHOTOS match data/photosets.json",
           script("generate_photo_feed.py", "--check"),
           script("generate_photo_feed.py"), fast=True),
+
+    # The slideshow as a Lively wallpaper: its Customise menu lists the
+    # subjects, places and sounds, so a new place or sound makes it stale.
+    Check("lively", "the Lively wallpaper package matches the slideshow",
+          script("build_lively_package.py", "--check"),
+          script("build_lively_package.py"), fast=True),
 
     # The next three bake data into a page's HTML, so they come before the
     # stylesheet pruner and the audit, which read it.
