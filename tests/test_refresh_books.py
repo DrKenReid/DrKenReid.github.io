@@ -56,6 +56,7 @@ def item_for(b):
         "link": "https://www.goodreads.com/review/show/%s" % b["w"],
         "user_read_at": "" if b.get("e") else rss_date(b["d"]),
         "user_date_added": rss_date(b["d"]) if b.get("e") else rss_date("2024/01/01"),
+        "book_large_image_url": rb.GR_COVERS + b["c"] if b.get("c") else "",
     }
 
 
@@ -104,6 +105,21 @@ class ReRead(unittest.TestCase):
         self.assertEqual(rb.merge_one(b, it)["n"], 320)
         it["book/num_pages"] = "0"
         self.assertNotIn("n", rb.merge_one({}, it))
+
+    def test_the_cover_comes_from_the_feed_and_is_kept_when_it_has_none(self):
+        it = item("1", read="2024/02/01")
+        it["book_large_image_url"] = rb.GR_COVERS + "1670752670l/1._SY475_.jpg"
+        b = rb.merge_one({}, it)
+        self.assertEqual(b["c"], "1670752670l/1._SY475_.jpg")
+        # A week with no cover, or Goodreads' placeholder, keeps the one on file.
+        it["book_large_image_url"] = ""
+        self.assertEqual(rb.merge_one(b, it)["c"], "1670752670l/1._SY475_.jpg")
+        it["book_large_image_url"] = "https://s.gr-assets.com/assets/nophoto/book/111x148.png"
+        self.assertEqual(rb.merge_one(b, it)["c"], "1670752670l/1._SY475_.jpg")
+        self.assertNotIn("c", rb.merge_one({}, it))
+        # A cover from anywhere else is kept whole.
+        it["book_large_image_url"] = "https://images.example.org/cover.jpg"
+        self.assertEqual(rb.merge_one({}, it)["c"], "https://images.example.org/cover.jpg")
 
     def test_the_same_date_again_changes_nothing(self):
         old = rb.merge([], [item("1", read="2026/09/01")])

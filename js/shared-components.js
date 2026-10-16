@@ -14,6 +14,8 @@
  *   KR_PAGES                        the site map: footer and palette read it
  *   renderFooter(id)                footer, latest writing, palette hint
  *   renderPhotoStrip(id)            photo strip; every frame opens in the gallery
+ *   krOpenSlideshow(link, settings) the slideshow over the page, full screen;
+ *                                   initPlayLinks binds each [data-kr-play]
  *   renderNowStrip()                homepage "Now" cards (#now-strip)
  *   krQuoteRotator(section, quotes, opts)  the rotating quotation (homepage,
  *                                   literature.html), KR_QUOTE its timing
@@ -3760,8 +3762,8 @@ var KR_PAGES = [
     { key: 'gallery', label: 'Photography', href: 'gallery.html', blurb: 'Every photograph, filterable by subject', inFooter: 'explore', inPalette: true,
         also: 'pictures images' },
     { key: 'map', label: 'Photo Map', href: 'map.html', blurb: 'Photographs by place', inFooter: 'explore', inPalette: true, parent: 'gallery' },
-    { key: 'slideshow', label: 'Slideshow', href: 'slideshow.html', blurb: 'The photographs full screen, with a fire, rain, a river, a café or a city at night', inFooter: 'explore', inPalette: true, parent: 'gallery',
-        also: 'wallpaper screensaver presentation' },
+    { key: 'slideshow', label: 'Slideshow', href: 'slideshow.html', blurb: 'Photographs, places, quotes, books or albums full screen, with a fire, rain or a river to listen to', inFooter: 'explore', inPalette: true, parent: 'gallery',
+        also: 'wallpaper screensaver presentation quotes books albums music places tour map' },
     { key: 'music', label: 'Music', href: 'music.html', blurb: 'Guitar & listening stats', inFooter: 'explore', inPalette: true,
         also: 'last.fm lastfm scrobbles' },
     { key: 'literature', label: 'Literature', href: 'literature.html', blurb: 'Reading now, calendar, shelf, reviews', inFooter: 'explore', inPalette: true,
@@ -5430,6 +5432,58 @@ function renderFilterBar(container, items, opts) {
 }
 
 /**
+ * The slideshow over the page (js/slideshow.js, fetched on the first
+ * click): full screen on the same click, which a browser allows only
+ * while that click is being handled, then the slideshow, set up by
+ * settings() or else by the link's own address. If the script cannot
+ * load, the link is followed to slideshow.html instead. The banner's
+ * Slideshow link (.kr-opener-play, style.css "Slideshow link") is bound
+ * by initPlayLinks; the gallery binds its own, to pass its filter.
+ */
+var krSlideshowScript = null;
+
+function krLoadSlideshow() {
+    if (window.krSlideshow) return Promise.resolve();
+    if (!krSlideshowScript) {
+        krSlideshowScript = new Promise(function(resolve, reject) {
+            var s = document.createElement('script');
+            s.src = '/js/slideshow.js?v=20260923a';
+            s.onload = resolve;
+            s.onerror = function() { krSlideshowScript = null; s.remove(); reject(); };
+            document.head.appendChild(s);
+        });
+    }
+    return krSlideshowScript;
+}
+
+function krOpenSlideshow(link, settings) {
+    if (document.fullscreenEnabled && !document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(function() {});
+    }
+    krLoadSlideshow().then(function() {
+        window.krSlideshow.open({
+            settings: settings ? settings() : window.krSlideshow.readSettings(new URL(link.href, window.location.href).search),
+            returnFocus: link
+        });
+    }, function() {
+        if (document.fullscreenElement) document.exitFullscreen().catch(function() {});
+        window.location.href = link.href;
+    });
+}
+
+/** Every [data-kr-play] link opens its slideshow over the page; a click
+    with a modifier key opens slideshow.html as a link would. */
+function initPlayLinks() {
+    Array.prototype.forEach.call(document.querySelectorAll('a[data-kr-play]'), function(link) {
+        link.addEventListener('click', function(e) {
+            if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            e.preventDefault();
+            krOpenSlideshow(link);
+        });
+    });
+}
+
+/**
  * Hands the shared view-transition name to whichever post card was
  * clicked, so the card's photograph morphs into the post's banner across
  * the navigation instead of the two pages simply cross-fading.
@@ -5904,6 +5958,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initLazyImageFade();
     initEmbedFacades();
     initHeroTransitions();
+    initPlayLinks();
     initScrollFlourishes();
     initLiveCovers();
     initTopicPosts();

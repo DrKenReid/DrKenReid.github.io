@@ -5,7 +5,8 @@ Lively Wallpaper (Windows) imports a zip dropped into its window. This one
 is a "web" wallpaper (LivelyInfo.json, Type 1): a local index.html that
 shows https://www.kenreid.co.uk/slideshow.html in a frame, with the
 controls off, and a Customise menu (LivelyProperties.json) for the
-slideshow's settings: subject, place, which photographs, order, how long
+slideshow's settings: what to show (photographs, places, quotes, books or
+albums), subject, place, which photographs, order, how long
 each stays, framing, sound and volume, dimming, the slow zoom, the
 caption, the clock and the details. Lively calls livelyPropertyListener in
 index.html once for every property when the wallpaper starts and again
@@ -14,6 +15,7 @@ whenever one changes; the page turns them into the slideshow's address
 the last call. The menu's lists come from the site itself, so they cannot
 drift from the slideshow:
 
+  shows     SHOWS in js/slideshow.js
   subjects  KR_PHOTO_CATEGORIES in js/shared-components.js
   places    data/photo-locations.json, every region with a photograph
   sounds, speeds, dimming
@@ -82,6 +84,7 @@ def menus() -> dict:
     regions = json.loads((ROOT / "data" / "photo-locations.json").read_text(encoding="utf-8"))["regions"]
     places = sorted({r["name"] for r in regions if r.get("photos")}, key=str.lower)
     return {
+        "show": keyed(show, "SHOWS"),
         "tag": [("", "Any subject")] + keyed(shared, "KR_PHOTO_CATEGORIES"),
         "place": [("", "Anywhere")] + [(p, p) for p in places],
         "pool": POOLS,
@@ -99,6 +102,7 @@ def properties(m: dict) -> dict:
                 "items": [label for _, label in items]}
 
     return {
+        "show": dropdown("Show", m["show"], "photos"),
         "tag": dropdown("Subject", m["tag"], ""),
         "place": dropdown("Place", m["place"], ""),
         "pool": dropdown("Photographs", m["pool"], "selected"),
@@ -148,7 +152,7 @@ function livelyPropertyListener(name, val) {
 
 function load() {
   var q = new URLSearchParams();
-  ['tag', 'place', 'order', 'every', 'fit', 'sound'].forEach(function (k) {
+  ['show', 'tag', 'place', 'order', 'every', 'fit', 'sound'].forEach(function (k) {
     var v = picked[k], d = __DEFAULTS__[k];
     if (v != null && v !== d) q.set(k, v);
   });
@@ -173,8 +177,8 @@ timer = setTimeout(load, 400);
 
 
 def page(m: dict) -> str:
-    choices = {k: [v for v, _ in m[k]] for k in ("tag", "place", "pool", "order", "every", "fit", "sound")}
-    defaults = {"tag": "", "place": "", "order": "shuffle", "every": "20", "fit": "whole", "sound": "off"}
+    choices = {k: [v for v, _ in m[k]] for k in ("show", "tag", "place", "pool", "order", "every", "fit", "sound")}
+    defaults = {"show": "photos", "tag": "", "place": "", "order": "shuffle", "every": "20", "fit": "whole", "sound": "off"}
     return (PAGE.replace("__SITE__", json.dumps(SITE))
             .replace("__CHOICES__", json.dumps(choices, ensure_ascii=False))
             .replace("__DEFAULTS__", json.dumps(defaults)))
@@ -185,8 +189,8 @@ INFO = {
     "Title": "Ken Reid's photographs",
     "Thumbnail": "thumbnail.jpg",
     "Preview": "thumbnail.jpg",
-    "Desc": "Ken Reid's photographs one at a time, with a fire, rain, a river, a cafe or a city at night "
-            "to listen to if you like. Right-click it in Lively and choose Customise to pick the photographs "
+    "Desc": "Ken Reid's photographs one at a time, or a tour of the places, his quotes, his books or his albums, with a fire, rain, a river, a cafe or a city at night "
+            "to listen to if you like. Right-click it in Lively and choose Customise to pick what to show "
             "and the sound.",
     "Author": "Ken Reid",
     "License": "Photographs (c) Ken Reid, all rights reserved. The sounds are other people's, credited at "

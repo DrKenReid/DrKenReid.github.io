@@ -83,7 +83,7 @@ use it.
 | Gallery | `gallery.html` | `js/gallery.js` deferred in the head; `initGallery()` on DOMContentLoaded |
 | Reading pages | `literature.html`, `books.html` | `js/literature.js`, `js/bookshelf.js`, `js/bookwall.js`, deferred in the head |
 | Music | `music.html` | `js/albums.js` after the shared scripts |
-| Slideshow | `slideshow.html` | `js/shared-components.js` then `js/slideshow.js`, which starts itself on a page marked `<html data-slideshow-page>`; no header or footer, every setting in the address. The gallery's Slideshow button loads the same script and opens it over the gallery |
+| Slideshow | `slideshow.html` | `js/shared-components.js` then `js/slideshow.js`, which starts itself on a page marked `<html data-slideshow-page>`; no header or footer, every setting in the address. `show=` picks what it shows: photographs (the default), a tour of the places, quotes, books or albums. The Slideshow link under the title of the gallery, `map.html`, `quotes.html`, `books.html` and `music.html` (`.kr-opener-play`) loads the same script and opens that page's kind over the page (`krOpenSlideshow` in `js/shared-components.js`) |
 | Photo map | `map.html` | `js/vendor/leaflet/leaflet.css` in the head, `js/vendor/leaflet/leaflet.js` after the shared scripts |
 | Post | `blog/rating-systems.html` | nothing of its own; the post furniture starts by itself (below) |
 | Interactive post | `blog/particle-swarm-live.html` | `js/kr-viz.js` and an inline script that mounts the demo |
@@ -326,7 +326,7 @@ checks that. (The essay:
 | Share images | `generate_og_images.py` (bump `RENDERER`) | `generate_og_images.py` |
 | Blog filters, search, sort | `js/blog.js`; the shared panel parts in `js/shared-components.js` | smoke suite |
 | Gallery layout or lightbox | `js/gallery.js`, `js/lightbox.js`, CSS in §13 | smoke suite |
-| The slideshow and its sounds | `js/slideshow.js` (the header lists its address settings; `SOUNDS` lists each sound's file, loop length and credit), `slideshow.html`, CSS in §13 ("Slideshow"), the loops in `sounds/` (recordings under free licences, credited on the colophon under `#colo-sounds`), the Lively wallpaper package `wallpaper/kenreid-slideshow-lively.zip` (`build_lively_package.py`) | a browser: the smoke sweep only loads the page |
+| The slideshow and its sounds | `js/slideshow.js` (the header lists its address settings; `MODES` holds each kind of slideshow, `SHOWS` their menu; `SOUNDS` lists each sound's file, loop length and credit), `slideshow.html`, CSS in §13 ("Slideshow"), the loops in `sounds/` (recordings under free licences, credited on the colophon under `#colo-sounds`), the Lively wallpaper package `wallpaper/kenreid-slideshow-lively.zip` (`build_lively_package.py`) | a browser: the smoke sweep only loads the page |
 | The photo map | `map.html` (its script and styles are inline), `data/photo-locations.json` | smoke suite |
 | Reading pages | `js/bookshelf.js`, `js/literature.js`, `js/bookwall.js`, CSS in §14 | `js-tests`, smoke suite |
 | The music crate | `js/albums.js`, CSS in §15 | smoke suite |

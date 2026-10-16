@@ -83,6 +83,11 @@
         "minimum": 1,
         "description": "Pages, from the feed's book/num_pages (seeded from the Goodreads export). Kept from the record when a week's feed has none. Reading Stats sums and ranks them."
       },
+      "c": {
+        "type": "string",
+        "pattern": "^[^ ]+$",
+        "description": "The cover Goodreads shows for the book, from the feed's book_large_image_url (about 475px tall): the path under https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/ (GR_COVERS in refresh_books.py), or a whole https address for one elsewhere. Kept when a week's feed has none or only a placeholder. The slideshow's books show it (js/slideshow.js), and every book has one, ISBN or not."
+      },
       "m": {
         "type": "integer",
         "minimum": 1,

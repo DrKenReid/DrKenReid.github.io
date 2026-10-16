@@ -20,6 +20,8 @@ Record fields (data/schema/books.schema.json has the full descriptions):
     e  1 when d is only the date added (the calendar leaves it out)
     p  earlier finish dates, oldest first
     n  pages, from the feed's book/num_pages (kept when a week has none)
+    c  the cover Goodreads shows, from the feed's book_large_image_url,
+       less GR_COVERS (kept when a week has none or only a placeholder)
     m  consecutive refreshes this book was missing from the feed
 
 Also writes data/reading.json, the figures the homepage shows.
@@ -101,7 +103,13 @@ MIN_FEED_SHARE = 0.9
 # The item fields merge() reads; fetch_items() returns dicts of exactly
 # these, so a test can build items without any XML.
 FIELDS = ("book_id", "title", "author_name", "user_rating", "user_review",
-          "isbn", "link", "user_read_at", "user_date_added", "book/num_pages")
+          "isbn", "link", "user_read_at", "user_date_added", "book/num_pages",
+          "book_large_image_url")
+
+# Goodreads' covers all sit under this address; books.json keeps the rest
+# of each (c), and the pages put it back (GR_COVERS in js/slideshow.js).
+# A cover anywhere else is kept whole.
+GR_COVERS = "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/"
 
 
 class FeedError(RuntimeError):
@@ -192,6 +200,15 @@ def fetch_items(fetch=get) -> list[dict]:
 
 # --- the rules (pure) --------------------------------------------------------
 
+def cover_path(url: str) -> str:
+    """A feed cover as books.json keeps it: GR_COVERS taken off the front;
+    '' for none, or for Goodreads' "nophoto" placeholder."""
+    url = (url or "").strip()
+    if not url.startswith("https://") or "nophoto" in url:
+        return ""
+    return url[len(GR_COVERS):] if url.startswith(GR_COVERS) else url
+
+
 def merge_one(prev: dict, item: dict) -> dict:
     """One record from a feed item and the record on file ({} if new)."""
     b = {
@@ -205,6 +222,9 @@ def merge_one(prev: dict, item: dict) -> dict:
     if isbn:
         b["i"] = isbn
     b["g"] = item["book_id"]
+    c = cover_path(item.get("book_large_image_url", "")) or prev.get("c")
+    if c:
+        b["c"] = c
     pages = item.get("book/num_pages") or ""
     n = int(pages) if pages.isdigit() and int(pages) > 0 else prev.get("n")
     if n:
