@@ -19,8 +19,9 @@ drift from the slideshow:
   sounds, speeds, dimming
             SOUNDS, SPEEDS and DIMS in js/slideshow.js
 
-The zip is byte-for-byte reproducible (fixed timestamps, a fixed order),
-so --check can compare it with a fresh build. The thumbnail Lively shows
+The zip is the same on every machine (stored, not deflated, since zlib
+builds differ; fixed timestamps, platform field and order), and --check
+compares what is inside it, file by file, with a fresh build. The thumbnail Lively shows
 in its library is the gallery's share card, img/og/page-gallery.jpg.
 
     python .github/scripts/build_lively_package.py           # write the zip
@@ -213,10 +214,20 @@ def build() -> bytes:
     with zipfile.ZipFile(buf, "w") as z:
         for name, data in files:
             info = zipfile.ZipInfo(name, date_time=STAMP)
-            info.compress_type = zipfile.ZIP_DEFLATED
+            info.compress_type = zipfile.ZIP_STORED
+            info.create_system = 3          # the same "made on" field whatever builds it
             info.external_attr = 0o644 << 16
-            z.writestr(info, data, compresslevel=9)
+            z.writestr(info, data)
     return buf.getvalue()
+
+
+def contents(blob: bytes) -> list[tuple[str, bytes]]:
+    """The files in a zip, in order, with their bytes."""
+    try:
+        with zipfile.ZipFile(io.BytesIO(blob)) as z:
+            return [(i.filename, z.read(i)) for i in z.infolist()]
+    except zipfile.BadZipFile:
+        return []
 
 
 def main(argv=None) -> int:
@@ -226,7 +237,7 @@ def main(argv=None) -> int:
     data = build()
     rel = OUT.relative_to(ROOT).as_posix()
     if args.check:
-        if not OUT.exists() or OUT.read_bytes() != data:
+        if not OUT.exists() or contents(OUT.read_bytes()) != contents(data):
             print(f"{rel} is stale. run: python .github/scripts/build_lively_package.py")
             return 1
         print(f"{rel} is current.")
