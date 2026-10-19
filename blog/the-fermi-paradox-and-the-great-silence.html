@@ -73,8 +73,8 @@
    "isPartOf": { "@id": "https://www.kenreid.co.uk/#website" },
    "inLanguage": "en-GB",
    "articleSection": "Ideas",
-   "wordCount": 4797,
-   "timeRequired": "PT22M",
+   "wordCount": 4874,
+   "timeRequired": "PT23M",
    "keywords": ["fermi paradox", "dark forest", "extraterrestrial life", "science fiction", "great filter"]
  }
  </script>
@@ -104,6 +104,42 @@
    ]
  }
  </script>
+ <style>
+   /* The Drake equation calculator. The frame, buttons and tiles are the
+      shared .kr-viz component; these are the rows, the scale and the line
+      under it. The script shows it and hides the table it replaces. */
+   .drake-calc{ text-align:left; }
+   .drake-presets{ margin-top:0; }
+   .drake-presets .kr-btn{ margin:0; }
+   .drake-out{ position:sticky; top:var(--kr-bar-h); z-index:1; background:var(--viz-surface); padding:6px 0 10px; border-bottom:1px solid var(--viz-border); }
+   .drake-out .kr-stats{ margin-top:8px; }
+   .drake-swatch{ background:var(--viz-s1); }
+   .drake-scale{ position:relative; height:42px; margin-top:14px; }
+   .drake-scale__track{ position:absolute; left:0; right:0; top:8px; height:10px; border-radius:5px; background:var(--viz-cell); border:1px solid var(--viz-border); }
+   .drake-scale__fill{ position:absolute; left:0; top:0; bottom:0; border-radius:5px; background:var(--viz-s1); opacity:0.35; }
+   .drake-scale__one{ position:absolute; top:-6px; width:2px; height:20px; margin-left:-1px; background:var(--viz-muted); }
+   .drake-scale__mark{ position:absolute; top:-5px; width:18px; height:18px; margin-left:-9px; border-radius:50%; background:var(--viz-s1); border:3px solid var(--viz-surface); }
+   .drake-scale__tick{ position:absolute; top:24px; transform:translateX(-50%); font-size:0.7em; line-height:1.4; color:var(--viz-muted); white-space:nowrap; font-variant-numeric:tabular-nums; }
+   .drake-scale__tick--start{ transform:none; }
+   .drake-scale__tick--one{ color:var(--viz-ink); font-weight:600; }
+   .drake-says{ margin-top:8px; font-size:0.85em; line-height:1.5; color:var(--viz-ink); min-height:3em; }
+   .drake-terms{ display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:16px 28px; margin-top:14px; font-size:0.85em; color:var(--viz-ink); }
+   .drake-term{ display:grid; grid-template-columns:1fr auto; align-items:baseline; gap:0 10px; min-width:0; }
+   .drake-term label{ margin:0; font-weight:400; }
+   .drake-term__sym{ font-weight:600; margin-right:3px; }
+   .drake-term__val{ font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; }
+   .drake-term input[type=range]{ grid-column:1 / -1; width:100%; height:24px; margin:2px 0 0; accent-color:var(--viz-s3); }
+   .drake-term__est{ grid-column:1 / -1; font-size:0.85em; color:var(--viz-muted); }
+   @media (pointer: coarse){ .drake-term input[type=range]{ height:32px; } }
+   @media (prefers-reduced-motion: no-preference){
+     .drake-scale__mark{ transition:left 0.2s ease; }
+     .drake-scale__fill{ transition:width 0.2s ease; }
+   }
+   @media print{
+     #drake-table[hidden]{ display:block; }
+     .drake-calc{ display:none; }
+   }
+ </style>
  <script defer src="../js/theme.js?v=20260923a"></script>
  <script defer src="../js/palette.js?v=20260923a"></script>
 </head>
@@ -120,7 +156,7 @@
         <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
         <li class="breadcrumb-item active" aria-current="page">The Fermi Paradox - Why are we alone in space?</li>
       </ol></nav>
-      <p class="kr-opener__kicker">Ideas &middot; <time datetime="2026-07-28">28 July 2026</time> &middot; 22 min read</p>
+      <p class="kr-opener__kicker">Ideas &middot; <time datetime="2026-07-28">28 July 2026</time> &middot; 23 min read</p>
       <p class="kr-opener__title page-title">The Fermi Paradox - Why are we alone in space?</p>
       <p class="kr-opener__standfirst">The galaxy is old and vast and should be teeming, and it is silent. A tour of the Fermi paradox's unsettling answers through the science fiction that dramatises them, from Liu Cixin's dark forest to Banks's Culture.</p>
       <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>
@@ -195,7 +231,7 @@
  <div id="drake-equation" style="font-size: 1.25em; overflow-x: auto; padding: 4px 0;">
  <span style="font-style: italic;">N</span> = <span style="font-style: italic;">R</span><sub>*</sub> &middot; <span style="font-style: italic;">f</span><sub>p</sub> &middot; <span style="font-style: italic;">n</span><sub>e</sub> &middot; <span style="font-style: italic;">f</span><sub>l</sub> &middot; <span style="font-style: italic;">f</span><sub>i</sub> &middot; <span style="font-style: italic;">f</span><sub>c</sub> &middot; <span style="font-style: italic;">L</span>
  </div>
- <div style="overflow-x: auto; margin-top: 14px;">
+ <div id="drake-table" style="overflow-x: auto; margin-top: 14px;">
  <table class="kr-table kr-table--fit">
  <thead>
  <tr>
@@ -214,6 +250,26 @@
  <tr><td><em>L</em></td><td>years a civilisation stays detectable</td><td>10<sup>2</sup>&ndash;10<sup>8</sup></td></tr>
  </tbody>
  </table>
+ </div>
+ <div class="kr-viz drake-calc" id="drake-calc" hidden>
+ <div class="kr-toolbar drake-presets" role="group" aria-label="Presets">
+ <button type="button" class="kr-btn secondary" data-preset="optimistic" aria-pressed="false">Optimistic</button>
+ <button type="button" class="kr-btn secondary" data-preset="bleak" aria-pressed="false">Bleak</button>
+ <button type="button" class="kr-btn secondary" data-preset="greenbank" aria-pressed="false"><span>Green Bank 1961 (<em>N</em> &asymp; <em>L</em>)</span></button>
+ </div>
+ <div class="drake-out">
+ <div class="kr-stats">
+ <div class="kr-stat"><span class="kr-stat-lbl"><span class="kr-swatch drake-swatch"></span>N, our galaxy</span><span class="kr-stat-val" data-drake-n></span></div>
+ <div class="kr-stat"><span class="kr-stat-lbl">Every term but L</span><span class="kr-stat-val" data-drake-mid></span></div>
+ </div>
+ <div class="drake-scale" aria-hidden="true" data-drake-scale>
+ <div class="drake-scale__track"><span class="drake-scale__fill" data-drake-fill></span><span class="drake-scale__one"></span><span class="drake-scale__mark" data-drake-mark></span></div>
+ </div>
+ <div class="drake-says" data-drake-says></div>
+ </div>
+ <div class="drake-terms" data-drake-terms></div>
+ <p class="kr-note">The sliders for <em>f</em><sub>l</sub>, <em>f</em><sub>i</sub> and <em>L</em> move in powers of ten, and the dot on the scale does too. Green Bank 1961 sets the six terms before <em>L</em> so they multiply to one, which is where the 1961 group's estimates landed, and leaves <em>L</em> where you put it: <em>N</em> then matches <em>L</em> as you drag it.</p>
+ <div class="kr-sr-only" aria-live="polite" aria-atomic="true" data-drake-live></div>
  </div>
  <figcaption class="kr-figcaption">
  <em>N</em> is the number of civilisations we could hear from right now. Insert optimistic parameters and <em>N</em> comes out in the millions for our galaxy alone; feed the bleak ends through and <em>N</em> falls below one for the entire observable universe. At the original 1961 Green Bank meeting, the group's estimates for the middle terms multiplied out to roughly one, leaving the famous shorthand <em>N</em> &asymp; <em>L</em>: there are as many detectable civilisations as the number of years a typical one manages to stay detectable. Our own <em>L</em> currently stands at about a century.
@@ -475,6 +531,192 @@ renderFooter('footer-section');</script>
    } else {
      renderDrake();
    }
+ })();
+ </script>
+ <script>
+ /* The Drake equation as a calculator. Every range is the table's, and the
+    table stays in the page for anyone without script (and for print): this
+    hides it once the sliders are built. f_l, f_i and L span orders of
+    magnitude, so their sliders hold the power of ten, not the value. */
+ (function(){
+   'use strict';
+   var calc = document.getElementById('drake-calc');
+   var table = document.getElementById('drake-table');
+   if (!calc || !table) return;
+
+   var TERMS = [
+     {id: 'R',  sym: '<em>R</em><sub>*</sub>', say: 'R star', what: 'new stars formed in the galaxy per year', est: '1.5&ndash;3 (measured)', min: 1.5, max: 3, step: 0.1, dp: 1},
+     {id: 'fp', sym: '<em>f</em><sub>p</sub>', say: 'f p', what: 'fraction of stars with planets', est: '&asymp;1 (measured)', min: 0.1, max: 1, step: 0.05, dp: 2},
+     {id: 'ne', sym: '<em>n</em><sub>e</sub>', say: 'n e', what: 'habitable-zone rocky planets per system', est: '0.1&ndash;0.4 (estimated)', min: 0.1, max: 0.4, step: 0.01, dp: 2},
+     {id: 'fl', sym: '<em>f</em><sub>l</sub>', say: 'f l', what: 'fraction of those where life appears', est: 'unknown; guesses span 10<sup>&minus;8</sup>&ndash;1', min: -8, max: 0, step: 0.1, log: true},
+     {id: 'fi', sym: '<em>f</em><sub>i</sub>', say: 'f i', what: 'fraction where life becomes intelligent', est: 'unknown; guesses span 10<sup>&minus;9</sup>&ndash;1', min: -9, max: 0, step: 0.1, log: true},
+     {id: 'fc', sym: '<em>f</em><sub>c</sub>', say: 'f c', what: 'fraction that build detectable technology', est: 'a guess; 0.1&ndash;1', min: 0.1, max: 1, step: 0.05, dp: 2},
+     {id: 'L',  sym: '<em>L</em>', say: 'L', what: 'years a civilisation stays detectable', est: '10<sup>2</sup>&ndash;10<sup>8</sup>', min: 2, max: 8, step: 0.1, log: true, unit: ' years'}
+   ];
+
+   // In slider units: the log terms are powers of ten. Green Bank sets the
+   // six terms before L to multiply to one and leaves L alone, so N = L.
+   var PRESETS = {
+     optimistic: {R: 3,   fp: 1, ne: 0.4, fl: 0,  fi: 0,  fc: 1,   L: 8},
+     bleak:      {R: 1.5, fp: 1, ne: 0.1, fl: -8, fi: -9, fc: 0.1, L: 2},
+     greenbank:  {R: 2.5, fp: 1, ne: 0.4, fl: 0,  fi: 0,  fc: 1}
+   };
+
+   // The scale under the tiles runs from 10^-18 (every slider at its
+   // floor) to 10^9 (above the optimistic 1.2 x 10^8).
+   var LO = -18, HI = 9;
+
+   /* A number as HTML and as words: plain figures from 0.01 to a million,
+      "120 million" up to a billion, powers of ten beyond either end. */
+   function num(v) {
+     if (v >= 1e9 || v < 0.01) {
+       var e = Math.floor(Math.log10(v)), m = +(v / Math.pow(10, e)).toPrecision(2);
+       if (m >= 10) { m = 1; e += 1; }
+       var sign = e < 0 ? '&minus;' : '', sayExp = (e < 0 ? 'minus ' : '') + Math.abs(e);
+       var pow = '10<sup>' + sign + Math.abs(e) + '</sup>';
+       return m === 1 ? {html: pow, say: '10 to the ' + sayExp}
+                      : {html: m + ' &times; ' + pow, say: m + ' times 10 to the ' + sayExp};
+     }
+     var t = v >= 1e6 ? +(v / 1e6).toPrecision(2) + ' million'
+           : v >= 1000 ? (+v.toPrecision(2)).toLocaleString('en-GB')
+           : String(+v.toPrecision(2));
+     return {html: t, say: t};
+   }
+
+   function valueOf(t) {
+     var x = Number(t.input.value);
+     return t.log ? Math.pow(10, x) : x;
+   }
+
+   function shown(t) {
+     if (t.log) {
+       var n = num(valueOf(t));
+       return {html: n.html + (t.unit || ''), say: n.say + (t.unit || '')};
+     }
+     var s = Number(t.input.value).toFixed(t.dp);
+     return {html: s, say: s};
+   }
+
+   /* ---- build ---------------------------------------------------------- */
+
+   var rows = calc.querySelector('[data-drake-terms]');
+   TERMS.forEach(function (t) {
+     var row = document.createElement('div');
+     row.className = 'drake-term';
+     row.innerHTML =
+       '<label for="drake-' + t.id + '"><span class="drake-term__sym" aria-hidden="true">' + t.sym + '</span>' +
+       '<span class="kr-sr-only">' + t.say + ', </span>' + t.what + '</label>' +
+       '<span class="drake-term__val" aria-hidden="true"></span>' +
+       '<input type="range" id="drake-' + t.id + '" min="' + t.min + '" max="' + t.max + '" step="' + t.step + '"' +
+       ' aria-describedby="drake-' + t.id + '-est">' +
+       '<span class="drake-term__est" id="drake-' + t.id + '-est">Table: ' + t.est + '</span>';
+     t.input = row.querySelector('input');
+     t.val = row.querySelector('.drake-term__val');
+     t.input.addEventListener('input', function () { update(); announce(); });
+     rows.appendChild(row);
+   });
+
+   var scale = calc.querySelector('[data-drake-scale]');
+   [-18, -12, -6, 0, 6].forEach(function (e) {
+     var tick = document.createElement('span');
+     tick.className = 'drake-scale__tick' + (e === 0 ? ' drake-scale__tick--one' : '') +
+                      (e === LO ? ' drake-scale__tick--start' : '');
+     tick.style.left = pct(e) + '%';
+     tick.innerHTML = e === 0 ? '1' : '10<sup>' + (e < 0 ? '&minus;' : '') + Math.abs(e) + '</sup>';
+     scale.appendChild(tick);
+   });
+   scale.querySelector('.drake-scale__one').style.left = pct(0) + '%';
+
+   function pct(exp) {
+     return (Math.max(LO, Math.min(HI, exp)) - LO) / (HI - LO) * 100;
+   }
+
+   /* ---- update --------------------------------------------------------- */
+
+   var nEl = calc.querySelector('[data-drake-n]');
+   var midEl = calc.querySelector('[data-drake-mid]');
+   var says = calc.querySelector('[data-drake-says]');
+   var fill = calc.querySelector('[data-drake-fill]');
+   var mark = calc.querySelector('[data-drake-mark]');
+   var buttons = calc.querySelectorAll('[data-preset]');
+   var spoken = '';
+
+   function update() {
+     var mid = 1;
+     TERMS.forEach(function (t) {
+       var s = shown(t);
+       t.val.innerHTML = s.html;
+       t.input.setAttribute('aria-valuetext', s.say);
+       if (t.id !== 'L') mid *= valueOf(t);
+     });
+     var N = mid * valueOf(TERMS[6]);
+     var n = num(N), m = num(mid);
+     nEl.innerHTML = n.html;
+     midEl.innerHTML = m.html;
+
+     var html, say;
+     if (N >= 0.95) {
+       var one = N < 1.05;
+       html = 'About ' + (one ? 'one civilisation' : n.html + ' civilisations') +
+              ' we could hear from in our galaxy right now.';
+       say = 'N is about ' + n.say + '.';
+     } else {
+       var per = num(1 / N);
+       html = 'Fewer than one in our galaxy: about one civilisation we could hear for every ' +
+              per.html + ' galaxies like ours.';
+       say = 'N is ' + n.say + ', one civilisation for every ' + per.say + ' galaxies like ours.';
+     }
+     if (Math.abs(mid - 1) < 0.005) {
+       html += ' Every term before <em>L</em> multiplies to one, so <em>N</em> is <em>L</em>.';
+     }
+     says.innerHTML = html;
+     spoken = say;
+
+     var x = pct(Math.log10(N));
+     mark.style.left = x + '%';
+     fill.style.width = x + '%';
+
+     // a preset reads as pressed for as long as the sliders still match it
+     Array.prototype.forEach.call(buttons, function (b) {
+       var p = PRESETS[b.getAttribute('data-preset')];
+       var on = TERMS.every(function (t) {
+         return !(t.id in p) || Math.abs(Number(t.input.value) - p[t.id]) < 1e-9;
+       });
+       b.setAttribute('aria-pressed', on ? 'true' : 'false');
+       b.classList.toggle('secondary', !on);
+     });
+   }
+
+   /* N goes to a hidden live region, at most once every 1.2 seconds and
+      always the latest value, as the kr-viz demos do: a slider dragged
+      end to end would otherwise queue a sentence for every step. The
+      slider's own value is already read out by its aria-valuetext. */
+   var live = calc.querySelector('[data-drake-live]');
+   var lastSpoke = 0, timer = null;
+   function announce(now) {
+     clearTimeout(timer);
+     var wait = now ? 0 : Math.max(0, 1200 - (Date.now() - lastSpoke));
+     timer = setTimeout(function () {
+       live.textContent = spoken;
+       lastSpoke = Date.now();
+     }, wait);
+   }
+
+   function apply(name) {
+     var p = PRESETS[name];
+     TERMS.forEach(function (t) { if (t.id in p) t.input.value = p[t.id]; });
+     update();
+     announce(true);
+   }
+
+   Array.prototype.forEach.call(buttons, function (b) {
+     b.addEventListener('click', function () { apply(b.getAttribute('data-preset')); });
+   });
+
+   TERMS.forEach(function (t) { t.input.value = PRESETS.optimistic[t.id]; });
+   update();
+   table.hidden = true;
+   calc.hidden = false;
  })();
  </script>
 </body>
