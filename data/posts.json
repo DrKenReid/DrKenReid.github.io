@@ -1148,8 +1148,9 @@
     "excerpt": "Snowball and avalanche both work, but for different reasons. A practical guide with simulator-backed charts on interest, timing, and motivation.",
     "url": "blog/snowball-vs-avalanche.html",
     "image": "blog/img/debt_total_curve.png",
-    "readMinutes": 6,
-    "words": 1181
+    "readMinutes": 7,
+    "words": 1342,
+    "interactive": true
   },
   {
     "title": "Book Ratings Are Broken",

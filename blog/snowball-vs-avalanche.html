@@ -73,8 +73,8 @@
     "isPartOf": { "@id": "https://www.kenreid.co.uk/#website" },
     "inLanguage": "en-GB",
     "articleSection": "Money",
-    "wordCount": 1181,
-    "timeRequired": "PT6M",
+    "wordCount": 1342,
+    "timeRequired": "PT7M",
     "keywords": ["nerd-stuff", "debt-payoff", "personal-finance"]
   }
   </script>
@@ -104,6 +104,40 @@
     ]
   }
   </script>
+  <style>
+    /* Series: s2 = avalanche (and your plan), s1 = snowball (and the same payment from today), s4 = $120 a month. */
+    /* Overrides of the shared .kr-viz component in style.css: one row of tiles per method on a wide screen, one column per method on a phone. */
+    .debt-calc .kr-stats{ grid-template-columns:repeat(3, minmax(0, 1fr)); grid-template-rows:auto auto; grid-auto-flow:column; }
+    .debt-calc .kr-stat-lbl{ white-space:normal; }
+    @media (max-width: 520px){ .debt-calc .kr-stats{ grid-template-columns:repeat(2, minmax(0, 1fr)); grid-template-rows:none; grid-auto-flow:row; } }
+
+    /* Particular to this post's calculator. */
+    .debt-form{ border:0; margin:0; padding:0; min-width:0; font-size:0.85em; color:var(--viz-ink); }
+    .debt-form legend{ font-size:1em; font-weight:600; margin:0 0 8px; padding:0; color:var(--viz-ink); }
+    .debt-head, .debt-row{ display:grid; grid-template-columns:minmax(0, 1.7fr) minmax(0, 1.1fr) minmax(0, 0.8fr) minmax(0, 0.9fr) 32px; gap:6px 8px; align-items:end; }
+    .debt-head{ font-size:0.78em; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--viz-muted); padding-bottom:4px; }
+    .debt-row{ margin-bottom:6px; }
+    .debt-row label{ display:block; margin:0; min-width:0; font-weight:400; }
+    .debt-lbl{ display:none; font-size:0.85em; color:var(--viz-muted); margin-bottom:2px; }
+    .debt-form input{ width:100%; min-width:0; box-sizing:border-box; background:var(--viz-surface); color:var(--viz-ink); border:1px solid var(--viz-border); border-radius:var(--kr-radius-sm); padding:5px 7px; font:inherit; font-variant-numeric:tabular-nums; }
+    .debt-form input[aria-invalid="true"]{ border-color:var(--viz-s4); }
+    .debt-del{ width:32px; height:32px; padding:0; border:1px solid var(--viz-border); border-radius:var(--kr-radius-sm); background:transparent; color:var(--viz-muted); font:inherit; font-size:1.2em; line-height:1; cursor:pointer; }
+    .debt-del:disabled{ opacity:0.35; cursor:default; }
+    .debt-actions{ display:flex; flex-wrap:wrap; gap:8px 10px; align-items:center; margin:10px 0 0; }
+    .debt-budget{ display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; margin:14px 0 0; }
+    .debt-budget label{ display:flex; align-items:center; gap:8px; margin:0; font-weight:600; }
+    .debt-budget input{ width:7.5em; }
+    .debt-budget-note{ color:var(--viz-muted); }
+    /* :root lifts it past the post's paragraph rules, as .kr-note does in style.css. */
+    :root .kr-viz .debt-verdict{ margin:12px 0 0; font-family:inherit; font-size:0.9em; line-height:1.5; font-weight:600; color:var(--viz-ink); }
+    @media (max-width: 520px){
+      .debt-head{ display:none; }
+      .debt-row{ grid-template-columns:repeat(3, minmax(0, 1fr)) 32px; padding:8px 0; border-top:1px solid var(--viz-border); margin:0; }
+      .debt-row .debt-name{ grid-column:1 / 4; }
+      .debt-row .debt-del{ grid-column:4; grid-row:1; }
+      .debt-lbl{ display:block; }
+    }
+  </style>
   <script defer src="../js/theme.js?v=20260923a"></script>
   <script defer src="../js/palette.js?v=20260923a"></script>
 </head>
@@ -120,7 +154,7 @@
         <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
         <li class="breadcrumb-item active" aria-current="page">The Science of Paying Off Debt Efficiently</li>
       </ol></nav>
-      <p class="kr-opener__kicker">Money &middot; <time datetime="2026-04-14">14 April 2026</time> &middot; 6 min read</p>
+      <p class="kr-opener__kicker">Money &middot; <time datetime="2026-04-14">14 April 2026</time> &middot; 7 min read</p>
       <p class="kr-opener__title page-title">The Science of Paying Off Debt Efficiently</p>
       <p class="kr-opener__standfirst">Snowball and avalanche both work, but for different reasons. A practical guide with simulator-backed charts on interest, timing, and motivation.</p>
     </div>
@@ -155,15 +189,20 @@
 
         <p>The longer debt sits there, the more expensive it gets. At 24% APR, interest is about 2% per month. On a $4,000 balance, that is around $80 in month one, and then more each month if the balance does not fall quickly.</p>
 
-        
-          <img class="chart-dark" src="img/debt_payment_power.png" alt="Paying $220/month instead of $120/month clears the same $4,000 debt roughly twice as fast, because every extra dollar also shrinks the principal that next month's interest is charged on" loading="lazy" width="1800" height="936">
-        <p class="chart-note">$120/mo to $220/mo: <strong>56</strong> months to <strong>23</strong> months, and about <strong>$1,636</strong> less interest.</p>
-
         <p>Waiting also costs money: if you wait four months before starting a plan, interest has extra time to compound before you make serious progress.</p>
 
-        
-          <img class="chart-dark" src="img/debt_start_delay.png" alt="Waiting just 4 months before starting a payoff plan adds hundreds of dollars in interest before serious repayment has even begun" loading="lazy" width="1800" height="936">
-        <p class="chart-note">Start now vs wait 4 months: <strong>20</strong> months vs <strong>22</strong> months, plus about <strong>$170</strong> extra interest.</p>
+        <div class="debt-fallback">
+          <p class="chart-note">$120/mo to $220/mo: <strong>56</strong> months to <strong>23</strong> months, and about <strong>$1,636</strong> less interest.</p>
+          <p class="chart-note">Start now vs wait 4 months, at $250/mo: cleared in <strong>20</strong> months vs <strong>26</strong>, and about <strong>$499</strong> more paid ($330 of it charged while you wait).</p>
+        </div>
+
+        <div class="kr-viz" id="debt-one" hidden>
+          <canvas id="debtOneChart" height="300" role="img" aria-label="Line chart of a $4,000 credit card at 24% APR, the balance left each month under your plan against paying $120 a month from today. The sliders set your monthly payment and how many months you wait before paying anything."></canvas>
+          <div class="kr-toolbar" data-kr-toolbar></div>
+          <div class="kr-sliders" data-kr-sliders></div>
+          <div class="kr-stats" data-kr-stats></div>
+          <p class="kr-note">At $120/mo the card takes 56 months to clear. At $220/mo it takes 23, with about $1,636 less interest. Now try a 4-month wait at $250/mo: the card charges about $330 while you wait, the payoff after it costs about $170 more, and it clears 6 months later.</p>
+        </div>
 
         <p>If you remember one thing from this post, let it be this: paying debt early does two jobs at once: 1) it lowers what you owe now, and 2) it lowers future interest on what you owe - which is cumulative, so paying $10 now is saving possibly $12, $15, $25 later.</p>
 
@@ -181,9 +220,7 @@
 
         <p>The downside: it can feel slower because you may spend months paying down a large high-APR balance before any account disappears from your list.</p>
 
-        
-          <img class="chart-dark" src="img/debt_total_curve.png" alt="On identical debt inputs, avalanche clears the full balance 6 months faster than snowball, with a visibly steeper decline after the first year" loading="lazy" width="1800" height="936">
-        <p class="chart-note">Avalanche vs snowball: <strong>48</strong> months vs <strong>54</strong> months, and about <strong>$6,216</strong> less interest.</p>
+        <p>Avalanche vs snowball on the <a href="#worked-example">debt stack further down</a>: <strong>48</strong> months vs <strong>54</strong> months, and about <strong>$6,215</strong> less interest.</p>
 
         <h2>Both methods work, your choice should be the one you can stick to.</h2>
 
@@ -191,14 +228,11 @@
 
         <p>I often blend both: clear one tiny debt for momentum, then return to pure high-APR targeting. Sometimes just not having to log into another app to make another payment can make it feel less burdensome.</p>
 
-        
-          <img class="chart-dark" src="img/debt_method_comparison.png" alt="Side-by-side bars show avalanche costs about $6,216 less in total interest than snowball and finishes about 6 months sooner on this debt stack" loading="lazy" width="2015" height="936">
-        <p class="chart-note">Example comparison from the same simulator inputs.</p>
+        <h2 id="worked-example">Worked example: a real debt stack</h2>
 
-        <h2>Worked example: a real debt stack</h2>
+        <p>The calculator below starts with this set of five debts. Monthly take-home: $4,219. Fixed expenses: $3,176. Combined minimums: $772/month. That leaves $271 extra to throw at debt each month, $1,043 in all. Swap in your own debts and budget and both methods run again.</p>
 
-        <p>The charts above use this set of five debts. Monthly take-home: $4,219. Fixed expenses: $3,247. Combined minimums: $772/month. That leaves $200 extra to throw at debt each month.</p>
-
+        <div class="debt-fallback">
         <table class="example-table" aria-label="Example debt stack inputs">
           <thead>
             <tr><th scope="col">Debt</th><th scope="col">Balance</th><th scope="col">APR</th><th scope="col">Min. Payment</th></tr>
@@ -220,16 +254,41 @@
             <tr><th scope="col">Strategy</th><th scope="col">Months</th><th scope="col">Interest paid</th><th scope="col">Total paid</th></tr>
           </thead>
           <tbody>
-            <tr class="winner"><td>Avalanche</td><td>48</td><td>$15,254</td><td>$49,450</td></tr>
-            <tr><td>Snowball</td><td>54</td><td>$21,470</td><td>$55,666</td></tr>
+            <tr class="winner"><td>Avalanche</td><td>48</td><td>$15,252</td><td>$49,448</td></tr>
+            <tr><td>Snowball</td><td>54</td><td>$21,466</td><td>$55,662</td></tr>
           </tbody>
         </table>
+        </div>
 
-        <p>Avalanche saves <strong>about $6,216 in interest</strong> and finishes roughly six months sooner. That is a meaningful chunk of time and money. Whether it outweighs the psychological wins of snowball is still a question only you can answer, but this makes the trade-off much easier to see.</p>
+        <div class="kr-viz debt-calc" id="debt-calc" hidden>
+          <fieldset class="debt-form">
+            <legend>Your debts</legend>
+            <div class="debt-head" aria-hidden="true"><span>Debt</span><span>Balance ($)</span><span>APR (%)</span><span>Min. ($/mo)</span><span></span></div>
+            <div class="debt-rows" id="debtRows"></div>
+            <div class="debt-actions">
+              <button type="button" class="kr-btn secondary" id="debtAdd">Add a debt</button>
+              <button type="button" class="kr-btn secondary" id="debtReset">Back to the example</button>
+            </div>
+            <div class="debt-budget">
+              <label for="debtBudget">Paid toward debt each month ($)</label>
+              <input type="number" id="debtBudget" min="0" step="1" inputmode="decimal" value="1043" aria-describedby="debtBudgetNote">
+              <span class="debt-budget-note" id="debtBudgetNote"></span>
+            </div>
+          </fieldset>
+          <div class="kr-stats" data-kr-stats></div>
+          <p class="debt-verdict" id="debtVerdict"></p>
+          <canvas id="debtCurve" class="kr-chart kr-interactive" height="300" role="img" aria-label="Line chart of the total debt left each month under avalanche and under snowball, with a dot where each debt is paid off. Tapping the chart jumps to that month."></canvas>
+          <p class="kr-note">Tap the chart to jump to a month. The faint lines are the whole run; the solid ones are where it has got to.</p>
+          <div class="kr-toolbar" data-kr-toolbar></div>
+          <canvas id="debtBars" class="kr-chart" height="220" role="img" aria-label="Bars for each debt under each method, showing the balance left in the month the chart has reached, the debt getting the extra money that month, and the month each debt was paid off."></canvas>
+          <p class="kr-note">The bright bar is the debt getting everything above the minimums that month. Snowball clears two debts in its first year while avalanche spends three and a half years on Credit Card A, the 28% card snowball leaves until last.</p>
+        </div>
+
+        <p>Avalanche saves <strong>about $6,215 in interest</strong> and finishes roughly six months sooner. That is a meaningful chunk of time and money. Whether it outweighs the psychological wins of snowball is still a question only you can answer, but this makes the trade-off much easier to see.</p>
 
         <h2>So I built a simulator</h2>
 
-        <p>Most debt calculators are too generic or too annoying to use. I wanted one where you can enter your real debts, real APRs, and actual monthly budget, then compare snowball vs avalanche directly. Every chart in this post was generated directly from the same simulation engine that powers the live app, not illustrative diagrams or filler visuals. You can <a href="https://github.com/DrKenReid/Debt-Payoff-Simulator" target="_blank" rel="noopener noreferrer">read the source code on GitHub</a> or find more tools like this on my <a href="../data_science.html">data science page</a>.</p>
+        <p>Most debt calculators are too generic or too annoying to use. I wanted one where you can enter your real debts, real APRs, and actual monthly budget, then compare snowball vs avalanche directly. The calculators in this post run the same model as the live app, rewritten in JavaScript so they work right here in the page. You can <a href="https://github.com/DrKenReid/Debt-Payoff-Simulator" target="_blank" rel="noopener noreferrer">read the source code on GitHub</a> or find more tools like this on my <a href="../data_science.html">data science page</a>.</p>
 
         <div class="sim-cta">
           <a class="sim-button" href="https://debt-payoff-simulator.streamlit.app" target="_blank" rel="noopener noreferrer">Open Debt Payoff Simulator</a>
@@ -350,5 +409,543 @@
   <script src="../js/shared-components.js?v=20260923a"></script>
   <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
 renderFooter('footer-section');</script>
+<script src="../js/kr-viz.js?v=20260923a"></script>
+ <script>
+/*
+ * The two calculators in this post. The engine (js/kr-viz.js) supplies the
+ * chrome and plays a run back one month per step; what stays here is the
+ * model, the drawing and the debts form.
+ */
+(function () {
+  'use strict';
+  if (!window.KRViz) return;
+
+  // One month: interest at APR / 12 on every balance, then the minimums,
+  // then everything left over to the first debt in the method's order
+  // (avalanche: highest APR, then smallest balance; snowball: smallest
+  // balance). The model of the Debt Payoff Simulator's src/simulator.py.
+  // Three months of growth in a row means the budget cannot keep up; the
+  // run stops there, or carries on to month `extend` so the chart can show
+  // the debt growing.
+  var MAX_MONTHS = 600;
+  function simulate(debts, budget, method, extend) {
+    var active = [], i;
+    for (i = 0; i < debts.length; i++) {
+      if (debts[i].balance > 0) active.push({i: i, bal: debts[i].balance, apr: debts[i].apr, min: debts[i].min});
+    }
+    var start = debts.map(function (d) { return Math.max(0, d.balance); });
+    var res = {months: 0, interest: 0, paid: 0, cleared: true, growing: false,
+               remaining: [sum(start)], balances: [start], target: [-1],
+               payoff: debts.map(function () { return 0; })};
+    if (!active.length) return res;
+    budget = Math.max(0, budget);
+    for (var month = 1; month <= MAX_MONTHS; month++) {
+      active.forEach(function (d) {
+        var interest = d.bal * (d.apr / 100 / 12);
+        d.bal += interest;
+        res.interest += interest;
+      });
+      var order = active.slice().sort(method === 'avalanche'
+        ? function (a, b) { return (b.apr - a.apr) || (a.bal - b.bal); }
+        : function (a, b) { return a.bal - b.bal; });
+      var left = budget, pay = {};
+      active.forEach(function (d) {
+        var p = Math.min(d.min, d.bal, left);
+        pay[d.i] = p; left -= p;
+      });
+      var target = -1;
+      for (var k = 0; k < order.length && left > 0; k++) {
+        var d = order[k], extra = Math.min(left, d.bal - pay[d.i]);
+        if (extra > 0) { pay[d.i] += extra; left -= extra; if (target < 0) target = d.i; }
+      }
+      var row = res.balances[res.balances.length - 1].slice(), total = 0;
+      active.forEach(function (d) {
+        d.bal -= pay[d.i];
+        if (d.bal < 0.01) d.bal = 0;
+        res.paid += pay[d.i];
+        row[d.i] = d.bal;
+        total += d.bal;
+        if (d.bal === 0) res.payoff[d.i] = month;
+      });
+      res.balances.push(row);
+      res.remaining.push(total);
+      res.target.push(target);
+      var r = res.remaining, n = r.length - 1;
+      if (!res.growing && month >= 3 && cents(r[n]) > cents(r[n - 1]) && cents(r[n - 1]) > cents(r[n - 2])) {
+        res.growing = true; res.cleared = false; res.months = month;
+      }
+      if (res.growing && month >= (extend || 0)) return res;
+      active = active.filter(function (d) { return d.bal > 0; });
+      if (!active.length) { if (!res.growing) res.months = month; return res; }
+    }
+    res.cleared = false; res.months = MAX_MONTHS;
+    return res;
+  }
+  function cents(v) { return Math.round(v * 100) / 100; }
+  function sum(a) { return a.reduce(function (s, v) { return s + v; }, 0); }
+
+  function money(v) {
+    var r = Math.round(v);
+    return (r < 0 ? '-$' : '$') + Math.abs(r).toLocaleString('en-US');
+  }
+  function monthsText(n) { return n + (n === 1 ? ' month' : ' months'); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  var FONT = 'Poppins, sans-serif';
+
+  // Ticks at 1, 2, 2.5 or 5 times a power of ten, about four of them.
+  function niceStep(span) {
+    var p = Math.pow(10, Math.floor(Math.log10(span / 4 || 1)));
+    var f = span / 4 / p;
+    return p * (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10);
+  }
+  function dollarsShort(v) {
+    if (v >= 1000) return '$' + (Math.round(v / 100) / 10).toLocaleString('en-US') + 'k';
+    return '$' + Math.round(v);
+  }
+  function fit(g, text, w) {
+    if (g.measureText(text).width <= w) return text;
+    while (text.length > 1 && g.measureText(text + '…').width > w) text = text.slice(0, -1);
+    return text + '…';
+  }
+
+  // Debt left over time: one line per series, faint for the whole run and
+  // solid up to month m, a dot where a debt is cleared, and the month
+  // marked. Returns the plot's left and right edges, so a tap can be
+  // turned into a month.
+  function drawCurves(c, colors, series, horizon, m) {
+    var g = c.g, W = c.w, H = c.h, small = W < 480;
+    var fs = small ? 11 : 12;
+    g.font = '600 ' + fs + 'px ' + FONT;
+    g.textBaseline = 'middle';
+
+    // the legend wraps rather than running off a phone
+    var lx = 0, ly = 9, items = [];
+    series.forEach(function (s) {
+      var w = 18 + g.measureText(s.label).width;
+      if (lx > 0 && lx + w > W) { lx = 0; ly += fs + 7; }
+      items.push({s: s, x: lx, y: ly});
+      lx += w + 16;
+    });
+    items.forEach(function (it) {
+      g.strokeStyle = colors[it.s.tone]; g.lineWidth = 3;
+      g.setLineDash(it.s.dash ? [5, 4] : []);
+      g.beginPath(); g.moveTo(it.x, it.y); g.lineTo(it.x + 12, it.y); g.stroke();
+      g.setLineDash([]);
+      g.fillStyle = colors.ink; g.textAlign = 'left';
+      g.fillText(it.s.label, it.x + 18, it.y);
+    });
+
+    var top = 0;
+    series.forEach(function (s) { s.values.forEach(function (v) { if (v > top) top = v; }); });
+    var step = niceStep(top || 1), yMax = Math.max(step, Math.ceil(top / step) * step);
+    g.font = '400 ' + fs + 'px ' + FONT;
+    var padL = Math.ceil(g.measureText(dollarsShort(yMax)).width) + 10;
+    var x0 = padL, x1 = W - 10, y0 = ly + fs + 14, y1 = H - 36;
+    function X(month) { return x0 + (x1 - x0) * month / Math.max(1, horizon); }
+    function Y(v) { return y1 - (y1 - y0) * v / yMax; }
+
+    g.lineWidth = 1;
+    for (var t = 0; t <= yMax + step / 2; t += step) {
+      g.strokeStyle = colors.grid;
+      g.beginPath(); g.moveTo(x0, Y(t)); g.lineTo(x1, Y(t)); g.stroke();
+      g.fillStyle = colors.muted; g.textAlign = 'right';
+      g.fillText(dollarsShort(t), x0 - 6, Y(t));
+    }
+    var xs = horizon <= 36 ? 6 : horizon <= 84 ? 12 : horizon <= 180 ? 24 : 60;
+    if (small && horizon / xs > 6) xs *= 2;
+    g.textAlign = 'center';
+    for (var mo = 0; mo <= horizon; mo += xs) g.fillText(String(mo), X(mo), y1 + 12);
+    g.fillText('Months from today', (x0 + x1) / 2, y1 + 28);
+
+    if (m > 0) {
+      g.strokeStyle = colors.muted; g.setLineDash([3, 3]);
+      g.beginPath(); g.moveTo(X(m), y0); g.lineTo(X(m), y1); g.stroke();
+      g.setLineDash([]);
+      g.fillStyle = colors.muted;
+      var right = X(m) > x1 - 60;
+      g.textAlign = right ? 'right' : 'left';
+      g.fillText('Month ' + m, X(m) + (right ? -5 : 5), y0 + 2);
+    }
+
+    series.forEach(function (s) {
+      var v = s.values, last = Math.min(m, v.length - 1), i;
+      g.strokeStyle = colors[s.tone];
+      g.setLineDash(s.dash ? [6, 5] : []);
+      g.globalAlpha = 0.3; g.lineWidth = 1.5;
+      g.beginPath();
+      for (i = 0; i < v.length; i++) { if (i) g.lineTo(X(i), Y(v[i])); else g.moveTo(X(i), Y(v[i])); }
+      g.stroke();
+      g.globalAlpha = 1; g.lineWidth = 2.5;
+      g.beginPath();
+      for (i = 0; i <= last; i++) { if (i) g.lineTo(X(i), Y(v[i])); else g.moveTo(X(i), Y(v[i])); }
+      g.stroke();
+      g.setLineDash([]);
+      (s.payoffs || []).forEach(function (p) {
+        if (!p || p >= v.length) return;
+        g.beginPath(); g.arc(X(p), Y(v[p]), 4, 0, Math.PI * 2);
+        if (p <= m) {
+          g.fillStyle = colors[s.tone]; g.fill();
+          g.strokeStyle = colors.surface; g.lineWidth = 1.5; g.stroke();
+        } else {
+          g.globalAlpha = 0.45; g.strokeStyle = colors[s.tone]; g.lineWidth = 1.5; g.stroke();
+          g.globalAlpha = 1;
+        }
+      });
+    });
+    return {x0: x0, x1: x1};
+  }
+
+  // Each debt's balance in month m under one method: its name, what is
+  // left (or the month it was paid off) and a bar. The bright bar is the
+  // debt getting everything above the minimums that month.
+  function drawBarPane(g, x, y, w, h, colors, pane, st, m) {
+    var r = pane.run, at = Math.min(m, r.balances.length - 1);
+    var target = r.target[Math.max(1, Math.min(m, r.target.length - 1))];
+    if (r.cleared && m >= r.months) target = -1;
+    var done = st.rows.filter(function (i) { return r.payoff[i] && r.payoff[i] <= m; }).length;
+    g.textBaseline = 'alphabetic';
+    g.font = '600 12px ' + FONT;
+    g.fillStyle = colors[pane.tone]; g.textAlign = 'left';
+    g.fillText(pane.label.toUpperCase(), x, y + 12);
+    g.font = '400 12px ' + FONT;
+    g.fillStyle = colors.muted; g.textAlign = 'right';
+    g.fillText(done + ' of ' + st.rows.length + ' paid off', x + w, y + 12);
+    var rowH = (h - 22) / Math.max(1, st.rows.length);
+    st.rows.forEach(function (i, j) {
+      var ty = y + 22 + j * rowH, bal = r.balances[at][i], paidOff = r.payoff[i] && r.payoff[i] <= m;
+      var amount = paidOff ? 'Paid off, month ' + r.payoff[i] : money(bal);
+      g.font = '400 12px ' + FONT;
+      var aw = g.measureText(amount).width;
+      g.fillStyle = paidOff ? colors[pane.tone] : colors.muted; g.textAlign = 'right';
+      g.fillText(amount, x + w, ty + 13);
+      g.font = (i === target ? '600 ' : '400 ') + '12px ' + FONT;
+      g.fillStyle = colors.ink; g.textAlign = 'left';
+      g.fillText(fit(g, st.names[i], w - aw - 10), x, ty + 13);
+      g.fillStyle = colors.cell;
+      g.fillRect(x, ty + 18, w, 7);
+      g.fillStyle = colors[pane.tone];
+      g.globalAlpha = i === target ? 1 : 0.4;
+      g.fillRect(x, ty + 18, w * clamp(bal / st.scale, 0, 1), 7);
+      g.globalAlpha = 1;
+    });
+  }
+
+  /* ---- 1. One card: the payment, and the cost of waiting ------------- */
+
+  var CARD = {balance: 4000, apr: 24}, BASE_PAY = 120;
+
+  // Nothing is paid while waiting, so the card compounds; then the payment
+  // goes in every month until it is clear.
+  function oneCard(pay, wait) {
+    var bal = CARD.balance, values = [bal], waited = 0;
+    for (var k = 0; k < wait; k++) {
+      var i = bal * CARD.apr / 100 / 12;
+      bal += i; waited += i; values.push(bal);
+    }
+    var r = simulate([{balance: bal, apr: CARD.apr, min: pay}], pay, 'avalanche', 120);
+    return {values: values.concat(r.remaining.slice(1)), months: wait + r.months,
+            cleared: r.cleared, interest: waited + r.interest, paid: r.paid};
+  }
+
+  var one = document.getElementById('debt-one');
+  var calc = document.getElementById('debt-calc');
+  if (!one || !calc) return;
+  // the calculators replace the figures written out for readers without script
+  Array.prototype.forEach.call(document.querySelectorAll('.debt-fallback'),
+                               function (n) { n.hidden = true; });
+  one.hidden = false;
+  calc.hidden = false;
+
+  var oneRate = 12;
+  KRViz.mount(one, {
+    canvases: {
+      chart: {el: '#debtOneChart', height: function (w) { return clamp(w * 0.5, 250, 340); },
+              mobile: {height: function (w) { return Math.max(270, w * 0.85); }}}
+    },
+    buttons: ['run', 'restart'],
+    controls: [
+      {id: 'pay', label: 'Monthly payment', min: 120, max: 400, step: 10, value: 220, restart: true,
+       fmt: function (v) { return '$' + v; }},
+      {id: 'wait', label: 'Months before paying', min: 0, max: 12, value: 0, restart: true,
+       fmt: monthsText}
+    ],
+    stats: [
+      {id: 'months', label: 'Months to clear', tone: 's2',
+       fmt: function (v) { return v == null ? 'Never' : String(v); }},
+      {id: 'interest', label: 'Interest', fmt: money},
+      {id: 'saved', label: 'Saved vs $120/mo', fmt: money},
+      {id: 'waiting', label: 'Cost of waiting', fmt: money}
+    ],
+    speed: function () { return oneRate; },
+
+    init: function (ctx) {
+      var pay = ctx.controls.pay, wait = ctx.controls.wait;
+      var st = {base: oneCard(BASE_PAY, 0), yours: oneCard(pay, wait),
+                now: wait > 0 ? oneCard(pay, 0) : null};
+      st.horizon = Math.max(st.base.values.length, st.yours.values.length) - 1;
+      oneRate = clamp(st.horizon / 4, 10, 60);
+      ctx.set('months', st.yours.cleared ? st.yours.months : null);
+      ctx.set('interest', st.yours.interest);
+      ctx.set('saved', st.base.interest - st.yours.interest);
+      ctx.set('waiting', st.now ? st.yours.paid - st.now.paid : 0);
+      return st;
+    },
+    step: function (ctx) {
+      var st = ctx.state;
+      if (ctx.iteration + 1 >= st.horizon) {
+        ctx.finish(st.yours.cleared
+          ? 'Your plan clears the card in ' + monthsText(st.yours.months) + '; $120/mo takes ' + st.base.months + '.'
+          : 'At this payment the card never clears.');
+      }
+    },
+    draw: function (ctx) {
+      var st = ctx.state, series = [
+        {values: st.base.values, tone: 's4', label: '$120/mo from today'},
+        {values: st.yours.values, tone: 's2', label: 'Your plan'}
+      ];
+      if (st.now) series.push({values: st.now.values, tone: 's1', dash: true, label: 'Same payment from today'});
+      drawCurves(ctx.canvas.chart, ctx.colors, series, st.horizon, Math.min(ctx.iteration, st.horizon));
+    }
+  });
+
+  /* ---- 2. The debt stack: avalanche against snowball ----------------- */
+
+  // The worked example's debts, as the table above lists them.
+  var EXAMPLE = [
+    {name: 'Store Card', balance: 890, apr: 15.92, min: 77},
+    {name: 'Credit Card A', balance: 14123, apr: 28.20, min: 224},
+    {name: 'Credit Card B', balance: 8356, apr: 20.47, min: 212},
+    {name: 'Personal Loan', balance: 7287, apr: 11.25, min: 193},
+    {name: 'Medical Bill', balance: 3540, apr: 2.08, min: 66}
+  ];
+  var EXAMPLE_BUDGET = 1043, MAX_DEBTS = 8;
+
+  var rowsEl = document.getElementById('debtRows');
+  var addBtn = document.getElementById('debtAdd');
+  var budgetEl = document.getElementById('debtBudget');
+  var budgetNote = document.getElementById('debtBudgetNote');
+  var verdictEl = document.getElementById('debtVerdict');
+  var curve = document.getElementById('debtCurve');
+  var FIELDS = [
+    {key: 'balance', head: 'Balance ($)', say: 'balance in dollars', step: '1', max: null},
+    {key: 'apr', head: 'APR (%)', say: 'APR in percent', step: '0.01', max: '100'},
+    {key: 'min', head: 'Min. ($/mo)', say: 'minimum payment in dollars a month', step: '1', max: null}
+  ];
+
+  function field(row, labelText, input, cls) {
+    var lab = document.createElement('label');
+    if (cls) lab.className = cls;
+    var span = document.createElement('span');
+    span.className = 'debt-lbl';
+    span.textContent = labelText;
+    lab.appendChild(span);
+    lab.appendChild(input);
+    row.appendChild(lab);
+  }
+
+  // The column heads are hidden from screen readers and the phone labels
+  // from wide screens, so every input carries its own name.
+  function nameRow(row) {
+    var text = row.querySelector('input[type=text]');
+    var name = text.value.trim() || 'This debt';
+    row.querySelectorAll('input[type=number]').forEach(function (inp, k) {
+      inp.setAttribute('aria-label', name + ', ' + FIELDS[k].say);
+    });
+    text.setAttribute('aria-label', 'Name of debt');
+    row.querySelector('.debt-del').setAttribute('aria-label', 'Remove ' + name);
+  }
+
+  function addRow(d) {
+    var row = document.createElement('div');
+    row.className = 'debt-row';
+    var name = document.createElement('input');
+    name.type = 'text'; name.maxLength = 30; name.value = d.name; name.autocomplete = 'off';
+    field(row, 'Debt', name, 'debt-name');
+    FIELDS.forEach(function (f) {
+      var inp = document.createElement('input');
+      inp.type = 'number'; inp.min = '0'; inp.step = f.step; inp.inputMode = 'decimal';
+      if (f.max) inp.max = f.max;
+      inp.value = d[f.key] == null ? '' : String(d[f.key]);
+      field(row, f.head, inp);
+    });
+    var del = document.createElement('button');
+    del.type = 'button'; del.className = 'debt-del'; del.textContent = '×';
+    row.appendChild(del);
+    rowsEl.appendChild(row);
+    nameRow(row);
+    return row;
+  }
+
+  function syncButtons() {
+    var rows = rowsEl.querySelectorAll('.debt-row');
+    addBtn.disabled = rows.length >= MAX_DEBTS;
+    rows.forEach(function (r) { r.querySelector('.debt-del').disabled = rows.length <= 1; });
+  }
+
+  function fillExample() {
+    rowsEl.textContent = '';
+    EXAMPLE.forEach(addRow);
+    budgetEl.value = String(EXAMPLE_BUDGET);
+    syncButtons();
+  }
+
+  // A blank or impossible entry counts as nothing owed, and is marked.
+  function num(inp, max) {
+    var v = parseFloat(inp.value);
+    var bad = inp.value !== '' && !(v >= 0 && (max == null || v <= max));
+    inp.setAttribute('aria-invalid', bad ? 'true' : 'false');
+    return bad || isNaN(v) ? 0 : v;
+  }
+
+  function readForm() {
+    var debts = [];
+    rowsEl.querySelectorAll('.debt-row').forEach(function (row) {
+      var nums = row.querySelectorAll('input[type=number]');
+      debts.push({name: row.querySelector('input[type=text]').value.trim() || 'Unnamed debt',
+                  balance: num(nums[0]), apr: num(nums[1], 100), min: num(nums[2])});
+    });
+    var owed = debts.filter(function (d) { return d.balance > 0; });
+    return {debts: debts, budget: num(budgetEl), count: owed.length,
+            sumMin: sum(owed.map(function (d) { return d.min; }))};
+  }
+
+  // A budget under the minimums can still clear the debts slowly, so the
+  // shortfall is said first and the comparison still follows.
+  function verdict(f, a, s) {
+    if (!f.count) return 'Add a debt with a balance to compare the two methods.';
+    var short = f.budget < f.sumMin ? 'This budget is ' + money(f.sumMin - f.budget) + ' short of the minimums. ' : '';
+    if (!a.cleared && !s.cleared) return short + 'At this budget the debts never clear: the interest grows faster than the payments.';
+    var di = s.interest - a.interest, dm = s.months - a.months;
+    if (!a.cleared || !s.cleared) return short + (a.cleared ? 'Only avalanche' : 'Only snowball') + ' clears these debts at this budget.';
+    if (Math.abs(di) < 0.5 && dm === 0) return short + 'Both methods pay these debts off in the same order, so they cost the same.';
+    if (di < 0) return short + 'Snowball comes out ' + money(-di) + ' cheaper on these debts.';
+    return short + 'Avalanche saves ' + money(di) + ' in interest' +
+      (dm > 0 ? ' and finishes ' + monthsText(dm) + ' sooner.'
+       : dm === 0 ? ' and finishes in the same month.'
+       : ', though snowball finishes ' + monthsText(-dm) + ' sooner.');
+  }
+
+  var calcRate = 12, barRows = EXAMPLE.length;
+  function barsHeight(w) {
+    var pane = 24 + Math.max(1, barRows) * 32;
+    return w < 480 ? pane * 2 + 18 : pane;
+  }
+  function monthsOrNever(v) { return v == null ? 'Never' : String(v); }
+  // a run that never clears has no total to show
+  function moneyOrNA(v) { return v == null ? 'n/a' : money(v); }
+
+  fillExample();
+  var viz = KRViz.mount(calc, {
+    canvases: {
+      curve: {el: '#debtCurve', height: function (w) { return clamp(w * 0.5, 250, 340); },
+              mobile: {height: function (w) { return Math.max(270, w * 0.85); }}},
+      bars: {el: '#debtBars', height: barsHeight}
+    },
+    buttons: ['run', 'step', 'restart'],
+    stats: [
+      {id: 'aMonths', label: 'Avalanche months', tone: 's2', fmt: monthsOrNever},
+      {id: 'sMonths', label: 'Snowball months', tone: 's1', fmt: monthsOrNever},
+      {id: 'aInterest', label: 'Avalanche interest', tone: 's2', fmt: moneyOrNA},
+      {id: 'sInterest', label: 'Snowball interest', tone: 's1', fmt: moneyOrNA},
+      {id: 'aPaid', label: 'Avalanche total paid', tone: 's2', fmt: moneyOrNA},
+      {id: 'sPaid', label: 'Snowball total paid', tone: 's1', fmt: moneyOrNA}
+    ],
+    speed: function () { return calcRate; },
+
+    init: function (ctx) {
+      var f = readForm();
+      var a = simulate(f.debts, f.budget, 'avalanche', 60);
+      var s = simulate(f.debts, f.budget, 'snowball', 60);
+      var st = {f: f, a: a, s: s, box: null,
+                horizon: Math.max(1, a.remaining.length - 1, s.remaining.length - 1),
+                names: f.debts.map(function (d) { return d.name; }),
+                rows: [], scale: 1};
+      f.debts.forEach(function (d, i) { if (d.balance > 0) st.rows.push(i); });
+      [a, s].forEach(function (r) {
+        r.balances.forEach(function (row) { row.forEach(function (v) { if (v > st.scale) st.scale = v; }); });
+      });
+      calcRate = clamp(st.horizon / 4.5, 10, 140);
+      ctx.set('aMonths', a.cleared ? a.months : null);
+      ctx.set('sMonths', s.cleared ? s.months : null);
+      ctx.set('aInterest', a.cleared ? a.interest : null);
+      ctx.set('sInterest', s.cleared ? s.interest : null);
+      ctx.set('aPaid', a.cleared ? a.paid : null);
+      ctx.set('sPaid', s.cleared ? s.paid : null);
+      verdictEl.textContent = verdict(f, a, s);
+      budgetNote.textContent = !f.count ? ''
+        : f.budget >= f.sumMin
+          ? 'Minimums add up to ' + money(f.sumMin) + ', so ' + money(f.budget - f.sumMin) + ' a month goes to the target debt.'
+          : 'Minimums add up to ' + money(f.sumMin) + '.';
+      // the bars canvas is as tall as the list, and the engine sizes its
+      // canvases when the window changes size, so a new count asks for that
+      if (st.rows.length !== barRows) {
+        barRows = st.rows.length;
+        requestAnimationFrame(function () { window.dispatchEvent(new Event('resize')); });
+      }
+      return st;
+    },
+    step: function (ctx) {
+      var st = ctx.state;
+      if (ctx.iteration + 1 >= st.horizon) {
+        ctx.finish(st.a.cleared && st.s.cleared
+          ? 'Avalanche is debt-free in month ' + st.a.months + ', snowball in month ' + st.s.months + '.'
+          : 'At this budget the debts never clear.');
+      }
+    },
+    draw: function (ctx) {
+      var st = ctx.state, m = Math.min(ctx.iteration, st.horizon);
+      st.box = drawCurves(ctx.canvas.curve, ctx.colors, [
+        {values: st.a.remaining, tone: 's2', label: 'Avalanche', payoffs: st.a.payoff},
+        {values: st.s.remaining, tone: 's1', label: 'Snowball', payoffs: st.s.payoff}
+      ], st.horizon, m);
+      var c = ctx.canvas.bars, stacked = c.w < 480, gap = stacked ? 18 : 28;
+      var pw = stacked ? c.w : (c.w - gap) / 2, ph = stacked ? (c.h - gap) / 2 : c.h;
+      [{label: 'Avalanche', tone: 's2', run: st.a}, {label: 'Snowball', tone: 's1', run: st.s}]
+        .forEach(function (pane, k) {
+          drawBarPane(c.g, stacked ? 0 : k * (pw + gap), stacked ? k * (ph + gap) : 0,
+                      pw, ph, ctx.colors, pane, st, m);
+        });
+    }
+  });
+  if (!viz) return;
+
+  // Tapping the chart (or Enter at the keyboard cursor) jumps to that month.
+  curve.addEventListener('click', function (e) {
+    var st = viz.ctx.state, b = st && st.box;
+    if (!b) return;
+    var x = e.clientX - curve.getBoundingClientRect().left;
+    viz.stepTo(Math.round(clamp((x - b.x0) / (b.x1 - b.x0), 0, 1) * st.horizon));
+  });
+
+  // Typing runs both methods again once the reader stops for a moment.
+  var timer = null;
+  calc.querySelector('.debt-form').addEventListener('input', function (e) {
+    var row = e.target.closest('.debt-row');
+    if (row) nameRow(row);
+    clearTimeout(timer);
+    timer = setTimeout(function () { viz.restart(); }, 300);
+  });
+  rowsEl.addEventListener('click', function (e) {
+    var del = e.target.closest('.debt-del');
+    if (!del || del.disabled) return;
+    var row = del.closest('.debt-row');
+    var next = row.nextElementSibling || row.previousElementSibling;
+    row.remove();
+    syncButtons();
+    (next ? next.querySelector('.debt-del') : addBtn).focus();
+    viz.restart();
+  });
+  addBtn.addEventListener('click', function () {
+    var row = addRow({name: 'Debt ' + (rowsEl.children.length + 1), balance: null, apr: null, min: null});
+    syncButtons();
+    row.querySelector('input[type=number]').focus();
+  });
+  document.getElementById('debtReset').addEventListener('click', function () {
+    fillExample();
+    viz.restart();
+  });
+})();
+ </script>
 </body>
 </html>
