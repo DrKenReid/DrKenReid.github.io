@@ -8549,6 +8549,20 @@ blockquote:hover .copy-hint {
 [data-theme="dark"] .blog-timeline li .tl-body strong {
   color: #f0f0f0; }
 
+/* In a post, the entry under the pointer (or holding keyboard focus)
+   stays as it is and the others step back, as the dot plot's rows and a
+   diagram's nodes do. Only while an entry is hovered: each entry's gap
+   is its own padding, not a margin, so moving from one entry to the
+   next never crosses a strip of bare list that would flash them all
+   back to full strength. */
+.blog-post .blog-timeline li {
+  margin-bottom: 0;
+  padding-bottom: 6px;
+  transition: opacity 0.2s ease; }
+
+.blog-post .blog-timeline:has(> li:is(:hover, :focus-within)) > li:not(:hover, :focus-within) {
+  opacity: 0.4; }
+
 .checklist {
   list-style: none;
   padding-left: 0;
