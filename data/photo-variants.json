@@ -1,6 +1,8 @@
 {
   "_help": "Frames that are one photograph: re-edits of the same shot (colour and black and white, a different grade, a double exposure) or the same file listed twice. Each group is one tile in the gallery. The first stem is the edit the tile shows; the others come up while the tile is hovered and in the lightbox's Edit buttons (gallery.js). Every stem must be in photography-files.json, and in one group only (audit: photo-variants).",
   "groups": [
+    ["655", "656"],
+    ["657", "658"],
     ["545", "544"],
     ["543", "542"],
     ["540", "539"],
