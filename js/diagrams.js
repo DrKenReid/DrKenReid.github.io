@@ -1,5 +1,6 @@
 /**
- * diagrams.js: the hover, focus and tap cards on a post's diagrams.
+ * diagrams.js: the hover cards and Save as PNG buttons on a post's
+ * diagrams, and the phone labels on its stacked tables.
  *
  * Purpose
  *   A diagram (.kr-diagram, style.css section 11 "Diagrams") is HTML whose
@@ -19,8 +20,10 @@
  *
  * Loaded by
  *   initDiagrams() in shared-components.js, which adds this script only
- *   when the page has a .kr-diagram, so pages without a diagram never
- *   fetch it. Needs krEscapeHtml from shared-components.js.
+ *   when the page has a .kr-diagram, a chart marked data-kr-export or a
+ *   table.kr-table--stack, so pages without one never fetch it. Needs
+ *   krEscapeHtml and siteRootPrefix from shared-components.js. Save as PNG
+ *   loads js/kr-export.js on the first press.
  *
  * Exposes
  *   Nothing. It runs once when it loads.
@@ -32,7 +35,8 @@
  *   hides it. The card is a .kr-offstage, so it leaves the
  *   accessibility tree when hidden. It lived in shared-components.js
  *   until the page script budgets (perf_budget.py) showed every page
- *   paying for it.
+ *   paying for it, and initDiagramExport and initStackTables followed it
+ *   here for the same reason.
  */
 (function () {
     'use strict';
@@ -154,5 +158,109 @@
         });
     }
 
-    initDiagrams();
+    /**
+     * A table marked .kr-table--stack becomes a card per row on a phone
+     * (style.css §11, "Stacked on a phone"). The cards need each column's
+     * name beside its value, so this copies the last header row's names
+     * onto the body cells as data-label (a colspan cell takes the first
+     * name it spans; a header's data-short, when it has one, stands in for
+     * a long name) and marks the table .kr-table--labelled, which is what
+     * the stylesheet waits for: a table this never reached keeps scrolling
+     * sideways instead of losing its headings.
+     */
+    function initStackTables() {
+        var tables = document.querySelectorAll('.blog-post table.kr-table--stack');
+        Array.prototype.forEach.call(tables, function(table) {
+            var head = table.tHead && table.tHead.rows[table.tHead.rows.length - 1];
+            if (!head) return;
+            var names = [];
+            Array.prototype.forEach.call(head.cells, function(th) {
+                var name = th.getAttribute('data-short') || th.textContent.trim();
+                for (var i = 0; i < (th.colSpan || 1); i++) names.push(name);
+            });
+            Array.prototype.forEach.call(table.tBodies, function(body) {
+                Array.prototype.forEach.call(body.rows, function(row) {
+                    var col = 0;
+                    Array.prototype.forEach.call(row.cells, function(cell) {
+                        if (names[col]) cell.setAttribute('data-label', names[col]);
+                        col += cell.colSpan || 1;
+                    });
+                });
+            });
+            table.classList.add('kr-table--labelled');
+        });
+    }
+
+    /* Every diagram gets a button in its corner that saves it as a PNG with
+       the page's address under it (js/kr-export.js does the drawing, and
+       says how). A diagram is a .kr-diagram, or anything a post marks with
+       data-kr-export (a hand-built flow chart); data-kr-export="name" names
+       the file. The drawing code loads on the first press. */
+    var KR_EXPORT_SELECTOR = '.kr-diagram, [data-kr-export]';
+    var KR_EXPORT_VERSION = '20261019a';
+    var krExportLoading = null;
+
+    /** Loads js/kr-export.js once; resolves with window.krExport. */
+    function krLoadExport() {
+        if (window.krExport) return Promise.resolve(window.krExport);
+        if (krExportLoading) return krExportLoading;
+        krExportLoading = new Promise(function(ok, fail) {
+            var sc = document.createElement('script');
+            sc.src = siteRootPrefix() + 'js/kr-export.js?v=' + KR_EXPORT_VERSION;
+            sc.onload = function() { ok(window.krExport); };
+            sc.onerror = function() { krExportLoading = null; fail(new Error('load')); };
+            document.head.appendChild(sc);
+        });
+        return krExportLoading;
+    }
+
+    /** The file label for a diagram: its data-kr-export value, else its title or caption. */
+    function krExportLabel(host) {
+        var named = host.getAttribute('data-kr-export');
+        if (named) return named;
+        var fig = host.closest('figure');
+        var title = host.querySelector('[id$="-title"], .kr-diagram__title, figcaption')
+            || (fig && fig.querySelector('figcaption'));
+        return title ? title.textContent.split('.')[0] : '';
+    }
+
+    function initDiagramExport() {
+        var hosts = document.querySelectorAll(KR_EXPORT_SELECTOR);
+        if (!hosts.length || !window.HTMLCanvasElement) return;
+        var status = document.createElement('div');
+        status.className = 'sr-only';
+        status.setAttribute('role', 'status');
+        document.body.appendChild(status);
+        function say(text) {
+            status.textContent = '';
+            setTimeout(function() { status.textContent = text; }, 50);
+        }
+        Array.prototype.forEach.call(hosts, function(host) {
+            if (host.querySelector(':scope > .kr-export-btn')) return;
+            host.classList.add('kr-export-host');
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'kr-export-btn';
+            btn.title = 'Save as PNG';
+            btn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4h2v8.17l3.59-3.58L18 10l-6 6-6-6 1.41-1.41L11 12.17V4zM5 18h14v2H5z"/></svg>' + '<span class="sr-only">Save this diagram as a PNG</span>';
+            host.appendChild(btn);
+            btn.addEventListener('click', function() {
+                if (btn.classList.contains('is-busy')) return;
+                btn.classList.add('is-busy');
+                krLoadExport().then(function(ex) {
+                    return ex.png(host, krExportLabel(host));
+                }).then(function() {
+                    say('Diagram saved as a PNG');
+                }, function() {
+                    say('This browser could not save the diagram');
+                }).then(function() {
+                    btn.classList.remove('is-busy');
+                });
+            });
+        });
+    }
+
+    if (document.querySelector('.kr-diagram')) initDiagrams();
+    initStackTables();
+    initDiagramExport();
 })();

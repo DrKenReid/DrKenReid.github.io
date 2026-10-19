@@ -1,8 +1,8 @@
 /**
  * Saves a diagram as a PNG, with the page's address under it.
  *
- * shared-components.js puts a small button in the corner of every
- * diagram (initDiagramExport) and loads this file the first time one is
+ * js/diagrams.js puts a small button in the corner of every diagram
+ * (initDiagramExport) and loads this file the first time one is
  * pressed, so a page nobody saves from never fetches it. It sets
  * window.krExport = { png, watermark, fileName }; the last two are plain
  * string functions, tested in tests/js/kr-export.test.js.

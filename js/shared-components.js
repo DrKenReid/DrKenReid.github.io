@@ -377,8 +377,7 @@ var KR_SHARE_ICONS = {
     x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2H21l-6.52 7.45L22 22h-6.77l-4.74-6.2L4.86 22H2l7.02-8.01L2 2h6.91l4.27 5.66L18.244 2zm-1.18 18h1.85L7.04 4H5.07l11.99 16z"/></svg>',
     threads: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.18 22h-.05C8.43 21.98 5.58 20.77 3.66 18.4 1.95 16.29 1.07 13.34 1.05 9.62v-.04c.02-3.72.9-6.67 2.61-8.78C5.58.23 8.43-.98 12.13-1h.05c2.83.02 5.21.76 7.06 2.2 1.75 1.36 2.98 3.3 3.66 5.78l-2.27.6c-1.16-4.31-4.21-6.5-9.07-6.55C8.42 1.06 6.5 2 5.21 3.58 4 5.07 3.36 7.23 3.34 10c.02 2.78.66 4.94 1.87 6.43 1.29 1.58 3.21 2.52 6.35 2.55 2.83-.02 4.7-.69 6.26-2.24.92-.91 1.49-2.02 1.71-3.31-.18-.99-.73-1.79-1.66-2.41-.74-.49-1.7-.88-2.85-1.15-.08 1.32-.42 2.39-1.02 3.18-.69.9-1.7 1.34-3 1.34h-.05c-1.07-.01-2.05-.32-2.77-.86-.83-.63-1.27-1.51-1.27-2.55 0-2.05 1.65-3.47 4.11-3.55.94-.03 1.84.07 2.66.3-.18-1.16-.55-2.07-1.11-2.71-.79-.91-2.02-1.39-3.66-1.39-1.55 0-2.83.62-3.81 1.84l-1.66-1.32c1.41-1.78 3.25-2.69 5.47-2.69 2.32 0 4.18.81 5.37 2.34.79 1.02 1.25 2.37 1.36 4.04 1.95.55 3.36 1.32 4.27 2.35.91 1.04 1.36 2.34 1.36 3.91 0 .14 0 .29-.02.43-.32 1.99-1.21 3.7-2.66 5.07-1.93 1.84-4.39 2.73-7.51 2.75zm.49-9.27c-.27 0-.55.01-.83.03-1.92.06-2.6.79-2.6 1.49 0 .55.45 1.43 2.04 1.45h.03c.96 0 1.55-.27 1.92-.86.34-.55.51-1.31.49-2.04-.34-.04-.69-.07-1.05-.07z"/></svg>',
     copy: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>',
-    copyDone: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
-    download: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4h2v8.17l3.59-3.58L18 10l-6 6-6-6 1.41-1.41L11 12.17V4zM5 18h14v2H5z"/></svg>'
+    copyDone: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>'
 };
 
 /**
@@ -2967,13 +2966,16 @@ function initDotplots() {
 }
 
 /**
- * Diagrams (.kr-diagram, style.css "Diagrams"): their hover, focus and tap
- * cards live in js/diagrams.js, added here only when the page has a
- * diagram, so the pages without one never pay for it.
+ * Diagrams (.kr-diagram, style.css "Diagrams"), charts marked
+ * data-kr-export and stacked tables (table.kr-table--stack): their hover
+ * cards, Save as PNG buttons and phone labels live in js/diagrams.js
+ * (initDiagrams, initDiagramExport, initStackTables), added here only when
+ * the page has one of them, so the pages without one never pay for it.
  */
-var KR_DIAGRAMS_VERSION = '20261019b';
+var KR_DIAGRAMS_VERSION = '20261019c';
+var KR_DIAGRAMS_SELECTOR = '.kr-diagram, [data-kr-export], table.kr-table--stack';
 function initDiagrams() {
-    if (window.krDiagramsLoading || !document.querySelector('.kr-diagram')) return;
+    if (window.krDiagramsLoading || !document.querySelector(KR_DIAGRAMS_SELECTOR)) return;
     window.krDiagramsLoading = true;
     var sc = document.createElement('script');
     sc.src = siteRootPrefix() + 'js/diagrams.js?v=' + KR_DIAGRAMS_VERSION;
@@ -5696,108 +5698,6 @@ function initCodeCopy() {
 }
 
 /**
- * A table marked .kr-table--stack becomes a card per row on a phone
- * (style.css §11, "Stacked on a phone"). The cards need each column's
- * name beside its value, so this copies the last header row's names
- * onto the body cells as data-label (a colspan cell takes the first
- * name it spans; a header's data-short, when it has one, stands in for
- * a long name) and marks the table .kr-table--labelled, which is what
- * the stylesheet waits for: a table this never reached keeps scrolling
- * sideways instead of losing its headings.
- */
-function initStackTables() {
-    var tables = document.querySelectorAll('.blog-post table.kr-table--stack');
-    Array.prototype.forEach.call(tables, function(table) {
-        var head = table.tHead && table.tHead.rows[table.tHead.rows.length - 1];
-        if (!head) return;
-        var names = [];
-        Array.prototype.forEach.call(head.cells, function(th) {
-            var name = th.getAttribute('data-short') || th.textContent.trim();
-            for (var i = 0; i < (th.colSpan || 1); i++) names.push(name);
-        });
-        Array.prototype.forEach.call(table.tBodies, function(body) {
-            Array.prototype.forEach.call(body.rows, function(row) {
-                var col = 0;
-                Array.prototype.forEach.call(row.cells, function(cell) {
-                    if (names[col]) cell.setAttribute('data-label', names[col]);
-                    col += cell.colSpan || 1;
-                });
-            });
-        });
-        table.classList.add('kr-table--labelled');
-    });
-}
-
-/* Every diagram gets a button in its corner that saves it as a PNG with
-   the page's address under it (js/kr-export.js does the drawing, and
-   says how). A diagram is a .kr-diagram, or anything a post marks with
-   data-kr-export (a hand-built flow chart); data-kr-export="name" names
-   the file. The drawing code loads on the first press. */
-var KR_EXPORT_SELECTOR = '.kr-diagram, [data-kr-export]';
-var KR_EXPORT_VERSION = '20261019a';
-var krExportLoading = null;
-
-/** Loads js/kr-export.js once; resolves with window.krExport. */
-function krLoadExport() {
-    if (window.krExport) return Promise.resolve(window.krExport);
-    if (krExportLoading) return krExportLoading;
-    krExportLoading = new Promise(function(ok, fail) {
-        var sc = document.createElement('script');
-        sc.src = siteRootPrefix() + 'js/kr-export.js?v=' + KR_EXPORT_VERSION;
-        sc.onload = function() { ok(window.krExport); };
-        sc.onerror = function() { krExportLoading = null; fail(new Error('load')); };
-        document.head.appendChild(sc);
-    });
-    return krExportLoading;
-}
-
-/** The file label for a diagram: its data-kr-export value, else its title or caption. */
-function krExportLabel(host) {
-    var named = host.getAttribute('data-kr-export');
-    if (named) return named;
-    var fig = host.closest('figure');
-    var title = host.querySelector('[id$="-title"], .kr-diagram__title, figcaption')
-        || (fig && fig.querySelector('figcaption'));
-    return title ? title.textContent.split('.')[0] : '';
-}
-
-function initDiagramExport() {
-    var hosts = document.querySelectorAll(KR_EXPORT_SELECTOR);
-    if (!hosts.length || !window.HTMLCanvasElement) return;
-    var status = document.createElement('div');
-    status.className = 'sr-only';
-    status.setAttribute('role', 'status');
-    document.body.appendChild(status);
-    function say(text) {
-        status.textContent = '';
-        setTimeout(function() { status.textContent = text; }, 50);
-    }
-    Array.prototype.forEach.call(hosts, function(host) {
-        if (host.querySelector(':scope > .kr-export-btn')) return;
-        host.classList.add('kr-export-host');
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'kr-export-btn';
-        btn.title = 'Save as PNG';
-        btn.innerHTML = KR_SHARE_ICONS.download + '<span class="sr-only">Save this diagram as a PNG</span>';
-        host.appendChild(btn);
-        btn.addEventListener('click', function() {
-            if (btn.classList.contains('is-busy')) return;
-            btn.classList.add('is-busy');
-            krLoadExport().then(function(ex) {
-                return ex.png(host, krExportLabel(host));
-            }).then(function() {
-                say('Diagram saved as a PNG');
-            }, function() {
-                say('This browser could not save the diagram');
-            }).then(function() {
-                btn.classList.remove('is-busy');
-            });
-        });
-    });
-}
-
-/**
  * A printed post carries the answers and definitions a reader opens on
  * screen: the FAQ answers and the glossary box are opened for the print
  * and closed again after it, as each was. On paper a closed <details> is
@@ -6124,6 +6024,4 @@ initLightboxFix();
 initFullResMode();
 initCodeHighlighting();
 initCodeCopy();
-initStackTables();
-initDiagramExport();
 initPrintExpand();
