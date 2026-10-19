@@ -74,7 +74,7 @@
     "isPartOf": { "@id": "https://www.kenreid.co.uk/#website" },
     "inLanguage": "en-GB",
     "articleSection": "Books & Media",
-    "wordCount": 2509,
+    "wordCount": 2894,
     "timeRequired": "PT12M",
     "keywords": ["books", "ratings", "Goodreads"]
   }
@@ -160,7 +160,21 @@
 
         <h2>My rating distribution, or: "people who like reading probably rate books highly"</h2>
 
-        <img class="chart-dark" src="img/rating_distribution.png" alt="Rating distribution" loading="lazy" width="1200" height="600">
+        <figure class="kr-figure--solo">
+          <div class="kr-diagram kr-diagram--bars" role="group" aria-label="Bar chart: how many of my 569 rated books got each star rating">
+            <p class="kr-bars__title">My rating distribution (569 books)</p>
+            <div class="kr-bars__area">
+              <ol class="kr-bars__plot">
+                <li class="kr-diagram__node" style="--kr-bar: 0.07"><span class="kr-bars__fill"><span class="kr-diagram__sub">17</span></span><span class="kr-bars__label">1&#9733;</span><span class="kr-diagram__detail">17 books, 3% of the 569.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.169"><span class="kr-bars__fill"><span class="kr-diagram__sub">41</span></span><span class="kr-bars__label">2&#9733;</span><span class="kr-diagram__detail">41 books, 7% of the 569.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.498"><span class="kr-bars__fill"><span class="kr-diagram__sub">121</span></span><span class="kr-bars__label">3&#9733;</span><span class="kr-diagram__detail">121 books, 21% of the 569.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.605"><span class="kr-bars__fill"><span class="kr-diagram__sub">147</span></span><span class="kr-bars__label">4&#9733;</span><span class="kr-diagram__detail">147 books, 26% of the 569.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 1"><span class="kr-bars__fill kr-bars__fill--hi"><span class="kr-diagram__sub">243</span></span><span class="kr-bars__label">5&#9733;</span><span class="kr-diagram__detail">243 books, 43% of the 569.</span></li>
+              </ol>
+            </div>
+          </div>
+          <figcaption class="figure-note">Hover over, tap or tab to a bar for more.</figcaption>
+        </figure>
 
         <p>Nearly 70% of everything I've ever read gets four or five stars, and my average rating is 3.98. I am, statistically speaking, a pushover. But before you judge me, consider that the average Goodreads rating across all books on the platform is something like 3.9, so I guess we're all pushovers. The whole system is built to make us generous, because the scale is fundamentally asymmetric: five is "amazing", one is "I want my hours back", and the jump from three to two feels like you're insulting someone's mum.</p>
 
@@ -170,7 +184,20 @@
 
         <h2>I apparently write more when I'm angry</h2>
 
-        <img class="chart-dark" src="img/review_length_by_rating.png" alt="1-star reviews average 554 chars, 5-star average 331" loading="lazy" width="1200" height="600">
+        <figure class="kr-figure--solo">
+          <div class="kr-diagram kr-diagram--bars" role="group" aria-label="Bar chart: the average length of my reviews at each star rating, in characters">
+            <p class="kr-bars__title">Average review length by rating, in characters</p>
+            <div class="kr-bars__area">
+              <ol class="kr-bars__plot">
+                <li class="kr-diagram__node" style="--kr-bar: 1"><span class="kr-bars__fill kr-bars__fill--hi"><span class="kr-diagram__sub">554</span></span><span class="kr-bars__label">1&#9733;</span><span class="kr-diagram__detail">The 1-star reviews I wrote average 554 characters.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.919"><span class="kr-bars__fill kr-bars__fill--hi"><span class="kr-diagram__sub">509</span></span><span class="kr-bars__label">2&#9733;</span><span class="kr-diagram__detail">The 2-star reviews I wrote average 509 characters.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.608"><span class="kr-bars__fill"><span class="kr-diagram__sub">337</span></span><span class="kr-bars__label">3&#9733;</span><span class="kr-diagram__detail">The 3-star reviews I wrote average 337 characters.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.523"><span class="kr-bars__fill"><span class="kr-diagram__sub">290</span></span><span class="kr-bars__label">4&#9733;</span><span class="kr-diagram__detail">The 4-star reviews I wrote average 290 characters.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.597"><span class="kr-bars__fill"><span class="kr-diagram__sub">331</span></span><span class="kr-bars__label">5&#9733;</span><span class="kr-diagram__detail">The 5-star reviews I wrote average 331 characters.</span></li>
+              </ol>
+            </div>
+          </div>
+        </figure>
 
         <p class="kr-muted-note kr-muted-note--center">The polynomial regression from my analysis project confirms it (R&sup2; = 0.03, meaning review length explains almost nothing about rating):</p>
         <img class="chart-dark" src="img/gr_review_length.png" alt="Polynomial regression of rating vs review length, R-squared 0.03" loading="lazy" width="1184" height="784">
@@ -199,7 +226,25 @@
 
         <h2>I'm not even consistent across genres</h2>
 
-        <img class="chart-dark" src="img/genre_rating_bias.png" alt="Horizontal bar chart: fantasy 4.27 avg, horror 3.50 avg" loading="lazy" width="1200" height="750">
+        <figure class="kr-figure--solo">
+          <div class="kr-diagram kr-diagram--bars kr-bars--rows kr-bars--scale" role="group" aria-label="Bar chart: my average rating for each genre with 10 or more books, on the 1 to 5 star scale">
+            <p class="kr-bars__title">My average rating by genre (10+ books), on the 1 to 5 star scale</p>
+            <div class="kr-bars__area">
+              <ol class="kr-bars__plot">
+                <li class="kr-diagram__node" style="--kr-bar: 0.817"><span class="kr-bars__fill kr-bars__fill--hi"><span class="kr-diagram__sub">4.27</span></span><span class="kr-bars__label">Fantasy (178)</span><span class="kr-diagram__detail">Average 4.27 stars across 178 books.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.788"><span class="kr-bars__fill kr-bars__fill--hi"><span class="kr-diagram__sub">4.15</span></span><span class="kr-bars__label">Science (13)</span><span class="kr-diagram__detail">Average 4.15 stars across 13 books.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.76"><span class="kr-bars__fill kr-bars__fill--hi"><span class="kr-diagram__sub">4.04</span></span><span class="kr-bars__label">LitRPG (72)</span><span class="kr-diagram__detail">Average 4.04 stars across 72 books.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.75"><span class="kr-bars__fill kr-bars__fill--hi"><span class="kr-diagram__sub">4.00</span></span><span class="kr-bars__label">Fiction (32)</span><span class="kr-diagram__detail">Average 4.00 stars across 32 books.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.74"><span class="kr-bars__fill"><span class="kr-diagram__sub">3.96</span></span><span class="kr-bars__label">Non-fiction (77)</span><span class="kr-diagram__detail">Average 3.96 stars across 77 books.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.728"><span class="kr-bars__fill"><span class="kr-diagram__sub">3.91</span></span><span class="kr-bars__label">Sci-fi (22)</span><span class="kr-diagram__detail">Average 3.91 stars across 22 books.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.688"><span class="kr-bars__fill"><span class="kr-diagram__sub">3.75</span></span><span class="kr-bars__label">Science fiction (24)</span><span class="kr-diagram__detail">Average 3.75 stars across 24 books.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.68"><span class="kr-bars__fill"><span class="kr-diagram__sub">3.72</span></span><span class="kr-bars__label">Classics (39)</span><span class="kr-diagram__detail">Average 3.72 stars across 39 books.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.64"><span class="kr-bars__fill"><span class="kr-diagram__sub">3.56</span></span><span class="kr-bars__label">Philosophy (16)</span><span class="kr-diagram__detail">Average 3.56 stars across 16 books.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.625"><span class="kr-bars__fill"><span class="kr-diagram__sub">3.50</span></span><span class="kr-bars__label">Horror (30)</span><span class="kr-diagram__detail">Average 3.50 stars across 30 books.</span></li>
+              </ol>
+            </div>
+          </div>
+        </figure>
 
         <p class="kr-muted-note kr-muted-note--center">The rating density curves by genre from the analysis project show this even more clearly:</p>
         <img class="chart-dark" src="img/gr_genre_ratings.png" alt="Distribution of ratings for each primary genre" loading="lazy" width="1023" height="710">
@@ -211,7 +256,19 @@
 
         <h2>The longer the book, the more I like it</h2>
 
-        <img class="chart-dark" src="img/page_count_rating.png" alt="Books under 200 pages average 3.72 stars, 600+ average 4.28" loading="lazy" width="1200" height="600">
+        <figure class="kr-figure--solo">
+          <div class="kr-diagram kr-diagram--bars kr-bars--scale" role="group" aria-label="Bar chart: my average rating by the book's page count, on the 1 to 5 star scale">
+            <p class="kr-bars__title">My average rating by page count, on the 1 to 5 star scale</p>
+            <div class="kr-bars__area">
+              <ol class="kr-bars__plot">
+                <li class="kr-diagram__node" style="--kr-bar: 0.68"><span class="kr-bars__fill"><span class="kr-diagram__sub">3.72</span></span><span class="kr-bars__label">Under 200</span><span class="kr-diagram__detail">85 books, average 3.72 stars.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.715"><span class="kr-bars__fill"><span class="kr-diagram__sub">3.86</span></span><span class="kr-bars__label">200&ndash;400</span><span class="kr-diagram__detail">215 books, average 3.86 stars.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.775"><span class="kr-bars__fill kr-bars__fill--hi"><span class="kr-diagram__sub">4.10</span></span><span class="kr-bars__label">400&ndash;600</span><span class="kr-diagram__detail">157 books, average 4.10 stars.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.82"><span class="kr-bars__fill kr-bars__fill--hi"><span class="kr-diagram__sub">4.28</span></span><span class="kr-bars__label">600+</span><span class="kr-diagram__detail">105 books, average 4.28 stars.</span></li>
+              </ol>
+            </div>
+          </div>
+        </figure>
 
         <p>There's more than half a star difference between short books and long ones. The obvious interpretation is that longer books are better. The actual interpretation is that I only finish long books I'm enjoying. A 200-page book I'm not into, I'll push through and rate a 3. A 600-page book I'm not into, I probably abandoned 200 pages in and never rated it at all. This is survivorship bias that looks like a preference, and it would completely wreck any model trying to predict my ratings from metadata alone. (This is the kind of thing I explore in more depth in the <a href="https://goodreads-analysis.streamlit.app/" target="_blank" rel="noopener noreferrer">Goodreads Analysis app</a>, where I actually tried to build rating prediction models and the results were... humbling.)</p>
 
@@ -219,7 +276,26 @@
 
         <h2>What happens when you rate a 10-book series</h2>
 
-        <img class="chart-dark" src="img/hwfwm_drift.png" alt="Line chart: He Who Fights with Monsters ratings across 10 books, dipping mid-series" loading="lazy" width="1500" height="600">
+        <figure class="kr-figure--solo">
+          <div class="kr-diagram kr-diagram--bars kr-bars--line" role="group" aria-label="Line chart: my rating for each of the ten He Who Fights with Monsters books">
+            <p class="kr-bars__title">He Who Fights with Monsters: my rating for each book</p>
+            <div class="kr-bars__area">
+              <svg class="kr-bars__line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><polyline points="5,0 15,0 25,0 35,0 45,20 55,0 65,40 75,40 85,0 95,0"/></svg>
+              <ol class="kr-bars__plot">
+                <li class="kr-diagram__node" style="--kr-bar: 1"><span class="kr-bars__fill"><span class="kr-diagram__sub">5</span></span><span class="kr-bars__label"><span class="sr-only">Book </span>1</span><span class="kr-diagram__detail">5 stars.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 1"><span class="kr-bars__fill"><span class="kr-diagram__sub">5</span></span><span class="kr-bars__label"><span class="sr-only">Book </span>2</span><span class="kr-diagram__detail">5 stars.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 1"><span class="kr-bars__fill"><span class="kr-diagram__sub">5</span></span><span class="kr-bars__label"><span class="sr-only">Book </span>3</span><span class="kr-diagram__detail">5 stars.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 1"><span class="kr-bars__fill"><span class="kr-diagram__sub">5</span></span><span class="kr-bars__label"><span class="sr-only">Book </span>4</span><span class="kr-diagram__detail">5 stars.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.8"><span class="kr-bars__fill"><span class="kr-diagram__sub">4</span></span><span class="kr-bars__label"><span class="sr-only">Book </span>5</span><span class="kr-diagram__detail">4 stars.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 1"><span class="kr-bars__fill"><span class="kr-diagram__sub">5</span></span><span class="kr-bars__label"><span class="sr-only">Book </span>6</span><span class="kr-diagram__detail">5 stars.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.6"><span class="kr-bars__fill"><span class="kr-diagram__sub">3</span></span><span class="kr-bars__label"><span class="sr-only">Book </span>7</span><span class="kr-diagram__detail">3 stars.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.6"><span class="kr-bars__fill"><span class="kr-diagram__sub">3</span></span><span class="kr-bars__label"><span class="sr-only">Book </span>8</span><span class="kr-diagram__detail">3 stars.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 1"><span class="kr-bars__fill"><span class="kr-diagram__sub">5</span></span><span class="kr-bars__label"><span class="sr-only">Book </span>9</span><span class="kr-diagram__detail">5 stars.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 1"><span class="kr-bars__fill"><span class="kr-diagram__sub">5</span></span><span class="kr-bars__label"><span class="sr-only">Book </span>10</span><span class="kr-diagram__detail">5 stars.</span></li>
+              </ol>
+            </div>
+          </div>
+        </figure>
 
         <p>When you read a long series, your ratings tell a story of their own.</p>
 
@@ -233,7 +309,20 @@
 
         <h2>The silence is deafening</h2>
 
-        <img class="chart-dark" src="img/silent_ratings.png" alt="51% of 5-star books have no review text" loading="lazy" width="1200" height="600">
+        <figure class="kr-figure--solo">
+          <div class="kr-diagram kr-diagram--bars kr-bars--scale" role="group" aria-label="Bar chart: the share of my books at each star rating that have no review text">
+            <p class="kr-bars__title">Books with no review text, as a share of each rating</p>
+            <div class="kr-bars__area">
+              <ol class="kr-bars__plot">
+                <li class="kr-diagram__node" style="--kr-bar: 0.29"><span class="kr-bars__fill"><span class="kr-diagram__sub">29%</span></span><span class="kr-bars__label">1&#9733;</span><span class="kr-diagram__detail">29% of my 1-star books have no review text.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.54"><span class="kr-bars__fill kr-bars__fill--hi"><span class="kr-diagram__sub">54%</span></span><span class="kr-bars__label">2&#9733;</span><span class="kr-diagram__detail">54% of my 2-star books have no review text.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.6"><span class="kr-bars__fill kr-bars__fill--hi"><span class="kr-diagram__sub">60%</span></span><span class="kr-bars__label">3&#9733;</span><span class="kr-diagram__detail">60% of my 3-star books have no review text.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.65"><span class="kr-bars__fill kr-bars__fill--hi"><span class="kr-diagram__sub">65%</span></span><span class="kr-bars__label">4&#9733;</span><span class="kr-diagram__detail">65% of my 4-star books have no review text.</span></li>
+                <li class="kr-diagram__node" style="--kr-bar: 0.51"><span class="kr-bars__fill kr-bars__fill--hi"><span class="kr-diagram__sub">51%</span></span><span class="kr-bars__label">5&#9733;</span><span class="kr-diagram__detail">51% of my 5-star books have no review text.</span></li>
+              </ol>
+            </div>
+          </div>
+        </figure>
 
         <p>More than half of my 5-star books have absolutely no review text. I felt strongly enough to give them the highest possible rating, the literary equivalent of a standing ovation, but couldn't be bothered to write a single sentence about why. Meanwhile, 71% of my 1-star books have reviews: apparently the threshold for writing is "I need to explain why this is bad."</p>
 

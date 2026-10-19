@@ -7463,6 +7463,220 @@ body.kr-cite-docked .kr-share-tab {
   font-weight: 700;
   text-anchor: middle; }
 
+/* --- Bar layout
+   A bar chart written in the post, so its type reads at a phone's width
+   and follows the theme. Each bar is a .kr-diagram__node: its
+   .kr-bars__label names it, its .kr-diagram__sub is the value printed on
+   the bar, and its .kr-diagram__detail is the card's sentence. The row's
+   style sets --kr-bar, the bar's length as a share (0 to 1) of the
+   column. .kr-bars__fill--hi is the highlighted bar (amber, the colour of
+   my ratings in the dot plot); the rest are grey. Columns by default;
+   .kr-bars--rows lays the bars across with the labels on the left;
+   .kr-bars--scale adds a faint track for the whole scale behind each bar
+   (an average out of 5, a percentage), and the title names the scale;
+   .kr-bars--line draws a dot per column, joined by svg.kr-bars__line
+   (viewBox 0 0 100 100, one point per column centre). Hover, focus and
+   tap come from js/diagrams.js, as for every diagram.
+     <figure class="kr-figure--solo">
+       <div class="kr-diagram kr-diagram--bars" role="group" aria-label="...">
+         <p class="kr-bars__title">Books per star rating</p>
+         <div class="kr-bars__area">
+           <ol class="kr-bars__plot">
+             <li class="kr-diagram__node" style="--kr-bar: 0.07">
+               <span class="kr-bars__fill"><span class="kr-diagram__sub">17</span></span>
+               <span class="kr-bars__label">1&#9733;</span>
+               <span class="kr-diagram__detail">17 books, 3% of them.</span></li>
+           </ol>
+         </div>
+       </div>
+       <figcaption class="figure-note">...</figcaption>
+     </figure> */
+.blog-post .kr-diagram--bars {
+  --kr-bars-h: 200px;
+  --kr-bars-head: 26px;
+  margin: 8px 0 4px; }
+
+.blog-post .kr-diagram--bars .kr-bars__title {
+  margin: 0 0 6px;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--kr-muted); }
+
+.blog-post .kr-bars__area {
+  position: relative; }
+
+.blog-post .kr-diagram--bars .kr-bars__plot {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: 0 6px;
+  position: relative;
+  z-index: 1; }
+
+.blog-post .kr-diagram--bars .kr-diagram__node {
+  --kr-bar: 0;
+  display: grid;
+  grid-template-rows: var(--kr-bars-head) var(--kr-bars-h) auto;
+  padding: 0;
+  border: 0;
+  border-radius: var(--kr-radius-sm) var(--kr-radius-sm) 0 0;
+  background: none;
+  font-size: 13px;
+  font-weight: 400; }
+
+.blog-post .kr-diagram--bars .kr-diagram__node.is-active {
+  background: color-mix(in srgb, var(--kr-ink) 6%, transparent);
+  box-shadow: none; }
+
+.blog-post .kr-bars__fill {
+  grid-row: 2;
+  grid-column: 1;
+  align-self: end;
+  position: relative;
+  height: calc(var(--kr-bar) * var(--kr-bars-h));
+  margin: 0 12%;
+  border-radius: 4px 4px 0 0;
+  background: var(--kr-rule-strong); }
+
+.blog-post .kr-bars__fill--hi {
+  background: var(--kr-brand-to); }
+
+/* On a fixed scale (a 1 to 5 average, a percentage), a faint track behind
+   each bar shows the whole of it. */
+.blog-post .kr-bars--scale .kr-diagram__node::before {
+  content: '';
+  grid-row: 2;
+  grid-column: 1;
+  margin: 0 12%;
+  border-radius: 4px 4px 0 0;
+  background: color-mix(in srgb, var(--kr-ink) 6%, transparent); }
+
+.blog-post .kr-diagram--bars .kr-diagram__sub {
+  position: absolute;
+  bottom: 100%;
+  left: -12px;
+  right: -12px;
+  margin: 0 0 3px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--kr-ink); }
+
+.blog-post .kr-bars__label {
+  grid-row: 3;
+  padding: 6px 2px 4px;
+  border-top: 1px solid var(--kr-rule-strong);
+  line-height: 1.3;
+  text-align: center;
+  color: var(--kr-muted); }
+
+/* Across: a row per bar, the label on the left, the value just past the
+   bar's end, in the room the row's right margin keeps for it. */
+.blog-post .kr-diagram--bars.kr-bars--rows .kr-bars__plot {
+  grid-auto-flow: row;
+  gap: 4px 0; }
+
+.blog-post .kr-bars--rows .kr-diagram__node {
+  grid-template-rows: none;
+  grid-template-columns: minmax(7.5em, 32%) 1fr;
+  align-items: center;
+  min-height: 30px;
+  padding-right: 3.2em;
+  border-radius: var(--kr-radius-sm); }
+
+.blog-post .kr-bars--rows.kr-bars--scale .kr-diagram__node::before {
+  grid-row: 1;
+  grid-column: 2;
+  align-self: center;
+  height: 20px;
+  margin: 0;
+  border-radius: 0 4px 4px 0; }
+
+.blog-post .kr-bars--rows .kr-bars__fill {
+  grid-row: 1;
+  grid-column: 2;
+  align-self: center;
+  width: calc(var(--kr-bar) * 100%);
+  height: 20px;
+  margin: 0;
+  border-radius: 0 4px 4px 0; }
+
+.blog-post .kr-bars--rows .kr-diagram__sub {
+  top: 50%;
+  bottom: auto;
+  left: 100%;
+  right: auto;
+  margin: 0 0 0 6px;
+  transform: translateY(-50%);
+  text-align: left; }
+
+.blog-post .kr-bars--rows .kr-bars__label {
+  grid-row: 1;
+  grid-column: 1;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 2px 10px 2px 0;
+  border-top: 0;
+  border-right: 1px solid var(--kr-rule-strong);
+  text-align: right;
+  color: var(--kr-ink); }
+
+/* Line: no gaps, so each column's centre is where the svg puts its point;
+   the bar is a dot at its top. */
+.blog-post .kr-diagram--bars.kr-bars--line {
+  --kr-bars-head: 34px; }
+
+.blog-post .kr-diagram--bars.kr-bars--line .kr-bars__plot {
+  gap: 0; }
+
+.blog-post .kr-bars--line .kr-bars__fill {
+  margin: 0;
+  background: none; }
+
+.blog-post .kr-bars--line .kr-bars__fill::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  border: 2px solid var(--kr-surface-0);
+  border-radius: 50%;
+  background: var(--kr-brand-to); }
+
+.blog-post .kr-bars--line .kr-diagram__sub {
+  margin-bottom: 9px; }
+
+.blog-post .kr-bars__line {
+  position: absolute;
+  top: var(--kr-bars-head);
+  left: 0;
+  width: 100%;
+  height: var(--kr-bars-h);
+  overflow: visible; }
+
+.blog-post .kr-bars__line polyline {
+  fill: none;
+  stroke: var(--kr-brand-to);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke; }
+
+@media (max-width: 575px) {
+  .blog-post .kr-diagram--bars {
+    --kr-bars-h: 160px; }
+
+  .blog-post .kr-diagram--bars .kr-diagram__node,
+  .blog-post .kr-diagram--bars .kr-diagram__sub {
+    font-size: 12px; }
+
+  .blog-post .kr-diagram--bars .kr-bars__plot {
+    gap: 0 3px; } }
+
 /* Full resolution mode: the panel shared-components injects at the top of a
    photography post (.blog-post[data-fullres]) and the per-photo link it adds
    to each figcaption. Same shape as the nerd-mode switch, own class names, so

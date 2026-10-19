@@ -43,16 +43,15 @@
         var touch = window.matchMedia ? window.matchMedia('(hover: none)') : { matches: false };
         var seq = 0;
 
-        // The node's own words: its text without the sub line and the detail.
+        // The node's own words: its text without the sub line, the detail
+        // and the number, wherever they sit in it (a bar's value is inside
+        // its fill).
         function nodeTitle(node) {
-            var out = '';
-            Array.prototype.forEach.call(node.childNodes, function(n) {
-                if (n.nodeType === 3) out += n.textContent;
-                else if (n.nodeType === 1 && !n.classList.contains('kr-diagram__sub') &&
-                         !n.classList.contains('kr-diagram__detail') &&
-                         !n.classList.contains('kr-diagram__num')) out += n.textContent;
+            var copy = node.cloneNode(true);
+            Array.prototype.forEach.call(copy.querySelectorAll('.kr-diagram__sub, .kr-diagram__detail, .kr-diagram__num'), function(el) {
+                el.parentNode.removeChild(el);
             });
-            return out.replace(/\s+/g, ' ').trim();
+            return copy.textContent.replace(/\s+/g, ' ').trim();
         }
 
         Array.prototype.forEach.call(diagrams, function(diagram) {
@@ -84,12 +83,16 @@
                     '<p>' + krEscapeHtml(detail ? detail.textContent.replace(/\s+/g, ' ').trim() : '') + '</p>';
                 card.classList.add('is-visible');
                 // Above the node, centred on it and kept inside the diagram;
-                // below it when there is no room above.
-                var box = diagram.getBoundingClientRect(), r = (anchor || node).getBoundingClientRect();
+                // below it when there is no room above. A bar chart's card
+                // sits over the bar itself, and may rise above the chart
+                // while it stays on screen.
+                var bars = diagram.classList.contains('kr-diagram--bars');
+                var target = anchor || (bars && node.querySelector('.kr-bars__fill')) || node;
+                var box = diagram.getBoundingClientRect(), r = target.getBoundingClientRect();
                 var w = card.offsetWidth, h = card.offsetHeight;
                 var left = Math.max(0, Math.min(r.left + r.width / 2 - box.left - w / 2, box.width - w));
                 var top = r.top - box.top - h - 8;
-                if (top < 0) top = r.bottom - box.top + 8;
+                if (bars ? r.top - h - 8 < 0 : top < 0) top = r.bottom - box.top + 8;
                 card.style.left = left + 'px';
                 card.style.top = top + 'px';
             }

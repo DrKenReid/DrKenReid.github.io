@@ -625,6 +625,23 @@ charts drawn elsewhere.
   both themes. A `.kr-diagram__num` in a key node matches a numbered
   `g.kr-map__badge` on the drawing. Give the svg `role="img"` and an
   `aria-label` that describes the drawing.
+- **Bar layout.** `.kr-diagram--bars`: a bar chart written as HTML, so
+  it reads at a phone's width and follows the theme. A
+  `p.kr-bars__title` names the measure and its scale, then
+  `div.kr-bars__area > ol.kr-bars__plot` holds one `li.kr-diagram__node`
+  per bar, its `style` setting `--kr-bar` (the bar's length, 0 to 1). In
+  each: `span.kr-bars__fill` (`--hi` for a highlighted bar) holding the
+  value as a `.kr-diagram__sub`, then `span.kr-bars__label` (the card's
+  title), then the `.kr-diagram__detail` sentence. Columns by default;
+  `.kr-bars--rows` lays the bars across, labels on the left;
+  `.kr-bars--scale` adds a faint track for a fixed scale (an average out
+  of 5, a percentage); `.kr-bars--line` draws a dot per column joined by
+  an `svg.kr-bars__line` (`viewBox="0 0 100 100"`,
+  `preserveAspectRatio="none"`, one point per column centre at
+  `(i + 0.5) * 100 / n`). Bars on a rating scale start at 1, the bottom
+  of the scale, not at a value picked to make the gaps look big. The
+  chart's words count towards `words` in posts.json but not towards the
+  read time. `blog/rating-systems.html` has all three variants.
 - **Linked parts.** A node with `data-part="x"` owns every other element
   in the diagram with `data-part="x"`: while the node is active they get
   `.is-lit` and the rest of the drawing fades, and hovering or tapping

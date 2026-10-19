@@ -2950,7 +2950,7 @@ function initDotplots() {
  * cards live in js/diagrams.js, added here only when the page has a
  * diagram, so the pages without one never pay for it.
  */
-var KR_DIAGRAMS_VERSION = '20261019a';
+var KR_DIAGRAMS_VERSION = '20261019b';
 function initDiagrams() {
     if (window.krDiagramsLoading || !document.querySelector('.kr-diagram')) return;
     window.krDiagramsLoading = true;

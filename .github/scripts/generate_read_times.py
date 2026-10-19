@@ -12,7 +12,10 @@ code inside a folded listing, <details class="code-example"> without
 `open`: a reader skims past it closed, and a 600-line listing counted as
 prose made a seven-minute post read "27 min" and filed it as a deep dive
 on the Length filter. A listing that opens by default, and a <pre> in the
-flow of the text, still count.
+flow of the text, still count. A bar chart written in the post
+(div.kr-diagram--bars) is left out of readMinutes the same way: its
+labels, values and hover sentences are looked at, not read, and the six
+in rating-systems added two minutes to a twelve-minute post.
 
 Run after adding or substantially editing a post:
 
@@ -53,6 +56,7 @@ class BlogPostTextExtractor(HTMLParser):
         self.skip_depth = 0     # <div> nesting inside a skipped block
         self.folded = 0         # <details> nesting from a closed code listing
         self.pre_depth = 0      # <pre> nesting inside that listing
+        self.chart_depth = 0    # <div> nesting inside a bar chart
         self.chunks = []
         self.folded_chunks = []  # the code in closed listings, counted apart
 
@@ -65,6 +69,10 @@ class BlogPostTextExtractor(HTMLParser):
                     self.skip_depth += 1
                 elif any(c in classes for c in self.SKIP_CLASSES):
                     self.skip_depth = 1
+                if self.chart_depth:
+                    self.chart_depth += 1
+                elif "kr-diagram--bars" in classes:
+                    self.chart_depth = 1
             elif tag in ("script", "style"):
                 self.in_skip = tag
             elif tag == "details":
@@ -85,6 +93,8 @@ class BlogPostTextExtractor(HTMLParser):
             self.div_depth -= 1
             if self.skip_depth:
                 self.skip_depth -= 1
+            if self.chart_depth:
+                self.chart_depth -= 1
         elif tag == self.in_skip:
             self.in_skip = None
         elif tag == "details" and self.folded:
@@ -98,7 +108,8 @@ class BlogPostTextExtractor(HTMLParser):
         if self.div_depth and not self.in_skip and not self.skip_depth:
             # Only the <pre> is set apart: the listing's summary line ("The
             # JavaScript (js/palette.js)") is read on the way past.
-            (self.folded_chunks if self.pre_depth else self.chunks).append(data)
+            # A bar chart is set apart whole.
+            (self.folded_chunks if self.pre_depth or self.chart_depth else self.chunks).append(data)
 
 
 def _words(chunks) -> int:
@@ -109,8 +120,8 @@ def word_counts(text: str) -> tuple[int, int]:
     """(words, reading words) in a page's .blog-post div.
 
     `words` is the whole article; reading words leave out the code in
-    folded listings (see the module docstring), and are what readMinutes
-    is worked out from.
+    folded listings and the bar charts (see the module docstring), and
+    are what readMinutes is worked out from.
 
     A parser rather than sitelib.post_body: post_body returns the body's
     markup, and counting words needs its text without scripts, styles or

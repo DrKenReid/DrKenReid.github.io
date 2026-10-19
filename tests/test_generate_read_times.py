@@ -63,6 +63,17 @@ class WordCounts(unittest.TestCase):
         self.assertEqual(reading, 1 + 4)
         self.assertEqual(words, 1 + 500 + 4)
 
+    def test_bar_chart_is_left_out_of_reading_words(self):
+        # Labels, values and hover sentences are looked at, not read; the
+        # caption under the chart is read.
+        body = ('<p>one two</p><figure><div class="kr-diagram kr-diagram--bars">'
+                '<p class="kr-bars__title">Books per rating</p><div class="kr-bars__area">'
+                '<ol><li>1 star <span>17 books, 3% of them.</span></li></ol></div></div>'
+                '<figcaption>Tap a bar.</figcaption></figure><p>three</p>')
+        words, reading = grt.word_counts(page(body))
+        self.assertEqual(reading, 2 + 3 + 1)
+        self.assertEqual(words, 2 + 3 + 7 + 3 + 1)
+
     def test_related_cards_and_scripts_still_skipped(self):
         body = ('<p>a b</p><script>var x = 1;</script>'
                 '<div class="related-posts"><p>not counted</p></div>')
