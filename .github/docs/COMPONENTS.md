@@ -627,6 +627,12 @@ charts drawn elsewhere.
   purple, for bars and arrows only), each a row of up to four steps from
   768px and a column below it. A step holds one node or a
   `.kr-diagram__group`.
+- **Flow layout.** `.kr-diagram--flow`: a chain that runs on from one
+  row to the next (a supply chain from mine to shop), with the tree's
+  routes as its stages and no root. Each route's label says where the
+  stage happens, a dashed arrow leads down into the next stage, and the
+  steps share a row equally from 768px, however many there are
+  (`blog/hidden-cost-of-cobalt-congo.html`).
 - **Save as PNG.** Every `.kr-diagram` gets the corner button
   ("What the runtime adds", below) and keeps a strip above the drawing
   for it, `--kr-export-strip`, which the saved picture leaves out.

@@ -7329,6 +7329,49 @@ body.kr-cite-docked .kr-share-tab {
     border-color: transparent;
     border-left-color: var(--kr-route); } }
 
+/* --- Flow layout
+   .kr-diagram--flow: a chain that runs on from one row to the next (a
+   supply chain from mine to shop), where the tree's routes would read as
+   branches side by side. No root; each route is a stage of the chain,
+   its label naming where it happens, and a dashed arrow leads from one
+   stage down into the next. Steps share a row equally from 768px, however
+   many there are, and stack below it as in the tree.
+     <div class="kr-diagram kr-diagram--flow" role="group" aria-label="...">
+       <ol class="kr-diagram__routes">
+         <li class="kr-diagram__route kr-diagram__route--1">
+           <span class="kr-diagram__label">In the DRC</span>
+           <ol class="kr-diagram__steps">...</ol></li>
+         <li class="kr-diagram__route kr-diagram__route--2">...</li>
+       </ol>
+     </div> */
+.blog-post .kr-diagram--flow .kr-diagram__routes {
+  gap: 40px; }
+
+.blog-post .kr-diagram--flow .kr-diagram__route {
+  position: relative; }
+
+.blog-post .kr-diagram--flow .kr-diagram__route + .kr-diagram__route::before {
+  content: "";
+  position: absolute;
+  top: -34px;
+  left: 18px;
+  height: 24px;
+  border-left: 2px dashed var(--kr-muted); }
+
+.blog-post .kr-diagram--flow .kr-diagram__route + .kr-diagram__route::after {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 14px;
+  border: 5px solid transparent;
+  border-top-color: var(--kr-muted); }
+
+@media (min-width: 768px) {
+  .blog-post .kr-diagram--flow .kr-diagram__steps {
+    grid-template-columns: none;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column; } }
+
 /* --- Map layout
    A drawing (svg.kr-diagram__map, inline, its shapes classed kr-map__*)
    beside a key of nodes (.kr-diagram__key), the key under the drawing on

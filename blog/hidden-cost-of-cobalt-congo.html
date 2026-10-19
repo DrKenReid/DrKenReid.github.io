@@ -81,8 +81,8 @@
     ],
     "inLanguage": "en-GB",
     "articleSection": "Ideas",
-    "wordCount": 3654,
-    "timeRequired": "PT17M",
+    "wordCount": 3919,
+    "timeRequired": "PT18M",
     "keywords": ["ethics", "technology"]
   }
   </script>
@@ -138,7 +138,7 @@
         <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
         <li class="breadcrumb-item active" aria-current="page">The Hidden Cost of Cobalt</li>
       </ol></nav>
-      <p class="kr-opener__kicker">Ideas &middot; <time datetime="2026-05-13">13 May 2026</time> &middot; 17 min read</p>
+      <p class="kr-opener__kicker">Ideas &middot; <time datetime="2026-05-13">13 May 2026</time> &middot; 18 min read</p>
       <p class="kr-opener__title page-title">The Hidden Cost of Cobalt</p>
       <p class="kr-opener__standfirst">The batteries in our phones, laptops, and EVs are largely made of cobalt mined in the Democratic Republic of the Congo, often by hand and often by children. A reflection on a presentation I gave, and what we can actually do about it.</p>
       <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>
@@ -248,9 +248,53 @@
 
         <p>Artisanal mining in the DRC is not a quaint craft tradition. It is people, including children, digging tunnels that collapse, washing ore in contaminated water, breathing in cobalt dust that gives them "hard metal lung disease," and selling their day's output to middlemen who sell it on into a supply chain that is deliberately murky. The hand-dug cobalt and the industrially-mined cobalt converge upstream, get processed together, and become indistinguishable by the time they reach a battery factory in Asia or a finished device in your pocket.</p>
 
-        <figure>
-          <img src="img/cobalt/page16_Image18.webp" alt="Diagram showing how cobalt moves through the supply chain from mines to global electronics and EV manufacturers" loading="lazy" width="900" height="357">
-          <figcaption>Cobalt supply-chain flow from extraction to final products. Source: as cited in the original presentation slide.</figcaption>
+        <figure class="kr-figure--solo">
+          <div class="kr-diagram kr-diagram--flow" role="group" aria-label="How cobalt gets from a mine in the DRC to a battery in your phone or car">
+            <ol class="kr-diagram__routes">
+              <li class="kr-diagram__route kr-diagram__route--1">
+                <span class="kr-diagram__label">In the DRC</span>
+                <ol class="kr-diagram__steps">
+                  <li class="kr-diagram__step"><div class="kr-diagram__group">
+                    <div class="kr-diagram__node">Artisanal miners
+                      <span class="kr-diagram__sub">By hand</span>
+                      <span class="kr-diagram__detail">People, children among them, digging tunnels by hand. Paid by weight, with no contract, and often a few dollars a day at most. Most sell to n&eacute;gociants because they can't reach a depot.</span></div>
+                    <div class="kr-diagram__node">Industrial mines
+                      <span class="kr-diagram__sub">Multinationals</span>
+                      <span class="kr-diagram__detail">Large mines run by multinational companies. They produce most of the DRC's cobalt by volume, and they also buy hand-dug cobalt from the depots.</span></div>
+                  </div></li>
+                  <li class="kr-diagram__step"><div class="kr-diagram__group">
+                    <div class="kr-diagram__node">N&eacute;gociants
+                      <span class="kr-diagram__sub">Middlemen</span>
+                      <span class="kr-diagram__detail">Traders who buy cobalt from the miners and sell it to the depots at a profit. Of everyone who makes money from cobalt, they make the least.</span></div>
+                    <div class="kr-diagram__node">Depots
+                      <span class="kr-diagram__sub">Buyers</span>
+                      <span class="kr-diagram__detail">Buy cobalt and sell it on to refiners or to the industrial mines. This is where hand-dug cobalt starts to join the industrial supply.</span></div>
+                  </div></li>
+                  <li class="kr-diagram__step"><div class="kr-diagram__node">Processor
+                    <span class="kr-diagram__sub">Concentrating the ore</span>
+                    <span class="kr-diagram__detail">Separates the cobalt from the other minerals in the ore. Hand-dug and industrial cobalt go through together.</span></div></li>
+                </ol>
+              </li>
+              <li class="kr-diagram__route kr-diagram__route--2">
+                <span class="kr-diagram__label">Abroad</span>
+                <ol class="kr-diagram__steps">
+                  <li class="kr-diagram__step"><div class="kr-diagram__node">Commercial refiner
+                    <span class="kr-diagram__sub">Mostly China</span>
+                    <span class="kr-diagram__detail">Artisanal and industrial cobalt are mixed together here, and China refines about three-quarters of the world's cobalt. After this, nobody can tell which was dug by hand.</span></div></li>
+                  <li class="kr-diagram__step"><div class="kr-diagram__node">Battery maker
+                    <span class="kr-diagram__sub">China, Korea, Japan</span>
+                    <span class="kr-diagram__detail">Six companies across China, Korea and Japan make more than 80% of the batteries. The cobalt goes into the cathode of most lithium-ion cells.</span></div></li>
+                  <li class="kr-diagram__step"><div class="kr-diagram__group">
+                    <div class="kr-diagram__node">Electric cars
+                      <span class="kr-diagram__detail">The car makers and their shareholders sit at the top of the profit, a long way from the miners at the bottom.</span></div>
+                    <div class="kr-diagram__node">Phones and laptops
+                      <span class="kr-diagram__detail">The "ethical" phone doesn't get you out of it: the cobalt in it was mixed long before it reached the factory.</span></div>
+                  </div></li>
+                </ol>
+              </li>
+            </ol>
+          </div>
+          <figcaption>Cobalt supply-chain flow from extraction to final products. Hover over, tap or tab to a box for more. Source: Hannah Ritchie's diagram, adapted from Siddharth Kara's <em>Cobalt Red</em>.</figcaption>
         </figure>
 
         <p>That is the structural problem. There is no completely clean version of the supply chain you can opt into by buying the "ethical" phone. The cobalt is mixed, so even well-intentioned consumers are implicated. The problem doesn't lie with using phones, however, it's with us putting up with companies that profit from this system.</p>
