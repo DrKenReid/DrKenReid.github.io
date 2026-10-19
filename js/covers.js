@@ -1437,6 +1437,54 @@
 
     /* ---------------------------------------------------- books and media */
 
+    // A MOBA map: two creep waves march down all three lanes and meet in the middle.
+    def('warcraft-iii-most-influential-game', function (w, h, rnd) {
+        var t = 0, cycle = 300, s = Math.min(w, h) * 0.82, x0 = (w - s) / 2, y0 = (h - s) / 2;
+        var lanes = [[[0.1, 0.9], [0.1, 0.1], [0.9, 0.1]], [[0.1, 0.9], [0.9, 0.1]], [[0.1, 0.9], [0.9, 0.9], [0.9, 0.1]]];
+        var meet = lanes.map(function () { return 0.46 + rnd() * 0.08; });
+        function at(lane, u) {
+            var segs = [], total = 0, i;
+            for (i = 1; i < lane.length; i++) {
+                var len = Math.hypot(lane[i][0] - lane[i - 1][0], lane[i][1] - lane[i - 1][1]);
+                segs.push(len); total += len;
+            }
+            var d = clamp01(u) * total;
+            for (i = 0; i < segs.length; i++) {
+                if (d <= segs[i] || i === segs.length - 1) {
+                    var f = segs[i] ? d / segs[i] : 0, a = lane[i], b = lane[i + 1];
+                    return [x0 + s * (a[0] + (b[0] - a[0]) * f), y0 + s * (a[1] + (b[1] - a[1]) * f)];
+                }
+                d -= segs[i];
+            }
+        }
+        return {
+            step: function () { t = (t + 1) % cycle; },
+            draw: function (ctx) {
+                line(ctx, x0 + s * 0.04, y0 + s * 0.04, x0 + s * 0.96, y0 + s * 0.96, alpha(C.blue, 0.35), s * 0.06);
+                lanes.forEach(function (lane) {
+                    for (var i = 1; i < lane.length; i++) {
+                        line(ctx, x0 + s * lane[i - 1][0], y0 + s * lane[i - 1][1], x0 + s * lane[i][0], y0 + s * lane[i][1], C.dim, s * 0.035);
+                    }
+                });
+                dot(ctx, x0 + s * 0.1, y0 + s * 0.9, s * 0.07, C.green);
+                dot(ctx, x0 + s * 0.9, y0 + s * 0.1, s * 0.07, C.red);
+                var march = ease(Math.min(1, t / 150)), fight = clamp01((t - 150) / 90), fade = 1 - clamp01((t - 250) / 50);
+                lanes.forEach(function (lane, k) {
+                    for (var j = 0; j < 3; j++) {
+                        var gap = j * 0.035, alive = fight < (j + 1) / 3.2, wob = fight > 0 ? Math.sin(t / 3 + j + k) * s * 0.008 : 0;
+                        var g = at(lane, 0.08 + (meet[k] - 0.1) * march - gap), r = at(lane, 0.92 - (0.9 - meet[k]) * march + gap);
+                        if (alive || k === 1) dot(ctx, g[0] + wob, g[1], s * 0.022, alpha(C.green, fade));
+                        if (alive || k !== 1) dot(ctx, r[0] - wob, r[1], s * 0.022, alpha(C.red, fade));
+                    }
+                    if (fight > 0 && fight < 1) {
+                        var m = at(lane, meet[k]);
+                        dot(ctx, m[0], m[1], s * (0.03 + 0.03 * Math.abs(Math.sin(t / 5 + k))), alpha(C.b, 0.6 * fade));
+                    }
+                });
+            }
+        };
+    });
+
     // A dungeon grid, a crawler and a cat, and the XP bar that will not stop filling.
     def('dungeon-crawler-carl-litrpg-dignity', function (w, h, rnd) {
         var t = 0, xp = 0, lvl = 1, px = 2, py = 2;

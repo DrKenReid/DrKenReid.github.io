@@ -52,7 +52,7 @@
  *   initPostSidenotes, initCitePreviews, initReferenceBackLinks,
  *   applyJargonTooltips, autoCollapseTopJargonBox, initDropCap,
  *   initFullResMode, initCopyQuotes, initCodeHighlighting, initCodeCopy,
- *   initPrintExpand, initEmbedFacades,
+ *   initPrintExpand, initEmbedFacades, initDotplots, initDiagrams,
  *   KR_ROUTES (the sign-off's three links per category), postRoutes(post),
  *   KR_WIDE_POST, krWidePost()      the width of the wide post layout
  *
@@ -2946,6 +2946,20 @@ function initDotplots() {
 }
 
 /**
+ * Diagrams (.kr-diagram, style.css "Diagrams"): their hover, focus and tap
+ * cards live in js/diagrams.js, added here only when the page has a
+ * diagram, so the pages without one never pay for it.
+ */
+var KR_DIAGRAMS_VERSION = '20261019a';
+function initDiagrams() {
+    if (window.krDiagramsLoading || !document.querySelector('.kr-diagram')) return;
+    window.krDiagramsLoading = true;
+    var sc = document.createElement('script');
+    sc.src = siteRootPrefix() + 'js/diagrams.js?v=' + KR_DIAGRAMS_VERSION;
+    document.head.appendChild(sc);
+}
+
+/**
  * A way back from the reference list: each reference gets a small link
  * (a.kr-ref-back, an arrow drawn by CSS, named for a screen reader) to
  * the first place it is cited, which gets an id for it (cite-<ref id>)
@@ -3302,6 +3316,7 @@ function renderBlogPostEssentials() {
     initReferenceBackLinks();
     initCitePreviews();
     initDotplots();
+    initDiagrams();
 }
 
 /**
@@ -3538,10 +3553,11 @@ function applyJargonTooltips() {
     };
     // Chrome and furniture: the meta line, disclosure labels, the
     // reference list and its sidenote copies, the series line, captions,
-    // the pager, the fine print, the end band. A tooltip there is noise
-    // in something the reader scans rather than reads.
+    // the pager, the fine print, the end band, a diagram (its nodes have
+    // their own hover cards). A tooltip there is noise in something the
+    // reader scans rather than reads.
     var SKIP_SELECTOR = '.blog-meta, summary, ol.references, .kr-sidenote, ' +
-        '.kr-series, figcaption, .post-pagination, .post-disclaimer, .kr-post-end, ' +
+        '.kr-series, figcaption, .kr-diagram, .post-pagination, .post-disclaimer, .kr-post-end, ' +
         '.related-posts, .kr-toc-mobile, .kr-share-rail, .fullres-card, .katex, .katex-display, .math-block';
 
     // One walk over the article in reading order, collecting what it

@@ -1,6 +1,10 @@
 {
   "_help": "The newsletter pop-up's words for each post, keyed by slug (renderNewsletterPopup in js/shared-components.js). title: the card's heading; line: one or two sentences on what else the reader would get. A How This Site Is Built part gets the RSS feed first and its own small print, so its line is about following the series by feed. A post with no entry falls back to its category's words (KR_INVITES). tests/test_invites.py checks every post has one.",
   "invites": {
+    "warcraft-iii-most-influential-game": {
+      "title": "Still have Warcraft III installed?",
+      "line": "I write about the games and the internet I grew up on, alongside books, data science and photography."
+    },
     "stephen-king-ranked": {
       "title": "More books, ranked and rated?",
       "line": "I write about what I read, the five-star ones and the ones that lost me, alongside data science and photography."

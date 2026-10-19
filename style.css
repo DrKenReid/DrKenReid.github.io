@@ -248,6 +248,13 @@
        up   #2d7a45  4.94 page, 4.59 on a marked row */
   --kr-delta-down: #a8431c;
   --kr-delta-up: #2d7a45;
+  /* Series colours for diagrams (.kr-diagram routes): bars, edges and
+     arrows only, never text, so they need 3:1 against the surface, not
+     4.5. Blue, green, amber, purple: no red, which means clickable. */
+  --kr-series-1: #2a78d6;
+  --kr-series-2: #1a8f64;
+  --kr-series-3: #c98a00;
+  --kr-series-4: #7c5cc4;
   /* A table's header rule: the muted ink at 70%, near the #999 the
      inline tables used, but following the theme. */
   --kr-rule-strong: color-mix(in srgb, var(--kr-muted) 70%, transparent);
@@ -302,6 +309,10 @@
   --kr-caution-edge: #e0a84a;
   --kr-delta-down: #f08c6a;
   --kr-delta-up: #6cc48a;
+  --kr-series-1: #5b9cf0;
+  --kr-series-2: #3fbf8c;
+  --kr-series-3: #f0b429;
+  --kr-series-4: #a98be8;
   --kr-rule-strong: color-mix(in srgb, var(--kr-muted) 70%, transparent);
   color-scheme: dark; }
 
@@ -7039,6 +7050,418 @@ body.kr-cite-docked .kr-share-tab {
   .photo-grid > a,
   .photo-grid > img {
     margin-bottom: 12px; } }
+
+/* --- Thumbnail grid ------------------------------------------------------
+   Small square pictures of a set of things, three to a row, each named
+   under its picture, one figcaption for the lot (a game's map previews,
+   say). Written by hand in the post; lightbox.js wraps each image in an
+   a.img-lightbox at run time, so the sizing lands on that link too.
+     <figure class="kr-figure--solo">
+       <div class="kr-thumb-grid">
+         <div class="kr-thumb-grid__cell">
+           <img src="..." alt="..." loading="lazy" width="256" height="256">
+           <span class="kr-thumb-grid__label">Name</span>
+         </div>
+       </div>
+       <figcaption class="figure-note kr-figcaption">...</figcaption>
+     </figure> */
+.blog-post .kr-thumb-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px 14px;
+  max-width: 600px;
+  margin: 0 auto; }
+
+.blog-post .kr-thumb-grid__cell > a,
+.blog-post .kr-thumb-grid__cell img {
+  display: block;
+  width: 100%; }
+
+.blog-post .kr-thumb-grid__cell img {
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--kr-radius-sm); }
+
+.blog-post .kr-thumb-grid__label {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.3;
+  text-align: center;
+  color: var(--kr-muted); }
+
+@media (max-width: 575px) {
+  .blog-post .kr-thumb-grid {
+    gap: 12px 8px; }
+
+  .blog-post .kr-thumb-grid__label {
+    font-size: 12px; } }
+
+/* --- Diagrams (initDiagrams) ---------------------------------------------
+   A diagram is HTML, not a picture: real text that reflows, follows the
+   theme and reads to a screen reader. Each .kr-diagram__node may hold a
+   .kr-diagram__detail; without script the detail shows under its node.
+   initDiagrams (shared-components.js) adds .is-live, which hides the
+   details visually (each stays its node's aria-describedby), makes every
+   node with a detail focusable, and shows the detail in a card
+   (.kr-diagram__card, a .kr-offstage) on hover, keyboard focus or a tap.
+   It also sets .has-active on the diagram and .is-active on the node.
+   .kr-diagram--tree is one layout: a root, then routes
+   (.kr-diagram__route--1 to --4 pick the series colour) of steps left to
+   right from 768px, top to bottom below it. A step holds one node or a
+   .kr-diagram__group of them.
+     <figure class="kr-figure--solo">
+       <div class="kr-diagram kr-diagram--tree" role="group" aria-label="...">
+         <div class="kr-diagram__node kr-diagram__root">Name
+           <span class="kr-diagram__sub">2002</span>
+           <span class="kr-diagram__detail">More about it.</span></div>
+         <ol class="kr-diagram__routes">
+           <li class="kr-diagram__route kr-diagram__route--1">
+             <span class="kr-diagram__label">MOBAs</span>
+             <ol class="kr-diagram__steps">
+               <li class="kr-diagram__step"><div class="kr-diagram__node">...</div></li>
+             </ol>
+           </li>
+         </ol>
+       </div>
+       <figcaption class="figure-note">...</figcaption>
+     </figure> */
+.blog-post .kr-diagram {
+  position: relative;
+  font-family: 'Poppins', 'Poppins Fallback', sans-serif;
+  color: var(--kr-ink); }
+
+.blog-post .kr-diagram ol,
+.blog-post .kr-diagram li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit; }
+
+.blog-post .kr-diagram__node {
+  --kr-route: var(--kr-muted);
+  display: block;
+  padding: 9px 12px 9px 14px;
+  border: 1px solid var(--kr-hairline);
+  border-left: 4px solid var(--kr-route);
+  border-radius: var(--kr-radius-sm);
+  background: var(--kr-surface-3);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease; }
+
+.blog-post .kr-diagram__route .kr-diagram__node {
+  --kr-route: inherit; }
+
+.blog-post .kr-diagram__node[tabindex] {
+  cursor: pointer; }
+
+.blog-post .kr-diagram__sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--kr-muted); }
+
+.blog-post .kr-diagram__detail {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--kr-muted); }
+
+/* Live: the detail moves to the card, and stays in the page for the
+   node's aria-describedby. */
+.blog-post .kr-diagram.is-live .kr-diagram__detail {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap; }
+
+.blog-post .kr-diagram.has-active .kr-diagram__node:not(.is-active) {
+  opacity: 0.45; }
+
+.blog-post .kr-diagram__node.is-active {
+  border-color: var(--kr-route);
+  box-shadow: var(--kr-shadow-1); }
+
+.kr-diagram__card {
+  position: absolute;
+  z-index: 5;
+  width: max-content;
+  max-width: 280px;
+  padding: 10px 14px;
+  border: 1px solid var(--kr-hairline);
+  border-radius: var(--kr-radius-md);
+  background: var(--kr-surface-3);
+  box-shadow: var(--kr-shadow-2);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px); }
+
+.kr-diagram__card.is-visible {
+  opacity: 1;
+  transform: none; }
+
+.blog-post .kr-diagram__card p {
+  margin: 0;
+  font-family: 'Poppins', 'Poppins Fallback', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--kr-ink); }
+
+.blog-post .kr-diagram__card .kr-diagram__card-title {
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 600; }
+
+/* --- Tree layout */
+.blog-post .kr-diagram__route--1 { --kr-route: var(--kr-series-1); }
+.blog-post .kr-diagram__route--2 { --kr-route: var(--kr-series-2); }
+.blog-post .kr-diagram__route--3 { --kr-route: var(--kr-series-3); }
+.blog-post .kr-diagram__route--4 { --kr-route: var(--kr-series-4); }
+
+.blog-post .kr-diagram__root {
+  margin-bottom: 22px;
+  /* The same card as every node, in the page's own colours, set apart
+     by an ink border and larger type: an inverted slab read as a light
+     panel stuck in the dark theme. */
+  border: 2px solid var(--kr-ink);
+  font-size: 18px;
+  text-align: center; }
+
+.blog-post .kr-diagram__routes {
+  display: grid;
+  gap: 22px; }
+
+.blog-post .kr-diagram__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: var(--kr-label-size);
+  font-weight: 700;
+  letter-spacing: var(--kr-label-tracking);
+  text-transform: uppercase; }
+
+.blog-post .kr-diagram__label::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--kr-route); }
+
+.blog-post .kr-diagram__steps {
+  display: grid;
+  gap: 18px; }
+
+.blog-post .kr-diagram__step {
+  position: relative; }
+
+/* The arrow into a step: down the left edge on a phone, across from
+   768px. */
+.blog-post .kr-diagram__step + .kr-diagram__step::before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  left: 18px;
+  height: 14px;
+  border-left: 2px solid var(--kr-route); }
+
+.blog-post .kr-diagram__step + .kr-diagram__step::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 14px;
+  border: 5px solid transparent;
+  border-top-color: var(--kr-route); }
+
+.blog-post .kr-diagram__group {
+  display: grid;
+  gap: 6px; }
+
+.blog-post .kr-diagram__group .kr-diagram__node {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-size: 13px; }
+
+/* Live, a group's node is one line, its year at the right (the detail
+   has moved to the card); without script it keeps its stacked lines. */
+.blog-post .kr-diagram.is-live .kr-diagram__group .kr-diagram__node {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px; }
+
+.blog-post .kr-diagram.is-live .kr-diagram__group .kr-diagram__sub {
+  flex: none;
+  margin-top: 0; }
+
+@media (min-width: 768px) {
+  /* A route usually fans out at its third step (a group of names and
+     years), so that column is the widest and the last the narrowest. */
+  .blog-post .kr-diagram__steps {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 0.95fr) minmax(0, 1.3fr) minmax(0, 0.8fr);
+    align-items: center; }
+
+  .blog-post .kr-diagram__step + .kr-diagram__step::before {
+    top: 50%;
+    left: -16px;
+    width: 12px;
+    height: 0;
+    border-top: 2px solid var(--kr-route);
+    border-left: 0; }
+
+  .blog-post .kr-diagram__step + .kr-diagram__step::after {
+    top: calc(50% - 4px);
+    left: -6px;
+    border-width: 5px 0 5px 6px;
+    border-color: transparent;
+    border-left-color: var(--kr-route); } }
+
+/* --- Map layout
+   A drawing (svg.kr-diagram__map, inline, its shapes classed kr-map__*)
+   beside a key of nodes (.kr-diagram__key), the key under the drawing on
+   a phone. Shapes that share a node's data-part light up with it and
+   show its card when hovered or tapped (initDiagrams, "Linked parts").
+   Every fill comes from a token, so one drawing serves both themes; a
+   team's shapes sit in g.kr-map__sentinel or g.kr-map__scourge, which set
+   --kr-team. .kr-diagram__num is a key node's number, matching the
+   numbered badge (g.kr-map__badge) on the drawing. */
+.blog-post .kr-diagram--map {
+  display: grid;
+  gap: 20px;
+  align-items: start; }
+
+@media (min-width: 768px) {
+  .blog-post .kr-diagram--map {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    align-items: center; } }
+
+.blog-post .kr-diagram__map {
+  display: block;
+  width: 100%;
+  height: auto; }
+
+.blog-post .kr-diagram__key {
+  display: grid;
+  gap: 6px; }
+
+.blog-post .kr-diagram__key .kr-diagram__node {
+  padding-top: 7px;
+  padding-bottom: 7px; }
+
+.blog-post .kr-diagram__num {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--kr-ink);
+  color: var(--kr-surface-0);
+  font-size: 12px;
+  font-weight: 700;
+  vertical-align: 1px; }
+
+.blog-post .kr-diagram__key .kr-diagram__sub {
+  padding-left: 30px; }
+
+.blog-post .kr-diagram__map [data-part] {
+  cursor: pointer;
+  transition: opacity 0.2s ease; }
+
+.blog-post .kr-diagram.has-active .kr-diagram__map [data-part]:not(.is-lit) {
+  opacity: 0.2; }
+
+.blog-post .kr-map__sentinel { --kr-team: var(--kr-series-2); }
+.blog-post .kr-map__scourge { --kr-team: var(--kr-series-4); }
+
+.blog-post .kr-map__ground {
+  fill: color-mix(in srgb, var(--kr-ink) 6%, var(--kr-surface-2));
+  stroke: var(--kr-hairline);
+  stroke-width: 2; }
+
+.blog-post .kr-map__river {
+  fill: none;
+  stroke: var(--kr-series-1);
+  stroke-opacity: 0.6;
+  stroke-width: 50;
+  stroke-linecap: round; }
+
+.blog-post .kr-map__lane {
+  fill: none;
+  stroke: color-mix(in srgb, var(--kr-muted) 40%, var(--kr-surface-2));
+  stroke-width: 34;
+  stroke-linecap: round;
+  stroke-linejoin: round; }
+
+.blog-post .kr-map__camp {
+  fill: var(--kr-muted); }
+
+.blog-post .kr-map__base {
+  fill: var(--kr-team);
+  fill-opacity: 0.22;
+  stroke: var(--kr-team);
+  stroke-width: 3; }
+
+.blog-post .kr-map__ancient,
+.blog-post .kr-map__tower {
+  fill: var(--kr-team);
+  stroke: var(--kr-ink);
+  stroke-width: 3; }
+
+.blog-post .kr-map__creep {
+  fill: var(--kr-team); }
+
+.blog-post .kr-map__hero {
+  fill: var(--kr-series-3);
+  stroke: var(--kr-ink);
+  stroke-width: 3; }
+
+.blog-post .kr-map__ring {
+  fill: none;
+  stroke: var(--kr-series-3);
+  stroke-width: 3;
+  stroke-dasharray: 7 7; }
+
+.blog-post .kr-map__pit {
+  fill: var(--kr-surface-2);
+  stroke: var(--kr-ink);
+  stroke-width: 3; }
+
+.blog-post .kr-map__pit-dot {
+  fill: var(--kr-ink); }
+
+.blog-post .kr-map__label,
+.blog-post .kr-map__team {
+  fill: var(--kr-ink);
+  font-size: 38px; }
+
+.blog-post .kr-map__label {
+  font-style: italic; }
+
+.blog-post .kr-map__team {
+  font-size: 46px;
+  font-weight: 700; }
+
+.blog-post .kr-map__badge circle {
+  fill: var(--kr-ink); }
+
+.blog-post .kr-map__badge text {
+  fill: var(--kr-surface-0);
+  font-size: 42px;
+  font-weight: 700;
+  text-anchor: middle; }
 
 /* Full resolution mode: the panel shared-components injects at the top of a
    photography post (.blog-post[data-fullres]) and the per-photo link it adds

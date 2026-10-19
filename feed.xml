@@ -5,11 +5,437 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 05 Oct 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Mon, 05 Oct 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Mon, 19 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Mon, 19 Oct 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Warcraft III Is the Most Influential Game Ever Made</title>
+      <link>https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html</link>
+      <guid>https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html</guid>
+      <pubDate>Mon, 19 Oct 2026 00:00:00 +0000</pubDate>
+      <description>League of Legends, Dota 2, Honor of Kings, tower defence, auto battlers and World of Warcraft all come from one 2002 strategy game.</description>
+      <category>technology</category>
+      <category>personal</category>
+      <content:encoded><![CDATA[
+
+ <p>When I was around 12 years old, I was obsessed with this new game winning all the "Game of the Year" awards, called Warcraft III: Reign of Chaos, then its incredible expansion, Warcraft III: The Frozen Throne. But at some point, after playing the campaign, I learned about multiplayer. I spent so much of that Summer at my friend's house listening to Jimmy Eat World and Dragonforce, while playing Warcraft III. I would open the game, choose multiplayer, click 'Custom Game', and scroll a list of maps with names like Footmen Frenzy, Wintermaul, Sheep Tag, Vampire Tag, Life of a Peasant (and the myriad of adaptations), Green TD, X Hero Siege, various Lord of the Rings themed games, Tree Tag, Hero Line Wars, DotA Allstars 5.84c, and more. I should make it clear that none of these were <i>actually created by the developers </i>of W3. The game Blizzard had spent four years making became mostly a launcher for other people's ideas and games.</p>
+
+ <figure class="kr-figure--solo">
+ <div class="kr-thumb-grid">
+ <div class="kr-thumb-grid__cell"><img src="https://www.kenreid.co.uk/blog/img/wc3/maps/dota-allstars.webp" alt="Loading screen art for DotA Allstars 6.61c: a crowd of heroes fighting, under the words IceFrog presents" loading="lazy" width="256" height="256"><span class="kr-thumb-grid__label">DotA Allstars</span></div>
+ <div class="kr-thumb-grid__cell"><img src="https://www.kenreid.co.uk/blog/img/wc3/maps/green-td.webp" alt="Minimap of Green TD: a dark green field cut by a branching dirt maze, with a coloured marker for each player" loading="lazy" width="256" height="256"><span class="kr-thumb-grid__label">Green TD</span></div>
+ <div class="kr-thumb-grid__cell"><img src="https://www.kenreid.co.uk/blog/img/wc3/maps/wintermaul.webp" alt="Minimap of Wintermaul: icy lanes running down from the players' building areas at the top to a frozen pool at the bottom" loading="lazy" width="256" height="256"><span class="kr-thumb-grid__label">Wintermaul</span></div>
+ <div class="kr-thumb-grid__cell"><img src="https://www.kenreid.co.uk/blog/img/wc3/maps/footmen-frenzy.webp" alt="Minimap of Footmen Frenzy: four corner bases around a walled centre, joined by dirt roads" loading="lazy" width="256" height="256"><span class="kr-thumb-grid__label">Footmen Frenzy</span></div>
+ <div class="kr-thumb-grid__cell"><img src="https://www.kenreid.co.uk/blog/img/wc3/maps/sheep-tag.webp" alt="Minimap of Sheep Tag: a square of grass ringed by a road, with ponds and rocky patches and the players bunched in the middle" loading="lazy" width="256" height="256"><span class="kr-thumb-grid__label">Sheep Tag</span></div>
+ <div class="kr-thumb-grid__cell"><img src="https://www.kenreid.co.uk/blog/img/wc3/maps/life-of-a-peasant.webp" alt="Minimap of Life of a Peasant: a crowded town of streets and houses" loading="lazy" width="256" height="256"><span class="kr-thumb-grid__label">Life of a Peasant</span></div>
+ <div class="kr-thumb-grid__cell"><img src="https://www.kenreid.co.uk/blog/img/wc3/maps/x-hero-siege.webp" alt="Title art for X Hero Siege: a giant armoured figure with a mace towering over a row of small heroes" loading="lazy" width="256" height="256"><span class="kr-thumb-grid__label">X Hero Siege</span></div>
+ <div class="kr-thumb-grid__cell"><img src="https://www.kenreid.co.uk/blog/img/wc3/maps/hero-line-wars.webp" alt="Minimap of Hero Line Wars: long parallel lanes across the map, with the players' base in the bottom right corner" loading="lazy" width="256" height="256"><span class="kr-thumb-grid__label">Hero Line Wars</span></div>
+ <div class="kr-thumb-grid__cell"><img src="https://www.kenreid.co.uk/blog/img/wc3/maps/tree-tag.webp" alt="Minimap of Tree Tag: a forest crossed by rivers and paths, with the players starting together in the middle" loading="lazy" width="256" height="256"><span class="kr-thumb-grid__label">Tree Tag</span></div>
+ </div>
+ <figcaption class="figure-note kr-figcaption">Nine of those maps. The previews come from <a href="https://www.epicwar.com/" target="_blank" rel="noopener">Epic War</a> and <a href="https://www.hiveworkshop.com/" target="_blank" rel="noopener">Hive Workshop</a>, and the versions shown are by IceFrog (DotA Allstars 6.61c), hollowoutside and Darky712 (Green TD), Duke-Wintermaul (Wintermaul), HatoDOWN (Footmen Frenzy), MD Team (Sheep Tag), Moon_Walker (Life of a Peasant), Sogat (X Hero Siege), Rubberneck, Surray and Sargentpeepers (Hero Line Wars) and 40k_ralle89 (Tree Tag). &copy; their authors and Blizzard Entertainment. Used here for commentary.</figcaption>
+ </figure>
+
+ <p>Twenty-something years later I've realized a lot of people grew up the same way. Counting games, TV and film, no franchise has had more cultural impact this century than Warcraft. And in September 2026, 23 years after The Frozen Throne, Blizzard put out a new expansion for it, Forsaken Kingdom. More on that at the end.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>RTS (real-time strategy):</strong> build a base, gather resources, raise an army, and do it all at once with no turns. Dune II, Command &amp; Conquer, StarCraft and Warcraft are the family.</li>
+ <li><strong>Custom map:</strong> a level built by a player in the game's own editor. In Warcraft III a custom map could rewrite every rule, so "map" undersells it. "Mod" is the wider word.</li>
+ <li><strong>World Editor:</strong> the map editor Blizzard shipped in the Warcraft III box, with a point-and-click trigger system and a scripting language called JASS for people who wanted more.</li>
+ <li><strong>Hero unit:</strong> a single powerful unit that gains levels, learns abilities and carries items. Warcraft III built its whole design around them.</li>
+ <li><strong>Creeps:</strong> neutral monsters scattered around a map, there to be killed for experience and gold.</li>
+ <li><strong>MOBA (multiplayer online battle arena):</strong> two teams of five, each player controlling one hero, trying to push down lanes and destroy the other side's base. The name was coined by Riot Games to avoid saying "DotA-like".</li>
+ <li><strong>DotA (Defense of the Ancients):</strong> the Warcraft III custom map that defined the MOBA. Spelled DotA for the map, Dota for Valve's sequel.</li>
+ <li><strong>Tower defence:</strong> enemies walk a path in waves, you build towers beside it to stop them, and anything that gets through costs you a life.</li>
+ <li><strong>Auto battler:</strong> you buy and place units on a small board between rounds, then watch them fight on their own. Also called auto chess, after the map that started it.</li>
+ <li><strong>Esports:</strong> competitive gaming with tournaments, sponsors and an audience. Warcraft III was one of the first games with a professional scene.</li>
+ </ul>
+ </div>
+
+ <h2 class="section-heading">How I am scoring this</h2>
+
+ <p>"Most influential" doesn't mean "most sold". Warcraft III: Reign of Chaos sold about a million copies in its first month, the fastest a PC game had ever sold at that point<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-1" class="cite-ref">[1]</a></sup>. That was a big deal in 2002, largely due to it being a physical media era at the time, unlike the much easier sales platforms of Steam and Epic Games today. "Most influential" also doesn't mean <i>best</i>, because that gets messy quickly (better than Tetris? Mario? chess? football? StarCraft?)</p>
+
+ <p>I'm mostly considering causality - what came after because of the release of W3? Which games exist only because this one did, and how many people play them today? By that measure the answer isn't Mario or Doom, it's a game most people under thirty have never played.</p>
+
+ <figure class="kr-figure--solo">
+ <div class="kr-diagram kr-diagram--tree" role="group" aria-label="Warcraft III's family tree">
+  <div class="kr-diagram__node kr-diagram__root">Warcraft III<span class="kr-diagram__sub">Blizzard, 2002</span><span class="kr-diagram__detail">Reign of Chaos shipped in July 2002 with the World Editor, its triggers and the JASS scripting language, and a custom games lobby on Battle.net that sent a map from the host to every player in seconds.</span></div>
+  <ol class="kr-diagram__routes">
+   <li class="kr-diagram__route kr-diagram__route--1">
+    <span class="kr-diagram__label">MOBAs</span>
+    <ol class="kr-diagram__steps">
+      <li class="kr-diagram__step">
+       <div class="kr-diagram__node">DotA<span class="kr-diagram__sub">Eul, 2003</span><span class="kr-diagram__detail">Eul rebuilt Aeon of Strife, a StarCraft map, with Warcraft III's heroes, items and levelling: one hero each, three lanes, waves of soldiers.</span></div>
+      </li>
+      <li class="kr-diagram__step">
+       <div class="kr-diagram__node">DotA Allstars<span class="kr-diagram__sub">2004</span><span class="kr-diagram__detail">The version that pulled the best heroes from a dozen copies of Eul's map. Guinsoo ran it from 2004 and added item recipes and the boss in the river, then IceFrog took over in 2005.</span></div>
+      </li>
+      <li class="kr-diagram__step">
+       <div class="kr-diagram__group">
+        <div class="kr-diagram__node">League of Legends<span class="kr-diagram__sub">2009</span><span class="kr-diagram__detail">Riot hired Guinsoo and Pendragon, who ran the Allstars community site. Over a hundred million monthly players by 2016.</span></div>
+        <div class="kr-diagram__node">Dota 2<span class="kr-diagram__sub">2013</span><span class="kr-diagram__detail">Valve hired IceFrog in 2009. Its 2021 world championship had a forty million dollar prize pool, crowdfunded by players.</span></div>
+        <div class="kr-diagram__node">Honor of Kings<span class="kr-diagram__sub">2015</span><span class="kr-diagram__detail">Tencent's phone MOBA for China. A hundred million daily players by 2020, by Tencent's own count.</span></div>
+        <div class="kr-diagram__node">Heroes of the Storm<span class="kr-diagram__sub">2015</span><span class="kr-diagram__detail">Blizzard's own MOBA, three years after it settled with Valve over the word DOTA.</span></div>
+       </div>
+      </li>
+      <li class="kr-diagram__step">
+       <div class="kr-diagram__node">Arcane<span class="kr-diagram__sub">Netflix, 2021</span><span class="kr-diagram__detail">Riot's series about two sisters from the undercity below Piltover. In 2022 it was the first streaming series to win the Emmy for Outstanding Animated Program.</span></div>
+      </li>
+    </ol>
+   </li>
+   <li class="kr-diagram__route kr-diagram__route--2">
+    <span class="kr-diagram__label">Tower defence</span>
+    <ol class="kr-diagram__steps">
+      <li class="kr-diagram__step">
+       <div class="kr-diagram__node">Tower defence maps<span class="kr-diagram__sub">Wintermaul, Green TD, Element TD</span><span class="kr-diagram__detail">Waves on a path or a maze you build, a pause to build between them, a life lost for every leak, towers that sell back for about half. The rules were settled in Warcraft III custom games.</span></div>
+      </li>
+      <li class="kr-diagram__step">
+       <div class="kr-diagram__node">Flash games<span class="kr-diagram__sub">Desktop Tower Defense, Bloons TD, 2007</span><span class="kr-diagram__detail">Tower defence left the editor for the browser: Warcraft III tower defence without the orcs.</span></div>
+      </li>
+      <li class="kr-diagram__step">
+       <div class="kr-diagram__group">
+        <div class="kr-diagram__node">Defense Grid<span class="kr-diagram__sub">2008</span><span class="kr-diagram__detail">Hidden Path Entertainment, December 2008. Aliens walk a path through a base to steal its power cores, and your towers have to stop them carrying the cores back out.</span></div>
+        <div class="kr-diagram__node">Plants vs. Zombies<span class="kr-diagram__sub">2009</span><span class="kr-diagram__detail">PopCap Games, May 2009. Zombies walk down the lanes of a lawn and you plant defences in their way. It was the fastest seller PopCap had made.</span></div>
+        <div class="kr-diagram__node">Kingdom Rush<span class="kr-diagram__sub">2011</span><span class="kr-diagram__detail">Ironhide Game Studio, from Uruguay, July 2011. It came out as a free Flash game on Armor Games, then moved to phones.</span></div>
+        <div class="kr-diagram__node">Legion TD 2<span class="kr-diagram__detail">A standalone game on Steam, made by the people who wrote the Legion TD map. Element TD 2 is the same story.</span></div>
+       </div>
+      </li>
+    </ol>
+   </li>
+   <li class="kr-diagram__route kr-diagram__route--3">
+    <span class="kr-diagram__label">Auto battlers</span>
+    <ol class="kr-diagram__steps">
+      <li class="kr-diagram__step">
+       <div class="kr-diagram__node">Pokemon Defense<span class="kr-diagram__sub">a Warcraft III map</span><span class="kr-diagram__detail">Drodo, the studio behind Auto Chess, named it and mahjong as the inspirations.</span></div>
+      </li>
+      <li class="kr-diagram__step">
+       <div class="kr-diagram__node">Dota Auto Chess<span class="kr-diagram__sub">Dota 2's Arcade, 2019</span><span class="kr-diagram__detail">A custom game, January 2019: eight players, a chessboard each, units from a shared shop. Millions of players within months.</span></div>
+      </li>
+      <li class="kr-diagram__step">
+       <div class="kr-diagram__group">
+        <div class="kr-diagram__node">Teamfight Tactics<span class="kr-diagram__sub">2019</span><span class="kr-diagram__detail">Riot's version, June 2019.</span></div>
+        <div class="kr-diagram__node">Dota Underlords<span class="kr-diagram__sub">2019</span><span class="kr-diagram__detail">Valve's version, June 2019.</span></div>
+        <div class="kr-diagram__node">Battlegrounds<span class="kr-diagram__sub">2019</span><span class="kr-diagram__detail">Blizzard's version, added to Hearthstone in November 2019.</span></div>
+       </div>
+      </li>
+    </ol>
+   </li>
+   <li class="kr-diagram__route kr-diagram__route--4">
+    <span class="kr-diagram__label">Story and setting</span>
+    <ol class="kr-diagram__steps">
+      <li class="kr-diagram__step">
+       <div class="kr-diagram__node">The campaign's cast<span class="kr-diagram__sub">Arthas, Thrall, Jaina, Sylvanas, Illidan</span><span class="kr-diagram__detail">The cast and places World of Warcraft is built on: the Scourge, the Burning Legion, Kalimdor, Northrend, and the Horde as a people.</span></div>
+      </li>
+      <li class="kr-diagram__step">
+       <div class="kr-diagram__node">World of Warcraft<span class="kr-diagram__sub">2004</span><span class="kr-diagram__detail">It plays more like EverQuest, but its world, cast and art are Warcraft III's, and Rexxar's bonus campaign in The Frozen Throne was a prototype. Twelve million subscribers at its peak.</span></div>
+      </li>
+      <li class="kr-diagram__step">
+       <div class="kr-diagram__group">
+        <div class="kr-diagram__node">Wrath of the Lich King<span class="kr-diagram__sub">2008</span><span class="kr-diagram__detail">The WoW expansion The Frozen Throne's ending sets up. It sold 2.8 million copies in a day.</span></div>
+        <div class="kr-diagram__node">Hearthstone<span class="kr-diagram__sub">2014</span><span class="kr-diagram__detail">Blizzard's card game: a deck of Warcraft characters, most of them from Warcraft III.</span></div>
+       </div>
+      </li>
+    </ol>
+   </li>
+  </ol>
+ </div>
+ <figcaption class="figure-note">Warcraft III's family tree: four routes from one 2002 game. Hover over, tap or tab to a box for more.</figcaption>
+ </figure>
+
+ <h2 class="section-heading">What Blizzard shipped in 2002</h2>
+
+ <p>Reign of Chaos came out in July 2002, and The Frozen Throne expansion a year later. As a strategy game it was built around heroes. Each side had a handful of named units that gained levels, learned spells and carried items, and games were won or lost by their hero-focused strategies, generally. The maps were full of creeps, neutral monsters you killed to level those heroes up, and an upkeep tax kicked in when your army got big, so fights happened between a dozen units and not a hundred.</p>
+
+ <p>I loved it. It had a proper campaign, and the campaign's story, where a paladin (holy warrior) Arthas picks up a cursed sword and goes home to kill his King and Father, toppling his own Kingdom, beats most films.</p>
+
+ <p>The world editor let you place trees and hills, obviously, but it also gave you the trigger system Blizzard's own designers had used to build the campaign. When a unit enters this region, do this. When a hero dies, give the killer gold. Change what this spell does. Behind the triggers sat JASS, a full scripting language, for anyone who wanted to go further. You could make a game that had nothing to do with orcs and elves, and so the community did.</p>
+
+ <p>What turned that into an industry was the custom games lobby, which was an app store long before the concept existed. When you joined a custom game on Battle.net, the map downloaded to your machine from the host in seconds, without a website or installer. Anyone could make a map and have thousands of strangers playing it within days.</p>
+
+ <h2 class="section-heading">Timeline</h2>
+
+ <ul class="blog-timeline">
+ <li><span class="tl-year">early 2002</span><span class="tl-dot"></span><span class="tl-body">Aeon of Strife, a StarCraft custom map: one hero each, lanes, waves of computer-controlled soldiers. The credit usually goes to a mapper called Aeon64, but the earliest map files anyone has found carry the name Gunner_4_ever<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-2" class="cite-ref">[2]</a></sup>.</span></li>
+ <li><span class="tl-year">2002</span><span class="tl-dot"></span><span class="tl-body">Warcraft III: Reign of Chaos ships with the World Editor and custom games on Battle.net.</span></li>
+ <li><span class="tl-year">2003</span><span class="tl-dot"></span><span class="tl-body">The Frozen Throne. Eul releases Defense of the Ancients, an Aeon of Strife remake with Warcraft III heroes.</span></li>
+ <li><span class="tl-year">2004</span><span class="tl-dot"></span><span class="tl-body">DotA Allstars merges the best heroes from a dozen variants. Steve "Guinsoo" Feak takes over. World of Warcraft launches in November.</span></li>
+ <li><span class="tl-year">2005</span><span class="tl-dot"></span><span class="tl-body">IceFrog takes over Allstars and never reveals his name. Li "Sky" Xiaofeng wins the World Cyber Games on Warcraft III, the first of two.</span></li>
+ <li><span class="tl-year">2009</span><span class="tl-dot"></span><span class="tl-body">Riot Games, having hired Guinsoo and Pendragon, releases League of Legends. Valve hires IceFrog.</span></li>
+ <li><span class="tl-year">2010&ndash;2013</span><span class="tl-dot"></span><span class="tl-body">Heroes of Newerth. Blizzard and Valve fight over the word "DOTA" and settle. Dota 2 releases in 2013.</span></li>
+ <li><span class="tl-year">2015</span><span class="tl-dot"></span><span class="tl-body">Blizzard's own MOBA, Heroes of the Storm. Tencent, now Riot's owner, releases Honor of Kings for phones.</span></li>
+ <li><span class="tl-year">2019</span><span class="tl-dot"></span><span class="tl-body">Dota Auto Chess appears as a custom game inside Dota 2 in January. Teamfight Tactics, Dota Underlords and Hearthstone Battlegrounds all ship before the year is out.</span></li>
+ <li><span class="tl-year">2020</span><span class="tl-dot"></span><span class="tl-body">Warcraft III: Reforged. More on that below.</span></li>
+ <li><span class="tl-year">2026</span><span class="tl-dot"></span><span class="tl-body">Forsaken Kingdom, the first Warcraft III expansion since The Frozen Throne.</span></li>
+ </ul>
+
+ <h2 class="section-heading">DotA</h2>
+
+ <p>Defense of the Ancients wasn't original: a StarCraft map called Aeon of Strife had already done one hero, three lanes and waves of soldiers a year earlier. What Eul did in 2003 was rebuild it with Warcraft III's heroes, items and levelling. I think a hero who gets stronger over forty minutes, chooses between six items and can die to a single mistake is a much better thing to control than a StarCraft marine. When The Frozen Throne came out Eul moved on, a dozen copies of his map sprang up, and a version called Allstars pulled the best heroes from all of them into one map.</p>
+
+ <figure class="kr-figure--solo">
+ <div class="kr-diagram kr-diagram--map" role="group" aria-label="The DotA map, simplified">
+  <svg class="kr-diagram__map" viewBox="-30 -90 1060 1200" role="img" aria-label="A square map with the Sentinel base in the bottom left corner and the Scourge base in the top right, joined by three lanes, with towers along each lane, soldiers meeting in each lane, a river running corner to corner with the boss Roshan beside it, and camps of neutral monsters between the lanes."><defs><clipPath id="kr-map-clip"><rect x="0" y="0" width="1000" height="1000" rx="20"/></clipPath></defs><text class="kr-map__team" x="1000" y="-26" text-anchor="end">Scourge</text><text class="kr-map__team" x="0" y="1072">Sentinel</text><rect class="kr-map__ground" x="0" y="0" width="1000" height="1000" rx="20"/><g data-part="river"><path class="kr-map__river" d="M0.0,0.0 L11.9,8.1 L23.7,16.3 L35.5,24.5 L47.3,32.7 L59.0,41.0 L70.6,49.4 L82.1,57.9 L93.6,66.4 L104.9,75.1 L116.0,84.0 L127.0,93.0 L137.9,102.1 L148.6,111.4 L159.2,120.8 L169.6,130.4 L179.8,140.2 L189.8,150.2 L199.6,160.4 L209.3,170.7 L218.8,181.2 L228.2,191.8 L237.3,202.7 L246.4,213.6 L255.3,224.7 L264.0,236.0 L272.6,247.4 L281.1,258.9 L289.5,270.5 L297.9,282.1 L306.1,293.9 L314.3,305.7 L322.5,317.5 L330.6,329.4 L338.8,341.2 L346.9,353.1 L355.1,364.9 L363.3,376.7 L371.6,388.4 L379.9,400.1 L388.4,411.6 L396.9,423.1 L405.6,434.4 L414.4,445.6 L423.3,456.7 L432.4,467.6 L441.6,478.4 L451.0,489.0 L460.6,499.4 L470.3,509.7 L480.2,519.8 L490.3,529.7 L500.6,539.4 L511.0,549.0 L521.6,558.4 L532.4,567.6 L543.3,576.7 L554.4,585.6 L565.6,594.4 L576.9,603.1 L588.4,611.6 L599.9,620.1 L611.6,628.4 L623.3,636.7 L635.1,644.9 L646.9,653.1 L658.8,661.2 L670.6,669.4 L682.5,677.5 L694.3,685.7 L706.1,693.9 L717.9,702.1 L729.5,710.5 L741.1,718.9 L752.6,727.4 L764.0,736.0 L775.3,744.7 L786.4,753.6 L797.3,762.7 L808.2,771.8 L818.8,781.2 L829.3,790.7 L839.6,800.4 L849.8,810.2 L859.8,820.2 L869.6,830.4 L879.2,840.8 L888.6,851.4 L897.9,862.1 L907.0,873.0 L916.0,884.0 L924.9,895.1 L933.6,906.4 L942.1,917.9 L950.6,929.4 L959.0,941.0 L967.3,952.7 L975.5,964.5 L983.7,976.3 L991.9,988.1 L1000.0,1000.0" clip-path="url(#kr-map-clip)"/><circle class="kr-map__pit" cx="655" cy="635" r="26"/><circle class="kr-map__pit-dot" cx="655" cy="635" r="10"/><text class="kr-map__label" x="694" y="648">Roshan</text><g class="kr-map__badge"><circle cx="246" cy="214" r="34"/><text x="246" y="229">5</text></g></g><g data-part="lanes"><polyline class="kr-map__lane" points="80,860 80,80 860,80"/><polyline class="kr-map__lane" points="140,920 920,920 920,140"/><polyline class="kr-map__lane" points="150,850 850,150"/><g class="kr-map__badge"><circle cx="155" cy="600" r="34"/><text x="155" y="615">2</text></g></g><g data-part="jungle"><circle class="kr-map__camp" cx="470" cy="774" r="8"/><circle class="kr-map__camp" cx="455" cy="800" r="8"/><circle class="kr-map__camp" cx="485" cy="800" r="8"/><circle class="kr-map__camp" cx="630" cy="784" r="8"/><circle class="kr-map__camp" cx="615" cy="810" r="8"/><circle class="kr-map__camp" cx="645" cy="810" r="8"/><circle class="kr-map__camp" cx="210" cy="504" r="8"/><circle class="kr-map__camp" cx="195" cy="530" r="8"/><circle class="kr-map__camp" cx="225" cy="530" r="8"/><circle class="kr-map__camp" cx="200" cy="284" r="8"/><circle class="kr-map__camp" cx="185" cy="310" r="8"/><circle class="kr-map__camp" cx="215" cy="310" r="8"/><circle class="kr-map__camp" cx="530" cy="194" r="8"/><circle class="kr-map__camp" cx="515" cy="220" r="8"/><circle class="kr-map__camp" cx="545" cy="220" r="8"/><circle class="kr-map__camp" cx="370" cy="184" r="8"/><circle class="kr-map__camp" cx="355" cy="210" r="8"/><circle class="kr-map__camp" cx="385" cy="210" r="8"/><circle class="kr-map__camp" cx="790" cy="464" r="8"/><circle class="kr-map__camp" cx="775" cy="490" r="8"/><circle class="kr-map__camp" cx="805" cy="490" r="8"/><circle class="kr-map__camp" cx="800" cy="684" r="8"/><circle class="kr-map__camp" cx="785" cy="710" r="8"/><circle class="kr-map__camp" cx="815" cy="710" r="8"/><g class="kr-map__badge"><circle cx="545" cy="715" r="34"/><text x="545" y="730">6</text></g></g><g data-part="ancient"><g class="kr-map__sentinel"><circle class="kr-map__base" cx="115" cy="885" r="140" clip-path="url(#kr-map-clip)"/><path class="kr-map__ancient" d="M115,850 L150,885 L115,920 L80,885 Z"/></g><g class="kr-map__scourge"><circle class="kr-map__base" cx="885" cy="115" r="140" clip-path="url(#kr-map-clip)"/><path class="kr-map__ancient" d="M885,80 L920,115 L885,150 L850,115 Z"/></g><g class="kr-map__badge"><circle cx="255" cy="820" r="34"/><text x="255" y="835">1</text></g></g><g data-part="towers"><g class="kr-map__sentinel"><rect class="kr-map__tower" x="67" y="677" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="67" y="457" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="67" y="237" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="297" y="907" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="517" y="907" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="737" y="907" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="202" y="772" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="257" y="717" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="307" y="667" width="26" height="26" rx="4"/></g><g class="kr-map__scourge"><rect class="kr-map__tower" x="907" y="297" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="907" y="517" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="907" y="737" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="677" y="67" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="457" y="67" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="237" y="67" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="772" y="202" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="717" y="257" width="26" height="26" rx="4"/><rect class="kr-map__tower" x="667" y="307" width="26" height="26" rx="4"/></g><g class="kr-map__badge"><circle cx="530" cy="860" r="34"/><text x="530" y="875">3</text></g></g><g data-part="creeps"><g class="kr-map__sentinel"><circle class="kr-map__creep" cx="80" cy="205" r="10"/><circle class="kr-map__creep" cx="80" cy="170" r="10"/><circle class="kr-map__creep" cx="80" cy="135" r="10"/><circle class="kr-map__creep" cx="470" cy="530" r="10"/><circle class="kr-map__creep" cx="445" cy="555" r="10"/><circle class="kr-map__creep" cx="420" cy="580" r="10"/><circle class="kr-map__creep" cx="795" cy="920" r="10"/><circle class="kr-map__creep" cx="830" cy="920" r="10"/><circle class="kr-map__creep" cx="865" cy="920" r="10"/></g><g class="kr-map__scourge"><circle class="kr-map__creep" cx="920" cy="795" r="10"/><circle class="kr-map__creep" cx="920" cy="830" r="10"/><circle class="kr-map__creep" cx="920" cy="865" r="10"/><circle class="kr-map__creep" cx="530" cy="470" r="10"/><circle class="kr-map__creep" cx="555" cy="445" r="10"/><circle class="kr-map__creep" cx="580" cy="420" r="10"/><circle class="kr-map__creep" cx="205" cy="80" r="10"/><circle class="kr-map__creep" cx="170" cy="80" r="10"/><circle class="kr-map__creep" cx="135" cy="80" r="10"/></g><g class="kr-map__badge"><circle cx="560" cy="600" r="34"/><text x="560" y="615">4</text></g></g><g data-part="hero"><circle class="kr-map__ring" cx="385" cy="625" r="36"/><circle class="kr-map__hero" cx="385" cy="625" r="22"/><g class="kr-map__badge"><circle cx="300" cy="555" r="34"/><text x="300" y="570">7</text></g></g></svg>
+  <div class="kr-diagram__key">
+   <div class="kr-diagram__node" data-part="ancient"><span class="kr-diagram__num">1</span>The Ancient<span class="kr-diagram__sub">Each team's base</span><span class="kr-diagram__detail">Each team's base sits in a corner with its Ancient in the middle. Destroy the other side's Ancient and the game is over. League of Legends calls it the Nexus.</span></div>
+   <div class="kr-diagram__node" data-part="lanes"><span class="kr-diagram__num">2</span>Three lanes<span class="kr-diagram__sub">Top, middle and bottom</span><span class="kr-diagram__detail">Three roads join the two bases: one along the left and top edges, one straight through the middle and one along the bottom and right edges.</span></div>
+   <div class="kr-diagram__node" data-part="towers"><span class="kr-diagram__num">3</span>Towers<span class="kr-diagram__sub">Three a lane on each side</span><span class="kr-diagram__detail">Every lane has three towers for each side. They shoot whatever comes in range, so a lane gets pushed one tower at a time.</span></div>
+   <div class="kr-diagram__node" data-part="creeps"><span class="kr-diagram__num">4</span>Creep waves<span class="kr-diagram__sub">Soldiers that march all game</span><span class="kr-diagram__detail">Computer-controlled soldiers leave each base in waves and march down every lane for the whole game. The heroes fight where the two waves meet. League calls them minions.</span></div>
+   <div class="kr-diagram__node" data-part="river"><span class="kr-diagram__num">5</span>The river<span class="kr-diagram__sub">With Roshan's pit</span><span class="kr-diagram__detail">The river splits the map in two. Roshan, the boss Guinsoo added to Allstars, waits in a pit beside it.</span></div>
+   <div class="kr-diagram__node" data-part="jungle"><span class="kr-diagram__num">6</span>The jungle<span class="kr-diagram__sub">Neutral creeps</span><span class="kr-diagram__detail">Camps of neutral creeps fill the ground between the lanes. Killing them earns gold and experience without fighting the other team.</span></div>
+   <div class="kr-diagram__node" data-part="hero"><span class="kr-diagram__num">7</span>Your hero<span class="kr-diagram__sub">One each, five a side</span><span class="kr-diagram__detail">The only unit you control. Kill creeps for gold, level up, buy items, and help your side push down a lane.</span></div>
+  </div>
+ </div>
+ <figcaption class="figure-note">League of Legends, Dota 2 and Honor of Kings all still use this layout. League calls the Ancient a Nexus and the creeps minions. Hover over or tap any part of the map, or tab through the key, for more.</figcaption>
+ </figure>
+
+ <p>Two people took it from popular to enormous. Steve Feak, known as Guinsoo, ran Allstars from 2004 and added the things that made it a sport: item recipes, a boss in the river, a balance pass every few weeks. Then in 2005 a mapper known only as IceFrog took it over. He's still never told anyone his name, and he ran it for years, balancing it carefully.</p>
+
+ <p>Somewhere along the way DotA became the reason people had Warcraft III installed at all. In the internet cafes of China, Korea and Southeast Asia, that's what it was there for.</p>
+
+ <figure class="kr-figure--solo">
+ <img src="https://www.kenreid.co.uk/img/ext/wc3-wangba.webp" alt="A neon sign for an internet cafe in China at night" loading="lazy" width="1200" height="673" class="kr-figure-img">
+ <figcaption class="figure-note">A wangba, an internet cafe, in China. For years, a lot of the Warcraft III installs in rooms like this were there for DotA. Photo: <a href="https://commons.wikimedia.org/wiki/File:Wangba.JPG" target="_blank" rel="noopener">Zcm11</a> via Wikimedia Commons, <a href="https://creativecommons.org/licenses/by-sa/3.0" target="_blank" rel="noopener">CC BY-SA 3.0</a>.</figcaption>
+ </figure>
+
+ <p>Riot Games hired Guinsoo and Steve "Pendragon" Mescon, who'd run the DotA Allstars community site, and then shipped League of Legends in October 2009. Valve hired IceFrog the same year and shipped Dota 2 in 2013. Blizzard, the company whose editor all of these people had learned on, fought Valve over the trademark on the word "DOTA", gave up the commercial rights in a 2012 settlement, and shipped its own MOBA in 2015. Riot even made up the word MOBA so that the name of the genre wouldn't have somebody else's map in it, and these days hardly anyone says "DotA-like". Also, can you imagine just being really into Warcraft 3, being deeply involved in a community around some custom map you like, then getting hired by Blizzard or Riot Games? Crazy.</p>
+
+ <p>Riot said in 2016 that League of Legends had over a hundred million monthly players<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-3" class="cite-ref">[3]</a></sup>. Tencent bought Riot outright and built Honor of Kings, a phone MOBA for China. By Tencent's own count it passed a hundred million daily players in 2020, and it has been the highest grossing game on the planet for years<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-4" class="cite-ref">[4]</a></sup><sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-5" class="cite-ref">[5]</a></sup>.</p>
+
+ <p>Dota 2's 2021 world championship had a prize pool of forty million dollars, crowdfunded by players<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-6" class="cite-ref">[6]</a></sup>. The League of Legends world final draws more live viewers than most sports finals outside football<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-7" class="cite-ref">[7]</a></sup>.</p>
+
+ <figure class="kr-figure--solo">
+ <img src="https://www.kenreid.co.uk/img/ext/wc3-ti-keyarena.webp" alt="A packed arena lit in purple with a huge screen showing a Dota 2 match" loading="lazy" width="1100" height="729" class="kr-figure-img">
+ <figcaption class="figure-note">The International at KeyArena, Seattle, 2014. Dota 2 filling a basketball arena. Photo: <a href="https://commons.wikimedia.org/wiki/File:The_International_at_KeyArena.jpg" target="_blank" rel="noopener">Dota 2 The International</a> via Wikimedia Commons, <a href="https://creativecommons.org/licenses/by/2.0" target="_blank" rel="noopener">CC BY 2.0</a>.</figcaption>
+ </figure>
+
+ <p>It's produced television too. Arcane, animated by the French studio Fortiche and put on Netflix in 2021, follows two sisters from the undercity below Piltover, one of whom grows up into the champion Jinx. It won the Emmy for Outstanding Animated Program in 2022, the first streaming series ever to win it, and no game adaptation had been anywhere near<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-8" class="cite-ref">[8]</a></sup>. Riot is reported to have spent something like 250 million dollars across its two seasons and to have made no direct profit on it<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-9" class="cite-ref">[9]</a></sup>. I can also safely say it made for excellent viewing.</p>
+
+ <figure class="kr-figure--solo">
+ <img src="https://www.kenreid.co.uk/img/ext/wc3-arcane-cosplay.webp" alt="A group of cosplayers dressed as characters from Arcane on a convention stage" loading="lazy" width="1200" height="797" class="kr-figure-img">
+ <figcaption class="figure-note">An Arcane cosplay meet in Raleigh, 2025. They are dressed as characters from League of Legends, which comes out of a Warcraft III map. Photo: <a href="https://commons.wikimedia.org/wiki/File:Arcane_Cosplay_Meetup_-_Animate!_Raleigh_2025_-_54268316378.jpg" target="_blank" rel="noopener">Super Festivals</a> via Wikimedia Commons, <a href="https://creativecommons.org/licenses/by/2.0" target="_blank" rel="noopener">CC BY 2.0</a>.</figcaption>
+ </figure>
+
+ <h2 class="section-heading">Tower defence, exported</h2>
+
+ <p>Tower defence existed before Warcraft III in bits and pieces. Rampart in 1990 had you building walls between rounds, and StarCraft had a few turret maps. The rules every tower defence game has used since were settled in Warcraft III custom games: a fixed path or a maze you build yourself, enemies in numbered waves, a pause to build and upgrade between them, a life lost for every leak, and towers you can sell for ~half their price. Two of the maps in that list I used to scroll, Wintermaul and Green TD (including circle), were tower defence, and so were Burbenog TD, Gem TD and Element TD, and that's where a lot of people worked out that a maze with one open corner beats a straight line of towers.</p>
+
+ <p>Around 2007 the genre left the editor for the browser. Desktop Tower Defense and Bloons TD were Flash games, and they were Warcraft III tower defence without the orcs. Then came Defense Grid (2008), Plants vs. Zombies (2009) and Kingdom Rush (2011), and Bloons is still going, and still selling, on Steam and on mobile. The World Editor originals got their own sequels too: Element TD 2 and Legion TD 2 are standalone games on Steam, made by the people who wrote the maps. Legion TD is also halfway to an auto battler. You buy units that fight the waves for you instead of towers, and you spend spare gold sending extra creeps at the other team. The fighting is automatic, the economy is shared and you attack your opponent indirectly.</p>
+
+ <h2 class="section-heading">Auto battlers</h2>
+
+ <p>In January 2019 a small Chinese studio called Drodo released Dota Auto Chess. It was a custom map inside Dota 2's Arcade, which is Valve's version of the Warcraft III custom game lobby, built by people who'd been hired out of that lobby. Eight players get a chessboard each, buy units from a shared shop, place them, watch them fight, and lose health when they lose. Drodo have said the inspirations were mahjong and a Warcraft III custom map called Pokemon Defense<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-10" class="cite-ref">[10]</a></sup>.</p>
+
+ <p>Within a few months it had millions of players. By the end of the year, the three biggest companies making these games had each shipped their own version, the second time in fifteen years they'd chased a hobby project out of a custom game list. Riot released Teamfight Tactics in June 2019, Valve released Dota Underlords the same month, and Blizzard added Battlegrounds to Hearthstone in November.</p>
+
+ <h2 class="section-heading">Esports</h2>
+
+ <p>Esports didn't start with Warcraft III. Korea had a StarCraft: Brood War scene with its own television channels before Reign of Chaos shipped, and that's where professional gaming as an institution begins. Warcraft III shaped it as a game in its own right, and much more through DotA.</p>
+
+ <p>Through the 2000s it was a flagship game at the World Cyber Games and the Electronic Sports World Cup, back when esports meant a few international tournaments a year and national qualifiers. Manuel "Grubby" Schenkhuizen, a Dutch orc player, turned it into a career that is still running on Twitch two decades later. Jang "Moon" Jae-ho, a Korean night elf specialist, was good enough to be called the Fifth Race (the game has four). Li "Sky" Xiaofeng took the World Cyber Games in 2005 and again in 2006, the first player to win it two years running<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-11" class="cite-ref">[11]</a></sup>, and in 2008 he and Moon carried the Olympic torch, after Razer talked the pair of them into the relay<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-12" class="cite-ref">[12]</a></sup>.</p>
+
+ <figure class="kr-figure--solo">
+ <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px;">
+ <img src="https://www.kenreid.co.uk/img/ext/wc3-sky.webp" alt="Li Sky Xiaofeng on stage in a red jacket at the World Cyber Games 2011 grand final" loading="lazy" width="700" height="467" class="kr-figure-img" style="aspect-ratio: 3 / 4; object-fit: cover;">
+ <img src="https://www.kenreid.co.uk/img/ext/wc3-grubby.webp" alt="Manuel Grubby Schenkhuizen wearing a headset at a tournament" loading="lazy" width="700" height="1053" class="kr-figure-img" style="aspect-ratio: 3 / 4; object-fit: cover;">
+ <img src="https://www.kenreid.co.uk/img/ext/wc3-moon.webp" alt="Jang Moon Jae-ho in a team jacket, looking down at a screen" loading="lazy" width="700" height="981" class="kr-figure-img" style="aspect-ratio: 3 / 4; object-fit: cover;">
+ </div>
+ <figcaption class="figure-note">Sky at the World Cyber Games 2011 grand final, Grubby at MLG 2012, and Moon. Photos: <a href="https://commons.wikimedia.org/wiki/File:WarCraft_III_Medalists_-_Sky_-_WCG_2011_GF_(1).jpg" target="_blank" rel="noopener">xReDeYe</a> (<a href="https://creativecommons.org/licenses/by/2.0" target="_blank" rel="noopener">CC BY 2.0</a>), <a href="https://commons.wikimedia.org/wiki/File:Manuel_%22Grubby%22_Schenkhuizen.jpg" target="_blank" rel="noopener">Kevin Chang for Team Liquid</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0" target="_blank" rel="noopener">CC BY-SA 3.0</a>) and <a href="https://commons.wikimedia.org/wiki/File:Jang_Jae_Ho(Moon).jpg" target="_blank" rel="noopener">jareed</a> (<a href="https://creativecommons.org/licenses/by/2.0" target="_blank" rel="noopener">CC BY 2.0</a>), via Wikimedia Commons.</figcaption>
+ </figure>
+
+ <p>Riot ran its own competition instead of leaving it to tournament organisers. The League Championship Series started in 2013 with salaried players on year-long contracts, a regular season and a playoff, and Riot pushed the American government until League professionals were granted the same visa class as foreign athletes (!!!)<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-13" class="cite-ref">[13]</a></sup>. Five years later it sold permanent places in that league for ten million dollars each<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-14" class="cite-ref">[14]</a></sup>. Every publisher-run league since, the Overwatch League, the Call of Duty League, Valorant's circuit, is built to that plan.</p>
+
+ <figure class="kr-figure--solo">
+ <img src="https://www.kenreid.co.uk/img/ext/wc3-worlds-2017.webp" alt="A vast stadium at night, packed, with a lit stage and giant screens at one end" loading="lazy" width="1400" height="638" class="kr-figure-img">
+ <figcaption class="figure-note">The 2017 League of Legends World Championship final in the Bird's Nest, Beijing, the Olympic stadium. Photo: <a href="https://commons.wikimedia.org/wiki/File:League_of_Legends_World_Championship_2017_Finals.jpg" target="_blank" rel="noopener">Richard Ye</a> via Wikimedia Commons, <a href="https://creativecommons.org/licenses/by-sa/2.0" target="_blank" rel="noopener">CC BY-SA 2.0</a>.</figcaption>
+ </figure>
+
+ <p>Valve went the other way. The International funds its prize pool by selling players a battle pass and putting a share of the sales into the pot, which is how a tournament for a free game got to forty million dollars without a single traditional sponsor. The franchised league and the crowdfunded prize pool are the two ways modern esports pays for itself, and both were built for games that started as Warcraft III custom maps.</p>
+
+ <h2 class="section-heading">World of Warcraft</h2>
+
+ <p>World of Warcraft isn't a descendant of Warcraft III in how it plays. Its design owes much more to EverQuest. What it took from Warcraft III is everything else: Arthas, Thrall, Jaina, Illidan, Sylvanas, the Scourge, the Burning Legion, Kalimdor, Northrend, and the idea of the Horde as a people and not just a green army. That's the cast and setting of Warcraft III's campaign, and The Frozen Throne's final cutscene sets up Wrath of the Lich King, which sold 2.8 million copies in a day in 2008<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-15" class="cite-ref">[15]</a></sup>. The art came across too. WoW's thick shoulders and hand-painted textures, which let it run on nearly any old PC for twenty years, are Warcraft III's low-polygon models scaled up.</p>
+
+ <figure class="kr-figure--solo">
+ <img src="https://www.kenreid.co.uk/img/ext/wc3-wow-blizzcon.webp" alt="Rows of demo PCs under a large World of Warcraft banner at a convention" loading="lazy" width="1200" height="675" class="kr-figure-img">
+ <figcaption class="figure-note">World of Warcraft on the floor at BlizzCon 2013. Photo: <a href="https://commons.wikimedia.org/wiki/File:World_of_Warcraft_demo_at_BlizzCon_2013_17.jpg" target="_blank" rel="noopener">instaSHINOBI</a> via Wikimedia Commons, <a href="https://creativecommons.org/licenses/by/2.0" target="_blank" rel="noopener">CC BY 2.0</a>.</figcaption>
+ </figure>
+
+ <p>The Frozen Throne's bonus campaign, The Founding of Durotar, was a WoW prototype. It had one hero (Rexxar, and his bear), no base, a map full of quest givers, an inventory to manage, and a story about founding a town. It felt different to the rest of the Warcraft III campaign and was a lot of fun, with Rexxar being a beloved and memorable figure, and still lingers as the archetypical hunter. Sixteen months later Blizzard shipped the same idea as a subscription game, and it peaked at twelve million subscribers<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-16" class="cite-ref">[16]</a></sup>.</p>
+
+ <p>WoW then set the template for every online RPG after it, to the point where "WoW clone" was a genre for a decade, and for fifteen years it was the biggest thing Blizzard had, out of a series that started in 1994 as a strategy game. Hearthstone, Blizzard's card game, is a deck of Warcraft characters, most of them from this one.</p>
+
+ <figure class="kr-figure--solo">
+ <img src="https://www.kenreid.co.uk/img/ext/wc3-duncan-jones.webp" alt="Duncan Jones in a cap, smiling, at San Diego Comic-Con" loading="lazy" width="700" height="825" class="kr-figure-img" style="max-width: 420px;">
+ <figcaption class="figure-note">Duncan Jones at San Diego Comic-Con, 2013, three years before Warcraft. Photo: <a href="https://commons.wikimedia.org/wiki/File:Duncan_Jones_by_Gage_Skidmore.jpg" target="_blank" rel="noopener">Gage Skidmore</a> via Wikimedia Commons, <a href="https://creativecommons.org/licenses/by-sa/3.0" target="_blank" rel="noopener">CC BY-SA 3.0</a>.</figcaption>
+ </figure>
+
+ <p>Duncan Jones directed 'Warcraft' the film, in 2016, a hundred and sixty million dollar adaptation of the first game's story and not this one's: Durotan, Lothar, Medivh, orcs coming through the Dark Portal. Reviewers hated it (29 percent on Rotten Tomatoes). It made about 440 million dollars anyway, the most any film made from a game had taken until Mario turned up in 2023<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-17" class="cite-ref">[17]</a></sup>, and it took more money in China in five days than it managed in America in its entire run<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-18" class="cite-ref">[18]</a></sup>.</p>
+
+ <p>The film was ok, but mostly a missed opportunity. They could have shown Arthas, they could have stuck to the lore more stringently, they could have defined a new era of movies with it - but instead they took major liberties in changing the lore and making complex characters largely two dimensional. A real shame. I saw it in the cinema and thought it was fun, I thoroughly enjoyed the music and view of Stormwind when it was shown on the big screen - but I'd only give it a solid 5 / 10. </p>
+
+ <p>So a fantasy film about orcs took more than four times its American gross in China. I think that's because a generation of Chinese players spent the 2000s in internet cafes on Warcraft III, then DotA, then WoW. No sequel followed, which is usually put down to the 47 million dollars it took at home. Another missed opportunity, so far.</p>
+
+ <figure class="kr-figure--solo">
+ <img src="https://www.kenreid.co.uk/img/ext/wc3-gorehowl-netease.webp" alt="A giant sculpture of a curved orcish axe lying on a lawn among trees" loading="lazy" width="1000" height="750" class="kr-figure-img">
+ <figcaption class="figure-note">Gorehowl, Grommash Hellscream's axe, on the NetEase campus in Hangzhou. NetEase has run World of Warcraft in China for most of the game's life there. Photo: <a href="https://commons.wikimedia.org/wiki/File:Warcraft_Axe_in_the_Netease_Hangzhou_Campus.jpg" target="_blank" rel="noopener">CatOnMars</a> via Wikimedia Commons, <a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank" rel="noopener">CC BY-SA 4.0</a>.</figcaption>
+ </figure>
+
+ <h2 class="section-heading">What it did to strategy games</h2>
+
+ <p>On its own genre, Warcraft III's influence is smaller than everything above suggests, and I should be fair about that. Hero units in strategy games came before it (Warlords Battlecry had them in 2000) and Age of Mythology shipped heroes the same year. What it did was set the small-army, hero-led style that Battle for Middle-earth, SpellForce and eventually Dawn of War II followed. It was also the last strategy game to be a mainstream esport before StarCraft II.</p>
+
+ <p>The genre shrank, and its players went to DotA, which is Warcraft III with the base building taken out and one hero left in. </p>
+
+ <p>Blizzard didn't learn from it. StarCraft II in 2010 shipped with custom games behind a popularity chart that buried anything new, and a licence claiming ownership of whatever you made in its editor. Its custom scene ended up a fraction the size of Warcraft III's, and Dota Auto Chess happened in Valve's lobby, not Blizzard's.</p>
+
+ <p>Warcraft III: Reforged in 2020 was a remake so bad it got a user score of 0.5 out of ten on Metacritic, then the lowest on the site<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-19" class="cite-ref">[19]</a></sup>. It came with a new agreement saying that custom games made in the editor belong to Blizzard<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-20" class="cite-ref">[20]</a></sup> (hardly a surprise after League of Legends and Dota 2). I found Reforged to be mostly "fine", with more promises than were actually delivered. The previews shown months prior to release looked much more appealing than the gameplay lived up to. </p>
+
+ <h2 class="section-heading">Things W3 Didn't Inspire (much)</h2>
+
+ <ul>
+ <li><strong>Hero shooters.</strong> Overwatch's roster owes something to MOBA hero design, but Team Fortress had classes in 1996 and Team Fortress 2 had the personalities in 2007. Shared ancestor at best.</li>
+ <li><strong>Battle royale.</strong> Runs through Arma mods, DayZ, and Minecraft Hunger Games servers. Warcraft III had survival maps, but nobody at PUBG seemed to be thinking about them. Fortnite took the mode from PUBG in 2017 and bolted it onto a co-op game about building forts, and overtook PUBG within months.</li>
+ <li><strong>Survival crafting.</strong> Island Troll Tribes was a Warcraft III map doing hunger, crafting and hide-from-the-other-tribe years before Minecraft, and I would love to connect them, but I cannot find anyone who says they took it from there.</li>
+ <li><strong>Roblox and "the game is a platform".</strong> Roblox launched in 2006 and had its own reasons. Fortnite's Creative mode, from 2018, lists islands built by players the way Battle.net listed custom maps, but what Epic is chasing with it is Roblox. Warcraft III got there first at scale, but so did Quake and Half-Life. See below.</li>
+ </ul>
+
+ <h2 class="section-heading">The rivals</h2>
+
+ <p>Doom defined the first-person shooter, it made deathmatch, and its WAD files started PC modding as a culture. Half-Life is the other, and the closest rival to the case I'm making: Counter-Strike was a mod that outgrew its parent, Valve hired its two authors, and Riot and Valve did the same thing with DotA a decade later. Then there's Team Fortress, Day of Defeat and Garry's Mod, and Steam exists partly because Valve needed a way to patch Counter-Strike.</p>
+
+ <p>Minecraft has sold more copies than anything, and Dune II invented the RTS in the first place. Super Mario Bros. and Tetris are foundations, but their descendants are platformers and puzzle games, and that isn't where the players went.</p>
+
+ <p>"Changed how games are made" goes to Doom - I won't argue. "Number of people, right now, playing something that could not exist without it" goes to Warcraft III, through League of Legends, Dota 2 and Honor of Kings alone, before you add a single tower defence or auto battler. That's hundreds of millions of people every month.</p>
+
+ <h2 class="section-heading">Where the credit goes</h2>
+
+ <p>Some, but far from all, goes to Blizzard. Blizzard's part was an editor that gave players the real tools and a lobby that got a map from one stranger to another with nothing in between. Everything since came from whoever wrote Aeon of Strife, from Eul, Guinsoo and IceFrog, the Drodo team, the anonymous authors of Wintermaul and Gem TD, and everyone who kept that custom game list full.</p>
+
+ <p>So thank you, whoever you all are.</p>
+
+ <h2 class="section-heading">Forsaken Kingdom</h2>
+
+ <p>Blizzard has had one more go, though. At BlizzCon on 12 September 2026 it announced Forsaken Kingdom, the first Warcraft III expansion since The Frozen Throne 23 years ago, and put it on sale the same day<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-21" class="cite-ref">[21]</a></sup>. It's about thirty hours of new campaign: a four-mission prologue, The Last Days of Lordaeron, then a main campaign set between Arthas coming home and the founding of the Undercity, with Sylvanas, the Forsaken and the Scarlet Crusade. That main campaign is semi-open and built like the Rexxar one, with a new inventory and talent system<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-22" class="cite-ref">[22]</a></sup>. The patch that came with it adds a Definitive Edition graphics mode, lets you select 24 units instead of 12, and improves the World Editor.</p>
+
+ <figure class="kr-figure--solo kr-figure--embed">
+ <button type="button" class="kr-embed-facade" data-embed-src="https://www.youtube.com/embed/I1kXClUCyuA" data-embed-title="Warcraft III Reforged: Forsaken Kingdom launch trailer">
+ <span class="kr-embed-facade__play" aria-hidden="true"></span>
+ <span class="kr-embed-facade__title">Warcraft III Reforged: Forsaken Kingdom launch trailer</span>
+ <span class="kr-embed-facade__note">Click to load the YouTube player</span>
+ </button>
+ <figcaption class="kr-figcaption">The launch trailer, from Blizzard's Warcraft channel on YouTube, September 2026.</figcaption>
+ </figure>
+
+ <p>After Reforged I didn't expect this (I don't think anyone did), but it's calling me back. I reinstalled Reforged and played some custom games, played some of the original campaign, and I'm trying to avoid hitting buy just yet. I want to see what else is coming first - what other people think - if Warcraft III is now an "active" product, or if this was a one-off.</p>
+
+ <p>The campaign follows Garek Bandarion, a lieutenant in Lordaeron's city guard who comes back as one of the Forsaken<sup><a href="https://www.kenreid.co.uk/blog/warcraft-iii-most-influential-game.html#ref-22" class="cite-ref">[22]</a></sup>. The new hero, in the Tavern for anyone playing multiplayer, is a Forsaken Paladin. Undead paladins! That sounds super cool. Maybe I should pick it up...</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/blog/img/wc3/forsaken-kingdom-hero.webp" alt="Painted key art of a battle outside a ruined castle: a huge armoured rider on a warhorse swings a flail, while a blond warrior with a sword and a hooded archer charge in from the left" loading="lazy" width="1920" height="1080">
+ <figcaption class="figure-note kr-figcaption">The key art for Forsaken Kingdom, also at the top of this post. &copy; Blizzard Entertainment. Used here for commentary.</figcaption>
+ </figure>
+
+ <h2 class="section-heading" id="references">References</h2>
+ <ol class="references">
+          <li id="ref-1">
+            Walker, R. (2002). WarCraft III: How Arthas the Nordic hero conquers his gaming targets. <em>Slate</em>. <a href="https://slate.com/culture/2002/08/warcraft-iii.html" target="_blank" rel="noopener">https://slate.com/culture/2002/08/warcraft-iii.html</a>
+          </li>
+          <li id="ref-2">
+            Lane-Pushing Games (n.d.). Aeon of Strife. <a href="https://lanepushinggames.com/article/aeon-of-strife" target="_blank" rel="noopener">https://lanepushinggames.com/article/aeon-of-strife</a>
+          </li>
+          <li id="ref-3">
+            Huddleston, T. (2016). The world's most popular online videogame now has 100 million players. <em>Fortune</em>. <a href="https://fortune.com/2016/09/14/league-of-legends-100-million/" target="_blank" rel="noopener">https://fortune.com/2016/09/14/league-of-legends-100-million/</a>
+          </li>
+          <li id="ref-4">
+            Tencent Games (2020). Tencent's TiMi Studios sets world daily active user record as mobile MOBA Honor of Kings hits 100 million DAU. <em>PR Newswire</em>. <a href="https://www.prnewswire.com/news-releases/tencents-timi-studios-sets-world-daily-active-user-record-as-mobile-moba-honor-of-kings-hits-100-million-dau-301164359.html" target="_blank" rel="noopener">prnewswire.com</a>
+          </li>
+          <li id="ref-5">
+            Ye, J. (2020). Tencent says Honour of Kings becomes first game to average over 100mn daily users across any platform. <em>South China Morning Post</em>. <a href="https://www.scmp.com/tech/gear/article/3108108/tencent-says-honor-kings-becomes-first-game-average-over-100mn-daily" target="_blank" rel="noopener">scmp.com</a>
+          </li>
+          <li id="ref-6">
+            Liquipedia (2021). The International 2021. <a href="https://liquipedia.net/dota2/The_International/2021" target="_blank" rel="noopener">https://liquipedia.net/dota2/The_International/2021</a>
+          </li>
+          <li id="ref-7">
+            Esports Charts (2023). 2023 World Championship. <a href="https://escharts.com/tournaments/lol/2023-world-championship" target="_blank" rel="noopener">https://escharts.com/tournaments/lol/2023-world-championship</a>
+          </li>
+          <li id="ref-8">
+            Lang, J. (2022). Netflix's Arcane is first streaming series to win Animated Program Emmy. <em>Cartoon Brew</em>. <a href="https://www.cartoonbrew.com/awards/arcane-emmy-animated-program-netflix-220954.html" target="_blank" rel="noopener">cartoonbrew.com</a>
+          </li>
+          <li id="ref-9">
+            Bloomberg (2024). Riot's $250 million Netflix show was a TV hit, financial miss. <em>Bloomberg</em>. <a href="https://www.bloomberg.com/news/articles/2024-12-23/riot-s-250-million-netflix-show-was-a-tv-hit-financial-miss" target="_blank" rel="noopener">bloomberg.com</a>
+          </li>
+          <li id="ref-10">
+            Wikipedia (2026). Dota Auto Chess. <a href="https://en.wikipedia.org/wiki/Dota_Auto_Chess" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Dota_Auto_Chess</a>
+          </li>
+          <li id="ref-11">
+            Guinness World Records (n.d.). First player to win two consecutive Warcraft 3 gold medals at the World Cyber Games. <a href="https://www.guinnessworldrecords.com/world-records/first-player-to-win-two-consecutive-warcraft-3-gold-medals-at-the-world-cyber-games" target="_blank" rel="noopener">guinnessworldrecords.com</a>
+          </li>
+          <li id="ref-12">
+            Chalk, A. (2008). Pro gamers join Olympic torch rally. <em>The Escapist</em>. <a href="https://www.escapistmagazine.com/pro-gamers-join-olympic-torch-rally/" target="_blank" rel="noopener">https://www.escapistmagazine.com/pro-gamers-join-olympic-torch-rally/</a>
+          </li>
+          <li id="ref-13">
+            CNBC (2013). Score! Professional video gamers awarded athletic visas. <a href="https://www.cnbc.com/2013/07/22/score-professional-video-gamers-awarded-athletic-visas.html" target="_blank" rel="noopener">cnbc.com</a>
+          </li>
+          <li id="ref-14">
+            Khan, I. (2017). Riot releases details on NA LCS franchising with $10M flat-fee buy-in. <em>ESPN</em>. <a href="https://www.espn.com/gaming/story/_/id/19511222/riot-releases-details-na-lcs-franchising-10m-flat-fee-buy-in" target="_blank" rel="noopener">espn.com</a>
+          </li>
+          <li id="ref-15">
+            Activision Blizzard (2008). World of Warcraft: Wrath of the Lich King shatters day-1 sales record [press release]. <a href="https://investor.activision.com/news-releases/news-release-details/world-warcraftr-wrath-lich-kingtm-shatters-day-1-sales-record" target="_blank" rel="noopener">investor.activision.com</a>
+          </li>
+          <li id="ref-16">
+            Activision Blizzard (2010). World of Warcraft subscriber base reaches 12 million worldwide [press release]. <a href="https://investor.activision.com/news-releases/news-release-details/world-warcraftr-subscriber-base-reaches-12-million-worldwide" target="_blank" rel="noopener">investor.activision.com</a>
+          </li>
+          <li id="ref-17">
+            Box Office Mojo (n.d.). Warcraft (2016). <a href="https://www.boxofficemojo.com/title/tt0803096/" target="_blank" rel="noopener">https://www.boxofficemojo.com/title/tt0803096/</a>
+          </li>
+          <li id="ref-18">
+            Bloomberg (2016). Warcraft tops China's box office with $157 million debut. <em>Bloomberg</em>. <a href="https://www.bloomberg.com/news/articles/2016-06-12/-warcraft-tops-china-box-office-with-157-million-opening-week" target="_blank" rel="noopener">bloomberg.com</a>
+          </li>
+          <li id="ref-19">
+            Denzer, T. J. (2020). Warcraft 3: Reforged garners a record-low 0.5 Metacritic user rating. <em>Shacknews</em>. <a href="https://www.shacknews.com/article/116127/warcraft-3-reforged-garners-a-record-low-05-metacritic-user-rating" target="_blank" rel="noopener">shacknews.com</a>
+          </li>
+          <li id="ref-20">
+            PC Gamer (2020). All your Warcraft 3: Reforged custom games belong exclusively to Blizzard. <a href="https://www.pcgamer.com/all-your-warcraft-3-reforged-custom-games-belong-exclusively-to-blizzard/" target="_blank" rel="noopener">pcgamer.com</a>
+          </li>
+          <li id="ref-21">
+            Kay, A. (2026). Blizzard releases Warcraft 3: Reforged "Forsaken Kingdom" expansion, the first in over 23 years. <em>gHacks</em>. <a href="https://www.ghacks.net/2026/09/15/blizzard-releases-warcraft-3-reforged-forsaken-kingdom-expansion-the-first-in-over-23-years/" target="_blank" rel="noopener">ghacks.net</a>
+          </li>
+          <li id="ref-22">
+            Wikipedia (2026). Warcraft III Reforged: Forsaken Kingdom. <a href="https://en.wikipedia.org/wiki/Warcraft_III_Reforged:_Forsaken_Kingdom" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Warcraft_III_Reforged:_Forsaken_Kingdom</a>
+          </li>
+</ol>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Doesn't Aeon of Strife on StarCraft mean StarCraft deserves the credit?</summary>
+ <p>For the idea, yes. Aeon of Strife stayed a curiosity because StarCraft's editor couldn't give a unit levels, items or a skill tree and its custom games didn't travel the same way, so DotA needed Warcraft III's heroes to become DotA.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Isn't Counter-Strike the better example of a mod beating its parent?</summary>
+ <p>It's the earlier example and a cleaner one, but Counter-Strike is still the game it was in 1999 with better graphics. DotA produced League of Legends, Dota 2, Honor of Kings, Mobile Legends, Heroes of the Storm, Pokemon Unite and, two steps on, the auto battler, and the same editor produced tower defence on the side.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>What about Minecraft?</summary>
+ <p>It's a strong case: the best selling game ever, with a modding scene to match. What it hasn't done is spawn whole genres the way Warcraft III did. Survival crafting games cite it and the Hunger Games servers fed into battle royale, and there's still no Minecraft-shaped genre with hundreds of millions of players that isn't Minecraft.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Can you still play the original?</summary>
+ <p>Sort of. Reforged replaced the classic client in 2020, so it's what you get even if you want the old graphics, and the custom game list and a lot of the old maps are still there. The players run their own ladder, W3Champions, on top of it, fans still host DotA Allstars, and the game is the healthiest it's been in a decade, no thanks to Blizzard.</p>
+ </details>
+ </div>
+
+        
+ ]]></content:encoded>
+    </item>
     <item>
       <title>Every Stephen King Book I&#x27;ve Read, Ranked</title>
       <link>https://www.kenreid.co.uk/blog/stephen-king-ranked.html</link>
@@ -2443,175 +2869,6 @@ new MutationObserver(function () {
       <pubDate>Fri, 14 Aug 2026 00:00:00 +0000</pubDate>
       <description>My homepage shows what I&#x27;m listening to and reading, updated every Monday by a GitHub Action that commits to its own repository. Live data on a static site, no server required.</description>
       <category>technology</category>
-      <content:encoded><![CDATA[
-
- <p><a href="https://www.kenreid.co.uk/index.html">My homepage</a> shows my scrobble count, the book I'm reading through, the last song I played, and whatever I last posted on Bluesky. This is a static site, meaning it can't just run dynamic scripts on a whim. I set up a system to dynamically update my HTML weekly, however, and it works for free. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
-
- <div class="plain-english-box">
- <h2>Quick jargon guide</h2>
- <ul>
- <li><strong>GitHub Actions:</strong> GitHub's free automation. You describe a job in a text file, and GitHub runs it on their machines, on a schedule if you like.</li>
- <li><strong>Cron:</strong> the venerable syntax for "run this at these times". Mine says <code>0 6 * * 1</code>: every Monday at 06:00 UTC.</li>
- <li><strong>API:</strong> a website's machine-readable front door. Last.fm's API answers "what did this user play?" with data instead of a web page.</li>
- <li><strong>API key / secret:</strong> the password for that front door, stored in GitHub's encrypted secrets so it never appears in the code.</li>
- <li><strong>Scrobble:</strong> one logged song play. My <a href="https://www.kenreid.co.uk/blog/what-50000-scrobbles-say-about-me.html">Last.fm account</a> has been counting since 2011.</li>
- <li><strong>Bot commit:</strong> a change to the repository made by an automation rather than a person.</li>
- </ul>
- </div>
-
- <h2>The idea: if the site can't fetch, fetch into the site</h2>
-
- <p>A normal website with live data has a server that queries things when visitors arrive. A static site can't do that, but it has a loophole: the site is a git repository, and <em>anything that can commit to the repository can change the site</em>. So instead of fetching data per visit, a scheduled job fetches it once a week and commits the results as plain JSON files. The site stays static. Visitors' browsers read those JSON files with an ordinary fetch: same origin, no keys, no rate limits, nothing that can fail separately from the site itself.</p>
-
- <p>The whole pipeline is one workflow file and three Python scripts. The workflow checks out the repository, runs the two fetch scripts, checks what they wrote, and commits whatever changed (the comments are trimmed out here):</p>
-
-<pre><code class="language-yaml">name: Refresh live data
-
-on:
-  schedule:
-    - cron: "0 6 * * 1"   # weekly, Mondays 06:00 UTC
-  workflow_dispatch:
-
-permissions:
-  contents: write
-
-concurrency:
-  group: live-data
-  cancel-in-progress: false
-
-jobs:
-  refresh:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    env:
-      FILES: >-
-        data/lastfm.json data/now.json data/lastfm-history.json
-        data/topalbums.json data/books.json data/reading.json
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Fetch listening and currently-reading
-        id: now
-        continue-on-error: true
-        env:
-          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
-        run: python .github/scripts/refresh_now.py
-
-      - name: Refresh the read shelf
-        id: books
-        continue-on-error: true
-        run: python .github/scripts/refresh_books.py
-
-      - name: Validate the data files
-        id: validate
-        run: python .github/scripts/validate_data.py $FILES
-
-      - name: Commit what refreshed
-        if: always() &amp;&amp; steps.validate.outcome == 'success'
-        run: |
-          if git diff --quiet -- $FILES; then
-            echo "No change."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -- $FILES
-          git commit -m "Refresh live data (Last.fm, Goodreads)"
-          git pull --rebase origin "$GITHUB_REF_NAME"
-          git push origin "HEAD:$GITHUB_REF_NAME"
-
-      - name: Fail if any source did not refresh
-        if: always()
-        env:
-          NOW: ${{ steps.now.outcome }}
-          BOOKS: ${{ steps.books.outcome }}
-          VALID: ${{ steps.validate.outcome }}
-        run: |
-          status=0
-          if [ "$NOW" != success ]; then
-            echo "::error::Last.fm / currently-reading refresh: $NOW (see 'Fetch listening and currently-reading')"
-            status=1
-          fi
-          if [ "$BOOKS" != success ]; then
-            echo "::error::Read-shelf refresh: $BOOKS (see 'Refresh the read shelf')"
-            status=1
-          fi
-          if [ "$VALID" != success ]; then
-            echo "::error::Data validation: $VALID; nothing was committed"
-            status=1
-          fi
-          exit $status
-</code></pre>
-
- <p>The <code>workflow_dispatch</code> line adds a manual "run now" button in GitHub's interface (which you will want the first dozen times), while the diff check means runs where nothing changed produce no commit at all.</p>
-
- <p>Most of the rest is there for when something breaks. Both fetch steps are allowed to fail (<code>continue-on-error</code>), so a Goodreads outage doesn't stop the Last.fm numbers from landing, and the last step turns the run red afterwards so I still hear about it. Nothing is committed unless every file passes its schema in <code>data/schema/</code>, because the pages read these files with no fallback for a wrong shape. The robot and I both push to the same branch, hence the <code>git pull --rebase</code> before its push, and the concurrency group makes a manual run wait for a scheduled one instead of both committing the same files at once.</p>
-
- <h2>What the script gathers</h2>
-
- <p>The first script, <code>refresh_now.py</code>, makes a handful of HTTP requests. From the Last.fm API: my total play count, the most recent track, and my top albums of the past three months, which feed the homepage stat, the "now playing" strip, and the record crate on <a href="https://www.kenreid.co.uk/music.html">the music page</a> respectively. From Goodreads, which shut its API years ago but still publishes RSS feeds: my currently-reading shelf, parsed straight out of the XML.</p>
-
- <p>The second, <code>refresh_books.py</code>, reads the feed of my read shelf the same way and merges it into <code>data/books.json</code>, so a book I mark as read on Goodreads turns up on this site's reading pages by itself. The feed only reports the latest time I finished a book, so when I re-read something the script holds on to the earlier dates itself, because they exist nowhere else. It also writes <code>data/reading.json</code>, the books-read and reviews figures on the homepage. Everything goes into JSON files under <code>data/</code>, most of them a few kilobytes, apart from <code>books.json</code>, which holds every book I've marked read and weighs about 83 KB.</p>
-
- <p>Each run appends that week's play count to a rolling log, capped at ninety entries, which at one measurement a week is close to two years of history. </p>
-
- <figure>
- <img src="https://www.kenreid.co.uk/img/photography/thumb/12.webp" alt="A brindle Staffordshire terrier standing alert in woodland, looking at the camera" loading="lazy" class="kr-figure-img" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/12.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/12@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/12.webp 1200w" sizes="(min-width: 800px) 760px, 100vw">
- <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> A good fetcher.</figcaption>
- </figure>
-
- <h2>What the homepage shows</h2>
-
- <p>The strip under the hero is a single row of up to four things, and only two of them come from the robot. The book and the track are read straight out of <code>now.json</code>. The latest short story comes from <code>stories.json</code>, which is an empty list until the first story goes up, so for now the strip leaves that card out. The latest blog post isn't in the strip at all, because the homepage has a whole section of its own for those.</p>
-
- <p>Last.fm distinguishes a track that is playing from one that was played, so the label switches between "Now playing" and "Last played" depending on whether I happen to be listening when you open the page, and the first version gets a little animated equaliser beside it. It is not accurate, because it is updated so infrequently, but it gives some flavor to the site and over time it's likely representative of me. Maybe.</p>
-
- <p>The third item, my most recent Bluesky post, is in no JSON file at all. Your browser fetches it from Bluesky's public API while the page loads. I've been tempted to remove it, as recently I've only posted new blogs to social media, but I hope I will return to posting random thoughts there again soon, making this a bit more useful than another place to see a new blog post (which is already on the index page!)</p>
-
- <h2>Design decisions </h2>
-
- <p>The homepage HTML contains a hardcoded scrobble count, and the JavaScript replaces it with the fresh value from the JSON after load. If the fetch fails, or JavaScript is off, the visitor sees a slightly stale number instead of a blank. The robot improves the site but it fails elegantly.</p>
-
- <p>Goodreads' RSS goes down more often than Last.fm's API. When a source fails, the script keeps whatever the previous run wrote rather than blanking it: better yesterday's truth than today's error. A failure in one source never stops the others from updating, of course.</p>
-
- <p>The Last.fm key lives in the repository's encrypted secrets and reaches the script as an environment variable. It appears in no file and no log for security reasons (not that I'd be massively put-out if someone broke into my goodreads or last.fm).</p>
-
- <p>The bot's commits are labelled as bot commits, touch only the data files, and say what they did. My git history has a weekly heartbeat in it now: a tidy row of "Refresh live data" commits, one every Monday, each one the robot clocking in so I don't have to manually update stuff.</p>
-
- <h2>What else this pattern is good for</h2>
-
- <p>Anything that changes slowly and comes from somewhere with an API or a feed: your latest posts elsewhere, sports scores, weather, stars on a project, prices you're tracking, a "days since" counter for whatever you are currently ashamed of. The recipe is always the same three steps: a script that fetches and writes JSON, a workflow that runs it on a schedule and commits, and a page that reads the JSON with a fallback. If the data changes faster than a schedule can keep up with (live chat, comment counts), a static site is the wrong tool and no robot can easily fix that. Everything slower works just fine though.</p>
-
- <div class="faq-section">
- <h2>Common questions</h2>
-
- <details class="faq-item">
- <summary>Doesn't committing data on a schedule bloat the repository?</summary>
- <p>Slowly, and acceptably. Each commit stores a few kilobytes of changed JSON, so a year of weekly commits comes to a couple of hundred kilobytes. </p>
- </details>
-
- <details class="faq-item">
- <summary>Why weekly instead of hourly, or on every visit?</summary>
- <p>I could but it's hardly vitally important and worth moving out of the free level of GitHub actions.</p>
- </details>
-
- <details class="faq-item">
- <summary>What happens when the robot itself breaks?</summary>
- <p>GitHub emails me when a scheduled workflow fails, and the last step makes sure a run where only one source failed still counts as a failure.</p>
- </details>
-
- <details class="faq-item">
- <summary>Could this update the page instantly when something changes?</summary>
- <p>Not this pattern. A schedule can only poll. Instant would need the source to push (webhooks) into something always listening, which drags a server back into the picture. </p>
- </details>
- </div>
-
-        
- ]]></content:encoded>
     </item>
     <item>
       <title>Variable Neighbourhood Search, Live</title>

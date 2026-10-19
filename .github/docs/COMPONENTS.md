@@ -213,6 +213,8 @@ accessibility, and what not to do.
   their thumbnail until the original arrives; charts and diagrams open
   one at a time. Do not link a photograph yourself, and never link the
   release PNG as a download.
+- **Diagrams are not pictures.** Boxes, arrows and labels are built as
+  a `.kr-diagram` ("Diagrams", below), never drawn as an image.
 - **Two themes.** A picture drawn once for each theme goes in one figure
   as `img.theme-img-light` and `img.theme-img-dark`; only the theme's own
   shows. A dark chart that should read as a card in the light theme takes
@@ -568,6 +570,71 @@ and `__apa`. The markup and the copy script are in
   <li><span class="tl-year">2012&ndash;2014</span><span class="tl-dot"></span><span class="tl-body">What happened.</span></li>
 </ul>
 ```
+
+### Diagrams
+
+A diagram (a family tree, a flow, a labelled map: anything that explains
+by boxes, arrows and labels) is HTML, not a picture, and every part of it
+can say more on hover. This is the default for every new diagram; a PNG
+or a light and dark image pair is for photographs, screenshots and data
+charts drawn elsewhere.
+
+```html
+<figure class="kr-figure--solo">
+  <div class="kr-diagram kr-diagram--tree" role="group" aria-label="What it shows">
+    <div class="kr-diagram__node kr-diagram__root">Root
+      <span class="kr-diagram__sub">2002</span>
+      <span class="kr-diagram__detail">One or two sentences more.</span></div>
+    <ol class="kr-diagram__routes">
+      <li class="kr-diagram__route kr-diagram__route--1">
+        <span class="kr-diagram__label">Route name</span>
+        <ol class="kr-diagram__steps">
+          <li class="kr-diagram__step"><div class="kr-diagram__node">Step
+            <span class="kr-diagram__sub">2003</span>
+            <span class="kr-diagram__detail">More about it.</span></div></li>
+          <li class="kr-diagram__step"><div class="kr-diagram__group">
+            <div class="kr-diagram__node">One of several</div>
+            <div class="kr-diagram__node">Another</div></div></li>
+        </ol>
+      </li>
+    </ol>
+  </div>
+  <figcaption class="figure-note">What it shows. Hover over, tap or tab to a box for more.</figcaption>
+</figure>
+```
+
+- **Nodes.** `.kr-diagram__node` holds its name, an optional
+  `.kr-diagram__sub` line and an optional `.kr-diagram__detail`. Only a
+  node with a detail becomes interactive; leave the detail out rather
+  than pad it.
+- **Behaviour.** `initDiagrams` (shared-components.js) makes each node
+  with a detail focusable, gives it the detail as `aria-describedby`, and
+  shows the detail in a card on hover, keyboard focus or a tap (a second
+  tap, a tap elsewhere or Escape puts it away). The card is a
+  `.kr-offstage` and `aria-hidden`; the detail stays in the page for a
+  screen reader. Without script the details print under their nodes.
+- **Tree layout.** `.kr-diagram--tree`: a root, then up to four routes
+  (`--1` to `--4` pick `--kr-series-1` to `-4`, blue, green, amber and
+  purple, for bars and arrows only), each a row of up to four steps from
+  768px and a column below it. A step holds one node or a
+  `.kr-diagram__group`.
+- **Map layout.** `.kr-diagram--map`: an inline `svg.kr-diagram__map`
+  beside a `.kr-diagram__key` of nodes (under it on a phone). Draw in the
+  svg's own units and colour shapes with the `kr-map__*` classes in
+  style.css §11 "Map layout", which read tokens, so one drawing serves
+  both themes. A `.kr-diagram__num` in a key node matches a numbered
+  `g.kr-map__badge` on the drawing. Give the svg `role="img"` and an
+  `aria-label` that describes the drawing.
+- **Linked parts.** A node with `data-part="x"` owns every other element
+  in the diagram with `data-part="x"`: while the node is active they get
+  `.is-lit` and the rest of the drawing fades, and hovering or tapping
+  one shows the node's card beside it. Parts are not focusable; the
+  keyboard reaches them through their node.
+- **Text.** Detail text is post prose: every house rule and ban applies,
+  and every fact in it is one the post can stand behind.
+- Do not: draw a diagram as a PNG; colour text with a series token; put
+  links in a detail (the card cannot be clicked); add a new layout
+  without its own `--name` modifier and banner in style.css §11.
 
 ### Console
 
