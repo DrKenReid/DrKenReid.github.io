@@ -203,6 +203,7 @@ menu and its focus handling, `window.krNavMenu`, the sticky state);
 | Google Analytics | after `load`, at the next idle moment | `js/analytics.js` |
 | Hover sketches | first `pointermove` or `focusin`, only with `(hover: hover)` and motion allowed; phones never fetch them | `krLoadLiveCovers` in `js/shared-components.js` loads `js/live-covers.js`, `js/covers.js`, `js/covers-site.js` |
 | Syntax highlighting | a post with `pre code[class*="language-"]` | `initCodeHighlighting` loads `js/prism-loader.js`, which loads Prism from jsDelivr |
+| Saving a diagram as a PNG | the first press of a diagram's Save as PNG button | `initDiagramExport` loads `js/kr-export.js` |
 | Comments | the end band is built at parse; giscus loads its frame lazily | `buildGiscusSection` |
 | Video and other embeds | a click on the facade | `initEmbedFacades` swaps in the iframe |
 | Homepage hero photographs | slides after the first, after load and idle | the inline painter in `index.html`, from `data-bg` |

@@ -1351,7 +1351,7 @@
 
  <p>"Broadly legal" covers three quite different rules, though, and which one you are under depends on where your feet are. Wikimedia Commons maintains a country-by-country list of consent requirements for pictures of identifiable people, because it has to: it hosts the photographs. Of the 52 jurisdictions it documents, the split runs like this.</p>
 
- <table class="values-grid">
+ <table class="values-grid kr-table--stack">
  <thead>
  <tr><th>What the law asks of you</th><th class="score">Jurisdictions</th><th>Notes</th></tr>
  </thead>
@@ -2683,7 +2683,21 @@ link.appendChild(span);</code></pre>
  </div>
 
  <figure>
- <img src="https://www.kenreid.co.uk/blog/img/factorio-paper-encodings.webp" alt="A table of integer encodings. Negative numbers describe the problem: minus ten to minus seven are output directions, minus six a steel chest, minus five to minus two input directions, minus one a stone wall, and zero is empty. Positive numbers are the solution: one to four are belts facing north, east, south and west, and five to eight are underground belts in the same four directions." loading="lazy" class="kr-figure-img" style="max-width: 420px;" width="590" height="546">
+ <div style="overflow-x:auto"><table class="kr-table kr-table--fit">
+ <caption class="sr-only">Integer encoding of every tile the grid can hold, by the direction it faces</caption>
+ <thead><tr><th scope="col">Tile</th><th scope="col">North</th><th scope="col">East</th><th scope="col">South</th><th scope="col">West</th></tr></thead>
+ <tbody>
+ <tr><th scope="rowgroup" colspan="5">The problem (fixed)</th></tr>
+ <tr><th scope="row">Output</th><td>&minus;7</td><td>&minus;8</td><td>&minus;9</td><td>&minus;10</td></tr>
+ <tr><th scope="row">Input</th><td>&minus;2</td><td>&minus;3</td><td>&minus;4</td><td>&minus;5</td></tr>
+ <tr><th scope="row">No direction</th><td colspan="4">&minus;6 steel chest, &minus;1 stone wall, 0 empty</td></tr>
+ </tbody>
+ <tbody>
+ <tr><th scope="rowgroup" colspan="5">The solution</th></tr>
+ <tr><th scope="row">Belt</th><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+ <tr><th scope="row">Under&shy;ground belt</th><td>5</td><td>6</td><td>7</td><td>8</td></tr>
+ </tbody>
+ </table></div>
  <figcaption class="figure-note">From <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:8k81kl-MbHgC" target="_blank" rel="noopener noreferrer">Reid et al. (2021)</a>. The encoding an optimiser reads and writes. Everything below zero is the problem and is fixed; everything above zero is the solution and is yours. A direction is not a separate field, it is baked into the number.</figcaption>
  </figure>
 

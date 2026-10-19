@@ -511,6 +511,15 @@ and centres it. `.kr-delta--up`, `--down` and `--zero` colour a signed
 change, which is never the only cue: the sign is in the number.
 `th scope` names the headers for a screen reader.
 
+A table whose cells are sentences (options with notes, a values grid)
+adds `.kr-table--stack`, on a `.kr-table` or any other post table: under
+576px each row becomes a card, its first cell the heading and every
+other cell a line with its column's name beside it (`initStackTables`
+copies the names onto the cells). A long header can carry
+`data-short="..."` for the card label. Keep numeric tables as they are:
+a row of numbers reads better scrolled than stacked. Code in a
+`.kr-table` cell never wraps, so an address or hostname stays whole.
+
 ### Book covers
 
 ```html
@@ -618,6 +627,9 @@ charts drawn elsewhere.
   purple, for bars and arrows only), each a row of up to four steps from
   768px and a column below it. A step holds one node or a
   `.kr-diagram__group`.
+- **Save as PNG.** Every `.kr-diagram` gets the corner button
+  ("What the runtime adds", below) and keeps a strip above the drawing
+  for it, `--kr-export-strip`, which the saved picture leaves out.
 - **Map layout.** `.kr-diagram--map`: an inline `svg.kr-diagram__map`
   beside a `.kr-diagram__key` of nodes (under it on a phone). Draw in the
   svg's own units and colour shapes with the `kr-map__*` classes in
@@ -669,6 +681,8 @@ in it): the post then keeps only its own shapes in its `<style>`. Such a
 post is not `interactive` in `posts.json`: the facet comes from a
 `KRViz.mount` call, not from the class, so a static figure stays out of
 the blog's "posts with a live demo" filter.
+A hand-built diagram like that one carries `data-kr-export="<name>"`,
+which gives it the Save as PNG button every `.kr-diagram` has.
 
 ## What the runtime adds
 
@@ -697,6 +711,8 @@ none of it should be: a hand-written copy would be a second one.
 | `.blog-post[data-fullres]` | the full-resolution panel and per-photo links | `initFullResMode` |
 | classed code blocks | Prism, with the languages named | `initCodeHighlighting` |
 | every code block | a Copy button (`div.kr-code > button.kr-code-copy`) | `initCodeCopy` |
+| `table.kr-table--stack` | `data-label` on each body cell from its column header (or the header's `data-short`), and `.kr-table--labelled`, which turns rows into cards under 576px | `initStackTables` |
+| every diagram (`.kr-diagram`, or any element with `data-kr-export`) | a Save as PNG button in its top right corner (`button.kr-export-btn`); the picture is the diagram as drawn in the reader's theme, with the page's address (`kenreid.co.uk/blog/<slug>`) small under it. `data-kr-export="name"` names the file `kenreid-<slug>-<name>.png`; without a name it comes from the diagram's title or caption. `js/kr-export.js` does the drawing and loads on the first press | `initDiagramExport` |
 | printing | the FAQ answers and the glossary box opened, then closed again | `initPrintExpand` |
 | `.kr-embed-facade` | the iframe, on click | `initEmbedFacades` |
 | every `blockquote` | click to copy, with a hint | `initCopyQuotes` |

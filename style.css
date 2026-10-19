@@ -6795,7 +6795,8 @@ body.kr-cite-docked .kr-share-tab {
    Classes only script applies here: .copy-hint and .copied (the click to
    copy on quotations), .img-lightbox (the link lightbox.js wraps round a
    photograph), the full-resolution switch and links (.fullres-*), the
-   code blocks' Copy button (.kr-code, .kr-code-copy, .is-copied), the
+   code blocks' Copy button (.kr-code, .kr-code-copy, .is-copied), a
+   diagram's Save as PNG button (.kr-export-host, .kr-export-btn, .is-busy), the
    references' way back (.kr-ref-back) and .is-dismissed on a jargon term
    whose card Escape put away. */
 
@@ -8072,6 +8073,61 @@ blockquote:hover .copy-hint {
 [data-theme="dark"] .blog-post details.code-example pre {
   border-top-color: #333; }
 
+/* --- Save as PNG (.kr-export-btn) --------------------------------------
+   Every diagram (.kr-diagram, or anything with data-kr-export) gets a
+   small round button in its top right corner that saves it as a PNG
+   with the page's address under it. initDiagramExport adds the button
+   and .kr-export-host to the diagram, and .is-busy while it draws;
+   js/kr-export.js does the drawing and leaves the button out of the
+   picture. Same surface, hairline and ink as the code blocks' Copy
+   button, so it reads on either theme's panel and turns red on hover
+   and focus like every other control. */
+.kr-export-host {
+  position: relative; }
+
+.kr-export-host > .kr-export-btn {
+  --kr-share-ink: var(--kr-muted);
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--kr-hairline);
+  border-radius: 999px;
+  background: var(--kr-surface-card);
+  cursor: pointer;
+  transition: border-color 0.15s ease; }
+
+.kr-export-host > .kr-export-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--kr-share-ink); }
+
+.kr-export-host > .kr-export-btn:is(:hover, :focus-visible) {
+  --kr-share-ink: var(--kr-action);
+  border-color: var(--kr-action); }
+
+.kr-export-host > .kr-export-btn.is-busy {
+  cursor: progress;
+  opacity: 0.55; }
+
+/* A .kr-diagram has no padding of its own and a box can sit in its top
+   right corner (a flow's last stage), so it keeps a strip above the
+   drawing for the button. --kr-export-strip names the strip so the
+   saved picture can leave it out (js/kr-export.js reads it). */
+.blog-post .kr-diagram.kr-export-host {
+  --kr-export-strip: 38px;
+  padding-top: var(--kr-export-strip); }
+
+.blog-post .kr-diagram.kr-export-host > .kr-export-btn {
+  top: 0;
+  right: 0; }
+
 /* --- Console ----------------------------------------------------------
    A few lines of pretend code set as a terminal: the nerd-mode greeting
    in the schedule posts. Dark in both themes, like every code block, and
@@ -8151,6 +8207,66 @@ blockquote:hover .copy-hint {
     background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
     background-attachment: local, local, scroll, scroll; } }
 
+/* --- Stacked on a phone (.kr-table--stack) -----------------------------
+   A table whose cells are sentences (options and notes, a values grid)
+   squeezed its prose into a column eight words wide on a phone, rows a
+   screen tall. With .kr-table--stack, on any post table, each row is a
+   card under 576px: the first cell as its heading, every other cell a
+   line with its column's name beside it. initStackTables copies the
+   header names onto the cells (data-label) and adds .kr-table--labelled;
+   without it the table keeps the sideways scroll above.
+     <table class="kr-table kr-table--stack"> or class="values-grid kr-table--stack" */
+@media (max-width: 575px) {
+  .blog-post table.kr-table--labelled {
+    overflow-x: visible;
+    background: none; }
+
+  .blog-post table.kr-table--labelled thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap; }
+
+  .blog-post table.kr-table--labelled tbody,
+  .blog-post table.kr-table--labelled tr {
+    display: block; }
+
+  .blog-post table.kr-table--labelled tr {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--kr-hairline); }
+
+  .blog-post table.kr-table--labelled tr:last-child {
+    border-bottom: 0; }
+
+  /* The label sits in a left column of its own; the value keeps its
+     inline flow (a cell that was a grid split a footnote mark off the
+     word it belongs to). */
+  .blog-post table.kr-table--labelled td {
+    position: relative;
+    display: block;
+    min-height: 1.5em;
+    padding: 3px 0 3px calc(38% + 10px);
+    border: 0;
+    text-align: left; }
+
+  .blog-post table.kr-table--labelled td::before {
+    content: attr(data-label);
+    position: absolute;
+    top: 3px;
+    left: 0;
+    width: 38%;
+    color: var(--kr-muted);
+    font-size: 0.86em; }
+
+  .blog-post table.kr-table--labelled td:first-child {
+    padding: 0 0 6px;
+    font-weight: 600; }
+
+  .blog-post table.kr-table--labelled td:first-child::before {
+    content: none; } }
+
 /* --- Data table (.kr-table) ---------------------------------------------
    A data table in a post: hairline rows under a stronger header rule, in
    the theme's own greys. Zebra striping and the phone scroll come from
@@ -8184,6 +8300,14 @@ blockquote:hover .copy-hint {
   width: auto;
   margin: 0 auto;
   font-size: 0.85em; }
+
+/* An address, a hostname or a command in a cell is one token: copied
+   from a phone it must read as one, so it never wraps (the inline code
+   rule would break 185.199.108.153 after a dot). The table scrolls
+   sideways instead, with the post table fades. */
+.blog-post .kr-table code {
+  white-space: nowrap;
+  word-break: normal; }
 
 /* A signed change in a table cell, and the rows it happened in.
      <tr class="kr-row-mark"><td>deep work</td> ...
@@ -8268,6 +8392,17 @@ blockquote:hover .copy-hint {
     border-bottom: 2px solid #f0d9d4; }
   .dialect-table tbody tr:hover {
     background: #fffdfb; }
+
+/* On a phone three equal columns are narrower than "checkpointing", and
+   the cell broke it a letter from the end. There the columns take the
+   width their longest word needs, and the post table scrolls sideways
+   if the three together still do not fit. */
+@media (max-width: 575px) {
+  .dialect-table {
+    table-layout: auto; }
+  .dialect-table th,
+  .dialect-table td {
+    word-break: normal; } }
 
 [data-theme="dark"] .dialect-table th,
 [data-theme="dark"] .dialect-table td {
@@ -15560,6 +15695,7 @@ html.kr-theme-reveal::view-transition-new(root) {
   .blog-post .blog-meta,
   .kr-series__parts,
   .kr-code-copy,
+  .kr-export-btn,
   .kr-ref-back,
   .kr-live-cover,
   .kr-opener__media,
