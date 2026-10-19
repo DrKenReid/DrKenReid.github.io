@@ -264,8 +264,10 @@ test('a dot plot agrees with the rating card in each review', () => {
         const html = fs.readFileSync(path.join(ROOT, post.url), 'utf8');
         if (!html.includes('kr-dotplot__rows')) continue;
         const sections = html.split('<div class="bsec">').slice(1);
+        // A plot of a series in reading order has no ranks and no review
+        // headings to agree with; only ranked rows are checked.
         const rows = [...html.matchAll(/<li style="--kr-dot-me: ([\d.]+); --kr-dot-crowd: ([\d.]+)" data-rank="(\d+)"/g)];
-        assert.ok(rows.length, `${post.url}: a dot plot with no rows`);
+        if (!rows.length) continue;
         for (const [, me, crowd, rank] of rows) {
             const section = sections.find(s => new RegExp('<h2[^>]*>\\s*' + rank + '\\.').test(s));
             assert.ok(section, `${post.url}: no review heading starts "${rank}."`);
