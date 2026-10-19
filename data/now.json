@@ -1,8 +1,8 @@
 {
   "track": {
-    "name": "Cure",
-    "artist": "Anna Marx",
-    "url": "https://www.last.fm/music/Anna+Marx/_/Cure",
+    "name": "All Star",
+    "artist": "Jonathan Young",
+    "url": "https://www.last.fm/music/Jonathan+Young/_/All+Star",
     "nowPlaying": false
   },
   "reading": [
@@ -25,5 +25,5 @@
       "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1715780755l/211721806._SY75_.jpg"
     }
   ],
-  "updated": "2026-10-12"
+  "updated": "2026-10-19"
 }
