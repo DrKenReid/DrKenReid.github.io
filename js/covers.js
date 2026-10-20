@@ -1194,6 +1194,25 @@
         };
     });
 
+    // The fee for one open access paper, bar by bar, from JOSS's $0 to Nature's $12,850.
+    def('open-access-charges-the-wrong-people', function (w, h, rnd) {
+        var fees = [['JOSS', 0], ['ACM 2026', 350], ['ACM 2027', 750], ['NeuroImage', 3450],
+            ['HBM', 3850], ['Lancet Neuro', 6300], ['Nature Neuro', 11690], ['Nature', 12850]], t = 0;
+        return {
+            step: function () { t = (t + 1) % 360; },
+            draw: function (ctx) {
+                var rowH = h * 0.8 / fees.length, x0 = w * 0.32, span = w * 0.5;
+                text(ctx, 'to publish one paper', w * 0.5, h * 0.07, 9, C.dim, 700, 'center');
+                fees.forEach(function (f, i) {
+                    var y = h * 0.14 + i * rowH, g = ease((t - i * 16) / 30), last = i === fees.length - 1;
+                    text(ctx, f[0], x0 - 6, y + rowH * 0.5, 9, C.ink, 500, 'right');
+                    rect(ctx, x0, y + rowH * 0.2, Math.max(1, span * f[1] / 14500 * g), rowH * 0.6, last ? C.b : (f[1] ? C.dim : C.green));
+                    if (g > 0.95) text(ctx, '$' + f[1].toLocaleString('en-US'), x0 + span * f[1] / 14500 + 5, y + rowH * 0.5, 9, last ? C.b : (f[1] ? C.ink : C.green), 700, 'left');
+                });
+            }
+        };
+    });
+
     // A token stream against a kettle: the numbers, side by side.
     def('ethics-of-llm-use-not-llms', function (w, h, rnd) {
         var t = 0, toks = [];
