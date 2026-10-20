@@ -167,6 +167,18 @@ without one class), and the pin seen to fail.
   check_contrast            Buttons, links outside posts, eyebrows, chips,
                             footer headings and opener type clear AA in both
                             themes, on flat colour or on a photograph.
+  check_fill_contrast       On every page and post, in both themes, at rest,
+                            hovered and focused, text on its own fill (a
+                            button, pill or chip) clears AA against it (the
+                            post link colour outranked a one-off button
+                            class, red type on a red gradient; the skip link
+                            was red on blue in the dark theme). At rest, all
+                            other text clears AA on the surface beneath it,
+                            a card's tint and faded ancestors counted (a
+                            demo's series colours used as text, stat numbers
+                            on accent-washed cards, rating stars, Leaflet's
+                            attribution in the dark theme, captions faded
+                            with opacity).
   check_live_classes        No rule is missing from style.min.css for a class
                             a live page uses (the pruner cannot see classes
                             assembled at runtime; the hero's bounceInDown
@@ -2570,6 +2582,244 @@ def _pixels(image):
     return list(flat() if flat else image.getdata())
 
 
+# Controls whose fill the check judges, and the states it forces on all
+# of them at once (CDP's CSS.forcePseudoState; no pointer, no Tab).
+FILL_CONTROLS = "a, button, summary, [role=button], label, .btn"
+FILL_STATES = ((), ("hover",), ("focus", "focus-visible"))
+
+
+def check_fill_contrast(browser, base, rep):
+    """Text on a fill of its own (a button, a pill, a count chip, a badge)
+    clears AA against that fill on every tracked page and post, in both
+    themes, at rest, hovered and focused. The fill is the first background
+    colour or gradient above the text, counted only when the text's own
+    element or its control paints it; a gradient is judged at its worst
+    stop. Pins the debt simulator's call to action: a one-off button class
+    set white on a red gradient at (0,1,0), and the post's link colour
+    (.blog-post a, 0,1,1) and the dark theme's (0,1,1) outranked it, so
+    the label was red on red in both themes. The skip link was red on its
+    blue in the dark theme the same way. A link that looks like a button
+    is a .kr-btn (DESIGN-SYSTEM.md, "Buttons").
+
+    At rest the same pass judges every other text against the surface
+    beneath it (SURFACE_COLLECT). Pins coloured type on cards and panels:
+    a demo's series colours used for words on its white panel (amber at
+    2.2:1, the constraint table's green at 2.8:1), the infographic's stat
+    numbers on cards washed in their own accent, the review stars at 2:1,
+    the map's attribution links on Leaflet's pale strip over dark tiles,
+    and captions and attributions faded with opacity below 4.5:1. A text
+    colour taken from a demo palette is that colour mixed toward
+    --viz-ink; fade type with colour, never opacity."""
+    pages = sweep_pages() + [p.relative_to(ROOT).as_posix() for p in sitelib.tracked_posts()]
+    for theme in THEMES:
+        context = site_context(browser, base, theme, DESKTOP, reduced_motion="reduce")
+        for path, page, sink in open_ahead(context, base, pages, SWEEP_AHEAD):
+            scope = f"{path} {theme}"
+            wait_until(page, "document.readyState === 'complete'", PAGE_BUDGET_MS)
+            let_network_settle(page)
+            low = {}
+            cdp = context.new_cdp_session(page)
+            cdp.send("DOM.enable")
+            cdp.send("CSS.enable")
+            # Transitions off, so a forced state paints its end colours at once.
+            page.add_style_tag(content="*, *::before, *::after { transition: none !important; }")
+            page.evaluate(FILL_MARK, FILL_CONTROLS)
+            root = cdp.send("DOM.getDocument", {"depth": -1, "pierce": False})["root"]["nodeId"]
+            nodes = cdp.send("DOM.querySelectorAll", {"nodeId": root, "selector": "[data-kr-fill]"})["nodeIds"]
+            for state in FILL_STATES:
+                for node in nodes:
+                    cdp.send("CSS.forcePseudoState", {"nodeId": node, "forcedPseudoClasses": list(state)})
+                next_frames(page)
+                for item in page.evaluate(FILL_COLLECT, {"controls": FILL_CONTROLS, "onlyControls": bool(state)}):
+                    key = (item["el"], item["text"])
+                    if key not in low:
+                        low[key] = (f"{item['el']} '{item['text']}' {':'.join(state[-1:]) or 'rest'}"
+                                    f" {item['ratio']:.2f}:1 < {item['need']:g} ({item['fg']} on {item['ground']})")
+            for node in nodes:
+                cdp.send("CSS.forcePseudoState", {"nodeId": node, "forcedPseudoClasses": []})
+            cdp.detach()
+            rep.check(scope, f"text on fills, at rest; {len(nodes)} kinds of control hovered and focused",
+                      not low, "; ".join(list(low.values())[:4]))
+            next_frames(page)
+            under = {}
+            for item in page.evaluate(SURFACE_COLLECT, {"controls": FILL_CONTROLS, "photo": PHOTO_GROUNDS}):
+                under.setdefault((item["el"], item["text"]), f"{item['el']} '{item['text']}' {item['ratio']:.2f}:1"
+                                 f" < {item['need']:g} ({item['fg']} on {item['ground']})")
+            rep.check(scope, "text on surfaces, at rest", not under,
+                      "; ".join(list(under.values())[:4])
+                      + (f" (+{len(under) - 4} more)" if len(under) > 4 else ""))
+            page.close()
+        context.close()
+
+
+# One control of each kind (its tag and classes, its parent's and its
+# grandparent's) is forced into each state, so the book wall's hundreds of
+# identical cover links cost one CDP call per state, not hundreds.
+FILL_MARK = """controls => { const kinds = new Set();
+    const kind = n => n ? n.tagName + '.' + [...n.classList].sort().join('.') : '';
+    for (const el of document.querySelectorAll(controls)) {
+        const k = [el, el.parentElement, el.parentElement && el.parentElement.parentElement].map(kind).join('>');
+        if (!kinds.has(k)) { kinds.add(k); el.setAttribute('data-kr-fill', ''); } } }"""
+
+# Each visible element with text of its own whose first fill (a background
+# colour that is not transparent, or a gradient) is painted by the element
+# or by something inside its control, and whose text fails against it. A
+# url() image above the fill hands the element to check_contrast. The fill
+# is composed over what lies beneath it, up to the first opaque colour; a
+# gradient's worst stop is the ground. Text drawn outside its fill's box
+# (a bar chart's value printed above its bar) is not on it.
+FILL_COLLECT = """({controls, onlyControls}) => {
+    // rgb() and rgba(), and color(srgb ...), which is what color-mix() computes to.
+    const COLOUR = /rgba?\\([^)]+\\)|color\\(srgb [^)]+\\)/g;
+    const rgba = s => { const m = (s || '').match(/(rgba?|color)\\(([^)]+)\\)/); if (!m) return null;
+        const p = m[2].replace('srgb', '').split(/[ ,/]+/).filter(Boolean).map(Number);
+        const k = m[1] === 'color' ? 255 : 1;
+        return [p[0] * k, p[1] * k, p[2] * k, p.length > 3 ? p[3] : 1]; };
+    const over = (top, under) => top.slice(0, 3).map((c, i) => c * top[3] + under[i] * (1 - top[3]));
+    const lin = v => (v /= 255) <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    const lum = c => 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2]);
+    const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+    const clipText = s => s.backgroundClip === 'text' || s.webkitBackgroundClip === 'text';
+    const describe = n => n.tagName.toLowerCase() + [...n.classList].map(c => '.' + c).join('');
+    const out = [];
+    for (const el of document.querySelectorAll('body *')) {
+        if (![...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) continue;
+        const control = el.closest(controls);
+        if (onlyControls && !(control && control.hasAttribute('data-kr-fill'))) continue;
+        const cs = getComputedStyle(el);
+        if (clipText(cs) || el.closest('svg, canvas, [aria-hidden=true]')) continue;
+        const box = el.getBoundingClientRect();
+        if (box.width < 2 || box.height < 2 || !el.checkVisibility({opacityProperty: true, visibilityProperty: true})) continue;
+        const fg = rgba(cs.webkitTextFillColor) || rgba(cs.color);
+        if (!fg || fg[3] === 0) continue;
+        let fill = null, layers = [], stops = null, photo = false;
+        for (let a = el; a; a = a.parentElement) {
+            const s = getComputedStyle(a), image = s.backgroundImage;
+            if (image !== 'none' && !clipText(s)) {
+                if (/url\\(/.test(image)) { photo = true; break; }
+                // An underline drawn as a gradient a pixel or two tall is not a fill.
+                if (/gradient/.test(image) && !/(^|\\s)[0-3]px/.test(s.backgroundSize)) {
+                    stops = (image.match(COLOUR) || []).map(rgba).filter(c => c[3] > 0.5);
+                    if (stops.length) { fill = fill || a; break; }
+                    stops = null;
+                }
+            }
+            const c = rgba(s.backgroundColor);
+            if (c && c[3] > 0) { layers.push(c); fill = fill || a; }
+            if (c && c[3] >= 0.999) break;
+        }
+        if (photo || !fill || !(fill === el || (control && control.contains(fill)))) continue;
+        const r = fill.getBoundingClientRect(), x = box.left + box.width / 2, y = box.top + box.height / 2;
+        if (x < r.left || x > r.right || y < r.top || y > r.bottom) continue;
+        let worst = Infinity, ground = null;
+        for (const under of stops || [[255, 255, 255, 1]]) {
+            let g = under.slice(0, 3);
+            for (let i = layers.length - 1; i >= 0; i--) g = over(layers[i], g);
+            const q = ratio(fg[3] < 1 ? over(fg, g) : fg.slice(0, 3), g);
+            if (q < worst) { worst = q; ground = g; }
+        }
+        const size = parseFloat(cs.fontSize), weight = parseInt(cs.fontWeight, 10) || 400;
+        const need = size >= 24 || (size >= 18.66 && weight >= 700) ? 3 : 4.5;
+        if (worst < need) out.push({el: describe(el), text: el.textContent.trim().replace(/\\s+/g, ' ').slice(0, 32),
+            fg: cs.color, ground: 'rgb(' + ground.map(Math.round).join(', ') + ')', ratio: worst, need});
+    }
+    return out;
+}"""
+
+
+# Each visible element with text of its own that check_fill_contrast does
+# not judge (no fill of its own or its control's), against the surface
+# beneath it: the composite of every background under the text, read up
+# the ancestors to the first opaque one. Counted on the way: a tint a
+# pseudo-element paints under its element's content (z-index below 0,
+# covering the box: a card washed in its accent), and the opacity of every
+# ancestor, which fades the text into what lies under it. A box the text
+# is drawn outside of paints nothing under it (a bar's value above the
+# bar, a long line in a code block scrolled past its frame); the point
+# tested is near the start of the text, which is on screen in a scroller.
+# Skipped, as having no ground this can read: text over a photograph (a
+# url() image, PHOTO_GROUNDS: check_contrast reads those from pixels), in
+# a fixed or sticky bar the page scrolls under (the header over the
+# opener), and disabled controls (WCAG exempts them). Text of symbols
+# alone (rating stars, arrows) is a mark and needs 3:1.
+SURFACE_COLLECT = """({controls, photo}) => {
+    const COLOUR = /rgba?\\([^)]+\\)|color\\(srgb [^)]+\\)/g;
+    const rgba = s => { const m = (s || '').match(/(rgba?|color)\\(([^)]+)\\)/); if (!m) return null;
+        const p = m[2].replace('srgb', '').split(/[ ,/]+/).filter(Boolean).map(Number);
+        const k = m[1] === 'color' ? 255 : 1;
+        return [p[0] * k, p[1] * k, p[2] * k, p.length > 3 ? p[3] : 1]; };
+    const over = (top, under) => top.slice(0, 3).map((c, i) => c * top[3] + under[i] * (1 - top[3]));
+    const lin = v => (v /= 255) <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    const lum = c => 0.2126 * lin(c[0]) + 0.7152 * lin(c[1]) + 0.0722 * lin(c[2]);
+    const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+    const clipText = s => s.backgroundClip === 'text' || s.webkitBackgroundClip === 'text';
+    const describe = n => n.tagName.toLowerCase() + [...n.classList].map(c => '.' + c).join('');
+    const tint = (a, r) => { const found = [];
+        for (const p of ['::before', '::after']) { const s = getComputedStyle(a, p);
+            if (s.content === 'none' || s.content === 'normal' || !/absolute|fixed/.test(s.position)) continue;
+            if (!(parseInt(s.zIndex, 10) < 0)) continue;
+            if (parseFloat(s.width) < r.width * 0.9 || parseFloat(s.height) < r.height * 0.9) continue;
+            const c = rgba(s.backgroundColor);
+            if (c && c[3] > 0) found.push([c[0], c[1], c[2], c[3] * parseFloat(s.opacity)]); }
+        return found; };
+    const out = [];
+    for (const el of document.querySelectorAll('body *')) {
+        if (![...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) continue;
+        if (el.closest('svg, canvas, [aria-hidden=true], [inert], .owl-item:not(.active),'
+                       + ' .kr-offstage:not(.is-visible), :disabled, [aria-disabled=true], .disabled, .leaflet-disabled')
+            || el.closest(photo)) continue;
+        const cs = getComputedStyle(el);
+        if (clipText(cs)) continue;
+        const box = el.getBoundingClientRect();
+        if (box.width < 2 || box.height < 2 || !el.checkVisibility({opacityProperty: true, visibilityProperty: true})) continue;
+        const fg = rgba(cs.webkitTextFillColor) || rgba(cs.color);
+        if (!fg || fg[3] === 0) continue;
+        const control = el.closest(controls);
+        const x = box.left + Math.min(8, box.width / 2), y = box.top + box.height / 2;
+        let fill = null, layers = [], stops = null, unreadable = false, fade = 1;
+        for (let a = el; a; a = a.parentElement) {
+            const s = getComputedStyle(a), image = s.backgroundImage, r = a.getBoundingClientRect();
+            const page = a === document.body || a === document.documentElement;
+            if (!page && (x < r.left || x > r.right || y < r.top || y > r.bottom)) {
+                if (/fixed|sticky/.test(s.position)) { unreadable = true; break; }
+                fade *= parseFloat(s.opacity);
+                continue;
+            }
+            for (const t of tint(a, r)) { layers.push(t); fill = fill || a; }
+            if (image !== 'none' && !clipText(s)) {
+                if (/url\\(/.test(image)) { unreadable = true; break; }
+                if (/gradient/.test(image) && !/(^|\\s)[0-3]px/.test(s.backgroundSize)) {
+                    stops = (image.match(COLOUR) || []).map(rgba).filter(c => c[3] > 0.5);
+                    if (stops.length) { fill = fill || a; break; }
+                    stops = null;
+                }
+            }
+            const c = rgba(s.backgroundColor);
+            if (c && c[3] > 0) { layers.push(c); fill = fill || a; }
+            if (c && c[3] >= 0.999) break;
+            if (/fixed|sticky/.test(s.position)) { unreadable = true; break; }
+            fade *= parseFloat(s.opacity);
+        }
+        if (unreadable || (fill && (fill === el || (control && control.contains(fill))))) continue;
+        const ink = [fg[0], fg[1], fg[2], fg[3] * fade];
+        let worst = Infinity, ground = null;
+        for (const under of stops || [[255, 255, 255, 1]]) {
+            let g = under.slice(0, 3);
+            for (let i = layers.length - 1; i >= 0; i--) g = over(layers[i], g);
+            const q = ratio(ink[3] < 1 ? over(ink, g) : ink.slice(0, 3), g);
+            if (q < worst) { worst = q; ground = g; }
+        }
+        const text = el.textContent.trim().replace(/\\s+/g, ' ');
+        const size = parseFloat(cs.fontSize), weight = parseInt(cs.fontWeight, 10) || 400;
+        const mark = !/[\\p{L}\\p{N}]/u.test(text);
+        const need = mark || size >= 24 || (size >= 18.66 && weight >= 700) ? 3 : 4.5;
+        if (worst < need) out.push({el: describe(el), text: text.slice(0, 32), fg: cs.color,
+            ground: 'rgb(' + ground.map(Math.round).join(', ') + ')', ratio: worst, need});
+    }
+    return out;
+}"""
+
+
 class LiveTokens:
     """Every class and id seen in a live DOM during the run, with the first
     page each class was seen on, for check_live_classes."""
@@ -2677,6 +2927,7 @@ def run_pins(browser, base, rep):
     check_code_blocks(browser, base, rep)
     check_desktop_geometry(browser, base, rep)
     check_contrast(browser, base, rep)
+    check_fill_contrast(browser, base, rep)
 
 
 # The suite's parts, in running order, for --only. "classes" judges what

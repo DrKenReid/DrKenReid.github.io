@@ -202,6 +202,19 @@ on its container, in both themes:
 In a drawing, read them from `ctx.colors` (`ctx.colors.s1`,
 `ctx.colors.ink`), never as literals.
 
+The series colours are for marks on the canvas, where 3:1 is enough.
+Words in a series colour (a status cell, a highlighted label, a stat
+number) mix it toward the ink, which darkens it in the light theme and
+lightens it in the dark one, so the canvas keeps the raw colour:
+
+```css
+.my-ok { color: color-mix(in srgb, var(--viz-s2) 60%, var(--viz-ink)); }
+```
+
+Amber needs 50% to clear 4.5:1 on the white panel; green 60%; red 80%.
+The smoke suite's `check_fill_contrast` judges every text on its
+surface, at rest, in both themes.
+
 ### KRViz.mount(target, options)
 
 `target` is a selector or an element. Returns the handle, or `null` when

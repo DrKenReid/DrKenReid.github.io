@@ -123,8 +123,10 @@
  .rr-constraints th { text-align:left; font-weight:600; color:var(--viz-muted); font-size:0.85em; letter-spacing:0.04em; text-transform:uppercase; padding:4px 0; }
  .rr-constraints td { padding:4px 0; border-top:1px solid var(--viz-border); vertical-align:top; }
  .rr-constraints th.rr-val, .rr-constraints td.rr-val { text-align:right; white-space:nowrap; padding-left:10px; font-variant-numeric:tabular-nums; }
- .rr-ok { color:var(--viz-s2); font-weight:600; }
- .rr-bad { color:var(--viz-s4); font-weight:600; }
+ /* The status words are the series colours pulled toward the ink, so they
+    clear 4.5:1 in both themes; the canvas keeps the raw series colours. */
+ .rr-ok { color:color-mix(in srgb, var(--viz-s2) 60%, var(--viz-ink)); font-weight:600; }
+ .rr-bad { color:color-mix(in srgb, var(--viz-s4) 80%, var(--viz-ink)); font-weight:600; }
  .rr-soft { color:var(--viz-muted); font-weight:600; }
  @media (max-width:520px) { .rr-constraints { font-size:0.74em; padding:4px 8px 6px; } .rr-constraints td.rr-val { padding-left:6px; } .rr-constraints td.rr-val:last-child { white-space:normal; max-width:4.5em; } }
  </style>

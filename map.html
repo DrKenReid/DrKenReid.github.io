@@ -180,6 +180,16 @@
       background: #242424;
       color: #e2e2e2;
     }
+    /* Leaflet's pale attribution strip turned grey over the dark tiles,
+       and its blue links fell to 3.3:1 on it: a dark strip, muted text
+       and the action red of every link on the site. */
+    [data-theme="dark"] .leaflet-container .leaflet-control-attribution {
+      background: color-mix(in srgb, var(--kr-surface-2) 90%, transparent);
+      color: var(--kr-muted);
+    }
+    [data-theme="dark"] .leaflet-container .leaflet-control-attribution a {
+      color: var(--kr-action);
+    }
     [data-theme="dark"] .leaflet-bar a {
       background: #242424;
       color: #e2e2e2;

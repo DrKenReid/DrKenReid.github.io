@@ -158,8 +158,11 @@
    .wrap-card::after{ content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
      background:var(--accent); }
    .wrap-card:hover{ transform:translateY(-3px); box-shadow:0 8px 22px rgba(0,0,0,0.13); }
+   /* the number takes its accent drawn 40% of the way to the ink: the raw
+      green and amber fell under 3:1 on the tinted card in the light theme */
    .wrap-num{ display:block; font-size:2.3em; font-weight:800; line-height:1.05;
-     color:var(--accent); font-variant-numeric:tabular-nums; letter-spacing:-0.02em; }
+     color:color-mix(in srgb, var(--accent) 60%, var(--viz-ink));
+     font-variant-numeric:tabular-nums; letter-spacing:-0.02em; }
    .wrap-lbl{ display:block; margin-top:6px; font-size:0.78em; font-weight:700;
      color:var(--viz-ink); line-height:1.3; }
    /* the sub-line used to be flat grey and read as small print; it now sits in

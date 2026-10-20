@@ -364,6 +364,18 @@ The file sat in <code>Music\Rock\</code>.</p>
 - Do not colour or underline a link by hand: a link in a post's prose is
   the action red with a drawn underline that thickens on hover (§10),
   and a citation (`a.cite-ref`) is left out of that on purpose.
+- A link that should look like a button (open the app, download the
+  data) is a `.kr-btn` in a `.kr-btn-row`, never a class of the post's
+  own:
+
+  ```html
+  <div class="kr-btn-row kr-btn-row--below">
+    <a class="kr-btn kr-btn--primary" href="https://example.com" target="_blank" rel="noopener noreferrer">Open the simulator</a>
+  </div>
+  ```
+
+  The post's link colour outranks a one-class button rule, so the label
+  comes out red on the button's fill (DESIGN-SYSTEM.md, "Buttons").
 
 ### Jargon
 

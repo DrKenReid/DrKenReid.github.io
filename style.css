@@ -393,15 +393,19 @@ main {
   padding: 0.75rem 1rem;
   border-radius: 0 0 0.75rem 0.75rem;
   background: #0f4c81;
-  color: #ffffff;
   font-weight: 700;
   letter-spacing: 0.01em;
   box-shadow: 0 10px 28px rgba(15, 76, 129, 0.25);
   transition: transform 0.2s ease; }
 
-.skip-link:focus {
-  transform: translate(-50%, 0);
+/* :root lifts the white above the dark theme's link colours, a (0,1,1)
+   and a:hover / a:focus (0,2,1), which painted it red on its own blue. */
+:root .skip-link,
+:root .skip-link:is(:hover, :focus) {
   color: #ffffff; }
+
+.skip-link:focus {
+  transform: translate(-50%, 0); }
 
 /* --- Elements ------------------------------------------------------------ */
 
@@ -4057,8 +4061,10 @@ box-shadow: none; }
   margin-bottom: 10px;
   line-height: 1.4; }
 
+/* The token, not #c53030: at (0,3,0) this outranks the dark title colour
+   below, and the light red sat on the dark card at 2.84:1. */
 .blog-card:hover .blog-card-title {
-  color: #c53030; }
+  color: var(--kr-action); }
 
 .blog-card-excerpt {
   font-size: 14px;
@@ -4729,7 +4735,9 @@ a.kr-series-chip--kicker:is(:hover, :focus) {
     color: #fff; }
   .gallery-filter-btn .filter-count {
     display: inline-block;
-    background: rgba(0,0,0,0.1);
+    /* 4%, not 10%: the pill's grey type, and its red on hover, came to
+       4.49:1 on a 10% chip. */
+    background: rgba(0,0,0,0.04);
     border-radius: 12px;
     padding: 1px 8px;
     font-size: 12px;
@@ -5540,7 +5548,8 @@ a.gallery-filter-btn:focus:not(:hover) {
 
 .blog-post .blog-meta a.blog-tag:hover,
 .blog-post .blog-meta a.blog-tag:focus-visible {
-  background: color-mix(in srgb, var(--kr-action) 12%, transparent);
+  /* 7%: at 12% the focused tag's red type came to 4.28:1 on its tint. */
+  background: color-mix(in srgb, var(--kr-action) 7%, transparent);
   border-color: var(--kr-action);
   text-decoration: none; }
 
@@ -8223,6 +8232,11 @@ blockquote:hover .copy-hint {
 .blog-post table tbody tr:nth-child(even) {
   background: rgba(127, 127, 127, 0.07); }
 
+/* Bootstrap's caption grey (#6c757d) is 4.4:1 on the light page and 3.7:1
+   on the dark one. */
+.blog-post caption {
+  color: var(--kr-muted); }
+
 @media (max-width: 767px) {
   .blog-post table {
     display: block;
@@ -9052,21 +9066,6 @@ blockquote:hover .copy-hint {
 .sim-cta {
   text-align: center;
   margin: 28px 0 30px; }
-.sim-button {
-  display: inline-block;
-  background: linear-gradient(135deg, #ff5f45, #ff2f59);
-  color: #fff;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  padding: 12px 22px;
-  border-radius: 999px;
-  text-decoration: none;
-  box-shadow: 0 10px 22px rgba(255, 47, 89, 0.28);
-  transition: transform 0.15s ease, box-shadow 0.15s ease; }
-.sim-button:hover {
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(255, 47, 89, 0.35); }
 .repo-note {
   text-align: center;
   margin: 12px 0 8px; }
@@ -12706,8 +12705,10 @@ button.kr-cal__cell {
       box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
   .review-body {
     padding: 20px; }
+  /* The amber series colour drawn toward the ink: the old #f5a623 was
+     2:1 on the white card, under the 3:1 a glyph needs. */
   .review-stars {
-    color: #f5a623;
+    color: color-mix(in srgb, var(--kr-series-3) 85%, var(--kr-ink));
     font-size: 18px;
     margin-bottom: 8px;
     letter-spacing: 2px; }
@@ -12930,22 +12931,19 @@ button.kr-cal__cell {
   bottom: 10px;
   border: 1px solid rgba(0, 0, 0, 0.15);
   background: transparent;
-  color: #6b6b6b;
+  color: var(--kr-muted);
   font-size: 11px;
   padding: 3px 10px;
   border-radius: 999px;
-  cursor: pointer;
-  opacity: 0.7; }
+  cursor: pointer; }
 
 .kr-quote-card:hover .kr-quote-copy,
 .kr-quote-copy:focus-visible {
-  opacity: 1;
   color: var(--kr-action);
   border-color: var(--kr-action); }
 
 [data-theme="dark"] .kr-quote-copy {
-  border-color: #444;
-  color: #a5a5a5; }
+  border-color: #444; }
 
 /* Holding the author pills' place. The page's script draws them at the
    foot of a long document, so on a slow connection the first cards paint

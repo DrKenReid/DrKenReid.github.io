@@ -250,6 +250,17 @@ Lora, the gradient as a short rule under it, and an optional lede (§05).
   forms), never `color` or `background`: the button's own rule is written
   to outrank the global link colours, and a plain declaration loses to
   them. The demo toolbar does exactly this (§12).
+- Never a one-off button class (`.my-cta { background: ...; color:
+  #fff }`) on a link. A single class is (0,1,0); a post's link colour
+  (`.blog-post a`) and the dark theme's (`[data-theme="dark"] a`) are
+  (0,1,1), so they win and paint the label red on its own fill. The
+  debt simulator's call to action shipped red on a red gradient this
+  way. If `.kr-btn`'s variants do not fit, add a variant that sets the
+  `--kr-btn-*` properties. Anything else with text on a fill of its own
+  (a skip link, a chip) that a link colour could reach sets its colour
+  under the same `:root` lift. The smoke suite's `check_fill_contrast`
+  fails a label that loses to its fill on any page, in either theme, at
+  rest, hovered or focused.
 - `.alime-btn`, the template's button, takes the `--ghost` rules
   (`--on-photo` over a photograph) until the last post using it
   migrates; `.btn-2` no longer has a rule. New markup uses `.kr-btn`.
@@ -332,7 +343,13 @@ What every component keeps to (the essay:
   other mark, in both themes, on every surface it sits on; on a
   photograph, against the lightest part of the image under the letters.
   `tests/test_contrast.py` checks the tokens and the smoke suite's
-  `check_contrast` checks rendered pages.
+  `check_contrast` checks rendered pages; `check_fill_contrast` checks
+  the text on every button, pill and chip against its own fill, on
+  every page and post, hovered and focused as well as at rest, and at
+  rest every other text against the surface beneath it (a card's tint
+  and any faded ancestor counted). Fade secondary type with a colour,
+  never with `opacity`: a grey that passes on its own drops under 4.5:1
+  at 0.9.
 - **Focus.** The site's ring is `:focus-visible` only, in `--kr-focus`
   with the `--site-focus-shadow` halo. A component that needs its own
   ring sets it with a class selector on `:focus-visible`, which outranks

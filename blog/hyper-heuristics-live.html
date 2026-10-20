@@ -121,7 +121,9 @@
    .hh-heur{ margin-top:14px; display:flex; flex-direction:column; gap:6px; }
    .hh-heur-row{ display:flex; align-items:center; gap:10px; font-size:0.78em; color:var(--viz-ink); }
    .hh-heur-name{ width:10.5em; white-space:nowrap; font-weight:600; }
-   .hh-heur-row.fav .hh-heur-name{ color:var(--viz-s3); }
+   /* the bar keeps the canvas amber; the name is that amber halfway to
+      the ink, since the raw amber is 2.2:1 on the white panel */
+   .hh-heur-row.fav .hh-heur-name{ color:color-mix(in srgb, var(--viz-s3) 50%, var(--viz-ink)); }
    .hh-bar{ flex:1; height:10px; background:var(--viz-cell); border:1px solid var(--viz-border); border-radius:5px; overflow:hidden; }
    .hh-bar-fill{ height:100%; width:25%; background:var(--viz-s3); transition:width 0.35s ease; }
    .hh-heur-pct{ width:3.2em; text-align:right; color:var(--viz-muted); font-variant-numeric:tabular-nums; }
