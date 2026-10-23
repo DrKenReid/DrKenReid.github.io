@@ -20,7 +20,7 @@
   "ciChecks": 32,
   "dependencies": 0,
   "buildStep": false,
-  "htmlBytes": 6454514,
+  "htmlBytes": 6455048,
   "imageCount": 2305,
   "imageBytes": 163907416,
   "webFontCount": 9,
@@ -39,7 +39,7 @@
   "shortestPostTitle": "Every Card Has a Sketch",
   "shortestPostUrl": "blog/every-card-has-a-sketch.html",
   "averagePostWords": 2470,
-  "commits": 707,
+  "commits": 708,
   "commitsByMonth": [
     [
       "2019-12",
@@ -371,7 +371,7 @@
     ],
     [
       "2026-10",
-      71
+      72
     ]
   ],
   "repoStart": "2019-12"
