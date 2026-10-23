@@ -535,6 +535,29 @@
         };
     });
 
+    // Tags spray onto a brick wall; a viewfinder locks on one, and the credit flips between us.
+    def('photographing-other-peoples-art', function (w, h, rnd) {
+        var t = 0, tags = [], cols = [C.a, C.b, C.red, C.green, C.blue];
+        for (var i = 0; i < 9; i++) tags.push({ x: w * (0.1 + 0.8 * rnd()), y: h * (0.18 + 0.55 * rnd()), r: 10 + rnd() * 16, c: cols[i % cols.length], at: i * 14 });
+        return {
+            step: function () { t = (t + 1) % 420; },
+            draw: function (ctx) {
+                for (var y = h * 0.1, row = 0; y < h * 0.88; y += h * 0.08, row++) {
+                    line(ctx, w * 0.05, y, w * 0.95, y, 'rgba(255,255,255,0.08)', 1);
+                    for (var x = w * 0.05 + (row % 2) * w * 0.05; x < w * 0.95; x += w * 0.1) line(ctx, x, y, x, y + h * 0.08, 'rgba(255,255,255,0.06)', 1);
+                }
+                tags.forEach(function (g) { var p = clamp01((t - g.at) / 20); if (p > 0) dot(ctx, g.x, g.y, g.r * ease(p), alpha(g.c, 0.75)); });
+                var s = ease(clamp01((t - 140) / 90)), tg = tags[4];
+                var fx = w * 0.15 + (tg.x - w * 0.15) * s, fy = h * 0.2 + (tg.y - h * 0.2) * s, fr = 38 - 8 * s;
+                [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(function (c) {
+                    line(ctx, fx + c[0] * fr, fy + c[1] * fr, fx + c[0] * (fr - 10), fy + c[1] * fr, C.ink, 2);
+                    line(ctx, fx + c[0] * fr, fy + c[1] * fr, fx + c[0] * fr, fy + c[1] * (fr - 10), C.ink, 2);
+                });
+                if (t > 240) text(ctx, Math.floor(t / 45) % 2 ? 'wall: them' : 'photo: me', w * 0.5, h * 0.94, 10, Math.floor(t / 45) % 2 ? C.b : C.ink, 700, 'center');
+            }
+        };
+    });
+
     // Photographs plotted onto a sketch of two continents, count badges popping.
     def('putting-my-photos-on-a-map', function (w, h, rnd) {
         var land = [];
