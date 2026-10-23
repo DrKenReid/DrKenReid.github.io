@@ -65,10 +65,13 @@
  *   Place (country, state in the US, town, place within a town; see
  *   "Places" below) and Orientation (landscape, portrait or square, from
  *   photo-dims.json). Their rows start closed behind a line of toggles,
- *   each naming the filter in force (see "Filter toggles"). A row shows
- *   its PILLS_SHOWN largest pills and keeps the rest behind "+N more",
- *   and counts and lists only what the other filters leave, so every
- *   pill on screen narrows the grid to something.
+ *   each naming the filter in force (see "Filter toggles"), beside the
+ *   number of photographs shown and, while any filter is in force, a
+ *   Reset button that turns every one off. The bar stays pinned under
+ *   the header while the grid scrolls (style.css). A row shows its
+ *   PILLS_SHOWN largest pills and keeps the rest behind "+N more", and
+ *   counts and lists only what the other filters leave, so every pill on
+ *   screen narrows the grid to something.
  *
  * Deep links
  *   ?tag=<subject>, ?place=<place key> and ?shape=<orientation> open with
@@ -371,6 +374,7 @@ function startGallery() {
     var placeToggle = document.querySelector('#gallery-filter-toggles button[aria-controls="gallery-places"]');
     if (placeToggle) placeToggle.hidden = !placeTree || !placeTree.children.length;
     bindFilterToggles();
+    bindResetButton();
     applyFilter(cat);
 
     openFromUrl();
@@ -598,6 +602,36 @@ function syncFilterToggles() {
     setToggle('gallery-subject-row', activeCat === '*' ? 'All' : labelOf(activeCat), activeCat !== '*');
     setToggle('gallery-places', place && place !== placeTree ? place.name : 'Anywhere', !!activePlace);
     setToggle('gallery-shape-row', shape ? shape.label : 'Any', !!shape);
+    var reset = document.getElementById('gallery-reset-filters');
+    if (reset) reset.hidden = activeCat === '*' && !activePlace && !shape;
+    // The count beside the toggles is for the eye; the live counter under
+    // the grid is the one a screen reader hears.
+    var shown = document.getElementById('gallery-shown-count');
+    if (shown) shown.textContent = galleryView.length + (galleryView.length === 1 ? ' photo' : ' photos');
+}
+
+/**
+ * Reset, at the end of the toggles' line while any filter is in force:
+ * every filter off at once, the open row left open. The button leaves
+ * with the filters, so keyboard focus moves to the first toggle rather
+ * than falling to <body>.
+ */
+function bindResetButton() {
+    var btn = document.getElementById('gallery-reset-filters');
+    if (!btn || btn.dataset.bound) return;
+    btn.dataset.bound = 'true';
+    btn.addEventListener('click', function() {
+        var hadFocus = document.activeElement === btn;
+        activePlace = '';
+        activeShape = '';
+        writeUrl({ tag: null, place: null, shape: null, photo: null });
+        var container = document.getElementById('gallery-grid');
+        krGalleryMorph(container, function() { applyFilter('*'); });
+        if (hadFocus) {
+            var first = document.querySelector('#gallery-filter-toggles button:not([hidden])');
+            if (first) first.focus({ preventScroll: true });
+        }
+    });
 }
 
 function setToggle(rowId, value, isSet) {

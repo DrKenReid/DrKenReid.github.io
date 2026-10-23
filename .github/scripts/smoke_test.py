@@ -1054,7 +1054,7 @@ def check_gallery_keyboard_and_rows(browser, base, rep):
         open_rows = page.evaluate("[...document.querySelectorAll('.kr-gallery-panel > .kr-facet-row')]"
                                   ".filter(r => !r.hidden).map(r => r.id)")
         rep.check(scope, "the filter rows start closed", not open_rows, open_rows)
-        filters = page.evaluate("[...document.querySelectorAll('#gallery-filter-toggles button, .kr-gallery-panel .kr-facet-row button')]"
+        filters = page.evaluate("[...document.querySelectorAll('.kr-gallery-panel button, .kr-gallery-panel a[href]')]"
                                 ".filter(e => e.tabIndex >= 0 && e.getBoundingClientRect().width > 0).length")
         page.focus("#gallery-filter-toggles .gallery-filter-btn")
         presses, stops = 0, []
@@ -1104,6 +1104,13 @@ def check_gallery_keyboard_and_rows(browser, base, rep):
             return { shown: stems.length, wide: stems.filter(s => dims[s] && dims[s][0] >= dims[s][1]) };
         }""")
         rep.check(scope, "only portrait-format frames are left", got["shown"] > 0 and not got["wide"], got)
+        shown = page.evaluate("!document.getElementById('gallery-reset-filters').hidden")
+        rep.check(scope, "Reset filters shows while a filter is on", shown)
+        if shown:
+            page.click("#gallery-reset-filters")
+            page.wait_for_function("location.search === '' && document.getElementById('gallery-reset-filters').hidden"
+                                   " && document.querySelectorAll('#gallery-grid .single_gallery_item').length >= 12")
+            rep.check(scope, "Reset filters clears the address and leaves", True)
         rep.console_errors(scope, sink)
         page.close()
     context.close()

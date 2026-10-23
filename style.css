@@ -2397,6 +2397,24 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
     padding: 4px 14px 4px 11px;
     font-size: 13px; } }
 
+/* A banner with more than one way in (the gallery: Slideshow, Photo map,
+   Follow) sets the pills in a row, .kr-opener-actions, which takes the
+   pill's margin above so the pills wrap with even gaps. The other pills
+   wear .kr-opener-play for its look; only #gallery-slideshow opens the
+   slideshow. */
+.breadcrumb-area .kr-opener-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px; }
+  .breadcrumb-area .kr-opener-actions .kr-opener-play {
+    margin-top: 0; }
+
+@media only screen and (max-width: 767px) {
+  .breadcrumb-area .kr-opener-actions {
+    gap: 6px;
+    margin-top: 10px; } }
+
 /* --- Listing banner ---------------------------------------------------
    .breadcrumb-area--listing is the page opener cut down for an index
    page. A listing's banner only names the page; what the reader came for
@@ -4835,18 +4853,117 @@ a.gallery-filter-btn:focus:not(:hover) {
   color: #ffffff; }
 
 /* --- Gallery filter toggles (.kr-gallery-toggles) -----------------------------
-   The gallery's filters start closed: a line of pill toggles (Subject,
-   Place, Orientation) in gallery.html, each naming the filter in force,
-   opens its row below it, one row at a time (js/gallery.js,
-   openFilterRow). The chevron turns while the row is open; a toggle whose
-   filter narrows the grid takes the action colour (.is-set, set by
-   syncFilterToggles), so a closed panel still says the grid is filtered.
+   The top of the gallery is three light layers: the banner (title,
+   Slideshow, Photo map, Follow), a one-line .kr-gallery-intro, and the
+   filter bar. The bar (.kr-gallery-bar) is a line of pill toggles
+   (Subject, Place, Orientation) in gallery.html, each naming the filter
+   in force, with the number of photographs shown and, while any filter
+   is in force, a Reset text button at its end (.kr-gallery-status). A
+   toggle opens its row below the line, one row at a time (js/gallery.js,
+   openFilterRow); the Subject row ends in a small link to how subjects
+   are tagged (.kr-gallery-note). The chevron turns while a row is open;
+   a toggle whose filter narrows the grid takes the action colour
+   (.is-set, set by syncFilterToggles), so a closed panel still says the
+   grid is filtered.
+   The panel stays pinned under the header bar (--kr-bar-h) while the
+   grid scrolls past, on the page's own surface so photographs pass
+   under it, and lets go at the end of the gallery section.
    Script-only class: .is-set. */
+.kr-gallery-intro {
+  max-width: 640px;
+  margin: 0 auto 18px;
+  font-size: 16px;
+  text-align: center;
+  color: var(--kr-muted); }
+
+/* With no heading above the intro, the section's 80px top padding
+   (.section-padding-80) was an empty band under the banner; half does. */
+.alime-portfolio-area.section-padding-80 {
+  padding-top: 40px; }
+
+.kr-gallery-panel {
+  position: sticky;
+  top: var(--kr-bar-h);
+  z-index: 20;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: var(--kr-surface-0); }
+  /* The grid is wider than the column the panel sits in (it breaks out to
+     the page), so the panel's surface reaches the page's edges or
+     photographs would show beside it while it is pinned. 50cqi is half
+     the gallery section, a size container as wide as the page; where
+     container units are unsupported the surface keeps the panel's width. */
+  .kr-gallery-panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    right: calc(50% - 50cqi);
+    left: calc(50% - 50cqi);
+    z-index: -1;
+    background: var(--kr-surface-0); }
+
+.kr-gallery-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 16px; }
+
 .kr-gallery-toggles {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px; }
+
+.kr-gallery-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--kr-muted);
+  white-space: nowrap; }
+
+.kr-gallery-reset,
+.kr-gallery-panel .kr-gallery-note {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--kr-action); }
+
+.kr-gallery-reset {
+  min-height: 24px;
+  padding: 2px 4px;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  cursor: pointer; }
+  .kr-gallery-reset:hover {
+    color: var(--kr-action-hover);
+    text-decoration: underline; }
+
+.kr-gallery-note {
+  flex: 0 0 auto;
+  white-space: nowrap; }
+
+/* On a phone the bar stacks: the toggles' line (one line, scrolling
+   sideways if it must; below) over the count and Reset, and the Subject
+   row's note takes a line under its pills. */
+@media only screen and (max-width: 767px) {
+  .kr-gallery-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0; }
+  .kr-gallery-status {
+    align-self: center; }
+  .kr-gallery-panel .kr-facet-row {
+    flex-wrap: wrap;
+    row-gap: 2px; }
+  .kr-gallery-note {
+    flex-basis: 100%;
+    text-align: center; } }
 
 .kr-gallery-toggle::after {
   content: "\25BE";

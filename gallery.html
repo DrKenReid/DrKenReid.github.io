@@ -77,7 +77,11 @@
           <li class="breadcrumb-item active" aria-current="page">Photography</li>
         </ol></nav>
         <h1 class="page-title">Photography</h1>
-        <a href="/slideshow.html" class="kr-opener-play" id="gallery-slideshow"><i class="ti-control-play" aria-hidden="true"></i> Slideshow<span class="kr-sr-only"> of the photographs</span></a>
+        <div class="kr-opener-actions">
+          <a href="/slideshow.html" class="kr-opener-play" id="gallery-slideshow"><i class="ti-control-play" aria-hidden="true"></i> Slideshow<span class="kr-sr-only"> of the photographs</span></a>
+          <a href="/map.html" class="kr-opener-play"><i class="ti-map-alt" aria-hidden="true"></i> Photo map</a>
+          <a href="/feed-photos.xml" class="kr-opener-play"><i class="ti-rss" aria-hidden="true"></i> Follow<span class="kr-sr-only"> new photosets by RSS</span></a>
+        </div>
       </div>
     </div>
   </section>
@@ -86,23 +90,20 @@
        js/gallery.js fills it from data/*.json. -->
   <div class="alime-portfolio-area section-padding-80 clearfix" id="gallery">
     <div class="container-fluid">
-      <div class="section-heading section-heading--snug text-center">
-        <span class="section-eyebrow">Portfolio</span>
-        <h2>Gallery</h2>
-        <p class="section-heading__lede"><span id="gallery-total-count">Hundreds of</span> photos, all shot by me: the older ones on a Canon EOS 60D, the newer ones on a Canon EOS R. Filter by subject, place or orientation. <a href="/blog/photo-tagging-with-clip.html" class="kr-accent-link">How these tags were generated &rarr;</a></p>
-      </div>
-      <div class="kr-btn-row mb-4">
-        <a href="/map.html" class="kr-btn kr-btn--ghost"><i class="ti-map-alt" aria-hidden="true"></i> Explore the Photo Map</a>
-        <a href="/feed-photos.xml" class="kr-btn kr-btn--ghost"><i class="ti-rss" aria-hidden="true"></i> Follow new photosets (RSS)</a>
-      </div>
+      <h2 class="kr-sr-only">Gallery</h2>
+      <p class="kr-gallery-intro"><span id="gallery-total-count">Hundreds of</span> photographs, all mine: a Canon EOS 60D, then an EOS R.</p>
       <div class="gallery-filters kr-filter-panel kr-gallery-panel text-center mb-4">
-        <div id="gallery-filter-toggles" class="kr-gallery-toggles" role="group" aria-label="Filters">
-          <button type="button" class="btn gallery-filter-btn kr-gallery-toggle" aria-expanded="false" aria-controls="gallery-subject-row"><span class="kr-gallery-toggle__label">Subject</span> <span class="kr-gallery-toggle__value">All</span></button>
-          <button type="button" class="btn gallery-filter-btn kr-gallery-toggle" aria-expanded="false" aria-controls="gallery-places"><span class="kr-gallery-toggle__label">Place</span> <span class="kr-gallery-toggle__value">Anywhere</span></button>
-          <button type="button" class="btn gallery-filter-btn kr-gallery-toggle" aria-expanded="false" aria-controls="gallery-shape-row"><span class="kr-gallery-toggle__label">Orientation</span> <span class="kr-gallery-toggle__value">Any</span></button>
+        <div class="kr-gallery-bar">
+          <div id="gallery-filter-toggles" class="kr-gallery-toggles" role="group" aria-label="Filters">
+            <button type="button" class="btn gallery-filter-btn kr-gallery-toggle" aria-expanded="false" aria-controls="gallery-subject-row"><span class="kr-gallery-toggle__label">Subject</span> <span class="kr-gallery-toggle__value">All</span></button>
+            <button type="button" class="btn gallery-filter-btn kr-gallery-toggle" aria-expanded="false" aria-controls="gallery-places"><span class="kr-gallery-toggle__label">Place</span> <span class="kr-gallery-toggle__value">Anywhere</span></button>
+            <button type="button" class="btn gallery-filter-btn kr-gallery-toggle" aria-expanded="false" aria-controls="gallery-shape-row"><span class="kr-gallery-toggle__label">Orientation</span> <span class="kr-gallery-toggle__value">Any</span></button>
+          </div>
+          <p class="kr-gallery-status"><span id="gallery-shown-count"></span><button type="button" id="gallery-reset-filters" class="kr-gallery-reset" hidden><span aria-hidden="true">&times;</span> Reset<span class="kr-sr-only"> filters</span></button></p>
         </div>
         <div id="gallery-subject-row" class="kr-facet-row" hidden>
           <div id="gallery-filters" class="kr-facet-row__btns"></div>
+          <a href="/blog/photo-tagging-with-clip.html" class="kr-gallery-note">How subjects are tagged</a>
         </div>
         <div id="gallery-places" class="kr-facet-row kr-place-filter" hidden></div>
         <div id="gallery-shape-row" class="kr-facet-row" hidden>
