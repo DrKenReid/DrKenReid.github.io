@@ -1036,8 +1036,10 @@ FOCUS_RING = """() => {
 
 
 def check_gallery_keyboard_and_rows(browser, base, rep):
-    """Three gallery regressions: Tab from the filter buttons reaches the
-    first photograph within the filters plus GALLERY_TAB_SLACK presses; at
+    """Four gallery regressions: Tab from the filter buttons (subject and
+    place rows) reaches the first photograph within the filters plus
+    GALLERY_TAB_SLACK presses; ?place= opens on that place, its trail
+    climbs back up a level, and every tile left is from there; at
     phone widths no row holds a single photograph except the last; and
     gallery.html?photo=<stem> opens that frame in the lightbox as a named
     modal dialog, paging through batches to find it: the deep link the
@@ -1048,7 +1050,7 @@ def check_gallery_keyboard_and_rows(browser, base, rep):
                            "document.querySelectorAll('#gallery-grid a.portfolio-img').length >= 12"
                            " && document.querySelectorAll('#gallery-filters .gallery-filter-btn').length >= 3")
     if page:
-        filters = page.evaluate("[...document.querySelectorAll('#gallery-filters button, #gallery-filters a[href]')]"
+        filters = page.evaluate("[...document.querySelectorAll('#gallery-filters button, #gallery-filters a[href], #gallery-places button')]"
                                 ".filter(e => e.tabIndex >= 0 && e.getBoundingClientRect().width > 0).length")
         page.focus("#gallery-filters .gallery-filter-btn")
         presses, stops = 0, []
@@ -1063,6 +1065,27 @@ def check_gallery_keyboard_and_rows(browser, base, rep):
             presses = -1
         rep.check(scope, f"Tab from the filters reaches a photograph within {filters + GALLERY_TAB_SLACK}",
                   presses > 0, f"stops: {', '.join(stops[-4:])}")
+        rep.console_errors(scope, sink)
+        page.close()
+
+    scope = "gallery.html?place=scotland.stirling"
+    page, sink = open_page(context, base, scope, rep, scope,
+                           "document.querySelectorAll('#gallery-grid a.portfolio-img').length >= 3"
+                           " && !!document.querySelector('.kr-place-crumb[data-place=scotland]')")
+    if page:
+        counter = page.evaluate("document.getElementById('gallery-counter').textContent")
+        rep.check(scope, "the counter names the place", counter.endswith("photos from Stirling"), counter)
+        page.click(".kr-place-crumb[data-place=scotland]")
+        page.wait_for_function("location.search === '?place=scotland'"
+                               " && !!document.querySelector('#gallery-places button[data-filter-key=\"scotland.stirling\"]')")
+        got = page.evaluate("""async () => {
+            const places = await fetch('data/photo-locations.json').then(r => r.json());
+            const scots = new Set(places.regions.filter(r => (r.path || [])[0] === 'Scotland').flatMap(r => r.photos));
+            const stems = [...document.querySelectorAll('#gallery-grid .single_gallery_item')].map(t => t.dataset.stem);
+            return { shown: stems.length, outside: stems.filter(s => !scots.has(s)) };
+        }""")
+        rep.check(scope, "the trail's Scotland shows only Scottish frames",
+                  got["shown"] > 0 and not got["outside"], got)
         rep.console_errors(scope, sink)
         page.close()
     context.close()

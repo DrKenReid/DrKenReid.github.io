@@ -31,7 +31,7 @@ builds on it, which is why a hand edit there is dangerous.
 | `photo-dims.json` | `{"<n>": [width, height]}` | `generate_photo_dims.py` | `js/gallery.js`, `index.html` (the Latest section's photography lane) | when thumbnails are added | `photo-dims` | never |
 | `photo-originals.json` | `{"<n>": [width, height]}`, the full-size frame on the release | `generate_photo_renditions.py` (reads each PNG's header with a ranged request) | the same script: a hero is made at `HERO_EDGE` or the original's own size, whichever is smaller | when frames are added | `renditions` | never |
 | `photo-tags.json` | `{"<n>": [tags]}` | a tagging tool kept outside the repository; `bw` rewritten by `detect_monochrome.py` | `js/gallery.js`, `js/slideshow.js` (the gallery's filter buttons are `KR_PHOTO_CATEGORIES` in `js/shared-components.js`) | when photographs are added | `monochrome` | subject tags yes; `bw` never |
-| `photo-locations.json` | `{_help, regions: [{name, lat, lng, photos: ["<n>"]}]}` | you (its `_help` field says how) | `map.html`, `js/gallery.js` (tile captions, the globe badge), `js/palette.js` (places), `js/slideshow.js` (its Place setting and caption) | when photographs are placed | none | yes |
+| `photo-locations.json` | `{_help, regions: [{name, path, lat, lng, photos: ["<n>"]}]}`; `path` is the region's place in the gallery's place filter, `[country]`, `[country, town]` or `[country, town, place in that town]` (a spot outside any town, a loch or a park, stands as its own town) | you (its `_help` field says how) | `map.html`, `js/gallery.js` (tile captions, the globe badge, the place filter and `?place=`), `js/palette.js` (places), `js/slideshow.js` (its Place setting and caption) | when photographs are placed | `data-schemas` (every region has a `path`) | yes |
 | `photo-credits.json` | `{_help, credits: {"<n>": "line"}}`: a credit for someone else's work in a frame (a mural, a sculpture) | you | `js/gallery.js` (the tile's hover caption, the lightbox caption, the link's name) | when a frame shows work Ken can name | none | yes |
 | `photo-variants.json` | `{_help, groups: [["<n>", "<n>", ...]]}`: frames that are one photograph, the shown edit first | you (its `_help` field says how) | `js/gallery.js` (one tile per group, the edits on hover and in the lightbox), `js/slideshow.js` (one slide per group) | when a re-edit goes up | `audit` (`photo-variants`) | yes |
 | `photography-files.json` | `["<n>.png"]`, newest first: every frame | a filename tool kept outside the repository, or by hand | `js/gallery.js`, `js/slideshow.js`, `404.html`, `index.html` (the three newest, the Latest section), `generate_colophon.py`, the audit's orphan report | when photographs are added | the smoke suite (the gallery renders) | yes, carefully |
@@ -157,6 +157,10 @@ Adding photographs touches every file in this group:
    in `js/shared-components.js`.
 5. Place it in a region of `photo-locations.json` if it belongs on the
    map ([Putting My Photos on a Map](https://www.kenreid.co.uk/blog/putting-my-photos-on-a-map.html)).
+   A new region needs a `path` as well as its pin: the country, the town
+   and, for a spot inside a town, its own name
+   (`["Scotland", "Stirling", "Stirling Castle"]`). That is where the
+   gallery's place filter lists it.
 6. Add the set to the top of `photosets.json`: the day it went up,
    its first and last frame numbers and where it was taken. From it
    `generate_photo_feed.py` (run by step 7) writes the set's item in

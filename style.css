@@ -4509,7 +4509,8 @@ a.kr-series-chip--kicker:is(:hover, :focus) {
      .kr-listing              the listing body and its spacing budget
      #blog-grid ...           the overlay cards (§08) sized by the tile
      .gallery-filter-btn      a filter pill, in .gallery-filters
-     .kr-filter-panel         the faceted panel: one labelled row a group
+     .kr-place-filter         the gallery's place row and its trail
+     .kr-filter-panel        the faceted panel: one labelled row a group
      .kr-list-search,
      .kr-list-counter         the search field and the live result count
      .kr-list-empty,
@@ -4831,6 +4832,60 @@ a.gallery-filter-btn:focus:not(:hover) {
 [data-theme="dark"] .gallery-filter-btn.active .filter-count {
   background: rgba(255, 255, 255, 0.2);
   color: #ffffff; }
+
+/* --- Place filter (.kr-place-filter) ------------------------------------------
+   The gallery's filters are a two-row panel (.kr-filter-panel, below):
+   Subject, then Place. The place row walks places by country, then town,
+   then a place within the town, from the regions' paths in
+   data/photo-locations.json. renderPlaceBar (js/gallery.js) writes the
+   row into #gallery-places, which stays [hidden] until then: its label, a
+   short trail of the levels above the one shown (each a text button back
+   up to it), and the level's pills, the first six shown and the rest
+   behind "+N more". A pill for a place with places inside it ends in a
+   chevron. Script-only classes: .kr-place-trail, .kr-place-crumb,
+   .kr-place-more. */
+.kr-place-trail {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  white-space: nowrap; }
+  .kr-place-trail li {
+    display: inline-flex;
+    align-items: center; }
+  .kr-place-trail li::after {
+    content: "\203A";
+    margin: 0 4px;
+    color: var(--kr-muted); }
+
+.kr-place-crumb {
+  min-height: 24px;
+  padding: 2px 4px;
+  border: 0;
+  background: none;
+  color: var(--kr-action);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer; }
+  .kr-place-crumb:hover {
+    color: var(--kr-action-hover); }
+
+.kr-place-more::after {
+  content: "\203A";
+  margin-left: 2px; }
+
+/* On a phone a trail beside the label left the pills a sliver of the
+   row, so with a trail showing the pills take a line of their own. */
+@media only screen and (max-width: 767px) {
+  .kr-place-filter {
+    flex-wrap: wrap;
+    row-gap: 2px; }
+  .kr-place-trail ~ .kr-facet-row__btns {
+    flex-basis: 100%; } }
 
 /* --- Filter panel --------------------------------------------------------------
    The faceted panel on the blog listing and the series index: one

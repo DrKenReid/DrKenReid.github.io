@@ -110,7 +110,7 @@ CHECKS: list[Check] = [
     # Every data/<name>.json that has a data/schema/<name>.schema.json: the
     # weekly live-data files (books, reading, now, lastfm, topalbums,
     # lastfm-history), which the workflow checks before it commits, plus
-    # posts.json and publications.json. There is no fixer: a wrong shape
+    # posts.json, publications.json, photosets.json and photo-locations.json. There is no fixer: a wrong shape
     # needs a person, and the generators that write fields of posts.json
     # (read-times, post-facets) come after this, so they read a file
     # already known to parse.

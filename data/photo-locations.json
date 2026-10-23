@@ -1,8 +1,13 @@
 {
-  "_help": "Regions for map.html. Add photo stems (the number before .webp in img/photography/thumb/) to a region's photos array, or add new regions with lat/lng. Coarse locations are fine — the map clusters by region, not exact spots.",
+  "_help": "Regions for map.html and the gallery's place filter. Add photo stems (the number before .webp in img/photography/thumb/) to a region's photos array, or add new regions with lat/lng. Coarse locations are fine: the map clusters by region, not exact spots. path places the region in the gallery's filter: [country], [country, town] or [country, town, place in that town]; a spot outside any town (a loch, a park) stands as its own town.",
   "regions": [
     {
       "name": "University of Stirling",
+      "path": [
+        "Scotland",
+        "Stirling",
+        "University of Stirling"
+      ],
       "lat": 56.1451,
       "lng": -3.9204,
       "photos": [
@@ -46,6 +51,10 @@
     },
     {
       "name": "Loch Ard, Scotland",
+      "path": [
+        "Scotland",
+        "Loch Ard"
+      ],
       "lat": 56.1855,
       "lng": -4.4756,
       "photos": [
@@ -57,6 +66,10 @@
     },
     {
       "name": "Birnie Loch, Fife, Scotland",
+      "path": [
+        "Scotland",
+        "Birnie Loch"
+      ],
       "lat": 56.3065,
       "lng": -3.144,
       "photos": [
@@ -66,6 +79,10 @@
     },
     {
       "name": "Bangour Village Hospital, West Lothian",
+      "path": [
+        "Scotland",
+        "Bangour Village Hospital"
+      ],
       "lat": 55.914,
       "lng": -3.569,
       "photos": [
@@ -93,6 +110,10 @@
     },
     {
       "name": "Inverness, Scotland",
+      "path": [
+        "Scotland",
+        "Inverness"
+      ],
       "lat": 57.4778,
       "lng": -4.2247,
       "photos": [
@@ -118,6 +139,10 @@
     },
     {
       "name": "Ipswich, England",
+      "path": [
+        "England",
+        "Ipswich"
+      ],
       "lat": 52.0567,
       "lng": 1.1482,
       "photos": [
@@ -133,6 +158,10 @@
     },
     {
       "name": "Dublin, Ireland",
+      "path": [
+        "Ireland",
+        "Dublin"
+      ],
       "lat": 53.3498,
       "lng": -6.2603,
       "photos": [
@@ -161,6 +190,10 @@
     },
     {
       "name": "East Lansing, Michigan",
+      "path": [
+        "United States",
+        "East Lansing"
+      ],
       "lat": 42.7369,
       "lng": -84.4839,
       "photos": [
@@ -213,6 +246,10 @@
     },
     {
       "name": "Trento, Italy",
+      "path": [
+        "Italy",
+        "Trento"
+      ],
       "lat": 46.0748,
       "lng": 11.1217,
       "photos": [
@@ -227,6 +264,10 @@
     },
     {
       "name": "Lake Geneva, Switzerland",
+      "path": [
+        "Switzerland",
+        "Lake Geneva"
+      ],
       "lat": 46.37,
       "lng": 6.52,
       "photos": [
@@ -235,6 +276,10 @@
     },
     {
       "name": "Ochil Hills, Stirling",
+      "path": [
+        "Scotland",
+        "Ochil Hills"
+      ],
       "lat": 56.175,
       "lng": -3.85,
       "photos": [
@@ -243,6 +288,11 @@
     },
     {
       "name": "Lansing Zoo, Michigan",
+      "path": [
+        "United States",
+        "Lansing",
+        "Lansing Zoo"
+      ],
       "lat": 42.7166,
       "lng": -84.5262,
       "photos": [
@@ -278,6 +328,10 @@
     },
     {
       "name": "Chicago, Illinois",
+      "path": [
+        "United States",
+        "Chicago"
+      ],
       "lat": 41.8781,
       "lng": -87.6298,
       "photos": [
@@ -289,6 +343,10 @@
     },
     {
       "name": "Glenwood Springs, Colorado",
+      "path": [
+        "United States",
+        "Glenwood Springs"
+      ],
       "lat": 39.5505,
       "lng": -107.3248,
       "photos": [
@@ -315,6 +373,10 @@
     },
     {
       "name": "Glenrothes, Fife",
+      "path": [
+        "Scotland",
+        "Glenrothes"
+      ],
       "lat": 56.198,
       "lng": -3.178,
       "photos": [
@@ -333,6 +395,10 @@
     },
     {
       "name": "Peterborough, England",
+      "path": [
+        "England",
+        "Peterborough"
+      ],
       "lat": 52.5695,
       "lng": -0.2405,
       "photos": [
@@ -360,6 +426,9 @@
     },
     {
       "name": "Czechia",
+      "path": [
+        "Czechia"
+      ],
       "lat": 49.82,
       "lng": 15.47,
       "photos": [
@@ -379,6 +448,10 @@
     },
     {
       "name": "Athens, Greece",
+      "path": [
+        "Greece",
+        "Athens"
+      ],
       "lat": 37.9838,
       "lng": 23.7275,
       "photos": [
@@ -399,6 +472,10 @@
     },
     {
       "name": "Las Vegas, Nevada",
+      "path": [
+        "United States",
+        "Las Vegas"
+      ],
       "lat": 36.1699,
       "lng": -115.1398,
       "photos": [
@@ -429,6 +506,10 @@
     },
     {
       "name": "Geneva, Switzerland",
+      "path": [
+        "Switzerland",
+        "Geneva"
+      ],
       "lat": 46.2044,
       "lng": 6.1432,
       "photos": [
@@ -458,6 +539,10 @@
     },
     {
       "name": "Stirling, Scotland",
+      "path": [
+        "Scotland",
+        "Stirling"
+      ],
       "lat": 56.1165,
       "lng": -3.9369,
       "photos": [
@@ -512,6 +597,10 @@
     },
     {
       "name": "London, England",
+      "path": [
+        "England",
+        "London"
+      ],
       "lat": 51.5074,
       "lng": -0.1278,
       "photos": [
@@ -533,6 +622,11 @@
     },
     {
       "name": "Michigan State University, East Lansing",
+      "path": [
+        "United States",
+        "East Lansing",
+        "Michigan State University"
+      ],
       "lat": 42.7251,
       "lng": -84.4791,
       "photos": [
@@ -547,6 +641,10 @@
     },
     {
       "name": "Denver, Colorado",
+      "path": [
+        "United States",
+        "Denver"
+      ],
       "lat": 39.7392,
       "lng": -104.9903,
       "photos": [
@@ -555,6 +653,10 @@
     },
     {
       "name": "Edinburgh, Scotland",
+      "path": [
+        "Scotland",
+        "Edinburgh"
+      ],
       "lat": 55.9533,
       "lng": -3.1883,
       "photos": [
@@ -567,6 +669,10 @@
     },
     {
       "name": "Ann Arbor, Michigan",
+      "path": [
+        "United States",
+        "Ann Arbor"
+      ],
       "lat": 42.2808,
       "lng": -83.743,
       "photos": [
@@ -738,6 +844,10 @@
     },
     {
       "name": "Lansing, Michigan",
+      "path": [
+        "United States",
+        "Lansing"
+      ],
       "lat": 42.7325,
       "lng": -84.5555,
       "photos": [
@@ -750,6 +860,10 @@
     },
     {
       "name": "Falkland, Fife, Scotland",
+      "path": [
+        "Scotland",
+        "Falkland"
+      ],
       "lat": 56.2536,
       "lng": -3.2062,
       "photos": [
@@ -761,6 +875,10 @@
     },
     {
       "name": "Falkirk, Scotland",
+      "path": [
+        "Scotland",
+        "Falkirk"
+      ],
       "lat": 55.9986,
       "lng": -3.7839,
       "photos": [
@@ -798,6 +916,10 @@
     },
     {
       "name": "Ypsilanti, Michigan",
+      "path": [
+        "United States",
+        "Ypsilanti"
+      ],
       "lat": 42.2412,
       "lng": -83.6129,
       "photos": [
@@ -807,6 +929,10 @@
     },
     {
       "name": "Holland, Michigan",
+      "path": [
+        "United States",
+        "Holland"
+      ],
       "lat": 42.7875,
       "lng": -86.1089,
       "photos": [
@@ -849,6 +975,10 @@
     },
     {
       "name": "Scottish Deer Centre, Fife",
+      "path": [
+        "Scotland",
+        "Scottish Deer Centre"
+      ],
       "lat": 56.31,
       "lng": -3.09,
       "photos": [
@@ -860,6 +990,10 @@
     },
     {
       "name": "Glasgow, Scotland",
+      "path": [
+        "Scotland",
+        "Glasgow"
+      ],
       "lat": 55.86,
       "lng": -4.25,
       "photos": [
@@ -868,6 +1002,10 @@
     },
     {
       "name": "Dunmore Pineapple, Falkirk",
+      "path": [
+        "Scotland",
+        "Dunmore Pineapple"
+      ],
       "lat": 56.0767,
       "lng": -3.7866,
       "photos": [
@@ -885,6 +1023,10 @@
     },
     {
       "name": "West Stow Anglo-Saxon Village, Suffolk",
+      "path": [
+        "England",
+        "West Stow Anglo-Saxon Village"
+      ],
       "lat": 52.3106,
       "lng": 0.6353,
       "photos": [
@@ -902,6 +1044,11 @@
     },
     {
       "name": "St Peter's Seminary, Cardross",
+      "path": [
+        "Scotland",
+        "Cardross",
+        "St Peter's Seminary"
+      ],
       "lat": 55.9703,
       "lng": -4.6406,
       "photos": [
@@ -915,6 +1062,10 @@
     },
     {
       "name": "Balloch, Loch Lomond",
+      "path": [
+        "Scotland",
+        "Balloch"
+      ],
       "lat": 56.0035,
       "lng": -4.5855,
       "photos": [
@@ -924,6 +1075,10 @@
     },
     {
       "name": "Annecy, France",
+      "path": [
+        "France",
+        "Annecy"
+      ],
       "lat": 45.8992,
       "lng": 6.1294,
       "photos": [
@@ -932,6 +1087,10 @@
     },
     {
       "name": "Erskine, Scotland",
+      "path": [
+        "Scotland",
+        "Erskine"
+      ],
       "lat": 55.9214,
       "lng": -4.4625,
       "photos": [
@@ -942,6 +1101,10 @@
     },
     {
       "name": "Blair Drummond Safari Park",
+      "path": [
+        "Scotland",
+        "Blair Drummond Safari Park"
+      ],
       "lat": 56.1643,
       "lng": -4.0402,
       "photos": [
@@ -951,6 +1114,11 @@
     },
     {
       "name": "Stirling Castle",
+      "path": [
+        "Scotland",
+        "Stirling",
+        "Stirling Castle"
+      ],
       "lat": 56.124,
       "lng": -3.948,
       "photos": [
@@ -960,6 +1128,10 @@
     },
     {
       "name": "Faskally Forest, Scotland",
+      "path": [
+        "Scotland",
+        "Faskally Forest"
+      ],
       "lat": 56.7154,
       "lng": -3.7652,
       "photos": [
@@ -971,6 +1143,10 @@
     },
     {
       "name": "Northumberland National Park, England",
+      "path": [
+        "England",
+        "Northumberland National Park"
+      ],
       "lat": 55.2858,
       "lng": -2.1172,
       "photos": [
@@ -979,6 +1155,10 @@
     },
     {
       "name": "Middle Coldrain, Scotland",
+      "path": [
+        "Scotland",
+        "Middle Coldrain"
+      ],
       "lat": 56.1869,
       "lng": -3.4841,
       "photos": [
@@ -987,6 +1167,9 @@
     },
     {
       "name": "Scotland",
+      "path": [
+        "Scotland"
+      ],
       "lat": 56.7861,
       "lng": -4.1141,
       "photos": [
@@ -995,6 +1178,11 @@
     },
     {
       "name": "South Ann Arbor, Michigan",
+      "path": [
+        "United States",
+        "Ann Arbor",
+        "South Ann Arbor"
+      ],
       "lat": 42.2294,
       "lng": -83.7255,
       "photos": [
@@ -1016,6 +1204,10 @@
     },
     {
       "name": "Detroit, Michigan",
+      "path": [
+        "United States",
+        "Detroit"
+      ],
       "lat": 42.3314,
       "lng": -83.0458,
       "photos": [
@@ -1040,6 +1232,11 @@
     },
     {
       "name": "Loch Lomond Bird of Prey Centre, Balloch",
+      "path": [
+        "Scotland",
+        "Balloch",
+        "Loch Lomond Bird of Prey Centre"
+      ],
       "lat": 56.0046,
       "lng": -4.5957,
       "photos": [
@@ -1048,6 +1245,11 @@
     },
     {
       "name": "Meadowforth Barracks, Stirling",
+      "path": [
+        "Scotland",
+        "Stirling",
+        "Meadowforth Barracks"
+      ],
       "lat": 56.1164,
       "lng": -3.9267,
       "photos": [
@@ -1056,6 +1258,11 @@
     },
     {
       "name": "Loch Lomond Sea Life Centre, Balloch",
+      "path": [
+        "Scotland",
+        "Balloch",
+        "Loch Lomond Sea Life Centre"
+      ],
       "lat": 56.0058,
       "lng": -4.5911,
       "photos": [
@@ -1064,6 +1271,10 @@
     },
     {
       "name": "Kirkcaldy, Fife",
+      "path": [
+        "Scotland",
+        "Kirkcaldy"
+      ],
       "lat": 56.111,
       "lng": -3.1582,
       "photos": [

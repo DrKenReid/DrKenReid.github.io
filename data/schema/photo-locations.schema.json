@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.kenreid.co.uk/data/schema/photo-locations.schema.json",
+  "title": "data/photo-locations.json",
+  "description": "Where the photographs were taken, by region. map.html draws a marker per region; js/gallery.js names a tile's place from it and builds the place filter from each region's path; js/palette.js and js/slideshow.js list the regions.",
+  "type": "object",
+  "required": [
+    "regions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "_help": {
+      "type": "string",
+      "description": "How to add a region; read by people, ignored by code."
+    },
+    "regions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "path",
+          "lat",
+          "lng",
+          "photos"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "\\S",
+            "description": "The place as captions and the map name it, e.g. \"Stirling Castle\" or \"Ann Arbor, Michigan\"."
+          },
+          "path": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "\\S"
+            },
+            "description": "Where the region sits in the gallery's place filter: [country], [country, town] or [country, town, place in that town]. A spot outside any town (a loch, a park) stands as its own town."
+          },
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "lng": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "photos": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^\\d+$"
+            },
+            "description": "Frame numbers (stems) taken there."
+          }
+        }
+      }
+    }
+  }
+}

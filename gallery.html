@@ -89,13 +89,19 @@
       <div class="section-heading section-heading--snug text-center">
         <span class="section-eyebrow">Portfolio</span>
         <h2>Gallery</h2>
-        <p class="section-heading__lede"><span id="gallery-total-count">Hundreds of</span> photos, all shot by me: the older ones on a Canon EOS 60D, the newer ones on a Canon EOS R. Click a tag to filter. <a href="/blog/photo-tagging-with-clip.html" class="kr-accent-link">How these tags were generated &rarr;</a></p>
+        <p class="section-heading__lede"><span id="gallery-total-count">Hundreds of</span> photos, all shot by me: the older ones on a Canon EOS 60D, the newer ones on a Canon EOS R. Filter by subject, by place, or both. <a href="/blog/photo-tagging-with-clip.html" class="kr-accent-link">How these tags were generated &rarr;</a></p>
       </div>
       <div class="kr-btn-row mb-4">
         <a href="/map.html" class="kr-btn kr-btn--ghost"><i class="ti-map-alt" aria-hidden="true"></i> Explore the Photo Map</a>
         <a href="/feed-photos.xml" class="kr-btn kr-btn--ghost"><i class="ti-rss" aria-hidden="true"></i> Follow new photosets (RSS)</a>
       </div>
-      <div id="gallery-filters" class="gallery-filters gallery-filters--scroll text-center mb-4"></div>
+      <div class="gallery-filters kr-filter-panel kr-gallery-panel text-center mb-4">
+        <div class="kr-facet-row">
+          <span class="kr-facet-row__label">Subject</span>
+          <div id="gallery-filters" class="kr-facet-row__btns"></div>
+        </div>
+        <div id="gallery-places" class="kr-facet-row kr-place-filter" hidden></div>
+      </div>
       <div class="alime-portfolio kr-justified" id="gallery-grid"></div>
       <div class="row">
         <div class="col-12 text-center mt-3">

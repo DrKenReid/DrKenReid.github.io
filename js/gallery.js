@@ -4,7 +4,8 @@
  * Data
  *   photography-files.json  every frame, newest first
  *   photo-tags.json         stem -> subject tags (CLIP-generated)
- *   photo-locations.json    regions, for tile captions and the globe badge
+ *   photo-locations.json    regions, for tile captions, the globe badge and
+ *                           the place filter (each region's path)
  *   photo-dims.json         stem -> [width, height] of the full frame
  *   photo-variants.json     groups of frames that are one photograph
  *   photo-credits.json      stem -> a line naming someone else's work in the frame
@@ -58,13 +59,21 @@
  *   all show the frame on screen. ?photo= takes any edit's number and
  *   opens its group showing that edit.
  *
+ * Filters
+ *   Two rows narrow the grid together: Subject (the CLIP tags) and Place
+ *   (country, town, place within a town; see "Places" below). Each row
+ *   shows its PILLS_SHOWN largest pills and keeps the rest behind "+N
+ *   more", and each counts and lists only what the other row's choice
+ *   leaves, so every pill on screen narrows the grid to something.
+ *
  * Deep links
- *   ?tag=<subject> opens with that filter; ?photo=<stem> opens that frame
- *   in the lightbox, loading batches until it is in the grid. Both are
- *   written back while browsing (a filter change, each frame viewed, the
- *   lightbox closing), so the address bar can always be shared, and the
- *   lightbox has a Copy link action for the frame on screen. The photo
- *   strip on other pages links here as gallery.html?photo=<stem>.
+ *   ?tag=<subject> and ?place=<place key> open with those filters;
+ *   ?photo=<stem> opens that frame in the lightbox, loading batches
+ *   until it is in the grid. All are written back while browsing (a
+ *   filter change, each frame viewed, the lightbox closing), so the
+ *   address bar can always be shared, and the lightbox has a Copy link
+ *   action for the frame on screen. The photo strip on other pages links
+ *   here as gallery.html?photo=<stem>.
  *
  *   history.replaceState, not pushState, as in blog.js: paging through a
  *   set would otherwise leave a history entry per frame, and Back would
@@ -82,8 +91,9 @@
  *
  * Slideshow
  *   The Slideshow link in the banner (#gallery-slideshow) goes to
- *   slideshow.html carrying the filter (?tag=), kept current as the
- *   filter changes, so it opens in a new tab as it is. A plain click
+ *   slideshow.html carrying the subject (?tag=), and the place (?place=)
+ *   when the place filter is a single region, kept current as the
+ *   filters change, so it opens in a new tab as it is. A plain click
  *   instead opens the slideshow over the gallery, full screen, on the
  *   same photographs (krOpenSlideshow in shared-components.js).
  *
@@ -141,6 +151,14 @@ var EDIT_STEP_MS = 1500;
 var activeCat = '*';
 var filterBar = null;
 var quietFilter = false;     // true while the page sets the bar itself
+var placeTree = null;        // country > town > place, from the regions' paths
+var placeNodes = {};         // node key ('scotland.stirling') -> node
+var placeKeyOf = {};         // stem -> the key of its region's node
+var activePlace = '';        // '' anywhere, else a node key
+// Each filter row (subject, place) shows this many pills, the largest
+// first, and keeps the rest behind "+N more", so the two rows stay a line
+// each on a desktop screen.
+var PILLS_SHOWN = 6;
 var lastRowWidth = 0;
 
 // The subject filters, keyed by tag, in the order the shared table
@@ -287,6 +305,7 @@ function loadGallery() {
                 if (region.lat && region.lng) photoCoords[String(stem)] = [+region.lat, +region.lng];
             });
         });
+        buildPlaceTree((results[2] || {}).regions || []);
         startGallery();
     });
 }
@@ -332,12 +351,15 @@ function startGallery() {
     filterBar = buildFilterButtons();
     bindGalleryLightbox();
 
-    // ?tag= applies its filter before anything is drawn, with no morph:
-    // there is nothing on screen yet to morph from.
+    // ?tag= and ?place= apply their filters before anything is drawn, with
+    // no morph: there is nothing on screen yet to morph from.
     var wanted = readParam('tag');
     var cat = CATEGORIES[wanted] && galleryAll.some(function(f) { return hasTag(f, wanted); }) ? wanted : '*';
     if (cat !== '*' && filterBar) setBarQuietly([cat]);
     if (wanted && cat === '*') writeUrl({ tag: null });
+    var wantedPlace = readParam('place');
+    activePlace = placeNodes[wantedPlace] ? wantedPlace : '';
+    if (wantedPlace && !activePlace) writeUrl({ place: null });
     applyFilter(cat);
 
     openFromUrl();
@@ -347,8 +369,24 @@ function startGallery() {
 // Slideshow (see "Slideshow" at the top)
 // ----------------------------------------------------------------------
 
+/** The slideshow's own filters: the subject, and the place when the place
+    filter is one region (the slideshow's place= takes a single region name,
+    so a town or a country leaves it showing every place). */
+function slideshowFilters() {
+    var node = placeNodes[activePlace];
+    return {
+        tag: activeCat === '*' ? '' : activeCat,
+        place: node && !node.children.length && node.regions.length === 1 ? node.regions[0] : ''
+    };
+}
+
 function slideshowHref() {
-    return '/slideshow.html' + (activeCat === '*' ? '' : '?tag=' + encodeURIComponent(activeCat));
+    var f = slideshowFilters();
+    var q = new URLSearchParams();
+    if (f.tag) q.set('tag', f.tag);
+    if (f.place) q.set('place', f.place);
+    var qs = q.toString();
+    return '/slideshow.html' + (qs ? '?' + qs : '');
 }
 
 function bindSlideshowButton() {
@@ -359,9 +397,7 @@ function bindSlideshowButton() {
     link.addEventListener('click', function(e) {
         if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
         e.preventDefault();
-        krOpenSlideshow(link, function() {
-            return { tag: activeCat === '*' ? '' : activeCat };
-        });
+        krOpenSlideshow(link, slideshowFilters);
     });
 }
 
@@ -386,14 +422,30 @@ function hasTag(filename, cat) {
     });
 }
 
+/**
+ * The subject row, for the place chosen: counted in tiles, as the view
+ * is (a group counts once for a subject any of its edits has), and only
+ * the subjects that place has, plus the one pressed, so every pill left
+ * narrows the grid to something. Built again when the place changes, on
+ * a fresh copy of the row, since renderFilterBar binds its clicks to the
+ * element it is given.
+ */
+var subjectBarPlace = null;  // the place the subject row was counted for
+
 function buildFilterButtons() {
     var container = document.getElementById('gallery-filters');
     if (!container || typeof renderFilterBar !== 'function') return null;
+    var hadFocus = container.contains(document.activeElement);
+    if (subjectBarPlace !== null) {
+        var fresh = container.cloneNode(false);
+        container.parentNode.replaceChild(fresh, container);
+        container = fresh;
+    }
+    subjectBarPlace = activePlace;
 
-    // Counted in tiles, as the view is: a group counts once for a subject
-    // any of its edits has.
     var counts = {};
     galleryAll.forEach(function(filename) {
+        if (!inPlace(filename, activePlace)) return;
         var tags = {};
         editsFor(stemOf(filename)).forEach(function(stem) {
             (photoTags[stem] || []).forEach(function(tag) { tags[tag] = true; });
@@ -404,24 +456,35 @@ function buildFilterButtons() {
     });
 
     var items = Object.keys(CATEGORIES)
-        .filter(function(cat) { return counts[cat]; })
-        .sort(function(a, b) { return counts[b] - counts[a]; })
+        .filter(function(cat) { return counts[cat] || cat === activeCat; })
+        .sort(function(a, b) { return (counts[b] || 0) - (counts[a] || 0); })
         .map(function(cat) {
             return {
                 key: cat,
                 label: krEscapeHtml(CATEGORIES[cat].label),
-                count: counts[cat]
+                count: counts[cat] || 0
             };
         });
 
     container.setAttribute('aria-label', 'Filter photos by subject');
-    return renderFilterBar(container, items, {
+    var bar = renderFilterBar(container, items, {
         multi: false,
+        collapseAfter: PILLS_SHOWN,
         onChange: function(activeKeys) {
             if (quietFilter) return;
             filterGallery(activeKeys.length ? activeKeys[0] : '*');
         }
     });
+    if (activeCat !== '*') {
+        quietFilter = true;
+        try { bar.setActive([activeCat]); } finally { quietFilter = false; }
+    }
+    if (hadFocus) {
+        var target = container.querySelector(activeCat === '*' ? 'button[data-filter-key="*"]'
+            : 'button[aria-pressed="true"]');
+        if (target) target.focus({ preventScroll: true });
+    }
+    return bar;
 }
 
 // The bar's setActive reports back through onChange; when the page itself
@@ -439,19 +502,168 @@ function filterGallery(cat) {
 }
 
 /* Rebuild the grid from the filtered list, batched: no force-loading the
-   whole archive to hide most of it. */
+   whole archive to hide most of it. The subject and the place narrow it
+   together. */
 function applyFilter(cat) {
     activeCat = cat;
-    galleryView = cat === '*' ? galleryAll : galleryAll.filter(function(filename) {
-        return hasTag(filename, cat);
+    galleryView = galleryAll.filter(function(filename) {
+        return (cat === '*' || hasTag(filename, cat)) && inPlace(filename, activePlace);
     });
     galleryIndex = 0;
     var container = document.getElementById('gallery-grid');
     if (container) container.innerHTML = '';
     var show = document.getElementById('gallery-slideshow');
     if (show) show.href = slideshowHref();
+    renderPlaceBar();
+    if (filterBar && subjectBarPlace !== activePlace) filterBar = buildFilterButtons();
     loadMoreImages();
 }
+
+// ----------------------------------------------------------------------
+// Places
+// ----------------------------------------------------------------------
+
+/*
+ * The place filter walks the regions' paths in photo-locations.json:
+ * country, then town, then a place within the town ("path": ["Scotland",
+ * "Stirling", "Stirling Castle"]). Any level filters: Scotland is every
+ * frame under it, Stirling the town and the places in it, Stirling Castle
+ * the castle alone. The row lists one level at a time, behind an "Anywhere
+ * in ..." button for the level itself: choosing a place with places inside
+ * it opens its level, choosing one without keeps the row where it is with
+ * that place pressed. The trail above the row climbs back up. A node's key
+ * is its path in slugs joined by dots (?place=scotland.stirling), which
+ * the address keeps as it is.
+ */
+
+function placeSlug(name) {
+    return String(name).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/['\u2019]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+function buildPlaceTree(regions) {
+    placeTree = { key: '', name: '', parent: null, children: [], regions: [] };
+    placeNodes = { '': placeTree };
+    placeKeyOf = {};
+    regions.forEach(function(region) {
+        var path = Array.isArray(region.path) ? region.path : [];
+        var node = placeTree;
+        path.forEach(function(name) {
+            var key = (node.key ? node.key + '.' : '') + placeSlug(name);
+            if (!placeNodes[key]) {
+                placeNodes[key] = { key: key, name: String(name), parent: node, children: [], regions: [] };
+                node.children.push(placeNodes[key]);
+            }
+            node = placeNodes[key];
+        });
+        if (node === placeTree) return;      // a region with no path stays off the filter
+        node.regions.push(region.name);
+        (region.photos || []).forEach(function(stem) { placeKeyOf[String(stem)] = node.key; });
+    });
+}
+
+// A tile is in a place when any of its edits was taken there or anywhere
+// inside it.
+function inPlace(filename, key) {
+    if (!key) return true;
+    return editsFor(stemOf(filename)).some(function(stem) {
+        var at = placeKeyOf[stem];
+        return !!at && (at === key || at.indexOf(key + '.') === 0);
+    });
+}
+
+/** "the United States", "Scotland": a place's name after "in" or "from". */
+function placeName(node) {
+    return /^United /.test(node.name) ? 'the ' + node.name : node.name;
+}
+
+/** Tiles under the subject filter in each place, every level counted. */
+function placeCounts() {
+    var counts = {};
+    galleryAll.forEach(function(filename) {
+        if (activeCat !== '*' && !hasTag(filename, activeCat)) return;
+        var seen = {};
+        editsFor(stemOf(filename)).forEach(function(stem) {
+            var key = placeKeyOf[stem];
+            while (key) {
+                if (!seen[key]) { seen[key] = true; counts[key] = (counts[key] || 0) + 1; }
+                key = key.lastIndexOf('.') > -1 ? key.slice(0, key.lastIndexOf('.')) : '';
+            }
+        });
+    });
+    return counts;
+}
+
+/**
+ * Draw the place row for the place chosen: its trail, and the level it
+ * belongs to. Redrawn on every filter change (the counts follow the
+ * subject), into a new row each time, since renderFilterBar binds its
+ * clicks to the element it is given. Keyboard focus inside the row stays
+ * on the button for the place now chosen.
+ */
+function renderPlaceBar() {
+    var holder = document.getElementById('gallery-places');
+    if (!holder || !placeTree || !placeTree.children.length) return;
+    var node = placeNodes[activePlace] || placeTree;
+    var level = node.children.length ? node : node.parent;
+    var counts = placeCounts();
+    var hadFocus = holder.contains(document.activeElement);
+
+    var trail = [];
+    for (var up = level.parent; up; up = up.parent) trail.unshift(up);
+    var crumbs = trail.map(function(t) {
+        return '<li><button type="button" class="kr-place-crumb" data-place="' + krEscapeHtml(t.key) + '">' +
+            krEscapeHtml(t === placeTree ? 'Anywhere' : t.name) + '</button></li>';
+    }).join('');
+    holder.innerHTML = '<span class="kr-facet-row__label">Place</span>' +
+        (crumbs ? '<ol class="kr-place-trail" aria-label="Back up to">' + crumbs + '</ol>' : '') +
+        '<div class="kr-facet-row__btns"></div>';
+    holder.hidden = false;
+
+    var items = level.children
+        .filter(function(c) { return counts[c.key] || c === node; })
+        .sort(function(a, b) { return (counts[b.key] || 0) - (counts[a.key] || 0) || a.name.localeCompare(b.name); })
+        .map(function(c) {
+            return {
+                key: c.key,
+                label: krEscapeHtml(c.name) + (c.children.length ? '<span class="kr-place-more" aria-hidden="true"></span>' : ''),
+                count: counts[c.key] || 0
+            };
+        });
+    var row = holder.lastChild;
+    row.setAttribute('aria-label', level === placeTree ? 'Filter photos by place' : 'Filter photos by place in ' + placeName(level));
+    var bar = renderFilterBar(row, items, {
+        multi: false,
+        collapseAfter: PILLS_SHOWN,
+        allLabel: level === placeTree ? 'Anywhere' : 'Anywhere in ' + placeName(level),
+        onChange: function(keys) {
+            if (quietFilter) return;
+            filterByPlace(keys.length ? keys[0] : level.key);
+        }
+    });
+    if (node !== level) {
+        quietFilter = true;
+        try { bar.setActive([node.key]); } finally { quietFilter = false; }
+    }
+    if (hadFocus) {
+        var focusKey = node === level ? '*' : node.key;
+        var target = row.querySelector('button[data-filter-key="' + focusKey.replace(/["\\]/g, '\\$&') + '"]');
+        if (target) target.focus({ preventScroll: true });
+    }
+}
+
+/** A reader's place change (a row button or a crumb). */
+function filterByPlace(key) {
+    activePlace = placeNodes[key] ? key : '';
+    writeUrl({ place: activePlace || null, photo: null });
+    var container = document.getElementById('gallery-grid');
+    krGalleryMorph(container, function() { applyFilter(activeCat); });
+}
+
+document.addEventListener('click', function(e) {
+    var crumb = e.target && e.target.closest ? e.target.closest('.kr-place-crumb') : null;
+    if (crumb) filterByPlace(crumb.getAttribute('data-place'));
+});
 
 /**
  * A filter change is a same-document view transition. Every tile on
@@ -490,6 +702,8 @@ function updateCounter() {
     var counter = document.getElementById('gallery-counter');
     if (!counter) return;
     var noun = activeCat === '*' ? 'photos' : labelOf(activeCat) + ' photos';
+    var place = placeNodes[activePlace];
+    if (place && place !== placeTree) noun += ' from ' + placeName(place);
     counter.textContent = 'Showing ' + galleryIndex + ' of ' + galleryView.length + ' ' + noun;
 }
 
@@ -1059,7 +1273,7 @@ document.addEventListener('click', function(e) {
  * ?photo=<stem>: load batches until the frame is in the grid, bring its
  * tile on screen, and open it from there, so the lightbox grows out of
  * the tile the way a click would. A frame outside the ?tag= filter drops
- * the filter; an unknown stem is dropped from the address.
+ * the filters; an unknown stem is dropped from the address.
  */
 function openFromUrl() {
     var stem = readParam('photo');
@@ -1071,9 +1285,10 @@ function openFromUrl() {
         return -1;
     }
     var at = indexIn(galleryView);
-    if (at === -1 && activeCat !== '*' && indexIn(galleryAll) !== -1) {
+    if (at === -1 && (activeCat !== '*' || activePlace) && indexIn(galleryAll) !== -1) {
         if (filterBar) setBarQuietly([]);
-        writeUrl({ tag: null });
+        activePlace = '';
+        writeUrl({ tag: null, place: null });
         applyFilter('*');
         at = indexIn(galleryView);
     }
