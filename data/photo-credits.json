@@ -1,0 +1,7 @@
+{
+  "_help": "A line naming someone else's work in a frame (a mural, a sculpture, a building's designer), keyed by frame number. js/gallery.js adds it to the tile's hover caption, the lightbox caption and the link's name. Name only what the wall or a source says: a handle beside a painting is not proof of who painted it.",
+  "credits": {
+    "687": "Handle beside the face: adam_is_uncle",
+    "703": "Handle beside the face: adam_is_uncle"
+  }
+}

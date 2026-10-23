@@ -7,6 +7,7 @@
  *   photo-locations.json    regions, for tile captions and the globe badge
  *   photo-dims.json         stem -> [width, height] of the full frame
  *   photo-variants.json     groups of frames that are one photograph
+ *   photo-credits.json      stem -> a line naming someone else's work in the frame
  *
  * Layout
  *   Justified rows (packRows, layoutJustified): every row fills the width
@@ -130,6 +131,7 @@ var photoDims = {};          // stem -> [w, h], from data/photo-dims.json
 var photoTags = {};
 var photoPlaces = {};
 var photoCoords = {};        // stem -> [lat, lng], for the tile's globe badge
+var photoCredits = {};       // stem -> credit line, from data/photo-credits.json
 var editsOf = {};            // the shown stem of a group -> every stem in it, shown first
 var groupOf = {};            // any stem in a group -> the group's shown stem
 // A hovered tile shows its next edit after EDIT_FIRST_MS, then every
@@ -250,10 +252,12 @@ function loadGallery() {
         soft('data/photography-files.json'),
         soft('data/photo-locations.json'),
         soft('data/photo-dims.json'),
-        soft('data/photo-variants.json')
+        soft('data/photo-variants.json'),
+        soft('data/photo-credits.json')
     ]).then(function(results) {
         photoTags = results[0] || {};
         photoDims = results[3] || {};
+        photoCredits = (results[5] || {}).credits || {};
         // krFetchJson hands every caller the same parsed value, so the
         // list is copied before it is sorted.
         var files = Array.isArray(results[1]) ? results[1].slice()
@@ -605,15 +609,18 @@ function watchGridWidth() {
 // ----------------------------------------------------------------------
 
 /** The link's name and caption for the edit `stem` of a tile with `count`
-    edits: the number, New, how many edits, the subjects and the place. */
+    edits: the number, New, how many edits, the subjects, the place and
+    the credit for anyone else's work in the frame. */
 function describeLink(link, stem, count) {
     var labels = (photoTags[stem] || []).map(labelOf);
     var place = photoPlaces[stem] || '';
+    var credit = photoCredits[stem] || '';
     link.setAttribute('aria-label', 'Photograph ' + stem + (krIsNewPhoto(stem) ? ', new' : '') +
         (count > 1 ? ', one of ' + count + ' edits' : '') +
         (labels.length ? ': ' + labels.join(', ') : '') +
-        (place ? (labels.length ? ', ' : ': ') + 'taken near ' + place : ''));
-    link.setAttribute('data-caption', labels.concat(place ? [place] : []).join(' · '));
+        (place ? (labels.length ? ', ' : ': ') + 'taken near ' + place : '') +
+        (credit ? '. ' + credit : ''));
+    link.setAttribute('data-caption', labels.concat(place ? [place] : [], credit ? [credit] : []).join(' · '));
     if (place) link.setAttribute('data-place', place);
     else link.removeAttribute('data-place');
 }
@@ -633,6 +640,7 @@ function buildTile(filename) {
     var tags = photoTags[stem] || [];
     var labels = tags.map(labelOf);
     var place = photoPlaces[stem] || '';
+    var credit = photoCredits[stem] || '';
 
     var col = document.createElement('div');
     col.className = 'single_gallery_item ' + tags.join(' ');
@@ -667,10 +675,11 @@ function buildTile(filename) {
     var hover = document.createElement('div');
     hover.className = 'hover-content';
     hover.setAttribute('aria-hidden', 'true');
-    if (labels.length || place) {
+    if (labels.length || place || credit) {
         var caption = document.createElement('div');
         caption.className = 'kr-tile-caption';
         caption.innerHTML = (labels.length ? '<span class="kr-tile-tags">' + krEscapeHtml(labels.join(' · ')) + '</span>' : '') +
+            (credit ? '<span class="kr-tile-tags">' + krEscapeHtml(credit) + '</span>' : '') +
             (place ? '<a class="kr-tile-place" tabindex="-1" href="map.html?region=' + encodeURIComponent(place) +
                 '" title="See this place on the photo map">' + krEscapeHtml(place) + '</a>' : '');
         hover.appendChild(caption);
