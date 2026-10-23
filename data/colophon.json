@@ -13,7 +13,7 @@
   "cssInputBytes": 817785,
   "cssServedBytes": 290352,
   "jsFiles": 28,
-  "jsBytes": 1146012,
+  "jsBytes": 1146583,
   "iconFontBeforeBytes": 133268,
   "iconFontAfterBytes": 7076,
   "buildScripts": 37,
@@ -26,8 +26,8 @@
   "webFontCount": 9,
   "webFontBytes": 133264,
   "cssLines": 15871,
-  "jsLines": 19349,
-  "dataFiles": 24,
+  "jsLines": 19358,
+  "dataFiles": 25,
   "tags": 13,
   "firstPost": "2026-04-10",
   "latestPost": "2026-10-20",
@@ -39,7 +39,7 @@
   "shortestPostTitle": "Every Card Has a Sketch",
   "shortestPostUrl": "blog/every-card-has-a-sketch.html",
   "averagePostWords": 2473,
-  "commits": 701,
+  "commits": 704,
   "commitsByMonth": [
     [
       "2019-12",
@@ -371,7 +371,7 @@
     ],
     [
       "2026-10",
-      65
+      68
     ]
   ],
   "repoStart": "2019-12"
