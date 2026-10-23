@@ -1036,10 +1036,11 @@ FOCUS_RING = """() => {
 
 
 def check_gallery_keyboard_and_rows(browser, base, rep):
-    """Four gallery regressions: Tab from the filter buttons (subject and
-    place rows) reaches the first photograph within the filters plus
+    """Five gallery regressions: the filter rows start closed and Tab from
+    the filter toggles reaches the first photograph within the toggles plus
     GALLERY_TAB_SLACK presses; ?place= opens on that place, its trail
-    climbs back up a level, and every tile left is from there; at
+    climbs back up a level, and every tile left is from there; ?shape=
+    leaves only frames of that shape; at
     phone widths no row holds a single photograph except the last; and
     gallery.html?photo=<stem> opens that frame in the lightbox as a named
     modal dialog, paging through batches to find it: the deep link the
@@ -1050,9 +1051,12 @@ def check_gallery_keyboard_and_rows(browser, base, rep):
                            "document.querySelectorAll('#gallery-grid a.portfolio-img').length >= 12"
                            " && document.querySelectorAll('#gallery-filters .gallery-filter-btn').length >= 3")
     if page:
-        filters = page.evaluate("[...document.querySelectorAll('#gallery-filters button, #gallery-filters a[href], #gallery-places button')]"
+        open_rows = page.evaluate("[...document.querySelectorAll('.kr-gallery-panel > .kr-facet-row')]"
+                                  ".filter(r => !r.hidden).map(r => r.id)")
+        rep.check(scope, "the filter rows start closed", not open_rows, open_rows)
+        filters = page.evaluate("[...document.querySelectorAll('#gallery-filter-toggles button, .kr-gallery-panel .kr-facet-row button')]"
                                 ".filter(e => e.tabIndex >= 0 && e.getBoundingClientRect().width > 0).length")
-        page.focus("#gallery-filters .gallery-filter-btn")
+        page.focus("#gallery-filter-toggles .gallery-filter-btn")
         presses, stops = 0, []
         for presses in range(1, filters + GALLERY_TAB_SLACK + 1):
             page.keyboard.press("Tab")
@@ -1075,6 +1079,7 @@ def check_gallery_keyboard_and_rows(browser, base, rep):
     if page:
         counter = page.evaluate("document.getElementById('gallery-counter').textContent")
         rep.check(scope, "the counter names the place", counter.endswith("photos from Stirling"), counter)
+        page.click("#gallery-filter-toggles button[aria-controls=gallery-places]")
         page.click(".kr-place-crumb[data-place=scotland]")
         page.wait_for_function("location.search === '?place=scotland'"
                                " && !!document.querySelector('#gallery-places button[data-filter-key=\"scotland.stirling\"]')")
@@ -1086,6 +1091,19 @@ def check_gallery_keyboard_and_rows(browser, base, rep):
         }""")
         rep.check(scope, "the trail's Scotland shows only Scottish frames",
                   got["shown"] > 0 and not got["outside"], got)
+        rep.console_errors(scope, sink)
+        page.close()
+
+    scope = "gallery.html?shape=portrait"
+    page, sink = open_page(context, base, scope, rep, scope,
+                           "document.querySelectorAll('#gallery-grid .single_gallery_item').length >= 3")
+    if page:
+        got = page.evaluate("""async () => {
+            const dims = await fetch('data/photo-dims.json').then(r => r.json());
+            const stems = [...document.querySelectorAll('#gallery-grid .single_gallery_item')].map(t => t.dataset.stem);
+            return { shown: stems.length, wide: stems.filter(s => dims[s] && dims[s][0] >= dims[s][1]) };
+        }""")
+        rep.check(scope, "only portrait-format frames are left", got["shown"] > 0 and not got["wide"], got)
         rep.console_errors(scope, sink)
         page.close()
     context.close()
@@ -1310,6 +1328,7 @@ def check_filter_rows(browser, base, rep):
     page, sink = open_page(context, base, "gallery.html?tag=winter", rep, scope,
                            "!!document.querySelector('#gallery-filters button[data-filter-key=winter][aria-pressed=true]')")
     if page:
+        page.click("#gallery-filter-toggles button[aria-controls=gallery-subject-row]")
         got = page.evaluate(PILL_INSET, page.locator("#gallery-filters button[data-filter-key=winter]").element_handle())
         rep.check(scope, "the linked pill is in view", got["left"] >= 0 and got["right"] >= 0, got)
         rep.console_errors(scope, sink)

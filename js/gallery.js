@@ -6,7 +6,8 @@
  *   photo-tags.json         stem -> subject tags (CLIP-generated)
  *   photo-locations.json    regions, for tile captions, the globe badge and
  *                           the place filter (each region's path)
- *   photo-dims.json         stem -> [width, height] of the full frame
+ *   photo-dims.json         stem -> [width, height] of the full frame (the
+ *                           layout and the orientation filter)
  *   photo-variants.json     groups of frames that are one photograph
  *   photo-credits.json      stem -> a line naming someone else's work in the frame
  *
@@ -60,20 +61,23 @@
  *   opens its group showing that edit.
  *
  * Filters
- *   Two rows narrow the grid together: Subject (the CLIP tags) and Place
- *   (country, town, place within a town; see "Places" below). Each row
- *   shows its PILLS_SHOWN largest pills and keeps the rest behind "+N
- *   more", and each counts and lists only what the other row's choice
- *   leaves, so every pill on screen narrows the grid to something.
+ *   Three filters narrow the grid together: Subject (the CLIP tags),
+ *   Place (country, state in the US, town, place within a town; see
+ *   "Places" below) and Orientation (landscape, portrait or square, from
+ *   photo-dims.json). Their rows start closed behind a line of toggles,
+ *   each naming the filter in force (see "Filter toggles"). A row shows
+ *   its PILLS_SHOWN largest pills and keeps the rest behind "+N more",
+ *   and counts and lists only what the other filters leave, so every
+ *   pill on screen narrows the grid to something.
  *
  * Deep links
- *   ?tag=<subject> and ?place=<place key> open with those filters;
- *   ?photo=<stem> opens that frame in the lightbox, loading batches
- *   until it is in the grid. All are written back while browsing (a
- *   filter change, each frame viewed, the lightbox closing), so the
- *   address bar can always be shared, and the lightbox has a Copy link
- *   action for the frame on screen. The photo strip on other pages links
- *   here as gallery.html?photo=<stem>.
+ *   ?tag=<subject>, ?place=<place key> and ?shape=<orientation> open with
+ *   those filters; ?photo=<stem> opens that frame in the lightbox,
+ *   loading batches until it is in the grid. All are written back while
+ *   browsing (a filter change, each frame viewed, the lightbox closing),
+ *   so the address bar can always be shared, and the lightbox has a Copy
+ *   link action for the frame on screen. The photo strip on other pages
+ *   links here as gallery.html?photo=<stem>.
  *
  *   history.replaceState, not pushState, as in blog.js: paging through a
  *   set would otherwise leave a history entry per frame, and Back would
@@ -151,10 +155,11 @@ var EDIT_STEP_MS = 1500;
 var activeCat = '*';
 var filterBar = null;
 var quietFilter = false;     // true while the page sets the bar itself
-var placeTree = null;        // country > town > place, from the regions' paths
+var placeTree = null;        // country > (US state) > town > place, from the regions' paths
 var placeNodes = {};         // node key ('scotland.stirling') -> node
 var placeKeyOf = {};         // stem -> the key of its region's node
 var activePlace = '';        // '' anywhere, else a node key
+var activeShape = '';        // '' any, else a key of SHAPES
 // Each filter row (subject, place) shows this many pills, the largest
 // first, and keeps the rest behind "+N more", so the two rows stay a line
 // each on a desktop screen.
@@ -360,6 +365,12 @@ function startGallery() {
     var wantedPlace = readParam('place');
     activePlace = placeNodes[wantedPlace] ? wantedPlace : '';
     if (wantedPlace && !activePlace) writeUrl({ place: null });
+    var wantedShape = readParam('shape');
+    activeShape = SHAPES[wantedShape] ? wantedShape : '';
+    if (wantedShape && !activeShape) writeUrl({ shape: null });
+    var placeToggle = document.querySelector('#gallery-filter-toggles button[aria-controls="gallery-places"]');
+    if (placeToggle) placeToggle.hidden = !placeTree || !placeTree.children.length;
+    bindFilterToggles();
     applyFilter(cat);
 
     openFromUrl();
@@ -423,29 +434,55 @@ function hasTag(filename, cat) {
 }
 
 /**
- * The subject row, for the place chosen: counted in tiles, as the view
- * is (a group counts once for a subject any of its edits has), and only
- * the subjects that place has, plus the one pressed, so every pill left
- * narrows the grid to something. Built again when the place changes, on
- * a fresh copy of the row, since renderFilterBar binds its clicks to the
- * element it is given.
+ * Whether a tile passes the filters, leaving one out when asked: each row
+ * counts what the other two leave, so its counts are what a click on it
+ * would show.
  */
-var subjectBarPlace = null;  // the place the subject row was counted for
+function passes(filename, skip) {
+    return (skip === 'cat' || activeCat === '*' || hasTag(filename, activeCat)) &&
+        (skip === 'place' || inPlace(filename, activePlace)) &&
+        (skip === 'shape' || inShape(filename, activeShape));
+}
 
+/** A fresh copy of a filter row, since renderFilterBar binds its clicks
+    to the element it is given and every row is drawn again on a change. */
+function freshRow(id) {
+    var row = document.getElementById(id);
+    if (!row) return null;
+    var fresh = row.cloneNode(false);
+    row.parentNode.replaceChild(fresh, row);
+    return fresh;
+}
+
+/** Whether keyboard focus is inside the element with this id. */
+function focusIn(id) {
+    var el = document.getElementById(id);
+    return !!el && el.contains(document.activeElement);
+}
+
+/** After a redraw, keyboard focus goes back to the row's pressed button
+    (or its reset), not to <body>. */
+function refocusRow(row, hadFocus) {
+    if (!hadFocus) return;
+    var target = row.querySelector('button[aria-pressed="true"]');
+    if (target) target.focus({ preventScroll: true });
+}
+
+/**
+ * The subject row: counted in tiles, as the view is (a group counts once
+ * for a subject any of its edits has), and only the subjects the other
+ * filters leave, plus the one pressed, so every pill narrows the grid to
+ * something.
+ */
 function buildFilterButtons() {
-    var container = document.getElementById('gallery-filters');
-    if (!container || typeof renderFilterBar !== 'function') return null;
-    var hadFocus = container.contains(document.activeElement);
-    if (subjectBarPlace !== null) {
-        var fresh = container.cloneNode(false);
-        container.parentNode.replaceChild(fresh, container);
-        container = fresh;
-    }
-    subjectBarPlace = activePlace;
+    if (typeof renderFilterBar !== 'function') return null;
+    var hadFocus = focusIn('gallery-filters');
+    var container = freshRow('gallery-filters');
+    if (!container) return null;
 
     var counts = {};
     galleryAll.forEach(function(filename) {
-        if (!inPlace(filename, activePlace)) return;
+        if (!passes(filename, 'cat')) return;
         var tags = {};
         editsFor(stemOf(filename)).forEach(function(stem) {
             (photoTags[stem] || []).forEach(function(tag) { tags[tag] = true; });
@@ -479,11 +516,7 @@ function buildFilterButtons() {
         quietFilter = true;
         try { bar.setActive([activeCat]); } finally { quietFilter = false; }
     }
-    if (hadFocus) {
-        var target = container.querySelector(activeCat === '*' ? 'button[data-filter-key="*"]'
-            : 'button[aria-pressed="true"]');
-        if (target) target.focus({ preventScroll: true });
-    }
+    refocusRow(container, hadFocus);
     return bar;
 }
 
@@ -502,21 +535,143 @@ function filterGallery(cat) {
 }
 
 /* Rebuild the grid from the filtered list, batched: no force-loading the
-   whole archive to hide most of it. The subject and the place narrow it
-   together. */
+   whole archive to hide most of it. The subject, the place and the
+   orientation narrow it together, and every row is drawn again with
+   counts for the new view. */
 function applyFilter(cat) {
     activeCat = cat;
-    galleryView = galleryAll.filter(function(filename) {
-        return (cat === '*' || hasTag(filename, cat)) && inPlace(filename, activePlace);
-    });
+    galleryView = galleryAll.filter(function(filename) { return passes(filename); });
     galleryIndex = 0;
     var container = document.getElementById('gallery-grid');
     if (container) container.innerHTML = '';
     var show = document.getElementById('gallery-slideshow');
     if (show) show.href = slideshowHref();
+    filterBar = buildFilterButtons();
     renderPlaceBar();
-    if (filterBar && subjectBarPlace !== activePlace) filterBar = buildFilterButtons();
+    renderShapeBar();
+    syncFilterToggles();
     loadMoreImages();
+}
+
+// ----------------------------------------------------------------------
+// Filter toggles
+// ----------------------------------------------------------------------
+
+/*
+ * The rows start closed: a line of toggles (Subject, Place, Orientation),
+ * each naming the filter in force, opens its row below it. One row is
+ * open at a time, so the panel is never more than two lines; a click on
+ * the open row's toggle closes it. A filter stays in force with its row
+ * closed (a ?tag= link arrives that way), and its toggle says so.
+ */
+function bindFilterToggles() {
+    var bar = document.getElementById('gallery-filter-toggles');
+    if (!bar || bar.dataset.bound) return;
+    bar.dataset.bound = 'true';
+    bar.addEventListener('click', function(e) {
+        var btn = e.target.closest('button[aria-controls]');
+        if (!btn) return;
+        openFilterRow(btn.getAttribute('aria-expanded') === 'true' ? '' : btn.getAttribute('aria-controls'));
+    });
+}
+
+function openFilterRow(id) {
+    var toggles = document.querySelectorAll('#gallery-filter-toggles button[aria-controls]');
+    Array.prototype.forEach.call(toggles, function(btn) {
+        var rowId = btn.getAttribute('aria-controls');
+        var open = rowId === id;
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        var row = document.getElementById(rowId);
+        if (!row) return;
+        row.hidden = !open;
+        // A row drawn while closed had no width to scroll its pressed
+        // pill into view by; it has one now.
+        if (open && typeof krRevealPressed === 'function') krRevealPressed(row);
+    });
+}
+
+/** Each toggle names the filter in force; one that narrows the grid is
+    marked, so a closed panel still says the grid is filtered. */
+function syncFilterToggles() {
+    var place = placeNodes[activePlace];
+    var shape = SHAPES[activeShape];
+    setToggle('gallery-subject-row', activeCat === '*' ? 'All' : labelOf(activeCat), activeCat !== '*');
+    setToggle('gallery-places', place && place !== placeTree ? place.name : 'Anywhere', !!activePlace);
+    setToggle('gallery-shape-row', shape ? shape.label : 'Any', !!shape);
+}
+
+function setToggle(rowId, value, isSet) {
+    var btn = document.querySelector('#gallery-filter-toggles button[aria-controls="' + rowId + '"]');
+    if (!btn) return;
+    var out = btn.querySelector('.kr-gallery-toggle__value');
+    if (out) out.textContent = value;
+    btn.classList.toggle('is-set', isSet);
+}
+
+// ----------------------------------------------------------------------
+// Orientation
+// ----------------------------------------------------------------------
+
+// Frames by shape, from photo-dims.json: within SQUARE_SLACK of 1:1 is
+// square. A group is in a shape when any of its edits is (a crop can
+// change it).
+var SHAPES = {
+    landscape: { label: 'Landscape' },
+    portrait: { label: 'Portrait' },
+    square: { label: 'Square' }
+};
+var SQUARE_SLACK = 0.05;
+
+function shapeOf(stem) {
+    var d = photoDims[stem];
+    if (!d || !d[1]) return '';
+    var r = d[0] / d[1];
+    return r > 1 + SQUARE_SLACK ? 'landscape' : r < 1 - SQUARE_SLACK ? 'portrait' : 'square';
+}
+
+function inShape(filename, shape) {
+    if (!shape) return true;
+    return editsFor(stemOf(filename)).some(function(stem) { return shapeOf(stem) === shape; });
+}
+
+function renderShapeBar() {
+    var hadFocus = focusIn('gallery-shapes');
+    var row = freshRow('gallery-shapes');
+    if (!row || typeof renderFilterBar !== 'function') return;
+    var counts = {};
+    galleryAll.forEach(function(filename) {
+        if (!passes(filename, 'shape')) return;
+        var seen = {};
+        editsFor(stemOf(filename)).forEach(function(stem) {
+            var s = shapeOf(stem);
+            if (s && !seen[s]) { seen[s] = true; counts[s] = (counts[s] || 0) + 1; }
+        });
+    });
+    var items = Object.keys(SHAPES)
+        .filter(function(key) { return counts[key] || key === activeShape; })
+        .map(function(key) { return { key: key, label: SHAPES[key].label, count: counts[key] || 0 }; });
+    row.setAttribute('aria-label', 'Filter photos by orientation');
+    var bar = renderFilterBar(row, items, {
+        multi: false,
+        allLabel: 'Any',
+        onChange: function(keys) {
+            if (quietFilter) return;
+            filterByShape(keys.length ? keys[0] : '');
+        }
+    });
+    if (activeShape) {
+        quietFilter = true;
+        try { bar.setActive([activeShape]); } finally { quietFilter = false; }
+    }
+    refocusRow(row, hadFocus);
+}
+
+/** A reader's orientation change. */
+function filterByShape(key) {
+    activeShape = SHAPES[key] ? key : '';
+    writeUrl({ shape: activeShape || null, photo: null });
+    var container = document.getElementById('gallery-grid');
+    krGalleryMorph(container, function() { applyFilter(activeCat); });
 }
 
 // ----------------------------------------------------------------------
@@ -526,7 +681,9 @@ function applyFilter(cat) {
 /*
  * The place filter walks the regions' paths in photo-locations.json:
  * country, then town, then a place within the town ("path": ["Scotland",
- * "Stirling", "Stirling Castle"]). Any level filters: Scotland is every
+ * "Stirling", "Stirling Castle"]), with the state between country and
+ * town in the United States (["United States", "Michigan", "Ann Arbor"]).
+ * The tree takes paths of any depth. Any level filters: Scotland is every
  * frame under it, Stirling the town and the places in it, Stirling Castle
  * the castle alone. The row lists one level at a time, behind an "Anywhere
  * in ..." button for the level itself: choosing a place with places inside
@@ -577,11 +734,11 @@ function placeName(node) {
     return /^United /.test(node.name) ? 'the ' + node.name : node.name;
 }
 
-/** Tiles under the subject filter in each place, every level counted. */
+/** Tiles under the other filters in each place, every level counted. */
 function placeCounts() {
     var counts = {};
     galleryAll.forEach(function(filename) {
-        if (activeCat !== '*' && !hasTag(filename, activeCat)) return;
+        if (!passes(filename, 'place')) return;
         var seen = {};
         editsFor(stemOf(filename)).forEach(function(stem) {
             var key = placeKeyOf[stem];
@@ -615,10 +772,8 @@ function renderPlaceBar() {
         return '<li><button type="button" class="kr-place-crumb" data-place="' + krEscapeHtml(t.key) + '">' +
             krEscapeHtml(t === placeTree ? 'Anywhere' : t.name) + '</button></li>';
     }).join('');
-    holder.innerHTML = '<span class="kr-facet-row__label">Place</span>' +
-        (crumbs ? '<ol class="kr-place-trail" aria-label="Back up to">' + crumbs + '</ol>' : '') +
+    holder.innerHTML = (crumbs ? '<ol class="kr-place-trail" aria-label="Back up to">' + crumbs + '</ol>' : '') +
         '<div class="kr-facet-row__btns"></div>';
-    holder.hidden = false;
 
     var items = level.children
         .filter(function(c) { return counts[c.key] || c === node; })
@@ -704,6 +859,7 @@ function updateCounter() {
     var noun = activeCat === '*' ? 'photos' : labelOf(activeCat) + ' photos';
     var place = placeNodes[activePlace];
     if (place && place !== placeTree) noun += ' from ' + placeName(place);
+    if (SHAPES[activeShape]) noun += ', ' + SHAPES[activeShape].label.toLowerCase() + ' format';
     counter.textContent = 'Showing ' + galleryIndex + ' of ' + galleryView.length + ' ' + noun;
 }
 
@@ -1285,10 +1441,11 @@ function openFromUrl() {
         return -1;
     }
     var at = indexIn(galleryView);
-    if (at === -1 && (activeCat !== '*' || activePlace) && indexIn(galleryAll) !== -1) {
+    if (at === -1 && (activeCat !== '*' || activePlace || activeShape) && indexIn(galleryAll) !== -1) {
         if (filterBar) setBarQuietly([]);
         activePlace = '';
-        writeUrl({ tag: null, place: null });
+        activeShape = '';
+        writeUrl({ tag: null, place: null, shape: null });
         applyFilter('*');
         at = indexIn(galleryView);
     }

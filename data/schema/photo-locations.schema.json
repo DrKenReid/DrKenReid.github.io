@@ -37,7 +37,7 @@
               "type": "string",
               "pattern": "\\S"
             },
-            "description": "Where the region sits in the gallery's place filter: [country], [country, town] or [country, town, place in that town]. A spot outside any town (a loch, a park) stands as its own town."
+            "description": "Where the region sits in the gallery's place filter: [country], [country, town] or [country, town, place in that town], with the state after the country in the United States ([\"United States\", \"Michigan\", \"Ann Arbor\"]). A spot outside any town (a loch, a park) stands as its own town."
           },
           "lat": {
             "type": "number",

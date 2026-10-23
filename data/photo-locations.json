@@ -1,5 +1,5 @@
 {
-  "_help": "Regions for map.html and the gallery's place filter. Add photo stems (the number before .webp in img/photography/thumb/) to a region's photos array, or add new regions with lat/lng. Coarse locations are fine: the map clusters by region, not exact spots. path places the region in the gallery's filter: [country], [country, town] or [country, town, place in that town]; a spot outside any town (a loch, a park) stands as its own town.",
+  "_help": "Regions for map.html and the gallery's place filter. Add photo stems (the number before .webp in img/photography/thumb/) to a region's photos array, or add new regions with lat/lng. Coarse locations are fine: the map clusters by region, not exact spots. path places the region in the gallery's filter: [country], [country, town] or [country, town, place in that town], with the state between country and town in the United States ([\"United States\", \"Michigan\", \"Ann Arbor\"]); a spot outside any town (a loch, a park) stands as its own town.",
   "regions": [
     {
       "name": "University of Stirling",
@@ -192,6 +192,7 @@
       "name": "East Lansing, Michigan",
       "path": [
         "United States",
+        "Michigan",
         "East Lansing"
       ],
       "lat": 42.7369,
@@ -290,6 +291,7 @@
       "name": "Lansing Zoo, Michigan",
       "path": [
         "United States",
+        "Michigan",
         "Lansing",
         "Lansing Zoo"
       ],
@@ -330,6 +332,7 @@
       "name": "Chicago, Illinois",
       "path": [
         "United States",
+        "Illinois",
         "Chicago"
       ],
       "lat": 41.8781,
@@ -345,6 +348,7 @@
       "name": "Glenwood Springs, Colorado",
       "path": [
         "United States",
+        "Colorado",
         "Glenwood Springs"
       ],
       "lat": 39.5505,
@@ -474,6 +478,7 @@
       "name": "Las Vegas, Nevada",
       "path": [
         "United States",
+        "Nevada",
         "Las Vegas"
       ],
       "lat": 36.1699,
@@ -531,6 +536,7 @@
         "87",
         "88",
         "114",
+        "115",
         "134",
         "165",
         "459",
@@ -624,6 +630,7 @@
       "name": "Michigan State University, East Lansing",
       "path": [
         "United States",
+        "Michigan",
         "East Lansing",
         "Michigan State University"
       ],
@@ -643,6 +650,7 @@
       "name": "Denver, Colorado",
       "path": [
         "United States",
+        "Colorado",
         "Denver"
       ],
       "lat": 39.7392,
@@ -671,6 +679,7 @@
       "name": "Ann Arbor, Michigan",
       "path": [
         "United States",
+        "Michigan",
         "Ann Arbor"
       ],
       "lat": 42.2808,
@@ -846,6 +855,7 @@
       "name": "Lansing, Michigan",
       "path": [
         "United States",
+        "Michigan",
         "Lansing"
       ],
       "lat": 42.7325,
@@ -918,6 +928,7 @@
       "name": "Ypsilanti, Michigan",
       "path": [
         "United States",
+        "Michigan",
         "Ypsilanti"
       ],
       "lat": 42.2412,
@@ -931,6 +942,7 @@
       "name": "Holland, Michigan",
       "path": [
         "United States",
+        "Michigan",
         "Holland"
       ],
       "lat": 42.7875,
@@ -1074,18 +1086,6 @@
       ]
     },
     {
-      "name": "Annecy, France",
-      "path": [
-        "France",
-        "Annecy"
-      ],
-      "lat": 45.8992,
-      "lng": 6.1294,
-      "photos": [
-        "115"
-      ]
-    },
-    {
       "name": "Erskine, Scotland",
       "path": [
         "Scotland",
@@ -1180,6 +1180,7 @@
       "name": "South Ann Arbor, Michigan",
       "path": [
         "United States",
+        "Michigan",
         "Ann Arbor",
         "South Ann Arbor"
       ],
@@ -1206,6 +1207,7 @@
       "name": "Detroit, Michigan",
       "path": [
         "United States",
+        "Michigan",
         "Detroit"
       ],
       "lat": 42.3314,

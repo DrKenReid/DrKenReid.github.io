@@ -4509,6 +4509,7 @@ a.kr-series-chip--kicker:is(:hover, :focus) {
      .kr-listing              the listing body and its spacing budget
      #blog-grid ...           the overlay cards (§08) sized by the tile
      .gallery-filter-btn      a filter pill, in .gallery-filters
+     .kr-gallery-toggles      the gallery's filter toggles, which open its rows
      .kr-place-filter         the gallery's place row and its trail
      .kr-filter-panel        the faceted panel: one labelled row a group
      .kr-list-search,
@@ -4833,17 +4834,87 @@ a.gallery-filter-btn:focus:not(:hover) {
   background: rgba(255, 255, 255, 0.2);
   color: #ffffff; }
 
+/* --- Gallery filter toggles (.kr-gallery-toggles) -----------------------------
+   The gallery's filters start closed: a line of pill toggles (Subject,
+   Place, Orientation) in gallery.html, each naming the filter in force,
+   opens its row below it, one row at a time (js/gallery.js,
+   openFilterRow). The chevron turns while the row is open; a toggle whose
+   filter narrows the grid takes the action colour (.is-set, set by
+   syncFilterToggles), so a closed panel still says the grid is filtered.
+   Script-only class: .is-set. */
+.kr-gallery-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px; }
+
+.kr-gallery-toggle::after {
+  content: "\25BE";
+  font-size: 11px;
+  line-height: 1; }
+
+.kr-gallery-toggle[aria-expanded="true"]::after {
+  transform: rotate(180deg); }
+
+.kr-gallery-toggle__value {
+  font-weight: 600; }
+
+.kr-gallery-toggle.is-set {
+  border-color: var(--kr-action);
+  color: var(--kr-action); }
+
+/* One word a toggle on a phone: the filter's name until one is set, then
+   the value in its place ("Wildlife", in the action colour). The word
+   left out is clipped, not removed, so the button's name stays "Subject
+   Wildlife". Three toggles then fit one line; should a long value not,
+   the line scrolls sideways as the pill rows below it do
+   (.gallery-filters--scroll), and a very long value stops at 6em with an
+   ellipsis (its row, once open, names it in full). The padding keeps the
+   focus ring inside the scroller, and the end pills' auto margins centre
+   the line while it fits; the panel gives up its side padding for it. */
+@media only screen and (max-width: 575px) {
+  .kr-gallery-toggle {
+    position: relative; }
+  .kr-gallery-toggle.is-set .kr-gallery-toggle__label,
+  .kr-gallery-toggle:not(.is-set) .kr-gallery-toggle__value {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap; }
+  .kr-gallery-toggles {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 7px 6px 9px;
+    overscroll-behavior-x: contain; }
+  .kr-gallery-toggle {
+    flex: 0 0 auto;
+    white-space: nowrap; }
+  .kr-gallery-toggle:first-child {
+    margin-left: auto; }
+  .kr-gallery-toggle:last-child {
+    margin-right: auto; }
+  .kr-gallery-toggle__value {
+    max-width: 6em;
+    overflow: hidden;
+    text-overflow: ellipsis; }
+  .kr-gallery-panel {
+    padding-left: 0;
+    padding-right: 0; } }
+
 /* --- Place filter (.kr-place-filter) ------------------------------------------
-   The gallery's filters are a two-row panel (.kr-filter-panel, below):
-   Subject, then Place. The place row walks places by country, then town,
-   then a place within the town, from the regions' paths in
+   The place row walks places by country (then state, in the US), then
+   town, then a place within the town, from the regions' paths in
    data/photo-locations.json. renderPlaceBar (js/gallery.js) writes the
-   row into #gallery-places, which stays [hidden] until then: its label, a
-   short trail of the levels above the one shown (each a text button back
-   up to it), and the level's pills, the first six shown and the rest
-   behind "+N more". A pill for a place with places inside it ends in a
-   chevron. Script-only classes: .kr-place-trail, .kr-place-crumb,
-   .kr-place-more. */
+   row into #gallery-places: a short trail of the levels above the one
+   shown (each a text button back up to it), and the level's pills, the
+   first six shown and the rest behind "+N more". A pill for a place with
+   places inside it ends in a chevron. Script-only classes:
+   .kr-place-trail, .kr-place-crumb, .kr-place-more. */
 .kr-place-trail {
   display: flex;
   flex: 0 0 auto;
