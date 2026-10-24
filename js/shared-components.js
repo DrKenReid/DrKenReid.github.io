@@ -342,6 +342,46 @@ function krSeasonsOff() {
     try { return localStorage.getItem(KR_SEASON_OFF) === 'off'; } catch (e) { return false; }
 }
 
+/* The way back once a reader has turned the decorations off (the
+   ribbon's button, the palette, ?season=off): a small grey dog-ear in the
+   bottom left corner, where the ribbon was, on the days a season runs.
+   It opens a card that says so, with a button that turns them back on
+   (?season=on, which reloads the page dressed). The card opens and
+   closes as the ribbon's does: a click on the tab, Escape, or a click
+   elsewhere; hidden, it is .kr-offstage. Its rules are in style.css,
+   because the season sheets are not loaded while the decorations are
+   off. */
+function krSeasonOffTab(season) {
+    if (document.querySelector('.kr-season-off')) return;
+    var el = document.createElement('div');
+    el.className = 'kr-season-off';
+    el.innerHTML = '<button type="button" class="kr-season-off__tab" aria-expanded="false" aria-controls="kr-season-off-card"' +
+        ' aria-label="' + krEscapeHtml(season.label) + ' decorations are off"></button>' +
+        '<div class="kr-season-off__card kr-offstage" id="kr-season-off-card" role="group" aria-label="Seasonal decorations">' +
+        '<p>The ' + krEscapeHtml(season.label) + ' decorations are off on this device.</p>' +
+        '<button type="button" class="kr-btn kr-btn--ghost kr-btn--sm">Turn them back on</button></div>';
+    document.body.appendChild(el);
+    var tab = el.firstChild, card = el.lastChild;
+    function show(on) {
+        card.classList.toggle('is-visible', on);
+        tab.setAttribute('aria-expanded', on ? 'true' : 'false');
+    }
+    tab.addEventListener('click', function () { show(!card.classList.contains('is-visible')); });
+    card.querySelector('button').addEventListener('click', function () {
+        var q = new URLSearchParams(location.search);
+        q.set('season', 'on');
+        location.href = location.pathname + '?' + q + location.hash;
+    });
+    el.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape' || !card.classList.contains('is-visible')) return;
+        show(false);
+        tab.focus();
+    });
+    document.addEventListener('click', function (e) {
+        if (!el.contains(e.target)) show(false);
+    });
+}
+
 function krSeason() {
     var pick = null;
     try { pick = sessionStorage.getItem(KR_SEASON_PREVIEW); } catch (e) {}
@@ -388,6 +428,7 @@ function krSeason() {
         // The boot script dressed the page before ?season=off reached here.
         root.removeAttribute('data-season');
         sheets.forEach(function (id) { var el = document.getElementById(id); if (el) el.remove(); });
+        if (today && krSeasonsOff()) krSeasonOffTab(today);
         return;
     }
     root.setAttribute('data-season', season.key);

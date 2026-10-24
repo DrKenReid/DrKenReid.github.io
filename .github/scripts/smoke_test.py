@@ -391,7 +391,9 @@ CHECKS = [
     ]),
     ("map.html", [
         ("leaflet initialized", "!!document.querySelector('.leaflet-container')"),
-        ("region markers", "document.querySelectorAll('.kr-map-marker').length >= 10"),
+        # Places close together share one marker (map.html, gather), so a
+        # whole-world view shows only a handful.
+        ("region markers", "document.querySelectorAll('.kr-map-marker').length >= 3"),
     ]),
 ]
 
@@ -1231,14 +1233,23 @@ def check_photo_lightboxes(browser, base, rep):
 
     scope = "map.html keyboard"
     page, sink = open_page(context, base, "map.html", rep, scope,
-                           "document.querySelectorAll('.leaflet-marker-pane .leaflet-marker-icon').length >= 10")
+                           "document.querySelectorAll('.leaflet-marker-pane .leaflet-marker-icon').length >= 3")
     if page:
         stops = page.evaluate("""() => { const pins = [...document.querySelectorAll('.leaflet-marker-pane .leaflet-marker-icon')];
             const stops = [...document.querySelectorAll('.leaflet-marker-pane *')].filter(e => e.tabIndex >= 0);
             return {pins: pins.length, stops: stops.length, named: pins.every(p => stops.includes(p) && !!p.getAttribute('aria-label'))}; }""")
         rep.check(scope, "each marker is one named tab stop",
                   stops["stops"] == stops["pins"] and stops["named"], stops)
-        page.focus(".leaflet-marker-pane .leaflet-marker-icon")
+        # A marker for several places zooms in on Enter, and they part.
+        if page.query_selector(".kr-map-pin--group"):
+            before = page.evaluate("document.querySelectorAll('.leaflet-marker-pane .leaflet-marker-icon').length")
+            page.focus(".kr-map-pin--group")
+            page.keyboard.press("Enter")
+            parted = wait_until(page, "document.querySelectorAll('.leaflet-marker-pane .leaflet-marker-icon').length > "
+                                      + str(before), PAGE_BUDGET_MS)
+            rep.check(scope, "Enter on a marker for several places zooms in until they part", parted)
+            page.wait_for_timeout(400)
+        page.focus(".leaflet-marker-pane .leaflet-marker-icon:not(.kr-map-pin--group)")
         page.keyboard.press("Enter")
         inside = wait_until(page, "!!document.activeElement.closest('.leaflet-popup .kr-map-grid')", PAGE_BUDGET_MS)
         rep.check(scope, "Enter opens the popup with focus on its first photograph", inside)
@@ -3247,8 +3258,9 @@ def check_season(browser, base, rep):
                 pins: document.querySelectorAll('#photo-map .kr-map-pin').length,
                 badges: document.querySelectorAll('#photo-map .kr-season-badge').length,
                 dusk: getComputedStyle(document.querySelector('#photo-map .leaflet-layer')).filter })""")
-            rep.check(scope, "the map is dusked and a few places carry the season's badge",
-                      0 < marks["badges"] < marks["pins"] / 2 and marks["dusk"] != "none", marks)
+            rep.check(scope, "the map is dusked and some of its markers (a marker may stand for several "
+                      "places) carry the season's badge",
+                      0 < marks["badges"] < marks["pins"] and marks["dusk"] != "none", marks)
             rep.console_errors(scope, sink)
             page.close()
         context.close()
@@ -3294,6 +3306,30 @@ def check_season(browser, base, rep):
         state = page.evaluate(SEASON_STATE)
         rep.check("season off", "?season=off takes the season away",
                   state["season"] is None and not state["webs"], state)
+        page.close()
+    # With them off, a grey tab in the corner offers them back (every day
+    # has a season, so it is always there in this state). The context's
+    # preview would show its season over "off", so it goes first.
+    context.add_init_script("try { sessionStorage.removeItem('kr-season-preview'); } catch (e) {}")
+    page, sink = open_page(context, base, "about.html", rep, "season off",
+                           "!!document.querySelector('.kr-season-off__tab')")
+    if page:
+        tab = page.evaluate("""async () => {
+            const tab = document.querySelector('.kr-season-off__tab');
+            const r = tab.getBoundingClientRect();
+            const top = document.elementFromPoint(8, innerHeight - 8);
+            tab.click();
+            await new Promise(res => setTimeout(res, 400));
+            const card = document.querySelector('.kr-season-off__card');
+            const on = card.querySelector('button');
+            return { name: tab.getAttribute('aria-label'), size: Math.round(Math.min(r.width, r.height)),
+                     onTop: !!top && tab.contains(top), expanded: tab.getAttribute('aria-expanded'),
+                     shown: getComputedStyle(card).visibility, button: on ? on.textContent : null };
+        }""")
+        rep.check("season off", "a 44px tab in the corner opens a card with the button that turns them back on",
+                  tab["name"].endswith("decorations are off") and tab["size"] >= 44 and tab["onTop"]
+                  and tab["expanded"] == "true" and tab["shown"] == "visible"
+                  and tab["button"] == "Turn them back on", tab)
         page.close()
     context.close()
 

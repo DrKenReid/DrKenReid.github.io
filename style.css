@@ -15937,13 +15937,81 @@ html.kr-theme-reveal::view-transition-new(root) {
       scale: 0.96;
       opacity: 0; } } }
 
-/* --- Seasonal decorations ------------------------/* --- Seasonal decorations ------------------------------------------------
+/* --- Seasonal decorations ------------------------------------------------
    Not here: while a season is on, shared-components.js loads the rules
    every season shares, css/season.css, and the season's own,
    css/seasons/<key>.css, so a reader with the seasons turned off fetches
    none of them. Print hides them (§23). */
 
-) ==== */
+/* --- Seasonal decorations turned off --------------------------------------
+   Built by krSeasonOffTab (shared-components.js) on the days a season
+   runs, once the reader has turned the decorations off: a grey dog-ear in
+   the bottom left corner, where the ribbon was, red under the pointer or
+   focus like any control, and the card it opens with the button that
+   turns them back on. Here rather than in css/season.css, which is not
+   loaded while they are off. Classes only script applies: .kr-season-off,
+   __tab, __card. */
+.kr-season-off {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 85;
+  width: 0;
+  height: 0; }
+
+/* A 44px square (the hit area and the focus ring), drawn as a triangle. */
+.kr-season-off__tab {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer; }
+
+.kr-season-off__tab::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--kr-muted);
+  clip-path: polygon(0 0, 0 100%, 100% 100%);
+  transition: background-color 0.2s ease; }
+
+.kr-season-off__tab:hover::before,
+.kr-season-off__tab:focus-visible::before,
+.kr-season-off__tab[aria-expanded="true"]::before {
+  background: var(--kr-action); }
+
+/* Inside the box, so the screen's edge does not cut the ring off. */
+.kr-season-off__tab:focus-visible {
+  outline-offset: -3px; }
+
+.kr-season-off__card {
+  position: fixed;
+  bottom: 56px;
+  left: 16px;
+  width: min(280px, calc(100vw - 32px));
+  padding: 12px 14px 14px;
+  border-left: 4px solid var(--kr-muted);
+  border-radius: var(--kr-radius-md);
+  background: var(--kr-surface-card);
+  box-shadow: var(--kr-shadow-2);
+  opacity: 0;
+  transform: translateY(8px); }
+
+.kr-season-off__card.is-visible {
+  opacity: 1;
+  transform: none; }
+
+.kr-season-off__card p {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--kr-ink); }
+
+/* ==== :: §22 Story pages (pending: Writing section) ==== */
 
 /* The short-story pages of the Writing section (.story-post): book
    typography, a serif body, an accent drop cap, small caps on the first
@@ -16116,6 +16184,7 @@ html.kr-theme-reveal::view-transition-new(root) {
   .kr-season-track,
   .kr-season-fog,
   .kr-season-ribbon,
+  .kr-season-off,
   .kr-season-backdrop,
   .kr-opener__media,
   .kr-opener__scrim,

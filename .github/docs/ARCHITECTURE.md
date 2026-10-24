@@ -344,7 +344,10 @@ The address can override the date, once (it is stored and taken out of
 the address): `?season=<key>` previews a season in this tab,
 `?season=none` turns seasons off in this tab, and `?season=off` turns
 them off on this device until `?season=on`. The palette offers off and
-on in season, and the colophon's "The seasons" section draws every entry
+on in season, and while they are off a small grey tab in the bottom left
+corner (`krSeasonOffTab`, styled in `style.css` since the season sheets
+are not loaded) opens a card with a button that turns them back on. The
+colophon's "The seasons" section draws every entry
 in `KR_SEASONS` on this year's calendar (its inline script) with a
 Preview link to each and the off and on links. The checks always run with no season
 (`harness.set_season`, and `tests/js/runtime.js`), except the smoke pin

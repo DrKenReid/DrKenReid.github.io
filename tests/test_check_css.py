@@ -152,6 +152,35 @@ class PrintBlocks(unittest.TestCase):
         self.assertEqual(check_css.print_blocks(sheet), [])
 
 
+class Sections(unittest.TestCase):
+    HEAD = ("/* ==========================================================\n"
+            "   Contents\n"
+            "     §01 Brand system          tokens\n"
+            "     §02 Base\n"
+            "   ========================================================== */\n")
+
+    def found(self, body):
+        text = self.HEAD + body
+        return check_css.sections(text, check_css.parse_css(text))
+
+    def test_banners_that_match_the_list_pass(self):
+        self.assertEqual(self.found("/* ==== :: §01 Brand system ==== */\n.a { x: 1; }\n"
+                                    "/* ==== :: §02 Base ==== */\n.b { x: 1; }\n"), [])
+
+    def test_a_missing_banner_and_the_text_it_left_behind(self):
+        # An edit that replaced from a comment's middle to the next banner's.
+        found = self.found("/* ==== :: §01 Brand system ==== */\n"
+                           "/* --- A note --/* --- A note. */\n\n) ==== */\n.b { x: 1; }\n")
+        self.assertEqual(len(found), 2)
+        self.assertIn("§02 Base", found[0])
+        self.assertIn("comment text", found[1])
+
+    def test_banners_out_of_order(self):
+        found = self.found("/* ==== :: §02 Base ==== */\n/* ==== :: §01 Brand system ==== */\n")
+        self.assertEqual(len(found), 1)
+        self.assertIn("order", found[0])
+
+
 class Ratchets(unittest.TestCase):
     def counts(self, css):
         found = check_css.ratchet_instances(check_css.parse_css(css))

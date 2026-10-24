@@ -97,6 +97,11 @@
       border-width: 3px;
       transition: transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.25s ease;
     }
+    /* Several places in one marker (gather, below): a second print peeks
+       out behind it, so it reads as a stack that opens by zooming in. */
+    .kr-map-pin--group .kr-map-marker--photo {
+      box-shadow: 5px -5px 0 -1px #ffffff, 5px -5px 0 1px rgba(0, 0, 0, 0.3), 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
     .kr-map-pin:hover .kr-map-marker--photo,
     .kr-map-pin:focus-visible .kr-map-marker--photo {
       transform: scale(1.18);
@@ -399,6 +404,62 @@
         if (first) first.focus({ preventScroll: true });
       }
 
+      // Places whose markers would overlap on screen (closer than their two
+      // sizes' average) join the one with the most
+      // photographs: one marker, the group's total on its badge, named for
+      // the places it holds, and a click (or Enter) zooms in until they
+      // part rather than opening a popup. Every zoom regroups; a place
+      // whose popup is open is never folded into another.
+      function gather(regions) {
+        var leaders = [];
+        regions.slice().sort(function (a, b) { return b.photos.length - a.photos.length; }).forEach(function (region) {
+          var p = map.latLngToLayerPoint([region.lat, region.lng]);
+          var lead = region._marker === openMarker ? null
+            : leaders.filter(function (l) { return l.p.distanceTo(p) < (l.region._size + region._size) / 2; })[0];
+          region._group = null;
+          if (lead) {
+            lead.members.push(region);
+            region._marker.remove();
+          } else {
+            leaders.push({ region: region, p: p, members: [] });
+          }
+        });
+        leaders.forEach(function (l) {
+          var region = l.region, marker = region._marker, members = l.members;
+          if (!map.hasLayer(marker)) marker.addTo(map);
+          var total = members.reduce(function (n, r) { return n + r.photos.length; }, region.photos.length);
+          var el = marker.getElement();
+          el.querySelector('.kr-map-marker__n').textContent = total;
+          el.classList.toggle('kr-map-pin--group', members.length > 0);
+          // Every place the marker stands for, for the season's badges.
+          el.setAttribute('data-places', [region].concat(members).map(function (r) { return r.name; }).join('|'));
+          if (members.length) {
+            region._group = members;
+            el.setAttribute('aria-label', region.name + ' and ' + members.length + ' more place' +
+              (members.length === 1 ? '' : 's') + ' nearby, ' + total + ' photos; zooms in to them');
+            if (marker.getPopup()) marker.unbindPopup();
+          } else {
+            el.setAttribute('aria-label', region.name + ', ' + total + ' photo' + (total === 1 ? '' : 's'));
+            if (!marker.getPopup()) marker.bindPopup(region._html, popupOptions());
+          }
+        });
+      }
+      // Zoom to a group's places: at least one level in, so a click always
+      // does something. From the keyboard, focus stays on the marker if it
+      // is still there, or goes to the map.
+      function spread(region, byKey) {
+        var places = [region].concat(region._group);
+        var bounds = L.latLngBounds(places.map(function (r) { return [r.lat, r.lng]; }));
+        var zoom = Math.min(map.getMaxZoom(), Math.max(map.getZoom() + 1, map.getBoundsZoom(bounds.pad(0.5))));
+        if (byKey) {
+          map.once('zoomend', function () {
+            var el = map.hasLayer(region._marker) && region._marker.getElement();
+            (el || mapEl).focus({ preventScroll: true });
+          });
+        }
+        map.setView(bounds.getCenter(), zoom);
+      }
+
       function addRegions(data) {
         var regions = (data.regions || []).filter(function (r) { return r.photos && r.photos.length; });
         if (!regions.length) return;
@@ -434,7 +495,9 @@
             el.addEventListener('keydown', function (ev) {
               if (ev.key !== 'Enter' && ev.key !== ' ') return;
               ev.preventDefault();
-              if (marker.isPopupOpen()) {
+              if (region._group) {
+                spread(region, true);
+              } else if (marker.isPopupOpen()) {
                 focusPopup(marker);
               } else {
                 openedByKey = true;
@@ -484,8 +547,13 @@
                   : '') +
               '</div>';
           marker.bindPopup(html, popupOptions());
+          marker.on('click', function () { if (region._group) spread(region, false); });
           region._marker = marker;
+          region._html = html;
+          region._size = size;
         });
+        gather(regions);
+        map.on('zoomend', function () { gather(regions); });
 
         var wanted = null;
         try { wanted = new URLSearchParams(window.location.search).get('region'); } catch (e) {}

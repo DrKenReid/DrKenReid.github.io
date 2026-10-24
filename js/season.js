@@ -784,10 +784,18 @@
                 }).length;
                 if (n >= rule.min && n >= photos.length * rule.share) owned[region.name] = true;
             });
+            // A marker can stand for several places (map.html folds close
+            // ones together, data-places), so it is the season's if any of
+            // them is, and stops being so when a zoom splits them.
             function mark() {
                 Array.prototype.forEach.call(mapEl.querySelectorAll('.kr-map-pin'), function (pin) {
                     var marker = pin.querySelector('.kr-map-marker');
-                    if (!marker || !owned[pin.title] || marker.querySelector('.kr-season-badge')) return;
+                    if (!marker) return;
+                    var places = (pin.getAttribute('data-places') || pin.title).split('|');
+                    var ours = places.some(function (name) { return owned[name]; });
+                    var had = marker.querySelector('.kr-season-badge');
+                    if (had && !ours) had.remove();
+                    if (had || !ours) return;
                     var badge = document.createElement('span');
                     badge.className = 'kr-season-badge';
                     badge.setAttribute('aria-hidden', 'true');
@@ -797,7 +805,7 @@
             }
             mark();
             new MutationObserver(mark).observe(mapEl.querySelector('.leaflet-marker-pane') || mapEl,
-                { childList: true, subtree: true });
+                { childList: true, subtree: true, attributes: true, attributeFilter: ['data-places'] });
         }).catch(function () {});
     }
 

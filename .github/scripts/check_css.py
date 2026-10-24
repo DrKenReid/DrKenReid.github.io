@@ -35,6 +35,14 @@ duplicate-rule
     so the earlier changes nothing and only misleads the next edit (a
     change to it does nothing, which looks like a cascade bug).
 
+sections
+    The contents list in style.css's header and the section banners
+    (/* ==== :: §NN Name ==== */) disagree: a section listed with no
+    banner, a banner the list leaves out, or the two in another order; or
+    a selector holds comment text (`*/`), left outside a comment when an
+    edit cut one in half, which makes the browser drop that rule. A
+    section without its banner is where new CSS goes in the wrong place.
+
 print-blocks
     More than one @media print. Print rules scattered through the file
     each hide or show something the others do not know about, so what a
@@ -634,6 +642,27 @@ def duplicate_rules(sheet: Sheet) -> list[str]:
     return out
 
 
+LISTED_SECTION = re.compile(r"^ {2,}(§\d\d .+?)(?: {2,}|$)", re.M)
+SECTION_BANNER = re.compile(r"^/\* ==== :: (§\d\d .+?) ==== \*/", re.M)
+
+
+def sections(style_text: str, sheet: Sheet) -> list[str]:
+    """The header's contents list against the banners, and comment text
+    left in a selector."""
+    head_end = style_text.find("==== */")
+    listed = LISTED_SECTION.findall(style_text[:head_end]) if head_end > 0 else []
+    banners = SECTION_BANNER.findall(style_text)
+    found = [f"style.css: section {name} is in the contents list but has no banner"
+             for name in listed if name not in banners]
+    found += [f"style.css: banner {name} is not in the contents list"
+              for name in banners if name not in listed]
+    if not found and listed != banners:
+        found.append("style.css: the banners are not in the contents list's order")
+    found += [f"{one.source}:{rule.line}: a selector holds comment text, so the rule is dropped: "
+              f"{rule.selector[:60]!r}" for one in [sheet] for rule in one.rules if "*/" in rule.selector]
+    return found
+
+
 def print_blocks_in(sheet: Sheet) -> int:
     return sum(1 for p, _c, _line in sheet.at_rules if PRINT_QUERY.match(p))
 
@@ -737,6 +766,7 @@ def main(argv=None) -> int:
     for code, found in (("undefined-property", undefined_properties(usage)),
                         ("unused-property", unused_properties(usage)),
                         ("duplicate-rule", [m for one in sheets for m in duplicate_rules(one)]),
+                        ("sections", sections(STYLE.read_text(encoding="utf-8"), sheet)),
                         ("print-blocks", print_blocks(sheet)
                          + [f"{one.source} has an @media print block; print rules live in "
                             f"style.css §23" for one in sheets[1:] if print_blocks_in(one)])):
