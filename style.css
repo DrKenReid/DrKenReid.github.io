@@ -13101,7 +13101,11 @@ button.kr-cal__cell {
   line-height: 1.7;
   margin: 0 0 10px; }
 
+/* Clear of the Copy button in the bottom right corner: a long book title
+   wrapped under it, and its link (lifted above the card) took the
+   button's clicks. */
 .kr-quote-card footer {
+  padding-right: 64px;
   font-size: 12px;
   color: var(--kr-muted); }
 

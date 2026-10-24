@@ -630,6 +630,13 @@
   bottom: 96px;
   left: 16px;
   width: min(320px, calc(100vw - 32px));
+  /* Never taller than the room between the header bar and the corner
+     (a phone on its side has about 140px): the card scrolls inside
+     itself instead of sliding under the bar. */
+  max-height: calc(100vh - 104px - var(--kr-bar-h));
+  max-height: calc(100dvh - 104px - var(--kr-bar-h));
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 14px 16px 16px;
   border-left: 4px solid var(--kr-brand-from);
   border-radius: var(--kr-radius-md);
