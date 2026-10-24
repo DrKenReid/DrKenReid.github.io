@@ -1,0 +1,646 @@
+/* css/season.css: the rules every season shares, for the pieces
+   js/season.js builds. shared-components.js loads this file only while
+   a season is on, with the season's own colours and rules
+   (css/seasons/<key>.css), and season.js draws nothing until both are in.
+   Served as written: check_css.py holds it to style.css's rules and
+   ratchets (tokens, never raw colours; no hand-written dark rules; no
+   !important). Print hides the pieces from style.css §23. */
+
+:root[data-season] {
+  --kr-season-cursor: auto; }
+
+/* --- Seasonal decorations ------------------------------------------------
+   Built by js/season.js, the engine, which loads only while a season is
+   on (KR_SEASONS in shared-components.js; html[data-season] carries its
+   key), with the season's art from js/seasons/<key>.js. Every season
+   dresses the same pieces with its own art, and these rules serve them
+   all, in the season's tokens: a corner piece with something dangling on
+   a thread below it, in the header bar's corner on a wide screen and the
+   opener's on a narrower one; things in the air over the openers and the
+   homepage hero; a patch of three pieces on the footer's top edge; a
+   flyer crossing once as the footer arrives; a mark crossing the theme
+   button's full moon on hover; a track in place of a post's reading bar
+   (burn, fill or bits); fog under the homepage hero and the gallery's
+   opener; the photo map's rims, dusk and badges; the pointer; walkers
+   along the footer's edge. A season's own rules (its flyer's flight, its
+   track's kind, its burst, its toys) live in css/seasons/<key>.css, which
+   loads with it, and use these tokens the same way.
+   Every piece is aria-hidden, sits over no post text, gallery tile or
+   slideshow, and goes in print (§23, with the header and footer it lives
+   in). Only the dangling thing, the patch and a season's own toys take
+   clicks (a drop; a burst of smoke, leaves, snow and the like), and
+   nothing focus. Under reduced motion the switch above stills everything
+   that moves, and season.js lays the leaves down once and sends no flyer
+   and no burst.
+   Classes only script applies: .kr-season-corner (--bar, --opener,
+   __art), .kr-season-dangler (--drop, __body, __line),
+   .kr-season-leaves, .kr-season-patch (__big, __mid, __small),
+   .kr-season-pumpkin, .kr-season-leaf, .kr-season-glow, .kr-season-lit,
+   .kr-season-puff, .kr-season-flyer (__body, __wing, __wing--l,
+   __wing--r), .kr-season-moonmark, .kr-season-track (--burn, --fill,
+   --bits, --out, __rest, __tip, __bit, __bit--passed),
+   .kr-season-tracked, .kr-season-fog (__layer, __layer--far),
+   .kr-season-map, .kr-season-badge (__body), .kr-season-walker (--gone,
+   __tail), .kr-season-cursor.
+   Tokens (set by each season's file): --kr-season-line,
+   --kr-season-creature, --kr-season-glow, --kr-season-pumpkin,
+   --kr-season-badge, --kr-season-fog, --kr-season-dusk,
+   --kr-season-fog-display, --kr-season-cursor (§01, "Seasons"). */
+.kr-season-corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 84px;
+  height: 84px;
+  pointer-events: none; }
+
+/* The bar's corner piece needs the gutter beside the container clear
+   (1140px wide from 1200px): from 1320px it is. Narrower, it hangs in the
+   opener's corner instead, just under the bar. */
+.kr-season-corner--opener {
+  top: var(--kr-bar-h);
+  z-index: 5;
+  width: 64px;
+  height: 64px; }
+
+@media only screen and (max-width: 1319.98px) {
+  .kr-season-corner--bar {
+    display: none; } }
+
+@media only screen and (min-width: 1320px) {
+  .kr-season-corner--opener {
+    display: none; } }
+
+/* Lifted over the header bar's frosted ground (which would blur it once
+   the page scrolls), and over the dangler's thread. */
+.kr-season-corner__art {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  stroke: var(--kr-season-line);
+  stroke-width: 0.7; }
+
+/* The dangling thing hangs below the corner piece; its thread runs up
+   past the piece's top, so it never comes loose as it climbs. */
+.kr-season-dangler {
+  position: absolute;
+  top: 66px;
+  right: 30px;
+  width: 15px;
+  animation: kr-season-dangle 7s ease-in-out infinite; }
+
+.kr-season-corner--opener .kr-season-dangler {
+  top: 52px;
+  right: 22px;
+  width: 13px; }
+
+.kr-season-dangler::before {
+  content: '';
+  position: absolute;
+  bottom: 70%;
+  left: calc(50% - 0.5px);
+  width: 1px;
+  height: 80px;
+  background: var(--kr-season-line); }
+
+.kr-season-dangler__body {
+  display: block;
+  width: 100%;
+  fill: var(--kr-season-creature); }
+
+.kr-season-dangler__line {
+  fill: none;
+  stroke: var(--kr-season-creature);
+  stroke-width: 1.4;
+  stroke-linecap: round; }
+
+@keyframes kr-season-dangle {
+  0%, 100% { transform: translateY(0); }
+  45% { transform: translateY(16px); }
+  60% { transform: translateY(13px); } }
+
+/* The leaves: under the opener's type, over its photograph and scrim. The
+   page opener's container is lifted to stay above them. */
+.kr-season-leaves {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; }
+
+:root[data-season] .breadcrumb-area > .container {
+  position: relative; }
+
+.welcome-area .kr-season-leaves {
+  z-index: 5; }
+
+/* The pumpkin patch sits on the footer's top edge, at its left, in a
+   band of page the season opens above the footer so they cover nothing
+   (the photo strip runs right down to it on some pages). */
+:root[data-season] .kr-footer {
+  position: relative;
+  margin-top: 48px; }
+
+.kr-season-patch {
+  position: absolute;
+  left: max(12px, 6%);
+  bottom: calc(100% - 9px);
+  display: flex;
+  align-items: flex-end;
+  pointer-events: none; }
+
+.kr-season-patch > span {
+  display: block;
+  margin: 0 -5px; }
+
+.kr-season-patch__big {
+  width: 66px; }
+
+.kr-season-patch__mid {
+  width: 50px; }
+
+.kr-season-patch__small {
+  width: 38px; }
+
+.kr-season-pumpkin {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--kr-season-glow) 35%, transparent)); }
+
+.kr-season-leaf {
+  flex: none;
+  margin: 0 -3px 1px; }
+
+.kr-season-glow {
+  fill: var(--kr-season-glow);
+  animation: kr-season-flicker 3.4s linear infinite; }
+
+.kr-season-patch__mid .kr-season-glow {
+  animation-delay: -1.3s; }
+
+.kr-season-patch__small .kr-season-glow {
+  animation-delay: -2.2s; }
+
+@keyframes kr-season-flicker {
+  0%, 100% { opacity: 1; }
+  18% { opacity: 0.82; }
+  22% { opacity: 0.97; }
+  47% { opacity: 0.74; }
+  52% { opacity: 0.93; }
+  80% { opacity: 0.86; } }
+
+@media only screen and (max-width: 575.98px) {
+  .kr-season-patch {
+    transform: scale(0.78);
+    transform-origin: 0 100%; } }
+
+/* The flyer crosses the screen once, left to right; Halloween's bat rises
+   and dips. */
+.kr-season-flyer {
+  position: fixed;
+  top: 34vh;
+  left: 0;
+  z-index: 90;
+  width: 54px;
+  pointer-events: none;
+  animation: kr-season-fly 4.6s cubic-bezier(0.45, 0.1, 0.55, 0.9) forwards; }
+
+.kr-season-flyer__body {
+  display: block;
+  width: 100%;
+  fill: var(--kr-season-creature); }
+
+.kr-season-flyer__wing {
+  transform-box: fill-box;
+  animation: kr-season-flap 0.2s ease-in-out infinite alternate; }
+
+.kr-season-flyer__wing--l {
+  transform-origin: 100% 30%; }
+
+.kr-season-flyer__wing--r {
+  transform-origin: 0 30%; }
+
+@keyframes kr-season-flap {
+  to { transform: scaleY(0.3); } }
+
+@keyframes kr-season-fly {
+  0% { transform: translate(-80px, 18vh) scale(0.8); }
+  30% { transform: translate(30vw, -4vh) scale(1); }
+  55% { transform: translate(55vw, 9vh) scale(1.1); }
+  100% { transform: translate(calc(100vw + 80px), -22vh) scale(0.7); } }
+
+/* The theme button's moon, full; the season's mark (a bat, a leaf)
+   crosses it while the button is hovered or focused. */
+.kr-season-moonmark {
+  fill: currentColor;
+  stroke: none;
+  opacity: 0;
+  transform: translate(-6px, 4px) scale(0.4);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.3, 0.7, 0.4, 1); }
+
+.theme-toggle:hover .kr-season-moonmark,
+.theme-toggle:focus-visible .kr-season-moonmark {
+  opacity: 1;
+  transform: none; }
+
+/* Toys (season.js): a click sends the dangling thing down its thread and
+   back, and lights a pumpkin with a puff of smoke. They take clicks and
+   never focus; the dangler's target reaches past its 15px body. */
+.kr-season-dangler,
+.kr-season-patch > span {
+  pointer-events: auto;
+  cursor: pointer; }
+
+.kr-season-dangler::after {
+  content: '';
+  position: absolute;
+  inset: -8px; }
+
+.kr-season-dangler--drop {
+  animation: kr-season-drop 2.6s cubic-bezier(0.3, 0.7, 0.4, 1); }
+
+@keyframes kr-season-drop {
+  0% { transform: translateY(0); }
+  28% { transform: translateY(70px); }
+  38% { transform: translateY(61px); }
+  48% { transform: translateY(66px); }
+  100% { transform: translateY(0); } }
+
+.kr-season-patch > span {
+  position: relative; }
+
+.kr-season-lit .kr-season-pumpkin {
+  animation: kr-season-flare 1.4s ease-out; }
+
+@keyframes kr-season-flare {
+  0% { filter: drop-shadow(0 0 20px var(--kr-season-glow)) brightness(1.3); }
+  100% { filter: drop-shadow(0 0 10px color-mix(in srgb, var(--kr-season-glow) 35%, transparent)); } }
+
+.kr-season-puff,
+.kr-season-puff::before,
+.kr-season-puff::after {
+  position: absolute;
+  bottom: 72%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--kr-season-line) 75%, transparent), transparent 70%);
+  pointer-events: none;
+  animation: kr-season-puff 1.7s ease-out forwards; }
+
+.kr-season-puff::before,
+.kr-season-puff::after {
+  content: '';
+  bottom: 0;
+  animation-delay: 0.25s;
+  opacity: 0; }
+
+.kr-season-puff::after {
+  left: 80%;
+  animation-delay: 0.5s; }
+
+@keyframes kr-season-puff {
+  0% { transform: translate(0, 0) scale(0.6); opacity: 0.9; }
+  100% { transform: translate(7px, -48px) scale(2.6); opacity: 0; } }
+
+@keyframes kr-season-scatter {
+  0% { transform: translate(0, 0) rotate(0) scale(0.6); opacity: 1; }
+  35% { transform: translate(var(--kr-season-toss), -44px) rotate(160deg) scale(1); opacity: 1; }
+  100% { transform: translate(calc(var(--kr-season-toss) * 1.7), 6px) rotate(380deg) scale(0.9); opacity: 0; } }
+
+/* The track: the reading bar (§10, "Reading progress") still measures,
+   hidden, and season.js draws this to match it, docked under the header
+   bar at every width so the flame has room to stand. Halloween's is a
+   candle: the wax is what is left to read, and the flame goes out at the
+   end mark. */
+.kr-progress-bar.kr-season-tracked {
+  visibility: hidden; }
+
+.kr-season-track {
+  position: fixed;
+  top: var(--kr-bar-h);
+  left: 0;
+  width: 100%;
+  height: 5px;
+  z-index: 4000;
+  pointer-events: none; }
+
+.kr-season-track__rest {
+  position: absolute;
+  inset: 0;
+  transform-origin: right center; }
+
+.kr-season-track__tip {
+  position: absolute;
+  bottom: 4px;
+  left: -5px;
+  width: 10px;
+  transition: opacity 0.6s ease; }
+
+.kr-season-track--out .kr-season-track__tip {
+  opacity: 0; }
+
+/* A track that fills (a beam, a ribbon) grows from the left instead. */
+.kr-season-track--fill .kr-season-track__rest {
+  transform-origin: left center; }
+
+@keyframes kr-season-burn {
+  0% { transform: scale(1, 1) skewX(0); }
+  50% { transform: scale(0.93, 1.09) skewX(3deg); }
+  100% { transform: scale(1.04, 0.95) skewX(-3deg); } }
+
+.kr-season-track__bit {
+  position: absolute;
+  top: 2px;
+  width: 12px;
+  margin-left: -6px;
+  transition: transform 0.35s ease-out, opacity 0.35s ease-out; }
+
+.kr-season-track__bit svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: 50% 0; }
+
+@keyframes kr-season-sway {
+  from { transform: rotate(-9deg); }
+  to { transform: rotate(9deg); } }
+
+/* Fog along the foot of the homepage hero and the gallery's opener, in
+   the themes the season shows it in (--kr-season-fog-display, §01:
+   Halloween's dark only, the fall's golden haze in both): two banks of
+   soft ellipses drifting opposite ways, each a strip two tiles wide that
+   slides one tile and starts again. */
+.kr-season-fog {
+  display: var(--kr-season-fog-display);
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 42%;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to top, var(--kr-season-fog) 45%, transparent);
+  mask-image: linear-gradient(to top, var(--kr-season-fog) 45%, transparent); }
+
+.welcome-area .kr-season-fog {
+  z-index: 4; }
+
+.kr-season-fog__layer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  background:
+    radial-gradient(ellipse 22% 60% at 12% 88%, color-mix(in srgb, var(--kr-season-fog) 40%, transparent), transparent 70%),
+    radial-gradient(ellipse 26% 50% at 36% 96%, color-mix(in srgb, var(--kr-season-fog) 32%, transparent), transparent 70%),
+    radial-gradient(ellipse 20% 65% at 63% 90%, color-mix(in srgb, var(--kr-season-fog) 38%, transparent), transparent 70%),
+    radial-gradient(ellipse 28% 55% at 87% 94%, color-mix(in srgb, var(--kr-season-fog) 30%, transparent), transparent 70%);
+  background-size: 50% 100%;
+  background-repeat: repeat-x;
+  animation: kr-season-fog 90s linear infinite; }
+
+.kr-season-fog__layer--far {
+  background-position: 30% 0;
+  opacity: 0.7;
+  animation-duration: 140s;
+  animation-direction: reverse; }
+
+@keyframes kr-season-fog {
+  to { transform: translateX(-50%); } }
+
+/* The photo map in season (season.js marks map.html's #photo-map): a
+   rim on every marker, the tiles dusked (or chilled), and the season's
+   badge (a ghost, a leaf, a snowflake) on each place its photo tag owns, at the corner the
+   count badge is not. */
+.kr-season-map .leaflet-layer {
+  filter: var(--kr-season-dusk); }
+
+.kr-season-map .kr-map-marker--photo {
+  border-color: var(--kr-season-pumpkin);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--kr-season-glow) 45%, transparent); }
+
+.kr-season-badge {
+  position: absolute;
+  top: -12px;
+  left: -10px;
+  width: 22px;
+  pointer-events: none;
+  animation: kr-season-hover 3.2s ease-in-out infinite; }
+
+.kr-season-badge__body {
+  display: block;
+  width: 100%;
+  fill: var(--kr-season-badge);
+  filter: drop-shadow(0 1px 3px color-mix(in srgb, var(--kr-season-creature) 60%, transparent)); }
+
+@keyframes kr-season-hover {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-4px) rotate(4deg); } }
+
+/* --- The season's pointer -----------------------------------------------
+   season.js sets --kr-season-cursor (a data: svg with its hotspot) and
+   .kr-season-cursor on <html> when the season's file gives a pointer.
+   Only for a mouse; links, buttons and text fields keep their own
+   cursors, so a click target still looks like one. Classes only script
+   applies: .kr-season-cursor. */
+@media (pointer: fine) {
+  :root.kr-season-cursor body {
+    cursor: var(--kr-season-cursor); }
+
+  :root.kr-season-cursor :is(input, textarea, select, [contenteditable]) {
+    cursor: auto; } }
+
+/* --- The backdrop in a post's margins ----------------------------------------
+   Built by js/season.js (backdrop) behind a post or the blog's listing:
+   the season's shapes in the margins either side of the container, never
+   under the text, at three depths (--kr-season-depth). The host is
+   isolated so the layer sits on its ground and under its content. Each
+   shape slides by its depth against --kr-season-scroll as the page
+   scrolls, and sways on its own; under reduced motion both stop. Classes
+   only script applies: .kr-season-backdrop-host, .kr-season-backdrop,
+   __item, __art. */
+.kr-season-backdrop-host {
+  position: relative;
+  isolation: isolate; }
+
+.kr-season-backdrop {
+  --kr-season-scroll: 0;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none; }
+
+.kr-season-backdrop__item {
+  --kr-season-y: 0;
+  --kr-season-depth: 0;
+  position: absolute;
+  display: block;
+  transform: translate3d(0, calc((var(--kr-season-scroll) - var(--kr-season-y)) * var(--kr-season-depth) * 1px), 0);
+  will-change: transform; }
+
+.kr-season-backdrop__art {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  stroke: color-mix(in srgb, var(--kr-season-line) 55%, transparent);
+  stroke-width: 0.6;
+  animation: kr-season-bob 9s ease-in-out infinite alternate; }
+
+@keyframes kr-season-bob {
+  from { transform: rotate(-10deg) translateY(-5px); }
+  to { transform: rotate(10deg) translateY(5px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-season-backdrop__item {
+    transform: none; } }
+
+/* --- A holiday's ribbon ---------------------------------------------------
+   Built by js/season.js (ribbon) for a season whose file gives `about`:
+   a sash across the bottom left corner of the screen, in the season's
+   gradient with the page's own colour for its type (the season test holds
+   that pair at 4.5:1 in both themes), and the card it opens above the
+   corner. The sash is a real button and takes focus; the card is a
+   .kr-offstage, shown with .is-visible. From 768px it is a little larger.
+   Classes only script applies: .kr-season-ribbon, __sash,
+   .kr-season-about (__title, __when, __text, __more). */
+.kr-season-ribbon {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 85;
+  width: 0;
+  height: 0; }
+
+/* A band at 45 degrees, centred 40px in from the corner, long enough to
+   run off both edges. */
+.kr-season-ribbon__sash {
+  position: absolute;
+  bottom: 27px;
+  left: -50px;
+  width: 180px;
+  height: 26px;
+  padding: 0 44px;
+  border: 0;
+  background: var(--kr-brand-gradient);
+  color: var(--kr-surface-0);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 26px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: var(--kr-shadow-1);
+  transform: rotate(45deg);
+  cursor: pointer; }
+
+.kr-season-ribbon__sash span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis; }
+
+@media only screen and (min-width: 768px) {
+  .kr-season-ribbon__sash {
+    bottom: 34px;
+    left: -54px;
+    width: 200px;
+    height: 30px;
+    padding: 0 48px;
+    font-size: 11px;
+    line-height: 30px; } }
+
+.kr-season-about {
+  position: fixed;
+  bottom: 96px;
+  left: 16px;
+  width: min(320px, calc(100vw - 32px));
+  padding: 14px 16px 16px;
+  border-left: 4px solid var(--kr-brand-from);
+  border-radius: var(--kr-radius-md);
+  background: var(--kr-surface-card);
+  box-shadow: var(--kr-shadow-2);
+  opacity: 0;
+  transform: translateY(8px); }
+
+.kr-season-about.is-visible {
+  opacity: 1;
+  transform: none; }
+
+.kr-season-about p {
+  margin: 0; }
+
+.kr-season-about__title {
+  font-weight: 700;
+  color: var(--kr-brand-from); }
+
+.kr-season-about__when {
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--kr-muted); }
+
+.kr-season-about__text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--kr-ink); }
+
+/* Two classes: a link colour at (0,1,1) beats one. Red, as every link. */
+.kr-season-about .kr-season-about__more {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--kr-action);
+  text-decoration: underline; }
+
+/* --- Walkers on the footer's edge -----------------------------------------
+   Built by kit.walker in js/season.js for a season's file: something that
+   comes along the footer's top edge once the footer is in view, stops by
+   the patch, and goes off right; a click hurries it away (--gone). Never
+   under reduced motion. Its kind sets its size and pace: the fall's
+   squirrel scampers, Halloween's cat strolls. Classes only script applies:
+   .kr-season-walker (--squirrel, --cat, --gone), __tail. */
+.kr-season-walker {
+  position: absolute;
+  bottom: calc(100% - 2px);
+  left: 0;
+  width: 40px;
+  cursor: pointer;
+  animation: kr-season-scamper 7s cubic-bezier(0.5, 0, 0.5, 1) forwards; }
+
+.kr-season-walker svg {
+  display: block;
+  width: 100%;
+  fill: var(--kr-season-creature); }
+
+.kr-season-walker__tail {
+  transform-box: fill-box;
+  transform-origin: 90% 90%;
+  animation: kr-season-flick 0.6s ease-in-out infinite alternate; }
+
+/* Two classes, so a kind's own pace (one class, in its season's file)
+   never slows the dash. */
+.kr-season-walker.kr-season-walker--gone {
+  animation: kr-season-dash 0.9s ease-in forwards; }
+
+@keyframes kr-season-scamper {
+  0% { transform: translateX(-60px); }
+  30% { transform: translateX(max(300px, 26vw)); }
+  70% { transform: translateX(max(300px, 26vw)); }
+  100% { transform: translateX(calc(100vw + 60px)); } }
+
+/* From wherever the click caught it (season.js sets --kr-season-from). */
+@keyframes kr-season-dash {
+  from { transform: var(--kr-season-from); }
+  to { transform: translateX(calc(100vw + 60px)); } }
+
+@keyframes kr-season-flick {
+  to { transform: rotate(-12deg); } }

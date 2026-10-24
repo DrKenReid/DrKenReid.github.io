@@ -2986,20 +2986,21 @@ SEASON_STATE = """() => {
 # its gallery subject (?tag=, and the pill's label; None for a season that
 # picks its frames by place or not at all), whether its fog shows in the
 # light theme ("none" too for a season without fog), its patch's burst
-# class, and its post track's mode (burn, fill or bits).
+# class, its post track's mode (burn, fill or bits), and "ribbon": False
+# for the four seasons, which have no holiday ribbon.
 SEASONS_UNDER_TEST = {
     "halloween": {"lost": "This Page Has Passed Over", "tag": "spooky", "pill": "Spooky",
                   "light_fog": "none", "burst": "kr-season-puff", "track": "burn"},
     "fall": {"lost": "This Page Has Fallen", "tag": "autumn", "pill": "Autumn",
-             "light_fog": "block", "burst": "kr-season-puff kr-season-puff--leaves", "track": "bits"},
+             "light_fog": "block", "burst": "kr-season-puff kr-season-puff--leaves", "track": "bits", "ribbon": False},
     "winter": {"lost": "This Page Is Snowed In", "tag": "winter", "pill": "Winter",
-               "light_fog": "block", "burst": "kr-season-puff kr-season-puff--snow", "track": "bits"},
+               "light_fog": "block", "burst": "kr-season-puff kr-season-puff--snow", "track": "bits", "ribbon": False},
     "spring": {"lost": "This Page Hasn't Sprouted", "tag": "spring", "pill": "Spring",
                "light_fog": "block", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--petals",
-               "track": "bits"},
+               "track": "bits", "ribbon": False},
     "summer": {"lost": "This Page Has Gone on Holiday", "tag": "summer", "pill": "Summer",
                "light_fog": "block", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--pollen",
-               "track": "fill"},
+               "track": "fill", "ribbon": False},
     "burns-night": {"lost": "This Page Has Gone Agley", "tag": None, "pill": None,
                     "light_fog": "none", "burst": "kr-season-puff kr-season-puff--steam", "track": "fill"},
     "st-andrews": {"lost": "This Page Is Lost in the Haar", "tag": None, "pill": None,
@@ -3091,6 +3092,20 @@ def check_season(browser, base, rep):
                             .map(el => el.className);
                     }""")
                     rep.check(scope, "no decoration over the post's text", not over, over)
+                    back = page.evaluate("""() => {
+                        const layer = document.querySelector('.kr-season-backdrop');
+                        const box = document.querySelector('#main-content-body .container');
+                        if (!layer || !box) return null;
+                        const b = box.getBoundingClientRect();
+                        const items = [...layer.querySelectorAll('.kr-season-backdrop__item')];
+                        return { items: items.length, hidden: layer.getAttribute('aria-hidden') === 'true',
+                                 inert: getComputedStyle(layer).pointerEvents === 'none',
+                                 over: items.filter(el => { const r = el.getBoundingClientRect();
+                                     return r.right > b.left + 2 && r.left < b.right - 2; }).length };
+                    }""")
+                    rep.check(scope, "the backdrop's shapes sit in the margins, hidden and taking no clicks",
+                              bool(back) and back["items"] > 0 and back["hidden"] and back["inert"]
+                              and not back["over"], back)
                     track = page.evaluate(TRACK_STATE)
                     if want["track"] in ("burn", "fill"):
                         done = track.get("done") or 0
@@ -3121,6 +3136,22 @@ def check_season(browser, base, rep):
                     }""")
                     rep.check(scope, "a pumpkin bursts and the dangler drops when clicked, in silence",
                               toys["burst"] == want["burst"] and toys["drop"] and not toys["sounds"], toys)
+                if path == "about.html" and want.get("ribbon", True):
+                    ribbon = page.evaluate("""() => {
+                        const sash = document.querySelector('.kr-season-ribbon__sash');
+                        const card = document.querySelector('.kr-season-about');
+                        if (!sash || !card) return null;
+                        const shut = getComputedStyle(card).visibility;
+                        sash.focus({ focusVisible: true });
+                        sash.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+                        const r = sash.getBoundingClientRect();
+                        const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+                        return { name: sash.getAttribute('aria-label'), shut,
+                                 onTop: !!(top && sash.contains(top)), link: !!card.querySelector('a[href]') };
+                    }""")
+                    rep.check(scope, "the holiday's ribbon is a named button on top, its card hidden until asked for",
+                              bool(ribbon) and ribbon["name"].startswith("About ") and ribbon["shut"] == "hidden"
+                              and ribbon["onTop"] and ribbon["link"], ribbon)
                 if path == "404.html":
                     title = page.evaluate("document.querySelector('.page-title').textContent")
                     rep.check(scope, "the 404 page is dressed", title == want["lost"], title)

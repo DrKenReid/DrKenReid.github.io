@@ -113,7 +113,7 @@ from css_prune import split_selectors  # noqa: E402
 ROOT = sitelib.ROOT
 STYLE = ROOT / "style.css"
 # Each season's own colours and rules, loaded only while it is on.
-SEASON_SHEETS = ("css/seasons/*.css",)
+SEASON_SHEETS = ("css/season.css", "css/seasons/*.css",)
 BASELINE = ROOT / ".github" / "css-baseline.json"
 
 # The corpus the definitions and reads come from (git pathspecs).

@@ -1,7 +1,7 @@
 /* css/seasons/world-book-day.css: World Book Day's colours and its own
    rules. shared-components.js loads this file only while the season is
-   on (KR_SEASONS), beside js/seasons/world-book-day.js; style.css keeps
-   what every season shares (§01 "Seasons", §21 "Seasonal decorations").
+   on (KR_SEASONS), beside js/seasons/world-book-day.js; css/season.css
+   holds what every season shares.
    Tokens first, both themes, then the rules for its own pieces. */
 
 /* World Book Day: lamplit gold into plum:

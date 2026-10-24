@@ -412,6 +412,10 @@
     }
 
     K.dress({
+        // The ribbon's card (season.js, ribbon).
+        about: { short: 'Pi Day', when: '14 March',
+            text: '3/14 in American date order, which is about the only good thing that order has ever done. Larry Shaw started it at the San Francisco Exploratorium in 1988, and it\'s Albert Einstein\'s birthday too.',
+            link: 'https://en.wikipedia.org/wiki/Pi_Day' },
         corner: archimedesArt, dangler: SLICE, fog: false,
         // The digits drifting and glinting, upright.
         leaves: { kind: 'twinkle', colours: DIGIT_COLOURS, per1000: 22, shapes: DIGITS, tumble: false, size: [14, 26] },

@@ -436,6 +436,10 @@
     }
 
     K.dress({
+        // The ribbon's card (season.js, ribbon).
+        about: { short: 'Darwin Day', when: '12 February',
+            text: 'Charles Darwin was born on 12 February 1809. On the Origin of Species, in 1859, set out evolution by natural selection, the idea every evolutionary algorithm borrows: vary, select, repeat.',
+            link: 'https://en.wikipedia.org/wiki/Darwin_Day' },
         corner: thinkTree, dangler: BEETLE,
         // Peppered moths drifting and fading, pale ones and the odd dark one.
         leaves: { kind: 'twinkle', colours: MOTH_COLOURS, per1000: 16, shapes: [moth(0), moth(2.4)], tumble: false, size: [16, 28] },

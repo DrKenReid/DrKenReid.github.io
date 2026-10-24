@@ -220,6 +220,8 @@
     }
 
     K.dress({
+        // The seeds in both themes: the night's fireflies are dots.
+        backdrop: { shapes: LEAVES.light.shapes, colours: ['#fff3c4', '#ffe9a0', '#f6efd6'] },
         corner: branchArt, dangler: SWING,
         leaves: LEAVES,
         // The sunflowers hum with cicadas, the sandcastle has the lake

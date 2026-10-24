@@ -30,8 +30,9 @@ on every push.
 - **One stylesheet.** `style.css` is the source; `style.min.css`, the file
   pages load, is built from it and from the vendor sheets it imports, with
   every rule no page can use pruned away. The one exception is the
-  seasonal decorations: each season's colours and rules are a small file
-  of their own, `css/seasons/<key>.css`, loaded only while that season is
+  seasonal decorations: the rules every season shares are
+  `css/season.css`, and each season's colours and rules a small file of
+  their own, `css/seasons/<key>.css`, both loaded only while a season is
   on.
 - **Bootstrap 4's CSS** for the grid and utilities, and none of its
   JavaScript.
@@ -93,7 +94,7 @@ the browser suites and a few generators.
 | `blog/` | the posts, and the images that belong to them (`blog/img/`) |
 | `js/` | the site's scripts; `js/shared-components.js` is the shared runtime |
 | `style.css` | the one stylesheet to edit; `style.min.css` is built from it |
-| `css/`, `fonts/` | vendor stylesheets and fonts, imported into the build; `css/seasons/`, each season's own stylesheet |
+| `css/`, `fonts/` | vendor stylesheets and fonts, imported into the build; `css/season.css` and `css/seasons/`, the seasonal decorations' stylesheets |
 | `img/` | photograph thumbnails and hero crops, share cards (`img/og/`), icons |
 | `data/` | the JSON the pages and generators read; `data/schema/` describes the shapes |
 | `docs/` | the CV and the thesis, as PDFs |

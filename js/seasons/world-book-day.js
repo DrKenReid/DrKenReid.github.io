@@ -278,6 +278,10 @@
     }
 
     K.dress({
+        // The ribbon's card (season.js, ribbon).
+        about: { short: 'Book Day', when: '23 April',
+            text: 'UNESCO\'s World Book and Copyright Day, held since 1995 on the anniversary of the deaths of Shakespeare and Cervantes in 1616. The UK and Ireland keep their own World Book Day in early March.',
+            link: 'https://en.wikipedia.org/wiki/World_Book_Day' },
         corner: lampArt, dangler: BOOKWORM,
         // Pages turning over as they fall, mostly whole ones, some scraps.
         leaves: { kind: 'fall', colours: PAPERS, per1000: 12, shapes: [PAGE, SCRAP], tumble: true, size: [24, 40] },

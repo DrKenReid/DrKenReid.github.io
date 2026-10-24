@@ -82,12 +82,14 @@ adds one fails the build; code that removes one lowers the baseline with
 
 ## The stylesheet
 
-`style.css` is the stylesheet to edit, with one exception: each season's
-own colours and rules are in `css/seasons/<key>.css`, which
+`style.css` is the stylesheet to edit, with one exception, the seasonal
+decorations: each season's own colours and rules are in
+`css/seasons/<key>.css`, which
 `js/shared-components.js` loads only while that season is on (served as
 written, not minified or pruned; `check_css.py` holds it to the same
 rules and ratchets as `style.css`, and reads it with `style.css` as one
-stylesheet). What every season shares stays in `style.css` §21. Pages
+stylesheet). What every season shares is `css/season.css`, loaded and
+checked the same way. Pages
 load `style.min.css`,
 which `python .github/scripts/minify_css.py` builds: it inlines the
 vendor sheets `style.css` imports, minifies, swaps the icon fonts for

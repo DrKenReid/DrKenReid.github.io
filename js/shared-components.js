@@ -355,15 +355,17 @@ function krSeason() {
     var season = krSeason();
     if (!season) return;
     document.documentElement.setAttribute('data-season', season.key);
-    // The season's stylesheet (its colours and its own rules), then the
-    // engine and the season's art, which calls krSeasonKit.dress once the
+    // The rules every season shares and the season's own stylesheet (its
+    // colours and its own rules), then the engine and the season's art, which calls krSeasonKit.dress once the
     // stylesheet is in; async false runs the two scripts in that order.
     var art = season.art || season.key;
-    var sheet = document.createElement('link');
-    sheet.rel = 'stylesheet';
-    sheet.id = 'kr-season-css';
-    sheet.href = siteRootPrefix() + 'css/seasons/' + art + '.css';
-    document.head.appendChild(sheet);
+    [['kr-season-shared-css', 'css/season.css'], ['kr-season-css', 'css/seasons/' + art + '.css']].forEach(function (s) {
+        var sheet = document.createElement('link');
+        sheet.rel = 'stylesheet';
+        sheet.id = s[0];
+        sheet.href = siteRootPrefix() + s[1];
+        document.head.appendChild(sheet);
+    });
     ['js/season.js', 'js/seasons/' + art + '.js'].forEach(function (src) {
         var script = document.createElement('script');
         script.src = siteRootPrefix() + src;

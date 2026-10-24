@@ -34,8 +34,9 @@ varies a little between pages and does not matter):
 4. A preload with `fetchpriority="high"` for the opening photograph, the
    largest paint on the page, which the browser would otherwise find
    late (it is a CSS background).
-5. `style.min.css?v=<stamp>`, the one stylesheet. (The season's own,
-   `css/seasons/<key>.css`, is added by `js/shared-components.js` at the
+5. `style.min.css?v=<stamp>`, the one stylesheet. (The seasons' shared
+   rules, `css/season.css`, and the season's own,
+   `css/seasons/<key>.css`, are added by `js/shared-components.js` at the
    end of the body; see "Seasons".)
 6. `js/theme.js` and `js/palette.js`, deferred: the theme toggle and the
    Ctrl+K palette, which builds nothing until it is first opened.
@@ -240,16 +241,17 @@ fail when a moving holiday's table has no dates for this year or the
 next two: extend Diwali's from Lakshmi Puja's date, two days either
 side, and Holi's from a panchang (Holika Dahan, then the day after).
 
-While one is on, `<html>` carries `data-season="<key>"`, and three
-files are fetched: `css/seasons/<key>.css`, the season's colours (its
-token blocks for both themes) and the rules for its own pieces;
+While one is on, `<html>` carries `data-season="<key>"`, and four
+files are fetched: `css/season.css`, the rules every season shares;
+`css/seasons/<key>.css`, the season's colours (its token blocks for both
+themes) and the rules for its own pieces;
 `js/season.js`, the engine; and `js/seasons/<key>.js`, the season's art
 (Revenge of the Fifth uses May the Fourth's files, `art`). The engine
-draws nothing until the season's stylesheet has loaded. With seasons
+draws nothing until both stylesheets have loaded. With seasons
 turned off none of them is requested, and a reader only ever fetches
 one season's pictures and styles. Every season dresses the same pieces,
-documented in `season.js`'s header, and the shared rules in `style.css`
-§21 ("Seasonal decorations") serve them all in the season's tokens:
+documented in `season.js`'s header, and the shared rules in
+`css/season.css` serve them all in the season's tokens:
 
 - a corner piece with something dangling on a thread below it (a click
   drops it);
@@ -271,7 +273,15 @@ documented in `season.js`'s header, and the shared rules in `style.css`
 - the 404 page's words, and the photo strip, 404 photo and palette frame
   drawn from its photographs;
 - toys of its own (`extra`), and `kit.walker` to send something along
-  the footer's edge.
+  the footer's edge;
+- on posts and the blog's listing, a backdrop: the season's shapes in
+  the margins beside the text (never under it, nor under the contents
+  list), at three depths, sliding at their own pace as the page scrolls
+  and swaying gently; none on screens too narrow for margins;
+- on a holiday, a ribbon across the bottom left corner of the screen:
+  the one piece that is not decoration, a button that opens a short card
+  about the day (`about` in the season's file) on hover, keyboard focus
+  or a tap. The four seasons have none.
 
 | Season | Its art | Its own |
 |---|---|---|
@@ -452,7 +462,7 @@ checks that. (The essay:
 | The interactive demo engine | `js/kr-viz.js`, CSS in §12 | `viz_verify.py`, smoke suite |
 | Offline behaviour | `sw.js` (bump `VERSION` when caching changes) | `perf_budget.py` (the offline scenario) |
 | Theme toggle | `js/theme.js`, the inline head script on every page | smoke suite |
-| A season or holiday | `KR_SEASONS` in `js/shared-components.js`, `js/season.js` and `js/seasons/<key>.js`, `css/seasons/<key>.css`, shared CSS in §21 (see "Seasons") | `js-tests`, `tests/test_contrast.py`, smoke `check_season` |
+| A season or holiday | `KR_SEASONS` in `js/shared-components.js`, `js/season.js` and `js/seasons/<key>.js`, `css/season.css` and `css/seasons/<key>.css` (see "Seasons") | `js-tests`, `tests/test_contrast.py`, smoke `check_season` |
 | Analytics | `js/analytics.js` (`GA_ID`) | audit |
 | Anything a check enforces | the check, and the doc that describes the rule | `run_checks.py` |
 

@@ -523,6 +523,10 @@
     }
 
     K.dress({
+        // The ribbon's card (season.js, ribbon).
+        about: { short: 'Cat Day', when: '8 August',
+            text: 'International Cat Day was started in 2002 by the International Fund for Animal Welfare, and International Cat Care has run it since 2020. This house has four cats, and all four think every day is theirs.',
+            link: 'https://en.wikipedia.org/wiki/International_Cat_Day' },
         corner: catnapArt, dangler: TAIL_TIP,
         // Tufts of fluff, now and then a small heart, drifting down.
         leaves: { kind: 'fall', colours: AIR_COLOURS, per1000: 10, shapes: [FLUFF, HEART], tumble: true, size: [10, 18] },

@@ -5,7 +5,7 @@
  * (js/seasons/<key>.js), so a reader only ever fetches one season's
  * pictures. The colours are the season's own stylesheet's
  * (css/seasons/<key>.css, keyed on html[data-season]), the shared rules
- * style.css §21's; this adds the things.
+ * css/season.css's; this adds the things.
  *
  * A season's file calls krSeasonKit.dress(dress) once. Every season
  * dresses the same pieces, each with its own art, and may add a feature
@@ -46,6 +46,16 @@
  *   cursor    the pointer, where the reader has a mouse: a whole svg of
  *             at most 32 x 32 with its hotspot ({ svg, x, y }), usually
  *             kit.cursor(fill, emblem); links keep the hand
+ *   backdrop  on posts and the blog's listing, the season's shapes drifting
+ *             in the margins beside the text, at three depths, sliding at
+ *             their own pace as the page scrolls; by default the shapes
+ *             and colours of the things in the air (dots left out), or
+ *             { shapes, colours } of its own (colours may be one list per
+ *             shape); false for none
+ *   about     a holiday's card ({ short, when, text, link }): a ribbon
+ *             across the bottom left corner of the screen, labelled short,
+ *             that opens a card about the day on hover, keyboard focus or
+ *             a tap. The four seasons have none.
  *   extra     function (kit), run after the rest: the season's own toys;
  *             kit.walker(art, kind) sends something along the footer's edge,
  *             kit.onFooter(fn) runs fn once the footer comes into view
@@ -59,8 +69,9 @@
  * was its first name); either is taken out of the address. A recording is
  * fetched only when it first plays.
  *
- * Every piece is aria-hidden decoration that sits over no post text,
- * gallery tile, lightbox or slideshow, and is left out of print (§23).
+ * Every piece but a holiday's ribbon is aria-hidden decoration that sits
+ * over no post text, gallery tile, lightbox or slideshow, and is left out
+ * of print (§23).
  * Only the dangling thing and the patch take clicks, and nothing takes
  * focus. Under reduced motion nothing moves: the leaves lie where they
  * fell (or hang still), no flyer crosses, a clicked piece only makes its
@@ -68,15 +79,17 @@
  * (kit.reduced). The canvases draw only while on screen and the tab is
  * visible.
  *
- * Classes only this file applies (style.css §21, "Seasonal decorations"):
+ * Classes only this file applies (css/season.css):
  * .kr-season-corner (--bar, --opener, __art), .kr-season-dangler (--drop,
  * __body), .kr-season-leaves, .kr-season-patch (__big, __mid, __small),
  * .kr-season-leaf, .kr-season-lit, .kr-season-puff, .kr-season-flyer,
  * .kr-season-moonmark, .kr-season-track (--burn, --fill, --bits, --out,
  * --<kind>, __rest, __tip, __bit, __bit--passed), .kr-season-tracked,
  * .kr-season-fog (__layer, __layer--far), .kr-season-map, .kr-season-badge,
- * .kr-season-walker (--<kind>, --gone, __tail), and .kr-season-cursor on
- * <html> (with --kr-season-cursor) for the pointer.
+ * .kr-season-walker (--<kind>, --gone, __tail), .kr-season-backdrop (__item,
+ * __art) and .kr-season-backdrop-host, .kr-season-ribbon (__sash),
+ * .kr-season-about (__title, __when, __text, __more), and
+ * .kr-season-cursor on <html> (with --kr-season-cursor) for the pointer.
  * The seasons' files apply the rest (each names its own).
  */
 (function () {
@@ -883,6 +896,170 @@
         });
     }
 
+    /* ------------------------------------------------------------------ *
+     * The backdrop in a post's margins
+     * ------------------------------------------------------------------ */
+
+    /* Behind a post (or the blog's listing), in the margins either side
+       of its container and never under the text: the season's shapes,
+       one every BACKDROP_EVERY px down each margin, at three depths. Each
+       sways on its own (CSS), and slides by its depth as the page scrolls
+       (--kr-season-scroll, the viewport's middle in the host's own
+       coordinates, against each shape's --kr-season-y), so the near ones
+       pass faster than the far ones. Margins narrower than BACKDROP_MIN
+       get nothing, so phones get nothing. Under reduced motion they hold
+       still. */
+    var BACKDROP_EVERY = 230, BACKDROP_MIN = 48, DEPTHS = [0.12, 0.26, 0.42];
+
+    function backdropCfg() {
+        if (dress.backdrop) return dress.backdrop;
+        var air = airCfg();
+        var shapes = air.shapes.filter(function (d) { return d !== DOT; });
+        return shapes.length ? { shapes: shapes, colours: air.colours } : null;
+    }
+
+    function backdrop() {
+        if (dress.backdrop === false) return;
+        var post = document.querySelector('.blog-post, .story-post');
+        var host = post ? post.closest('#main-content-body') : document.querySelector('.kr-listing');
+        if (!host || host.querySelector('.kr-season-backdrop')) return;
+        host.classList.add('kr-season-backdrop-host');
+        var layer = document.createElement('div');
+        layer.className = 'kr-season-backdrop';
+        layer.setAttribute('aria-hidden', 'true');
+        host.insertBefore(layer, host.firstChild);
+        var built = '';
+
+        function place() {
+            var cfg = backdropCfg();
+            var box = host.querySelector('.container') || host;
+            var w = host.clientWidth, h = host.scrollHeight;
+            var gutter = (w - box.getBoundingClientRect().width) / 2;
+            var key = [w, h, cfg && cfg.shapes.length].join(' ');
+            if (key === built) return;
+            built = key;
+            if (!cfg || gutter < BACKDROP_MIN) { layer.innerHTML = ''; return; }
+            var size = Math.max(18, Math.min(56, gutter * 0.5));
+            // Room on each side, short of a fixed rail that reaches into it
+            // (the contents list; the share buttons, which the wide post
+            // layout swaps for a row at the end): never behind its text.
+            var room = [gutter, gutter];
+            var wide = typeof krWidePost === 'function' && krWidePost().matches;
+            Array.prototype.forEach.call(document.querySelectorAll(wide ? '.kr-toc' : '.kr-toc, .kr-share-rail'), function (rail) {
+                var r = rail.getBoundingClientRect();
+                if (!r.width || getComputedStyle(rail).display === 'none') return;
+                if (r.left < gutter) room[0] = Math.min(room[0], r.left - 8);
+                if (r.right > w - gutter) room[1] = Math.min(room[1], w - r.right - 8);
+            });
+            var html = '';
+            for (var y = BACKDROP_EVERY * 0.4, i = 0; y < h - size; y += BACKDROP_EVERY, i++) {
+                [0, 1].forEach(function (side) {
+                    if (room[side] < size * 0.8) return;
+                    // Seeded by the shape's place, so a fresh layout (an image
+                    // loading, a resize) puts every shape back where it was.
+                    var n = i * 2 + side, k = 0;
+                    var rand = function () { var v = Math.sin(n * 91.7 + ++k * 12.9898) * 43758.5453; return v - Math.floor(v); };
+                    var depth = DEPTHS[(i + side * 2 + (rand() * 2 | 0)) % DEPTHS.length];
+                    var s = Math.min(size * (0.6 + depth), room[side] - 8);
+                    var x = Math.min(room[side] * (0.12 + rand() * 0.6) - s / 2, room[side] - s - 4);
+                    var top = y + (rand() - 0.5) * BACKDROP_EVERY * 0.6;
+                    // A shape's own colours (one list per shape), or the season's.
+                    var shape = (rand() * cfg.shapes.length) | 0;
+                    var colours = Array.isArray(cfg.colours[0]) ? cfg.colours[shape] : cfg.colours;
+                    html += '<span class="kr-season-backdrop__item" style="' + (side ? 'right' : 'left') + ': ' + Math.max(4, x).toFixed(0) +
+                        'px; top: ' + top.toFixed(0) + 'px; width: ' + s.toFixed(0) + 'px; opacity: ' + (0.35 + depth).toFixed(2) +
+                        '; --kr-season-y: ' + (top + s / 2).toFixed(0) + '; --kr-season-depth: ' + depth + '">' +
+                        '<svg class="kr-season-backdrop__art" viewBox="0 0 24 24" style="animation-delay: -' + (rand() * 9).toFixed(1) +
+                        's; animation-duration: ' + (7 + rand() * 6).toFixed(1) + 's" aria-hidden="true" focusable="false">' +
+                        '<path d="' + cfg.shapes[shape] + '" fill="' +
+                        colours[(rand() * colours.length) | 0] + '"/></svg></span>';
+                });
+            }
+            layer.innerHTML = html;
+            scrolled();
+        }
+
+        var frame = 0;
+        function scrolled() {
+            frame = 0;
+            var top = host.getBoundingClientRect().top;
+            layer.style.setProperty('--kr-season-scroll', (innerHeight / 2 - top).toFixed(0));
+        }
+
+        place();
+        if (window.ResizeObserver) new ResizeObserver(function () { place(); }).observe(host);
+        // The contents rail may come after this did: measure again at load.
+        window.addEventListener('load', function () { built = ''; place(); });
+        skies.push(function () { built = ''; place(); });
+        if (reduced) return;
+        window.addEventListener('scroll', function () {
+            if (!frame) frame = requestAnimationFrame(scrolled);
+        }, { passive: true });
+    }
+
+    /* ------------------------------------------------------------------ *
+     * A holiday's ribbon, and the card it opens
+     * ------------------------------------------------------------------ */
+
+    /* The one piece that is not decoration: a real button, in the Tab
+       order, named by its label. The card opens while the mouse is over
+       the ribbon or the card, while the button has keyboard focus, or
+       when it is clicked or tapped (and then stays until clicked again,
+       Escape, or a click elsewhere). Hidden, it is .kr-offstage, out of
+       the Tab order. */
+    function ribbon() {
+        var a = dress.about;
+        if (!a || document.querySelector('.kr-season-ribbon')) return;
+        var el = document.createElement('div');
+        el.className = 'kr-season-ribbon';
+        el.innerHTML = '<button type="button" class="kr-season-ribbon__sash" aria-expanded="false"' +
+            ' aria-controls="kr-season-about" aria-label="About ' + season.label + '"><span>' + a.short + '</span></button>' +
+            '<div class="kr-season-about kr-offstage" id="kr-season-about" role="group" aria-label="' + season.label + '">' +
+            '<p class="kr-season-about__title">' + season.label + '</p>' +
+            '<p class="kr-season-about__when">' + a.when + '</p>' +
+            '<p class="kr-season-about__text">' + a.text + '</p>' +
+            (a.link ? '<a class="kr-season-about__more" href="' + a.link + '">Read more about ' + season.label + '</a>' : '') +
+            '</div>';
+        document.body.appendChild(el);
+        var sash = el.firstChild, card = el.lastChild;
+        var pinned = false, hovered = false, leave = 0;
+
+        function show(on) {
+            card.classList.toggle('is-visible', on);
+            sash.setAttribute('aria-expanded', on ? 'true' : 'false');
+        }
+        function update() { show(pinned || hovered || el.contains(document.activeElement) && sash.matches(':focus-visible') || card.contains(document.activeElement)); }
+
+        sash.addEventListener('click', function () {
+            pinned = !pinned;
+            hovered = false;
+            show(pinned);
+        });
+        el.addEventListener('pointerenter', function (e) {
+            if (e.pointerType !== 'mouse') return;
+            clearTimeout(leave);
+            hovered = true;
+            update();
+        });
+        el.addEventListener('pointerleave', function (e) {
+            if (e.pointerType !== 'mouse') return;
+            leave = setTimeout(function () { hovered = false; update(); }, 250);
+        });
+        el.addEventListener('focusin', update);
+        el.addEventListener('focusout', function () { setTimeout(update, 0); });
+        el.addEventListener('keydown', function (e) {
+            if (e.key !== 'Escape') return;
+            pinned = hovered = false;
+            if (card.contains(document.activeElement)) sash.focus();
+            show(false);
+        });
+        document.addEventListener('click', function (e) {
+            if (!pinned || el.contains(e.target)) return;
+            pinned = false;
+            update();
+        });
+    }
+
     /* What a season's file is given: the shapes and drawings above to
        build its art from, the switches the engine reads, and dress()
        to hand its pieces over. */
@@ -899,14 +1076,19 @@
         }
     };
 
-    /* The season's stylesheet (css/seasons/<key>.css, which
+    /* Both stylesheets (css/season.css and css/seasons/<key>.css, which
        shared-components.js adds) must be in before anything is drawn, or
-       its pieces would show unstyled for a moment; if it fails, nothing
-       is drawn. */
+       the pieces would show unstyled for a moment; if either fails,
+       nothing is drawn. */
     function whenSheet(fn) {
-        var link = document.getElementById('kr-season-css');
-        if (!link || link.sheet) { fn(); return; }
-        link.addEventListener('load', fn);
+        var waiting = ['kr-season-shared-css', 'kr-season-css'].map(function (id) {
+            return document.getElementById(id);
+        }).filter(function (link) { return link && !link.sheet; });
+        var left = waiting.length;
+        if (!left) { fn(); return; }
+        waiting.forEach(function (link) {
+            link.addEventListener('load', function () { if (!--left) fn(); });
+        });
     }
 
     // Every piece, in the order they are drawn, then the season's own.
@@ -919,12 +1101,14 @@
         fog();
         pumpkinPatch();
         track();
+        backdrop();
         markMap();
         favicon();
         moon();
         lost();
         treats();
         pointer();
+        ribbon();
         if (dress.extra) dress.extra(kit);
     }
 })();

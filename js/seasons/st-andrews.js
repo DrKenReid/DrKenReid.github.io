@@ -177,6 +177,10 @@
     }
 
     K.dress({
+        // The ribbon's card (season.js, ribbon).
+        about: { short: 'St Andrew\'s', when: '30 November',
+            text: 'Scotland\'s patron saint. The story goes that before a battle in the ninth century, King Óengus II saw a white saltire against a blue sky, and that\'s where the flag comes from. It\'s been an official holiday in Scotland since 2007.',
+            link: 'https://en.wikipedia.org/wiki/Saint_Andrew%27s_Day' },
         corner: buntingArt, dangler: FISH,
         leaves: { kind: 'fall', colours: CONFETTI, per1000: 18, shapes: [SALTIRE, SCRAP], tumble: false, size: [10, 18] },
         // The puffin's shore has oystercatchers on it, the pipes play; the

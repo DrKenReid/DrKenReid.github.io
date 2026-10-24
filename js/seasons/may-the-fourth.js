@@ -18,8 +18,8 @@
  * .kr-season-dangler__body, .kr-season-flyer__body,
  * .kr-season-flyer--comet, .kr-season-puff--exhaust,
  * .kr-season-track--beam, .kr-season-track__spark, .kr-season-planet,
- * .kr-season-warp, .kr-season-warp__streak, .kr-season-warping (style.css
- * §21, "May the Fourth's jump to light speed", for the last four).
+ * .kr-season-warp, .kr-season-warp__streak, .kr-season-warping (its
+ * "jump to light speed" banner, for the last four).
  */
 (function () {
     'use strict';
@@ -165,6 +165,14 @@
     }
 
     K.dress({
+        // The ribbon's card (season.js, ribbon), for whichever day it is.
+        about: K.season.key === 'revenge-of-the-fifth' ?
+            { short: 'Fifth of May', when: '5 May',
+                text: 'The day after May the Fourth belongs to the other side: Revenge of the Fifth, after Revenge of the Sith. Hence the red.',
+                link: 'https://en.wikipedia.org/wiki/Star_Wars_Day' } :
+            { short: 'May the 4th', when: '4 May',
+                text: 'Say it out loud: May the Fourth be with you. A pun Star Wars fans turned into a holiday, and tomorrow is Revenge of the Fifth.',
+                link: 'https://en.wikipedia.org/wiki/Star_Wars_Day' },
         corner: planetArt, dangler: MOON,
         // Stars, mostly points of light, some four-pointed, twinkling.
         leaves: { kind: 'twinkle', colours: DAY.stars, per1000: 46, shapes: [K.DOT, sparkle(12, 12, 11)],

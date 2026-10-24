@@ -209,7 +209,19 @@
         }).observe(root, { attributes: true, attributeFilter: ['data-theme', 'class'] });
     }
 
+    // For the margins of a post: bats, ghosts and leaves,
+    // on the backdrop's 24 x 24 box.
+    var BAT_24 = 'M12 8.6l-1-1.4.3 1.8c-.8.4-1.2 1.3-1.2 2.3 0 1.5.8 2.5 1.9 2.5s1.9-1 1.9-2.5c0-1-.4-1.9-1.2-2.3l.3-1.8z' +
+        'M10.2 10.6C8.2 8.4 5 7.6 1 8.3c1.4.8 2.2 1.9 2.2 3.3-1-.6-2.2-.6-3.2 0 1.8.4 2.9 1.8 3.2 3.3 1-1 2.5-1 3.5-.4 1-1.4 2.1-2.1 3.5-2.1z' +
+        'M13.8 10.6c2-2.2 5.2-3 9.2-2.3-1.4.8-2.2 1.9-2.2 3.3 1-.6 2.2-.6 3.2 0-1.8.4-2.9 1.8-3.2 3.3-1-1-2.5-1-3.5-.4-1-1.4-2.1-2.1-3.5-2.1z';
+    var GHOST_24 = 'M12 3a6.5 6.5 0 0 0-6.5 6.5V21l2.2-1.6 2.1 1.6 2.2-1.6 2.2 1.6 2.1-1.6 2.2 1.6V9.5A6.5 6.5 0 0 0 12 3z';
+
     K.dress({
+        backdrop: { shapes: [BAT_24, GHOST_24, K.MAPLE], colours: [['#2b2233'], ['#f7f5ff'], ['#e07a2e', '#c4512a', '#e8a33d']] },
+        // The ribbon's card (season.js, ribbon).
+        about: { short: 'Halloween', when: '31 October',
+            text: 'Halloween grew out of Samhain, the Gaelic festival at the end of the harvest, when the line between the living and the dead was said to wear thin. Guising, going door to door in costume for treats, is the Scottish and Irish custom that turned into trick-or-treating.',
+            link: 'https://en.wikipedia.org/wiki/Halloween' },
         corner: cobwebArt, dangler: SPIDER,
         leaves: { kind: 'fall', colours: K.LEAF_COLOURS, per1000: 14, shapes: [K.MAPLE, K.OVAL], tumble: true },
         // The big pumpkin howls, the small one hoots, the middle one creaks.

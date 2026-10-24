@@ -28,8 +28,8 @@ which are published on purpose, and anything `_config.yml` excludes.
   stylesheet, the share images, the feed, the sitemap, the post heads,
   parts of `data/`) is generated locally and committed.
 - `style.css` is the stylesheet you edit; `style.min.css` is built from
-  it. A season's own colours and rules are in `css/seasons/<key>.css`,
-  loaded only while it is on. See
+  it. The seasonal decorations' rules are in `css/season.css` (shared)
+  and `css/seasons/<key>.css`, loaded only while a season is on. See
   [CONVENTIONS.md](CONVENTIONS.md#the-stylesheet).
 - `js/shared-components.js` draws the header, footer, cards and all the
   furniture around a post. A site-wide change is made there, not in

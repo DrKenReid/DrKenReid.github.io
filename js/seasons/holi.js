@@ -366,6 +366,10 @@
     }
 
     K.dress({
+        // The ribbon's card (season.js, ribbon).
+        about: { short: 'Holi', when: 'The full moon of Phalguna, in February or March',
+            text: 'The Hindu festival of spring and colours. On the first evening, Holika Dahan, bonfires remember the burning of Holika and the escape of Prahlad; the next day people throw gulal, coloured powder, and water at each other, friends and strangers alike.',
+            link: 'https://en.wikipedia.org/wiki/Holi' },
         corner: palashArt, dangler: POTLI,
         // Clouds and specks of gulal rising, soft-edged; embers on the eve.
         leaves: EVE ? { kind: 'rise', colours: EMBERS, per1000: 22, shapes: [K.DOT], tumble: false, glow: true, size: [8, 16] } :

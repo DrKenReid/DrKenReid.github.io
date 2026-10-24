@@ -256,7 +256,15 @@
         update();
     }
 
+    // For the margins of a post: gold and silver stars, as the fireworks go up.
+    var STAR_24 = K.star(12, 12, 11, 5, 0.45), SPARK_24 = K.star(12, 12, 10, 8, 0.25);
+
     K.dress({
+        backdrop: { shapes: [STAR_24, SPARK_24], colours: ['#e8c25a', '#f3dd8f', '#cfd6e6', '#b8c2ff'] },
+        // The ribbon's card (season.js, ribbon).
+        about: { short: 'Hogmanay', when: '31 December to 2 January',
+            text: 'Scotland\'s new year. Christmas wasn\'t even a public holiday in Scotland until 1958, so this was the big one. After the Bells at midnight comes first-footing: the first person over the doorstep brings the luck for the year, ideally with coal, shortbread, salt or whisky.',
+            link: 'https://en.wikipedia.org/wiki/Hogmanay' },
         corner: clockArt, dangler: COAL_LUMP,
         // Fewer, grander bursts than Bonfire Night's, in gold and silver, glowing.
         leaves: { kind: 'fireworks', colours: FIREWORK_COLOURS, per1000: 0, shapes: [K.DOT], rate: 0.75, glow: true },

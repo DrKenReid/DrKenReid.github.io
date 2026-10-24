@@ -207,6 +207,10 @@
     }
 
     K.dress({
+        // The ribbon's card (season.js, ribbon).
+        about: { short: 'Burns Night', when: '25 January',
+            text: 'Robert Burns, Scotland\'s national poet, was born in Alloway on 25 January 1759. A Burns Supper pipes in the haggis, reads his Address to a Haggis over it, raises a dram and ends with Auld Lang Syne.',
+            link: 'https://en.wikipedia.org/wiki/Burns_supper' },
         corner: sprigArt, dangler: MOUSE,
         // Thistledown mostly, and a little snow: it is January.
         leaves: { kind: 'fall', colours: DOWN_COLOURS, per1000: 14, shapes: [thistledown(), K.DOT], tumble: false, size: [18, 30] },

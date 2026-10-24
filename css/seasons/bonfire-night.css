@@ -1,7 +1,7 @@
 /* css/seasons/bonfire-night.css: Bonfire Night's colours and its own rules.
    shared-components.js loads this file only while the season is on
-   (KR_SEASONS), beside js/seasons/bonfire-night.js; style.css keeps what every
-   season shares (§01 "Seasons", §21 "Seasonal decorations"). Tokens
+   (KR_SEASONS), beside js/seasons/bonfire-night.js; css/season.css holds what
+   every season shares. Tokens
    first, both themes, then the rules for its own pieces. */
 
 /* Bonfire Night: ember orange into wood smoke:

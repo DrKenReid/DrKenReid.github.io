@@ -242,6 +242,10 @@
     }
 
     K.dress({
+        // The ribbon's card (season.js, ribbon).
+        about: { short: 'Diwali', when: 'Five days in October or November',
+            text: 'The festival of lights, kept by Hindus, Sikhs and Jains. Homes are lit with diyas, small oil lamps, doorsteps get rangoli, and the main night, Lakshmi Puja, falls on the new moon of Kartik.',
+            link: 'https://en.wikipedia.org/wiki/Diwali' },
         corner: toranArt, dangler: KANDIL,
         // Sky lanterns rising, now and then a spark, all glowing.
         leaves: { kind: 'rise', colours: LANTERN_COLOURS, per1000: 12, shapes: [LANTERN, K.DOT],

@@ -243,7 +243,15 @@
         }
     }
 
+    // For the margins of a post: sparks and embers off the fire.
+    var SPARK_24 = K.star(12, 12, 10, 8, 0.25), EMBER_24 = K.star(12, 12, 9, 4, 0.5);
+
     K.dress({
+        backdrop: { shapes: [SPARK_24, EMBER_24], colours: ['#ffb347', '#ff8a3d', '#ffd34d', '#e0662a'] },
+        // The ribbon's card (season.js, ribbon).
+        about: { short: 'Bonfire Night', when: '5 November',
+            text: 'On 5 November 1605 Guy Fawkes was caught in a cellar under the House of Lords with 36 barrels of gunpowder, part of a plot to blow up King James I and Parliament. Bonfires were lit that night for the king\'s escape, and they\'ve been lit every year since.',
+            link: 'https://en.wikipedia.org/wiki/Guy_Fawkes_Night' },
         corner: wheelArt, dangler: TOFFEE_APPLE,
         // Busier than Hogmanay's and hotter: a back garden display, crisp sparks.
         leaves: { kind: 'fireworks', colours: FIREWORK_COLOURS, per1000: 0, shapes: [K.DOT], rate: 1.5, glow: false },
