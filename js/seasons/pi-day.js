@@ -217,8 +217,7 @@
 
     // Between the pies: a fork, crumbs, a slice on its side, a biscuit.
     function bit(w, h, body, turn) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 ' + h + '" width="' + w + '" height="' + fix(w * h / 24) + '"' +
-            (turn ? ' style="transform: rotate(' + turn + 'deg)"' : '') + ' aria-hidden="true" focusable="false">' + body + '</svg>';
+        return K.bit(24, h, w, turn || 0, body);
     }
     var FORK = bit(20, 12, '<path d="M1 7.2h12.6M13.4 5.4l3.6.4M13.4 9l3.6-.4M13.4 7.2H22" stroke="#a7b0b9" stroke-width="1.3" stroke-linecap="round"/>' +
         '<path d="M13 5.2c.8 0 1 4 0 4" fill="#a7b0b9"/>', -6);

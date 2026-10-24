@@ -49,23 +49,11 @@
 
 /* Winter's snowmen throw up snow: the same scatter in three round
    flakes, with an edge for the light page. */
-.kr-season-puff--snow,
-.kr-season-puff--snow::before,
-.kr-season-puff--snow::after {
-  width: 8px;
-  height: 8px;
-  margin-left: -4px;
-  border-radius: 50%;
-  background: var(--kr-season-badge);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--kr-season-line) 55%, transparent);
-  --kr-season-toss: 5px;
-  animation: kr-season-scatter 1.6s cubic-bezier(0.2, 0.6, 0.4, 1) forwards; }
-
-.kr-season-puff--snow::before {
-  --kr-season-toss: -20px; }
-
-.kr-season-puff--snow::after {
-  --kr-season-toss: 22px; }
+.kr-season-puff--snow {
+  --kr-puff-a: var(--kr-season-badge);
+  --kr-puff-b: var(--kr-season-badge);
+  --kr-puff-c: var(--kr-season-badge);
+  --kr-puff-edge: 0 0 0 1px color-mix(in srgb, var(--kr-season-line) 55%, transparent); }
 
 /* Winter's eaves, in the same place: a ledge of ice the width of the
    window, with a bud of an icicle every 26px that grows to its length

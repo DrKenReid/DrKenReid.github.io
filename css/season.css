@@ -310,6 +310,46 @@
   0% { transform: translate(0, 0) scale(0.6); opacity: 0.9; }
   100% { transform: translate(7px, -48px) scale(2.6); opacity: 0; } }
 
+/* A scatter puff (puff: 'kr-season-puff--scatter kr-season-puff--<kind>'):
+   three bits tossed up and out, each its own colour. The season's own
+   class sets only what differs from these, on the puff itself (the two
+   pseudo-elements inherit them): the bit's size, shape and edge, three
+   fills, three tosses, and the motion and its time. */
+.kr-season-puff--scatter {
+  --kr-puff-w: 8px;
+  --kr-puff-h: 8px;
+  --kr-puff-shape: 50%;
+  --kr-puff-edge: none;
+  --kr-puff-a: var(--kr-season-pumpkin);
+  --kr-puff-b: var(--kr-season-badge);
+  --kr-puff-c: color-mix(in srgb, var(--kr-season-pumpkin) 55%, var(--kr-season-badge));
+  --kr-puff-toss-a: 5px;
+  --kr-puff-toss-b: -20px;
+  --kr-puff-toss-c: 22px;
+  --kr-puff-motion: kr-season-scatter;
+  --kr-puff-ease: cubic-bezier(0.2, 0.6, 0.4, 1);
+  --kr-puff-time: 1.6s; }
+
+.kr-season-puff--scatter,
+.kr-season-puff--scatter::before,
+.kr-season-puff--scatter::after {
+  width: var(--kr-puff-w);
+  height: var(--kr-puff-h);
+  margin-left: calc(var(--kr-puff-w) / -2);
+  border-radius: var(--kr-puff-shape);
+  background: var(--kr-puff-a);
+  box-shadow: var(--kr-puff-edge);
+  --kr-season-toss: var(--kr-puff-toss-a);
+  animation: var(--kr-puff-motion) var(--kr-puff-time) var(--kr-puff-ease) forwards; }
+
+.kr-season-puff--scatter::before {
+  background: var(--kr-puff-b);
+  --kr-season-toss: var(--kr-puff-toss-b); }
+
+.kr-season-puff--scatter::after {
+  background: var(--kr-puff-c);
+  --kr-season-toss: var(--kr-puff-toss-c); }
+
 @keyframes kr-season-scatter {
   0% { transform: translate(0, 0) rotate(0) scale(0.6); opacity: 1; }
   35% { transform: translate(var(--kr-season-toss), -44px) rotate(160deg) scale(1); opacity: 1; }
@@ -512,8 +552,9 @@
    that pair at 4.5:1 in both themes), and the card it opens above the
    corner. The sash is a real button and takes focus; the card is a
    .kr-offstage, shown with .is-visible. From 768px it is a little larger.
-   Classes only script applies: .kr-season-ribbon, __sash,
-   .kr-season-about (__title, __when, __text, __more). */
+   Classes only script applies: .kr-season-ribbon (--tucked), __sash,
+   .kr-season-about (__title, __when, __text, __more, __switches,
+   __sound, __off). */
 .kr-season-ribbon {
   position: fixed;
   bottom: 0;
@@ -548,6 +589,31 @@
   display: block;
   overflow: hidden;
   text-overflow: ellipsis; }
+
+/* Phones, half a screen down: the sash tucks into a dog-ear in the corner,
+   52px on its edges (clip-path also clips the hit area, so the button
+   keeps a 26px square inside the triangle), named by its aria-label. The
+   card still opens above it. */
+@media only screen and (max-width: 767px) {
+  .kr-season-ribbon--tucked .kr-season-ribbon__sash {
+    bottom: 0;
+    left: 0;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    clip-path: polygon(0 0, 0 100%, 100% 100%);
+    transform: none;
+    animation: kr-season-tuck 0.25s ease; }
+  .kr-season-ribbon--tucked .kr-season-ribbon__sash span {
+    display: none; } }
+
+@keyframes kr-season-tuck {
+  from {
+    opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-season-ribbon--tucked .kr-season-ribbon__sash {
+    animation: none; } }
 
 @media only screen and (min-width: 768px) {
   .kr-season-ribbon__sash {
@@ -600,6 +666,13 @@
   font-size: 14px;
   color: var(--kr-action);
   text-decoration: underline; }
+
+/* The two switches under the text: small ghost buttons (.kr-btn) in a
+   .kr-btn-row, below a rule. */
+.kr-season-about__switches {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--kr-hairline); }
 
 /* --- Walkers on the footer's edge -----------------------------------------
    Built by kit.walker in js/season.js for a season's file: something that

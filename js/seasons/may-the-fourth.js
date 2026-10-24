@@ -99,14 +99,12 @@
 
     // Stardust between the rockets: sparkles, and a pebble of moon rock.
     function dust(size, colour, turn) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 24" width="' + size + '" height="' + size + '"' +
-            ' style="transform: rotate(' + turn + 'deg)" aria-hidden="true" focusable="false">' +
-            '<path d="' + sparkle(12, 12, 11) + '" fill="' + colour + '"/></svg>';
+        return K.bit(24, 24, size, turn,
+            '<path d="' + sparkle(12, 12, 11) + '" fill="' + colour + '"/>');
     }
     function pebble(w) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 12" width="' + w + '" height="' + fix(w / 2) + '"' +
-            ' aria-hidden="true" focusable="false"><path d="M2 11c-1-4 2-8 8-9s12 2 13 6-2 3.5-6 3.5z" fill="#9a9488"' +
-            ' stroke="#5e594f" stroke-width=".8"/></svg>';
+        return K.bit(24, 12, w, 0, '<path d="M2 11c-1-4 2-8 8-9s12 2 13 6-2 3.5-6 3.5z" fill="#9a9488"' +
+            ' stroke="#5e594f" stroke-width=".8"/>');
     }
 
     // A comet heading right: a bright head and a tail fading behind it.

@@ -135,15 +135,13 @@
 
     // A tuft of new grass and a small flower, for between the pieces.
     function tuft(w) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 24" width="' + w + '" height="' + w + '" aria-hidden="true"' +
-            ' focusable="false"><path d="M5 24c1-6 0-10-3-14 4 3 6 8 6 14zM10 24c0-8 1-14 4-19-1 6-1 13 0 19zM16 24c1-5 3-9 7-11' +
-            '-3 3-4 7-4 11z" fill="' + GREEN + '"/></svg>';
+        return K.bit(24, 24, w, 0, '<path d="M5 24c1-6 0-10-3-14 4 3 6 8 6 14zM10 24c0-8 1-14 4-19-1 6-1 13 0 19zM16 24c1-5 3-9 7-11' +
+            '-3 3-4 7-4 11z" fill="' + GREEN + '"/>');
     }
     function posy(colour, w) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 24" width="' + w + '" height="' + w + '" aria-hidden="true"' +
-            ' focusable="false"><path d="M12 13v11" stroke="' + DARK_GREEN + '" stroke-width="1.6"/>' +
+        return K.bit(24, 24, w, 0, '<path d="M12 13v11" stroke="' + DARK_GREEN + '" stroke-width="1.6"/>' +
             '<path d="' + posyPath(12, 9, 9) + '" fill="' + colour + '" stroke="#b9a6b0" stroke-width=".5"/>' +
-            '<circle cx="12" cy="9" r="1.8" fill="#f2c94c"/></svg>';
+            '<circle cx="12" cy="9" r="1.8" fill="#f2c94c"/>');
     }
 
     var BLOSSOM_ICON = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-12 -12 24 24">' +
@@ -218,7 +216,7 @@
                 { art: DAFFODILS, size: 'small', sound: 'peepers' },
                 { art: ROBIN, size: 'mid', sound: '' }],
         strew: [tuft(18), posy('#ffffff', 14), posy('#cdb3ec', 13), tuft(15), posy('#f7b6cf', 14)],
-        puff: 'kr-season-puff--petals',
+        puff: 'kr-season-puff--scatter kr-season-puff--petals',
         flyer: swallows(), flight: 'kr-season-flyer--swoop',
         favicon: BLOSSOM_ICON, moonmark: posyPath(14, 11, 4.6),
         // A bud every 34px of vine, open once the reader has passed it.

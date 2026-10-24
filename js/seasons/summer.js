@@ -129,9 +129,8 @@
         'M38.4 27a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0-3 0zM24.6 46a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0-3.2 0z"/>');
 
     // Grass, daisies and a shell for between the pieces.
-    function strewn(w, body, vb) {
-        return '<svg class="kr-season-leaf" viewBox="' + (vb || '0 0 24 24') + '" width="' + w + '" height="' + w + '"' +
-            ' aria-hidden="true" focusable="false">' + body + '</svg>';
+    function strewn(w, body) {
+        return K.bit(24, 24, w, 0, body);
     }
     var TUFT = '<path d="M5 24c1-6 0-10-3-14 4 3 6 8 6 14zM10 24c0-8 1-14 4-19-1 6-1 13 0 19zM16 24c1-5 3-9 7-11-3 3-4 7-4 11z"' +
         ' fill="' + GREEN + '"/>';
@@ -230,7 +229,7 @@
                 { art: JAR, size: 'small', sound: 'crickets' },
                 { art: SANDCASTLE, size: 'mid', sound: 'waves' }],
         strew: [strewn(18, TUFT), strewn(14, DAISY), strewn(13, SHELL), strewn(15, TUFT), strewn(12, DAISY)],
-        puff: 'kr-season-puff--pollen',
+        puff: 'kr-season-puff--scatter kr-season-puff--pollen',
         flyer: DRAGONFLY, flight: 'kr-season-flyer--dart',
         favicon: SUN_ICON, moonmark: sunPath(14, 11, 2.2, 8),
         // A beam of sunlight as far as the reader has come, the sun at its tip.

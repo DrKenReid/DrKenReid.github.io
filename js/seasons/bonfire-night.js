@@ -111,20 +111,17 @@
 
     // Bits for between them: sticks, embers, a spent sparkler.
     function stick(w, turn) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 8" width="' + w + '" height="' + (w / 3).toFixed(1) + '"' +
-            ' style="transform: rotate(' + turn + 'deg)" aria-hidden="true" focusable="false">' +
-            '<path d="M1 5l21-2M14 3.6l4-3" stroke="' + WOOD + '" stroke-width="1.8" stroke-linecap="round"/></svg>';
+        return K.bit(24, 8, w, turn,
+            '<path d="M1 5l21-2M14 3.6l4-3" stroke="' + WOOD + '" stroke-width="1.8" stroke-linecap="round"/>');
     }
     function ember(w) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 12 8" width="' + w + '" height="' + (w * 8 / 12).toFixed(1) + '"' +
-            ' aria-hidden="true" focusable="false"><path d="M1 7c0-3 2-5 5-5s5 2 5 5z" fill="#3a2a20"/>' +
-            '<path class="kr-season-glow" d="M3.4 6.4c.4-1.6 1.4-2.4 2.6-2.4s2.2.8 2.6 2.4z"/></svg>';
+        return K.bit(12, 8, w, 0, '<path d="M1 7c0-3 2-5 5-5s5 2 5 5z" fill="#3a2a20"/>' +
+            '<path class="kr-season-glow" d="M3.4 6.4c.4-1.6 1.4-2.4 2.6-2.4s2.2.8 2.6 2.4z"/>');
     }
     function spent(w, turn) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 6" width="' + w + '" height="' + (w / 4).toFixed(1) + '"' +
-            ' style="transform: rotate(' + turn + 'deg)" aria-hidden="true" focusable="false">' +
+        return K.bit(24, 6, w, turn,
             '<path d="M1 3h22" stroke="#8d939a" stroke-width="1.2" stroke-linecap="round"/>' +
-            '<path d="M12 3h11" stroke="#2a2a2a" stroke-width="2.2" stroke-linecap="round"/></svg>';
+            '<path d="M12 3h11" stroke="#2a2a2a" stroke-width="2.2" stroke-linecap="round"/>');
     }
 
     // A rocket on its stick, flying right, sparks streaming from its tail.
@@ -260,7 +257,7 @@
                 { art: SPARKLER, size: 'small', sound: 'sparkler' },
                 { art: ROCKET_BOTTLE, size: 'mid', sound: 'fireworks' }],
         strew: [stick(22, -8), ember(12), spent(20, 12), stick(18, 20), ember(10)],
-        puff: 'kr-season-puff--cinders',
+        puff: 'kr-season-puff--scatter kr-season-puff--cinders',
         flyer: ROCKET, flight: 'kr-season-flyer--rocket',
         favicon: BONFIRE_ICON, moonmark: MOON_ROCKET,
         // A fuse along the top of a post, burning down to the reader.

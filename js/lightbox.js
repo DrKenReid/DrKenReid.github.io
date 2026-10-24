@@ -226,6 +226,39 @@
 
     window.krLightboxA11y = krLightboxA11y;
 
+    /* The caption sits in the frame's bottom padding (--kr-lightbox-room).
+       How many rows it takes depends on the picture's width: a tall one
+       leaves a narrow caption that wraps, and a photograph's Edit buttons
+       can take a row of their own. A fixed room let that last row run
+       down under the filmstrip, where it could not be clicked, so the
+       room is measured from the caption each time a picture shows and on
+       resize, and the picture shrinks to leave it. A narrower picture can
+       wrap the caption again, hence a few rounds. */
+    function krLightboxFit(mfp) {
+        if (!mfp || !mfp.wrap) return;
+        var wrap = mfp.wrap[0], rounds = 0;
+        (function fit() {
+            var bar = wrap.querySelector('.mfp-bottom-bar');
+            if (!bar || !bar.offsetHeight) {
+                if (rounds++ < 20) setTimeout(fit, 50);
+                return;
+            }
+            var want = Math.ceil(bar.offsetHeight) + 12;
+            var now = parseFloat(getComputedStyle(wrap).getPropertyValue('--kr-lightbox-room')) || 0;
+            if (Math.abs(want - now) <= 1) return;
+            wrap.style.setProperty('--kr-lightbox-room', want + 'px');
+            if (rounds++ < 6) requestAnimationFrame(fit);
+        })();
+        if (!wrap.krFitOnResize) {
+            wrap.krFitOnResize = true;
+            window.addEventListener('resize', function () {
+                if (mfp.isOpen) krLightboxFit(mfp);
+            });
+        }
+    }
+
+    window.krLightboxFit = krLightboxFit;
+
     // ------------------------------------------------------------------
     // The thumbnail while the full frame loads
     // ------------------------------------------------------------------
@@ -437,7 +470,9 @@
                 change: function () {
                     krLightboxA11y(this, { noun: 'Photograph' });
                     krLightboxPreview(this);
-                }
+                    krLightboxFit(this);
+                },
+                imageLoadComplete: function () { krLightboxFit(this); }
             }
         });
         $('.img-lightbox').not(photos).magnificPopup({
@@ -450,7 +485,9 @@
                 change: function () {
                     krLightboxA11y(this);
                     krLightboxPreview(this);
-                }
+                    krLightboxFit(this);
+                },
+                imageLoadComplete: function () { krLightboxFit(this); }
             }
         });
     }

@@ -33,6 +33,7 @@ function loadRuntime(pathname = '/index.html', scripts = []) {
         classList: { add: noop, remove: noop, toggle: noop, contains: () => false },
         getAttribute: () => null,
         setAttribute: noop,
+        removeAttribute: noop,
         style: {},
     };
     const document = {

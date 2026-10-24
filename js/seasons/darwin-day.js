@@ -181,17 +181,15 @@
 
     // Between them: an Opuntia pad, seeds, a stone with barnacles, a burr.
     function opuntia(size, turn) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 24" width="' + size + '" height="' + size + '"' +
-            ' style="transform: rotate(' + turn + 'deg)" aria-hidden="true" focusable="false">' +
+        return K.bit(24, 24, size, turn,
             '<path d="M12 23c-5.4 0-7.4-5-7-10 .4-5.6 3.4-10 7-10s6.6 4.4 7 10c.4 5-1.6 10-7 10z" fill="#5f8a3c" stroke="#3e5f26" stroke-width=".8"/>' +
             '<g fill="#e8e0b0"><circle cx="9" cy="8" r=".7"/><circle cx="14.6" cy="9" r=".7"/><circle cx="11.6" cy="13" r=".7"/>' +
             '<circle cx="8.4" cy="16.6" r=".7"/><circle cx="15" cy="17" r=".7"/></g>' +
-            '<path d="M12 3c-1.4-1.8-.6-2.8 0-2.6s1.4.8 0 2.6z" fill="#f2c84b"/></svg>';
+            '<path d="M12 3c-1.4-1.8-.6-2.8 0-2.6s1.4.8 0 2.6z" fill="#f2c84b"/>');
     }
     function seeds(size) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 12" width="' + size + '" height="' + (size / 2).toFixed(1) + '"' +
-            ' aria-hidden="true" focusable="false"><ellipse cx="5" cy="8" rx="3.6" ry="2.6" fill="#8a6a3c" transform="rotate(-20 5 8)"/>' +
-            '<ellipse cx="12.6" cy="9" rx="2.6" ry="1.9" fill="#b08a52"/><ellipse cx="19" cy="8.4" rx="3.2" ry="2.2" fill="#6f5530" transform="rotate(25 19 8.4)"/></svg>';
+        return K.bit(24, 12, size, 0, '<ellipse cx="5" cy="8" rx="3.6" ry="2.6" fill="#8a6a3c" transform="rotate(-20 5 8)"/>' +
+            '<ellipse cx="12.6" cy="9" rx="2.6" ry="1.9" fill="#b08a52"/><ellipse cx="19" cy="8.4" rx="3.2" ry="2.2" fill="#6f5530" transform="rotate(25 19 8.4)"/>');
     }
     function barnacles(size) {
         var cone = function (x, y, s) {
@@ -199,15 +197,13 @@
                 'L' + fix(x + 2.6 * s) + ' ' + fix(y) + 'z" fill="#ece6d8" stroke="#8d877a" stroke-width=".5"/>' +
                 '<path d="M' + fix(x - 0.8 * s) + ' ' + fix(y - 3.2 * s) + 'h' + fix(1.6 * s) + '" stroke="#5d584f" stroke-width=".7"/>';
         };
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 16" width="' + size + '" height="' + (size * 16 / 24).toFixed(1) + '"' +
-            ' aria-hidden="true" focusable="false"><path d="M1.5 16c-1-5 3-9.4 10.5-9.4S23.6 11 22.6 16z" fill="#7d8388"/>' +
-            cone(7, 10.2, 1) + cone(12.6, 8.4, 1.15) + cone(17.4, 10.8, 0.85) + cone(10, 13.6, 0.7) + '</svg>';
+        return K.bit(24, 16, size, 0, '<path d="M1.5 16c-1-5 3-9.4 10.5-9.4S23.6 11 22.6 16z" fill="#7d8388"/>' +
+            cone(7, 10.2, 1) + cone(12.6, 8.4, 1.15) + cone(17.4, 10.8, 0.85) + cone(10, 13.6, 0.7));
     }
     function burr(size, turn) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 24" width="' + size + '" height="' + size + '"' +
-            ' style="transform: rotate(' + turn + 'deg)" aria-hidden="true" focusable="false">' +
+        return K.bit(24, 24, size, turn,
             '<path d="' + K.star(12, 13, 10, 5, 0.55) + '" fill="#a88a4e" stroke="#6d5630" stroke-width=".8" stroke-linejoin="round"/>' +
-            '<circle cx="12" cy="13" r="3" fill="#7c6438"/></svg>';
+            '<circle cx="12" cy="13" r="3" fill="#7c6438"/>');
     }
 
     /* HMS Beagle under sail, bound right: a barque, square sails on the
@@ -449,7 +445,7 @@
                 { art: finch(FINCHES[1], BEAKS[1]), size: 'mid', sound: 'waves' },
                 { art: finch(FINCHES[2], BEAKS[2]), size: 'small', sound: '' }],
         strew: [opuntia(20, -8), seeds(14), barnacles(20), burr(12, 20), seeds(11)],
-        puff: 'kr-season-puff--seeds',
+        puff: 'kr-season-puff--scatter kr-season-puff--seeds',
         flyer: BEAGLE, flight: 'kr-season-flyer--beagle',
         favicon: FINCH_ICON, moonmark: place(FINCH_SHAPE, 0.62, 4.6, 4.8),
         // A twig every 28px of the line, branching once the reader has passed.

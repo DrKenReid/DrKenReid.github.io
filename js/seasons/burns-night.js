@@ -119,11 +119,9 @@
 
     // A sprig of heather for between the dishes, s px tall.
     function sprig(s, turn, shade) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 24" width="' + s + '" height="' + s + '"' +
-            ' style="transform: rotate(' + turn + 'deg)" aria-hidden="true" focusable="false">' +
+        return K.bit(24, 24, s, turn,
             '<path d="M12 23V4M12 15l-5-5M12 12l5-4" fill="none" stroke="#5c6b3a" stroke-width="1.3" stroke-linecap="round"/>' +
-            spike(12, 22, 18, -90, 7, shade) + spike(12, 15, 7, -135, 4, shade + 1) + spike(12, 12, 6, -39, 4, shade + 2) +
-            '</svg>';
+            spike(12, 22, 18, -90, 7, shade) + spike(12, 15, 7, -135, 4, shade + 1) + spike(12, 12, 6, -39, 4, shade + 2));
     }
 
     /* A red grouse seen from below as it whirrs over the moor: a plump

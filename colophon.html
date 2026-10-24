@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
   <meta charset="UTF-8">
-  <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+  <script>(function(){var d=document.documentElement,t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';d.setAttribute('data-theme',t);try{var c=(localStorage.getItem('kr-season-day')||'').split('|'),n=new Date();if(c[0]&&c[3]===n.getFullYear()+'-'+(n.getMonth()+1)+'-'+n.getDate()&&!sessionStorage.getItem('kr-season-preview')&&localStorage.getItem('kr-season')!=='off'){d.setAttribute('data-season',c[0]);[1,2].forEach(function(i){var l=document.createElement('link');l.rel='stylesheet';l.id=i<2?'kr-season-shared-css':'kr-season-css';l.href=c[i];l.setAttribute('blocking','render');document.head.appendChild(l);});}}catch(e){}})();</script>
   <meta name="description" content="How kenreid.co.uk is built and what it weighs: no framework, no build step on the server, pruned CSS, subset icon fonts, and the numbers behind all of it.">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Colophon - Ken Reid</title>
@@ -291,6 +291,18 @@
           neutral, because <span data-colo="photos">hundreds of</span> photographs are colour enough for one website.</p>
       </section>
 
+      <section class="kr-colo-block" aria-labelledby="colo-seasons">
+        <h3 class="kr-colo-h" id="colo-seasons">The seasons</h3>
+        <p class="kr-colo-note">The site dresses itself for the four seasons and for the holidays below:
+          the colours change, and each brings its own decorations, cursor and a few sounds (credited
+          further down). When a holiday falls inside a season, the holiday gets the day. Preview any of
+          them; a preview lasts until you close the tab.</p>
+        <div class="kr-colo-seasons__months" aria-hidden="true"><span id="kr-colo-season-months"></span></div>
+        <ol class="kr-colo-seasons" id="kr-colo-seasons" aria-label="The seasons and holidays this year"></ol>
+        <p class="kr-colo-note"><a href="/colophon.html?season=on#colo-seasons" id="kr-colo-season-today">Back to today's season</a>
+          &middot; <a href="/colophon.html?season=off#colo-seasons" id="kr-colo-season-switch">Turn the seasons off</a></p>
+      </section>
+
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
           <p class="kr-colo-note">Photography is my own, shot on a Canon EOS 60D (the older photos) and a Canon EOS R (the newer ones); the full-size
@@ -371,6 +383,80 @@
   <script>
     renderHeader('header-section', { basePath: '/' });
     renderFooter('footer-section');
+
+    /* The seasons calendar: every entry in KR_SEASONS (shared-components.js)
+       on this year's track, its windows as bars in its hero colours, today
+       as a line, the four seasons first and then the holidays by date.
+       Preview links set ?season=<key> on the homepage, for the tab. */
+    (function () {
+      var list = document.getElementById('kr-colo-seasons');
+      if (!list || typeof KR_SEASONS === 'undefined') return;
+      var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+        'August', 'September', 'October', 'November', 'December'];
+      var now = new Date(), year = now.getFullYear();
+      var start = new Date(year, 0, 1);
+      var days = Math.round((new Date(year + 1, 0, 1) - start) / 864e5);
+      function dayOf(m, d) { return Math.round((new Date(year, m - 1, d) - start) / 864e5); }
+      function pc(n) { return (100 * n / days).toFixed(3) + '%'; }
+      function said(md) { return md[1] + ' ' + MONTHS[md[0] - 1]; }
+      function el(tag, cls, text) {
+        var e = document.createElement(tag);
+        e.className = cls;
+        if (text) e.textContent = text;
+        return e;
+      }
+      function ramp(s) {
+        var r = s.heroRamp || [[200, 200, 200], [200, 200, 200]];
+        return 'linear-gradient(90deg, rgb(' + r[0].join(',') + '), rgb(' + r[1].join(',') + '))';
+      }
+
+      var months = document.getElementById('kr-colo-season-months');
+      MONTHS.forEach(function (m) { months.appendChild(el('span', '', m.slice(0, 3))); });
+
+      var showing = krSeason();
+      var today = dayOf(now.getMonth() + 1, now.getDate()) + 0.5;
+      KR_SEASONS.map(function (s) {
+        var wins = s.windows.concat((s.years && s.years[year]) || []);
+        return { s: s, wins: wins, first: wins.length ? dayOf(wins[0][0][0], wins[0][0][1]) : days };
+      }).sort(function (a, b) {
+        return ((a.s.rank ? 1 : 0) - (b.s.rank ? 1 : 0)) || a.first - b.first;
+      }).forEach(function (row) {
+        var s = row.s;
+        var li = el('li', 'kr-colo-season' + (showing && showing.key === s.key ? ' is-showing' : ''));
+        var name = el('span', 'kr-colo-season__name', s.label);
+        if (showing && showing.key === s.key) name.appendChild(el('span', 'kr-colo-season__now', 'showing now'));
+        li.appendChild(name);
+        li.appendChild(el('span', 'kr-colo-season__when', row.wins.length ? row.wins.map(function (w) {
+          return said(w[0]) === said(w[1]) ? said(w[0]) : said(w[0]) + ' to ' + said(w[1]);
+        }).join('; ') : 'Dates for ' + year + ' to come'));
+        var track = el('span', 'kr-colo-season__track');
+        track.setAttribute('aria-hidden', 'true');
+        row.wins.forEach(function (w) {
+          var from = dayOf(w[0][0], w[0][1]), to = dayOf(w[1][0], w[1][1]) + 1;
+          (from < to ? [[from, to]] : [[from, days], [0, to]]).forEach(function (seg) {
+            var bar = el('span', 'kr-colo-season__bar');
+            bar.style.left = pc(seg[0]);
+            bar.style.width = pc(seg[1] - seg[0]);
+            bar.style.background = ramp(s);
+            track.appendChild(bar);
+          });
+        });
+        var line = el('span', 'kr-colo-season__today');
+        line.style.left = pc(today);
+        track.appendChild(line);
+        li.appendChild(track);
+        var go = el('a', 'kr-colo-season__try', 'Preview');
+        go.href = '/?season=' + s.key;
+        go.appendChild(el('span', 'sr-only', ' ' + s.label));
+        li.appendChild(go);
+        list.appendChild(li);
+      });
+      if (krSeasonsOff()) {
+        var flip = document.getElementById('kr-colo-season-switch');
+        flip.textContent = 'Turn the seasons back on';
+        flip.href = '/colophon.html?season=on#colo-seasons';
+      }
+    }());
 
     /* Every figure comes from data/colophon.json, written by
        .github/scripts/generate_colophon.py. */

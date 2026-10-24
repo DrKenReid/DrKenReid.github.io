@@ -69,9 +69,8 @@
 
     // A drift of snow for between the snowmen, w px wide.
     function drift(w) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 10" width="' + w + '" height="' + (w * 10 / 24).toFixed(1) + '"' +
-            ' aria-hidden="true" focusable="false"><path d="M.5 10c2-6 6.5-9 11.5-9s9.5 3 11.5 9z" fill="' + SNOWY +
-            '" stroke="' + SNOW_EDGE + '" stroke-width=".8"/></svg>';
+        return K.bit(24, 10, w, 0, '<path d="M.5 10c2-6 6.5-9 11.5-9s9.5 3 11.5 9z" fill="' + SNOWY +
+            '" stroke="' + SNOW_EDGE + '" stroke-width=".8"/>');
     }
 
     var FLAKE_ICON = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">' +
@@ -113,7 +112,7 @@
         patch: [{ art: snowman('#2f6fa8'), size: 'big', sound: 'snow' },
                 { art: snowman('#d9a530', true), size: 'small', sound: 'chickadee' },
                 { art: snowman('#2a8c82'), size: 'mid', sound: 'flop' }],
-        strew: [drift(22), drift(16), drift(18), drift(20), drift(14)], puff: 'kr-season-puff--snow',
+        strew: [drift(22), drift(16), drift(18), drift(20), drift(14)], puff: 'kr-season-puff--scatter kr-season-puff--snow',
         flyer: OWL, flight: 'kr-season-flyer--soar',
         favicon: FLAKE_ICON, moonmark: flake(14, 11, 4.4),
         // An icicle every 26px of eaves, grown once the reader has passed.

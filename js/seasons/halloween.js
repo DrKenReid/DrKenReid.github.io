@@ -128,15 +128,13 @@
         '<circle cx="28.4" cy="5.2" r="2.2"/><path d="M24.6 4.6h7.6l-2.4-1.4L24 -3.2l2.8 6z"/>');
 
     var GRAVE = function (w) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 20 24" width="' + w + '" height="' + (w * 1.2).toFixed(1) + '"' +
-            ' aria-hidden="true" focusable="false"><path d="M3 24V9a7 7 0 0 1 14 0v15z" fill="#8d8a93" stroke="#55525b" stroke-width="1"/>' +
+        return K.bit(20, 24, w, 0, '<path d="M3 24V9a7 7 0 0 1 14 0v15z" fill="#8d8a93" stroke="#55525b" stroke-width="1"/>' +
             '<path d="M7 11h6M7 14h6M7 17h4" stroke="#55525b" stroke-width="1.2" stroke-linecap="round"/>' +
-            '<path d="M1 24c1-2 2-3 3-2 0-2 1-3 2-1M14 24c1-2 2-3 3-1 1-2 2-2 2 1" fill="none" stroke="#5b6b2c" stroke-width="1"/></svg>';
+            '<path d="M1 24c1-2 2-3 3-2 0-2 1-3 2-1M14 24c1-2 2-3 3-1 1-2 2-2 2 1" fill="none" stroke="#5b6b2c" stroke-width="1"/>');
     };
 
-    var CANDY_CORN = '<svg class="kr-season-leaf" viewBox="0 0 16 18" width="11" height="12.4" style="transform: rotate(-18deg)"' +
-        ' aria-hidden="true" focusable="false"><path d="M2.5 12h11l1.5 4c0 1.4-14 1.4-14 0z" fill="#f2c230"/>' +
-        '<path d="M4.7 6.5h6.6l2.2 5.5H2.5z" fill="#ec7a1c"/><path d="M8 1c1 0 2.6 3.6 3.3 5.5H4.7C5.4 4.6 7 1 8 1z" fill="#fbf6e9"/></svg>';
+    var CANDY_CORN = K.bit(16, 18, 11, -18, '<path d="M2.5 12h11l1.5 4c0 1.4-14 1.4-14 0z" fill="#f2c230"/>' +
+        '<path d="M4.7 6.5h6.6l2.2 5.5H2.5z" fill="#ec7a1c"/><path d="M8 1c1 0 2.6 3.6 3.3 5.5H4.7C5.4 4.6 7 1 8 1z" fill="#fbf6e9"/>');
 
     /* A ghost rises from the bottom corner of a post card's picture while
        the card is hovered, and sinks back when the pointer leaves. Cards

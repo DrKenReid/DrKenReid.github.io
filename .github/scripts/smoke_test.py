@@ -68,6 +68,12 @@ without one class), and the pin seen to fail.
                             post's set, not while zoomed, and again on the
                             frame after a zoomed one (it stopped there for
                             good).
+  check_gallery_edits       A photograph with edits, opened in the gallery's
+                            lightbox at desktop sizes: every Edit button is on
+                            top where it is drawn, and one click shows that
+                            edit (a tall frame's caption wrapped to a third row
+                            that ran under the filmstrip, unclickable up to
+                            1600 x 900).
   check_filter_rows         At 390 the quote wall's author pills are one row
                             that scrolls (they stood 376px tall); ?tag=winter
                             shows Winter pressed in the gallery's row; Tab
@@ -1252,6 +1258,47 @@ def swipe(cdp, x0, x1, y):
     for k in range(1, 7):
         cdp.send("Input.dispatchTouchEvent", {"type": "touchMove", "touchPoints": [{"x": x0 + (x1 - x0) * k / 6, "y": y}]})
     cdp.send("Input.dispatchTouchEvent", {"type": "touchEnd", "touchPoints": []})
+
+
+def check_gallery_edits(browser, base, rep):
+    """The lightbox's Edit buttons take clicks at desktop sizes (see the
+    module docstring). The originals come from the repository's heroes."""
+    groups = json.loads((ROOT / "data" / "photo-variants.json").read_text(encoding="utf-8"))
+    groups = groups.get("groups", groups) if isinstance(groups, dict) else groups
+    stem = str(groups[0][0])
+
+    def hero_for_original(route):
+        name = route.request.url.rsplit("/", 1)[-1].rsplit(".", 1)[0]
+        hero = ROOT / "img" / "photography" / "hero" / f"{name}.webp"
+        if name.isdigit() and hero.exists():
+            route.fulfill(status=200, body=hero.read_bytes(), headers={"content-type": "image/webp"})
+        else:
+            route.abort()
+    for size in ((1280, 600), (1366, 768), (1440, 900), (1920, 1080)):
+        context = site_context(browser, base, size=size)
+        context.route(RELEASE_GLOB, hero_for_original)
+        scope = f"gallery.html?photo={stem} @{size[0]}x{size[1]}"
+        page, sink = open_page(context, base, f"gallery.html?photo={stem}", rep, scope,
+                               "document.querySelectorAll('.kr-lightbox-edit').length > 1")
+        if page:
+            ready = wait_until(page, "[...document.querySelectorAll('.kr-lightbox-edit')]"
+                                     ".every(b => b.getBoundingClientRect().height > 0)", PAGE_BUDGET_MS)
+            page.wait_for_timeout(400)
+            hits = page.evaluate("""() => [...document.querySelectorAll('.kr-lightbox-edit')].map(b => {
+                const r = b.getBoundingClientRect();
+                const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+                return { edit: b.textContent, on: !!top && b.contains(top), under: top ? String(top.className || top.tagName) : null };
+            })""")
+            rep.check(scope, "every Edit button is on top where it is drawn",
+                      ready and all(h["on"] for h in hits), hits)
+            second = page.locator(".kr-lightbox-edit").nth(1)
+            second.click()
+            rep.check(scope, "a click on Edit 2 shows that edit",
+                      wait_until(page, "document.querySelectorAll('.kr-lightbox-edit')[1]"
+                                       ".getAttribute('aria-pressed') === 'true'", PAGE_BUDGET_MS))
+            rep.console_errors(scope, sink)
+            page.close()
+        context.close()
 
 
 def check_photo_swipes(browser, base, rep):
@@ -2992,24 +3039,24 @@ SEASONS_UNDER_TEST = {
     "halloween": {"lost": "This Page Has Passed Over", "tag": "spooky", "pill": "Spooky",
                   "light_fog": "none", "burst": "kr-season-puff", "track": "burn"},
     "fall": {"lost": "This Page Has Fallen", "tag": "autumn", "pill": "Autumn",
-             "light_fog": "block", "burst": "kr-season-puff kr-season-puff--leaves", "track": "bits", "ribbon": False},
+             "light_fog": "block", "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--leaves", "track": "bits", "ribbon": False},
     "winter": {"lost": "This Page Is Snowed In", "tag": "winter", "pill": "Winter",
-               "light_fog": "block", "burst": "kr-season-puff kr-season-puff--snow", "track": "bits", "ribbon": False},
+               "light_fog": "block", "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--snow", "track": "bits", "ribbon": False},
     "spring": {"lost": "This Page Hasn't Sprouted", "tag": "spring", "pill": "Spring",
-               "light_fog": "block", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--petals",
+               "light_fog": "block", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--petals",
                "track": "bits", "ribbon": False},
     "summer": {"lost": "This Page Has Gone on Holiday", "tag": "summer", "pill": "Summer",
-               "light_fog": "block", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--pollen",
+               "light_fog": "block", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--pollen",
                "track": "fill", "ribbon": False},
     "burns-night": {"lost": "This Page Has Gone Agley", "tag": None, "pill": None,
                     "light_fog": "none", "burst": "kr-season-puff kr-season-puff--steam", "track": "fill"},
     "st-andrews": {"lost": "This Page Is Lost in the Haar", "tag": None, "pill": None,
-                   "light_fog": "block", "burst": "kr-season-puff kr-season-puff--saltire", "track": "bits"},
+                   "light_fog": "block", "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--saltire", "track": "bits"},
     "hogmanay": {"lost": "This Page Missed the Bells", "tag": None, "pill": None,
-                 "light_fog": "none", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--streamers",
+                 "light_fog": "none", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--streamers",
                  "track": "bits"},
     "bonfire-night": {"lost": "This Page Went Up in Smoke", "tag": None, "pill": None,
-                      "light_fog": "block", "burst": "kr-season-puff kr-season-puff--cinders", "track": "burn"},
+                      "light_fog": "block", "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--cinders", "track": "burn"},
     "may-the-fourth": {"lost": "This Isn't the Page You're Looking For", "tag": None, "pill": None,
                        "light_fog": "none", "burst": "kr-season-puff kr-season-puff--exhaust", "track": "fill",
                        "map": False},
@@ -3017,17 +3064,17 @@ SEASONS_UNDER_TEST = {
                              "light_fog": "none", "burst": "kr-season-puff kr-season-puff--exhaust",
                              "track": "fill", "map": False},
     "diwali": {"lost": "No Lamp at This Door", "tag": None, "pill": None,
-               "light_fog": "none", "burst": "kr-season-puff kr-season-puff--sparks", "track": "bits",
+               "light_fog": "none", "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--sparks", "track": "bits",
                "map": False},
     "holi": {"lost": "This Page Has Gone Out to Play Holi", "tag": None, "pill": None,
              "light_fog": "block", "burst": "kr-season-puff kr-season-puff--gulal", "track": "fill", "map": False},
     "darwin-day": {"lost": "This Page Went Extinct", "tag": "wildlife", "pill": "Wildlife",
-                   "light_fog": "block", "burst": "kr-season-puff kr-season-puff--seeds", "track": "bits"},
+                   "light_fog": "block", "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--seeds", "track": "bits"},
     "pi-day": {"lost": "This Page Is Irrational", "tag": None, "pill": None,
                "light_fog": "none", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--digits",
                "track": "fill", "map": False},
     "world-book-day": {"lost": "This Page Has Been Torn Out", "tag": None, "pill": None,
-                       "light_fog": "none", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--pages",
+                       "light_fog": "none", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--pages",
                        "track": "bits", "map": False},
     "cat-day": {"lost": "The Cat Knocked This Page Off the Table", "tag": None, "pill": None,
                 "light_fog": "none", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--hearts",
@@ -3136,6 +3183,20 @@ def check_season(browser, base, rep):
                     }""")
                     rep.check(scope, "a pumpkin bursts and the dangler drops when clicked, in silence",
                               toys["burst"] == want["burst"] and toys["drop"] and not toys["sounds"], toys)
+                if path == "about.html":
+                    back = page.evaluate("""() => {
+                        const layer = document.querySelector('main > .kr-season-backdrop');
+                        if (!layer) return null;
+                        const boxes = [...document.querySelectorAll('main .container')]
+                            .map(c => c.getBoundingClientRect()).filter(r => r.width);
+                        const items = [...layer.querySelectorAll('.kr-season-backdrop__item')];
+                        return { items: items.length, hidden: layer.getAttribute('aria-hidden') === 'true',
+                                 over: items.filter(el => { const r = el.getBoundingClientRect();
+                                     return boxes.some(b => r.right > b.left + 2 && r.left < b.right - 2
+                                         && r.bottom > b.top && r.top < b.bottom); }).length };
+                    }""")
+                    rep.check(scope, "the page's backdrop keeps to the margins, clear of every container",
+                              bool(back) and back["items"] > 0 and back["hidden"] and not back["over"], back)
                 if path == "about.html" and want.get("ribbon", True):
                     ribbon = page.evaluate("""() => {
                         const sash = document.querySelector('.kr-season-ribbon__sash');
@@ -3146,12 +3207,18 @@ def check_season(browser, base, rep):
                         sash.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
                         const r = sash.getBoundingClientRect();
                         const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+                        const sound = card.querySelector('button.kr-season-about__sound');
+                        const off = card.querySelector('button.kr-season-about__off');
                         return { name: sash.getAttribute('aria-label'), shut,
-                                 onTop: !!(top && sash.contains(top)), link: !!card.querySelector('a[href]') };
+                                 onTop: !!(top && sash.contains(top)), link: !!card.querySelector('a[href]'),
+                                 sound: sound ? sound.textContent : null,
+                                 off: off ? off.textContent : null };
                     }""")
-                    rep.check(scope, "the holiday's ribbon is a named button on top, its card hidden until asked for",
+                    rep.check(scope, "the holiday's ribbon is a named button on top, its card hidden until asked for, "
+                              "with the sounds switch and the way to turn the decorations off",
                               bool(ribbon) and ribbon["name"].startswith("About ") and ribbon["shut"] == "hidden"
-                              and ribbon["onTop"] and ribbon["link"], ribbon)
+                              and ribbon["onTop"] and ribbon["link"] and ribbon["sound"] == "Turn the sounds on"
+                              and ribbon["off"] == "Turn off the decorations", ribbon)
                 if path == "404.html":
                     title = page.evaluate("document.querySelector('.page-title').textContent")
                     rep.check(scope, "the 404 page is dressed", title == want["lost"], title)
@@ -3238,6 +3305,7 @@ def run_pins(browser, base, rep):
     check_gallery_keyboard_and_rows(browser, base, rep)
     check_photo_lightboxes(browser, base, rep)
     check_photo_swipes(browser, base, rep)
+    check_gallery_edits(browser, base, rep)
     check_filter_rows(browser, base, rep)
     check_palette_paths(browser, base, rep)
     check_not_found_page(browser, base, rep)

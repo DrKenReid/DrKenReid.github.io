@@ -72,7 +72,7 @@
         patch: [{ art: K.pumpkin(null), size: 'big', sound: 'leaves' },
                 { art: K.pumpkin(null, ['#d8c49a', '#ecdcb6', '#bfa878']), size: 'small', sound: 'crow' },
                 { art: K.pumpkin(null, ['#a8401a', '#c4552a', '#93361a']), size: 'mid', sound: 'geese' }],
-        strew: K.strewnLeaves(FALL_COLOURS), puff: 'kr-season-puff--leaves',
+        strew: K.strewnLeaves(FALL_COLOURS), puff: 'kr-season-puff--scatter kr-season-puff--leaves',
         flyer: geese(), flight: 'kr-season-flyer--glide',
         favicon: MAPLE_ICON, moonmark: MOON_LEAF,
         // A leaf every 64px of twig, the reader's passing drops it.

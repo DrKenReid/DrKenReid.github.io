@@ -53,24 +53,15 @@
 
 /* The fall's pumpkins burst leaves instead: three small leaves thrown up
    and fluttering down, each its own way (--kr-season-toss). */
-.kr-season-puff--leaves,
-.kr-season-puff--leaves::before,
-.kr-season-puff--leaves::after {
-  width: 9px;
-  height: 9px;
-  margin-left: -4px;
-  border-radius: 0 70%;
-  background: var(--kr-season-pumpkin);
-  --kr-season-toss: 6px;
-  animation: kr-season-scatter 1.5s cubic-bezier(0.2, 0.6, 0.4, 1) forwards; }
-
-.kr-season-puff--leaves::before {
-  background: var(--kr-season-badge);
-  --kr-season-toss: -22px; }
-
-.kr-season-puff--leaves::after {
-  background: var(--kr-season-creature);
-  --kr-season-toss: 24px; }
+.kr-season-puff--leaves {
+  --kr-puff-w: 9px;
+  --kr-puff-h: 9px;
+  --kr-puff-shape: 0 70%;
+  --kr-puff-c: var(--kr-season-creature);
+  --kr-puff-toss-a: 6px;
+  --kr-puff-toss-b: -22px;
+  --kr-puff-toss-c: 24px;
+  --kr-puff-time: 1.5s; }
 
 /* The fall's twig, in the same place: a thin bough the width of the
    window with a leaf hanging every 64px (every: 64 in js/seasons/fall.js).

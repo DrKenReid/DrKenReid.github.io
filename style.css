@@ -10710,7 +10710,11 @@ button.mfp-arrow {
    or three rows (the words, then the map link and Copy link), which ran
    off the foot of the screen under a tall picture, so the room grows
    there. --kr-lightbox-room is that padding, read by the image, the
-   shadow box behind it, the caption bar and the loading spinner. */
+   shadow box behind it, the caption bar and the loading spinner;
+   lightbox.js (krLightboxFit) sets it from the caption's own height each
+   time a picture shows, so a caption of three rows (a photograph's Edit
+   buttons) still sits above the filmstrip, and the caption is drawn over
+   the picture's box so every row takes clicks. */
 .kr-lightbox {
   --kr-lightbox-room: 40px; }
 
@@ -10725,6 +10729,7 @@ button.mfp-arrow {
   bottom: var(--kr-lightbox-room); }
 
 .kr-lightbox .mfp-bottom-bar {
+  z-index: 1;
   display: block !important;
   margin-top: calc(10px - var(--kr-lightbox-room));
   text-align: center; }
@@ -14970,6 +14975,110 @@ a.kr-made__link:focus-visible::after {
 
 [data-theme="dark"] .kr-colo-note {
   color: #a49d93; }
+
+/* The seasons calendar: one row per entry in KR_SEASONS, built by the
+   colophon's inline script. Name, dates, a year-long track with the
+   season's windows as bars in its hero colours and today as a line, and a
+   Preview link. Below 768px the track takes a line of its own. Classes
+   only script applies: .kr-colo-season (.is-showing), __name, __now,
+   __when, __track, __bar, __today, __try; .kr-colo-seasons__months. */
+.kr-colo-seasons,
+.kr-colo-seasons__months {
+  max-width: 900px;
+  margin: 24px auto 0;
+  padding: 0;
+  list-style: none; }
+
+.kr-colo-season,
+.kr-colo-seasons__months {
+  display: grid;
+  grid-template-columns: 12.5rem 1fr 4.5rem;
+  grid-template-areas: "name track try" "when track try";
+  align-items: center;
+  column-gap: 16px; }
+
+.kr-colo-season {
+  padding: 8px 8px;
+  border-radius: var(--kr-radius-md); }
+
+.kr-colo-season:hover,
+.kr-colo-season:focus-within,
+.kr-colo-season.is-showing {
+  background: var(--kr-surface-1); }
+
+.kr-colo-season__name {
+  grid-area: name;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--kr-ink); }
+
+.kr-colo-season__now {
+  margin-left: 6px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--kr-muted); }
+
+.kr-colo-season__when {
+  grid-area: when;
+  font-size: 13px;
+  color: var(--kr-muted); }
+
+.kr-colo-season__track {
+  grid-area: track;
+  position: relative;
+  height: 14px;
+  border-radius: 7px;
+  background: var(--kr-hairline); }
+
+.kr-colo-season__bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  min-width: 5px;
+  border-radius: 7px;
+  box-shadow: inset 0 0 0 1px var(--kr-rule-strong); }
+
+.kr-colo-season__today {
+  position: absolute;
+  top: -5px;
+  bottom: -5px;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--kr-ink); }
+
+/* Two classes: a link colour at (0,1,1) beats one. */
+.kr-colo-season .kr-colo-season__try {
+  grid-area: try;
+  font-size: 14px;
+  text-align: right;
+  color: var(--kr-action);
+  text-decoration: underline; }
+
+.kr-colo-seasons__months {
+  margin-top: 28px;
+  padding: 0 8px;
+  grid-template-areas: ". track .";
+  font-size: 12px;
+  color: var(--kr-muted); }
+
+.kr-colo-seasons__months > span {
+  grid-area: track;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr); }
+
+.kr-colo-seasons + .kr-colo-note {
+  margin-top: 18px; }
+
+@media only screen and (max-width: 767px) {
+  .kr-colo-season,
+  .kr-colo-seasons__months {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "name try" "when when" "track track";
+    row-gap: 4px; }
+  .kr-colo-seasons__months {
+    grid-template-areas: "track track"; }
+  .kr-colo-season__track {
+    margin-top: 6px; } }
 
 /* Colophon commit bars rise as the chart scrolls up the viewport. */
 @supports (animation-timeline: view()) {

@@ -100,16 +100,14 @@
 
     // A marigold head and a loose petal for between the diyas.
     function bloom(size, outer, inner, turn) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 24" width="' + size + '" height="' + size + '"' +
-            ' style="transform: rotate(' + turn + 'deg)" aria-hidden="true" focusable="false">' +
+        return K.bit(24, 24, size, turn,
             '<path d="' + star(12, 12, 11, 14, 0.8) + '" fill="' + outer + '"/>' +
             '<path d="' + star(12, 12, 6.8, 10, 0.75) + '" fill="' + inner + '"/>' +
-            '<circle cx="12" cy="12" r="2.2" fill="#9a4a0c"/></svg>';
+            '<circle cx="12" cy="12" r="2.2" fill="#9a4a0c"/>');
     }
     function petal(size, colour, turn) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 24" width="' + size + '" height="' + size + '"' +
-            ' style="transform: rotate(' + turn + 'deg)" aria-hidden="true" focusable="false">' +
-            '<path d="M12 3c4.2 3 5.4 9 0 18-5.4-9-4.2-15 0-18z" fill="' + colour + '"/></svg>';
+        return K.bit(24, 24, size, turn,
+            '<path d="M12 3c4.2 3 5.4 9 0 18-5.4-9-4.2-15 0-18z" fill="' + colour + '"/>');
     }
 
     // A sky lantern rising: paper lit from inside, its ribs, the burner.
@@ -257,7 +255,7 @@
                 { art: diya('#c9962c', '#7a5614', '#fff4dc', '#7a5614'), size: 'mid', sound: 'festival' }],
         strew: [bloom(18, SAFFRON, MARIGOLD, 0), petal(11, ROSE, -40), bloom(14, MARIGOLD, '#fbd46a', 20),
             petal(10, SAFFRON, 70), bloom(16, SAFFRON, MARIGOLD, 45)],
-        puff: 'kr-season-puff--sparks',
+        puff: 'kr-season-puff--scatter kr-season-puff--sparks',
         flyer: SKY_LANTERN, flight: 'kr-season-flyer--rise',
         favicon: DIYA_ICON, moonmark: MOON_DIYA,
         // A saffron pointer with a small lit diya at its tail.

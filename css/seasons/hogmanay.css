@@ -66,24 +66,15 @@
 
 /* The tin throws up streamers: three thin strips, gold, silver and ice,
    on the leaves' scatter. */
-.kr-season-puff--streamers,
-.kr-season-puff--streamers::before,
-.kr-season-puff--streamers::after {
-  width: 3px;
-  height: 12px;
-  margin-left: -1px;
-  border-radius: 2px;
-  background: var(--kr-season-glow);
-  --kr-season-toss: 4px;
-  animation: kr-season-scatter 1.6s cubic-bezier(0.2, 0.6, 0.4, 1) forwards; }
-
-.kr-season-puff--streamers::before {
-  background: var(--kr-season-silver);
-  --kr-season-toss: -24px; }
-
-.kr-season-puff--streamers::after {
-  background: var(--kr-season-ice);
-  --kr-season-toss: 22px; }
+.kr-season-puff--streamers {
+  --kr-puff-w: 3px;
+  --kr-puff-h: 12px;
+  --kr-puff-shape: 2px;
+  --kr-puff-a: var(--kr-season-glow);
+  --kr-puff-b: var(--kr-season-silver);
+  --kr-puff-c: var(--kr-season-ice);
+  --kr-puff-toss-a: 4px;
+  --kr-puff-toss-b: -24px; }
 
 /* A shooting star high over the page, left to right and a little down,
    fast, fading as it goes. */

@@ -158,14 +158,12 @@
 
     // A katori of gulal and a heap of it spilled, for between them.
     function katori(w, colour) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 16" width="' + w + '" height="' + fix(w * 16 / 24) + '"' +
-            ' aria-hidden="true" focusable="false">' + heap(12, 8.4, 8, 6, colour) +
-            '<path d="M2 8h20c-.6 4.6-4.6 7.4-10 7.4S2.6 12.6 2 8z" fill="' + BRASS + '" stroke="' + BRASS_DEEP + '" stroke-width=".7"/></svg>';
+        return K.bit(24, 16, w, 0, heap(12, 8.4, 8, 6, colour) +
+            '<path d="M2 8h20c-.6 4.6-4.6 7.4-10 7.4S2.6 12.6 2 8z" fill="' + BRASS + '" stroke="' + BRASS_DEEP + '" stroke-width=".7"/>');
     }
     function pile(w, colour) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 12" width="' + w + '" height="' + fix(w / 2) + '"' +
-            ' aria-hidden="true" focusable="false">' + heap(12, 12, 10, 7, colour) +
-            '<circle cx="2" cy="11" r=".9" fill="' + colour + '"/><circle cx="22.4" cy="10.6" r=".7" fill="' + colour + '"/></svg>';
+        return K.bit(24, 12, w, 0, heap(12, 12, 10, 7, colour) +
+            '<circle cx="2" cy="11" r=".9" fill="' + colour + '"/><circle cx="22.4" cy="10.6" r=".7" fill="' + colour + '"/>');
     }
 
     /* A water balloon lobbed across the page, blue and shiny, tied off;

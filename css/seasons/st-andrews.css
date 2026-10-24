@@ -56,25 +56,15 @@
    .kr-season-flyer__wing--up, .kr-season-flyer__wing--down,
    .kr-season-track--bunting, .kr-season-cloudcross (__band, __band--a,
    __band--b). */
-.kr-season-puff--saltire,
-.kr-season-puff--saltire::before,
-.kr-season-puff--saltire::after {
-  width: 8px;
-  height: 8px;
-  margin-left: -4px;
-  border-radius: 1px;
-  background: var(--kr-season-pumpkin);
-  --kr-season-toss: 4px;
-  animation: kr-season-scatter 1.6s cubic-bezier(0.2, 0.6, 0.4, 1) forwards; }
+.kr-season-puff--saltire {
+  --kr-puff-shape: 1px;
+  --kr-puff-toss-a: 4px;
+  --kr-puff-toss-b: -22px;
+  --kr-puff-toss-c: 24px; }
 
+/* The white one gets an edge, or it vanishes on a light page. */
 .kr-season-puff--saltire::before {
-  background: var(--kr-season-badge);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--kr-season-line) 55%, transparent);
-  --kr-season-toss: -22px; }
-
-.kr-season-puff--saltire::after {
-  background: color-mix(in srgb, var(--kr-season-pumpkin) 55%, var(--kr-season-badge));
-  --kr-season-toss: 24px; }
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--kr-season-line) 55%, transparent); }
 
 .kr-season-flyer--gannet {
   top: 16vh;

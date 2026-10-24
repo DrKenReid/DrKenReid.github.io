@@ -161,10 +161,18 @@ OG_LOCALE = 'en_GB'
 # generate_og_images.py draws every card at this size (its W, H).
 OG_CARD_SIZE = (1200, 630)
 
+# The first thing in every head: the reader's theme, and the season
+# shared-components.js remembered for today ('kr-season-day': key, the two
+# stylesheet urls, the date), so its colours are in the first frame rather
+# than arriving with the scripts at the end of the body.
 THEME_BOOT = (
-    "<script>(function(){var t;try{t=localStorage.getItem('kr-theme');}"
-    "catch(e){}if(!t)t='dark';document.documentElement.setAttribute("
-    "'data-theme',t);})();</script>"
+    "<script>(function(){var d=document.documentElement,t;try{t=localStorage.getItem('kr-theme');}"
+    "catch(e){}if(!t)t='dark';d.setAttribute('data-theme',t);try{var c=(localStorage.getItem("
+    "'kr-season-day')||'').split('|'),n=new Date();if(c[0]&&c[3]===n.getFullYear()+'-'+(n.getMonth()+1)"
+    "+'-'+n.getDate()&&!sessionStorage.getItem('kr-season-preview')&&localStorage.getItem('kr-season')"
+    "!=='off'){d.setAttribute('data-season',c[0]);[1,2].forEach(function(i){var l=document.createElement("
+    "'link');l.rel='stylesheet';l.id=i<2?'kr-season-shared-css':'kr-season-css';l.href=c[i];"
+    "l.setAttribute('blocking','render');document.head.appendChild(l);});}}catch(e){}})();</script>"
 )
 
 ICON_LINE = '<link rel="icon" href="../img/core-img/favicon.png">'

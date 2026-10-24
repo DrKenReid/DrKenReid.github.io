@@ -1389,13 +1389,19 @@ function bindGalleryLightbox() {
                 if (galleryView.length > 1) values.counter = (item.index + 1) + ' of ' + galleryView.length;
             },
             imageHasSize: function() { krLightboxMorph.settle(this); },
-            imageLoadComplete: function() { krLightboxMorph.settle(this); },
+            imageLoadComplete: function() {
+                krLightboxMorph.settle(this);
+                if (window.krLightboxFit) krLightboxFit(this);
+            },
             change: function() {
                 growSet(this);
                 a11y(this);
                 window.krLightboxPreview(this);
                 krLightboxMorph.change(this);
                 krLightboxStrip.sync(this);
+                // The caption's rows (an edit's buttons among them) set the
+                // room under the picture.
+                if (window.krLightboxFit) krLightboxFit(this);
                 writeUrl({ photo: stemOf(this.currItem.src) });
             },
             beforeClose: function() {

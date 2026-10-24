@@ -62,26 +62,20 @@
   from { transform: skewX(-6deg); opacity: 0.55; }
   to { transform: skewX(8deg) translateY(-1px); opacity: 0.9; } }
 
-.kr-season-puff--pages,
-.kr-season-puff--pages::before,
-.kr-season-puff--pages::after {
-  width: 9px;
-  height: 11px;
-  margin-left: -4.5px;
-  border-radius: 1px;
-  background:
+.kr-season-puff--pages {
+  --kr-puff-w: 9px;
+  --kr-puff-h: 11px;
+  --kr-puff-shape: 1px;
+  --kr-puff-a:
     linear-gradient(to bottom, transparent 3px, var(--kr-season-paper-edge) 3px 4px, transparent 4px 6px,
       var(--kr-season-paper-edge) 6px 7px, transparent 7px) 2px 0 / 5px 100% no-repeat,
     var(--kr-season-paper);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--kr-season-paper-edge) 80%, transparent);
-  --kr-season-toss: 3px;
-  animation: kr-season-scatter 1.8s cubic-bezier(0.2, 0.6, 0.4, 1) forwards; }
-
-.kr-season-puff--pages::before {
-  --kr-season-toss: -24px; }
-
-.kr-season-puff--pages::after {
-  --kr-season-toss: 22px; }
+  --kr-puff-b: var(--kr-puff-a);
+  --kr-puff-c: var(--kr-puff-a);
+  --kr-puff-edge: 0 0 0 1px color-mix(in srgb, var(--kr-season-paper-edge) 80%, transparent);
+  --kr-puff-toss-a: 3px;
+  --kr-puff-toss-b: -24px;
+  --kr-puff-time: 1.8s; }
 
 .kr-season-flyer--plane {
   top: 18vh;

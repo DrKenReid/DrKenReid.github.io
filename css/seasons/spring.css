@@ -56,25 +56,14 @@
    only script applies: .kr-season-puff--petals, .kr-season-flyer--swoop,
    .kr-season-track--vine, .kr-season-bloom, .kr-season-shower (__rain,
    __rain--far, __bow). */
-.kr-season-puff--petals,
-.kr-season-puff--petals::before,
-.kr-season-puff--petals::after {
-  width: 8px;
-  height: 11px;
-  margin-left: -4px;
-  border-radius: 50% 50% 50% 50% / 70% 70% 35% 35%;
-  background: var(--kr-season-pumpkin);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--kr-season-line) 30%, transparent);
-  --kr-season-toss: 6px;
-  animation: kr-season-scatter 1.7s cubic-bezier(0.2, 0.6, 0.4, 1) forwards; }
-
-.kr-season-puff--petals::before {
-  background: var(--kr-season-badge);
-  --kr-season-toss: -22px; }
-
-.kr-season-puff--petals::after {
-  background: color-mix(in srgb, var(--kr-season-pumpkin) 55%, var(--kr-season-badge));
-  --kr-season-toss: 24px; }
+.kr-season-puff--petals {
+  --kr-puff-h: 11px;
+  --kr-puff-shape: 50% 50% 50% 50% / 70% 70% 35% 35%;
+  --kr-puff-edge: 0 0 0 1px color-mix(in srgb, var(--kr-season-line) 30%, transparent);
+  --kr-puff-toss-a: 6px;
+  --kr-puff-toss-b: -22px;
+  --kr-puff-toss-c: 24px;
+  --kr-puff-time: 1.7s; }
 
 .kr-season-flyer--swoop {
   top: 26vh;

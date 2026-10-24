@@ -58,24 +58,16 @@
    .kr-season-puff--seeds, .kr-season-flyer--beagle,
    .kr-season-track--phylo, .kr-season-twig, .kr-season-beak,
    .kr-season-walker--tortoise, .kr-season-tortoise__head. */
-.kr-season-puff--seeds,
-.kr-season-puff--seeds::before,
-.kr-season-puff--seeds::after {
-  width: 7px;
-  height: 4px;
-  margin-left: -3.5px;
-  border-radius: 50%;
-  background: var(--kr-season-seed);
-  --kr-season-toss: 4px;
-  animation: kr-season-scatter 1.4s cubic-bezier(0.2, 0.6, 0.4, 1) forwards; }
-
-.kr-season-puff--seeds::before {
-  background: var(--kr-season-seed-dark);
-  --kr-season-toss: -18px; }
-
-.kr-season-puff--seeds::after {
-  background: var(--kr-season-pumpkin);
-  --kr-season-toss: 21px; }
+.kr-season-puff--seeds {
+  --kr-puff-w: 7px;
+  --kr-puff-h: 4px;
+  --kr-puff-a: var(--kr-season-seed);
+  --kr-puff-b: var(--kr-season-seed-dark);
+  --kr-puff-c: var(--kr-season-pumpkin);
+  --kr-puff-toss-a: 4px;
+  --kr-puff-toss-b: -18px;
+  --kr-puff-toss-c: 21px;
+  --kr-puff-time: 1.4s; }
 
 .kr-season-flyer--beagle {
   top: auto;

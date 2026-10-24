@@ -22,9 +22,12 @@
  *             `rate` bursts a second per 1000px of width); shapes are
  *             paths on a 24 x 24 box, the first drawn 70% of the time
  *   patch     three things sitting on the footer ({ art, size: big, mid
- *             or small, sound }), with `strew` (five bits of markup) between
- *             them; a click flares one, bursts `puff` from it and, with
- *             sounds on, plays sounds/<sound>.mp3
+ *             or small, sound }), with `strew` (five bits of markup,
+ *             each usually kit.bit) between them; a click flares one,
+ *             bursts `puff` from it (its classes: 'kr-season-puff--scatter
+ *             kr-season-puff--<kind>' tosses three bits out, sized and
+ *             coloured by the season's sheet) and, with sounds on, plays
+ *             sounds/<sound>.mp3
  *   flyer     a drawing that crosses the screen once, as the footer comes
  *             into view, flying the way `flight` (a class) says
  *   favicon   the tab's icon (a whole svg); moonmark, a path that crosses
@@ -46,8 +49,8 @@
  *   cursor    the pointer, where the reader has a mouse: a whole svg of
  *             at most 32 x 32 with its hotspot ({ svg, x, y }), usually
  *             kit.cursor(fill, emblem); links keep the hand
- *   backdrop  on posts and the blog's listing, the season's shapes drifting
- *             in the margins beside the text, at three depths, sliding at
+ *   backdrop  behind a page's content (a post's article), the season's
+ *             shapes drifting in the margins beside it, at three depths, sliding at
  *             their own pace as the page scrolls; by default the shapes
  *             and colours of the things in the air (dots left out), or
  *             { shapes, colours } of its own (colours may be one list per
@@ -64,10 +67,11 @@
  * Toys: a click sends the dangling thing down its thread and back, and
  * bursts something from a patch piece, which with sounds on also plays a
  * recording (credited on the colophon). Sounds are off until the reader
- * turns them on: ?season-sounds=on (the palette's "Turn on ... sounds")
- * stores it on this device, ?season-sounds=off clears it (?spooky-sounds=
- * was its first name); either is taken out of the address. A recording is
- * fetched only when it first plays.
+ * turns them on, from a holiday ribbon's card or the address:
+ * ?season-sounds=on (the palette's "Turn on ... sounds") stores it on this
+ * device, ?season-sounds=off clears it (?spooky-sounds= was its first
+ * name); either is taken out of the address. A recording is fetched only
+ * when it first plays.
  *
  * Every piece but a holiday's ribbon is aria-hidden decoration that sits
  * over no post text, gallery tile, lightbox or slideshow, and is left out
@@ -191,10 +195,16 @@
 
     // A small drawing of `path` (24 x 24) for between the patch's pieces.
     function leaf(path, colour, size, turn) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 24" width="' + size + '" height="' + size + '"' +
-            ' style="transform: rotate(' + turn + 'deg)" aria-hidden="true" focusable="false">' +
-            '<path d="' + path + '" fill="' + colour + '"/>' +
-            '<path d="M12 14v9" stroke="' + colour + '" stroke-width="1.2"/></svg>';
+        return bit(24, 24, size, turn, '<path d="' + path + '" fill="' + colour + '"/>' +
+            '<path d="M12 14v9" stroke="' + colour + '" stroke-width="1.2"/>');
+    }
+
+    /* One bit for the strew (or anywhere a small drawing lies on the
+       page): an svg of viewBox 0 0 vw vh, w px wide and as tall as that
+       makes it, turned `turn` degrees. */
+    function bit(vw, vh, w, turn, body) {
+        return '<svg class="kr-season-leaf" viewBox="0 0 ' + vw + ' ' + vh + '" width="' + w + '" height="' + fix(w * vh / vw) + '"' +
+            (turn ? ' style="transform: rotate(' + turn + 'deg)"' : '') + ' aria-hidden="true" focusable="false">' + body + '</svg>';
     }
 
     // A leaf placed inside a larger drawing: centred on (x, y), turned, scaled.
@@ -900,16 +910,18 @@
      * The backdrop in a post's margins
      * ------------------------------------------------------------------ */
 
-    /* Behind a post (or the blog's listing), in the margins either side
-       of its container and never under the text: the season's shapes,
-       one every BACKDROP_EVERY px down each margin, at three depths. Each
+    /* Behind a page's content (a post's article; elsewhere all of
+       <main>, below the opener), in the margins either side of its
+       container and never under the text: the season's shapes,
+       one every BACKDROP_EVERY px down each margin (spaced out further
+       on a long page), at three depths. Each
        sways on its own (CSS), and slides by its depth as the page scrolls
        (--kr-season-scroll, the viewport's middle in the host's own
        coordinates, against each shape's --kr-season-y), so the near ones
        pass faster than the far ones. Margins narrower than BACKDROP_MIN
        get nothing, so phones get nothing. Under reduced motion they hold
        still. */
-    var BACKDROP_EVERY = 230, BACKDROP_MIN = 48, DEPTHS = [0.12, 0.26, 0.42];
+    var BACKDROP_EVERY = 230, BACKDROP_MIN = 48, BACKDROP_MOST = 60, DEPTHS = [0.12, 0.26, 0.42];
 
     function backdropCfg() {
         if (dress.backdrop) return dress.backdrop;
@@ -920,9 +932,14 @@
 
     function backdrop() {
         if (dress.backdrop === false) return;
+        // A post: its article section. Anywhere else: the whole of <main>,
+        // where anything opaque (a photograph, the map, a band of colour)
+        // covers the shapes and they show only in the plain margins; not a
+        // page whose content runs the full width (the gallery's grid).
         var post = document.querySelector('.blog-post, .story-post');
-        var host = post ? post.closest('#main-content-body') : document.querySelector('.kr-listing');
-        if (!host || host.querySelector('.kr-season-backdrop')) return;
+        var host = post ? post.closest('#main-content-body') : document.querySelector('main');
+        if (!host || host.querySelector('.kr-season-backdrop') ||
+            (!post && host.querySelector('.container-fluid'))) return;
         host.classList.add('kr-season-backdrop-host');
         var layer = document.createElement('div');
         layer.className = 'kr-season-backdrop';
@@ -934,6 +951,9 @@
             var cfg = backdropCfg();
             var box = host.querySelector('.container') || host;
             var w = host.clientWidth, h = host.scrollHeight;
+            // Below the page's opening photograph, which has its own sky.
+            var opener = post ? null : host.querySelector('.breadcrumb-area, .kr-opener, .welcome-area');
+            var from = opener ? opener.offsetTop + opener.offsetHeight : 0;
             var gutter = (w - box.getBoundingClientRect().width) / 2;
             var key = [w, h, cfg && cfg.shapes.length].join(' ');
             if (key === built) return;
@@ -952,7 +972,10 @@
                 if (r.right > w - gutter) room[1] = Math.min(room[1], w - r.right - 8);
             });
             var html = '';
-            for (var y = BACKDROP_EVERY * 0.4, i = 0; y < h - size; y += BACKDROP_EVERY, i++) {
+            // Further apart on a long page (the quote wall): at most
+            // BACKDROP_MOST down each side, to keep each scroll cheap.
+            var every = Math.max(BACKDROP_EVERY, (h - from) / BACKDROP_MOST);
+            for (var y = from + every * 0.4, i = 0; y < h - size; y += every, i++) {
                 [0, 1].forEach(function (side) {
                     if (room[side] < size * 0.8) return;
                     // Seeded by the shape's place, so a fresh layout (an image
@@ -962,7 +985,7 @@
                     var depth = DEPTHS[(i + side * 2 + (rand() * 2 | 0)) % DEPTHS.length];
                     var s = Math.min(size * (0.6 + depth), room[side] - 8);
                     var x = Math.min(room[side] * (0.12 + rand() * 0.6) - s / 2, room[side] - s - 4);
-                    var top = y + (rand() - 0.5) * BACKDROP_EVERY * 0.6;
+                    var top = y + (rand() - 0.5) * every * 0.6;
                     // A shape's own colours (one list per shape), or the season's.
                     var shape = (rand() * cfg.shapes.length) | 0;
                     var colours = Array.isArray(cfg.colours[0]) ? cfg.colours[shape] : cfg.colours;
@@ -1006,10 +1029,17 @@
        the ribbon or the card, while the button has keyboard focus, or
        when it is clicked or tapped (and then stays until clicked again,
        Escape, or a click elsewhere). Hidden, it is .kr-offstage, out of
-       the Tab order. */
+       the Tab order. Under the text, the reader's two switches, small
+       ghost buttons: the sounds (stored as ?season-sounds= stores them,
+       no reload; an action label, as the theme toggle) and the
+       decorations, off on this device (it reloads the page with
+       ?season=off, which the palette and the colophon's seasons calendar
+       turn back on). */
     function ribbon() {
         var a = dress.about;
         if (!a || document.querySelector('.kr-season-ribbon')) return;
+        var off = new URLSearchParams(location.search);
+        off.set('season', 'off');
         var el = document.createElement('div');
         el.className = 'kr-season-ribbon';
         el.innerHTML = '<button type="button" class="kr-season-ribbon__sash" aria-expanded="false"' +
@@ -1019,10 +1049,27 @@
             '<p class="kr-season-about__when">' + a.when + '</p>' +
             '<p class="kr-season-about__text">' + a.text + '</p>' +
             (a.link ? '<a class="kr-season-about__more" href="' + a.link + '">Read more about ' + season.label + '</a>' : '') +
+            '<div class="kr-season-about__switches kr-btn-row kr-btn-row--start">' +
+            '<button type="button" class="kr-season-about__sound kr-btn kr-btn--ghost kr-btn--sm"></button>' +
+            '<button type="button" class="kr-season-about__off kr-btn kr-btn--ghost kr-btn--sm">Turn off the decorations</button></div>' +
             '</div>';
         document.body.appendChild(el);
         var sash = el.firstChild, card = el.lastChild;
         var pinned = false, hovered = false, leave = 0;
+
+        var sound = card.querySelector('.kr-season-about__sound');
+        function soundLabel() { sound.textContent = soundsOn() ? 'Turn the sounds off' : 'Turn the sounds on'; }
+        soundLabel();
+        sound.addEventListener('click', function () {
+            try {
+                if (soundsOn()) localStorage.removeItem(SOUND_KEY);
+                else localStorage.setItem(SOUND_KEY, 'on');
+            } catch (e) {}
+            soundLabel();
+        });
+        card.querySelector('.kr-season-about__off').addEventListener('click', function () {
+            location.href = location.pathname + '?' + off + location.hash;
+        });
 
         function show(on) {
             card.classList.toggle('is-visible', on);
@@ -1058,6 +1105,19 @@
             pinned = false;
             update();
         });
+        // On a phone the sash crosses the text in the corner, so once the
+        // reader is half a screen down it tucks into a dog-ear (CSS only
+        // below 768px), and comes back out at the top of the page.
+        var tucked = false, queued = false;
+        function tuck() {
+            queued = false;
+            var on = window.scrollY > window.innerHeight / 2;
+            if (on !== tucked) el.classList.toggle('kr-season-ribbon--tucked', tucked = on);
+        }
+        window.addEventListener('scroll', function () {
+            if (!queued) { queued = true; requestAnimationFrame(tuck); }
+        }, { passive: true });
+        tuck();
     }
 
     /* What a season's file is given: the shapes and drawings above to
@@ -1066,7 +1126,7 @@
     var kit = window.krSeasonKit = {
         season: season, reduced: reduced, ready: ready, svg: svg, play: play,
         soundsOn: soundsOn, bar: bar, flake: flake, star: star, pumpkin: pumpkin,
-        leaf: leaf, leafAt: leafAt, strewnLeaves: strewnLeaves, cursor: cursorArt, walker: walker,
+        leaf: leaf, leafAt: leafAt, bit: bit, strewnLeaves: strewnLeaves, cursor: cursorArt, walker: walker,
         onFooter: onFooter, fix: fix,
         MAPLE: MAPLE, OVAL: OVAL, DOT: DOT, TWIG: TWIG, LEAF_COLOURS: LEAF_COLOURS,
         dress: function (d) {

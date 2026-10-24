@@ -171,30 +171,27 @@
 
     // A grey felt mouse with a pink ear and a string tail.
     function mouse(w) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 28 14" width="' + w + '" height="' + fix(w / 2) + '"' +
-            ' aria-hidden="true" focusable="false">' +
+        return K.bit(28, 14, w, 0,
             '<path d="M7 11.4C5 13.4 1.6 13.2.6 10.6" fill="none" stroke="#8b8f98" stroke-width="1" stroke-linecap="round"/>' +
             '<path d="M6 12c0-5 4.6-8.4 10-8.4 4.4 0 8.4 3.4 10.6 7.4.4.8 0 1.4-.8 1.4H6.6z" fill="#a9adb6"/>' +
             '<circle cx="18" cy="5" r="2.6" fill="' + PINK + '"/><circle cx="18" cy="5" r="1.5" fill="#f6c3cc"/>' +
-            '<circle cx="23" cy="9" r=".7" fill="' + PUPIL + '"/><circle cx="26.8" cy="11.4" r=".8" fill="' + PINK + '"/></svg>';
+            '<circle cx="23" cy="9" r=".7" fill="' + PUPIL + '"/><circle cx="26.8" cy="11.4" r=".8" fill="' + PINK + '"/>');
     }
 
     // A feather from a wand toy, teal and gold.
     function feather(h, turn) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 12 28" width="' + fix(h * 12 / 28) + '" height="' + h + '"' +
-            ' style="transform: rotate(' + turn + 'deg)" aria-hidden="true" focusable="false">' +
+        return K.bit(12, 28, fix(h * 12 / 28), turn,
             '<path d="M6 27V3" stroke="#6b5a45" stroke-width=".8"/>' +
             '<path d="M6 2c4 3 5.4 8.4 4.4 14-.8 3.6-2.6 6-4.4 7.4-1.8-1.4-3.6-3.8-4.4-7.4C.6 10.4 2 5 6 2z" fill="#2fa39a"/>' +
             '<path d="M6 7c2 1.6 2.6 4.4 2.2 7.2-.4 1.8-1.2 3-2.2 3.8-1-.8-1.8-2-2.2-3.8C3.4 11.4 4 8.6 6 7z" fill="#e9b949"/>' +
-            '<path d="M6 10l3.4-2M6 14l4-2M6 10L2.6 8M6 14l-4-2" stroke="#1f7d76" stroke-width=".5"/></svg>';
+            '<path d="M6 10l3.4-2M6 14l4-2M6 10L2.6 8M6 14l-4-2" stroke="#1f7d76" stroke-width=".5"/>');
     }
 
     // A jingle ball: a slotted ball with a bell in it.
     function jingle(w, colour) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 12 12" width="' + w + '" height="' + w + '"' +
-            ' aria-hidden="true" focusable="false"><circle cx="6" cy="6" r="5.4" fill="' + colour + '"/>' +
+        return K.bit(12, 12, w, 0, '<circle cx="6" cy="6" r="5.4" fill="' + colour + '"/>' +
             '<path d="M2 4.4h8M1.4 7.4h9.2M6 .8v10.4" stroke="#ffffff" stroke-opacity=".7" stroke-width="1"/>' +
-            '<circle cx="6" cy="6" r="1.6" fill="#e6c34a"/></svg>';
+            '<circle cx="6" cy="6" r="1.6" fill="#e6c34a"/>');
     }
 
     /* ------------------------------------------------------------------ *

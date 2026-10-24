@@ -78,25 +78,19 @@
 
 /* A clicked piece throws up cinders: three sparks that rise, wander and
    go out. */
-.kr-season-puff--cinders,
-.kr-season-puff--cinders::before,
-.kr-season-puff--cinders::after {
-  width: 4px;
-  height: 4px;
-  margin-left: -2px;
-  border-radius: 50%;
-  background: var(--kr-season-glow);
-  box-shadow: 0 0 6px var(--kr-season-pumpkin);
-  --kr-season-toss: 6px;
-  animation: kr-season-cinder 1.5s ease-out forwards; }
-
-.kr-season-puff--cinders::before {
-  background: var(--kr-season-spark);
-  --kr-season-toss: -14px; }
-
-.kr-season-puff--cinders::after {
-  background: var(--kr-season-pumpkin);
-  --kr-season-toss: 16px; }
+.kr-season-puff--cinders {
+  --kr-puff-w: 4px;
+  --kr-puff-h: 4px;
+  --kr-puff-a: var(--kr-season-glow);
+  --kr-puff-b: var(--kr-season-spark);
+  --kr-puff-c: var(--kr-season-pumpkin);
+  --kr-puff-edge: 0 0 6px var(--kr-season-pumpkin);
+  --kr-puff-toss-a: 6px;
+  --kr-puff-toss-b: -14px;
+  --kr-puff-toss-c: 16px;
+  --kr-puff-motion: kr-season-cinder;
+  --kr-puff-ease: ease-out;
+  --kr-puff-time: 1.5s; }
 
 @keyframes kr-season-cinder {
   0% { transform: translate(0, 0) scale(1); opacity: 1; }

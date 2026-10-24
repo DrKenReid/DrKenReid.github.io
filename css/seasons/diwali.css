@@ -61,25 +61,22 @@
 
 /* Three sparks thrown up from the flame, in saffron, magenta and gold,
    twinkling as they fall. */
+.kr-season-puff--sparks {
+  --kr-puff-w: 6px;
+  --kr-puff-h: 6px;
+  --kr-puff-b: var(--kr-season-spark);
+  --kr-puff-c: var(--kr-season-badge);
+  --kr-puff-edge: 0 0 6px 1px var(--kr-season-glow);
+  --kr-puff-toss-a: 4px;
+  --kr-puff-toss-b: -18px;
+  --kr-puff-toss-c: 20px;
+  --kr-puff-time: 1.3s; }
+
+/* Thrown from the flame's tip, not the lamp's middle. */
 .kr-season-puff--sparks,
 .kr-season-puff--sparks::before,
 .kr-season-puff--sparks::after {
-  bottom: 88%;
-  width: 6px;
-  height: 6px;
-  margin-left: -3px;
-  background: var(--kr-season-pumpkin);
-  box-shadow: 0 0 6px 1px var(--kr-season-glow);
-  --kr-season-toss: 4px;
-  animation: kr-season-scatter 1.3s cubic-bezier(0.2, 0.6, 0.4, 1) forwards; }
-
-.kr-season-puff--sparks::before {
-  background: var(--kr-season-spark);
-  --kr-season-toss: -18px; }
-
-.kr-season-puff--sparks::after {
-  background: var(--kr-season-badge);
-  --kr-season-toss: 20px; }
+  bottom: 88%; }
 
 /* The sky lantern: up from the foot of the window, drifting right and
    swaying, glowing, smaller as it climbs away. */

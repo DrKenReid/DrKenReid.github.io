@@ -225,7 +225,9 @@ var KR_SEASONS = [{
 }, {
     key: 'diwali',
     label: 'Diwali',
-    // The five days, Dhanteras to Bhai Dooj, around Lakshmi Puja.
+    // The five days, Dhanteras to Bhai Dooj, two either side of Lakshmi
+    // Puja, whose dates are Drik Panchang's for New Delhi (checked
+    // 2026-10-24); a tithi that spans two days can stretch the five by one.
     windows: [],
     years: {
         2026: [[[11, 6], [11, 10]]],
@@ -233,7 +235,11 @@ var KR_SEASONS = [{
         2028: [[[10, 15], [10, 19]]],
         2029: [[[11, 3], [11, 7]]],
         2030: [[[10, 24], [10, 28]]],
-        2031: [[[11, 12], [11, 16]]]
+        2031: [[[11, 12], [11, 16]]],
+        2032: [[[10, 31], [11, 4]]],
+        2033: [[[10, 20], [10, 24]]],
+        2034: [[[11, 8], [11, 12]]],
+        2035: [[[10, 28], [11, 1]]]
     },
     treat: { title: 'Something bright', sub: 'A random photograph', also: 'diwali deepavali festival of lights' },
     heroText: 'Happy Diwali.',
@@ -242,14 +248,16 @@ var KR_SEASONS = [{
 }, {
     key: 'holi',
     label: 'Holi',
-    // Holika Dahan and the day of colours after it. 2026 and 2027 from
-    // Drik Panchang; check the later years against a panchang too.
+    // Holika Dahan and the day of colours after it, from Drik Panchang
+    // for New Delhi (checked 2026-10-24; it gives no year past 2031). Some
+    // calendars put the colours on the full moon itself, a day early in
+    // 2029 and 2030.
     windows: [],
     years: {
         2026: [[[3, 3], [3, 4]]],
         2027: [[[3, 21], [3, 22]]],
         2028: [[[3, 10], [3, 11]]],
-        2029: [[[2, 27], [2, 28]]],
+        2029: [[[2, 28], [3, 1]]],
         2030: [[[3, 19], [3, 20]]],
         2031: [[[3, 8], [3, 9]]]
     },
@@ -293,6 +301,16 @@ var KR_SEASONS = [{
 }];
 var KR_SEASON_PREVIEW = 'kr-season-preview';   // sessionStorage: a key, or 'none'
 var KR_SEASON_OFF = 'kr-season';               // localStorage: 'off'
+var KR_SEASON_DAY = 'kr-season-day';           // localStorage: key|shared css|season css|date, for the boot script
+
+/** A season's two stylesheets as absolute urls: the rules every season
+    shares, then its own. Absolute so the boot script can use them from
+    any page depth. */
+function krSeasonSheets(season) {
+    return ['css/season.css', 'css/seasons/' + (season.art || season.key) + '.css'].map(function (path) {
+        return new URL(siteRootPrefix() + path, document.baseURI).href;
+    });
+}
 
 function krSeasonByKey(key) {
     for (var i = 0; i < KR_SEASONS.length; i++) {
@@ -353,18 +371,42 @@ function krSeason() {
         } catch (e) {}
     }
     var season = krSeason();
-    if (!season) return;
-    document.documentElement.setAttribute('data-season', season.key);
+    var sheets = ['kr-season-shared-css', 'kr-season-css'];
+    var root = document.documentElement;
+    var now = new Date();
+    var today = krSeasonOnDate(now);
+    // Remembered for the boot script in every page's head: today's season,
+    // its two stylesheets and the date, so the next page paints in its
+    // colours from the first frame. A new day falls back to this script.
+    try {
+        if (krSeasonsOff()) localStorage.removeItem(KR_SEASON_DAY);
+        else localStorage.setItem(KR_SEASON_DAY, [today ? today.key : '']
+            .concat(today ? krSeasonSheets(today) : ['', ''])
+            .concat(now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate()).join('|'));
+    } catch (e) {}
+    if (!season) {
+        // The boot script dressed the page before ?season=off reached here.
+        root.removeAttribute('data-season');
+        sheets.forEach(function (id) { var el = document.getElementById(id); if (el) el.remove(); });
+        return;
+    }
+    root.setAttribute('data-season', season.key);
     // The rules every season shares and the season's own stylesheet (its
     // colours and its own rules), then the engine and the season's art, which calls krSeasonKit.dress once the
     // stylesheet is in; async false runs the two scripts in that order.
+    // The boot script may have added both already: they are kept when
+    // they match and pointed at this season's when they do not.
     var art = season.art || season.key;
-    [['kr-season-shared-css', 'css/season.css'], ['kr-season-css', 'css/seasons/' + art + '.css']].forEach(function (s) {
-        var sheet = document.createElement('link');
-        sheet.rel = 'stylesheet';
-        sheet.id = s[0];
-        sheet.href = siteRootPrefix() + s[1];
-        document.head.appendChild(sheet);
+    krSeasonSheets(season).forEach(function (href, i) {
+        var sheet = document.getElementById(sheets[i]);
+        if (sheet && sheet.href === href) return;
+        if (!sheet) {
+            sheet = document.createElement('link');
+            sheet.rel = 'stylesheet';
+            sheet.id = sheets[i];
+            document.head.appendChild(sheet);
+        }
+        sheet.href = href;
     });
     ['js/season.js', 'js/seasons/' + art + '.js'].forEach(function (src) {
         var script = document.createElement('script');

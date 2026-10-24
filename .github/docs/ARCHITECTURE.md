@@ -37,7 +37,8 @@ varies a little between pages and does not matter):
 5. `style.min.css?v=<stamp>`, the one stylesheet. (The seasons' shared
    rules, `css/season.css`, and the season's own,
    `css/seasons/<key>.css`, are added by `js/shared-components.js` at the
-   end of the body; see "Seasons".)
+   end of the body, or by the boot script in item 1 when it remembers
+   today's season; see "Seasons".)
 6. `js/theme.js` and `js/palette.js`, deferred: the theme toggle and the
    Ctrl+K palette, which builds nothing until it is first opened.
 7. JSON-LD.
@@ -239,7 +240,10 @@ The node tests refuse two seasons of one rank on the same day, fail when
 a season has no `js/seasons/<key>.js` or `css/seasons/<key>.css`, and
 fail when a moving holiday's table has no dates for this year or the
 next two: extend Diwali's from Lakshmi Puja's date, two days either
-side, and Holi's from a panchang (Holika Dahan, then the day after).
+side, and Holi's as Holika Dahan, then the day after. Both come from
+Drik Panchang's pages for New Delhi, which give Holi up to 2031 only;
+calendars that put the colours on the full moon itself are a day early
+in some years.
 
 While one is on, `<html>` carries `data-season="<key>"`, and four
 files are fetched: `css/season.css`, the rules every season shares;
@@ -249,7 +253,16 @@ themes) and the rules for its own pieces;
 (Revenge of the Fifth uses May the Fourth's files, `art`). The engine
 draws nothing until both stylesheets have loaded. With seasons
 turned off none of them is requested, and a reader only ever fetches
-one season's pictures and styles. Every season dresses the same pieces,
+one season's pictures and styles. `shared-components.js` also keeps
+today's season in `localStorage['kr-season-day']` (its key, the two
+stylesheet urls and the date), and the boot script at the top of every
+page's head (`THEME_BOOT` in `generate_post_head.py`, the same text in
+every page) reads it: on the same day it sets `data-season` and adds both
+stylesheets with `blocking="render"`, so from the second page on the
+season's colours are in the first frame. On a new day, under a preview,
+or with seasons off it does nothing and the script at the end of the
+body takes over, which also points the stylesheets at the right season
+or removes them. Every season dresses the same pieces,
 documented in `season.js`'s header, and the shared rules in
 `css/season.css` serve them all in the season's tokens:
 
@@ -259,7 +272,10 @@ documented in `season.js`'s header, and the shared rules in
   canvas: falling (leaves, petals, snow), rising (lanterns, thistledown),
   twinkling (stars, fireflies) or fireworks;
 - three pieces sitting on the footer's edge among small things strewn
-  between them (a click flares one and bursts something from it);
+  between them, each usually drawn with `kit.bit` (a click flares one
+  and bursts something from it: most seasons toss three bits with the
+  shared `kr-season-puff--scatter` rule, setting only its `--kr-puff-*`
+  sizes, colours and tosses);
 - a flyer that crosses once as the footer arrives;
 - a favicon, a mark across the theme button's moon on hover, and a
   pointer for mouse users (links keep the hand);
@@ -274,14 +290,19 @@ documented in `season.js`'s header, and the shared rules in
   drawn from its photographs;
 - toys of its own (`extra`), and `kit.walker` to send something along
   the footer's edge;
-- on posts and the blog's listing, a backdrop: the season's shapes in
-  the margins beside the text (never under it, nor under the contents
-  list), at three depths, sliding at their own pace as the page scrolls
-  and swaying gently; none on screens too narrow for margins;
+- on every page with margins (all but the gallery, whose grid runs the
+  full width), a backdrop below the opener: the season's shapes in the
+  margins beside the content (never under it, nor under a post's
+  contents list), at three depths, sliding at their own pace as the page
+  scrolls and swaying gently, and covered by anything opaque (a photo
+  strip, the map); none on screens too narrow for margins;
 - on a holiday, a ribbon across the bottom left corner of the screen:
   the one piece that is not decoration, a button that opens a short card
   about the day (`about` in the season's file) on hover, keyboard focus
-  or a tap. The four seasons have none.
+  or a tap. Under the text the card has the reader's two switches, small
+  ghost buttons: the sounds, on or off for this device without a reload,
+  and one that turns the decorations off (it reloads with `?season=off`). On a phone it tucks into a dog-ear in the corner once the
+  reader is half a screen down. The four seasons have none.
 
 | Season | Its art | Its own |
 |---|---|---|
@@ -323,7 +344,9 @@ The address can override the date, once (it is stored and taken out of
 the address): `?season=<key>` previews a season in this tab,
 `?season=none` turns seasons off in this tab, and `?season=off` turns
 them off on this device until `?season=on`. The palette offers off and
-on in season. The checks always run with no season
+on in season, and the colophon's "The seasons" section draws every entry
+in `KR_SEASONS` on this year's calendar (its inline script) with a
+Preview link to each and the off and on links. The checks always run with no season
 (`harness.set_season`, and `tests/js/runtime.js`), except the smoke pin
 `check_season`, which shows each season on purpose.
 

@@ -119,25 +119,22 @@
 
     // Between them: a pencil, a biscuit and stray pages.
     function pencil(w, turn) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 6" width="' + w + '" height="' + fix(w / 4) + '"' +
-            ' style="transform: rotate(' + turn + 'deg)" aria-hidden="true" focusable="false">' +
+        return K.bit(24, 6, w, turn,
             '<rect x="1" y="1" width="3" height="4" rx=".8" fill="#e58aa0"/><rect x="3.6" y="1" width="1.4" height="4" fill="#b8b8b8"/>' +
             '<rect x="5" y="1" width="13" height="4" fill="#f2c230"/><path d="M5 2.4h13" stroke="#d9a520" stroke-width=".5"/>' +
-            '<path d="M18 1l5 2-5 2z" fill="#e8c9a0"/><path d="M21.4 2.36L23 3l-1.6.64z" fill="#3a3328"/></svg>';
+            '<path d="M18 1l5 2-5 2z" fill="#e8c9a0"/><path d="M21.4 2.36L23 3l-1.6.64z" fill="#3a3328"/>');
     }
     function biscuit(w) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 10" width="' + w + '" height="' + fix(w * 10 / 24) + '"' +
-            ' aria-hidden="true" focusable="false"><ellipse cx="12" cy="6" rx="11" ry="3.6" fill="#c98a45"/>' +
+        return K.bit(24, 10, w, 0, '<ellipse cx="12" cy="6" rx="11" ry="3.6" fill="#c98a45"/>' +
             '<ellipse cx="12" cy="5.2" rx="11" ry="3.6" fill="#e2ac62"/>' +
             '<g fill="#b3743a"><circle cx="8" cy="5" r=".6"/><circle cx="12" cy="4" r=".6"/><circle cx="16" cy="5" r=".6"/>' +
-            '<circle cx="12" cy="6.4" r=".6"/></g></svg>';
+            '<circle cx="12" cy="6.4" r=".6"/></g>');
     }
     function loosePage(w, turn) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 24" width="' + w + '" height="' + w + '"' +
-            ' style="transform: rotate(' + turn + 'deg)" aria-hidden="true" focusable="false">' +
+        return K.bit(24, 24, w, turn,
             '<path d="M5 4h10l4 4v13H5z" fill="' + PAPER + '" stroke="' + PAPER_EDGE + '" stroke-width=".8"/>' +
             '<path d="M15 4v4h4" fill="none" stroke="' + PAPER_EDGE + '" stroke-width=".8"/>' +
-            '<path d="M7.4 11h9M7.4 14h9M7.4 17h6" stroke="#a89c86" stroke-width=".8"/></svg>';
+            '<path d="M7.4 11h9M7.4 14h9M7.4 17h6" stroke="#a89c86" stroke-width=".8"/>');
     }
 
     /* A paper plane folded from a printed page, seen from the side: the
@@ -291,7 +288,7 @@
                 { art: TEA, size: 'small', sound: 'tea' },
                 { art: OPEN_BOOK, size: 'mid', sound: 'page' }],
         strew: [loosePage(16, -18), pencil(26, 6), biscuit(14), loosePage(13, 24), pencil(18, -10)],
-        puff: 'kr-season-puff--pages',
+        puff: 'kr-season-puff--scatter kr-season-puff--pages',
         flyer: PLANE, flight: 'kr-season-flyer--plane',
         favicon: BOOK_ICON, moonmark: MOON_BOOK,
         // A book every 10px of shelf, stood up once the reader has passed it.

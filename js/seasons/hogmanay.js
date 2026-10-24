@@ -116,19 +116,16 @@
 
     // Bits for between the gifts: a shortbread finger, coal, a gold star.
     function finger(w, turn) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 10" width="' + w + '" height="' + (w * 10 / 24).toFixed(1) + '"' +
-            ' style="transform: rotate(' + turn + 'deg)" aria-hidden="true" focusable="false">' +
+        return K.bit(24, 10, w, turn,
             '<rect x="1" y="1" width="22" height="8" rx="1.6" fill="#ecc985" stroke="#b98a3e" stroke-width=".8"/>' +
-            '<path d="M6 5h.1M12 5h.1M18 5h.1" stroke="#b98a3e" stroke-width="1.3" stroke-linecap="round"/></svg>';
+            '<path d="M6 5h.1M12 5h.1M18 5h.1" stroke="#b98a3e" stroke-width="1.3" stroke-linecap="round"/>');
     }
     function nugget(w) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 12 10" width="' + w + '" height="' + (w * 10 / 12).toFixed(1) + '"' +
-            ' aria-hidden="true" focusable="false"><path d="M1 6l3-4.5 5 .5 2 5-3 2.5H3z" fill="' + COAL + '" stroke="' + COAL_EDGE +
-            '" stroke-width=".6" stroke-linejoin="round"/></svg>';
+        return K.bit(12, 10, w, 0, '<path d="M1 6l3-4.5 5 .5 2 5-3 2.5H3z" fill="' + COAL + '" stroke="' + COAL_EDGE +
+            '" stroke-width=".6" stroke-linejoin="round"/>');
     }
     function sparkle(w) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 24" width="' + w + '" height="' + w + '"' +
-            ' aria-hidden="true" focusable="false"><path class="kr-season-glint" d="' + star(12, 12, 11, 4, 0.28) + '" fill="' + GOLD + '"/></svg>';
+        return K.bit(24, 24, w, 0, '<path class="kr-season-glint" d="' + star(12, 12, 11, 4, 0.28) + '" fill="' + GOLD + '"/>');
     }
 
     // A shooting star going right and a little down, its tail behind it.
@@ -274,7 +271,7 @@
                 { art: COAL_PIECE, size: 'small', sound: 'knock' },
                 { art: BLACK_BUN, size: 'mid', sound: 'cheer' }],
         strew: [finger(20, -12), nugget(12), sparkle(12), finger(16, 18), nugget(10)],
-        puff: 'kr-season-puff--streamers',
+        puff: 'kr-season-puff--scatter kr-season-puff--streamers',
         flyer: SHOOTING_STAR, flight: 'kr-season-flyer--shoot',
         favicon: BURST_ICON, moonmark: star(14.5, 10.5, 4.2, 4, 0.3),
         // A boot print every 34px along the top of the post, made as the

@@ -227,13 +227,13 @@ test('KR_SEASONS: every season is well formed, and no two of one rank share a da
         }
         assert.ok(s.heroText && s.heroRamp && s.heroRamp.length === 2, `${s.key}: heroText and a two-stop heroRamp`);
     }
-    // Every day of the years the tables cover (2028 a leap year): no two
+    // Every day of the years the tables cover (2028 and 2032 leap years): no two
     // seasons of the same rank claim it, whatever wins it.
     const onDay = (d, s) => s.windows.concat((s.years && s.years[d.getFullYear()]) || []).some(([f, t]) => {
         const day = (d.getMonth() + 1) * 100 + d.getDate(), from = f[0] * 100 + f[1], to = t[0] * 100 + t[1];
         return from <= to ? day >= from && day <= to : day >= from || day <= to;
     });
-    for (let d = new Date(2026, 0, 1); d.getFullYear() <= 2031; d.setDate(d.getDate() + 1)) {
+    for (let d = new Date(2026, 0, 1); d.getFullYear() <= 2035; d.setDate(d.getDate() + 1)) {
         const on = rt.KR_SEASONS.filter(s => onDay(d, s));
         const ranks = on.map(s => s.rank || 0);
         assert.equal(new Set(ranks).size, ranks.length,

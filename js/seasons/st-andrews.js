@@ -108,13 +108,11 @@
 
     // A pebble, and a small saltire on a stick, for between them.
     function pebble(w, colour) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 12" width="' + w + '" height="' + (w / 2).toFixed(1) + '"' +
-            ' aria-hidden="true" focusable="false"><path d="M2 11c-1-4 3-8 10-8s11 3 10 8z" fill="' + colour + '"/></svg>';
+        return K.bit(24, 12, w, 0, '<path d="M2 11c-1-4 3-8 10-8s11 3 10 8z" fill="' + colour + '"/>');
     }
     function stickFlag(h, turn) {
-        return '<svg class="kr-season-leaf" viewBox="0 0 24 24" width="' + h + '" height="' + h + '"' +
-            ' style="transform: rotate(' + turn + 'deg)" aria-hidden="true" focusable="false">' +
-            '<path d="M7 24V2" stroke="#6b5a45" stroke-width="1.4"/>' + flag(7.6, 2, 13, 0) + '</svg>';
+        return K.bit(24, 24, h, turn,
+            '<path d="M7 24V2" stroke="#6b5a45" stroke-width="1.4"/>' + flag(7.6, 2, 13, 0));
     }
 
     /* A gannet seen from the side as it glides over, wings spread up and
@@ -189,7 +187,7 @@
                 { art: PUFFIN, size: 'small', sound: 'shore' },
                 { art: PIPES, size: 'mid', sound: 'pipes' }],
         strew: [pebble(14, '#9aa3a8'), stickFlag(22, -6), pebble(11, '#b8b0a2'), stickFlag(18, 8), pebble(9, '#7d8a90')],
-        puff: 'kr-season-puff--saltire',
+        puff: 'kr-season-puff--scatter kr-season-puff--saltire',
         flyer: GANNET, flight: 'kr-season-flyer--gannet',
         favicon: SALTIRE_ICON, moonmark: MOON_SALTIRE,
         // A flag every 34px of string, flown out once the reader has passed.
