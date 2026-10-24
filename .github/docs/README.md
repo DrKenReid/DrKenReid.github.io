@@ -27,8 +27,10 @@ which are published on purpose, and anything `_config.yml` excludes.
   with no build step on the server. Everything that is generated (the
   stylesheet, the share images, the feed, the sitemap, the post heads,
   parts of `data/`) is generated locally and committed.
-- `style.css` is the only stylesheet you edit; `style.min.css` is built
-  from it. See [CONVENTIONS.md](CONVENTIONS.md#the-stylesheet).
+- `style.css` is the stylesheet you edit; `style.min.css` is built from
+  it. A season's own colours and rules are in `css/seasons/<key>.css`,
+  loaded only while it is on. See
+  [CONVENTIONS.md](CONVENTIONS.md#the-stylesheet).
 - `js/shared-components.js` draws the header, footer, cards and all the
   furniture around a post. A site-wide change is made there, not in
   ninety HTML files.

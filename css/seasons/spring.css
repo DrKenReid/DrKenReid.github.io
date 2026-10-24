@@ -1,0 +1,182 @@
+/* css/seasons/spring.css: Spring's colours and its own rules.
+   shared-components.js loads this file only while the season is on
+   (KR_SEASONS), beside js/seasons/spring.js; style.css keeps what every
+   season shares (§01 "Seasons", §21 "Seasonal decorations"). Tokens
+   first, both themes, then the rules for its own pieces. */
+
+/* Spring: blossom rose into new-leaf green:
+     light  #b03a72  5.32 page, 5.60 warm;  #3a7327  5.37 page
+     dark   #ffa6c9  9.57 page, 7.89 raised; #b8e68f  12.23 page
+   The line is the twig, the creature the swallows, the pumpkin token
+   the blossom (the map's rims, the petals a tulip throws), the badge a
+   pale blossom, and the fog a morning mist in the light theme only.
+   Its own tokens: --kr-season-leaf (the vine on a post) and
+   --kr-season-rain (the shower). */
+:root[data-season="spring"] {
+  --kr-brand-from: #b03a72;
+  --kr-brand-to: #3a7327;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #ffc4dc;
+  --kr-photo-to: #d4f2b6;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #7d6a5a;
+  --kr-season-creature: #2c3e66;
+  --kr-season-glow: #fff1c9;
+  --kr-season-pumpkin: #ee8fb2;
+  --kr-season-badge: #fbd0e0;
+  --kr-season-fog: #eef6e8;
+  --kr-season-dusk: saturate(1.15) hue-rotate(-6deg) brightness(1.03);
+  --kr-season-fog-display: block;
+  --kr-season-leaf: #6aa83e;
+  --kr-season-rain: #e3eef8; }
+
+:root[data-theme="dark"][data-season="spring"] {
+  --kr-brand-from: #ffa6c9;
+  --kr-brand-to: #b8e68f;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-line: #b39c88;
+  --kr-season-creature: #c5d0ea;
+  --kr-season-dusk: saturate(1.05) hue-rotate(-6deg) brightness(0.92);
+  --kr-season-fog-display: none;
+  --kr-season-leaf: #8cc152; }
+
+/* --- Spring ----------------------------------------------------------------
+   Built by js/seasons/spring.js: petals thrown up by a clicked tulip,
+   daffodil or robin (--petals, the fall's scatter in blossom colours);
+   two swallows swooping across in a wave (--swoop), wings folding fast;
+   the vine along a post's top, a bud every 34px that opens into a flower
+   once the reader has passed it and closes again on the way up (--vine,
+   .kr-season-bloom); and the shower, a few seconds of rain over the
+   page's opening photograph with a rainbow after it, which then goes
+   (never under reduced motion: spring.js does not start it). Classes
+   only script applies: .kr-season-puff--petals, .kr-season-flyer--swoop,
+   .kr-season-track--vine, .kr-season-bloom, .kr-season-shower (__rain,
+   __rain--far, __bow). */
+.kr-season-puff--petals,
+.kr-season-puff--petals::before,
+.kr-season-puff--petals::after {
+  width: 8px;
+  height: 11px;
+  margin-left: -4px;
+  border-radius: 50% 50% 50% 50% / 70% 70% 35% 35%;
+  background: var(--kr-season-pumpkin);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--kr-season-line) 30%, transparent);
+  --kr-season-toss: 6px;
+  animation: kr-season-scatter 1.7s cubic-bezier(0.2, 0.6, 0.4, 1) forwards; }
+
+.kr-season-puff--petals::before {
+  background: var(--kr-season-badge);
+  --kr-season-toss: -22px; }
+
+.kr-season-puff--petals::after {
+  background: color-mix(in srgb, var(--kr-season-pumpkin) 55%, var(--kr-season-badge));
+  --kr-season-toss: 24px; }
+
+.kr-season-flyer--swoop {
+  top: 26vh;
+  width: 110px;
+  animation: kr-season-swoop 5.4s ease-in-out forwards; }
+
+.kr-season-flyer--swoop .kr-season-flyer__wing {
+  animation-duration: 0.13s; }
+
+.kr-season-flyer--swoop .kr-season-flyer__wing--l {
+  transform-origin: 100% 100%; }
+
+.kr-season-flyer--swoop .kr-season-flyer__wing--r {
+  transform-origin: 100% 0; }
+
+@keyframes kr-season-swoop {
+  0% { transform: translate(-100px, 14vh) rotate(8deg); }
+  30% { transform: translate(28vw, 24vh) rotate(-6deg); }
+  55% { transform: translate(52vw, 5vh) rotate(5deg); }
+  80% { transform: translate(78vw, 16vh) rotate(-8deg); }
+  100% { transform: translate(calc(100vw + 100px), -3vh) rotate(-12deg); } }
+
+.kr-season-track--vine .kr-season-track__rest {
+  top: 1px;
+  bottom: auto;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--kr-season-leaf); }
+
+.kr-season-track--vine .kr-season-track__bit {
+  top: 1px;
+  width: 16px;
+  margin-left: -8px; }
+
+.kr-season-bloom {
+  transform: scale(0.2);
+  transform-origin: 12px 13px;
+  transition: transform 0.4s ease-in; }
+
+.kr-season-track__bit--passed .kr-season-bloom {
+  transform: none;
+  transition: transform 1.1s cubic-bezier(0.2, 0.8, 0.3, 1.25); }
+
+.kr-season-shower {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none; }
+
+.welcome-area .kr-season-shower {
+  z-index: 5; }
+
+/* Each layer of rain is a tile of short streaks, skewed into the wind,
+   sliding down one tile at a time (--kr-season-drop) so it never jumps;
+   the far layer is finer and slower. */
+.kr-season-shower__rain {
+  position: absolute;
+  top: -120px;
+  right: -15%;
+  bottom: 0;
+  left: -15%;
+  background-image:
+    radial-gradient(1px 9px at 10px 14px, color-mix(in srgb, var(--kr-season-rain) 80%, transparent), transparent),
+    radial-gradient(1px 9px at 52px 70px, color-mix(in srgb, var(--kr-season-rain) 80%, transparent), transparent),
+    radial-gradient(1px 9px at 95px 33px, color-mix(in srgb, var(--kr-season-rain) 80%, transparent), transparent),
+    radial-gradient(1px 9px at 31px 98px, color-mix(in srgb, var(--kr-season-rain) 80%, transparent), transparent),
+    radial-gradient(1px 9px at 74px 50px, color-mix(in srgb, var(--kr-season-rain) 80%, transparent), transparent),
+    radial-gradient(1px 9px at 108px 88px, color-mix(in srgb, var(--kr-season-rain) 80%, transparent), transparent);
+  background-size: 120px 120px;
+  opacity: 0;
+  --kr-season-drop: 120px;
+  animation: kr-season-rain 0.22s linear infinite, kr-season-rain-on 16s ease-in-out forwards; }
+
+.kr-season-shower__rain--far {
+  /* The same tile, offset and blurred: a smaller one would clip the
+     streaks that sit past its edge. */
+  background-position: 61px 47px;
+  filter: blur(0.4px);
+  animation-duration: 0.2s, 16s; }
+
+.kr-season-shower__bow {
+  position: absolute;
+  top: 9%;
+  right: 5%;
+  width: min(44%, 520px);
+  height: auto;
+  opacity: 0;
+  animation: kr-season-bow 16s ease-in-out forwards; }
+
+@keyframes kr-season-rain {
+  from { transform: skewX(-10deg) translateY(0); }
+  to { transform: skewX(-10deg) translateY(var(--kr-season-drop)); } }
+
+@keyframes kr-season-rain-on {
+  0% { opacity: 0; }
+  8% { opacity: 0.75; }
+  40% { opacity: 0.75; }
+  54% { opacity: 0; }
+  100% { opacity: 0; } }
+
+@keyframes kr-season-bow {
+  0%, 36% { opacity: 0; }
+  52% { opacity: 0.55; }
+  80% { opacity: 0.55; }
+  100% { opacity: 0; } }

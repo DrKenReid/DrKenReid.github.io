@@ -178,13 +178,20 @@ var CATEGORIES = {};
 KR_PHOTO_CATEGORIES.forEach(function(cat) { CATEGORIES[cat.key] = cat; });
 // In a season that names one (krSeason() in shared-components.js), a
 // subject of its own: every frame carrying any of the season's tags
-// ("Spooky" at Halloween), offered first.
+// ("Spooky" at Halloween). Whichever subject the season is about, its
+// own or the one stored tag it names (Autumn in the fall), is offered
+// first (SEASON_LEAD).
 var SEASON_SUBJECT = null;
+var SEASON_LEAD = null;
 (function() {
     var season = typeof krSeason === 'function' ? krSeason() : null;
-    if (!season || !season.subject || !season.photoTags) return;
-    SEASON_SUBJECT = season.subject.key;
-    CATEGORIES[SEASON_SUBJECT] = { key: SEASON_SUBJECT, label: season.subject.label, tags: season.photoTags };
+    if (!season || !season.photoTags) return;
+    if (season.subject) {
+        SEASON_SUBJECT = SEASON_LEAD = season.subject.key;
+        CATEGORIES[SEASON_SUBJECT] = { key: SEASON_SUBJECT, label: season.subject.label, tags: season.photoTags };
+    } else if (season.photoTags.length === 1 && CATEGORIES[season.photoTags[0]]) {
+        SEASON_LEAD = season.photoTags[0];
+    }
 })();
 
 function compareFileNames(a, b) {
@@ -516,7 +523,7 @@ function buildFilterButtons() {
     var items = Object.keys(CATEGORIES)
         .filter(function(cat) { return counts[cat] || cat === activeCat; })
         .sort(function(a, b) {
-            return (b === SEASON_SUBJECT) - (a === SEASON_SUBJECT) || (counts[b] || 0) - (counts[a] || 0);
+            return (b === SEASON_LEAD) - (a === SEASON_LEAD) || (counts[b] || 0) - (counts[a] || 0);
         })
         .map(function(cat) {
             return {

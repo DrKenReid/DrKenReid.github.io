@@ -1,0 +1,236 @@
+/* css/seasons/world-book-day.css: World Book Day's colours and its own
+   rules. shared-components.js loads this file only while the season is
+   on (KR_SEASONS), beside js/seasons/world-book-day.js; style.css keeps
+   what every season shares (§01 "Seasons", §21 "Seasonal decorations").
+   Tokens first, both themes, then the rules for its own pieces. */
+
+/* World Book Day: lamplit gold into plum:
+     light  #8a5410  5.86 page, 6.16 tint;  #5d3f8f  7.64 page, 8.04 tint
+     dark   #f0c27a  10.53 page, 8.68 raised; #cbb0f0  9.12 page, 7.52 raised
+   The line is the lamp's arms, the creature the bookworm, the glow the
+   lamplight, the pumpkin token book cloth (the shelf over a post), the
+   badge paper, and the paper and ink tokens the slip over the footer and
+   the pages thrown up from the patch, the same in both themes. No fog. */
+:root[data-season="world-book-day"] {
+  --kr-brand-from: #8a5410;
+  --kr-brand-to: #5d3f8f;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #ffdca0;
+  --kr-photo-to: #e2d2ff;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #6b5844;
+  --kr-season-creature: #4f7a3a;
+  --kr-season-glow: #ffe2a0;
+  --kr-season-pumpkin: #7a4f2c;
+  --kr-season-badge: #fbf6ea;
+  --kr-season-fog: #efe6d4;
+  --kr-season-dusk: sepia(0.4) brightness(0.95);
+  --kr-season-fog-display: none;
+  --kr-season-paper: #fbf6ea;
+  --kr-season-paper-edge: #c9b896;
+  --kr-season-ink: #3a3328; }
+
+:root[data-theme="dark"][data-season="world-book-day"] {
+  --kr-brand-from: #f0c27a;
+  --kr-brand-to: #cbb0f0;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-line: #a8957c;
+  --kr-season-creature: #a8d08a;
+  --kr-season-pumpkin: #9a6a40;
+  --kr-season-dusk: sepia(0.4) brightness(0.85); }
+
+/* --- World Book Day --------------------------------------------------------
+   Built by js/seasons/world-book-day.js: the tea's steam (.kr-season-wbd-steam);
+   three pages thrown up from a clicked piece of the patch (--pages); a
+   paper plane that glides in, pulls up, stalls and glides on (--plane);
+   a shelf along a post's top whose books are stubs until the reader has
+   passed them, then stand up (--shelf, its books); the bookworm inching
+   along the footer's edge, slowly (--bookworm). Classes only script
+   applies: .kr-season-wbd-steam, .kr-season-puff--pages,
+   .kr-season-flyer--plane, .kr-season-track--shelf,
+   .kr-season-track__book, .kr-season-walker--bookworm. */
+.kr-season-wbd-steam {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: kr-season-wbd-steam 2.6s ease-in-out infinite alternate; }
+
+@keyframes kr-season-wbd-steam {
+  from { transform: skewX(-6deg); opacity: 0.55; }
+  to { transform: skewX(8deg) translateY(-1px); opacity: 0.9; } }
+
+.kr-season-puff--pages,
+.kr-season-puff--pages::before,
+.kr-season-puff--pages::after {
+  width: 9px;
+  height: 11px;
+  margin-left: -4.5px;
+  border-radius: 1px;
+  background:
+    linear-gradient(to bottom, transparent 3px, var(--kr-season-paper-edge) 3px 4px, transparent 4px 6px,
+      var(--kr-season-paper-edge) 6px 7px, transparent 7px) 2px 0 / 5px 100% no-repeat,
+    var(--kr-season-paper);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--kr-season-paper-edge) 80%, transparent);
+  --kr-season-toss: 3px;
+  animation: kr-season-scatter 1.8s cubic-bezier(0.2, 0.6, 0.4, 1) forwards; }
+
+.kr-season-puff--pages::before {
+  --kr-season-toss: -24px; }
+
+.kr-season-puff--pages::after {
+  --kr-season-toss: 22px; }
+
+.kr-season-flyer--plane {
+  top: 18vh;
+  width: 58px;
+  filter: drop-shadow(0 3px 4px color-mix(in srgb, var(--kr-season-ink) 30%, transparent));
+  animation: kr-season-wbd-glide 7.5s cubic-bezier(0.4, 0.1, 0.6, 0.9) forwards; }
+
+@keyframes kr-season-wbd-glide {
+  0% { transform: translate(-80px, 0) rotate(10deg); }
+  38% { transform: translate(38vw, 14vh) rotate(8deg); }
+  50% { transform: translate(48vw, 8vh) rotate(-18deg); }
+  58% { transform: translate(53vw, 9vh) rotate(4deg); }
+  66% { transform: translate(58vw, 14vh) rotate(16deg); }
+  100% { transform: translate(calc(100vw + 80px), 36vh) rotate(12deg); } }
+
+.kr-season-track--shelf .kr-season-track__rest {
+  top: 15px;
+  bottom: auto;
+  height: 3px;
+  background: var(--kr-season-pumpkin);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--kr-season-ink) 40%, transparent); }
+
+.kr-season-track--shelf .kr-season-track__bit {
+  top: 0;
+  display: flex;
+  align-items: flex-end;
+  width: 7px;
+  height: 15px;
+  margin-left: -3.5px; }
+
+.kr-season-track__bit .kr-season-track__book {
+  flex: none;
+  opacity: 0.4;
+  transform: scaleY(0.2);
+  transform-origin: 50% 100%;
+  transition: transform 0.35s ease-in, opacity 0.35s ease-in; }
+
+.kr-season-track__bit.kr-season-track__bit--passed .kr-season-track__book {
+  opacity: 1;
+  transform: none;
+  transition: transform 0.6s cubic-bezier(0.3, 1.5, 0.5, 1), opacity 0.3s ease-out; }
+
+.kr-season-walker--bookworm {
+  width: 34px;
+  animation-duration: 26s; }
+
+.kr-season-walker--bookworm svg {
+  transform-origin: 0 100%;
+  animation: kr-season-wbd-inch 0.9s ease-in-out infinite alternate; }
+
+@keyframes kr-season-wbd-inch {
+  from { transform: scale(1, 1); }
+  to { transform: scale(0.84, 1.18); } }
+
+/* --- World Book Day's pages ------------------------------------------------
+   Built by js/seasons/world-book-day.js (its extra): a slip of paper
+   lying across the top edge of the footer at its right, mostly on the
+   footer, above its columns, from 992px, with a line
+   from the quote wall, turned over for another at a click (--turn; the
+   line simply changes under reduced motion); and a dog-ear on the bottom
+   right corner of every page opener, the page beneath showing through,
+   that curls back further while the pointer is over the opener; on the
+   404 page, the opener's foot torn ragged instead, in the page's own
+   colour. Classes only script applies: .kr-season-wbd-slip (--turn),
+   .kr-season-wbd-slip__line, .kr-season-wbd-slip__source,
+   .kr-season-wbd-curl, .kr-season-wbd-tear. */
+.kr-season-wbd-slip {
+  display: none;
+  position: absolute;
+  right: max(12px, 6%);
+  bottom: calc(100% - 52px);
+  max-width: min(42%, 440px);
+  padding: 8px 16px 9px;
+  border-radius: 2px;
+  background: var(--kr-season-paper);
+  color: var(--kr-season-ink);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--kr-season-ink) 45%, transparent),
+    inset 0 0 0 1px var(--kr-season-paper-edge);
+  font-family: 'Lora', 'Lora Fallback', Georgia, serif;
+  line-height: 1.32;
+  cursor: pointer;
+  transform: rotate(-1.4deg);
+  transform-origin: 50% 100%; }
+
+@media only screen and (min-width: 992px) {
+  .kr-season-wbd-slip:not([hidden]) {
+    display: block; } }
+
+.kr-season-wbd-slip__line {
+  display: block;
+  font-size: 13.5px;
+  font-style: italic; }
+
+.kr-season-wbd-slip__source {
+  display: block;
+  margin-top: 3px;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  color: color-mix(in srgb, var(--kr-season-ink) 78%, var(--kr-season-paper)); }
+
+.kr-season-wbd-slip--turn {
+  animation: kr-season-wbd-turn 0.52s ease-in-out; }
+
+@keyframes kr-season-wbd-turn {
+  0%, 100% { transform: rotate(-1.4deg); }
+  50% { transform: rotate(-1.4deg) perspective(600px) rotateX(88deg); } }
+
+.kr-season-wbd-curl {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 30px;
+  height: 30px;
+  pointer-events: none;
+  transition: width 0.35s cubic-bezier(0.3, 0.7, 0.4, 1), height 0.35s cubic-bezier(0.3, 0.7, 0.4, 1); }
+
+.kr-season-wbd-curl::before,
+.kr-season-wbd-curl::after {
+  content: '';
+  position: absolute;
+  inset: 0; }
+
+.kr-season-wbd-curl::before {
+  background: linear-gradient(315deg, var(--kr-surface-0) 50%, transparent 50%); }
+
+.kr-season-wbd-curl::after {
+  background: linear-gradient(315deg, transparent 50%,
+    color-mix(in srgb, var(--kr-season-paper) 72%, var(--kr-season-paper-edge)) 50%,
+    var(--kr-season-paper) 72%, color-mix(in srgb, var(--kr-season-paper) 85%, var(--kr-season-paper-edge)));
+  filter: drop-shadow(-2px -2px 3px color-mix(in srgb, var(--kr-season-ink) 45%, transparent)); }
+
+.breadcrumb-area:hover .kr-season-wbd-curl,
+.kr-opener:hover .kr-season-wbd-curl {
+  width: 64px;
+  height: 64px; }
+
+.kr-season-wbd-tear {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  z-index: 2;
+  height: 18px;
+  color: var(--kr-surface-0);
+  pointer-events: none;
+  filter: drop-shadow(0 -1px 1px color-mix(in srgb, var(--kr-season-ink) 40%, transparent)); }
+
+.kr-season-wbd-tear svg {
+  display: block;
+  width: 100%;
+  height: 100%; }

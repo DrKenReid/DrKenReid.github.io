@@ -1,0 +1,211 @@
+/* css/seasons/hogmanay.css: Hogmanay's colours and its own rules.
+   shared-components.js loads this file only while the season is on
+   (KR_SEASONS), beside js/seasons/hogmanay.js; style.css keeps what every
+   season shares (§01 "Seasons", §21 "Seasonal decorations"). Tokens
+   first, both themes, then the rules for its own pieces. */
+
+/* Hogmanay: old gold into night blue:
+     light  #8a6410  5.02 page, 5.29 warm;  #24438a  8.75 page
+     dark   #ffd36e  12.26 page, 10.11 raised; #b8c2ff  10.11 page
+   The line is the clock's cord and the coal's string, the creature the
+   first foot's boot prints, the pumpkin token gold (the map's rims), the
+   badge a gold burst, no fog in either theme, and the map's dusk a night
+   blue. --kr-season-night is the countdown's ground on the hero; silver
+   and ice colour the streamers and the midnight bursts. */
+:root[data-season="hogmanay"] {
+  --kr-brand-from: #8a6410;
+  --kr-brand-to: #24438a;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #ffe08f;
+  --kr-photo-to: #d6dcff;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #5d6b85;
+  --kr-season-creature: #2b2f3a;
+  --kr-season-glow: #ffd36e;
+  --kr-season-pumpkin: #d9a520;
+  --kr-season-badge: #f2c14e;
+  --kr-season-fog: #dfe6f5;
+  --kr-season-dusk: saturate(0.55) hue-rotate(-12deg) brightness(0.78);
+  --kr-season-fog-display: none;
+  --kr-season-night: #14203d;
+  --kr-season-silver: #e9eef9;
+  --kr-season-ice: #9cc4ff; }
+
+:root[data-theme="dark"][data-season="hogmanay"] {
+  --kr-brand-from: #ffd36e;
+  --kr-brand-to: #b8c2ff;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-line: #a9b6cc;
+  --kr-season-creature: #c3cbe0;
+  --kr-season-dusk: saturate(0.55) hue-rotate(-12deg) brightness(0.7); }
+
+/* --- Hogmanay -------------------------------------------------------------
+   Built by js/seasons/hogmanay.js: gold glints that twinkle on the clock,
+   the coal and the footer; the tin's burst of streamers (--streamers); a
+   shooting star (--shoot); boot prints along the top of a post, made as
+   the reader passes (--footsteps). Classes only script applies:
+   .kr-season-glint, .kr-season-flyer__trail, .kr-season-puff--streamers,
+   .kr-season-flyer--shoot, .kr-season-track--footsteps. */
+.kr-season-glint {
+  transform-box: fill-box;
+  transform-origin: center;
+  /* Eight twinkles, then still: the clock sits in the fixed header. */
+  animation: kr-season-glint 2.6s ease-in-out 8; }
+
+.kr-season-patch__mid .kr-season-glint,
+.kr-season-leaf:nth-child(2n) .kr-season-glint {
+  animation-delay: -1.3s; }
+
+@keyframes kr-season-glint {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.6); } }
+
+/* The tin throws up streamers: three thin strips, gold, silver and ice,
+   on the leaves' scatter. */
+.kr-season-puff--streamers,
+.kr-season-puff--streamers::before,
+.kr-season-puff--streamers::after {
+  width: 3px;
+  height: 12px;
+  margin-left: -1px;
+  border-radius: 2px;
+  background: var(--kr-season-glow);
+  --kr-season-toss: 4px;
+  animation: kr-season-scatter 1.6s cubic-bezier(0.2, 0.6, 0.4, 1) forwards; }
+
+.kr-season-puff--streamers::before {
+  background: var(--kr-season-silver);
+  --kr-season-toss: -24px; }
+
+.kr-season-puff--streamers::after {
+  background: var(--kr-season-ice);
+  --kr-season-toss: 22px; }
+
+/* A shooting star high over the page, left to right and a little down,
+   fast, fading as it goes. */
+.kr-season-flyer--shoot {
+  top: 9vh;
+  width: 150px;
+  filter: drop-shadow(0 0 6px var(--kr-season-glow));
+  animation: kr-season-shoot 2.6s cubic-bezier(0.5, 0, 0.8, 0.6) forwards; }
+
+@keyframes kr-season-shoot {
+  0% { transform: translate(-160px, 0) rotate(9deg); opacity: 0; }
+  12% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translate(calc(100vw + 20px), 16vh) rotate(9deg); opacity: 0; } }
+
+/* The first foot's boot prints under the header bar: a faint path with a
+   print every 34px, pressed in where the reader has been and fading back
+   on the way up. */
+.kr-season-track--footsteps .kr-season-track__rest {
+  top: 0;
+  bottom: auto;
+  height: 1px;
+  background: color-mix(in srgb, var(--kr-season-line) 45%, transparent); }
+
+.kr-season-track--footsteps .kr-season-track__bit {
+  top: 3px;
+  width: 13px;
+  margin-left: -6px;
+  opacity: 0.16;
+  transition: opacity 0.5s ease-out; }
+
+.kr-season-track--footsteps .kr-season-track__bit svg {
+  fill: var(--kr-season-creature); }
+
+.kr-season-track--footsteps .kr-season-track__bit--passed {
+  opacity: 0.9;
+  transition: opacity 0.25s ease-in; }
+
+/* --- Hogmanay's Bells ------------------------------------------------------
+   Built by js/seasons/hogmanay.js: a line low on the homepage hero that
+   counts down to the reader's midnight (the Bells), the last ten seconds
+   large; at midnight it says Happy New Year (--rung), bursts of sparks
+   open over the hero (__burst) and the corner clocks rock
+   (.kr-season-clock--chime); on 1 and 2 January it names the year. The
+   bursts and the rocking never run under reduced motion. Classes only
+   script applies: .kr-season-bells (--final, --rung), __text, __burst,
+   .kr-season-hand (--hour, --minute), .kr-season-clock--chime. */
+.kr-season-bells {
+  position: absolute;
+  bottom: 74px;
+  left: 50%;
+  z-index: 6;
+  max-width: calc(100% - 32px);
+  padding: 6px 18px;
+  border: 1px solid color-mix(in srgb, var(--kr-season-glow) 45%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--kr-season-night) 72%, transparent);
+  color: var(--kr-photo-from);
+  font-size: 15px;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translateX(-50%); }
+
+.kr-season-bells--final .kr-season-bells__text {
+  display: inline-block;
+  min-width: 2ch;
+  font-size: 30px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  animation: kr-season-beat 1s ease-out infinite; }
+
+.kr-season-bells--rung {
+  box-shadow: 0 0 22px color-mix(in srgb, var(--kr-season-glow) 55%, transparent);
+  font-size: 18px;
+  font-weight: 700; }
+
+@keyframes kr-season-beat {
+  0% { transform: scale(1.25); }
+  100% { transform: scale(1); } }
+
+.kr-season-bells__burst {
+  position: absolute;
+  z-index: 6;
+  width: 2px;
+  height: 2px;
+  margin: -1px 0 0 -1px;
+  border-radius: 50%;
+  background: var(--kr-season-glow);
+  box-shadow:
+    36px 0 0 var(--kr-season-glow), 31.2px 18px 0 var(--kr-season-silver),
+    18px 31.2px 0 var(--kr-season-glow), 0 36px 0 var(--kr-season-silver),
+    -18px 31.2px 0 var(--kr-season-glow), -31.2px 18px 0 var(--kr-season-silver),
+    -36px 0 0 var(--kr-season-glow), -31.2px -18px 0 var(--kr-season-silver),
+    -18px -31.2px 0 var(--kr-season-glow), 0 -36px 0 var(--kr-season-silver),
+    18px -31.2px 0 var(--kr-season-glow), 31.2px -18px 0 var(--kr-season-silver),
+    18.5px 7.7px 0 var(--kr-season-ice), 7.7px 18.5px 0 var(--kr-season-ice),
+    -7.7px 18.5px 0 var(--kr-season-ice), -18.5px 7.7px 0 var(--kr-season-ice),
+    -18.5px -7.7px 0 var(--kr-season-ice), -7.7px -18.5px 0 var(--kr-season-ice),
+    7.7px -18.5px 0 var(--kr-season-ice), 18.5px -7.7px 0 var(--kr-season-ice);
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.1);
+  animation: kr-season-bells-burst 1.8s cubic-bezier(0.15, 0.7, 0.35, 1) forwards; }
+
+@keyframes kr-season-bells-burst {
+  0% { opacity: 1; transform: scale(0.1); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: scale(3) translateY(4px); } }
+
+.kr-season-clock--chime {
+  transform-origin: 50% 0;
+  animation: kr-season-chime 0.6s ease-in-out 5; }
+
+@keyframes kr-season-chime {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-6deg); }
+  75% { transform: rotate(6deg); } }
+
+@media only screen and (max-width: 575.98px) {
+  .kr-season-bells {
+    bottom: 64px;
+    font-size: 13px; } }

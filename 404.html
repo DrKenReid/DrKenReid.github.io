@@ -63,7 +63,9 @@
             if (!c || !c.getContext) return;
             var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             var status = document.getElementById('kr-lost-status');
-            var path = decodeURIComponent(location.pathname || '/');
+            // A broken escape (/x%E0) is just the kind of address that lands here.
+            var path = location.pathname || '/';
+            try { path = decodeURIComponent(path); } catch (e) {}
             var W = 640, H = 150, ctx = c.getContext('2d');
 
             // A rugged landscape seeded from the path, so every missing URL

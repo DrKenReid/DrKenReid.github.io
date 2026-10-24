@@ -1,0 +1,115 @@
+/* css/seasons/winter.css: Winter's colours and its own rules.
+   shared-components.js loads this file only while the season is on
+   (KR_SEASONS), beside js/seasons/winter.js; style.css keeps what every
+   season shares (§01 "Seasons", §21 "Seasonal decorations"). Tokens
+   first, both themes, then the rules for its own pieces. */
+
+/* Winter: glacier blue into dusk indigo:
+     light  #1b6292  6.12 page, 6.12 warm;  #4a4f9c  6.80 page
+     dark   #8fcfff  10.39 page, 8.57 raised; #c8cdff  11.30 page
+   The line is the bare branch and the mitten's string, the creature the
+   mitten and the owl, the pumpkin token the ice (the eaves, the map's
+   rims), the badge snow, the fog a frost in both themes, and the map's
+   dusk cold. */
+:root[data-season="winter"] {
+  --kr-brand-from: #1b6292;
+  --kr-brand-to: #4a4f9c;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #a8dcff;
+  --kr-photo-to: #dfe4ff;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #6e7f8d;
+  --kr-season-creature: #2f4a63;
+  --kr-season-glow: #cfe9ff;
+  --kr-season-pumpkin: #5c9fd6;
+  --kr-season-badge: #f6fbff;
+  --kr-season-fog: #e4f2fc;
+  --kr-season-dusk: saturate(0.45) hue-rotate(-10deg) brightness(1.05);
+  --kr-season-fog-display: block; }
+
+:root[data-theme="dark"][data-season="winter"] {
+  --kr-brand-from: #8fcfff;
+  --kr-brand-to: #c8cdff;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-line: #a3b6c6;
+  --kr-season-creature: #c9def0;
+  --kr-season-dusk: saturate(0.5) hue-rotate(-10deg) brightness(0.92); }
+
+/* Winter's owl takes the bat's path, bigger, slower, with slow beats. */
+.kr-season-flyer--soar {
+  width: 66px;
+  animation-duration: 7.5s; }
+
+.kr-season-flyer--soar .kr-season-flyer__wing {
+  animation-duration: 0.55s; }
+
+/* Winter's snowmen throw up snow: the same scatter in three round
+   flakes, with an edge for the light page. */
+.kr-season-puff--snow,
+.kr-season-puff--snow::before,
+.kr-season-puff--snow::after {
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  border-radius: 50%;
+  background: var(--kr-season-badge);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--kr-season-line) 55%, transparent);
+  --kr-season-toss: 5px;
+  animation: kr-season-scatter 1.6s cubic-bezier(0.2, 0.6, 0.4, 1) forwards; }
+
+.kr-season-puff--snow::before {
+  --kr-season-toss: -20px; }
+
+.kr-season-puff--snow::after {
+  --kr-season-toss: 22px; }
+
+/* Winter's eaves, in the same place: a ledge of ice the width of the
+   window, with a bud of an icicle every 26px that grows to its length
+   once the reader has passed it, and melts back on the way up. */
+.kr-season-track--icicles .kr-season-track__rest {
+  top: 0;
+  bottom: auto;
+  height: 3px;
+  border-radius: 0 0 2px 2px;
+  background: var(--kr-season-pumpkin);
+  box-shadow: inset 0 1px 0 var(--kr-season-badge); }
+
+.kr-season-track--icicles .kr-season-track__bit {
+  top: 2px;
+  width: 6px;
+  margin-left: -3px;
+  transform: scaleY(0.18);
+  transform-origin: 50% 0;
+  transition: transform 0.5s ease-in; }
+
+.kr-season-track--icicles .kr-season-track__bit--passed {
+  transform: none;
+  transition: transform 1.4s cubic-bezier(0.2, 0.7, 0.3, 1); }
+
+/* --- Winter's settling snow ----------------------------------------------
+   Built by js/seasons/winter.js: a ridge of snow along the footer's top
+   edge, behind the snowmen, that deepens to 14px over two minutes on the
+   page; under reduced motion it is settled from the start. Classes only
+   script applies: .kr-season-settle (.is-visible once it is in). */
+.kr-season-settle {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% - 3px);
+  left: 0;
+  height: 14px;
+  pointer-events: none;
+  transform: scaleY(0.15);
+  transform-origin: 50% 100%;
+  transition: transform 120s cubic-bezier(0.2, 0.6, 0.3, 1); }
+
+.kr-season-settle.is-visible {
+  transform: none; }
+
+.kr-season-settle svg {
+  display: block;
+  width: 100%;
+  height: 100%; }

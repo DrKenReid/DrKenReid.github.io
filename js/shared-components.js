@@ -92,10 +92,14 @@
 document.documentElement.classList.add('kr-js');
 
 /*
- * Seasons: a stretch of the calendar when the site dresses up. While one
- * is on, data-season on <html> switches the colours (style.css §01,
- * "Seasons") and js/season.js, fetched only then, adds the decorations.
- * The rest of the year a season costs nothing but its rules in style.css.
+ * Seasons: a stretch of the calendar when the site dresses up, from the
+ * four seasons of the year to a holiday of a day or two. While one is
+ * on, data-season on <html> switches the colours (style.css §01,
+ * "Seasons", with the season's own stylesheet, css/seasons/<key>.css),
+ * and js/season.js with the season's own art, js/seasons/<key>.js (or
+ * the files another season's `art` names), fetched only then, adds the
+ * decorations. Off
+ * season (?season=none or off) none of that is fetched.
  *
  * krSeason() says which season is on, if any. The reader's local date
  * decides, both ends of a window included, unless the address said
@@ -105,22 +109,187 @@ document.documentElement.classList.add('kr-js');
  *   ?season=off     no decorations on this device, until ?season=on
  * The command palette offers the last two in season.
  *
- * Each season can also name the photo tags its frames come from
- * (photoTags: the photo strip, the 404 page's frame, and a gallery
- * subject of their own, `subject`; the palette's random one of them,
- * `treat`) and what the homepage's evolving headline spells and in
- * which colours (heroText, heroRamp).
+ * A season runs over one or more windows ([month, day] pairs, both ends
+ * included; a window may end before it starts, as winter's runs over the
+ * new year), and a holiday that moves with another calendar lists its
+ * windows by year (`years`: Diwali). Where two hold the same day, the
+ * higher `rank` wins: a holiday inside a season shows on its own days
+ * (rank 2, Bonfire Night inside the fall), Halloween's fortnight inside
+ * the fall (rank 1), and Diwali over all (rank 3), since its days can
+ * land on Halloween or Bonfire Night. The node tests refuse two of the
+ * same rank on one day, and a `years` table about to run out.
+ *
+ * Each season can also name the frames it shows (the photo strip, the
+ * 404 page's frame, the palette's random one, `treat`): by photo tag
+ * (photoTags, which also picks the gallery subject offered first, its
+ * own `subject` or the one stored tag it names) or by place (photoPlaces,
+ * words in a region's name in photo-locations.json). And what the
+ * homepage's evolving headline spells and in which colours (heroText,
+ * heroRamp).
  */
 var KR_SEASONS = [{
     key: 'halloween',
     label: 'Halloween',
-    from: [10, 17],
-    to: [11, 1],
+    windows: [[[10, 17], [11, 1]]],
     photoTags: ['abandoned', 'silhouette'],
     subject: { key: 'spooky', label: 'Spooky' },
     treat: { title: 'Trick or treat', sub: 'A random spooky photograph', also: 'boo spooky' },
     heroText: 'Boo.',
-    heroRamp: [[255, 165, 82], [201, 162, 255]]
+    heroRamp: [[255, 165, 82], [201, 162, 255]],
+    rank: 1
+}, {
+    key: 'fall',
+    label: 'Fall',
+    windows: [[[9, 22], [11, 30]]],
+    photoTags: ['autumn'],
+    treat: { title: 'An autumn walk', sub: 'A random autumn photograph', also: 'fall leaves autumn walk' },
+    heroText: 'Hello, fall.',
+    heroRamp: [[255, 179, 92], [232, 205, 110]]
+}, {
+    key: 'winter',
+    label: 'Winter',
+    windows: [[[12, 1], [3, 19]]],
+    photoTags: ['winter'],
+    treat: { title: 'A winter walk', sub: 'A random winter photograph', also: 'winter snow frost cold walk' },
+    heroText: 'Hello, winter.',
+    heroRamp: [[143, 207, 255], [214, 230, 255]]
+}, {
+    key: 'spring',
+    label: 'Spring',
+    windows: [[[3, 20], [6, 20]]],
+    photoTags: ['spring'],
+    treat: { title: 'A spring walk', sub: 'A random spring photograph', also: 'spring blossom flowers walk' },
+    heroText: 'Hello, spring.',
+    heroRamp: [[255, 170, 200], [190, 235, 160]]
+}, {
+    key: 'summer',
+    label: 'Summer',
+    windows: [[[6, 21], [9, 21]]],
+    photoTags: ['summer'],
+    treat: { title: 'A summer walk', sub: 'A random summer photograph', also: 'summer sun walk' },
+    heroText: 'Hello, summer.',
+    heroRamp: [[255, 210, 90], [120, 215, 230]]
+}, {
+    key: 'burns-night',
+    label: 'Burns Night',
+    windows: [[[1, 25], [1, 25]]],
+    photoPlaces: ['Scotland', 'Fife'],
+    treat: { title: 'A Scottish view', sub: 'A random photograph from Scotland', also: 'burns night scotland scottish rabbie' },
+    heroText: "A man's a man.",
+    heroRamp: [[226, 169, 240], [255, 205, 120]],
+    rank: 2
+}, {
+    key: 'st-andrews',
+    label: "St Andrew's Day",
+    windows: [[[11, 30], [11, 30]]],
+    photoPlaces: ['Scotland', 'Fife'],
+    treat: { title: 'A Scottish view', sub: 'A random photograph from Scotland', also: 'st andrews day saltire scotland scottish' },
+    heroText: "St Andrew's Day.",
+    heroRamp: [[120, 180, 255], [235, 245, 255]],
+    rank: 2
+}, {
+    key: 'hogmanay',
+    label: 'Hogmanay',
+    windows: [[[12, 31], [1, 2]]],
+    photoPlaces: ['Scotland', 'Fife'],
+    treat: { title: 'A Scottish view', sub: 'A random photograph from Scotland', also: 'hogmanay new year scotland' },
+    heroText: 'Happy Hogmanay.',
+    heroRamp: [[255, 214, 110], [190, 170, 255]],
+    rank: 2
+}, {
+    key: 'bonfire-night',
+    label: 'Bonfire Night',
+    windows: [[[11, 5], [11, 5]]],
+    treat: { title: 'A night out', sub: 'A random photograph', also: 'bonfire night guy fawkes fireworks' },
+    heroText: 'Remember, remember.',
+    heroRamp: [[255, 140, 60], [255, 220, 120]],
+    rank: 2
+}, {
+    key: 'may-the-fourth',
+    label: 'May the Fourth',
+    windows: [[[5, 4], [5, 4]]],
+    treat: { title: 'A photograph from far away', sub: 'A random photograph', also: 'may the fourth star wars space' },
+    heroText: 'May the Fourth.',
+    heroRamp: [[110, 200, 255], [190, 230, 255]],
+    rank: 2
+}, {
+    // The day after, in red, drawn by the same art as the day before.
+    key: 'revenge-of-the-fifth',
+    label: 'Revenge of the Fifth',
+    windows: [[[5, 5], [5, 5]]],
+    art: 'may-the-fourth',
+    treat: { title: 'A photograph from far away', sub: 'A random photograph', also: 'revenge of the fifth star wars space' },
+    heroText: 'Revenge of the Fifth.',
+    heroRamp: [[255, 110, 90], [255, 190, 120]],
+    rank: 2
+}, {
+    key: 'diwali',
+    label: 'Diwali',
+    // The five days, Dhanteras to Bhai Dooj, around Lakshmi Puja.
+    windows: [],
+    years: {
+        2026: [[[11, 6], [11, 10]]],
+        2027: [[[10, 27], [10, 31]]],
+        2028: [[[10, 15], [10, 19]]],
+        2029: [[[11, 3], [11, 7]]],
+        2030: [[[10, 24], [10, 28]]],
+        2031: [[[11, 12], [11, 16]]]
+    },
+    treat: { title: 'Something bright', sub: 'A random photograph', also: 'diwali deepavali festival of lights' },
+    heroText: 'Happy Diwali.',
+    heroRamp: [[255, 196, 80], [255, 120, 170]],
+    rank: 3
+}, {
+    key: 'holi',
+    label: 'Holi',
+    // Holika Dahan and the day of colours after it. 2026 and 2027 from
+    // Drik Panchang; check the later years against a panchang too.
+    windows: [],
+    years: {
+        2026: [[[3, 3], [3, 4]]],
+        2027: [[[3, 21], [3, 22]]],
+        2028: [[[3, 10], [3, 11]]],
+        2029: [[[2, 27], [2, 28]]],
+        2030: [[[3, 19], [3, 20]]],
+        2031: [[[3, 8], [3, 9]]]
+    },
+    treat: { title: 'Something colourful', sub: 'A random photograph', also: 'holi festival of colours' },
+    heroText: 'Happy Holi.',
+    heroRamp: [[255, 92, 170], [80, 200, 255]],
+    rank: 3
+}, {
+    key: 'darwin-day',
+    label: 'Darwin Day',
+    windows: [[[2, 12], [2, 12]]],
+    photoTags: ['wildlife'],
+    treat: { title: 'A wild one', sub: 'A random wildlife photograph', also: 'darwin day evolution nature wildlife' },
+    heroText: 'Endless forms.',
+    heroRamp: [[120, 210, 160], [230, 205, 120]],
+    rank: 2
+}, {
+    key: 'pi-day',
+    label: 'Pi Day',
+    windows: [[[3, 14], [3, 14]]],
+    treat: { title: 'A random photograph', sub: 'Picked by Math.random()', also: 'pi day maths math 3.14' },
+    heroText: 'Happy π Day.',
+    heroRamp: [[140, 200, 255], [255, 200, 120]],
+    rank: 2
+}, {
+    key: 'world-book-day',
+    label: 'World Book Day',
+    windows: [[[4, 23], [4, 23]]],
+    treat: { title: 'A photograph to read by', sub: 'A random photograph', also: 'world book day reading books' },
+    heroText: 'Read anything good?',
+    heroRamp: [[240, 190, 120], [200, 160, 230]],
+    rank: 2
+}, {
+    key: 'cat-day',
+    label: 'International Cat Day',
+    windows: [[[8, 8], [8, 8]]],
+    treat: { title: 'A random photograph', sub: 'The cats chose it', also: 'cat day cats kitten' },
+    heroText: 'Meow.',
+    heroRamp: [[255, 190, 120], [200, 210, 255]],
+    rank: 2
 }];
 var KR_SEASON_PREVIEW = 'kr-season-preview';   // sessionStorage: a key, or 'none'
 var KR_SEASON_OFF = 'kr-season';               // localStorage: 'off'
@@ -132,17 +301,23 @@ function krSeasonByKey(key) {
     return null;
 }
 
-/** The season whose window holds `date`, or null. A window may run over
-    the new year (from [12, 20] to [1, 6]). */
+/** The highest-ranked season with a window holding `date`, or null. A
+    window may run over the new year ([[12, 20], [1, 6]]); a season's
+    `years` adds windows for that year alone. */
 function krSeasonOnDate(date) {
     var day = (date.getMonth() + 1) * 100 + date.getDate();
+    var best = null;
     for (var i = 0; i < KR_SEASONS.length; i++) {
         var s = KR_SEASONS[i];
-        var from = s.from[0] * 100 + s.from[1];
-        var to = s.to[0] * 100 + s.to[1];
-        if (from <= to ? day >= from && day <= to : day >= from || day <= to) return s;
+        var wins = s.windows.concat((s.years && s.years[date.getFullYear()]) || []);
+        for (var w = 0; w < wins.length; w++) {
+            var from = wins[w][0][0] * 100 + wins[w][0][1];
+            var to = wins[w][1][0] * 100 + wins[w][1][1];
+            var on = from <= to ? day >= from && day <= to : day >= from || day <= to;
+            if (on && (!best || (s.rank || 0) > (best.rank || 0))) best = s;
+        }
     }
-    return null;
+    return best;
 }
 
 function krSeasonsOff() {
@@ -180,9 +355,21 @@ function krSeason() {
     var season = krSeason();
     if (!season) return;
     document.documentElement.setAttribute('data-season', season.key);
-    var script = document.createElement('script');
-    script.src = siteRootPrefix() + 'js/season.js';
-    document.head.appendChild(script);
+    // The season's stylesheet (its colours and its own rules), then the
+    // engine and the season's art, which calls krSeasonKit.dress once the
+    // stylesheet is in; async false runs the two scripts in that order.
+    var art = season.art || season.key;
+    var sheet = document.createElement('link');
+    sheet.rel = 'stylesheet';
+    sheet.id = 'kr-season-css';
+    sheet.href = siteRootPrefix() + 'css/seasons/' + art + '.css';
+    document.head.appendChild(sheet);
+    ['js/season.js', 'js/seasons/' + art + '.js'].forEach(function (src) {
+        var script = document.createElement('script');
+        script.src = siteRootPrefix() + src;
+        script.async = false;
+        document.head.appendChild(script);
+    });
 })();
 
 var BLUESKY_SVG = '<svg class="bluesky-icon" viewBox="0 0 568 501" xmlns="http://www.w3.org/2000/svg"><path d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.21C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.842 193.273-185.702 70.281-63.111-64.76-33.889-129.52 80.986-149.071-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.659 0 75.291 0 57.946 0-28.906 76.135-1.612 123.121 33.664z"/></svg>';
@@ -387,18 +574,31 @@ function siteRootPrefix() {
 /**
  * The frames the photo strip and the 404 page pick from: the standard
  * pool, narrowed in a season that names photoTags to the frames carrying
- * one of them, while that still leaves a strip's worth.
+ * one of them, or in one that names photoPlaces to the frames from a
+ * region whose name holds one of its words, while that still leaves a
+ * strip's worth.
  */
 function krPhotoPool() {
     var pool = krFetchJson('data/photography-standard-files.json');
     var season = krSeason();
-    if (!season || !season.photoTags) return pool;
-    var tags = krFetchJson('data/photo-tags.json').catch(function() { return {}; });
-    return Promise.all([pool, tags]).then(function(found) {
+    if (!season || !(season.photoTags || season.photoPlaces)) return pool;
+    var tags = season.photoTags
+        ? krFetchJson('data/photo-tags.json').catch(function() { return {}; }) : null;
+    var places = season.photoPlaces
+        ? krFetchJson('data/photo-locations.json').catch(function() { return {}; }) : null;
+    return Promise.all([pool, tags, places]).then(function(found) {
         var files = Array.isArray(found[0]) ? found[0] : [];
+        var here = {};
+        ((found[2] && found[2].regions) || []).forEach(function(region) {
+            var name = region.name || '';
+            if (season.photoPlaces.some(function(word) { return name.indexOf(word) !== -1; })) {
+                (region.photos || []).forEach(function(stem) { here[stem] = true; });
+            }
+        });
         var picked = files.filter(function(filename) {
-            var own = found[1][String(filename).replace(/\.[^.]+$/, '')] || [];
-            return own.some(function(tag) { return season.photoTags.indexOf(tag) !== -1; });
+            var stem = String(filename).replace(/\.[^.]+$/, '');
+            if (found[2]) return here[stem];
+            return (found[1][stem] || []).some(function(tag) { return season.photoTags.indexOf(tag) !== -1; });
         });
         return picked.length >= 10 ? picked : files;
     });
@@ -4917,6 +5117,9 @@ var KR_PHOTO_CATEGORIES = [
     { key: 'portrait', label: 'Portrait' },
     { key: 'bw', label: 'B&W', also: 'black and white monochrome' },
     { key: 'silhouette', label: 'Silhouette' },
+    { key: 'spring', label: 'Spring', also: 'blossom flowers new leaves' },
+    { key: 'summer', label: 'Summer', also: 'sunny sun lake beach' },
+    { key: 'autumn', label: 'Autumn', also: 'fall leaves foliage' },
     { key: 'winter', label: 'Winter' }
 ];
 

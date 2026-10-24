@@ -1,0 +1,161 @@
+/* css/seasons/bonfire-night.css: Bonfire Night's colours and its own rules.
+   shared-components.js loads this file only while the season is on
+   (KR_SEASONS), beside js/seasons/bonfire-night.js; style.css keeps what every
+   season shares (§01 "Seasons", §21 "Seasonal decorations"). Tokens
+   first, both themes, then the rules for its own pieces. */
+
+/* Bonfire Night: ember orange into wood smoke:
+     light  #a84a0c  5.38 page, 5.67 warm;  #5a5047  7.35 page
+     dark   #ff9550  8.01 page, 6.61 raised; #d0c8bf  10.52 page
+   The line is the toffee apple's string, the creature the shadow under
+   the map's barrel, the pumpkin token ember orange (the map's rims and
+   the cinders' glow), the glow and the badge a flame, the fog wood smoke
+   in both themes, and the map's dusk a bonfire-lit night. The fuse tokens
+   are the track's twisted cord, the spark token a sparkler's white. */
+:root[data-season="bonfire-night"] {
+  --kr-brand-from: #a84a0c;
+  --kr-brand-to: #5a5047;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #ffb27a;
+  --kr-photo-to: #efe3d3;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #6b5a4a;
+  --kr-season-creature: #3a2a20;
+  --kr-season-glow: #ffb347;
+  --kr-season-pumpkin: #e8691f;
+  --kr-season-badge: #ffb347;
+  --kr-season-fog: #d6cdc2;
+  --kr-season-dusk: sepia(0.45) hue-rotate(-18deg) saturate(1.2) brightness(0.72);
+  --kr-season-fog-display: block;
+  --kr-season-fuse: #8a6a45;
+  --kr-season-fuse-edge: #5a4128;
+  --kr-season-spark: #fff0b0; }
+
+:root[data-theme="dark"][data-season="bonfire-night"] {
+  --kr-brand-from: #ff9550;
+  --kr-brand-to: #d0c8bf;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-line: #b39c86;
+  --kr-season-creature: #c9b29a;
+  --kr-season-fog: #8f877e;
+  --kr-season-dusk: sepia(0.45) hue-rotate(-18deg) saturate(1.2) brightness(0.62);
+  --kr-season-fuse: #b8925f;
+  --kr-season-fuse-edge: #7a5a38; }
+
+/* --- Bonfire Night ----------------------------------------------------------
+   Built by js/seasons/bonfire-night.js: a Catherine wheel that spins on
+   its stake (.kr-season-wheel), with the toffee apple's string behind the
+   stake; the bonfire's flames (.kr-season-blaze); cinders flying up from
+   a clicked piece (--cinders); a rocket on its stick (--rocket); a fuse
+   burning down along the top of a post with a spark fizzing at the
+   reader (--fuse, __fizz). Classes only script applies: .kr-season-wheel,
+   .kr-season-blaze, .kr-season-flyer__trail, .kr-season-puff--cinders,
+   .kr-season-flyer--rocket, .kr-season-track--fuse,
+   .kr-season-track__fizz. */
+.kr-season-wheel {
+  transform-box: view-box;
+  transform-origin: 34px 24px;
+  /* Twelve turns, then it has burnt out: the header is fixed, so a wheel
+     that spun for the whole visit would repaint it all the while. */
+  animation: kr-season-spin 1.3s linear 12; }
+
+@keyframes kr-season-spin {
+  to { transform: rotate(360deg); } }
+
+.kr-season-blaze {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: kr-season-blaze 0.7s ease-in-out infinite alternate; }
+
+@keyframes kr-season-blaze {
+  0% { transform: scale(1, 1) skewX(0); }
+  50% { transform: scale(0.95, 1.07) skewX(2deg); }
+  100% { transform: scale(1.03, 0.94) skewX(-2deg); } }
+
+/* A clicked piece throws up cinders: three sparks that rise, wander and
+   go out. */
+.kr-season-puff--cinders,
+.kr-season-puff--cinders::before,
+.kr-season-puff--cinders::after {
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: var(--kr-season-glow);
+  box-shadow: 0 0 6px var(--kr-season-pumpkin);
+  --kr-season-toss: 6px;
+  animation: kr-season-cinder 1.5s ease-out forwards; }
+
+.kr-season-puff--cinders::before {
+  background: var(--kr-season-spark);
+  --kr-season-toss: -14px; }
+
+.kr-season-puff--cinders::after {
+  background: var(--kr-season-pumpkin);
+  --kr-season-toss: 16px; }
+
+@keyframes kr-season-cinder {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  40% { transform: translate(calc(var(--kr-season-toss) * -0.4), -30px) scale(0.9); opacity: 1; }
+  100% { transform: translate(var(--kr-season-toss), -70px) scale(0.3); opacity: 0; } }
+
+/* The rocket goes up from low on the left to high on the right, fast,
+   tilted along its climb. */
+.kr-season-flyer--rocket {
+  top: auto;
+  bottom: 8vh;
+  width: 96px;
+  animation: kr-season-launch 2.2s cubic-bezier(0.55, 0, 0.9, 0.5) forwards; }
+
+.kr-season-flyer--rocket .kr-season-flyer__trail {
+  animation: kr-season-flicker 0.3s linear infinite; }
+
+@keyframes kr-season-launch {
+  0% { transform: translate(-100px, 0) rotate(-24deg); }
+  100% { transform: translate(calc(100vw + 40px), -80vh) rotate(-36deg); } }
+
+/* The fuse under the header bar: a twisted cord, burnt away from the
+   left as the reader goes, its spark at the reader and gone at the end
+   mark. */
+.kr-season-track--fuse .kr-season-track__rest {
+  top: 1px;
+  bottom: auto;
+  height: 3px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(-60deg, var(--kr-season-fuse) 0 3px, var(--kr-season-fuse-edge) 3px 5px); }
+
+.kr-season-track--fuse .kr-season-track__tip {
+  top: -5px;
+  bottom: auto;
+  left: -7px;
+  width: 14px; }
+
+.kr-season-track__fizz {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 4px var(--kr-season-glow));
+  animation: kr-season-fizz 0.24s steps(3) infinite; }
+
+@keyframes kr-season-fizz {
+  0% { transform: rotate(0) scale(1); }
+  33% { transform: rotate(20deg) scale(0.8); }
+  66% { transform: rotate(-15deg) scale(1.15); }
+  100% { transform: rotate(0) scale(1); } }
+
+/* --- Bonfire Night's sparkler ----------------------------------------------
+   Built by js/seasons/bonfire-night.js: a canvas over the homepage hero
+   where sparks follow the pointer, drawn only while some are in the air
+   and never under reduced motion. Classes only script applies:
+   .kr-season-sparkler. */
+.kr-season-sparkler {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; }

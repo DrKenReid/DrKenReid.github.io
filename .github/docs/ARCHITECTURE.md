@@ -1,6 +1,7 @@
 # Architecture
 
-kenreid.co.uk is a static site: HTML pages, one stylesheet, a handful of
+kenreid.co.uk is a static site: HTML pages, one stylesheet (and a small
+one per season, loaded only while it is on), a handful of
 scripts and a folder of JSON, served by GitHub Pages straight from the
 `master` branch. There is no framework and no build step on the server.
 The things a build step would normally produce (a minified stylesheet,
@@ -33,7 +34,9 @@ varies a little between pages and does not matter):
 4. A preload with `fetchpriority="high"` for the opening photograph, the
    largest paint on the page, which the browser would otherwise find
    late (it is a CSS background).
-5. `style.min.css?v=<stamp>`, the one stylesheet.
+5. `style.min.css?v=<stamp>`, the one stylesheet. (The season's own,
+   `css/seasons/<key>.css`, is added by `js/shared-components.js` at the
+   end of the body; see "Seasons".)
 6. `js/theme.js` and `js/palette.js`, deferred: the theme toggle and the
    Ctrl+K palette, which builds nothing until it is first opened.
 7. JSON-LD.
@@ -214,33 +217,94 @@ menu and its focus handling, `window.krNavMenu`, the sticky state);
 
 ## Seasons
 
-A season is a stretch of the calendar when the site dresses up: Halloween
-runs 17 October to 1 November. `KR_SEASONS` in `js/shared-components.js`
-holds each one (its key, label and dates, both ends included, and
-optionally the photo tags its frames come from, a gallery subject of its
-own, the palette's random frame and the homepage headline's words and
-colours). `krSeason()` says which is on, from the reader's local date.
+A season is a stretch of the calendar when the site dresses up: the four
+seasons of the year and the holidays inside them. `KR_SEASONS` in
+`js/shared-components.js` holds each one (its key, label and windows,
+both ends included, a window may run over the new year; `years` for a
+holiday that moves, Diwali; `rank`; and optionally the frames it shows,
+by photo tag or by place, a gallery subject of its own, the palette's
+random frame and the homepage headline's words and colours).
+`krSeason()` says which is on, from the reader's local date. Where two
+hold one day the higher rank wins, so the site is always in exactly one:
 
-While one is on, `<html>` carries `data-season="<key>"`, which switches
-the colour blocks in `style.css` §01 ("Seasons"), and `js/season.js` is
-fetched to add the decorations (§21, "Seasonal decorations"). The rest of
-the year that file is never requested. Every decoration is `aria-hidden`,
-takes no focus, keeps off post text, the gallery, the lightbox and the
-slideshow, is dropped in print and holds still under reduced motion.
-Only Halloween's spider and pumpkins take clicks: the spider drops down
-its thread, a pumpkin puffs smoke. Halloween also burns a candle in place
-of a post's reading bar (which still measures, hidden), lays fog under
-the homepage hero and the gallery's opener in the dark theme, and haunts
-the photo map (pumpkin rims, dusked tiles, a ghost where at least three
-frames and 30% of a place's frames are tagged `abandoned`).
+| Rank | Seasons | When |
+|---|---|---|
+| 0 | spring, summer, fall, winter | 20 March to 20 June, 21 June to 21 September, 22 September to 30 November, 1 December to 19 March |
+| 1 | Halloween | 17 October to 1 November |
+| 2 | Burns Night, Darwin Day, Pi Day, World Book Day, May the Fourth, Revenge of the Fifth, International Cat Day, Bonfire Night, St Andrew's Day, Hogmanay | 25 January, 12 February, 14 March, 23 April, 4 May, 5 May, 8 August, 5 November, 30 November, 31 December to 2 January |
+| 3 | Diwali, Holi | Diwali's five days, Dhanteras to Bhai Dooj; Holi's two, Holika Dahan and the day of colours; each from a table by year |
 
-A clicked pumpkin can also play a recording from `sounds/` (an owl, a
-creak, wolves; public domain, credited on the colophon beside the
-slideshow's sounds). Sounds are off until the reader asks:
-`?spooky-sounds=on` stores `kr-season-sound` on the device and
-`?spooky-sounds=off` clears it, both taken out of the address, and the
-palette offers whichever applies. A recording is fetched only when it
-first plays.
+The node tests refuse two seasons of one rank on the same day, fail when
+a season has no `js/seasons/<key>.js` or `css/seasons/<key>.css`, and
+fail when a moving holiday's table has no dates for this year or the
+next two: extend Diwali's from Lakshmi Puja's date, two days either
+side, and Holi's from a panchang (Holika Dahan, then the day after).
+
+While one is on, `<html>` carries `data-season="<key>"`, and three
+files are fetched: `css/seasons/<key>.css`, the season's colours (its
+token blocks for both themes) and the rules for its own pieces;
+`js/season.js`, the engine; and `js/seasons/<key>.js`, the season's art
+(Revenge of the Fifth uses May the Fourth's files, `art`). The engine
+draws nothing until the season's stylesheet has loaded. With seasons
+turned off none of them is requested, and a reader only ever fetches
+one season's pictures and styles. Every season dresses the same pieces,
+documented in `season.js`'s header, and the shared rules in `style.css`
+§21 ("Seasonal decorations") serve them all in the season's tokens:
+
+- a corner piece with something dangling on a thread below it (a click
+  drops it);
+- things in the air over the page openers and the homepage hero, on a
+  canvas: falling (leaves, petals, snow), rising (lanterns, thistledown),
+  twinkling (stars, fireflies) or fireworks;
+- three pieces sitting on the footer's edge among small things strewn
+  between them (a click flares one and bursts something from it);
+- a flyer that crosses once as the footer arrives;
+- a favicon, a mark across the theme button's moon on hover, and a
+  pointer for mouse users (links keep the hand);
+- a track in place of a post's reading bar, which still measures,
+  hidden: burning down (a candle, a fuse), filling (a beam, a ribbon) or
+  a line of things that change as the reader passes them;
+- fog along the foot of the homepage hero and the gallery's opener, in
+  the themes its tokens say;
+- on the photo map, rims, a dusk on the tiles and a badge on the places
+  the season owns, by tag or by name;
+- the 404 page's words, and the photo strip, 404 photo and palette frame
+  drawn from its photographs;
+- toys of its own (`extra`), and `kit.walker` to send something along
+  the footer's edge.
+
+| Season | Its art | Its own |
+|---|---|---|
+| Spring | blossom twig and caterpillar; petals; tulips, daffodils, a robin; swallows; a vine whose buds open; morning mist (light) | a shower over an opener, then a rainbow; tagged `spring` frames |
+| Summer | cherry branch and tyre swing; dandelion seeds (light) or fireflies (dark); sunflowers, a firefly jar, a sandcastle; a dragonfly; a sunbeam | a monarch by day, fireflies by night over the footer; tagged `summer` frames |
+| Fall | oak twig and acorn; leaves; plain pumpkins; geese in a V; a twig dropping leaves; golden haze | a squirrel along the footer; tagged `autumn` frames |
+| Halloween | cobweb and spider; leaves; jack-o'-lanterns, gravestones, candy corn; a bat; a candle; fog (dark) | eyes in the footer that shut as the pointer nears; a black cat; ghosts rising from hovered post cards; a moon in the hero that a witch crosses; lightning on switching to dark |
+| Winter | snowy branch and mitten; snow; snowmen; an owl; eaves growing icicles; frost | snow settling on the footer's edge; tagged `winter` frames |
+| Burns Night | heather and a thistle, a mouse; thistledown and snow; haggis, a dram, neeps and tatties; a red grouse; a quill drawing a tartan ribbon; peat smoke (dark) | a line of Burns written out over the footer, the next one on a click |
+| St Andrew's Day | saltire bunting and a fish; saltire confetti; a Highland coo, a puffin, pipes; a gannet that dives; bunting that flies out; a haar | clouds that drift into a white saltire over the hero and openers |
+| Hogmanay | a clock and a lump of coal; fireworks; shortbread, black bun, coal; a shooting star; boot prints as the reader passes | the corner clock keeps time, and the hero counts down to the Bells, then bursts at midnight |
+| Bonfire Night | a Catherine wheel and a toffee apple; fireworks and wood smoke; a bonfire, a sparkler, a rocket in a bottle; a rocket; a fuse burning down | sparkler trails after the pointer over the hero |
+| May the Fourth, Revenge of the Fifth | a ringed planet and its moon; stars; three tin rockets; a comet; a beam that fills as the reader goes; a nebula (dark); blue on the 4th, red on the 5th | a click on the planet streaks the stars to light speed |
+| Diwali | a toran of marigolds with a star lantern; rising sky lanterns; three diyas; a sky lantern; a string of lights coming on; a warm haze (dark) | diyas along the footer lit one by one; a rangoli on the 404 page, poured from the missing address |
+| Holi | a palash bough and a pouch of gulal; gulal rising (embers on the eve); a thali of colours, a pichkari in a lota, a dhol; a water balloon that bursts; a streak of colour filling as the reader goes; a haze of colour | thrown gulal that stays on the openers and builds up over the visit, never behind the type; a pyre on the footer on Holika Dahan, lit from the evening |
+| Darwin Day | the "I think" tree and a beetle; peppered moths; three Galápagos finches; the Beagle; a tree of life branching as the reader goes; sea mist; finches on the wildlife places | a click mutates a finch's beak, kept for the visit; a tortoise along the footer; on the 404 page, biomorphs to breed by clicking; tagged `wildlife` frames |
+| Pi Day | Archimedes' polygons about a circle and a slice of pie; digits of π; three pies; a flying pie; a wheel unrolling its rim as the reader goes | the corner's polygons doubling their sides; a Monte Carlo dartboard on the footer estimating π; Buffon's needles on the 404 page |
+| World Book Day | a reading lamp and a bookworm; loose pages; a stack of books, tea, an open book; a paper plane; a shelf filling with books | a line from the quote wall on a slip over the footer, turned on a click; dog-eared openers; a torn 404 opener; the bookworm along the footer |
+| International Cat Day | a ginger cat asleep on a shelf, its tail as the dangler; fluff and hearts; a cat in a box, yarn, a bowl; a kitten chasing a butterfly; paw prints as the reader goes | a tuxedo and a calico along the footer; a laser dot over the hero that a grey cat stalks and pounces on; a cat that knocks the 404 page off a table |
+
+Every decoration is `aria-hidden`, takes no focus, keeps off post text,
+the gallery, the lightbox and the slideshow, is dropped in print and
+holds still under reduced motion (a season's toys check `kit.reduced`).
+Winter keeps clear of Christmas: no trees, presents or red and green; May
+the Fourth has nothing from the films.
+
+A clicked footer piece can also play a recording from `sounds/` (each
+season's, credited on the colophon beside the slideshow's sounds; real
+recordings only, freely licensed). Sounds are off until the reader asks:
+`?season-sounds=on` stores `kr-season-sound` on the device and
+`?season-sounds=off` clears it (`?spooky-sounds=` was its first name and
+still works), both taken out of the address, and the palette offers
+whichever applies. A recording is fetched only when it first plays.
 `season.js` checks that the stylesheet knows its classes before adding
 anything, so a stylesheet cached from before a season's rules shows no
 half-styled decorations.
@@ -251,12 +315,16 @@ the address): `?season=<key>` previews a season in this tab,
 them off on this device until `?season=on`. The palette offers off and
 on in season. The checks always run with no season
 (`harness.set_season`, and `tests/js/runtime.js`), except the smoke pin
-`check_season`, which shows Halloween on purpose.
+`check_season`, which shows each season on purpose.
 
-To add a season: an entry in `KR_SEASONS` (the node tests refuse an
-overlap with another window), its colour blocks in §01 for both themes
-(the contrast test measures them), its decorations in `season.js` keyed
-on its key, their styles in §21, and a pin like `check_season`.
+To add a season: an entry in `KR_SEASONS` (with a rank, if it sits
+inside another); `css/seasons/<key>.css` with its token blocks for both
+themes (the contrast test measures them; set every `--kr-season-*` token
+the shared rules read) and its own rules under banners; its art in
+`js/seasons/<key>.js` (one `krSeasonKit.dress` call); `git add -N` both
+before running the checks, which read only tracked files; its sounds in
+`sounds/` with their credits; and its row in `SEASONS_UNDER_TEST` for
+`check_season`.
 
 ## The generators
 
@@ -384,7 +452,7 @@ checks that. (The essay:
 | The interactive demo engine | `js/kr-viz.js`, CSS in §12 | `viz_verify.py`, smoke suite |
 | Offline behaviour | `sw.js` (bump `VERSION` when caching changes) | `perf_budget.py` (the offline scenario) |
 | Theme toggle | `js/theme.js`, the inline head script on every page | smoke suite |
-| A season (Halloween) | `KR_SEASONS` in `js/shared-components.js`, `js/season.js`, CSS in §01 and §21 (see "Seasons") | `js-tests`, `tests/test_contrast.py`, smoke `check_season` |
+| A season or holiday | `KR_SEASONS` in `js/shared-components.js`, `js/season.js` and `js/seasons/<key>.js`, `css/seasons/<key>.css`, shared CSS in §21 (see "Seasons") | `js-tests`, `tests/test_contrast.py`, smoke `check_season` |
 | Analytics | `js/analytics.js` (`GA_ID`) | audit |
 | Anything a check enforces | the check, and the doc that describes the rule | `run_checks.py` |
 

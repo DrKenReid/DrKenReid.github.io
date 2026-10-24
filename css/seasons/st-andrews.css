@@ -1,0 +1,170 @@
+/* css/seasons/st-andrews.css: St Andrew's Day's colours and its own rules.
+   shared-components.js loads this file only while the season is on
+   (KR_SEASONS), beside js/seasons/st-andrews.js; style.css keeps what every
+   season shares (§01 "Seasons", §21 "Seasonal decorations"). Tokens
+   first, both themes, then the rules for its own pieces. */
+
+/* St Andrew's Day: saltire blue into sea green:
+     light  #005eb8  5.97 page, 6.28 tint;  #1d6657  6.36 page, 6.69 tint
+     dark   #8cc4ff  9.49 page, 7.83 raised; #e6f0ff  15.14 page, 12.49 raised
+   The line is the bunting's string and the fishing line, the creature
+   the fish, the pumpkin token saltire blue (the map's rims, the burst),
+   the badge white, the cloud the sky's saltire, and the fog a haar off
+   the sea in both themes. */
+:root[data-season="st-andrews"] {
+  --kr-brand-from: #005eb8;
+  --kr-brand-to: #1d6657;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #b3d8ff;
+  --kr-photo-to: #f4f8ff;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #6b7b88;
+  --kr-season-creature: #3d5a73;
+  --kr-season-glow: #dcebff;
+  --kr-season-pumpkin: #0065bd;
+  --kr-season-badge: #ffffff;
+  --kr-season-fog: #e3eaef;
+  --kr-season-dusk: saturate(0.6) hue-rotate(-8deg) brightness(1.02);
+  --kr-season-fog-display: block;
+  --kr-season-cloud: #ffffff; }
+
+:root[data-theme="dark"][data-season="st-andrews"] {
+  --kr-brand-from: #8cc4ff;
+  --kr-brand-to: #e6f0ff;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-line: #a7b6c2;
+  --kr-season-creature: #c5d8e8;
+  --kr-season-fog: #cdd6dd;
+  --kr-season-dusk: saturate(0.6) hue-rotate(-8deg) brightness(0.9); }
+
+/* --- St Andrew's Day ------------------------------------------------------
+   Built by js/seasons/st-andrews.js: confetti in saltire blue and white
+   when a piece of the patch is clicked (--saltire), a gannet that glides
+   in on still wings, folds them and dives for the footer (--gannet, its
+   wings drawn up and down from the side), bunting along a post's top
+   whose furled flags fly out once the reader has passed them
+   (--bunting), and the season's own: the legend's white saltire, two
+   banks of cloud that drift together over the homepage hero and each
+   page opener, hold, and drift apart, once a page, under the type
+   (--kr-season-cloudcross-turn and --kr-season-cloudcross-len, set by script from the
+   banner's shape, are the cross's angle and length). Never under reduced motion. Classes only script applies:
+   .kr-season-puff--saltire, .kr-season-flyer--gannet,
+   .kr-season-flyer__wing--up, .kr-season-flyer__wing--down,
+   .kr-season-track--bunting, .kr-season-cloudcross (__band, __band--a,
+   __band--b). */
+.kr-season-puff--saltire,
+.kr-season-puff--saltire::before,
+.kr-season-puff--saltire::after {
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  border-radius: 1px;
+  background: var(--kr-season-pumpkin);
+  --kr-season-toss: 4px;
+  animation: kr-season-scatter 1.6s cubic-bezier(0.2, 0.6, 0.4, 1) forwards; }
+
+.kr-season-puff--saltire::before {
+  background: var(--kr-season-badge);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--kr-season-line) 55%, transparent);
+  --kr-season-toss: -22px; }
+
+.kr-season-puff--saltire::after {
+  background: color-mix(in srgb, var(--kr-season-pumpkin) 55%, var(--kr-season-badge));
+  --kr-season-toss: 24px; }
+
+.kr-season-flyer--gannet {
+  top: 16vh;
+  width: 76px;
+  animation: kr-season-gannet 8s cubic-bezier(0.4, 0, 0.7, 1) forwards; }
+
+.kr-season-flyer--gannet .kr-season-flyer__wing {
+  animation: kr-season-fold 8s ease-in forwards; }
+
+.kr-season-flyer__wing--up {
+  transform-origin: 50% 100%; }
+
+.kr-season-flyer__wing--down {
+  transform-origin: 50% 0; }
+
+@keyframes kr-season-gannet {
+  0% { transform: translate(-90px, 4vh) rotate(0); opacity: 1; }
+  62% { transform: translate(62vw, 0) rotate(-4deg); opacity: 1; }
+  72% { transform: translate(70vw, 6vh) rotate(48deg); opacity: 1; }
+  100% { transform: translate(76vw, 90vh) rotate(80deg); opacity: 0; } }
+
+@keyframes kr-season-fold {
+  0%, 60% { transform: none; }
+  72%, 100% { transform: scaleY(0.25); } }
+
+.kr-season-track--bunting .kr-season-track__rest {
+  top: 1px;
+  bottom: auto;
+  height: 1px;
+  background: var(--kr-season-line); }
+
+.kr-season-track--bunting .kr-season-track__bit {
+  top: 1px;
+  width: 12px;
+  margin-left: -6px;
+  opacity: 0.6;
+  transform: scale(0.22, 1);
+  transform-origin: 50% 0;
+  transition: transform 0.4s ease-in, opacity 0.4s ease-in; }
+
+.kr-season-track--bunting .kr-season-track__bit--passed {
+  opacity: 1;
+  transform: none;
+  transition: transform 0.9s cubic-bezier(0.2, 1.4, 0.4, 1), opacity 0.3s ease-out; }
+
+.kr-season-track--bunting .kr-season-track__bit--passed svg {
+  animation: kr-season-sway 2.4s ease-in-out infinite alternate; }
+
+.kr-season-track--bunting .kr-season-track__bit:nth-child(2n) svg {
+  animation-delay: -1.2s; }
+
+.kr-season-cloudcross {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none; }
+
+.welcome-area .kr-season-cloudcross {
+  z-index: 2; }
+
+.kr-season-cloudcross__band {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: var(--kr-season-cloudcross-len, 130%);
+  height: 96px;
+  margin: -48px 0 0 calc(var(--kr-season-cloudcross-len, 130%) / -2);
+  opacity: 0;
+  background:
+    radial-gradient(ellipse 9% 42% at 10% 52%, color-mix(in srgb, var(--kr-season-cloud) 55%, transparent), transparent 72%),
+    radial-gradient(ellipse 12% 50% at 22% 46%, color-mix(in srgb, var(--kr-season-cloud) 60%, transparent), transparent 72%),
+    radial-gradient(ellipse 10% 38% at 33% 58%, color-mix(in srgb, var(--kr-season-cloud) 50%, transparent), transparent 72%),
+    radial-gradient(ellipse 13% 48% at 45% 48%, color-mix(in srgb, var(--kr-season-cloud) 62%, transparent), transparent 72%),
+    radial-gradient(ellipse 11% 40% at 57% 56%, color-mix(in srgb, var(--kr-season-cloud) 55%, transparent), transparent 72%),
+    radial-gradient(ellipse 12% 50% at 69% 47%, color-mix(in srgb, var(--kr-season-cloud) 60%, transparent), transparent 72%),
+    radial-gradient(ellipse 10% 40% at 80% 55%, color-mix(in srgb, var(--kr-season-cloud) 52%, transparent), transparent 72%),
+    radial-gradient(ellipse 9% 44% at 90% 49%, color-mix(in srgb, var(--kr-season-cloud) 50%, transparent), transparent 72%);
+  animation: kr-season-cloudcross-a 18s ease-in-out 1.2s forwards; }
+
+.kr-season-cloudcross__band--b {
+  animation-name: kr-season-cloudcross-b; }
+
+@keyframes kr-season-cloudcross-a {
+  0% { transform: translate(-40%, 0) rotate(var(--kr-season-cloudcross-turn, 28deg)) scaleY(0.6); opacity: 0; }
+  35% { transform: translate(0, 0) rotate(var(--kr-season-cloudcross-turn, 28deg)) scaleY(1); opacity: 0.6; }
+  65% { transform: translate(0, 0) rotate(var(--kr-season-cloudcross-turn, 28deg)) scaleY(1); opacity: 0.6; }
+  100% { transform: translate(16%, -25%) rotate(calc(var(--kr-season-cloudcross-turn, 28deg) - 8deg)) scaleY(1.6); opacity: 0; } }
+
+@keyframes kr-season-cloudcross-b {
+  0% { transform: translate(40%, 0) rotate(calc(var(--kr-season-cloudcross-turn, 28deg) * -1)) scaleY(0.6); opacity: 0; }
+  35% { transform: translate(0, 0) rotate(calc(var(--kr-season-cloudcross-turn, 28deg) * -1)) scaleY(1); opacity: 0.6; }
+  65% { transform: translate(0, 0) rotate(calc(var(--kr-season-cloudcross-turn, 28deg) * -1)) scaleY(1); opacity: 0.6; }
+  100% { transform: translate(-16%, -25%) rotate(calc(var(--kr-season-cloudcross-turn, 28deg) * -1 + 8deg)) scaleY(1.6); opacity: 0; } }

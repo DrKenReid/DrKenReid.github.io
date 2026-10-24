@@ -1,0 +1,272 @@
+/* css/seasons/holi.css: Holi's colours and its own rules.
+   shared-components.js loads this file only while the season is on
+   (KR_SEASONS), beside js/seasons/holi.js; style.css keeps what every
+   season shares (§01 "Seasons", §21 "Seasonal decorations"). Tokens
+   first, both themes, then the rules for its own pieces. */
+
+/* Holi: gulal pink into blue:
+     light  #b3146b  6.09 page, 6.41 tint;  #1f5fae  5.94 page, 6.26 tint
+     dark   #ff8cc8  8.15 page, 6.72 raised; #8fd3ff  10.72 page, 8.84 raised
+   The line is the palash bough, the creature the balloon's knot, the
+   glow the pyre's flames, the pumpkin token pink (the burst), the badge
+   yellow, and the gulal tokens the five colours: the burst, the streak
+   along a post's top and the haze of colour along the foot of the
+   homepage hero (the fog, in both themes). On Holika Dahan's evening
+   (.kr-season-holi-eve on <html>, set by script) the haze is woodsmoke. */
+:root[data-season="holi"] {
+  --kr-brand-from: #b3146b;
+  --kr-brand-to: #1f5fae;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #ffc0e0;
+  --kr-photo-to: #bfe6ff;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #7a5a44;
+  --kr-season-creature: #1b4f99;
+  --kr-season-glow: #ffd34d;
+  --kr-season-pumpkin: #e8358f;
+  --kr-season-badge: #ffc21a;
+  --kr-season-fog: #ff9ccf;
+  --kr-season-dusk: saturate(1.25) hue-rotate(-8deg);
+  --kr-season-fog-display: block;
+  --kr-season-gulal-pink: #e8358f;
+  --kr-season-gulal-yellow: #ffc21a;
+  --kr-season-gulal-green: #2fb35a;
+  --kr-season-gulal-blue: #2f7fe0;
+  --kr-season-gulal-purple: #8e44c9;
+  --kr-season-smoke: #b8aca0;
+  --kr-season-ember: #ffc98a; }
+
+:root[data-theme="dark"][data-season="holi"] {
+  --kr-brand-from: #ff8cc8;
+  --kr-brand-to: #8fd3ff;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-line: #b0917a;
+  --kr-season-creature: #8fb8f0;
+  --kr-season-dusk: saturate(1.2) hue-rotate(-8deg) brightness(0.9); }
+
+/* Holika Dahan's evening: the haze is smoke off the pyre, and the colours
+   wait for the morning. */
+:root[data-season="holi"].kr-season-holi-eve {
+  --kr-season-gulal-pink: var(--kr-season-smoke);
+  --kr-season-gulal-yellow: var(--kr-season-ember);
+  --kr-season-gulal-green: var(--kr-season-smoke);
+  --kr-season-gulal-blue: var(--kr-season-smoke);
+  --kr-season-gulal-purple: var(--kr-season-ember); }
+
+/* --- Holi ------------------------------------------------------------------
+   Built by js/seasons/holi.js: a clicked piece of the patch throws up
+   three clouds of gulal (--gulal); a water balloon lobbed across the
+   page in an arc bursts into a ring of colour at the top of it (--lob,
+   its balloon and burst); a streak of colour in five bands along a
+   post's top, as far as the reader has read, with a puff of powder at
+   the reader (--rang, its tip); the fog under the homepage hero recoloured
+   as a haze of all five colours. Classes only script applies:
+   .kr-season-puff--gulal, .kr-season-flyer--lob, .kr-season-holi-balloon,
+   .kr-season-holi-burst, .kr-season-track--rang, .kr-season-holi-tip,
+   .kr-season-holi-eve. */
+.kr-season-puff--gulal,
+.kr-season-puff--gulal::before,
+.kr-season-puff--gulal::after {
+  bottom: 60%;
+  width: 30px;
+  height: 30px;
+  margin-left: -15px;
+  background: radial-gradient(closest-side, var(--kr-season-gulal-pink), color-mix(in srgb, var(--kr-season-gulal-pink) 40%, transparent) 60%, transparent);
+  animation: kr-season-gulal-rise 1.6s cubic-bezier(0.2, 0.7, 0.3, 1) forwards; }
+
+/* The pseudo-elements ride on the main cloud, so their own spread is
+   measured from it (it rises without growing, or they would grow twice). */
+.kr-season-puff--gulal::before,
+.kr-season-puff--gulal::after {
+  bottom: 0;
+  left: 50%;
+  animation: kr-season-gulal 1.4s cubic-bezier(0.2, 0.7, 0.3, 1) forwards; }
+
+.kr-season-puff--gulal::before {
+  background: radial-gradient(closest-side, var(--kr-season-gulal-yellow), color-mix(in srgb, var(--kr-season-gulal-yellow) 40%, transparent) 60%, transparent);
+  animation-delay: 0.06s;
+  --kr-season-toss: -24px; }
+
+.kr-season-puff--gulal::after {
+  background: radial-gradient(closest-side, var(--kr-season-gulal-green), color-mix(in srgb, var(--kr-season-gulal-green) 40%, transparent) 60%, transparent);
+  animation-delay: 0.12s;
+  --kr-season-toss: 24px; }
+
+@keyframes kr-season-gulal-rise {
+  0% { transform: translate(0, 6px) scale(0.5); opacity: 0; }
+  15% { opacity: 1; }
+  40% { transform: translate(0, -18px) scale(1.4); opacity: 0.95; }
+  100% { transform: translate(0, -30px) scale(1.6); opacity: 0; } }
+
+@keyframes kr-season-gulal {
+  0% { transform: translate(0, 0) scale(0.3); opacity: 0; }
+  15% { opacity: 1; }
+  45% { transform: translate(var(--kr-season-toss), -6px) scale(1); opacity: 0.95; }
+  100% { transform: translate(calc(var(--kr-season-toss) * 1.3), -12px) scale(1.3); opacity: 0; } }
+
+.kr-season-flyer--lob {
+  top: 70vh;
+  width: 44px;
+  animation: kr-season-lob 3.4s cubic-bezier(0.3, 0, 0.6, 1) forwards; }
+
+@keyframes kr-season-lob {
+  0% { transform: translate(-60px, 0) rotate(-30deg); }
+  30% { transform: translate(24vw, -38vh) rotate(-8deg); }
+  56% { transform: translate(48vw, -52vh) rotate(14deg); }
+  100% { transform: translate(48vw, -52vh) rotate(14deg); } }
+
+.kr-season-holi-balloon {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: kr-season-holi-pop 3.4s linear forwards; }
+
+@keyframes kr-season-holi-pop {
+  0%, 20%, 40% { transform: scale(1, 1); }
+  10%, 30%, 50% { transform: scale(0.92, 1.08); }
+  55% { transform: scale(1.15, 0.9); opacity: 1; }
+  57%, 100% { transform: scale(0); opacity: 0; } }
+
+.kr-season-holi-burst {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+  animation: kr-season-holi-bloom 3.4s ease-out forwards; }
+
+@keyframes kr-season-holi-bloom {
+  0%, 56% { transform: scale(0); opacity: 1; }
+  70% { transform: scale(1.7); opacity: 0.95; }
+  100% { transform: scale(2.6) translateY(4px); opacity: 0; } }
+
+.kr-season-track--rang {
+  height: 6px; }
+
+.kr-season-track--rang .kr-season-track__rest {
+  background: linear-gradient(to bottom,
+    var(--kr-season-gulal-pink) 0 1.2px, var(--kr-season-gulal-yellow) 1.2px 2.4px,
+    var(--kr-season-gulal-green) 2.4px 3.6px, var(--kr-season-gulal-blue) 3.6px 4.8px,
+    var(--kr-season-gulal-purple) 4.8px);
+  box-shadow: 0 1px 4px color-mix(in srgb, var(--kr-season-gulal-pink) 45%, transparent); }
+
+.kr-season-track--rang .kr-season-track__tip {
+  bottom: -3px;
+  left: -8px;
+  width: 16px; }
+
+.kr-season-holi-tip {
+  display: block;
+  width: 100%;
+  height: auto;
+  animation: kr-season-holi-puffing 0.9s ease-in-out infinite alternate; }
+
+@keyframes kr-season-holi-puffing {
+  from { transform: scale(0.9) rotate(-6deg); }
+  to { transform: scale(1.12) rotate(6deg); } }
+
+/* The fog as a haze of colour: the same two banks and drift as every
+   season's, each puff in its own gulal. */
+.kr-season-fog__layer {
+  background:
+    radial-gradient(ellipse 22% 60% at 12% 88%, color-mix(in srgb, var(--kr-season-gulal-pink) 42%, transparent), transparent 70%),
+    radial-gradient(ellipse 26% 50% at 36% 96%, color-mix(in srgb, var(--kr-season-gulal-yellow) 36%, transparent), transparent 70%),
+    radial-gradient(ellipse 20% 65% at 63% 90%, color-mix(in srgb, var(--kr-season-gulal-green) 36%, transparent), transparent 70%),
+    radial-gradient(ellipse 28% 55% at 87% 94%, color-mix(in srgb, var(--kr-season-gulal-blue) 36%, transparent), transparent 70%);
+  background-size: 50% 100%;
+  background-repeat: repeat-x; }
+
+.kr-season-fog__layer--far {
+  background:
+    radial-gradient(ellipse 24% 55% at 24% 92%, color-mix(in srgb, var(--kr-season-gulal-purple) 38%, transparent), transparent 70%),
+    radial-gradient(ellipse 22% 60% at 74% 90%, color-mix(in srgb, var(--kr-season-gulal-pink) 34%, transparent), transparent 70%);
+  background-size: 50% 100%;
+  background-repeat: repeat-x;
+  background-position: 30% 0; }
+
+/* --- Holi's colours --------------------------------------------------------
+   Built by js/seasons/holi.js (its extra). On the day of colours, a
+   layer under each opener's type where every click leaves a handful of
+   gulal, blooming as it lands (--fresh; no bloom under reduced motion),
+   and the visit's count of throws starts each new opener as colourful
+   (those start clear of the type). On the homepage hero each slide has
+   its own layer, under the slide's type, which is lifted over it. On Holika Dahan's evening, a pyre on the
+   footer's top edge at its right, its flames out until five in the
+   evening (--lit), sparks rising off it. Classes only script applies:
+   .kr-season-holi-stains, .kr-season-holi-stain (--fresh),
+   .kr-season-holika (--lit), .kr-season-holika__flame (--front),
+   .kr-season-holika__spark. */
+.kr-season-holi-stains {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.62; }
+
+.single-welcome-slide > .container {
+  position: relative; }
+
+.kr-season-holi-stain {
+  position: absolute;
+  display: block; }
+
+.kr-season-holi-stain svg {
+  display: block;
+  width: 100%;
+  height: 100%; }
+
+.kr-season-holi-stain--fresh svg {
+  animation: kr-season-holi-land 0.7s cubic-bezier(0.2, 0.9, 0.3, 1) both; }
+
+@keyframes kr-season-holi-land {
+  0% { transform: scale(0.2); opacity: 0; }
+  40% { opacity: 1; }
+  100% { transform: none; opacity: 1; } }
+
+.kr-season-holika {
+  position: absolute;
+  right: max(12px, 6%);
+  bottom: calc(100% - 6px);
+  width: 76px;
+  pointer-events: none; }
+
+.kr-season-holika svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible; }
+
+.kr-season-holika__flame {
+  display: none;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 0 6px var(--kr-season-glow));
+  animation: kr-season-burn 0.9s ease-in-out infinite alternate; }
+
+.kr-season-holika__flame--front {
+  animation-duration: 0.7s;
+  animation-delay: -0.3s; }
+
+.kr-season-holika--lit .kr-season-holika__flame {
+  display: inline; }
+
+.kr-season-holika__spark {
+  position: absolute;
+  bottom: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--kr-season-glow);
+  box-shadow: 0 0 4px 1px var(--kr-season-glow);
+  opacity: 0;
+  animation: kr-season-holi-spark 2.2s ease-out infinite; }
+
+@keyframes kr-season-holi-spark {
+  0% { transform: translate(0, 0); opacity: 0; }
+  15% { opacity: 1; }
+  100% { transform: translate(8px, -70px); opacity: 0; } }
+
+@media only screen and (max-width: 575.98px) {
+  .kr-season-holika {
+    width: 56px; } }

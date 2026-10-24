@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
-"""Hold style.css to the rules its tokens depend on, and stop the habits
-the token system replaced from growing back.
+"""Hold style.css, and the seasons' stylesheets beside it
+(css/seasons/<key>.css, each loaded only while its season is on), to the
+rules their tokens depend on, and stop the habits the token system
+replaced from growing back. The seasons' files are read with style.css as
+one stylesheet: a token one sets may be read by the other, and the
+ratchets count them all.
 
     python .github/scripts/check_css.py --check             # CI, run_checks, pre-commit
     python .github/scripts/check_css.py --report            # every counted instance, by line
@@ -108,6 +112,8 @@ from css_prune import split_selectors  # noqa: E402
 
 ROOT = sitelib.ROOT
 STYLE = ROOT / "style.css"
+# Each season's own colours and rules, loaded only while it is on.
+SEASON_SHEETS = ("css/seasons/*.css",)
 BASELINE = ROOT / ".github" / "css-baseline.json"
 
 # The corpus the definitions and reads come from (git pathspecs).
@@ -536,13 +542,22 @@ def vendor_sheets(style_text: str) -> list[Path]:
     return out
 
 
+def season_sheets() -> list[Sheet]:
+    """The seasons' stylesheets, parsed (tracked files only)."""
+    return [parse_css(path.read_text(encoding="utf-8"), path.relative_to(ROOT).as_posix())
+            for path in sitelib.tracked(*SEASON_SHEETS)]
+
+
 def collect(style_text: str | None = None) -> tuple[Sheet, Usage]:
-    """style.css parsed, and custom-property usage across the corpus."""
+    """style.css parsed, and custom-property usage across the corpus (the
+    seasons' stylesheets included)."""
     if style_text is None:
         style_text = STYLE.read_text(encoding="utf-8")
     sheet = parse_css(style_text, "style.css")
     usage = Usage()
     scan_sheet(sheet, usage)
+    for season in season_sheets():
+        scan_sheet(season, usage)
     for path in vendor_sheets(style_text):
         rel = path.relative_to(ROOT).as_posix()
         scan_sheet(parse_css(path.read_text(encoding="utf-8", errors="replace"), rel),
@@ -619,6 +634,10 @@ def duplicate_rules(sheet: Sheet) -> list[str]:
     return out
 
 
+def print_blocks_in(sheet: Sheet) -> int:
+    return sum(1 for p, _c, _line in sheet.at_rules if PRINT_QUERY.match(p))
+
+
 def print_blocks(sheet: Sheet) -> list[str]:
     found = [(p, line) for p, _c, line in sheet.at_rules if PRINT_QUERY.match(p)]
     if len(found) <= 1:
@@ -681,15 +700,19 @@ def main(argv=None) -> int:
         sys.stdout.reconfigure(errors="backslashreplace")
 
     sheet, usage = collect()
-    instances = ratchet_instances(sheet)
+    sheets = [sheet] + season_sheets()
+    instances = {k: [] for k in RATCHETS}
+    for one in sheets:
+        for key, found in ratchet_instances(one).items():
+            instances[key] += [(f"{one.source}:{line}", text) for line, text in found]
     counts = {k: len(v) for k, v in instances.items()}
     baseline = load_baseline()
 
     if args.report:
         for key, what in RATCHETS.items():
             print(f"{what}: {counts[key]} (baseline {baseline.get(key, 'none')})")
-            for line, text in instances[key]:
-                print(f"  style.css:{line}  {text}")
+            for where, text in instances[key]:
+                print(f"  {where}  {text}")
             print()
         return 0
 
@@ -713,8 +736,10 @@ def main(argv=None) -> int:
     failures = []
     for code, found in (("undefined-property", undefined_properties(usage)),
                         ("unused-property", unused_properties(usage)),
-                        ("duplicate-rule", duplicate_rules(sheet)),
-                        ("print-blocks", print_blocks(sheet))):
+                        ("duplicate-rule", [m for one in sheets for m in duplicate_rules(one)]),
+                        ("print-blocks", print_blocks(sheet)
+                         + [f"{one.source} has an @media print block; print rules live in "
+                            f"style.css §23" for one in sheets[1:] if print_blocks_in(one)])):
         failures += [f"[{code}] {msg}" for msg in found]
     if not baseline:
         failures.append(f"[ratchet] {BASELINE.relative_to(ROOT).as_posix()} is missing; "
@@ -737,7 +762,8 @@ def main(argv=None) -> int:
     if failures:
         print(f"\ncheck_css: {len(failures)} problem(s). Ratchets now: {summary}.")
         return 1
-    print(f"style.css: {len(sheet.rules)} rules, {len(usage.sets)} custom properties set, "
+    print(f"style.css: {len(sheet.rules)} rules, and {len(sheets) - 1} seasons' sheets with "
+          f"{sum(len(one.rules) for one in sheets[1:])}; {len(usage.sets)} custom properties set, "
           f"none undefined or unused, no duplicate rules, at most one print block. "
           f"Ratchets: {summary}.")
     return 0

@@ -90,7 +90,7 @@ In registry order. "Fixer" is what `--fix` runs when the check fails.
 | `monochrome` | `detect_monochrome.py --check` | the script | The gallery's B&W filter disagrees with the pixels. Needs Pillow, so CI runs it in the browser job. |
 | `post-head` | `generate_post_head.py --check` | `--fix` | A post's head is missing a canonical element (share card, BreadcrumbList, manifest, feed link, asset stamps) or its JSON-LD disagrees with `posts.json`. What it cannot derive (a missing share card, a bad `updated` date) stays a failure for a person. Before the stylesheet build, because the pruner reads the JSON-LD it rewrites. Fast. |
 | `css-prune` | `css_prune.py --selftest` | none | The pruner loses a pattern (mixed quotes, a `'stem-' + n` class) and the build silently drops live rules. Fast. |
-| `css-rules` | `check_css.py --check` | `--update-baseline` | A `var()` of a property nothing sets, a property nothing reads, a duplicate rule, a second print block, or a rise in the raw-colour, `!important` or hand-written dark-rule counts (`.github/css-baseline.json`). Fast. |
+| `css-rules` | `check_css.py --check` | `--update-baseline` | A `var()` of a property nothing sets, a property nothing reads, a duplicate rule, a second print block, or a rise in the raw-colour, `!important` or hand-written dark-rule counts (`.github/css-baseline.json`), over `style.css` and the seasons' stylesheets (`css/seasons/*.css`) read as one. Fast. |
 | `css` | `minify_css.py --check` | the script | `style.min.css` is not a fresh build of `style.css`, including when new HTML uses a class the last build pruned. After every generator that writes HTML. Fast. |
 | `live-covers` | `check_live_covers.py --check` | none | A post in `posts.json` has no hover sketch in `js/covers.js`. Fast. |
 | `docs` | `check_docs.py --check` | none | These docs, the README or a code comment name a path under a tracked top-level folder that git does not track (a rename left a pointer behind), name a private file, or carry a review label. A path into an ignored folder is not seen at all. Fast. |
@@ -164,7 +164,7 @@ real files in a `vm` (`tests/js/runtime.js` is the shared loader).
 | `test_check_css.py` | each stylesheet rule on something it must catch and something it must pass |
 | `test_check_docs.py` | which words in the docs and comments count as paths, and what may never be named |
 | `test_css_prune.py` | selector splitting, and the classes the pruner must never drop |
-| `test_contrast.py` | every text token and the focus ring clear AA on every surface, in both themes |
+| `test_contrast.py` | every text token and the focus ring clear AA on every surface, in both themes, and so do they and each season's brand pair under every season's token blocks |
 | `test_decisions.py` | decisions that look like mistakes (`overflow: clip` on the opener, gradient text inside `@supports`, derived tokens restated in the dark block) |
 | `test_generate_post_head.py` | the post head template, one `--fix` pass from an old post, idempotence |
 | `test_generate_publications.py` | the publication list's order, markup and refusals, the All button's count, and every stated size of the site's own PDFs |

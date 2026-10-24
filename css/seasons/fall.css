@@ -1,0 +1,95 @@
+/* css/seasons/fall.css: The fall's colours and its own rules.
+   shared-components.js loads this file only while the season is on
+   (KR_SEASONS), beside js/seasons/fall.js; style.css keeps what every
+   season shares (§01 "Seasons", §21 "Seasonal decorations"). Tokens
+   first, both themes, then the rules for its own pieces. */
+
+/* The fall: harvest amber into olive gold:
+     light  #a5500d  5.24 page, 5.24 warm;  #66601a  6.04 page
+     dark   #ffb35c  9.82 page, 8.10 raised; #e8cd6e  11.10 page
+   Halloween's pieces in its own colours: the line is the twig, the
+   creature a tossed leaf and the squirrel, the badge the map's leaf, and
+   the fog a golden haze in both themes. */
+:root[data-season="fall"] {
+  --kr-brand-from: #a5500d;
+  --kr-brand-to: #66601a;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #ffc27a;
+  --kr-photo-to: #f3dd8f;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #7a5a3a;
+  --kr-season-creature: #6b4423;
+  --kr-season-glow: #ffd36b;
+  --kr-season-pumpkin: #d9822b;
+  --kr-season-badge: #e8a33d;
+  --kr-season-fog: #f6e3b4;
+  --kr-season-dusk: sepia(0.35) hue-rotate(-12deg) brightness(0.86);
+  --kr-season-fog-display: block; }
+
+:root[data-theme="dark"][data-season="fall"] {
+  --kr-brand-from: #ffb35c;
+  --kr-brand-to: #e8cd6e;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-line: #b08a5f;
+  --kr-season-creature: #c58f55; }
+
+/* The fall's geese glide across in a V, higher and slower, flapping
+   slower too. */
+.kr-season-flyer--glide {
+  top: 22vh;
+  width: 144px;
+  animation: kr-season-glide 11s linear forwards; }
+
+.kr-season-flyer--glide .kr-season-flyer__wing {
+  animation-duration: 0.42s; }
+
+@keyframes kr-season-glide {
+  0% { transform: translate(-130px, 6vh); }
+  100% { transform: translate(calc(100vw + 130px), -5vh); } }
+
+/* The fall's pumpkins burst leaves instead: three small leaves thrown up
+   and fluttering down, each its own way (--kr-season-toss). */
+.kr-season-puff--leaves,
+.kr-season-puff--leaves::before,
+.kr-season-puff--leaves::after {
+  width: 9px;
+  height: 9px;
+  margin-left: -4px;
+  border-radius: 0 70%;
+  background: var(--kr-season-pumpkin);
+  --kr-season-toss: 6px;
+  animation: kr-season-scatter 1.5s cubic-bezier(0.2, 0.6, 0.4, 1) forwards; }
+
+.kr-season-puff--leaves::before {
+  background: var(--kr-season-badge);
+  --kr-season-toss: -22px; }
+
+.kr-season-puff--leaves::after {
+  background: var(--kr-season-creature);
+  --kr-season-toss: 24px; }
+
+/* The fall's twig, in the same place: a thin bough the width of the
+   window with a leaf hanging every 64px (every: 64 in js/seasons/fall.js).
+   A leaf the reader has passed drops away slowly; scrolling back hangs
+   it again quickly. */
+.kr-season-track--branch .kr-season-track__rest {
+  top: 1px;
+  bottom: auto;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--kr-season-line); }
+
+.kr-season-track--branch .kr-season-track__bit svg {
+  animation: kr-season-sway 2.8s ease-in-out infinite alternate; }
+
+.kr-season-track--branch .kr-season-track__bit:nth-child(2n) svg {
+  animation-delay: -1.4s; }
+
+.kr-season-track--branch .kr-season-track__bit--passed {
+  opacity: 0;
+  transform: translate(14px, 90px) rotate(150deg);
+  transition: transform 1.8s cubic-bezier(0.4, 0, 0.7, 0.6), opacity 1.8s ease-in; }

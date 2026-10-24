@@ -154,7 +154,10 @@ Adding photographs touches every file in this group:
    tagging model run outside the repository (the essay
    [Building a Photo Tagging System with CLIP](https://www.kenreid.co.uk/blog/photo-tagging-with-clip.html)
    describes it); the gallery's filter buttons are `KR_PHOTO_CATEGORIES`
-   in `js/shared-components.js`.
+   in `js/shared-components.js`. `autumn` is strict in the model (it
+   misses many autumn frames), so look over a new autumn shoot by eye: the
+   fall season's photo strip and map read it. `winter`, `spring` and
+   `summer` are the same, picked by eye for their seasons.
 5. Place it in a region of `photo-locations.json` if it belongs on the
    map ([Putting My Photos on a Map](https://www.kenreid.co.uk/blog/putting-my-photos-on-a-map.html)).
    A new region needs a `path` as well as its pin: the country, the

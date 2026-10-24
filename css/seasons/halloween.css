@@ -1,0 +1,197 @@
+/* css/seasons/halloween.css: Halloween's colours and its own rules.
+   shared-components.js loads this file only while the season is on
+   (KR_SEASONS), beside js/seasons/halloween.js; style.css keeps what every
+   season shares (§01 "Seasons", §21 "Seasonal decorations"). Tokens
+   first, both themes, then the rules for its own pieces. */
+
+/* Halloween: pumpkin into violet. Gradient starts on the page:
+     light  #b4470c  5.11 page, 4.77 tint;  #7a35b0  6.63 page
+     dark   #ffa552  8.91 page, 7.35 raised; #c9a2ff  8.37 page
+   The line is the cobweb, the creature the spider, bat and cat, the wax
+   the candle and the moon, the badge a ghost, and the fog the dark
+   theme's alone. */
+:root[data-season="halloween"] {
+  --kr-brand-from: #b4470c;
+  --kr-brand-to: #7a35b0;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #ffb066;
+  --kr-photo-to: #dcc2ff;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #8f877d;
+  --kr-season-creature: #2b2233;
+  --kr-season-glow: #ffd36b;
+  --kr-season-wax: #f3e7cc;
+  --kr-season-wax-edge: #b89a63;
+  --kr-season-pumpkin: #e5761f;
+  --kr-season-badge: #f7f5ff;
+  --kr-season-cat: #17131c;
+  --kr-season-dusk: sepia(0.35) hue-rotate(-12deg) brightness(0.86);
+  --kr-season-fog-display: none; }
+
+:root[data-theme="dark"][data-season="halloween"] {
+  --kr-brand-from: #ffa552;
+  --kr-brand-to: #c9a2ff;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-creature: #b9a8c9;
+  --kr-season-fog: #cfcbe0;
+  --kr-season-fog-display: block; }
+
+/* Halloween's candle: the wax is what is left to read. */
+.kr-season-track--candle .kr-season-track__rest {
+  background: var(--kr-season-wax);
+  box-shadow: inset 0 -1px 0 var(--kr-season-wax-edge); }
+
+/* The wick, under the flame. */
+.kr-season-track--candle .kr-season-track__tip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: calc(50% - 1px);
+  width: 2px;
+  height: 3px;
+  background: var(--kr-season-creature); }
+
+.kr-season-track__fire {
+  display: block;
+  width: 100%;
+  height: auto;
+  fill: var(--kr-season-pumpkin);
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 0 4px var(--kr-season-glow));
+  animation: kr-season-burn 0.9s ease-in-out infinite alternate; }
+
+.kr-season-track__core {
+  fill: var(--kr-season-glow); }
+
+.kr-season-badge__eye {
+  fill: var(--kr-season-creature); }
+
+/* --- Halloween's eyes ---------------------------------------------------
+   Built by js/seasons/halloween.js: pairs of eyes along the footer's top,
+   in the dark band above its text, that
+   blink now and then and shut while the pointer is near (season.js's
+   extra). Classes only script applies: .kr-season-eyes, __pair,
+   __pair--shut. */
+.kr-season-eyes {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none; }
+
+.kr-season-eyes__pair {
+  position: absolute;
+  width: 26px;
+  animation: kr-season-blink 5.2s steps(1) infinite; }
+
+.kr-season-eyes__pair svg {
+  display: block;
+  width: 100%;
+  fill: var(--kr-season-glow);
+  filter: drop-shadow(0 0 4px var(--kr-season-glow));
+  transform-origin: 50% 50%;
+  transition: transform 0.25s ease; }
+
+.kr-season-eyes__pair--shut svg {
+  transform: scaleY(0.08); }
+
+@keyframes kr-season-blink {
+  0%, 100% { opacity: 0.85; }
+  48% { opacity: 0.85; }
+  49% { opacity: 0.1; }
+  51% { opacity: 0.85; } }
+
+.kr-season-walker--cat {
+  width: 48px;
+  animation-duration: 14s;
+  animation-timing-function: linear; }
+
+/* A black cat in both themes, edged so the dark page still shows it. */
+.kr-season-walker--cat svg {
+  fill: var(--kr-season-cat);
+  stroke: var(--kr-season-line);
+  stroke-width: 0.6; }
+
+.kr-season-walker--cat .kr-season-walker__tail {
+  animation-duration: 1.4s; }
+
+/* --- Halloween's ghosts, moon and lightning -------------------------------
+   Built by js/seasons/halloween.js. A ghost rises from the bottom right
+   corner of a post card's picture while the card is hovered (--up), over
+   any hover sketch; the moon hangs high on the right of the homepage hero
+   from 992px, where the headline and portrait leave it room, and a witch
+   crosses it every 32 seconds; switching to the dark theme flickers
+   lightning over the page once. Under reduced motion no ghost rises, the
+   witch stays away and no lightning comes. Classes only script applies:
+   .kr-season-peek (--up), .kr-season-sky (__moon, __witch),
+   .kr-season-flash. */
+.kr-season-peek {
+  position: absolute;
+  right: 12px;
+  bottom: 0;
+  z-index: 4;
+  width: 30px;
+  height: 36px;
+  overflow: hidden;
+  pointer-events: none; }
+
+.kr-season-peek .kr-season-badge__body {
+  transform: translateY(105%);
+  transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.4, 1); }
+
+.kr-season-peek--up .kr-season-badge__body {
+  transform: translateY(14%); }
+
+.kr-season-sky {
+  display: none;
+  position: absolute;
+  top: calc(var(--kr-bar-h) + 6%);
+  right: 5%;
+  z-index: 4;
+  width: 92px;
+  height: 92px;
+  pointer-events: none; }
+
+@media only screen and (min-width: 992px) {
+  .kr-season-sky {
+    display: block; } }
+
+.kr-season-sky__moon {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 36%, var(--kr-season-wax), color-mix(in srgb, var(--kr-season-wax) 70%, var(--kr-season-wax-edge)));
+  box-shadow: 0 0 34px color-mix(in srgb, var(--kr-season-glow) 45%, transparent); }
+
+.kr-season-sky__witch {
+  position: absolute;
+  top: 30%;
+  left: 0;
+  width: 54px;
+  fill: var(--kr-season-cat);
+  opacity: 0;
+  animation: kr-season-witch 32s linear 3s infinite; }
+
+@keyframes kr-season-witch {
+  0% { opacity: 1; transform: translate(-90px, 18px) rotate(-6deg); }
+  9% { opacity: 1; transform: translate(150px, -14px) rotate(-10deg); }
+  9.01%, 100% { opacity: 0; transform: translate(150px, -14px); } }
+
+.kr-season-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: var(--kr-season-badge);
+  opacity: 0;
+  pointer-events: none;
+  animation: kr-season-lightning 0.9s linear forwards; }
+
+@keyframes kr-season-lightning {
+  0% { opacity: 0; }
+  6% { opacity: 0.42; }
+  14% { opacity: 0; }
+  26% { opacity: 0.22; }
+  34%, 100% { opacity: 0; } }

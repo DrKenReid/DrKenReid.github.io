@@ -1,0 +1,211 @@
+/* css/seasons/summer.css: Summer's colours and its own rules.
+   shared-components.js loads this file only while the season is on
+   (KR_SEASONS), beside js/seasons/summer.js; style.css keeps what every
+   season shares (§01 "Seasons", §21 "Seasonal decorations"). Tokens
+   first, both themes, then the rules for its own pieces. */
+
+/* Summer: sun gold into lake blue:
+     light  #7d6000  5.54 page, 5.83 warm;  #1b6a95  5.55 page
+     dark   #ffd36b  12.25 page, 10.10 raised; #8fd8f0  10.98 page
+   The line is the branch and the swing's rope, the creature the tyre
+   and the dragonfly, the glow the fireflies, the pumpkin token the sun
+   (the map's rims, the sunbeam on a post, the pollen a sunflower
+   throws), the badge the map's sun, and the fog a warm haze in the
+   light theme only (the dark theme has the fireflies). */
+:root[data-season="summer"] {
+  --kr-brand-from: #7d6000;
+  --kr-brand-to: #1b6a95;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #ffe08f;
+  --kr-photo-to: #b9ecf7;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #6f5a3c;
+  --kr-season-creature: #1f5a6e;
+  --kr-season-glow: #e6ff7a;
+  --kr-season-pumpkin: #f5a614;
+  --kr-season-badge: #ffd34d;
+  --kr-season-fog: #fff0c4;
+  --kr-season-dusk: saturate(1.2) sepia(0.12) brightness(1.04);
+  --kr-season-fog-display: block; }
+
+:root[data-theme="dark"][data-season="summer"] {
+  --kr-brand-from: #ffd36b;
+  --kr-brand-to: #8fd8f0;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-line: #b39a72;
+  --kr-season-creature: #9fdcec;
+  --kr-season-dusk: saturate(1.1) sepia(0.1) brightness(0.9);
+  --kr-season-fog-display: none; }
+
+/* --- Summer ----------------------------------------------------------------
+   Built by js/seasons/summer.js: the tyre swing swaying on its rope
+   (--swing, left off while it drops); pollen thrown up by a clicked
+   sunflower, sandcastle or jar (--pollen); a dragonfly darting across
+   and hovering twice (--dart), its glassy wings a blur; the sunbeam along
+   a post's top, growing from the left with a turning sun at the reader
+   (--sunbeam, __sun). And its visitors, once the footer is in view and
+   by the reader's clock: by day a monarch flutters down to the big
+   sunflower, opens and closes its wings there and flies off when the
+   pointer comes to the patch (--gone); after dark, fireflies drift and
+   blink over the footer. Never under reduced motion (summer.js adds
+   none of them). Classes only script applies: .kr-season-dangler--swing,
+   .kr-season-puff--pollen, .kr-season-flyer--dart,
+   .kr-season-track--sunbeam, .kr-season-track__sun,
+   .kr-season-butterfly (--gone, __wing, __wing--l, __wing--r),
+   .kr-season-fireflies (__fly). */
+.kr-season-dangler--swing:not(.kr-season-dangler--drop) {
+  transform-origin: 50% -75px;
+  animation: kr-season-swing 4.6s ease-in-out infinite; }
+
+@keyframes kr-season-swing {
+  0%, 100% { transform: rotate(-6deg); }
+  50% { transform: rotate(6deg); } }
+
+.kr-season-puff--pollen,
+.kr-season-puff--pollen::before,
+.kr-season-puff--pollen::after {
+  width: 7px;
+  height: 7px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: var(--kr-season-pumpkin);
+  box-shadow: 0 0 6px var(--kr-season-badge);
+  --kr-season-toss: 4px;
+  animation: kr-season-float 2.2s ease-out forwards; }
+
+.kr-season-puff--pollen::before {
+  background: var(--kr-season-badge);
+  --kr-season-toss: -18px; }
+
+.kr-season-puff--pollen::after {
+  --kr-season-toss: 20px; }
+
+@keyframes kr-season-float {
+  0% { transform: translate(0, 0) scale(0.5); opacity: 1; }
+  60% { transform: translate(var(--kr-season-toss), -40px) scale(1); opacity: 1; }
+  100% { transform: translate(calc(var(--kr-season-toss) * 1.5), -66px) scale(0.7); opacity: 0; } }
+
+.kr-season-flyer--dart {
+  top: 30vh;
+  width: 72px;
+  animation: kr-season-dart 6.5s ease-in-out forwards; }
+
+.kr-season-flyer--dart .kr-season-flyer__wing {
+  fill: color-mix(in srgb, var(--kr-season-creature) 30%, transparent);
+  stroke: var(--kr-season-creature);
+  stroke-width: 0.6;
+  animation-duration: 0.06s; }
+
+.kr-season-flyer--dart .kr-season-flyer__wing--l {
+  transform-origin: 50% 100%; }
+
+.kr-season-flyer--dart .kr-season-flyer__wing--r {
+  transform-origin: 50% 0; }
+
+@keyframes kr-season-dart {
+  0% { transform: translate(-80px, 10vh); }
+  16% { transform: translate(24vw, 2vh); }
+  32% { transform: translate(25vw, 3vh); }
+  44% { transform: translate(47vw, 14vh); }
+  60% { transform: translate(48vw, 13vh); }
+  74% { transform: translate(70vw, 4vh); }
+  100% { transform: translate(calc(100vw + 80px), -8vh); } }
+
+.kr-season-track--sunbeam .kr-season-track__rest {
+  top: 1px;
+  bottom: auto;
+  height: 3px;
+  border-radius: 0 2px 2px 0;
+  background: linear-gradient(to right, color-mix(in srgb, var(--kr-season-pumpkin) 20%, transparent), var(--kr-season-pumpkin));
+  box-shadow: 0 0 6px color-mix(in srgb, var(--kr-season-pumpkin) 55%, transparent); }
+
+.kr-season-track--sunbeam .kr-season-track__tip {
+  top: -5.5px;
+  bottom: auto;
+  left: -7px;
+  width: 14px; }
+
+.kr-season-track__sun {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 3px var(--kr-season-badge));
+  animation: kr-season-turn 14s linear infinite; }
+
+@keyframes kr-season-turn {
+  to { transform: rotate(1turn); } }
+
+/* The monarch perches on the big sunflower's head. */
+.kr-season-butterfly {
+  position: absolute;
+  top: -4px;
+  left: 13px;
+  width: 24px;
+  pointer-events: none;
+  animation: kr-season-flit-in 3.2s cubic-bezier(0.3, 0.6, 0.4, 1) both; }
+
+.kr-season-butterfly svg {
+  display: block;
+  width: 100%;
+  height: auto; }
+
+.kr-season-butterfly__wing {
+  transform-box: fill-box;
+  transform-origin: 100% 50%;
+  animation: kr-season-flutter 0.16s ease-in-out 20 alternate, kr-season-rest 5s ease-in-out 3.2s infinite; }
+
+.kr-season-butterfly--gone {
+  animation: kr-season-flit-off 1.6s ease-in forwards; }
+
+.kr-season-butterfly--gone .kr-season-butterfly__wing {
+  animation: kr-season-flutter 0.14s ease-in-out infinite alternate; }
+
+@keyframes kr-season-flit-in {
+  0% { transform: translate(-140px, -160px) rotate(-20deg); opacity: 0; }
+  10% { opacity: 1; }
+  40% { transform: translate(-60px, -90px) rotate(10deg); }
+  70% { transform: translate(-12px, -30px) rotate(-8deg); }
+  100% { transform: none; opacity: 1; } }
+
+@keyframes kr-season-flit-off {
+  from { transform: var(--kr-season-from); }
+  to { transform: translate(220px, -260px) rotate(25deg); opacity: 0; } }
+
+@keyframes kr-season-flutter {
+  to { transform: scaleX(0.25); } }
+
+@keyframes kr-season-rest {
+  0%, 100% { transform: none; }
+  50% { transform: scaleX(0.35); } }
+
+.kr-season-fireflies {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none; }
+
+.kr-season-fireflies__fly {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--kr-season-glow);
+  box-shadow: 0 0 6px 2px color-mix(in srgb, var(--kr-season-glow) 70%, transparent);
+  opacity: 0;
+  animation: kr-season-wander 12s ease-in-out infinite alternate, kr-season-wink 6s linear infinite; }
+
+@keyframes kr-season-wander {
+  0% { transform: none; }
+  33% { transform: translate(18px, -10px); }
+  66% { transform: translate(-8px, -22px); }
+  100% { transform: translate(14px, 6px); } }
+
+@keyframes kr-season-wink {
+  0%, 70%, 100% { opacity: 0; }
+  78% { opacity: 1; }
+  86% { opacity: 0.85; }
+  92% { opacity: 0; } }

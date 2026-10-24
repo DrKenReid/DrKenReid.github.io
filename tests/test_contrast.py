@@ -30,6 +30,7 @@ import check_css  # noqa: E402
 from harness import contrast_ratio as contrast  # noqa: E402  (the browser checks' WCAG maths)
 
 STYLE = check_css.STYLE
+ROOT = check_css.ROOT
 AA = 4.5
 
 # Colours that set text (or the ring around a focused control).
@@ -131,14 +132,17 @@ class TokenContrast(unittest.TestCase):
                     self.assertIn(token, props)
 
     def test_seasons_clear_aa(self):
-        # A season (html[data-season], style.css §01 "Seasons") lays its
-        # own block over each theme. The text tokens must still clear, and
-        # so must both ends of its brand gradient: the gradient is heading
-        # type, and its start is the solid fallback without clip support.
-        sheet = check_css.parse_css(STYLE.read_text(encoding="utf-8"))
-        keys = sorted(set(re.findall(r':root\[data-season="([\w-]+)"\]', STYLE.read_text(encoding="utf-8"))))
-        self.assertTrue(keys, "no season blocks found in style.css")
-        for key in keys:
+        # A season (html[data-season]) lays its own block over each theme,
+        # in its stylesheet (css/seasons/<key>.css; one file may dress two
+        # keys). The text tokens must still clear, and so must both ends of
+        # its brand gradient: the gradient is heading type, and its start
+        # is the solid fallback without clip support.
+        found = []
+        for sheet in check_css.season_sheets():
+            text = (ROOT / sheet.source).read_text(encoding="utf-8")
+            found += [(key, sheet) for key in sorted(set(re.findall(r':root\[data-season="([\w-]+)"\]', text)))]
+        self.assertTrue(found, "no season blocks found in css/seasons/")
+        for key, sheet in found:
             own = check_css.custom_property_values(sheet, f':root[data-season="{key}"]')
             own_dark = check_css.custom_property_values(
                 sheet, f':root[data-theme="dark"][data-season="{key}"]')

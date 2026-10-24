@@ -1,0 +1,164 @@
+/* css/seasons/burns-night.css: Burns Night's colours and its own rules.
+   shared-components.js loads this file only while the season is on
+   (KR_SEASONS), beside js/seasons/burns-night.js; style.css keeps what every
+   season shares (§01 "Seasons", §21 "Seasonal decorations"). Tokens
+   first, both themes, then the rules for its own pieces. */
+
+/* Burns Night: heather into whisky:
+     light  #7b3d82  6.94 page, 7.30 tint;  #8a5a12  5.53 page, 5.82 tint
+     dark   #e2a9f0  9.26 page, 7.63 raised; #f2c56b  10.75 page, 8.87 raised
+   The line is the heather's stems and the mouse's tail, the creature the
+   mouse and the grouse, the pumpkin token the whisky (the map's rims),
+   the steam the haggis's, the tartan tokens the ribbon's three colours, and
+   the fog peat smoke in the dark theme only. */
+:root[data-season="burns-night"] {
+  --kr-brand-from: #7b3d82;
+  --kr-brand-to: #8a5a12;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #f0c9f5;
+  --kr-photo-to: #ffd98f;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #6f6052;
+  --kr-season-creature: #5e4636;
+  --kr-season-glow: #ffcf73;
+  --kr-season-pumpkin: #c98a2b;
+  --kr-season-badge: #f3e9f7;
+  --kr-season-fog: #d9cfc3;
+  --kr-season-dusk: sepia(0.3) saturate(0.85) brightness(0.88);
+  --kr-season-fog-display: none;
+  --kr-season-steam: #a99fb4;
+  --kr-season-tartan: #24503a;
+  --kr-season-tartan-over: #1f2f55;
+  --kr-season-tartan-line: #e3b23c; }
+
+:root[data-theme="dark"][data-season="burns-night"] {
+  --kr-brand-from: #e2a9f0;
+  --kr-brand-to: #f2c56b;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-line: #a89a8a;
+  --kr-season-creature: #c9b29a;
+  --kr-season-steam: #e6e0ec;
+  --kr-season-dusk: sepia(0.3) saturate(0.8) brightness(0.8);
+  --kr-season-fog-display: block; }
+
+/* --- Burns Night ----------------------------------------------------------
+   Built by js/seasons/burns-night.js: steam off the supper when a dish is
+   clicked (--steam), the haggis's wobble, a red grouse whirring low and
+   fast, turned to fly the way it goes (--whirr), a tartan ribbon a quill
+   draws along a post's top as far as the reader has read (--tartan, its
+   stripes run along it so the fill never squashes them), and the
+   season's own toy: a line of Burns written out over the footer at its
+   right, from 768px, a new line on each click of it or of the haggis.
+   Classes only script applies: .kr-season-puff--steam, .kr-season-haggis,
+   .kr-season-flyer--whirr, .kr-season-track--tartan, .kr-season-quill,
+   .kr-season-verse (__line, __source). */
+.kr-season-puff--steam,
+.kr-season-puff--steam::before,
+.kr-season-puff--steam::after {
+  width: 7px;
+  height: 20px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--kr-season-steam) 85%, transparent), transparent);
+  animation: kr-season-steam 1.9s ease-out forwards; }
+
+.kr-season-puff--steam::before {
+  left: -160%; }
+
+.kr-season-puff--steam::after {
+  left: 260%; }
+
+@keyframes kr-season-steam {
+  0% { transform: translate(0, 0) scale(0.6, 0.5); opacity: 0; }
+  20% { opacity: 0.95; }
+  50% { transform: translate(-4px, -22px) scale(1, 1); }
+  100% { transform: translate(3px, -46px) scale(1.4, 1.7); opacity: 0; } }
+
+.kr-season-lit .kr-season-haggis {
+  transform-origin: 50% 90%;
+  animation: kr-season-flare 1.4s ease-out, kr-season-wobble 0.9s ease-in-out; }
+
+@keyframes kr-season-wobble {
+  0%, 100% { transform: none; }
+  20% { transform: scale(1.07, 0.9); }
+  40% { transform: scale(0.95, 1.07); }
+  60% { transform: scale(1.03, 0.97); }
+  80% { transform: scale(0.99, 1.01); } }
+
+.kr-season-flyer--whirr {
+  top: 52vh;
+  width: 46px;
+  animation: kr-season-whirr 3.6s cubic-bezier(0.3, 0.1, 0.6, 1) forwards; }
+
+.kr-season-flyer--whirr .kr-season-flyer__wing {
+  animation-duration: 0.08s; }
+
+@keyframes kr-season-whirr {
+  0% { transform: translate(-60px, 6vh) rotate(90deg); }
+  40% { transform: translate(38vw, 0) rotate(86deg); }
+  70% { transform: translate(64vw, 2vh) rotate(93deg); }
+  100% { transform: translate(calc(100vw + 60px), -4vh) rotate(88deg); } }
+
+.kr-season-track--tartan {
+  height: 6px; }
+
+.kr-season-track--tartan .kr-season-track__rest {
+  background: linear-gradient(to bottom,
+    var(--kr-season-tartan) 0 1.5px, var(--kr-season-tartan-over) 1.5px 2.5px,
+    var(--kr-season-tartan-line) 2.5px 3.5px, var(--kr-season-tartan-over) 3.5px 4.5px,
+    var(--kr-season-tartan) 4.5px); }
+
+.kr-season-track--tartan .kr-season-track__tip {
+  bottom: 2px;
+  left: -1px;
+  width: 14px; }
+
+.kr-season-quill {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: 0 100%;
+  animation: kr-season-scribble 0.45s ease-in-out infinite alternate; }
+
+@keyframes kr-season-scribble {
+  from { transform: rotate(-5deg); }
+  to { transform: rotate(4deg) translateY(-1px); } }
+
+.kr-season-verse {
+  display: none;
+  position: absolute;
+  right: max(12px, 6%);
+  bottom: calc(100% + 8px);
+  max-width: min(48%, 480px);
+  text-align: right;
+  line-height: 1.3;
+  cursor: pointer;
+  font-family: 'Lora', 'Lora Fallback', Georgia, serif; }
+
+@media only screen and (min-width: 768px) {
+  .kr-season-verse {
+    display: block; }
+
+  /* Room above the footer for a verse of two lines and its source. */
+  :root[data-season="burns-night"] .kr-footer {
+    margin-top: 76px; } }
+
+.kr-season-verse__line {
+  display: block;
+  min-height: 1.3em;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--kr-brand-from); }
+
+.kr-season-verse__source {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: var(--kr-muted); }
+
+.kr-season-verse__source::before {
+  content: 'Burns, '; }

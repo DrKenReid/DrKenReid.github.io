@@ -206,42 +206,114 @@ test('prerender rules cover posts and never drafts', () => {
     assert.ok(text.includes('{"not":{"href_matches":"/blog/drafts/*"}}'));
 });
 
-test('KR_SEASONS: every season is well formed and no two windows overlap', () => {
+test('KR_SEASONS: every season is well formed, and no two of one rank share a day', () => {
     const keys = new Set();
-    const days = new Map();
+    const known = rt.KR_PHOTO_CATEGORIES.map(c => c.key);
+    const inRange = (end, key) =>
+        assert.ok(end[0] >= 1 && end[0] <= 12 && end[1] >= 1 && end[1] <= 31, `${key}: ${end}`);
     for (const s of rt.KR_SEASONS) {
         assert.match(s.key, /^[a-z-]+$/, s.key);
         assert.ok(!keys.has(s.key), `duplicate season ${s.key}`);
         keys.add(s.key);
         assert.ok(s.label, `${s.key} needs a label`);
-        for (const end of [s.from, s.to]) {
-            assert.ok(end[0] >= 1 && end[0] <= 12 && end[1] >= 1 && end[1] <= 31, `${s.key}: ${end}`);
-        }
-        if (s.photoTags) {
-            const known = rt.KR_PHOTO_CATEGORIES.map(c => c.key);
-            for (const tag of s.photoTags) assert.ok(known.includes(tag), `${s.key}: unknown photo tag ${tag}`);
-        }
+        assert.ok(Array.isArray(s.windows), `${s.key} needs windows`);
+        assert.ok(s.windows.length || s.years, `${s.key} needs a window or a years table`);
+        for (const end of s.windows.flat()) inRange(end, s.key);
+        for (const wins of Object.values(s.years || {})) for (const end of wins.flat()) inRange(end, s.key);
+        assert.ok([undefined, 1, 2, 3].includes(s.rank), `${s.key}: rank ${s.rank}`);
+        for (const tag of s.photoTags || []) assert.ok(known.includes(tag), `${s.key}: unknown photo tag ${tag}`);
         if (s.subject) {
-            assert.ok(!rt.KR_PHOTO_CATEGORIES.some(c => c.key === s.subject.key),
-                `${s.key}: its subject ${s.subject.key} would shadow a stored tag`);
+            assert.ok(!known.includes(s.subject.key), `${s.key}: its subject ${s.subject.key} would shadow a stored tag`);
         }
-        // A leap year, so 29 February is a day too.
-        for (let d = new Date(2028, 0, 1); d.getFullYear() === 2028; d.setDate(d.getDate() + 1)) {
-            if (rt.krSeasonOnDate(new Date(d)) !== s) continue;
-            const day = `${d.getMonth() + 1}-${d.getDate()}`;
-            if (days.has(day)) assert.fail(`${s.key} and ${days.get(day)} both claim ${day}`);
-            days.set(day, s.key);
+        assert.ok(s.heroText && s.heroRamp && s.heroRamp.length === 2, `${s.key}: heroText and a two-stop heroRamp`);
+    }
+    // Every day of the years the tables cover (2028 a leap year): no two
+    // seasons of the same rank claim it, whatever wins it.
+    const onDay = (d, s) => s.windows.concat((s.years && s.years[d.getFullYear()]) || []).some(([f, t]) => {
+        const day = (d.getMonth() + 1) * 100 + d.getDate(), from = f[0] * 100 + f[1], to = t[0] * 100 + t[1];
+        return from <= to ? day >= from && day <= to : day >= from || day <= to;
+    });
+    for (let d = new Date(2026, 0, 1); d.getFullYear() <= 2031; d.setDate(d.getDate() + 1)) {
+        const on = rt.KR_SEASONS.filter(s => onDay(d, s));
+        const ranks = on.map(s => s.rank || 0);
+        assert.equal(new Set(ranks).size, ranks.length,
+            `${d.toDateString()}: ${on.map(s => s.key).join(' and ')} share a rank`);
+    }
+});
+
+test('KR_SEASONS: every season has its art and its stylesheet', () => {
+    // js/seasons/<art>.js and css/seasons/<art>.css, which shared-components
+    // loads for it: without them the page gets two 404s and no decorations.
+    for (const s of rt.KR_SEASONS) {
+        const art = s.art || s.key;
+        for (const file of [`js/seasons/${art}.js`, `css/seasons/${art}.css`]) {
+            assert.ok(fs.existsSync(path.join(ROOT, file)), `${s.key}: no ${file}`);
         }
     }
 });
 
+test('KR_SEASONS: a holiday that moves has dates for this year and the next two', () => {
+    // Diwali follows the lunar calendar: extend its `years` table (Lakshmi
+    // Puja's date, two days either side) before this fails.
+    const year = new Date().getFullYear();
+    for (const s of rt.KR_SEASONS.filter(s => s.years)) {
+        for (const y of [year, year + 1, year + 2]) assert.ok(s.years[y], `${s.key} has no dates for ${y}`);
+    }
+});
+
+test('krSeasonOnDate: the higher rank wins a shared day', () => {
+    const on = (y, m, d) => (rt.krSeasonOnDate(new Date(y, m - 1, d)) || {}).key || null;
+    assert.equal(on(2026, 11, 4), 'fall');
+    assert.equal(on(2026, 11, 5), 'bonfire-night');
+    assert.equal(on(2026, 11, 8), 'diwali');
+    assert.equal(on(2026, 11, 30), 'st-andrews');
+    assert.equal(on(2027, 10, 29), 'diwali');
+    assert.equal(on(2027, 11, 1), 'halloween');
+    assert.equal(on(2029, 11, 5), 'diwali');
+    assert.equal(on(2026, 12, 31), 'hogmanay');
+    assert.equal(on(2027, 1, 2), 'hogmanay');
+    assert.equal(on(2027, 1, 3), 'winter');
+    assert.equal(on(2027, 1, 25), 'burns-night');
+    assert.equal(on(2027, 5, 4), 'may-the-fourth');
+    assert.equal(on(2027, 5, 5), 'revenge-of-the-fifth');
+    assert.equal(on(2027, 5, 6), 'spring');
+    assert.equal(on(2027, 3, 20), 'spring');
+    assert.equal(on(2027, 6, 21), 'summer');
+    assert.equal(on(2027, 9, 21), 'summer');
+    assert.equal(on(2027, 2, 12), 'darwin-day');
+    assert.equal(on(2027, 3, 14), 'pi-day');
+    assert.equal(on(2027, 3, 22), 'holi');
+    assert.equal(on(2027, 4, 23), 'world-book-day');
+    assert.equal(on(2027, 8, 8), 'cat-day');
+});
+
 test('krSeasonOnDate: Halloween runs 17 October to 1 November, both included', () => {
     const on = (m, d) => (rt.krSeasonOnDate(new Date(2026, m - 1, d)) || {}).key || null;
-    assert.equal(on(10, 16), null);
+    assert.equal(on(10, 16), 'fall');
     assert.equal(on(10, 17), 'halloween');
     assert.equal(on(10, 31), 'halloween');
     assert.equal(on(11, 1), 'halloween');
-    assert.equal(on(11, 2), null);
+    assert.equal(on(11, 2), 'fall');
+});
+
+test('krSeasonOnDate: the fall runs either side of Halloween, 22 September to 30 November', () => {
+    const on = (m, d) => (rt.krSeasonOnDate(new Date(2026, m - 1, d)) || {}).key || null;
+    assert.equal(on(9, 21), 'summer');
+    assert.equal(on(9, 22), 'fall');
+    assert.equal(on(10, 16), 'fall');
+    assert.equal(on(11, 2), 'fall');
+    assert.equal(on(11, 29), 'fall');
+});
+
+test('krSeasonOnDate: winter runs over the new year, 1 December to 19 March, round Hogmanay', () => {
+    const on = (m, d) => (rt.krSeasonOnDate(new Date(2026, m - 1, d)) || {}).key || null;
+    assert.equal(on(12, 1), 'winter');
+    assert.equal(on(12, 25), 'winter');
+    assert.equal(on(1, 1), 'hogmanay');
+    assert.equal(on(2, 28), 'winter');
+    assert.equal(on(3, 19), 'winter');
+    assert.equal(on(3, 20), 'spring');
+    assert.equal((rt.krSeasonOnDate(new Date(2028, 1, 29)) || {}).key, 'winter');
 });
 
 test('krSeason: the runtime has no season, whatever the date', () => {

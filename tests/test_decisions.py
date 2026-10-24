@@ -109,7 +109,9 @@ class DerivedTokensAreRestated(unittest.TestCase):
                    for name, value in light.items() if "var(" in value}
         self.assertIn("--kr-brand-gradient", derived)
         groups = {}
-        for rule in SHEET.rules:
+        # The seasons' stylesheets override the same tokens (each its own
+        # :root[data-season] blocks), so they are held to it too.
+        for rule in SHEET.rules + [r for sheet in check_css.season_sheets() for r in sheet.rules]:
             if not rule.selector.startswith("@"):
                 groups.setdefault((rule.context, rule.selector), []).extend(rule.declarations)
         for (context, selector), decls in groups.items():

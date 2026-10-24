@@ -346,16 +346,18 @@
                 { text: `${season.treat.also} random photo ${words(season)}`, weight: WEIGHT.tag }
             ]);
         }
-        // Sounds for the pumpkins' clicks (season.js), off until asked for.
+        // Sounds for clicks on the season's footer pieces (season.js), off
+        // until asked for.
         if (window.krSeasonSounds) {
             const on = window.krSeasonSounds.on();
             const title = `Turn ${on ? 'off' : 'on'} ${season.label} sounds`;
             out.push({ id: optionId('Season', 'sounds', out), kind: 'Season', title,
-                sub: on ? 'Pumpkins go quiet, on this device' : 'Click a pumpkin to hear it, on this device',
-                href: window.location.pathname + '?spooky-sounds=' + (on ? 'off' : 'on') + window.location.hash,
+                sub: on ? 'No more sounds from the footer, on this device'
+                    : 'Click the things on the footer to hear them, on this device',
+                href: window.location.pathname + '?season-sounds=' + (on ? 'off' : 'on') + window.location.hash,
                 fields: [
                     { text: title, weight: WEIGHT.title, title: true },
-                    { text: `${words(season)} sound audio noise owl wolf creak`, weight: WEIGHT.tag }
+                    { text: `${words(season)} sound audio noise`, weight: WEIGHT.tag }
                 ] });
         }
         if (season === dated) {

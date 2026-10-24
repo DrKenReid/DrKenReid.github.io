@@ -14,10 +14,12 @@
     "landscape"
   ],
   "102": [
-    "landscape"
+    "landscape",
+    "summer"
   ],
   "103": [
-    "nature"
+    "nature",
+    "spring"
   ],
   "104": [
     "landscape"
@@ -108,6 +110,7 @@
     "winter"
   ],
   "129": [
+    "autumn",
     "nature",
     "winter"
   ],
@@ -183,7 +186,8 @@
     "bw"
   ],
   "149": [
-    "landscape"
+    "landscape",
+    "summer"
   ],
   "15": [
     "abandoned",
@@ -231,7 +235,8 @@
     "wildlife"
   ],
   "161": [
-    "nature"
+    "nature",
+    "spring"
   ],
   "162": [
     "abandoned"
@@ -248,6 +253,7 @@
     "winter"
   ],
   "166": [
+    "autumn",
     "wildlife"
   ],
   "167": [],
@@ -305,12 +311,14 @@
     "portrait"
   ],
   "182": [
+    "autumn",
     "wildlife"
   ],
   "183": [
     "portrait"
   ],
   "184": [
+    "summer",
     "wildlife"
   ],
   "185": [
@@ -327,6 +335,7 @@
     "nature"
   ],
   "190": [
+    "autumn",
     "nature"
   ],
   "191": [
@@ -521,13 +530,15 @@
     "urban"
   ],
   "247": [
-    "landscape"
+    "landscape",
+    "summer"
   ],
   "248": [
     "portrait"
   ],
   "249": [
-    "landscape"
+    "landscape",
+    "summer"
   ],
   "25": [
     "bw"
@@ -650,9 +661,11 @@
   ],
   "280": [
     "nature",
+    "spring",
     "wildlife"
   ],
   "281": [
+    "spring",
     "wildlife"
   ],
   "283": [
@@ -676,7 +689,8 @@
     "silhouette"
   ],
   "289": [
-    "landscape"
+    "landscape",
+    "summer"
   ],
   "29": [
     "wildlife"
@@ -695,7 +709,8 @@
     "architecture"
   ],
   "294": [
-    "nature"
+    "nature",
+    "spring"
   ],
   "295": [
     "portrait"
@@ -726,13 +741,16 @@
     "wildlife"
   ],
   "301": [
-    "nature"
+    "nature",
+    "spring"
   ],
   "302": [
-    "landscape"
+    "landscape",
+    "summer"
   ],
   "303": [
-    "landscape"
+    "landscape",
+    "summer"
   ],
   "304": [
     "wildlife"
@@ -749,7 +767,8 @@
     "urban"
   ],
   "308": [
-    "architecture"
+    "architecture",
+    "autumn"
   ],
   "309": [
     "portrait"
@@ -764,10 +783,12 @@
     "nature"
   ],
   "311": [
+    "autumn",
     "nature"
   ],
   "312": [
-    "architecture"
+    "architecture",
+    "autumn"
   ],
   "313": [
     "architecture"
@@ -838,6 +859,7 @@
     "winter"
   ],
   "335": [
+    "spring",
     "wildlife"
   ],
   "336": [
@@ -873,21 +895,26 @@
     "wildlife"
   ],
   "346": [
+    "autumn",
     "wildlife"
   ],
   "347": [
+    "autumn",
     "wildlife"
   ],
   "348": [
     "wildlife"
   ],
   "349": [
+    "autumn",
     "wildlife"
   ],
   "350": [
+    "autumn",
     "wildlife"
   ],
   "351": [
+    "autumn",
     "wildlife"
   ],
   "352": [
@@ -925,6 +952,7 @@
     "silhouette"
   ],
   "364": [
+    "spring",
     "wildlife"
   ],
   "365": [
@@ -938,6 +966,7 @@
     "silhouette"
   ],
   "368": [
+    "autumn",
     "nature"
   ],
   "369": [
@@ -982,6 +1011,7 @@
     "bw"
   ],
   "382": [
+    "summer",
     "wildlife"
   ],
   "383": [
@@ -1000,6 +1030,7 @@
     "silhouette"
   ],
   "388": [
+    "autumn",
     "nature"
   ],
   "389": [
@@ -1010,7 +1041,8 @@
     "architecture"
   ],
   "390": [
-    "nature"
+    "nature",
+    "spring"
   ],
   "392": [
     "portrait"
@@ -1057,14 +1089,16 @@
     "urban"
   ],
   "409": [
-    "nature"
+    "nature",
+    "spring"
   ],
   "41": [
     "portrait",
     "bw"
   ],
   "410": [
-    "nature"
+    "nature",
+    "spring"
   ],
   "411": [
     "nature"
@@ -1131,7 +1165,8 @@
     "wildlife"
   ],
   "43": [
-    "landscape"
+    "landscape",
+    "summer"
   ],
   "430": [
     "landscape",
@@ -1141,12 +1176,14 @@
     "landscape"
   ],
   "432": [
-    "landscape"
+    "landscape",
+    "summer"
   ],
   "433": [
     "portrait"
   ],
   "434": [
+    "autumn",
     "silhouette"
   ],
   "435": [
@@ -1187,7 +1224,8 @@
     "wildlife"
   ],
   "448": [
-    "nature"
+    "nature",
+    "winter"
   ],
   "449": [],
   "45": [
@@ -1231,7 +1269,8 @@
   ],
   "461": [],
   "462": [
-    "landscape"
+    "landscape",
+    "spring"
   ],
   "464": [
     "bw"
@@ -1252,9 +1291,12 @@
   "469": [
     "portrait"
   ],
-  "47": [],
+  "47": [
+    "spring"
+  ],
   "470": [
-    "landscape"
+    "landscape",
+    "summer"
   ],
   "471": [
     "bw"
@@ -1320,16 +1362,19 @@
     "bw"
   ],
   "58": [
-    "nature"
+    "nature",
+    "spring"
   ],
   "59": [
     "nature"
   ],
   "6": [
-    "landscape"
+    "landscape",
+    "winter"
   ],
   "60": [
-    "nature"
+    "nature",
+    "spring"
   ],
   "61": [
     "abandoned",
@@ -1347,7 +1392,8 @@
     "urban"
   ],
   "65": [
-    "landscape"
+    "landscape",
+    "summer"
   ],
   "66": [
     "wildlife"
@@ -1382,6 +1428,7 @@
     "winter"
   ],
   "74": [
+    "autumn",
     "urban"
   ],
   "75": [
@@ -1439,7 +1486,8 @@
     "urban"
   ],
   "9": [
-    "landscape"
+    "landscape",
+    "summer"
   ],
   "90": [
     "urban"
@@ -1521,21 +1569,37 @@
   "482": [],
   "483": [],
   "484": [],
-  "485": [],
-  "486": [],
-  "487": [],
-  "488": [],
-  "489": [],
+  "485": [
+    "summer"
+  ],
+  "486": [
+    "summer"
+  ],
+  "487": [
+    "summer"
+  ],
+  "488": [
+    "summer"
+  ],
+  "489": [
+    "summer"
+  ],
   "490": [],
-  "491": [],
+  "491": [
+    "spring"
+  ],
   "492": [],
   "493": [],
-  "494": [],
+  "494": [
+    "summer"
+  ],
   "495": [],
   "496": [],
   "497": [],
   "498": [],
-  "499": [],
+  "499": [
+    "summer"
+  ],
   "500": [
     "portrait"
   ],
@@ -1591,7 +1655,8 @@
     "nature"
   ],
   "518": [
-    "nature"
+    "nature",
+    "spring"
   ],
   "519": [
     "nature"
@@ -1615,7 +1680,8 @@
     "portrait"
   ],
   "526": [
-    "portrait"
+    "portrait",
+    "summer"
   ],
   "527": [
     "portrait"
@@ -1697,7 +1763,8 @@
     "silhouette"
   ],
   "549": [
-    "portrait"
+    "portrait",
+    "summer"
   ],
   "550": [
     "portrait"
@@ -1721,7 +1788,8 @@
     "urban"
   ],
   "556": [
-    "landscape"
+    "landscape",
+    "summer"
   ],
   "557": [
     "wildlife"
@@ -1730,10 +1798,12 @@
     "wildlife"
   ],
   "559": [
-    "landscape"
+    "landscape",
+    "summer"
   ],
   "560": [
-    "landscape"
+    "landscape",
+    "summer"
   ],
   "561": [
     "architecture"
@@ -1752,6 +1822,7 @@
     "nature"
   ],
   "566": [
+    "autumn",
     "nature"
   ],
   "567": [
@@ -1857,6 +1928,7 @@
     "nature"
   ],
   "602": [
+    "summer",
     "wildlife"
   ],
   "603": [
@@ -1880,12 +1952,14 @@
   ],
   "609": [
     "nature",
+    "spring",
     "wildlife"
   ],
   "610": [
     "wildlife"
   ],
   "611": [
+    "summer",
     "wildlife"
   ],
   "612": [
@@ -1901,7 +1975,8 @@
     "wildlife"
   ],
   "616": [
-    "nature"
+    "nature",
+    "spring"
   ],
   "617": [
     "wildlife"
@@ -1910,6 +1985,7 @@
     "wildlife"
   ],
   "619": [
+    "spring",
     "wildlife"
   ],
   "620": [
@@ -1949,7 +2025,8 @@
     "architecture"
   ],
   "632": [
-    "nature"
+    "nature",
+    "summer"
   ],
   "633": [
     "abandoned",
@@ -2010,12 +2087,15 @@
     "wildlife"
   ],
   "652": [
+    "autumn",
     "portrait"
   ],
   "653": [
+    "autumn",
     "portrait"
   ],
   "654": [
+    "autumn",
     "portrait"
   ],
   "655": [
@@ -2056,6 +2136,7 @@
     "silhouette"
   ],
   "666": [
+    "autumn",
     "silhouette"
   ],
   "667": [
@@ -2090,6 +2171,7 @@
     "portrait"
   ],
   "677": [
+    "autumn",
     "portrait"
   ],
   "678": [
@@ -2165,12 +2247,15 @@
     "urban"
   ],
   "698": [
+    "autumn",
     "wildlife"
   ],
   "699": [
+    "autumn",
     "wildlife"
   ],
   "700": [
+    "autumn",
     "nature"
   ],
   "701": [
@@ -2180,6 +2265,7 @@
     "urban"
   ],
   "702": [
+    "autumn",
     "nature"
   ],
   "703": [
@@ -2189,6 +2275,7 @@
     "architecture"
   ],
   "705": [
+    "autumn",
     "wildlife"
   ],
   "706": [
@@ -2234,7 +2321,8 @@
   ],
   "719": [
     "portrait",
-    "silhouette"
+    "silhouette",
+    "summer"
   ],
   "720": [
     "portrait"
@@ -2260,6 +2348,7 @@
   ],
   "726": [
     "architecture",
+    "autumn",
     "urban"
   ],
   "727": [
