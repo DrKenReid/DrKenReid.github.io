@@ -205,3 +205,45 @@ test('prerender rules cover posts and never drafts', () => {
     assert.ok(text.includes('"/blog/*"'));
     assert.ok(text.includes('{"not":{"href_matches":"/blog/drafts/*"}}'));
 });
+
+test('KR_SEASONS: every season is well formed and no two windows overlap', () => {
+    const keys = new Set();
+    const days = new Map();
+    for (const s of rt.KR_SEASONS) {
+        assert.match(s.key, /^[a-z-]+$/, s.key);
+        assert.ok(!keys.has(s.key), `duplicate season ${s.key}`);
+        keys.add(s.key);
+        assert.ok(s.label, `${s.key} needs a label`);
+        for (const end of [s.from, s.to]) {
+            assert.ok(end[0] >= 1 && end[0] <= 12 && end[1] >= 1 && end[1] <= 31, `${s.key}: ${end}`);
+        }
+        if (s.photoTags) {
+            const known = rt.KR_PHOTO_CATEGORIES.map(c => c.key);
+            for (const tag of s.photoTags) assert.ok(known.includes(tag), `${s.key}: unknown photo tag ${tag}`);
+        }
+        if (s.subject) {
+            assert.ok(!rt.KR_PHOTO_CATEGORIES.some(c => c.key === s.subject.key),
+                `${s.key}: its subject ${s.subject.key} would shadow a stored tag`);
+        }
+        // A leap year, so 29 February is a day too.
+        for (let d = new Date(2028, 0, 1); d.getFullYear() === 2028; d.setDate(d.getDate() + 1)) {
+            if (rt.krSeasonOnDate(new Date(d)) !== s) continue;
+            const day = `${d.getMonth() + 1}-${d.getDate()}`;
+            if (days.has(day)) assert.fail(`${s.key} and ${days.get(day)} both claim ${day}`);
+            days.set(day, s.key);
+        }
+    }
+});
+
+test('krSeasonOnDate: Halloween runs 17 October to 1 November, both included', () => {
+    const on = (m, d) => (rt.krSeasonOnDate(new Date(2026, m - 1, d)) || {}).key || null;
+    assert.equal(on(10, 16), null);
+    assert.equal(on(10, 17), 'halloween');
+    assert.equal(on(10, 31), 'halloween');
+    assert.equal(on(11, 1), 'halloween');
+    assert.equal(on(11, 2), null);
+});
+
+test('krSeason: the runtime has no season, whatever the date', () => {
+    assert.equal(rt.krSeason(), null);
+});

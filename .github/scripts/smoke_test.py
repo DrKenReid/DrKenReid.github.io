@@ -179,6 +179,21 @@ without one class), and the pin seen to fail.
                             on accent-washed cards, rating stars, Leaflet's
                             attribution in the dark theme, captions faded
                             with opacity).
+  check_season              A season (KR_SEASONS) dresses the site without
+                            getting in the way: the Halloween decorations
+                            appear on a page, a post, the 404 page and the
+                            homepage in both themes, every one aria-hidden
+                            and taking no clicks (bar the spider and the
+                            pumpkins, which drop and puff smoke, silently
+                            unless ?spooky-sounds=on), none over the post's
+                            text, and no console error; the post's candle
+                            burns with its reading bar; fog only in the dark;
+                            the photo map is haunted in a few places; the
+                            gallery's seasonal subject leads its row; reduced
+                            motion sends no bat and no smoke; ?season=off
+                            takes it all away. Every other
+                            check runs with no season (harness.set_season),
+                            so none of them changes on 17 October.
   check_live_classes        No rule is missing from style.min.css for a class
                             a live page uses (the pruner cannot see classes
                             assembled at runtime; the hero's bounceInDown
@@ -222,8 +237,8 @@ from audit_site import EXEMPT_PAGES  # noqa: E402
 from harness import (OPENER_COLOURS, ROOT, THEMES, Reporter,  # noqa: E402
                      contrast_ratio, describe_overflow,
                      element_overflow, is_own, next_frames, open_ahead,
-                     own_errors, relative_luminance, serve, set_theme,
-                     site_context, watch_console)
+                     own_errors, relative_luminance, serve, set_season,
+                     set_theme, site_context, watch_console)
 
 # 0 lets the OS pick a free port, so two runs (CI and a local one, or two
 # people) never collide. Set a number only to reach the server by hand.
@@ -2948,6 +2963,159 @@ def check_live_classes(tokens, rep):
               not lost, detail)
 
 
+# What every page shows in season: its decorations, all of them
+# decoration (aria-hidden, no pointer events), and the colour switch.
+SEASON_STATE = """() => {
+    const decor = [...document.querySelectorAll('.kr-season-web, .kr-season-leaves, .kr-season-patch, .kr-season-bat, '
+        + '.kr-season-candle, .kr-season-fog, .kr-season-ghost')];
+    const fog = document.querySelector('.kr-season-fog');
+    return {
+        season: document.documentElement.dataset.season || null,
+        webs: document.querySelectorAll('.kr-season-web').length,
+        leaves: document.querySelectorAll('.kr-season-leaves').length,
+        patch: !!document.querySelector('.kr-footer .kr-season-patch'),
+        candle: !!document.querySelector('.kr-season-candle'),
+        fog: fog ? getComputedStyle(fog).display : null,
+        loud: decor.filter(el => el.getAttribute('aria-hidden') !== 'true'
+            || getComputedStyle(el).pointerEvents !== 'none').map(el => el.className),
+    };
+}"""
+
+
+def check_season(browser, base, rep):
+    """The Halloween season, shown on purpose (see the module docstring)."""
+    posts = json.loads((ROOT / "data" / "posts.json").read_text(encoding="utf-8"))
+    post = next(p["url"] for p in posts if p.get("url", "").startswith("blog/"))
+    for theme in THEMES:
+        context = site_context(browser, base, theme=theme)
+        set_season(context, "halloween")
+        for path, ready in (("about.html", "true"), (post, "true"), ("404.html", "true"),
+                            ("index.html", "true")):
+            scope = f"season {path} {theme}"
+            page, sink = open_page(context, base, path, rep, scope,
+                                   "!!document.querySelector('.kr-season-patch')")
+            if not page:
+                continue
+            state = page.evaluate(SEASON_STATE)
+            rep.check(scope, "html carries data-season", state["season"] == "halloween", state)
+            rep.check(scope, "a cobweb, leaves and the pumpkin patch",
+                      state["webs"] >= 1 and state["leaves"] >= 1 and state["patch"], state)
+            rep.check(scope, "every decoration is aria-hidden and takes no clicks",
+                      not state["loud"], state["loud"])
+            if path == post:
+                over = page.evaluate("""() => {
+                    const text = document.querySelector('.blog-post');
+                    if (!text) return ['no .blog-post'];
+                    const t = text.getBoundingClientRect();
+                    return [...document.querySelectorAll('.kr-season-web, .kr-season-leaves, .kr-season-patch')]
+                        .filter(el => getComputedStyle(el).display !== 'none')
+                        .filter(el => { const r = el.getBoundingClientRect();
+                            return r.width && r.left < t.right && r.right > t.left
+                                && r.top < t.bottom && r.bottom > t.top; })
+                        .map(el => el.className);
+                }""")
+                rep.check(scope, "no decoration over the post's text", not over, over)
+            if path == post:
+                burn = page.evaluate("""async () => {
+                    const bar = document.querySelector('.kr-progress-bar');
+                    const candle = document.querySelector('.kr-season-candle');
+                    if (!bar || !candle) return { missing: true };
+                    bar.style.transform = 'scaleX(0.5)';
+                    await new Promise(r => setTimeout(r, 50));
+                    return { bar: getComputedStyle(bar).visibility,
+                             wax: candle.querySelector('.kr-season-candle__wax').style.transform };
+                }""")
+                rep.check(scope, "the candle stands in for the reading bar and burns with it",
+                          burn.get("bar") == "hidden" and burn.get("wax") == "scaleX(0.5)", burn)
+            if path == "index.html":
+                want = "block" if theme == "dark" else "none"
+                rep.check(scope, f"fog under the hero, shown only in the dark ({want})",
+                          state["fog"] == want, state["fog"])
+            if path == "about.html":
+                toys = page.evaluate("""() => {
+                    const pumpkin = document.querySelector('.kr-season-patch > span');
+                    const spider = document.querySelector('.kr-season-spider');
+                    pumpkin.click();
+                    spider.click();
+                    return { smoke: !!pumpkin.querySelector('.kr-season-smoke'),
+                             drop: spider.classList.contains('kr-season-spider--drop'),
+                             sounds: performance.getEntriesByType('resource')
+                                 .filter(e => e.name.includes('/sounds/')).length };
+                }""")
+                rep.check(scope, "a pumpkin puffs smoke and the spider drops when clicked, in silence",
+                          toys["smoke"] and toys["drop"] and not toys["sounds"], toys)
+            if path == "404.html":
+                title = page.evaluate("document.querySelector('.page-title').textContent")
+                rep.check(scope, "the 404 page is haunted", title == "This Page Has Passed Over", title)
+            rep.console_errors(scope, sink)
+            page.close()
+        context.close()
+
+    context = site_context(browser, base)
+    set_season(context, "halloween")
+    scope = "season gallery.html"
+    page, sink = open_page(context, base, "gallery.html?tag=spooky", rep, scope,
+                           "document.querySelectorAll('#gallery-filters .gallery-filter-btn').length >= 3")
+    if page:
+        pills = page.evaluate("[...document.querySelectorAll('#gallery-filters .gallery-filter-btn')]"
+                              ".map(b => [b.textContent.trim(), b.getAttribute('aria-pressed')])")
+        rep.check(scope, "Spooky leads the subject row, pressed",
+                  len(pills) > 1 and pills[1][0].startswith("Spooky") and pills[1][1] == "true", pills[:3])
+        page.close()
+    scope = "season map.html"
+    page, sink = open_page(context, base, "map.html", rep, scope,
+                           "!!document.querySelector('#photo-map .kr-season-ghost')")
+    if page:
+        haunt = page.evaluate("""() => ({
+            pins: document.querySelectorAll('#photo-map .kr-map-pin').length,
+            ghosts: document.querySelectorAll('#photo-map .kr-season-ghost').length,
+            dusk: getComputedStyle(document.querySelector('#photo-map .leaflet-layer')).filter })""")
+        rep.check(scope, "the map is dusked and a few places are haunted",
+                  0 < haunt["ghosts"] < haunt["pins"] / 2 and haunt["dusk"] != "none", haunt)
+        rep.console_errors(scope, sink)
+        page.close()
+    scope = "season sounds"
+    page, sink = open_page(context, base, "about.html?spooky-sounds=on", rep, scope,
+                           "!!document.querySelector('.kr-season-patch')")
+    if page:
+        with page.expect_request(lambda r: "/sounds/" in r.url, timeout=5000) as asked:
+            page.evaluate("document.querySelector('.kr-season-patch > span').click()")
+        rep.check(scope, "with sounds on, a pumpkin plays a recording", asked.value.url.endswith(".mp3"),
+                  asked.value.url)
+        rep.check(scope, "the switch leaves the address", "spooky-sounds" not in page.url, page.url)
+        page.close()
+    page, sink = open_page(context, base, "about.html?spooky-sounds=off", rep, scope, "true")
+    if page:
+        rep.check(scope, "?spooky-sounds=off clears it",
+                  page.evaluate("localStorage.getItem('kr-season-sound')") is None)
+        page.close()
+    page, sink = open_page(context, base, "about.html?season=off", rep, "season off", "true")
+    if page:
+        state = page.evaluate(SEASON_STATE)
+        rep.check("season off", "?season=off takes the season away",
+                  state["season"] is None and not state["webs"], state)
+        page.close()
+    context.close()
+
+    context = site_context(browser, base, reduced_motion="reduce")
+    set_season(context, "halloween")
+    scope = "season reduced motion"
+    page, sink = open_page(context, base, "about.html", rep, scope,
+                           "!!document.querySelector('.kr-season-patch')")
+    if page:
+        page.evaluate("window.scrollTo({top: document.documentElement.scrollHeight, behavior: 'instant'})")
+        page.wait_for_timeout(600)
+        rep.check(scope, "no bat flies", not page.evaluate("!!document.querySelector('.kr-season-bat')"))
+        still = page.evaluate("""() => {
+            const pumpkin = document.querySelector('.kr-season-patch > span');
+            pumpkin.click();
+            return !pumpkin.querySelector('.kr-season-smoke');
+        }""")
+        rep.check(scope, "a clicked pumpkin puffs no smoke", still)
+        page.close()
+    context.close()
+
+
 def run_pins(browser, base, rep):
     """Every regression pin, in the order the module docstring lists them."""
     check_opener_colours(browser, base, rep)
@@ -2977,6 +3145,7 @@ def run_pins(browser, base, rep):
     check_desktop_geometry(browser, base, rep)
     check_contrast(browser, base, rep)
     check_fill_contrast(browser, base, rep)
+    check_season(browser, base, rep)
 
 
 # The suite's parts, in running order, for --only. "classes" judges what

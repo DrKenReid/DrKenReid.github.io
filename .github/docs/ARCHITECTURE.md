@@ -210,6 +210,53 @@ menu and its focus handling, `window.krNavMenu`, the sticky state);
 | Prerendered posts | about 200ms of hover on a post card, desktop only, never under Save-Data | `krArmPostPrerender` and `KR_PRERENDER_RULES` |
 | The palette's data | first open | `js/palette.js` |
 | Gallery tiles | a batch at a time as the reader scrolls | `js/gallery.js` |
+| Seasonal decorations | only while a season is on (see "Seasons") | `js/shared-components.js` loads `js/season.js` |
+
+## Seasons
+
+A season is a stretch of the calendar when the site dresses up: Halloween
+runs 17 October to 1 November. `KR_SEASONS` in `js/shared-components.js`
+holds each one (its key, label and dates, both ends included, and
+optionally the photo tags its frames come from, a gallery subject of its
+own, the palette's random frame and the homepage headline's words and
+colours). `krSeason()` says which is on, from the reader's local date.
+
+While one is on, `<html>` carries `data-season="<key>"`, which switches
+the colour blocks in `style.css` §01 ("Seasons"), and `js/season.js` is
+fetched to add the decorations (§21, "Seasonal decorations"). The rest of
+the year that file is never requested. Every decoration is `aria-hidden`,
+takes no focus, keeps off post text, the gallery, the lightbox and the
+slideshow, is dropped in print and holds still under reduced motion.
+Only Halloween's spider and pumpkins take clicks: the spider drops down
+its thread, a pumpkin puffs smoke. Halloween also burns a candle in place
+of a post's reading bar (which still measures, hidden), lays fog under
+the homepage hero and the gallery's opener in the dark theme, and haunts
+the photo map (pumpkin rims, dusked tiles, a ghost where at least three
+frames and 30% of a place's frames are tagged `abandoned`).
+
+A clicked pumpkin can also play a recording from `sounds/` (an owl, a
+creak, wolves; public domain, credited on the colophon beside the
+slideshow's sounds). Sounds are off until the reader asks:
+`?spooky-sounds=on` stores `kr-season-sound` on the device and
+`?spooky-sounds=off` clears it, both taken out of the address, and the
+palette offers whichever applies. A recording is fetched only when it
+first plays.
+`season.js` checks that the stylesheet knows its classes before adding
+anything, so a stylesheet cached from before a season's rules shows no
+half-styled decorations.
+
+The address can override the date, once (it is stored and taken out of
+the address): `?season=<key>` previews a season in this tab,
+`?season=none` turns seasons off in this tab, and `?season=off` turns
+them off on this device until `?season=on`. The palette offers off and
+on in season. The checks always run with no season
+(`harness.set_season`, and `tests/js/runtime.js`), except the smoke pin
+`check_season`, which shows Halloween on purpose.
+
+To add a season: an entry in `KR_SEASONS` (the node tests refuse an
+overlap with another window), its colour blocks in §01 for both themes
+(the contrast test measures them), its decorations in `season.js` keyed
+on its key, their styles in §21, and a pin like `check_season`.
 
 ## The generators
 
@@ -337,6 +384,7 @@ checks that. (The essay:
 | The interactive demo engine | `js/kr-viz.js`, CSS in §12 | `viz_verify.py`, smoke suite |
 | Offline behaviour | `sw.js` (bump `VERSION` when caching changes) | `perf_budget.py` (the offline scenario) |
 | Theme toggle | `js/theme.js`, the inline head script on every page | smoke suite |
+| A season (Halloween) | `KR_SEASONS` in `js/shared-components.js`, `js/season.js`, CSS in §01 and §21 (see "Seasons") | `js-tests`, `tests/test_contrast.py`, smoke `check_season` |
 | Analytics | `js/analytics.js` (`GA_ID`) | audit |
 | Anything a check enforces | the check, and the doc that describes the rule | `run_checks.py` |
 

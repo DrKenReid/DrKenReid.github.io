@@ -4,8 +4,8 @@
  * A (1+1) evolution strategy: hold one candidate picture made of
  * translucent triangles, mutate a copy, keep the copy only if it matches
  * the target better, repeat. The target is the words "Hi, I'm Ken."
- * rendered offscreen, so the headline emerges out of noise rather than
- * being drawn. Same family of algorithm as the Evolution, Live post, cut
+ * (or a season's own, such as "Boo.") rendered offscreen, so the
+ * headline emerges out of noise rather than being drawn. Same family of algorithm as the Evolution, Live post, cut
  * down to something that belongs in a hero: no controls, no population
  * grid, no chart.
  *
@@ -35,12 +35,16 @@
     var EVALS_PER_FRAME = 170;
     var STALL_LIMIT = 1800;       // evaluations with no improvement = converged
     var REPLAY_DELAY = 420;       // ms after the slide arrives before restarting
-    var TEXT = "Hi, I'm Ken.";
+    // A season (krSeason() in shared-components.js) can swap the words
+    // and the ramp: "Boo." in pumpkin and violet at Halloween. The hidden
+    // heading keeps the greeting either way.
+    var SEASON = typeof krSeason === 'function' ? krSeason() : null;
+    var TEXT = (SEASON && SEASON.heroText) || "Hi, I'm Ken.";
 
     // Endpoints of --kr-photo-gradient. Colour is not evolved, only mixed
     // along this ramp, which keeps the result on-palette and drops three
     // dimensions out of the search.
-    var RAMP = [[255, 150, 150], [255, 232, 158]];
+    var RAMP = (SEASON && SEASON.heroRamp) || [[255, 150, 150], [255, 232, 158]];
 
     function mix(t) {
         return [

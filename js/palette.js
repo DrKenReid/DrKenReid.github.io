@@ -300,8 +300,69 @@
                     { text: pl.name, weight: WEIGHT.name, title: true }
                 ]);
         }
+        seasonEntries(add, out);
         entries = out;
         return out;
+    }
+
+    // A season's entries (KR_SEASONS in shared-components.js): its photos
+    // as a gallery subject, a random one of them ("Trick or treat", from
+    // the frames js/season.js lists in krSeasonTreats), and the switch for
+    // its decorations, which reloads this page with ?season=off or on
+    // (an entry's `treat` names the random one).
+    // Outside a season's dates there are none; on its dates with the
+    // decorations off, only the switch back on.
+    function seasonEntries(add, out) {
+        if (typeof krSeasonOnDate !== 'function') return;
+        const season = krSeason();
+        const dated = krSeasonOnDate(new Date());
+        const words = (s) => `${s.label.toLowerCase()} seasonal decorations theme`;
+        const toggle = (title, sub, flag, s) => {
+            out.push({ id: optionId('Season', flag, out), kind: 'Season', title, sub,
+                href: window.location.pathname + '?season=' + flag + window.location.hash,
+                fields: [
+                    { text: title, weight: WEIGHT.title, title: true },
+                    { text: words(s), weight: WEIGHT.tag }
+                ] });
+        };
+        if (!season) {
+            if (dated && krSeasonsOff()) {
+                toggle(`Turn on ${dated.label} decorations`, 'Seasonal look, on this device', 'on', dated);
+            }
+            return;
+        }
+        if (season.subject) {
+            add('Photos', `${season.subject.label} photos`, `Gallery filter, for ${season.label}`,
+                `gallery.html?tag=${encodeURIComponent(season.subject.key)}`, [
+                    { text: season.subject.label, weight: WEIGHT.name, title: true },
+                    { text: words(season), weight: WEIGHT.tag }
+                ]);
+        }
+        const treats = window.krSeasonTreats || [];
+        if (season.treat && treats.length) {
+            const stem = treats[Math.floor(Math.random() * treats.length)];
+            add('Season', season.treat.title, season.treat.sub, `gallery.html?photo=${encodeURIComponent(stem)}`, [
+                { text: season.treat.title, weight: WEIGHT.title, title: true },
+                { text: `${season.treat.also} random photo ${words(season)}`, weight: WEIGHT.tag }
+            ]);
+        }
+        // Sounds for the pumpkins' clicks (season.js), off until asked for.
+        if (window.krSeasonSounds) {
+            const on = window.krSeasonSounds.on();
+            const title = `Turn ${on ? 'off' : 'on'} ${season.label} sounds`;
+            out.push({ id: optionId('Season', 'sounds', out), kind: 'Season', title,
+                sub: on ? 'Pumpkins go quiet, on this device' : 'Click a pumpkin to hear it, on this device',
+                href: window.location.pathname + '?spooky-sounds=' + (on ? 'off' : 'on') + window.location.hash,
+                fields: [
+                    { text: title, weight: WEIGHT.title, title: true },
+                    { text: `${words(season)} sound audio noise owl wolf creak`, weight: WEIGHT.tag }
+                ] });
+        }
+        if (season === dated) {
+            toggle(`Turn off ${season.label} decorations`, 'Seasonal look, on this device', 'off', season);
+        } else {
+            toggle(`End the ${season.label} preview`, 'Back to the usual look', 'on', season);
+        }
     }
 
     // Derived from the destination, not the position in the list, so an

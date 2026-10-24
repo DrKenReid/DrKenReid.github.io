@@ -71,7 +71,9 @@
  *   the header while the grid scrolls (style.css). A row shows its
  *   PILLS_SHOWN largest pills and keeps the rest behind "+N more", and
  *   counts and lists only what the other filters leave, so every pill on
- *   screen narrows the grid to something.
+ *   screen narrows the grid to something. In a season that names photo
+ *   tags (KR_SEASONS), its own subject leads the row: "Spooky" at
+ *   Halloween is every abandoned or silhouette frame.
  *
  * Deep links
  *   ?tag=<subject>, ?place=<place key> and ?shape=<orientation> open with
@@ -174,6 +176,16 @@ var lastRowWidth = 0;
 // table for its "photos" entries.
 var CATEGORIES = {};
 KR_PHOTO_CATEGORIES.forEach(function(cat) { CATEGORIES[cat.key] = cat; });
+// In a season that names one (krSeason() in shared-components.js), a
+// subject of its own: every frame carrying any of the season's tags
+// ("Spooky" at Halloween), offered first.
+var SEASON_SUBJECT = null;
+(function() {
+    var season = typeof krSeason === 'function' ? krSeason() : null;
+    if (!season || !season.subject || !season.photoTags) return;
+    SEASON_SUBJECT = season.subject.key;
+    CATEGORIES[SEASON_SUBJECT] = { key: SEASON_SUBJECT, label: season.subject.label, tags: season.photoTags };
+})();
 
 function compareFileNames(a, b) {
     return b.localeCompare(a, undefined, {numeric: true, sensitivity: 'base'});
@@ -390,7 +402,8 @@ function startGallery() {
 function slideshowFilters() {
     var node = placeNodes[activePlace];
     return {
-        tag: activeCat === '*' ? '' : activeCat,
+        // The slideshow knows the stored subjects only, not a season's.
+        tag: activeCat === '*' || activeCat === SEASON_SUBJECT ? '' : activeCat,
         place: node && !node.children.length && node.regions.length === 1 ? node.regions[0] : ''
     };
 }
@@ -432,8 +445,9 @@ function bindLoadMoreButton() {
 
 // A tile has a subject when any of its edits has it.
 function hasTag(filename, cat) {
+    var wanted = (CATEGORIES[cat] && CATEGORIES[cat].tags) || [cat];
     return editsFor(stemOf(filename)).some(function(stem) {
-        return (photoTags[stem] || []).indexOf(cat) !== -1;
+        return (photoTags[stem] || []).some(function(tag) { return wanted.indexOf(tag) !== -1; });
     });
 }
 
@@ -494,11 +508,16 @@ function buildFilterButtons() {
         Object.keys(tags).forEach(function(tag) {
             counts[tag] = (counts[tag] || 0) + 1;
         });
+        if (SEASON_SUBJECT && hasTag(filename, SEASON_SUBJECT)) {
+            counts[SEASON_SUBJECT] = (counts[SEASON_SUBJECT] || 0) + 1;
+        }
     });
 
     var items = Object.keys(CATEGORIES)
         .filter(function(cat) { return counts[cat] || cat === activeCat; })
-        .sort(function(a, b) { return (counts[b] || 0) - (counts[a] || 0); })
+        .sort(function(a, b) {
+            return (b === SEASON_SUBJECT) - (a === SEASON_SUBJECT) || (counts[b] || 0) - (counts[a] || 0);
+        })
         .map(function(cat) {
             return {
                 key: cat,

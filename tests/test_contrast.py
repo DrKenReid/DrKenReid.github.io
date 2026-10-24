@@ -130,6 +130,36 @@ class TokenContrast(unittest.TestCase):
                 with self.subTest(theme=name, token=token):
                     self.assertIn(token, props)
 
+    def test_seasons_clear_aa(self):
+        # A season (html[data-season], style.css §01 "Seasons") lays its
+        # own block over each theme. The text tokens must still clear, and
+        # so must both ends of its brand gradient: the gradient is heading
+        # type, and its start is the solid fallback without clip support.
+        sheet = check_css.parse_css(STYLE.read_text(encoding="utf-8"))
+        keys = sorted(set(re.findall(r':root\[data-season="([\w-]+)"\]', STYLE.read_text(encoding="utf-8"))))
+        self.assertTrue(keys, "no season blocks found in style.css")
+        for key in keys:
+            own = check_css.custom_property_values(sheet, f':root[data-season="{key}"]')
+            own_dark = check_css.custom_property_values(
+                sheet, f':root[data-theme="dark"][data-season="{key}"]')
+            for name, (props, surfaces) in self.themes.items():
+                seasoned = {**props, **own, **(own_dark if name == "dark" else {})}
+                for token in TEXT_TOKENS + ("--kr-brand-from", "--kr-brand-to"):
+                    if token not in seasoned:
+                        continue
+                    fg = parse_colour(check_css.resolve(seasoned[token], seasoned))
+                    for surface, value in surfaces.items():
+                        try:
+                            bg = parse_colour(check_css.resolve(value, seasoned))
+                        except ValueError:
+                            continue
+                        with self.subTest(season=key, theme=name, token=token, on=surface):
+                            ratio = contrast(fg, bg)
+                            self.assertGreaterEqual(
+                                round(ratio, 2), AA,
+                                f"{token} is {ratio:.2f}:1 on {surface} in the {name} "
+                                f"theme at {key}")
+
     def test_contrast_arithmetic(self):
         # Reference values: black on white is 21:1, and #767676 on white
         # is the well-known 4.54:1.

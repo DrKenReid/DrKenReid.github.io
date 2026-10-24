@@ -238,11 +238,29 @@ def set_theme(context, theme):
     prefers-color-scheme (dark is its default), so color_scheme on the
     context is not a substitute. Init scripts accumulate on a context, so
     use one context per theme rather than switching one back and forth.
+    It also turns any season off (set_season).
     """
     if theme not in THEMES:
         raise ValueError(f"theme must be one of {THEMES}, not {theme!r}")
     context.add_init_script(
         f"try {{ localStorage.setItem('kr-theme', '{theme}'); }} catch (e) {{}}")
+    set_season(context)
+
+
+def set_season(context, season="none"):
+    """Open every page in `context` in `season`: "none" (the default) for
+    no season whatever the date, or a KR_SEASONS key (shared-components.js)
+    to show that one.
+
+    A season changes the brand colours, swaps the homepage's evolving
+    headline and adds decorations (js/season.js), so a check that measured
+    the site on 31 October would measure something else on 1 November.
+    Seeds sessionStorage['kr-season-preview'], which krSeason() reads
+    before the date. set_theme and site_context call this, so a check gets
+    no season unless it asks for one.
+    """
+    context.add_init_script(
+        f"try {{ sessionStorage.setItem('kr-season-preview', '{season}'); }} catch (e) {{}}")
 
 
 def block_third_parties(context, base):
@@ -274,6 +292,8 @@ def site_context(browser, base, theme="dark", size=(1280, 900), **kw):
     context = browser.new_context(service_workers="block", **kw)
     if theme:
         set_theme(context, theme)
+    else:
+        set_season(context)
     block_third_parties(context, base)
     return context
 

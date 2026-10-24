@@ -14,6 +14,10 @@
  * context, as a page loads them (palette.js for its search). The
  * document reports itself still loading, so a script that waits for
  * DOMContentLoaded to build its DOM waits for ever and builds none.
+ *
+ * No season is on (sessionStorage says 'none', as the browser checks'
+ * set_season does), so a suite run on 31 October sees the site it sees
+ * on any other day; the season tests call krSeasonOnDate with dates.
  */
 'use strict';
 
@@ -49,9 +53,15 @@ function loadRuntime(pathname = '/index.html', scripts = []) {
         location: { pathname, hostname: 'www.kenreid.co.uk', protocol: 'https:', search: '' },
         requestAnimationFrame: noop,
     };
+    const store = (seed) => ({
+        getItem: (k) => (k in seed ? seed[k] : null),
+        setItem: (k, v) => { seed[k] = String(v); },
+        removeItem: (k) => { delete seed[k]; },
+    });
     const context = vm.createContext({
         window, document, navigator: {}, location: window.location,
         console, URL, URLSearchParams, setTimeout, clearTimeout, Promise,
+        sessionStorage: store({ 'kr-season-preview': 'none' }), localStorage: store({}),
     });
     window.document = document;
     for (const name of ['shared-components.js', ...scripts]) {

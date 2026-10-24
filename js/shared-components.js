@@ -78,6 +78,10 @@
  *   krEscapeHtml(s), krBookTitle(t), krParsePostDate(s), formatPostDate(s),
  *   krCopyText(t, cb), krIsMac(), krLabelModKeys(scope), krOnScroll(fn),
  *   KR_RELEASE, KR_PHOTO_CATEGORIES, KR_TAGLINE, DEFAULT_POST_IMAGE
+ *
+ * Seasons (below; the decorations are js/season.js)
+ *   KR_SEASONS, krSeason(), krSeasonOnDate(d), krSeasonByKey(k),
+ *   krSeasonsOff(), krPhotoPool()   the frames the strip and 404 draw from
  */
 
 // .kr-js on <html> says script is running. A style that hides something
@@ -86,6 +90,100 @@
 // sees the content. Section headings animate in on scroll through CSS
 // (style.css §05); nothing here reveals elements by class any more.
 document.documentElement.classList.add('kr-js');
+
+/*
+ * Seasons: a stretch of the calendar when the site dresses up. While one
+ * is on, data-season on <html> switches the colours (style.css §01,
+ * "Seasons") and js/season.js, fetched only then, adds the decorations.
+ * The rest of the year a season costs nothing but its rules in style.css.
+ *
+ * krSeason() says which season is on, if any. The reader's local date
+ * decides, both ends of a window included, unless the address said
+ * otherwise once (it is read, stored and taken out of the address):
+ *   ?season=<key>   show that season on any day, in this tab
+ *   ?season=none    no season in this tab (the browser checks use it)
+ *   ?season=off     no decorations on this device, until ?season=on
+ * The command palette offers the last two in season.
+ *
+ * Each season can also name the photo tags its frames come from
+ * (photoTags: the photo strip, the 404 page's frame, and a gallery
+ * subject of their own, `subject`; the palette's random one of them,
+ * `treat`) and what the homepage's evolving headline spells and in
+ * which colours (heroText, heroRamp).
+ */
+var KR_SEASONS = [{
+    key: 'halloween',
+    label: 'Halloween',
+    from: [10, 17],
+    to: [11, 1],
+    photoTags: ['abandoned', 'silhouette'],
+    subject: { key: 'spooky', label: 'Spooky' },
+    treat: { title: 'Trick or treat', sub: 'A random spooky photograph', also: 'boo spooky' },
+    heroText: 'Boo.',
+    heroRamp: [[255, 165, 82], [201, 162, 255]]
+}];
+var KR_SEASON_PREVIEW = 'kr-season-preview';   // sessionStorage: a key, or 'none'
+var KR_SEASON_OFF = 'kr-season';               // localStorage: 'off'
+
+function krSeasonByKey(key) {
+    for (var i = 0; i < KR_SEASONS.length; i++) {
+        if (KR_SEASONS[i].key === key) return KR_SEASONS[i];
+    }
+    return null;
+}
+
+/** The season whose window holds `date`, or null. A window may run over
+    the new year (from [12, 20] to [1, 6]). */
+function krSeasonOnDate(date) {
+    var day = (date.getMonth() + 1) * 100 + date.getDate();
+    for (var i = 0; i < KR_SEASONS.length; i++) {
+        var s = KR_SEASONS[i];
+        var from = s.from[0] * 100 + s.from[1];
+        var to = s.to[0] * 100 + s.to[1];
+        if (from <= to ? day >= from && day <= to : day >= from || day <= to) return s;
+    }
+    return null;
+}
+
+function krSeasonsOff() {
+    try { return localStorage.getItem(KR_SEASON_OFF) === 'off'; } catch (e) { return false; }
+}
+
+function krSeason() {
+    var pick = null;
+    try { pick = sessionStorage.getItem(KR_SEASON_PREVIEW); } catch (e) {}
+    if (pick === 'none') return null;
+    if (pick && krSeasonByKey(pick)) return krSeasonByKey(pick);
+    return krSeasonsOff() ? null : krSeasonOnDate(new Date());
+}
+
+(function () {
+    var params = new URLSearchParams(window.location.search);
+    var asked = params.get('season');
+    if (asked !== null) {
+        try {
+            if (asked === 'off' || asked === 'on') {
+                sessionStorage.removeItem(KR_SEASON_PREVIEW);
+                if (asked === 'off') localStorage.setItem(KR_SEASON_OFF, 'off');
+                else localStorage.removeItem(KR_SEASON_OFF);
+            } else if (asked === 'none' || krSeasonByKey(asked)) {
+                sessionStorage.setItem(KR_SEASON_PREVIEW, asked);
+            }
+        } catch (e) {}
+        params.delete('season');
+        var rest = params.toString();
+        try {
+            history.replaceState(history.state, '',
+                window.location.pathname + (rest ? '?' + rest : '') + window.location.hash);
+        } catch (e) {}
+    }
+    var season = krSeason();
+    if (!season) return;
+    document.documentElement.setAttribute('data-season', season.key);
+    var script = document.createElement('script');
+    script.src = siteRootPrefix() + 'js/season.js';
+    document.head.appendChild(script);
+})();
 
 var BLUESKY_SVG = '<svg class="bluesky-icon" viewBox="0 0 568 501" xmlns="http://www.w3.org/2000/svg"><path d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.21C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.842 193.273-185.702 70.281-63.111-64.76-33.889-129.52 80.986-149.071-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.659 0 75.291 0 57.946 0-28.906 76.135-1.612 123.121 33.664z"/></svg>';
 
@@ -287,6 +385,26 @@ function siteRootPrefix() {
 }
 
 /**
+ * The frames the photo strip and the 404 page pick from: the standard
+ * pool, narrowed in a season that names photoTags to the frames carrying
+ * one of them, while that still leaves a strip's worth.
+ */
+function krPhotoPool() {
+    var pool = krFetchJson('data/photography-standard-files.json');
+    var season = krSeason();
+    if (!season || !season.photoTags) return pool;
+    var tags = krFetchJson('data/photo-tags.json').catch(function() { return {}; });
+    return Promise.all([pool, tags]).then(function(found) {
+        var files = Array.isArray(found[0]) ? found[0] : [];
+        var picked = files.filter(function(filename) {
+            var own = found[1][String(filename).replace(/\.[^.]+$/, '')] || [];
+            return own.some(function(tag) { return season.photoTags.indexOf(tag) !== -1; });
+        });
+        return picked.length >= 10 ? picked : files;
+    });
+}
+
+/**
  * The photography strip into #targetId: ten random frames, each a link
  * that opens that photograph in the gallery (gallery.html?photo=<stem>).
  * Instagram stays as the secondary line under the heading rather than
@@ -320,7 +438,7 @@ function renderPhotoStrip(targetId) {
         return copy;
     }
 
-    krFetchJson('data/photography-standard-files.json').then(function(files) {
+    krPhotoPool().then(function(files) {
         var sample = shuffleCopy(Array.isArray(files) ? files : []).slice(0, 10);
         var feed = el.querySelector('.instragram-feed-area');
         if (!feed) return;

@@ -171,7 +171,7 @@
     }).catch(function() {});
 
     // Since you're lost anyway: a random photograph, shown once it loads.
-    krFetchJson('data/photography-standard-files.json').then(function(files) {
+    krPhotoPool().then(function(files) {
       if (!Array.isArray(files) || !files.length) return;
       var pick = String(files[Math.floor(Math.random() * files.length)]);
       var img = document.getElementById('lost-photo');

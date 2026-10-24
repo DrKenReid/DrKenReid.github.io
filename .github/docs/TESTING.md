@@ -231,7 +231,8 @@ node --test "tests/js/*.test.js"                   # the JavaScript tests
   from `run_pins()`, with the bug named in its docstring and in the module
   docstring. Open pages with `site_context` and `open_page`, which abort
   third parties and block the service worker so the page is the page as
-  served.
+  served, with no season whatever the date (`set_season`; call it again
+  with a key to show one).
 - **A page check**: a predicate in the `CHECKS` table at the top of
   `smoke_test.py`, for a page whose interface script builds.
 - **Prove it bites.** Break the fix in the served response with a

@@ -316,6 +316,45 @@
   --kr-rule-strong: color-mix(in srgb, var(--kr-muted) 70%, transparent);
   color-scheme: dark; }
 
+/* --- Seasons -------------------------------------------------------------
+   While a season is on (KR_SEASONS and krSeason() in shared-components.js)
+   <html> carries data-season, and these blocks dress the brand for it.
+   Red stays the colour of a link: only the decoration changes, the
+   gradient and the type over photographs (the bar's wordmark tokens,
+   §04, are restated with them). js/season.js draws the rest
+   (§21, "Seasonal decorations") in the --kr-season-* colours.
+   Halloween: pumpkin into violet. Gradient starts on the page, which the
+   season test holds at 4.5:1 like the text tokens:
+     light  #b4470c  5.11 page, 4.77 tint;  #7a35b0  6.63 page
+     dark   #ffa552  8.91 page, 7.35 raised; #c9a2ff  8.37 page */
+:root[data-season="halloween"] {
+  --kr-brand-from: #b4470c;
+  --kr-brand-to: #7a35b0;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #ffb066;
+  --kr-photo-to: #dcc2ff;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-web: #8f877d;
+  --kr-season-creature: #2b2233;
+  --kr-season-glow: #ffd36b;
+  --kr-season-wax: #f3e7cc;
+  --kr-season-wax-edge: #b89a63;
+  --kr-season-pumpkin: #e5761f;
+  --kr-season-ghost: #f7f5ff;
+  --kr-season-fog-display: none; }
+
+:root[data-theme="dark"][data-season="halloween"] {
+  --kr-brand-from: #ffa552;
+  --kr-brand-to: #c9a2ff;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-creature: #b9a8c9;
+  --kr-season-fog: #cfcbe0;
+  --kr-season-fog-display: block; }
+
 /* Gradient text needs a fallback: without background-clip support,
    transparent text is invisible text. An element whose markup does not
    carry .kr-gradient-text (the end mark, built by script with one class)
@@ -15814,6 +15853,427 @@ html.kr-theme-reveal::view-transition-new(root) {
       scale: 0.96;
       opacity: 0; } } }
 
+/* --- Seasonal decorations ------------------------------------------------
+   Built by js/season.js, which loads only while a season is on (KR_SEASONS
+   in shared-components.js; html[data-season] carries its key). Every
+   piece is aria-hidden and takes no clicks, sits over no post text,
+   gallery tile or slideshow, and goes in print (§23, with the header and
+   footer it lives in). Under reduced motion the switch above stills the
+   spider and the faces, season.js lays the leaves down once and sends no
+   bat.
+   Halloween: a cobweb with a spider on a thread below it, in the header
+   bar's corner on a wide screen and the opener's on a narrower one;
+   leaves falling over the openers and the homepage hero; a pumpkin patch
+   on the footer's top edge; a bat crossing once as the footer arrives; a
+   full moon on the theme button that a bat crosses on hover; a candle for
+   a post's reading bar; fog under the homepage hero and the gallery's
+   opener in the dark theme; the photo map haunted. Only the spider and
+   the pumpkins take clicks (a drop, a puff of smoke), and nothing focus.
+   Classes only script applies: .kr-season-web (--bar, --opener,
+   __strands), .kr-season-spider (--drop, __body, __legs),
+   .kr-season-leaves, .kr-season-patch (__big, __mid, __small),
+   .kr-season-pumpkin, .kr-season-leaf, .kr-season-glow, .kr-season-lit,
+   .kr-season-smoke, .kr-season-bat (__body, __wing, __wing--l,
+   __wing--r), .kr-season-moonbat, .kr-season-candle (__wax, __flame,
+   __fire, __core, --out), .kr-season-candled, .kr-season-fog (__layer,
+   __layer--far), .kr-season-map, .kr-season-ghost (__body, __eye).
+   Tokens: --kr-season-web, --kr-season-creature, --kr-season-glow,
+   --kr-season-wax, --kr-season-wax-edge, --kr-season-pumpkin,
+   --kr-season-ghost, --kr-season-fog, --kr-season-fog-display (§01,
+   "Seasons"). */
+.kr-season-web {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 84px;
+  height: 84px;
+  pointer-events: none; }
+
+/* The bar's web needs the gutter beside the container clear (1140px wide
+   from 1200px): from 1320px it is. Narrower, the web hangs in the
+   opener's corner instead, just under the bar. */
+.kr-season-web--opener {
+  top: var(--kr-bar-h);
+  z-index: 5;
+  width: 64px;
+  height: 64px; }
+
+@media only screen and (max-width: 1319.98px) {
+  .kr-season-web--bar {
+    display: none; } }
+
+@media only screen and (min-width: 1320px) {
+  .kr-season-web--opener {
+    display: none; } }
+
+.kr-season-web__strands {
+  display: block;
+  width: 100%;
+  height: 100%;
+  stroke: var(--kr-season-web);
+  stroke-width: 0.7; }
+
+/* The spider hangs below the web; its thread runs up past the web's
+   top, so it never comes loose from it as it climbs. */
+.kr-season-spider {
+  position: absolute;
+  top: 66px;
+  right: 30px;
+  width: 15px;
+  animation: kr-season-dangle 7s ease-in-out infinite; }
+
+.kr-season-web--opener .kr-season-spider {
+  top: 52px;
+  right: 22px;
+  width: 13px; }
+
+.kr-season-spider::before {
+  content: '';
+  position: absolute;
+  bottom: 70%;
+  left: calc(50% - 0.5px);
+  width: 1px;
+  height: 80px;
+  background: var(--kr-season-web); }
+
+.kr-season-spider__body {
+  display: block;
+  width: 100%;
+  fill: var(--kr-season-creature); }
+
+.kr-season-spider__legs {
+  fill: none;
+  stroke: var(--kr-season-creature);
+  stroke-width: 1.4;
+  stroke-linecap: round; }
+
+@keyframes kr-season-dangle {
+  0%, 100% { transform: translateY(0); }
+  45% { transform: translateY(16px); }
+  60% { transform: translateY(13px); } }
+
+/* The leaves: under the opener's type, over its photograph and scrim. The
+   page opener's container is lifted to stay above them. */
+.kr-season-leaves {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; }
+
+:root[data-season] .breadcrumb-area > .container {
+  position: relative; }
+
+.welcome-area .kr-season-leaves {
+  z-index: 5; }
+
+/* The pumpkin patch sits on the footer's top edge, at its left, in a
+   band of page the season opens above the footer so they cover nothing
+   (the photo strip runs right down to it on some pages). */
+:root[data-season] .kr-footer {
+  position: relative;
+  margin-top: 48px; }
+
+.kr-season-patch {
+  position: absolute;
+  left: max(12px, 6%);
+  bottom: calc(100% - 9px);
+  display: flex;
+  align-items: flex-end;
+  pointer-events: none; }
+
+.kr-season-patch > span {
+  display: block;
+  margin: 0 -5px; }
+
+.kr-season-patch__big {
+  width: 66px; }
+
+.kr-season-patch__mid {
+  width: 50px; }
+
+.kr-season-patch__small {
+  width: 38px; }
+
+.kr-season-pumpkin {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--kr-season-glow) 35%, transparent)); }
+
+.kr-season-leaf {
+  flex: none;
+  margin: 0 -3px 1px; }
+
+.kr-season-glow {
+  fill: var(--kr-season-glow);
+  animation: kr-season-flicker 3.4s linear infinite; }
+
+.kr-season-patch__mid .kr-season-glow {
+  animation-delay: -1.3s; }
+
+.kr-season-patch__small .kr-season-glow {
+  animation-delay: -2.2s; }
+
+@keyframes kr-season-flicker {
+  0%, 100% { opacity: 1; }
+  18% { opacity: 0.82; }
+  22% { opacity: 0.97; }
+  47% { opacity: 0.74; }
+  52% { opacity: 0.93; }
+  80% { opacity: 0.86; } }
+
+@media only screen and (max-width: 575.98px) {
+  .kr-season-patch {
+    transform: scale(0.78);
+    transform-origin: 0 100%; } }
+
+/* The bat crosses the screen once, left to right, rising and dipping. */
+.kr-season-bat {
+  position: fixed;
+  top: 34vh;
+  left: 0;
+  z-index: 90;
+  width: 54px;
+  pointer-events: none;
+  animation: kr-season-fly 4.6s cubic-bezier(0.45, 0.1, 0.55, 0.9) forwards; }
+
+.kr-season-bat__body {
+  display: block;
+  width: 100%;
+  fill: var(--kr-season-creature); }
+
+.kr-season-bat__wing {
+  transform-box: fill-box;
+  animation: kr-season-flap 0.2s ease-in-out infinite alternate; }
+
+.kr-season-bat__wing--l {
+  transform-origin: 100% 30%; }
+
+.kr-season-bat__wing--r {
+  transform-origin: 0 30%; }
+
+@keyframes kr-season-flap {
+  to { transform: scaleY(0.3); } }
+
+@keyframes kr-season-fly {
+  0% { transform: translate(-80px, 18vh) scale(0.8); }
+  30% { transform: translate(30vw, -4vh) scale(1); }
+  55% { transform: translate(55vw, 9vh) scale(1.1); }
+  100% { transform: translate(calc(100vw + 80px), -22vh) scale(0.7); } }
+
+/* The theme button's moon, full; a bat flies across it while the button
+   is hovered or focused. */
+.kr-season-moonbat {
+  fill: currentColor;
+  stroke: none;
+  opacity: 0;
+  transform: translate(-6px, 4px) scale(0.4);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.3, 0.7, 0.4, 1); }
+
+.theme-toggle:hover .kr-season-moonbat,
+.theme-toggle:focus-visible .kr-season-moonbat {
+  opacity: 1;
+  transform: none; }
+
+/* Toys (season.js): a click sends the spider down its thread and back,
+   and lights a pumpkin with a puff of smoke. They take clicks and never
+   focus; the spider's target reaches past its 15px body. */
+.kr-season-spider,
+.kr-season-patch > span {
+  pointer-events: auto;
+  cursor: pointer; }
+
+.kr-season-spider::after {
+  content: '';
+  position: absolute;
+  inset: -8px; }
+
+.kr-season-spider--drop {
+  animation: kr-season-drop 2.6s cubic-bezier(0.3, 0.7, 0.4, 1); }
+
+@keyframes kr-season-drop {
+  0% { transform: translateY(0); }
+  28% { transform: translateY(70px); }
+  38% { transform: translateY(61px); }
+  48% { transform: translateY(66px); }
+  100% { transform: translateY(0); } }
+
+.kr-season-patch > span {
+  position: relative; }
+
+.kr-season-lit .kr-season-pumpkin {
+  animation: kr-season-flare 1.4s ease-out; }
+
+@keyframes kr-season-flare {
+  0% { filter: drop-shadow(0 0 20px var(--kr-season-glow)) brightness(1.3); }
+  100% { filter: drop-shadow(0 0 10px color-mix(in srgb, var(--kr-season-glow) 35%, transparent)); } }
+
+.kr-season-smoke,
+.kr-season-smoke::before,
+.kr-season-smoke::after {
+  position: absolute;
+  bottom: 72%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--kr-season-web) 75%, transparent), transparent 70%);
+  pointer-events: none;
+  animation: kr-season-puff 1.7s ease-out forwards; }
+
+.kr-season-smoke::before,
+.kr-season-smoke::after {
+  content: '';
+  bottom: 0;
+  animation-delay: 0.25s;
+  opacity: 0; }
+
+.kr-season-smoke::after {
+  left: 80%;
+  animation-delay: 0.5s; }
+
+@keyframes kr-season-puff {
+  0% { transform: translate(0, 0) scale(0.6); opacity: 0.9; }
+  100% { transform: translate(7px, -48px) scale(2.6); opacity: 0; } }
+
+/* The candle: the reading bar (§10, "Reading progress") still measures,
+   hidden, and season.js burns this down to match it, docked under the
+   header bar at every width so the flame has room to stand. The wax is
+   what is left to read; the flame goes out at the end mark. */
+.kr-progress-bar.kr-season-candled {
+  visibility: hidden; }
+
+.kr-season-candle {
+  position: fixed;
+  top: var(--kr-bar-h);
+  left: 0;
+  width: 100%;
+  height: 5px;
+  z-index: 4000;
+  pointer-events: none; }
+
+.kr-season-candle__wax {
+  position: absolute;
+  inset: 0;
+  background: var(--kr-season-wax);
+  box-shadow: inset 0 -1px 0 var(--kr-season-wax-edge);
+  transform-origin: right center; }
+
+.kr-season-candle__flame {
+  position: absolute;
+  bottom: 4px;
+  left: -5px;
+  width: 10px;
+  transition: opacity 0.6s ease; }
+
+/* The wick, under the flame. */
+.kr-season-candle__flame::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: calc(50% - 1px);
+  width: 2px;
+  height: 3px;
+  background: var(--kr-season-creature); }
+
+.kr-season-candle__fire {
+  display: block;
+  width: 100%;
+  height: auto;
+  fill: var(--kr-season-pumpkin);
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 0 4px var(--kr-season-glow));
+  animation: kr-season-burn 0.9s ease-in-out infinite alternate; }
+
+.kr-season-candle__core {
+  fill: var(--kr-season-glow); }
+
+.kr-season-candle--out .kr-season-candle__flame {
+  opacity: 0; }
+
+@keyframes kr-season-burn {
+  0% { transform: scale(1, 1) skewX(0); }
+  50% { transform: scale(0.93, 1.09) skewX(3deg); }
+  100% { transform: scale(1.04, 0.95) skewX(-3deg); } }
+
+/* Fog along the foot of the homepage hero and the gallery's opener, in
+   the dark theme only (--kr-season-fog-display, §01): two banks of soft ellipses drifting opposite ways,
+   each a strip two tiles wide that slides one tile and starts again. */
+.kr-season-fog {
+  display: var(--kr-season-fog-display);
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 42%;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to top, var(--kr-season-fog) 45%, transparent);
+  mask-image: linear-gradient(to top, var(--kr-season-fog) 45%, transparent); }
+
+.welcome-area .kr-season-fog {
+  z-index: 4; }
+
+.kr-season-fog__layer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  background:
+    radial-gradient(ellipse 22% 60% at 12% 88%, color-mix(in srgb, var(--kr-season-fog) 40%, transparent), transparent 70%),
+    radial-gradient(ellipse 26% 50% at 36% 96%, color-mix(in srgb, var(--kr-season-fog) 32%, transparent), transparent 70%),
+    radial-gradient(ellipse 20% 65% at 63% 90%, color-mix(in srgb, var(--kr-season-fog) 38%, transparent), transparent 70%),
+    radial-gradient(ellipse 28% 55% at 87% 94%, color-mix(in srgb, var(--kr-season-fog) 30%, transparent), transparent 70%);
+  background-size: 50% 100%;
+  background-repeat: repeat-x;
+  animation: kr-season-fog 90s linear infinite; }
+
+.kr-season-fog__layer--far {
+  background-position: 30% 0;
+  opacity: 0.7;
+  animation-duration: 140s;
+  animation-direction: reverse; }
+
+@keyframes kr-season-fog {
+  to { transform: translateX(-50%); } }
+
+/* The haunted photo map (season.js marks map.html's #photo-map): a
+   pumpkin rim on every marker, the tiles dusked, and a ghost on each
+   place haunted by its abandoned frames, at the corner the count badge
+   is not. */
+.kr-season-map .leaflet-layer {
+  filter: sepia(0.35) hue-rotate(-12deg) brightness(0.86); }
+
+.kr-season-map .kr-map-marker--photo {
+  border-color: var(--kr-season-pumpkin);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--kr-season-glow) 45%, transparent); }
+
+.kr-season-ghost {
+  position: absolute;
+  top: -12px;
+  left: -10px;
+  width: 22px;
+  pointer-events: none;
+  animation: kr-season-haunt 3.2s ease-in-out infinite; }
+
+.kr-season-ghost__body {
+  display: block;
+  width: 100%;
+  fill: var(--kr-season-ghost);
+  filter: drop-shadow(0 1px 3px color-mix(in srgb, var(--kr-season-creature) 60%, transparent)); }
+
+.kr-season-ghost__eye {
+  fill: var(--kr-season-creature); }
+
+@keyframes kr-season-haunt {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-4px) rotate(4deg); } }
+
 /* ==== :: §22 Story pages (pending: Writing section) ==== */
 
 /* The short-story pages of the Writing section (.story-post): book
@@ -15982,6 +16442,10 @@ html.kr-theme-reveal::view-transition-new(root) {
   .kr-export-btn,
   .kr-ref-back,
   .kr-live-cover,
+  .kr-season-leaves,
+  .kr-season-bat,
+  .kr-season-candle,
+  .kr-season-fog,
   .kr-opener__media,
   .kr-opener__scrim,
   .kr-opener__crumbs,

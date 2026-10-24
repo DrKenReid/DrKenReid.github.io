@@ -100,7 +100,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import sitelib  # noqa: E402
 from generate_photo_dims import png_size  # noqa: E402
 from harness import (ROOT, Reporter, block_third_parties, is_own,  # noqa: E402
-                     serve, site_context, watch_console)
+                     serve, set_season, site_context, watch_console)
 
 BUDGETS = ROOT / ".github" / "perf-budgets.json"
 
@@ -406,6 +406,7 @@ def check_offline(browser, base, rep):
     """The offline scenario (see the module docstring)."""
     scope = "offline"
     context = browser.new_context(viewport={"width": 1280, "height": 900})
+    set_season(context)
     block_third_parties(context, base)
     page = context.new_page()
     sink = []
