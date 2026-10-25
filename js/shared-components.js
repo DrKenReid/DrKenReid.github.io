@@ -82,6 +82,7 @@
  * Seasons (below; the decorations are js/season.js)
  *   KR_SEASONS, krSeason(), krSeasonOnDate(d), krSeasonByKey(k),
  *   krSeasonsOff(), krPhotoPool()   the frames the strip and 404 draw from
+ *   krBirthday(date)   12 October: party hats on Ken (js/birthday.js)
  */
 
 // .kr-js on <html> says script is running. A style that hides something
@@ -455,6 +456,46 @@ function krSeason() {
         script.async = false;
         document.head.appendChild(script);
     });
+})();
+
+/* Ken's birthday, 12 October by the reader's date, as for the seasons:
+   js/birthday.js, fetched on that day alone, puts a party hat on the
+   photographs of him. A decoration, so the seasons' off switch turns it
+   off, and so does ?season=none (the browser checks). In this tab,
+   ?birthday=on shows it on any day and ?birthday=none hides it. */
+var KR_BIRTHDAY = [10, 12];
+var KR_BIRTHDAY_PREVIEW = 'kr-birthday-preview';   // sessionStorage: 'on' or 'none'
+
+/** True on the birthday (`date`, by default today) unless the decorations
+    are off or a preview says otherwise. */
+function krBirthday(date) {
+    var pick = null, season = null;
+    try {
+        pick = sessionStorage.getItem(KR_BIRTHDAY_PREVIEW);
+        season = sessionStorage.getItem(KR_SEASON_PREVIEW);
+    } catch (e) {}
+    if (pick) return pick === 'on';
+    if (season === 'none' || krSeasonsOff()) return false;
+    var now = date || new Date();
+    return now.getMonth() + 1 === KR_BIRTHDAY[0] && now.getDate() === KR_BIRTHDAY[1];
+}
+
+(function () {
+    var params = new URLSearchParams(window.location.search);
+    var asked = params.get('birthday');
+    if (asked === 'on' || asked === 'none') {
+        try { sessionStorage.setItem(KR_BIRTHDAY_PREVIEW, asked); } catch (e) {}
+        params.delete('birthday');
+        var rest = params.toString();
+        try {
+            history.replaceState(history.state, '',
+                window.location.pathname + (rest ? '?' + rest : '') + window.location.hash);
+        } catch (e) {}
+    }
+    if (!krBirthday()) return;
+    var script = document.createElement('script');
+    script.src = siteRootPrefix() + 'js/birthday.js';
+    document.head.appendChild(script);
 })();
 
 var BLUESKY_SVG = '<svg class="bluesky-icon" viewBox="0 0 568 501" xmlns="http://www.w3.org/2000/svg"><path d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.21C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.859-185.702-70.281-2.462-7.227-3.614-10.608-3.631-7.733-.017-2.875-1.169.506-3.631 7.733-13.43 39.422-65.842 193.273-185.702 70.281-63.111-64.76-33.889-129.52 80.986-149.071-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.659 0 75.291 0 57.946 0-28.906 76.135-1.612 123.121 33.664z"/></svg>';

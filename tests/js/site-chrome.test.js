@@ -319,3 +319,21 @@ test('krSeasonOnDate: winter runs over the new year, 1 December to 19 March, rou
 test('krSeason: the runtime has no season, whatever the date', () => {
     assert.equal(rt.krSeason(), null);
 });
+
+test('krBirthday: 12 October alone, unless the decorations are off or a preview says', () => {
+    const day = (m, d) => new Date(2026, m - 1, d);
+    // The runtime is a browser check's page (?season=none): no hats.
+    assert.equal(rt.krBirthday(day(10, 12)), false);
+    const page = loadRuntime();
+    page.sessionStorage.removeItem('kr-season-preview');
+    assert.equal(page.krBirthday(day(10, 12)), true);
+    assert.equal(page.krBirthday(day(10, 11)), false);
+    assert.equal(page.krBirthday(day(10, 13)), false);
+    page.localStorage.setItem('kr-season', 'off');
+    assert.equal(page.krBirthday(day(10, 12)), false);
+    page.sessionStorage.setItem('kr-birthday-preview', 'on');
+    assert.equal(page.krBirthday(day(3, 1)), true);
+    page.localStorage.removeItem('kr-season');
+    page.sessionStorage.setItem('kr-birthday-preview', 'none');
+    assert.equal(page.krBirthday(day(10, 12)), false);
+});

@@ -216,6 +216,7 @@ menu and its focus handling, `window.krNavMenu`, the sticky state);
 | The palette's data | first open | `js/palette.js` |
 | Gallery tiles | a batch at a time as the reader scrolls | `js/gallery.js` |
 | Seasonal decorations | only while a season is on (see "Seasons") | `js/shared-components.js` loads `js/season.js` |
+| Birthday hats | 12 October only (see "The birthday") | `js/shared-components.js` loads `js/birthday.js` |
 
 ## Seasons
 
@@ -361,6 +362,23 @@ the shared rules read) and its own rules under banners; its art in
 before running the checks, which read only tracked files; its sounds in
 `sounds/` with their credits; and its row in `SEASONS_UNDER_TEST` for
 `check_season`.
+
+### The birthday
+
+On 12 October, Ken's birthday, `shared-components.js` (`krBirthday`)
+fetches `js/birthday.js`, which puts a party hat on every photograph of
+him: an svg over the picture whose viewBox is the picture's own size, so
+the hat follows any width, crop (`object-fit` or `background-size`
+cover) and the hero's slow zoom, left off where a crop would cut it. A
+note by the pointer says it is his birthday while the pointer is over
+him (a tap shows it for a moment), and the picture's alt text says he is
+in a hat. Which pictures and where the hat sits are a table in that file
+(`KR_BIRTHDAY_PHOTOS`, by file name), so a new photograph of Ken needs a
+row there and nothing else. It is a decoration: the seasons' off switch
+and `?season=none` leave it off. `?birthday=on` shows it on any day in
+this tab and `?birthday=none` hides it; the smoke pin `check_birthday`
+uses the first. Its rules are in `style.css` ("Birthday hats"), since a
+day without a season loads no season sheet.
 
 ## The generators
 

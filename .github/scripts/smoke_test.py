@@ -201,6 +201,13 @@ without one class), and the pin seen to fail.
                             burst; ?season=off takes it all away. Every other
                             check runs with no season (harness.set_season),
                             so none of them changes when a season starts.
+  check_birthday            On 12 October (?birthday=on here) each photograph
+                            of Ken (the homepage hero, the About portrait,
+                            the kilts photograph and a post's author photo)
+                            wears a hat inside the page, taking no clicks,
+                            and a note says it is his birthday while the
+                            pointer is over him; ?birthday=none, or any other
+                            day, fetches none of it.
   check_live_classes        No rule is missing from style.min.css for a class
                             a live page uses (the pruner cannot see classes
                             assembled at runtime; the hero's bounceInDown
@@ -3334,6 +3341,64 @@ def check_season(browser, base, rep):
     context.close()
 
 
+def check_birthday(browser, base, rep):
+    """Party hats on Ken's photographs (js/birthday.js; see the module
+    docstring)."""
+    # The hero's own slide (the carousel keeps copies of it either side),
+    # held there; the author photo's hat pokes out of its circle by design.
+    pages = (("index.html", ".owl-item:not(.cloned) .slide-bg--portrait"), ("about.html", ".about-portrait"),
+             ("blog/from-scotland-to-michigan.html", "img[src*='kilts']"),
+             ("blog/from-scotland-to-michigan.html", ".kr-author__photo"))
+    for size in ((1440, 900), (390, 844)):
+        context = site_context(browser, base, size=size)
+        for path, photo in pages:
+            scope = f"birthday {path} {photo} @{size[0]}"
+            page, sink = open_page(context, base, path + "?birthday=on", rep, scope,
+                                   f"!!document.querySelector('.kr-bday-note') && !!document.querySelector({json.dumps(photo)})")
+            if not page:
+                continue
+            if path == "index.html":
+                page.evaluate("jQuery('.welcome-slides').trigger('stop.owl.autoplay').trigger('to.owl.carousel', [0, 0])")
+            page.locator(photo).first.scroll_into_view_if_needed()
+            page.evaluate("scrollBy(0, -160)")
+            page.wait_for_timeout(300)
+            hat = page.evaluate("""(sel) => {
+                const el = document.querySelector(sel);
+                const svg = [...document.querySelectorAll('.kr-bday-hat')]
+                    .find(s => s.previousElementSibling === el || s.parentElement === el);
+                if (!svg) return null;
+                const hat = svg.querySelector('.kr-bday-hat__wiggle').getBoundingClientRect();
+                const pic = el.getBoundingClientRect(), spot = svg.querySelector('.kr-bday-hat__spot').getBoundingClientRect();
+                return { shown: getComputedStyle(svg).visibility, hidden: svg.getAttribute('aria-hidden'),
+                         clicks: getComputedStyle(svg).pointerEvents,
+                         inside: el.matches('.kr-author__photo') ? hat.width > 4
+                             : hat.left >= pic.left - 2 && hat.right <= pic.right + 2 && hat.width > 4,
+                         spot: [spot.left + spot.width / 2, spot.top + spot.height / 2] };
+            }""", photo)
+            rep.check(scope, "a hat over Ken, aria-hidden, taking no clicks, inside the picture",
+                      bool(hat) and hat["hidden"] == "true" and hat["clicks"] == "none"
+                      and hat["shown"] == "visible" and hat["inside"], hat)
+            if hat and size[0] >= 768:
+                page.mouse.move(*hat["spot"])
+                rep.check(scope, "the note says it is his birthday while the pointer is over him",
+                          wait_until(page, "document.querySelector('.kr-bday-note.is-visible')"
+                                           "?.textContent === \"It's my birthday!\"", PAGE_BUDGET_MS))
+                page.mouse.move(2, size[1] - 2)
+                rep.check(scope, "and goes when it leaves",
+                          wait_until(page, "!document.querySelector('.kr-bday-note.is-visible')", PAGE_BUDGET_MS))
+            rep.console_errors(scope, sink)
+            page.close()
+        context.close()
+    context = site_context(browser, base)
+    page, sink = open_page(context, base, "about.html?birthday=none", rep, "birthday off", "true")
+    if page:
+        page.wait_for_timeout(300)
+        rep.check("birthday off", "?birthday=none (or any other day) fetches no hats",
+                  page.evaluate("!document.querySelector('script[src*=\"birthday.js\"], .kr-bday-hat')"))
+        page.close()
+    context.close()
+
+
 def run_pins(browser, base, rep):
     """Every regression pin, in the order the module docstring lists them."""
     check_opener_colours(browser, base, rep)
@@ -3365,6 +3430,7 @@ def run_pins(browser, base, rep):
     check_contrast(browser, base, rep)
     check_fill_contrast(browser, base, rep)
     check_season(browser, base, rep)
+    check_birthday(browser, base, rep)
 
 
 # The suite's parts, in running order, for --only. "classes" judges what
