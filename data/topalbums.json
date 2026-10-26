@@ -29,6 +29,13 @@
       "plays": 4
     },
     {
+      "name": "Diggy Diggy Hole",
+      "artist": "Wind Rose",
+      "url": "https://www.last.fm/music/Wind+Rose/Diggy+Diggy+Hole",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/82dcad7e5d68eeb705636dea1e6fea01.png",
+      "plays": 4
+    },
+    {
       "name": "Dopamine (Split Brain Version)",
       "artist": "Madelline",
       "url": "https://www.last.fm/music/Madelline/Dopamine+(Split+Brain+Version)",
@@ -40,13 +47,6 @@
       "artist": "The Toxic Avenger",
       "url": "https://www.last.fm/music/The+Toxic+Avenger/Superheroes",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/7d68c49ebc9a4bde9c714b4048ab915b.jpg",
-      "plays": 3
-    },
-    {
-      "name": "Diggy Diggy Hole",
-      "artist": "Wind Rose",
-      "url": "https://www.last.fm/music/Wind+Rose/Diggy+Diggy+Hole",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/82dcad7e5d68eeb705636dea1e6fea01.png",
       "plays": 3
     },
     {
@@ -120,20 +120,20 @@
       "plays": 2
     },
     {
+      "name": "Tales from Yellowstone",
+      "artist": "Kevin Costner & Modern West",
+      "url": "https://www.last.fm/music/Kevin+Costner+&+Modern+West/Tales+from+Yellowstone",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/18e0e7f0af88dad7ab60c7f28988426b.jpg",
+      "plays": 2
+    },
+    {
       "name": "Divenire (Deluxe Edition)",
       "artist": "Ludovico Einaudi",
       "url": "https://www.last.fm/music/Ludovico+Einaudi/Divenire+(Deluxe+Edition)",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/44d6abcfd8aed5439223f0e88d8e4626.jpg",
       "plays": 2
-    },
-    {
-      "name": "I Giorni",
-      "artist": "Ludovico Einaudi",
-      "url": "https://www.last.fm/music/Ludovico+Einaudi/I+Giorni",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/19e634f2f0aacce136850e4dd6a7b0e1.jpg",
-      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-10-19"
+  "updated": "2026-10-26"
 }

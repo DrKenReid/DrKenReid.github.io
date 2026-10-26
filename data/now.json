@@ -1,16 +1,16 @@
 {
   "track": {
-    "name": "All Star",
-    "artist": "Jonathan Young",
-    "url": "https://www.last.fm/music/Jonathan+Young/_/All+Star",
+    "name": "Ashes",
+    "artist": "Mat Cammarano",
+    "url": "https://www.last.fm/music/Mat+Cammarano/_/Ashes",
     "nowPlaying": false
   },
   "reading": [
     {
-      "title": "Return of the Runebound Professor (The Return of the Runebound Professor #1)",
-      "author": "Actus",
-      "link": "https://www.goodreads.com/review/show/8971566499?utm_medium=api&utm_source=rss",
-      "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1710951089l/210201005._SY75_.jpg"
+      "title": "The First Step (A Thousand Li, #1)",
+      "author": "Tao Wong",
+      "link": "https://www.goodreads.com/review/show/5173713445?utm_medium=api&utm_source=rss",
+      "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552279563l/44327636._SY75_.jpg"
     },
     {
       "title": "A Boy and His Dog",
@@ -25,5 +25,5 @@
       "img": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1715780755l/211721806._SY75_.jpg"
     }
   ],
-  "updated": "2026-10-19"
+  "updated": "2026-10-26"
 }
