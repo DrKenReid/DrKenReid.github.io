@@ -374,6 +374,41 @@ class PhotoVariants(unittest.TestCase):
         self.assertEqual(out, [])
 
 
+class HeroReuse(unittest.TestCase):
+    """check_hero_reuse: no two posts open on the same picture."""
+
+    PAGES = {
+        "blog/a.html": '<header style="--kr-opener-img: url(/img/photography/hero/30.webp);">',
+        "blog/b.html": '<header style="--kr-opener-img: url(/img/photography/hero/31.webp);">',
+        "blog/c.html": '<header style="--kr-opener-img: url(/blog/img/c/hero.webp);">',
+    }
+
+    def found(self, posts):
+        out = []
+        add = lambda s, f, l, code, m: out.append((f, code))  # noqa: E731
+        audit_site.check_hero_reuse(posts, add, read=self.PAGES.__getitem__)
+        return out
+
+    def test_own_pictures_pass(self):
+        self.assertEqual(self.found([
+            {"url": "blog/a.html", "image": "img/photography/thumb/30.webp"},
+            {"url": "blog/b.html", "image": "img/photography/thumb/31.webp"},
+            {"url": "blog/c.html", "image": "blog/img/c/card.webp"}]), [])
+
+    def test_a_shared_frame_is_an_error(self):
+        # The card's thumb and the other post's hero are one photograph.
+        self.assertEqual(self.found([
+            {"url": "blog/a.html", "image": "img/photography/thumb/30.webp"},
+            {"url": "blog/b.html", "image": "img/photography/thumb/30.webp"}]),
+            [("blog/b.html", "hero-reuse")])
+
+    def test_the_tracked_posts_pass(self):
+        out = []
+        posts = json.loads((audit_site.ROOT / "data" / "posts.json").read_text(encoding="utf-8"))
+        audit_site.check_hero_reuse(posts, lambda s, f, l, code, m: out.append(m))
+        self.assertEqual(out, [])
+
+
 class PublishedMarkdown(unittest.TestCase):
     """jekyll_publishes: which tracked files Pages would serve."""
 

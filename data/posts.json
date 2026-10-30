@@ -8,7 +8,7 @@
     "category": "Technology",
     "excerpt": "A Python script draws the preview picture for every post on this site, here's how it's done, and the testing to make sure I stay compliant with my own rules!",
     "url": "blog/share-cards-drawn-by-a-script.html",
-    "image": "img/photography/hero/90.webp",
+    "image": "img/photography/thumb/90.webp",
     "series": {
       "name": "How This Site Is Built",
       "part": 22
@@ -27,7 +27,7 @@
     "category": "Technology",
     "excerpt": "How my gallery's slideshow works as a wallpaper, why every photograph needed a smaller copy, and where its fire, rain and café sounds come from.",
     "url": "blog/turning-my-gallery-into-a-wallpaper.html",
-    "image": "img/photography/hero/42.webp",
+    "image": "img/photography/thumb/102.webp",
     "series": {
       "name": "How This Site Is Built",
       "part": 21
@@ -45,7 +45,7 @@
     "category": "Technology",
     "excerpt": "Every post on this site opens with a jargon guide, and every term in it becomes a hover tooltip across the whole article.",
     "url": "blog/the-tooltip-factory.html",
-    "image": "img/photography/hero/147.webp",
+    "image": "img/photography/thumb/147.webp",
     "series": {
       "name": "How This Site Is Built",
       "part": 20
@@ -64,7 +64,7 @@
     "category": "Technology",
     "excerpt": "How a link can open my photo gallery on a single photograph.",
     "url": "blog/deep-links-into-a-photo-gallery.html",
-    "image": "img/photography/hero/83.webp",
+    "image": "img/photography/thumb/83.webp",
     "series": {
       "name": "How This Site Is Built",
       "part": 19
@@ -114,7 +114,7 @@
     "category": "Ideas",
     "excerpt": "What it costs to publish, review and read research now, and why open access moved the bill onto researchers who can least afford it.",
     "url": "blog/open-access-charges-the-wrong-people.html",
-    "image": "img/photography/hero/11.webp",
+    "image": "img/photography/thumb/11.webp",
     "readMinutes": 10,
     "words": 2216
   },
@@ -223,7 +223,7 @@
     "category": "Technology",
     "excerpt": "Move your mouse over a card on the blog and the cover starts doing something. How the sketches work.",
     "url": "blog/every-card-has-a-sketch.html",
-    "image": "img/photography/hero/204.webp",
+    "image": "img/photography/thumb/204.webp",
     "series": {
       "name": "How This Site Is Built",
       "part": 16
@@ -531,7 +531,7 @@
     "category": "Personal",
     "excerpt": "Fifty posts in: an infographic the site drew about itself, and what it taught me. Words written, what gets read versus what I love writing, and the 135 drafts waiting their turn.",
     "url": "blog/50-blogs-an-infographic.html",
-    "image": "img/photography/thumb/30.webp",
+    "image": "img/photography/thumb/297.webp",
     "readMinutes": 11,
     "words": 2288
   },
@@ -873,7 +873,7 @@
     "category": "Ideas",
     "excerpt": "Everyone took the quiz and got a label. Decades of cognitive psychology say the label does nothing: matching teaching to 'learning styles' doesn't improve learning, and believing it limits you. What works instead is effortful, unglamorous, and the same for everyone.",
     "url": "blog/why-you-arent-a-visual-learner.html",
-    "image": "img/photography/thumb/366.webp",
+    "image": "img/photography/thumb/196.webp",
     "readMinutes": 8,
     "words": 1657
   },

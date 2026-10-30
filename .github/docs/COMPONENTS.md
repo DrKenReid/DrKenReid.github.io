@@ -166,7 +166,7 @@ defines it (`additionalProperties: false`, so a misspelt key fails the
 | `category` | you | the opener's kicker and the JSON-LD `articleSection`: one of the schema's enum; each has sign-off routes in `KR_ROUTES` and newsletter words in `KR_INVITES` in `js/shared-components.js` |
 | `excerpt` | you | the standfirst under the opener, and the card excerpt |
 | `url` | you | `blog/<slug>.html` |
-| `image` | you | the card picture: a gallery thumbnail, a `blog/img/` file, or a full URL |
+| `image` | you | the card picture: a gallery thumbnail (never its hero, which is several times the bytes), a `blog/img/` file, or a full URL; a photograph no other post opens on (the audit's `hero-reuse` rule) |
 | `series` | you, optional | `{"name": "...", "part": n}`, or a list of them for a post in two series; each name needs a landing page ([ARCHITECTURE.md](ARCHITECTURE.md#adding-a-series)) |
 | `readMinutes`, `words` | `generate_read_times.py` | `words` is every word in the article (the JSON-LD `wordCount`, the homepage total); `readMinutes` is 220 words a minute, rounded up, without the code in a folded listing (`details.code-example` with no `open`) |
 | `interactive`, `code` | `generate_post_facets.py` | present, as `true`, when the post mounts a demo (`KRViz.mount`) or has a `<pre><code>` block; the blog filter's Format row, the series index and the colophon read them |

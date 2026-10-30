@@ -1320,6 +1320,42 @@ def check_photo_variants(add, variants=None, listed=None):
             seen.setdefault(stem, i + 1)
 
 
+HERO_FRAME_RE = re.compile(r"img/photography/(?:thumb|hero)/(\d+)(?:@2x)?\.webp")
+OPENER_IMG_RE = re.compile(r"--kr-opener-img:\s*url\(([^)]+)\)")
+
+
+def check_hero_reuse(posts, add, read=None):
+    """ERROR when two posts open on the same picture.
+
+    A post's picture is its opener's --kr-opener-img and its card's
+    posts.json image; a gallery frame counts by number, so thumb/30 and
+    hero/30 are one photograph. Every post gets its own, so the listing
+    never shows the same photograph twice. `read` returns a page's text
+    (the file on disk by default; tests pass their own).
+    """
+    read = read or (lambda rel: (ROOT / rel).read_text(encoding="utf-8"))
+
+    def key(url):
+        m = HERO_FRAME_RE.search(url)
+        return f"frame {m.group(1)}" if m else url.strip().strip("'\"").lstrip("/")
+
+    owner = {}
+    for post in posts:
+        rel = post.get("url", "")
+        urls = [post.get("image") or ""]
+        try:
+            m = OPENER_IMG_RE.search(read(rel))
+        except OSError:
+            m = None
+        if m:
+            urls.append(m.group(1))
+        for k in {key(u) for u in urls if u}:
+            if k in owner and owner[k] != rel:
+                add("ERROR", rel, 0, "hero-reuse",
+                    f"opens on {k}, already the picture of {owner[k]}: pick an unused one")
+            owner.setdefault(k, rel)
+
+
 # --- orphaned assets (INFO) ----------------------------------------------------
 # A picture or script nothing points at still deploys, still counts in the
 # colophon's byte totals, and reads to the next person as something in use.
@@ -1633,6 +1669,7 @@ def main(argv=None):
     check_site_map(tracked_pages, posts, add)
     check_published_markdown(tracked, add)
     check_photo_variants(add)
+    check_hero_reuse(posts, add)
 
     # --- assets nothing references (INFO, never fails) ---
     for rel in orphan_assets(tracked):
