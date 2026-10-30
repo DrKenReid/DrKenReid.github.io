@@ -285,6 +285,9 @@ test('krSeasonOnDate: the higher rank wins a shared day', () => {
     assert.equal(on(2027, 3, 22), 'holi');
     assert.equal(on(2027, 4, 23), 'world-book-day');
     assert.equal(on(2027, 8, 8), 'cat-day');
+    assert.equal(on(2027, 9, 7), 'summer');
+    assert.equal(on(2027, 9, 8), 'star-trek-day');
+    assert.equal(on(2027, 9, 9), 'summer');
 });
 
 test('a memorial page (<body data-memorial>) has no season and no birthday hats', () => {
@@ -299,6 +302,23 @@ test('a memorial page (<body data-memorial>) has no season and no birthday hats'
     } finally {
         delete body.hasAttribute;
         rt.sessionStorage.setItem('kr-season-preview', preview);
+    }
+});
+
+test('the coffee button takes a season\'s own words, and only in that season', () => {
+    const preview = rt.sessionStorage.getItem('kr-season-preview');
+    try {
+        rt.sessionStorage.setItem('kr-season-preview', 'none');
+        assert.match(rt.thanksActionsHtml(), /<span>Buy me a coffee<\/span>/);
+        rt.sessionStorage.setItem('kr-season-preview', 'star-trek-day');
+        const html = rt.thanksActionsHtml();
+        assert.match(html, /<span>Buy me an Earl Grey, hot<\/span>/);
+        assert.match(html, /href="https:\/\/buymeacoffee\.com\/drkenreid"/);
+        rt.sessionStorage.setItem('kr-season-preview', 'summer');
+        assert.match(rt.thanksActionsHtml(), /<span>Buy me a coffee<\/span>/);
+    } finally {
+        if (preview === null) rt.sessionStorage.removeItem('kr-season-preview');
+        else rt.sessionStorage.setItem('kr-season-preview', preview);
     }
 });
 

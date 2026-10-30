@@ -226,7 +226,8 @@ seasons of the year and the holidays inside them. `KR_SEASONS` in
 both ends included, a window may run over the new year; `years` for a
 holiday that moves, Diwali; `rank`; and optionally the frames it shows,
 by photo tag or by place, a gallery subject of its own, the palette's
-random frame and the homepage headline's words and colours).
+random frame, the homepage headline's words and colours, and the words
+on the coffee button at the end of a post, `coffee`).
 `krSeason()` says which is on, from the reader's local date. Where two
 hold one day the higher rank wins, so the site is always in exactly one:
 
@@ -234,7 +235,7 @@ hold one day the higher rank wins, so the site is always in exactly one:
 |---|---|---|
 | 0 | spring, summer, fall, winter | 20 March to 20 June, 21 June to 21 September, 22 September to 30 November, 1 December to 19 March |
 | 1 | Halloween | 17 October to 1 November |
-| 2 | Burns Night, Darwin Day, Pi Day, World Book Day, May the Fourth, Revenge of the Fifth, International Cat Day, Bonfire Night, St Andrew's Day, Hogmanay | 25 January, 12 February, 14 March, 23 April, 4 May, 5 May, 8 August, 5 November, 30 November, 31 December to 2 January |
+| 2 | Burns Night, Darwin Day, Pi Day, World Book Day, May the Fourth, Revenge of the Fifth, International Cat Day, Star Trek Day, Bonfire Night, St Andrew's Day, Hogmanay | 25 January, 12 February, 14 March, 23 April, 4 May, 5 May, 8 August, 8 September, 5 November, 30 November, 31 December to 2 January |
 | 3 | Diwali, Holi | Diwali's five days, Dhanteras to Bhai Dooj; Holi's two, Holika Dahan and the day of colours; each from a table by year |
 
 The node tests refuse two seasons of one rank on the same day, fail when
@@ -323,6 +324,7 @@ documented in `season.js`'s header, and the shared rules in
 | Pi Day | Archimedes' polygons about a circle and a slice of pie; digits of π; three pies; a flying pie; a wheel unrolling its rim as the reader goes | the corner's polygons doubling their sides; a Monte Carlo dartboard on the footer estimating π; Buffon's needles on the 404 page |
 | World Book Day | a reading lamp and a bookworm; loose pages; a stack of books, tea, an open book; a paper plane; a shelf filling with books | a line from the quote wall on a slip over the footer, turned on a click; dog-eared openers; a torn 404 opener; the bookworm along the footer |
 | International Cat Day | a ginger cat asleep on a shelf, its tail as the dangler; fluff and hearts; a cat in a box, yarn, a bowl; a kitten chasing a butterfly; paw prints as the reader goes | a tuxedo and a calico along the footer; a laser dot over the hero that a grey cat stalks and pounces on; a cat that knocks the 404 page off a table |
+| Star Trek Day | a starship and a delta badge; stars; Earl Grey, a flute on its box, a PADD; a starship that jumps to warp; panel bars lit as the reader goes; a fleet in the margins | a click on the corner's starship engages, and it drops back out of warp; the footer's pieces beam in; a panel of coloured bars along the footer's top that powers up |
 
 Every decoration is `aria-hidden`, takes no focus, keeps off post text,
 the gallery, the lightbox and the slideshow, is dropped in print and

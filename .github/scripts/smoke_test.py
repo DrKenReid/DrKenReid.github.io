@@ -3100,6 +3100,9 @@ SEASONS_UNDER_TEST = {
     "cat-day": {"lost": "The Cat Knocked This Page Off the Table", "tag": None, "pill": None,
                 "light_fog": "none", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--hearts",
                 "track": "bits", "map": False},
+    "star-trek-day": {"lost": "This Page Has Boldly Gone", "tag": None, "pill": None,
+                      "light_fog": "none", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--energize",
+                      "track": "bits", "map": False},
 }
 
 TRACK_STATE = """async () => {

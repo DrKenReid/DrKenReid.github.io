@@ -126,7 +126,8 @@ document.documentElement.classList.add('kr-js');
  * own `subject` or the one stored tag it names) or by place (photoPlaces,
  * words in a region's name in photo-locations.json). And what the
  * homepage's evolving headline spells and in which colours (heroText,
- * heroRamp).
+ * heroRamp), and the words on the coffee button at the end of a post
+ * (coffee; thanksActionsHtml).
  */
 var KR_SEASONS = [{
     key: 'halloween',
@@ -298,6 +299,15 @@ var KR_SEASONS = [{
     treat: { title: 'A random photograph', sub: 'The cats chose it', also: 'cat day cats kitten' },
     heroText: 'Meow.',
     heroRamp: [[255, 190, 120], [200, 210, 255]],
+    rank: 2
+}, {
+    key: 'star-trek-day',
+    label: 'Star Trek Day',
+    windows: [[[9, 8], [9, 8]]],
+    treat: { title: 'Strange new worlds', sub: 'A random photograph', also: 'star trek day next generation picard enterprise' },
+    coffee: 'Buy me an Earl Grey, hot',
+    heroText: 'Make it so.',
+    heroRamp: [[255, 170, 80], [200, 160, 255]],
     rank: 2
 }];
 var KR_SEASON_PREVIEW = 'kr-season-preview';   // sessionStorage: a key, or 'none'
@@ -2347,8 +2357,12 @@ function buildSignOff() {
  * (their colours and cup, the site's font, no third-party script): the
  * official script renders via document.write, which browsers ignore
  * outside initial page parse, so it cannot work in injected markup.
+ * A season may word it its own way (KR_SEASONS `coffee`); the words are
+ * the link's whole name, so a screen reader hears the same.
  */
 function thanksActionsHtml() {
+    var season = typeof krSeason === 'function' ? krSeason() : null;
+    var coffee = (season && season.coffee) || 'Buy me a coffee';
     return '' +
         '<div class="blog-thanks-cta__actions">' +
         '<a class="kr-btn kr-btn--ghost kr-cta-btn" href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">' + SUBSTACK_SVG + '<span>Subscribe by email</span></a>' +
@@ -2358,7 +2372,7 @@ function thanksActionsHtml() {
         '<path d="M6.55 11.5h10.9l-.42 3.4c-1.55.85-2.6-.55-4.13-.1-1.4.4-2.3 1.15-3.55.7-.7-.25-1.55-.75-2.4-.6Z" fill="#FFDD00"/>' +
         '<rect x="4.9" y="4.4" width="14.2" height="2.7" rx="1.35" fill="#FFDD00" stroke="#0D0C22" stroke-width="1.3"/>' +
         '</svg>' +
-        '<span>Buy me a coffee</span></a>' +
+        '<span>' + krEscapeHtml(coffee) + '</span></a>' +
         '</div>';
 }
 

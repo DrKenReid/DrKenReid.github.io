@@ -1,0 +1,319 @@
+/* css/seasons/star-trek-day.css: Star Trek Day's colours and its own rules.
+   shared-components.js loads this file only while the season is on
+   (KR_SEASONS), beside js/seasons/star-trek-day.js; css/season.css holds
+   what every season shares. Tokens first, both themes, then the rules for
+   its own pieces. */
+
+/* Star Trek Day: panel orange into lilac:
+     light  #a34800  5.64 page and warm;  #6b3fa0  6.91 page and warm
+     dark   #ffad5c  9.43 page, 7.78 raised; #cfa8ff  8.87 page, 7.31 raised
+   The line is the badge's thread and the drawings' outlines, the glow a
+   warm panel light round the footer's pieces, the pumpkin token the map's
+   rims, the badge a pale gold. The beam and its white-hot core are the
+   energy of a beaming (the shimmer from a clicked piece, the columns the
+   footer's pieces beam in through) and the flashes of a jump to warp; the
+   steam rises off the tea. The lcars colours are the panel along the
+   footer's top, which is dark in both themes; the pills are the bars in
+   place of a post's reading bar, deeper on the light page than on the
+   dark one. No fog. */
+:root[data-season="star-trek-day"] {
+  --kr-brand-from: #a34800;
+  --kr-brand-to: #6b3fa0;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #ffd0a0;
+  --kr-photo-to: #e2ccff;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #7a8394;
+  --kr-season-creature: #2b3142;
+  --kr-season-glow: #ffcf99;
+  --kr-season-pumpkin: #ff9c3a;
+  --kr-season-badge: #fff1d6;
+  --kr-season-fog: #9fb8ff;
+  --kr-season-dusk: saturate(0.7) hue-rotate(-10deg) brightness(0.85);
+  --kr-season-fog-display: none;
+  --kr-season-beam: #6cc8ff;
+  --kr-season-core: #f2fbff;
+  --kr-season-steam: #9aa1ad;
+  --kr-season-lcars-a: #ff9c3a;
+  --kr-season-lcars-b: #ffcc99;
+  --kr-season-lcars-c: #cc99cc;
+  --kr-season-lcars-d: #9999ff;
+  --kr-season-lcars-e: #ffcc66;
+  --kr-season-lcars-f: #cc6666;
+  --kr-season-pill-a: #e07b12;
+  --kr-season-pill-b: #a76aa8;
+  --kr-season-pill-c: #6f6fe0;
+  --kr-season-pill-d: #d29a2a; }
+
+:root[data-theme="dark"][data-season="star-trek-day"] {
+  --kr-brand-from: #ffad5c;
+  --kr-brand-to: #cfa8ff;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-line: #a9b2c2;
+  --kr-season-creature: #d5dbe6;
+  --kr-season-steam: #d9dee6;
+  --kr-season-pill-a: #ff9c3a;
+  --kr-season-pill-b: #cc99cc;
+  --kr-season-pill-c: #9999ff;
+  --kr-season-pill-d: #ffcc66; }
+
+/* --- Star Trek Day's starship ------------------------------------------------
+   Built by js/seasons/star-trek-day.js: the corner's starship takes
+   clicks (.kr-season-starship), and a click engages (--warp): the ship
+   pulls back, draws out long towards its bow and is gone in a flash
+   (__flash, at the bow), then drops back out of warp where it was, the
+   flash again as it arrives. Never under reduced motion (the ship takes
+   no clicks then). Classes only script applies: .kr-season-starship,
+   .kr-season-starship--warp, .kr-season-starship__ship,
+   .kr-season-starship__flash. */
+.kr-season-starship {
+  pointer-events: auto;
+  cursor: pointer; }
+
+.kr-season-starship__ship {
+  transform-box: fill-box;
+  transform-origin: 100% 50%; }
+
+.kr-season-starship__flash {
+  fill: var(--kr-season-core);
+  stroke: none;
+  opacity: 0;
+  filter: drop-shadow(0 0 3px var(--kr-season-beam));
+  transform-box: fill-box;
+  transform-origin: center; }
+
+.kr-season-starship--warp .kr-season-starship__ship {
+  animation: kr-season-engage 2.8s cubic-bezier(0.5, 0, 0.5, 1); }
+
+.kr-season-starship--warp .kr-season-starship__flash {
+  animation: kr-season-engage-flash 2.8s ease-out; }
+
+@keyframes kr-season-engage {
+  0% { transform: none; opacity: 1; }
+  14% { transform: translateX(2px); opacity: 1; }
+  30% { transform: translateX(-4px) scaleX(2.4); opacity: 1; }
+  36% { transform: translateX(-30px) scaleX(5); opacity: 0; }
+  72% { transform: translateX(-30px) scaleX(5); opacity: 0; }
+  80% { transform: translateX(3px) scaleX(2); opacity: 1; }
+  90% { transform: translateX(-1px) scaleX(1); }
+  100% { transform: none; opacity: 1; } }
+
+@keyframes kr-season-engage-flash {
+  0%, 30% { opacity: 0; transform: scale(0.2); }
+  35% { opacity: 1; transform: scale(1.2); }
+  44% { opacity: 0; transform: scale(0.6); }
+  76% { opacity: 0; transform: scale(0.2); }
+  80% { opacity: 0.9; transform: scale(1); }
+  88%, 100% { opacity: 0; transform: scale(0.4); } }
+
+/* --- Star Trek Day's footer -------------------------------------------------
+   Built by js/seasons/star-trek-day.js. Steam rises off the tea
+   (.kr-season-steam) and a block on the PADD's screen blinks
+   (.kr-season-padd__lit); both hold still under reduced motion, the
+   steam showing. A clicked piece gives off a shimmer of energy, three
+   sparks rising in a column (--energize). The three pieces beam in as
+   the patch comes into view: out of sight until then (.kr-season-energize--wait),
+   then (.kr-season-energize) each fades in through a column of sparkle,
+   one after another; script adds neither under reduced motion. Along the
+   footer's top, a panel of coloured bars, rounded at both ends
+   (.kr-season-lcars, __bar, __bar--a to --f, each bar's share of the
+   width and its delay set by script), dim until the footer comes into
+   view (--off) and then lit from left to right (--on); lit from the start
+   under reduced motion. Classes only script applies: .kr-season-steam,
+   .kr-season-padd__lit, .kr-season-puff--energize, .kr-season-energize,
+   .kr-season-energize--wait, .kr-season-lcars (--off, --on, __bar,
+   __bar--a to --f). */
+.kr-season-steam {
+  stroke: var(--kr-season-steam);
+  opacity: 0.7;
+  animation: kr-season-steam 3.6s ease-in-out infinite; }
+
+@keyframes kr-season-steam {
+  0% { transform: translateY(2px); opacity: 0; }
+  35% { opacity: 0.8; }
+  100% { transform: translateY(-5px); opacity: 0; } }
+
+.kr-season-padd__lit {
+  animation: kr-season-blink 2.4s steps(1) infinite; }
+
+@keyframes kr-season-blink {
+  50% { opacity: 0.3; } }
+
+.kr-season-puff--energize,
+.kr-season-puff--energize::before,
+.kr-season-puff--energize::after {
+  bottom: 30%;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  background: radial-gradient(circle, var(--kr-season-core) 0 30%, var(--kr-season-beam) 55%, transparent 72%);
+  animation: kr-season-energize 1.6s ease-out forwards; }
+
+.kr-season-puff--energize::before {
+  bottom: 0;
+  left: -7px;
+  animation-delay: 0.15s; }
+
+.kr-season-puff--energize::after {
+  bottom: 0;
+  left: 13px;
+  animation-delay: 0.3s; }
+
+@keyframes kr-season-energize {
+  0% { transform: translateY(0) scale(0.4); opacity: 0; }
+  20% { transform: translateY(-10px) scale(1.3); opacity: 1; }
+  45% { opacity: 0.4; }
+  60% { opacity: 1; }
+  100% { transform: translateY(-46px) scale(0.6); opacity: 0; } }
+
+.kr-season-energize--wait > span {
+  opacity: 0; }
+
+.kr-season-energize > span {
+  animation: kr-season-materialise 1.6s ease-in both; }
+
+.kr-season-energize > span:nth-of-type(2) {
+  animation-delay: 0.3s; }
+
+.kr-season-energize > span:nth-of-type(3) {
+  animation-delay: 0.6s; }
+
+.kr-season-energize > span::before {
+  content: '';
+  position: absolute;
+  right: 12%;
+  bottom: 0;
+  left: 12%;
+  height: 130%;
+  border-radius: 50% 50% 0 0 / 16% 16% 0 0;
+  background:
+    radial-gradient(circle, var(--kr-season-core) 0 0.8px, transparent 1.6px) 0 0 / 7px 9px,
+    linear-gradient(to top, transparent, color-mix(in srgb, var(--kr-season-beam) 40%, transparent) 25% 75%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  animation: kr-season-shimmer 1.6s ease-in-out both;
+  animation-delay: inherit; }
+
+@keyframes kr-season-materialise {
+  0%, 20% { opacity: 0; filter: brightness(2.4); }
+  70% { opacity: 1; filter: brightness(1.5); }
+  100% { opacity: 1; filter: none; } }
+
+@keyframes kr-season-shimmer {
+  0% { opacity: 0; background-position: 0 0, 0 0; }
+  25%, 65% { opacity: 1; }
+  100% { opacity: 0; background-position: 0 -36px, 0 0; } }
+
+.kr-season-lcars {
+  position: absolute;
+  top: 22px;
+  right: max(12px, 4%);
+  left: max(12px, 4%);
+  display: flex;
+  gap: 4px;
+  height: 10px;
+  pointer-events: none; }
+
+.kr-season-lcars__bar {
+  flex: 1 1 0;
+  min-width: 6px;
+  background: var(--kr-season-lcars-a); }
+
+.kr-season-lcars__bar:first-child {
+  border-radius: 5px 0 0 5px; }
+
+.kr-season-lcars__bar:last-child {
+  border-radius: 0 5px 5px 0; }
+
+.kr-season-lcars__bar--b {
+  background: var(--kr-season-lcars-b); }
+
+.kr-season-lcars__bar--c {
+  background: var(--kr-season-lcars-c); }
+
+.kr-season-lcars__bar--d {
+  background: var(--kr-season-lcars-d); }
+
+.kr-season-lcars__bar--e {
+  background: var(--kr-season-lcars-e); }
+
+.kr-season-lcars__bar--f {
+  background: var(--kr-season-lcars-f); }
+
+.kr-season-lcars--off .kr-season-lcars__bar {
+  opacity: 0.2; }
+
+.kr-season-lcars--on .kr-season-lcars__bar {
+  animation-name: kr-season-power-up;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both; }
+
+@keyframes kr-season-power-up {
+  0% { opacity: 0.2; }
+  60% { opacity: 1; filter: brightness(1.35); }
+  100% { opacity: 1; filter: none; } }
+
+/* --- Star Trek Day's flyer and track -------------------------------------
+   Built by js/seasons/star-trek-day.js. The starship crosses at impulse
+   as the footer arrives, gathers itself, draws out long and is gone to
+   warp in a flash at its bow (--warp, .kr-season-warpflash). Over a
+   post, a row of panel bars stands in for the reading bar (--lcars, one
+   .kr-season-pill per bit, --a to --d its colour), dim ahead of the
+   reader and lit behind. Classes only script applies:
+   .kr-season-flyer--warp, .kr-season-warpflash, .kr-season-track--lcars,
+   .kr-season-pill (--a, --b, --c, --d). */
+.kr-season-flyer--warp {
+  top: 18vh;
+  width: 96px;
+  transform-origin: 0 50%;
+  animation: kr-season-impulse 4.6s linear forwards; }
+
+@keyframes kr-season-impulse {
+  0% { transform: translate(-110px, 5vh); }
+  62% { transform: translate(50vw, 0); }
+  72% { transform: translate(56vw, 0) scaleX(0.94); }
+  79% { transform: translate(62vw, 0) scaleX(3); opacity: 1; }
+  86%, 100% { transform: translate(calc(100vw + 40px), 0) scaleX(6); opacity: 0; } }
+
+.kr-season-warpflash {
+  fill: var(--kr-season-core);
+  opacity: 0;
+  filter: drop-shadow(0 0 3px var(--kr-season-beam));
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: kr-season-warpflash 4.6s linear forwards; }
+
+@keyframes kr-season-warpflash {
+  0%, 76% { opacity: 0; transform: scale(0.2); }
+  80% { opacity: 1; transform: scale(1.3); }
+  88%, 100% { opacity: 0; transform: scale(0.5); } }
+
+.kr-season-track--lcars .kr-season-track__bit {
+  top: 1px;
+  width: 26px;
+  margin-left: -13px; }
+
+.kr-season-pill {
+  display: block;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--kr-season-pill-a);
+  opacity: 0.25;
+  transition: opacity 0.35s ease-out; }
+
+.kr-season-track__bit--passed .kr-season-pill {
+  opacity: 1; }
+
+.kr-season-pill--b {
+  background: var(--kr-season-pill-b); }
+
+.kr-season-pill--c {
+  background: var(--kr-season-pill-c); }
+
+.kr-season-pill--d {
+  background: var(--kr-season-pill-d); }
