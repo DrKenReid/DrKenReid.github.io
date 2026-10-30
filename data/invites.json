@@ -316,6 +316,14 @@
     "the-tooltip-factory": {
       "title": "Hovered your way through this one?",
       "line": "The series covers the tooltips and the rest of the site's insides, and the feed is the way to follow it."
+    },
+    "turning-my-gallery-into-a-wallpaper": {
+      "title": "Watching the slideshow right now?",
+      "line": "The series covers the slideshow, the gallery and the rest of the site, and the feed is the way to follow it."
+    },
+    "share-cards-drawn-by-a-script": {
+      "title": "Every post gets its own card",
+      "line": "The series covers the share cards and the rest of the site's insides, and the feed is the way to follow it."
     }
   }
 }

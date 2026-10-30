@@ -80,7 +80,7 @@ WORKERS = 6
 # untracked file, made before this script for a post then in draft. They
 # are not remade or required here until their owner tracks or drops them;
 # until then the pages show the frame at thumb size, as they always have.
-AWAITING_OWNER = {"90", "127", "149"}
+AWAITING_OWNER = {"127", "149"}
 
 
 # --- which frames -------------------------------------------------------

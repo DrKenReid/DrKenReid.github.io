@@ -1,5 +1,42 @@
 [
   {
+    "title": "Share Cards Drawn by a Script",
+    "date": "2026-10-30",
+    "tags": [
+      "technology"
+    ],
+    "category": "Technology",
+    "excerpt": "A Python script draws the preview picture for every post on this site, here's how it's done, and the testing to make sure I stay compliant with my own rules!",
+    "url": "blog/share-cards-drawn-by-a-script.html",
+    "image": "img/photography/hero/90.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 22
+    },
+    "readMinutes": 10,
+    "words": 1990,
+    "code": true
+  },
+  {
+    "title": "Turning My Gallery Into a Wallpaper",
+    "date": "2026-10-30",
+    "tags": [
+      "technology",
+      "photography"
+    ],
+    "category": "Technology",
+    "excerpt": "How my gallery's slideshow works as a wallpaper, why every photograph needed a smaller copy, and where its fire, rain and café sounds come from.",
+    "url": "blog/turning-my-gallery-into-a-wallpaper.html",
+    "image": "img/photography/hero/42.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 21
+    },
+    "readMinutes": 14,
+    "words": 2977,
+    "code": true
+  },
+  {
     "title": "The Tooltip Factory",
     "date": "2026-10-29",
     "tags": [

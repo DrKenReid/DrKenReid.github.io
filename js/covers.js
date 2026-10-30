@@ -941,6 +941,83 @@
         };
     });
 
+    // Photographs crossfade on a television while a fire's sound bars
+    // flicker underneath it.
+    def('turning-my-gallery-into-a-wallpaper', function (w, h, rnd) {
+        var t = 0, STEP = 200, tv = { x: w * 0.12, y: h * 0.1, w: w * 0.76, h: h * 0.6 }, shots = [], bars = [];
+        var skies = [C.blue, C.a, C.b, C.green];
+        for (var i = 0; i < 4; i++) {
+            var hills = [];
+            for (var k = 0; k <= 6; k++) hills.push(0.45 + rnd() * 0.35);
+            shots.push({ sky: skies[i], hills: hills, sun: [0.15 + rnd() * 0.7, 0.18 + rnd() * 0.2] });
+        }
+        for (var b = 0; b < 14; b++) bars.push(rnd());
+        function paint(ctx, shot, a) {
+            ctx.globalAlpha = a;
+            rect(ctx, tv.x, tv.y, tv.w, tv.h, alpha(shot.sky, 0.35));
+            dot(ctx, tv.x + tv.w * shot.sun[0], tv.y + tv.h * shot.sun[1], tv.h * 0.09, alpha(C.b, 0.9));
+            ctx.fillStyle = alpha('#000000', 0.55);
+            ctx.beginPath(); ctx.moveTo(tv.x, tv.y + tv.h);
+            shot.hills.forEach(function (v, k) { ctx.lineTo(tv.x + tv.w * k / 6, tv.y + tv.h * v); });
+            ctx.lineTo(tv.x + tv.w, tv.y + tv.h); ctx.closePath(); ctx.fill();
+            ctx.globalAlpha = 1;
+        }
+        return {
+            step: function () { t++; },
+            draw: function (ctx) {
+                var n = Math.floor(t / STEP), p = phase(t, STEP), fade = clamp01((p - 0.8) / 0.2);
+                paint(ctx, shots[n % shots.length], 1);
+                if (fade > 0) paint(ctx, shots[(n + 1) % shots.length], ease(fade));
+                ctx.strokeStyle = C.ink; ctx.lineWidth = 3; ctx.strokeRect(tv.x, tv.y, tv.w, tv.h);
+                rect(ctx, w * 0.44, tv.y + tv.h + 2, w * 0.12, 5, C.ink);
+                rect(ctx, tv.x, tv.y + tv.h - 4, tv.w * p, 3, alpha('#ffffff', 0.6));
+                var bw = w * 0.4 / bars.length;
+                bars.forEach(function (v, i) {
+                    var bh = h * (0.04 + 0.1 * Math.abs(Math.sin(t * (0.05 + v * 0.08) + v * 9)));
+                    rect(ctx, w * 0.3 + i * bw, h * 0.95 - bh, bw * 0.6, bh, i % 3 ? C.b : C.red);
+                });
+            }
+        };
+    });
+
+    // A share card builds itself: a photograph, a darkening scrim, the
+    // title, then the site's name, and starts over on a new photograph.
+    def('share-cards-drawn-by-a-script', function (w, h, rnd) {
+        var t = 0, STEP = 300, cw = w * 0.8, ch = cw * 630 / 1200, cx = (w - cw) / 2, cy = (h - ch) / 2, cards = [];
+        if (ch > h * 0.86) { ch = h * 0.86; cw = ch * 1200 / 630; cx = (w - cw) / 2; cy = (h - ch) / 2; }
+        var skies = [C.blue, C.a, C.green, C.b];
+        for (var i = 0; i < 4; i++) {
+            var hills = [];
+            for (var k = 0; k <= 5; k++) hills.push(0.35 + rnd() * 0.4);
+            cards.push({ sky: skies[i], hills: hills, title: 0.5 + rnd() * 0.35 });
+        }
+        return {
+            step: function () { t++; },
+            draw: function (ctx) {
+                var c = cards[Math.floor(t / STEP) % cards.length], p = phase(t, STEP);
+                var photo = ease(p / 0.15), scrim = ease((p - 0.18) / 0.15), title = clamp01((p - 0.36) / 0.25), name = ease((p - 0.64) / 0.1);
+                ctx.globalAlpha = photo;
+                rect(ctx, cx, cy, cw, ch, alpha(c.sky, 0.4));
+                ctx.fillStyle = alpha('#000000', 0.45);
+                ctx.beginPath(); ctx.moveTo(cx, cy + ch);
+                c.hills.forEach(function (v, k) { ctx.lineTo(cx + cw * k / 5, cy + ch * v); });
+                ctx.lineTo(cx + cw, cy + ch); ctx.closePath(); ctx.fill();
+                ctx.globalAlpha = 1;
+                for (var s = 0; s < 6; s++) rect(ctx, cx, cy + ch * (0.4 + s * 0.1), cw, ch * 0.1, alpha('#000000', scrim * 0.12 * (s + 1)));
+                for (var s2 = 0; s2 < 4; s2++) rect(ctx, cx + cw * s2 * 0.1, cy, cw * 0.1, ch, alpha('#000000', scrim * 0.1 * (4 - s2)));
+                var tw = cw * c.title;
+                if (title > 0) rect(ctx, cx + cw * 0.06, cy + ch * 0.58, Math.min(1, title * 2) * tw, ch * 0.09, C.ink);
+                if (title > 0.5) rect(ctx, cx + cw * 0.06, cy + ch * 0.71, (title - 0.5) * 2 * tw * 0.6, ch * 0.09, C.ink);
+                if (name > 0) {
+                    ctx.globalAlpha = name;
+                    text(ctx, 'kenreid.co.uk', cx + cw * 0.06, cy + ch * 0.9, Math.max(9, ch * 0.08), C.b, 700);
+                    ctx.globalAlpha = 1;
+                }
+                ctx.strokeStyle = alpha('#ffffff', 0.5); ctx.lineWidth = 1; ctx.strokeRect(cx, cy, cw, ch);
+            }
+        };
+    });
+
     // Translucent triangles, nudged one at a time, settle into "Hi" while
     // a fitness bar fills underneath.
     def('a-headline-that-evolves-itself', function (w, h, rnd) {

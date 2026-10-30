@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="A Python script draws the preview picture for every post on this site, here's how it's done, and the testing to make sure I stay compliant with my own rules!">
+ <meta name="keywords" content="technology">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Share Cards Drawn by a Script - Ken Reid</title>
+ <meta property="og:title" content="Share Cards Drawn by a Script">
+ <meta property="og:description" content="A Python script draws the preview picture for every post on this site, here's how it's done, and the testing to make sure I stay compliant with my own rules!">
+ <meta property="og:image" content="https://www.kenreid.co.uk/img/og/share-cards-drawn-by-a-script.jpg">
+ <meta property="og:image:width" content="1200">
+ <meta property="og:image:height" content="630">
+ <meta property="og:image:alt" content="Share Cards Drawn by a Script">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/share-cards-drawn-by-a-script.html">
+ <meta property="og:type" content="article">
+ <meta property="og:site_name" content="Ken Reid">
+ <meta property="og:locale" content="en_GB">
+ <meta property="article:published_time" content="2026-10-30">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Share Cards Drawn by a Script">
+ <meta name="twitter:description" content="A Python script draws the preview picture for every post on this site, here's how it's done, and the testing to make sure I stay compliant with my own rules!">
+ <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/share-cards-drawn-by-a-script.jpg">
+ <meta name="citation_title" content="Share Cards Drawn by a Script">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/10/30">
+ <meta name="citation_online_date" content="2026/10/30">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/share-cards-drawn-by-a-script.html">
+ <meta name="DC.title" content="Share Cards Drawn by a Script">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-10-30">
+ <script defer src="../js/analytics.js"></script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="../img/photography/hero/90.webp" fetchpriority="high">
+ <link rel="stylesheet" href="../style.min.css?v=20260923a">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/share-cards-drawn-by-a-script.html">
+ <link rel="alternate" type="application/rss+xml" title="Ken Reid's Blog" href="https://www.kenreid.co.uk/feed.xml">
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BlogPosting",
+   "mainEntityOfPage": {
+     "@type": "WebPage",
+     "@id": "https://www.kenreid.co.uk/blog/share-cards-drawn-by-a-script.html"
+   },
+   "url": "https://www.kenreid.co.uk/blog/share-cards-drawn-by-a-script.html",
+   "headline": "Share Cards Drawn by a Script",
+   "description": "A Python script draws the preview picture for every post on this site, here's how it's done, and the testing to make sure I stay compliant with my own rules!",
+   "image": {
+     "@type": "ImageObject",
+     "url": "https://www.kenreid.co.uk/img/og/share-cards-drawn-by-a-script.jpg",
+     "width": 1200,
+     "height": 630
+   },
+   "datePublished": "2026-10-30",
+   "dateModified": "2026-10-30",
+   "author": {
+     "@type": "Person",
+     "@id": "https://www.kenreid.co.uk/#ken",
+     "name": "Ken Reid",
+     "url": "https://www.kenreid.co.uk/"
+   },
+   "publisher": {
+     "@type": "Person",
+     "@id": "https://www.kenreid.co.uk/#ken",
+     "name": "Ken Reid",
+     "url": "https://www.kenreid.co.uk/"
+   },
+   "isPartOf": [
+     { "@id": "https://www.kenreid.co.uk/#website" },
+     {
+       "@type": "CreativeWorkSeries",
+       "@id": "https://www.kenreid.co.uk/series-how-this-site-is-built.html#series",
+       "name": "How This Site Is Built",
+       "url": "https://www.kenreid.co.uk/series-how-this-site-is-built.html"
+     }
+   ],
+   "inLanguage": "en-GB",
+   "articleSection": "Technology",
+   "wordCount": 1990,
+   "timeRequired": "PT10M",
+   "keywords": ["open graph", "share images", "pillow", "variable fonts", "static sites"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "Share Cards Drawn by a Script",
+       "item": "https://www.kenreid.co.uk/blog/share-cards-drawn-by-a-script.html"
+     }
+   ]
+ }
+ </script>
+ <script defer src="../js/theme.js?v=20260923a"></script>
+ <script defer src="../js/palette.js?v=20260923a"></script>
+</head>
+<body>
+
+ <div id="header-section"></div>
+
+ <main id="main-content">
+  <header class="kr-opener" style="--kr-opener-img: url(/img/photography/hero/90.webp);">
+    <div class="kr-opener__media" aria-hidden="true"></div>
+    <div class="kr-opener__scrim" aria-hidden="true"></div>
+    <div class="container kr-opener__inner">
+      <nav aria-label="breadcrumb" class="kr-opener__crumbs"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Share Cards Drawn by a Script</li>
+      </ol></nav>
+      <p class="kr-opener__kicker">Technology &middot; <time datetime="2026-10-30">30 October 2026</time> &middot; 10 min read</p>
+      <p class="kr-opener__title page-title">Share Cards Drawn by a Script</p>
+      <p class="kr-opener__standfirst">A Python script draws the preview picture for every post on this site, here's how it's done, and the testing to make sure I stay compliant with my own rules!</p>
+      <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>
+    </div>
+    <a class="kr-opener__cue" href="#main-content-body" aria-label="Scroll to the article"><span></span></a>
+  </header>
+
+ <div class="about-us-area section-padding-80 clearfix" id="main-content-body">
+ <div class="container">
+
+ <div class="blog-post">
+ <h1>Share Cards Drawn by a Script</h1>
+ <div class="blog-meta">
+ 30 October 2026 &middot;
+ <span class="blog-tag">technology</span>
+ </div>
+
+ <p>It took me a long time to understand how sharing to social media sites worked. I thought it was largely driven by them, and that I had no control over what they sourced for the image, because I'd share a blog about data science and a picture of Kwee would appear in the socials (???).</p>
+
+ <p>Kwee is a very fluffy grey cat and has nothing to do with data science portfolios (as far as I'm aware, I don't keep an eye on him all day).</p>
+
+ <p>This post covers the script I wrote to replace all of that, <code>generate_og_images.py</code>, which draws a card for every post with Pillow, and the manifest that lets CI tell when a card is out of date without drawing. Part of the series on how this site is built.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Share card:</strong> the picture a chat app or social site shows under a link you paste.</li>
+ <li><strong>Open Graph:</strong> the meta tags (<code>og:title</code>, <code>og:image</code> and friends) that tell those sites what to show. Facebook created it.</li>
+ <li><strong>Pillow:</strong> the Python library for opening, drawing on and saving pictures.</li>
+ <li><strong>Variable font:</strong> one font file that holds a whole range of weights, picked with a number. Lora runs from 400 to 700.</li>
+ <li><strong>woff2:</strong> the compressed font format browsers download.</li>
+ <li><strong>Hash:</strong> a short fingerprint of some input. Change one letter of the input and the fingerprint changes completely.</li>
+ <li><strong>CI:</strong> the checks GitHub runs on every push, which turn red when something is wrong.</li>
+ </ul>
+ </div>
+
+ <h2>What goes on a card</h2>
+
+ <p>I've since learned a lot about this topic. The Open Graph protocol asks for four things on every page, and one of them is <code>og:image</code>: "An image URL which should represent your object within the graph."<sup><a href="#ref-1" class="cite-ref">[1]</a></sup> Facebook's own guidance is at least 1200 by 630 pixels, as close to 1.91:1 as you can get so nothing is cropped in the feed<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>. So every post now gets <code>img/og/&lt;slug&gt;.jpg</code> at 1200 by 630. Each card copies the post's opener, the big photograph at the top of every post. It's the same photo cropped to fill the frame, under a dark scrim that's heavier at the bottom and on the left where the text sits. Then, from the bottom up, come the site name in the brand gradient, a short gradient rule, the title in Lora, and the kicker (category, date, read time) in capitals.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="../img/og/hosting-photography-on-github-for-free.jpg" alt="A share card: a Ferris wheel lit up at night under a dark scrim, the post title in large white serif type, and kenreid.co.uk in a pink-to-gold gradient at the bottom left" loading="lazy" width="1200" height="630">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> The card for the post about hosting the gallery on GitHub, as the script draws it.</figcaption>
+ </figure>
+
+ <figure class="kr-figure--solo">
+ <div class="kr-diagram kr-diagram--flow" role="group" aria-label="The order the script draws a card in">
+ <ol class="kr-diagram__routes">
+ <li class="kr-diagram__route kr-diagram__route--1">
+ <span class="kr-diagram__label">Behind the type</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Photograph
+ <span class="kr-diagram__sub">cropped to fill 1200 by 630</span>
+ <span class="kr-diagram__detail">The opener's photograph, scaled until it covers the whole card and cut from the middle. A post with no photograph gets the plain dark base colour.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Scrim
+ <span class="kr-diagram__sub">darkest at the bottom left</span>
+ <span class="kr-diagram__detail">The dark base colour laid over the photo, 30% opaque at the top right and 96% at the bottom left, where the type goes. It's the same for every card, so it's worked out once a run.</span></div></li>
+ </ol>
+ </li>
+ <li class="kr-diagram__route kr-diagram__route--2">
+ <span class="kr-diagram__label">The type, from the bottom up</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Site name
+ <span class="kr-diagram__sub">Poppins 600, 26 px</span>
+ <span class="kr-diagram__detail">kenreid.co.uk in the brand gradient, pink to gold, 72 pixels in from the left edge and up from the bottom.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Rule
+ <span class="kr-diagram__sub">72 by 4 px</span>
+ <span class="kr-diagram__detail">A short bar in the same gradient, 26 pixels above the site name.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Title
+ <span class="kr-diagram__sub">Lora 600, 64 px</span>
+ <span class="kr-diagram__detail">Wrapped to the width of the card, three lines at most. When a title needs a fourth, the third ends in an ellipsis.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Kicker
+ <span class="kr-diagram__sub">Poppins 600, 22 px</span>
+ <span class="kr-diagram__detail">Category, date and read time in capitals, in the site's stone grey, 22 pixels above the title.</span></div></li>
+ </ol>
+ </li>
+ </ol>
+ </div>
+ <figcaption class="figure-note">The order a card is drawn in. Hover over, tap or tab to a box for more.</figcaption>
+ </figure>
+
+ <p>They average about 77 KB each, which is important because these could clog up the repo over time. The script also rewrites <code>og:image</code>, <code>twitter:image</code> and the JSON-LD image in each post's head so all three point at the card. The head is <a href="invisible-half-of-a-blog-post.html">the part of a post that link previews read</a>. The thirteen top-level pages, from the homepage to the contact page, get cards in the same design, with a kicker I wrote into the script for each. The script never edits a top-level page, though, so I point those at their cards by hand.</p>
+
+ <figure>
+ <div class="photo-grid">
+ <img src="../img/og/ant-colony-live.jpg" alt="Share card for Ant Colony, Live: coloured paths joining dots on a dark background" loading="lazy" width="1200" height="630">
+ <img src="../img/og/rating-systems.jpg" alt="Share card for Book Ratings Are Broken: a bar chart of star ratings behind the title" loading="lazy" width="1200" height="630">
+ <img src="../img/og/putting-my-photos-on-a-map.jpg" alt="Share card for Putting My Photos on a Map: a dark world map with red markers over Europe" loading="lazy" width="1200" height="630">
+ <img src="../img/og/page-gallery.jpg" alt="Share card for the Photography page: a white tower narrowing into a deep blue sky" loading="lazy" width="1200" height="630">
+ </div>
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> Three posts that open on a demo, a chart and a map, and the card for the photography page.</figcaption>
+ </figure>
+
+ <h2>A font Pillow can't open</h2>
+
+ <p>Pillow does the drawing; its text functions want a TrueType font file<sup><a href="#ref-3" class="cite-ref">[3]</a></sup>, and I only ship the site's fonts as woff2. So the script opens the woff2 with fontTools, sets the font's flavor to nothing (plain TrueType, no compression)<sup><a href="#ref-4" class="cite-ref">[4]</a></sup>, saves it into a buffer in memory and hands Pillow the buffer. The repo keeps no TrueType copy of Lora, only the woff2 files the site already serves. Here's the loader, trimmed a little:</p>
+
+<pre><code class="language-python">f = TTFont(FONTS / name)
+f.flavor = None                # woff2 in, plain TrueType out
+buf = io.BytesIO()
+f.save(buf)
+buf.seek(0)
+font = ImageFont.truetype(buf, size)
+if weight is not None:
+    font.set_variation_by_axes([weight])</code></pre>
+
+ <p>Lora is a variable font with one axis, weight, from 400 to 700, and the opener sets post titles at 600. Without the fix, Pillow drew Lora at its default weight of 400. Every card the first version made had a lighter title than the page it was copied from. <code>set_variation_by_axes</code> takes one value per axis<sup><a href="#ref-3" class="cite-ref">[3]</a></sup>, and Lora only has the one, so <code>[600]</code> does it. At the same time I bumped a number in the script called <code>RENDERER</code> from 1 to 2. That number goes into each card's fingerprint, so every card went stale at once and got redrawn.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="img/sharecards/title-400.webp" alt="The title Share Cards Drawn by a Script in a light serif, over a dark photo of light trails" loading="lazy" width="988" height="97">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> <code>RENDERER</code> 1: Lora at its default weight, 400.</figcaption>
+ </figure>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="img/sharecards/title-600.webp" alt="The same title in a heavier weight of the same serif" loading="lazy" width="988" height="97">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> <code>RENDERER</code> 2: Lora at 600, as the opener sets it.</figcaption>
+ </figure>
+
+ <p>The gradient on the site name is the same trick as CSS <code>background-clip: text</code>, done by hand: draw the text in white on a black mask, then paste a gradient strip through the mask. The scrim is worked out pixel by pixel in plain Python loops. It takes about a fifth of a second, once per run, because it's the same for every card. The finished card is saved as a progressive JPEG at quality 82.</p>
+
+ <figure>
+ <div class="photo-grid">
+ <img src="img/sharecards/name-mask.webp" alt="The words kenreid.co.uk in white on black" loading="lazy" width="960" height="504">
+ <img src="img/sharecards/name-gradient.webp" alt="The words kenreid.co.uk filled with a gradient from pink to gold on a dark background" loading="lazy" width="960" height="504">
+ <img src="img/sharecards/scrim-alone.webp" alt="A rectangle shading from light grey at the top to near black at the bottom, darker on the left" loading="lazy" width="960" height="504">
+ <img src="img/sharecards/scrim-photo.webp" alt="A night photo of light trails on a road, darkened towards the bottom and the left" loading="lazy" width="960" height="504">
+ </div>
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> Left, the site name as a mask, white where the letters are, and the gradient pasted through it, at three times the size it is on a card. Right, the scrim on its own over white, then over this post's photograph.</figcaption>
+ </figure>
+
+ <h2>Knowing a card is stale</h2>
+
+ <p>CI has to go red when a card is out of date: a retitled post, a new photo, an edit that changes the read time in the kicker. I gave each card a fingerprint of what went into it, run through SHA-1 and cut to 16 characters. <code>img/og/manifest.json</code> keeps all 81 of them. <code>--check</code> works the fingerprints out again from <code>posts.json</code> and the files on disk and compares them with the manifest. It also checks that every post's head points at its own card, and it needs nothing but Python's standard library. On my machine, drawing all 81 cards from scratch takes a few seconds, and fingerprinting them takes a few hundredths of a second.</p>
+
+ <figure class="kr-figure--solo">
+ <div class="kr-diagram kr-diagram--flow" role="group" aria-label="How a card's fingerprint is made on my machine and checked in CI">
+ <ol class="kr-diagram__routes">
+ <li class="kr-diagram__route kr-diagram__route--1">
+ <span class="kr-diagram__label">What goes into a fingerprint</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Title
+ <span class="kr-diagram__sub">from posts.json</span>
+ <span class="kr-diagram__detail">Retitle a post and its fingerprint changes.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Kicker
+ <span class="kr-diagram__sub">category, date, read time</span>
+ <span class="kr-diagram__detail">The same line that's drawn on the card, so a read time that moves to another minute changes it.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Photo
+ <span class="kr-diagram__sub">path and size in bytes</span>
+ <span class="kr-diagram__detail">Where the opener's photo lives and how many bytes it weighs. The pixels themselves never go in.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Fonts
+ <span class="kr-diagram__sub">both files' sizes</span>
+ <span class="kr-diagram__detail">Lora and Poppins. A new copy of either font makes every card stale without any code changing.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">RENDERER
+ <span class="kr-diagram__sub">2 since the weight fix</span>
+ <span class="kr-diagram__detail">A number in the script that I bump by hand whenever the drawing changes.</span></div></li>
+ </ol>
+ </li>
+ <li class="kr-diagram__route kr-diagram__route--2">
+ <span class="kr-diagram__label">On my machine</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">SHA-1
+ <span class="kr-diagram__sub">cut to 16 characters</span>
+ <span class="kr-diagram__detail">The hosting post's card comes out as 2010dbb24fd4731f.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Draw
+ <span class="kr-diagram__sub">only the stale cards</span>
+ <span class="kr-diagram__detail">A card is drawn again when its fingerprint isn't the one in the manifest, or its file is missing.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Manifest
+ <span class="kr-diagram__sub">img/og/manifest.json</span>
+ <span class="kr-diagram__detail">Every card's fingerprint, written after each run and committed with the cards.</span></div></li>
+ </ol>
+ </li>
+ <li class="kr-diagram__route kr-diagram__route--3">
+ <span class="kr-diagram__label">In CI</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Fingerprint again
+ <span class="kr-diagram__sub">standard library only</span>
+ <span class="kr-diagram__detail">--check makes every fingerprint again from posts.json and the files on disk, with no Pillow and no drawing.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Compare
+ <span class="kr-diagram__sub">with the manifest</span>
+ <span class="kr-diagram__detail">It also checks that every post's head points at the post's own card.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Red or green
+ <span class="kr-diagram__sub">one stale card is enough</span>
+ <span class="kr-diagram__detail">Every card that doesn't match is listed by name, and the check fails.</span></div></li>
+ </ol>
+ </li>
+ </ol>
+ </div>
+ <figcaption class="figure-note">A card's fingerprint, from what goes into it to the check in CI. Hover over, tap or tab to a box for more.</figcaption>
+ </figure>
+
+<pre><code class="language-python">h = hashlib.sha1()
+h.update(card.title.encode())
+h.update(card.kicker.encode())
+h.update(card.hero.relative_to(ROOT).as_posix().encode())
+h.update(str(card.hero.stat().st_size).encode())</code></pre>
+
+ <p>That <code>as_posix()</code> is the other fix: the first version <jargon key="hash">hashed</jargon> the hero's path the way the operating system spelled it with backslashes on my Windows machine, forward slashes on the Linux runner. So every manifest I wrote locally told CI that every single card was stale. I fixed it with forward slashes everywhere, and not one card changed.</p>
+
+ <figure class="kr-figure--solo">
+ <div class="kr-diagram kr-diagram--tree" role="group" aria-label="One card fingerprinted on Windows and on Linux, before and after the fix">
+ <div class="kr-diagram__node kr-diagram__root">The hosting post's card
+ <span class="kr-diagram__sub">same title, kicker, photo and fonts</span>
+ <span class="kr-diagram__detail">Everything that goes into its fingerprint is the same on both machines, apart from how the photo's path is spelled.</span></div>
+ <ol class="kr-diagram__routes">
+ <li class="kr-diagram__route kr-diagram__route--1">
+ <span class="kr-diagram__label">My Windows machine, before the fix</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Path
+ <span class="kr-diagram__sub"><code>img\<wbr>photography\<wbr>hero\<wbr>387.webp</code></span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Fingerprint
+ <span class="kr-diagram__sub"><code>9c92e092ab178253</code></span>
+ <span class="kr-diagram__detail">What the manifest I wrote locally said.</span></div></li>
+ </ol>
+ </li>
+ <li class="kr-diagram__route kr-diagram__route--2">
+ <span class="kr-diagram__label">The Linux runner</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Path
+ <span class="kr-diagram__sub"><code>img/<wbr>photography/<wbr>hero/<wbr>387.webp</code></span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Fingerprint
+ <span class="kr-diagram__sub"><code>2010dbb24fd4731f</code></span>
+ <span class="kr-diagram__detail">What CI worked out. It didn't match the manifest, so CI called the card stale, and every other card went the same way.</span></div></li>
+ </ol>
+ </li>
+ <li class="kr-diagram__route kr-diagram__route--3">
+ <span class="kr-diagram__label">Both, after the fix</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Path
+ <span class="kr-diagram__sub"><code>img/<wbr>photography/<wbr>hero/<wbr>387.webp</code></span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Fingerprint
+ <span class="kr-diagram__sub"><code>2010dbb24fd4731f</code></span>
+ <span class="kr-diagram__detail">Forward slashes on both machines, so Windows writes the fingerprint the runner expects. Only the manifest changed, so no card had to be drawn again.</span></div></li>
+ </ol>
+ </li>
+ </ol>
+ </div>
+ <figcaption class="figure-note">One card fingerprinted both ways, worked out with today's title, kicker and photo. Hover over, tap or tab to a box for more.</figcaption>
+ </figure>
+
+ <h2>Holes in it</h2>
+
+ <ul>
+ <li><strong>File size, not contents.</strong> The fingerprint takes the hero's size in bytes, so a photo replaced by a different one that happens to weigh the same to the byte gets past the check.</li>
+ <li><strong>The URL never changes.</strong> A redrawn card keeps the same address, and Facebook's documentation says to give an updated image a new URL if you want the new one shown<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>. A post whose card I redraw can go on showing the old one there for a while.</li>
+ <li><strong>Long titles get cut.</strong> A card has room for three lines of 64 pixel Lora. One title runs to four: the Rothfuss post, whose card stops at "and the Architecture of..." and drops "Creative Friction" altogether.</li>
+ </ul>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="../img/og/fifteen-years-of-silence-rothfuss-doors-of-stone.jpg" alt="Share card for the Rothfuss post: temple columns under a cloudy sky, the title stopping after three lines at and the Architecture of..." loading="lazy" width="1200" height="630">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> The Rothfuss post's card. The title's last two words don't fit.</figcaption>
+ </figure>
+
+ <p>Every card lives at <code>/img/og/&lt;slug&gt;.jpg</code>, so you can look at one without pasting a link anywhere. This post's will be at <code>/img/og/share-cards-drawn-by-a-script.jpg</code> once it's published.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="img/sharecards/this-post.jpg" alt="Share card for this post: a night photo of light trails on a road, the title Share Cards Drawn by a Script in white serif type, and kenreid.co.uk in a pink-to-gold gradient" loading="lazy" width="1200" height="630">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> This post's own card.</figcaption>
+ </figure>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Does a post need a photograph for this to work?</summary>
+ <p>No. Without one the card is the dark base colour with the same type on it, but every post has a picture anyway, and 20 of the 68 use something other than one of my photographs, most of them a demo, a chart or a map made for the post.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Does the card change when a post is edited?</summary>
+ <p>Only when something on it changes: the title, the category, the date, the photo, or the read time. An edit that tips the read time over a minute boundary redraws the card with the new kicker.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+ <ol class="references">
+ <li id="ref-1">The Open Graph protocol. <em>Basic Metadata.</em> <a href="https://ogp.me/" target="_blank" rel="noopener noreferrer">https://ogp.me/</a></li>
+ <li id="ref-2">Meta for Developers. <em>Images in Link Shares.</em> <a href="https://developers.facebook.com/docs/sharing/webmasters/images/" target="_blank" rel="noopener noreferrer">https://developers.facebook.com/docs/sharing/webmasters/images/</a></li>
+ <li id="ref-3">Pillow. <em>ImageFont module.</em> <a href="https://pillow.readthedocs.io/en/stable/reference/ImageFont.html" target="_blank" rel="noopener noreferrer">https://pillow.readthedocs.io/en/stable/reference/ImageFont.html</a></li>
+ <li id="ref-4">fontTools. <em>TTFont.</em> <a href="https://fonttools.readthedocs.io/en/latest/ttLib/ttFont.html" target="_blank" rel="noopener noreferrer">https://fonttools.readthedocs.io/en/latest/ttLib/ttFont.html</a></li>
+ </ol>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/blog/img/fonts/fonts-og.png')">
+              <a href="self-hosting-your-fonts.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../blog/img/fonts/fonts-og.png" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">12 July 2026 · 7 min read</div>
+                  <h3 class="blog-card-title">Self-Hosting Your Fonts</h3>
+                  <p class="blog-card-excerpt">No Google Fonts, no third-party requests, and icon fonts subset from 75 KB down to 1.5 KB. Here&#x27;s how, and why it&#x27;s worth an afternoon.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/78.webp')">
+              <a href="invisible-half-of-a-blog-post.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/78.webp" srcset="../img/photography/thumb/78.webp 1x, ../img/photography/thumb/78@2x.webp 2x" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">4 August 2026 · 7 min read</div>
+                  <h3 class="blog-card-title">The Invisible Half of a Blog Post</h3>
+                  <p class="blog-card-excerpt">Every post on this blog carries a pile of metadata nobody reads: social preview cards, structured data, feeds, citation tags. What each layer does, and why the real problem is discipline, not difficulty.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/387.webp')">
+              <a href="hosting-photography-on-github-for-free.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/387.webp" srcset="../img/photography/thumb/387.webp 1x, ../img/photography/thumb/387@2x.webp 2x" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">6 July 2026 · 10 min read</div>
+                  <h3 class="blog-card-title">Hosting a Photography Portfolio on GitHub for Free</h3>
+                  <p class="blog-card-excerpt">GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here&#x27;s the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">photography</span><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ </div>
+ </div>
+ </div>
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js?v=20260923a"></script>
+ <script src="../js/site.js?v=20260923a"></script>
+ <script src="../js/lightbox.js?v=20260923a"></script>
+ <script src="../js/default-assets/active.js?v=20260923a"></script>
+ <script src="../js/shared-components.js?v=20260923a"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+</body>
+</html>

@@ -5,11 +5,499 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 29 Oct 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Thu, 29 Oct 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Fri, 30 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Fri, 30 Oct 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Share Cards Drawn by a Script</title>
+      <link>https://www.kenreid.co.uk/blog/share-cards-drawn-by-a-script.html</link>
+      <guid>https://www.kenreid.co.uk/blog/share-cards-drawn-by-a-script.html</guid>
+      <pubDate>Fri, 30 Oct 2026 00:00:00 +0000</pubDate>
+      <description>A Python script draws the preview picture for every post on this site, here&#x27;s how it&#x27;s done, and the testing to make sure I stay compliant with my own rules!</description>
+      <category>technology</category>
+      <content:encoded><![CDATA[
+
+ <p>It took me a long time to understand how sharing to social media sites worked. I thought it was largely driven by them, and that I had no control over what they sourced for the image, because I'd share a blog about data science and a picture of Kwee would appear in the socials (???).</p>
+
+ <p>Kwee is a very fluffy grey cat and has nothing to do with data science portfolios (as far as I'm aware, I don't keep an eye on him all day).</p>
+
+ <p>This post covers the script I wrote to replace all of that, <code>generate_og_images.py</code>, which draws a card for every post with Pillow, and the manifest that lets CI tell when a card is out of date without drawing. Part of the series on how this site is built.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Share card:</strong> the picture a chat app or social site shows under a link you paste.</li>
+ <li><strong>Open Graph:</strong> the meta tags (<code>og:title</code>, <code>og:image</code> and friends) that tell those sites what to show. Facebook created it.</li>
+ <li><strong>Pillow:</strong> the Python library for opening, drawing on and saving pictures.</li>
+ <li><strong>Variable font:</strong> one font file that holds a whole range of weights, picked with a number. Lora runs from 400 to 700.</li>
+ <li><strong>woff2:</strong> the compressed font format browsers download.</li>
+ <li><strong>Hash:</strong> a short fingerprint of some input. Change one letter of the input and the fingerprint changes completely.</li>
+ <li><strong>CI:</strong> the checks GitHub runs on every push, which turn red when something is wrong.</li>
+ </ul>
+ </div>
+
+ <h2>What goes on a card</h2>
+
+ <p>I've since learned a lot about this topic. The Open Graph protocol asks for four things on every page, and one of them is <code>og:image</code>: "An image URL which should represent your object within the graph."<sup><a href="https://www.kenreid.co.uk/blog/share-cards-drawn-by-a-script.html#ref-1" class="cite-ref">[1]</a></sup> Facebook's own guidance is at least 1200 by 630 pixels, as close to 1.91:1 as you can get so nothing is cropped in the feed<sup><a href="https://www.kenreid.co.uk/blog/share-cards-drawn-by-a-script.html#ref-2" class="cite-ref">[2]</a></sup>. So every post now gets <code>img/og/&lt;slug&gt;.jpg</code> at 1200 by 630. Each card copies the post's opener, the big photograph at the top of every post. It's the same photo cropped to fill the frame, under a dark scrim that's heavier at the bottom and on the left where the text sits. Then, from the bottom up, come the site name in the brand gradient, a short gradient rule, the title in Lora, and the kicker (category, date, read time) in capitals.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/og/hosting-photography-on-github-for-free.jpg" alt="A share card: a Ferris wheel lit up at night under a dark scrim, the post title in large white serif type, and kenreid.co.uk in a pink-to-gold gradient at the bottom left" loading="lazy" width="1200" height="630">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> The card for the post about hosting the gallery on GitHub, as the script draws it.</figcaption>
+ </figure>
+
+ <figure class="kr-figure--solo">
+ <div class="kr-diagram kr-diagram--flow" role="group" aria-label="The order the script draws a card in">
+ <ol class="kr-diagram__routes">
+ <li class="kr-diagram__route kr-diagram__route--1">
+ <span class="kr-diagram__label">Behind the type</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Photograph
+ <span class="kr-diagram__sub">cropped to fill 1200 by 630</span>
+ <span class="kr-diagram__detail">The opener's photograph, scaled until it covers the whole card and cut from the middle. A post with no photograph gets the plain dark base colour.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Scrim
+ <span class="kr-diagram__sub">darkest at the bottom left</span>
+ <span class="kr-diagram__detail">The dark base colour laid over the photo, 30% opaque at the top right and 96% at the bottom left, where the type goes. It's the same for every card, so it's worked out once a run.</span></div></li>
+ </ol>
+ </li>
+ <li class="kr-diagram__route kr-diagram__route--2">
+ <span class="kr-diagram__label">The type, from the bottom up</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Site name
+ <span class="kr-diagram__sub">Poppins 600, 26 px</span>
+ <span class="kr-diagram__detail">kenreid.co.uk in the brand gradient, pink to gold, 72 pixels in from the left edge and up from the bottom.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Rule
+ <span class="kr-diagram__sub">72 by 4 px</span>
+ <span class="kr-diagram__detail">A short bar in the same gradient, 26 pixels above the site name.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Title
+ <span class="kr-diagram__sub">Lora 600, 64 px</span>
+ <span class="kr-diagram__detail">Wrapped to the width of the card, three lines at most. When a title needs a fourth, the third ends in an ellipsis.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Kicker
+ <span class="kr-diagram__sub">Poppins 600, 22 px</span>
+ <span class="kr-diagram__detail">Category, date and read time in capitals, in the site's stone grey, 22 pixels above the title.</span></div></li>
+ </ol>
+ </li>
+ </ol>
+ </div>
+ <figcaption class="figure-note">The order a card is drawn in. Hover over, tap or tab to a box for more.</figcaption>
+ </figure>
+
+ <p>They average about 77 KB each, which is important because these could clog up the repo over time. The script also rewrites <code>og:image</code>, <code>twitter:image</code> and the JSON-LD image in each post's head so all three point at the card. The head is <a href="https://www.kenreid.co.uk/blog/invisible-half-of-a-blog-post.html">the part of a post that link previews read</a>. The thirteen top-level pages, from the homepage to the contact page, get cards in the same design, with a kicker I wrote into the script for each. The script never edits a top-level page, though, so I point those at their cards by hand.</p>
+
+ <figure>
+ <div class="photo-grid">
+ <img src="https://www.kenreid.co.uk/img/og/ant-colony-live.jpg" alt="Share card for Ant Colony, Live: coloured paths joining dots on a dark background" loading="lazy" width="1200" height="630">
+ <img src="https://www.kenreid.co.uk/img/og/rating-systems.jpg" alt="Share card for Book Ratings Are Broken: a bar chart of star ratings behind the title" loading="lazy" width="1200" height="630">
+ <img src="https://www.kenreid.co.uk/img/og/putting-my-photos-on-a-map.jpg" alt="Share card for Putting My Photos on a Map: a dark world map with red markers over Europe" loading="lazy" width="1200" height="630">
+ <img src="https://www.kenreid.co.uk/img/og/page-gallery.jpg" alt="Share card for the Photography page: a white tower narrowing into a deep blue sky" loading="lazy" width="1200" height="630">
+ </div>
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> Three posts that open on a demo, a chart and a map, and the card for the photography page.</figcaption>
+ </figure>
+
+ <h2>A font Pillow can't open</h2>
+
+ <p>Pillow does the drawing; its text functions want a TrueType font file<sup><a href="https://www.kenreid.co.uk/blog/share-cards-drawn-by-a-script.html#ref-3" class="cite-ref">[3]</a></sup>, and I only ship the site's fonts as woff2. So the script opens the woff2 with fontTools, sets the font's flavor to nothing (plain TrueType, no compression)<sup><a href="https://www.kenreid.co.uk/blog/share-cards-drawn-by-a-script.html#ref-4" class="cite-ref">[4]</a></sup>, saves it into a buffer in memory and hands Pillow the buffer. The repo keeps no TrueType copy of Lora, only the woff2 files the site already serves. Here's the loader, trimmed a little:</p>
+
+<pre><code class="language-python">f = TTFont(FONTS / name)
+f.flavor = None                # woff2 in, plain TrueType out
+buf = io.BytesIO()
+f.save(buf)
+buf.seek(0)
+font = ImageFont.truetype(buf, size)
+if weight is not None:
+    font.set_variation_by_axes([weight])</code></pre>
+
+ <p>Lora is a variable font with one axis, weight, from 400 to 700, and the opener sets post titles at 600. Without the fix, Pillow drew Lora at its default weight of 400. Every card the first version made had a lighter title than the page it was copied from. <code>set_variation_by_axes</code> takes one value per axis<sup><a href="https://www.kenreid.co.uk/blog/share-cards-drawn-by-a-script.html#ref-3" class="cite-ref">[3]</a></sup>, and Lora only has the one, so <code>[600]</code> does it. At the same time I bumped a number in the script called <code>RENDERER</code> from 1 to 2. That number goes into each card's fingerprint, so every card went stale at once and got redrawn.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/blog/img/sharecards/title-400.webp" alt="The title Share Cards Drawn by a Script in a light serif, over a dark photo of light trails" loading="lazy" width="988" height="97">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> <code>RENDERER</code> 1: Lora at its default weight, 400.</figcaption>
+ </figure>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/blog/img/sharecards/title-600.webp" alt="The same title in a heavier weight of the same serif" loading="lazy" width="988" height="97">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> <code>RENDERER</code> 2: Lora at 600, as the opener sets it.</figcaption>
+ </figure>
+
+ <p>The gradient on the site name is the same trick as CSS <code>background-clip: text</code>, done by hand: draw the text in white on a black mask, then paste a gradient strip through the mask. The scrim is worked out pixel by pixel in plain Python loops. It takes about a fifth of a second, once per run, because it's the same for every card. The finished card is saved as a progressive JPEG at quality 82.</p>
+
+ <figure>
+ <div class="photo-grid">
+ <img src="https://www.kenreid.co.uk/blog/img/sharecards/name-mask.webp" alt="The words kenreid.co.uk in white on black" loading="lazy" width="960" height="504">
+ <img src="https://www.kenreid.co.uk/blog/img/sharecards/name-gradient.webp" alt="The words kenreid.co.uk filled with a gradient from pink to gold on a dark background" loading="lazy" width="960" height="504">
+ <img src="https://www.kenreid.co.uk/blog/img/sharecards/scrim-alone.webp" alt="A rectangle shading from light grey at the top to near black at the bottom, darker on the left" loading="lazy" width="960" height="504">
+ <img src="https://www.kenreid.co.uk/blog/img/sharecards/scrim-photo.webp" alt="A night photo of light trails on a road, darkened towards the bottom and the left" loading="lazy" width="960" height="504">
+ </div>
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> Left, the site name as a mask, white where the letters are, and the gradient pasted through it, at three times the size it is on a card. Right, the scrim on its own over white, then over this post's photograph.</figcaption>
+ </figure>
+
+ <h2>Knowing a card is stale</h2>
+
+ <p>CI has to go red when a card is out of date: a retitled post, a new photo, an edit that changes the read time in the kicker. I gave each card a fingerprint of what went into it, run through SHA-1 and cut to 16 characters. <code>img/og/manifest.json</code> keeps all 81 of them. <code>--check</code> works the fingerprints out again from <code>posts.json</code> and the files on disk and compares them with the manifest. It also checks that every post's head points at its own card, and it needs nothing but Python's standard library. On my machine, drawing all 81 cards from scratch takes a few seconds, and fingerprinting them takes a few hundredths of a second.</p>
+
+ <figure class="kr-figure--solo">
+ <div class="kr-diagram kr-diagram--flow" role="group" aria-label="How a card's fingerprint is made on my machine and checked in CI">
+ <ol class="kr-diagram__routes">
+ <li class="kr-diagram__route kr-diagram__route--1">
+ <span class="kr-diagram__label">What goes into a fingerprint</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Title
+ <span class="kr-diagram__sub">from posts.json</span>
+ <span class="kr-diagram__detail">Retitle a post and its fingerprint changes.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Kicker
+ <span class="kr-diagram__sub">category, date, read time</span>
+ <span class="kr-diagram__detail">The same line that's drawn on the card, so a read time that moves to another minute changes it.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Photo
+ <span class="kr-diagram__sub">path and size in bytes</span>
+ <span class="kr-diagram__detail">Where the opener's photo lives and how many bytes it weighs. The pixels themselves never go in.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Fonts
+ <span class="kr-diagram__sub">both files' sizes</span>
+ <span class="kr-diagram__detail">Lora and Poppins. A new copy of either font makes every card stale without any code changing.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">RENDERER
+ <span class="kr-diagram__sub">2 since the weight fix</span>
+ <span class="kr-diagram__detail">A number in the script that I bump by hand whenever the drawing changes.</span></div></li>
+ </ol>
+ </li>
+ <li class="kr-diagram__route kr-diagram__route--2">
+ <span class="kr-diagram__label">On my machine</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">SHA-1
+ <span class="kr-diagram__sub">cut to 16 characters</span>
+ <span class="kr-diagram__detail">The hosting post's card comes out as 2010dbb24fd4731f.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Draw
+ <span class="kr-diagram__sub">only the stale cards</span>
+ <span class="kr-diagram__detail">A card is drawn again when its fingerprint isn't the one in the manifest, or its file is missing.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Manifest
+ <span class="kr-diagram__sub">img/og/manifest.json</span>
+ <span class="kr-diagram__detail">Every card's fingerprint, written after each run and committed with the cards.</span></div></li>
+ </ol>
+ </li>
+ <li class="kr-diagram__route kr-diagram__route--3">
+ <span class="kr-diagram__label">In CI</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Fingerprint again
+ <span class="kr-diagram__sub">standard library only</span>
+ <span class="kr-diagram__detail">--check makes every fingerprint again from posts.json and the files on disk, with no Pillow and no drawing.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Compare
+ <span class="kr-diagram__sub">with the manifest</span>
+ <span class="kr-diagram__detail">It also checks that every post's head points at the post's own card.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Red or green
+ <span class="kr-diagram__sub">one stale card is enough</span>
+ <span class="kr-diagram__detail">Every card that doesn't match is listed by name, and the check fails.</span></div></li>
+ </ol>
+ </li>
+ </ol>
+ </div>
+ <figcaption class="figure-note">A card's fingerprint, from what goes into it to the check in CI. Hover over, tap or tab to a box for more.</figcaption>
+ </figure>
+
+<pre><code class="language-python">h = hashlib.sha1()
+h.update(card.title.encode())
+h.update(card.kicker.encode())
+h.update(card.hero.relative_to(ROOT).as_posix().encode())
+h.update(str(card.hero.stat().st_size).encode())</code></pre>
+
+ <p>That <code>as_posix()</code> is the other fix: the first version <jargon key="hash">hashed</jargon> the hero's path the way the operating system spelled it with backslashes on my Windows machine, forward slashes on the Linux runner. So every manifest I wrote locally told CI that every single card was stale. I fixed it with forward slashes everywhere, and not one card changed.</p>
+
+ <figure class="kr-figure--solo">
+ <div class="kr-diagram kr-diagram--tree" role="group" aria-label="One card fingerprinted on Windows and on Linux, before and after the fix">
+ <div class="kr-diagram__node kr-diagram__root">The hosting post's card
+ <span class="kr-diagram__sub">same title, kicker, photo and fonts</span>
+ <span class="kr-diagram__detail">Everything that goes into its fingerprint is the same on both machines, apart from how the photo's path is spelled.</span></div>
+ <ol class="kr-diagram__routes">
+ <li class="kr-diagram__route kr-diagram__route--1">
+ <span class="kr-diagram__label">My Windows machine, before the fix</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Path
+ <span class="kr-diagram__sub"><code>img\<wbr>photography\<wbr>hero\<wbr>387.webp</code></span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Fingerprint
+ <span class="kr-diagram__sub"><code>9c92e092ab178253</code></span>
+ <span class="kr-diagram__detail">What the manifest I wrote locally said.</span></div></li>
+ </ol>
+ </li>
+ <li class="kr-diagram__route kr-diagram__route--2">
+ <span class="kr-diagram__label">The Linux runner</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Path
+ <span class="kr-diagram__sub"><code>img/<wbr>photography/<wbr>hero/<wbr>387.webp</code></span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Fingerprint
+ <span class="kr-diagram__sub"><code>2010dbb24fd4731f</code></span>
+ <span class="kr-diagram__detail">What CI worked out. It didn't match the manifest, so CI called the card stale, and every other card went the same way.</span></div></li>
+ </ol>
+ </li>
+ <li class="kr-diagram__route kr-diagram__route--3">
+ <span class="kr-diagram__label">Both, after the fix</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Path
+ <span class="kr-diagram__sub"><code>img/<wbr>photography/<wbr>hero/<wbr>387.webp</code></span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Fingerprint
+ <span class="kr-diagram__sub"><code>2010dbb24fd4731f</code></span>
+ <span class="kr-diagram__detail">Forward slashes on both machines, so Windows writes the fingerprint the runner expects. Only the manifest changed, so no card had to be drawn again.</span></div></li>
+ </ol>
+ </li>
+ </ol>
+ </div>
+ <figcaption class="figure-note">One card fingerprinted both ways, worked out with today's title, kicker and photo. Hover over, tap or tab to a box for more.</figcaption>
+ </figure>
+
+ <h2>Holes in it</h2>
+
+ <ul>
+ <li><strong>File size, not contents.</strong> The fingerprint takes the hero's size in bytes, so a photo replaced by a different one that happens to weigh the same to the byte gets past the check.</li>
+ <li><strong>The URL never changes.</strong> A redrawn card keeps the same address, and Facebook's documentation says to give an updated image a new URL if you want the new one shown<sup><a href="https://www.kenreid.co.uk/blog/share-cards-drawn-by-a-script.html#ref-2" class="cite-ref">[2]</a></sup>. A post whose card I redraw can go on showing the old one there for a while.</li>
+ <li><strong>Long titles get cut.</strong> A card has room for three lines of 64 pixel Lora. One title runs to four: the Rothfuss post, whose card stops at "and the Architecture of..." and drops "Creative Friction" altogether.</li>
+ </ul>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/og/fifteen-years-of-silence-rothfuss-doors-of-stone.jpg" alt="Share card for the Rothfuss post: temple columns under a cloudy sky, the title stopping after three lines at and the Architecture of..." loading="lazy" width="1200" height="630">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> The Rothfuss post's card. The title's last two words don't fit.</figcaption>
+ </figure>
+
+ <p>Every card lives at <code>/img/og/&lt;slug&gt;.jpg</code>, so you can look at one without pasting a link anywhere. This post's will be at <code>/img/og/share-cards-drawn-by-a-script.jpg</code> once it's published.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/blog/img/sharecards/this-post.jpg" alt="Share card for this post: a night photo of light trails on a road, the title Share Cards Drawn by a Script in white serif type, and kenreid.co.uk in a pink-to-gold gradient" loading="lazy" width="1200" height="630">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> This post's own card.</figcaption>
+ </figure>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Does a post need a photograph for this to work?</summary>
+ <p>No. Without one the card is the dark base colour with the same type on it, but every post has a picture anyway, and 20 of the 68 use something other than one of my photographs, most of them a demo, a chart or a map made for the post.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Does the card change when a post is edited?</summary>
+ <p>Only when something on it changes: the title, the category, the date, the photo, or the read time. An edit that tips the read time over a minute boundary redraws the card with the new kicker.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+ <ol class="references">
+ <li id="ref-1">The Open Graph protocol. <em>Basic Metadata.</em> <a href="https://ogp.me/" target="_blank" rel="noopener noreferrer">https://ogp.me/</a></li>
+ <li id="ref-2">Meta for Developers. <em>Images in Link Shares.</em> <a href="https://developers.facebook.com/docs/sharing/webmasters/images/" target="_blank" rel="noopener noreferrer">https://developers.facebook.com/docs/sharing/webmasters/images/</a></li>
+ <li id="ref-3">Pillow. <em>ImageFont module.</em> <a href="https://pillow.readthedocs.io/en/stable/reference/ImageFont.html" target="_blank" rel="noopener noreferrer">https://pillow.readthedocs.io/en/stable/reference/ImageFont.html</a></li>
+ <li id="ref-4">fontTools. <em>TTFont.</em> <a href="https://fonttools.readthedocs.io/en/latest/ttLib/ttFont.html" target="_blank" rel="noopener noreferrer">https://fonttools.readthedocs.io/en/latest/ttLib/ttFont.html</a></li>
+ </ol>
+
+        
+
+ ]]></content:encoded>
+    </item>
+    <item>
+      <title>Turning My Gallery Into a Wallpaper</title>
+      <link>https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html</link>
+      <guid>https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html</guid>
+      <pubDate>Fri, 30 Oct 2026 00:00:00 +0000</pubDate>
+      <description>How my gallery&#x27;s slideshow works as a wallpaper, why every photograph needed a smaller copy, and where its fire, rain and café sounds come from.</description>
+      <category>technology</category>
+      <category>photography</category>
+      <content:encoded><![CDATA[
+
+ <p>Open <code>www.kenreid.co.uk/slideshow.html?sound=fire</code>, press F11, and my photographs play one at a time, full screen, with a fire crackling underneath. Point a wallpaper app at the same link and it's your desktop. I did this because I find photography particularly difficult to share. I'll go out and spend 2 hours taking 300 photos, I'll purge down to 10 over 30 minutes, then spend another 2 hours editing those 10, which are now 8. I then post them online, and my Mum and my wife comment and like them. I appreciate and love you guys for that, thank you for the support! But - I want to share it with others: photographers, people local to the area (I know I love seeing nice photos of where i live, work and frequent), and hopefully my shots are good enough that others can like them too. I have even made Google Chrome themes you can download, of some of my older shots, which were fairly successful (one had 100,000 downloads, which was so fulfilling). But how do you share beyond just posting on social media? Well, one way is to have your shots on display. Rather than spending a high sum on having prints made, I opted to show them on my website, via this feature, on my home TV occasionally. It means if we have guests over, I can have the TVs idle over these photos, slowly meandering through them, while some ambient sounds play. It often sparks conversation, and interest, more than a social media share does. So, this post covers the two ways into the slideshow, why it needed a smaller copy of every photograph I've ever put up, and where the sounds come from. Part of the series on how this site is built.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Query string:</strong> the part of a URL after the question mark, like <code>?sound=fire</code>.</li>
+ <li><strong>Hero:</strong> this site's name for a big copy of a photograph, 1920 pixels on its long edge, made for showing large.</li>
+ <li><strong>Release:</strong> a bundle of files attached to a GitHub repository. Mine holds the full-size originals.</li>
+ <li><strong>Wallpaper app:</strong> a program that puts something other than a still image behind your desktop icons. Lively Wallpaper on Windows can show a web page.</li>
+ <li><strong>Web Audio API:</strong> the browser's built-in kit for making and mixing sound in code.</li>
+ <li><strong>CC0 and CC BY:</strong> Creative Commons licences. CC0 gives a work away with no conditions; CC BY lets anyone use it as long as they credit whoever made it.</li>
+ <li><strong>LUFS:</strong> loudness units relative to full scale, a measure of how loud a recording sounds to people rather than how big its waveform is. Broadcasters level to it.</li>
+ </ul>
+ </div>
+
+ <h2>Two ways in</h2>
+
+ <p>The gallery has a Slideshow button under its title, next to the one for the photo map. It plays the photographs your filter is showing, full screen, so if you've clicked Wildlife you get the wildlife photos only. Escape takes you back to the gallery, scrolled where you left it.</p>
+
+ <p>Full screen is... fiddly. A page can only ask the browser for full screen while it's handling a click or a key press<sup><a href="https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html#ref-1" class="cite-ref">[1]</a></sup>, and the slideshow's script isn't on the gallery page at all until someone presses that button (it's nearly 100 KB, under 30 KB compressed, and there's no point every visit to the gallery downloading it). So the click asks for full screen first, then fetches the script, then opens the slideshow over the page. Done the other way round, the browser can decide the click is over by the time the script arrives, and you get a slideshow in a window.</p>
+
+ <p>The button is also a plain link to <code>slideshow.html</code> with the filter on the end, so middle-clicking it opens the same slideshow in a tab. That page is the second way in. It has no header, no footer and no menu, just the slideshow. On a computer where the window isn't already the size of the screen, I opted to make a line near the bottom that says to press F11 (Control + Command + F on a Mac) for a few seconds and then goes away. </p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/blog/img/wallpaper/slideshow-controls.webp" alt="A black and white photograph of a person walking across an iron truss footbridge fills the screen, with a caption reading Holland, Michigan in the top right and a bar of playback, sound and settings controls along the bottom" loading="lazy" width="1366" height="768">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> The controls, which hide again after a couple of seconds without the mouse moving.</figcaption>
+ </figure>
+
+ <h2>Everything is in the address</h2>
+
+ <p>A wallpaper app like Lively Wallpaper<sup><a href="https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html#ref-2" class="cite-ref">[2]</a></sup> can't click through a settings panel for you every time the computer starts, so I put every setting in the query string, and a link is the whole slideshow:</p>
+
+ <ul>
+ <li><code>show</code> picks what plays: the photographs (the default), a tour of the places on the photo map, the quotes I've saved, the books I've read or the albums I play most. The photo map and the quotes, books and music pages have Slideshow buttons of their own.</li>
+ <li><code>tag</code>, <code>place</code> and <code>added</code> choose the photographs: a subject from the gallery's filters, a place from the photo map, or the photoset they arrived in.</li>
+ <li><code>order</code> is shuffle, newest or oldest, and <code>every</code> is how many seconds each one stays up (20 unless you say otherwise).</li>
+ <li><code>sound</code> is fire, rain, storm (rain and thunder), forest, river, cafe or city, and <code>volume</code> runs from 0 to 100.</li>
+ <li><code>fit=fill</code> crops each photo to fill the screen. Without it you see the whole frame, sitting on a blurred and darkened copy of itself, which fills the bars a portrait leaves on a wide monitor.</li>
+ <li><code>drift=0</code> stops the slow zoom, <code>captions=0</code> hides the place name, and <code>controls=off</code> means the controls never show up at all.</li>
+ <li><code>sleep</code> turns the sound off after so many minutes, <code>dim</code> darkens the screen, and <code>clock</code> and <code>info</code> add the time and date in the corner and each photo's number, place and subjects. Both come on by themselves with <code>controls=off</code>, since that's the wallpaper, and <code>clock=0</code> or <code>info=0</code> turns one off.</li>
+ </ul>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/blog/img/wallpaper/slideshow-portrait.webp" alt="A tall photograph of the State Theatre's vertical sign and marquee in Ann Arbor, shown whole in the middle of a wide screen, with a blurred copy of the same photograph filling the space either side" loading="lazy" width="1366" height="768">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> The State Theatre in Ann Arbor, a portrait frame on a wide screen. Both sides are the same photo, blurred and darkened.</figcaption>
+ </figure>
+
+ <p>Of course that's just for users of a wallpaper app. The settings panel has a Copy link button that writes the address for whatever you've set up, with a tickbox for the wallpaper version. For Lively there's also a package to download from the same panel: drag it into Lively and the settings are in its Customise menu. Anything in the address that means nothing (a typo in a subject, a place I've never been) is dropped to prevent errors.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/blog/img/wallpaper/slideshow-settings.webp" alt="The slideshow's settings panel open over a photograph of a brown bear in a grassy enclosure, scrolled down to an As a wallpaper section with the slideshow's link in a box, a red Copy link button and a line crediting the rain recording to luc de bruijn under CC BY 3.0" loading="lazy" width="1366" height="768">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> The settings for wildlife with the rain on, over the bears at the Scottish Deer Centre in Fife. The box holds <code>slideshow.html?tag=wildlife&amp;sound=rain</code>, and the line under it names whoever recorded the rain.</figcaption>
+ </figure>
+
+ <p>I put the place caption in the top right corner. Windows puts the desktop icons down the left and the taskbar along the bottom, so that was the one corner left.</p>
+
+ <h2>A smaller copy of every photograph</h2>
+
+ <p>The full-size originals live on <a href="https://www.kenreid.co.uk/blog/hosting-photography-on-github-for-free.html">a GitHub release</a>. Most of the older ones are a megabyte or two, but the new Canon EOS R ones run to tens of megabytes, and the biggest are over 70 MB. GitHub answers every request for one of them with <code>Cache-Control: no-cache</code>, so the browser checks back with GitHub each time a photo comes round again instead of trusting the copy it already has.</p>
+
+ <p>At 20 seconds a photo, a wallpaper left on all day shows 4,320 of them. With the originals, that's tens of gigabytes a day, for a background. So yeah, I had to fix that.</p>
+
+ <p>Until October only the photographs a page or post shows had a hero, about 180 of them. Now I have a script make one for every frame from its original, 1920 pixels on the long edge and never enlarged, so the early 1200-pixel frames stay 1200. Most come in under 300 KB. Frame 589's is 193 KB, about a three-hundredth of its 62 MB original, and still more pixels than a 1080p monitor can show. The site's checks now fail if any frame is missing one, and the routine I follow for adding photographs makes it alongside the thumbnail to save time later.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/589.webp" alt="A calico cat lying down with its chin low beside a white paw, looking at the camera with green eyes" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/589.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/589@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/589.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> Frame 589, one of the Canon EOS R ones. The slideshow shows it from a 193 KB file instead of the 62 MB original.</figcaption>
+ </figure>
+
+ <p>The next photo is fetched and decoded while the current one is still up, to try and circumvent issues with wifi! If a hero won't load, the 800-pixel thumbnail stands in, and a frame with neither gets skipped. When the slideshow gets to the end of the list it fetches the lists of photographs again before starting over, so a wallpaper that's been running for a week picks up the photosets I've added since, and a shuffle never starts the new pass on the photo that ended the last one. I may have spent too long on this feature that only I will likely use!</p>
+
+ <h2>Sounds, second time round</h2>
+
+ <p>My first go made the sounds in the browser, with no recordings at all: filtered noise for the steady part, and drops, crackles, birds and cars drawn at random on top of it with the Web Audio API<sup><a href="https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html#ref-3" class="cite-ref">[3]</a></sup>. I wanted a bunch of them, including a caf&eacute; murmur built out of fake vowels, measured them, balanced them, and checked them on spectrograms. I was having wild success, considering I'd never done anything like it before, but it sounded pretty awful despite leaps and bounds of progress, so I decided I was wasting my time.</p>
+
+ <p>The sounds now are recordings people have shared under free licences, from Wikimedia Commons and OpenGameArt, where every file has its licence on its page:</p>
+
+ <ul>
+ <li>Fire: a fireplace loop by PagDev (CC0).</li>
+ <li>Rain: rain on a tent, recorded by luc de bruijn (CC BY 3.0).</li>
+ <li>Rain and thunder: a summer thunderstorm uploaded by stephan (public domain).</li>
+ <li>Forest: a dawn chorus in Shipton Gorge, Dorset, by Silas S. Brown (public domain).</li>
+ <li>River: a creek in Webster, New York, by Dsw4 (public domain).</li>
+ <li>Caf&eacute;: people chatting in a caf&eacute;, by Marble Toast (CC0).</li>
+ <li>City at night: a two-lane road in Kelowna at midnight, by Extemporalist (CC0).</li>
+ </ul>
+
+ <p>CC0 and public domain need no credit. <jargon key="cc0 and cc by">CC BY</jargon> does<sup><a href="https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html#ref-4" class="cite-ref">[4]</a></sup>, along with a note if you changed the thing, so the settings panel names whoever recorded the sound that's playing, and the colophon lists all seven with their licences and says they've been cut into loops.</p>
+
+ <p>A short script does the looping, cross-fades the 4 seconds after it into its first 4 seconds so the end runs straight into the start, levels it to -20 LUFS so switching sounds doesn't mean touching the volume, and keeps its peaks around -1 dB. The city needed 32 dB of gain: the original sits at -52 LUFS, which is about what an empty road at midnight sounds like. All seven come to 7.7 MB as MP3s, and the browser only fetches the one you pick. I didn't really want anything too long bogging down downloads and storage.</p>
+
+ <p>An <code>&lt;audio&gt;</code> element set to loop can leave a small gap at the end, and an MP3 starts with a few milliseconds of silence the encoder adds. So each file is its loop with one second of its own end before it and one second of its start after it. The slideshow decodes the file with the Web Audio API and loops it from second 1 to second 1 plus the loop's length<sup><a href="https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html#ref-5" class="cite-ref">[5]</a></sup>, and wherever that bit of silence lands, the span in between is one whole turn of the loop. A decoded 96-second stereo loop takes about 35 MB of memory, so only the sound that's playing is kept decoded.</p>
+
+ <figure class="kr-figure--solo">
+ <div class="kr-diagram kr-diagram--flow" role="group" aria-label="How a shared recording becomes a sound in the slideshow">
+ <ol class="kr-diagram__routes">
+ <li class="kr-diagram__route kr-diagram__route--1">
+ <span class="kr-diagram__label">Made once, by a script</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Recording
+ <span class="kr-diagram__sub">Commons, OpenGameArt</span>
+ <span class="kr-diagram__detail">Somebody else's recording, shared under a free licence, with the licence on its page.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Loop
+ <span class="kr-diagram__sub">25 to 96 seconds</span>
+ <span class="kr-diagram__detail">A stretch of the recording, with the 4 seconds after it cross-faded into its first 4 seconds so the end runs straight into the start.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Level
+ <span class="kr-diagram__sub">-20 LUFS</span>
+ <span class="kr-diagram__detail">Every loop is as loud as the others, peaks around -1 dB. The city needed 32 dB of gain to get there.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Pad
+ <span class="kr-diagram__sub">1 second each end</span>
+ <span class="kr-diagram__detail">One second of the loop's own end goes in front of it and one second of its start after it, then it's saved as an MP3.</span></div></li>
+ </ol>
+ </li>
+ <li class="kr-diagram__route kr-diagram__route--2">
+ <span class="kr-diagram__label">In your browser</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Fetch
+ <span class="kr-diagram__sub">0.4 to 1.3 MB</span>
+ <span class="kr-diagram__detail">Only the sound you pick is downloaded, and only once you pick it.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Decode
+ <span class="kr-diagram__sub">Web Audio API</span>
+ <span class="kr-diagram__detail">The MP3 is unpacked into raw sound in memory, about 35 MB for a 96-second loop, so only the one playing is kept.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Play
+ <span class="kr-diagram__sub">1 s to 1 s + the loop</span>
+ <span class="kr-diagram__detail">The browser plays that span round and round. The few milliseconds of silence an MP3 starts with land in the padding, so the span is always one whole turn of the loop.</span></div></li>
+ </ol>
+ </li>
+ </ol>
+ </div>
+ <figcaption class="figure-note">From a shared recording to a loop with no gap. Hover over, tap or tab to a box for more.</figcaption>
+ </figure>
+
+ <details class="code-example">
+ <summary><code>js/slideshow.js</code>: starting a loop, trimmed</summary>
+<pre><code class="language-javascript">const src = ctx.createBufferSource();
+src.buffer = buffer;                       // the decoded file
+src.loop = true;
+src.loopStart = SOUND_PAD;                 // 1 second in
+src.loopEnd = SOUND_PAD + sound.loop;      // one whole turn later
+src.connect(out);
+src.start(0, SOUND_PAD);</code></pre>
+ </details>
+
+ <p>BUT, browsers won't play sound on a page until the person has clicked or pressed a key on it<sup><a href="https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html#ref-6" class="cite-ref">[6]</a></sup>, which is fair, nobody wants a tab that screams at them. So a link with <code>sound=</code> in it opens silent, with "Click anywhere for sound" at the top, and the first click starts it.</p>
+
+ <h2>Accessibility</h2>
+
+ <p>Over the gallery, the slideshow is considered a dialog. Stuff that is behind it is made inert<sup><a href="https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html#ref-7" class="cite-ref">[7]</a></sup>, so the Tab key can't wander off into the gallery behind it, and closing it puts focus back on the Slideshow button. The keys work whether the controls are showing or not: space pauses, the arrows step, F toggles full screen, M toggles the sound, I the details, Escape closes the settings and then the slideshow. On a phone, a swipe left or right on the photo does what the arrows do. It has to be clearly more sideways than up or down and at least 50 pixels long, so a wobbly tap doesn't count, and the first time you open it a line at the bottom tells you you can, until you've swiped once.</p>
+
+ <p>The controls fade out after 2.6 seconds without the mouse moving, and the pointer goes with them, unless the mouse is resting on them. On a phone a tap on the photo brings them up and the next tap puts them away, and the settings panel closes by itself after 10 seconds of inactivity. They hide the way all my floating controls do (<a href="https://www.kenreid.co.uk/blog/making-this-website-accessible.html">the accessibility post</a> has the rest of them): once they're gone they're out of the Tab order too, so nobody tabs onto a button they can't see. The photos change on their own, so I don't tell a screen reader about each one, because a voice reading out a new photograph every 20 seconds, all day, sounds ridiculous to me at least. It does hear about the ones you step to yourself, with the place and "12 of 108". Every photo has alt text with its number and, where I've put it on the map, the place.</p>
+
+ <p>If your system asks for reduced motion, there's no slow zoom and the photos cut from one to the next instead of fading. And while the slideshow is playing it asks for a screen wake lock<sup><a href="https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html#ref-8" class="cite-ref">[8]</a></sup>, so a laptop running it in a browser doesn't dim and lock halfway through, and it lets go the moment you pause.</p>
+
+ <h2>What it doesn't do</h2>
+
+ <p>Sadly, there's no date a photo was taken in my data. The "Added to the gallery" setting goes by photoset, which only goes back to May 2026, so everything before that is one big lump called "Before May 2026". I'd have to read the dates out of hundreds of originals before I could filter by year.</p>
+
+ <p>Phone browsers that don't let a page go full screen don't get a full screen button, and the slideshow fills the browser window instead. It works in an iframe (GitHub Pages doesn't send anything that stops a page being framed), which is how the Lively package shows it.</p>
+
+ <p>The link for wildlife, shuffled, over the fire, with no controls, is <code>slideshow.html?tag=wildlife&amp;sound=fire&amp;controls=off</code>.</p>
+
+ <figure>
+ <div class="photo-grid">
+ <img src="https://www.kenreid.co.uk/img/photography/thumb/699.webp" alt="A squirrel standing in a carpet of red and pink fallen leaves, looking at the camera" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/699.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/699@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/699.webp 1920w" sizes="(min-width: 800px) 373px, (min-width: 576px) 50vw, 100vw">
+ <img src="https://www.kenreid.co.uk/img/photography/thumb/447.webp" alt="A peacock with its tail fanned out in a full circle of eyespots, standing on a path" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/447.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/447@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/447.webp 1920w" sizes="(min-width: 800px) 373px, (min-width: 576px) 50vw, 100vw">
+ <img src="https://www.kenreid.co.uk/img/photography/thumb/429.webp" alt="A white swan on dark rippled water, black and white" loading="lazy" width="400" height="250" srcset="https://www.kenreid.co.uk/img/photography/thumb/429.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/429@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/429.webp 1920w" sizes="(min-width: 800px) 373px, (min-width: 576px) 50vw, 100vw">
+ <img src="https://www.kenreid.co.uk/img/photography/thumb/383.webp" alt="A pink jellyfish trailing long frilled arms through a dark tank flecked with specks of light" loading="lazy" width="400" height="265" srcset="https://www.kenreid.co.uk/img/photography/thumb/383.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/383@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/383.webp 1891w" sizes="(min-width: 800px) 373px, (min-width: 576px) 50vw, 100vw">
+ </div>
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> Four of the wildlife photos that link shuffles through, from Ann Arbor, a zoo in Lansing, the University of Stirling and the Sea Life Centre at Loch Lomond.</figcaption>
+ </figure>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>How much data does it use as a wallpaper?</summary>
+ <p>At the default 20 seconds a photo, a few photos a minute at a hundred-odd KB each, so roughly 20 MB an hour while it works through the photographs. A sound is one file of 0.4 to 1.3 MB, fetched once when you pick it. Hell of a lot less than the ~80mb photos I have in full resolution each!</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Can I use it with only my favourite place?</summary>
+ <p>Yup, <code>place=</code> takes any place from the photo map, spelled the way the map spells it, so <code>slideshow.html?place=Falkirk%2C%20Scotland</code> plays only the photos from Falkirk. The settings panel lists every place with its count, and Copy link writes the address for you.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+ <ol class="references">
+ <li id="ref-1">MDN Web Docs. <em>Element: requestFullscreen() method.</em> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullscreen" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullscreen</a></li>
+ <li id="ref-2">Lively Wallpaper. <a href="https://www.rocksdanister.com/lively/" target="_blank" rel="noopener noreferrer">https://www.rocksdanister.com/lively/</a></li>
+ <li id="ref-3">MDN Web Docs. <em>Web Audio API.</em> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API</a></li>
+ <li id="ref-4">Creative Commons. <em>Attribution 3.0 Unported (CC BY 3.0).</em> <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer">https://creativecommons.org/licenses/by/3.0/</a></li>
+ <li id="ref-5">MDN Web Docs. <em>AudioBufferSourceNode: loopStart property.</em> <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode/loopStart" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode/loopStart</a></li>
+ <li id="ref-6">Chrome for Developers. <em>Autoplay policy in Chrome.</em> <a href="https://developer.chrome.com/blog/autoplay" target="_blank" rel="noopener noreferrer">https://developer.chrome.com/blog/autoplay</a></li>
+ <li id="ref-7">MDN Web Docs. <em>HTML inert global attribute.</em> <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inert" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inert</a></li>
+ <li id="ref-8">MDN Web Docs. <em>Screen Wake Lock API.</em> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API</a></li>
+ </ol>
+
+        
+
+ ]]></content:encoded>
+    </item>
     <item>
       <title>The Tooltip Factory</title>
       <link>https://www.kenreid.co.uk/blog/the-tooltip-factory.html</link>
@@ -2811,110 +3299,6 @@ link.appendChild(span);</code></pre>
       <description>Confirmation bias is the bias under the biases. Why it&#x27;s the hardest to fix, why smart people are worse, and there might be something that can help us.</description>
       <category>philosophy</category>
       <category>science</category>
-      <content:encoded><![CDATA[
-
- <p>Nobody googles "reasons I am wrong about this". We google "reasons I am right about this", and we smugly nod at how wise we are.</p>
-
- <p>There are dozens of named cognitive biases, and this is the start of a series on them - I find them fascinating and I'm using this series as a means to learn about some psychology 101, and share what I've learned. One such bias sits under the others and is something of a basis for others. Confirmation bias is the tendency to seek, notice, remember and believe evidence that supports what we already think, and to ignore, discount or forget evidence that doesn't. It's how your uncle can keep bringing up the same political arguments at Thanksgiving dinner, forgetting what you've already said that clearly counters his argument - he won't remember, because the information you provide is irrelevant to him.</p>
-
- <div class="plain-english-box">
- <h2>Quick jargon guide</h2>
- <ul>
- <li><strong>Confirmation bias:</strong> seeking out, noticing, remembering and believing whatever supports what you already think, while the rest slides past.</li>
- <li><strong>Motivated reasoning:</strong> reasoning that works backwards from the conclusion you want, while feeling from the inside like fair weighing.</li>
- <li><strong>Steelmanning:</strong> stating the strongest version of the case against you, so well that the people who hold it would sign off on your summary.</li>
- <li><strong>Motivated numeracy:</strong> the finding that better reasoning skills can <em>increase</em> polarisation on charged questions, because the skill goes to work for the side you already picked.</li>
- </ul>
- </div>
-
- <h2>Evidence</h2>
-
- <p>The comforting model of the mind is a courtroom: you gather evidence, weigh it impartially, and reach a verdict. The actual mind <jargon key="motivated reasoning">runs the process backwards</jargon> most of the time. You start with the verdict (the belief you already hold, or want to hold) and then work as its defence lawyer, scouring for supporting evidence and cross-examining anything inconsistent into silence. </p>
-
- <p>You search for confirming information. You read ambiguous evidence as supporting your side. You remember the hits and forget the misses. You let confirming evidence in over a doorstep and make disconfirming evidence climb a wall<sup><a href="https://www.kenreid.co.uk/blog/confirmation-bias-is-the-mother-bias.html#ref-1" class="cite-ref">[1]</a></sup>. </p>
-
- <h2>Setting the stage</h2>
-
- <p>I want to put two scenes down here, because I am going to keep returning to them throughout the series (or try to, if I can bend the examples enough each time!). Every bias in this run is easier to see when it happens to the same people in the same rooms, so: meet the dinner table and the dashboard. They will be back!</p>
-
- <aside class="kr-scene">
-  <p class="kr-scene-label">The dinner table</p>
-  <p>My uncle has decided the earth is flat. He arrives at dinner with a video of a coastline where you can supposedly see a lighthouse the curve should have hidden, and a man saying "they never show you the curve." He found it in seconds, because he searched for "proof flat earth real". I countered it, again. You can lie down, watch the sun set, then stand up and watch it set a second time, which wouldn't work on a flat earth. All the other planets can be observed to be spherical. Shadows over time show the Earth is round. None of it sticks: the counter-evidence is immediately dismissed. I run the same search he does, I consider it and work through from his perspective back to mine, rather than searching "proof earth is not flat", and that makes me understand his approach more, and reinforces my position as a rigorous argument, instead of parroting what I previously read.</p>
-  <figure class="kr-figure--solo">
-   <img src="https://www.kenreid.co.uk/img/photography/thumb/211.webp" alt="An older man in glasses and a tie at a busy restaurant dinner table, mid-conversation, wine glasses and flowers in front of him" loading="lazy" class="kr-figure-img" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/211.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/211@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/211.webp 1200w" sizes="(min-width: 800px) 760px, 100vw">
-   <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
-  </figure>
-  <p class="kr-scene-note">The uncle searched for evidence to prove his position, assuming he was already correct, not showing curiosity and willingness to consider other opinions. Classic confirmation bias.</p>
- </aside>
-
- <aside class="kr-scene">
-  <p class="kr-scene-label">The neighbour</p>
-  <p>I knew before even moving into my new place that my neighbours wouldn't like me. And, in my first week here, that man across the road clearly didn't like me. He doesn't wave, and then, when he does wave, it's begrudging, only after I do. He put his bins out later than me, but then after he saw I did it earlier, he's almost doing it the night before to beat me. I send him a Christmas card but he didn't send one to me. He did sign for a parcel for me when I wasn't home, but it just feels like he's doing it to have one over me, seem to be the nicer neighbour - so fake. I knew it before I even met my neighbour: I knew he wouldn't like me, and every interaction just proves it. </p>
-  <figure class="kr-figure--solo">
-   <img src="https://www.kenreid.co.uk/img/photography/thumb/306.webp" alt="A concrete tower block shot from below against a clear blue sky, rows of windows receding upward" loading="lazy" class="kr-figure-img" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/306.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/306@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/306.webp 1200w" sizes="(min-width: 800px) 760px, 100vw">
-   <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
-  </figure>
-  <p class="kr-scene-note">Here, the person new to the neighbourhood already decided how the relationships with their neighbours would be, and took any evidence (even the neighbour being nice) as evidence for the neighbour hating them.</p>
- </aside>
-
- <h2>Why intelligence hinders you</h2>
-
- <p>Being clever, educated or numerate does not protect you (despite what most of us tell ourselves), and can make things <em>worse</em>. A smarter person is a better lawyer: quicker at generating persuasive arguments for what they already believe, better at spotting the flaw in inconvenient evidence, more fluent at explaining away the anomaly. It's funny how we assume intelligent people are wiser. There's a reason wisdom and intelligence are separate ability scores in pathfinder and dungeons and dragons: intelligence is knowing that a tomato is a fruit, wisdom is not adding it to your cereal.</p>
-
- <p>Studies find that <jargon key="motivated numeracy">greater numeracy and reasoning ability</jargon> can <em>increase</em> polarisation on politically charged questions, because people put their cognitive horsepower to work for their existing side rather than for the truth<sup><a href="https://www.kenreid.co.uk/blog/confirmation-bias-is-the-mother-bias.html#ref-2" class="cite-ref">[2]</a></sup>. The ignorant are overconfident, fine, we all knew that. The capable are better at rationalising, which is not a great thing for society.</p>
-
- <h2>The one habit that helps (apparently)</h2>
-
- <p>Willpower does nothing here. "Be less biased" is an instruction on the level of "be taller". Confirmation bias runs below awareness, so telling yourself to be fair-minded mostly produces a more confident lawyer. The thing that helps is structural: <strong>go and find the strongest version of the opposing case.</strong></p>
-
- <p>Before settling a belief that matters, hunt down the best argument <em>against</em> it, from the cleverest people who disagree, and try to state their case so well they would sign off on your summary. That is steelmanning, and it is the discipline behind <a href="https://www.kenreid.co.uk/blog/how-to-write-a-blog.html">how I try to write</a> (and mostly fail at).</p>
-
- <p>Ask "what would change my mind?" and get worried if the answer is "nothing". Watch for the flinch, too. That little urge to wave a piece of evidence away is strong and itself deeply biased - you're doing that with your "tribe", your "side" and your "argument" in mind, not actually fairly comparing evidence. Your defence lawyer has found something and would like it kept out of the record.</p>
-
- <h2>But, even with that...</h2>
-
- <p>It won't make you unbiased. Nothing does. But - it will insert a step where you point your intelligence towards something more than building walls.</p>
-
- <p>You cannot trust your sense of having weighed the evidence fairly. It is a horrible fact to know about yourself and we're kind of stuck with that fact. What's worse, knowing this doesn't solve the problem. It's like recognizing you having a proclivity for a certain flavor of ice cream doesn't make you like all of them equally suddenly. But maybe it can help you try new flavors, if you take that next step. This metaphor is a bit stretched: what I mean is, try thinking of other perspectives thoroughly. Intellectual empathy; emotional, too. </p>
-
- <figure class="kr-figure--solo">
-  <img src="https://www.kenreid.co.uk/img/photography/thumb/66.webp" alt="Stainless steel trays of gelato in a shop counter, chocolate chip, caramel swirl and nut flavours side by side" loading="lazy" class="kr-figure-img" width="400" height="265" srcset="https://www.kenreid.co.uk/img/photography/thumb/66.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/66@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/66.webp 1200w" sizes="(min-width: 800px) 760px, 100vw">
-  <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
- </figure>
-
- <p>Go and read the <a href="https://doi.org/10.1037/1089-2680.2.2.175" target="_blank" rel="noopener">Nickerson review</a>. It came out in 1998.</p>
-
- <div class="faq-section">
- <h2>Common questions</h2>
-
- <details class="faq-item">
- <summary>If everyone has confirmation bias, isn't objective truth hopeless?</summary>
- <p>No. Individuals are badly biased, but well-designed <em>systems</em> can be much better than any individual in them. Science works, imperfectly, because it institutionalises disconfirmation: peer review, replication, adversarial scrutiny, predictions registered. The fix for a bias you cannot remove from a single head is to build processes where other people's confirmation biases point in opposite directions and cancel it out, somewhat.</p>
- </details>
-
- <details class="faq-item">
- <summary>How is confirmation bias different from just having strong opinions?</summary>
- <p>Having a strong opinion is fine and often justified. Confirmation bias is about how you <em>maintain</em> it: protecting it by filtering evidence instead of testing it. What gives it away is not the strength of the belief but how the belief behaves when challenged. A well-held strong opinion can name what would change it and engages with the best counterarguments. A bias-protected one waves disconfirming evidence off without looking at it and never seems to update about anything, ever. </p>
- </details>
-
- <details class="faq-item">
- <summary>Doesn't steelmanning the other side just make me vulnerable to bad ideas?</summary>
- <p>I think that a belief challenged is a belief trained, like lifting weights. It hurts, and is tiring, but it is the only way to improve. If you argument is so weak that it can't stand up to alternative view points, why are you so keen to hold onto it? </p>
- </details>
- </div>
-
- <h2 class="section-heading" id="references">References</h2>
- <ol class="references">
-          <li id="ref-1">
-            Nickerson, R. S. (1998). Confirmation bias: A ubiquitous phenomenon in many guises. <em>Review of General Psychology</em>, 2(2), 175&ndash;220. <a href="https://doi.org/10.1037/1089-2680.2.2.175" target="_blank" rel="noopener">https://doi.org/10.1037/1089-2680.2.2.175</a>
-          </li>
-          <li id="ref-2">
-            Kahan, D. M., et al. (2017). Motivated numeracy and enlightened self-government. <em>Behavioural Public Policy</em>, 1(1), 54&ndash;86. <a href="https://doi.org/10.1017/bpp.2016.2" target="_blank" rel="noopener">https://doi.org/10.1017/bpp.2016.2</a>
-          </li>
-        </ol>
-
-        
- ]]></content:encoded>
     </item>
     <item>
       <title>Tabu Search, Live</title>
@@ -2923,122 +3307,6 @@ link.appendChild(span);</code></pre>
       <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
       <description>An interactive tabu search in your browser: watch a search with a memory solve N-Queens live, ban its own best moves, and escape the traps that stop every other method in this series.</description>
       <category>ai</category>
-      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/tabu-search-live.html">View it on the site</a> to play with it.</em></p>
-
- <p>Eight posts in, every escape from a trap in this series has been some flavour of randomness:</p>
- <ul>
- <li><a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">simulated annealing</a> gambles: while it's hot it accepts bad moves at random and hopes for betterment</li>
- <li><a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">the ant colony</a> wanders its way out</li>
- <li><a href="https://www.kenreid.co.uk/blog/evolution-live.html">the genetic algorithm</a> and its <a href="https://www.kenreid.co.uk/blog/genetic-programming-live.html">program-breeding cousin</a> mutate their way out</li>
- <li><a href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">the swarm</a> jitters</li>
- <li><a href="https://www.kenreid.co.uk/blog/cma-es-live.html">CMA-ES</a> and <a href="https://www.kenreid.co.uk/blog/differential-evolution-live.html">differential evolution</a> sample their way out of trouble</li>
- <li>even <a href="https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html">variable neighbourhood search</a>, the most systematic escape artist so far, opens every escape with a random shake</li>
- </ul>
-
- <p>Tabu search is the odd one out, escaping traps by <em>remembering</em> them: it keeps a short list of places it has just been and refuses to go back, even when going back looks like the best move on the board. </p>
-
- 
-
- <p>Fred Glover sketched the idea in 1986<sup><a href="https://www.kenreid.co.uk/blog/tabu-search-live.html#ref-1" class="cite-ref">[1]</a></sup> and built it out properly in 1989<sup><a href="https://www.kenreid.co.uk/blog/tabu-search-live.html#ref-2" class="cite-ref">[2]</a></sup>. The core of it is simple: run a greedy search, but make the recent past forbidden. That one addition turns the dumbest search strategy going into something that can walk out of a local optimum, cross a plateau, and keep improving. It needs no temperature and no coin to flip, which makes it something of an oddity in this series.</p>
-
- <div class="plain-english-box">
- <h2>Quick jargon guide</h2>
- <ul>
- <li><strong>Tabu search:</strong> a greedy search that keeps a short-term memory of recent moves and forbids undoing them, so it can climb out of traps instead of circling back in.</li>
- <li><strong>Tabu list:</strong> the ban list itself: the attributes of recent moves (in our demo, squares a queen just vacated) that the search is not allowed to revisit yet.</li>
- <li><strong>Tenure:</strong> how many iterations an entry stays on the tabu list before it expires.</li>
- <li><strong>Aspiration criterion:</strong> the escape clause: a tabu move is allowed anyway if it would produce the best solution ever seen. Bans are for moves that merely look good.</li>
- <li><strong>Cycling:</strong> the failure tabu search exists to prevent: a memoryless search bouncing between the same few solutions forever because each looks like the best neighbour of the other.</li>
- <li><strong>Steepest descent:</strong> evaluate every neighbour of the current solution and take the best one. Fast, greedy, and helpless the moment no neighbour improves.</li>
- <li><strong>Intensification vs diversification:</strong> Glover's tug-of-war: search hard near the good solutions you have found (intensify), versus force yourself somewhere you have never been (diversify). Recency memory the key here.</li>
- </ul>
- </div>
-
- <h2>Greed with amnesia</h2>
-
- <p>Steepest descent is the greediest search there is: look at every neighbour of your current solution, take the best one, repeat. It's fast, it's simple, and it's doomed: sooner or later it reaches a solution where no neighbour is better, and there it sits. I covered that failure in the annealing post, where the cure was randomness on a cooling schedule.</p>
-
- <p>Allow sideways moves (neighbours that are no worse, a common tweak for crossing flat regions) and the search steps from board A to board B, surveys the neighbourhood, and concludes that the best move from B is... back to A.</p>
-
- <p>So it goes back, and then the best move from A is back to B. It will do this until all the coal mines and oil refineries run dry.</p>
-
- <p>This is <em>cycling</em>, the signature failure of memoryless search, where every step the algorithm wakes up fresh with no idea it has been here before. Whether three times or over nine thousand times.</p>
-
- <h2>A ban list and a countdown</h2>
-
- <p>In tabu search, after each move, an attribute of the position you just left (in our demo, the square a queen just vacated) goes on a ban list for a handful of iterations, called its tenure.</p>
-
- <p>While it's on the list, the search may not move a queen back there, however tempting the move looks, and with the recent past fenced off the only direction available is somewhere new. So the ban list turns "best move" into "best move I haven't just made", a small change that punches through plateaus which hold a hill climber forever.</p>
-
- <p>There is one safety valve: if a banned move would produce the best solution ever seen, the ban is waived. This is the <em>aspiration criterion</em>, and it exists because tabu attributes are deliberately crude: banning a square bans every future board that would use it, including, occasionally, a record-breaking one. When the forbidden move beats anything in the run so far, take it.</p>
-
- <h2>Glover's tug-of-war</h2>
-
- <p>Glover framed the wider method as a balance between <em>intensification</em> (search hard near the good solutions you already have) and <em>diversification</em> (force yourself into regions you have never visited). Serious implementations layer on frequency memory (penalise moves you make too often), long-term restarts, and cleverer aspiration rules. It all grows from the same seed: the search takes notes on itself, and then obeys them. The demo here is a simple version.</p>
-
- <h2>Eight queens, no peace</h2>
-
- <p>The playground this time is the N-Queens problem: place N queens on an N&times;N chessboard so that none attacks another, meaning no two share a row, column, or diagonal. Our queens start one per column, so columns are handled for free, and a move relocates one queen within her own column. The score is the number of attacking pairs, and zero means solved.</p>
-
- <p>It's a lovely testbed for tabu search because the landscape is nothing but plateaus. Near the end you are almost always sitting at one or two conflicts, surrounded by equally mediocre neighbours. That's the terrain where greedy search paces in circles, like me trying to find my car in the multistory car park outside my work (I have the memory of a pigeon with some things).</p>
-
- <p>Below, a tabu search is solving the board live, and red lines join queens that currently attack each other.</p>
-
- <p>The frost is the memory: when a queen leaves a square that square ices over, and the frost fades as its tenure counts down, so you're watching the algorithm's short-term memory dissolve in real time. The readout underneath lists the banned squares with their countdowns. When the search overrides a ban because the move would break a record, an "aspiration!" badge lights up next to the toolbar.</p>
-
- 
-
- <h2>Tenure, at zero and at twenty</h2>
-
- <p><strong>Switch the memory off.</strong> The search becomes plain steepest descent with sideways moves, and on a lucky board it solves anyway. Most of the time it drops to one or two conflicts and then starts pacing, and the "revisited states" counter begins to climb as it bounces between the same handful of boards, forever, at whatever speed you set. The chart flatlines with a tiny shimmer, which is the cycle itself.</p>
-
- <p>Flip the memory back on and the search usually punches out within a few dozen steps. One counter, and it makes the case for tabu search better than I can.</p>
-
- <p><strong>Set tenure to 0.</strong> A ban that expires instantly is not a ban, so this is hill climbing again, cycle and all, even with the memory checkbox ticked. Tenure is the memory. The checkbox just decides whether anyone writes to it.</p>
-
- <p><strong>Set tenure to 20.</strong> Now the search forbids so much of its own neighbourhood that it can barely exploit anything. It reaches a promising region, is immediately banned from refining it, and lurches away, sometimes abandoning a one-conflict board it could have finished in a step or two.</p>
-
- <p><strong>Grow the board.</strong> Bigger boards mean bigger neighbourhoods and longer plateaus, and the sweet-spot tenure grows with them. Around 7 suits the 8&times;8 board, and at 16&times;16 you'll want noticeably more. The literature's rule of thumb is that tenure should scale with problem size.</p>
-
- <h2>Remembering the good and remembering the bad</h2>
-
- <p>There's some interesting debates I have in my mind about this concept, because it's somewhat philosophical. Our human memories are odd, we often think of periods of time that are difficult and we dislike fondly later in life, like times in the military - we remember the fun moments and forget the 5am wake up time, endless PT and drills. But we also remember specific jarring, horrible moments with great clarity - PTSD is a big warning marker left with the intent to protect us, and let us remember what was bad.</p>
-
- <p>Maybe there's something to take from this: it's actually efficient to remember the bad things, but at some point to let them go, and perhaps similar can be said about remembering the good things, when trying to move towards a better future.</p>
-
- <div class="faq-section">
- <h2>Common questions</h2>
-
- <details class="faq-item">
- <summary>Why is it spelled "tabu" and not "taboo"?</summary>
- <p>Because Glover spelled it that way, and the field kept his spelling. "Tabu" is closer to the Tongan word that English borrowed "taboo" from, and both forms show up in older literature. So it's a citation rather than a typo. It also makes the algorithm much easier to search for, which is a nice side effect.</p>
- </details>
-
- <details class="faq-item">
- <summary>Tabu search vs simulated annealing?</summary>
- <p>They treat the same disease with opposite medicine. Annealing escapes local optima stochastically: it accepts worse moves with a probability that cools over time, so its behaviour is a distribution and every run differs. Tabu search is deterministic. Same starting board, same tenure, same run, every time (the only randomness in this demo is the scramble that deals the board). Annealing carries no memory and trusts the temperature. Tabu search carries memory and trusts the list. In practice they're complementary, and plenty of hybrid methods anneal with a tabu list bolted on.</p>
- </details>
-
- <details class="faq-item">
- <summary>Is tabu search used for anything real?</summary>
- <p>Heavily. It has one of the strongest production records of any metaheuristic: job-shop and staff scheduling, vehicle routing, university timetabling, telecoms network design. For years, many of the best-known solutions on standard vehicle routing benchmarks belonged to tabu search variants. Like everything in this series, it asks almost nothing of the problem, just a neighbourhood and a score, so it travels well.</p>
- </details>
- </div>
-
- <h2 class="section-heading" id="references">References</h2>
-
- <ol class="references">
-          <li id="ref-1">
-            Glover, F. (1986). Future paths for integer programming and links to artificial intelligence. <em>Computers &amp; Operations Research</em>, 13(5), 533&ndash;549. <a href="https://doi.org/10.1016/0305-0548(86)90048-1" target="_blank" rel="noopener">https://doi.org/10.1016/0305-0548(86)90048-1</a>
-          </li>
-          <li id="ref-2">
-            Glover, F. (1989). Tabu Search - Part I. <em>ORSA Journal on Computing</em>, 1(3), 190&ndash;206. <a href="https://doi.org/10.1287/ijoc.1.3.190" target="_blank" rel="noopener">https://doi.org/10.1287/ijoc.1.3.190</a>
-          </li>
-        </ol>
-
-        
-
- ]]></content:encoded>
     </item>
     <item>
       <title>Genetic Programming, Live</title>

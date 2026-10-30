@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="How my gallery's slideshow works as a wallpaper, why every photograph needed a smaller copy, and where its fire, rain and caf&eacute; sounds come from.">
+ <meta name="keywords" content="technology, photography">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Turning My Gallery Into a Wallpaper - Ken Reid</title>
+ <meta property="og:title" content="Turning My Gallery Into a Wallpaper">
+ <meta property="og:description" content="How my gallery's slideshow works as a wallpaper, why every photograph needed a smaller copy, and where its fire, rain and caf&eacute; sounds come from.">
+ <meta property="og:image" content="https://www.kenreid.co.uk/img/og/turning-my-gallery-into-a-wallpaper.jpg">
+ <meta property="og:image:width" content="1200">
+ <meta property="og:image:height" content="630">
+ <meta property="og:image:alt" content="Turning My Gallery Into a Wallpaper">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html">
+ <meta property="og:type" content="article">
+ <meta property="og:site_name" content="Ken Reid">
+ <meta property="og:locale" content="en_GB">
+ <meta property="article:published_time" content="2026-10-30">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Turning My Gallery Into a Wallpaper">
+ <meta name="twitter:description" content="How my gallery's slideshow works as a wallpaper, why every photograph needed a smaller copy, and where its fire, rain and caf&eacute; sounds come from.">
+ <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/turning-my-gallery-into-a-wallpaper.jpg">
+ <meta name="citation_title" content="Turning My Gallery Into a Wallpaper">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/10/30">
+ <meta name="citation_online_date" content="2026/10/30">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html">
+ <meta name="DC.title" content="Turning My Gallery Into a Wallpaper">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-10-30">
+ <script defer src="../js/analytics.js"></script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="../img/photography/hero/42.webp" fetchpriority="high">
+ <link rel="stylesheet" href="../style.min.css?v=20260923a">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html">
+ <link rel="alternate" type="application/rss+xml" title="Ken Reid's Blog" href="https://www.kenreid.co.uk/feed.xml">
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BlogPosting",
+   "mainEntityOfPage": {
+     "@type": "WebPage",
+     "@id": "https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html"
+   },
+   "url": "https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html",
+   "headline": "Turning My Gallery Into a Wallpaper",
+   "description": "How my gallery's slideshow works as a wallpaper, why every photograph needed a smaller copy, and where its fire, rain and caf&eacute; sounds come from.",
+   "image": {
+     "@type": "ImageObject",
+     "url": "https://www.kenreid.co.uk/img/og/turning-my-gallery-into-a-wallpaper.jpg",
+     "width": 1200,
+     "height": 630
+   },
+   "datePublished": "2026-10-30",
+   "dateModified": "2026-10-30",
+   "author": {
+     "@type": "Person",
+     "@id": "https://www.kenreid.co.uk/#ken",
+     "name": "Ken Reid",
+     "url": "https://www.kenreid.co.uk/"
+   },
+   "publisher": {
+     "@type": "Person",
+     "@id": "https://www.kenreid.co.uk/#ken",
+     "name": "Ken Reid",
+     "url": "https://www.kenreid.co.uk/"
+   },
+   "isPartOf": [
+     { "@id": "https://www.kenreid.co.uk/#website" },
+     {
+       "@type": "CreativeWorkSeries",
+       "@id": "https://www.kenreid.co.uk/series-how-this-site-is-built.html#series",
+       "name": "How This Site Is Built",
+       "url": "https://www.kenreid.co.uk/series-how-this-site-is-built.html"
+     }
+   ],
+   "inLanguage": "en-GB",
+   "articleSection": "Technology",
+   "wordCount": 2977,
+   "timeRequired": "PT14M",
+   "keywords": ["slideshow", "desktop wallpaper", "web audio api", "photo gallery", "static sites"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "Turning My Gallery Into a Wallpaper",
+       "item": "https://www.kenreid.co.uk/blog/turning-my-gallery-into-a-wallpaper.html"
+     }
+   ]
+ }
+ </script>
+ <script defer src="../js/theme.js?v=20260923a"></script>
+ <script defer src="../js/palette.js?v=20260923a"></script>
+</head>
+<body>
+
+ <div id="header-section"></div>
+
+ <main id="main-content">
+  <header class="kr-opener" style="--kr-opener-img: url(/img/photography/hero/42.webp);">
+    <div class="kr-opener__media" aria-hidden="true"></div>
+    <div class="kr-opener__scrim" aria-hidden="true"></div>
+    <div class="container kr-opener__inner">
+      <nav aria-label="breadcrumb" class="kr-opener__crumbs"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Turning My Gallery Into a Wallpaper</li>
+      </ol></nav>
+      <p class="kr-opener__kicker">Technology &middot; <time datetime="2026-10-30">30 October 2026</time> &middot; 14 min read</p>
+      <p class="kr-opener__title page-title">Turning My Gallery Into a Wallpaper</p>
+      <p class="kr-opener__standfirst">How my gallery's slideshow works as a wallpaper, why every photograph needed a smaller copy, and where its fire, rain and café sounds come from.</p>
+      <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>
+    </div>
+    <a class="kr-opener__cue" href="#main-content-body" aria-label="Scroll to the article"><span></span></a>
+  </header>
+
+ <div class="about-us-area section-padding-80 clearfix" id="main-content-body">
+ <div class="container">
+
+ <div class="blog-post">
+ <h1>Turning My Gallery Into a Wallpaper</h1>
+ <div class="blog-meta">
+ 30 October 2026 &middot;
+ <span class="blog-tag">technology</span>
+ <span class="blog-tag">photography</span>
+ </div>
+
+ <p>Open <code>www.kenreid.co.uk/slideshow.html?sound=fire</code>, press F11, and my photographs play one at a time, full screen, with a fire crackling underneath. Point a wallpaper app at the same link and it's your desktop. I did this because I find photography particularly difficult to share. I'll go out and spend 2 hours taking 300 photos, I'll purge down to 10 over 30 minutes, then spend another 2 hours editing those 10, which are now 8. I then post them online, and my Mum and my wife comment and like them. I appreciate and love you guys for that, thank you for the support! But - I want to share it with others: photographers, people local to the area (I know I love seeing nice photos of where i live, work and frequent), and hopefully my shots are good enough that others can like them too. I have even made Google Chrome themes you can download, of some of my older shots, which were fairly successful (one had 100,000 downloads, which was so fulfilling). But how do you share beyond just posting on social media? Well, one way is to have your shots on display. Rather than spending a high sum on having prints made, I opted to show them on my website, via this feature, on my home TV occasionally. It means if we have guests over, I can have the TVs idle over these photos, slowly meandering through them, while some ambient sounds play. It often sparks conversation, and interest, more than a social media share does. So, this post covers the two ways into the slideshow, why it needed a smaller copy of every photograph I've ever put up, and where the sounds come from. Part of the series on how this site is built.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Query string:</strong> the part of a URL after the question mark, like <code>?sound=fire</code>.</li>
+ <li><strong>Hero:</strong> this site's name for a big copy of a photograph, 1920 pixels on its long edge, made for showing large.</li>
+ <li><strong>Release:</strong> a bundle of files attached to a GitHub repository. Mine holds the full-size originals.</li>
+ <li><strong>Wallpaper app:</strong> a program that puts something other than a still image behind your desktop icons. Lively Wallpaper on Windows can show a web page.</li>
+ <li><strong>Web Audio API:</strong> the browser's built-in kit for making and mixing sound in code.</li>
+ <li><strong>CC0 and CC BY:</strong> Creative Commons licences. CC0 gives a work away with no conditions; CC BY lets anyone use it as long as they credit whoever made it.</li>
+ <li><strong>LUFS:</strong> loudness units relative to full scale, a measure of how loud a recording sounds to people rather than how big its waveform is. Broadcasters level to it.</li>
+ </ul>
+ </div>
+
+ <h2>Two ways in</h2>
+
+ <p>The gallery has a Slideshow button under its title, next to the one for the photo map. It plays the photographs your filter is showing, full screen, so if you've clicked Wildlife you get the wildlife photos only. Escape takes you back to the gallery, scrolled where you left it.</p>
+
+ <p>Full screen is... fiddly. A page can only ask the browser for full screen while it's handling a click or a key press<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>, and the slideshow's script isn't on the gallery page at all until someone presses that button (it's nearly 100 KB, under 30 KB compressed, and there's no point every visit to the gallery downloading it). So the click asks for full screen first, then fetches the script, then opens the slideshow over the page. Done the other way round, the browser can decide the click is over by the time the script arrives, and you get a slideshow in a window.</p>
+
+ <p>The button is also a plain link to <code>slideshow.html</code> with the filter on the end, so middle-clicking it opens the same slideshow in a tab. That page is the second way in. It has no header, no footer and no menu, just the slideshow. On a computer where the window isn't already the size of the screen, I opted to make a line near the bottom that says to press F11 (Control + Command + F on a Mac) for a few seconds and then goes away. </p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="img/wallpaper/slideshow-controls.webp" alt="A black and white photograph of a person walking across an iron truss footbridge fills the screen, with a caption reading Holland, Michigan in the top right and a bar of playback, sound and settings controls along the bottom" loading="lazy" width="1366" height="768">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> The controls, which hide again after a couple of seconds without the mouse moving.</figcaption>
+ </figure>
+
+ <h2>Everything is in the address</h2>
+
+ <p>A wallpaper app like Lively Wallpaper<sup><a href="#ref-2" class="cite-ref">[2]</a></sup> can't click through a settings panel for you every time the computer starts, so I put every setting in the query string, and a link is the whole slideshow:</p>
+
+ <ul>
+ <li><code>show</code> picks what plays: the photographs (the default), a tour of the places on the photo map, the quotes I've saved, the books I've read or the albums I play most. The photo map and the quotes, books and music pages have Slideshow buttons of their own.</li>
+ <li><code>tag</code>, <code>place</code> and <code>added</code> choose the photographs: a subject from the gallery's filters, a place from the photo map, or the photoset they arrived in.</li>
+ <li><code>order</code> is shuffle, newest or oldest, and <code>every</code> is how many seconds each one stays up (20 unless you say otherwise).</li>
+ <li><code>sound</code> is fire, rain, storm (rain and thunder), forest, river, cafe or city, and <code>volume</code> runs from 0 to 100.</li>
+ <li><code>fit=fill</code> crops each photo to fill the screen. Without it you see the whole frame, sitting on a blurred and darkened copy of itself, which fills the bars a portrait leaves on a wide monitor.</li>
+ <li><code>drift=0</code> stops the slow zoom, <code>captions=0</code> hides the place name, and <code>controls=off</code> means the controls never show up at all.</li>
+ <li><code>sleep</code> turns the sound off after so many minutes, <code>dim</code> darkens the screen, and <code>clock</code> and <code>info</code> add the time and date in the corner and each photo's number, place and subjects. Both come on by themselves with <code>controls=off</code>, since that's the wallpaper, and <code>clock=0</code> or <code>info=0</code> turns one off.</li>
+ </ul>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="img/wallpaper/slideshow-portrait.webp" alt="A tall photograph of the State Theatre's vertical sign and marquee in Ann Arbor, shown whole in the middle of a wide screen, with a blurred copy of the same photograph filling the space either side" loading="lazy" width="1366" height="768">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> The State Theatre in Ann Arbor, a portrait frame on a wide screen. Both sides are the same photo, blurred and darkened.</figcaption>
+ </figure>
+
+ <p>Of course that's just for users of a wallpaper app. The settings panel has a Copy link button that writes the address for whatever you've set up, with a tickbox for the wallpaper version. For Lively there's also a package to download from the same panel: drag it into Lively and the settings are in its Customise menu. Anything in the address that means nothing (a typo in a subject, a place I've never been) is dropped to prevent errors.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="img/wallpaper/slideshow-settings.webp" alt="The slideshow's settings panel open over a photograph of a brown bear in a grassy enclosure, scrolled down to an As a wallpaper section with the slideshow's link in a box, a red Copy link button and a line crediting the rain recording to luc de bruijn under CC BY 3.0" loading="lazy" width="1366" height="768">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> The settings for wildlife with the rain on, over the bears at the Scottish Deer Centre in Fife. The box holds <code>slideshow.html?tag=wildlife&amp;sound=rain</code>, and the line under it names whoever recorded the rain.</figcaption>
+ </figure>
+
+ <p>I put the place caption in the top right corner. Windows puts the desktop icons down the left and the taskbar along the bottom, so that was the one corner left.</p>
+
+ <h2>A smaller copy of every photograph</h2>
+
+ <p>The full-size originals live on <a href="hosting-photography-on-github-for-free.html">a GitHub release</a>. Most of the older ones are a megabyte or two, but the new Canon EOS R ones run to tens of megabytes, and the biggest are over 70 MB. GitHub answers every request for one of them with <code>Cache-Control: no-cache</code>, so the browser checks back with GitHub each time a photo comes round again instead of trusting the copy it already has.</p>
+
+ <p>At 20 seconds a photo, a wallpaper left on all day shows 4,320 of them. With the originals, that's tens of gigabytes a day, for a background. So yeah, I had to fix that.</p>
+
+ <p>Until October only the photographs a page or post shows had a hero, about 180 of them. Now I have a script make one for every frame from its original, 1920 pixels on the long edge and never enlarged, so the early 1200-pixel frames stay 1200. Most come in under 300 KB. Frame 589's is 193 KB, about a three-hundredth of its 62 MB original, and still more pixels than a 1080p monitor can show. The site's checks now fail if any frame is missing one, and the routine I follow for adding photographs makes it alongside the thumbnail to save time later.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="../img/photography/thumb/589.webp" alt="A calico cat lying down with its chin low beside a white paw, looking at the camera with green eyes" loading="lazy" width="400" height="266" srcset="../img/photography/thumb/589.webp 400w, ../img/photography/thumb/589@2x.webp 800w, ../img/photography/hero/589.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> Frame 589, one of the Canon EOS R ones. The slideshow shows it from a 193 KB file instead of the 62 MB original.</figcaption>
+ </figure>
+
+ <p>The next photo is fetched and decoded while the current one is still up, to try and circumvent issues with wifi! If a hero won't load, the 800-pixel thumbnail stands in, and a frame with neither gets skipped. When the slideshow gets to the end of the list it fetches the lists of photographs again before starting over, so a wallpaper that's been running for a week picks up the photosets I've added since, and a shuffle never starts the new pass on the photo that ended the last one. I may have spent too long on this feature that only I will likely use!</p>
+
+ <h2>Sounds, second time round</h2>
+
+ <p>My first go made the sounds in the browser, with no recordings at all: filtered noise for the steady part, and drops, crackles, birds and cars drawn at random on top of it with the Web Audio API<sup><a href="#ref-3" class="cite-ref">[3]</a></sup>. I wanted a bunch of them, including a caf&eacute; murmur built out of fake vowels, measured them, balanced them, and checked them on spectrograms. I was having wild success, considering I'd never done anything like it before, but it sounded pretty awful despite leaps and bounds of progress, so I decided I was wasting my time.</p>
+
+ <p>The sounds now are recordings people have shared under free licences, from Wikimedia Commons and OpenGameArt, where every file has its licence on its page:</p>
+
+ <ul>
+ <li>Fire: a fireplace loop by PagDev (CC0).</li>
+ <li>Rain: rain on a tent, recorded by luc de bruijn (CC BY 3.0).</li>
+ <li>Rain and thunder: a summer thunderstorm uploaded by stephan (public domain).</li>
+ <li>Forest: a dawn chorus in Shipton Gorge, Dorset, by Silas S. Brown (public domain).</li>
+ <li>River: a creek in Webster, New York, by Dsw4 (public domain).</li>
+ <li>Caf&eacute;: people chatting in a caf&eacute;, by Marble Toast (CC0).</li>
+ <li>City at night: a two-lane road in Kelowna at midnight, by Extemporalist (CC0).</li>
+ </ul>
+
+ <p>CC0 and public domain need no credit. <jargon key="cc0 and cc by">CC BY</jargon> does<sup><a href="#ref-4" class="cite-ref">[4]</a></sup>, along with a note if you changed the thing, so the settings panel names whoever recorded the sound that's playing, and the colophon lists all seven with their licences and says they've been cut into loops.</p>
+
+ <p>A short script does the looping, cross-fades the 4 seconds after it into its first 4 seconds so the end runs straight into the start, levels it to -20 LUFS so switching sounds doesn't mean touching the volume, and keeps its peaks around -1 dB. The city needed 32 dB of gain: the original sits at -52 LUFS, which is about what an empty road at midnight sounds like. All seven come to 7.7 MB as MP3s, and the browser only fetches the one you pick. I didn't really want anything too long bogging down downloads and storage.</p>
+
+ <p>An <code>&lt;audio&gt;</code> element set to loop can leave a small gap at the end, and an MP3 starts with a few milliseconds of silence the encoder adds. So each file is its loop with one second of its own end before it and one second of its start after it. The slideshow decodes the file with the Web Audio API and loops it from second 1 to second 1 plus the loop's length<sup><a href="#ref-5" class="cite-ref">[5]</a></sup>, and wherever that bit of silence lands, the span in between is one whole turn of the loop. A decoded 96-second stereo loop takes about 35 MB of memory, so only the sound that's playing is kept decoded.</p>
+
+ <figure class="kr-figure--solo">
+ <div class="kr-diagram kr-diagram--flow" role="group" aria-label="How a shared recording becomes a sound in the slideshow">
+ <ol class="kr-diagram__routes">
+ <li class="kr-diagram__route kr-diagram__route--1">
+ <span class="kr-diagram__label">Made once, by a script</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Recording
+ <span class="kr-diagram__sub">Commons, OpenGameArt</span>
+ <span class="kr-diagram__detail">Somebody else's recording, shared under a free licence, with the licence on its page.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Loop
+ <span class="kr-diagram__sub">25 to 96 seconds</span>
+ <span class="kr-diagram__detail">A stretch of the recording, with the 4 seconds after it cross-faded into its first 4 seconds so the end runs straight into the start.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Level
+ <span class="kr-diagram__sub">-20 LUFS</span>
+ <span class="kr-diagram__detail">Every loop is as loud as the others, peaks around -1 dB. The city needed 32 dB of gain to get there.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Pad
+ <span class="kr-diagram__sub">1 second each end</span>
+ <span class="kr-diagram__detail">One second of the loop's own end goes in front of it and one second of its start after it, then it's saved as an MP3.</span></div></li>
+ </ol>
+ </li>
+ <li class="kr-diagram__route kr-diagram__route--2">
+ <span class="kr-diagram__label">In your browser</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Fetch
+ <span class="kr-diagram__sub">0.4 to 1.3 MB</span>
+ <span class="kr-diagram__detail">Only the sound you pick is downloaded, and only once you pick it.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Decode
+ <span class="kr-diagram__sub">Web Audio API</span>
+ <span class="kr-diagram__detail">The MP3 is unpacked into raw sound in memory, about 35 MB for a 96-second loop, so only the one playing is kept.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Play
+ <span class="kr-diagram__sub">1 s to 1 s + the loop</span>
+ <span class="kr-diagram__detail">The browser plays that span round and round. The few milliseconds of silence an MP3 starts with land in the padding, so the span is always one whole turn of the loop.</span></div></li>
+ </ol>
+ </li>
+ </ol>
+ </div>
+ <figcaption class="figure-note">From a shared recording to a loop with no gap. Hover over, tap or tab to a box for more.</figcaption>
+ </figure>
+
+ <details class="code-example">
+ <summary><code>js/slideshow.js</code>: starting a loop, trimmed</summary>
+<pre><code class="language-javascript">const src = ctx.createBufferSource();
+src.buffer = buffer;                       // the decoded file
+src.loop = true;
+src.loopStart = SOUND_PAD;                 // 1 second in
+src.loopEnd = SOUND_PAD + sound.loop;      // one whole turn later
+src.connect(out);
+src.start(0, SOUND_PAD);</code></pre>
+ </details>
+
+ <p>BUT, browsers won't play sound on a page until the person has clicked or pressed a key on it<sup><a href="#ref-6" class="cite-ref">[6]</a></sup>, which is fair, nobody wants a tab that screams at them. So a link with <code>sound=</code> in it opens silent, with "Click anywhere for sound" at the top, and the first click starts it.</p>
+
+ <h2>Accessibility</h2>
+
+ <p>Over the gallery, the slideshow is considered a dialog. Stuff that is behind it is made inert<sup><a href="#ref-7" class="cite-ref">[7]</a></sup>, so the Tab key can't wander off into the gallery behind it, and closing it puts focus back on the Slideshow button. The keys work whether the controls are showing or not: space pauses, the arrows step, F toggles full screen, M toggles the sound, I the details, Escape closes the settings and then the slideshow. On a phone, a swipe left or right on the photo does what the arrows do. It has to be clearly more sideways than up or down and at least 50 pixels long, so a wobbly tap doesn't count, and the first time you open it a line at the bottom tells you you can, until you've swiped once.</p>
+
+ <p>The controls fade out after 2.6 seconds without the mouse moving, and the pointer goes with them, unless the mouse is resting on them. On a phone a tap on the photo brings them up and the next tap puts them away, and the settings panel closes by itself after 10 seconds of inactivity. They hide the way all my floating controls do (<a href="making-this-website-accessible.html">the accessibility post</a> has the rest of them): once they're gone they're out of the Tab order too, so nobody tabs onto a button they can't see. The photos change on their own, so I don't tell a screen reader about each one, because a voice reading out a new photograph every 20 seconds, all day, sounds ridiculous to me at least. It does hear about the ones you step to yourself, with the place and "12 of 108". Every photo has alt text with its number and, where I've put it on the map, the place.</p>
+
+ <p>If your system asks for reduced motion, there's no slow zoom and the photos cut from one to the next instead of fading. And while the slideshow is playing it asks for a screen wake lock<sup><a href="#ref-8" class="cite-ref">[8]</a></sup>, so a laptop running it in a browser doesn't dim and lock halfway through, and it lets go the moment you pause.</p>
+
+ <h2>What it doesn't do</h2>
+
+ <p>Sadly, there's no date a photo was taken in my data. The "Added to the gallery" setting goes by photoset, which only goes back to May 2026, so everything before that is one big lump called "Before May 2026". I'd have to read the dates out of hundreds of originals before I could filter by year.</p>
+
+ <p>Phone browsers that don't let a page go full screen don't get a full screen button, and the slideshow fills the browser window instead. It works in an iframe (GitHub Pages doesn't send anything that stops a page being framed), which is how the Lively package shows it.</p>
+
+ <p>The link for wildlife, shuffled, over the fire, with no controls, is <code>slideshow.html?tag=wildlife&amp;sound=fire&amp;controls=off</code>.</p>
+
+ <figure>
+ <div class="photo-grid">
+ <img src="../img/photography/thumb/699.webp" alt="A squirrel standing in a carpet of red and pink fallen leaves, looking at the camera" loading="lazy" width="400" height="266" srcset="../img/photography/thumb/699.webp 400w, ../img/photography/thumb/699@2x.webp 800w, ../img/photography/hero/699.webp 1920w" sizes="(min-width: 800px) 373px, (min-width: 576px) 50vw, 100vw">
+ <img src="../img/photography/thumb/447.webp" alt="A peacock with its tail fanned out in a full circle of eyespots, standing on a path" loading="lazy" width="400" height="266" srcset="../img/photography/thumb/447.webp 400w, ../img/photography/thumb/447@2x.webp 800w, ../img/photography/hero/447.webp 1920w" sizes="(min-width: 800px) 373px, (min-width: 576px) 50vw, 100vw">
+ <img src="../img/photography/thumb/429.webp" alt="A white swan on dark rippled water, black and white" loading="lazy" width="400" height="250" srcset="../img/photography/thumb/429.webp 400w, ../img/photography/thumb/429@2x.webp 800w, ../img/photography/hero/429.webp 1920w" sizes="(min-width: 800px) 373px, (min-width: 576px) 50vw, 100vw">
+ <img src="../img/photography/thumb/383.webp" alt="A pink jellyfish trailing long frilled arms through a dark tank flecked with specks of light" loading="lazy" width="400" height="265" srcset="../img/photography/thumb/383.webp 400w, ../img/photography/thumb/383@2x.webp 800w, ../img/photography/hero/383.webp 1891w" sizes="(min-width: 800px) 373px, (min-width: 576px) 50vw, 100vw">
+ </div>
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> Four of the wildlife photos that link shuffles through, from Ann Arbor, a zoo in Lansing, the University of Stirling and the Sea Life Centre at Loch Lomond.</figcaption>
+ </figure>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>How much data does it use as a wallpaper?</summary>
+ <p>At the default 20 seconds a photo, a few photos a minute at a hundred-odd KB each, so roughly 20 MB an hour while it works through the photographs. A sound is one file of 0.4 to 1.3 MB, fetched once when you pick it. Hell of a lot less than the ~80mb photos I have in full resolution each!</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Can I use it with only my favourite place?</summary>
+ <p>Yup, <code>place=</code> takes any place from the photo map, spelled the way the map spells it, so <code>slideshow.html?place=Falkirk%2C%20Scotland</code> plays only the photos from Falkirk. The settings panel lists every place with its count, and Copy link writes the address for you.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+ <ol class="references">
+ <li id="ref-1">MDN Web Docs. <em>Element: requestFullscreen() method.</em> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullscreen" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullscreen</a></li>
+ <li id="ref-2">Lively Wallpaper. <a href="https://www.rocksdanister.com/lively/" target="_blank" rel="noopener noreferrer">https://www.rocksdanister.com/lively/</a></li>
+ <li id="ref-3">MDN Web Docs. <em>Web Audio API.</em> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API</a></li>
+ <li id="ref-4">Creative Commons. <em>Attribution 3.0 Unported (CC BY 3.0).</em> <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer">https://creativecommons.org/licenses/by/3.0/</a></li>
+ <li id="ref-5">MDN Web Docs. <em>AudioBufferSourceNode: loopStart property.</em> <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode/loopStart" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode/loopStart</a></li>
+ <li id="ref-6">Chrome for Developers. <em>Autoplay policy in Chrome.</em> <a href="https://developer.chrome.com/blog/autoplay" target="_blank" rel="noopener noreferrer">https://developer.chrome.com/blog/autoplay</a></li>
+ <li id="ref-7">MDN Web Docs. <em>HTML inert global attribute.</em> <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inert" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inert</a></li>
+ <li id="ref-8">MDN Web Docs. <em>Screen Wake Lock API.</em> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API</a></li>
+ </ol>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/hero/83.webp')">
+              <a href="deep-links-into-a-photo-gallery.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/hero/83.webp" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">29 October 2026 · 6 min read</div>
+                  <h3 class="blog-card-title">Deep Links Into a Photo Gallery</h3>
+                  <p class="blog-card-excerpt">How a link can open my photo gallery on a single photograph.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">photography</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/blog/img/map/photo-map-dark.webp')">
+              <a href="putting-my-photos-on-a-map.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../blog/img/map/photo-map-dark.webp" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">14 July 2026 · 5 min read</div>
+                  <h3 class="blog-card-title">Putting My Photos on a Map</h3>
+                  <p class="blog-card-excerpt">Hundreds of my photographs plotted on an interactive world map, this is how the photo map works.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">photography</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/387.webp')">
+              <a href="hosting-photography-on-github-for-free.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/387.webp" srcset="../img/photography/thumb/387.webp 1x, ../img/photography/thumb/387@2x.webp 2x" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">6 July 2026 · 10 min read</div>
+                  <h3 class="blog-card-title">Hosting a Photography Portfolio on GitHub for Free</h3>
+                  <p class="blog-card-excerpt">GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here&#x27;s the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">photography</span><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ </div>
+ </div>
+ </div>
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js?v=20260923a"></script>
+ <script src="../js/site.js?v=20260923a"></script>
+ <script src="../js/lightbox.js?v=20260923a"></script>
+ <script src="../js/default-assets/active.js?v=20260923a"></script>
+ <script src="../js/shared-components.js?v=20260923a"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+</body>
+</html>
