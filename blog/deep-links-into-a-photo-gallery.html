@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="How a link can open my photo gallery on a single photograph.">
+ <meta name="keywords" content="technology, photography">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>Deep Links Into a Photo Gallery - Ken Reid</title>
+ <meta property="og:title" content="Deep Links Into a Photo Gallery">
+ <meta property="og:description" content="How a link can open my photo gallery on a single photograph.">
+ <meta property="og:image" content="https://www.kenreid.co.uk/img/og/deep-links-into-a-photo-gallery.jpg">
+ <meta property="og:image:width" content="1200">
+ <meta property="og:image:height" content="630">
+ <meta property="og:image:alt" content="Deep Links Into a Photo Gallery">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/deep-links-into-a-photo-gallery.html">
+ <meta property="og:type" content="article">
+ <meta property="og:site_name" content="Ken Reid">
+ <meta property="og:locale" content="en_GB">
+ <meta property="article:published_time" content="2026-10-29">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Deep Links Into a Photo Gallery">
+ <meta name="twitter:description" content="How a link can open my photo gallery on a single photograph.">
+ <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/deep-links-into-a-photo-gallery.jpg">
+ <meta name="citation_title" content="Deep Links Into a Photo Gallery">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/10/29">
+ <meta name="citation_online_date" content="2026/10/29">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/deep-links-into-a-photo-gallery.html">
+ <meta name="DC.title" content="Deep Links Into a Photo Gallery">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-10-29">
+ <script defer src="../js/analytics.js"></script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="../img/photography/hero/83.webp" fetchpriority="high">
+ <link rel="stylesheet" href="../style.min.css?v=20260923a">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/deep-links-into-a-photo-gallery.html">
+ <link rel="alternate" type="application/rss+xml" title="Ken Reid's Blog" href="https://www.kenreid.co.uk/feed.xml">
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BlogPosting",
+   "mainEntityOfPage": {
+     "@type": "WebPage",
+     "@id": "https://www.kenreid.co.uk/blog/deep-links-into-a-photo-gallery.html"
+   },
+   "url": "https://www.kenreid.co.uk/blog/deep-links-into-a-photo-gallery.html",
+   "headline": "Deep Links Into a Photo Gallery",
+   "description": "How a link can open my photo gallery on a single photograph.",
+   "image": {
+     "@type": "ImageObject",
+     "url": "https://www.kenreid.co.uk/img/og/deep-links-into-a-photo-gallery.jpg",
+     "width": 1200,
+     "height": 630
+   },
+   "datePublished": "2026-10-29",
+   "dateModified": "2026-10-29",
+   "author": {
+     "@type": "Person",
+     "@id": "https://www.kenreid.co.uk/#ken",
+     "name": "Ken Reid",
+     "url": "https://www.kenreid.co.uk/"
+   },
+   "publisher": {
+     "@type": "Person",
+     "@id": "https://www.kenreid.co.uk/#ken",
+     "name": "Ken Reid",
+     "url": "https://www.kenreid.co.uk/"
+   },
+   "isPartOf": [
+     { "@id": "https://www.kenreid.co.uk/#website" },
+     {
+       "@type": "CreativeWorkSeries",
+       "@id": "https://www.kenreid.co.uk/series-how-this-site-is-built.html#series",
+       "name": "How This Site Is Built",
+       "url": "https://www.kenreid.co.uk/series-how-this-site-is-built.html"
+     }
+   ],
+   "inLanguage": "en-GB",
+   "articleSection": "Technology",
+   "wordCount": 1148,
+   "timeRequired": "PT6M",
+   "keywords": ["deep links", "history api", "replacestate", "photo gallery", "static sites"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "Deep Links Into a Photo Gallery",
+       "item": "https://www.kenreid.co.uk/blog/deep-links-into-a-photo-gallery.html"
+     }
+   ]
+ }
+ </script>
+ <script defer src="../js/theme.js?v=20260923a"></script>
+ <script defer src="../js/palette.js?v=20260923a"></script>
+</head>
+<body>
+
+ <div id="header-section"></div>
+
+ <main id="main-content">
+  <header class="kr-opener" style="--kr-opener-img: url(/img/photography/hero/83.webp);">
+    <div class="kr-opener__media" aria-hidden="true"></div>
+    <div class="kr-opener__scrim" aria-hidden="true"></div>
+    <div class="container kr-opener__inner">
+      <nav aria-label="breadcrumb" class="kr-opener__crumbs"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Deep Links Into a Photo Gallery</li>
+      </ol></nav>
+      <p class="kr-opener__kicker">Technology &middot; <time datetime="2026-10-29">29 October 2026</time> &middot; 6 min read</p>
+      <p class="kr-opener__title page-title">Deep Links Into a Photo Gallery</p>
+      <p class="kr-opener__standfirst">How a link can open my photo gallery on a single photograph.</p>
+      <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>
+    </div>
+    <a class="kr-opener__cue" href="#main-content-body" aria-label="Scroll to the article"><span></span></a>
+  </header>
+
+ <div class="about-us-area section-padding-80 clearfix" id="main-content-body">
+ <div class="container">
+
+ <div class="blog-post">
+ <h1>Deep Links Into a Photo Gallery</h1>
+ <div class="blog-meta">
+ 29 October 2026 &middot;
+ <span class="blog-tag">technology</span>
+ <span class="blog-tag">photography</span>
+ </div>
+
+ <p>Paste <code>www.kenreid.co.uk/gallery.html?photo=318</code> into a browser and my photography page opens full screen on Brutus, my dog. He's frame 318, in a gallery that loads 24 at a time, so before it can show him the page builds a few hundred tiled thumbnails on a phone (more on a wider screen) and scrolls to his.</p>
+
+ <p>This post covers the two things the gallery now reads from its address, <code>?photo=</code> and <code>?tag=</code>, how it writes them back while you browse, and why it does that with the History API's <code>replaceState</code>. Part of the series on how this site is built.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Query string:</strong> the part of a URL after the question mark, like <code>?photo=318</code>.</li>
+ <li><strong>Deep link:</strong> a link to something inside a page, not just to the page.</li>
+ <li><strong>Lightbox:</strong> the full-screen viewer a photo opens in, with arrows to page through the rest.</li>
+ <li><strong>History API:</strong> the browser functions a page uses to change its own address without reloading.</li>
+ <li><strong>Lazy image:</strong> an image the browser only fetches once it gets near the screen.</li>
+ </ul>
+ </div>
+
+ <h2>Every frame went to Instagram</h2>
+
+ <p>The strip of ten random photographs near the bottom of the homepage, and of other top-level pages on the site, used to send every single frame clicked to my Instagram profile. Not to that photo on Instagram, but to my user profile, which was pretty "meh".</p>
+
+ <p>And the gallery itself had no means - yet - to point to a specific shot. It read <code>?tag=</code> once, when the page opened, to start on a filter, but otherwise the URL wasn't considered. So if you filtered to wildlife and copied the address to send to someone, they got the whole gallery. Also "meh".</p>
+
+ <p>I changed the strip so each frame links to <code>gallery.html?photo=</code> and its number, and then had the gallery read that.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="../img/photography/thumb/318.webp" alt="Brindle Staffordshire bull terrier with a blue collar gazing at the camera" loading="lazy" width="400" height="266" srcset="../img/photography/thumb/318.webp 400w, ../img/photography/thumb/318@2x.webp 800w, ../img/photography/hero/318.webp 1200w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> Brutus, who lives at <code>gallery.html?photo=318</code>.</figcaption>
+ </figure>
+
+ <h2>Opening on the right frame</h2>
+
+ <p>When the page starts, it reads both parameters from the address. <code>?tag=</code> goes first and is applied before drawing, so the first batch of tiles is already the filtered one, and a tag the gallery doesn't have is dropped from the address. A filter you click is animated, with the tiles that survive it sliding to their new rows, but a filter from the address isn't, because there's nothing on screen yet to slide. Then, if there's a <code>?photo=</code>, the gallery:</p>
+
+ <ol>
+ <li>Looks for the frame in the current set. If a filter hides it but the frame exists, the filter goes (from the page and from the address) and it looks again. If the frame doesn't exist at all, <code>?photo=</code> comes off the address and that's the end of it, so a link to a frame I've deleted opens the gallery as normal.</li>
+ <li>Loads batches until that frame's tile is in the grid, without updating the counter under the grid for every batch on the way.</li>
+ <li>Scrolls the tile to the middle of the screen, puts keyboard focus on it, and opens the lightbox at that tile's position in the grid, which Magnific Popup (the lightbox library) takes as a second argument<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>.</li>
+ </ol>
+
+ <p>The lightbox on this site doesn't fade in, it grows out of the tile you clicked (unless your system is set to reduce motion). A copy of the thumbnail flies from the tile to where the full-size frame will sit, and the full frame takes over when it arrives (it comes from <a href="hosting-photography-on-github-for-free.html">a GitHub release</a>, and can take a moment). The copy that flies is the thumbnail itself, so it has to have loaded. A deep-linked tile was off screen a moment ago and its thumbnail is <jargon key="Lazy image">lazy</jargon>, so the page switches that one image to eager and waits for it, for 1.5 seconds at most, before opening.</p>
+
+ <p>Building hundreds of tiles to show one photograph sounds wasteful. It would be if every tile fetched its thumbnail, but they're all lazy, and the browser only fetches the ones near the screen<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>. I timed it locally in testing - Brutus opens in 0.3 seconds, or 1.3 with Chrome's CPU throttled four times. Frame 42, a railway line I shot running into snowy hills near Inverness, is around 660th in the list (it runs newest first). On a phone the page builds 682 tiles to reach it and fetches about 70 thumbnails, and the lightbox is open about 0.4 seconds after the page starts loading, or about 1.7 seconds throttled.</p>
+
+ <h2>Writing it back</h2>
+
+ <p>The address follows you around. Picking a filter writes <code>?tag=</code>. Each frame you look at in the lightbox writes <code>?photo=</code>, and closing the lightbox takes it off again. Whatever is in the address bar is a link to what's on screen, and there's a Copy link button next to the frame number under every photo in the lightbox, which copies that frame's link (with the filter kept on if there is one).</p>
+
+ <p>I put all of that through one function:</p>
+
+<pre><code class="language-javascript">function writeUrl(changes) {
+    if (!window.history || !window.history.replaceState) return;
+    try {
+        window.history.replaceState(window.history.state, '', galleryHref(changes));
+    } catch (e) {}
+}</code></pre>
+
+ <p><code>pushState</code> adds a new entry to the browser's history<sup><a href="#ref-3" class="cite-ref">[3]</a></sup>. <code>replaceState</code> swaps the current entry for a new one<sup><a href="#ref-4" class="cite-ref">[4]</a></sup>, and neither of them reloads the page. If the gallery used <code>pushState</code>, every frame you paged through would be an entry. After thirty photos, Back would walk you through all thirty before it left the gallery. I'd already been through this on the blog listing, where a <code>pushState</code> per filter click buried the page you came from under a pile of near-identical addresses, and Back stopped meaning "leave the blog". So the gallery replaces.</p>
+
+ <p>Previews don't work (yet). The gallery is one static HTML page, so a chat app that unfurls <code>gallery.html?photo=318</code> gets the gallery's share card, whatever the query string says.</p>
+
+ <h2>Closing</h2>
+
+ <p>Paging changes which tile the lightbox belongs to. If you open Brutus and press the right arrow once, you're on frame 316, a lone protester in a city square with a "Ban This Plastic Poison" placard. Close the lightbox there and the photo shrinks back into tile 316, not Brutus's, and the page scrolls that tile into view first if it's gone off screen. Keyboard focus lands on 316 as well. Once the lightbox has closed, the address drops <code>?photo=</code>, back to plain <code>gallery.html</code>.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Can one link open a filter and a photo together?</summary>
+ <p>Yes, <code>gallery.html?tag=wildlife&amp;photo=</code> and a number opens that frame inside the wildlife set, as long as the frame is tagged wildlife. If it isn't, the filter is dropped and the frame opens in the whole gallery.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+ <ol class="references">
+ <li id="ref-1">Magnific Popup. <em>Documentation.</em> <a href="https://dimsemenov.com/plugins/magnific-popup/documentation.html" target="_blank" rel="noopener noreferrer">https://dimsemenov.com/plugins/magnific-popup/documentation.html</a></li>
+ <li id="ref-2">web.dev. <em>Browser-level image lazy loading for the web.</em> <a href="https://web.dev/articles/browser-level-image-lazy-loading" target="_blank" rel="noopener noreferrer">https://web.dev/articles/browser-level-image-lazy-loading</a></li>
+ <li id="ref-3">MDN Web Docs. <em>History: pushState() method.</em> <a href="https://developer.mozilla.org/en-US/docs/Web/API/History/pushState" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/History/pushState</a></li>
+ <li id="ref-4">MDN Web Docs. <em>History: replaceState() method.</em> <a href="https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState" target="_blank" rel="noopener noreferrer">https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState</a></li>
+ </ol>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/blog/img/map/photo-map-dark.webp')">
+              <a href="putting-my-photos-on-a-map.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../blog/img/map/photo-map-dark.webp" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">14 July 2026 · 5 min read</div>
+                  <h3 class="blog-card-title">Putting My Photos on a Map</h3>
+                  <p class="blog-card-excerpt">Hundreds of my photographs plotted on an interactive world map, this is how the photo map works.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">photography</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/387.webp')">
+              <a href="hosting-photography-on-github-for-free.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/387.webp" srcset="../img/photography/thumb/387.webp 1x, ../img/photography/thumb/387@2x.webp 2x" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">6 July 2026 · 10 min read</div>
+                  <h3 class="blog-card-title">Hosting a Photography Portfolio on GitHub for Free</h3>
+                  <p class="blog-card-excerpt">GitHub Pages caps your site at 1 GB, and my photography portfolio is bigger than that on its own. Here&#x27;s the free workaround: thumbnails in the repo, full-size originals in a GitHub release.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">photography</span><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/46.webp')">
+              <a href="ctrl-k-for-a-static-site.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/46.webp" srcset="../img/photography/thumb/46.webp 1x, ../img/photography/thumb/46@2x.webp 2x" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">3 August 2026 · 7 min read</div>
+                  <h3 class="blog-card-title">Ctrl+K for a Static Site</h3>
+                  <p class="blog-card-excerpt">Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. Vanilla JavaScript, no library, and the whole thing is in the post to steal.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ </div>
+ </div>
+ </div>
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js?v=20260923a"></script>
+ <script src="../js/site.js?v=20260923a"></script>
+ <script src="../js/lightbox.js?v=20260923a"></script>
+ <script src="../js/default-assets/active.js?v=20260923a"></script>
+ <script src="../js/shared-components.js?v=20260923a"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+</body>
+</html>

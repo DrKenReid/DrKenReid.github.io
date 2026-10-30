@@ -864,6 +864,44 @@
         };
     });
 
+    // A ?photo= link builds the gallery a batch at a time, scrolls to its
+    // frame, and the frame grows out of its tile into the lightbox.
+    def('deep-links-into-a-photo-gallery', function (w, h, rnd) {
+        var t = 0, CYCLE = 480, COLS = 6, ROWS = 14, TR = 12, TC = 2;
+        var pad = w * 0.06, gap = 4, tw = (w - pad * 2 - gap * (COLS - 1)) / COLS, th = tw * 0.66, pitch = th + gap;
+        var top = h * 0.22, view = h * 0.74, shade = [];
+        for (var i = 0; i < ROWS * COLS; i++) shade.push(0.08 + rnd() * 0.14);
+        return {
+            step: function () { t++; },
+            draw: function (ctx) {
+                var p = phase(t, CYCLE);
+                var rows = 2 + 2 * Math.floor(clamp01(p / 0.4) * (ROWS / 2 - 1));
+                var loading = Math.max(0, rows * pitch - view), aim = TR * pitch + th / 2 - view / 2;
+                var scroll = loading + (aim - loading) * ease(clamp01((p - 0.4) / 0.08));
+                ctx.save(); ctx.beginPath(); ctx.rect(0, top, w, view); ctx.clip();
+                for (var r = 0; r < rows; r++) {
+                    var y = top + r * pitch - scroll;
+                    if (y + th < top || y > top + view) continue;
+                    for (var c = 0; c < COLS; c++) rect(ctx, pad + c * (tw + gap), y, tw, th, alpha('#ffffff', shade[r * COLS + c]));
+                }
+                var tx = pad + TC * (tw + gap), ty = top + TR * pitch - scroll, found = p > 0.42;
+                if (found) { ctx.strokeStyle = C.b; ctx.lineWidth = 2; ctx.strokeRect(tx - 1, ty - 1, tw + 2, th + 2); }
+                ctx.restore();
+                var g = p < 0.52 ? 0 : p < 0.64 ? ease((p - 0.52) / 0.12) : p < 0.86 ? 1 : 1 - ease(clamp01((p - 0.86) / 0.1));
+                if (g > 0) {
+                    var bw = w * 0.62, bh = bw * 0.62, bx = (w - bw) / 2, by = top + (view - bh) / 2;
+                    var x = tx + (bx - tx) * g, y2 = ty + (by - ty) * g, fw = tw + (bw - tw) * g, fh = th + (bh - th) * g;
+                    rect(ctx, 0, 0, w, h, alpha('#000000', 0.55 * g));
+                    rect(ctx, x, y2, fw, fh, C.ink);
+                    rect(ctx, x + fw * 0.04, y2 + fh * 0.06, fw * 0.92, fh * 0.88, alpha(C.a, 0.75));
+                    dot(ctx, x + fw * 0.72, y2 + fh * 0.32, fh * 0.12, C.b);
+                }
+                rect(ctx, pad, h * 0.05, w - pad * 2, h * 0.11, alpha('#ffffff', 0.16));
+                text(ctx, p < 0.96 ? 'gallery.html?photo=318' : 'gallery.html', w / 2, h * 0.105, 10, C.ink, 600, 'center');
+            }
+        };
+    });
+
     // Translucent triangles, nudged one at a time, settle into "Hi" while
     // a fitness bar fills underneath.
     def('a-headline-that-evolves-itself', function (w, h, rnd) {

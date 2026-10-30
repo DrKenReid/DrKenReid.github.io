@@ -1,5 +1,24 @@
 [
   {
+    "title": "Deep Links Into a Photo Gallery",
+    "date": "2026-10-29",
+    "tags": [
+      "technology",
+      "photography"
+    ],
+    "category": "Technology",
+    "excerpt": "How a link can open my photo gallery on a single photograph.",
+    "url": "blog/deep-links-into-a-photo-gallery.html",
+    "image": "img/photography/hero/83.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 19
+    },
+    "readMinutes": 6,
+    "words": 1148,
+    "code": true
+  },
+  {
     "title": "The Measure of a Man: Honouring Sir Patrick Stewart's Masterclass in Leadership",
     "date": "2026-10-29",
     "tags": [

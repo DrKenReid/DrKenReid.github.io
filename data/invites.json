@@ -308,6 +308,10 @@
     "what-a-custom-domain-actually-involves": {
       "title": "Follow the build",
       "line": "From the domain to the test suite, this series covers how the site works, and the feed is the way to follow it."
+    },
+    "deep-links-into-a-photo-gallery": {
+      "title": "More on how the gallery works",
+      "line": "This series covers the gallery, the photo map and the rest of the site, and the feed is the way to follow it."
     }
   }
 }
