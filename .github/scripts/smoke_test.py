@@ -198,7 +198,10 @@ without one class), and the pin seen to fail.
                             page is dressed; the photo map is marked in a
                             few places; the season's gallery subject leads
                             its row; reduced motion sends no flyer and no
-                            burst; ?season=off takes it all away. Every other
+                            burst; ?season=off takes it all away; a memorial
+                            post (<body data-memorial>) shows none of it, so
+                            the post dressed is the newest that is not one.
+                            Every other
                             check runs with no season (harness.set_season),
                             so none of them changes when a season starts.
   check_birthday            On 12 October (?birthday=on here) each photograph
@@ -3123,11 +3126,17 @@ TRACK_STATE = """async () => {
 }"""
 
 
+MEMORIAL_BODY = re.compile(r"<body\b[^>]*\bdata-memorial\b")
+
+
 def check_season(browser, base, rep):
     """Each season in SEASONS_UNDER_TEST, shown on purpose (see the module
-    docstring)."""
+    docstring), on the newest post that can wear one; and a memorial post
+    (<body data-memorial>) wearing none while one is shown."""
     posts = json.loads((ROOT / "data" / "posts.json").read_text(encoding="utf-8"))
-    post = next(p["url"] for p in posts if p.get("url", "").startswith("blog/"))
+    urls = [p["url"] for p in posts if p.get("url", "").startswith("blog/")]
+    memorial = [u for u in urls if MEMORIAL_BODY.search((ROOT / u).read_text(encoding="utf-8"))]
+    post = next(u for u in urls if u not in memorial)
     for key, want in SEASONS_UNDER_TEST.items():
         for theme in THEMES:
             context = site_context(browser, base, theme=theme)
@@ -3287,6 +3296,25 @@ def check_season(browser, base, rep):
                 return !pumpkin.querySelector('.kr-season-puff');
             }""")
             rep.check(scope, "a clicked pumpkin bursts nothing", still)
+            page.close()
+        context.close()
+
+    # A post in memory of someone stays plain whatever the date, so a
+    # season shown on purpose must not reach it either.
+    for path in memorial[:1]:
+        context = site_context(browser, base)
+        set_season(context, next(iter(SEASONS_UNDER_TEST)))
+        scope = f"memorial {path}"
+        page, sink = open_page(context, base, path, rep, scope, "document.readyState === 'complete'")
+        if page:
+            let_network_settle(page)
+            plain = page.evaluate("""() => ({
+                season: document.documentElement.getAttribute('data-season'),
+                pieces: document.querySelectorAll('[class*="kr-season"]').length,
+                files: [...document.querySelectorAll('link[href*="season"], script[src*="season"]')].length })""")
+            rep.check(scope, "no season, decoration or season file on a memorial post",
+                      plain["season"] is None and not plain["pieces"] and not plain["files"], plain)
+            rep.console_errors(scope, sink)
             page.close()
         context.close()
 
