@@ -11,6 +11,130 @@
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>The Tooltip Factory</title>
+      <link>https://www.kenreid.co.uk/blog/the-tooltip-factory.html</link>
+      <guid>https://www.kenreid.co.uk/blog/the-tooltip-factory.html</guid>
+      <pubDate>Thu, 29 Oct 2026 00:00:00 +0000</pubDate>
+      <description>Every post on this site opens with a jargon guide, and every term in it becomes a hover tooltip across the whole article.</description>
+      <category>technology</category>
+      <content:encoded><![CDATA[
+
+ <p>I have an eclectic mix of blogs on my site. I basically just write about whatever I feel like, and hope that I bring in an equally eclectic group of readers. But, this means that my poor friends and family who want to support me might go from a blog about <a href="https://www.kenreid.co.uk/blog/mistaken-identity-italy.html">my trip to Trento, Italy</a>, then try and support me by reading about <a href="https://www.kenreid.co.uk/blog/hyper-heuristics-live.html">hyper-heuristics</a>, and quickly get lost in the jargon. So - I made a system so that readers can easily hover over underlined words in the box below and a definition appears. Now hover the same words anywhere else in this article: same definition. Since this system is needed in many of my blogs I just made it a feature in all of them. Serendipitously, an example is directly below. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Tree walker:</strong> a browser API (<code>document.createTreeWalker</code>) for visiting every text node in part of a page, one by one, without touching the elements around them.</li>
+ <li><strong>Text node:</strong> the raw runs of text between HTML tags. "The <em>quick</em> fox" is three nodes: two text, one element.</li>
+ <li><strong>abbr element:</strong> HTML's built-in "this has an expansion" tag. Given a <code>title</code>, browsers show it on hover and screen readers can announce it.</li>
+ <li><strong>Glossary box:</strong> the "Quick jargon guide" you are reading right now, which on this site is also a data source. This box is manufactured by the factory it describes, which pleases me more than it should.</li>
+ </ul>
+ </div>
+
+ <h2>Definitions are data</h2>
+
+ <p>The jargon box at the top of each post is ordinary HTML: a list of <code>&lt;li&gt;&lt;strong&gt;Term:&lt;/strong&gt; definition&lt;/li&gt;</code> lines. The shared JavaScript reads that list and turns it into a dictionary. Then it adds a site-wide base dictionary of terms I was frequently re-defining (AI, ML, LLM, API, JSON, open source, GitHub, Python), with the page's own definitions winning collisions, so a post about a different kind of API can say so (e.g. a beginner-friendly data science blog vs an expert-focused one).</p>
+
+ <p>Armed with the dictionary, a tree walker (an ent?) visits every text node in the article and wraps each match in an <code>&lt;abbr&gt;</code> with the definition as its <code>title</code>. Trimmed to its bones:</p>
+
+<pre><code class="language-javascript">var walker = document.createTreeWalker(blogPost, NodeFilter.SHOW_TEXT, {
+  acceptNode: function (node) {
+    // skip code blocks, headings, links, and the glossary box itself
+    if (insideSkippedTag(node) || insideSourceBox(node)) return NodeFilter.FILTER_REJECT;
+    return jargonRegex.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT
+                                            : NodeFilter.FILTER_REJECT;
+  }
+});
+
+// for each matching text node, rebuild it as text + abbr + text
+var abbr = document.createElement('abbr');
+abbr.setAttribute('title', definition);
+abbr.textContent = matchedText;
+fragment.appendChild(abbr);</code></pre>
+
+ <figure class="kr-figure--solo">
+ <div class="kr-diagram kr-diagram--flow" role="group" aria-label="How a post's jargon box becomes tooltips across the whole article">
+ <ol class="kr-diagram__routes">
+ <li class="kr-diagram__route kr-diagram__route--1">
+ <span class="kr-diagram__label">Written by hand</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__group">
+ <div class="kr-diagram__node">Jargon box
+ <span class="kr-diagram__sub">This post's terms</span>
+ <span class="kr-diagram__detail">A plain HTML list near the top of the post, one term and its definition per line, like the one folded up at the top of this post.</span></div>
+ <div class="kr-diagram__node">Site-wide terms
+ <span class="kr-diagram__sub">AI, API, JSON...</span>
+ <span class="kr-diagram__detail">The handful I kept defining in post after post, kept once in the shared JavaScript.</span></div>
+ </div></li>
+ </ol>
+ </li>
+ <li class="kr-diagram__route kr-diagram__route--2">
+ <span class="kr-diagram__label">In your browser</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Dictionary
+ <span class="kr-diagram__sub">The post wins</span>
+ <span class="kr-diagram__detail">Both lists go into one lookup. When a post defines one of the site-wide terms itself, the post's definition is the one used.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Tree walker
+ <span class="kr-diagram__sub">Every text node</span>
+ <span class="kr-diagram__detail">Visits every run of text in the article and skips code, headings, links and the jargon box itself.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Tooltips
+ <span class="kr-diagram__sub">abbr + title</span>
+ <span class="kr-diagram__detail">Each match is wrapped in an abbr element with the definition as its title, and the stylesheet draws that title as the card.</span></div></li>
+ </ol>
+ </li>
+ </ol>
+ </div>
+ <figcaption class="figure-note">From the jargon box to the tooltips. Hover over, tap or tab to a box for more.</figcaption>
+ </figure>
+
+ <figure class="kr-figure--solo">
+ <img class="theme-img-light kr-figure-img" src="https://www.kenreid.co.uk/blog/img/tooltips/tooltip-open-light.webp" alt="A paragraph with the words Great Deluge underlined in dots, and a card above them holding that term's definition" width="1100" height="432" loading="lazy">
+ <img class="theme-img-dark kr-figure-img" src="https://www.kenreid.co.uk/blog/img/tooltips/tooltip-open-dark.webp" alt="A paragraph with the words Great Deluge underlined in dots, and a card above them holding that term's definition" width="1100" height="432" loading="lazy">
+ <figcaption class="figure-note">Hovering "Great Deluge" on <a href="https://www.kenreid.co.uk/blog/hyper-heuristics-live.html">Hyper-Heuristics, Live</a>. The card is that post's jargon box entry, word for word.</figcaption>
+ </figure>
+
+ <h2>The drudgery</h2>
+
+ <p>Matching words in prose is a swamp, and every rule below marks a place I fell in:</p>
+
+ <ul>
+ <li><strong>Longest term first.</strong> Terms are sorted by length before the regex is built, so "cooling schedule" wins over "cooling" instead of leaving a half-wrapped phrase.</li>
+ <li><strong>Plurals match their singular.</strong> "Hemispheres" gets the definition for "hemisphere". The reader sees the word as written, the lookup uses the base form.</li>
+ <li><strong>Code is off-limits.</strong> The walker skips <code>pre</code>, <code>code</code>, headings, and links.</li>
+ <li><strong>The box doesn't annotate itself.</strong> The glossary box is excluded as a source region, or every definition would sprout tooltips of the terms it defines, recursively, a hall of mirrors ending in a memory issue.</li>
+ <li><strong>Manual override exists.</strong> A bare <code>&lt;jargon key="wcag"&gt;WCAG&lt;/jargon&gt;</code> tag forces a specific definition where automatic matching would guess wrong, and hand-written <code>&lt;abbr&gt;</code> tags are left untouched.</li>
+ </ul>
+
+ <h2>And then the box folds itself away</h2>
+
+ <p>The first jargon box in a post is automatically collapsed into a click-to-open <code>&lt;details&gt;</code> element. Returning readers scroll past a single line offering to expand into jargon definitions, and the tooltips can be used at-will instead. </p>
+
+ <p>Why <code>&lt;abbr&gt;</code> and not a tooltip library: 1. it is the element browsers already understand, 2. it costs zero dependencies, 3. screen readers can work with it, 4. the styling (the dotted underline, the positioning, the theme awareness) is a handful of CSS rules on top of native behaviour, 5. the factory is small, 6. I wanted to work it out!</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Doesn't rewriting text nodes on every load slow the page down?</summary>
+ <p>It runs once, after the content has painted, on one article's worth of text, and the walker rejects nodes that can't match before doing any work on them. In practice it's a few milliseconds. The cost to the reader is zero, and the saving on my end is every definition I never had to write twice.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why not define terms inline, like normal writing?</summary>
+ <p>For one or two terms, inline is better and I still do it. The posts that needed this system use eight or ten technical terms, and defining them all inline turns paragraphs into glue. The box up top serves the reader who wants to preload, and the tooltips serve the one who reads first and asks questions later, so the prose gets to stay prose.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>What about touchscreens, where there is no hover?</summary>
+ <p>Tapping an abbr shows the tooltip on the mobile browsers I test, and the jargon box remains one tap away at the top as the fallback everyone gets. It's the weakest part of the system. The box and the tooltips are a pair rather than competitors for that reason: whichever one your device is worse at, the other covers.</p>
+ </details>
+ </div>
+
+        
+
+ ]]></content:encoded>
+    </item>
+    <item>
       <title>Deep Links Into a Photo Gallery</title>
       <link>https://www.kenreid.co.uk/blog/deep-links-into-a-photo-gallery.html</link>
       <guid>https://www.kenreid.co.uk/blog/deep-links-into-a-photo-gallery.html</guid>
@@ -2923,138 +3047,6 @@ link.appendChild(span);</code></pre>
       <pubDate>Sun, 23 Aug 2026 00:00:00 +0000</pubDate>
       <description>Genetic programming in your browser: watch a population of expression trees evolve to fit a hidden curve, read the best program as it grows, and give it bloat with the sliders.</description>
       <category>ai</category>
-      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/genetic-programming-live.html">View it on the site</a> to play with it.</em></p>
-
- <p>Genetic programming evolves programs. What gets bred is the program itself rather than the settings of a program: a working formula nobody wrote, assembled out of worse ones. I've published with this one: the belt-laying search in <a href="https://www.kenreid.co.uk/blog/factorio-live.html">the Factorio post</a> is a genetic programming system, and it came out ahead of both other methods in the paper.</p>
-
- <p>This is part eight of the series. So far:</p>
- <ul>
- <li><a href="https://www.kenreid.co.uk/blog/ant-colony-live.html">ants have foraged</a></li>
- <li><a href="https://www.kenreid.co.uk/blog/evolution-live.html">triangles have evolved</a></li>
- <li><a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">a search has cooled its way out of bad valleys</a></li>
- <li><a href="https://www.kenreid.co.uk/blog/particle-swarm-live.html">a swarm has chased its own best guess</a></li>
- <li><a href="https://www.kenreid.co.uk/blog/variable-neighbourhood-search-live.html">a stuck search has widened its neighbourhood until it came unstuck</a></li>
- <li><a href="https://www.kenreid.co.uk/blog/cma-es-live.html">a cloud of samples has learned the shape of a valley</a></li>
- <li><a href="https://www.kenreid.co.uk/blog/differential-evolution-live.html">a population has built its moves out of its own spread</a></li>
- </ul>
-
- 
-
- <p>In part two every individual was a fixed-length list of numbers: fifty triangles, ten genes each, five hundred dials for evolution to twiddle. The <em>shape</em> of that genome was decided by me, in advance, forever. Genetic programming throws that away. The genome is a tree of code, and the size and shape of the tree are up for grabs too. Evolution gets the structure as well as the settings.</p>
-
- <div class="plain-english-box">
- <h2>Quick jargon guide</h2>
- <ul>
- <li><strong>Genetic programming (GP):</strong> an evolutionary algorithm whose individuals are programs (here, mathematical expressions) rather than fixed-length strings of parameters. Selection, crossover, and mutation operate on the program's tree.</li>
- <li><strong>Expression tree:</strong> a program written as a tree, with operators at the branches and variables or constants at the leaves. sin(x)*(x+1.7) is a seven-node tree.</li>
- <li><strong>Symbolic regression:</strong> searching for a formula that fits data, where the formula itself is the unknown, not just the coefficients of a formula you chose in advance.</li>
- <li><strong>Crossover:</strong> in GP, snipping a random subtree out of one parent and grafting in a random subtree from another. Children can be bigger than both parents or smaller than either.</li>
- <li><strong>Bloat:</strong> trees growing larger generation after generation without getting any fitter - famous disease of GP.</li>
- <li><strong>Parsimony:</strong> a fitness penalty per node, taxing big trees. The standard treatment for bloat.</li>
- <li><strong>Intron:</strong> code that has no effect on a program's output, like a subtree multiplied by zero. Bloat is mostly introns.</li>
- </ul>
- </div>
-
- <h2>An infinite haystack</h2>
-
- <p>The demo below does symbolic regression. I sample forty points from a hidden target curve, and the population's job is to find an expression that fits them. Individuals are trees built from plus, minus, times, a protected divide (dividing by nearly zero returns 1 instead of exploding), sine, cosine, the variable x, and random constants.</p>
-
- <p>Fitness is mean squared error over the sample points, the lower the better. A formula that outputs infinity or NaN anywhere gets a score so bad it amounts to a death sentence.</p>
-
- <p>Part two's genome was a box with five hundred dials: finite and fixed. The space of all expressions is infinite, and almost all of it is garbage. A random tree comes out like cos(x/x)*0.3-x. There's no gradient to follow and no obvious notion of "nearby".</p>
-
- <p>And yet a population of these things, bred and culled, finds working programs in seconds - which is kinda crazy.</p>
-
- <h2>Trading subtrees</h2>
-
- <p>The engine is the one you already know from part two: tournament selection, crossover, mutation, and a couple of elites carried into each new generation untouched. What changes is what crossover <em>means</em>. With trees, crossover picks a random subtree in each parent and swaps them. It works because subtrees are meaningful units in a way that random substrings of characters never are: sin(2*x) is a working component. Evolution here is trading parts, not shuffling letters.</p>
-
- <p>The starting population is grown "ramped half-and-half", a mix of bushy full trees and scraggly random ones at several depths (GP-speak for seeding the pool with variety). I also cap tree depth at eight, partly for your device's sake and partly because, as you'll see, GP will take every inch you give it.</p>
-
- <h2>Watch a program grow</h2>
-
- <p>Below, a population of formulas is evolving against the data. The dots are the samples from the hidden curve, and the green line is the best formula so far, redrawn each generation so you can watch it snap toward the data.</p>
-
- <p>The node diagram is that formula's actual code: blue nodes are operators, amber leaves are x and constants. The readout underneath prints it as maths you can read. Generations tick by a few per second so the motion stays watchable.</p>
-
- 
-
- <h2>The parsimony tax</h2>
-
- <p><strong>Set parsimony to zero.</strong> Keep one eye on the average size chart. Error improves, then plateaus, while average size climbs and keeps climbing until it slams into the depth cap.</p>
-
- <p>The population is now hauling around programs of a hundred-plus nodes that fit the data no better than a fifteen-node formula from fifty generations ago. This is bloat, the most famous disease of genetic programming and the reason the parsimony slider exists. Why a population would <em>choose</em> to bloat gets its own section below.</p>
-
- <p><strong>Now slam parsimony to maximum.</strong> The opposite catastrophe: every node now costs more fitness than accuracy is worth, so the population collapses to tiny, dumb expressions: a bare constant, a lonely x. They fit the data terribly, but cheaply. Parsimony is a tax, and like any tax, set it too high and nobody builds anything.</p>
-
- <p><strong>Shrink the population to twenty.</strong> The run crawls or stalls. With so few trees, the pool of subtrees for crossover to trade is tiny, and once the population homogenises, mutation has to invent every new part from scratch.</p>
-
- <p><strong>And drop mutation to zero</strong> while you're at it. Same lesson as part two, sharper here: crossover can only recombine subtrees that already exist somewhere in the population. Once the interesting ones are gone, they are gone.</p>
-
- <h2>Bloat is evolved defensive code</h2>
-
- <p>Subtree crossover is destructive: graft a random subtree into a random point of a working program and you'll usually break it.</p>
-
- <p>Imagine two parents of equal fitness, one lean, one padded with introns: code that computes something and then multiplies it by zero, or adds a quantity and subtracts it again. When crossover hits the padded parent, odds are it lands in the padding, and the child behaves just like its parent. When it hits the lean one, it hits something that mattered.</p>
-
- <p>Padded parents therefore produce more viable children. Padding spreads. Average size marches upward while fitness stands perfectly still.</p>
-
- <p>The population is evolving <em>resistance to its own genetic operators</em>. No line of my code rewards defensive padding: it falls out of selection pressure, the same way real genomes are stuffed with non-coding DNA and real codebases accrete dead branches nobody dares delete (you don't want to see some of the folders I don't sync to GitHub here locally...).</p>
-
- <p>The trees are, in effect, growing bubble wrap to survive crossover.</p>
-
- <h2>Where GP turns up in practice</h2>
-
- <p>Symbolic regression is the flagship application and it earns its keep in science. Fit a neural network to experimental data and you get a black box that interpolates. Fit an expression tree and you get an equation a human can read and argue with.</p>
-
- <p>GP-based systems have rediscovered conservation laws from raw motion-capture data, and they get used to propose compact models in physics, materials science and ecology. When you want insight rather than raw predictive power, a ten-node formula beats a million-weight network, contrary to what many machine learning specialists would say.</p>
-
- <p>NASA's ST5 mission needed a small satellite antenna with an awkward radiation pattern, and an evolutionary algorithm designed one<sup><a href="https://www.kenreid.co.uk/blog/genetic-programming-live.html#ref-3" class="cite-ref">[3]</a></sup>. The result looks like a bent paperclip. No engineer would have drawn it, and it outperformed the conventionally designed alternative.</p>
-
- <p>It flew in 2006. There is evolved hardware in space!</p>
-
- <p>John Koza launched the field with his 1992 book<sup><a href="https://www.kenreid.co.uk/blog/genetic-programming-live.html#ref-1" class="cite-ref">[1]</a></sup> and then spent years compiling "human-competitive" results: GP runs that reinvented patented circuits and produced patentable designs of their own. </p>
-
- <p>Every one of them lived in a domain with a fast, automatic, well-behaved fitness function. GP never became a general way to write software, and the field guide I recommend below<sup><a href="https://www.kenreid.co.uk/blog/genetic-programming-live.html#ref-2" class="cite-ref">[2]</a></sup> is refreshingly frank about why. Where a score is cheap to compute and means what you want, GP is a live option. Everywhere else, the fitness function is the really hard part.</p>
-
- <h2>Structure is a freedom</h2>
-
- <p>Part two's lesson was that the fitness function is where the meaning lives: change what you reward and you change what evolves. Give evolution control over structure as well and it will use that control in every way that pays.</p>
-
- <p>It builds the subtree that fits your curve. It also builds padding to shield that subtree from your own crossover operator, and for the same reason: both help its children survive.</p>
-
- <p>Zero the parsimony and watch the trees fatten in real time, then tax them back down to stumps. Sit through thirty flat generations of the error chart until it falls off a cliff, because two mediocre parents happened to be holding complementary halves of the answer.</p>
-
- <p>An infinite search space, almost all of it garbage, explored by trading parts and taxing waste. It should not work anything like as well as it does.</p>
-
- <div class="faq-section">
- <h2>Common questions</h2>
-
- <details class="faq-item">
- <summary>Is this how AI coding assistants work?</summary>
- <p>No. A modern code assistant is a large language model: it learned from an enormous corpus of human-written code and generates likely text, so it turns up to every problem with a vast prior about what programs should look like. GP turns up knowing nothing. It has never seen a maths textbook. It has a score, and it searches blind. That makes it wasteful (it rediscovers wheels constantly) and also unprejudiced: it can find designs no human would write, like that antenna. Researchers have begun combining the two, with a language model proposing programs and an evolutionary loop scoring and selecting them.</p>
- </details>
-
-
- </div>
-
- <h2 class="section-heading" id="references">References</h2>
-
- <ol class="references">
-          <li id="ref-1">
-            Koza, J. R. (1992). <em>Genetic Programming: On the Programming of Computers by Means of Natural Selection</em>. MIT Press. ISBN 978-0262111706.
-          </li>
-          <li id="ref-2">
-            Poli, R., Langdon, W. B., &amp; McPhee, N. F. (2008). <em>A Field Guide to Genetic Programming</em>. Freely available at <a href="http://www.gp-field-guide.org.uk" target="_blank" rel="noopener">http://www.gp-field-guide.org.uk</a>
-          </li>
-          <li id="ref-3">
-            Lohn, J. D., Hornby, G. S., &amp; Linden, D. S. (2005). An evolved antenna for deployment on NASA's Space Technology 5 mission. In <em>Genetic Programming Theory and Practice II</em> (pp. 301&ndash;315). Springer.
-          </li>
-        </ol>
-
-        
-
- ]]></content:encoded>
     </item>
     <item>
       <title>Differential Evolution, Live</title>

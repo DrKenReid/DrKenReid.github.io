@@ -312,6 +312,10 @@
     "deep-links-into-a-photo-gallery": {
       "title": "More on how the gallery works",
       "line": "This series covers the gallery, the photo map and the rest of the site, and the feed is the way to follow it."
+    },
+    "the-tooltip-factory": {
+      "title": "Hovered your way through this one?",
+      "line": "The series covers the tooltips and the rest of the site's insides, and the feed is the way to follow it."
     }
   }
 }

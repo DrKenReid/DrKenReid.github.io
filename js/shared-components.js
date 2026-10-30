@@ -4015,15 +4015,15 @@ function applyJargonTooltips() {
     // Global jargon: cross-cutting terms that benefit every post even without a page-specific glossary.
     // Page-level definitions (in plain-english-box) always override these when the same key is defined.
     var GLOBAL_JARGON = {
-        'ai': 'Artificial Intelligence — computer systems that can perform tasks normally requiring human intelligence, such as reasoning, learning, and problem-solving.',
-        'ml': 'Machine Learning — a type of AI where systems improve by learning patterns from data rather than following explicit rules.',
-        'llm': 'Large Language Model — an AI model trained on large amounts of text that can generate, summarise, and reason about language.',
-        'genai': 'Generative AI — AI systems that can produce original content such as text, code, or images in response to a prompt.',
+        'ai': 'Artificial Intelligence: computer systems that can perform tasks normally requiring human intelligence, such as reasoning, learning, and problem-solving.',
+        'ml': 'Machine Learning: a type of AI where systems improve by learning patterns from data rather than following explicit rules.',
+        'llm': 'Large Language Model: an AI model trained on large amounts of text that can generate, summarise, and reason about language.',
+        'genai': 'Generative AI: AI systems that can produce original content such as text, code, or images in response to a prompt.',
         'open source': 'software whose source code is publicly available and free to use, modify, and distribute.',
-        'api': 'Application Programming Interface — a defined way for software systems to communicate and exchange data with each other.',
+        'api': 'Application Programming Interface: a defined way for software systems to communicate and exchange data with each other.',
         'github': 'a web platform for hosting and sharing code repositories, built on Git version control.',
         'python': 'a popular programming language known for its readable syntax, widely used in data science, AI, and automation.',
-        'json': 'JavaScript Object Notation — a lightweight, human-readable text format for storing and exchanging structured data.'
+        'json': 'JavaScript Object Notation: a lightweight, human-readable text format for storing and exchanging structured data.'
     };
 
     var extracted = extractPageJargonDefinitions(blogPost);

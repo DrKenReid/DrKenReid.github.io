@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="Every post on this site opens with a jargon guide, and every term in it becomes a hover tooltip across the whole article.">
+ <meta name="keywords" content="technology">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>The Tooltip Factory - Ken Reid</title>
+ <meta property="og:title" content="The Tooltip Factory">
+ <meta property="og:description" content="Every post on this site opens with a jargon guide, and every term in it becomes a hover tooltip across the whole article.">
+ <meta property="og:image" content="https://www.kenreid.co.uk/img/og/the-tooltip-factory.jpg">
+ <meta property="og:image:width" content="1200">
+ <meta property="og:image:height" content="630">
+ <meta property="og:image:alt" content="The Tooltip Factory">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/the-tooltip-factory.html">
+ <meta property="og:type" content="article">
+ <meta property="og:site_name" content="Ken Reid">
+ <meta property="og:locale" content="en_GB">
+ <meta property="article:published_time" content="2026-10-29">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="The Tooltip Factory">
+ <meta name="twitter:description" content="Every term in this site's jargon guides becomes a hover tooltip across the whole article.">
+ <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/the-tooltip-factory.jpg">
+ <meta name="citation_title" content="The Tooltip Factory">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/10/29">
+ <meta name="citation_online_date" content="2026/10/29">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/the-tooltip-factory.html">
+ <meta name="DC.title" content="The Tooltip Factory">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-10-29">
+ <script defer src="../js/analytics.js"></script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="../img/photography/hero/147.webp" fetchpriority="high">
+ <link rel="stylesheet" href="../style.min.css?v=20260923a">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/the-tooltip-factory.html">
+ <link rel="alternate" type="application/rss+xml" title="Ken Reid's Blog" href="https://www.kenreid.co.uk/feed.xml">
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BlogPosting",
+   "mainEntityOfPage": {
+     "@type": "WebPage",
+     "@id": "https://www.kenreid.co.uk/blog/the-tooltip-factory.html"
+   },
+   "url": "https://www.kenreid.co.uk/blog/the-tooltip-factory.html",
+   "headline": "The Tooltip Factory",
+   "description": "Every post on this site opens with a jargon guide, and every term in it becomes a hover tooltip across the whole article.",
+   "image": {
+     "@type": "ImageObject",
+     "url": "https://www.kenreid.co.uk/img/og/the-tooltip-factory.jpg",
+     "width": 1200,
+     "height": 630
+   },
+   "datePublished": "2026-10-29",
+   "dateModified": "2026-10-29",
+   "author": {
+     "@type": "Person",
+     "@id": "https://www.kenreid.co.uk/#ken",
+     "name": "Ken Reid",
+     "url": "https://www.kenreid.co.uk/"
+   },
+   "publisher": {
+     "@type": "Person",
+     "@id": "https://www.kenreid.co.uk/#ken",
+     "name": "Ken Reid",
+     "url": "https://www.kenreid.co.uk/"
+   },
+   "isPartOf": [
+     { "@id": "https://www.kenreid.co.uk/#website" },
+     {
+       "@type": "CreativeWorkSeries",
+       "@id": "https://www.kenreid.co.uk/series-how-this-site-is-built.html#series",
+       "name": "How This Site Is Built",
+       "url": "https://www.kenreid.co.uk/series-how-this-site-is-built.html"
+     }
+   ],
+   "inLanguage": "en-GB",
+   "articleSection": "Technology",
+   "wordCount": 1065,
+   "timeRequired": "PT5M",
+   "keywords": ["tooltips", "javascript", "writing", "accessibility", "jargon"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "The Tooltip Factory",
+       "item": "https://www.kenreid.co.uk/blog/the-tooltip-factory.html"
+     }
+   ]
+ }
+ </script>
+ <script defer src="../js/theme.js?v=20260923a"></script>
+ <script defer src="../js/palette.js?v=20260923a"></script>
+</head>
+<body>
+ <div id="header-section"></div>
+
+ <main id="main-content">
+  <header class="kr-opener" style="--kr-opener-img: url(/img/photography/hero/147.webp);">
+    <div class="kr-opener__media" aria-hidden="true"></div>
+    <div class="kr-opener__scrim" aria-hidden="true"></div>
+    <div class="container kr-opener__inner">
+      <nav aria-label="breadcrumb" class="kr-opener__crumbs"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">The Tooltip Factory</li>
+      </ol></nav>
+      <p class="kr-opener__kicker">Technology &middot; <time datetime="2026-10-29">29 October 2026</time> &middot; 5 min read</p>
+      <p class="kr-opener__title page-title">The Tooltip Factory</p>
+      <p class="kr-opener__standfirst">Every post on this site opens with a jargon guide, and every term in it becomes a hover tooltip across the whole article.</p>
+      <p class="kr-opener__credit">Photograph &copy; Ken Reid</p>
+    </div>
+    <a class="kr-opener__cue" href="#main-content-body" aria-label="Scroll to the article"><span></span></a>
+  </header>
+
+ <div class="about-us-area section-padding-80 clearfix" id="main-content-body">
+ <div class="container">
+ 
+ <div class="blog-post">
+ <h1>The Tooltip Factory</h1>
+ <div class="blog-meta">
+ 29 October 2026 &middot;
+ <span class="blog-tag">technology</span>
+ </div>
+
+ <p>I have an eclectic mix of blogs on my site. I basically just write about whatever I feel like, and hope that I bring in an equally eclectic group of readers. But, this means that my poor friends and family who want to support me might go from a blog about <a href="mistaken-identity-italy.html">my trip to Trento, Italy</a>, then try and support me by reading about <a href="hyper-heuristics-live.html">hyper-heuristics</a>, and quickly get lost in the jargon. So - I made a system so that readers can easily hover over underlined words in the box below and a definition appears. Now hover the same words anywhere else in this article: same definition. Since this system is needed in many of my blogs I just made it a feature in all of them. Serendipitously, an example is directly below. Part of the series on <a href="../series-how-this-site-is-built.html">how this site is built</a>.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Tree walker:</strong> a browser API (<code>document.createTreeWalker</code>) for visiting every text node in part of a page, one by one, without touching the elements around them.</li>
+ <li><strong>Text node:</strong> the raw runs of text between HTML tags. "The <em>quick</em> fox" is three nodes: two text, one element.</li>
+ <li><strong>abbr element:</strong> HTML's built-in "this has an expansion" tag. Given a <code>title</code>, browsers show it on hover and screen readers can announce it.</li>
+ <li><strong>Glossary box:</strong> the "Quick jargon guide" you are reading right now, which on this site is also a data source. This box is manufactured by the factory it describes, which pleases me more than it should.</li>
+ </ul>
+ </div>
+
+ <h2>Definitions are data</h2>
+
+ <p>The jargon box at the top of each post is ordinary HTML: a list of <code>&lt;li&gt;&lt;strong&gt;Term:&lt;/strong&gt; definition&lt;/li&gt;</code> lines. The shared JavaScript reads that list and turns it into a dictionary. Then it adds a site-wide base dictionary of terms I was frequently re-defining (AI, ML, LLM, API, JSON, open source, GitHub, Python), with the page's own definitions winning collisions, so a post about a different kind of API can say so (e.g. a beginner-friendly data science blog vs an expert-focused one).</p>
+
+ <p>Armed with the dictionary, a tree walker (an ent?) visits every text node in the article and wraps each match in an <code>&lt;abbr&gt;</code> with the definition as its <code>title</code>. Trimmed to its bones:</p>
+
+<pre><code class="language-javascript">var walker = document.createTreeWalker(blogPost, NodeFilter.SHOW_TEXT, {
+  acceptNode: function (node) {
+    // skip code blocks, headings, links, and the glossary box itself
+    if (insideSkippedTag(node) || insideSourceBox(node)) return NodeFilter.FILTER_REJECT;
+    return jargonRegex.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT
+                                            : NodeFilter.FILTER_REJECT;
+  }
+});
+
+// for each matching text node, rebuild it as text + abbr + text
+var abbr = document.createElement('abbr');
+abbr.setAttribute('title', definition);
+abbr.textContent = matchedText;
+fragment.appendChild(abbr);</code></pre>
+
+ <figure class="kr-figure--solo">
+ <div class="kr-diagram kr-diagram--flow" role="group" aria-label="How a post's jargon box becomes tooltips across the whole article">
+ <ol class="kr-diagram__routes">
+ <li class="kr-diagram__route kr-diagram__route--1">
+ <span class="kr-diagram__label">Written by hand</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__group">
+ <div class="kr-diagram__node">Jargon box
+ <span class="kr-diagram__sub">This post's terms</span>
+ <span class="kr-diagram__detail">A plain HTML list near the top of the post, one term and its definition per line, like the one folded up at the top of this post.</span></div>
+ <div class="kr-diagram__node">Site-wide terms
+ <span class="kr-diagram__sub">AI, API, JSON...</span>
+ <span class="kr-diagram__detail">The handful I kept defining in post after post, kept once in the shared JavaScript.</span></div>
+ </div></li>
+ </ol>
+ </li>
+ <li class="kr-diagram__route kr-diagram__route--2">
+ <span class="kr-diagram__label">In your browser</span>
+ <ol class="kr-diagram__steps">
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Dictionary
+ <span class="kr-diagram__sub">The post wins</span>
+ <span class="kr-diagram__detail">Both lists go into one lookup. When a post defines one of the site-wide terms itself, the post's definition is the one used.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Tree walker
+ <span class="kr-diagram__sub">Every text node</span>
+ <span class="kr-diagram__detail">Visits every run of text in the article and skips code, headings, links and the jargon box itself.</span></div></li>
+ <li class="kr-diagram__step"><div class="kr-diagram__node">Tooltips
+ <span class="kr-diagram__sub">abbr + title</span>
+ <span class="kr-diagram__detail">Each match is wrapped in an abbr element with the definition as its title, and the stylesheet draws that title as the card.</span></div></li>
+ </ol>
+ </li>
+ </ol>
+ </div>
+ <figcaption class="figure-note">From the jargon box to the tooltips. Hover over, tap or tab to a box for more.</figcaption>
+ </figure>
+
+ <figure class="kr-figure--solo">
+ <img class="theme-img-light kr-figure-img" src="img/tooltips/tooltip-open-light.webp" alt="A paragraph with the words Great Deluge underlined in dots, and a card above them holding that term's definition" width="1100" height="432" loading="lazy">
+ <img class="theme-img-dark kr-figure-img" src="img/tooltips/tooltip-open-dark.webp" alt="A paragraph with the words Great Deluge underlined in dots, and a card above them holding that term's definition" width="1100" height="432" loading="lazy">
+ <figcaption class="figure-note">Hovering "Great Deluge" on <a href="hyper-heuristics-live.html">Hyper-Heuristics, Live</a>. The card is that post's jargon box entry, word for word.</figcaption>
+ </figure>
+
+ <h2>The drudgery</h2>
+
+ <p>Matching words in prose is a swamp, and every rule below marks a place I fell in:</p>
+
+ <ul>
+ <li><strong>Longest term first.</strong> Terms are sorted by length before the regex is built, so "cooling schedule" wins over "cooling" instead of leaving a half-wrapped phrase.</li>
+ <li><strong>Plurals match their singular.</strong> "Hemispheres" gets the definition for "hemisphere". The reader sees the word as written, the lookup uses the base form.</li>
+ <li><strong>Code is off-limits.</strong> The walker skips <code>pre</code>, <code>code</code>, headings, and links.</li>
+ <li><strong>The box doesn't annotate itself.</strong> The glossary box is excluded as a source region, or every definition would sprout tooltips of the terms it defines, recursively, a hall of mirrors ending in a memory issue.</li>
+ <li><strong>Manual override exists.</strong> A bare <code>&lt;jargon key="wcag"&gt;WCAG&lt;/jargon&gt;</code> tag forces a specific definition where automatic matching would guess wrong, and hand-written <code>&lt;abbr&gt;</code> tags are left untouched.</li>
+ </ul>
+
+ <h2>And then the box folds itself away</h2>
+
+ <p>The first jargon box in a post is automatically collapsed into a click-to-open <code>&lt;details&gt;</code> element. Returning readers scroll past a single line offering to expand into jargon definitions, and the tooltips can be used at-will instead. </p>
+
+ <p>Why <code>&lt;abbr&gt;</code> and not a tooltip library: 1. it is the element browsers already understand, 2. it costs zero dependencies, 3. screen readers can work with it, 4. the styling (the dotted underline, the positioning, the theme awareness) is a handful of CSS rules on top of native behaviour, 5. the factory is small, 6. I wanted to work it out!</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Doesn't rewriting text nodes on every load slow the page down?</summary>
+ <p>It runs once, after the content has painted, on one article's worth of text, and the walker rejects nodes that can't match before doing any work on them. In practice it's a few milliseconds. The cost to the reader is zero, and the saving on my end is every definition I never had to write twice.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why not define terms inline, like normal writing?</summary>
+ <p>For one or two terms, inline is better and I still do it. The posts that needed this system use eight or ten technical terms, and defining them all inline turns paragraphs into glue. The box up top serves the reader who wants to preload, and the tooltips serve the one who reads first and asks questions later, so the prose gets to stay prose.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>What about touchscreens, where there is no hover?</summary>
+ <p>Tapping an abbr shows the tooltip on the mobile browsers I test, and the jargon box remains one tap away at the top as the fallback everyone gets. It's the weakest part of the system. The box and the tooltips are a pair rather than competitors for that reason: whichever one your device is worse at, the other covers.</p>
+ </details>
+ </div>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/46.webp')">
+              <a href="ctrl-k-for-a-static-site.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/46.webp" srcset="../img/photography/thumb/46.webp 1x, ../img/photography/thumb/46@2x.webp 2x" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">3 August 2026 · 7 min read</div>
+                  <h3 class="blog-card-title">Ctrl+K for a Static Site</h3>
+                  <p class="blog-card-excerpt">Press Ctrl+K anywhere on this site and a command palette appears: every page, every post, every photo tag, searchable from the keyboard. Vanilla JavaScript, no library, and the whole thing is in the post to steal.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/20.webp')">
+              <a href="dark-mode-that-doesnt-flash.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/20.webp" srcset="../img/photography/thumb/20.webp 1x, ../img/photography/thumb/20@2x.webp 2x" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">6 August 2026 · 7 min read</div>
+                  <h3 class="blog-card-title">Dark Mode That Doesn&#x27;t Flash</h3>
+                  <p class="blog-card-excerpt">Dark mode is easy; dark mode without a white flash is more difficult. How this site stamps the theme before the first paint, and drags every chart and iframe along with it.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/71.webp')">
+              <a href="blog-engine-in-one-json-file.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/71.webp" srcset="../img/photography/thumb/71.webp 1x, ../img/photography/thumb/71@2x.webp 2x" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">26 July 2026 · 7 min read</div>
+                  <h3 class="blog-card-title">A Blog Engine in One JSON File</h3>
+                  <p class="blog-card-excerpt">No database, no CMS, no Jekyll: this blog&#x27;s search, filters, pagination, read times, and related posts all hang off one JSON file and the Python scripts that run when I publish.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">technology</span><span class="blog-tag">writing</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ </div>
+ </div>
+ </div>
+
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js?v=20260923a"></script>
+ <script src="../js/site.js?v=20260923a"></script>
+ <script src="../js/lightbox.js?v=20260923a"></script>
+ <script src="../js/default-assets/active.js?v=20260923a"></script>
+ <script src="../js/shared-components.js?v=20260923a"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');
+</script>
+</body>
+</html>

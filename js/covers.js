@@ -902,6 +902,45 @@
         };
     });
 
+    // A pointer drifts onto the dotted words in a paragraph, and each one
+    // opens a card with its definition.
+    def('the-tooltip-factory', function (w, h, rnd) {
+        var t = 0, STEP = 200, pad = w * 0.08, rows = [], terms = [];
+        for (var r = 0; r < 5; r++) rows.push({ y: h * (0.4 + r * 0.11), len: (w - pad * 2) * (r === 4 ? 0.55 : 0.85 + rnd() * 0.15) });
+        [[1, 0.18], [2, 0.55], [4, 0.1]].forEach(function (k) {
+            terms.push({ x: pad + (w - pad * 2) * k[1], y: rows[k[0]].y, len: (w - pad * 2) * (0.16 + rnd() * 0.08), lines: 2 + ((rnd() * 2) | 0) });
+        });
+        var pointer = { x: w * 0.9, y: h * 0.95 };
+        return {
+            step: function () {
+                t++;
+                var term = terms[Math.floor(t / STEP) % terms.length];
+                pointer.x += (term.x + term.len * 0.5 - pointer.x) * 0.08;
+                pointer.y += (term.y + 2 - pointer.y) * 0.08;
+            },
+            draw: function (ctx) {
+                var p = phase(t, STEP), on = Math.floor(t / STEP) % terms.length;
+                rows.forEach(function (row) { rect(ctx, pad, row.y - 3, row.len, 6, alpha('#ffffff', 0.16)); });
+                terms.forEach(function (term, i) {
+                    rect(ctx, term.x, term.y - 3, term.len, 6, i === on && p > 0.3 ? C.ink : alpha('#ffffff', 0.45));
+                    for (var d = term.x; d < term.x + term.len; d += 4) dot(ctx, d + 1, term.y + 7, 0.9, C.b);
+                });
+                var term = terms[on], a = clamp01((p - 0.3) / 0.1) * (1 - clamp01((p - 0.88) / 0.1));
+                if (a > 0) {
+                    var cw = w * 0.52, ch = h * (0.08 + term.lines * 0.055);
+                    var cx = Math.min(w - pad * 0.5 - cw, Math.max(pad * 0.5, term.x + term.len / 2 - cw / 2)), cy = term.y - 14 - ch;
+                    ctx.globalAlpha = a;
+                    rect(ctx, cx, cy, cw, ch, alpha('#000000', 0.8));
+                    dot(ctx, cx + 12, cy + 14, 4, C.blue);
+                    for (var l = 0; l < term.lines; l++) rect(ctx, cx + 22, cy + 11 + l * h * 0.055, (cw - 34) * (l === term.lines - 1 ? 0.6 : 1), 4, C.ink);
+                    ctx.globalAlpha = 1;
+                }
+                ctx.fillStyle = C.ink; ctx.strokeStyle = 'rgba(0,0,0,0.6)'; ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.moveTo(pointer.x, pointer.y); ctx.lineTo(pointer.x, pointer.y + 13); ctx.lineTo(pointer.x + 3.5, pointer.y + 10); ctx.lineTo(pointer.x + 9, pointer.y + 9); ctx.closePath(); ctx.fill(); ctx.stroke();
+            }
+        };
+    });
+
     // Translucent triangles, nudged one at a time, settle into "Hi" while
     // a fitness bar fills underneath.
     def('a-headline-that-evolves-itself', function (w, h, rnd) {

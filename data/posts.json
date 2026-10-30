@@ -1,5 +1,23 @@
 [
   {
+    "title": "The Tooltip Factory",
+    "date": "2026-10-29",
+    "tags": [
+      "technology"
+    ],
+    "category": "Technology",
+    "excerpt": "Every post on this site opens with a jargon guide, and every term in it becomes a hover tooltip across the whole article.",
+    "url": "blog/the-tooltip-factory.html",
+    "image": "img/photography/hero/147.webp",
+    "series": {
+      "name": "How This Site Is Built",
+      "part": 20
+    },
+    "readMinutes": 5,
+    "words": 1065,
+    "code": true
+  },
+  {
     "title": "Deep Links Into a Photo Gallery",
     "date": "2026-10-29",
     "tags": [
