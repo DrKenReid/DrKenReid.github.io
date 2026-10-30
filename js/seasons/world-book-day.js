@@ -8,7 +8,7 @@
  * plane folded from a printed page gliding over, an open book for a
  * favicon and across the moon, a shelf along a post's top that fills
  * with books as the reader reads, a 404 page with a page torn out, a
- * gold pointer with a green book at its tail, and the bookworm inching
+ * pencil for the pointer, and the bookworm inching
  * along the footer's edge. Its own: a slip of paper tucked into the top
  * of the footer with a line from Ken's quote wall (data/quotes.json),
  * turned over for another at a click; and the bottom corner of each page
@@ -274,6 +274,13 @@
         host.appendChild(el);
     }
 
+    // The pointer: a pencil, its point the hotspot.
+    var POINTER = '<path d="M16-3.4l2.4 5.6h-4.8z" fill="#2a2a30"/><path d="M13.6 2.2h4.8l2.4 5.4h-9.6z" fill="#e8c69a"/>' +
+        '<path d="M11.2 7.6h9.6V26h-9.6z" fill="#f2c94c"/>' +
+        '<path d="M14.4 7.6V26M17.6 7.6V26" stroke="#d4a62a" stroke-width=".8"/>' +
+        '<path d="M11.2 26h9.6v3h-9.6z" fill="#b8bec6"/>' +
+        '<path d="M11.2 29h9.6v3a2 2 0 0 1-2 2h-5.6a2 2 0 0 1-2-2z" fill="#f2a0ae"/>';
+
     K.dress({
         // The ribbon's card (season.js, ribbon).
         about: { short: 'Book Day', when: '23 April',
@@ -301,10 +308,7 @@
                 'and whatever happened in between is anybody\'s guess.',
             caption: 'While I look for it, have a photograph to read by. '
         },
-        // A gold pointer with a small green book at its tail.
-        cursor: K.cursor('#f0c27a', '<rect x="1.4" y="1.4" width="9.2" height="9.6" rx="1" fill="#2e5e46" stroke="#173528" stroke-width=".8"/>' +
-            '<path d="M3.6 1.4v9.6" stroke="' + GILT + '" stroke-width=".8"/><path d="M5.4 4.4h3.4M5.4 6.4h2.6" stroke="' + GILT +
-            '" stroke-width=".8"/>', '#3a2a12'),
+        cursor: K.pointer(POINTER, 2, 2, -45),
         extra: function (kit) {
             slip(kit);
             curls();

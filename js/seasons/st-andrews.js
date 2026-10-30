@@ -7,8 +7,8 @@
  * and dives, a saltire favicon, a saltire across the moon, bunting along
  * a post's top whose flags fly out as the reader passes them, a haar off
  * the sea in both themes, saltires on the Scottish places, a 404 page
- * lost in the haar, a blue pointer with a saltire. Its own: the legend
- * of the day, a white saltire of
+ * lost in the haar, a saltire on a flagpole for the pointer. Its own:
+ * the legend of the day, a white saltire of
  * cloud that drifts together in the sky over the homepage hero and the
  * page openers, holds, and drifts apart.
  *
@@ -174,6 +174,12 @@
         });
     }
 
+    // The pointer: a saltire on a flagpole, its finial the hotspot.
+    var POINTER = '<circle cx="16" cy="-2" r="1.6" fill="#d9b65a"/>' +
+        '<path d="M16-.6V34" stroke="#8a6a3e" stroke-width="1.6" fill="none"/>' +
+        '<path d="M16.8 1h11v8h-11z" fill="#0065bd"/>' +
+        '<path d="M16.8 1l11 8M27.8 1l-11 8" stroke="#ffffff" stroke-width="1.5"/>';
+
     K.dress({
         // The ribbon's card (season.js, ribbon).
         about: { short: 'St Andrew\'s', when: '30 November',
@@ -199,8 +205,6 @@
             caption: 'While it clears, have one of my photographs of Scotland. '
         },
         extra: skySaltire,
-        // A saltire-blue pointer with a small saltire flag at its tail.
-        cursor: K.cursor('#5ea4ea', '<rect x=".4" y="2.4" width="11.2" height="7.2" fill="' + BLUE + '" stroke="#0b2540" stroke-width=".8"/>' +
-            '<path d="M.8 2.8L11.2 9.2M11.2 2.8L.8 9.2" stroke="' + WHITE + '" stroke-width="1.5"/>', '#0b2540')
+        cursor: K.pointer(POINTER, 2, 2, -45)
     });
 })();

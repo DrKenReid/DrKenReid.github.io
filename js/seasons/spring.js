@@ -286,6 +286,11 @@
         setTimeout(function () { el.remove(); }, 700);
     }
 
+    // The pointer: a tulip held by its stem, the stem's end the hotspot.
+    var POINTER = '<path d="M16-3.2V22" stroke="#3f8a3a" stroke-width="1.8" stroke-linecap="round"/>' +
+        '<path d="M16 15c-3.6-2-5.6-5.6-5.4-9.4 2.8 1.2 4.6 3.8 5.4 7.8z" fill="#5aa64a"/>' +
+        '<path d="M11 21.6c0-.8 2.2-1.4 5-1.4s5 .6 5 1.4v6.4l-2.5-2.6-2.5 3-2.5-3-2.5 2.6z" fill="#e8476a"/>';
+
     K.dress({
         corner: blossomArt, dangler: CATERPILLAR,
         // Mostly single petals, some whole small blossoms, turning over.
@@ -309,8 +314,7 @@
             lede: 'Something was planted at this address, but nothing has come up yet. It may want more rain.',
             caption: 'While you wait, have one of my spring photographs. '
         },
-        cursor: K.cursor('#9ed36a', '<path fill="#f6a5c4" stroke="#7a2e52" stroke-width=".8" d="' + posyPath(6, 6, 6) + '"/>' +
-            '<circle cx="6" cy="6" r="1.5" fill="#f2c230"/>', '#2f4a1f'),
+        cursor: K.pointer(POINTER, 2, 2, -45),
         extra: function (kit) {
             shower(kit);
             garden(kit);

@@ -323,6 +323,13 @@
         });
     }
 
+    // The pointer: an ice cream cone, its point the hotspot.
+    var POINTER = '<path d="M16-3.4l5.6 17.4H10.4z" fill="#dba35c"/>' +
+        '<path d="M12.4 9l6 3.6M13.6 4.6l5.6 3.4M19.6 9l-6 3.6M18.4 4.6l-5.6 3.4" stroke="#a8742e" stroke-width=".7"/>' +
+        '<circle cx="16" cy="19.4" r="6.6" fill="#ffd1dc"/>' +
+        '<path d="M9.6 16c2 1.4 4 1.6 6.4.4s4.4-1 6.4.4" fill="none" stroke="#f3a5b8" stroke-width="1.4"/>' +
+        '<circle cx="14" cy="19" r=".8" fill="#d84a6a"/><circle cx="18.4" cy="21.4" r=".8" fill="#d84a6a"/>';
+
     K.dress({
         // The seeds in both themes: the night's fireflies are dots.
         backdrop: { shapes: LEAVES.light.shapes, colours: ['#fff3c4', '#ffe9a0', '#f6efd6'] },
@@ -346,8 +353,7 @@
                 'It left no forwarding address.',
             caption: "While it's away, have one of my summer photographs. "
         },
-        cursor: K.cursor('#f7c843', '<path fill="#f39c12" stroke="#7a4a05" stroke-width=".6" d="' + sunPath(6, 6, 2.9, 8) + '"/>' +
-            '<circle cx="6" cy="6" r="2.3" fill="#ffd34d"/>', '#5a3a05'),
+        cursor: K.pointer(POINTER, 2, 2, -45),
         extra: function (kit) {
             visitors(kit);
             beachBall(kit);

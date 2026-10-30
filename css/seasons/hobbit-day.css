@@ -1,0 +1,329 @@
+/* css/seasons/hobbit-day.css: Hobbit Day's colours and its own rules.
+   shared-components.js loads this file only while the season is on
+   (KR_SEASONS), beside js/seasons/hobbit-day.js; css/season.css holds
+   what every season shares. Tokens first, both themes, then the rules for
+   its own pieces. */
+
+/* Hobbit Day: Shire green into earth brown:
+     light  #2f5e2a  7.13 page and warm;  #7a4a1e  6.95 page and warm
+     dark   #a8d88f  10.68 page, 8.81 raised; #e8c48a  10.52 page, 8.68 raised
+   The clock's words are 12.44:1 on its paper.
+   The line is the Ring's chain and the drawings' outlines, the glow a
+   warm candle and lamp light (the cake's candles, the pipe's ember), the
+   pumpkin token the map's rims, the badge a pale gold. The smoke is the
+   smoke rings (the pipe's, a clicked piece's); the ink and the paper are
+   the road over a post and the clock's card; the map ink is the Shire
+   drawn along the dark footer; the mist is what closes in while the Ring
+   is on. The fog is a morning mist along the foot of the hero, in the
+   light theme only. */
+:root[data-season="hobbit-day"] {
+  --kr-brand-from: #2f5e2a;
+  --kr-brand-to: #7a4a1e;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #cfeab8;
+  --kr-photo-to: #f2d9b0;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #8a7a5a;
+  --kr-season-creature: #3a2a18;
+  --kr-season-glow: #ffd27a;
+  --kr-season-pumpkin: #5f9a3a;
+  --kr-season-badge: #fff3d6;
+  --kr-season-fog: #fff3dc;
+  --kr-season-dusk: sepia(0.25) saturate(1.15) brightness(0.98);
+  --kr-season-fog-display: block;
+  --kr-season-hob-smoke: #bdb5a6;
+  --kr-season-hob-ink: #6b4a28;
+  --kr-season-hob-paper: #fbf3dc;
+  --kr-season-hob-ink-dark: #3a2a18;
+  --kr-season-hob-map: #e6d6ae;
+  --kr-season-hob-mist: #d9dde2; }
+
+:root[data-theme="dark"][data-season="hobbit-day"] {
+  --kr-brand-from: #a8d88f;
+  --kr-brand-to: #e8c48a;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-line: #c2b08a;
+  --kr-season-creature: #ecdcc6;
+  --kr-season-fog-display: none;
+  --kr-season-hob-smoke: #d9d3c6;
+  --kr-season-hob-ink: #d9b88a; }
+
+/* --- Hobbit Day's Ring ------------------------------------------------------
+   Built by js/seasons/hobbit-day.js. The Ring on its chain glints now and
+   then (.kr-season-hob-glint). A click on it puts it on: a grey mist
+   closes in round the page and its colours drain away for a moment
+   (.kr-season-hob-mist, removed when its animation ends), while the
+   pointer vanishes (script sets --kr-season-cursor to none). Never under
+   reduced motion, where the glint holds still. Classes only script
+   applies: .kr-season-hob-glint, .kr-season-hob-mist. */
+.kr-season-hob-glint {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0.8;
+  animation: kr-season-hob-glint 4s ease-in-out infinite; }
+
+@keyframes kr-season-hob-glint {
+  0%, 70%, 100% { opacity: 0; transform: scale(0.4); }
+  80% { opacity: 1; transform: scale(1.2) rotate(30deg); } }
+
+.kr-season-hob-mist {
+  position: fixed;
+  inset: 0;
+  z-index: 4500;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 50%, transparent 35%, color-mix(in srgb, var(--kr-season-hob-mist) 70%, transparent) 85%),
+    radial-gradient(ellipse 40% 30% at 20% 30%, color-mix(in srgb, var(--kr-season-hob-mist) 30%, transparent), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 80% 70%, color-mix(in srgb, var(--kr-season-hob-mist) 30%, transparent), transparent 70%);
+  -webkit-backdrop-filter: grayscale(0.9) blur(1.2px);
+  backdrop-filter: grayscale(0.9) blur(1.2px);
+  animation: kr-season-hob-unseen 2.8s ease-in-out forwards; }
+
+@keyframes kr-season-hob-unseen {
+  0% { opacity: 0; }
+  20%, 70% { opacity: 1; }
+  100% { opacity: 0; } }
+
+/* --- Hobbit Day's footer ----------------------------------------------------
+   Built by js/seasons/hobbit-day.js. The pipe on its stand blows smoke
+   rings that rise and widen, one after another (.kr-season-hob-smoke, its
+   three rings); a clicked piece puffs three smoke rings of its own
+   (--rings). The second-breakfast clock sits on the footer's top edge at
+   its right (.kr-season-hob-clock, its face and hands set by script, the
+   meal now and the next beside it; on a phone the next is left off). The
+   map of the Shire runs along the footer's top between the patch and the
+   clock, from 992px (.kr-season-hob-map). Under reduced motion the rings
+   hold still. Classes only script applies: .kr-season-hob-smoke,
+   .kr-season-puff--rings, .kr-season-hob-clock (__face, __hour, __minute,
+   __now, __next), .kr-season-hob-map. */
+.kr-season-hob-smoke ellipse {
+  stroke: var(--kr-season-hob-smoke);
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0.7;
+  transform: translate(-2px, -2px) scale(0.8);
+  animation: kr-season-hob-smoke 4.2s ease-out infinite; }
+
+/* At rest (under reduced motion) the three rings stand in a column. */
+.kr-season-hob-smoke ellipse:nth-child(2) {
+  opacity: 0.5;
+  transform: translate(-4px, -11px) scale(1.2);
+  animation-delay: -1.4s; }
+
+.kr-season-hob-smoke ellipse:nth-child(3) {
+  opacity: 0.3;
+  transform: translate(-6px, -20px) scale(1.6);
+  animation-delay: -2.8s; }
+
+@keyframes kr-season-hob-smoke {
+  0% { transform: translate(0, 4px) scale(0.5); opacity: 0; }
+  15% { opacity: 0.9; }
+  100% { transform: translate(-6px, -22px) scale(1.8); opacity: 0; } }
+
+.kr-season-puff--rings,
+.kr-season-puff--rings::before,
+.kr-season-puff--rings::after {
+  bottom: 60%;
+  width: 14px;
+  height: 9px;
+  margin-left: -7px;
+  border: 2px solid var(--kr-season-hob-smoke);
+  border-radius: 50%;
+  background: none;
+  animation: kr-season-hob-ring 2s ease-out forwards; }
+
+.kr-season-puff--rings::before {
+  bottom: 0;
+  left: auto;
+  margin-left: 0;
+  animation-delay: 0.35s; }
+
+.kr-season-puff--rings::after {
+  bottom: 0;
+  left: auto;
+  margin-left: 0;
+  animation-delay: 0.7s; }
+
+@keyframes kr-season-hob-ring {
+  0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+  15% { opacity: 0.9; }
+  100% { transform: translate(4px, -50px) scale(2.2); opacity: 0; } }
+
+.kr-season-hob-clock {
+  position: absolute;
+  right: max(12px, 5%);
+  bottom: calc(100% - 46px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px 7px 8px;
+  border-radius: 999px;
+  background: var(--kr-season-hob-paper);
+  color: var(--kr-season-hob-ink-dark);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--kr-season-hob-ink-dark) 45%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--kr-season-hob-ink) 35%, transparent);
+  font-family: 'Lora', 'Lora Fallback', Georgia, serif;
+  line-height: 1.3;
+  pointer-events: none; }
+
+.kr-season-hob-clock__face {
+  display: block;
+  flex: none;
+  width: 42px;
+  height: 42px; }
+
+.kr-season-hob-clock__now {
+  display: block;
+  font-size: 14px;
+  font-weight: 700; }
+
+.kr-season-hob-clock__next {
+  display: block;
+  font-size: 11.5px;
+  font-style: italic; }
+
+@media only screen and (max-width: 575.98px) {
+  .kr-season-hob-clock {
+    padding: 5px 12px 5px 6px;
+    bottom: calc(100% - 38px); }
+
+  .kr-season-hob-clock__face {
+    width: 32px;
+    height: 32px; }
+
+  .kr-season-hob-clock__now {
+    font-size: 12.5px; }
+
+  .kr-season-hob-clock__next {
+    display: none; } }
+
+.kr-season-hob-map {
+  display: none;
+  position: absolute;
+  top: 3px;
+  left: 30%;
+  width: min(30%, 360px);
+  color: var(--kr-season-hob-map);
+  opacity: 0.6;
+  pointer-events: none; }
+
+.kr-season-hob-map svg {
+  display: block;
+  width: 100%;
+  height: auto; }
+
+@media only screen and (min-width: 992px) {
+  .kr-season-hob-map {
+    display: block; } }
+
+/* --- Hobbit Day's dragon and road -------------------------------------------
+   Built by js/seasons/hobbit-day.js. A firework dragon swoops across once
+   as the footer arrives, its wings beating (the shared flap) and sparks
+   streaming from its tail (--dragon, .kr-season-hob-spark). Over a post a
+   road of dashes runs from the round door at the left to the Mountain at
+   the right (--journey, .kr-season-hob-marks, __home, __mountain), and
+   the traveller walks it: there by the middle of the post, home again by
+   its end, turning to face the way he goes (the shared --back), still
+   standing at home when the reader is done. Classes only script applies:
+   .kr-season-flyer--dragon, .kr-season-hob-spark, .kr-season-track--journey,
+   .kr-season-hob-walker, .kr-season-hob-marks (__home, __mountain). */
+.kr-season-flyer--dragon {
+  top: 16vh;
+  width: 160px;
+  filter: drop-shadow(0 0 6px var(--kr-season-glow));
+  animation: kr-season-hob-swoop 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
+
+@keyframes kr-season-hob-swoop {
+  0% { transform: translate(-180px, 18vh) rotate(-8deg); }
+  30% { transform: translate(24vw, 2vh) rotate(-14deg); }
+  50% { transform: translate(46vw, 10vh) rotate(6deg); }
+  75% { transform: translate(72vw, -2vh) rotate(-10deg); }
+  100% { transform: translate(calc(100vw + 30px), -14vh) rotate(-16deg); } }
+
+.kr-season-hob-spark {
+  animation: kr-season-hob-spark 0.7s ease-in-out infinite alternate; }
+
+@keyframes kr-season-hob-spark {
+  from { opacity: 0.2; }
+  to { opacity: 1; } }
+
+.kr-season-track--journey .kr-season-track__rest {
+  top: 2px;
+  bottom: auto;
+  height: 2px;
+  background: repeating-linear-gradient(to right, var(--kr-season-hob-ink) 0 6px, transparent 6px 10px); }
+
+.kr-season-track--journey .kr-season-track__tip {
+  top: -6px;
+  bottom: auto;
+  left: -7px;
+  width: 14px; }
+
+.kr-season-track--journey.kr-season-track--out .kr-season-track__tip {
+  opacity: 1; }
+
+.kr-season-hob-walker {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.25s ease; }
+
+.kr-season-track--back .kr-season-hob-walker {
+  transform: scaleX(-1); }
+
+.kr-season-hob-marks > span {
+  position: absolute;
+  top: -5px;
+  display: block;
+  width: 15px; }
+
+.kr-season-hob-marks svg {
+  display: block;
+  width: 100%;
+  height: auto; }
+
+.kr-season-hob-marks__home {
+  left: 2px; }
+
+.kr-season-hob-marks__mountain {
+  right: 4px; }
+
+/* --- Hobbit Day's round door ------------------------------------------------
+   Built by js/seasons/hobbit-day.js (its extra): on the 404 page, above
+   the lede, a round green door in its ring of stone. A click swings the
+   door (__leaf) open on its left edge to show the lamplit hall behind
+   (__hall) for a few seconds (--open); the stone ring (__frame) stays on
+   top. Under reduced motion it opens and shuts without swinging. Classes
+   only script applies: .kr-season-hob-door (--open, __hall, __leaf,
+   __frame). */
+.kr-season-hob-door {
+  position: relative;
+  width: min(210px, 60vw);
+  aspect-ratio: 1;
+  margin: 0 auto 26px;
+  perspective: 700px;
+  cursor: pointer; }
+
+.kr-season-hob-door > div {
+  position: absolute;
+  inset: 0; }
+
+.kr-season-hob-door svg {
+  display: block;
+  width: 100%;
+  height: 100%; }
+
+.kr-season-hob-door__leaf {
+  transform-origin: 12% 50%;
+  transition: transform 0.9s cubic-bezier(0.3, 0.7, 0.4, 1); }
+
+.kr-season-hob-door--open .kr-season-hob-door__leaf {
+  transform: rotateY(-105deg); }
+
+.kr-season-hob-door__frame {
+  pointer-events: none; }

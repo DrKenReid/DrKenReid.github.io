@@ -235,7 +235,7 @@ hold one day the higher rank wins, so the site is always in exactly one:
 |---|---|---|
 | 0 | spring, summer, fall, winter | 20 March to 20 June, 21 June to 21 September, 22 September to 30 November, 1 December to 19 March |
 | 1 | Halloween | 17 October to 1 November |
-| 2 | Burns Night, Darwin Day, International Women's Day, Pi Day, World Book Day, May the Fourth, Revenge of the Fifth, International Cat Day, Star Trek Day, Firefly Day, Bonfire Night, N7 Day, St Andrew's Day, Hogmanay | 25 January, 12 February, 8 March, 14 March, 23 April, 4 May, 5 May, 8 August, 8 September, 20 September, 5 November, 7 November, 30 November, 31 December to 2 January |
+| 2 | Burns Night, Darwin Day, International Women's Day, Pi Day, World Book Day, May the Fourth, Revenge of the Fifth, International Cat Day, Star Trek Day, Firefly Day, Hobbit Day, Bonfire Night, N7 Day, St Andrew's Day, Hogmanay | 25 January, 12 February, 8 March, 14 March, 23 April, 4 May, 5 May, 8 August, 8 September, 20 September, 22 September, 5 November, 7 November, 30 November, 31 December to 2 January |
 | 3 | Diwali, Holi | Diwali's five days, Dhanteras to Bhai Dooj; Holi's two, Holika Dahan and the day of colours; each from a table by year, and each over a holiday it lands on (Holi takes International Women's Day in 2031, Diwali N7 Day in 2026 and 2029) |
 
 The node tests refuse two seasons of one rank on the same day, fail when
@@ -280,7 +280,9 @@ documented in `season.js`'s header, and the shared rules in
   sizes, colours and tosses);
 - a flyer that crosses once as the footer arrives;
 - a favicon, a mark across the theme button's moon on hover, and a
-  pointer for mouse users (links keep the hand);
+  pointer for mouse users drawn as a thing of the day's (a lightsaber,
+  a candy cane, a pencil: `kit.pointer`, its tip the hotspot, a halo
+  round it for either theme; links keep the hand);
 - a track in place of a post's reading bar, which still measures,
   hidden: burning down (a candle, a fuse), filling (a beam, a ribbon) or
   a line of things that change as the reader passes them;
@@ -327,14 +329,17 @@ documented in `season.js`'s header, and the shared rules in
 | Star Trek Day | a starship and a delta badge; stars; Earl Grey, a flute on its box, a PADD; a starship that jumps to warp; panel bars lit as the reader goes; a fleet in the margins | a click on the corner's starship engages, and it drops back out of warp; the footer's pieces beam in; a panel of coloured bars along the footer's top that powers up |
 | International Women's Day | a sash in purple, white and green with a badge, the Venus symbol with a raised fist, and a Venus symbol on the thread; confetti and Venus symbols; mimosa in a jar, an enamel badge, a ballot box; an airship trailing a banner; a sash across a post's top; Venus symbols, fists and mimosa in the margins | a click on the badge raises the fist; a slip over the footer naming a woman whose work science and computing stand on, turned on a click |
 | Firefly Day | a Firefly-class ship and a knitted hat with earflaps; stars; cargo crates, a toy dinosaur, a clay jug; a tumbleweed; a rope paying out as the reader goes; a dusty haze; ships in the margins | a click on the ship goes to full burn; the dinosaur rears when clicked; a wanted poster for the missing page on the 404 page |
+| Hobbit Day | a round green door in a bank of turf, the Ring on its chain; smoke rings rising; a party cake, a basket of mushrooms, a pipe blowing smoke rings; a firework dragon; a road over a post that a traveller walks there and back again; morning mist (light); acorns, oak leaves, mushrooms and smoke rings in the margins; a long pipe for the pointer | a click on the Ring puts it on: the page greys, mist closes in and the pointer vanishes; a round door on the 404 page that swings open on a lamplit hall; a second-breakfast clock on the footer that tells the meal by the reader's clock; a hand-drawn map of the Shire along the footer |
 | N7 Day | a frigate and a dog tag; blue motes rising; an armoured helmet, a fish tank, a model ship; the frigate crossing; a red and white stripe as the reader goes; frigates and chevrons in the margins; a red glow (dark) | a blue and a red prompt on the opener: the one clicked colours the drive, its trail and the stripe for the visit; fish that swim |
 
 Every decoration is `aria-hidden`, takes no focus, keeps off post text,
 the gallery, the lightbox and the slideshow, is dropped in print and
 holds still under reduced motion (a season's toys check `kit.reduced`).
-Winter keeps clear of Christmas: no trees, presents or red and green. May
-the Fourth, Star Trek Day, Firefly Day and N7 Day evoke their films, shows
-and games in drawings of the site's own, never their logos or official art.
+Winter keeps clear of Christmas: no trees, presents or red and green, the
+candy-cane pointer aside. May the Fourth, Star Trek Day, Firefly Day, N7
+Day and Hobbit Day evoke their films, shows, games and books in drawings
+of the site's own (Star Trek Day's delta among them), never copied logos,
+film designs or official art, and quote no books.
 
 A clicked footer piece can also play a recording from `sounds/` (each
 season's, credited on the colophon beside the slideshow's sounds; real

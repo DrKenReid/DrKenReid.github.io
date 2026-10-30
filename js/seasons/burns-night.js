@@ -6,8 +6,8 @@
  * neeps and tatties among heather, a red grouse whirring past, a thistle
  * favicon, a quill across the moon, a quill drawing out a tartan ribbon
  * as the reader goes, peat smoke in the dark theme, thistles on the
- * Scottish places, a 404 page that has gone agley, a heather pointer
- * with a thistle. Its own: a line of
+ * Scottish places, a 404 page that has gone agley, a quill for the
+ * pointer. Its own: a line of
  * Burns over the footer, written out by hand, and a new one each time the
  * line or the haggis is clicked (the haggis wobbles too).
  *
@@ -204,6 +204,13 @@
         kit.onFooter(write, 0.1);
     }
 
+    // The pointer: a quill, its nib the hotspot.
+    var POINTER = '<path d="M16-3.4l1.4 4.6h-2.8z" fill="#2a2a30"/>' +
+        '<path d="M16 1.2C21 5 23 13 21 27c-3-4-5-10-5-16z" fill="#f4efe4"/>' +
+        '<path d="M16 3.4C12 7.4 11 14 12 23c2-4 4-8 4-12z" fill="#e2d8c4"/>' +
+        '<path d="M16 1.2V34" stroke="#b8a888" stroke-width="1" fill="none"/>' +
+        '<path d="M17.2 9l3 2.4M17.4 14l3.2 2.4M14.8 11l-2.4 2" stroke="#cfc2a4" stroke-width=".6" fill="none"/>';
+
     K.dress({
         // The ribbon's card (season.js, ribbon).
         about: { short: 'Burns Night', when: '25 January',
@@ -230,7 +237,6 @@
             caption: "While you're here, have one of my photographs of Scotland. "
         },
         extra: verse,
-        // A heather pointer with a thistle at its tail.
-        cursor: K.cursor('#c27fbf', '<g transform="scale(.5)">' + thistle() + '</g>', '#3a1f3d')
+        cursor: K.pointer(POINTER, 2, 2, -45)
     });
 })();

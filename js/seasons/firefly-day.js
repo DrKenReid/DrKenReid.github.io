@@ -11,8 +11,8 @@
  * across the foot of the window, a rope over a post that pays out as the
  * reader goes, a dusty haze along the foot of the hero, ships and stars
  * in the margins, a firefly for the favicon, the ship crossing the moon,
- * a 404 page lost in the black, and a pointer in saddle brown with a
- * firefly's glow at its tail. Every drawing is the site's own.
+ * a 404 page lost in the black, and a firefly for the pointer. Every
+ * drawing is the site's own.
  * Its own:
  *   - full burn: a click on the corner's ship lights its rear engine
  *     white-hot and the ship lunges forward a moment
@@ -208,6 +208,12 @@
         lede.parentNode.insertBefore(el, lede);
     }
 
+    // The pointer: a firefly, its head the hotspot.
+    var POINTER = '<circle cx="16" cy="-1.2" r="2.4" fill="#3a2a1c"/>' +
+        '<path d="M16 2c-6 2-10 7-9 13 3-3 6-6 9-9zM16 2c6 2 10 7 9 13-3-3-6-6-9-9z" fill="#d9e6f0" fill-opacity=".95"/>' +
+        '<ellipse cx="16" cy="7" rx="3" ry="4" fill="#3a2a1c"/><ellipse cx="16" cy="17" rx="4" ry="7" fill="#ffd23f"/>' +
+        '<ellipse cx="16" cy="18.4" rx="2.4" ry="4.6" fill="#fff4b0"/>';
+
     K.dress({
         // The ribbon's card (season.js, ribbon).
         about: { short: 'Firefly Day', when: '20 September',
@@ -229,9 +235,7 @@
         puff: 'kr-season-puff--dust',
         flyer: WEED, flight: 'kr-season-flyer--tumble',
         favicon: FIREFLY_ICON, moonmark: SHIP_24,
-        // A saddle-brown pointer with a firefly's glow at its tail.
-        cursor: K.cursor('#b5773a', '<circle cx="6" cy="6" r="4.6" fill="#ffe27a" fill-opacity=".45"/>' +
-            '<circle cx="6" cy="6" r="2.8" fill="#ffd23f" stroke="#5a3a12" stroke-width=".9"/>', '#3a2410'),
+        cursor: K.pointer(POINTER, 2, 2, -45),
         // A rope over a post, paid out as far as the reader has read.
         track: { kind: 'rope', mode: 'fill', tip: KNOT },
         map: null,

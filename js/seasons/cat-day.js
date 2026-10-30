@@ -9,7 +9,7 @@
  * is clicked, a kitten chasing a butterfly along the foot of the window,
  * a cat face favicon, a cat sitting in the moon, paw prints along a
  * post's top wherever the reader has passed, a 404 page knocked off the
- * table, and a ginger pointer with a paw print.
+ * table, and a toy mouse for the pointer.
  * Its own:
  *   - the corner cat: its tail swishes as it sleeps; touch the tail and it
  *     flicks, and the cat opens its eyes and lifts its head a moment
@@ -519,6 +519,13 @@
         lede.parentNode.insertBefore(el, lede);
     }
 
+    // The pointer: a toy mouse, its nose the hotspot.
+    var POINTER = '<path d="M16-3.4c3.6 3 6 8 6 14 0 5-2.6 8-6 8s-6-3-6-8c0-6 2.4-11 6-14z" fill="#a4a4b0"/>' +
+        '<circle cx="12.4" cy="7.6" r="2.6" fill="#a4a4b0"/><circle cx="19.6" cy="7.6" r="2.6" fill="#a4a4b0"/>' +
+        '<circle cx="12.4" cy="7.6" r="1.4" fill="#f2a6b3"/><circle cx="19.6" cy="7.6" r="1.4" fill="#f2a6b3"/>' +
+        '<circle cx="14.6" cy="2.4" r=".7" fill="#1d1b1f"/><circle cx="17.4" cy="2.4" r=".7" fill="#1d1b1f"/>' +
+        '<path d="M16 18.6c0 4 4.4 5.4 2.6 9-1.4 2.6-5 2-4.4 5" stroke="#f2a6b3" stroke-width="1.3" fill="none" stroke-linecap="round"/>';
+
     K.dress({
         // The ribbon's card (season.js, ribbon).
         about: { short: 'Cat Day', when: '8 August',
@@ -545,8 +552,7 @@
                 'and now it is somewhere under the sofa.',
             caption: 'While I look for it, have a random photograph. The cats chose it. '
         },
-        // A ginger pointer with a paw print at its tail.
-        cursor: K.cursor('#f2a35c', '<g fill="#5a3418" stroke="#fff4e4" stroke-width=".9" paint-order="stroke">' + PAW + '</g>', '#5a3418'),
+        cursor: K.pointer(POINTER, 2, 2, -45),
         extra: function (kit) {
             catnap(kit);
             K.walker(TUXEDO, 'tuxedo');

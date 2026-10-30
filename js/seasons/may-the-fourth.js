@@ -10,8 +10,8 @@
  * hilt and a blue blade on the 4th, a black hilt and a red one on the
  * 5th), blaster bolts from whatever is clicked, a lightsaber in place of
  * a post's reading bar (its hilt at the left, its blade reaching as far
- * as the reader has read), a lightsaber favicon, a pointer with a small
- * hilt at its tail, a nebula along the hero's foot in the dark theme, and
+ * as the reader has read), a lightsaber favicon, a lightsaber for the
+ * pointer (blue on the 4th, red on the 5th), a nebula along the hero's foot in the dark theme, and
  * a 404 page that is not the one you want.
  * The 4th: twin suns setting over the dunes in the corner, a training
  * remote on its thread, a domed astromech droid and a moisture
@@ -63,14 +63,14 @@
     var DAY = FIFTH ? {
         stars: ['#ffffff', '#ffd2c2', '#ff8a6a', '#ff5a4a', '#ffe0a0'],
         dust: ['#ff8a6a', '#ffb08a', '#ffe0a0'],
-        blade: '#ff3b3b', sparkle: '#ffb08a', pointer: '#ff5a4a', pointerEdge: '#3a0c0c',
+        blade: '#ff3b3b', sparkle: '#ffb08a',
         crystal: ['#e8352a', '#ffb0a0', '#7a1410'],
         ships: ['#8e939c', '#a9aeb7', '#6f747d'],
         hilt: '#2a2c31', hiltEdge: '#8d929b', grip: '#b9bdc5'
     } : {
         stars: ['#ffffff', '#d6ecff', '#a8d8ff', '#fff3b0', '#cfd8ff'],
         dust: ['#a8d8ff', '#ffe27a', '#cfd8ff'],
-        blade: '#3f9fff', sparkle: '#ffe27a', pointer: '#5fb8ff', pointerEdge: '#0c2340',
+        blade: '#3f9fff', sparkle: '#ffe27a',
         crystal: ['#4fb0ff', '#d6f0ff', '#1a4f8a'],
         ships: ['#9fb0c4', '#c3cfdd', '#8396ad'],
         hilt: '#c3c8d0', hiltEdge: '#4a4f58', grip: '#1f2228'
@@ -358,12 +358,6 @@
         '<path d="M4.6 27.4l9.4-9.4" stroke="' + (FIFTH ? '#5a5e66' : '#c3c8d0') + '" stroke-width="3.6" stroke-linecap="round"/>' +
         '<path d="M7.4 22.6l2 2M9.4 20.6l2 2" stroke="#2b3038" stroke-width="1.2"/></svg>';
 
-    // The pointer's emblem: a small hilt with a stub of blade.
-    var HILT_EMBLEM = '<path d="M1.6 10.4l3.6-3.6" stroke="#2b3038" stroke-width="3.2" stroke-linecap="round"/>' +
-        '<path d="M1.6 10.4l3.6-3.6" stroke="' + (FIFTH ? '#6a6e76' : '#c3c8d0') + '" stroke-width="1.8" stroke-linecap="round"/>' +
-        '<path d="M5.8 6.2l5-5" stroke="' + DAY.blade + '" stroke-width="2.6" stroke-linecap="round"/>' +
-        '<path d="M5.8 6.2l5-5" stroke="#ffffff" stroke-width="1" stroke-linecap="round"/>';
-
     /* ------------------------------------------------------------------ *
      * The 4th's own: light speed, and the crawl on the 404 page
      * ------------------------------------------------------------------ */
@@ -478,6 +472,20 @@
         });
     }
 
+    /* The pointer: a lightsaber, the tip of its blade the hotspot, blue
+       from a silver hilt on the 4th, red from a black one on the 5th. */
+    var POINTER = FIFTH ?
+        '<path d="M14.6 21V-2.2a1.4 1.4 0 0 1 2.8 0V21z" fill="#ff2a2a"/>' +
+        '<path d="M15.5 20V-1.4a.5.5 0 0 1 1 0V20z" fill="#ffffff"/><path d="M13.2 21h5.6v2.6h-5.6z" fill="#6a6a72"/>' +
+        '<path d="M14 23.6h4V35h-4z" fill="#3a3a40"/>' +
+        '<path d="M14 26.4h4M14 28.6h4M14 30.8h4" stroke="#1b1b1b" stroke-width=".9"/>' +
+        '<path d="M18 25h1v1.8h-1z" fill="#d23a2a"/>' :
+        '<path d="M14.6 21V-2.2a1.4 1.4 0 0 1 2.8 0V21z" fill="#4fb3ff"/>' +
+        '<path d="M15.5 20V-1.4a.5.5 0 0 1 1 0V20z" fill="#ffffff"/><path d="M13.2 21h5.6v2.6h-5.6z" fill="#d6dbe2"/>' +
+        '<path d="M14 23.6h4V35h-4z" fill="#aeb6c0"/>' +
+        '<path d="M14 26.4h4M14 28.6h4M14 30.8h4" stroke="#1b1b1b" stroke-width=".9"/>' +
+        '<path d="M18 25h1v1.8h-1z" fill="#d23a2a"/>';
+
     K.dress({
         // The ribbon's card (season.js, ribbon), for whichever day it is.
         about: FIFTH ?
@@ -510,7 +518,7 @@
         flyer: FIFTH ? HEXWING : FOURWING,
         flight: FIFTH ? 'kr-season-flyer--hexwing' : 'kr-season-flyer--fourwing',
         favicon: SABER_ICON, moonmark: FIGHTER_24,
-        cursor: K.cursor(DAY.pointer, HILT_EMBLEM, DAY.pointerEdge),
+        cursor: K.pointer(POINTER, 2, 2, -45),
         // A lightsaber over a post: the hilt at the left, the blade as far
         // as the reader has read, its glowing tip at the reader.
         track: { kind: 'saber', mode: 'fill', tip: '<i class="kr-season-blade-tip"></i>' },

@@ -256,6 +256,11 @@
     // For the margins of a post: gold and silver stars, as the fireworks go up.
     var STAR_24 = K.star(12, 12, 11, 5, 0.45), SPARK_24 = K.star(12, 12, 10, 8, 0.25);
 
+    // The pointer: a clock's minute hand, its point the hotspot.
+    var POINTER = '<path d="M16-3.6l2.6 6.2h-1.3l.4 21h-3.4l.4-21h-1.3z" fill="#e8c25a"/>' +
+        '<circle cx="16" cy="27.6" r="3.4" fill="none" stroke="#e8c25a" stroke-width="1.8"/>' +
+        '<circle cx="16" cy="27.6" r="1" fill="#e8c25a"/>';
+
     K.dress({
         backdrop: { shapes: [STAR_24, SPARK_24], colours: ['#e8c25a', '#f3dd8f', '#cfd6e6', '#b8c2ff'] },
         // The ribbon's card (season.js, ribbon).
@@ -287,8 +292,6 @@
             caption: "While you wait for it to find its way home, have one of my photographs of Scotland. "
         },
         extra: bells,
-        // A gold pointer with a firework at its tail.
-        cursor: K.cursor(GOLD, '<circle cx="6" cy="6" r="6" fill="' + NIGHT + '"/>' +
-            '<path transform="translate(.5 .5) scale(.46)" d="' + burst(11, 2) + '" fill="#ffd36e"/>', NIGHT)
+        cursor: K.pointer(POINTER, 2, 2, -45)
     });
 })();

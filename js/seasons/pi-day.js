@@ -9,7 +9,7 @@
  * moon, and a 404 page that is irrational. Over a post, a wheel rolls
  * along the top as the reader goes and unrolls its rim behind it: a tick
  * every turn, pi diameters apart, which its marked rim touches each time
- * round. The pointer is blue with a pi at its tail. Its own:
+ * round. The pointer is a drawing compass. Its own:
  *   - the corner's polygons double their sides, 6, 12, 24, 48, 96, as
  *     Archimedes did, closing on the circle from inside and out
  *   - a Monte Carlo board on the footer: a click throws darts at a square
@@ -410,6 +410,13 @@
         el.querySelector('.kr-season-buffon__floor').addEventListener('click', function () { rain(50); });
     }
 
+    // The pointer: a drawing compass, its needle the hotspot.
+    var POINTER = '<path d="M16-3.4l1 3.4-1 21" stroke="#5b6472" stroke-width="1.6" fill="none" stroke-linejoin="round"/>' +
+        '<path d="M17.6 21L23.6 1.4" stroke="#5b6472" stroke-width="1.6" fill="none"/>' +
+        '<path d="M22.8 3.6l1.4-4.6 1.6 5z" fill="#f2c94c"/><path d="M24.2-1l.5 1.6-1 0z" fill="#2a2a30"/>' +
+        '<circle cx="16.8" cy="23.4" r="3" fill="#9aa3ad"/>' +
+        '<path d="M16.8 26.4V32" stroke="#5b6472" stroke-width="1.8"/>';
+
     K.dress({
         // The ribbon's card (season.js, ribbon).
         about: { short: 'Pi Day', when: '14 March',
@@ -433,9 +440,7 @@
             lede: 'It goes on and on without ever repeating itself, and it never once arrives at the page you wanted.',
             caption: "While you're here, have a photograph picked by Math.random(). "
         },
-        // A blue pointer with a pi at its tail.
-        cursor: K.cursor('#8cc6ff', '<path fill="#12345a" stroke="#ffffff" stroke-width=".9" paint-order="stroke" d="' +
-            glyph('pi', 0.95, 1.2, 0.6, 2.8) + '"/>', '#12345a'),
+        cursor: K.pointer(POINTER, 2, 2, -45),
         extra: function (kit) {
             archimedes(kit);
             roll();

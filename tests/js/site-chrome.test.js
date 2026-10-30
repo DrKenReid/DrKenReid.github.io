@@ -294,7 +294,8 @@ test('krSeasonOnDate: the higher rank wins a shared day', () => {
     assert.equal(on(2031, 3, 8), 'holi');
     assert.equal(on(2027, 9, 19), 'summer');
     assert.equal(on(2027, 9, 20), 'firefly-day');
-    assert.equal(on(2027, 9, 22), 'fall');
+    assert.equal(on(2027, 9, 22), 'hobbit-day');
+    assert.equal(on(2027, 9, 23), 'fall');
     assert.equal(on(2027, 11, 6), 'fall');
     assert.equal(on(2027, 11, 7), 'n7-day');
     assert.equal(on(2027, 11, 8), 'fall');
@@ -326,6 +327,7 @@ test('the coffee button: every season words it or keeps the default on purpose, 
         'darwin-day': 'Buy me a coffee, naturally selected', 'pi-day': 'Buy me a slice of pie',
         'world-book-day': 'Buy me a book', 'cat-day': 'Buy the cats some treats', 'star-trek-day': 'Buy me an Earl Grey, hot',
         'womens-day': null, 'firefly-day': "Buy me a Mudder's Milk", 'n7-day': null,
+        'hobbit-day': 'Buy me a second breakfast',
     };
     assert.deepEqual(Array.from(rt.KR_SEASONS, s => s.key).sort(), Object.keys(WORDS).sort(), 'a season with no decision here');
     const words = () => {
@@ -362,10 +364,11 @@ test('krSeasonOnDate: Halloween runs 17 October to 1 November, both included', (
     assert.equal(on(11, 2), 'fall');
 });
 
-test('krSeasonOnDate: the fall runs either side of Halloween, 22 September to 30 November', () => {
+test('krSeasonOnDate: the fall runs either side of Halloween, 22 September to 30 November (Hobbit Day takes its first day)', () => {
     const on = (m, d) => (rt.krSeasonOnDate(new Date(2026, m - 1, d)) || {}).key || null;
     assert.equal(on(9, 21), 'summer');
-    assert.equal(on(9, 22), 'fall');
+    assert.equal(on(9, 22), 'hobbit-day');
+    assert.equal(on(9, 23), 'fall');
     assert.equal(on(10, 16), 'fall');
     assert.equal(on(11, 2), 'fall');
     assert.equal(on(11, 29), 'fall');

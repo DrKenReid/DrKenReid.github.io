@@ -350,6 +350,17 @@ var KR_SEASONS = [{
     heroText: 'N7 Day.',
     heroRamp: [[255, 120, 105], [230, 236, 245]],
     rank: 2
+}, {
+    key: 'hobbit-day',
+    label: 'Hobbit Day',
+    // The first day of the fall, which takes the day after.
+    windows: [[[9, 22], [9, 22]]],
+    photoTags: ['landscape'],
+    treat: { title: 'Somewhere green', sub: 'A random landscape', also: 'hobbit day tolkien shire bilbo frodo baggins lord of the rings' },
+    coffee: 'Buy me a second breakfast',
+    heroText: 'There and back again.',
+    heroRamp: [[168, 216, 143], [232, 196, 138]],
+    rank: 2
 }];
 var KR_SEASON_PREVIEW = 'kr-season-preview';   // sessionStorage: a key, or 'none'
 var KR_SEASON_OFF = 'kr-season';               // localStorage: 'off'

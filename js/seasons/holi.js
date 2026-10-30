@@ -9,7 +9,7 @@
  * a favicon and a moon splashed with colour, a streak of colour that runs
  * along a post's top as far as the reader has read, a haze of colour
  * along the foot of the homepage hero, a 404 page that has gone out to
- * play, and a pink pointer with a splash at its tail.
+ * play, and a pichkari for the pointer.
  * Its own, on the day of colours: every click on a page opener (or a
  * slide of the homepage hero) throws a handful of gulal that stays where
  * it lands, never behind the type, and the colour builds up over the
@@ -363,6 +363,12 @@
         footer.insertBefore(el, footer.firstChild);
     }
 
+    // The pointer: a pichkari, its nozzle the hotspot.
+    var POINTER = '<path d="M15.2-3.4h1.6V3h-1.6z" fill="#9aa3ad"/><path d="M12 3h8v19h-8z" fill="#ff5ca8"/>' +
+        '<path d="M13.4 5v15" stroke="#ffd1e6" stroke-width="1.2"/><path d="M15.2 22h1.6v8h-1.6z" fill="#9aa3ad"/>' +
+        '<path d="M10.4 30h11.2v2.4H10.4z" fill="#5aa9e6"/><circle cx="11" cy="-1.6" r="1.2" fill="#ffd34d"/>' +
+        '<circle cx="20.6" cy="-.4" r="1" fill="#5ad17a"/>';
+
     K.dress({
         // The ribbon's card (season.js, ribbon).
         about: { short: 'Holi', when: 'The full moon of Phalguna, in February or March',
@@ -390,10 +396,7 @@
                 'pink and green and very hard to recognise. <i lang="hi-Latn">Bura na mano, Holi hai.</i>',
             caption: 'While it washes off, have one of my more colourful photographs. '
         },
-        // A pink pointer with a splash of three colours at its tail.
-        cursor: K.cursor('#ff5fae', '<circle cx="4" cy="4.4" r="3" fill="' + YELLOW + '" stroke="#5a1035" stroke-width=".6"/>' +
-            '<circle cx="9" cy="5" r="2.4" fill="' + GREEN + '" stroke="#5a1035" stroke-width=".6"/>' +
-            '<circle cx="6.4" cy="9.2" r="2.6" fill="' + BLUE + '" stroke="#5a1035" stroke-width=".6"/>', '#5a1035'),
+        cursor: K.pointer(POINTER, 2, 2, -45),
         extra: function (kit) {
             if (EVE) pyre(kit);
             else stains();

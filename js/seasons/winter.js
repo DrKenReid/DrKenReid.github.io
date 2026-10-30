@@ -205,6 +205,10 @@
         wake();
     }
 
+    // The pointer: a candy cane, its straight end the hotspot.
+    var POINTER = '<path d="M16-3V23a4 4 0 0 0 8 0v-2" fill="none" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round"/>' +
+        '<path d="M16-3V23a4 4 0 0 0 8 0v-2" fill="none" stroke="#d8232a" stroke-width="3.6" stroke-dasharray="2.2 2.4"/>';
+
     K.dress({
         corner: snowArt, dangler: MITTEN,
         // Mostly small flakes, some whole snowflakes; snow does not tumble.
@@ -225,8 +229,7 @@
             lede: 'Whatever lived at this address is under a lot of snow, and nobody has dug it out.',
             caption: "While you wait for the thaw, have one of my winter photographs. "
         },
-        // An ice-blue pointer with a snowflake at its tail.
-        cursor: K.cursor('#cfe6f5', '<path fill="#3d86c6" d="' + flake(6, 6, 5.8) + '"/>', '#2f4a63'),
+        cursor: K.pointer(POINTER, 2, 2, -45),
         extra: function (kit) {
             settle(kit);
             rime(kit);

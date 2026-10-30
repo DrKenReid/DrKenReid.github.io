@@ -192,6 +192,12 @@
         el.lastChild.addEventListener('click', function () { pick('renegade'); });
     }
 
+    // The pointer: the frigate, its nose the hotspot.
+    var POINTER = '<path d="M16-3.4l3 9.4.8 17-3.8 4-3.8-4 .8-17z" fill="#d9dde3"/>' +
+        '<path d="M16 2l1.8 6v14h-3.6V8z" fill="#3d4552"/><path d="M15.2 6.6h1.6v16h-1.6z" fill="#c8102e"/>' +
+        '<path d="M12.6 15l-7 10.6h3.6l4-5zM19.4 15l7 10.6h-3.6l-4-5z" fill="#3d4552"/>' +
+        '<ellipse cx="16" cy="27.6" rx="1.8" ry="1.4" fill="#7cc4ff"/>';
+
     K.dress({
         // The ribbon's card (season.js, ribbon).
         about: { short: 'N7 Day', when: '7 November',
@@ -213,9 +219,7 @@
         puff: 'kr-season-puff--scatter kr-season-puff--holo',
         flyer: FLYER, flight: 'kr-season-flyer--frigate',
         favicon: STRIPE_ICON, moonmark: SHIP_24,
-        // A gunmetal pointer with a red and white stripe at its tail.
-        cursor: K.cursor('#3d4552', '<path d="M1 8.6L11 3.4v2.4L1 11z" fill="' + RED + '" stroke="#ffffff" stroke-width=".5"/>' +
-            '<path d="M1 11l10-5.2v1.2L1 12.2z" fill="#ffffff"/>', '#0b0c0e'),
+        cursor: K.pointer(POINTER, 2, 2, -45),
         // A red and white stripe over a post, a chevron at its end.
         track: { kind: 'n7', mode: 'fill', tip: TIP },
         map: null,

@@ -215,6 +215,11 @@
         });
     }
 
+    // The pointer: an autumn leaf, its point the hotspot.
+    var POINTER = '<path d="M16-3.4C22 2 24 9 22.6 15.6 21.6 20 19 23 16 24.6 13 23 10.4 20 9.4 15.6 8 9 10 2 16-3.4z" fill="#d9682a"/>' +
+        '<path d="M16 0V24.6M16 8l4-3M16 13l5-3.6M16 8l-4-3M16 13l-5-3.6M16 18l4-3M16 18l-4-3" stroke="#9a3f15" stroke-width=".8" fill="none"/>' +
+        '<path d="M16 24.6V32" stroke="#7a4a22" stroke-width="1.6" stroke-linecap="round"/>';
+
     K.dress({
         corner: twigArt, dangler: ACORN,
         leaves: { kind: 'fall', colours: FALL_COLOURS, per1000: 20, shapes: [MAPLE, OVAL], tumble: true },
@@ -237,8 +242,7 @@
             lede: 'Like the leaves outside, whatever was here came down and blew away.',
             caption: "While you're here, have one of my autumn photographs. "
         },
-        // An amber pointer with a maple leaf at its tail.
-        cursor: K.cursor('#e8a33d', '<path transform="scale(.5)" fill="#c4512a" stroke="#5a2a10" stroke-width="1" d="' + MAPLE + '"/>'),
+        cursor: K.pointer(POINTER, 2, 2, -45),
         extra: function (kit) {
             K.walker(SQUIRREL, 'squirrel');
             leafPiles(kit);

@@ -3111,6 +3111,9 @@ SEASONS_UNDER_TEST = {
     "n7-day": {"lost": "This Page Went Through the Relay", "tag": None, "pill": None,
                "light_fog": "none", "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--holo",
                "track": "fill", "map": False},
+    "hobbit-day": {"lost": "This Page Has Gone on an Adventure", "tag": "landscape", "pill": "Landscape",
+                   "light_fog": "block", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--rings",
+                   "track": "fill", "map": False},
 }
 
 TRACK_STATE = """async () => {

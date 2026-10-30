@@ -243,6 +243,12 @@
     // For the margins of a post: sparks and embers off the fire.
     var SPARK_24 = K.star(12, 12, 10, 8, 0.25), EMBER_24 = K.star(12, 12, 9, 4, 0.5);
 
+    // The pointer: a rocket on its stick, its nose the hotspot.
+    var POINTER = '<path d="M16-3.4c2.4 2 3.6 5 3.6 9v13h-7.2v-13c0-4 1.2-7 3.6-9z" fill="#d8402a"/>' +
+        '<path d="M16-3.4c1.6 1.4 2.6 3.2 3.2 5.4h-6.4c.6-2.2 1.6-4 3.2-5.4z" fill="#ffd34d"/>' +
+        '<path d="M12.4 15l-3 4.6h3zM19.6 15l3 4.6h-3z" fill="#7a2418"/>' +
+        '<path d="M16 18.6V34" stroke="#8a6a3e" stroke-width="1.2" fill="none"/>';
+
     K.dress({
         backdrop: { shapes: [SPARK_24, EMBER_24], colours: ['#ffb347', '#ff8a3d', '#ffd34d', '#e0662a'] },
         // The ribbon's card (season.js, ribbon).
@@ -271,7 +277,6 @@
             caption: "While the embers cool, have one of my photographs. "
         },
         extra: sparkler,
-        // An ember pointer with a flame at its tail.
-        cursor: K.cursor('#ff9550', '<path fill="#ffc53d" stroke="#7a2a08" stroke-width=".7" d="M6 .4c1.2 2 3.6 3.2 3.6 6.2a3.6 3.6 0 0 1-7.2 0c0-1.8 1.2-2.6 1.6-4 .6.8.8 1.4.8 2.2.6-1.4 1.2-2.6 1.2-4.4z"/>', '#4a1d06')
+        cursor: K.pointer(POINTER, 2, 2, -45)
     });
 })();

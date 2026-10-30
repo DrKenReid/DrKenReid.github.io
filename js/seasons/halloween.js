@@ -3,7 +3,7 @@
  * for the pieces): a cobweb and its spider, autumn leaves, jack-o'-lanterns
  * with flickering faces, a bat, a pumpkin favicon, a candle burning down
  * as the reader goes, fog in the dark theme only, ghosts over the most
- * abandoned places, a haunted 404 page, an orange pointer with a bat.
+ * abandoned places, a haunted 404 page, a witch's hat for the pointer.
  * Its own:
  *   - eyes that open in the dark along the footer's top, and shut when
  *     the pointer comes near
@@ -214,6 +214,11 @@
         'M13.8 10.6c2-2.2 5.2-3 9.2-2.3-1.4.8-2.2 1.9-2.2 3.3 1-.6 2.2-.6 3.2 0-1.8.4-2.9 1.8-3.2 3.3-1-1-2.5-1-3.5-.4-1-1.4-2.1-2.1-3.5-2.1z';
     var GHOST_24 = 'M12 3a6.5 6.5 0 0 0-6.5 6.5V21l2.2-1.6 2.1 1.6 2.2-1.6 2.2 1.6 2.1-1.6 2.2 1.6V9.5A6.5 6.5 0 0 0 12 3z';
 
+    // The pointer: a witch's hat, its point the hotspot.
+    var POINTER = '<path d="M16-3.4l6.6 21.8H9.4z" fill="#2b2233"/><path d="M10.4 15h11.2l.9 3H9.5z" fill="#e07a2e"/>' +
+        '<path d="M14.6 15.2h2.8v2.6h-2.8z" fill="#ffd34d"/>' +
+        '<ellipse cx="16" cy="19.6" rx="10.4" ry="2.4" fill="#2b2233"/>';
+
     K.dress({
         backdrop: { shapes: [BAT_24, GHOST_24, K.MAPLE], colours: [['#2b2233'], ['#f7f5ff'], ['#e07a2e', '#c4512a', '#e8a33d']] },
         // The ribbon's card (season.js, ribbon).
@@ -243,8 +248,7 @@
                 'Only the link haunts the place.',
             caption: "Since you're lost anyway, here's one of my spookier photographs. "
         },
-        // An orange pointer with a bat at its tail.
-        cursor: K.cursor('#e5761f', '<path transform="scale(.19) translate(0 14)" fill="#2b2233" stroke="#f3e7cc" stroke-width="5" paint-order="stroke" d="M30 13C25 7 16 4 4 6c4 2 6 5 6 9-3-2-6-2-9 0 5 1 8 5 9 9 3-3 7-3 10-1 3-4 6-6 10-6zM34 13c5-6 14-9 26-7-4 2-6 5-6 9 3-2 6-2 9 0-5 1-8 5-9 9-3-3-7-3-10-1-3-4-6-6-10-6zM32 9l-3-4 1 5c-2 1-3 4-3 7 0 4 2 7 5 7s5-3 5-7c0-3-1-6-3-7l1-5z"/>'),
+        cursor: K.pointer(POINTER, 2, 2, -45),
         extra: function (kit) {
             eyes(kit);
             K.walker(CAT, 'cat');

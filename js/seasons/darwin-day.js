@@ -8,8 +8,8 @@
  * and a barnacled stone, HMS Beagle sailing along the foot of the window,
  * a finch favicon and moon, a tree of life that branches along a post's
  * top wherever the reader has passed, a sea mist off the islands, finches
- * on the wildlife places, a 404 page gone extinct, a sage pointer with a
- * beetle at its tail. Its own:
+ * on the wildlife places, a 404 page gone extinct, a finch for the
+ * pointer. Its own:
  *   - a click on a finch mutates its beak, a little longer or deeper or
  *     more hooked each time, and the beaks are kept for the visit, so the
  *     three drift apart page by page: descent with modification
@@ -431,6 +431,11 @@
         });
     }
 
+    // The pointer: a finch, its beak the hotspot.
+    var POINTER = '<path d="M16-3.4l2.2 5.6h-4.4z" fill="#5a3e22"/><ellipse cx="16" cy="11.6" rx="6" ry="9.4" fill="#8a6a4a"/>' +
+        '<path d="M16 6c4 2 6 7 5 13-2-3-4-7-5-13z" fill="#5e4630"/><circle cx="14.4" cy="4.6" r="1" fill="#1d1b1f"/>' +
+        '<path d="M13.2 19.6l2.8 12 2.8-12z" fill="#6b5038"/>';
+
     K.dress({
         // The ribbon's card (season.js, ribbon).
         about: { short: 'Darwin Day', when: '12 February',
@@ -458,9 +463,7 @@
                 'or it may only ever have been a missing link.',
             caption: "While you're here, have one of my wildlife photographs. "
         },
-        // A sage pointer with a beetle at its tail.
-        cursor: K.cursor('#a9d4ae', '<path fill="#24402a" stroke="#e9f2e6" stroke-width=".6" d="M6 3.6c2.4 0 3.4 2 3.4 4 0 2.3-1.6 3.8-3.4 3.8S2.6 9.9 2.6 7.6c0-2 1-4 3.4-4zM6 .8c1 0 1.8.7 1.8 1.6S7 3.8 6 3.8 4.2 3.3 4.2 2.4 5 .8 6 .8z"/>' +
-            '<path d="M6 3.8v7.4" stroke="#e9f2e6" stroke-width=".5"/>', '#1f3a24'),
+        cursor: K.pointer(POINTER, 2, 2, -45),
         extra: function (kit) {
             beaks();
             K.walker(TORTOISE, 'tortoise');

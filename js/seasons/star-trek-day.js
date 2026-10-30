@@ -8,8 +8,8 @@
  * isolinear chips between them, a shimmer of energy from whatever is
  * clicked, a starship that crosses at impulse and jumps to warp as the
  * footer arrives, a fleet in the margins, a delta favicon, a starship
- * crossing the moon, a 404 page that has boldly gone, and a pointer in
- * panel orange with a delta at its tail. Every drawing is the site's own.
+ * crossing the moon, a 404 page that has boldly gone, and the gold
+ * delta for the pointer. Every drawing is the site's own.
  * Its own:
  *   - engage: a click on the corner's starship sends it to warp, drawn
  *     out long and gone in a flash, and it drops back out of warp a
@@ -237,6 +237,10 @@
         }, 0.1);
     }
 
+    // The pointer: a gold delta, its point the hotspot, turned a little.
+    var POINTER = '<path d="M16-1C19.2 5.8 21.8 13.2 23.6 22.4 21.2 20 18.6 18.8 16 18.8S10.8 20 8.4 22.4C10.2 13.2 12.8 5.8 16-1z" fill="#e2b84a"/>' +
+        '<path d="M16 2C17.3 5.2 18.4 8.8 19.2 12.6" stroke="#fff3c4" stroke-width="1" fill="none" stroke-linecap="round"/>';
+
     K.dress({
         // The ribbon's card (season.js, ribbon).
         about: { short: 'Star Trek Day', when: '8 September',
@@ -260,9 +264,7 @@
         puff: 'kr-season-puff--energize',
         flyer: FLYER, flight: 'kr-season-flyer--warp',
         favicon: DELTA_ICON, moonmark: SHIP_24,
-        // A pointer in panel orange with a delta at its tail.
-        cursor: K.cursor(LCARS.orange, '<path d="M6 .6C7.6 3.6 9.2 7.4 10.2 11.6 8.8 10.2 7.4 9.4 6 9.4S3.2 10.2 1.8 11.6C2.8 7.4 4.4 3.6 6 .6z"' +
-            ' fill="' + GOLD + '" stroke="#4a3608" stroke-width=".8" stroke-linejoin="round"/>', '#4a2400'),
+        cursor: K.pointer(POINTER, 8, 1, -28),
         // Panel bars along a post's top, lit as far as the reader has read.
         track: { kind: 'lcars', mode: 'bits', every: 34, bit: pill },
         fog: false,

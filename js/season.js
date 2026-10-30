@@ -33,11 +33,14 @@
  *   favicon   the tab's icon (a whole svg); moonmark, a path that crosses
  *             the theme button's full moon while it is hovered
  *   track     what stands in for a post's reading bar: { kind, mode, tip,
- *             every, bit }. mode 'burn' shrinks from the left as the
- *             reader goes (a candle, a fuse), 'fill' grows from the left
- *             (a beam, a ribbon), both with `tip` at the reader; 'bits'
- *             hangs bit(i) every `every` px and marks those the reader has
- *             passed (leaves fall, icicles grow)
+ *             every, bit, path }. mode 'burn' shrinks from the left as
+ *             the reader goes (a candle, a fuse), 'fill' grows from the
+ *             left (a beam, a ribbon), both with `tip` at the reader, or
+ *             where path(done) says (a fraction of the width: a walker
+ *             who goes there and back again), the track taking --back
+ *             while the tip heads home; 'bits' hangs bit(i) every
+ *             `every` px and marks those the reader has passed (leaves
+ *             fall, icicles grow)
  *   fog       false for none; otherwise style.css's tokens say in which
  *             themes it shows along the foot of the homepage hero and the
  *             gallery's opener
@@ -48,7 +51,8 @@
  *   lost      the 404 page's title, lede and caption
  *   cursor    the pointer, where the reader has a mouse: a whole svg of
  *             at most 32 x 32 with its hotspot ({ svg, x, y }), usually
- *             kit.cursor(fill, emblem); links keep the hand
+ *             kit.pointer(art, x, y, turn), a thing drawn as the pointer
+ *             (a lightsaber, a candy cane); links keep the hand
  *   backdrop  behind a page's content (a post's article), the season's
  *             shapes drifting in the margins beside it, at three depths, sliding at
  *             their own pace as the page scrolls; by default the shapes
@@ -88,7 +92,8 @@
  * __body), .kr-season-leaves, .kr-season-patch (__big, __mid, __small),
  * .kr-season-leaf, .kr-season-lit, .kr-season-puff, .kr-season-flyer,
  * .kr-season-moonmark, .kr-season-track (--burn, --fill, --bits, --out,
- * --<kind>, __rest, __tip, __bit, __bit--passed), .kr-season-tracked,
+ * --back, --<kind>, __rest, __tip, __bit, __bit--passed),
+ * .kr-season-tracked,
  * .kr-season-fog (__layer, __layer--far), .kr-season-map, .kr-season-badge,
  * .kr-season-walker (--<kind>, --gone, __tail), .kr-season-backdrop (__item,
  * __art) and .kr-season-backdrop-host, .kr-season-ribbon (__sash),
@@ -684,7 +689,7 @@
         var tip = el.querySelector('.kr-season-track__tip');
         var bits = [];
 
-        var width = el.clientWidth, passed = -1;
+        var width = el.clientWidth, passed = -1, lastAt = 0;
 
         function hang() {
             // One bit per spec.every px, spaced evenly along the line.
@@ -722,7 +727,14 @@
                 return;
             }
             rest.style.transform = 'scaleX(' + (mode === 'burn' ? 1 - done : done) + ')';
-            if (tip) tip.style.transform = 'translateX(' + Math.max(6, Math.min(width - 6, done * width)).toFixed(1) + 'px)';
+            // Where the tip is: at the reader, or where the track's path puts it.
+            var at = spec.path ? spec.path(done) : done;
+            if (tip) tip.style.transform = 'translateX(' + Math.max(6, Math.min(width - 6, at * width)).toFixed(1) + 'px)';
+            // A walker faces the way it last went: home when the place falls.
+            if (spec.path && Math.abs(at - lastAt) > 0.002) {
+                el.classList.toggle('kr-season-track--back', at < lastAt);
+                lastAt = at;
+            }
             el.classList.toggle('kr-season-track--out', done >= 0.999);
         }
         draw();
@@ -863,19 +875,25 @@
         return ok;
     }
 
-    /* An arrow pointer in the season's colour, with `emblem` (markup on
-       a 12 x 12 box) at its tail: a whole cursor for dress.cursor, its
-       hotspot at the tip (2, 2). A dark edge inside a pale one keeps it
-       seen on either theme; an emblem wants the same. */
-    function cursorArt(fill, emblem, edge) {
+    /* A pointer drawn as a thing (a lightsaber, a pencil, a candy cane):
+       `art` on a 32 x 32 box, turned `turn` degrees about its middle, with
+       its hotspot at (x, y). The seasons draw theirs upright with the tip
+       at (16, -3.6) and turn it -45, which puts the tip at (2, 2). A white
+       halo and a dark edge round whatever is drawn (a filter, so any shape
+       gets them) keep it seen on either theme. A whole cursor for
+       dress.cursor. */
+    function pointerArt(art, x, y, turn) {
         return {
             svg: '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">' +
-                '<path d="M2 2v20l5.5-5 3.5 8 3-1.4-3.4-7.8H18z" fill="none" stroke="#ffffff" stroke-width="3.6"' +
-                ' stroke-linejoin="round" stroke-opacity=".85"/>' +
-                '<path d="M2 2v20l5.5-5 3.5 8 3-1.4-3.4-7.8H18z" fill="' + fill + '" stroke="' + (edge || '#1b1b1b') +
-                '" stroke-width="1.4" stroke-linejoin="round"/>' +
-                (emblem ? '<g transform="translate(18 18)">' + emblem + '</g>' : '') + '</svg>',
-            x: 2, y: 2
+                '<defs><filter id="o" filterUnits="userSpaceOnUse" x="0" y="0" width="32" height="32">' +
+                '<feMorphology in="SourceAlpha" operator="dilate" radius="1.5" result="w"/>' +
+                '<feFlood flood-color="#ffffff" flood-opacity=".92"/><feComposite in2="w" operator="in" result="halo"/>' +
+                '<feMorphology in="SourceAlpha" operator="dilate" radius=".6" result="k"/>' +
+                '<feFlood flood-color="#1b1b1b"/><feComposite in2="k" operator="in" result="edge"/>' +
+                '<feMerge><feMergeNode in="halo"/><feMergeNode in="edge"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+                '</filter></defs><g filter="url(#o)">' +
+                (turn ? '<g transform="rotate(' + turn + ' 16 16)">' + art + '</g>' : art) + '</g></svg>',
+            x: x, y: y
         };
     }
 
@@ -1134,7 +1152,7 @@
     var kit = window.krSeasonKit = {
         season: season, reduced: reduced, ready: ready, svg: svg, play: play,
         soundsOn: soundsOn, bar: bar, flake: flake, star: star, pumpkin: pumpkin,
-        leaf: leaf, leafAt: leafAt, bit: bit, strewnLeaves: strewnLeaves, cursor: cursorArt, walker: walker,
+        leaf: leaf, leafAt: leafAt, bit: bit, strewnLeaves: strewnLeaves, pointer: pointerArt, walker: walker,
         onFooter: onFooter, fix: fix,
         MAPLE: MAPLE, OVAL: OVAL, DOT: DOT, TWIG: TWIG, LEAF_COLOURS: LEAF_COLOURS,
         dress: function (d) {

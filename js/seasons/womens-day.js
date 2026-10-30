@@ -11,7 +11,8 @@
  * small airship trailing a banner in the three colours; a sash that
  * grows across a post's top as the reader goes, a rosette at its end;
  * Venus symbols, raised fists and mimosa in the margins; a Venus symbol
- * for the favicon, in the moon and at the pointer's tail; and a 404 page
+ * for the favicon and in the moon; a hat pin with a rosette in the three
+ * colours for the pointer; and a 404 page
  * left out of the history books. Every drawing is the site's own.
  * Its own:
  *   - a click on the corner's badge raises the fist inside it
@@ -272,6 +273,12 @@
         el.addEventListener('animationend', function () { el.classList.remove('kr-season-iwd-slip--turn'); });
     }
 
+    // The pointer: a hat pin with a rosette in the three colours, its point the hotspot.
+    var POINTER = '<path d="M16-3.4l.7 2V21h-1.4V-1.4z" fill="#9aa3ad"/>' +
+        '<path d="M14 26l-2.6 7.6 2.6-1 1.6 1.8 1-7.6zM18 26l2.6 7.6-2.6-1-1.6 1.8-1-7.6z" fill="#2f8f4e"/>' +
+        '<circle cx="16" cy="24" r="6.2" fill="#6b2d8f"/><circle cx="16" cy="24" r="4.2" fill="#ffffff"/>' +
+        '<circle cx="16" cy="24" r="2.4" fill="#2f8f4e"/>';
+
     K.dress({
         // The ribbon's card (season.js, ribbon).
         about: { short: 'Women\'s Day', when: '8 March',
@@ -294,11 +301,7 @@
         puff: 'kr-season-puff--scatter kr-season-puff--sash',
         flyer: AIRSHIP, flight: 'kr-season-flyer--airship',
         favicon: VENUS_ICON, moonmark: VENUS_MOON,
-        // A purple pointer with a Venus symbol at its tail.
-        cursor: K.cursor('#9b59d0', '<g fill="none" stroke-linecap="round">' +
-            '<circle cx="6" cy="4.4" r="3.1" stroke="#ffffff" stroke-width="2.6"/><path d="M6 7.6v4M4 9.8h4" stroke="#ffffff" stroke-width="2.6"/>' +
-            '<circle cx="6" cy="4.4" r="3.1" stroke="#4a1d6b" stroke-width="1.4"/><path d="M6 7.6v4M4 9.8h4" stroke="#4a1d6b" stroke-width="1.4"/>' +
-            '</g>', '#2e1046'),
+        cursor: K.pointer(POINTER, 2, 2, -45),
         // A sash of the three colours across a post's top, a rosette at its end.
         track: { kind: 'sash', mode: 'fill', tip: ROSETTE_TIP },
         fog: false,

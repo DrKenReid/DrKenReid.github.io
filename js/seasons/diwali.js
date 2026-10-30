@@ -9,7 +9,7 @@
  * footer's top edge, lit one by one as the footer comes into view, and on
  * the 404 page a rangoli poured petal by petal, its pattern seeded from
  * the missing address, so every lost page gets its own. The pointer is
- * saffron with a small lit diya at its tail.
+ * a lit diya, the tip of its flame the hotspot.
  *
  * Classes only this file applies (css/seasons/diwali.css):
  * .kr-season-pumpkin, .kr-season-glow, .kr-season-flame,
@@ -239,6 +239,13 @@
         lede.parentNode.insertBefore(el, lede);
     }
 
+    // The pointer: a diya, the tip of its flame the hotspot.
+    var POINTER = '<path d="M16-3.4c2.8 4 4 7 4 9.4a4 4 0 0 1-8 0c0-2.4 1.2-5.4 4-9.4z" fill="#ffb347"/>' +
+        '<path d="M16 1.4c1.4 2 2 3.6 2 4.8a2 2 0 0 1-4 0c0-1.2.6-2.8 2-4.8z" fill="#fff1a8"/>' +
+        '<path d="M16 9.6v2.4" stroke="#3a2a1c" stroke-width="1"/>' +
+        '<path d="M7.6 12.4h16.8c-1 6.2-4.2 9.4-8.4 9.4s-7.4-3.2-8.4-9.4z" fill="#b5532a"/>' +
+        '<path d="M10 15.4h12" stroke="#fde68a" stroke-width="1.1" stroke-dasharray="1.6 1.4"/>';
+
     K.dress({
         // The ribbon's card (season.js, ribbon).
         about: { short: 'Diwali', when: 'Five days in October or November',
@@ -258,9 +265,7 @@
         puff: 'kr-season-puff--scatter kr-season-puff--sparks',
         flyer: SKY_LANTERN, flight: 'kr-season-flyer--rise',
         favicon: DIYA_ICON, moonmark: MOON_DIYA,
-        // A saffron pointer with a small lit diya at its tail.
-        cursor: K.cursor('#f7a531', '<path fill="#ffc53d" stroke="#7a3a0c" stroke-width=".7" d="M6 .6c1.5 2.3 2.4 3.5 2.4 4.9a2.4 2.4 0 0 1-4.8 0c0-1.4.9-2.6 2.4-4.9z"/>' +
-            '<path fill="#b5462a" stroke="#4a1a08" stroke-width=".7" d="M.6 8h10.8c-.4 2.6-2.6 3.8-5.4 3.8S1 10.6.6 8z"/>', '#4a1a08'),
+        cursor: K.pointer(POINTER, 2, 2, -45),
         // A light every 30px of string, on once the reader has passed it.
         track: { kind: 'lights', mode: 'bits', every: 30, bit: bulb },
         map: null,
