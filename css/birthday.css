@@ -1,0 +1,64 @@
+/* css/birthday.css: the rules for Ken's birthday, 12 October.
+   js/birthday.js fetches this file with itself, on that day alone (or
+   with ?birthday=on), and draws nothing until it has loaded, so the
+   stylesheet every page loads does not carry a day's rules all year.
+   check_css.py reads it with style.css. Hiding the hats in print stays
+   in style.css's one print block (§23). */
+
+/* --- Birthday hats --------------------------------------------------------
+   Built by js/birthday.js on 12 October (krBirthday, shared-components.js):
+   a party hat in an svg over each photograph of Ken, placed and sized by
+   script to follow the picture, and the note by the pointer while it is
+   over him, which sets the hat wiggling. Classes only script applies:
+   .kr-bday-hat (--party, __wiggle, __spot) and .kr-bday-note. */
+.kr-bday-hat {
+  position: absolute;
+  z-index: 1;
+  overflow: visible;
+  pointer-events: none;
+  transition: transform 0.3s ease; }
+
+/* The About portrait lifts under the pointer; its hat goes with it. */
+.about-photo:hover + .kr-bday-hat {
+  transform: translateY(-4px); }
+
+.kr-bday-hat__wiggle {
+  transform-box: fill-box;
+  transform-origin: 50% 100%; }
+
+.kr-bday-hat--party .kr-bday-hat__wiggle {
+  animation: kr-bday-wiggle 0.7s ease-in-out; }
+
+@keyframes kr-bday-wiggle {
+  25% {
+    transform: rotate(-8deg); }
+  60% {
+    transform: rotate(6deg); } }
+
+.kr-bday-note {
+  position: fixed;
+  z-index: 95;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--kr-ink);
+  color: var(--kr-surface-card);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: var(--kr-shadow-2);
+  opacity: 0;
+  transform: translateY(4px) scale(0.96); }
+
+.kr-bday-note.is-visible {
+  opacity: 1;
+  transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-bday-hat,
+  .kr-bday-note {
+    transition: none; }
+
+  .kr-bday-hat--party .kr-bday-hat__wiggle {
+    animation: none; } }

@@ -9,14 +9,18 @@
      dark   #7cc8ff  9.58 page, 7.90 raised; #b9c2ff  10.13 page
    Revenge of the Fifth, the day after, in the same art: ember into
    wine, deep enough to read as heading colour and not as a link (the
-   red is in the beam, the stars, the glow and the nebula):
+   red is in the blades, the stars, the glow and the nebula):
      light  #9a3412  6.84 page, 7.20 warm;  #7a1f3a  9.43 page
      dark   #ff9a6e  8.37 page, 6.90 raised; #ffc08f  10.93 page
-   For both, the line is the moon's thread, the glow starlight (the
-   hyperspace streaks, the rockets' flames), the pumpkin token the
-   exhaust's warm edge, the badge a pale star, the fog a nebula in the
-   dark theme only, and --kr-season-beam the beam over a post with its
-   white-hot --kr-season-core. */
+   For both, the line is the thread the remote or the probe hangs on, the
+   glow starlight (the light speed streaks), the pumpkin token the map's
+   rims, the badge a pale star, the fog a nebula in the dark theme only.
+   --kr-season-beam is the blade's colour (the saber on the footer, the
+   one over a post, the bolts, the slash) round its white-hot
+   --kr-season-core; --kr-season-hilt and --kr-season-grip are the metal
+   and grip of the hilt over a post. The 4th's --kr-season-crawl is the
+   404 page's crawl; the 5th's --kr-season-laser is the station's beam
+   and --kr-season-scorch the glow a slash leaves. */
 :root[data-season="may-the-fourth"] {
   --kr-brand-from: #1a5fa0;
   --kr-brand-to: #4b3fa8;
@@ -33,6 +37,9 @@
   --kr-season-badge: #fff6c8;
   --kr-season-beam: #2f9bff;
   --kr-season-core: #f4fbff;
+  --kr-season-hilt: #c3c8d0;
+  --kr-season-grip: #1f2228;
+  --kr-season-crawl: #ffd84a;
   --kr-season-fog: #6f6bff;
   --kr-season-dusk: saturate(0.6) hue-rotate(15deg) brightness(0.8);
   --kr-season-fog-display: none; }
@@ -64,6 +71,10 @@
   --kr-season-badge: #ffe0d0;
   --kr-season-beam: #ff2a2a;
   --kr-season-core: #fff4f0;
+  --kr-season-hilt: #3a3d44;
+  --kr-season-grip: #b9bdc5;
+  --kr-season-laser: #6dff7a;
+  --kr-season-scorch: #ff6a2a;
   --kr-season-fog: #ff4a3a;
   --kr-season-dusk: sepia(0.4) hue-rotate(-30deg) saturate(1.4) brightness(0.75);
   --kr-season-fog-display: none; }
@@ -79,114 +90,229 @@
   --kr-season-beam: #ff3b3b;
   --kr-season-fog-display: block; }
 
-/* --- May the Fourth --------------------------------------------------------
-   Built by js/seasons/may-the-fourth.js, for May the Fourth and, in red,
-   the Revenge of the Fifth (each key's token blocks, above). A clicked rocket
-   hops on a burst of flame (.kr-season-rocket, __flame, burning only
-   while it is lit) and leaves a cloud of exhaust (--exhaust); a comet
-   crosses once (--comet); over a post, a beam of light grows from the
-   left as the reader goes, a bright spark at its end (--beam, __spark).
-   Classes only script applies: .kr-season-rocket, .kr-season-rocket__flame,
-   .kr-season-puff--exhaust, .kr-season-flyer--comet,
-   .kr-season-track--beam, .kr-season-track__spark. */
-.kr-season-rocket__flame {
-  fill: var(--kr-season-pumpkin);
+/* --- May the Fourth's footer ------------------------------------------------
+   Built by js/seasons/may-the-fourth.js, for both days. A lightsaber hilt
+   floats over its stone, bobbing (.kr-season-saber, __float); a click
+   ignites its blade, which reaches up out of the box, holds and goes out
+   (__blade, only while .kr-season-lit is on it; it takes no clicks). The
+   4th's astromech turns its dome when clicked (.kr-season-droid,
+   __dome), its lamp and the vaporator's blinking (__lamp,
+   .kr-season-vaporator__lamp); the 5th's walker stamps
+   (.kr-season-strider) and its mouse droid scoots off and back
+   (.kr-season-mousedroid). Whatever is clicked fires three blaster
+   bolts in the day's colour (--bolts). Under reduced motion nothing
+   bobs, turns or fires, and the lamps stay lit. Classes only script
+   applies: .kr-season-saber, .kr-season-saber__float,
+   .kr-season-saber__blade, .kr-season-droid, .kr-season-droid__dome,
+   .kr-season-droid__lamp, .kr-season-vaporator,
+   .kr-season-vaporator__lamp, .kr-season-strider, .kr-season-mousedroid,
+   .kr-season-puff--bolts. */
+.kr-season-saber {
+  overflow: visible; }
+
+.kr-season-saber__float {
+  animation: kr-season-levitate 3.6s ease-in-out infinite alternate; }
+
+@keyframes kr-season-levitate {
+  from { transform: translateY(0); }
+  to { transform: translateY(-2.5px); } }
+
+.kr-season-saber__blade {
   transform: scaleY(0);
   transform-box: fill-box;
-  transform-origin: 50% 0; }
+  transform-origin: 50% 100%;
+  pointer-events: none;
+  filter: drop-shadow(0 0 3px var(--kr-season-beam)); }
 
-.kr-season-lit .kr-season-rocket {
-  animation: kr-season-flare 1.4s ease-out, kr-season-hop 1.4s cubic-bezier(0.3, 0.7, 0.4, 1); }
+.kr-season-lit .kr-season-saber__blade {
+  animation: kr-season-ignite 2.6s ease-out; }
 
-.kr-season-lit .kr-season-rocket__flame {
-  animation: kr-season-thrust 1.4s ease-out; }
-
-@keyframes kr-season-hop {
-  0%, 100% { transform: translateY(0); }
-  30% { transform: translateY(-16px); }
-  65% { transform: translateY(-11px); } }
-
-@keyframes kr-season-thrust {
+@keyframes kr-season-ignite {
   0% { transform: scaleY(0); }
-  12% { transform: scaleY(1.25); }
-  60% { transform: scaleY(1); }
+  10% { transform: scaleY(1.04); }
+  16%, 80% { transform: scaleY(1); }
   100% { transform: scaleY(0); } }
 
-/* Exhaust: three clouds rolling out sideways from the rocket's foot. */
-.kr-season-puff--exhaust,
-.kr-season-puff--exhaust::before,
-.kr-season-puff--exhaust::after {
-  bottom: 4px;
-  --kr-season-toss: 0px;
-  animation: kr-season-billow 1.5s ease-out forwards; }
+.kr-season-lit .kr-season-droid__dome {
+  animation: kr-season-swivel 1.6s ease-in-out; }
 
-.kr-season-puff--exhaust::before {
-  bottom: 0;
-  --kr-season-toss: -26px; }
+@keyframes kr-season-swivel {
+  0%, 100% { transform: translateX(0); }
+  30% { transform: translateX(-4px); }
+  65% { transform: translateX(4px); } }
 
-.kr-season-puff--exhaust::after {
-  bottom: 0;
-  left: 50%;
-  --kr-season-toss: 26px; }
+.kr-season-droid__lamp,
+.kr-season-vaporator__lamp {
+  animation: kr-season-beacon 2.2s steps(1) infinite; }
 
-@keyframes kr-season-billow {
-  0% { transform: translate(0, 0) scale(0.5); opacity: 0.9; }
-  100% { transform: translate(var(--kr-season-toss), -10px) scale(2.6); opacity: 0; } }
+.kr-season-vaporator__lamp {
+  animation-delay: -1.1s; }
 
-/* The comet: in from the upper left, down across the window and out,
-   quick, its tail behind it. */
-.kr-season-flyer--comet {
-  top: 10vh;
-  width: 150px;
-  filter: drop-shadow(0 0 5px var(--kr-season-beam));
-  animation: kr-season-streak 3.2s cubic-bezier(0.4, 0, 0.8, 0.6) forwards; }
+@keyframes kr-season-beacon {
+  50% { opacity: 0.25; } }
 
-@keyframes kr-season-streak {
-  0% { transform: translate(-170px, 0) rotate(12deg); }
-  100% { transform: translate(calc(100vw + 40px), 24vh) rotate(12deg); } }
+.kr-season-lit .kr-season-strider {
+  animation: kr-season-flare 1.4s ease-out, kr-season-stamp 1.2s ease-in-out; }
 
-/* The beam over a post: a white-hot core in a glow of the day's colour,
-   from the left edge to the reader, a spark at its end. */
-.kr-season-track--beam .kr-season-track__rest {
-  top: 1px;
-  bottom: auto;
-  height: 3px;
+@keyframes kr-season-stamp {
+  0%, 100% { transform: translateY(0); }
+  20% { transform: translateY(2px); }
+  40% { transform: translateY(-4px); }
+  60% { transform: translateY(1px); }
+  80% { transform: translateY(-1px); } }
+
+.kr-season-lit .kr-season-mousedroid {
+  animation: kr-season-flare 1.4s ease-out, kr-season-scoot 1.2s ease-in-out; }
+
+@keyframes kr-season-scoot {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(10px); }
+  55% { transform: translateX(-6px); }
+  80% { transform: translateX(2px); } }
+
+/* Blaster bolts: three short glowing bars fired up and out, each on its
+   own slant (--kr-season-tilt), one after another. */
+.kr-season-puff--bolts,
+.kr-season-puff--bolts::before,
+.kr-season-puff--bolts::after {
+  bottom: 62%;
+  width: 3px;
+  height: 14px;
+  margin-left: -1.5px;
   border-radius: 2px;
   background: var(--kr-season-core);
-  box-shadow: 0 0 3px 1px var(--kr-season-beam), 0 0 10px 2px var(--kr-season-beam);
-  animation: kr-season-hum 2.4s ease-in-out infinite alternate; }
+  box-shadow: 0 0 3px 1px var(--kr-season-beam), 0 0 8px 2px var(--kr-season-beam);
+  --kr-season-tilt: 0deg;
+  animation: kr-season-bolt 0.9s ease-out forwards; }
 
-.kr-season-track--beam .kr-season-track__tip {
-  bottom: auto;
-  top: -4.5px;
-  left: -7px;
-  width: 14px; }
+.kr-season-puff--bolts::before {
+  bottom: 0;
+  --kr-season-tilt: -40deg;
+  animation-delay: 0.12s; }
 
-.kr-season-track__spark {
-  display: block;
-  width: 100%;
-  height: auto;
-  fill: var(--kr-season-core);
-  filter: drop-shadow(0 0 3px var(--kr-season-beam)) drop-shadow(0 0 6px var(--kr-season-beam));
-  animation: kr-season-twinkle 0.9s ease-in-out infinite alternate; }
+.kr-season-puff--bolts::after {
+  bottom: 0;
+  left: 50%;
+  --kr-season-tilt: 40deg;
+  animation-delay: 0.24s; }
 
-@keyframes kr-season-hum {
-  from { opacity: 0.88; }
+@keyframes kr-season-bolt {
+  0% { transform: rotate(var(--kr-season-tilt)) translateY(0) scaleY(0.4); opacity: 0; }
+  12% { opacity: 1; }
+  100% { transform: rotate(var(--kr-season-tilt)) translateY(-64px) scaleY(1); opacity: 0; } }
+
+/* --- May the Fourth's fighters and saber -----------------------------------
+   Built by js/seasons/may-the-fourth.js. As the footer arrives the 4th's
+   four-winged starfighter crosses, banking, its engines glowing
+   (--fourwing, .kr-season-fighter__engine); the 5th's fighter between
+   its hexagonal wings dashes across, weaving (--hexwing). Over a post a
+   lightsaber stands in for the reading bar (--saber): the hilt at the
+   left (::before, its emitter ::after), the blade growing from it as far
+   as the reader has read, a glowing tip at the reader
+   (.kr-season-blade-tip). Classes only script applies:
+   .kr-season-flyer--fourwing, .kr-season-flyer--hexwing,
+   .kr-season-fighter__engine, .kr-season-track--saber,
+   .kr-season-blade-tip. */
+.kr-season-flyer--fourwing {
+  top: 14vh;
+  width: 124px;
+  filter: drop-shadow(0 0 4px var(--kr-season-glow));
+  animation: kr-season-sortie 4.4s cubic-bezier(0.45, 0.1, 0.55, 0.9) forwards; }
+
+.kr-season-flyer--hexwing {
+  top: 20vh;
+  width: 76px;
+  filter: drop-shadow(0 0 4px var(--kr-season-glow));
+  animation: kr-season-pursuit 3.4s linear forwards; }
+
+@keyframes kr-season-sortie {
+  0% { transform: translate(-150px, 16vh) rotate(-10deg); }
+  45% { transform: translate(42vw, 3vh) rotate(-4deg); }
+  70% { transform: translate(68vw, 5vh) rotate(8deg) scaleY(0.8); }
+  100% { transform: translate(calc(100vw + 40px), -6vh) rotate(-6deg); } }
+
+@keyframes kr-season-pursuit {
+  0% { transform: translate(-100px, 8vh); }
+  30% { transform: translate(28vw, 3vh) rotate(-4deg); }
+  60% { transform: translate(58vw, 11vh) rotate(5deg); }
+  100% { transform: translate(calc(100vw + 40px), 2vh); } }
+
+.kr-season-fighter__engine {
+  animation: kr-season-afterburn 0.3s ease-in-out infinite alternate; }
+
+@keyframes kr-season-afterburn {
+  from { opacity: 0.6; }
   to { opacity: 1; } }
 
-@keyframes kr-season-twinkle {
-  from { transform: scale(0.85) rotate(0); }
-  to { transform: scale(1.1) rotate(20deg); } }
+.kr-season-track--saber .kr-season-track__rest {
+  top: 0.5px;
+  bottom: auto;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--kr-season-core);
+  box-shadow: 0 0 3px 1px var(--kr-season-beam), 0 0 9px 2px var(--kr-season-beam);
+  animation: kr-season-hum 2.4s ease-in-out infinite alternate; }
 
-/* --- May the Fourth's jump to light speed ---------------------------------
-   Built by js/seasons/may-the-fourth.js (its extra): the corner's planet
-   takes clicks (.kr-season-planet), and a click streaks the stars over
-   the page's opener (.kr-season-warping on the opener while it lasts)
-   into lines rushing out from its middle, each turned by script, for a
-   second and a half. Never under reduced motion (the planet takes no
-   clicks then). Classes only script applies: .kr-season-planet,
-   .kr-season-warp, .kr-season-warp__streak, .kr-season-warping. */
-.kr-season-planet {
+@keyframes kr-season-hum {
+  from { opacity: 0.86; }
+  to { opacity: 1; } }
+
+.kr-season-track--saber::before,
+.kr-season-track--saber::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  background: var(--kr-season-hilt);
+  box-shadow: 0 0 0 0.5px var(--kr-season-grip); }
+
+.kr-season-track--saber::before {
+  top: -2px;
+  left: 0;
+  width: 32px;
+  height: 9px;
+  background:
+    repeating-linear-gradient(90deg, var(--kr-season-grip) 0 2px, transparent 2px 4px) 8px 1.5px / 14px 6px no-repeat,
+    var(--kr-season-hilt); }
+
+.kr-season-track--saber::after {
+  top: -3.5px;
+  left: 30px;
+  width: 6px;
+  height: 12px;
+  border-radius: 1px 2px 2px 1px; }
+
+.kr-season-track--saber .kr-season-track__tip {
+  bottom: auto;
+  top: -0.5px;
+  left: -4px;
+  z-index: 1;
+  width: 8px; }
+
+.kr-season-blade-tip {
+  display: block;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--kr-season-core) 55%, color-mix(in srgb, var(--kr-season-beam) 60%, transparent) 80%, transparent); }
+
+/* --- May the Fourth's corner toys ---------------------------------------------
+   Built by js/seasons/may-the-fourth.js (its extra); never under reduced
+   motion (the corner takes no clicks then). On the 4th the twin suns
+   take clicks (.kr-season-jump), and a click streaks the stars over the
+   page's opener (.kr-season-warping on the opener while it lasts) into
+   lines rushing out from its middle, each turned by script, for a second
+   and a half: the jump to light speed. On the 5th the battle station
+   takes clicks (.kr-season-station), and a click fires it (--fire): its
+   dish charges (__dish), four rays gather in front of it (__ray), a beam
+   reaches to the lower left of the corner (__beam) and flashes where it
+   ends (__flash, round a white-hot __core), all hidden at rest. Classes
+   only script applies: .kr-season-jump, .kr-season-warp,
+   .kr-season-warp__streak, .kr-season-warping, .kr-season-station,
+   .kr-season-station--fire,
+   .kr-season-station__dish, .kr-season-station__ray,
+   .kr-season-station__beam, .kr-season-station__flash,
+   .kr-season-station__core. */
+.kr-season-jump,
+.kr-season-station {
   pointer-events: auto;
   cursor: pointer; }
 
@@ -226,3 +352,186 @@
 @keyframes kr-season-blink-out {
   0%, 100% { opacity: 1; }
   15%, 80% { opacity: 0; } }
+
+.kr-season-station__ray,
+.kr-season-station__beam {
+  fill: none;
+  stroke: var(--kr-season-laser);
+  stroke-linecap: round;
+  opacity: 0; }
+
+.kr-season-station__ray {
+  stroke-width: 0.8; }
+
+.kr-season-station__beam {
+  stroke-width: 2.2;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  filter: drop-shadow(0 0 2px var(--kr-season-laser)); }
+
+.kr-season-station__flash {
+  fill: var(--kr-season-laser);
+  stroke: none;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center; }
+
+.kr-season-station__core {
+  fill: var(--kr-season-core); }
+
+.kr-season-station--fire .kr-season-station__dish {
+  animation: kr-season-charge 2s ease-in; }
+
+.kr-season-station--fire .kr-season-station__ray {
+  animation: kr-season-gather 2s ease-out; }
+
+.kr-season-station--fire .kr-season-station__beam {
+  animation: kr-season-superlaser 2s ease-out; }
+
+.kr-season-station--fire .kr-season-station__flash {
+  animation: kr-season-impact 2s ease-out; }
+
+@keyframes kr-season-charge {
+  0%, 100% { filter: none; }
+  40%, 55% { filter: brightness(1.5) drop-shadow(0 0 3px var(--kr-season-laser)); } }
+
+@keyframes kr-season-gather {
+  0%, 12% { opacity: 0; }
+  28%, 42% { opacity: 1; }
+  52%, 100% { opacity: 0; } }
+
+@keyframes kr-season-superlaser {
+  0%, 40% { opacity: 0; stroke-dashoffset: 1; }
+  42% { opacity: 1; stroke-dashoffset: 1; }
+  52%, 72% { opacity: 1; stroke-dashoffset: 0; }
+  100% { opacity: 0; stroke-dashoffset: 0; } }
+
+@keyframes kr-season-impact {
+  0%, 50% { opacity: 0; transform: scale(0.2); }
+  56% { opacity: 1; transform: scale(1.3); }
+  100% { opacity: 0; transform: scale(2); } }
+
+/* --- May the Fourth's crawl -------------------------------------------------
+   Built by js/seasons/may-the-fourth.js on the 404 page, on the 4th: in
+   the opener, over its photograph and under its type (before the
+   container, which season.css lifts), a few lines of yellow type lean
+   back into the stars and slide away up them, fading out at the top, and
+   start again (.kr-season-crawl, __text, __episode, __title). It keeps
+   to the right of the title on a wide screen; on a phone it runs behind
+   the title, fainter. aria-hidden and taking no clicks. Its resting
+   place, part way up, is what reduced motion shows. Classes only script
+   applies: .kr-season-crawl, .kr-season-crawl__text,
+   .kr-season-crawl__episode, .kr-season-crawl__title. */
+.kr-season-crawl {
+  position: absolute;
+  top: var(--kr-bar-h);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  perspective: 300px;
+  perspective-origin: 50% 20%;
+  pointer-events: none;
+  opacity: 0.4;
+  -webkit-mask-image: linear-gradient(to top, var(--kr-season-crawl) 60%, transparent);
+  mask-image: linear-gradient(to top, var(--kr-season-crawl) 60%, transparent); }
+
+.kr-season-crawl__text {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: min(86%, 360px);
+  margin-left: max(-43%, -180px);
+  color: var(--kr-season-crawl);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: justify;
+  transform-origin: 50% 0;
+  transform: rotateX(55deg) translateY(-60%);
+  animation: kr-season-crawl 40s linear -12s infinite; }
+
+.kr-season-crawl__text p {
+  margin: 0 0 1em;
+  color: inherit;
+  font: inherit;
+  line-height: inherit; }
+
+.kr-season-crawl__text .kr-season-crawl__episode,
+.kr-season-crawl__text .kr-season-crawl__title {
+  margin: 0;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.06em; }
+
+.kr-season-crawl__text .kr-season-crawl__title {
+  margin-bottom: 0.8em;
+  font-size: 1.5em; }
+
+@keyframes kr-season-crawl {
+  from { transform: rotateX(55deg) translateY(0); }
+  to { transform: rotateX(55deg) translateY(-190%); } }
+
+@media only screen and (min-width: 768px) {
+  .kr-season-crawl {
+    left: 46%;
+    opacity: 0.9; }
+  .kr-season-crawl__text {
+    width: min(80%, 480px);
+    margin-left: max(-40%, -240px);
+    font-size: 22px; } }
+
+/* --- Revenge of the Fifth's saber slash ---------------------------------------
+   Built by js/seasons/may-the-fourth.js on the 5th: a layer in each page
+   opener and the homepage hero (.kr-season-slashes, clipped to it, over
+   the photograph and under the opener's type; over the hero, as its
+   stars are), taking no clicks. A click on the opener, not on a link or
+   a button, cuts a slash where it landed (.kr-season-slash, placed and
+   slanted by script): a white-hot stroke in a red glow sweeps through
+   (::before) and leaves a glow of hot metal that fades (::after). Never
+   under reduced motion. Classes only script applies: .kr-season-slashes,
+   .kr-season-slash. */
+.kr-season-slashes {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none; }
+
+.welcome-area .kr-season-slashes {
+  z-index: 5; }
+
+.kr-season-slash {
+  position: absolute;
+  width: clamp(150px, 24vw, 300px);
+  height: 6px; }
+
+.kr-season-slash::before,
+.kr-season-slash::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 3px;
+  opacity: 0; }
+
+.kr-season-slash::before {
+  background: var(--kr-season-core);
+  box-shadow: 0 0 4px 2px var(--kr-season-beam), 0 0 16px 5px var(--kr-season-beam);
+  transform-origin: 0 50%;
+  animation: kr-season-slash-cut 0.7s cubic-bezier(0.2, 0.8, 0.3, 1) forwards; }
+
+.kr-season-slash::after {
+  top: 2px;
+  bottom: 2px;
+  background: var(--kr-season-scorch);
+  box-shadow: 0 0 8px 2px color-mix(in srgb, var(--kr-season-scorch) 60%, transparent);
+  animation: kr-season-slash-glow 2s ease-out forwards; }
+
+@keyframes kr-season-slash-cut {
+  0% { opacity: 1; transform: scaleX(0); }
+  28% { opacity: 1; transform: scaleX(1); }
+  100% { opacity: 0; transform: scaleX(1); } }
+
+@keyframes kr-season-slash-glow {
+  0%, 12% { opacity: 0; }
+  26% { opacity: 0.9; }
+  100% { opacity: 0; } }

@@ -89,7 +89,12 @@ decorations: each season's own colours and rules are in
 written, not minified or pruned; `check_css.py` holds it to the same
 rules and ratchets as `style.css`, and reads it with `style.css` as one
 stylesheet). What every season shares is `css/season.css`, loaded and
-checked the same way. Pages
+checked the same way, and so are two more sheets for one occasion each:
+`css/birthday.css` (fetched by `js/birthday.js` on 12 October) and
+`css/season-off.css` (the tab that turns the decorations back on,
+fetched by `krSeasonOffTab` while they are off). A rule that only one
+day or state needs goes there, not into the stylesheet every page
+loads (its size is budgeted, `perf_budget.py`). Pages
 load `style.min.css`,
 which `python .github/scripts/minify_css.py` builds: it inlines the
 vendor sheets `style.css` imports, minifies, swaps the icon fonts for

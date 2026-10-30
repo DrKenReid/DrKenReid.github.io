@@ -235,8 +235,8 @@ hold one day the higher rank wins, so the site is always in exactly one:
 |---|---|---|
 | 0 | spring, summer, fall, winter | 20 March to 20 June, 21 June to 21 September, 22 September to 30 November, 1 December to 19 March |
 | 1 | Halloween | 17 October to 1 November |
-| 2 | Burns Night, Darwin Day, Pi Day, World Book Day, May the Fourth, Revenge of the Fifth, International Cat Day, Star Trek Day, Bonfire Night, St Andrew's Day, Hogmanay | 25 January, 12 February, 14 March, 23 April, 4 May, 5 May, 8 August, 8 September, 5 November, 30 November, 31 December to 2 January |
-| 3 | Diwali, Holi | Diwali's five days, Dhanteras to Bhai Dooj; Holi's two, Holika Dahan and the day of colours; each from a table by year |
+| 2 | Burns Night, Darwin Day, International Women's Day, Pi Day, World Book Day, May the Fourth, Revenge of the Fifth, International Cat Day, Star Trek Day, Firefly Day, Bonfire Night, N7 Day, St Andrew's Day, Hogmanay | 25 January, 12 February, 8 March, 14 March, 23 April, 4 May, 5 May, 8 August, 8 September, 20 September, 5 November, 7 November, 30 November, 31 December to 2 January |
+| 3 | Diwali, Holi | Diwali's five days, Dhanteras to Bhai Dooj; Holi's two, Holika Dahan and the day of colours; each from a table by year, and each over a holiday it lands on (Holi takes International Women's Day in 2031, Diwali N7 Day in 2026 and 2029) |
 
 The node tests refuse two seasons of one rank on the same day, fail when
 a season has no `js/seasons/<key>.js` or `css/seasons/<key>.css`, and
@@ -308,16 +308,16 @@ documented in `season.js`'s header, and the shared rules in
 
 | Season | Its art | Its own |
 |---|---|---|
-| Spring | blossom twig and caterpillar; petals; tulips, daffodils, a robin; swallows; a vine whose buds open; morning mist (light) | a shower over an opener, then a rainbow; tagged `spring` frames |
-| Summer | cherry branch and tyre swing; dandelion seeds (light) or fireflies (dark); sunflowers, a firefly jar, a sandcastle; a dragonfly; a sunbeam | a monarch by day, fireflies by night over the footer; tagged `summer` frames |
-| Fall | oak twig and acorn; leaves; plain pumpkins; geese in a V; a twig dropping leaves; golden haze | a squirrel along the footer; tagged `autumn` frames |
+| Spring | blossom twig and caterpillar; petals; tulips, daffodils, a robin; swallows; a vine whose buds open; morning mist (light) | a shower over an opener, then a rainbow; a click on an empty part of an opener or the hero plants a flower at its foot that grows and sways (eight at most); tagged `spring` frames |
+| Summer | cherry branch and tyre swing; dandelion seeds (light) or fireflies (dark); sunflowers, a firefly jar, a sandcastle; a dragonfly; a sunbeam | a monarch by day, fireflies by night over the footer; a beach ball on the footer's edge that a click sends rolling and bouncing; tagged `summer` frames |
+| Fall | oak twig and acorn; leaves; plain pumpkins; geese in a V; a twig dropping leaves; golden haze | a squirrel along the footer; a heap of leaves at the foot of the openers and the hero that a mouse sweeps up, the leaves drifting back down to settle; tagged `autumn` frames |
 | Halloween | cobweb and spider; leaves; jack-o'-lanterns, gravestones, candy corn; a bat; a candle; fog (dark) | eyes in the footer that shut as the pointer nears; a black cat; ghosts rising from hovered post cards; a moon in the hero that a witch crosses; lightning on switching to dark |
-| Winter | snowy branch and mitten; snow; snowmen; an owl; eaves growing icicles; frost | snow settling on the footer's edge; tagged `winter` frames |
+| Winter | snowy branch and mitten; snow; snowmen; an owl; eaves growing icicles; frost | snow settling on the footer's edge; frost creeping in from the corners of the openers and the hero while the reader is still, cleared by a move or scroll; tagged `winter` frames |
 | Burns Night | heather and a thistle, a mouse; thistledown and snow; haggis, a dram, neeps and tatties; a red grouse; a quill drawing a tartan ribbon; peat smoke (dark) | a line of Burns written out over the footer, the next one on a click |
 | St Andrew's Day | saltire bunting and a fish; saltire confetti; a Highland coo, a puffin, pipes; a gannet that dives; bunting that flies out; a haar | clouds that drift into a white saltire over the hero and openers |
 | Hogmanay | a clock and a lump of coal; fireworks; shortbread, black bun, coal; a shooting star; boot prints as the reader passes | the corner clock keeps time, and the hero counts down to the Bells, then bursts at midnight |
 | Bonfire Night | a Catherine wheel and a toffee apple; fireworks and wood smoke; a bonfire, a sparkler, a rocket in a bottle; a rocket; a fuse burning down | sparkler trails after the pointer over the hero |
-| May the Fourth, Revenge of the Fifth | a ringed planet and its moon; stars; three tin rockets; a comet; a beam that fills as the reader goes; a nebula (dark); blue on the 4th, red on the 5th | a click on the planet streaks the stars to light speed |
+| May the Fourth, Revenge of the Fifth | twin suns over the dunes and a training remote (4th), a battle station and a probe droid (5th); stars; a floating saber that ignites, blue or red, with an astromech and a vaporator (4th) or a walker and a mouse droid (5th); a four-winged starfighter or a fighter between hexagonal wings; a lightsaber that grows as the reader goes; fighters in the margins; a nebula (dark) | 4th: a click on the corner jumps to light speed; a crawl receding into the stars on the 404 opener. 5th: a click fires the station's dish; a click on an opener cuts a saber slash that glows and fades |
 | Diwali | a toran of marigolds with a star lantern; rising sky lanterns; three diyas; a sky lantern; a string of lights coming on; a warm haze (dark) | diyas along the footer lit one by one; a rangoli on the 404 page, poured from the missing address |
 | Holi | a palash bough and a pouch of gulal; gulal rising (embers on the eve); a thali of colours, a pichkari in a lota, a dhol; a water balloon that bursts; a streak of colour filling as the reader goes; a haze of colour | thrown gulal that stays on the openers and builds up over the visit, never behind the type; a pyre on the footer on Holika Dahan, lit from the evening |
 | Darwin Day | the "I think" tree and a beetle; peppered moths; three Galápagos finches; the Beagle; a tree of life branching as the reader goes; sea mist; finches on the wildlife places | a click mutates a finch's beak, kept for the visit; a tortoise along the footer; on the 404 page, biomorphs to breed by clicking; tagged `wildlife` frames |
@@ -325,12 +325,16 @@ documented in `season.js`'s header, and the shared rules in
 | World Book Day | a reading lamp and a bookworm; loose pages; a stack of books, tea, an open book; a paper plane; a shelf filling with books | a line from the quote wall on a slip over the footer, turned on a click; dog-eared openers; a torn 404 opener; the bookworm along the footer |
 | International Cat Day | a ginger cat asleep on a shelf, its tail as the dangler; fluff and hearts; a cat in a box, yarn, a bowl; a kitten chasing a butterfly; paw prints as the reader goes | a tuxedo and a calico along the footer; a laser dot over the hero that a grey cat stalks and pounces on; a cat that knocks the 404 page off a table |
 | Star Trek Day | a starship and a delta badge; stars; Earl Grey, a flute on its box, a PADD; a starship that jumps to warp; panel bars lit as the reader goes; a fleet in the margins | a click on the corner's starship engages, and it drops back out of warp; the footer's pieces beam in; a panel of coloured bars along the footer's top that powers up |
+| International Women's Day | a sash in purple, white and green with a badge, the Venus symbol with a raised fist, and a Venus symbol on the thread; confetti and Venus symbols; mimosa in a jar, an enamel badge, a ballot box; an airship trailing a banner; a sash across a post's top; Venus symbols, fists and mimosa in the margins | a click on the badge raises the fist; a slip over the footer naming a woman whose work science and computing stand on, turned on a click |
+| Firefly Day | a Firefly-class ship and a knitted hat with earflaps; stars; cargo crates, a toy dinosaur, a clay jug; a tumbleweed; a rope paying out as the reader goes; a dusty haze; ships in the margins | a click on the ship goes to full burn; the dinosaur rears when clicked; a wanted poster for the missing page on the 404 page |
+| N7 Day | a frigate and a dog tag; blue motes rising; an armoured helmet, a fish tank, a model ship; the frigate crossing; a red and white stripe as the reader goes; frigates and chevrons in the margins; a red glow (dark) | a blue and a red prompt on the opener: the one clicked colours the drive, its trail and the stripe for the visit; fish that swim |
 
 Every decoration is `aria-hidden`, takes no focus, keeps off post text,
 the gallery, the lightbox and the slideshow, is dropped in print and
 holds still under reduced motion (a season's toys check `kit.reduced`).
-Winter keeps clear of Christmas: no trees, presents or red and green; May
-the Fourth has nothing from the films.
+Winter keeps clear of Christmas: no trees, presents or red and green. May
+the Fourth, Star Trek Day, Firefly Day and N7 Day evoke their films, shows
+and games in drawings of the site's own, never their logos or official art.
 
 A clicked footer piece can also play a recording from `sounds/` (each
 season's, credited on the colophon beside the slideshow's sounds; real
@@ -353,8 +357,8 @@ for other pages. The boot script in the head cannot see the body yet, so
 on a reader's second page that day it adds the season's stylesheets as
 usual and the script at the end of the body takes them off again. The palette offers off and
 on in season, and while they are off a small grey tab in the bottom left
-corner (`krSeasonOffTab`, styled in `style.css` since the season sheets
-are not loaded) opens a card with a button that turns them back on. The
+corner (`krSeasonOffTab`, styled by `css/season-off.css`, which it fetches
+then, since the season sheets are not loaded) opens a card with a button that turns them back on. The
 colophon's "The seasons" section draws every entry
 in `KR_SEASONS` on this year's calendar (its inline script) with a
 Preview link to each and the off and on links. The checks always run with no season
@@ -384,8 +388,11 @@ in a hat. Which pictures and where the hat sits are a table in that file
 row there and nothing else. It is a decoration: the seasons' off switch
 and `?season=none` leave it off. `?birthday=on` shows it on any day in
 this tab and `?birthday=none` hides it; the smoke pin `check_birthday`
-uses the first. Its rules are in `style.css` ("Birthday hats"), since a
-day without a season loads no season sheet.
+uses the first. Its rules are in `css/birthday.css`, which `birthday.js`
+fetches with itself and waits for before it draws, so the stylesheet
+every page loads does not carry them all year. That day the coffee button at the end
+of a post asks for a slice of cake (`KR_BIRTHDAY_COFFEE`), over the
+season's own words.
 
 ## The generators
 

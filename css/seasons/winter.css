@@ -10,7 +10,8 @@
    The line is the bare branch and the mitten's string, the creature the
    mitten and the owl, the pumpkin token the ice (the eaves, the map's
    rims), the badge snow, the fog a frost in both themes, and the map's
-   dusk cold. */
+   dusk cold. Its own token: --kr-season-frost (the frost that creeps
+   into the openers' corners, on the photograph in both themes). */
 :root[data-season="winter"] {
   --kr-brand-from: #1b6292;
   --kr-brand-to: #4a4f9c;
@@ -27,7 +28,8 @@
   --kr-season-badge: #f6fbff;
   --kr-season-fog: #e4f2fc;
   --kr-season-dusk: saturate(0.45) hue-rotate(-10deg) brightness(1.05);
-  --kr-season-fog-display: block; }
+  --kr-season-fog-display: block;
+  --kr-season-frost: #eef8ff; }
 
 :root[data-theme="dark"][data-season="winter"] {
   --kr-brand-from: #8fcfff;
@@ -101,3 +103,110 @@
   display: block;
   width: 100%;
   height: 100%; }
+
+/* --- Winter's frost on the openers -----------------------------------------
+   Built by js/seasons/winter.js: in each corner of each page opener (under
+   its type) and of the homepage hero (over the slides, whose type sits
+   clear of the corners, and under the pause button), fronds of ice, each
+   a spine with fine barbs along it and a side frond, a crystal at each
+   tip, on a pale bloom. The lower two corners are smaller, as an
+   opener's type sits low; the upper two start under the header bar.
+   Hidden at rest. Once the reader has been still a few seconds (--on)
+   the bloom fades up and each vein draws out from the corner after its
+   own wait (--kr-season-at, set by script), the barbs slower than the
+   spines; the first move or scroll takes --on away, and the veins draw
+   back fast. Under reduced motion it is --still from the start: a faint
+   frost, never moving. Takes no clicks. Classes only script applies:
+   .kr-season-rime (--on, --still, __corner, __corner--tl, --tr, --bl,
+   --br, __vein, __vein--fine, __flake). */
+.kr-season-rime {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none; }
+
+.welcome-area .kr-season-rime {
+  z-index: 5; }
+
+.kr-season-rime__corner {
+  position: absolute;
+  width: min(36vw, 300px);
+  height: min(36vw, 300px);
+  background: radial-gradient(circle at 0 0, color-mix(in srgb, var(--kr-season-frost) 24%, transparent), transparent 66%);
+  opacity: 0;
+  transition: opacity 0.8s ease-in; }
+
+/* The top two start under the header bar, which lies over the opener's
+   top, so no frost runs behind the menu. */
+.kr-season-rime__corner--tl {
+  top: var(--kr-bar-h);
+  left: 0; }
+
+.kr-season-rime__corner--tr {
+  top: var(--kr-bar-h);
+  right: 0;
+  transform: scaleX(-1); }
+
+.kr-season-rime__corner--bl,
+.kr-season-rime__corner--br {
+  bottom: 0;
+  width: min(24vw, 190px);
+  height: min(24vw, 190px); }
+
+.kr-season-rime__corner--bl {
+  left: 0;
+  transform: scaleY(-1); }
+
+.kr-season-rime__corner--br {
+  right: 0;
+  transform: scale(-1); }
+
+/* The hero's headline starts near its left edge, under this layer, so
+   the frost in its top left corner stays smaller and clear of it (about
+   80px on a phone). */
+.welcome-area .kr-season-rime__corner--tl {
+  width: min(20vw, 290px);
+  height: min(20vw, 290px); }
+
+.kr-season-rime__corner svg {
+  display: block;
+  width: 100%;
+  height: 100%; }
+
+.kr-season-rime__vein {
+  fill: none;
+  stroke: var(--kr-season-frost);
+  stroke-opacity: 0.85;
+  stroke-dasharray: 1 1.1;
+  stroke-dashoffset: 1.05;
+  transition: stroke-dashoffset 0.8s ease-in; }
+
+.kr-season-rime__flake {
+  fill: var(--kr-season-frost);
+  opacity: 0;
+  transition: opacity 0.5s ease-in; }
+
+.kr-season-rime--on .kr-season-rime__corner {
+  opacity: 1;
+  transition: opacity 4s ease-out; }
+
+/* 3.6s a spine: RIME_SPINE in winter.js times the side fronds by it. */
+.kr-season-rime--on .kr-season-rime__vein {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 3.6s cubic-bezier(0.3, 0.5, 0.5, 1) var(--kr-season-at); }
+
+.kr-season-rime--on .kr-season-rime__vein--fine {
+  transition-duration: 6s; }
+
+.kr-season-rime--on .kr-season-rime__flake {
+  opacity: 0.9;
+  transition: opacity 1.2s ease-out var(--kr-season-at); }
+
+.kr-season-rime--still .kr-season-rime__corner {
+  opacity: 0.4; }
+
+.kr-season-rime--still .kr-season-rime__vein {
+  stroke-dashoffset: 0; }
+
+.kr-season-rime--still .kr-season-rime__flake {
+  opacity: 0.9; }

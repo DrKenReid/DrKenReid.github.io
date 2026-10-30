@@ -136,6 +136,7 @@ var KR_SEASONS = [{
     photoTags: ['abandoned', 'silhouette'],
     subject: { key: 'spooky', label: 'Spooky' },
     treat: { title: 'Trick or treat', sub: 'A random spooky photograph', also: 'boo spooky' },
+    coffee: 'Buy me a witch\'s brew',
     heroText: 'Boo.',
     heroRamp: [[255, 165, 82], [201, 162, 255]],
     rank: 1
@@ -145,6 +146,7 @@ var KR_SEASONS = [{
     windows: [[[9, 22], [11, 30]]],
     photoTags: ['autumn'],
     treat: { title: 'An autumn walk', sub: 'A random autumn photograph', also: 'fall leaves autumn walk' },
+    coffee: 'Buy me an apple cider',
     heroText: 'Hello, fall.',
     heroRamp: [[255, 179, 92], [232, 205, 110]]
 }, {
@@ -153,6 +155,7 @@ var KR_SEASONS = [{
     windows: [[[12, 1], [3, 19]]],
     photoTags: ['winter'],
     treat: { title: 'A winter walk', sub: 'A random winter photograph', also: 'winter snow frost cold walk' },
+    coffee: 'Buy me a hot chocolate',
     heroText: 'Hello, winter.',
     heroRamp: [[143, 207, 255], [214, 230, 255]]
 }, {
@@ -169,6 +172,7 @@ var KR_SEASONS = [{
     windows: [[[6, 21], [9, 21]]],
     photoTags: ['summer'],
     treat: { title: 'A summer walk', sub: 'A random summer photograph', also: 'summer sun walk' },
+    coffee: 'Buy me an iced coffee',
     heroText: 'Hello, summer.',
     heroRamp: [[255, 210, 90], [120, 215, 230]]
 }, {
@@ -177,6 +181,7 @@ var KR_SEASONS = [{
     windows: [[[1, 25], [1, 25]]],
     photoPlaces: ['Scotland', 'Fife'],
     treat: { title: 'A Scottish view', sub: 'A random photograph from Scotland', also: 'burns night scotland scottish rabbie' },
+    coffee: 'Buy me a dram',
     heroText: "A man's a man.",
     heroRamp: [[226, 169, 240], [255, 205, 120]],
     rank: 2
@@ -186,6 +191,7 @@ var KR_SEASONS = [{
     windows: [[[11, 30], [11, 30]]],
     photoPlaces: ['Scotland', 'Fife'],
     treat: { title: 'A Scottish view', sub: 'A random photograph from Scotland', also: 'st andrews day saltire scotland scottish' },
+    coffee: 'Buy me an Irn-Bru',
     heroText: "St Andrew's Day.",
     heroRamp: [[120, 180, 255], [235, 245, 255]],
     rank: 2
@@ -195,6 +201,7 @@ var KR_SEASONS = [{
     windows: [[[12, 31], [1, 2]]],
     photoPlaces: ['Scotland', 'Fife'],
     treat: { title: 'A Scottish view', sub: 'A random photograph from Scotland', also: 'hogmanay new year scotland' },
+    coffee: 'Buy me a dram for the bells',
     heroText: 'Happy Hogmanay.',
     heroRamp: [[255, 214, 110], [190, 170, 255]],
     rank: 2
@@ -203,6 +210,7 @@ var KR_SEASONS = [{
     label: 'Bonfire Night',
     windows: [[[11, 5], [11, 5]]],
     treat: { title: 'A night out', sub: 'A random photograph', also: 'bonfire night guy fawkes fireworks' },
+    coffee: 'Buy me a toffee apple',
     heroText: 'Remember, remember.',
     heroRamp: [[255, 140, 60], [255, 220, 120]],
     rank: 2
@@ -244,6 +252,7 @@ var KR_SEASONS = [{
         2035: [[[10, 28], [11, 1]]]
     },
     treat: { title: 'Something bright', sub: 'A random photograph', also: 'diwali deepavali festival of lights' },
+    coffee: 'Buy me some mithai',
     heroText: 'Happy Diwali.',
     heroRamp: [[255, 196, 80], [255, 120, 170]],
     rank: 3
@@ -264,6 +273,7 @@ var KR_SEASONS = [{
         2031: [[[3, 8], [3, 9]]]
     },
     treat: { title: 'Something colourful', sub: 'A random photograph', also: 'holi festival of colours' },
+    coffee: 'Buy me a thandai',
     heroText: 'Happy Holi.',
     heroRamp: [[255, 92, 170], [80, 200, 255]],
     rank: 3
@@ -273,6 +283,7 @@ var KR_SEASONS = [{
     windows: [[[2, 12], [2, 12]]],
     photoTags: ['wildlife'],
     treat: { title: 'A wild one', sub: 'A random wildlife photograph', also: 'darwin day evolution nature wildlife' },
+    coffee: 'Buy me a coffee, naturally selected',
     heroText: 'Endless forms.',
     heroRamp: [[120, 210, 160], [230, 205, 120]],
     rank: 2
@@ -281,6 +292,7 @@ var KR_SEASONS = [{
     label: 'Pi Day',
     windows: [[[3, 14], [3, 14]]],
     treat: { title: 'A random photograph', sub: 'Picked by Math.random()', also: 'pi day maths math 3.14' },
+    coffee: 'Buy me a slice of pie',
     heroText: 'Happy π Day.',
     heroRamp: [[140, 200, 255], [255, 200, 120]],
     rank: 2
@@ -289,6 +301,7 @@ var KR_SEASONS = [{
     label: 'World Book Day',
     windows: [[[4, 23], [4, 23]]],
     treat: { title: 'A photograph to read by', sub: 'A random photograph', also: 'world book day reading books' },
+    coffee: 'Buy me a book',
     heroText: 'Read anything good?',
     heroRamp: [[240, 190, 120], [200, 160, 230]],
     rank: 2
@@ -297,6 +310,7 @@ var KR_SEASONS = [{
     label: 'International Cat Day',
     windows: [[[8, 8], [8, 8]]],
     treat: { title: 'A random photograph', sub: 'The cats chose it', also: 'cat day cats kitten' },
+    coffee: 'Buy the cats some treats',
     heroText: 'Meow.',
     heroRamp: [[255, 190, 120], [200, 210, 255]],
     rank: 2
@@ -308,6 +322,33 @@ var KR_SEASONS = [{
     coffee: 'Buy me an Earl Grey, hot',
     heroText: 'Make it so.',
     heroRamp: [[255, 170, 80], [200, 160, 255]],
+    rank: 2
+}, {
+    key: 'womens-day',
+    label: 'International Women\'s Day',
+    // Holi (rank 3) takes the day when Holika Dahan falls on it, as in 2031.
+    windows: [[[3, 8], [3, 8]]],
+    treat: { title: 'A random photograph', sub: 'For International Women\'s Day', also: 'international womens day iwd 8 march' },
+    heroText: 'Happy Women\'s Day.',
+    heroRamp: [[215, 165, 255], [140, 225, 170]],
+    rank: 2
+}, {
+    key: 'firefly-day',
+    label: 'Firefly Day',
+    windows: [[[9, 20], [9, 20]]],
+    treat: { title: 'Somewhere in the \'verse', sub: 'A random photograph', also: 'firefly serenity browncoats' },
+    coffee: 'Buy me a Mudder\'s Milk',
+    heroText: 'Shiny.',
+    heroRamp: [[240, 196, 120], [214, 150, 96]],
+    rank: 2
+}, {
+    key: 'n7-day',
+    label: 'N7 Day',
+    // Diwali (rank 3) takes the day when its five days reach it, as in 2026 and 2029.
+    windows: [[[11, 7], [11, 7]]],
+    treat: { title: 'Somewhere past the relay', sub: 'A random photograph', also: 'n7 day mass effect shepard normandy' },
+    heroText: 'N7 Day.',
+    heroRamp: [[255, 120, 105], [230, 236, 245]],
     rank: 2
 }];
 var KR_SEASON_PREVIEW = 'kr-season-preview';   // sessionStorage: a key, or 'none'
@@ -359,11 +400,22 @@ function krSeasonsOff() {
    It opens a card that says so, with a button that turns them back on
    (?season=on, which reloads the page dressed). The card opens and
    closes as the ribbon's does: a click on the tab, Escape, or a click
-   elsewhere; hidden, it is .kr-offstage. Its rules are in style.css,
-   because the season sheets are not loaded while the decorations are
-   off. */
+   elsewhere; hidden, it is .kr-offstage. Its rules are css/season-off.css,
+   fetched here and only here (the season sheets are not loaded while the
+   decorations are off); the tab is built once they have loaded. Should
+   they fail, the palette and the colophon still turn the decorations
+   back on. */
 function krSeasonOffTab(season) {
-    if (document.querySelector('.kr-season-off')) return;
+    if (document.querySelector('.kr-season-off, #kr-season-off-css')) return;
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.id = 'kr-season-off-css';
+    link.href = siteRootPrefix() + 'css/season-off.css';
+    link.addEventListener('load', function () { krSeasonOffTabBuild(season); });
+    document.head.appendChild(link);
+}
+
+function krSeasonOffTabBuild(season) {
     var el = document.createElement('div');
     el.className = 'kr-season-off';
     el.innerHTML = '<button type="button" class="kr-season-off__tab" aria-expanded="false" aria-controls="kr-season-off-card"' +
@@ -482,9 +534,11 @@ function krSeason() {
    js/birthday.js, fetched on that day alone, puts a party hat on the
    photographs of him. A decoration, so the seasons' off switch turns it
    off, and so does ?season=none (the browser checks). In this tab,
-   ?birthday=on shows it on any day and ?birthday=none hides it. */
+   ?birthday=on shows it on any day and ?birthday=none hides it. The
+   coffee button at the end of a post asks for cake that day. */
 var KR_BIRTHDAY = [10, 12];
 var KR_BIRTHDAY_PREVIEW = 'kr-birthday-preview';   // sessionStorage: 'on' or 'none'
+var KR_BIRTHDAY_COFFEE = 'Buy me a slice of cake';  // the coffee button's words that day (thanksActionsHtml)
 
 /** True on the birthday (`date`, by default today) unless the decorations
     are off or a preview says otherwise. */
@@ -2357,16 +2411,20 @@ function buildSignOff() {
  * (their colours and cup, the site's font, no third-party script): the
  * official script renders via document.write, which browsers ignore
  * outside initial page parse, so it cannot work in injected markup.
- * A season may word it its own way (KR_SEASONS `coffee`); the words are
- * the link's whole name, so a screen reader hears the same.
+ * A season may word it its own way (KR_SEASONS `coffee`), and the
+ * birthday its own over the season's (KR_BIRTHDAY_COFFEE); the words
+ * are the link's whole name, so a screen reader hears the same.
  */
 function thanksActionsHtml() {
     var season = typeof krSeason === 'function' ? krSeason() : null;
-    var coffee = (season && season.coffee) || 'Buy me a coffee';
+    var coffee = krBirthday() ? KR_BIRTHDAY_COFFEE : (season && season.coffee) || 'Buy me a coffee';
     return '' +
         '<div class="blog-thanks-cta__actions">' +
         '<a class="kr-btn kr-btn--ghost kr-cta-btn" href="https://drkenreid.substack.com/subscribe" target="_blank" rel="noopener noreferrer">' + SUBSTACK_SVG + '<span>Subscribe by email</span></a>' +
-        '<a class="kr-btn kr-btn--ghost kr-cta-btn" href="https://buymeacoffee.com/drkenreid" target="_blank" rel="noopener noreferrer">' +
+        // A long label ("Buy me a coffee, naturally selected") is set a size
+        // smaller on a phone, so it keeps to one line at 390px (css/season.css).
+        '<a class="kr-btn kr-btn--ghost kr-cta-btn' + (coffee.length >= 30 ? ' kr-cta-btn--long' : '') +
+        '" href="https://buymeacoffee.com/drkenreid" target="_blank" rel="noopener noreferrer">' +
         '<svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true" focusable="false">' +
         '<path d="M6.1 7.9h11.8l-1.45 11.6a2.2 2.2 0 0 1-2.18 1.9H9.73a2.2 2.2 0 0 1-2.18-1.9Z" fill="#ffffff" stroke="#0D0C22" stroke-width="1.3" stroke-linejoin="round"/>' +
         '<path d="M6.55 11.5h10.9l-.42 3.4c-1.55.85-2.6-.55-4.13-.1-1.4.4-2.3 1.15-3.55.7-.7-.25-1.55-.75-2.4-.6Z" fill="#FFDD00"/>' +

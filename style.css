@@ -16035,134 +16035,6 @@ html.kr-theme-reveal::view-transition-new(root) {
    css/seasons/<key>.css, so a reader with the seasons turned off fetches
    none of them. Print hides them (§23). */
 
-/* --- Seasonal decorations turned off --------------------------------------
-   Built by krSeasonOffTab (shared-components.js) on the days a season
-   runs, once the reader has turned the decorations off: a grey dog-ear in
-   the bottom left corner, where the ribbon was, red under the pointer or
-   focus like any control, and the card it opens with the button that
-   turns them back on. Here rather than in css/season.css, which is not
-   loaded while they are off. Classes only script applies: .kr-season-off,
-   __tab, __card. */
-.kr-season-off {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 85;
-  width: 0;
-  height: 0; }
-
-/* A 44px square (the hit area and the focus ring), drawn as a triangle. */
-.kr-season-off__tab {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer; }
-
-.kr-season-off__tab::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--kr-muted);
-  clip-path: polygon(0 0, 0 100%, 100% 100%);
-  transition: background-color 0.2s ease; }
-
-.kr-season-off__tab:hover::before,
-.kr-season-off__tab:focus-visible::before,
-.kr-season-off__tab[aria-expanded="true"]::before {
-  background: var(--kr-action); }
-
-/* Inside the box, so the screen's edge does not cut the ring off. */
-.kr-season-off__tab:focus-visible {
-  outline-offset: -3px; }
-
-.kr-season-off__card {
-  position: fixed;
-  bottom: 56px;
-  left: 16px;
-  width: min(280px, calc(100vw - 32px));
-  padding: 12px 14px 14px;
-  border-left: 4px solid var(--kr-muted);
-  border-radius: var(--kr-radius-md);
-  background: var(--kr-surface-card);
-  box-shadow: var(--kr-shadow-2);
-  opacity: 0;
-  transform: translateY(8px); }
-
-.kr-season-off__card.is-visible {
-  opacity: 1;
-  transform: none; }
-
-.kr-season-off__card p {
-  margin: 0 0 10px;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--kr-ink); }
-
-/* --- Birthday hats --------------------------------------------------------
-   Built by js/birthday.js on 12 October (krBirthday, shared-components.js):
-   a party hat in an svg over each photograph of Ken, placed and sized by
-   script to follow the picture, and the note by the pointer while it is
-   over him, which sets the hat wiggling. Here rather than in
-   css/season.css, which is not loaded on a day without a season. Classes
-   only script applies: .kr-bday-hat (--party, __wiggle, __spot) and
-   .kr-bday-note. */
-.kr-bday-hat {
-  position: absolute;
-  z-index: 1;
-  overflow: visible;
-  pointer-events: none;
-  transition: transform 0.3s ease; }
-
-/* The About portrait lifts under the pointer; its hat goes with it. */
-.about-photo:hover + .kr-bday-hat {
-  transform: translateY(-4px); }
-
-.kr-bday-hat__wiggle {
-  transform-box: fill-box;
-  transform-origin: 50% 100%; }
-
-.kr-bday-hat--party .kr-bday-hat__wiggle {
-  animation: kr-bday-wiggle 0.7s ease-in-out; }
-
-@keyframes kr-bday-wiggle {
-  25% {
-    transform: rotate(-8deg); }
-  60% {
-    transform: rotate(6deg); } }
-
-.kr-bday-note {
-  position: fixed;
-  z-index: 95;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: var(--kr-ink);
-  color: var(--kr-surface-card);
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.4;
-  white-space: nowrap;
-  pointer-events: none;
-  box-shadow: var(--kr-shadow-2);
-  opacity: 0;
-  transform: translateY(4px) scale(0.96); }
-
-.kr-bday-note.is-visible {
-  opacity: 1;
-  transform: none; }
-
-@media (prefers-reduced-motion: reduce) {
-  .kr-bday-hat,
-  .kr-bday-note {
-    transition: none; }
-
-  .kr-bday-hat--party .kr-bday-hat__wiggle {
-    animation: none; } }
-
 /* ==== :: §22 Story pages (pending: Writing section) ==== */
 
 /* The short-story pages of the Writing section (.story-post): book
@@ -16332,6 +16204,13 @@ html.kr-theme-reveal::view-transition-new(root) {
   .kr-ref-back,
   .kr-live-cover,
   .kr-season-leaves,
+  .kr-season-crawl,
+  .kr-season-slashes,
+  .kr-season-garden,
+  .kr-season-pile,
+  .kr-season-rime,
+  .kr-season-n7-choice,
+  .kr-season-n7-sweep,
   .kr-season-flyer,
   .kr-season-track,
   .kr-season-fog,

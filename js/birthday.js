@@ -13,6 +13,8 @@
  * the page) and the homepage hero's slow zoom. A new photograph of Ken
  * needs a row here and nothing else.
  *
+ * Its rules are css/birthday.css, which this file fetches before it draws.
+ *
  * Classes only script applies: .kr-bday-hat (the svg; --party while the
  * note shows, which wiggles __wiggle, the hat; __spot, the face box) and
  * .kr-bday-note (the note, .kr-offstage).
@@ -222,6 +224,18 @@
         }, { passive: true });
     }
 
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
-    else start();
+    /* The hats' rules are css/birthday.css, fetched with this file on the
+       day alone so the stylesheet every page loads does not carry them;
+       nothing is drawn until it has loaded (an unstyled hat would be a
+       page-wide drawing), and nothing at all if it fails. */
+    function begin() {
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = siteRootPrefix() + 'css/birthday.css';
+        link.addEventListener('load', start);
+        document.head.appendChild(link);
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', begin);
+    else begin();
 })();

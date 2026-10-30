@@ -3079,10 +3079,10 @@ SEASONS_UNDER_TEST = {
     "bonfire-night": {"lost": "This Page Went Up in Smoke", "tag": None, "pill": None,
                       "light_fog": "block", "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--cinders", "track": "burn"},
     "may-the-fourth": {"lost": "This Isn't the Page You're Looking For", "tag": None, "pill": None,
-                       "light_fog": "none", "burst": "kr-season-puff kr-season-puff--exhaust", "track": "fill",
+                       "light_fog": "none", "burst": "kr-season-puff kr-season-puff--bolts", "track": "fill",
                        "map": False},
     "revenge-of-the-fifth": {"lost": "This Page Went Over to the Dark Side", "tag": None, "pill": None,
-                             "light_fog": "none", "burst": "kr-season-puff kr-season-puff--exhaust",
+                             "light_fog": "none", "burst": "kr-season-puff kr-season-puff--bolts",
                              "track": "fill", "map": False},
     "diwali": {"lost": "No Lamp at This Door", "tag": None, "pill": None,
                "light_fog": "none", "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--sparks", "track": "bits",
@@ -3103,6 +3103,14 @@ SEASONS_UNDER_TEST = {
     "star-trek-day": {"lost": "This Page Has Boldly Gone", "tag": None, "pill": None,
                       "light_fog": "none", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--energize",
                       "track": "bits", "map": False},
+    "womens-day": {"lost": "This Page Was Left Out of the History Books", "tag": None, "pill": None,
+                   "light_fog": "none", "dark_fog": "none",
+                   "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--sash", "track": "fill", "map": False},
+    "firefly-day": {"lost": "This Page Is Lost in the Black", "tag": None, "pill": None,
+                    "light_fog": "block", "burst": "kr-season-puff kr-season-puff--dust", "track": "fill", "map": False},
+    "n7-day": {"lost": "This Page Went Through the Relay", "tag": None, "pill": None,
+               "light_fog": "none", "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--holo",
+               "track": "fill", "map": False},
 }
 
 TRACK_STATE = """async () => {

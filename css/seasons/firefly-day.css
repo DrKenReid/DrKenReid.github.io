@@ -1,0 +1,175 @@
+/* css/seasons/firefly-day.css: Firefly Day's colours and its own rules.
+   shared-components.js loads this file only while the season is on
+   (KR_SEASONS), beside js/seasons/firefly-day.js; css/season.css holds
+   what every season shares. Tokens first, both themes, then the rules for
+   its own pieces. */
+
+/* Firefly Day: saddle brown into dusty gold:
+     light  #7c3f12  7.63 page and warm;  #6b5512  6.70 page and warm
+     dark   #e8b77a  9.52 page, 7.85 raised; #e3cf8a  11.24 page, 9.27 raised
+   The line is the hat's thread and the drawings' outlines, the glow an
+   engine's warm light (round the footer's pieces, and the ship's burn),
+   the pumpkin token the map's rims, the badge a pale gold. The dust is
+   what a clicked piece kicks up; the fog is dust too, a dry haze along
+   the foot of the hero in both themes; the rope and its dark twist are
+   the rope over a post. */
+:root[data-season="firefly-day"] {
+  --kr-brand-from: #7c3f12;
+  --kr-brand-to: #6b5512;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #f2d1a0;
+  --kr-photo-to: #efe2b0;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #8a7560;
+  --kr-season-creature: #3a2a1c;
+  --kr-season-glow: #ffd27a;
+  --kr-season-pumpkin: #c47a2c;
+  --kr-season-badge: #fff0d6;
+  --kr-season-fog: #d9b98a;
+  --kr-season-dusk: sepia(0.45) saturate(1.1) brightness(0.9);
+  --kr-season-fog-display: block;
+  --kr-season-ff-dust: #c9a77a;
+  --kr-season-ff-rope: #b08850;
+  --kr-season-ff-twist: #7a5a32; }
+
+:root[data-theme="dark"][data-season="firefly-day"] {
+  --kr-brand-from: #e8b77a;
+  --kr-brand-to: #e3cf8a;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-line: #c2ad94;
+  --kr-season-creature: #ecdcc6; }
+
+/* --- Firefly Day's ship -----------------------------------------------------
+   Built by js/seasons/firefly-day.js: the corner's ship takes clicks
+   (.kr-season-ff-ship), and a click goes to full burn (--burn on the
+   corner's art): the rear engine (__engine) flares white-hot and the hull
+   (__hull with it) lunges forward a moment, then settles. Never under
+   reduced motion (the ship takes no clicks then). Classes only script
+   applies: .kr-season-ff-ship, .kr-season-ff-ship--burn,
+   .kr-season-ff-ship__hull, .kr-season-ff-ship__engine. */
+.kr-season-ff-ship {
+  pointer-events: auto;
+  cursor: pointer; }
+
+.kr-season-ff-ship__engine {
+  transform-box: fill-box;
+  transform-origin: center;
+  filter: drop-shadow(0 0 2px var(--kr-season-glow)); }
+
+.kr-season-ff-ship--burn .kr-season-ff-ship {
+  animation: kr-season-ff-lunge 1.6s cubic-bezier(0.3, 0.7, 0.4, 1); }
+
+.kr-season-ff-ship--burn .kr-season-ff-ship__engine {
+  animation: kr-season-ff-flare 1.6s ease-out; }
+
+@keyframes kr-season-ff-lunge {
+  0%, 100% { transform: translateX(0); }
+  12% { transform: translateX(1.5px); }
+  40% { transform: translateX(-7px); }
+  70% { transform: translateX(-2px); } }
+
+@keyframes kr-season-ff-flare {
+  0%, 100% { filter: drop-shadow(0 0 2px var(--kr-season-glow)); }
+  25%, 55% { filter: drop-shadow(0 0 6px var(--kr-season-glow)) brightness(1.6); } }
+
+/* --- Firefly Day's footer, tumbleweed and rope ------------------------------
+   Built by js/seasons/firefly-day.js. A clicked piece kicks up dust
+   (--dust, the shared puff's clouds in the dust's colour); the toy
+   dinosaur rears and stamps when lit (.kr-season-ff-dino). As the footer
+   arrives a tumbleweed rolls along the foot of the window, bouncing and
+   turning over (--tumble, .kr-season-ff-weed). Over a post, a rope pays
+   out from the left as the reader goes, a knot at its end (--rope,
+   .kr-season-ff-knot). Classes only script applies:
+   .kr-season-puff--dust, .kr-season-ff-dino, .kr-season-flyer--tumble,
+   .kr-season-ff-weed, .kr-season-track--rope, .kr-season-ff-knot. */
+.kr-season-puff--dust,
+.kr-season-puff--dust::before,
+.kr-season-puff--dust::after {
+  bottom: 10%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--kr-season-ff-dust) 85%, transparent), transparent 70%); }
+
+.kr-season-ff-dino {
+  transform-origin: 40% 100%; }
+
+.kr-season-lit .kr-season-ff-dino {
+  animation: kr-season-flare 1.4s ease-out, kr-season-ff-stamp 0.9s ease-in-out; }
+
+@keyframes kr-season-ff-stamp {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-10deg) translateY(-3px); }
+  50% { transform: rotate(0) translateY(0); }
+  70% { transform: rotate(-5deg) translateY(-1px); } }
+
+.kr-season-flyer--tumble {
+  top: auto;
+  bottom: 4vh;
+  width: 44px;
+  animation: kr-season-ff-roll 6s linear forwards; }
+
+@keyframes kr-season-ff-roll {
+  0% { transform: translate(-60px, 0); }
+  12% { transform: translate(12vw, -26px); }
+  24% { transform: translate(24vw, 0); }
+  36% { transform: translate(36vw, -18px); }
+  48% { transform: translate(48vw, 0); }
+  62% { transform: translate(62vw, -22px); }
+  76% { transform: translate(76vw, 0); }
+  88% { transform: translate(88vw, -10px); }
+  100% { transform: translate(calc(100vw + 30px), 0); } }
+
+.kr-season-ff-weed {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: kr-season-ff-spin 1.2s linear infinite; }
+
+@keyframes kr-season-ff-spin {
+  to { transform: rotate(360deg); } }
+
+.kr-season-track--rope .kr-season-track__rest {
+  top: 1px;
+  bottom: auto;
+  height: 4px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(-55deg, var(--kr-season-ff-rope) 0 3px, var(--kr-season-ff-twist) 3px 5px); }
+
+.kr-season-track--rope .kr-season-track__tip {
+  top: -4px;
+  bottom: auto;
+  left: -6px;
+  width: 12px; }
+
+.kr-season-ff-knot {
+  display: block;
+  width: 100%;
+  height: auto; }
+
+/* --- Firefly Day's wanted poster --------------------------------------------
+   Built by js/seasons/firefly-day.js (its extra): on the 404 page, a
+   wanted poster for the missing page above the lede. It swings once on
+   its top nail as it goes up (--swing, which script leaves off under
+   reduced motion). Classes only script applies: .kr-season-ff-wanted,
+   .kr-season-ff-wanted--swing. */
+.kr-season-ff-wanted {
+  width: min(190px, 56vw);
+  margin: 0 auto 22px;
+  transform-origin: 50% 3%;
+  filter: drop-shadow(0 3px 6px color-mix(in srgb, var(--kr-season-creature) 35%, transparent)); }
+
+.kr-season-ff-wanted svg {
+  display: block;
+  width: 100%;
+  height: auto; }
+
+.kr-season-ff-wanted--swing {
+  animation: kr-season-ff-swing 2.2s cubic-bezier(0.3, 0.7, 0.4, 1); }
+
+@keyframes kr-season-ff-swing {
+  0% { transform: translateY(-14px) rotate(-9deg); opacity: 0; }
+  25% { transform: translateY(0) rotate(6deg); opacity: 1; }
+  55% { transform: rotate(-3deg); }
+  80% { transform: rotate(1.4deg); }
+  100% { transform: none; } }

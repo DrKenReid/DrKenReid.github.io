@@ -724,3 +724,20 @@
 
 @keyframes kr-season-flick {
   to { transform: rotate(-12deg); } }
+
+/* --- The coffee button's long words ---------------------------------------
+   A season's long words on the coffee button (thanksActionsHtml adds
+   .kr-cta-btn--long from 30 characters, as for Darwin Day's "Buy me a
+   coffee, naturally selected"): on a phone a size smaller with less
+   padding, so they keep to one line at 390px; narrower than that they
+   wrap, in two even lines. Here, not in style.css, since only a season
+   words the button that long. Class only script applies:
+   .kr-cta-btn--long. */
+@media (max-width: 420px) {
+  .blog-thanks-cta__actions .kr-cta-btn--long {
+    padding-right: 14px;
+    padding-left: 14px;
+    font-size: 14px; }
+
+  .kr-cta-btn--long span {
+    text-wrap: balance; } }

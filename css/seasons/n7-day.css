@@ -1,0 +1,234 @@
+/* css/seasons/n7-day.css: N7 Day's colours and its own rules.
+   shared-components.js loads this file only while the season is on
+   (KR_SEASONS), beside js/seasons/n7-day.js; css/season.css holds what
+   every season shares. Tokens first, both themes, then the rules for its
+   own pieces. */
+
+/* N7 Day: N7 red into gunmetal (light), red into steel white (dark):
+     light  #a3122a  7.34 page and warm;  #2c3440  11.75 page and warm
+     dark   #ff7a6b  6.84 page, 5.64 raised; #d9dee6  12.88 page, 10.62 raised
+   The line is the tag's chain and the drawings' outlines, the glow a pale
+   blue round the footer's pieces, the pumpkin token the map's rims. The
+   red, white and steel are the stripe over a post; the holo orange is the
+   flecks a clicked piece throws; the glow of the drive (the corner's
+   frigate, the model, the flyer, the stripe's tip) is a white blue until
+   the reader picks a side, then the paragon blue or the renegade red,
+   from data-n7-choice on <html>. The fog is a red glow along the foot of
+   the hero, in the dark theme only. */
+:root[data-season="n7-day"] {
+  --kr-brand-from: #a3122a;
+  --kr-brand-to: #2c3440;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #ffb3aa;
+  --kr-photo-to: #e6ebf2;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #7a828e;
+  --kr-season-creature: #2a2d33;
+  --kr-season-glow: #cfe8ff;
+  --kr-season-pumpkin: #c8102e;
+  --kr-season-badge: #f2f5f9;
+  --kr-season-fog: #ff3b2f;
+  --kr-season-dusk: saturate(0.6) hue-rotate(-15deg) brightness(0.8);
+  --kr-season-fog-display: none;
+  --kr-season-n7-red: #c8102e;
+  --kr-season-n7-white: #ffffff;
+  --kr-season-n7-steel: #3d4552;
+  --kr-season-n7-holo: #ff8a1f;
+  --kr-season-n7-glow: #cfe8ff;
+  --kr-season-n7-paragon: #4fa8ff;
+  --kr-season-n7-renegade: #ff3b3b; }
+
+:root[data-theme="dark"][data-season="n7-day"] {
+  --kr-brand-from: #ff7a6b;
+  --kr-brand-to: #d9dee6;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-line: #aab1bb;
+  --kr-season-creature: #e6e9ee;
+  --kr-season-fog-display: block; }
+
+:root[data-season="n7-day"][data-n7-choice="paragon"] {
+  --kr-season-n7-glow: #4fa8ff; }
+
+:root[data-season="n7-day"][data-n7-choice="renegade"] {
+  --kr-season-n7-glow: #ff3b3b; }
+
+/* --- N7 Day's frigate and footer ------------------------------------------
+   Built by js/seasons/n7-day.js. The frigate's drive (the corner's, the
+   model's on the footer, the flyer's) glows in the visit's colour
+   (.kr-season-n7-drive); the fish in the tank swim to and fro
+   (.kr-season-n7-fish, --back the second) and bubbles rise
+   (.kr-season-n7-bubble), all still under reduced motion; a clicked piece
+   throws flecks of an orange holographic interface (--holo, the shared
+   scatter); the frigate crosses once as the footer arrives (--frigate).
+   Classes only script applies: .kr-season-n7-drive, .kr-season-n7-fish,
+   .kr-season-n7-fish--back, .kr-season-n7-bubble, .kr-season-puff--holo,
+   .kr-season-flyer--frigate. */
+.kr-season-n7-drive {
+  fill: var(--kr-season-n7-glow);
+  filter: drop-shadow(0 0 2px var(--kr-season-n7-glow)); }
+
+.kr-season-n7-fish {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: kr-season-n7-swim 5s ease-in-out infinite alternate; }
+
+.kr-season-n7-fish--back {
+  animation-duration: 6.4s;
+  animation-direction: alternate-reverse; }
+
+@keyframes kr-season-n7-swim {
+  from { transform: translateX(-4px); }
+  to { transform: translateX(5px); } }
+
+.kr-season-n7-bubble {
+  transform-box: fill-box;
+  animation: kr-season-n7-bubble 2.6s ease-in infinite; }
+
+.kr-season-n7-bubble:nth-child(2) {
+  animation-delay: -0.9s; }
+
+.kr-season-n7-bubble:nth-child(3) {
+  animation-delay: -1.7s; }
+
+@keyframes kr-season-n7-bubble {
+  0% { transform: translateY(0); opacity: 0.9; }
+  100% { transform: translateY(-9px); opacity: 0; } }
+
+.kr-season-puff--holo {
+  --kr-puff-w: 7px;
+  --kr-puff-h: 7px;
+  --kr-puff-shape: 1px;
+  --kr-puff-edge: 0 0 4px var(--kr-season-n7-holo);
+  --kr-puff-a: var(--kr-season-n7-holo);
+  --kr-puff-b: color-mix(in srgb, var(--kr-season-n7-holo) 60%, var(--kr-season-n7-white));
+  --kr-puff-c: var(--kr-season-n7-holo); }
+
+.kr-season-flyer--frigate {
+  top: 20vh;
+  width: 110px;
+  filter: drop-shadow(-6px 0 6px var(--kr-season-n7-glow));
+  animation: kr-season-n7-cross 5.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards; }
+
+@keyframes kr-season-n7-cross {
+  0% { transform: translate(-130px, 8vh); }
+  100% { transform: translate(calc(100vw + 30px), -6vh); } }
+
+/* --- N7 Day's stripe --------------------------------------------------------
+   Built by js/seasons/n7-day.js (track): over a post, a red stripe edged
+   in white on steel runs from the left as the reader goes, a chevron in
+   the visit's colour at its end. Classes only script applies:
+   .kr-season-track--n7, .kr-season-n7-tip. */
+.kr-season-track--n7 .kr-season-track__rest {
+  top: 0;
+  bottom: auto;
+  height: 5px;
+  background: linear-gradient(to bottom, var(--kr-season-n7-red) 0 60%, var(--kr-season-n7-white) 60% 80%,
+    var(--kr-season-n7-steel) 80%); }
+
+.kr-season-track--n7 .kr-season-track__tip {
+  top: -4.5px;
+  bottom: auto;
+  left: -7px;
+  width: 14px; }
+
+.kr-season-n7-tip {
+  display: block;
+  width: 100%;
+  height: auto;
+  fill: var(--kr-season-n7-glow);
+  filter: drop-shadow(0 0 2px var(--kr-season-n7-glow)); }
+
+/* --- N7 Day's choice --------------------------------------------------------
+   Built by js/seasons/n7-day.js (its extra): two prompts in the lower
+   right of the page's opener, blue (__paragon) and red (__renegade), that
+   rise into view a moment after the page loads (--shown), pulse, and fade
+   if left alone (--gone; on the homepage hero, --hero lifts them clear of
+   the carousel's pause button). They take clicks, never focus. A click
+   keeps that colour for the visit (data-n7-choice on <html>, the token
+   blocks above) and sends a sweep of it across the opener
+   (.kr-season-n7-sweep, --paragon or --renegade); under reduced motion
+   the prompts hold still and no sweep crosses. Classes only script
+   applies: .kr-season-n7-choice (--shown, --gone, --hero, __paragon,
+   __renegade, __glyph), .kr-season-n7-sweep (--paragon, --renegade). */
+.kr-season-n7-choice {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  z-index: 6;
+  display: flex;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none; }
+
+.kr-season-n7-choice--hero {
+  bottom: 76px; }
+
+.kr-season-n7-choice--shown {
+  opacity: 1;
+  transform: none; }
+
+.kr-season-n7-choice--shown > span {
+  pointer-events: auto;
+  cursor: pointer; }
+
+.kr-season-n7-choice--gone {
+  opacity: 0;
+  transform: translateY(10px); }
+
+.kr-season-n7-choice--gone > span {
+  pointer-events: none; }
+
+.kr-season-n7-choice > span {
+  display: block;
+  width: 38px;
+  height: 38px;
+  padding: 7px;
+  border-radius: 50%;
+  border: 2px solid var(--kr-season-n7-white);
+  color: var(--kr-season-n7-white);
+  animation: kr-season-n7-pulse 1.6s ease-in-out infinite; }
+
+.kr-season-n7-choice__paragon {
+  background: var(--kr-season-n7-paragon);
+  box-shadow: 0 0 12px var(--kr-season-n7-paragon); }
+
+.kr-season-n7-choice__renegade {
+  background: var(--kr-season-n7-renegade);
+  box-shadow: 0 0 12px var(--kr-season-n7-renegade);
+  animation-delay: -0.8s; }
+
+.kr-season-n7-choice__glyph {
+  display: block;
+  width: 100%;
+  height: 100%; }
+
+@keyframes kr-season-n7-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); } }
+
+/* The sweep moves its gradient, not itself, so it never reaches past an
+   opener that does not clip. */
+.kr-season-n7-sweep {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  background-size: 300% 100%;
+  animation: kr-season-n7-sweep 1.4s ease-out; }
+
+.kr-season-n7-sweep--paragon {
+  background-image: linear-gradient(100deg, transparent 40%, color-mix(in srgb, var(--kr-season-n7-paragon) 45%, transparent) 50%, transparent 60%); }
+
+.kr-season-n7-sweep--renegade {
+  background-image: linear-gradient(100deg, transparent 40%, color-mix(in srgb, var(--kr-season-n7-renegade) 45%, transparent) 50%, transparent 60%); }
+
+@keyframes kr-season-n7-sweep {
+  0% { opacity: 1; background-position: 100% 0; }
+  100% { opacity: 0; background-position: 0 0; } }

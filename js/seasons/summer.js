@@ -6,16 +6,22 @@
  * pumpkins among grass, daisies and a shell, a dragonfly, a sun favicon,
  * a sunbeam that reaches as far as the reader has, a warm haze in the
  * light theme, suns on the sunniest places, a 404 page that has gone on
- * holiday. Its own: the footer's visitors, by the reader's own clock: by
- * day a monarch comes down to the sunflowers and flies off when the
- * pointer comes near; after dark, fireflies blink over the footer.
+ * holiday. Its own:
+ *   - the footer's visitors, by the reader's own clock: by day a monarch
+ *     comes down to the sunflowers and flies off when the pointer comes
+ *     near; after dark, fireflies blink over the footer
+ *   - a beach ball resting on the footer's top edge: a click kicks it,
+ *     and it rolls and bounces along the edge, off the patch and the
+ *     footer's end, until it comes to rest. Under reduced motion it sits
+ *     still and takes no clicks.
  *
  * Classes only this file applies (css/seasons/summer.css):
  * .kr-season-pumpkin, .kr-season-glow, .kr-season-dangler__body,
  * .kr-season-dangler--swing, .kr-season-flyer__body,
  * .kr-season-flyer__wing (--l, --r), .kr-season-track__sun,
  * .kr-season-badge__body, .kr-season-butterfly (--gone, __wing, __wing--l,
- * __wing--r), .kr-season-fireflies (__fly).
+ * __wing--r), .kr-season-fireflies (__fly), .kr-season-ball (__shadow,
+ * __body, __spin).
  */
 (function () {
     'use strict';
@@ -218,6 +224,105 @@
         footer.appendChild(el);
     }
 
+    /* ---------------------------------------------------------------- *
+     * Its own: a beach ball on the footer's edge
+     * ---------------------------------------------------------------- */
+
+    /* A beach ball seen from its pole on a 32 x 32 box: six curved gores
+       about a white cap (__spin, turned by script as it rolls), with a
+       shine and its rim over them that stay put. */
+    function ballArt() {
+        var gores = ['#e8453c', '#ffffff', '#f6c026', '#ffffff', '#2f86d6', '#ffffff'], body = '';
+        function at(a, r) { return K.fix(16 + Math.cos(a) * r) + ' ' + K.fix(16 + Math.sin(a) * r); }
+        for (var i = 0; i < 6; i++) {
+            var a0 = i * Math.PI / 3, a1 = a0 + Math.PI / 3;
+            // Each gore's edges bow the same way, so the ball reads as turning.
+            body += '<path d="M16 16Q' + at(a0 + 0.5, 8) + ' ' + at(a0, 15) + 'A15 15 0 0 1 ' + at(a1, 15) + 'Q' +
+                at(a1 + 0.5, 8) + ' 16 16z" fill="' + gores[i] + '"/>';
+        }
+        return '<svg class="kr-season-ball__body" viewBox="0 0 32 32" aria-hidden="true" focusable="false">' +
+            '<g class="kr-season-ball__spin">' + body + '<circle cx="16" cy="16" r="3.2" fill="#ffffff" stroke="#d8d2c4"' +
+            ' stroke-width=".6"/></g>' +
+            '<ellipse cx="11" cy="9.6" rx="5.6" ry="3.2" transform="rotate(-35 11 9.6)" fill="#ffffff" fill-opacity=".45"/>' +
+            '<circle cx="16" cy="16" r="15" fill="none" stroke="#5a4a3a" stroke-opacity=".55" stroke-width=".9"/></svg>';
+    }
+
+    /* The ball rests on the footer's top edge, right of the patch (or
+       anywhere along it, where the patch leaves too little room). A
+       click kicks it away from the side it was struck on, with a little
+       hop: it rolls, bounces off the patch and the footer's end, and
+       comes to rest. One frame loop, only while it moves; the room is
+       measured when the footer's size changes and the ball when it is
+       kicked, never per frame. Under reduced motion it sits still and
+       takes no clicks. */
+    var GRAVITY = 1500, HOP = 0.45, WALL = 0.55;
+    function beachBall(kit) {
+        var footer = document.querySelector('.kr-footer');
+        if (!footer || footer.querySelector('.kr-season-ball')) return;
+        var el = document.createElement('span');
+        el.className = 'kr-season-ball';
+        el.setAttribute('aria-hidden', 'true');
+        el.innerHTML = '<span class="kr-season-ball__shadow"></span>' + ballArt();
+        footer.appendChild(el);
+        var body = el.lastChild, spin = body.firstChild, shadow = el.firstChild;
+        var lo = 0, hi = 0, size = 28, x = -1, y = 0, vx = 0, vy = 0, turn = 0, frame = 0, last = 0;
+
+        function room() {
+            var f = footer.getBoundingClientRect(), patch = footer.querySelector('.kr-season-patch');
+            size = body.getBoundingClientRect().width || size;
+            var from = patch ? patch.getBoundingClientRect().right - f.left + 4 : 8;
+            hi = Math.max(8, f.width - size - 10);
+            lo = hi - from > size * 4 ? from : 8;
+            x = x < 0 ? lo + (hi - lo) * 0.62 : Math.max(lo, Math.min(hi, x));
+            draw();
+        }
+
+        function draw() {
+            el.style.transform = 'translateX(' + x.toFixed(1) + 'px)';
+            body.style.transform = 'translateY(' + (-y).toFixed(1) + 'px)';
+            spin.style.transform = 'rotate(' + turn.toFixed(1) + 'deg)';
+            shadow.style.transform = 'scale(' + Math.max(0.4, 1 - y / 40).toFixed(2) + ')';
+        }
+
+        function tick(now) {
+            frame = 0;
+            var dt = last ? Math.min(0.033, (now - last) / 1000) : 0.016;
+            last = now;
+            vy -= GRAVITY * dt;
+            y += vy * dt;
+            if (y <= 0) {
+                y = 0;
+                // A hop that lands hard bounces; a soft one stays down.
+                vy = vy < -90 ? -vy * HOP : 0;
+                vx *= 0.9;
+            }
+            x += vx * dt;
+            if (x < lo) { x = lo; vx = -vx * WALL; } else if (x > hi) { x = hi; vx = -vx * WALL; }
+            if (!y && !vy) {
+                // Rolling: it loses most of its speed each second, and a
+                // little more besides, so it comes to a stop.
+                vx *= Math.pow(0.3, dt);
+                vx -= Math.sign(vx) * Math.min(Math.abs(vx), 50 * dt);
+            }
+            turn = (turn + vx * dt / (size / 2) * 57.3) % 360;
+            draw();
+            if (!y && !vy && Math.abs(vx) < 4) { last = 0; return; }
+            frame = requestAnimationFrame(tick);
+        }
+
+        room();
+        if (window.ResizeObserver) new ResizeObserver(function () { room(); }).observe(footer);
+        if (kit.reduced) return;
+        body.addEventListener('click', function (e) {
+            var r = body.getBoundingClientRect(), off = e.clientX - (r.left + r.width / 2);
+            var away = Math.abs(off) < r.width * 0.08 ? (Math.random() < 0.5 ? -1 : 1) : (off < 0 ? 1 : -1);
+            vx = away * (360 + Math.random() * 240) + vx * 0.3;
+            // Low enough that the ball stays in the band above the footer.
+            vy = Math.max(vy, 170 + Math.random() * 80);
+            if (!frame) { last = 0; frame = requestAnimationFrame(tick); }
+        });
+    }
+
     K.dress({
         // The seeds in both themes: the night's fireflies are dots.
         backdrop: { shapes: LEAVES.light.shapes, colours: ['#fff3c4', '#ffe9a0', '#f6efd6'] },
@@ -243,6 +348,9 @@
         },
         cursor: K.cursor('#f7c843', '<path fill="#f39c12" stroke="#7a4a05" stroke-width=".6" d="' + sunPath(6, 6, 2.9, 8) + '"/>' +
             '<circle cx="6" cy="6" r="2.3" fill="#ffd34d"/>', '#5a3a05'),
-        extra: visitors
+        extra: function (kit) {
+            visitors(kit);
+            beachBall(kit);
+        }
     });
 })();

@@ -120,8 +120,10 @@ from css_prune import split_selectors  # noqa: E402
 
 ROOT = sitelib.ROOT
 STYLE = ROOT / "style.css"
-# Each season's own colours and rules, loaded only while it is on.
-SEASON_SHEETS = ("css/season.css", "css/seasons/*.css",)
+# Each season's own colours and rules, loaded only while it is on, and the
+# birthday's, loaded only on that day (js/birthday.js), and the tab that
+# turns them back on, loaded only while they are off (krSeasonOffTab).
+SEASON_SHEETS = ("css/season.css", "css/seasons/*.css", "css/birthday.css", "css/season-off.css",)
 BASELINE = ROOT / ".github" / "css-baseline.json"
 
 # The corpus the definitions and reads come from (git pathspecs).

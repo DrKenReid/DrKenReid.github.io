@@ -169,3 +169,70 @@
   52% { opacity: 0.55; }
   80% { opacity: 0.55; }
   100% { opacity: 0; } }
+
+/* --- Spring's garden ---------------------------------------------------------
+   Built by js/seasons/spring.js: along the foot of a page opener (under
+   its type) or the homepage hero (over the slides, whose type sits clear
+   of the foot, and under the pause button), the flowers the reader
+   plants with a click on an empty part of it; they take no clicks. A
+   new one (--grow) shoots up from the bottom edge and then opens its
+   head; each sways at its own pace; the oldest of nine goes back into
+   the ground (--wilt). Under reduced motion style.css's switch stills
+   them, so each stands grown and upright. Classes only script applies:
+   .kr-season-garden, .kr-season-sprout (--grow, --wilt, __stem,
+   __head). */
+.kr-season-garden {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 80px;
+  overflow: hidden;
+  pointer-events: none; }
+
+.welcome-area .kr-season-garden {
+  z-index: 5; }
+
+.kr-season-sprout {
+  position: absolute;
+  bottom: -2px;
+  width: 34px;
+  margin-left: -17px;
+  transform-origin: 50% 100%;
+  transition: transform 0.6s ease-in, opacity 0.6s ease-in; }
+
+.kr-season-sprout svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  transform-origin: 50% 100%;
+  animation: kr-season-breeze 4s ease-in-out infinite alternate; }
+
+.kr-season-sprout--grow .kr-season-sprout__stem {
+  transform-origin: 50% 100%;
+  animation: kr-season-shoot 1s cubic-bezier(0.2, 0.7, 0.3, 1) backwards; }
+
+.kr-season-sprout--grow .kr-season-sprout__head {
+  transform-box: fill-box;
+  transform-origin: 50% 60%;
+  animation: kr-season-open 0.8s cubic-bezier(0.3, 0.8, 0.4, 1.3) 0.8s backwards; }
+
+.kr-season-sprout--wilt {
+  opacity: 0;
+  transform: scaleY(0); }
+
+@media only screen and (max-width: 767px) {
+  .kr-season-sprout {
+    width: 24px;
+    margin-left: -12px; } }
+
+@keyframes kr-season-breeze {
+  from { transform: rotate(-4deg); }
+  to { transform: rotate(4deg); } }
+
+@keyframes kr-season-shoot {
+  from { transform: scaleY(0); } }
+
+@keyframes kr-season-open {
+  from { transform: scale(0); } }

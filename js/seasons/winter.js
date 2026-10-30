@@ -4,13 +4,20 @@
  * on a string, snow in place of the leaves, snowmen in place of the
  * pumpkins, an owl, a snowflake favicon, eaves that grow an icicle
  * wherever the reader has passed, frost in both themes, snowflakes on the
- * snowiest places, a 404 page that is snowed in. Its own: snow settling
- * along the footer's top edge, deeper the longer the reader stays.
+ * snowiest places, a 404 page that is snowed in. Its own:
+ *   - snow settling along the footer's top edge, deeper the longer the
+ *     reader stays
+ *   - frost creeping in from the corners of each page opener and the
+ *     homepage hero once the reader has been still for a few seconds (no
+ *     pointer move, key or scroll), frond by frond, and clearing at the
+ *     first move or scroll. Under reduced motion a faint frost lies in
+ *     the corners from the start, still.
  *
  * Classes only this file applies (css/seasons/winter.css):
  * .kr-season-pumpkin, .kr-season-dangler__body, .kr-season-flyer__body,
  * .kr-season-flyer__wing (--l, --r), .kr-season-badge__body,
- * .kr-season-settle.
+ * .kr-season-settle, .kr-season-rime (--on, --still, __corner,
+ * __corner--tl, --tr, --bl, --br, __vein, __vein--fine, __flake).
  */
 (function () {
     'use strict';
@@ -103,6 +110,101 @@
         requestAnimationFrame(function () { requestAnimationFrame(function () { el.classList.add('is-visible'); }); });
     }
 
+    /* ---------------------------------------------------------------- *
+     * Its own: frost that creeps in while the reader is still
+     * ---------------------------------------------------------------- */
+
+    // A random that is the same on every page for a given seed.
+    function seeded(n) {
+        return function () { var v = Math.sin(++n * 91.7 + 12.9898) * 43758.5453; return v - Math.floor(v); };
+    }
+
+    /* The frost in one corner, on a 200 x 200 box with the corner at its
+       origin: seven fronds of ice reaching out from it, each a spine with
+       a row of fine barbs along it (one path, drawn barb by barb) and a
+       smaller frond branching off its middle, and a small crystal at
+       each tip. Every vein has pathLength 1 so style.css can draw it out
+       with its dash; --kr-season-at is when each starts, the barbs a
+       moment after their spine and a side frond once its spine has
+       reached it. RIME_SPINE is style.css's time for a spine to grow. */
+    var RIME_SPINE = 3.6;
+    function rimeArt(seed) {
+        var rand = seeded(seed), fix = K.fix, veins = '', tips = '';
+        function at(t) { return '" style="--kr-season-at: ' + t.toFixed(2) + 's"/>'; }
+        function frond(x0, y0, deg, len, start, wide, tip) {
+            var a = deg * Math.PI / 180, c = Math.cos(a), s = Math.sin(a), barbs = '';
+            for (var d = 7 + rand() * 4, k = 0; d < len - 4; d += 4.5 + rand() * 4, k++) {
+                var turn = (deg + (k % 2 ? 1 : -1) * (52 + rand() * 14)) * Math.PI / 180;
+                var bl = (len - d) * (0.16 + rand() * 0.14) + 2.5;
+                barbs += 'M' + fix(x0 + c * d) + ' ' + fix(y0 + s * d) + 'l' + fix(Math.cos(turn) * bl) + ' ' +
+                    fix(Math.sin(turn) * bl);
+            }
+            veins += '<path class="kr-season-rime__vein" pathLength="1" stroke-width="' + wide + '" d="M' + fix(x0) + ' ' +
+                fix(y0) + 'L' + fix(x0 + c * len) + ' ' + fix(y0 + s * len) + at(start) +
+                '<path class="kr-season-rime__vein kr-season-rime__vein--fine" pathLength="1" stroke-width="' + fix(wide * 0.6) +
+                '" d="' + barbs + at(start + 0.3);
+            if (tip) tips += '<path class="kr-season-rime__flake" d="' + flake(x0 + c * (len + 4), y0 + s * (len + 4), tip) + at(start + RIME_SPINE);
+        }
+        for (var i = 0; i < 7; i++) {
+            var deg = 3 + (i + 0.15 + rand() * 0.7) * (84 / 7), a = deg * Math.PI / 180;
+            var len = 105 + rand() * 75 - Math.abs(deg - 45) * 0.8, start = rand() * 3;
+            frond(0, 0, deg, len, start, 1.2, 3 + rand() * 2.5);
+            var off = len * (0.3 + rand() * 0.2);
+            frond(Math.cos(a) * off, Math.sin(a) * off, deg + (rand() < 0.5 ? -1 : 1) * (28 + rand() * 12),
+                len * (0.35 + rand() * 0.15), start + off / len * RIME_SPINE, 0.9, 0);
+        }
+        return '<svg viewBox="0 0 200 200" aria-hidden="true" focusable="false">' + veins + tips + '</svg>';
+    }
+
+    /* After IDLE_S seconds with no pointer move, press, key, wheel or
+       scroll, frost creeps in from the four corners of each page opener
+       and the homepage hero (under an opener's type; the lower two
+       smaller, as that type sits low), frond by frond; the first move or
+       scroll clears it. The countdown is a one-second tick that runs
+       only until the frost is on, so a still page runs no timer at all.
+       Under reduced motion a faint frost lies in the corners from the
+       start, still. */
+    var IDLE_S = 5;
+    function rime(kit) {
+        var hosts = document.querySelectorAll('.breadcrumb-area, .kr-opener, .welcome-area');
+        if (!hosts.length) return;
+        var corners = ['tl', 'tr', 'bl', 'br'].map(function (at, i) {
+            return '<span class="kr-season-rime__corner kr-season-rime__corner--' + at + '">' + rimeArt(i * 7 + 3) + '</span>';
+        }).join('');
+        var layers = Array.prototype.map.call(hosts, function (host) {
+            var el = document.createElement('div');
+            el.className = 'kr-season-rime' + (kit.reduced ? ' kr-season-rime--still' : '');
+            el.setAttribute('aria-hidden', 'true');
+            el.innerHTML = corners;
+            host.insertBefore(el, host.querySelector(':scope > .container, :scope > .kr-opener__inner'));
+            return el;
+        });
+        if (kit.reduced) return;
+
+        var quiet = 0, ticking = 0, on = false;
+        function frost(v) {
+            on = v;
+            layers.forEach(function (el) { el.classList.toggle('kr-season-rime--on', v); });
+        }
+        // Stopped while the tab is hidden; its return wakes it again.
+        function tick() {
+            ticking = 0;
+            if (document.hidden) { quiet = 0; return; }
+            if (++quiet >= IDLE_S) { frost(true); return; }
+            ticking = setTimeout(tick, 1000);
+        }
+        function wake() {
+            quiet = 0;
+            if (on) frost(false);
+            if (!ticking) ticking = setTimeout(tick, 1000);
+        }
+        ['pointermove', 'pointerdown', 'keydown', 'wheel', 'touchstart', 'scroll'].forEach(function (type) {
+            window.addEventListener(type, wake, { passive: true });
+        });
+        document.addEventListener('visibilitychange', wake);
+        wake();
+    }
+
     K.dress({
         corner: snowArt, dangler: MITTEN,
         // Mostly small flakes, some whole snowflakes; snow does not tumble.
@@ -125,6 +227,9 @@
         },
         // An ice-blue pointer with a snowflake at its tail.
         cursor: K.cursor('#cfe6f5', '<path fill="#3d86c6" d="' + flake(6, 6, 5.8) + '"/>', '#2f4a63'),
-        extra: settle
+        extra: function (kit) {
+            settle(kit);
+            rime(kit);
+        }
     });
 })();

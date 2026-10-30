@@ -5,13 +5,20 @@
  * of the pumpkins among small flowers, two swallows, a blossom favicon,
  * a vine whose buds open as the reader passes them, a morning mist in the
  * light theme, blossom on the places most photographed in spring, a 404
- * page that has not come up yet. Its own: now and then a short shower
- * crosses the page's opening photograph, and a rainbow follows it.
+ * page that has not come up yet. Its own:
+ *   - now and then a short shower crosses the page's opening
+ *     photograph, and a rainbow follows it
+ *   - a click on an empty part of an opener or the homepage hero plants
+ *     a flower at its foot (a tulip, a daffodil, a posy or a blossom)
+ *     that shoots up from the bottom edge, opens and sways; eight at
+ *     most, the oldest going back into the ground. Under reduced motion
+ *     each appears grown and holds still.
  *
  * Classes only this file applies (css/seasons/spring.css):
  * .kr-season-pumpkin, .kr-season-dangler__body, .kr-season-flyer__body,
  * .kr-season-flyer__wing (--l, --r), .kr-season-bloom,
- * .kr-season-badge__body, .kr-season-shower (__rain, __rain--far, __bow).
+ * .kr-season-badge__body, .kr-season-shower (__rain, __rain--far, __bow),
+ * .kr-season-garden, .kr-season-sprout (--grow, --wilt, __stem, __head).
  */
 (function () {
     'use strict';
@@ -204,6 +211,81 @@
         }, 12000 + Math.random() * 18000);
     }
 
+    /* ---------------------------------------------------------------- *
+     * Its own: flowers planted along the foot of an opener
+     * ---------------------------------------------------------------- */
+
+    /* A flower to plant, on a 32 x 56 box rooted at (16, 56): a stem with
+       a leaf or two (__stem) and a head (__head), one of four kinds by i:
+       a tulip, a daffodil, a posy, a blossom, in the patch's colours. */
+    var SPROUT_TULIPS = [['#ea6f9d', '#c94f7f'], ['#f3c33c', '#d9a521'], ['#b48ad8', '#9466bf']];
+    var SPROUT_POSIES = ['#ffffff', '#cdb3ec', '#f7b6cf'];
+    function sproutArt(i, turn) {
+        var stem = '<path d="M16 56C15 45 17.4 31 16 15" fill="none" stroke="' + DARK_GREEN + '" stroke-width="1.8"' +
+            ' stroke-linecap="round"/><path d="M16 47c-5-1.4-8.4-5-9.4-10.4 5.2.8 8.6 4.4 9.4 10.4z" fill="' + GREEN + '"/>' +
+            (i % 2 ? '<path d="M16.4 39c4.4-1.4 7.2-4.6 7.8-9-4.4 1-7.2 4.2-7.8 9z" fill="' + GREEN + '"/>' : '');
+        var kind = i % 4, head;
+        if (kind === 0) {
+            var t = SPROUT_TULIPS[(i >> 2) % SPROUT_TULIPS.length];
+            head = tulip(16, 14, 1.15, t[0], t[1]);
+        } else if (kind === 1) {
+            head = daffodil(16, 12, 1);
+        } else if (kind === 2) {
+            head = '<path d="' + posyPath(16, 12, 11.5) + '" fill="' + SPROUT_POSIES[(i >> 2) % SPROUT_POSIES.length] +
+                '" stroke="#b9a6b0" stroke-width=".5"/><circle cx="16" cy="12" r="2.3" fill="#f2c94c"/>';
+        } else {
+            head = blossom(16, 12, 1, turn, '#f7b6cf');
+        }
+        return '<svg viewBox="0 0 32 56" aria-hidden="true" focusable="false">' +
+            '<g class="kr-season-sprout__stem">' + stem + '</g><g class="kr-season-sprout__head">' + head + '</g></svg>';
+    }
+
+    /* A click on an empty part of a page opener or the homepage hero (not
+       a link, a button or a field, the carousel's controls or the corner,
+       nor after selecting text) plants a flower at the foot of it, under
+       the click: its stem shoots up from the bottom edge, the head opens,
+       and it sways. At most GARDEN_MOST on the page: the next one sends
+       the oldest back into the ground. Under reduced motion each appears
+       grown, and holds still. */
+    var GARDEN_MOST = 8;
+    function garden(kit) {
+        var planted = [], count = 0;
+        Array.prototype.forEach.call(document.querySelectorAll('.breadcrumb-area, .kr-opener, .welcome-area'), function (host) {
+            var bed = null;
+            host.addEventListener('click', function (e) {
+                if (e.target.closest('a, button, input, select, textarea, label, summary, [role="button"], ' +
+                    '.owl-dots, .owl-nav, .kr-season-corner')) return;
+                var sel = window.getSelection && window.getSelection();
+                if (sel && String(sel).length) return;
+                var r = host.getBoundingClientRect();
+                if (!r.width) return;
+                if (!bed) {
+                    bed = document.createElement('div');
+                    bed.className = 'kr-season-garden';
+                    bed.setAttribute('aria-hidden', 'true');
+                    host.insertBefore(bed, host.querySelector(':scope > .container, :scope > .kr-opener__inner'));
+                }
+                var x = Math.max(16, Math.min(r.width - 16, e.clientX - r.left));
+                var el = document.createElement('span');
+                el.className = 'kr-season-sprout' + (kit.reduced ? '' : ' kr-season-sprout--grow');
+                el.style.left = (x / r.width * 100).toFixed(2) + '%';
+                el.innerHTML = sproutArt(count++ + ((Math.random() * 4) | 0), (Math.random() * 72) | 0);
+                // Each sways at its own pace and point in the swing.
+                el.firstChild.style.animationDuration = (3.2 + Math.random() * 1.6).toFixed(1) + 's';
+                el.firstChild.style.animationDelay = '-' + (Math.random() * 4).toFixed(1) + 's';
+                bed.appendChild(el);
+                planted.push(el);
+                if (planted.length > GARDEN_MOST) wilt(planted.shift(), kit.reduced);
+            });
+        });
+    }
+
+    function wilt(el, still) {
+        if (still) { el.remove(); return; }
+        el.classList.add('kr-season-sprout--wilt');
+        setTimeout(function () { el.remove(); }, 700);
+    }
+
     K.dress({
         corner: blossomArt, dangler: CATERPILLAR,
         // Mostly single petals, some whole small blossoms, turning over.
@@ -229,6 +311,9 @@
         },
         cursor: K.cursor('#9ed36a', '<path fill="#f6a5c4" stroke="#7a2e52" stroke-width=".8" d="' + posyPath(6, 6, 6) + '"/>' +
             '<circle cx="6" cy="6" r="1.5" fill="#f2c230"/>', '#2f4a1f'),
-        extra: shower
+        extra: function (kit) {
+            shower(kit);
+            garden(kit);
+        }
     });
 })();

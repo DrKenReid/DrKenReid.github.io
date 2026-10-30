@@ -1,0 +1,189 @@
+/* css/seasons/womens-day.css: International Women's Day's colours and its
+   own rules. shared-components.js loads this file only while the season
+   is on (KR_SEASONS), beside js/seasons/womens-day.js; css/season.css
+   holds what every season shares. Tokens first, both themes, then the
+   rules for its own pieces. */
+
+/* International Women's Day: purple into green, the day's colours:
+     light  #6b2d8f  8.20 page and warm;  #1f6b42  6.07 page and warm
+     dark   #d3a9f7  8.94 page, 7.37 raised; #8fdcae  10.79 page, 8.90 raised
+   The slip's ink is 14.74:1 on its paper, its source 7.36:1.
+   The line is the thread and the drawings' outlines, the glow a pale
+   lilac round the footer's pieces, the pumpkin token the map's rims, the
+   badge pale lilac. The purple, white and green are the sash over a post
+   and the confetti a clicked piece throws; the white has an edge of the
+   line so it shows on the light page. The paper, ink and edge are the
+   slip over the footer, a pale card in both themes. No fog. */
+:root[data-season="womens-day"] {
+  --kr-brand-from: #6b2d8f;
+  --kr-brand-to: #1f6b42;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-photo-from: #e3c9fb;
+  --kr-photo-to: #bff0cd;
+  --kr-photo-gradient: linear-gradient(100deg, var(--kr-photo-from), var(--kr-photo-to));
+  --kr-bar-solid-mark: var(--kr-brand-gradient);
+  --kr-bar-solid-mark-from: var(--kr-brand-from);
+  --kr-season-line: #7d6a8e;
+  --kr-season-creature: #3e1a5a;
+  --kr-season-glow: #e9d4ff;
+  --kr-season-pumpkin: #8e4fbf;
+  --kr-season-badge: #f3ecfa;
+  --kr-season-fog: #d9c4f0;
+  --kr-season-dusk: saturate(0.8) hue-rotate(10deg) brightness(0.95);
+  --kr-season-fog-display: none;
+  --kr-season-iwd-purple: #7b3fb3;
+  --kr-season-iwd-white: #ffffff;
+  --kr-season-iwd-green: #2f8f4e;
+  --kr-season-iwd-paper: #fbf8ff;
+  --kr-season-iwd-ink: #2e1a47;
+  --kr-season-iwd-source: #1f5e36;
+  --kr-season-iwd-edge: #d8c8ea; }
+
+:root[data-theme="dark"][data-season="womens-day"] {
+  --kr-brand-from: #d3a9f7;
+  --kr-brand-to: #8fdcae;
+  --kr-brand-gradient: linear-gradient(100deg, var(--kr-brand-from), var(--kr-brand-to));
+  --kr-bar-solid-mark: var(--kr-photo-gradient);
+  --kr-bar-solid-mark-from: var(--kr-photo-from);
+  --kr-season-line: #b9a8c8;
+  --kr-season-creature: #e6d8f2; }
+
+/* --- Women's Day's badge ----------------------------------------------------
+   Built by js/seasons/womens-day.js: the badge pinned to the corner's
+   sash takes clicks (.kr-season-iwd-badge), and a click raises the fist
+   inside the Venus symbol (.kr-season-iwd-raise on the corner's art,
+   .kr-season-iwd-fist) while the badge swells a moment. Never under
+   reduced motion (the badge takes no clicks then). The same fist is in
+   the enamel badge on the footer, which stays still. Classes only script
+   applies: .kr-season-iwd-badge, .kr-season-iwd-fist,
+   .kr-season-iwd-raise. */
+.kr-season-iwd-badge {
+  pointer-events: auto;
+  cursor: pointer;
+  transform-box: fill-box;
+  transform-origin: center; }
+
+.kr-season-iwd-fist {
+  transform-box: fill-box;
+  transform-origin: 50% 100%; }
+
+.kr-season-iwd-raise .kr-season-iwd-badge {
+  animation: kr-season-iwd-swell 0.9s ease-out; }
+
+.kr-season-iwd-raise .kr-season-iwd-badge .kr-season-iwd-fist {
+  animation: kr-season-iwd-punch 0.9s cubic-bezier(0.3, 0.7, 0.4, 1); }
+
+@keyframes kr-season-iwd-swell {
+  0%, 100% { transform: scale(1); }
+  35% { transform: scale(1.14); } }
+
+@keyframes kr-season-iwd-punch {
+  0%, 100% { transform: translateY(0) scale(1); }
+  30% { transform: translateY(-1.6px) scale(1.12); }
+  55% { transform: translateY(-1px) scale(1.08); } }
+
+/* --- Women's Day's confetti, airship and sash -------------------------------
+   Built by js/seasons/womens-day.js. A clicked piece throws confetti in
+   the three colours (--sash, the shared scatter); the airship drifts
+   across once as the footer arrives, bobbing, its banner rippling behind
+   it (--airship, .kr-season-iwd-banner); over a post, a sash of the three
+   colours grows from the left as the reader goes, a rosette at its end
+   (--sash, .kr-season-iwd-rosette). Classes only script applies:
+   .kr-season-puff--sash, .kr-season-flyer--airship, .kr-season-iwd-banner,
+   .kr-season-track--sash, .kr-season-iwd-rosette. */
+.kr-season-puff--sash {
+  --kr-puff-w: 5px;
+  --kr-puff-h: 10px;
+  --kr-puff-shape: 1px;
+  --kr-puff-edge: 0 0 0 0.5px color-mix(in srgb, var(--kr-season-line) 70%, transparent);
+  --kr-puff-a: var(--kr-season-iwd-purple);
+  --kr-puff-b: var(--kr-season-iwd-white);
+  --kr-puff-c: var(--kr-season-iwd-green); }
+
+.kr-season-flyer--airship {
+  top: 14vh;
+  width: 150px;
+  animation: kr-season-iwd-drift 9s linear forwards; }
+
+@keyframes kr-season-iwd-drift {
+  0% { transform: translate(-170px, 5vh); }
+  25% { transform: translate(22vw, 3vh); }
+  50% { transform: translate(48vw, 5vh); }
+  75% { transform: translate(74vw, 2.5vh); }
+  100% { transform: translate(calc(100vw + 20px), 4vh); } }
+
+.kr-season-iwd-banner {
+  transform-box: fill-box;
+  transform-origin: 100% 50%;
+  animation: kr-season-iwd-ripple 1.3s ease-in-out infinite alternate; }
+
+@keyframes kr-season-iwd-ripple {
+  from { transform: skewY(-4deg) scaleY(0.94); }
+  to { transform: skewY(4deg) scaleY(1.04); } }
+
+.kr-season-track--sash .kr-season-track__rest {
+  top: 0;
+  bottom: auto;
+  height: 6px;
+  background: linear-gradient(to bottom, var(--kr-season-iwd-purple) 0 33.4%,
+    var(--kr-season-iwd-white) 33.4% 66.7%, var(--kr-season-iwd-green) 66.7%);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--kr-season-line) 60%, transparent); }
+
+.kr-season-track--sash .kr-season-track__tip {
+  top: -4px;
+  bottom: auto;
+  left: -7px;
+  width: 14px; }
+
+.kr-season-iwd-rosette {
+  display: block;
+  width: 100%;
+  height: auto; }
+
+/* --- Women's Day's slip -----------------------------------------------------
+   Built by js/seasons/womens-day.js: a pale card across the footer's top
+   edge at its right, from 992px (narrower, the patch has the edge to
+   itself), with a line about a woman whose work science and computing
+   stand on, and her name and year under it. A click turns it over
+   (--turn) to the next; under reduced motion it changes without
+   turning. Classes only script applies: .kr-season-iwd-slip (--turn),
+   .kr-season-iwd-slip__line, .kr-season-iwd-slip__source. */
+.kr-season-iwd-slip {
+  display: none;
+  position: absolute;
+  right: max(12px, 6%);
+  bottom: calc(100% - 52px);
+  max-width: min(42%, 440px);
+  padding: 8px 16px 9px;
+  border-radius: 3px;
+  background: var(--kr-season-iwd-paper);
+  color: var(--kr-season-iwd-ink);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--kr-season-iwd-ink) 40%, transparent),
+    inset 0 0 0 1px var(--kr-season-iwd-edge), inset 4px 0 0 var(--kr-season-iwd-purple);
+  font-family: 'Lora', 'Lora Fallback', Georgia, serif;
+  line-height: 1.4;
+  transform: rotate(-1.2deg);
+  cursor: pointer; }
+
+@media only screen and (min-width: 992px) {
+  .kr-season-iwd-slip {
+    display: block; } }
+
+.kr-season-iwd-slip__line {
+  display: block;
+  font-size: 13.5px; }
+
+.kr-season-iwd-slip__source {
+  display: block;
+  margin-top: 3px;
+  font-size: 11.5px;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  color: var(--kr-season-iwd-source); }
+
+.kr-season-iwd-slip--turn {
+  animation: kr-season-iwd-turn 0.52s ease-in-out; }
+
+@keyframes kr-season-iwd-turn {
+  0%, 100% { transform: rotate(-1.2deg); }
+  50% { transform: rotate(-1.2deg) perspective(600px) rotateX(88deg); } }

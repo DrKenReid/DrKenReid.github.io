@@ -84,3 +84,31 @@
   opacity: 0;
   transform: translate(14px, 90px) rotate(150deg);
   transition: transform 1.8s cubic-bezier(0.4, 0, 0.7, 0.6), opacity 1.8s ease-in; }
+
+/* --- The fall's leaf pile ----------------------------------------------------
+   Built by js/seasons/fall.js: a heap of leaves at the foot of each page
+   opener (under its type) and of the homepage hero (over the slides,
+   whose type sits clear of the foot, and under the pause button), right
+   of the middle. Each leaf is placed by script with a transform alone:
+   lying flattened in the heap, and turning over in the air when a mouse
+   sweeps through and throws it up, until it drifts down and settles
+   again. Takes no clicks; under reduced motion the heap lies still.
+   Classes only script applies: .kr-season-pile (__leaf). */
+.kr-season-pile {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none; }
+
+.welcome-area .kr-season-pile {
+  z-index: 5; }
+
+.kr-season-pile__leaf {
+  position: absolute;
+  bottom: -4px;
+  left: 0; }
+
+.kr-season-pile__leaf svg {
+  display: block;
+  width: 100%;
+  height: auto; }

@@ -212,7 +212,7 @@ test('KR_SEASONS: every season is well formed, and no two of one rank share a da
     const inRange = (end, key) =>
         assert.ok(end[0] >= 1 && end[0] <= 12 && end[1] >= 1 && end[1] <= 31, `${key}: ${end}`);
     for (const s of rt.KR_SEASONS) {
-        assert.match(s.key, /^[a-z-]+$/, s.key);
+        assert.match(s.key, /^[a-z][a-z0-9-]*$/, s.key);
         assert.ok(!keys.has(s.key), `duplicate season ${s.key}`);
         keys.add(s.key);
         assert.ok(s.label, `${s.key} needs a label`);
@@ -288,6 +288,17 @@ test('krSeasonOnDate: the higher rank wins a shared day', () => {
     assert.equal(on(2027, 9, 7), 'summer');
     assert.equal(on(2027, 9, 8), 'star-trek-day');
     assert.equal(on(2027, 9, 9), 'summer');
+    assert.equal(on(2027, 3, 7), 'winter');
+    assert.equal(on(2027, 3, 8), 'womens-day');
+    assert.equal(on(2027, 3, 9), 'winter');
+    assert.equal(on(2031, 3, 8), 'holi');
+    assert.equal(on(2027, 9, 19), 'summer');
+    assert.equal(on(2027, 9, 20), 'firefly-day');
+    assert.equal(on(2027, 9, 22), 'fall');
+    assert.equal(on(2027, 11, 6), 'fall');
+    assert.equal(on(2027, 11, 7), 'n7-day');
+    assert.equal(on(2027, 11, 8), 'fall');
+    assert.equal(on(2026, 11, 7), 'diwali');
 });
 
 test('a memorial page (<body data-memorial>) has no season and no birthday hats', () => {
@@ -305,20 +316,40 @@ test('a memorial page (<body data-memorial>) has no season and no birthday hats'
     }
 });
 
-test('the coffee button takes a season\'s own words, and only in that season', () => {
-    const preview = rt.sessionStorage.getItem('kr-season-preview');
-    try {
-        rt.sessionStorage.setItem('kr-season-preview', 'none');
-        assert.match(rt.thanksActionsHtml(), /<span>Buy me a coffee<\/span>/);
-        rt.sessionStorage.setItem('kr-season-preview', 'star-trek-day');
+test('the coffee button: every season words it or keeps the default on purpose, and the birthday asks for cake', () => {
+    // A new season decides here: its own words, or null for the default.
+    const WORDS = {
+        halloween: "Buy me a witch's brew", fall: 'Buy me an apple cider', winter: 'Buy me a hot chocolate',
+        spring: null, summer: 'Buy me an iced coffee', 'burns-night': 'Buy me a dram', 'st-andrews': 'Buy me an Irn-Bru',
+        hogmanay: 'Buy me a dram for the bells', 'bonfire-night': 'Buy me a toffee apple', 'may-the-fourth': null,
+        'revenge-of-the-fifth': null, diwali: 'Buy me some mithai', holi: 'Buy me a thandai',
+        'darwin-day': 'Buy me a coffee, naturally selected', 'pi-day': 'Buy me a slice of pie',
+        'world-book-day': 'Buy me a book', 'cat-day': 'Buy the cats some treats', 'star-trek-day': 'Buy me an Earl Grey, hot',
+        'womens-day': null, 'firefly-day': "Buy me a Mudder's Milk", 'n7-day': null,
+    };
+    assert.deepEqual(Array.from(rt.KR_SEASONS, s => s.key).sort(), Object.keys(WORDS).sort(), 'a season with no decision here');
+    const words = () => {
         const html = rt.thanksActionsHtml();
-        assert.match(html, /<span>Buy me an Earl Grey, hot<\/span>/);
         assert.match(html, /href="https:\/\/buymeacoffee\.com\/drkenreid"/);
-        rt.sessionStorage.setItem('kr-season-preview', 'summer');
-        assert.match(rt.thanksActionsHtml(), /<span>Buy me a coffee<\/span>/);
+        return /buymeacoffee[\s\S]*?<span>([^<]*)<\/span>/.exec(html)[1].replace(/&#39;/g, "'");
+    };
+    const keep = ['kr-season-preview', 'kr-birthday-preview'].map(k => [k, rt.sessionStorage.getItem(k)]);
+    try {
+        rt.sessionStorage.setItem('kr-birthday-preview', 'none');
+        for (const [key, want] of Object.entries(WORDS)) {
+            rt.sessionStorage.setItem('kr-season-preview', key);
+            assert.equal(words(), want || 'Buy me a coffee', key);
+        }
+        rt.sessionStorage.setItem('kr-season-preview', 'none');
+        assert.equal(words(), 'Buy me a coffee', 'no season, no birthday');
+        rt.sessionStorage.setItem('kr-birthday-preview', 'on');
+        rt.sessionStorage.setItem('kr-season-preview', 'fall');
+        assert.equal(words(), 'Buy me a slice of cake', 'the birthday over the season');
     } finally {
-        if (preview === null) rt.sessionStorage.removeItem('kr-season-preview');
-        else rt.sessionStorage.setItem('kr-season-preview', preview);
+        for (const [k, v] of keep) {
+            if (v === null) rt.sessionStorage.removeItem(k);
+            else rt.sessionStorage.setItem(k, v);
+        }
     }
 });
 

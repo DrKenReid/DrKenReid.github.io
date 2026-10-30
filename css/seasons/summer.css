@@ -11,7 +11,8 @@
    and the dragonfly, the glow the fireflies, the pumpkin token the sun
    (the map's rims, the sunbeam on a post, the pollen a sunflower
    throws), the badge the map's sun, and the fog a warm haze in the
-   light theme only (the dark theme has the fireflies). */
+   light theme only (the dark theme has the fireflies). Its own token:
+   --kr-season-shade (the beach ball's shadow on the footer's edge). */
 :root[data-season="summer"] {
   --kr-brand-from: #7d6000;
   --kr-brand-to: #1b6a95;
@@ -28,7 +29,8 @@
   --kr-season-badge: #ffd34d;
   --kr-season-fog: #fff0c4;
   --kr-season-dusk: saturate(1.2) sepia(0.12) brightness(1.04);
-  --kr-season-fog-display: block; }
+  --kr-season-fog-display: block;
+  --kr-season-shade: #5a4320; }
 
 :root[data-theme="dark"][data-season="summer"] {
   --kr-brand-from: #ffd36b;
@@ -39,7 +41,8 @@
   --kr-season-line: #b39a72;
   --kr-season-creature: #9fdcec;
   --kr-season-dusk: saturate(1.1) sepia(0.1) brightness(0.9);
-  --kr-season-fog-display: none; }
+  --kr-season-fog-display: none;
+  --kr-season-shade: #000000; }
 
 /* --- Summer ----------------------------------------------------------------
    Built by js/seasons/summer.js: the tyre swing swaying on its rope
@@ -202,3 +205,48 @@
   78% { opacity: 1; }
   86% { opacity: 0.85; }
   92% { opacity: 0; } }
+
+/* --- Summer's beach ball -----------------------------------------------------
+   Built by js/seasons/summer.js: a beach ball resting on the footer's top
+   edge, right of the patch, its shadow under it on the edge. A click
+   kicks it (the only part that takes one is the ball itself): script
+   rolls and bounces it along the edge, between the patch and the
+   footer's end, setting the wrapper's place, the ball's hop, the gores'
+   turn (__spin) and the shadow's size, until it comes to rest. Under
+   reduced motion it sits still and takes no clicks. Classes only script
+   applies: .kr-season-ball (__shadow, __body, __spin). */
+.kr-season-ball {
+  position: absolute;
+  bottom: calc(100% - 3px);
+  left: 0;
+  width: 28px;
+  pointer-events: none; }
+
+.kr-season-ball__shadow {
+  position: absolute;
+  right: -4px;
+  bottom: 0;
+  left: -4px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--kr-season-shade) 55%, transparent), transparent); }
+
+.kr-season-ball__body {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: auto;
+  cursor: pointer; }
+
+.kr-season-ball__spin {
+  transform-origin: 50% 50%; }
+
+@media only screen and (max-width: 575.98px) {
+  .kr-season-ball {
+    width: 22px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-season-ball__body {
+    pointer-events: none;
+    cursor: auto; } }
