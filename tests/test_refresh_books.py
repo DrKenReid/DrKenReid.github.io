@@ -57,6 +57,7 @@ def item_for(b):
         "user_read_at": "" if b.get("e") else rss_date(b["d"]),
         "user_date_added": rss_date(b["d"]) if b.get("e") else rss_date("2024/01/01"),
         "book_large_image_url": rb.GR_COVERS + b["c"] if b.get("c") else "",
+        "book_published": str(b["y"]) if b.get("y") else "",
     }
 
 
@@ -105,6 +106,17 @@ class ReRead(unittest.TestCase):
         self.assertEqual(rb.merge_one(b, it)["n"], 320)
         it["book/num_pages"] = "0"
         self.assertNotIn("n", rb.merge_one({}, it))
+
+    def test_the_year_published_comes_from_the_feed_and_is_kept_when_it_has_none(self):
+        it = item("1", read="2024/02/01")
+        it["book_published"] = "1945"
+        b = rb.merge_one({}, it)
+        self.assertEqual(b["y"], 1945)
+        # A week with no year, or something that is not one, keeps the year on file.
+        for week in ("", "unknown", "0"):
+            it["book_published"] = week
+            self.assertEqual(rb.merge_one(b, it)["y"], 1945)
+        self.assertNotIn("y", rb.merge_one({}, it))
 
     def test_the_cover_comes_from_the_feed_and_is_kept_when_it_has_none(self):
         it = item("1", read="2024/02/01")

@@ -17,8 +17,12 @@
  *   photos    the photographs (the default)
  *   places    a tour: a dark map flies from place to place, nearest next,
  *             each stop named and then a few of its photographs (per=)
- *   quotes    data/quotes-all.json, one at a time over one of my
- *             photographs, blurred and darkened (behind=plain: none);
+ *   quotes    data/quotes-all.json, one at a time over a wall of the
+ *             books' covers (behind=photos: one of my photographs, blurred
+ *             and darkened, its shape near the screen's; plain: none),
+ *             beside the cover of the book it comes from, at the size
+ *             the books slideshow shows it, with the year it was
+ *             published (both found in data/books.json);
  *             a long quote stays up long enough to read
  *   books     every book I have rated in data/books.json, its cover (the
  *             one Goodreads shows, c; Open Library's by ISBN if that
@@ -33,7 +37,8 @@
  * The address (every setting is in it, so a link is the whole slideshow)
  *   show=     photos (the default) | places | quotes | books | music
  *   author=   quotes: one author's
- *   behind=   quotes: photos (the default) | plain
+ *   behind=   quotes: covers (the default: a wall of the books' covers)
+ *             | photos (one of my photographs, blurred) | plain
  *   year=     books: the year I read them
  *   rating=   books: this many stars or more (1 to 5)
  *   per=      places: photographs at each stop (default 4)
@@ -51,16 +56,19 @@
  *             itself) | fill (cropped to fill the screen)
  *   drift=0   no slow zoom
  *   captions=0  no place line
- *   controls=off  never show the controls (a wallpaper); the keys still work
+ *   controls=off  never show the controls (a wallpaper); the keys still work,
+ *             and the clock and the details are on (WALLPAPER_SHOWS)
  *   pool=all  every photograph, not only the selection the homepage's
  *             photo strip draws from (data/photography-standard-files.json,
  *             which leaves out most portraits of people)
  *   sleep=    minutes after which the sound fades out (SLEEPS; 0, never,
  *             is the default)
  *   info=1    show each photograph's details (number, place, subjects,
- *             when it was added, a link to it in the gallery)
+ *             when it was added, a link to it in the gallery); info=0
+ *             hides them in a wallpaper, which shows them by default
  *   dim=      darken the photographs by this percentage (DIMS)
- *   clock=1   show the time and date, top right
+ *   clock=1   show the time and date, top right; clock=0 hides them in a
+ *             wallpaper, which shows them by default
  *   Values that mean nothing (a subject with no photographs, an unknown
  *   place) are dropped rather than showing an empty screen, and when the
  *   selection has nothing for the other filters (Portrait, say), every
@@ -185,8 +193,11 @@
         show: 'photos', tag: '', place: '', added: '', order: 'shuffle', every: 20,
         sound: 'off', volume: 50, fit: 'whole', drift: true, captions: true,
         controls: 'auto', pool: 'selected', sleep: 0, info: false, dim: 0,
-        clock: false, author: '', behind: 'photos', year: '', rating: 0, per: 4
+        clock: false, author: '', behind: 'covers', year: '', rating: 0, per: 4
     };
+    // A wallpaper (controls=off) shows these by default: the time and date,
+    // and each slide's details. clock=0 or info=0 turns one off.
+    const WALLPAPER_SHOWS = ['clock', 'info'];
     // The settings that belong to one kind of slideshow, cleared when the
     // viewer switches to another, so a link carries only its own.
     const OWN_KEYS = ['tag', 'place', 'added', 'order', 'author', 'year', 'rating'];
@@ -202,7 +213,7 @@
     // second for every QUOTE_WPS words, or the speed setting if longer.
     const QUOTE_BASE_S = 5;
     const QUOTE_WPS = 2.5;
-    // books and music: the wall of covers behind the one in front.
+    // books, music and quotes: the wall of covers behind the slides.
     const WALL_MAX = 60;
     // Under fit=fill, the furthest a photograph's shape may be from the
     // screen's, as a ratio of the two: 1.5 lets a 3:2 frame fill a 16:9
@@ -257,7 +268,7 @@
         if (SHOWS.some(o => o.key === q.get('show'))) s.show = q.get('show');
         ['tag', 'place', 'added', 'author'].forEach(k => { if (q.get(k)) s[k] = q.get(k); });
         if (ORDERS.concat(MUSIC_ORDERS).some(o => o.key === q.get('order'))) s.order = q.get('order');
-        if (q.get('behind') === 'plain') s.behind = 'plain';
+        if (['covers', 'photos', 'plain'].indexOf(q.get('behind')) !== -1) s.behind = q.get('behind');
         if (/^\d{4}$/.test(q.get('year') || '')) s.year = q.get('year');
         const rating = parseInt(q.get('rating'), 10);
         if (rating >= 1 && rating <= 5) s.rating = rating;
@@ -277,9 +288,18 @@
         if (SLEEPS.indexOf(sleep) !== -1) s.sleep = sleep;
         const dim = parseInt(q.get('dim'), 10);
         if (dim >= 0 && dim <= 80) s.dim = dim;
-        if (q.get('info') === '1') s.info = true;
-        if (q.get('clock') === '1') s.clock = true;
+        // A wallpaper shows the time and the details unless told not to.
+        ['info', 'clock'].forEach(k => {
+            s[k] = q.get(k) === '1' || (q.get(k) !== '0' && shownByDefault(s, k));
+        });
         return s;
+    }
+
+    /** Whether the time (clock) or the details (info) show unless the
+        address says otherwise: off normally, on for a wallpaper
+        (controls=off). */
+    function shownByDefault(s, key) {
+        return s.controls === 'off' ? WALLPAPER_SHOWS.indexOf(key) !== -1 : !!DEFAULTS[key];
     }
 
     /** The query string for a set of settings: only what differs from the defaults. */
@@ -301,8 +321,9 @@
         if (s.pool === 'all') q.set('pool', 'all');
         if (s.sleep) q.set('sleep', String(s.sleep));
         if (s.dim) q.set('dim', String(s.dim));
-        if (s.info) q.set('info', '1');
-        if (s.clock) q.set('clock', '1');
+        ['info', 'clock'].forEach(k => {
+            if (!!s[k] !== shownByDefault(s, k)) q.set(k, s[k] ? '1' : '0');
+        });
         const qs = q.toString();
         return qs ? '?' + qs : '';
     }
@@ -575,7 +596,8 @@
     //   caption(item), describe(item, frame), info(item, frame, show) -> html
     //   fields(s, lib)   its own settings in the panel; count(deck) -> text
     //   home(s)          [href, label]: the close link on slideshow.html
-    //   scenery          what sits behind the slides: 'map' or 'wall'
+    //   scenery          what sits behind the slides: 'map' or 'wall', or
+    //                    a function of the settings that says which
     //                    (wallImage(item) gives a wall its pictures)
     //   drift, captions  whether the slow zoom and the place line apply
 
@@ -702,16 +724,54 @@
         return String(t || '').replace(/\s*\([^)]*#[\d.]+\)\s*$/, '').trim();
     }
 
+    /** The book in books.json a quote comes from: by its Goodreads id (g,
+        which quotes-all.json carries for a book on the shelf), else by
+        the title the quote wall gives it, a series bracket aside,
+        preferring one by the same author (the wall and Goodreads spell
+        some names differently: Le Guin, LeGuin), else by the part before
+        a subtitle's colon, and then only by the same author: the Yellow
+        Wallpaper is not its screenplay. */
+    function bookFinder(books) {
+        const key = s => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+        const bare = t => String(t || '').replace(/\s*\([^)]*\)\s*$/, '');
+        const short = t => bare(t).split(':')[0];
+        const full = {}, shortened = {}, byId = {};
+        books.forEach(b => {
+            if (!b || !b.t) return;
+            if (b.g) byId[b.g] = b;
+            (full[key(bare(b.t))] = full[key(bare(b.t))] || []).push(b);
+            (shortened[key(short(b.t))] = shortened[key(short(b.t))] || []).push(b);
+        });
+        return (title, author, id) => {
+            if (id && byId[id]) return byId[id];
+            const byAuthor = list => (list || []).find(b => key(b.a) === key(author));
+            const hits = full[key(bare(title))] || [];
+            return byAuthor(hits) || hits[0] || byAuthor(shortened[key(short(title))]) || null;
+        };
+    }
+
     MODES.quotes = {
         noun: 'quote', plural: 'quotes', drift: true,
-        data: ['data/quotes-all.json', 'data/photography-standard-files.json'],
+        scenery: s => s.behind === 'covers' ? 'wall' : '',
+        data: ['data/quotes-all.json', 'data/photography-standard-files.json', 'data/books.json', 'data/photo-dims.json'],
         build: results => {
             const list = Array.isArray(results[0]) ? results[0] : [];
-            const photos = Array.isArray(results[1]) ? results[1].map(stemOf).filter(x => /^\d+$/.test(x)) : [];
+            const dims = results[3] || {};
+            // Each photograph with its shape (width over height), from the
+            // thumb's dimensions; 1.5 where they are not known.
+            const photos = Array.isArray(results[1]) ? results[1].map(stemOf).filter(x => /^\d+$/.test(x))
+                .map(stem => ({ stem: stem, ratio: dims[stem] && dims[stem][1] ? dims[stem][0] / dims[stem][1] : 1.5 })) : [];
+            const findBook = bookFinder(Array.isArray(results[2]) ? results[2] : []);
             const items = list.filter(x => x && x.q && x.a).map((x, i) => {
                 const text = String(x.q).trim();
+                const book = x.b || x.g ? findBook(x.b, x.a, x.g) : null;
                 return { id: 'q' + i, text: text, author: String(x.a).trim(), book: bareTitle(x.b),
-                    words: text.split(/\s+/).length };
+                    words: text.split(/\s+/).length,
+                    // The size books.json names, which Goodreads' own pages
+                    // use and so has ready; a resized copy is made on the
+                    // first request, which can outlast COVER_WAIT_MS.
+                    cover: book && book.c ? grCover(book.c) : '', isbn: book && book.i || '',
+                    year: book && book.y || '' };
             });
             return { items: items, photos: photos };
         },
@@ -721,28 +781,46 @@
         },
         deal: (s, lib, avoidFirst) =>
             avoidRepeat(shuffled(lib.items.filter(x => !s.author || x.author === s.author)), avoidFirst),
+        // The photograph behind and the book's cover arrive together, so
+        // the cover never appears after the words. The photograph is the
+        // hero, from those whose shape is near the screen's (FILL_RATIO):
+        // a thumb, or a portrait on a wide monitor, was stretched far past
+        // its pixels to cover the screen.
         load: (item, show) => {
-            const photos = show.lib.photos;
-            if (show.s.behind !== 'photos' || !photos.length) return Promise.resolve({});
-            const stem = photos[Math.floor(Math.random() * photos.length)];
-            return loadImage([thumbOf(stem)]).then(src => ({ src: src, stem: stem }));
+            const photos = show.s.behind === 'photos' ? show.lib.photos : [];
+            const screen = window.innerWidth / Math.max(1, window.innerHeight);
+            const fits = photos.filter(x => x.ratio / screen <= FILL_RATIO && x.ratio / screen >= 1 / FILL_RATIO);
+            const pool = fits.length ? fits : photos;
+            const stem = pool.length ? pool[Math.floor(Math.random() * pool.length)].stem : '';
+            return Promise.all([
+                stem ? loadImage([heroOf(stem), thumbOf(stem)]) : null,
+                item.cover || item.isbn ? loadImage([item.cover, item.isbn ? bookCover(item.isbn, 'M') : ''], COVER_WAIT_MS) : null
+            ]).then(found => ({ src: found[0], stem: found[0] ? stem : '', cover: found[1] }));
         },
         draw: (slide, item, frame) => {
             const p = dress(slide, frame.src ? 'atmos' : 'card');
             if (frame.src) p.photo.src = frame.src;
             const size = item.text.length < 110 ? 'short' : item.text.length < 280 ? 'medium' : 'long';
-            p.card.innerHTML = '<figure class="kr-show__quote kr-show__quote--' + size + '">' +
+            const quote = '<figure class="kr-show__quote kr-show__quote--' + size + '">' +
                 '<blockquote class="kr-show__quote-text"><p>' + esc(item.text) + '</p></blockquote>' +
                 '<figcaption class="kr-show__quote-by">' + esc(item.author) +
-                (item.book ? ', <cite>' + esc(item.book) + '</cite>' : '') + '</figcaption></figure>';
+                (item.book ? ', <cite>' + esc(item.book) + '</cite>' + (item.year ? ' (' + item.year + ')' : '') : '') +
+                '</figcaption></figure>';
+            // With its book's cover, the quote stands beside it as a book
+            // does in the books slideshow; without one, alone in the middle.
+            p.card.innerHTML = frame.cover
+                ? feature('<img class="kr-show__cover" src="' + esc(frame.cover) + '" alt="">', [quote])
+                : quote;
         },
         seconds: (item, s) => Math.max(s.every, Math.round(QUOTE_BASE_S + item.words / QUOTE_WPS)),
         caption: () => '',
         describe: item => 'Quote by ' + item.author,
         info: item => '<p class="kr-show__info-title">' + esc(item.author) + '</p>' +
-            (item.book ? '<p>' + esc(item.book) + '</p>' : '') + '<p>' + outLink('/quotes.html', 'The quote wall') + '</p>',
+            (item.book ? '<p>' + esc(item.book) + (item.year ? ' (' + item.year + ')' : '') + '</p>' : '') +
+            '<p>' + outLink('/quotes.html', 'The quote wall') + '</p>',
         count: deck => plural(deck.length, 'quote', 'quotes'),
         home: () => ['/quotes.html', 'Back to the quote wall'],
+        wallImage: item => item.cover ? wallCover(item.cover) : item.isbn ? bookCover(item.isbn, 'M') : '',
         fields: (s, lib) => {
             const counts = {};
             lib.items.forEach(x => { counts[x.author] = (counts[x.author] || 0) + 1; });
@@ -751,6 +829,7 @@
             return '<label class="kr-show__field">Author<select data-set="author">' + option('', 'Any author', !s.author) +
                 authors.map(a => option(a, a + ' (' + counts[a] + ')', a === s.author)).join('') + '</select></label>' +
                 '<label class="kr-show__field">Behind the words<select data-set="behind">' +
+                option('covers', 'Book covers', s.behind === 'covers') +
                 option('photos', 'My photographs', s.behind === 'photos') + option('plain', 'Nothing', s.behind === 'plain') + '</select></label>';
         }
     };
@@ -851,6 +930,18 @@
     // Last.fm serves the same sleeve larger under another size in its path.
     const bigSleeve = url => url.replace('/300x300/', '/600x600/');
 
+    /** An album's sleeve: Last.fm's 600px copy if it comes within
+        COVER_WAIT_MS, else the 300px one. Last.fm makes the big one on
+        request and is often slower than that the first time, and sharing
+        one wait let it run out before the small one, which the wall behind
+        has usually fetched already, was asked for: the slide then showed
+        the title set in type. */
+    function loadSleeve(url) {
+        const big = bigSleeve(url);
+        if (big === url) return loadImage([url], COVER_WAIT_MS);
+        return loadImage([big], COVER_WAIT_MS).then(src => src || loadImage([url], COVER_WAIT_MS));
+    }
+
     MODES.music = {
         noun: 'album', plural: 'albums', scenery: 'wall', square: true,
         data: ['data/topalbums.json'],
@@ -866,7 +957,7 @@
             return s;
         },
         deal: (s, lib, avoidFirst) => s.order === 'top' ? lib.items.slice() : avoidRepeat(shuffled(lib.items), avoidFirst),
-        load: item => item.img ? loadImage([bigSleeve(item.img), item.img], COVER_WAIT_MS).then(src => ({ src: src })) : Promise.resolve({}),
+        load: item => item.img ? loadSleeve(item.img).then(src => ({ src: src })) : Promise.resolve({}),
         draw: (slide, item, frame, show) => {
             const p = dress(slide, 'card');
             const cover = frame.src ? '<img class="kr-show__cover" src="' + esc(frame.src) + '" alt="">' : typeCover(item.name, item.artist);
@@ -1078,7 +1169,7 @@
             (mode.drift ? check('drift', s.drift, 'Slow zoom') : '') +
             (mode.captions ? check('captions', s.captions, 'Show where each was taken') : '') +
             check('info', s.info, 'Show the details') +
-            check('clock', s.clock, 'Show the time') +
+            check('clock', s.clock, 'Show the time and date') +
             '<fieldset class="kr-show__share">' +
                 '<legend>As a wallpaper</legend>' +
                 '<p>This link opens the slideshow as it is set up here. Open it and press F11, or give it to a wallpaper app that shows web pages. For Lively Wallpaper on Windows, <a href="/wallpaper/kenreid-slideshow-lively.zip" download>download the Lively package</a> and drag it into Lively: its Customise menu has these settings.</p>' +
@@ -1185,12 +1276,18 @@
     // --- what sits behind the slides: the tour's map, a wall of covers ------
 
     Show.prototype.setScene = function() {
-        const kind = this.mode.scenery || '';
+        const kind = this.sceneOf();
         if (kind === 'map' && this.sceneKind === 'map') return;
         this.clearScene();
         this.sceneKind = kind;
         if (kind === 'map') this.buildMap();
         else if (kind === 'wall') this.buildWall();
+    };
+
+    /** The scenery the mode wants with the settings as they are. */
+    Show.prototype.sceneOf = function() {
+        const scenery = this.mode.scenery;
+        return (typeof scenery === 'function' ? scenery(this.s) : scenery) || '';
     };
 
     Show.prototype.clearScene = function() {
@@ -1405,7 +1502,7 @@
             if (lib.items.length) { this.lib = lib; mode.sanitise(this.s, lib); }
             this.deck = mode.deal(this.s, this.lib, last);
             this.next = null;
-            if (mode.scenery === 'wall') this.setScene();
+            if (this.sceneOf() === 'wall') this.setScene();
             this.updateLink();
             this.go(0, false);
         });
@@ -1473,7 +1570,18 @@
         if (key === 'every') s.every = parseInt(value, 10) || DEFAULTS.every;
         else if (key === 'volume') s.volume = Math.max(0, Math.min(100, parseInt(value, 10) || 0));
         else if (key === 'drift' || key === 'captions' || key === 'info' || key === 'clock') s[key] = !!value;
-        else if (key === 'controls') s.controls = value ? 'off' : 'auto';
+        else if (key === 'controls') {
+            // The time and the details follow the new default where they
+            // still sat at the old one (a wallpaper shows both).
+            const before = WALLPAPER_SHOWS.map(k => shownByDefault(s, k));
+            s.controls = value ? 'off' : 'auto';
+            WALLPAPER_SHOWS.forEach((k, i) => {
+                if (!!s[k] !== before[i]) return;
+                s[k] = shownByDefault(s, k);
+                const box = this.panel && this.panel.querySelector('input[data-set="' + k + '"]');
+                if (box) box.checked = s[k];
+            });
+        }
         else if (key === 'sleep' || key === 'dim' || key === 'rating') s[key] = parseInt(value, 10) || 0;
         else if (key === 'per') s.per = parseInt(value, 10) || DEFAULTS.per;
         else s[key] = value;
@@ -1486,7 +1594,7 @@
             this.dealtLandscape = landscape();
             this.deck = this.mode.deal(s, this.lib);
             this.next = null;
-            if (this.mode.scenery === 'wall') this.setScene();
+            if (key === 'behind' || this.sceneOf() === 'wall') this.setScene();
             this.go(0, false);
         } else if (key === 'every') {
             this.schedule();

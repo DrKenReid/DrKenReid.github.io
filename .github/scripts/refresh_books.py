@@ -22,6 +22,8 @@ Record fields (data/schema/books.schema.json has the full descriptions):
     n  pages, from the feed's book/num_pages (kept when a week has none)
     c  the cover Goodreads shows, from the feed's book_large_image_url,
        less GR_COVERS (kept when a week has none or only a placeholder)
+    y  the year it was published, from the feed's book_published (kept
+       when a week has none)
     m  consecutive refreshes this book was missing from the feed
 
 Also writes data/reading.json, the figures the homepage shows.
@@ -104,7 +106,7 @@ MIN_FEED_SHARE = 0.9
 # these, so a test can build items without any XML.
 FIELDS = ("book_id", "title", "author_name", "user_rating", "user_review",
           "isbn", "link", "user_read_at", "user_date_added", "book/num_pages",
-          "book_large_image_url")
+          "book_large_image_url", "book_published")
 
 # Goodreads' covers all sit under this address; books.json keeps the rest
 # of each (c), and the pages put it back (GR_COVERS in js/slideshow.js).
@@ -229,6 +231,10 @@ def merge_one(prev: dict, item: dict) -> dict:
     n = int(pages) if pages.isdigit() and int(pages) > 0 else prev.get("n")
     if n:
         b["n"] = n
+    year = (item.get("book_published") or "").strip()
+    y = int(year) if year.isdigit() and 0 < int(year) <= 9999 else prev.get("y")
+    if y:
+        b["y"] = y
     w = review_id(item["link"]) or prev.get("w")
     if w:
         b["w"] = w

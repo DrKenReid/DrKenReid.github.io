@@ -40,6 +40,8 @@
  *       its callers and tests with it.
  *         goodreadsUrl(book) -> my review, else the book's page, else a search
  *         coverUrl(isbn, size) -> Open Library cover, size 'M' or 'L'
+ *         goodreadsCover(c, height) -> Goodreads' cover at that height
+ *         coverAttrs(book, size) -> a cover <img>'s src and data-cover-next
  *         label(book)     -> "Title (Series #1) by Author, 4/5"
  *         sessions(book)  -> ['YYYY/MM/DD', ...]  every finish the
  *                            calendar and the counts include
@@ -70,11 +72,36 @@
                       : 'https://www.goodreads.com/search?q=' + encodeURIComponent(book.t);
     }
     /* Open Library's cover for an ISBN, size 'M' (a wall tile, a Reading
-       Now thumbnail) or 'L' (a review card). default=false: a 404 for an
-       ISBN with no scan, rather than a blank placeholder, so the error
-       listener below can set the cover in type instead. */
+       Now thumbnail) or 'L' (a review card): the fallback after Goodreads'
+       (coverAttrs). default=false: a 404 for an ISBN with no scan, rather
+       than a blank placeholder, so the error listener below can move on. */
     function coverUrl(isbn, size) {
         return 'https://covers.openlibrary.org/b/isbn/' + encodeURIComponent(isbn) + '-' + (size || 'M') + '.jpg?default=false';
+    }
+    /* Goodreads' cover for a book: c in books.json, which refresh_books.py
+       keeps for every book, ISBN or not (Open Library has a scan for only
+       about half of them). Goodreads serves another size for a
+       ._SY<height>_ in the file name, and takes one added to a name that
+       has none. 320px tall (about 20 KB) stays sharp on a high-density
+       screen at a wall tile's 150. */
+    var GR_COVERS = 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/';
+    function goodreadsCover(c, height) {
+        if (!c) return '';
+        var url = /^https:/.test(c) ? c : GR_COVERS + c;
+        if (url.indexOf(GR_COVERS) !== 0) return url;
+        var size = '._SY' + (height || 320) + '_';
+        return /\._S[XY]\d+_\.\w+$/.test(url) ? url.replace(/\._S[XY]\d+_\.(\w+)$/, size + '.$1')
+            : url.replace(/\.(\w+)$/, size + '.$1');
+    }
+    /* The attributes of a book's cover <img>: src, Goodreads' cover, and
+       data-cover-next, Open Library's for the ISBN, which the error
+       listener below tries before setting the cover in type. '' for a
+       book with neither, which takes its type cover straight away. */
+    function coverAttrs(b, size) {
+        var list = [goodreadsCover(b.c, size === 'L' ? 475 : 320), b.i ? coverUrl(b.i, size) : ''].filter(Boolean);
+        if (!list.length) return '';
+        return ' src="' + krEscapeHtml(list[0]) + '"' +
+            (list[1] ? ' data-cover-next="' + krEscapeHtml(list[1]) + '"' : '');
     }
     /* "The Captain (The Last Horizon #1) by Will Wight, 4/5": a spine's or
        a wall tile's name and tooltip, which have room for the series in
@@ -148,6 +175,8 @@
     window.krBookshelf = {
         goodreadsUrl: goodreadsUrl,
         coverUrl: coverUrl,
+        goodreadsCover: goodreadsCover,
+        coverAttrs: coverAttrs,
         label: bookLabel,
         sessions: sessions,
         firstRead: firstRead,
@@ -158,9 +187,8 @@
     };
 
     /* ------------------------------------------------- typographic cover
-       The cover a book gets when there is no picture of it: Open Library
-       has no scan for the ISBN, a hotlinked Goodreads image has gone, or
-       the book never had an ISBN. Title in Lora, the series under it,
+       The cover a book gets when there is no picture of it: neither
+       Goodreads nor Open Library has one, or it would not load. Title in Lora, the series under it,
        the author at the foot, and down the left edge the same rating
        colour its spine has on the shelf (the .kr-spine--rN classes, reused
        so the two can never disagree). Built with textContent, so no title
@@ -207,13 +235,21 @@
        capture phase, so a single listener on the document sees every cover
        that fails, including ones rendered long after it was bound, and no
        cover needs an inline onerror (the old one spliced the title back
-       into markup, so an apostrophe broke it). The typographic cover takes
-       the image's place, so a tile keeps its size and a list its count.
+       into markup, so an apostrophe broke it). A cover with a
+       data-cover-next tries that picture first (coverAttrs); after that the
+       typographic cover takes the image's place, so a tile keeps its size
+       and a list its count.
        An image with empty alt text sat beside its own title, so the
        stand-in is hidden from screen readers too. */
     document.addEventListener('error', function (e) {
         var img = e.target;
         if (!img || img.tagName !== 'IMG' || !img.hasAttribute('data-title')) return;
+        var next = img.getAttribute('data-cover-next');
+        if (next) {
+            img.removeAttribute('data-cover-next');
+            img.src = next;
+            return;
+        }
         img.replaceWith(krTypeCover({
             t: img.getAttribute('data-title'),
             a: img.getAttribute('data-author'),
@@ -686,6 +722,11 @@
     function typeCoverHtml(b) {
         return krTypeCover(b, { decorative: true }).outerHTML;
     }
+    /* A book from books.json: its picture (coverAttrs), or one set in type. */
+    function bookCoverImg(b) {
+        var attrs = coverAttrs(b, 'M');
+        return attrs ? '<img' + attrs + ' alt="" loading="lazy"' + krTypeCover.dataAttrs(b) + '>' : typeCoverHtml(b);
+    }
     function readingBook(href, rel, b, cover, meta) {
         var name = krBookTitle(b.t);
         return '<a class="kr-reading__book" href="' + krEscapeHtml(href) + '" target="_blank" rel="' + rel + '">' +
@@ -713,8 +754,10 @@
             }
             grid.innerHTML = reading.map(function (r) {
                 var b = { t: r.title, a: r.author };
+                // The feed's thumbnail is 75px tall; Goodreads has the same
+                // cover large enough for an 84px slot on a high-density screen.
                 return readingBook(r.link, 'nofollow noopener noreferrer', b,
-                    r.img ? coverImg(r.img, b) : typeCoverHtml(b), krEscapeHtml(r.author || ''));
+                    r.img ? coverImg(goodreadsCover(r.img, 240), b) : typeCoverHtml(b), krEscapeHtml(r.author || ''));
             }).join('') + asOf;
         }).catch(function () {
             grid.innerHTML = '<p class="kr-reading__meta">Could not load this just now.</p>';
@@ -730,7 +773,7 @@
         if (last) {
             last.innerHTML = dated.slice(0, 2).map(function (b) {
                 return readingBook(goodreadsUrl(b), 'noopener noreferrer', b,
-                    b.i ? coverImg(coverUrl(b.i), b) : typeCoverHtml(b),
+                    bookCoverImg(b),
                     krEscapeHtml(b.a || '') + (b.r ? ' &middot; ' + b.r + '/5' : '') + '<br>' + fmtDay(parseDate(b.d)));
             }).join('');
         }

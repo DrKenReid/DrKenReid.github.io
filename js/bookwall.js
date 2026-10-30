@@ -2,17 +2,17 @@
  * bookwall.js: the cover wall on books.html ("Every Book").
  *
  * Every rated book in data/books.json, searchable by title and author and
- * filterable by my rating. A book with an ISBN hangs as its Open Library
- * cover, looked up by that ISBN; a book Goodreads has no ISBN for (most
- * of the Kindle series) hangs as a cover set in type (krTypeCover), so
+ * filterable by my rating. A book hangs as the cover Goodreads shows for
+ * it (c in books.json, kept for every book, ISBN or not), else Open
+ * Library's for its ISBN, else a cover set in type (krTypeCover), so
  * the wall and its counts cover the whole reading history, not only the
  * books a cover can be found for.
  *
  * Links, cover URLs and tooltips come from krBookshelf (js/bookshelf.js,
  * loaded first), so a tile says and links what the shelf does.
- * A cover Open Library has no scan of is not dropped either: js/bookshelf.js
- * sets it in type, from the data- attributes on the <img>,
- * so every tile the counts promise is on the wall. The counts are the
+ * A cover that will not load is not dropped either: js/bookshelf.js
+ * tries the next picture and then sets it in type, from the data-
+ * attributes on the <img>, so every tile the counts promise is on the wall. The counts are the
  * filter buttons' (built by renderFilterBar, which gives them
  * aria-pressed), the total in the lede, and #book-wall-count, the shared
  * .kr-list-counter live region, empty unless something narrows the wall.
@@ -57,14 +57,14 @@
 
     /* A tile is one link: the cover, then the stars that show on hover.
        Its name is "Title by Author, rated N of 5" either way: the <img>'s
-       alt text, or for a book with no ISBN a hidden line beside a cover
+       alt text, or for a book with no picture a hidden line beside a cover
        set in type, which is itself hidden so the title is not read twice. */
     function tile(b) {
         var name = krBookTitle(b.t);
         var called = krEscapeHtml(name.title + ' by ' + b.a);
-        var cover = b.i
-            ? '<img src="' + krEscapeHtml(krBookshelf.coverUrl(b.i, 'M')) + '" alt="' + called + '" loading="lazy"' +
-                krTypeCover.dataAttrs(b) + '>'
+        var attrs = krBookshelf.coverAttrs(b, 'M');
+        var cover = attrs
+            ? '<img' + attrs + ' alt="' + called + '" loading="lazy"' + krTypeCover.dataAttrs(b) + '>'
             : krTypeCover(b, { decorative: true }).outerHTML + '<span class="sr-only">' + called + '</span>';
         return '<a class="book-wall-item" data-live="' + genreOf(b) + '" href="' + krEscapeHtml(krBookshelf.goodreadsUrl(b)) + '"' +
             ' target="_blank" rel="noopener noreferrer" title="' + krEscapeHtml(krBookshelf.label(b)) + '">' +

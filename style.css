@@ -11227,6 +11227,18 @@ html.kr-show-open body {
 .kr-show__info.is-visible {
   opacity: 1; }
 
+/* A wallpaper has no bar to clear, so the details drop to the corner;
+   and while they show, a slide of type set side by side (a book, a
+   record, a quote beside its cover) stands up clear of them. */
+.kr-show--bare .kr-show__info {
+  bottom: clamp(12px, 3vh, 28px); }
+
+@media (min-width: 768px) and (min-aspect-ratio: 4 / 5) {
+  .kr-show:has(.kr-show__info.is-visible) .kr-show__slide--card .kr-show__card {
+    padding-bottom: calc(clamp(12px, 3vh, 28px) + 150px); }
+  .kr-show:not(.kr-show--bare):has(.kr-show__info.is-visible) .kr-show__slide--card .kr-show__card {
+    padding-bottom: calc(clamp(12px, 3vh, 28px) + 222px); } }
+
 .kr-show .kr-show__info p {
   margin: 0;
   color: var(--kr-show-muted); }
@@ -11625,6 +11637,33 @@ html.kr-show-open body {
   font-size: clamp(14px, 1.2vw, 18px);
   letter-spacing: 0.04em;
   color: var(--kr-show-muted); }
+
+/* A quote beside the cover of its book, as a book stands in the books
+   slideshow (MODES.quotes in slideshow.js finds it in books.json): it
+   reads from the cover's edge, or centred under it where the feature
+   stacks. */
+.kr-show__about > .kr-show__quote,
+.kr-show__about > .kr-show__quote .kr-show__quote-text {
+  text-align: inherit; }
+
+/* Beside a cover the words get a little more room and type a size down,
+   so a long quote fits next to it. */
+.kr-show__feature:has(.kr-show__quote) .kr-show__about {
+  max-width: 40em; }
+
+.kr-show__about .kr-show__quote-text p {
+  font-size: clamp(20px, 2.6vw, 44px); }
+
+.kr-show__about .kr-show__quote--medium .kr-show__quote-text p {
+  font-size: clamp(17px, 1.9vw, 32px); }
+
+.kr-show__about .kr-show__quote--long .kr-show__quote-text p {
+  font-size: clamp(15px, 1.35vw, 24px); }
+
+/* Stacked (phones, tall screens), a long quote's cover gives it room. */
+@media (max-width: 767px), (max-aspect-ratio: 4 / 5) {
+  .kr-show__feature:has(.kr-show__quote--long) .kr-show__cover {
+    height: min(22vh, 200px); } }
 
 /* A book or a record in front of its wall: the cover, then its lines. */
 .kr-show__feature {
@@ -13098,18 +13137,33 @@ button.kr-cal__cell {
   .kr-quote-wall {
     column-count: 1; } }
 
+/* Each card takes one of the four series hues in turn (by its place on
+   the wall, so neighbours in a column differ): a stripe down its left
+   edge and a light wash of the same colour, which keeps every text colour
+   on it above 4.5:1. */
 .kr-quote-card {
+  --kr-quote-tint: var(--kr-series-1);
   position: relative;
   break-inside: avoid;
   margin-bottom: 16px;
   padding: 18px 20px;
   border: 1px solid rgba(0, 0, 0, 0.08);
+  border-left: 3px solid var(--kr-quote-tint);
   border-radius: 12px;
-  background: #ffffff;
+  background: color-mix(in srgb, var(--kr-quote-tint) 6%, var(--kr-surface-3));
   cursor: copy;
   content-visibility: auto;
   contain-intrinsic-size: auto 180px;
   transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
+
+.kr-quote-card:nth-child(4n + 2) {
+  --kr-quote-tint: var(--kr-series-2); }
+
+.kr-quote-card:nth-child(4n + 3) {
+  --kr-quote-tint: var(--kr-series-3); }
+
+.kr-quote-card:nth-child(4n) {
+  --kr-quote-tint: var(--kr-series-4); }
 
 .kr-quote-card:hover {
   transform: translateY(-3px);
@@ -13202,8 +13256,9 @@ button.kr-cal__cell {
   opacity: 1; }
 
 [data-theme="dark"] .kr-quote-card {
-  background: #222222;
-  border-color: rgba(255, 255, 255, 0.07); }
+  background: color-mix(in srgb, var(--kr-quote-tint) 8%, var(--kr-surface-1));
+  border-color: rgba(255, 255, 255, 0.07);
+  border-left-color: var(--kr-quote-tint); }
 
 [data-theme="dark"] .kr-quote-card:hover {
   border-color: rgba(252, 96, 96, 0.5);
@@ -14929,6 +14984,21 @@ a.kr-made__link:focus-visible::after {
 @media only screen and (max-width: 575px) {
   .kr-colo-defs > div {
     grid-template-columns: 1fr; } }
+
+/* The same rows naming things rather than files (photographs and
+   hosting, the sound credits), set in the page's own type; a row may hold
+   a .kr-colo-list, one recording to a line. */
+.kr-colo-defs--names dt {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600; }
+
+.kr-colo-defs--names .kr-colo-list li {
+  margin-bottom: 4px;
+  font-size: 14px; }
+
+.kr-colo-defs--names .kr-colo-list li:last-child {
+  margin-bottom: 0; }
 
 /* Type specimens, set in the faces they are describing. */
 .kr-colo-spec {

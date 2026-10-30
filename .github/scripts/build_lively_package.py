@@ -115,8 +115,9 @@ def properties(m: dict) -> dict:
                 "value": 0},
         "drift": {"type": "checkbox", "value": True, "text": "Slow zoom"},
         "captions": {"type": "checkbox", "value": True, "text": "Show where each was taken"},
-        "clock": {"type": "checkbox", "value": False, "text": "Show the time"},
-        "info": {"type": "checkbox", "value": False, "text": "Show each photograph's details"},
+        # On by default, as the slideshow has them in a wallpaper (WALLPAPER_SHOWS).
+        "clock": {"type": "checkbox", "value": True, "text": "Show the time and date"},
+        "info": {"type": "checkbox", "value": True, "text": "Show each photograph's details"},
     }
 
 
@@ -161,8 +162,9 @@ function load() {
   if (+picked.dim > 0) q.set('dim', String(Math.round(picked.dim)));
   if (picked.drift === false) q.set('drift', '0');
   if (picked.captions === false) q.set('captions', '0');
-  if (picked.clock === true) q.set('clock', '1');
-  if (picked.info === true) q.set('info', '1');
+  // controls=off turns the time and the details on; only "off" is written.
+  if (picked.clock === false) q.set('clock', '0');
+  if (picked.info === false) q.set('info', '0');
   q.set('controls', 'off');
   var url = SITE + '?' + q.toString();
   var frame = document.getElementById('show');

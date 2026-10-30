@@ -146,3 +146,24 @@ test('yearGroups: the newest year stands alone, and one year is one button', () 
     assert.deepEqual([...shelf.yearGroups(years({ 2026: 1 })).map((g) => g.label)], ['2026']);
     assert.deepEqual([...shelf.yearGroups([])], []);
 });
+
+/* Covers: Goodreads' (every book has one in books.json) at the size asked
+   for, then Open Library's for the ISBN as the fallback. Only about half
+   the books have an ISBN Open Library has a scan of, so a wall that asked
+   it alone set most of the Kindle series in type. */
+const GR = 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/';
+
+test('goodreadsCover: resizes a sized name, sizes an unsized one, leaves others alone', () => {
+    assert.equal(shelf.goodreadsCover('1775316794l/250638183._SY475_.jpg', 320), GR + '1775316794l/250638183._SY320_.jpg');
+    assert.equal(shelf.goodreadsCover('1600000000l/12345.jpg', 475), GR + '1600000000l/12345._SY475_.jpg');
+    assert.equal(shelf.goodreadsCover('https://example.com/cover.jpg', 240), 'https://example.com/cover.jpg');
+    assert.equal(shelf.goodreadsCover('', 240), '');
+});
+
+test('coverAttrs: Goodreads first, Open Library next, nothing without either', () => {
+    const both = shelf.coverAttrs({ c: '1/2._SY475_.jpg', i: '9780063021426' }, 'M');
+    assert.equal(both, ' src="' + GR + '1/2._SY320_.jpg" data-cover-next="' + shelf.coverUrl('9780063021426', 'M') + '"');
+    assert.equal(shelf.coverAttrs({ c: '1/2._SY475_.jpg' }, 'L'), ' src="' + GR + '1/2._SY475_.jpg"');
+    assert.equal(shelf.coverAttrs({ i: '9780063021426' }, 'M'), ' src="' + shelf.coverUrl('9780063021426', 'M') + '"');
+    assert.equal(shelf.coverAttrs({}, 'M'), '');
+});

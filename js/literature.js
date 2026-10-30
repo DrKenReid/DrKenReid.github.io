@@ -122,10 +122,11 @@
             var title = krEscapeHtml(shown.title);
             var author = krEscapeHtml(r.author);
             var isbn = r.isbn13 || r.isbn || '';
-            // Cover and link from bookshelf.js, as the shelf builds them.
+            // Cover and link from bookshelf.js, as the shelf builds them:
+            // the matching book's Goodreads cover, then Open Library's.
             var shelf = window.krBookshelf;
-            var coverUrl = isbn && shelf ? krEscapeHtml(shelf.coverUrl(isbn, 'L')) : '';
             var hit = reviewedBook(r, books || []);
+            var coverAttrs = shelf ? shelf.coverAttrs({ c: hit && hit.c, i: isbn }, 'L') : '';
             var url = hit && shelf ? krEscapeHtml(shelf.goodreadsUrl(hit)) : '';
             var open = url ? '<a href="' + url + '" target="_blank" rel="noopener noreferrer" class="review-link-wrap">' : '';
             var close = url ? '</a>' : '';
@@ -134,7 +135,7 @@
             var coverData = window.krTypeCover ? window.krTypeCover.dataAttrs({ t: r.title, a: r.author, r: r.rating }) : '';
             var card = document.createElement('div');
             card.className = 'review-card';
-            card.innerHTML = (coverUrl ? '<div class="review-cover">' + open + '<img src="' + coverUrl + '" alt="Book cover: ' + title + ' by ' + author + '" loading="lazy"' + coverData + '>' + close + '</div>' : '') +
+            card.innerHTML = (coverAttrs ? '<div class="review-cover">' + open + '<img' + coverAttrs + ' alt="Book cover: ' + title + ' by ' + author + '" loading="lazy"' + coverData + '>' + close + '</div>' : '') +
                 '<div class="review-body">' +
                 '<div class="review-stars">' + stars + '</div>' +
                 '<h3 class="review-title">' + open + title + close + '</h3>' +
