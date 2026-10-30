@@ -6212,6 +6212,30 @@ function embedHeightOverride(btn) {
     return h > 0 ? h : 0;
 }
 
+/* A Reddit post (embed.reddit.com/r/<sub>/comments/<id>/<slug>/?embed=true). */
+var KR_REDDIT_EMBED = 'https://embed.reddit.com';
+
+/** The address the frame loads: a Reddit post is drawn light or dark from
+ *  ?theme=, so it takes the page's theme as it is when the reader asks. */
+function krEmbedSrc(src, dark) {
+    if (src.indexOf(KR_REDDIT_EMBED + '/') !== 0) return src;
+    return src + (src.indexOf('?') < 0 ? '?' : '&') + 'theme=' + (dark ? 'dark' : 'light');
+}
+
+/** The height a message from an embed asks its frame for, or 0. A Reddit
+ *  post is as tall as its title, media and footer at the frame's width,
+ *  which no fixed height matches at every width, so the embed says how
+ *  tall it is: '{"type":"resize.embed","data":N}', the message Reddit's
+ *  own widgets.js listens for. */
+function krEmbedResize(origin, data) {
+    if (origin !== KR_REDDIT_EMBED || typeof data !== 'string') return 0;
+    var msg;
+    try { msg = JSON.parse(data); } catch (e) { return 0; }
+    if (!msg || msg.type !== 'resize.embed') return 0;
+    var h = Math.ceil(parseFloat(msg.data));
+    return h > 0 ? h : 0;
+}
+
 /**
  * Click-to-load embed facades. Markup:
  *   <button class="kr-embed-facade" data-embed-src="..."
@@ -6228,6 +6252,9 @@ function embedHeightOverride(btn) {
  * then both take N px. A video player ignores it. Every facade written so
  * far carries 315 or 300, copied from YouTube's own 560x315 embed code,
  * which was a way of saying 16:9 at one width, not a height anyone chose.
+ *
+ * A Reddit post starts 16:9 too, then takes the page's theme and the
+ * height it reports for itself (krEmbedSrc, krEmbedResize).
  */
 function initEmbedFacades() {
     // The override has to reach the facade before it is clicked too, or
@@ -6247,7 +6274,8 @@ function initEmbedFacades() {
         var btn = e.target.closest('.kr-embed-facade[data-embed-src]');
         if (!btn) return;
         var iframe = document.createElement('iframe');
-        iframe.src = btn.getAttribute('data-embed-src');
+        iframe.src = krEmbedSrc(btn.getAttribute('data-embed-src'),
+            document.documentElement.getAttribute('data-theme') === 'dark');
         iframe.title = btn.getAttribute('data-embed-title') || 'Embedded content';
         iframe.className = 'kr-embed-frame';
         var h = embedHeightOverride(btn);
@@ -6259,6 +6287,17 @@ function initEmbedFacades() {
         iframe.setAttribute('allowfullscreen', '');
         btn.parentNode.replaceChild(iframe, btn);
         iframe.focus();
+    });
+    // A self-sizing embed (krEmbedResize) grows or shrinks its own frame,
+    // found by the window the message came from.
+    window.addEventListener('message', function (e) {
+        var h = krEmbedResize(e.origin, e.data);
+        if (!h) return;
+        document.querySelectorAll('iframe.kr-embed-frame').forEach(function (f) {
+            if (f.contentWindow !== e.source) return;
+            f.style.aspectRatio = 'auto';
+            f.style.height = h + 'px';
+        });
     });
 }
 

@@ -287,3 +287,26 @@ test('a Goodreads title loses its series bracket for display', () => {
     assert.deepEqual(t('Big History (The Great Courses)'), ['Big History (The Great Courses)', '']);
     assert.deepEqual(t(null), ['', '']);
 });
+
+test('a Reddit embed loads in the page\'s theme; other embeds are untouched', () => {
+    const post = 'https://embed.reddit.com/r/TNG/comments/abc/a_post/?embed=true';
+    assert.equal(rt.krEmbedSrc(post, true), post + '&theme=dark');
+    assert.equal(rt.krEmbedSrc(post, false), post + '&theme=light');
+    assert.equal(rt.krEmbedSrc('https://embed.reddit.com/r/TNG/comments/abc/', true),
+                 'https://embed.reddit.com/r/TNG/comments/abc/?theme=dark');
+    const yt = 'https://www.youtube.com/embed/VQERtaTA0Ys';
+    assert.equal(rt.krEmbedSrc(yt, true), yt);
+    assert.equal(rt.krEmbedSrc('https://embed.reddit.com.example.org/x', true), 'https://embed.reddit.com.example.org/x');
+});
+
+test('only Reddit\'s resize message sizes an embed frame', () => {
+    const msg = (o) => JSON.stringify(o);
+    assert.equal(rt.krEmbedResize('https://embed.reddit.com', msg({ type: 'resize.embed', data: 612.4 })), 613);
+    assert.equal(rt.krEmbedResize('https://embed.reddit.com', msg({ type: 'resize.embed', data: '540' })), 540);
+    // Another origin, another message, or a malformed one is ignored.
+    assert.equal(rt.krEmbedResize('https://evil.example', msg({ type: 'resize.embed', data: 612 })), 0);
+    assert.equal(rt.krEmbedResize('https://embed.reddit.com', msg({ type: 'other', data: 612 })), 0);
+    assert.equal(rt.krEmbedResize('https://embed.reddit.com', msg({ type: 'resize.embed', data: -5 })), 0);
+    assert.equal(rt.krEmbedResize('https://embed.reddit.com', 'not json'), 0);
+    assert.equal(rt.krEmbedResize('https://embed.reddit.com', { type: 'resize.embed', data: 612 }), 0);
+});

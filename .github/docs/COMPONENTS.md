@@ -282,6 +282,13 @@ player until it is clicked.
 - Do not: paste a raw YouTube `<iframe>` (an audit error,
   `youtube-iframe`).
 
+A Reddit post (a clip that lives only there) uses the same facade, with
+`data-embed-src="https://embed.reddit.com/r/<sub>/comments/<id>/<slug>/?embed=true"`
+and the note "Click to load the Reddit post". The frame loads in the
+page's theme (`krEmbedSrc` adds `&theme=dark` or `light`) and takes the
+height the post reports in its `resize.embed` message (`krEmbedResize`),
+so it needs no `data-embed-height` and no Reddit script on the page.
+
 An Instagram post is the `blockquote.instagram-media` Instagram's own
 snippet writes, without its `style` attribute (§11 sizes it), inside a
 `figure.kr-figure--solo.kr-figure--embed`, with Instagram's script
