@@ -82,7 +82,7 @@
    ],
    "inLanguage": "en-GB",
    "articleSection": "Data & AI",
-   "wordCount": 1379,
+   "wordCount": 1358,
    "timeRequired": "PT7M",
    "keywords": ["CMA-ES", "evolution strategy", "covariance matrix adaptation", "interactive", "optimization"]
  }
@@ -169,7 +169,6 @@
  <h2>Quick jargon guide</h2>
  <ul>
  <li><strong>CMA-ES:</strong> the Covariance Matrix Adaptation Evolution Strategy. An optimiser that samples a cloud of candidate points, keeps the best ones, and keeps adjusting the cloud's position, size, and shape to follow whatever has been working.</li>
- <li><strong>Evolution strategy:</strong> the family CMA-ES belongs to: evolutionary optimisers for continuous variables, where mutation means adding random numbers rather than flipping genes.</li>
  <li><strong>Mean:</strong> the centre of the search cloud, the algorithm's current best guess at where the answer lives.</li>
  <li><strong>Step size (sigma):</strong> the overall scale of the cloud. Big sigma means bold, scattered samples; small sigma means cautious, local ones.</li>
  <li><strong>Covariance matrix:</strong> the shape of the cloud: which directions it stretches along and how far. This is the star of the show, and adapting it is what the "CMA" stands for.</li>
@@ -242,7 +241,7 @@
 
  <h2>Where it gets used</h2>
 
- <p>For continuous black-box problems, where the objective is a simulator or a physical measurement or a hyperparameter score with no gradient in sight, CMA-ES is the default serious tool up to a few hundred dimensions (yes, you read that correctly!!). </p>
+ <p>For continuous <jargon key="black-box optimisation">black-box problems</jargon>, where the objective is a simulator or a physical measurement or a hyperparameter score with no gradient in sight, CMA-ES is the default serious tool up to a few hundred dimensions (yes, you read that correctly!!). </p>
 
  <p>It has tuned aircraft geometry, robot gaits, controller parameters, and the settings of other learning systems. Hansen's tutorial<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
 

@@ -157,7 +157,7 @@
  <li><strong>devicePixelRatio:</strong> how many physical screen pixels sit behind one CSS pixel. Ignoring it can cause canvas drawings to come out blurry on phones and retina displays.</li>
  <li><strong>CSS custom properties:</strong> variables that live in stylesheets (<code>--viz-ink: #2b2b2b</code>). Scripts can read them at runtime, which is the hinge this whole system turns on.</li>
  <li><strong>MutationObserver:</strong> a browser API that fires a callback when part of the page changes, like an attribute being flipped by a theme toggle.</li>
- <li><strong>Seeded RNG:</strong> a random number generator that produces the same "random" sequence every time you start it from the same seed.</li>
+ <li><strong>Seeded generator:</strong> a random number generator that produces the same "random" sequence every time you start it from the same seed.</li>
  <li><strong>requestAnimationFrame:</strong> the browser's "call me before the next repaint" scheduler, the correct heartbeat for animation loops.</li>
  </ul>
  </div>
@@ -183,7 +183,7 @@ new MutationObserver(function () {
   redraw();
 }).observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});</code></pre>
 
- <p>The observer redraws the moment <code>data-theme</code> gets toggled, so a running simulation changes palette mid-run. This has no practical value whatsoever. </p>
+ <p>The <jargon key="mutationobserver">observer</jargon> redraws the moment <code>data-theme</code> gets toggled, so a running simulation changes palette mid-run. This has no practical value whatsoever. </p>
 
  <h2>Randomness must be reproducible</h2>
 
@@ -203,7 +203,7 @@ new MutationObserver(function () {
 
  <h2>Phones are the real test</h2>
 
- <p>No canvas ever gets a fixed rendered height now: the framework computes height from measured width, so narrow screens get a taller aspect instead of a squashed ribbon. It also caps the pixel density at 2, because a 3x phone would otherwise redraw nine pixels for every one it shows, every frame, for detail nobody can see at that size. Side-by-side panes stack vertically below ~480px, and sliders become full-width rows on small screens.</p>
+ <p>No canvas ever gets a fixed rendered height now: the framework computes height from measured width, so narrow screens get a taller aspect instead of a squashed ribbon. It also caps the <jargon key="devicepixelratio">pixel density</jargon> at 2, because a 3x phone would otherwise redraw nine pixels for every one it shows, every frame, for detail nobody can see at that size. Side-by-side panes stack vertically below ~480px, and sliders become full-width rows on small screens.</p>
 
  <p>A canvas only gets <code>touch-action: none</code> if it has drag interaction, so chart canvases never trap a reader mid-scroll.</p>
 

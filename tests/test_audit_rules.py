@@ -146,6 +146,28 @@ class ComponentPointers(unittest.TestCase):
                 self.assertIn(key, audit_site.COMPONENT_SECTIONS)
 
 
+class ExternalImageSizes(unittest.TestCase):
+    """check_img_dims: an external picture needs a size, unless it is a blog
+    card's, which sits in a fixed-ratio box (the cards baked into posts)."""
+
+    def ext(self, html):
+        parser = audit_site.PageParser()
+        parser.feed(html)
+        return [src for src, _line in parser.ext_nodims]
+
+    def test_a_bare_external_image_is_reported(self):
+        self.assertEqual(self.ext('<p><img src="https://example.org/a.jpg" alt="a"></p>'),
+                         ["https://example.org/a.jpg"])
+
+    def test_a_sized_one_is_fine(self):
+        self.assertEqual(self.ext('<img src="https://example.org/a.jpg" alt="a" width="4" height="3">'), [])
+
+    def test_a_card_picture_is_exempt(self):
+        html = ('<div class="related-posts"><a class="blog-card"><div class="blog-card-img">'
+                '<img src="https://example.org/a.jpg" alt="" loading="lazy"></div></a></div>')
+        self.assertEqual(self.ext(html), [])
+
+
 def run_page_checks(rel, html, checks, tracked=True):
     """Run page checks on one page; returns [(severity, code, message)]."""
     found = []

@@ -170,7 +170,7 @@
   <figcaption class="figure-note">Press Tab anywhere on the site and this is the first stop. Mouse users never see it.</figcaption>
  </figure>
 
- <p>The Ctrl+K <a href="ctrl-k-for-a-static-site.html">command palette</a> got the full dialog treatment: focus moves into the input when it opens, Tab is trapped (it moves the selection instead of escaping the dialog), Escape closes it, and results are given to screen readers through an <code>aria-live</code> region. The filter buttons on the blog and gallery use <code>aria-pressed</code>, so "Photography, toggle button, pressed" comes through instead of a mystery link.</p>
+ <p>The Ctrl+K <a href="ctrl-k-for-a-static-site.html">command palette</a> got the full dialog treatment: focus moves into the input when it opens, <jargon key="focus trap">Tab is trapped</jargon> (it moves the selection instead of escaping the dialog), Escape closes it, and results are given to screen readers through an <code>aria-live</code> region. The filter buttons on the blog and gallery use <jargon key="aria attributes"><code>aria-pressed</code></jargon>, so "Photography, toggle button, pressed" comes through instead of a mystery link.</p>
 
  <figure class="kr-figure--solo">
   <img src="img/a11y/command-palette.webp" alt="The Ctrl+K command palette open over a dimmed homepage, with the query accessib typed, six post results listed, the top one highlighted, and footer hints reading navigate, open, esc close" loading="lazy" width="1520" height="1064" class="kr-figure-img">
@@ -186,7 +186,7 @@
 
  <h2>The screen reader path</h2>
 
- <p>Links that open a new tab get a screen-reader-only annotation, WCAG technique G201, applied automatically:</p>
+ <p>Links that open a new tab get a <jargon key="sr-only">screen-reader-only</jargon> annotation, WCAG technique G201, applied automatically:</p>
 
 <pre><code class="language-javascript">// Appends screen-reader-only "(opens in new tab)" to target="_blank" links
 var span = document.createElement('span');

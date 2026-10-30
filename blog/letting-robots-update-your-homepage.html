@@ -162,7 +162,7 @@
 
  <h2>The idea: if the site can't fetch, fetch into the site</h2>
 
- <p>A normal website with live data has a server that queries things when visitors arrive. A static site can't do that, but it has a loophole: the site is a git repository, and <em>anything that can commit to the repository can change the site</em>. So instead of fetching data per visit, a scheduled job fetches it once a week and commits the results as plain JSON files. The site stays static. Visitors' browsers read those JSON files with an ordinary fetch: same origin, no keys, no rate limits, nothing that can fail separately from the site itself.</p>
+ <p>A normal website with live data has a server that queries things when visitors arrive. A static site can't do that, but it has a loophole: the site is a git repository, and <em>anything that can commit to the repository can change the site</em>. So instead of fetching data per visit, a <jargon key="cron">scheduled job</jargon> fetches it once a week and commits the results as plain JSON files. The site stays static. Visitors' browsers read those JSON files with an ordinary fetch: same origin, no keys, no rate limits, nothing that can fail separately from the site itself.</p>
 
  <p>The whole pipeline is one workflow file and three Python scripts. The workflow checks out the repository, runs the two fetch scripts, checks what they wrote, and commits whatever changed (the comments are trimmed out here):</p>
 

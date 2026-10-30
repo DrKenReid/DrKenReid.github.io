@@ -174,6 +174,7 @@ real files in a `vm` (`tests/js/runtime.js` is the shared loader).
 | `test_generate_related_posts.py` | the baked card stays `createBlogCardElement`'s card |
 | `test_generate_series_band.py` | which series the blog's "Read in order" band shows (three parts or more, most recently updated, ties by name), its escaped card, and the refusal of a series with no tracked page or no description |
 | `test_invites.py` | every post has its own newsletter pop-up words in `data/invites.json`, short enough for a phone and within the house rules |
+| `test_jargon_rule.py` | the jargon rule: what counts as a use of a box term, the stray `<jargon>` marker, the grandfathered list; its label cases (`tests/jargon_aliases.json`) also run against the tooltips' `krJargonAliases` in `tests/js/jargon.test.js` |
 | `test_photo_dims.py` | the image header readers and the `--stamp-img` scanner |
 | `test_photo_renditions.py` | the hero size (never enlarged), the edge a small original allows, the thumb list that leaves out the `@2x` doubles, and `--check` on a stand-in tree |
 | `test_post_body.py` | finding a post's article in its HTML |

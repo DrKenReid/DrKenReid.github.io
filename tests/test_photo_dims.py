@@ -50,6 +50,18 @@ class HeaderReaders(unittest.TestCase):
                 path.write_bytes(data)
                 self.assertEqual(tuple(gpd.image_size(path)), size, name)
 
+    def test_svg_from_its_attributes_or_viewbox(self):
+        # an animated post picture is an <img> of an .svg, which Pillow cannot read
+        with tempfile.TemporaryDirectory() as tmp:
+            for name, text, size in (
+                    ("a.svg", '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" '
+                              'width="1600" height="900"><title>t</title></svg>', (1600, 900)),
+                    ("b.svg", '<?xml version="1.0"?>\n<svg viewBox="0 0 320.5 180">', (320, 180)),
+                    ("c.svg", "<svg width='40px' height='30px'>", (40, 30))):
+                path = Path(tmp) / name
+                path.write_text(text, encoding="utf-8")
+                self.assertEqual(tuple(gpd.image_size(path)), size, name)
+
 
 class Scanner(unittest.TestCase):
     PAGE = (

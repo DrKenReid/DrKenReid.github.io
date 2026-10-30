@@ -287,6 +287,21 @@ test('krSeasonOnDate: the higher rank wins a shared day', () => {
     assert.equal(on(2027, 8, 8), 'cat-day');
 });
 
+test('a memorial page (<body data-memorial>) has no season and no birthday hats', () => {
+    const body = rt.document.body;
+    const preview = rt.sessionStorage.getItem('kr-season-preview');
+    rt.sessionStorage.setItem('kr-season-preview', 'halloween');
+    try {
+        assert.equal(rt.krSeason().key, 'halloween', 'an ordinary page follows the preview');
+        body.hasAttribute = (name) => name === 'data-memorial';
+        assert.equal(rt.krSeason(), null, 'not even a preview dresses it');
+        assert.equal(rt.krBirthday(new Date(2026, 9, 12)), false);
+    } finally {
+        delete body.hasAttribute;
+        rt.sessionStorage.setItem('kr-season-preview', preview);
+    }
+});
+
 test('krSeasonOnDate: Halloween runs 17 October to 1 November, both included', () => {
     const on = (m, d) => (rt.krSeasonOnDate(new Date(2026, m - 1, d)) || {}).key || null;
     assert.equal(on(10, 16), 'fall');

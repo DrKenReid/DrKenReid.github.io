@@ -41,6 +41,8 @@ not committed breaks every generator in CI.
     sitelib.thumb_srcset(src)   # "thumb 1x, double 2x" for a thumb, else ""
     sitelib.block_re("listing-fallback")  # a generated region of a page
     sitelib.fill_block(text, name, lines, note, where)
+    sitelib.jargon_report(html)  # box terms the post never uses, stray <jargon> keys
+    sitelib.jargon_aliases(label)  # "Gold OA (open access)" -> its names
 """
 from __future__ import annotations
 
@@ -48,6 +50,7 @@ import argparse
 import json
 import re
 import subprocess
+from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -311,6 +314,183 @@ def fill_block(text: str, name: str, lines: list[str], note: str | None = None,
         body = "".join((pad + ln).rstrip() + "\n" for ln in lines)
         return begin + body + m.group(4)
     return rx.sub(fill, text, count=1)
+
+
+# --- the jargon box -------------------------------------------------------
+# A post's glossary and its prose must agree: every term in the box is one
+# the post uses, in the post's own wording, and every <jargon key> marker
+# names a term in the box. applyJargonTooltips (js/shared-components.js)
+# underlines a box term only where those words appear, so a term the post
+# never uses defines nothing, and a marker whose key matches no term loses
+# its tooltip without a word. These helpers mirror that matcher for the
+# audit (jargon-unused, jargon-marker) and the draft lint.
+
+# Terms applyJargonTooltips knows on every post (GLOBAL_JARGON): a marker may
+# name one of these without the post defining it.
+GLOBAL_JARGON = ("ai", "ml", "llm", "genai", "open source", "api", "github",
+                 "python", "json")
+
+_JARGON_HEADING = re.compile(r"jargon|glossary|plain english", re.I)
+_ALIAS_SPLIT = re.compile(r"\s*/\s*|\s+vs\.?\s+", re.I)
+_VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link",
+         "meta", "source", "track", "wbr"}
+# Text that is not the post's prose: code, scripts, and the furniture the
+# runtime adds or reads (the reference list, the end band, the pager).
+_NOT_PROSE_TAGS = {"script", "style", "code", "pre", "textarea", "template"}
+_NOT_PROSE_CLASSES = {"references", "related-posts", "kr-post-end", "post-pagination",
+                      "kr-toc-mobile", "kr-share-rail", "blog-meta"}
+
+
+def _jargon_norm(text: str) -> str:
+    return re.sub(r"\s+", " ", (text or "").replace("’", "'").replace("‘", "'")).strip()
+
+
+def jargon_aliases(label: str) -> list[str]:
+    """The names a box label answers to, lower-cased: the label itself
+    without its trailing colon, the two halves of "Term (ABBR)", and each
+    side of "A / B" or "A vs B". krJargonAliases in shared-components.js
+    returns the same list for the same label (tests pin both)."""
+    base = re.sub(r"[:：]\s*$", "", _jargon_norm(label))
+    if not base:
+        return []
+    out = [base]
+    paren = re.match(r"^(.+?)\s*\(([^)]+)\)$", base)
+    if paren:
+        out += [paren.group(1), paren.group(2)]
+    for name in list(out):
+        parts = [p for p in _ALIAS_SPLIT.split(name) if p]
+        if len(parts) > 1:
+            out += parts
+    seen, result = set(), []
+    for name in out:
+        key = _jargon_norm(name).lower()
+        if key and key not in seen:
+            seen.add(key)
+            result.append(key)
+    return result
+
+
+def jargon_term_re(term: str) -> re.Pattern:
+    """A box term as applyJargonTooltips finds it in prose: whole words,
+    any case, an optional plural "s" or "es". ASCII word boundaries, as in
+    JavaScript, so a term that starts or ends with punctuation ("@font-face")
+    cannot match there and needs a <jargon> marker instead."""
+    return re.compile(r"\b" + re.escape(term) + r"(?:s|es)?\b", re.I | re.A)
+
+
+class _JargonParser(HTMLParser):
+    """The jargon boxes, the <jargon> markers and the prose of a post's
+    .blog-post, with line numbers."""
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.stack: list[tuple[str, set[str], bool]] = []   # tag, classes, not prose
+        self.post_depth = 0
+        self.box_depth = 0
+        self.boxes: list[tuple[str, list[tuple[str, int]]]] = []
+        self._heading: list[str] | None = None
+        self._box_heading = ""
+        self._box_items: list[tuple[str, int]] = []
+        self._li: list | None = None          # [label or None, line]
+        self._strong: list[str] | None = None
+        self.markers: list[tuple[str, int]] = []
+        self.prose: list[str] = []
+        self.not_prose = 0
+
+    def handle_starttag(self, tag, attrs):
+        if tag in _VOID:
+            return
+        a = dict(attrs)
+        classes = set((a.get("class") or "").split())
+        self.stack.append((tag, classes, False))
+        depth = len(self.stack)
+        if not self.post_depth:
+            if "blog-post" in classes:
+                self.post_depth = depth
+            return
+        if not self.box_depth and "plain-english-box" in classes:
+            self.box_depth = depth
+            self._box_heading, self._box_items = "", []
+        if self.box_depth:
+            if tag in ("h1", "h2", "h3", "h4", "h5", "h6"):
+                self._heading = []
+            elif tag == "li":
+                self._li = [None, self.getpos()[0]]
+            elif tag == "strong" and self._li is not None and self._li[0] is None:
+                self._strong = []
+            return
+        if tag == "jargon":
+            self.markers.append((_jargon_norm(a.get("key", "")).lower(), self.getpos()[0]))
+        if tag in _NOT_PROSE_TAGS or classes & _NOT_PROSE_CLASSES:
+            self.not_prose += 1
+            self.stack[-1] = (tag, classes, True)
+
+    def handle_endtag(self, tag):
+        if tag in _VOID:
+            return
+        for i in range(len(self.stack) - 1, -1, -1):
+            if self.stack[i][0] != tag:
+                continue
+            while len(self.stack) > i:
+                name, _classes, skip = self.stack.pop()
+                depth = len(self.stack) + 1
+                if skip:
+                    self.not_prose -= 1
+                if self.box_depth:
+                    if name in ("h1", "h2", "h3", "h4", "h5", "h6") and self._heading is not None:
+                        self._box_heading = _jargon_norm("".join(self._heading))
+                        self._heading = None
+                    elif name == "strong" and self._strong is not None:
+                        self._li[0] = _jargon_norm("".join(self._strong))
+                        self._strong = None
+                    elif name == "li" and self._li is not None:
+                        if self._li[0]:
+                            self._box_items.append((self._li[0], self._li[1]))
+                        self._li = None
+                    if depth == self.box_depth:
+                        self.boxes.append((self._box_heading, self._box_items))
+                        self.box_depth = 0
+                if depth == self.post_depth:
+                    self.post_depth = 0
+            return
+
+    def handle_data(self, data):
+        if not self.post_depth:
+            return
+        if self.box_depth:
+            if self._heading is not None:
+                self._heading.append(data)
+            if self._strong is not None:
+                self._strong.append(data)
+            return
+        if not self.not_prose:
+            self.prose.append(data)
+
+
+def jargon_report(html: str) -> tuple[list[tuple[str, int]], list[tuple[str, int]]]:
+    """What breaks the rule in one post: (box terms the post never uses,
+    <jargon> markers that name no box term), each as (text, line). A box
+    counts when its heading says jargon, glossary or plain English, or one
+    of its list items has a <strong> term, as the runtime decides. A term is
+    used when one of its aliases appears in the prose outside the box, or a
+    marker names it."""
+    parser = _JargonParser()
+    parser.feed(html)
+    parser.close()
+    prose = _jargon_norm(" ".join(parser.prose))
+    keys = {key for key, _line in parser.markers}
+    defined: set[str] = set(GLOBAL_JARGON)
+    unused = []
+    for heading, items in parser.boxes:
+        if not (_JARGON_HEADING.search(heading) or items):
+            continue
+        for label, line in items:
+            names = jargon_aliases(label)
+            defined.update(names)
+            if not any(name in keys or jargon_term_re(name).search(prose) for name in names):
+                unused.append((re.sub(r"[:：]\s*$", "", label), line))
+    unresolved = [(key, line) for key, line in parser.markers if key not in defined]
+    return unused, unresolved
 
 
 def arg_parser(doc: str | None, **kwargs) -> argparse.ArgumentParser:

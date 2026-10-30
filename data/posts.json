@@ -1,5 +1,23 @@
 [
   {
+    "title": "The Measure of a Man: Honouring Sir Patrick Stewart's Masterclass in Leadership",
+    "date": "2026-10-29",
+    "tags": [
+      "advice",
+      "television"
+    ],
+    "category": "Ideas",
+    "excerpt": "Sir Patrick Stewart taught me much about being a good leader by being a good person. Compassion, consideration, taking the time to consider. Here are those lessons and a commemoration.",
+    "url": "blog/learning-leadership-from-star-trek-and-picard.html",
+    "image": "blog/img/picard-tribute/enterprise-hero.webp",
+    "series": {
+      "name": "Leadership",
+      "part": 1
+    },
+    "readMinutes": 17,
+    "words": 3661
+  },
+  {
     "title": "Photographing Other People's Art",
     "date": "2026-10-22",
     "tags": [
@@ -11,7 +29,7 @@
     "url": "blog/photographing-other-peoples-art.html",
     "image": "img/photography/thumb/686.webp",
     "readMinutes": 10,
-    "words": 2189
+    "words": 2190
   },
   {
     "title": "Open Access Still Charges the Wrong People",
@@ -24,7 +42,7 @@
     "url": "blog/open-access-charges-the-wrong-people.html",
     "image": "img/photography/hero/11.webp",
     "readMinutes": 10,
-    "words": 2213
+    "words": 2216
   },
   {
     "title": "Warcraft III Is the Most Influential Game Ever Made",
@@ -70,7 +88,7 @@
       "part": 1
     },
     "readMinutes": 9,
-    "words": 1921
+    "words": 1922
   },
   {
     "title": "What a Custom Domain Actually Involves",
@@ -105,7 +123,7 @@
       "part": 17
     },
     "readMinutes": 5,
-    "words": 948,
+    "words": 951,
     "code": true
   },
   {
@@ -120,7 +138,7 @@
     "updated": "2026-10-12",
     "image": "img/photography/thumb/501.webp",
     "readMinutes": 8,
-    "words": 1695
+    "words": 1696
   },
   {
     "title": "Every Card Has a Sketch",
@@ -187,7 +205,7 @@
       "part": 3
     },
     "readMinutes": 9,
-    "words": 1777,
+    "words": 1778,
     "interactive": true
   },
   {
@@ -205,7 +223,7 @@
       "part": 1
     },
     "readMinutes": 15,
-    "words": 3166
+    "words": 3167
   },
   {
     "title": "Making This Website Accessible",
@@ -294,7 +312,7 @@
       "part": 8
     },
     "readMinutes": 9,
-    "words": 1822,
+    "words": 1821,
     "interactive": true
   },
   {
@@ -330,7 +348,7 @@
       "part": 6
     },
     "readMinutes": 7,
-    "words": 1379,
+    "words": 1358,
     "interactive": true
   },
   {
@@ -348,7 +366,7 @@
       "part": 2
     },
     "readMinutes": 12,
-    "words": 2525,
+    "words": 2511,
     "interactive": true
   },
   {
@@ -458,7 +476,7 @@
       "part": 12
     },
     "readMinutes": 7,
-    "words": 2027,
+    "words": 2026,
     "code": true
   },
   {
@@ -635,7 +653,7 @@
     "url": "blog/my-teacher-said-i-shouldnt-go-to-university.html",
     "image": "img/photography/thumb/113.webp",
     "readMinutes": 9,
-    "words": 1811
+    "words": 1810
   },
   {
     "title": "Free Comments via GitHub Discussions",
@@ -688,7 +706,7 @@
       "part": 5
     },
     "readMinutes": 7,
-    "words": 1324,
+    "words": 1325,
     "code": true
   },
   {
@@ -706,7 +724,7 @@
       "name": "How This Site Is Built",
       "part": 4
     },
-    "words": 1700,
+    "words": 1701,
     "code": true
   },
   {
@@ -798,7 +816,7 @@
     "url": "blog/frodo-sam-and-love.html",
     "image": "img/bg-img/end-of-the-third-age.jpg",
     "readMinutes": 12,
-    "words": 2565
+    "words": 2481
   },
   {
     "title": "Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)",
@@ -817,7 +835,7 @@
       "name": "Optimizing Your Schedule",
       "part": 2
     },
-    "words": 3490,
+    "words": 3461,
     "code": true
   },
   {
@@ -833,7 +851,7 @@
     "url": "blog/what-we-leave-behind.html",
     "image": "img/bg-img/voyager-golden-record.jpg",
     "readMinutes": 17,
-    "words": 3732
+    "words": 3707
   },
   {
     "title": "Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)",
@@ -852,7 +870,7 @@
       "name": "Optimizing Your Schedule",
       "part": 1
     },
-    "words": 3997,
+    "words": 3998,
     "code": true
   },
   {
@@ -880,7 +898,7 @@
     "url": "blog/mash-modern-perspective.html",
     "image": "https://commons.wikimedia.org/wiki/Special:FilePath/MASH_cast_1972.JPG",
     "readMinutes": 15,
-    "words": 3168
+    "words": 3117
   },
   {
     "title": "Iain M. Banks and The Culture",
@@ -910,7 +928,7 @@
       "part": 3
     },
     "readMinutes": 12,
-    "words": 2639
+    "words": 2640
   },
   {
     "title": "Advice to My Younger Self",
@@ -1017,7 +1035,7 @@
     "url": "blog/iso-8601-date-cult.html",
     "image": "img/photography/thumb/100.webp",
     "readMinutes": 8,
-    "words": 1601
+    "words": 1602
   },
   {
     "title": "Accessibility-First Design in Data Science",
@@ -1044,7 +1062,7 @@
     "url": "blog/life-and-death-of-the-early-internet.html",
     "image": "img/photography/thumb/375.webp",
     "readMinutes": 22,
-    "words": 4824
+    "words": 4806
   },
   {
     "title": "From Scotland to Michigan",
@@ -1057,7 +1075,7 @@
     "url": "blog/from-scotland-to-michigan.html",
     "image": "img/photography/thumb/18.webp",
     "readMinutes": 16,
-    "words": 3488
+    "words": 3329
   },
   {
     "title": "The Ethics of LLM Use (Not LLMs)",
@@ -1111,7 +1129,7 @@
     "url": "blog/no-idea-no-problem-data-science-portfolio.html",
     "image": "img/photography/thumb/19.webp",
     "readMinutes": 10,
-    "words": 2126
+    "words": 2127
   },
   {
     "title": "Evolutionary Computation's Identity Crisis in the Age of GenAI",
@@ -1124,7 +1142,7 @@
     "url": "blog/evolutionary-computation-identity-crisis.html",
     "image": "img/photography/thumb/208.webp",
     "readMinutes": 11,
-    "words": 2398
+    "words": 2402
   },
   {
     "title": "In Defense of Audiobooks",
@@ -1223,7 +1241,7 @@
       "name": "How This Site Is Built",
       "part": 1
     },
-    "words": 1178,
+    "words": 1179,
     "code": true
   }
 ]

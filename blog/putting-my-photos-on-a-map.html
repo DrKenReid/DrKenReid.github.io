@@ -152,8 +152,8 @@
           <h2>Quick jargon guide</h2>
           <ul>
             <li><strong>Leaflet:</strong> the standard open-source JavaScript library for interactive maps. It draws the map, handles panning and zooming, and places markers; it's the engine under a huge share of the web's non-Google maps.</li>
-            <li><strong>Tile server:</strong> where the actual map imagery comes from. Maps are served as a grid of small square images ("tiles") drawn on demand as you pan and zoom.</li>
-            <li><strong>Geotagging:</strong> attaching a location to a photo, either automatically (phones embed GPS in the file) or by hand (me, squinting at a map, going "that was definitely Falkirk").</li>
+            <li><strong>Tiles:</strong> where the actual map imagery comes from. Maps are served as a grid of small square images ("tiles") drawn on demand as you pan and zoom.</li>
+            <li><strong>Geotag:</strong> attaching a location to a photo, either automatically (phones embed GPS in the file) or by hand (me, squinting at a map, going "that was definitely Falkirk").</li>
             <li><strong>Marker / popup:</strong> the pin on the map and the bubble that opens when you click it.</li>
             <li><strong>Deep link:</strong> a URL that opens the page in a specific state, like the map already zoomed to one region.</li>
           </ul>
@@ -185,7 +185,7 @@
 
         <p>Each region renders as one circular marker: the first photograph taken there, with the photo count as a badge, its size scaled gently with the number (44 to 64 pixels, so Falkirk's 28 photos read bigger than Dublin's one without turning into a bubble chart). A map of photographs should show photographs; the plain red discs it launched with told you how many without telling you what. I skipped marker-clustering plugins entirely: hand-curated regions <em>are</em> the clustering, done once, with better names than any algorithm would pick.</p>
 
-        <p>Clicking a marker opens a popup with the region's name and up to nine thumbnails; clicking any thumbnail opens the region's <em>entire</em> photo set as a lightbox slideshow, starting from the one you picked. The thumbnails are the same small WebP files the <a href="../gallery.html">gallery</a> uses, and the slideshow pulls the full-resolution originals from <a href="hosting-photography-on-github-for-free.html">the GitHub release where they live</a>. The map also cooperates with the rest of the site: gallery photos with a known place show a location label linking to the map pre-zoomed on that region, via a small <code>?region=</code> parameter in the URL, so the command palette / search function (CTRL + K) can show you places on the map when you search for, say, "East Lansing".</p>
+        <p>Clicking a marker opens a popup with the region's name and up to nine thumbnails; clicking any thumbnail opens the region's <em>entire</em> photo set as a lightbox slideshow, starting from the one you picked. The thumbnails are the same small WebP files the <a href="../gallery.html">gallery</a> uses, and the slideshow pulls the full-resolution originals from <a href="hosting-photography-on-github-for-free.html">the GitHub release where they live</a>. The map also cooperates with the rest of the site: gallery photos with a known place show a location label <jargon key="deep link">linking to the map pre-zoomed on that region</jargon>, via a small <code>?region=</code> parameter in the URL, so the command palette / search function (CTRL + K) can show you places on the map when you search for, say, "East Lansing".</p>
 
         <h2>If you want one of these</h2>
 

@@ -82,7 +82,7 @@
     ],
     "inLanguage": "en-GB",
     "articleSection": "Data & AI",
-    "wordCount": 3490,
+    "wordCount": 3461,
     "timeRequired": "PT15M",
     "keywords": ["optimization", "operations research", "integer programming", "energy", "productivity", "personal", "data science"]
   }
@@ -178,8 +178,7 @@
             <li><strong>Renewable resource</strong>: a quantity that is consumed and replenished within the planning window, rather than fixed. </li>
             <li><strong>Energy balance</strong>: the requirement that energy spent across the week cannot exceed energy restored (plus any reserve you insist on keeping).</li>
             <li><strong>Binding vs. slack constraint</strong>: a constraint is <em>binding</em> if the solution is pressed right up against it, and <em>slack</em> if there is room to spare. Part I was about time binding. This part is about energy binding instead.</li>
-            <li><strong>Shadow price</strong>: how much your objective would improve if you relaxed a binding constraint by one unit. The value of one more unit of energy, in other words.</li>
-            <li><strong>Infeasibility</strong>: the state where no allocation satisfies every constraint at once. </li>
+            <li><strong>Infeasible</strong>: the state where no allocation satisfies every constraint at once. </li>
           </ul>
         </details>
 
@@ -188,7 +187,7 @@
 
         <p class="non-nerd">Part I treated the week as a single pot of 168 hours to be divided up. BUT, we spend hours <em>through</em> energy. An hour you are rested enough to use and an hour you spend staring at the wall because you are wrung out are both, on the calendar, an hour. In Part I we defined the hours summing to 168 as our only resource constraint, but now we want to consider energy.</p>
 
-        <p class="nerd-only">Formally, nothing about Part I changes. The activity set \(A\), the decision variables \(x_i\) (hours on activity \(i\)), the weights \(w_i\), the bounds, the integrality, all stay. We are simply adding a second resource that each activity draws on or contributes to, and a constraint that this second resource also has to balance.</p>
+        <p class="nerd-only">Formally, nothing about Part I changes. The activity set \(A\), the decision variables \(x_i\) (hours on activity \(i\)), the weights \(w_i\), the bounds, the integrality, all stay. We are simply adding a <jargon key="renewable resource">second resource</jargon> that each activity draws on or contributes to, and a constraint that this second resource also has to balance.</p>
 
         <figure class="non-nerd">
           <img src="../img/photography/thumb/410.webp" alt="White trillium wildflowers blooming among lush green woodland leaves" loading="lazy" width="400" height="266" srcset="../img/photography/thumb/410.webp 400w, ../img/photography/thumb/410@2x.webp 800w, ../img/photography/hero/410.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">

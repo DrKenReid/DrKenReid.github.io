@@ -1479,6 +1479,49 @@
 
     /* ---------------------------------------------------- books and media */
 
+    // In memory of Sir Patrick Stewart: the Enterprise draws away into the stars, a faint blue wake fading behind it, and the years fade in.
+    def('learning-leadership-from-star-trek-and-picard', function (w, h, rnd) {
+        var t = 0, cycle = 660, stars = [], trail = [];
+        for (var i = 0; i < 46; i++) stars.push([rnd() * w, rnd() * h * 0.8, 0.5 + rnd() * 1.1, rnd() * TAU]);
+        function ship(ctx, x, y, s, a) {
+            ctx.fillStyle = alpha(C.ink, 0.55 * a);
+            ctx.beginPath(); ctx.ellipse(x, y + 10 * s, 8 * s, 5 * s, 0, 0, TAU); ctx.fill();
+            rect(ctx, x - 2 * s, y + 2 * s, 4 * s, 7 * s, alpha(C.ink, 0.55 * a));
+            rect(ctx, x - 25 * s, y + 7 * s, 12 * s, 3.5 * s, alpha(C.blue, a));
+            rect(ctx, x + 13 * s, y + 7 * s, 12 * s, 3.5 * s, alpha(C.blue, a));
+            ctx.fillStyle = alpha(C.ink, 0.85 * a);
+            ctx.beginPath(); ctx.ellipse(x, y - 2 * s, 26 * s, 7 * s, 0, 0, TAU); ctx.fill();
+            dot(ctx, x, y + 2 * s, Math.max(0.8, 1.8 * s), alpha(C.red, a));
+        }
+        function where(p) {
+            var e = ease(Math.min(1, p * 1.1));
+            return [w * (0.34 + 0.36 * e), h * (0.56 - 0.22 * e), 2.4 - 2.2 * e];
+        }
+        return {
+            step: function () {
+                t++;
+                if (t % cycle === 0) trail = [];
+                trail.push(where(phase(t, cycle)));
+                if (trail.length > 200) trail.shift();
+            },
+            draw: function (ctx) {
+                var p = phase(t, cycle), pos = where(p);
+                stars.forEach(function (st) {
+                    dot(ctx, st[0], st[1], st[2], alpha(C.ink, 0.25 + 0.3 * (0.5 + 0.5 * Math.sin(t / 50 + st[3]))));
+                });
+                var fade = Math.min(1, p / 0.08) * Math.min(1, (1 - p) / 0.1);
+                for (var k = 1; k < trail.length; k++) {
+                    var a = trail[k - 1], b = trail[k];
+                    line(ctx, a[0], a[1] + 8 * a[2], b[0], b[1] + 8 * b[2],
+                        alpha(C.blue, 0.55 * fade * k / trail.length), Math.max(0.6, 2.2 * b[2]));
+                }
+                ship(ctx, pos[0], pos[1], pos[2], fade);
+                var years = clamp01((p - 0.35) / 0.25) * Math.min(1, (1 - p) / 0.1);
+                text(ctx, '1940 – 2026', w * 0.5, h * 0.88, 10, alpha(C.ink, 0.8 * years), 500, 'center', 'Lora, Georgia, serif');
+            }
+        };
+    });
+
     // A MOBA map: two creep waves march down all three lanes and meet in the middle.
     def('warcraft-iii-most-influential-game', function (w, h, rnd) {
         var t = 0, cycle = 300, s = Math.min(w, h) * 0.82, x0 = (w - s) / 2, y0 = (h - s) / 2;

@@ -2518,6 +2518,28 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   from { transform: scale(1.04) translateY(0); }
   to { transform: scale(1.12) translateY(70px); } }
 
+/* A post in memory of someone (<body data-memorial>, which also keeps the
+   seasons off: krMemorialPage in shared-components.js) lets its picture
+   draw slowly away as the page opens: one long zoom out, never a loop.
+   It animates the individual scale property, so it composes with the
+   scroll drift's transform; where both run they share one animation list,
+   since a second declaration would replace the drift. The 1.04 base scale
+   keeps the frame covered at 0.965. */
+@media (prefers-reduced-motion: no-preference) {
+  body[data-memorial] .kr-opener__media::before {
+    animation: kr-opener-recede 45s ease-out both; } }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    body[data-memorial] .kr-opener__media::before {
+      animation: kr-opener-drift linear both, kr-opener-recede 45s ease-out both;
+      animation-timeline: view(), auto;
+      animation-range: exit 0% exit 100%, normal; } } }
+
+@keyframes kr-opener-recede {
+  from { scale: 1; }
+  to { scale: 0.965; } }
+
 /* As the reader scrolls into the article the opener eases out: the type
    lifts and fades and the scrim deepens, on the same exit-range timeline
    as the photograph's drift. */

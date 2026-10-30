@@ -383,7 +383,17 @@ function krSeasonOffTab(season) {
     });
 }
 
+/** A post in memory of someone, `<body data-memorial>`: no seasonal
+    decorations there (nor the birthday hats), whatever the date, the
+    reader's setting or a preview, and nothing about it is remembered for
+    other pages. The same attribute slows the opener into a long drift
+    (style.css, "Page opener"). */
+function krMemorialPage() {
+    return !!(document.body && document.body.hasAttribute && document.body.hasAttribute('data-memorial'));
+}
+
 function krSeason() {
+    if (krMemorialPage()) return null;
     var pick = null;
     try { pick = sessionStorage.getItem(KR_SEASON_PREVIEW); } catch (e) {}
     if (pick === 'none') return null;
@@ -469,6 +479,7 @@ var KR_BIRTHDAY_PREVIEW = 'kr-birthday-preview';   // sessionStorage: 'on' or 'n
 /** True on the birthday (`date`, by default today) unless the decorations
     are off or a preview says otherwise. */
 function krBirthday(date) {
+    if (krMemorialPage()) return false;
     var pick = null, season = null;
     try {
         pick = sessionStorage.getItem(KR_BIRTHDAY_PREVIEW);
@@ -3907,6 +3918,34 @@ function autoCollapseTopJargonBox() {
 }
 
 /**
+ * The names a glossary label answers to, lower-cased: the label without
+ * its trailing colon, the two halves of "Term (ABBR)", and each side of
+ * "A / B" or "A vs B". sitelib.jargon_aliases returns the same list, so the
+ * audit's jargon rule and the tooltips agree on what counts as a use.
+ */
+function krJargonAliases(label) {
+    function clean(text) {
+        return String(text || '').replace(/[‘’]/g, "'").replace(/\s+/g, ' ').trim();
+    }
+    var base = clean(label).replace(/[:：]\s*$/, '');
+    if (!base) return [];
+    var names = [base];
+    var paren = base.match(/^(.+?)\s*\(([^)]+)\)$/);
+    if (paren) names.push(paren[1], paren[2]);
+    names.slice().forEach(function(name) {
+        var parts = name.split(/\s*\/\s*|\s+vs\.?\s+/i).filter(Boolean);
+        if (parts.length > 1) names = names.concat(parts);
+    });
+    var seen = {};
+    return names.map(function(name) { return clean(name).toLowerCase(); })
+        .filter(function(name) {
+            if (!name || seen[name]) return false;
+            seen[name] = true;
+            return true;
+        });
+}
+
+/**
  * Wraps glossary terms in the post's prose in <abbr title="definition">,
  * from the post's own jargon box plus a few site-wide terms. Safe to call
  * again (posts that render TeX do, once the maths is typeset).
@@ -3961,13 +4000,9 @@ function applyJargonTooltips() {
                 definition = definition.replace(/^[:\-–—]\s*/, '').trim();
                 if (!definition) return;
 
-                addTermAlias(definitions, rawLabel, definition);
-
-                var parenMatch = rawLabel.match(/^(.+?)\s*\(([^)]+)\)$/);
-                if (parenMatch) {
-                    addTermAlias(definitions, parenMatch[1], definition);
-                    addTermAlias(definitions, parenMatch[2], definition);
-                }
+                krJargonAliases(rawLabel).forEach(function(name) {
+                    addTermAlias(definitions, name, definition);
+                });
             });
         });
 

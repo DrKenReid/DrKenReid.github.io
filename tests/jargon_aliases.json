@@ -1,0 +1,15 @@
+{
+  "_help": "Box labels and the names each answers to. tests/test_jargon_rule.py checks sitelib.jargon_aliases against these and tests/js/jargon.test.js checks krJargonAliases, so the audit's jargon rule and the tooltips agree on what counts as a use.",
+  "cases": [
+    ["Psychological safety:", ["psychological safety"]],
+    ["Integer programming (IP)", ["integer programming (ip)", "integer programming", "ip"]],
+    ["Canon / headcanon:", ["canon / headcanon", "canon", "headcanon"]],
+    ["Binding vs. slack constraint", ["binding vs. slack constraint", "binding", "slack constraint"]],
+    ["Intensification vs diversification:", ["intensification vs diversification", "intensification", "diversification"]],
+    ["JSON-LD / structured data:", ["json-ld / structured data", "json-ld", "structured data"]],
+    ["Commander’s intent:", ["commander's intent"]],
+    ["SETI and METI:", ["seti and meti"]],
+    ["  Gold   OA  ", ["gold oa"]],
+    [":", []]
+  ]
+}

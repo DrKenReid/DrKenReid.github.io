@@ -82,7 +82,7 @@
     ],
     "inLanguage": "en-GB",
     "articleSection": "Data & AI",
-    "wordCount": 3997,
+    "wordCount": 3998,
     "timeRequired": "PT18M",
     "keywords": ["optimization", "operations research", "integer programming", "productivity", "personal", "data science"]
   }
@@ -173,7 +173,7 @@
             <li><strong>Decision variable</strong>: what the solver gets to set. Here, hours allocated to each activity.</li>
             <li><strong>Constraint</strong>: a rule the solution must satisfy. The week summing to 168 hours is one.</li>
             <li><strong>Bound</strong>: a floor or ceiling on a variable, the minimum or maximum hours an activity can receive.</li>
-            <li><strong>Integer programming (IP)</strong>: optimization where variables must be whole numbers, not fractions.</li>
+            <li><strong>Integer program (IP)</strong>: optimization where variables must be whole numbers, not fractions.</li>
             <li><strong>Feasible solution</strong>: any allocation that satisfies all constraints. Many exist; the solver finds the one with the best objective value.</li>
             <li><strong>Degeneracy</strong>: when two or more feasible solutions achieve the same objective value and the solver is indifferent between them.</li>
             <li><strong>PuLP</strong>: a Python library for writing and solving linear and integer programming models.</li>
@@ -230,7 +230,7 @@
         <p class="non-nerd">There are two kinds of limit. Some limits are something we can't reschedule or choose not to include: you will sleep; your contract wants its forty hours; the school bus arrives at half eight regardless of your plans. These cannot be moved. Writing things down forces you to ask, one by one: is this actually fixed, or just a habit I have mistaken for a law?</p>
 
         <div class="nerd-only">
-          <p>Translating these, constraints are inequalities (or equalities) the solution has to respect. The week is an equality: every hour goes somewhere, even if "somewhere" is doing nothing:</p>
+          <p>Translating these, constraints are inequalities (or equalities) <jargon key="feasible solution">the solution has to respect</jargon>. The week is an equality: every hour goes somewhere, even if "somewhere" is doing nothing:</p>
           <div class="math-block">
             \[ \sum_{i \in A} x_i = 168 \]
           </div>

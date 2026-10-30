@@ -73,7 +73,7 @@
 	  "isPartOf": { "@id": "https://www.kenreid.co.uk/#website" },
 	  "inLanguage": "en-GB",
 	  "articleSection": "Data & AI",
-	  "wordCount": 2398,
+	  "wordCount": 2402,
 	  "timeRequired": "PT11M",
 	  "keywords": ["evolutionary computation", "machine learning", "ai", "research", "reproducibility"]
 	}
@@ -151,7 +151,7 @@
 						<li><strong>Combinatorial Search Space</strong>: problems made of discrete choices (routes, schedules, component sets), where combinations explode quickly.</li>
 						<li><strong>Fitness / Objective Function</strong>: the scorecard used to judge each candidate solution against the real goal.</li>
 						<li><strong>Hard Constraints</strong>: non-negotiable rules (for example: weight limits, delivery windows, safety bounds) that must be satisfied.</li>
-						<li><strong>Selection, Crossover, Mutation</strong>: selection keeps stronger candidates; crossover mixes useful parts; mutation adds variation so search does not get stuck early.</li>
+						<li><strong>Selection / Crossover / Mutation</strong>: selection keeps stronger candidates; crossover mixes useful parts; mutation adds variation so search does not get stuck early.</li>
 						<li><strong>Non-differentiable Objective</strong>: a goal function with no useful gradient, so gradient descent is unreliable or impossible.</li>
 						<li><strong>Multi-objective Optimization</strong>: optimizing several competing goals at once (for example: cost, speed, and reliability).</li>
 						<li><strong>Surrogate Model</strong>: a cheaper approximation of an expensive evaluator (for example, replacing some simulations with a learned predictor).</li>
@@ -252,11 +252,11 @@
 
 				<h2>EC in the GenAI era</h2>
 
-				<p>Here is what I find frustrating: the GenAI wave is pulling attention away from EC while creating the kind of problems that EAs are built to solve. Neural architecture search, hyperparameter optimization, prompt engineering at scale, constrained code generation, multi-objective model selection: these are all optimization problems with messy, non-differentiable, or combinatorial search spaces. EAs should be central to the next generation of AI systems, not sidelined by them.</p>
+				<p>Here is what I find frustrating: the GenAI wave is pulling attention away from EC while creating the kind of problems that EAs are built to solve. Neural architecture search, hyperparameter optimization, prompt engineering at scale, constrained code generation, <jargon key="multi-objective optimization">multi-objective</jargon> model selection: these are all optimization problems with messy, <jargon key="non-differentiable objective">non-differentiable</jargon>, or combinatorial search spaces. EAs should be central to the next generation of AI systems, not sidelined by them.</p>
 
                 <img src="../img/photography/thumb/186.webp" alt="An abstract representation of machine learning." loading="lazy" width="400" height="266" srcset="../img/photography/thumb/186.webp 400w, ../img/photography/thumb/186@2x.webp 800w, ../img/photography/hero/186.webp 1200w" sizes="(min-width: 800px) 760px, 100vw">
 
-				<p>Hybrid approaches are already emerging. Researchers are using LLMs as surrogate fitness evaluators, letting evolutionary search explore design spaces while a language model provides fast approximate evaluations. Others are using EAs to evolve prompts, tune retrieval-augmented generation pipelines, or search for adversarial inputs that expose model weaknesses. The combination of GenAI's generative fluency and EA's constraint-respecting optimization is powerful, and it is still early days.</p>
+				<p>Hybrid approaches are already emerging. Researchers are using LLMs as <jargon key="surrogate model">surrogate fitness evaluators</jargon>, letting evolutionary search explore design spaces while a language model provides fast approximate evaluations. Others are using EAs to evolve prompts, tune retrieval-augmented generation pipelines, or search for adversarial inputs that expose model weaknesses. The combination of GenAI's generative fluency and EA's constraint-respecting optimization is powerful, and it is still early days.</p>
 
 				<p>But for EC to claim that seat at the table, the field has to get its house in order. The naming crisis and the dialect collision are not just academic annoyances. They are the reason EC papers do not show up in ML literature reviews, the reason industry labs do not consider evolutionary approaches, and the reason funding bodies see EC as a niche subdiscipline rather than a foundational tool. None of that reflects the quality of the underlying science; it reflects how the field communicates it.</p>
 

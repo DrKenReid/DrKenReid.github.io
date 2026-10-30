@@ -81,7 +81,7 @@
     ],
     "inLanguage": "en-GB",
     "articleSection": "Technology",
-    "wordCount": 1324,
+    "wordCount": 1325,
     "timeRequired": "PT7M",
     "keywords": ["fonts", "web performance", "privacy", "typography", "web development"]
   }
@@ -167,7 +167,7 @@
 
         <h2>The how</h2>
 
-        <p>Google Fonts provides them, of course. Download the family, keep the WOFF2 versions of the weights you actually use, and write an <code>@font-face</code> block per file:</p>
+        <p>Google Fonts provides them, of course. Download the family, keep the WOFF2 versions of the weights you actually use, and write an <code>@font-face</code> <jargon key="@font-face">block per file</jargon>:</p>
 
 <pre><code class="language-css">@font-face {
   font-family: 'Poppins';
@@ -187,7 +187,7 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }</code></pre>
 
-        <p>This site carries seven weights of Poppins and two files of Lora, upright and italic (the italics matter for pull quotes), Latin subset only, for a grand total of about 130 KB, roughly one photograph's thumbnail-and-hero pair. Lora is a variable font: one file holds every weight from 400 to 700, which is what <code>font-weight: 400 700</code> declares. Google hands you that same file whichever Lora weight you ask for, so my first font sheet pointed at three copies of one file, and a page using two weights downloaded it twice. The <code>font-display: swap</code> line is the other non-obvious part: it tells the browser to show text immediately in a fallback font and swap when the real one arrives, rather than showing nothing. Neat, right? Invisible text while a font loads is way more irritating than a brief flash of the wrong font that most people won't see.</p>
+        <p>This site carries seven weights of Poppins and two files of Lora, upright and italic (the italics matter for pull quotes), <jargon key="unicode range">Latin subset</jargon> only, for a grand total of about 130 KB, roughly one photograph's thumbnail-and-hero pair. Lora is a variable font: one file holds every weight from 400 to 700, which is what <code>font-weight: 400 700</code> declares. Google hands you that same file whichever Lora weight you ask for, so my first font sheet pointed at three copies of one file, and a page using two weights downloaded it twice. The <code>font-display: swap</code> line is the other non-obvious part: it tells the browser to show text immediately in a fallback font and swap when the real one arrives, rather than showing nothing. Neat, right? Invisible text while a font loads is way more irritating than a brief flash of the wrong font that most people won't see.</p>
 
         <p>That flash came with a jump, at first. Georgia and Arial set the same words to different widths than Lora and Poppins, so when the real font landed every paragraph rewrapped and the page moved. So I added two more families, 'Lora Fallback' and 'Poppins Fallback', which are just Georgia and Arial scaled and re-measured (a <code>size-adjust</code>, plus ascent, descent and line-gap overrides) to take up the same space as the fonts they stand in for. The widths are weighted by how often each character turns up in this blog's own posts, about 736,000 characters of them. Each fallback goes straight after its web font in the font stack.</p>
 

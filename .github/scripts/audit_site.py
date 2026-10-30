@@ -76,6 +76,14 @@ EXEMPT_PAGES = {"google1473b6928dc28ce6.html"}
 # Neither is somewhere a reader chooses to go.
 NOT_IN_SITE_MAP = {"404.html", "offline.html"}
 
+# Published posts whose jargon box held terms the post never uses when the
+# jargon rule arrived (2026-10-29). Each is reported as INFO until its box
+# and its prose agree; once a listed post passes, its entry is a WARN until
+# removed, so the list can only shrink. The 46 posts it listed were all
+# fixed the same day. Add nothing here: fix the box or the prose
+# (check_jargon).
+JARGON_PENDING = set()
+
 # Where search results cut a top-level page's title and description. A
 # longer one is shown truncated mid-word, usually losing the part that
 # said what the page is.
@@ -173,6 +181,7 @@ class PageParser(HTMLParser):
         self._in_jsonld = False
         self._jsonld_buf = []
         self._jsonld_line = 0
+        self._parent_cls = ""    # class of the element opened last: an <img>'s parent
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
@@ -195,6 +204,7 @@ class PageParser(HTMLParser):
                         or "ds-pub-" in cls
                         or (a.get("id") or "").startswith("ref-"))
             self._stack.append((tag, excluded))
+            self._parent_cls = cls
             if excluded:
                 self._excl += 1
         if "id" in a:
@@ -212,8 +222,13 @@ class PageParser(HTMLParser):
             if tag == "img":
                 if a.get("alt"):
                     self.alts.append((a["alt"].strip(), line))
+                # A blog card's picture sits in a fixed-ratio box
+                # (.blog-card-img, object-fit: cover), so it cannot shift the
+                # layout, and the cards baked into posts carry no sizes
+                # (generate_photo_dims skips .related-posts for the same reason).
                 if src and src.startswith(("http://", "https://")) and \
-                        not (a.get("width") and a.get("height")):
+                        not (a.get("width") and a.get("height")) and \
+                        "blog-card-img" not in self._parent_cls.split():
                     self.ext_nodims.append((src, line))
         if tag == "link":
             self.link_rels.update((a.get("rel") or "").split())
@@ -719,6 +734,35 @@ def check_post_components(c):
               f"button.kr-embed-facade ({doc('video')})")
 
 
+def check_jargon(c):
+    """A post's jargon box and its prose agree (sitelib.jargon_report),
+    because the tooltips depend on it: applyJargonTooltips underlines a box
+    term only where the post uses those words. Every term in the box must
+    appear in the post, in the box's wording (a plural or a bracketed or
+    slashed alias counts) or through a <jargon key="term"> marker where the
+    post words it differently; and every marker must name a term in the
+    box, or its tooltip is silently lost."""
+    if not (c.is_post and c.page_is_tracked) or c.is_redirect:
+        return
+    unused, unresolved = sitelib.jargon_report(c.text)
+    doc = "see .github/docs/COMPONENTS.md, 'Jargon'"
+    for key, line in unresolved:
+        c.add("ERROR", c.page, line, "jargon-marker",
+              f'<jargon key="{key}"> names no term in the jargon box, so its tooltip '
+              f"is lost: make the key the box term's own wording, or add the term ({doc})")
+    pending = c.rel in JARGON_PENDING
+    for term, line in unused:
+        c.add("INFO" if pending else "ERROR", c.page, line, "jargon-unused",
+              f"jargon box term '{term}' never appears in the post: word the box the "
+              f"way the post does, mark a differently worded use with "
+              f'<jargon key="...">, or drop the term ({doc})'
+              + ("; listed in JARGON_PENDING" if pending else ""))
+    if pending and not unused:
+        c.add("WARN", c.page, 0, "jargon-unused",
+              "the jargon box and the prose now agree: remove this post from "
+              "JARGON_PENDING in audit_site.py")
+
+
 def check_placeholders(c):
     # --- unwritten scaffolding that escaped into the page ---
     # A reference slot reading "[Placeholder: a general operational research
@@ -972,6 +1016,7 @@ PAGE_CHECKS = [
     check_img_dims,
     check_figures,
     check_post_components,
+    check_jargon,
     check_placeholders,
     check_retired_markup,
     check_prose,

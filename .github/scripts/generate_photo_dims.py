@@ -153,10 +153,36 @@ def png_size(head):
     return struct.unpack(">II", head[16:24])
 
 
+SVG_ROOT_RE = re.compile(r"<svg\b[^>]*>", re.I)
+SVG_LENGTH_RE = r'\b%s\s*=\s*["\']\s*([\d.]+)(?:px)?\s*["\']'
+
+
+def svg_size(path):
+    """(width, height) of an SVG from its root element: the width and
+    height attributes in pixels, else its viewBox. Pillow reads no SVG, and
+    an animated post picture (an <img> of an .svg) needs its size too."""
+    with path.open("r", encoding="utf-8", errors="replace") as f:
+        head = f.read(4096)
+    root = SVG_ROOT_RE.search(head)
+    if not root:
+        raise ValueError("no <svg> element in %s" % path.name)
+    tag = root.group(0)
+    w = re.search(SVG_LENGTH_RE % "width", tag)
+    h = re.search(SVG_LENGTH_RE % "height", tag)
+    if w and h:
+        return round(float(w.group(1))), round(float(h.group(1)))
+    box = re.search(r'\bviewBox\s*=\s*["\']\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)', tag)
+    if box:
+        return round(float(box.group(1))), round(float(box.group(2)))
+    raise ValueError("%s has no width and height or viewBox" % path.name)
+
+
 def image_size(path):
     """(width, height) of an image file in pixels."""
     if path.suffix.lower() == ".webp":
         return webp_size(path)
+    if path.suffix.lower() == ".svg":
+        return svg_size(path)
     with path.open("rb") as f:
         head = f.read(26)
         size = png_size(head)

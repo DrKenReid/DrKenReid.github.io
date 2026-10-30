@@ -81,7 +81,7 @@
    ],
    "inLanguage": "en-GB",
    "articleSection": "Technology",
-   "wordCount": 948,
+   "wordCount": 951,
    "timeRequired": "PT5M",
    "keywords": ["javascript", "canvas", "evolutionary computation", "hill climbing", "performance", "accessibility"]
  }
@@ -165,13 +165,13 @@
  </ul>
  </div>
 
- <p>Roger Alsing's Mona Lisa came out in December 2008 and is one of the best demos of evolutionary computation. He took 50 semi-transparent polygons, changed one small thing at a time, kept the change only if the picture looked more like the painting than before, and after enough rounds of that he had something you'd recognise as da Vinci's.</p>
+ <p>Roger Alsing's Mona Lisa came out in December 2008 and is one of the best demos of evolutionary computation. He took 50 semi-transparent polygons, <jargon key="hill climbing">changed one small thing at a time</jargon>, kept the change only if the picture looked more like the painting than before, and after enough rounds of that he had something you'd recognise as da Vinci's.</p>
 
  <p>Text, therefore, should be an easier target than a face. Letters are high contrast and built from straight-ish strokes, and people will read a word from a rough smear of ink in roughly the right place well before they notice it's made of shapes. So the slide has a canvas, and on the canvas are 78 translucent triangles being nudged toward the pixels of "Hi, I'm Ken."</p>
 
  <h2>The whole algorithm</h2>
 
- <p>There's no population, no crossover and no selection pressure to tune. It's one candidate and one mutation at a time:</p>
+ <p>There's no population, no crossover and no selection pressure to tune. It's <jargon key="(1+1) evolution strategy">one candidate and one mutation at a time</jargon>:</p>
 
  <pre><code class="language-javascript">for (var e = 0; e &lt; EVALS_PER_FRAME; e++) {
     var cand = genome.map(cloneShape);
@@ -201,13 +201,13 @@
 
  <h2>Keeping it cheap</h2>
 
- <p>I score on a canvas of 176 by 48 pixels that is hidden from users. The canvas you see is up to 560 pixels wide on the page, which is 1,120 real pixels on a retina screen, and scoring at that size would mean reading back over 370,000 pixels per evaluation, 170 evaluations a frame. At 176 by 48 it's 8,448, and the letters are still readable at that size.</p>
+ <p>I score on a canvas of 176 by 48 pixels that is hidden from users. The canvas you see is up to 560 pixels wide on the page, which is 1,120 real pixels on a retina screen, and scoring at that size would mean <jargon key="getimagedata">reading back</jargon> over 370,000 pixels per evaluation, 170 evaluations a frame. At 176 by 48 it's 8,448, and the letters are still readable at that size.</p>
 
  <p>I didn't let colour evolve either. Each triangle carries one number that puts it somewhere between the two ends of the site's photo gradient, which keeps the result on palette and takes three dimensions out of the search.</p>
 
  <p>Most mutations get rejected, and a rejected mutation changes nothing anyone can see, so the visible canvas is repainted at most once a frame and only if at least one of that frame's mutations was kept.</p>
 
- <p>The hero is a carousel of five slides, so four times out of five this one isn't on screen, and while it's off screen the loop checks whether its slide is the active one, sees it isn't, and does nothing. Once 1,800 evaluations in a row have failed to improve anything the loop idles, and when the slide comes back round it starts again from a fresh set of triangles, so whoever's looking gets to watch the headline being built instead of arriving at a finished one. The carousel can be paused, too, to give it more time.</p>
+ <p>The hero is a carousel of five slides, so four times out of five this one isn't on screen, and while it's off screen the loop checks whether its slide is the active one, sees it isn't, and does nothing. Once 1,800 evaluations in a row have failed to improve anything the loop idles, and when the slide comes back round it starts again from a fresh <jargon key="genome">set of triangles</jargon>, so whoever's looking gets to watch the headline being built instead of arriving at a finished one. The carousel can be paused, too, to give it more time.</p>
 
  <h2>What a screen reader gets</h2>
 

@@ -344,7 +344,12 @@ half-styled decorations.
 The address can override the date, once (it is stored and taken out of
 the address): `?season=<key>` previews a season in this tab,
 `?season=none` turns seasons off in this tab, and `?season=off` turns
-them off on this device until `?season=on`. The palette offers off and
+them off on this device until `?season=on`. A post in memory of someone
+carries `<body data-memorial>` (`krMemorialPage`), and no season, preview
+or birthday hat dresses that page, while nothing about it is remembered
+for other pages. The boot script in the head cannot see the body yet, so
+on a reader's second page that day it adds the season's stylesheets as
+usual and the script at the end of the body takes them off again. The palette offers off and
 on in season, and while they are off a small grey tab in the bottom left
 corner (`krSeasonOffTab`, styled in `style.css` since the season sheets
 are not loaded) opens a card with a button that turns them back on. The

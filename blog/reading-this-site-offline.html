@@ -81,7 +81,7 @@
     ],
     "inLanguage": "en-GB",
     "articleSection": "Technology",
-    "wordCount": 1700,
+    "wordCount": 1701,
     "timeRequired": "PT8M",
     "keywords": ["service worker", "offline", "web development", "pwa", "static sites"]
   }
@@ -231,7 +231,7 @@ function store(cacheName, req, res, limit) {
 
         <h2>The footguns</h2>
 
-        <p>I'm not really a website developer or designer, beyond hobbyist endeavors like this website and a couple of landing pages for research labs I worked in, so much of this section is just what I learned while, well, learning this stuff. Service workers have a deserved reputation for one specific misery: <em>the cache that would not die.</em> Ship a worker with a careless cache-first strategy and your visitors can be pinned to an old version of your site for days: including, delightfully, an old version of the service worker itself. The classic developer experience is editing a file, refreshing, seeing no change, and spending an hour debugging to find it's actually working as intended and you just turn off your monitor for a break and see your sad reflection staring back at yourself. Ahem, anyway.</p>
+        <p>I'm not really a website developer or designer, beyond hobbyist endeavors like this website and a couple of landing pages for research labs I worked in, so much of this section is just what I learned while, well, learning this stuff. Service workers have a deserved reputation for one specific misery: <em><jargon key="cache invalidation">the cache that would not die</jargon>.</em> Ship a worker with a careless cache-first strategy and your visitors can be pinned to an old version of your site for days: including, delightfully, an old version of the service worker itself. The classic developer experience is editing a file, refreshing, seeing no change, and spending an hour debugging to find it's actually working as intended and you just turn off your monitor for a break and see your sad reflection staring back at yourself. Ahem, anyway.</p>
 
         <p>I've hit two of my own. An earlier version kept everything in one cache capped at 200 entries, and the oldest entries in it were always the precache, so a single scroll through the gallery pushed out the offline page and the stylesheet, and the offline page then had nothing to show. It also served scripts stale-while-revalidate, which for one view after a deploy ran the new markup against the old <code>shared-components.js</code>: an uncaught ReferenceError, no footer, no photo strip.</p>
 

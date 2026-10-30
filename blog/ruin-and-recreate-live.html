@@ -81,7 +81,7 @@
    ],
    "inLanguage": "en-GB",
    "articleSection": "Data Science",
-   "wordCount": 1777,
+   "wordCount": 1778,
    "timeRequired": "PT9M",
    "keywords": ["metaheuristics", "scheduling", "rostering", "large neighbourhood search", "optimisation"]
  }
@@ -166,7 +166,7 @@
 
  <p>I started my Ph.D. in 2015 under Dr. Jingpeng Li, a kindly and intelligent man who was very patient with me going down the wrong roads and floundering over fairly fundamental and basic math. He had some interesting ideas on how to modify existing algorithms to improve their capabilities, and let me toy with them to begin to understand some of that fundamental math, as well as get a feel for how search algorithms, at their core, actually function.</p>
 
-<p>Most search algorithms take a working solution, change one thing, and keep the change if it helped. That works until the solution is tangled, at which point every single change makes things worse and the search sits there, surrounded by improvements it cannot reach because each one requires three simultaneous moves.</p>
+<p>Most search algorithms take a working solution, <jargon key="local search">change one thing, and keep the change if it helped</jargon>. That works until the solution is tangled, at which point every single change makes things worse and the search sits there, surrounded by improvements it cannot reach because each one requires three simultaneous moves.</p>
 
  <p>Ruin and recreate knocks a hole in the solution and rebuilds the solution. This is the method behind <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:Se3iqnhoufwC" target="_blank" rel="noopener">a rostering paper I wrote in 2018</a><sup><a href="#ref-1" class="cite-ref">[1]</a></sup> with colleagues at Stirling, York and BT, using a variant of Jingpeng's own algorithm: Evolutionary Ruin and Stochastic Recreate<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>, where the wrecking ball is aimed by fitness rather than swung blindly. The demo below is that method on a simple roster. Part of the series on <a href="../series-research-live.html">research, live</a>.</p>
 

@@ -391,6 +391,14 @@ A post's terms, defined once, explained where they are used.
 <p>... <jargon key="redundant coding">coding it twice</jargon> ...</p>
 ```
 
+- The box and the post agree, both ways. Every term in the box is one the
+  post uses, worded as the post words it, and every term of art the post
+  leans on is in the box. A term the post never uses defines nothing, since
+  the tooltips only find the box's own words. The audit holds published
+  posts to it (`jargon-unused`, `jargon-marker`, below; `check_jargon`
+  through `sitelib.jargon_report`), and the draft lint holds drafts to it
+  before they publish. A plural, either half of `Term (ABBR)`, or either
+  side of `A / B` or `A vs B` counts as a use.
 - `applyJargonTooltips` reads the box (a `.plain-english-box` whose
   heading says jargon, glossary or plain English, or any of whose list
   items holds a `<strong>` term) and wraps a term's first use in each
@@ -455,6 +463,19 @@ Amber (`--kr-caution`), because red means clickable. `role="note"` makes
 the warning a region a screen reader can find or skip; `initDropCap`
 skips it, so the drop cap lands on the first paragraph of the post
 proper.
+
+### In memoriam
+
+```html
+<body data-memorial>
+```
+
+For a post in memory of someone. The page drops the seasonal decorations
+and the birthday hats, whatever the date (`krMemorialPage`;
+ARCHITECTURE.md, "Seasons"). Its opener picture draws slowly away over
+45 seconds, once (`kr-opener-recede`, style.css, "Editorial post
+opener"), combined with the usual scroll drift; under reduced motion it
+does not move. The attribute sits on `<body>`, which no generator rewrites.
 
 ### Audio card
 
@@ -827,6 +848,8 @@ show the markup to use instead.
 | `references` | ERROR | an `a.cite-ref` whose target is not an `ol.references > li#ref-N` |
 | `code-language` | ERROR | a `pre > code` without a `language-*` class |
 | `youtube-iframe` | ERROR | a raw YouTube iframe instead of the facade |
+| `jargon-unused` | ERROR (INFO for a post in `JARGON_PENDING`, WARN once a listed post passes) | a jargon-box term the post never uses: word the box as the post does, mark a differently worded use with `<jargon key>`, or drop the term |
+| `jargon-marker` | ERROR | a `<jargon key>` that names no term in the box, so its tooltip is lost |
 | `figure-in-list` | ERROR | a `<figure>` directly inside a `ul` or `ol` |
 | `script-drift` | WARN | a post whose scripts differ from the others' |
 | `banned-word` | WARN (fails with `--strict`) | a word from `BANNED_PROSE` in `audit_site.py` in the prose, on posts and top-level pages |
