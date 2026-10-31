@@ -4,7 +4,8 @@
  * Baggins share, in the greens, browns and golds of the Shire: a round
  * green door with a brass knob in the middle, set in a bank of turf with
  * a round window lit within, in the corner, and the Ring hanging on its
- * chain below it; smoke rings drifting up over the openers; a party cake
+ * chain below it; gold rings like it turning over as they drift down
+ * over the openers; a party cake
  * with its candles lit, a basket of mushrooms and a pipe on its stand
  * blowing smoke rings on the footer, with acorns, a slice of seed cake, a
  * coin and an oak leaf between them; smoke rings from whatever is clicked;
@@ -169,6 +170,9 @@
        the middle stays open. */
     var RING_24 = 'M3 12a9 6 0 1 0 18 0a9 6 0 1 0-18 0zM6 12a6 3.6 0 1 1 12 0a6 3.6 0 1 1-12 0z';
     var RING_MOON = 'M7 12a5 3.6 0 1 0 10 0a5 3.6 0 1 0-10 0zM8.8 12a3.2 2.2 0 1 1 6.4 0a3.2 2.2 0 1 1-6.4 0z';
+    /* The Ring over the openers, on the same box: a heavy round band, seen
+       face on; the tumble turns it edge on and back as it falls. */
+    var ONE_RING_24 = 'M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0zM6 12a6 6 0 1 1 12 0a6 6 0 1 1-12 0z';
     var MUSHROOM_24 = 'M3 13c0-6 4-9 9-9s9 3 9 9zM10 13h4l1 8h-6z';
     var ACORN_24 = 'M6 11c0 7 3 11 6 11s6-4 6-11zM5 11.4c0-3.6 3-6 7-6s7 2.4 7 6zM11.4 5.4V2h1.2v3.4z';
 
@@ -369,9 +373,9 @@
                 'and go barefoot.',
             link: 'https://en.wikipedia.org/wiki/Hobbit_Day' },
         corner: hillArt, dangler: RING,
-        // Smoke rings drifting slowly up.
-        leaves: { kind: 'rise', colours: ['#e8e4dc', '#d4cfc4', '#f4f1ea', '#c9c3b6'], per1000: 9,
-            shapes: [RING_24], tumble: false, glow: false, size: [14, 30] },
+        // The Ring drifting down, turning over, glowing gold.
+        leaves: { kind: 'fall', colours: ['#f2c94c', GOLD, '#ffd966', '#d9a52e'], per1000: 5,
+            shapes: [ONE_RING_24], tumble: true, glow: true, size: [16, 30] },
         // Acorns, oak leaves, mushrooms and smoke rings in the margins.
         backdrop: { shapes: [ACORN_24, OAK, MUSHROOM_24, RING_24],
             colours: [['#b8874a', '#8a5a32'], [TURF, '#8a9a3a', '#c9962c'], ['#b08a6a', '#c49a76'], ['#cfc8bc', '#bdb5a6']] },
