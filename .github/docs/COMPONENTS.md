@@ -660,12 +660,14 @@ charts drawn elsewhere.
   `.kr-diagram__sub` line and an optional `.kr-diagram__detail`. Only a
   node with a detail becomes interactive; leave the detail out rather
   than pad it.
-- **Behaviour.** `initDiagrams` (shared-components.js) makes each node
-  with a detail focusable, gives it the detail as `aria-describedby`, and
-  shows the detail in a card on hover, keyboard focus or a tap (a second
-  tap, a tap elsewhere or Escape puts it away). The card is a
-  `.kr-offstage` and `aria-hidden`; the detail stays in the page for a
-  screen reader. Without script the details print under their nodes.
+- **Behaviour.** `js/diagrams.js`, which `initDiagrams`
+  (shared-components.js) fetches only on a page with a diagram, makes
+  each node with a detail focusable, gives it the detail as
+  `aria-describedby`, and shows the detail in a card on hover, keyboard
+  focus or a tap (a second tap, a tap elsewhere or Escape puts it away).
+  The card is a `.kr-offstage` and `aria-hidden`; the detail stays in the
+  page for a screen reader. Without script, and on paper, the details
+  show under their nodes: the rules that hide them are screen only.
 - **Tree layout.** `.kr-diagram--tree`: a root, then up to four routes
   (`--1` to `--4` pick `--kr-series-1` to `-4`, blue, green, amber and
   purple, for bars and arrows only), each a row of up to four steps from

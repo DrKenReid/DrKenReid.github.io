@@ -7456,15 +7456,18 @@ body.kr-cite-docked .kr-share-tab {
   .blog-post .kr-thumb-grid__label {
     font-size: 12px; } }
 
-/* --- Diagrams (initDiagrams) ---------------------------------------------
+/* --- Diagrams (js/diagrams.js) -------------------------------------------
    A diagram is HTML, not a picture: real text that reflows, follows the
    theme and reads to a screen reader. Each .kr-diagram__node may hold a
    .kr-diagram__detail; without script the detail shows under its node.
-   initDiagrams (shared-components.js) adds .is-live, which hides the
-   details visually (each stays its node's aria-describedby), makes every
-   node with a detail focusable, and shows the detail in a card
+   js/diagrams.js (fetched by initDiagrams in shared-components.js on a
+   page that has a diagram) adds .is-live, which hides the details
+   visually (each stays its node's aria-describedby), makes every node
+   with a detail focusable, and shows the detail in a card
    (.kr-diagram__card, a .kr-offstage) on hover, keyboard focus or a tap.
    It also sets .has-active on the diagram and .is-active on the node.
+   The rules for .is-live and .has-active are screen only, so a diagram
+   prints as it reads without script, every detail under its node.
    .kr-diagram--tree is one layout: a root, then routes
    (.kr-diagram__route--1 to --4 pick the series colour) of steps left to
    right from 768px, top to bottom below it. A step holds one node or a
@@ -7536,21 +7539,22 @@ body.kr-cite-docked .kr-share-tab {
 
 /* Live: the detail moves to the card, and stays in the page for the
    node's aria-describedby. */
-.blog-post .kr-diagram.is-live .kr-diagram__detail {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap; }
+@media screen {
+  .blog-post .kr-diagram.is-live .kr-diagram__detail {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap; }
 
-.blog-post .kr-diagram.has-active .kr-diagram__node:not(.is-active) {
-  opacity: 0.45; }
+  .blog-post .kr-diagram.has-active .kr-diagram__node:not(.is-active) {
+    opacity: 0.45; }
 
-.blog-post .kr-diagram__node.is-active {
-  border-color: var(--kr-route);
-  box-shadow: var(--kr-shadow-1); }
+  .blog-post .kr-diagram__node.is-active {
+    border-color: var(--kr-route);
+    box-shadow: var(--kr-shadow-1); } }
 
 .kr-diagram__card {
   position: absolute;
@@ -7592,8 +7596,9 @@ body.kr-cite-docked .kr-share-tab {
   margin-bottom: 22px;
   /* The same card as every node, in the page's own colours, set apart
      by an ink border and larger type: an inverted slab read as a light
-     panel stuck in the dark theme. */
-  border: 2px solid var(--kr-ink);
+     panel stuck in the dark theme. currentColor is the ink on screen
+     and black on paper, whichever theme printed it. */
+  border: 2px solid currentColor;
   font-size: 18px;
   text-align: center; }
 
@@ -7653,16 +7658,18 @@ body.kr-cite-docked .kr-share-tab {
   font-size: 13px; }
 
 /* Live, a group's node is one line, its year at the right (the detail
-   has moved to the card); without script it keeps its stacked lines. */
-.blog-post .kr-diagram.is-live .kr-diagram__group .kr-diagram__node {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px; }
+   has moved to the card); without script, and on paper, it keeps its
+   stacked lines. */
+@media screen {
+  .blog-post .kr-diagram.is-live .kr-diagram__group .kr-diagram__node {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px; }
 
-.blog-post .kr-diagram.is-live .kr-diagram__group .kr-diagram__sub {
-  flex: none;
-  margin-top: 0; }
+  .blog-post .kr-diagram.is-live .kr-diagram__group .kr-diagram__sub {
+    flex: none;
+    margin-top: 0; } }
 
 @media (min-width: 768px) {
   /* A route usually fans out at its third step (a group of names and
@@ -7733,7 +7740,7 @@ body.kr-cite-docked .kr-share-tab {
    A drawing (svg.kr-diagram__map, inline, its shapes classed kr-map__*)
    beside a key of nodes (.kr-diagram__key), the key under the drawing on
    a phone. Shapes that share a node's data-part light up with it and
-   show its card when hovered or tapped (initDiagrams, "Linked parts").
+   show its card when hovered or tapped (js/diagrams.js, "Linked parts").
    Every fill comes from a token, so one drawing serves both themes; a
    team's shapes sit in g.kr-map__sentinel or g.kr-map__scourge, which set
    --kr-team. .kr-diagram__num is a key node's number, matching the
@@ -16274,6 +16281,7 @@ html.kr-theme-reveal::view-transition-new(root) {
   .kr-series__parts,
   .kr-code-copy,
   .kr-export-btn,
+  .kr-diagram__card,
   .kr-ref-back,
   .kr-live-cover,
   .kr-season-leaves,
@@ -16369,7 +16377,8 @@ html.kr-theme-reveal::view-transition-new(root) {
      own rules, and a quotation's inherited colour, are stronger than any
      single print rule. */
   [data-theme] :is(h1, h2, h3, h4, p, li, figcaption, code, summary, dt, dd, th, td),
-  [data-theme] .kr-opener ~ * .blog-post > p.drop-cap::first-letter {
+  [data-theme] .kr-opener ~ * .blog-post > p.drop-cap::first-letter,
+  [data-theme] .kr-diagram :is(.kr-diagram__node, .kr-diagram__sub, .kr-diagram__detail) {
     color: #000 !important; }
 
   /* A code block is light type on a dark panel on screen; paper drops
@@ -16392,12 +16401,14 @@ html.kr-theme-reveal::view-transition-new(root) {
      (initPrintExpand); the glossary prints open at once rather than
      partway through its opening slide, and both print as ink on the
      paper rather than in the dark theme's panels, which kept their fill
-     under the ink when background graphics were printed. */
+     under the ink when background graphics were printed. A diagram's
+     boxes drop their panels the same way. */
   .plain-english-box.collapsible-jargon-box::details-content {
     transition: none; }
 
   [data-theme] .faq-item,
-  [data-theme] .plain-english-box {
+  [data-theme] .plain-english-box,
+  [data-theme] .kr-diagram__node {
     background: none;
     box-shadow: none; }
 

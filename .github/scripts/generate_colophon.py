@@ -20,6 +20,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import sitelib  # noqa: E402
 from run_checks import check_steps  # noqa: E402  (one rule for "a check step")
+from check_css import SEASON_SHEETS  # noqa: E402  (the stylesheets written by hand besides style.css)
+from subset_icon_fonts import FONTS as ICON_FONTS  # noqa: E402  (where each icon font and its subset live)
 
 ROOT = sitelib.ROOT
 OUT = ROOT / "data" / "colophon.json"
@@ -147,13 +149,16 @@ def main(argv=None):
     # sitelib.tracked raises when git fails; this script's own copy used
     # to return an empty list, and would have written a colophon claiming
     # no pages at all.
+    # A git pathspec's * crosses directories, so *.html is every page, the
+    # posts included: add the posts to it and they count twice.
     html_pages = sitelib.tracked("*.html")
-    blog_pages = sitelib.tracked("blog/*.html")
+    blog_pages = sitelib.tracked_posts()
     js_files = [f for f in sitelib.tracked("js/*.js") if not f.name.endswith(".min.js")]
     scripts = sitelib.tracked(".github/scripts/*.py")
 
     css_src = size("style.css")
     css_min = size("style.min.css")
+    css_authored = [ROOT / "style.css"] + sitelib.tracked(*SEASON_SHEETS)
 
     images = sitelib.tracked("img/**/*.webp", "img/**/*.png", "img/**/*.jpg", "img/**/*.svg")
     web_fonts = sitelib.tracked("fonts/vendor/*.woff2")
@@ -170,13 +175,17 @@ def main(argv=None):
     tags = {t for p in posts for t in p.get("tags", [])}
 
     # Icon fonts are subset at build time; report what that actually saved.
-    font_pairs = [
-        ("fontawesome-webfont.woff2", "fontawesome-subset.woff2"),
-        ("themify.woff", "themify-subset.woff"),
-        ("ElegantIcons.woff", "ElegantIcons-subset.woff"),
-    ]
-    icon_before = sum(size(Path("fonts") / a) for a, _ in font_pairs)
-    icon_after = sum(size(Path("fonts") / b) for _, b in font_pairs)
+    # The paths come from the subsetter's own table. A copy kept here once
+    # looked for ElegantIcons in fonts/ (it lives in css/fonts/), and a
+    # file that isn't there would weigh nothing, so a miss is an error.
+    font_pairs = [(f["sources"][0], f["out_dir"] / (f["out_stem"] + f["sources"][0].suffix))
+                  for f in ICON_FONTS]
+    missing = [p for pair in font_pairs for p in pair if not p.exists()]
+    if missing:
+        raise SystemExit("icon font not found: "
+                         + ", ".join(p.relative_to(ROOT).as_posix() for p in missing))
+    icon_before = total(a for a, _ in font_pairs)
+    icon_after = total(b for _, b in font_pairs)
 
     data = {
         "pages": len(html_pages),
@@ -205,12 +214,13 @@ def main(argv=None):
         "ciChecks": ci_checks(),
         "dependencies": 0,
         "buildStep": False,
-        "htmlBytes": total(html_pages) + total(blog_pages),
+        "htmlBytes": total(html_pages),
         "imageCount": len(images),
         "imageBytes": total(images),
         "webFontCount": len(web_fonts),
         "webFontBytes": total(web_fonts),
-        "cssLines": lines([ROOT / "style.css"]),
+        "cssFiles": len(css_authored),
+        "cssLines": lines(css_authored),
         "jsLines": lines(js_files),
         "dataFiles": len(data_files),
         "tags": len(tags),
