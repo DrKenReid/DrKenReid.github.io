@@ -2990,6 +2990,12 @@ function renderPostEnd() {
  * read 100%, however much end band, related reading and comment thread
  * follows it. Without an end mark it measures to the disclaimer, and a
  * story, which has neither, to its own last line.
+ *
+ * A post can dress its bar: data-progress="belt" on .blog-post (the
+ * Factorio posts) draws .kr-progress-dress--belt, clipped to the share
+ * read rather than scaled, so its pattern keeps its spacing. The bar
+ * stays the measure, hidden (.kr-progress-bar--dressed), and season.js
+ * leaves a dressed bar alone.
  */
 function renderReadingProgress() {
     var blogPost = document.querySelector('.blog-post, .story-post');
@@ -2998,6 +3004,15 @@ function renderReadingProgress() {
     var bar = document.createElement('div');
     bar.className = 'kr-progress-bar';
     bar.setAttribute('aria-hidden', 'true');
+    var look = blogPost.getAttribute('data-progress');
+    var dress = null;
+    if (look) {
+        bar.classList.add('kr-progress-bar--dressed');
+        dress = document.createElement('div');
+        dress.className = 'kr-progress-dress kr-progress-dress--' + look;
+        dress.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(dress);
+    }
     document.body.appendChild(bar);
 
     krOnScroll(function() {
@@ -3012,6 +3027,7 @@ function renderReadingProgress() {
         done = Math.min(1, Math.max(0, done));
         return function() {
             bar.style.transform = 'scaleX(' + done + ')';
+            if (dress) dress.style.clipPath = 'inset(0 ' + ((1 - done) * 100).toFixed(2) + '% 0 0)';
         };
     });
 }

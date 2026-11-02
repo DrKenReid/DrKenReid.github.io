@@ -199,8 +199,10 @@ without one class), and the pin seen to fail.
                             few places; the season's gallery subject leads
                             its row; reduced motion sends no flyer and no
                             burst; ?season=off takes it all away; a memorial
-                            post (<body data-memorial>) shows none of it, so
-                            the post dressed is the newest that is not one.
+                            post (<body data-memorial>) shows none of it, and
+                            a post that dresses its own reading bar
+                            (data-progress) has no track, so the post
+                            dressed is the newest that is neither.
                             Every other
                             check runs with no season (harness.set_season),
                             so none of them changes when a season starts.
@@ -3141,6 +3143,8 @@ TRACK_STATE = """async () => {
 
 
 MEMORIAL_BODY = re.compile(r"<body\b[^>]*\bdata-memorial\b")
+# A post that dresses its own reading bar wears no season track.
+DRESSED_BAR = re.compile(r"<div\b[^>]*\bclass=\"blog-post\"[^>]*\bdata-progress=")
 
 
 def check_season(browser, base, rep):
@@ -3150,7 +3154,8 @@ def check_season(browser, base, rep):
     posts = json.loads((ROOT / "data" / "posts.json").read_text(encoding="utf-8"))
     urls = [p["url"] for p in posts if p.get("url", "").startswith("blog/")]
     memorial = [u for u in urls if MEMORIAL_BODY.search((ROOT / u).read_text(encoding="utf-8"))]
-    post = next(u for u in urls if u not in memorial)
+    dressed = [u for u in urls if DRESSED_BAR.search((ROOT / u).read_text(encoding="utf-8"))]
+    post = next(u for u in urls if u not in memorial and u not in dressed)
     for key, want in SEASONS_UNDER_TEST.items():
         for theme in THEMES:
             context = site_context(browser, base, theme=theme)

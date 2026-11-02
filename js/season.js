@@ -677,6 +677,8 @@
             return;
         }
         if (document.querySelector('.kr-season-track')) return;
+        // A post that dresses its own bar (data-progress) keeps it.
+        if (bar.classList.contains('kr-progress-bar--dressed')) return;
         var spec = dress.track, mode = spec.mode;
         var el = document.createElement('div');
         el.className = 'kr-season-track kr-season-track--' + mode + ' kr-season-track--' + spec.kind;

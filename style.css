@@ -6177,6 +6177,62 @@ a.gallery-filter-btn:focus:not(:hover) {
   .kr-progress-bar {
     top: 70px; } }
 
+/* --- Reading progress, dressed (renderReadingProgress) -------------------
+   data-progress="<look>" on .blog-post: the script hides the bar, which
+   stays the measure (.kr-progress-bar--dressed), and draws
+   .kr-progress-dress--<look> under the header bar at every width, clipped
+   to the share read (clip-path, set by the script, not scaleX, so the
+   pattern keeps its spacing). season.js gives a dressed post no track.
+   The one look so far is the belt, for the Factorio posts: a yellow
+   transport belt carrying copper plates on one lane and iron on the
+   other, running east. The colours are the belt's own in both themes. */
+:root {
+  --kr-belt-rail: #d9a224;
+  --kr-belt-deck: #3a3836;
+  --kr-belt-slat: #232120;
+  --kr-belt-copper: #d07d4a;
+  --kr-belt-iron: #b4b9bf; }
+
+.kr-progress-bar--dressed {
+  visibility: hidden; }
+
+.kr-progress-dress {
+  position: fixed;
+  top: var(--kr-bar-h);
+  left: 0;
+  width: 100%;
+  clip-path: inset(0 100% 0 0);
+  z-index: 4000;
+  pointer-events: none; }
+
+.kr-progress-dress--belt {
+  height: 12px;
+  overflow: hidden;
+  background: var(--kr-belt-deck);
+  border-block: 2px solid var(--kr-belt-rail); }
+
+/* Slats every 4px and a plate every 24px on each lane, one 24px period
+   wider than the belt, slid one period and started again. */
+.kr-progress-dress--belt::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -24px;
+  right: 0;
+  background:
+    repeating-linear-gradient(90deg, var(--kr-belt-copper) 0 3px, transparent 3px 24px) 0 1px / 100% 2px no-repeat,
+    repeating-linear-gradient(90deg, transparent 0 12px, var(--kr-belt-iron) 12px 15px, transparent 15px 24px) 0 5px / 100% 2px no-repeat,
+    repeating-linear-gradient(90deg, var(--kr-belt-slat) 0 1px, transparent 1px 4px);
+  animation: kr-belt-run 1.5s linear infinite; }
+
+@keyframes kr-belt-run {
+  to { transform: translateX(24px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .kr-progress-dress--belt::before {
+    animation: none; } }
+
 /* --- Citation preview (initCitePreviews) --------------------------------
    The card that shows a reference on hovering its citation. Where the
    browser supports anchor positioning it hangs off the citation itself
@@ -16208,6 +16264,7 @@ html.kr-theme-reveal::view-transition-new(root) {
   #theme-toggle,
   #scrollUp,
   .kr-progress-bar,
+  .kr-progress-dress,
   .kr-toc,
   .kr-toc-mobile,
   .kr-share-rail,

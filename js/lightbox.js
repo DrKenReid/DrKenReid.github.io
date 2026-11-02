@@ -127,9 +127,9 @@
     // Fixed page furniture that sits above Magnific's overlay (z-index
     // 1043): the theme toggle (1500) lands on the close button,
     // scroll-to-top (far higher) on the filmstrip, and a post's reading
-    // progress bar (4000) draws across the top of the dialog. None of it
-    // belongs to the dialog.
-    var PAGE_CHROME = '#theme-toggle, #scrollUp, .kr-progress-bar';
+    // progress bar (4000), and the belt a post can dress it in, draw
+    // across the top of the dialog. None of it belongs to the dialog.
+    var PAGE_CHROME = '#theme-toggle, #scrollUp, .kr-progress-bar, .kr-progress-dress';
 
     // One Magnific instance serves every popup on a page, so one flag and
     // one timer are enough.

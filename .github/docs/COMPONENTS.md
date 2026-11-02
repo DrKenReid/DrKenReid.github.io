@@ -121,6 +121,10 @@ renderFooter('footer-section');</script>
 - `data-no-toc` on `.blog-post` turns the contents rail off for a post
   whose layout it would crowd. The contents box in the text stays, shown
   at every width.
+- `data-progress="belt"` on `.blog-post` draws the reading-progress bar
+  as a transport belt (the Factorio posts), in place of the plain bar
+  and of any season's track. A new look is a
+  `.kr-progress-dress--<look>` rule in style.css §10.
 
 ### The head
 
@@ -743,7 +747,7 @@ none of it should be: a hand-written copy would be a second one.
 | top of the post, under 1240px | the contents as a collapsible box (`details.kr-toc-mobile`); from 1240px the same box is drawn only while keyboard focus is in it, and with `data-no-toc` at every width | `renderPostToc` |
 | fixed left, from 1240px | the contents rail (`nav.kr-toc`) with a gradient marker on the section in view | `renderPostToc` |
 | each `h2` | an anchor link (`a.kr-hlink`) | `renderHeadingAnchors` |
-| top of the window | the reading-progress bar, which reaches 100% when the end mark is in view | `renderReadingProgress` |
+| top of the window | the reading-progress bar, which reaches 100% when the end mark is in view; with `data-progress` on `.blog-post`, a dressed bar (`div.kr-progress-dress`) under the header instead | `renderReadingProgress` |
 | beside the post, 992 to 1359px | the share rail, in the document just before the end band so Tab reaches it; on a phone, a share sheet over the sign-off that goes down when Up next comes on screen, and stays down for the session once dismissed; the sheet waits while the newsletter pop-up is up | `renderFloatingBlogShare` |
 | the right edge of the window, below 992px, on every page | the share tab: the device's share sheet (Web Share) with the page's title and canonical address, or Copy link where there is none; always there, and slim for it, except while a sheet holds the foot of the screen | `renderShareButton` |
 | over the page, from the end of the text | the newsletter pop-up: a card centred at the foot of the window from 768px, a sheet on a phone, rising when the end mark is wholly on screen (the progress bar at 100%) and going down when the footer arrives. Its words are the post's own, from `data/invites.json`, with its category's (`KR_INVITES`) as the fallback for a draft; a How This Site Is Built part offers RSS first, since that series is not emailed. A labelled region that never takes focus, in the document just before the end band. Closed (button or Escape), it rests 30 days; followed, it does not come back (`kr-invite-closed`, `kr-invite-followed` in localStorage). The Substack link carries `utm_` parameters naming the post; analytics gets `newsletter_invite_shown` and `newsletter_invite` | `renderNewsletterPopup` |
