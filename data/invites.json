@@ -324,6 +324,10 @@
     "share-cards-drawn-by-a-script": {
       "title": "Every post gets its own card",
       "line": "The series covers the share cards and the rest of the site's insides, and the feed is the way to follow it."
+    },
+    "ann-arbor-and-ypsilanti": {
+      "title": "More from the backyard and beyond",
+      "line": "I write about the photographs I take and what was going on when I took them, alongside books and data science."
     }
   }
 }

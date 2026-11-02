@@ -650,6 +650,58 @@
         };
     });
 
+    // Frames 500 to 524 fill a contact sheet in order: Ypsilanti first,
+    // then leaves, a tomato, the two skies, the car and the rain.
+    def('ann-arbor-and-ypsilanti', function (w, h, rnd) {
+        // Y portrait, K camera, L leaves, T tomato, F flowers, B teal sky,
+        // O orange sky, C car, R rain.
+        var plan = 'YKLLTLLFFBOLLLCRRLFRRLLLL', t = 0, frames = [];
+        var gx = w * 0.08, gy = h * 0.08, cw = w * 0.84 / 5, ch = h * 0.74 / 5;
+        for (var i = 0; i < 25; i++) {
+            var pts = [];
+            for (var k = 0; k < 6; k++) pts.push([0.15 + rnd() * 0.7, 0.2 + rnd() * 0.6]);
+            frames.push({ kind: plan.charAt(i), x: gx + (i % 5) * cw, y: gy + Math.floor(i / 5) * ch, pts: pts });
+        }
+        function paint(ctx, f, fw, fh) {
+            var k = f.kind, at = function (j) { return [f.x + f.pts[j][0] * fw, f.y + f.pts[j][1] * fh]; };
+            if (k === 'B' || k === 'O') {
+                var bx = f.x + fw * 0.5, ink = 'rgba(0,0,0,0.75)';
+                rect(ctx, f.x, f.y, fw, fh, k === 'B' ? alpha(C.blue, 0.6) : alpha(C.red, 0.75));
+                line(ctx, bx, f.y + fh, bx, f.y + fh * 0.3, ink, 1.5);
+                line(ctx, bx, f.y + fh * 0.6, f.x + fw * 0.2, f.y + fh * 0.2, ink, 1);
+                line(ctx, bx, f.y + fh * 0.45, f.x + fw * 0.82, f.y + fh * 0.15, ink, 1);
+                return;
+            }
+            rect(ctx, f.x, f.y, fw, fh, 'rgba(255,255,255,0.08)');
+            if (k === 'Y') { dot(ctx, f.x + fw * 0.5, f.y + fh * 0.55, fh * 0.26, alpha(C.blue, 0.8)); return; }
+            if (k === 'K') { rect(ctx, f.x + fw * 0.3, f.y + fh * 0.35, fw * 0.4, fh * 0.4, 'rgba(255,255,255,0.4)'); dot(ctx, f.x + fw * 0.5, f.y + fh * 0.55, fh * 0.13, C.ink); return; }
+            if (k === 'C') {
+                rect(ctx, f.x + fw * 0.2, f.y + fh * 0.4, fw * 0.6, fh * 0.32, C.red);
+                dot(ctx, f.x + fw * 0.32, f.y + fh * 0.74, fh * 0.09, C.ink);
+                dot(ctx, f.x + fw * 0.68, f.y + fh * 0.74, fh * 0.09, C.ink);
+                return;
+            }
+            if (k === 'R') { for (var r = 0; r < 6; r++) { var q = at(r); dot(ctx, q[0], q[1], 1.6, 'rgba(255,255,255,0.6)'); } return; }
+            for (var j = 0; j < 4; j++) { var p = at(j); dot(ctx, p[0], p[1], fh * 0.16, alpha(C.green, 0.65)); }
+            if (k === 'T') { var tp = at(4); dot(ctx, tp[0], tp[1], fh * 0.11, C.red); }
+            if (k === 'F') { var fp = at(5); dot(ctx, fp[0], fp[1], fh * 0.09, C.b); }
+        }
+        return {
+            step: function () { t = (t + 1) % 420; },
+            draw: function (ctx) {
+                var fw = cw - 4, fh = ch - 4, shown = Math.min(25, Math.floor((t - 10) / 9) + 1);
+                frames.forEach(function (f, i) {
+                    rect(ctx, f.x, f.y, fw, fh, 'rgba(255,255,255,0.04)');
+                    if (i >= shown) return;
+                    ctx.globalAlpha = clamp01((t - 10 - i * 9) / 12);
+                    paint(ctx, f, fw, fh);
+                    ctx.globalAlpha = 1;
+                });
+                if (shown > 0) text(ctx, (499 + shown) + ', ' + (shown <= 2 ? 'Ypsilanti' : 'Ann Arbor'), w * 0.5, h * 0.92, 10, C.dim, 600, 'center');
+            }
+        };
+    });
+
     /* ----------------------------------------------------- site building */
 
     // A focus ring tabs through controls; the skip link is the first stop.

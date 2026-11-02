@@ -5,11 +5,188 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 30 Oct 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Fri, 30 Oct 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Mon, 02 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Mon, 02 Nov 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Ann Arbor and Ypsilanti, Frame by Frame</title>
+      <link>https://www.kenreid.co.uk/blog/ann-arbor-and-ypsilanti.html</link>
+      <guid>https://www.kenreid.co.uk/blog/ann-arbor-and-ypsilanti.html</guid>
+      <pubDate>Mon, 02 Nov 2026 00:00:00 +0000</pubDate>
+      <description>The 25 frames I added to my gallery recently from Ann Arbor and Ypsilanti.</description>
+      <category>photography</category>
+      <category>personal</category>
+      <content:encoded><![CDATA[
+
+ <p>Sometimes when you have the urge to go do some photography, the weather stops you in your tracks, or your appointment in 1.5 hours, or the list of things you should be doing instead. I try to combat this by lowering my expectations - I can't frequently chase sunsets and go for shots that require a lot of time and patience, sometimes you gotta just take some photos in your backyard.</p>
+
+ <p>Other times, you are asked to take some photos for an event, and you manage to take some that appeal to your "artsy" photography, not just "acceptable" ones that you pass on to friends but don't post to your gallery. Nearly all of these ones are plants, and a lot of them are wet, and considering I generally don't care for taking photos of flowers, plants and such, nor do I enjoy getting my camera wet, I hope it tells you that I really stepped out of my comfort zone here to get <em>some</em> photography hours in. The categories I made for my gallery include landscapes, urban decay and pets as what I shoot, and this batch has no landscapes, no decay and no pets.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Original:</strong> the full-size file, as opposed to the 400-pixel thumbnail this page shows.</li>
+ <li><strong>F-stop:</strong> the setting for how wide the lens opens. A low f-stop lets in more light and leaves only a thin slice of the scene sharp, front to back, so the background goes soft.</li>
+ <li><strong>Black level:</strong> the darkest tone in a photo. Raising it turns true black into a dark grey, for a faded, matte look.</li>
+ <li><strong>Silhouette:</strong> a subject shot dark against a bright background, so you get its outline and none of its detail.</li>
+ <li><strong>Color grading:</strong> shifting a photo's colours after it's taken to set a mood, like the orange sky in 510.</li>
+ <li><strong>Lossless:</strong> compressed without throwing anything away, so the file opens pixel for pixel as it was saved.</li>
+ </ul>
+ </div>
+
+ <p>The originals are beefy - in file size, that is. The 25 of them come to 695 MB on the GitHub release where they live, from 4.7 MB for frame 510 up to 40 MB for 512. The high resolution switch at the top of this post is there if you want all of that, and best left alone on a phone plan. Clicking a single frame opens just its original.</p>
+
+ <h2>Ypsilanti</h2>
+
+ <p>Image 500 is a portrait. A friend with colourful hair, at an event playing guitar. I personally always feel anxious playing music in public, but both my wife and many of her friends are musicians, so playing in public is kind of their thing. I hope I didn't add too much stress to their playing by pointing my camera at them. I wanted to take photos of the event without people's faces - as a means of showing an event, the purpose of it, the vibes of it, without forcing people to exist on social media and websites. It also makes it easier on me - I don't feel as obligated to ask permissions to post a photo of someone if their face isn't in it. "Can I post this photo of your chin?" seems a bit unnecessary. I did ask her, mind you, and she was fine with it. </p>
+ 
+ <p>501 is a picture of a Canon. I took this partly because I love the look of a camera, ever since I got into photography I've found them aesthetically pleasing. </p>
+
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/500.webp" alt="A person with long teal hair, glasses and nose rings looking down against a brick wall, cropped below the eyes" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/500.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/500@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/500.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 500, Ypsilanti.</figcaption>
+ </figure>
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/501.webp" alt="A small black Canon camera with its lens cap on, sitting on a white table with a purple bottle behind it" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/501.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/501@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/501.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 501, Ypsilanti.</figcaption>
+ </figure>
+
+ <p>Ypsilanti wasn't on <a href="https://www.kenreid.co.uk/map.html">the photo map</a> before this batch, it was about time it was added.</p>
+
+ <h2>Green</h2>
+
+ <p>502 to 504 are tomato plants. 502 and 503 are the leaves, wet, jagged edges picked out and everything behind them gone soft after fiddling with f-stop, and 504 has the fruit, a truss of cherry tomatoes with one of them ripe and red and the rest still green. These are my tomatoes, I've never really been into gardening but this year I grew these from seeds, and I was lucky enough to have about 120 so far with about 60-70 left to be picked. The other shots below are from around my yard, partly practicing f-stop levels, partly that I love the look of wooden fences, they give a sort of Hobbiton feel.</p>
+
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/502.webp" alt="Wet, jagged-edged tomato leaves against a blurred green background" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/502.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/502@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/502.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 502.</figcaption>
+ </figure>
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/503.webp" alt="Tomato leaves in soft light against a dark, blurred background" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/503.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/503@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/503.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 503.</figcaption>
+ </figure>
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/504.webp" alt="A truss of cherry tomatoes among leaves, one ripe red tomato and several green ones" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/504.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/504@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/504.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 504.</figcaption>
+ </figure>
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/505.webp" alt="Ivy growing over a weathered grey wooden fence with a horizontal rail" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/505.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/505@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/505.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 505.</figcaption>
+ </figure>
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/506.webp" alt="A closer, darker view of ivy on old wooden fence posts, a blurred leaf in the foreground" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/506.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/506@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/506.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 506.</figcaption>
+ </figure>
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/507.webp" alt="Small white daisy-like flowers with yellow centres and buds against a near-black background" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/507.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/507@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/507.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 507.</figcaption>
+ </figure>
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/508.webp" alt="A plume of bright yellow flowers against a dark blue background, a dry brown stalk beside it" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/508.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/508@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/508.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 508.</figcaption>
+ </figure>
+
+ <p>511 and 512 are these huge leaves at the end of my yard. I always like the matte-black, with a slightly raised black level, and greens tend well to a matte feel, I find. At 40 MB, 512 is the heaviest file of the 25. 513 is an example of something I like playing with: textures. They're tough to get right, and they're a good way of showing how interesting something we ignore can be. Tree trunks, grass, stones, floorboards, can all be quite interesting when you fill an entire shot with them.</p>
+
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/511.webp" alt="Large, deeply veined green leaves filling the frame" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/511.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/511@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/511.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 511.</figcaption>
+ </figure>
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/512.webp" alt="A green leaf with spreading black patches and yellowing between them" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/512.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/512@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/512.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 512.</figcaption>
+ </figure>
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/513.webp" alt="Long green grass seen from above, with a few brown dead leaves caught in it" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/513.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/513@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/513.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 513.</figcaption>
+ </figure>
+
+ <p>517 is the only upright frame of the lot. It's from a stump of a tree my Dad chopped down when visiting from Scotland. With permission, I should say, he didn't just go on a tree-focused-massacre. The tree was long dead from a disease spreading through our area, and a recent storm knocked it sideways, so it was dangling precariously over an area visitors park. So he chopped it down, and we've since been using it for firewood. What is left is the trunk, and my wife loves the look of the growth there, and asked me for weeks to take a few photos of it. There is something poignant about life from death. The bottom four of this section contain some examples of texture shots I was playing with that day. A firewood pile in 521 that hadn't yet been stacked, an overgrown bush in 522, and the bark of a tree (we suspect is also dying) in 523. 524 was the first sign of Fall we saw this year.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img kr-figure-img--portrait" src="https://www.kenreid.co.uk/img/photography/thumb/517.webp" alt="A small shrub with red leaves on red stems in front of tall grass, a path at the right edge" loading="lazy" width="400" height="601" srcset="https://www.kenreid.co.uk/img/photography/thumb/517.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/517@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/517.webp 1278w" sizes="(min-width: 377px) 337px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 517.</figcaption>
+ </figure>
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/518.webp" alt="A cluster of pink trumpet-shaped flowers with white stamens against a soft green background" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/518.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/518@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/518.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 518.</figcaption>
+ </figure>
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/521.webp" alt="A pile of cut logs seen end-on, bark peeling and patched with yellow-green lichen" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/521.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/521@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/521.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 521.</figcaption>
+ </figure>
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/522.webp" alt="Flat sprays of evergreen foliage filling the frame" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/522.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/522@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/522.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 522.</figcaption>
+ </figure>
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/523.webp" alt="Close-up of grey, cracked tree bark with darkened corners" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/523.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/523@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/523.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 523.</figcaption>
+ </figure>
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/524.webp" alt="Green leaves on thin branches with one leaf turned orange and red in the middle" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/524.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/524@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/524.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 524.</figcaption>
+ </figure>
+
+ <h2>Two skies</h2>
+
+ <p>509 and 510 are bare branches in silhouette. In 509 the sky behind them is teal, going for more of a spooky feel, while in 510 the deep orange is some fun color grading. It was a damp early Fall day but I think I successfully made it look like an American view of what Mexico looks like in films. </p>
+
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/509.webp" alt="Bare branches in dark silhouette against a teal sky" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/509.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/509@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/509.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 509.</figcaption>
+ </figure>
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/510.webp" alt="Bare branches in black silhouette against a flat, saturated red-orange sky" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/510.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/510@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/510.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 510.</figcaption>
+ </figure>
+
+ <p>510 is also the smallest original, the 4.7 MB one. PNG files are lossless, and before compressing anything the format guesses each pixel from the ones next to it<sup><a href="https://www.kenreid.co.uk/blog/ann-arbor-and-ypsilanti.html#ref-1" class="cite-ref">[1]</a></sup>. A sky that's the same colour all the way across is easy to guess, I guess.</p>
+
+ <h2>Rain, and our car</h2>
+
+ <p>515 and 516 are the rain on our windshield. It reminds me of when I was doing my undergraduate degree in a computer science class on modelling complex systems, I wrote a program (in NetLogo, anyone?) which would emulate raindrops on a windshield, I mostly did it for fun but the reason I gave in my assignment report was that if a car company was wanting to test how raindrops stick to their glass, they could use this software to simulate it, and I added buttons to "add mud" making rain stick more, then I added some rules to mess with the physics (more gravity, easterly or westerly wind, rainbow colors of rain). </p>
+
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/515.webp" alt="Raindrops on a smooth surface in black and white, sharp in a band across the middle" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/515.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/515@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/515.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 515.</figcaption>
+ </figure>
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/516.webp" alt="Raindrops scattered across a dark surface, nearly black and white" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/516.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/516@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/516.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 516.</figcaption>
+ </figure>
+
+ <p>519 and 520 are grass after the rain, blades with beads of water strung along them, all dark blue-greens. I love the matte effect here.</p>
+
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/519.webp" alt="Blades of grass with water droplets strung along them, in dark blue-green tones" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/519.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/519@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/519.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 519.</figcaption>
+ </figure>
+ <figure>
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/520.webp" alt="A single grass blade beaded with water against dark, blurred grass" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/520.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/520@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/520.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 520.</figcaption>
+ </figure>
+
+ <p>Here is our car in our driveway. I had a feeling the lighting would work well, and I took the photo from behind a tree to give it some depth. I think it does a fair imitation of a car commercial. I promise I'm not sponsored by Toyota.</p>
+
+ <figure class="kr-figure--solo">
+ <img class="kr-figure-img" src="https://www.kenreid.co.uk/img/photography/thumb/514.webp" alt="A red Toyota SUV partly hidden behind dark overhanging leaves" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/514.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/514@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/514.webp 1920w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> 514.</figcaption>
+ </figure>
+
+ <p>All 25 are in <a href="https://www.kenreid.co.uk/gallery.html">the gallery</a> now, and on the map, 23 of them under Ann Arbor.</p>
+
+ <h2 class="section-heading" id="references">References</h2>
+ <ol class="references">
+ <li id="ref-1">Wikipedia. <em>PNG</em> (the section on compression: filtering, then DEFLATE). <a href="https://en.wikipedia.org/wiki/PNG" target="_blank" rel="noopener noreferrer">https://en.wikipedia.org/wiki/PNG</a></li>
+ </ol>
+
+        
+
+ ]]></content:encoded>
+    </item>
     <item>
       <title>Share Cards Drawn by a Script</title>
       <link>https://www.kenreid.co.uk/blog/share-cards-drawn-by-a-script.html</link>
@@ -3197,99 +3374,6 @@ link.appendChild(span);</code></pre>
       <description>We judge likelihood by how easily examples come to mind, so we fear the vivid and rare and shrug at the common and deadly. Why the news makes us afraid of the wrong things.</description>
       <category>philosophy</category>
       <category>science</category>
-      <content:encoded><![CDATA[
-
- <p>The news is a list of the least representative things that happened yesterday, which you might think - great, that's interesting! The problem is, our minds calibrate to work out how dangerous the world is with this information. Quick: which is more dangerous, flying or driving? Sharks or vending machines? Terrorism or heart disease? If your gut said "flying, sharks, terrorism", your gut is confidently and dramatically wrong.</p>
-
- <p>You judge how likely a thing is by how <em>easily</em> examples come to mind. The examples that come easily are the vivid ones, the ones the news showed you. That, in a nutshell, is the availability heuristic, and it runs your sense of risk, your politics, and a fair amount of your fear.</p>
-
- <div class="plain-english-box">
- <h2>Quick jargon guide</h2>
- <ul>
- <li><strong>Availability heuristic:</strong> judging how likely something is by how easily examples spring to mind.</li>
- <li><strong>Base rate:</strong> how often a thing actually happens, as opposed to how often you hear about it.</li>
- <li><strong>Denominator:</strong> the "out of how many" under every scary number; a headline usually reports the numerator and skips this part.</li>
- <li><strong>Newsworthiness filter:</strong> news reports the unusual by definition, so what reaches you is selected against being representative.</li>
- <li><strong>Doomscrolling:</strong> an infinite feed of the world's most vivid catastrophes, which your gut reads as a frequency table.</li>
- </ul>
- </div>
-
- <h2>The shortcut</h2>
-
- <p>The availability heuristic, named by Tversky and Kahneman, is the brain's habit of estimating how frequent or likely something is by how readily instances spring to mind<sup><a href="https://www.kenreid.co.uk/blog/the-availability-heuristic-runs-the-news.html#ref-1" class="cite-ref">[1]</a></sup>. Most of the time it's a decent shortcut: common things usually <em>are</em> easier to recall than rare ones, so "easy to remember" tracks "actually frequent" well enough to get you through a Tuesday.</p>
-
- <p>It fails when ease of recall is driven by something <em>other</em> than frequency. In the modern world that is constant: vividness, emotional intensity and media coverage all make an event easier to recall without making it any more common.</p>
-
- <p>So the events that dominate our sense of risk are the rare, dramatic, well-covered ones. Plane crashes get wall-to-wall coverage, and car crashes, which kill vastly more people, are too routine to report, so flying <em>feels</em> more dangerous while being far safer per mile.</p>
-
- <h2>The risks with no pictures</h2>
-
- <p>Shark attacks get a summer of headlines out of a handful of incidents, while the far deadlier risks (heart disease, the drive to the beach) produce no images at all. Terrorism reshapes whole societies' fears and budgets while killing a tiny fraction of the number who die of the mundane, unphotogenic causes nobody panics about. That last one makes me angry.</p>
-
- <p>The mismatch between what we fear and what actually harms us is, in large part, the availability heuristic reading the news as if it were a frequency table<sup><a href="https://www.kenreid.co.uk/blog/the-availability-heuristic-runs-the-news.html#ref-2" class="cite-ref">[2]</a></sup>.</p>
-
- <h2>The news is an availability machine</h2>
-
- <p>The news isn't lying, which is the trap. News reports the <em>un</em>usual by definition: "plane lands safely" is not a story, "plane crashes" is. That newsworthiness filter guarantees that what reaches you is the rare and dramatic rather than the common and deadly.</p>
-
- <figure class="kr-figure--solo">
-  <img src="https://www.kenreid.co.uk/img/photography/thumb/89.webp" alt="A city stretching to the hills under a lid of dark storm clouds" loading="lazy" class="kr-figure-img" width="400" height="265" srcset="https://www.kenreid.co.uk/img/photography/thumb/89.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/89@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/89.webp 1200w" sizes="(min-width: 800px) 760px, 100vw">
-  <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span></figcaption>
- </figure>
-
- <p>So the news stocks your memory with the vivid, atypical events that the availability heuristic will then treat as frequent ones. You get a mental sample of the world selected for drama and against representativeness, and your sense of risk is built on that sample.</p>
-
- <p>This is a cousin of survivorship bias, and of the habit of analysing whatever data happened to be lying around: in all of them, a filtered sample gets mistaken for the whole picture.</p>
-
- <p>Then there is doomscrolling. An infinite feed that tailors towards what you enjoy - the algorithm literally learns based on how quickly you scroll, or don't, from one item to the next, whether you comment, react, share. So when you show an interest in, well, interesting things that are, say, unusual, such as landslides, violence, politics, terrorism videos, whatever - you begin to see MORE of that because the algorithm learns what you interact with. Therefore, you start to think "this is how things are".</p>
-
- <p>The same wiring that helped an ancestor remember which mushroom caused a friend to die, or where there were dangerous animals, is now allowing you to identify dangerous patterns in a carefully crafted information feed, fed to you from your phone.</p>
-
- <h2>What to do about a bias you can't turn off</h2>
-
- <p>You can't just "stop" this by knowing it exists, but you can install a correction: <strong>when you notice fear, or a judgement about risk, ask where the example came from.</strong> Did this feel likely because you have base-rate data, or because a headline handed you a picture? That one question separates "this is common" from "this is merely memorable".</p>
-
- <h2>The boring denominators</h2>
-
- <p>The deeper practice is going after <em>base rates</em>, the boring denominators, instead of anecdotes. How many flights per crash? How many people drive, versus how many die driving? What's the trend, rather than the latest incident?</p>
-
- <p>Numbers are the antidote because they're unmoved by vividness. A statistic does not care how frightening your mental image is (notice how often journalists say "thousands" without the "out of millions"). So the frightening image is your cue to go and find the statistic.</p>
-
- <p>Your intuition has been fed a curated diet of the dramatic, so when it hands you a confident sense of how risky the world is, treat the confidence as a symptom rather than a measurement.</p>
-
- <p>Next time a headline frightens you, go and find the denominator. It's usually two searches away, and nowhere near as interesting as the headline.</p>
-
- <div class="faq-section">
- <h2>Common questions</h2>
-
- <details class="faq-item">
- <summary>Doesn't this just tell people to ignore the news and real dangers?</summary>
- <p>Journalists judge success by number of viewers and interactions. They are incentivised to make news that is clickbait, sensationalised, or blatantly pandering to specific crowds. "The news" is real-world information filtered through groups of people incentivised to misbehave. I recommend at least trying various news outlets, but preferably, get your news from smaller agencies, and be deeply discerning.</p>
- </details>
-
- <details class="faq-item">
- <summary>If the world is safer than it feels, why does everyone feel it's getting worse?</summary>
- <p>There are a half-dozen upcoming apocalypses that are real, including climate change, antibiotic resistance, and world war. Use your time and anxiety to better the world and our chances of preventing those things, don't fret over inflated figures from pot-stirring articles complaining about immigration or gang violence - it's clickbait and it is seeding hatred against our fellow humans.</p>
- </details>
-
- <details class="faq-item">
- <summary>Isn't it a bit privileged to tell people their fears are irrational?</summary>
- <p>It would be, if the claim were "your fears are stupid". The heuristic is a universal shortcut with a sensible origin, not a personal failing, and plenty of the fears it produces are justified. The argument is only that ease of recall and true frequency come apart in a media-saturated world, so it pays to check which one a given fear is tracking, especially for the high-stakes calls (what to worry about, how to vote, what you will let reshape a society). Respecting people's fears and helping them aim those fears well are compatible.</p>
- </details>
- </div>
-
- <h2 class="section-heading" id="references">References</h2>
- <ol class="references">
-          <li id="ref-1">
-            Tversky, A., &amp; Kahneman, D. (1973). Availability: A heuristic for judging frequency and probability. <em>Cognitive Psychology</em>, 5(2), 207&ndash;232. <a href="https://doi.org/10.1016/0010-0285(73)90033-9" target="_blank" rel="noopener">https://doi.org/10.1016/0010-0285(73)90033-9</a>
-          </li>
-          <li id="ref-2">
-            Slovic, P. (1987). Perception of risk. <em>Science</em>, 236(4799), 280&ndash;285. <a href="https://doi.org/10.1126/science.3563507" target="_blank" rel="noopener">https://doi.org/10.1126/science.3563507</a>
-          </li>
-        </ol>
-
-        
- ]]></content:encoded>
     </item>
     <item>
       <title>Confirmation Bias Is the Mother Bias</title>
