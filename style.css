@@ -6183,12 +6183,12 @@ a.gallery-filter-btn:focus:not(:hover) {
    .kr-progress-dress--<look> under the header bar at every width, clipped
    to the share read (clip-path, set by the script, not scaleX, so the
    pattern keeps its spacing). season.js gives a dressed post no track.
-   The one look so far is the belt, for the Factorio posts: the game's
-   belt yellow, with dark arrows running east. The colours are the
+   The one look so far is the belt, for the Factorio posts: a grey belt
+   with the game's yellow arrows running east. The colours are the
    belt's own in both themes. */
 :root {
-  --kr-belt-yellow: #e8b024;
-  --kr-belt-arrow: #2e2304; }
+  --kr-belt-deck: #4a4845;
+  --kr-belt-arrow: #f0b429; }
 
 .kr-progress-bar--dressed {
   visibility: hidden; }
@@ -6205,7 +6205,7 @@ a.gallery-filter-btn:focus:not(:hover) {
 .kr-progress-dress--belt {
   height: 12px;
   overflow: hidden;
-  background: var(--kr-belt-yellow); }
+  background: var(--kr-belt-deck); }
 
 /* A chevron every 14px, cut out of the arrow colour with a mask (so the
    colour stays a token), on a strip one chevron wider than the bar, slid
