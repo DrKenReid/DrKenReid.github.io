@@ -1289,6 +1289,51 @@
         "433",
         "434"
       ]
+    },
+    {
+      "name": "Argo Cascades, Ann Arbor",
+      "path": [
+        "United States",
+        "Michigan",
+        "Ann Arbor",
+        "Argo Cascades"
+      ],
+      "lat": 42.2885,
+      "lng": -83.7435,
+      "photos": [
+        "744",
+        "745",
+        "746",
+        "747"
+      ]
+    },
+    {
+      "name": "East Ann Arbor, Michigan",
+      "path": [
+        "United States",
+        "Michigan",
+        "Ann Arbor",
+        "East Ann Arbor"
+      ],
+      "lat": 42.2732,
+      "lng": -83.6661,
+      "photos": [
+        "748",
+        "749"
+      ]
+    },
+    {
+      "name": "Superior Township, Michigan",
+      "path": [
+        "United States",
+        "Michigan",
+        "Superior Township"
+      ],
+      "lat": 42.2762,
+      "lng": -83.5755,
+      "photos": [
+        "750"
+      ]
     }
   ]
 }
