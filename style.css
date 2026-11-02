@@ -2159,7 +2159,8 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
    the words (--kr-opener-scrim), the title in Lora, the crumbs above it.
      .breadcrumb-area        the page opener (every top-level page)
      --listing               its shorter cut for an index page
-     .kr-photo-band          a photograph band further down a page
+     --gallery               its taller cut, for the gallery alone
+     .kr-photo-band         a photograph band further down a page
      .kr-opener              the post opener, written into each post by
                              .github/scripts/apply_post_opener.py
      .kr-opener--long        the step-down for a long post title
@@ -2195,7 +2196,7 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
 
    Sizes: min(52vh, 520px) tall from 768px, 170px below it, both growing
    with the content. .breadcrumb-area--listing (below) is the shorter cut
-   for an index page. .page-standfirst has no page yet, so the pruner
+   for an index page, --gallery the taller one. .page-standfirst has no page yet, so the pruner
    leaves it out of style.min.css until one uses it.
 
    The template's form (the h1 before the crumbs, .row.h-100 >
@@ -2440,6 +2441,25 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   .breadcrumb-area.breadcrumb-area--listing {
     height: auto;
     min-height: clamp(260px, 34vh, 320px); } }
+
+/* --- Gallery banner ---------------------------------------------------
+   .breadcrumb-area--gallery is the one opener taller than the standard:
+   on the gallery the photograph is the point, so it takes most of the
+   first screen, while the grid still starts on it at 1440x900
+   (GALLERY_GRID_TOP_MAX in smoke_test.py). Its frame is a 2400px file
+   (img/bg-img/gallery-opener.webp), sharp on a high-density screen once
+   the banner and the parallax layer enlarge it. Below 768px it keeps the
+   shared scrim: the phone wash darkens everything from the middle down,
+   which on a banner this tall would bury the photograph.
+     <section class="breadcrumb-area breadcrumb-area--gallery ..."> */
+.breadcrumb-area.breadcrumb-area--gallery {
+  min-height: 56vh; }
+  @media only screen and (min-width: 768px) {
+    .breadcrumb-area.breadcrumb-area--gallery {
+      min-height: min(72vh, 720px); } }
+  @media only screen and (max-width: 767px) {
+    .breadcrumb-area--gallery.bg-overlay::after {
+      background: var(--kr-opener-scrim); } }
 
 /* --- Photo band (.kr-photo-band) ----------------------------------------
    A full-width section with a photograph behind it, lower on a page

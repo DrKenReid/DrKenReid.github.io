@@ -181,9 +181,12 @@ bottom left, crumbs above it, over `--kr-opener-scrim` (§06).
 </section>
 ```
 
-- Add `.breadcrumb-area--listing` for an index page (blog, series,
-  gallery), where the content is what the reader came for: the banner
-  takes about a third of the screen instead of half.
+- Add `.breadcrumb-area--listing` for an index page (blog, series),
+  where the content is what the reader came for: the banner takes about
+  a third of the screen instead of half.
+- The gallery has its own cut, `.breadcrumb-area--gallery`, taller than
+  the standard (most of the first screen, the grid still starting on
+  it), on a 2400px file in `img/bg-img/` rather than a 1920px hero.
 - The photograph stays in the inline `background-image`, where the
   parallax (`.jarallax`, run by `js/site.js`) reads it.
 - Below 768px the crumbs keep to one line and the current page's name
