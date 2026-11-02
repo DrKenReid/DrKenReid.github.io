@@ -1,13 +1,6 @@
 {
   "albums": [
     {
-      "name": "Is This It",
-      "artist": "The Strokes",
-      "url": "https://www.last.fm/music/The+Strokes/Is+This+It",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/c7a4e1700ae85d9910bbe59887a8c771.jpg",
-      "plays": 7
-    },
-    {
       "name": "you never really cared",
       "artist": "Anna Marx",
       "url": "https://www.last.fm/music/Anna+Marx/you+never+really+cared",
@@ -36,10 +29,10 @@
       "plays": 4
     },
     {
-      "name": "Dopamine (Split Brain Version)",
-      "artist": "Madelline",
-      "url": "https://www.last.fm/music/Madelline/Dopamine+(Split+Brain+Version)",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/4415ed4c7fafb84cdbfb0cad3cbd5028.jpg",
+      "name": "First Impressions of Earth",
+      "artist": "The Strokes",
+      "url": "https://www.last.fm/music/The+Strokes/First+Impressions+of+Earth",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/f41698e47228486ac81690028794f18d.png",
       "plays": 3
     },
     {
@@ -132,8 +125,15 @@
       "url": "https://www.last.fm/music/Ludovico+Einaudi/Divenire+(Deluxe+Edition)",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/44d6abcfd8aed5439223f0e88d8e4626.jpg",
       "plays": 2
+    },
+    {
+      "name": "I Giorni",
+      "artist": "Ludovico Einaudi",
+      "url": "https://www.last.fm/music/Ludovico+Einaudi/I+Giorni",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/19e634f2f0aacce136850e4dd6a7b0e1.jpg",
+      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-10-26"
+  "updated": "2026-11-02"
 }
