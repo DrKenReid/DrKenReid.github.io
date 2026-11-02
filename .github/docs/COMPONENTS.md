@@ -122,9 +122,9 @@ renderFooter('footer-section');</script>
   whose layout it would crowd. The contents box in the text stays, shown
   at every width.
 - `data-progress="belt"` on `.blog-post` draws the reading-progress bar
-  as a transport belt (the Factorio posts), in place of the plain bar
-  and of any season's track. A new look is a
-  `.kr-progress-dress--<look>` rule in style.css §10.
+  as a Factorio belt, yellow with arrows running along it (the Factorio
+  posts), in place of the plain bar and of any season's track. A new
+  look is a `.kr-progress-dress--<look>` rule in style.css §10.
 
 ### The head
 
