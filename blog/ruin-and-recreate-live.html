@@ -81,8 +81,8 @@
    ],
    "inLanguage": "en-GB",
    "articleSection": "Data Science",
-   "wordCount": 1778,
-   "timeRequired": "PT9M",
+   "wordCount": 1758,
+   "timeRequired": "PT8M",
    "keywords": ["metaheuristics", "scheduling", "rostering", "large neighbourhood search", "optimisation"]
  }
  </script>
@@ -147,7 +147,7 @@
         <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
         <li class="breadcrumb-item active" aria-current="page">Ruin and Recreate, Live</li>
       </ol></nav>
-      <p class="kr-opener__kicker">Data Science &middot; <time datetime="2026-09-13">13 September 2026</time> &middot; 9 min read</p>
+      <p class="kr-opener__kicker">Data Science &middot; <time datetime="2026-09-13">13 September 2026</time> &middot; 8 min read</p>
       <p class="kr-opener__title page-title">Ruin and Recreate, Live</p>
       <p class="kr-opener__standfirst">Most search algorithms improve a solution by nudging it. Ruin and recreate demolishes part of it and rebuilds, which works better on rosters. The method behind my 2018 rostering paper, running in your browser.</p>
     </div>
@@ -220,9 +220,9 @@
 
  <p>A roster is full of constraints that interlock. Moving one person off Tuesday night leaves Tuesday night short, so the move is rejected, so the person stays. Every individual change is bad, and yet the roster as a whole is nowhere near as good as it could be. That is a local optimum with high walls (you try to climb them and only fall right back down, you need to jump out of there entirely).</p>
 
- <p>Removing thirty assignments at once does not have to be an improvement, because the recreate step is not obliged to put them back where they were. It rebuilds greedily against the fitness function, which means it can discover an arrangement that no sequence of single moves would have reached, since each intermediate step in that sequence would have been rejected.</p>
+ <p>Removing thirty assignments at once does not have to be an improvement, because the recreate step is not obliged to put them back where they were. It rebuilds greedily against the fitness function, which means it can discover an arrangement that no sequence of single moves would have reached, because each intermediate step in that sequence would have been rejected.</p>
 
- <p>You can see this in action in the demo: small ruins converge smoothly and stall early. Large ruins jump around and take longer per step, since there is more to rebuild. The paper's answer is this: if you know which allocations are weak, a small, well-aimed ruin can do the work of a large blind one.</p>
+ <p>You can see this in action in the demo: small ruins converge smoothly and stall early. Large ruins jump around and take longer per step, because there is more to rebuild. The paper's answer is this: if you know which allocations are weak, a small, well-aimed ruin can do the work of a large blind one.</p>
 
  <h2>Aim the wrecking ball, or swing it harder</h2>
 
@@ -256,12 +256,12 @@
 
  <details class="faq-item">
  <summary>What makes it "evolutionary"?</summary>
- <p>The ruin phase runs on component fitness, in two mini-phases the paper calls selection and mutation. Selection scores every allocation and demolishes the probabilistically weakest, so bad genes die faster than good ones. Mutation then removes a few allocations at random, regardless of fitness, which keeps the search exploring even when every component looks healthy. Survival of the fittest, applied to the pieces of one schedule rather than to a population of schedules.</p>
+ <p>The ruin phase runs on component fitness, in two mini-phases the paper calls selection and mutation. Selection scores every allocation and demolishes the probabilistically weakest, so bad genes die faster than good ones. Mutation then removes a few allocations at random, regardless of fitness, which keeps the search exploring even when every component looks healthy.</p>
  </details>
 
  <details class="faq-item">
  <summary>Is this just simulated annealing with extra steps?</summary>
- <p>SA is in there, but as the referee rather than the boxer. The engine is the ruin and rebuild; annealing referees, deciding whether the rebuilt roster replaces the current one, with energy modelled as inverse fitness, and its falling temperature is what stops the destruction of a nearly finished schedule late in the run. </p>
+ <p>SA is in there, but it doesn't do the searching. The engine is the ruin and rebuild; annealing referees, deciding whether the rebuilt roster replaces the current one, with energy modelled as inverse fitness, and its falling temperature is what stops the destruction of a nearly finished schedule late in the run. </p>
  </details>
 
  <details class="faq-item">
@@ -321,14 +321,14 @@
                 </div>
               </a>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/21.webp')">
-              <a href="accessibility-first-product-design-data-science.html" class="blog-card kr-lit">
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/blog/img/seating/seating-hero.webp')">
+              <a href="wedding-seating-plan-live.html" class="blog-card kr-lit">
                 <span class="kr-lit__ring" aria-hidden="true"></span>
-                <div class="blog-card-img"><img src="../img/photography/thumb/21.webp" srcset="../img/photography/thumb/21.webp 1x, ../img/photography/thumb/21@2x.webp 2x" alt="" loading="lazy"></div>
+                <div class="blog-card-img"><img src="../blog/img/seating/seating-hero.webp" alt="" loading="lazy"></div>
                 <div class="blog-card-body">
-                  <div class="blog-card-date">11 May 2026 · 26 min read</div>
-                  <h3 class="blog-card-title">Accessibility-First Design in Data Science</h3>
-                  <p class="blog-card-excerpt">Data science outputs are often inaccessible by default. Accessibility-first design in plots, dashboards, and tables improves understanding for everyone.</p>
+                  <div class="blog-card-date">4 November 2026 · 13 min read</div>
+                  <h3 class="blog-card-title">The Wedding Seating Plan, Live</h3>
+                  <p class="blog-card-excerpt">Thirty wedding guests from books I&#x27;ve read, six tables and five feuds: seat them yourself, or let hill climbing and simulated annealing have a go.</p>
                   <div class="blog-card-tags"><span class="blog-tag">data science</span></div>
                 </div>
               </a>

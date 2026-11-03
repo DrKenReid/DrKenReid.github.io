@@ -5,11 +5,144 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Mon, 02 Nov 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Mon, 02 Nov 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Wed, 04 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Wed, 04 Nov 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>The Wedding Seating Plan, Live</title>
+      <link>https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html</link>
+      <guid>https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html</guid>
+      <pubDate>Wed, 04 Nov 2026 00:00:00 +0000</pubDate>
+      <description>Thirty wedding guests from books I&#x27;ve read, six tables and five feuds: seat them yourself, or let hill climbing and simulated annealing have a go.</description>
+      <category>data science</category>
+      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html">View it on the site</a> to play with it.</em></p>
+
+ <p>I'm not a wedding planner by any means, so I had to look up the fact that the average wedding in the US in 2025 had 117 guests, according to The Knot's survey of more than 10,000 couples who got married that year<sup><a href="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html#ref-1" class="cite-ref">[1]</a></sup>. That's 117 chairs, and unless you're letting everyone sit wherever they like (which I recommend personally), you're going to have to consider "Hm, Donut has to sit with Carl no matter what, and Rosie and Sam should be together but if Jaskier and Geralt are together, we will never get to the speeches" etc, etc. Whoever works that out is solving an optimisation problem, which makes the whole ordeal feel a bit more like a fun puzzle, at least to me. Rhyd Lewis and Fiona Carroll showed in 2016 that making a seating plan is NP-complete<sup><a href="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html#ref-2" class="cite-ref">[2]</a></sup>.</p>
+
+ <p>This is the first post in a new series, Optimisation for Normal Problems, where the search algorithms from my Algorithms, Live posts get pointed at the kind of problem people have at home. I did my PhD on rostering BT's engineers, and a seating plan is the same sort of puzzle: people, places to put them, and rules about who can go where. Below there's a wedding featuring 30 guests from various books I've read, six tables and a score, and you can move the guests around yourself or hand the job to the computer.</p>
+
+ 
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Complaints:</strong> this demo's score for a seating plan. Lower is better.</li>
+ <li><strong>Move:</strong> one small change to a plan. Here, two guests on different tables swap seats, or a couple swaps with another couple (or with two people sitting on their own).</li>
+ <li><strong>Local search:</strong> start from any plan and keep making moves that improve it.</li>
+ <li><strong>Hill climbing:</strong> local search that only keeps a move if the plan is no worse. The score here goes down, so it's really hill descending, but nobody calls it that.</li>
+ <li><strong>Local optimum:</strong> a plan where every move makes things worse, even though a better plan exists somewhere else.</li>
+ <li><strong>Simulated annealing:</strong> local search that sometimes keeps a worse move on purpose, more often while its temperature is high.</li>
+ <li><strong>Temperature:</strong> how willing annealing is to keep a worse move. It drops a little after every move.</li>
+ <li><strong>NP-complete:</strong> a family of problems that nobody knows how to solve both quickly and perfectly every time as they get bigger.</li>
+ </ul>
+ </div>
+
+ <h2>The guest list</h2>
+
+ <div class="bsec"><img class="book-cover book-cover--right" src="https://www.kenreid.co.uk/img/covers/9780756404079.webp" alt="The Name of the Wind cover" loading="lazy" width="340" height="500">
+ <p>The bride and groom are at the top table, so they're not part of the problem (Lewis and Carroll's planner takes the top table out first, too<sup><a href="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html#ref-2" class="cite-ref">[2]</a></sup>). That leaves 30 guests for six round tables of five. The bride is Ciri from The Witcher, and seven of them are her family, including her gran Calanthe, her mum Pavetta, her dad Duny, and Geralt and Yen, who brought her up. The groom is Sam Gamgee's son Frodo (yes, he named this son after Frodo), so six are hobbits: his mum Rosie, his dad Sam, his grandpa the Gaffer, his sister Elanor, Elanor's husband Fastred and their son Elfstan. Six are pals from uni, the University in <a href="https://www.kenreid.co.uk/blog/fifteen-years-of-silence-rothfuss-doors-of-stone.html">The Kingkiller Chronicle</a> (Denna never studied there, but she turned up often enough), and six are from work, at House Atreides in Dune. The last five are Kvothe, who knows some of the uni lot, his plus-one Auri, who knows nobody but Kvothe, and Carl, Donut and Mongo from <a href="https://www.kenreid.co.uk/blog/dungeon-crawler-carl-litrpg-dignity.html">Dungeon Crawler Carl</a>. Carl and Mongo sing karaoke with Fastred once in a while.</p>
+
+ <p>There are nine couples, counting Carl and Donut, and five feuds. Calanthe won't sit with Geralt, who claimed Ciri by the Law of Surprise, or with Yen, who helped him bring her up. Kvothe and Denna never quite got together at uni, and they fell out over a song. Thufir and Jessica haven't spoken since he decided she was the traitor. Duny and Sam had words at the engagement party over the last of the mushrooms. Everyone in the four big groups counts as friends with everyone else in their group, except anyone who's fallen out, and Geralt and Yen, who only know each other. Quite the tangled web, right? And think, this is only 30, and we have all the information. In reality you'd send out the invites then complaints would pour in despite your best efforts.</p>
+ </div>
+
+ <h2>How the demo scores a plan</h2>
+
+ <p>Every plan gets a number of complaints, less = better:</p>
+
+ <ul>
+ <li>10 for every couple sat at different tables</li>
+ <li>10 for every feud sat at the same table</li>
+ <li>3 for every guest who knows nobody at their table</li>
+ <li>1 for every pair of friends at different tables</li>
+ </ul>
+
+ <p>These are just numbers I made up, of course. The only rule I had was that splitting a couple or sitting a feud together should cost a lot more than anything else. Bellows and Peterson, who used a computer to seat the guests at their own wedding, did something similar: two guests who knew each other got a connection of 1, and a guest and their date got 50, so that the model wouldn't split them up<sup><a href="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html#ref-2" class="cite-ref">[2]</a></sup><sup><a href="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html#ref-3" class="cite-ref">[3]</a></sup>.</p>
+
+ <p>A score of 0 isn't possible here. The groom's family, the uni lot and the work lot are six people each, and the tables seat five, so somebody from each of them gets split off before any feud is even considered.</p>
+
+ <p>There are \(\frac{30!}{(5!)^6} = 88{,}832{,}646{,}059{,}788{,}350{,}720\) ways to put 30 people at six numbered tables of five (Lewis and Carroll give the formula<sup><a href="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html#ref-2" class="cite-ref">[2]</a></sup>). Checking a million of them every second, you'd be done in about 2.8 million years, which might make you a tad late for the wedding. Exhaustively trying every possible combination is a bit silly, anyway, so what people do instead is a local search: start with any plan, change it a little, keep the change if it helps, and go again, tens, hundreds, or thousands of times.</p>
+
+ <h2>Hill climbing and simulated annealing</h2>
+
+ <p>The simplest local search is hill climbing. Swap two guests, and if the plan has no more complaints than it did, keep the swap. If it has more, swap them back. Do that over and over and the complaints only ever go down or stay put. The trouble is it only looks one move ahead, like walking downhill in thick fog, so it stops at the first plan where every swap makes things worse (a local optimum), even when a much better plan is a few swaps away.</p>
+
+ <p>Simulated annealing is hill climbing that will sometimes keep a worse plan, deliberately, to get out of a local optimum. The name comes from metalwork: heat metal up and cool it slowly, and its atoms have time to settle into a more orderly arrangement, with fewer flaws, than if you cooled it fast. Here the temperature is how willing the search is to take a worse move. It starts hot, when it'll take plenty, and cools a little after every move until it takes none, and by then it's a hill climber again. Kirkpatrick, Gelatt and Vecchi brought the idea over from physics in 1983<sup><a href="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html#ref-4" class="cite-ref">[4]</a></sup>, and my <a href="https://www.kenreid.co.uk/blog/simulated-annealing-live.html">simulated annealing post</a> has the full story.</p>
+
+ <p>Here are the two of them side by side, on a landscape you can see:</p>
+
+ 
+
+ <h2>The seating plan</h2>
+
+ <p>Below, the guests start in a random shuffle. The computer waits for you: have a go by hand first, then press Play.</p>
+
+ 
+
+ <h2>Things to try</h2>
+
+ <p><strong>Try it by hand!</strong> The starting shuffle has 210 complaints: all nine couples are split up, 20 guests know nobody at their table, 50 pairs of friends are apart, and Duny and Sam are at table 4 together. Start with the couples, they're 90 of the 210. </p>
+
+ <p><strong>Press Play.</strong> (Press <em>Start again</em> first if you've moved anyone.) The fixer starts as hill climbing. Each move, it picks a guest and someone on another table and swaps them. It gets from 210 to about 30 in the first two seconds and then slows right down. After 642 moves it stops at 24. The Gaffer is at table 3 with Yueh, Jessica, Leto and Duncan from work, none of whom he knows, while the rest of his family is at table 5. Before it gives up it tries every move there is, and <jargon key="local optimum">none of them makes the plan any better</jargon>. Press Play again: it says it's still stuck.</p>
+
+ <p><strong>Now switch <em>Fixer</em> to simulated annealing.</strong> It starts again from the same shuffle. A move that adds \(d\) complaints is kept with probability \(e^{-d/T}\), where \(T\) is the temperature, which starts at \(T = 2\) and loses \(0.15\%\) every move. Early on it'll keep a move that costs \(d = 2\) complaints about a third of the time (\(e^{-2/2} \approx 0.37\)). Once \(T\) is down to \(0.2\) it keeps nothing worse. On the default shuffle it gets to 22 after 1,548 moves. It took a worse plan 13 times on the way down, never by more than 6 complaints, so look for small bumps in the red line on the chart while the blue best-so-far line sits still.</p>
+
+ <div class="bsec"><img class="book-cover book-cover--left" src="https://www.kenreid.co.uk/img/covers/9780593820247.webp" alt="Dungeon Crawler Carl cover" loading="lazy" width="331" height="500">
+ <p>The Gaffer's back with his family in the 22 plan, but now Thufir is on his own. He's at table 3 with the groom's family, the one guest in the room who knows nobody at his table (we've all been there, Thufir), because the work table has Jessica at it. Fastred and Elanor have moved in with Carl, Donut and Mongo, and Devi from uni is sitting with Geralt, Yen, Kvothe and Auri.</p>
+
+ <p><strong>Play with the temperature and shuffle a few times.</strong> At \(T = 0\) it's hill climbing. From a hot start, at \(T = 20\), it spends the early part moving people about more or less at random, so on average it takes nearly twice as many moves to finish as it does from \(T = 2\).</p>
+
+ <p><strong>Untick <em>Couples move together</em>.</strong> By default, when the fixer picks a guest whose partner is at the same table, the partner comes too, and the pair swaps with another couple or with two people who are there on their own. With it unticked, the fixer moves one guest at a time, the way you do by hand. Now a couple takes two moves to get anywhere, and the first one splits them up for 10 complaints. Hill climbing never keeps that move, and annealing at \(T = 2\) keeps a move that costs \(d = 10\) about \(0.7\%\) of the time (\(e^{-10/2} \approx 0.007\)). On the default shuffle hill climbing gets stuck at 41 and annealing stops at 31. Over 20 shuffles neither of them reached 22 once (their medians were 40 and 37), and hill climbing with couples moving together beat annealing without it on all 20. </p>
+ </div>
+
+ <p>Lewis and Carroll's planner works the same way round: couples and families with young children go in as one guest group, and it seats groups, which also makes the problem smaller<sup><a href="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html#ref-2" class="cite-ref">[2]</a></sup>.</p>
+
+ <p><strong>Start a feud.</strong> Set <em>Tapping two guests</em> to <em>starts or ends a feud</em>. On the default shuffle, let annealing finish at 22, then tap Rosie and then Thufir. They've fallen out and they're at the same table, so the plan jumps to 32. Press Play: annealing heats back up from there, and finishes at 24 after 3,074 moves in all. Thufir joins Duncan, Yueh and Gurney from work, Jessica and Leto move to Devi's table, and the Gaffer is back at the work table with people he doesn't know.</p>
+
+ <p>A feud between two people on different tables is stranger. Get back to the 22 plan (<em>Reset the feuds</em>, <em>Start again</em>, then run annealing), and tap Simmon and then Devi. They've fallen out, and the complaints go down to 21. The score counts two friends at different tables as a complaint and two enemies at different tables as nothing, so a row between two people who were never going to sit together counts as an improvement. (I could make the score count a friendship that's turned into a feud, but I haven't.)</p>
+
+ <h2>What the real planners do</h2>
+
+ <p>Bellows and Peterson wrote their wedding up as an integer program, 107 guests and 11 tables, and gave it to CPLEX. It ran for 36 hours. It found a plan that worked, but it couldn't prove there wasn't a better one<sup><a href="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html#ref-2" class="cite-ref">[2]</a></sup>.</p>
+
+ <p>Lewis and Carroll built theirs for weddingseatplanner.com (which, in 2016, needed Adobe Flash). You mark any two groups as <em>Definitely Apart</em>, <em>Rather Apart</em> or <em>Rather Together</em>, and it runs <a href="https://www.kenreid.co.uk/blog/tabu-search-live.html">tabu search</a> in your browser, usually in under three seconds. They also tested it against an integer programming solver on the same problems. Of the 119 where both found a plan with no feud at a table, tabu search found the better one 94 times and the solver 6 times, and the solver needed more than 400 times as much computer time<sup><a href="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html#ref-2" class="cite-ref">[2]</a></sup>. If feuds are all you care about, finding a plan with none at a table is graph colouring: every guest is a dot, every feud is a line between two dots, every table is a colour, and no line may join two dots of the same colour<sup><a href="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html#ref-2" class="cite-ref">[2]</a></sup>.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Couldn't you just check every plan?</summary>
+ <p>Not for 30 guests. There are about 89 billion billion (\(8.9 \times 10^{19}\)) ways to seat them at six numbered tables of five, and at a million a second that's about 2.8 million years. Lewis and Carroll's example of 48 guests at six tables of eight has about \(\frac{48!}{(8!)^6} \approx 2.9 \times 10^{33}\)<sup><a href="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html#ref-2" class="cite-ref">[2]</a></sup>.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why does the best plan leave Thufir on his own?</summary>
+ <p>Because of Jessica. Thufir can't sit with her, she comes with Leto, and the work table only seats five, so somebody leaves it. Sending Thufir away costs 7 complaints (3 because he knows nobody where he ends up, and 4 for the work friends he's apart from), and sending Jessica and Leto away instead costs 7 as well, so it comes down to where there's room. Every 22 plan I looked at had him at the groom's family table.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            The Knot Worldwide. (2026, February 18). <em>The Knot Worldwide unveils 2026 Real Weddings Study</em> [Press release]. <a href="https://www.theknotww.com/press-releases/the-knot-worldwide-unveils-2026-real-weddings-study" target="_blank" rel="noopener">https://www.theknotww.com/press-releases/the-knot-worldwide-unveils-2026-real-weddings-study</a>
+          </li>
+          <li id="ref-2">
+            Lewis, R., &amp; Carroll, F. (2016). Creating seating plans: A practical application. <em>Journal of the Operational Research Society</em>, 67(11), 1353&ndash;1362. <a href="https://doi.org/10.1057/jors.2016.34" target="_blank" rel="noopener">https://doi.org/10.1057/jors.2016.34</a>
+          </li>
+          <li id="ref-3">
+            Albert, L. (2013, April 4). How to use OR to plan your wedding. <em>Punk Rock Operations Research</em>. <a href="https://punkrockor.com/2013/04/04/how-to-use-or-to-plan-your-wedding/" target="_blank" rel="noopener">https://punkrockor.com/2013/04/04/how-to-use-or-to-plan-your-wedding/</a>
+          </li>
+          <li id="ref-4">
+            Kirkpatrick, S., Gelatt, C. D., &amp; Vecchi, M. P. (1983). Optimization by simulated annealing. <em>Science</em>, 220(4598), 671&ndash;680. <a href="https://doi.org/10.1126/science.220.4598.671" target="_blank" rel="noopener">https://doi.org/10.1126/science.220.4598.671</a>
+          </li>
+        </ol>
+
+        
+
+ ]]></content:encoded>
+    </item>
     <item>
       <title>Baader-Meinhof and Friends</title>
       <link>https://www.kenreid.co.uk/blog/baader-meinhof-and-friends.html</link>
@@ -3106,9 +3239,9 @@ fragment.appendChild(abbr);</code></pre>
 
  <p>A roster is full of constraints that interlock. Moving one person off Tuesday night leaves Tuesday night short, so the move is rejected, so the person stays. Every individual change is bad, and yet the roster as a whole is nowhere near as good as it could be. That is a local optimum with high walls (you try to climb them and only fall right back down, you need to jump out of there entirely).</p>
 
- <p>Removing thirty assignments at once does not have to be an improvement, because the recreate step is not obliged to put them back where they were. It rebuilds greedily against the fitness function, which means it can discover an arrangement that no sequence of single moves would have reached, since each intermediate step in that sequence would have been rejected.</p>
+ <p>Removing thirty assignments at once does not have to be an improvement, because the recreate step is not obliged to put them back where they were. It rebuilds greedily against the fitness function, which means it can discover an arrangement that no sequence of single moves would have reached, because each intermediate step in that sequence would have been rejected.</p>
 
- <p>You can see this in action in the demo: small ruins converge smoothly and stall early. Large ruins jump around and take longer per step, since there is more to rebuild. The paper's answer is this: if you know which allocations are weak, a small, well-aimed ruin can do the work of a large blind one.</p>
+ <p>You can see this in action in the demo: small ruins converge smoothly and stall early. Large ruins jump around and take longer per step, because there is more to rebuild. The paper's answer is this: if you know which allocations are weak, a small, well-aimed ruin can do the work of a large blind one.</p>
 
  <h2>Aim the wrecking ball, or swing it harder</h2>
 
@@ -3142,12 +3275,12 @@ fragment.appendChild(abbr);</code></pre>
 
  <details class="faq-item">
  <summary>What makes it "evolutionary"?</summary>
- <p>The ruin phase runs on component fitness, in two mini-phases the paper calls selection and mutation. Selection scores every allocation and demolishes the probabilistically weakest, so bad genes die faster than good ones. Mutation then removes a few allocations at random, regardless of fitness, which keeps the search exploring even when every component looks healthy. Survival of the fittest, applied to the pieces of one schedule rather than to a population of schedules.</p>
+ <p>The ruin phase runs on component fitness, in two mini-phases the paper calls selection and mutation. Selection scores every allocation and demolishes the probabilistically weakest, so bad genes die faster than good ones. Mutation then removes a few allocations at random, regardless of fitness, which keeps the search exploring even when every component looks healthy.</p>
  </details>
 
  <details class="faq-item">
  <summary>Is this just simulated annealing with extra steps?</summary>
- <p>SA is in there, but as the referee rather than the boxer. The engine is the ruin and rebuild; annealing referees, deciding whether the rebuilt roster replaces the current one, with energy modelled as inverse fitness, and its falling temperature is what stops the destruction of a nearly finished schedule late in the run. </p>
+ <p>SA is in there, but it doesn't do the searching. The engine is the ruin and rebuild; annealing referees, deciding whether the rebuilt roster replaces the current one, with energy modelled as inverse fitness, and its falling temperature is what stops the destruction of a nearly finished schedule late in the run. </p>
  </details>
 
  <details class="faq-item">
@@ -3190,188 +3323,6 @@ fragment.appendChild(abbr);</code></pre>
       <pubDate>Sun, 06 Sep 2026 00:00:00 +0000</pubDate>
       <description>You give feedback to a colleague. They thank you for it, and a week later nothing has changed. Three checks before you push harder, one change of approach, a budget, and a date.</description>
       <category>advice</category>
-      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html">View it on the site</a> to play with it.</em></p>
-
-        <p>I'm doing a master's in organizational leadership, and one of the first things I've learned is that leadership is not a status only found in specific roles, it's something we all do every day. Leading projects, leading people, making decisions on next steps, risk assessments, and practicing your social skills. One such example I have been thinking much about recently is providing feedback - generally, but also when you give the same feedback multiple times to someone. You find they nod, say it was fair, thank you for being direct, and then do the thing again the following week.</p>
-
-        <p>It's something perplexing: you are specific in the feedback given, offer help, and mean it. You write the steps down, in order, in an email they could find again. You ask if there was anything in the way, and nothing changes.</p>
-
-        <p>As the saying goes: you can lead a horse to water. But that hardly solves the problem, it just describes it. How many times must you take the horse to water? Should you fill up a bowl and raise it to its mouth? A PowerPoint on "drinking water"? Should you bring in a horse expert to assist?</p>
-
-        <div class="plain-english-box">
-          <h2>Quick jargon guide</h2>
-          <ul>
-            <li><strong>Righting reflex:</strong> the helper's urge to spot a problem and fix it for someone, usually by telling them what to do. Named by the motivational interviewing people.</li>
-            <li><strong>Reactance:</strong> the push-back people feel when they sense their freedom to choose being taken away, e.g. tell someone they must, and part of them wants to prove they needn't.</li>
-            <li><strong>Precontemplation:</strong> the first of the stages of change: the person does not think there is a problem, so advice is ignored.</li>
-            <li><strong>Goal commitment:</strong> whether the person has actually signed up to the goal: goals only predict performance when commitment is there.</li>
-            <li><strong>Skill/will:</strong> a coaching shorthand. Can they do it, and do they want to? </li>
-            <li><strong>Feedback intervention:</strong> any deliberate act of telling someone how they're doing. </li>
-          </ul>
-        </div>
-
-        <h2>The proverb</h2>
-
-        <p>It is the oldest English proverb still in daily use, recorded as early as 1175 in the Old English Homilies:<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-1" class="cite-ref">[1]</a></sup></p>
-
-        <blockquote>
-          <p>Hwa is thet mei thet hors wettrien the him self nule drinken?</p>
-          <cite>&mdash; <em>Old English Homilies</em>, c. 1175 (who can give water to the horse that will not drink of its own accord?)</cite>
-        </blockquote>
-
-        <p>John Heywood reshaped it into the version everyone knows by 1546. This is not a new problem among people.</p>
-
-        <p>The drinking is not yours to do, and no amount of leading <i>better</i> or putting in more effort as a leader will make a horse drink. It can be deeply irritating when the horse is now standing in the river up to its knees, you're gesturing at the water, and it just stares at you.</p>
-
-        <p>The version I like adds a third clause. Charlie "Tremendous" Jones, an American insurance-agency-executive-turned-motivational-speaker best known for the bestseller <em>Life Is Tremendous</em>, used to put it this way:</p>
-
-        <blockquote>
-          <p>You may not be able to make a horse drink, but you can put salt in his oats and make him thirsty.</p>
-          <cite>&mdash; Charlie "Tremendous" Jones</cite>
-        </blockquote>
-
-        <p>You cannot make the horse drink, but you CAN make it thirsty, you can check the water is fit to drink, and you can find out whether the animal in front of you is a horse that isn't thirsty or a horse that is ill.</p>
-
-        <figure>
-          <a href="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/184.png" class="img-lightbox portfolio-img" style="cursor: zoom-in;">
-            <img src="https://www.kenreid.co.uk/img/photography/thumb/184.webp" alt="Two greylag geese walking in single file across a sunlit lawn, the front one glancing back" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/184.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/184@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/184.webp 1200w" sizes="(min-width: 800px) 760px, 100vw">
-          </a>
-          <figcaption class="figure-note">
-            <span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span>
-            These are not horses, but it turns out I haven't taken many photos of horses, so here are some geese. No problems taking them to water.
-          </figcaption>
-        </figure>
-
-        <h2>First, check the water</h2>
-
-        <p>Before anything else: was the feedback actually constructive? In Kluger and DeNisi's 1996 meta-analysis, which pooled 607 effect sizes from <jargon key="feedback intervention">feedback studies</jargon>, feedback improved performance on average, but in over a third of cases it made performance worse.<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-2" class="cite-ref">[2]</a></sup> The feedback that hurt was the kind that pulled attention towards the self (who you are, how you compare) rather than the task (what to do differently, next time, at this step). No one wants to hear what is wrong with their character, but many are happy to hear how they can improve the technique, the strategy or the steps. </p>
-
-        <p>It's always satisfying when a scientific study rings true. I know that I have this problem when I receive feedback: I feel attacked, if it's about my underlying drive or passion, but when I am given feedback on specific actions or tasks, I feel motivated. So, now I try to do the following when giving other people feedback: can they repeat back, in their own words, what they are meant to do differently, by when, and how they will know they've done it? If the answer to any of the three is a shrug, then I did not lead a horse to water, I led a horse to a description of water. "Be more proactive" is a high-level descriptor and nowhere near specific enough.</p>
-
-        <h2>Second, check whether the horse is thirsty</h2>
-
-        <p>The second question is whether the person thinks there is anything to fix. Prochaska and DiClemente's stages of change model, built on decades of watching people quit smoking and fail to, puts a stage before "thinking about it": precontemplation, where the person does not see a problem at all.<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-3" class="cite-ref">[3]</a></sup> Advice delivered to someone in precontemplation is like telling someone it will eventually rain in a city fifty miles away, at least to them. The smoking example also rings true for me: I remember begging my parents to stop smoking, even threatening to start myself if they didn't stop. Ultimately, a person needs to want to change a habit, otherwise any well-meaning, well-informed, kind and considered advice is utterly for naught. </p>
-
-        <p>"Yeah, fair, thanks for saying" is what a person says when they agree and intend to act, and it is also what they say to make the meeting end while being polite. This means we can't really settle on that as the finale to the feedback conversation. Klein and colleagues' meta-analysis of goal commitment says: goals predict performance when people are committed to them, and barely at all when they are not, and commitment is not the same as having heard the goal read aloud.<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-4" class="cite-ref">[4]</a></sup></p>
-
-        <p>Worse, pushing harder at this stage makes it worse. Miller and Rollnick, the motivational interviewing people, call the helper's urge to fix the "righting reflex," and their central finding, replicated across addiction, health and now management, is that when you argue for change, the other person starts arguing against it, and hearing themselves argue against it makes them believe it.<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-5" class="cite-ref">[5]</a></sup> Brehm named the underlying push-back in 1966: reactance, the instinct to reclaim a freedom someone is trying to take.<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-6" class="cite-ref">[6]</a></sup> You can't tell a horse it's thirsty and expect it to believe you.</p>
-
-        <h2>Third, check whether the horse can drink</h2>
-
-        <p>Someone agreeing and then not doing is what inspired me to write this, and it is usually read as a will problem when it is often a capability or environment problem. Landsberg's skill/will matrix is a two-by-two from a coaching book.<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-7" class="cite-ref">[7]</a></sup> Low skill needs teaching while low will needs reasoning, and low both needs direction. Getting these wrong is like trying to inspire a fish to walk.</p>
-
-        <p>How to know if it's a "will" problem:</p>
-
-        <ul>
-          <li><strong>Have I seen them do it once?</strong> If I have never watched the person do the thing, even badly, I do not know whether they can. "Write clearer tickets" assumes they know what a clear ticket looks like. Show them one. Then watch them write one. </li>
-          <li><strong>What is paying them to do the opposite?</strong> If they are incentivized or otherwise follow a protocol established by a higher authority or by tradition, they may ignore your feedback.</li>
-          <li><strong>Is there room?</strong> Asking someone drowning in tickets to also improve how they write tickets is asking for the improvement to be ignored.</li>
-        </ul>
-
-        <figure>
-          <a href="https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/51.png" class="img-lightbox portfolio-img" style="cursor: zoom-in;">
-            <img src="https://www.kenreid.co.uk/img/photography/thumb/51.webp" alt="A mallard drake standing on a mossy bank at the edge of a pond, surrounded by branches" loading="lazy" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/51.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/51@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/51.webp 1200w" sizes="(min-width: 800px) 760px, 100vw">
-          </a>
-          <figcaption class="figure-note">
-            <span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span>
-          </figcaption>
-        </figure>
-
-        <h2>Salting the oats</h2>
-
-        <p>Given a horse that is capable, not obviously ill, and not thirsty, here are some of my thoughts and learnings compiled together:</p>
-
-        <ol>
-          <li>Listen to them, don't assume. Ask them to say what they'll do, and write down what they said, not what you wanted them to say. A plan in someone else's words is often very different from what you think they know. Locke and Latham's goal-setting work has been saying this for forty years: participation in setting the goal raises commitment to it.<sup><a href="https://www.kenreid.co.uk/blog/leading-a-horse-to-water.html#ref-8" class="cite-ref">[8]</a></sup></li>
-          <li>One behaviour, one fortnight, one checkpoint. "Be a better communicator" is useless. "Send the summary before the meeting, for the next three meetings, and we'll look at it on the 20th" is tangible, measurable and clear - the outcome is "becoming a better communicator" but the steps are clearly stated.</li>
-          <li>If they don't see shortcomings they don't see a problem to fix. If the report is late and you fix it for them at eleven at night, the report is never late from their standpoint. </li>
-          <li>Changing a person's behaviour is difficult. Changing a template, a checklist, a pairing session, a definition of done, is straightforward and easy.</li>
-          <li>"This is the third time we've had this conversation. What's going on?" and let silence reign until an answer comes. Listening is important.</li>
-          <li>"We agreed X by the 20th." A dated, agreed expectation turns the fourth conversation from an argument about memory into a paper trail.</li>
-        </ol>
-
-        <h2>How far to go</h2>
-
-        <p>A failure of leadership is waiting too long. When behaviours become patterns that have been that way for years, you are fighting both the problem and established tradition. You can always try one more thing, one more framing, one more month. So the leader who doesn't decide in advance ends up deciding by exhaustion, which is late, and usually unkind to the team, to yourself, and to your colleague.</p>
-
-        <p>Set the budget before the third conversation. What decides it is not how much you like the person (something I know we all struggle with). It's the cost of letting the issue stand:</p>
-
-        <ul>
-          <li><strong>You.</strong> The hours, obviously, but also the attention. A stuck person takes up a share of a leader's head that is wildly out of proportion to their share of the team.</li>
-          <li><strong>The others.</strong> Every hour spent on the horse that won't is an hour taken from the horses that would.</li>
-          <li><strong>The standard.</strong> What you tolerate for long enough becomes the definition of acceptable. And that can also spread: "Well, Jon takes 3 days on these tasks, why should I deprioritize it too?"</li>
-          <li><strong>The person.</strong> Every month they spend in a role they are not going to grow into is a month they are not spending somewhere they might. Endless patience inhibits their growth, prevents them from achieving their goals (and possibly stymieing their future income, prospects, benefits, etc.).</li>
-        </ul>
-
-        <p>Then, how do you read which kind of stuck you're looking at? </p>
-
-        <ol>
-          <li><strong>They try, and fail.</strong> They attempt the thing, it comes out wrong, they attempt it again. This is a skill gap and it is - believe it or not - the good kind of stuck. Keep going, teach more concretely, lengthen the horizon. At least the horse is trying to drink!</li>
-          <li><strong>They agree, and don't.</strong> Nod, thanks, nothing. This is will or environment, and the response is a single change of approach, followed, if nothing shifts, by the written expectation with a date on it.</li>
-          <li><strong>They dispute the premise.</strong> "I don't think that's a problem." Either they're in precontemplation, or you are wrong. Stop advising and focus on listening. Then go and check with somebody who has no stake in it whether the water you're offering is actually water.</li>
-        </ol>
-
-        <h2>When to give up</h2>
-
-        <p>Giving up on an approach is not giving up on a person. Most of what I've described above is giving up: on explanation, on the plan in your words, on absorbing the consequence. Surrendering is often surrendering the current strategy for a better one.</p>
-
-        <p>Giving up on the person is very different. Informal feedback, then explicit written expectation, then a formal process, then parting. The leader's obligation at each rung is the same: the person must never be surprised. If someone learns at a formal meeting that their job is at risk and this is news to them, the leader failed. And if you're not their leader but are providing feedback, sometimes giving up is giving up your part in the process to someone else - their leader, their mentor, the person themself.</p>
-
-        <p>I hate this part.</p>
-
-        <p>I'd rather run the sixth conversation than the formal one, and I think it's something many people avoid out of feelings of not wanting to be the bad guy. Ultimately, you can only control that which is your own action, not the outcome. Some wise words by an idol of mine, a physically crippled man who escaped slavery and learned much about our control over our personal destinies:</p>
-
-        <blockquote>
-          <p>The things in our control are opinion, pursuit, desire, aversion, and, in a word, whatever are our own actions. The things not in our control are body, property, reputation, command, and, in one word, whatever are not our own actions.</p>
-          <cite>&mdash; Epictetus, <em>Enchiridion</em></cite>
-        </blockquote>
-
-        <p>You can lead the horse to water, you can make sure the water is clean, and you can show it how to drink, but no matter how much you want to, out of compassion, kindness or care, there is a point where you have to accept that you are not the horse and you cannot force it to drink. The servant leadership test is whether the people you lead grow. If they are not growing with you after a fair run, the kind act may be to help them find where they will, perhaps a sister team, or through a friend you know from college. I personally believe leaders should help colleagues beyond their current role and company, and encourage growth, because paths can cross many times, so help them even if not from inside your own team or organization. And remember, this cannot be a surprise, this is only after a long period of trying and goal setting.</p>
-
-        <h2>A flow chart</h2>
-
-        
-
-        <div class="faq-section">
-          <h2>Common questions</h2>
-
-          <details class="faq-item">
-            <summary>Isn't "salting the oats" just manipulation?</summary>
-            <p>The line I use: it's manipulation if they'd object to it on finding out. Everything in the list above can and should be said directly to the person ("I'm going to stop fixing this for you, so you can see when it goes wrong"). It's only manipulative if you don't tell them.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>What if I'm the horse?</summary>
-            <p>Ask yourself which of the three patterns you're in. If you're nodding to end meetings, you're in precontemplation and the honourable thing is to say so: "I don't think this is a problem, and here's why." Regardless of which part - have clear communication with your leader and follow the steps with them, or by yourself.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>Does any of this work when they're senior to you?</summary>
-            <p>Less of it. You can check the water (is your point specific, is it attached to something they care about), and you can ask rather than tell. You cannot set a date on a page for your boss, and you cannot stop absorbing their consequences without it costing you. Proceed with caution, but a good leader accepts constructive feedback from their reports.</p>
-          </details>
-
-          <details class="faq-item">
-            <summary>How long is long enough?</summary>
-            <p>Like any habit setting, longer than it takes to see a result: so long that it's the default and feels comfortable to everyone without slippage.</p>
-          </details>
-        </div>
-
-        <h2 class="section-heading" id="references">References</h2>
-
-        <ol class="references">
-          <li id="ref-1">Old English Homilies, c. 1175. John Heywood, <em>A Dialogue Conteinyng the Nomber in Effect of All the Prouerbes in the Englishe Tongue</em> (1546). Discussed at <a href="https://www.phrases.org.uk/meanings/you-can-lead-a-horse-to-water.html" target="_blank" rel="noopener noreferrer">phrases.org.uk</a></li>
-          <li id="ref-2">Kluger, A. N., &amp; DeNisi, A. (1996). The effects of feedback interventions on performance: A historical review, a meta-analysis, and a preliminary feedback intervention theory. <em>Psychological Bulletin</em>, 119(2), 254&ndash;284. 607 effect sizes; mean d = 0.41; over one third of interventions reduced performance.</li>
-          <li id="ref-3">Prochaska, J. O., &amp; DiClemente, C. C. (1983). Stages and processes of self-change of smoking: Toward an integrative model of change. <em>Journal of Consulting and Clinical Psychology</em>, 51(3), 390&ndash;395.</li>
-          <li id="ref-4">Klein, H. J., Wesson, M. J., Hollenbeck, J. R., &amp; Alge, B. J. (1999). Goal commitment and the goal-setting process: Conceptual clarification and empirical synthesis. <em>Journal of Applied Psychology</em>, 84(6), 885&ndash;896. Meta-analysis of 83 samples. <a href="https://pubmed.ncbi.nlm.nih.gov/10639908/" target="_blank" rel="noopener noreferrer">pubmed.ncbi.nlm.nih.gov</a></li>
-          <li id="ref-5">Miller, W. R., &amp; Rollnick, S. (2013). <em>Motivational Interviewing: Helping People Change</em> (3rd ed.). Guilford Press. The righting reflex, ambivalence, and why arguing for change produces arguments against it. Summary at <a href="https://www.ncbi.nlm.nih.gov/books/NBK571068/" target="_blank" rel="noopener noreferrer">ncbi.nlm.nih.gov</a></li>
-          <li id="ref-6">Brehm, J. W. (1966). <em>A Theory of Psychological Reactance</em>. Academic Press. Reviewed fifty years on in Steindl et al. (2015), <em>Zeitschrift f&uuml;r Psychologie</em>, 223(4), 205&ndash;214.</li>
-          <li id="ref-7">Landsberg, M. (1996). <em>The Tao of Coaching</em>. HarperCollins. Source of the skill/will matrix (direct, guide, excite, delegate).</li>
-          <li id="ref-8">Locke, E. A., &amp; Latham, G. P. (2002). Building a practically useful theory of goal setting and task motivation: A 35-year odyssey. <em>American Psychologist</em>, 57(9), 705&ndash;717.</li>
-        </ol>
-
-        
-
-      ]]></content:encoded>
     </item>
     <item>
       <title>Making This Website Accessible</title>

@@ -1,5 +1,23 @@
 [
   {
+    "title": "The Wedding Seating Plan, Live",
+    "date": "2026-11-04",
+    "tags": [
+      "data science"
+    ],
+    "category": "Data Science",
+    "excerpt": "Thirty wedding guests from books I've read, six tables and five feuds: seat them yourself, or let hill climbing and simulated annealing have a go.",
+    "url": "blog/wedding-seating-plan-live.html",
+    "image": "blog/img/seating/seating-hero.webp",
+    "series": {
+      "name": "Optimisation for Normal Problems",
+      "part": 1
+    },
+    "readMinutes": 13,
+    "words": 2664,
+    "interactive": true
+  },
+  {
     "title": "Baader-Meinhof and Friends",
     "date": "2026-11-02",
     "tags": [
@@ -310,8 +328,8 @@
       "name": "Research, Live",
       "part": 3
     },
-    "readMinutes": 9,
-    "words": 1778,
+    "readMinutes": 8,
+    "words": 1758,
     "interactive": true
   },
   {
@@ -383,7 +401,7 @@
       "part": 1
     },
     "readMinutes": 7,
-    "words": 1527
+    "words": 1515
   },
   {
     "title": "Tabu Search, Live",
@@ -1260,8 +1278,8 @@
     "excerpt": "The stigma against audiobooks is rooted in bad assumptions about learning, intelligence, and what counts as reading. The research doesn't support any of it.",
     "url": "blog/in-defense-of-audiobooks.html",
     "image": "img/photography/thumb/366.webp",
-    "readMinutes": 12,
-    "words": 2449
+    "readMinutes": 11,
+    "words": 2406
   },
   {
     "title": "Why It Still Matters to Learn to Code in the Age of AI",

@@ -452,6 +452,62 @@
             }
         };
     });
+    // The wedding seating plan: thirty guests in five groups at six round
+    // tables, two swapping seats at a time under annealing. Red links are
+    // feuds sharing a table; the complaints bar falls as the plan settles.
+    def('wedding-seating-plan-live', function (w, h, rnd) {
+        var T = 6, P = 5, G = T * P, CYCLE = 540, tick = 0, i;
+        var groupOf = [], sizes = [7, 6, 6, 6, 5], cols = [C.a, C.green, C.blue, C.b, C.ink];
+        sizes.forEach(function (n, g) { for (var k = 0; k < n; k++) groupOf.push(g); });
+        var feuds = [];
+        while (feuds.length < 5) { var a = (rnd() * G) | 0, b = (rnd() * G) | 0; if (groupOf[a] !== groupOf[b]) feuds.push([a, b]); }
+        var R = Math.min(w * 0.065, h * 0.09), ring = R * 1.7, gr = Math.max(2.5, R * 0.34);
+        function centre(t) { return [w * (0.2 + 0.3 * (t % 3)), h * (0.26 + 0.4 * ((t / 3) | 0))]; }
+        function spot(s) { var c = centre((s / P) | 0), ang = -1.5708 + (s % P) * TAU / P; return [c[0] + ring * Math.cos(ang), c[1] + ring * Math.sin(ang)]; }
+        var seat = [], x = [], y = [], moved = [-1, -1], movedAt = -99, top = 1;
+        function shuffle() { seat = []; for (i = 0; i < G; i++) seat.push(i); for (i = G - 1; i > 0; i--) { var j = (rnd() * (i + 1)) | 0, t = seat[i]; seat[i] = seat[j]; seat[j] = t; } }
+        function complaints() {
+            var n = 0, tab = [], f, g;
+            for (g = 0; g < G; g++) tab.push((seat[g] / P) | 0);
+            for (f = 0; f < feuds.length; f++) if (tab[feuds[f][0]] === tab[feuds[f][1]]) n += 3;
+            for (g = 0; g < G; g++) { var friend = false; for (var o = 0; o < G; o++) if (o !== g && tab[o] === tab[g] && groupOf[o] === groupOf[g]) { friend = true; break; } if (!friend) n++; }
+            return n;
+        }
+        shuffle(); top = Math.max(1, complaints());
+        for (i = 0; i < G; i++) { var s0 = spot(seat[i]); x.push(s0[0]); y.push(s0[1]); }
+        return {
+            step: function () {
+                tick++;
+                if (tick % CYCLE === 0) { shuffle(); top = Math.max(1, complaints()); }
+                if (tick % 5) return;
+                var a = (rnd() * G) | 0, b = (rnd() * G) | 0;
+                if (((seat[a] / P) | 0) === ((seat[b] / P) | 0)) return;
+                var before = complaints(), t = seat[a]; seat[a] = seat[b]; seat[b] = t;
+                var temp = 3 * Math.pow(1 - phase(tick, CYCLE), 2) + 0.05, d = complaints() - before;
+                if (d <= 0 || rnd() < Math.exp(-d / temp)) { moved = [a, b]; movedAt = tick; }
+                else { seat[b] = seat[a]; seat[a] = t; }
+            },
+            draw: function (ctx) {
+                for (i = 0; i < G; i++) { var s = spot(seat[i]); x[i] += (s[0] - x[i]) * 0.2; y[i] += (s[1] - y[i]) * 0.2; }
+                for (var t = 0; t < T; t++) {
+                    var c = centre(t);
+                    dot(ctx, c[0], c[1], R, alpha('#ffffff', 0.07));
+                    ctx.strokeStyle = C.dim; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(c[0], c[1], R, 0, TAU); ctx.stroke();
+                }
+                feuds.forEach(function (f) {
+                    if (((seat[f[0]] / P) | 0) === ((seat[f[1]] / P) | 0)) line(ctx, x[f[0]], y[f[0]], x[f[1]], y[f[1]], alpha(C.red, 0.85), 1.6);
+                });
+                for (i = 0; i < G; i++) {
+                    if ((i === moved[0] || i === moved[1]) && tick - movedAt < 12) dot(ctx, x[i], y[i], gr + 2.5, alpha(C.b, 0.5));
+                    dot(ctx, x[i], y[i], gr, cols[groupOf[i]]);
+                }
+                var bx = w * 0.08, by = h * 0.9, bw = w * 0.84, frac = clamp01(complaints() / top);
+                rect(ctx, bx, by, bw, 4, alpha('#ffffff', 0.12));
+                rect(ctx, bx, by, bw * frac, 4, frac > 0.4 ? C.red : C.green);
+                text(ctx, 'COMPLAINTS', bx, by - 8, Math.max(8, h * 0.05), C.dim, 600);
+            }
+        };
+    });
     /* The feedback post's widget is a budget, not an algorithm: three
        checks pass one by one, a budget of attempts drains, a date arrives,
        and it starts over. */

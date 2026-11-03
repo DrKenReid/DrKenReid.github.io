@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+ <meta charset="UTF-8">
+ <script>(function(){var t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+ <meta name="description" content="Thirty wedding guests from books I've read, six tables and five feuds: seat them yourself, or let hill climbing and simulated annealing have a go.">
+ <meta name="keywords" content="data science">
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ <title>The Wedding Seating Plan, Live - Ken Reid</title>
+ <meta property="og:title" content="The Wedding Seating Plan, Live">
+ <meta property="og:description" content="Thirty wedding guests from books I've read, six tables and five feuds: seat them yourself, or let hill climbing and simulated annealing have a go.">
+ <meta property="og:image" content="https://www.kenreid.co.uk/img/og/wedding-seating-plan-live.jpg">
+ <meta property="og:image:width" content="1200">
+ <meta property="og:image:height" content="630">
+ <meta property="og:image:alt" content="The Wedding Seating Plan, Live">
+ <meta property="og:url" content="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html">
+ <meta property="og:type" content="article">
+ <meta property="og:site_name" content="Ken Reid">
+ <meta property="og:locale" content="en_GB">
+ <meta property="article:published_time" content="2026-11-04">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="The Wedding Seating Plan, Live">
+ <meta name="twitter:description" content="Thirty wedding guests from books I've read, six tables and five feuds: seat them yourself, or let hill climbing and simulated annealing have a go.">
+ <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/wedding-seating-plan-live.jpg">
+ <meta name="citation_title" content="The Wedding Seating Plan, Live">
+ <meta name="citation_author" content="Reid, Kenneth N.">
+ <meta name="citation_publication_date" content="2026/11/04">
+ <meta name="citation_online_date" content="2026/11/04">
+ <meta name="citation_public_url" content="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html">
+ <meta name="DC.title" content="The Wedding Seating Plan, Live">
+ <meta name="DC.creator" content="Kenneth N. Reid">
+ <meta name="DC.date" content="2026-11-04">
+ <script defer src="../js/analytics.js"></script>
+ <link rel="icon" href="../img/core-img/favicon.png">
+ <link rel="apple-touch-icon" href="../img/core-img/apple-touch-icon.png">
+ <meta name="theme-color" content="#1a1a1a">
+ <link rel="manifest" href="../manifest.json">
+ <link rel="preload" as="image" href="img/seating/seating-hero.webp" fetchpriority="high">
+ <link rel="stylesheet" href="../style.min.css?v=20260923a">
+ <link rel="canonical" href="https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html">
+ <link rel="alternate" type="application/rss+xml" title="Ken Reid's Blog" href="https://www.kenreid.co.uk/feed.xml">
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BlogPosting",
+   "mainEntityOfPage": {
+     "@type": "WebPage",
+     "@id": "https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html"
+   },
+   "url": "https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html",
+   "headline": "The Wedding Seating Plan, Live",
+   "description": "Thirty wedding guests from books I've read, six tables and five feuds: seat them yourself, or let hill climbing and simulated annealing have a go.",
+   "image": {
+     "@type": "ImageObject",
+     "url": "https://www.kenreid.co.uk/img/og/wedding-seating-plan-live.jpg",
+     "width": 1200,
+     "height": 630
+   },
+   "datePublished": "2026-11-04",
+   "dateModified": "2026-11-04",
+   "author": {
+     "@type": "Person",
+     "@id": "https://www.kenreid.co.uk/#ken",
+     "name": "Ken Reid",
+     "url": "https://www.kenreid.co.uk/"
+   },
+   "publisher": {
+     "@type": "Person",
+     "@id": "https://www.kenreid.co.uk/#ken",
+     "name": "Ken Reid",
+     "url": "https://www.kenreid.co.uk/"
+   },
+   "isPartOf": [
+     { "@id": "https://www.kenreid.co.uk/#website" },
+     {
+       "@type": "CreativeWorkSeries",
+       "@id": "https://www.kenreid.co.uk/series-optimisation-for-normal-problems.html#series",
+       "name": "Optimisation for Normal Problems",
+       "url": "https://www.kenreid.co.uk/series-optimisation-for-normal-problems.html"
+     }
+   ],
+   "inLanguage": "en-GB",
+   "articleSection": "Data Science",
+   "wordCount": 2664,
+   "timeRequired": "PT13M",
+   "keywords": ["seating plan", "wedding", "local search", "hill climbing", "simulated annealing", "optimisation", "interactive"]
+ }
+ </script>
+ <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+     {
+       "@type": "ListItem",
+       "position": 1,
+       "name": "Home",
+       "item": "https://www.kenreid.co.uk/"
+     },
+     {
+       "@type": "ListItem",
+       "position": 2,
+       "name": "Blog",
+       "item": "https://www.kenreid.co.uk/blog.html"
+     },
+     {
+       "@type": "ListItem",
+       "position": 3,
+       "name": "The Wedding Seating Plan, Live",
+       "item": "https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html"
+     }
+   ]
+ }
+ </script>
+ <script defer src="../js/theme.js?v=20260923a"></script>
+ <script defer src="../js/palette.js?v=20260923a"></script>
+ <style>
+   /* Two more series colours for the guest groups: s5 work, s6 everyone else. */
+   #seating-demo { --viz-s5: #8757d1; --viz-s6: #6b7888; }
+   [data-theme="dark"] #seating-demo { --viz-s5: #a98cf0; --viz-s6: #9ba7b4; }
+
+   /* Particular to this post's widget: the colour key in the note. */
+   .wsp-key { display: inline-block; width: 0.8em; height: 0.8em; border-radius: 3px; margin: 0 0.25em 0 0.1em; vertical-align: -0.05em; }
+   .wsp-bride { background: var(--viz-s3); }
+   .wsp-groom { background: var(--viz-s1); }
+   .wsp-uni { background: var(--viz-s2); }
+   .wsp-work { background: var(--viz-s5); }
+   .wsp-rest { background: var(--viz-s6); }
+ </style>
+</head>
+<body>
+ <div id="header-section"></div>
+
+ <main id="main-content">
+  <header class="kr-opener" style="--kr-opener-img: url(/blog/img/seating/seating-hero.webp);">
+    <div class="kr-opener__media" aria-hidden="true"></div>
+    <div class="kr-opener__scrim" aria-hidden="true"></div>
+    <div class="container kr-opener__inner">
+      <nav aria-label="breadcrumb" class="kr-opener__crumbs"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="../index.html"><i class="icon_house_alt"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="../blog.html">Blog</a></li>
+        <li class="breadcrumb-item active" aria-current="page">The Wedding Seating Plan, Live</li>
+      </ol></nav>
+      <p class="kr-opener__kicker">Data Science &middot; <time datetime="2026-11-04">4 November 2026</time> &middot; 13 min read</p>
+      <p class="kr-opener__title page-title">The Wedding Seating Plan, Live</p>
+      <p class="kr-opener__standfirst">Thirty wedding guests from books I've read, six tables and five feuds: seat them yourself, or let hill climbing and simulated annealing have a go.</p>
+    </div>
+    <a class="kr-opener__cue" href="#main-content-body" aria-label="Scroll to the article"><span></span></a>
+  </header>
+
+ <div class="about-us-area section-padding-80 clearfix" id="main-content-body">
+ <div class="container">
+
+ <div class="blog-post">
+ <h1>The Wedding Seating Plan, Live</h1>
+ <div class="blog-meta">
+ 4 November 2026 &middot;
+ <span class="blog-tag">data science</span>
+ </div>
+
+ <p>I'm not a wedding planner by any means, so I had to look up the fact that the average wedding in the US in 2025 had 117 guests, according to The Knot's survey of more than 10,000 couples who got married that year<sup><a href="#ref-1" class="cite-ref">[1]</a></sup>. That's 117 chairs, and unless you're letting everyone sit wherever they like (which I recommend personally), you're going to have to consider "Hm, Donut has to sit with Carl no matter what, and Rosie and Sam should be together but if Jaskier and Geralt are together, we will never get to the speeches" etc, etc. Whoever works that out is solving an optimisation problem, which makes the whole ordeal feel a bit more like a fun puzzle, at least to me. Rhyd Lewis and Fiona Carroll showed in 2016 that making a seating plan is NP-complete<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+
+ <p>This is the first post in a new series, Optimisation for Normal Problems, where the search algorithms from my Algorithms, Live posts get pointed at the kind of problem people have at home. I did my PhD on rostering BT's engineers, and a seating plan is the same sort of puzzle: people, places to put them, and rules about who can go where. Below there's a wedding featuring 30 guests from various books I've read, six tables and a score, and you can move the guests around yourself or hand the job to the computer.</p>
+
+ <noscript><p><strong>The seating plan below needs JavaScript to run.</strong> Everything else in the post reads fine without it.</p></noscript>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Complaints:</strong> this demo's score for a seating plan. Lower is better.</li>
+ <li><strong>Move:</strong> one small change to a plan. Here, two guests on different tables swap seats, or a couple swaps with another couple (or with two people sitting on their own).</li>
+ <li><strong>Local search:</strong> start from any plan and keep making moves that improve it.</li>
+ <li><strong>Hill climbing:</strong> local search that only keeps a move if the plan is no worse. The score here goes down, so it's really hill descending, but nobody calls it that.</li>
+ <li><strong>Local optimum:</strong> a plan where every move makes things worse, even though a better plan exists somewhere else.</li>
+ <li><strong>Simulated annealing:</strong> local search that sometimes keeps a worse move on purpose, more often while its temperature is high.</li>
+ <li><strong>Temperature:</strong> how willing annealing is to keep a worse move. It drops a little after every move.</li>
+ <li><strong>NP-complete:</strong> a family of problems that nobody knows how to solve both quickly and perfectly every time as they get bigger.</li>
+ </ul>
+ </div>
+
+ <h2>The guest list</h2>
+
+ <div class="bsec"><img class="book-cover book-cover--right" src="../img/covers/9780756404079.webp" alt="The Name of the Wind cover" loading="lazy" width="340" height="500">
+ <p>The bride and groom are at the top table, so they're not part of the problem (Lewis and Carroll's planner takes the top table out first, too<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>). That leaves 30 guests for six round tables of five. The bride is Ciri from The Witcher, and seven of them are her family, including her gran Calanthe, her mum Pavetta, her dad Duny, and Geralt and Yen, who brought her up. The groom is Sam Gamgee's son Frodo (yes, he named this son after Frodo), so six are hobbits: his mum Rosie, his dad Sam, his grandpa the Gaffer, his sister Elanor, Elanor's husband Fastred and their son Elfstan. Six are pals from uni, the University in <a href="fifteen-years-of-silence-rothfuss-doors-of-stone.html">The Kingkiller Chronicle</a> (Denna never studied there, but she turned up often enough), and six are from work, at House Atreides in Dune. The last five are Kvothe, who knows some of the uni lot, his plus-one Auri, who knows nobody but Kvothe, and Carl, Donut and Mongo from <a href="dungeon-crawler-carl-litrpg-dignity.html">Dungeon Crawler Carl</a>. Carl and Mongo sing karaoke with Fastred once in a while.</p>
+
+ <p>There are nine couples, counting Carl and Donut, and five feuds. Calanthe won't sit with Geralt, who claimed Ciri by the Law of Surprise, or with Yen, who helped him bring her up. Kvothe and Denna never quite got together at uni, and they fell out over a song. Thufir and Jessica haven't spoken since he decided she was the traitor. Duny and Sam had words at the engagement party over the last of the mushrooms. Everyone in the four big groups counts as friends with everyone else in their group, except anyone who's fallen out, and Geralt and Yen, who only know each other. Quite the tangled web, right? And think, this is only 30, and we have all the information. In reality you'd send out the invites then complaints would pour in despite your best efforts.</p>
+ </div>
+
+ <h2>How the demo scores a plan</h2>
+
+ <p>Every plan gets a number of complaints, less = better:</p>
+
+ <ul>
+ <li>10 for every couple sat at different tables</li>
+ <li>10 for every feud sat at the same table</li>
+ <li>3 for every guest who knows nobody at their table</li>
+ <li>1 for every pair of friends at different tables</li>
+ </ul>
+
+ <p>These are just numbers I made up, of course. The only rule I had was that splitting a couple or sitting a feud together should cost a lot more than anything else. Bellows and Peterson, who used a computer to seat the guests at their own wedding, did something similar: two guests who knew each other got a connection of 1, and a guest and their date got 50, so that the model wouldn't split them up<sup><a href="#ref-2" class="cite-ref">[2]</a></sup><sup><a href="#ref-3" class="cite-ref">[3]</a></sup>.</p>
+
+ <p>A score of 0 isn't possible here. The groom's family, the uni lot and the work lot are six people each, and the tables seat five, so somebody from each of them gets split off before any feud is even considered.</p>
+
+ <p>There are \(\frac{30!}{(5!)^6} = 88{,}832{,}646{,}059{,}788{,}350{,}720\) ways to put 30 people at six numbered tables of five (Lewis and Carroll give the formula<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>). Checking a million of them every second, you'd be done in about 2.8 million years, which might make you a tad late for the wedding. Exhaustively trying every possible combination is a bit silly, anyway, so what people do instead is a local search: start with any plan, change it a little, keep the change if it helps, and go again, tens, hundreds, or thousands of times.</p>
+
+ <h2>Hill climbing and simulated annealing</h2>
+
+ <p>The simplest local search is hill climbing. Swap two guests, and if the plan has no more complaints than it did, keep the swap. If it has more, swap them back. Do that over and over and the complaints only ever go down or stay put. The trouble is it only looks one move ahead, like walking downhill in thick fog, so it stops at the first plan where every swap makes things worse (a local optimum), even when a much better plan is a few swaps away.</p>
+
+ <p>Simulated annealing is hill climbing that will sometimes keep a worse plan, deliberately, to get out of a local optimum. The name comes from metalwork: heat metal up and cool it slowly, and its atoms have time to settle into a more orderly arrangement, with fewer flaws, than if you cooled it fast. Here the temperature is how willing the search is to take a worse move. It starts hot, when it'll take plenty, and cools a little after every move until it takes none, and by then it's a hill climber again. Kirkpatrick, Gelatt and Vecchi brought the idea over from physics in 1983<sup><a href="#ref-4" class="cite-ref">[4]</a></sup>, and my <a href="simulated-annealing-live.html">simulated annealing post</a> has the full story.</p>
+
+ <p>Here are the two of them side by side, on a landscape you can see:</p>
+
+ <div class="kr-viz" id="walk-demo">
+   <canvas id="walkCanvas" height="240" role="img" aria-label="Two copies of the same bumpy landscape of seating plans, where lower means fewer complaints. In one, hill climbing walks down from a starting plan and stops in the first dip it reaches. In the other, simulated annealing starts from the same plan, takes the odd step uphill while it's hot, and settles as it cools. When both have stopped, a new landscape starts."></canvas>
+   <p class="kr-note">Each point along the bottom is a different plan, and lower means fewer complaints. Both start from the same plan and try the same kind of move. When both have stopped, a new landscape starts. A real seating plan has far more directions to move in than left and right, but it works the same way.</p>
+   <div class="kr-toolbar" data-kr-toolbar></div>
+   <div class="kr-stats" data-kr-stats></div>
+ </div>
+
+ <h2>The seating plan</h2>
+
+ <p>Below, the guests start in a random shuffle. The computer waits for you: have a go by hand first, then press Play.</p>
+
+ <div class="kr-viz" id="seating-demo">
+   <canvas id="seatingPlan" class="kr-interactive" height="480" role="img" aria-label="A seating plan seen from above: six round tables numbered 1 to 6, each with five name cards around it, tinted by where each guest comes from. Red lines join couples who are on different tables and feuding guests who share a table, and a dashed red outline marks a guest who knows nobody at their table. Tap one card and then another to swap those two guests; with Tapping two guests set to feuds, the second tap starts or ends a feud between them instead."></canvas>
+   <div class="kr-toolbar" data-kr-toolbar></div>
+   <div class="kr-sliders" data-kr-sliders></div>
+   <div class="kr-stats" data-kr-stats></div>
+   <canvas id="seatingChart" class="kr-chart" height="120" role="img" aria-label="Live chart of the complaints over the moves: the plan as it stands, and the best plan so far"></canvas>
+   <p class="kr-note"><strong>Drag a name card onto another</strong> to swap those two guests, or tap one card and then the other. From the keyboard, focus the plan, move the cursor with the arrow keys and press Enter on each card. Cards are tinted by where the guest comes from: <span class="wsp-key wsp-bride"></span>the bride's family, <span class="wsp-key wsp-groom"></span>the groom's family, <span class="wsp-key wsp-uni"></span>uni, <span class="wsp-key wsp-work"></span>work and <span class="wsp-key wsp-rest"></span>everyone else. A dashed red line joins a couple on different tables, a solid red line joins two people who've fallen out and are sitting together, and a dashed red outline is a guest who knows nobody at their table. A picked guest is joined to their friends in grey and to their feuds in red. <em>Complaints</em> is the score, and the four tiles after it are what it's made of. Changing <em>Fixer</em>, <em>Couples move together</em> or <em>Starting temperature</em> starts again from the same shuffle; <em>New shuffle</em> deals a different one.</p>
+ </div>
+
+ <h2>Things to try</h2>
+
+ <p><strong>Try it by hand!</strong> The starting shuffle has 210 complaints: all nine couples are split up, 20 guests know nobody at their table, 50 pairs of friends are apart, and Duny and Sam are at table 4 together. Start with the couples, they're 90 of the 210. </p>
+
+ <p><strong>Press Play.</strong> (Press <em>Start again</em> first if you've moved anyone.) The fixer starts as hill climbing. Each move, it picks a guest and someone on another table and swaps them. It gets from 210 to about 30 in the first two seconds and then slows right down. After 642 moves it stops at 24. The Gaffer is at table 3 with Yueh, Jessica, Leto and Duncan from work, none of whom he knows, while the rest of his family is at table 5. Before it gives up it tries every move there is, and <jargon key="local optimum">none of them makes the plan any better</jargon>. Press Play again: it says it's still stuck.</p>
+
+ <p><strong>Now switch <em>Fixer</em> to simulated annealing.</strong> It starts again from the same shuffle. A move that adds \(d\) complaints is kept with probability \(e^{-d/T}\), where \(T\) is the temperature, which starts at \(T = 2\) and loses \(0.15\%\) every move. Early on it'll keep a move that costs \(d = 2\) complaints about a third of the time (\(e^{-2/2} \approx 0.37\)). Once \(T\) is down to \(0.2\) it keeps nothing worse. On the default shuffle it gets to 22 after 1,548 moves. It took a worse plan 13 times on the way down, never by more than 6 complaints, so look for small bumps in the red line on the chart while the blue best-so-far line sits still.</p>
+
+ <div class="bsec"><img class="book-cover book-cover--left" src="../img/covers/9780593820247.webp" alt="Dungeon Crawler Carl cover" loading="lazy" width="331" height="500">
+ <p>The Gaffer's back with his family in the 22 plan, but now Thufir is on his own. He's at table 3 with the groom's family, the one guest in the room who knows nobody at his table (we've all been there, Thufir), because the work table has Jessica at it. Fastred and Elanor have moved in with Carl, Donut and Mongo, and Devi from uni is sitting with Geralt, Yen, Kvothe and Auri.</p>
+
+ <p><strong>Play with the temperature and shuffle a few times.</strong> At \(T = 0\) it's hill climbing. From a hot start, at \(T = 20\), it spends the early part moving people about more or less at random, so on average it takes nearly twice as many moves to finish as it does from \(T = 2\).</p>
+
+ <p><strong>Untick <em>Couples move together</em>.</strong> By default, when the fixer picks a guest whose partner is at the same table, the partner comes too, and the pair swaps with another couple or with two people who are there on their own. With it unticked, the fixer moves one guest at a time, the way you do by hand. Now a couple takes two moves to get anywhere, and the first one splits them up for 10 complaints. Hill climbing never keeps that move, and annealing at \(T = 2\) keeps a move that costs \(d = 10\) about \(0.7\%\) of the time (\(e^{-10/2} \approx 0.007\)). On the default shuffle hill climbing gets stuck at 41 and annealing stops at 31. Over 20 shuffles neither of them reached 22 once (their medians were 40 and 37), and hill climbing with couples moving together beat annealing without it on all 20. </p>
+ </div>
+
+ <p>Lewis and Carroll's planner works the same way round: couples and families with young children go in as one guest group, and it seats groups, which also makes the problem smaller<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+
+ <p><strong>Start a feud.</strong> Set <em>Tapping two guests</em> to <em>starts or ends a feud</em>. On the default shuffle, let annealing finish at 22, then tap Rosie and then Thufir. They've fallen out and they're at the same table, so the plan jumps to 32. Press Play: annealing heats back up from there, and finishes at 24 after 3,074 moves in all. Thufir joins Duncan, Yueh and Gurney from work, Jessica and Leto move to Devi's table, and the Gaffer is back at the work table with people he doesn't know.</p>
+
+ <p>A feud between two people on different tables is stranger. Get back to the 22 plan (<em>Reset the feuds</em>, <em>Start again</em>, then run annealing), and tap Simmon and then Devi. They've fallen out, and the complaints go down to 21. The score counts two friends at different tables as a complaint and two enemies at different tables as nothing, so a row between two people who were never going to sit together counts as an improvement. (I could make the score count a friendship that's turned into a feud, but I haven't.)</p>
+
+ <h2>What the real planners do</h2>
+
+ <p>Bellows and Peterson wrote their wedding up as an integer program, 107 guests and 11 tables, and gave it to CPLEX. It ran for 36 hours. It found a plan that worked, but it couldn't prove there wasn't a better one<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+
+ <p>Lewis and Carroll built theirs for weddingseatplanner.com (which, in 2016, needed Adobe Flash). You mark any two groups as <em>Definitely Apart</em>, <em>Rather Apart</em> or <em>Rather Together</em>, and it runs <a href="tabu-search-live.html">tabu search</a> in your browser, usually in under three seconds. They also tested it against an integer programming solver on the same problems. Of the 119 where both found a plan with no feud at a table, tabu search found the better one 94 times and the solver 6 times, and the solver needed more than 400 times as much computer time<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>. If feuds are all you care about, finding a plan with none at a table is graph colouring: every guest is a dot, every feud is a line between two dots, every table is a colour, and no line may join two dots of the same colour<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>Couldn't you just check every plan?</summary>
+ <p>Not for 30 guests. There are about 89 billion billion (\(8.9 \times 10^{19}\)) ways to seat them at six numbered tables of five, and at a million a second that's about 2.8 million years. Lewis and Carroll's example of 48 guests at six tables of eight has about \(\frac{48!}{(8!)^6} \approx 2.9 \times 10^{33}\)<sup><a href="#ref-2" class="cite-ref">[2]</a></sup>.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Why does the best plan leave Thufir on his own?</summary>
+ <p>Because of Jessica. Thufir can't sit with her, she comes with Leto, and the work table only seats five, so somebody leaves it. Sending Thufir away costs 7 complaints (3 because he knows nobody where he ends up, and 4 for the work friends he's apart from), and sending Jessica and Leto away instead costs 7 as well, so it comes down to where there's room. Every 22 plan I looked at had him at the groom's family table.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+
+ <ol class="references">
+          <li id="ref-1">
+            The Knot Worldwide. (2026, February 18). <em>The Knot Worldwide unveils 2026 Real Weddings Study</em> [Press release]. <a href="https://www.theknotww.com/press-releases/the-knot-worldwide-unveils-2026-real-weddings-study" target="_blank" rel="noopener">https://www.theknotww.com/press-releases/the-knot-worldwide-unveils-2026-real-weddings-study</a>
+          </li>
+          <li id="ref-2">
+            Lewis, R., &amp; Carroll, F. (2016). Creating seating plans: A practical application. <em>Journal of the Operational Research Society</em>, 67(11), 1353&ndash;1362. <a href="https://doi.org/10.1057/jors.2016.34" target="_blank" rel="noopener">https://doi.org/10.1057/jors.2016.34</a>
+          </li>
+          <li id="ref-3">
+            Albert, L. (2013, April 4). How to use OR to plan your wedding. <em>Punk Rock Operations Research</em>. <a href="https://punkrockor.com/2013/04/04/how-to-use-or-to-plan-your-wedding/" target="_blank" rel="noopener">https://punkrockor.com/2013/04/04/how-to-use-or-to-plan-your-wedding/</a>
+          </li>
+          <li id="ref-4">
+            Kirkpatrick, S., Gelatt, C. D., &amp; Vecchi, M. P. (1983). Optimization by simulated annealing. <em>Science</em>, 220(4598), 671&ndash;680. <a href="https://doi.org/10.1126/science.220.4598.671" target="_blank" rel="noopener">https://doi.org/10.1126/science.220.4598.671</a>
+          </li>
+        </ol>
+
+        <div class="related-posts">
+          <h2>Related posts</h2>
+          <div class="row related-posts-grid">
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/blog/img/ruin/ruin-hero.webp')">
+              <a href="ruin-and-recreate-live.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../blog/img/ruin/ruin-hero.webp" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">13 September 2026 · 8 min read</div>
+                  <h3 class="blog-card-title">Ruin and Recreate, Live</h3>
+                  <p class="blog-card-excerpt">Most search algorithms improve a solution by nudging it. Ruin and recreate demolishes part of it and rebuilds, which works better on rosters. The method behind my 2018 rostering paper, running in your browser.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">data science</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/blog/img/factorio-belt-demo.png')">
+              <a href="factorio-live.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../blog/img/factorio-belt-demo.png" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">16 August 2026 · 12 min read</div>
+                  <h3 class="blog-card-title">Factorio, Live: a Game as an Optimisation Benchmark</h3>
+                  <p class="blog-card-excerpt">The logistic transport belt problem from my GECCO 2021 paper, running live in your browser: watch simulated annealing and genetic programming lay belts across a walled grid until the items get through.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">data science</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/493.webp')">
+              <a href="optimizing-your-schedule.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/493.webp" srcset="../img/photography/thumb/493.webp 1x, ../img/photography/thumb/493@2x.webp 2x" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">15 June 2026 · 18 min read</div>
+                  <h3 class="blog-card-title">Optimizing Your Schedule (or: Treating Your Week Like a Solvable Problem)</h3>
+                  <p class="blog-card-excerpt">What an operations researcher actually means by optimizing a schedule: objectives, constraints and weightings, a values clarification grid, and a working integer-programming model of your week. Nerd mode optional.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">personal</span><span class="blog-tag">data science</span><span class="blog-tag">advice</span></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+ </div>
+ </div>
+ </div>
+
+ </main>
+
+ <hr>
+ <div id="footer-section"></div>
+
+ <script src="../js/jquery.min.js"></script>
+ <script src="../js/alime.bundle.js?v=20260923a"></script>
+ <script src="../js/site.js?v=20260923a"></script>
+ <script src="../js/lightbox.js?v=20260923a"></script>
+ <script src="../js/default-assets/active.js?v=20260923a"></script>
+ <script src="../js/shared-components.js?v=20260923a"></script>
+ <script>renderHeader('header-section', { basePath: '../', active: 'blog' });
+renderFooter('footer-section');</script>
+
+<script src="../js/kr-viz.js?v=20260923a"></script>
+ <script>
+ /* ============================================================
+    The Wedding Seating Plan, Live: the interactive demo for this
+    post. Chrome from js/kr-viz.js. What stays here is the problem
+    and the search: thirty guests, six tables of five, a score in
+    complaints, and one loop that is hill climbing or simulated
+    annealing depending on the temperature. Tapping two guests
+    swaps them, or starts or ends a feud between them.
+    ============================================================ */
+ (function () {
+   'use strict';
+   var wrap = document.getElementById('seating-demo');
+   if (!wrap || !window.KRViz) return;
+
+   var TABLES = 6, SEATS = 5;
+   // complaints: what each kind of problem costs
+   var COUPLE = 10, FEUD = 10, LONELY = 3, APART = 1;
+   var COOL = 0.9985, COLD = 0.2;  // annealing: share of the temperature kept each move, and where it counts as cold
+   var CHECK = 200;                // moves without an improvement before trying every move there is
+   var WIDE = 540;                 // three tables to a row from this canvas width
+   var SEED = 20260925;
+
+   // [name, group]: 0 the bride's family, 1 the groom's family, 2 uni pals, 3 work, 4 everyone else
+   var GUESTS = [
+     ['Calanthe', 0], ['Geralt', 0], ['Yen', 0], ['Eist', 0], ['Duny', 0], ['Pavetta', 0], ['Jaskier', 0],
+     ['Rosie', 1], ['Sam', 1], ['Gaffer', 1], ['Elanor', 1], ['Fastred', 1], ['Elfstan', 1],
+     ['Simmon', 2], ['Fela', 2], ['Wilem', 2], ['Mola', 2], ['Devi', 2], ['Denna', 2],
+     ['Thufir', 3], ['Duncan', 3], ['Jessica', 3], ['Leto', 3], ['Gurney', 3], ['Yueh', 3],
+     ['Kvothe', 4], ['Auri', 4], ['Carl', 4], ['Donut', 4], ['Mongo', 4]
+   ];
+   var N = GUESTS.length;
+   var TONE = ['s3', 's1', 's2', 's5', 's6'];
+   var COUPLES = [['Geralt', 'Yen'], ['Duny', 'Pavetta'], ['Rosie', 'Sam'], ['Elanor', 'Fastred'],
+                  ['Simmon', 'Fela'], ['Wilem', 'Mola'], ['Jessica', 'Leto'], ['Kvothe', 'Auri'],
+                  ['Carl', 'Donut']];
+   var FEUDS = [['Calanthe', 'Geralt'], ['Calanthe', 'Yen'], ['Kvothe', 'Denna'], ['Thufir', 'Jessica'],
+                ['Duny', 'Sam']];
+   // everyone in a circle knows everyone else in it
+   var CIRCLES = [['Calanthe', 'Eist', 'Duny', 'Pavetta', 'Jaskier'],
+                  ['Rosie', 'Sam', 'Gaffer', 'Elanor', 'Fastred', 'Elfstan'],
+                  ['Simmon', 'Fela', 'Wilem', 'Mola', 'Devi', 'Denna'],
+                  ['Thufir', 'Duncan', 'Jessica', 'Leto', 'Gurney', 'Yueh']];
+   var PAIRS = [['Kvothe', 'Simmon'], ['Kvothe', 'Wilem'], ['Kvothe', 'Devi'], ['Carl', 'Mongo'],
+                ['Donut', 'Mongo'], ['Carl', 'Fastred'], ['Mongo', 'Fastred']];
+
+   function id(name) {
+     for (var i = 0; i < N; i++) if (GUESTS[i][0] === name) return i;
+     return -1;
+   }
+   function who(g) { return GUESTS[g][0]; }
+   function ids(p) { return [id(p[0]), id(p[1])]; }
+
+   // rel[a * N + b]: 2 a couple, 1 they know each other, -1 a feud, 0 strangers
+   var rel = new Int8Array(N * N);
+   var feuds = FEUDS.map(ids);     // outside the state, so a restart keeps the reader's feuds
+   function link(a, b, v) { rel[a * N + b] = v; rel[b * N + a] = v; }
+   function rebuild() {
+     for (var i = 0; i < rel.length; i++) rel[i] = 0;
+     CIRCLES.forEach(function (c) {
+       for (var i = 0; i < c.length; i++) for (var j = i + 1; j < c.length; j++) link(id(c[i]), id(c[j]), 1);
+     });
+     PAIRS.forEach(function (p) { link(id(p[0]), id(p[1]), 1); });
+     COUPLES.forEach(function (p) { link(id(p[0]), id(p[1]), 2); });
+     feuds.forEach(function (p) { link(p[0], p[1], -1); });
+   }
+   rebuild();
+
+   // The score. Every couple on different tables is 10 complaints, every feud
+   // on the same table is 10, every guest who knows nobody at their table is 3,
+   // and every pair of friends on different tables is 1.
+   function tally(at) {
+     var t = {total: 0, split: 0, feuds: 0, lonely: 0, apart: 0};
+     for (var i = 0; i < N; i++) {
+       var knows = false;
+       for (var j = 0; j < N; j++) {
+         if (i === j) continue;
+         var r = rel[i * N + j], same = at[i] === at[j];
+         if (r > 0 && same) knows = true;
+         if (j < i) continue;
+         if (r === 2 && !same) t.split++;
+         else if (r === 1 && !same) t.apart++;
+         else if (r === -1 && same) t.feuds++;
+       }
+       if (!knows) t.lonely++;
+     }
+     t.total = COUPLE * t.split + FEUD * t.feuds + LONELY * t.lonely + APART * t.apart;
+     return t;
+   }
+
+   // seat[s] is the guest in seat s (six seats a table); slot and at say where each guest is
+   function place(st) {
+     for (var s = 0; s < N; s++) { st.slot[st.seat[s]] = s; st.at[st.seat[s]] = (s / SEATS) | 0; }
+   }
+   function swap(st, a, b) {
+     var sa = st.slot[a], sb = st.slot[b];
+     st.seat[sa] = b; st.seat[sb] = a;
+     st.slot[a] = sb; st.slot[b] = sa;
+     st.at[a] = (sb / SEATS) | 0; st.at[b] = (sa / SEATS) | 0;
+   }
+   function settle(st) {
+     st.t = tally(st.at); st.score = st.t.total;
+     if (st.score < st.best) { st.best = st.score; st.bestSeat = st.seat.slice(); }
+   }
+
+   // partner of g if they are sitting at the same table, else -1
+   function mate(st, g) {
+     for (var j = 0; j < N; j++) if (rel[g * N + j] === 2 && st.at[j] === st.at[g]) return j;
+     return -1;
+   }
+   // The moves from guest a to guest b on another table. With couples moving
+   // together, a guest whose partner is at their table brings the partner
+   // along, and swaps with a couple, or with two people there on their own.
+   function movesFor(st, a, b, pairs) {
+     if (!pairs) return [[[a, b]]];
+     var A = [a], B = [b], ma = mate(st, a), mb = mate(st, b), out = [], g;
+     if (ma >= 0) A.push(ma);
+     if (mb >= 0) B.push(mb);
+     if (A.length === B.length) return [A.length === 2 ? [[A[0], B[0]], [A[1], B[1]]] : [[a, b]]];
+     var one = A.length === 1 ? A : B, two = A.length === 1 ? B : A;
+     for (g = 0; g < N; g++) {
+       if (g !== one[0] && st.at[g] === st.at[one[0]] && mate(st, g) < 0) out.push([[one[0], two[0]], [g, two[1]]]);
+     }
+     return out;
+   }
+   function propose(st, rng, pairs) {
+     var a = (rng() * N) | 0, r = (rng() * (N - SEATS)) | 0, b = -1;
+     for (var g = 0; g < N && b < 0; g++) if (st.at[g] !== st.at[a] && r-- === 0) b = g;
+     var all = movesFor(st, a, b, pairs);
+     return all.length ? all[(rng() * all.length) | 0] : null;
+   }
+   function apply(st, mv) { for (var i = 0; i < mv.length; i++) swap(st, mv[i][0], mv[i][1]); }
+   function undo(st, mv) { for (var i = mv.length - 1; i >= 0; i--) swap(st, mv[i][0], mv[i][1]); }
+
+   // try every move there is; the one that helps most, or null
+   function bestMove(st, pairs) {
+     var best = null;
+     for (var a = 0; a < N; a++) {
+       for (var b = a + 1; b < N; b++) {
+         if (st.at[a] === st.at[b]) continue;
+         movesFor(st, a, b, pairs).forEach(function (mv) {
+           apply(st, mv);
+           var d = tally(st.at).total - st.score;
+           undo(st, mv);
+           if (d < 0 && (!best || d < best.d)) best = {mv: mv, d: d};
+         });
+       }
+     }
+     return best;
+   }
+
+   var viz = null, pick = -1, seedNow = SEED;
+
+   // Nothing left to try from here. Annealing puts back the best plan it saw
+   // on the way down, if that was better, and tidies it up.
+   function stuck(ctx, st, again) {
+     var anneal = ctx.controls.algo === 'anneal', m;
+     if (anneal && st.best < st.score) {
+       st.seat = st.bestSeat.slice(); place(st); settle(st);
+       while ((m = bestMove(st, ctx.controls.pairs))) { apply(st, m.mv); settle(st); }
+     }
+     st.done = true; st.edited = false; st.wake = false;
+     if (viz) viz.pause();
+     ctx.status(anneal ? 'Cooled down. This plan has ' + st.score + ' complaints, after ' + st.tried + ' moves.'
+       : again ? 'Still stuck at ' + st.score + '. Move someone by hand, or try annealing.'
+       : 'Stuck at ' + st.score + ' complaints. No move from here makes this plan any better.');
+   }
+
+   function publish(ctx, st) {
+     var t = st.t;
+     ctx.set('score', t.total);
+     ctx.set('split', t.split);
+     ctx.set('feuds', t.feuds);
+     ctx.set('lonely', t.lonely);
+     ctx.set('apart', t.apart);
+     ctx.set('temp', ctx.controls.algo === 'anneal' ? st.T : -1);
+     ctx.set('tried', st.tried);
+     ctx.record({now: t.total, best: st.best});
+   }
+
+   function scaleFor(cw) { return Math.max(0.8, Math.min(1.2, cw / 180)); }
+   function tallFor(w) {
+     var cols = w >= WIDE ? 3 : 2, rows = Math.ceil(TABLES / cols);
+     return Math.round(rows * 150 * scaleFor(w / cols) + 12);
+   }
+
+   // where every table and guest sits on a canvas of this size
+   var view = null;
+   function layout(st, w, h) {
+     var cols = w >= WIDE ? 3 : 2, rows = Math.ceil(TABLES / cols), cw = w / cols;
+     var s = scaleFor(cw), ch = 150 * s, top = Math.max(0, (h - rows * ch) / 2);
+     var v = {s: s, tables: [], pos: [], tw: Math.max(44, 52 * s), th: Math.max(20, 20 * s),
+              rx: 56 * s, ry: 44 * s, tr: 22 * s};
+     for (var t = 0; t < TABLES; t++) {
+       var r = (t / cols) | 0, c = t % cols, inRow = Math.min(cols, TABLES - r * cols);
+       v.tables.push({x: (w - inRow * cw) / 2 + (c + 0.5) * cw, y: top + (r + 0.5) * ch});
+     }
+     for (var g = 0; g < N; g++) {
+       var slot = st.slot[g], tb = v.tables[(slot / SEATS) | 0], a = (slot % SEATS) * Math.PI * 2 / SEATS;
+       v.pos.push({x: tb.x + v.rx * Math.cos(a), y: tb.y + v.ry * Math.sin(a)});
+     }
+     return v;
+   }
+
+   function guestAt(x, y) {
+     if (!view) return -1;
+     var best = -1, bd = 1;
+     for (var g = 0; g < N; g++) {
+       var p = view.pos[g];
+       var d = Math.max(Math.abs(x - p.x) / (view.tw / 2 + 4), Math.abs(y - p.y) / (view.th / 2 + 6));
+       if (d < bd) { bd = d; best = g; }
+     }
+     return best;
+   }
+
+   // a rounded card, as a path to fill and stroke
+   function tag(g, x, y, w, h) {
+     var r = Math.min(8, h / 2), x0 = x - w / 2, y0 = y - h / 2;
+     g.beginPath();
+     g.moveTo(x0 + r, y0);
+     g.arcTo(x0 + w, y0, x0 + w, y0 + h, r);
+     g.arcTo(x0 + w, y0 + h, x0, y0 + h, r);
+     g.arcTo(x0, y0 + h, x0, y0, r);
+     g.arcTo(x0, y0, x0 + w, y0, r);
+     g.closePath();
+   }
+
+   var press = null, dragging = false, eat = false, pointer = null;
+
+   function draw(ctx) {
+     var c = ctx.canvas.plan, g = c.g, col = ctx.colors, st = ctx.state;
+     var v = layout(st, c.w, c.h), i, j;
+     view = v;
+     var fontPx = Math.round(Math.max(10, 11 * v.s));
+
+     // tables
+     v.tables.forEach(function (tb, t) {
+       g.beginPath(); g.arc(tb.x, tb.y, v.tr, 0, Math.PI * 2);
+       g.fillStyle = col.cell; g.fill();
+       g.strokeStyle = col.border; g.lineWidth = 1.5; g.stroke();
+       g.fillStyle = col.muted; g.font = '600 ' + Math.round(12 * v.s) + 'px system-ui, sans-serif';
+       g.textAlign = 'center'; g.textBaseline = 'middle';
+       g.fillText(String(t + 1), tb.x, tb.y);
+     });
+
+     // who is upset with whom: split couples dashed, feuds sharing a table solid
+     var hot = [], feudAt = [];
+     for (i = 0; i < N; i++) {
+       for (j = i + 1; j < N; j++) {
+         var r = rel[i * N + j], same = st.at[i] === st.at[j];
+         if (r === 2 && !same) hot.push([i, j, true]);
+         else if (r === -1 && same) { hot.push([i, j, false]); feudAt[i] = feudAt[j] = true; }
+       }
+     }
+     g.strokeStyle = col.s4;
+     hot.forEach(function (h) {
+       var p = v.pos[h[0]], q = v.pos[h[1]];
+       g.lineWidth = h[2] ? 1.5 : 3;
+       g.setLineDash(h[2] ? [5, 4] : []);
+       g.beginPath(); g.moveTo(p.x, p.y); g.lineTo(q.x, q.y); g.stroke();
+     });
+     g.setLineDash([]);
+
+     // the picked guest's people: everyone they know in ink, their feuds in red
+     if (pick >= 0) {
+       for (j = 0; j < N; j++) {
+         var rr = rel[pick * N + j];
+         if (!rr) continue;
+         g.strokeStyle = rr > 0 ? col.ink : col.s4;
+         g.globalAlpha = rr > 0 ? 0.55 : 1;
+         g.lineWidth = rr === 2 ? 2.5 : 1.5;
+         g.setLineDash(rr > 0 ? [] : [2, 3]);
+         g.beginPath(); g.moveTo(v.pos[pick].x, v.pos[pick].y); g.lineTo(v.pos[j].x, v.pos[j].y); g.stroke();
+       }
+       g.globalAlpha = 1; g.setLineDash([]);
+     }
+
+     // name cards, tinted by where each guest comes from
+     var lonely = [];
+     for (i = 0; i < N; i++) {
+       var k = false;
+       for (j = 0; j < N; j++) if (j !== i && rel[i * N + j] > 0 && st.at[i] === st.at[j]) { k = true; break; }
+       lonely[i] = !k;
+     }
+     g.font = '600 ' + fontPx + 'px system-ui, sans-serif';
+     g.textAlign = 'center'; g.textBaseline = 'middle';
+     function card(n, x, y, alpha) {
+       var tone = col[TONE[GUESTS[n][1]]] || col.muted;
+       g.globalAlpha = alpha;
+       tag(g, x, y, v.tw, v.th);
+       g.fillStyle = col.surface; g.fill();
+       g.globalAlpha = alpha * 0.28; g.fillStyle = tone; g.fill();
+       g.globalAlpha = alpha;
+       if (feudAt[n]) { g.strokeStyle = col.s4; g.lineWidth = 2.5; }
+       else if (lonely[n]) { g.strokeStyle = col.s4; g.lineWidth = 2; g.setLineDash([3, 2]); }
+       else { g.strokeStyle = tone; g.lineWidth = 1.5; }
+       g.stroke(); g.setLineDash([]);
+       g.fillStyle = col.ink;
+       g.fillText(who(n), x, y + 0.5);
+       g.globalAlpha = 1;
+     }
+     var held = dragging && press && press.g >= 0 ? press.g : -1;
+     for (i = 0; i < N; i++) card(i, v.pos[i].x, v.pos[i].y, i === held ? 0.35 : 1);
+
+     if (pick >= 0) {
+       g.strokeStyle = col.ink; g.lineWidth = 2.5;
+       tag(g, v.pos[pick].x, v.pos[pick].y, v.tw + 6, v.th + 6); g.stroke();
+     }
+     if (held >= 0 && pointer) card(held, pointer.x, pointer.y, 0.9);
+   }
+
+   function say(text) { if (viz) viz.ctx.status(text); }
+
+   // the reader moved someone: score it again, and let the fixer carry on from here
+   function handSwap(a, b) {
+     var ctx = viz.ctx, st = ctx.state;
+     if (a === b) return;
+     swap(st, a, b); settle(st);
+     st.since = 0; st.edited = true;
+     publish(ctx, st); viz.draw();
+     say(who(a) + ' and ' + who(b) + ' swapped seats. ' + st.score + ' complaints.');
+   }
+
+   function toggleFeud(a, b) {
+     var ctx = viz.ctx, st = ctx.state, r = rel[a * N + b];
+     if (r === 2) { say(who(a) + ' and ' + who(b) + ' came together. That row can wait until after the wedding.'); viz.draw(); return; }
+     var at = -1;
+     feuds.forEach(function (p, i) { if ((p[0] === a && p[1] === b) || (p[0] === b && p[1] === a)) at = i; });
+     if (at >= 0) feuds.splice(at, 1); else feuds.push([a, b]);
+     rebuild();
+     // the score has changed its mind, so the best so far starts again from here
+     st.best = Infinity; settle(st); st.since = 0; st.edited = true;
+     publish(ctx, st); viz.draw();
+     say(at >= 0 ? who(a) + ' and ' + who(b) + ' have made up. ' + st.score + ' complaints.'
+                 : who(a) + ' and ' + who(b) + ' have fallen out. ' + st.score + ' complaints.');
+   }
+
+   function tap(n) {
+     if (n < 0) { if (pick >= 0) { pick = -1; viz.draw(); } return; }
+     if (pick < 0) {
+       pick = n; viz.draw();
+       say(viz.ctx.controls.tap === 'feud' ? who(n) + ' picked. Tap someone they have fallen out with (or made up with).'
+                                           : who(n) + ' picked. Tap someone to swap seats with them.');
+       return;
+     }
+     var a = pick; pick = -1;
+     if (a === n) { viz.draw(); return; }
+     if (viz.ctx.controls.tap === 'feud') toggleFeud(a, n); else handSwap(a, n);
+   }
+
+   viz = KRViz.mount('#seating-demo', {
+     seed: SEED,
+     autostart: false,
+     maxSamples: 6000,
+     canvases: {
+       plan: {el: '#seatingPlan', height: tallFor},
+       chart: {el: '#seatingChart', height: 120, mobile: {height: 150}}
+     },
+     buttons: ['run', {id: 'restart', label: 'Start again'},
+       {id: 'shuffle', label: 'New shuffle', onClick: function (h) { seedNow += 1; h.seed(seedNow); }},
+       {id: 'peace', label: 'Reset the feuds', onClick: function (h) {
+         feuds = FEUDS.map(ids); rebuild();
+         var st = h.ctx.state; st.best = Infinity; settle(st); st.since = 0; st.edited = true;
+         publish(h.ctx, st); h.draw(); say('Feuds back to the five on the guest list. ' + st.score + ' complaints.');
+       }}],
+     controls: [
+       {id: 'algo', type: 'select', label: 'Fixer', value: 'hill', options: [
+         {value: 'hill', label: 'Hill climbing'},
+         {value: 'anneal', label: 'Simulated annealing'}]},
+       {id: 'tap', type: 'select', label: 'Tapping two guests', value: 'move', restart: false, options: [
+         {value: 'move', label: 'swaps their seats'},
+         {value: 'feud', label: 'starts or ends a feud'}]},
+       {id: 'pairs', type: 'check', label: 'Couples move together', value: true, restart: true},
+       {id: 'heat', label: 'Starting temperature', min: 0, max: 20, step: 1, value: 2, restart: true},
+       {id: 'speed', label: 'Moves a second', min: 1, max: 500, value: 100}
+     ],
+     stats: [
+       {id: 'score', label: 'Complaints', tone: 's4'},
+       {id: 'split', label: 'Couples split'},
+       {id: 'feuds', label: 'Feuds at a table'},
+       {id: 'lonely', label: 'Knows nobody'},
+       {id: 'apart', label: 'Friends apart'},
+       {id: 'temp', label: 'Temperature', fmt: function (v) { return v < 0 ? 'off' : v > COLD ? v.toFixed(1) : 'cold'; }},
+       {id: 'tried', label: 'Moves tried'}
+     ],
+     charts: [{
+       canvas: 'chart',
+       panes: [{label: 'COMPLAINTS', yMin: 0, series: [
+         {key: 'now', tone: 's4', label: 'this plan'},
+         {key: 'best', tone: 's1', label: 'best so far', step: true}]}]
+     }],
+
+     init: function (ctx) {
+       var seat = [], i, j, tmp;
+       for (i = 0; i < N; i++) seat.push(i);
+       for (i = N - 1; i > 0; i--) { j = (ctx.rng() * (i + 1)) | 0; tmp = seat[i]; seat[i] = seat[j]; seat[j] = tmp; }
+       var st = {seat: seat, slot: [], at: [], best: Infinity, bestSeat: null, since: 0, tried: 0, done: false, edited: false, wake: false,
+                 T: ctx.controls.algo === 'anneal' ? ctx.controls.heat : 0};
+       place(st); settle(st);
+       pick = -1;
+       publish(ctx, st);
+       return st;
+     },
+
+     // One move. Hill climbing keeps it if the plan is no worse. Annealing
+     // also keeps a worse one with probability exp(-extra complaints /
+     // temperature), and cools a little every move; once it is cold, it is
+     // hill climbing. Every CHECK moves without an improvement, try every
+     // move there is: if none helps, this plan is a local optimum.
+     step: function (ctx) {
+       var st = ctx.state, rng = ctx.rng, pairs = ctx.controls.pairs, m;
+       if (st.done) {
+         // Stopped. Only the reader pressing Play wakes it: annealing heats
+         // up again from this plan, and hill climbing looks again, in case
+         // the reader has changed something.
+         if (!st.wake) return;
+         st.wake = false;
+         if (ctx.controls.algo === 'anneal') {
+           st.T = ctx.controls.heat;
+           ctx.status('Heating back up to ' + st.T + ' from this plan.');
+         } else if (!st.edited || !bestMove(st, pairs)) { stuck(ctx, st, true); return; }
+         st.done = false; st.since = 0;
+       }
+       var hot = st.T > COLD, mv = propose(st, rng, pairs);
+       if (mv) {
+         var before = st.score;
+         apply(st, mv); st.tried++;
+         var d = tally(st.at).total - before;
+         if (d <= 0 || (hot && rng() < Math.exp(-d / st.T))) { settle(st); st.since = d < 0 ? 0 : st.since + 1; }
+         else { undo(st, mv); st.since++; }
+       } else st.since++;
+       if (hot) {
+         st.T *= COOL;
+         if (st.T <= COLD) { st.T = 0; st.since = 0; }
+       } else if (st.since >= CHECK) {
+         if ((m = bestMove(st, pairs))) { apply(st, m.mv); settle(st); st.since = 0; }
+         else stuck(ctx, st, false);
+       }
+       publish(ctx, st);
+     },
+
+     draw: draw
+   });
+   if (!viz) return;
+
+   // Play after a stop: tell the next step it was the reader, not the rest of a frame
+   var runBtn = wrap.querySelector('.kr-run');
+   if (runBtn) runBtn.addEventListener('click', function () {
+     var st = viz.ctx.state;
+     if (st && st.done && runBtn.textContent === 'Pause') st.wake = true;
+   });
+
+   var cv = document.getElementById('seatingPlan');
+   function local(ev) {
+     var rc = cv.getBoundingClientRect(), k = rc.width ? viz.ctx.canvas.plan.w / rc.width : 1;
+     return {x: (ev.clientX - rc.left) * k, y: (ev.clientY - rc.top) * k};
+   }
+   // Drag a card onto another to swap them (with a mouse), or tap one and
+   // then the other (anywhere, keyboard included: the engine replays taps).
+   cv.addEventListener('pointerdown', function (ev) {
+     var p = local(ev);
+     press = {x: p.x, y: p.y, g: guestAt(p.x, p.y)}; dragging = false;
+     if (ev.isTrusted && ev.pointerType === 'mouse' && press.g >= 0) {
+       try { cv.setPointerCapture(ev.pointerId); } catch (e) { /* synthetic events have no capture */ }
+     }
+   });
+   cv.addEventListener('pointermove', function (ev) {
+     if (!press || press.g < 0 || viz.ctx.controls.tap !== 'move') return;
+     var p = local(ev);
+     if (!dragging && Math.abs(p.x - press.x) + Math.abs(p.y - press.y) > 8) { dragging = true; pick = -1; }
+     if (dragging) { pointer = p; viz.draw(); }
+   });
+   cv.addEventListener('pointerup', function (ev) {
+     if (dragging) {
+       var p = local(ev), to = guestAt(p.x, p.y), from = press.g;
+       press = null; dragging = false; pointer = null; eat = true;
+       if (to >= 0 && to !== from) handSwap(from, to); else viz.draw();
+       return;
+     }
+     press = null;
+   });
+   cv.addEventListener('pointercancel', function () {
+     var was = dragging;
+     press = null; dragging = false; pointer = null;
+     if (was) viz.draw();
+   });
+   cv.addEventListener('click', function (ev) {
+     if (eat) { eat = false; return; }
+     var p = local(ev);
+     tap(guestAt(p.x, p.y));
+   });
+ })();
+ </script>
+ <script>
+ /* ============================================================
+    Hill climbing and simulated annealing side by side, on one
+    made-up landscape of plans (lower is fewer complaints), from
+    one starting plan, with the same kind of move. Only what each
+    one keeps is different. When both have stopped, a new
+    landscape starts.
+    ============================================================ */
+ (function () {
+   'use strict';
+   var N = 101;                  // plans along the bottom
+   var REACH = 5;                // a move goes up to this many plans either way
+   var HOT = 15, COLD = 0.15;    // annealing's starting temperature, and where it counts as cold
+   var COOL = Math.pow(COLD / HOT, 1 / 400);  // cold after about 400 moves
+   var HOLD = 70;                // moves to show the result before the next landscape
+   var LOW = 12, HIGH = 60;      // complaints at the lowest and the highest plan
+   var SIDE = 600;               // the two panes sit side by side from this canvas width
+
+   // Three waves of different lengths added together, scaled to LOW..HIGH.
+   function landscape(rng) {
+     var waves = [[1.5, 1], [4, 0.55], [9, 0.25]].map(function (w) {
+       return {k: w[0] * (1 + 0.6 * rng()), a: w[1] * (0.7 + 0.6 * rng()), p: rng() * Math.PI * 2};
+     });
+     var f = [], lo = Infinity, hi = -Infinity, i;
+     for (i = 0; i < N; i++) {
+       var v = 0;
+       waves.forEach(function (w) { v += w.a * Math.sin(w.k * Math.PI * 2 * i / (N - 1) + w.p); });
+       f.push(v); lo = Math.min(lo, v); hi = Math.max(hi, v);
+     }
+     return f.map(function (v) { return LOW + (v - lo) / (hi - lo) * (HIGH - LOW); });
+   }
+   // no plan within reach of plan i has fewer complaints
+   function stuck(f, i) {
+     for (var j = Math.max(0, i - REACH); j <= Math.min(N - 1, i + REACH); j++) if (f[j] < f[i]) return false;
+     return true;
+   }
+   // where taking the best move in reach, over and over, ends up from plan i
+   function bottom(f, i) {
+     while (!stuck(f, i)) {
+       var b = i;
+       for (var j = Math.max(0, i - REACH); j <= Math.min(N - 1, i + REACH); j++) if (f[j] < f[b]) b = j;
+       i = b;
+     }
+     return i;
+   }
+
+   // A new landscape, and a start partway up a slope whose dip is well
+   // above the lowest point, so there is something for annealing to find.
+   function round(st, rng) {
+     var f, picks, tries = 0, i;
+     do {
+       f = landscape(rng); picks = [];
+       var best = 0;
+       for (i = 1; i < N; i++) if (f[i] < f[best]) best = i;
+       for (i = 0; i < N; i++) {
+         var b = bottom(f, i);
+         if (f[b] - f[best] >= 10 && f[i] - f[b] >= 8) picks.push(i);
+       }
+     } while (!picks.length && ++tries < 20);
+     var start = picks.length ? picks[(rng() * picks.length) | 0] : (N >> 1);
+     st.f = f; st.T = HOT; st.hold = 0;
+     st.walkers = [{at: start, trail: [start], done: false}, {at: start, trail: [start], done: false}];
+   }
+
+   // One move: a step of 1 to REACH plans either way. Kept if it's no
+   // worse, or, while hot, with probability exp(-extra complaints / T).
+   function move(wk, f, rng, T) {
+     if (wk.done) return;
+     var to = wk.at + (rng() < 0.5 ? -1 : 1) * (1 + ((rng() * REACH) | 0));
+     to = Math.max(0, Math.min(N - 1, to));
+     var d = f[to] - f[wk.at];
+     if (d <= 0 || (T > 0 && rng() < Math.exp(-d / T))) wk.at = to;
+     wk.trail.push(wk.at);
+     if (wk.trail.length > 40) wk.trail.shift();
+   }
+
+   function publish(ctx, st) {
+     ctx.set('hill', st.f[st.walkers[0].at]);
+     ctx.set('anneal', st.f[st.walkers[1].at]);
+     ctx.set('temp', st.T);
+   }
+
+   function pane(ctx, x, y, w, h, wk, name, tone) {
+     var g = ctx.canvas.main.g, col = ctx.colors, f = ctx.state.f, i;
+     var x0 = x + 4, x1 = x + w - 4, yT = y + 34, yB = y + h - 6;
+     function px(i) { return x0 + (x1 - x0) * i / (N - 1); }
+     function py(v) { return yB - (yB - yT) * (v - LOW + 2) / (HIGH - LOW + 4); }
+     g.beginPath(); g.moveTo(px(0), yB);
+     for (i = 0; i < N; i++) g.lineTo(px(i), py(f[i]));
+     g.lineTo(px(N - 1), yB); g.closePath();
+     g.fillStyle = col.cell; g.fill();
+     g.beginPath();
+     for (i = 0; i < N; i++) { if (i) g.lineTo(px(i), py(f[i])); else g.moveTo(px(i), py(f[i])); }
+     g.strokeStyle = col.muted; g.lineWidth = 1.5; g.stroke();
+     // where it has been lately, fading out
+     g.fillStyle = tone;
+     wk.trail.forEach(function (t, k) {
+       g.globalAlpha = 0.1 + 0.45 * k / wk.trail.length;
+       g.beginPath(); g.arc(px(t), py(f[t]) - 7, 2.5, 0, Math.PI * 2); g.fill();
+     });
+     g.globalAlpha = 1;
+     g.beginPath(); g.arc(px(wk.at), py(f[wk.at]) - 7, 6, 0, Math.PI * 2);
+     g.fillStyle = tone; g.fill();
+     g.strokeStyle = col.surface; g.lineWidth = 2; g.stroke();
+     g.textBaseline = 'top';
+     g.textAlign = 'left'; g.fillStyle = col.ink; g.font = '600 12px system-ui, sans-serif';
+     g.fillText(name, x0, y + 4);
+     g.textAlign = 'right'; g.fillStyle = col.muted; g.font = '500 12px system-ui, sans-serif';
+     g.fillText(Math.round(f[wk.at]) + (wk.done ? ' complaints, stopped' : ' complaints'), x1, y + 4);
+   }
+
+   KRViz.mount('#walk-demo', {
+     seed: 20261103,
+     speed: 50,
+     canvases: {
+       main: {el: '#walkCanvas', height: function (w) {
+         return w >= SIDE ? Math.max(200, Math.min(260, w * 0.3)) : 2 * Math.max(150, Math.min(190, w * 0.48)) + 14;
+       }}
+     },
+     buttons: ['run', {id: 'next', label: 'New landscape', onClick: function (h) {
+       round(h.ctx.state, h.ctx.rng); publish(h.ctx, h.ctx.state); h.draw();
+     }}],
+     stats: [
+       {id: 'hill', label: 'Hill climbing', tone: 's2', fmt: function (v) { return Math.round(v); }},
+       {id: 'anneal', label: 'Annealing', tone: 's1', fmt: function (v) { return Math.round(v); }},
+       {id: 'temp', label: 'Temperature', fmt: function (v) { return v > 0 ? v.toFixed(1) : 'cold'; }}
+     ],
+
+     init: function (ctx) {
+       var st = {};
+       round(st, ctx.rng);
+       publish(ctx, st);
+       return st;
+     },
+
+     step: function (ctx) {
+       var st = ctx.state, rng = ctx.rng, f = st.f, hill = st.walkers[0], ann = st.walkers[1];
+       if (hill.done && ann.done) {
+         if (++st.hold >= HOLD) round(st, rng);
+         publish(ctx, st);
+         return;
+       }
+       move(hill, f, rng, 0);
+       move(ann, f, rng, st.T);
+       if (st.T > 0) { st.T *= COOL; if (st.T <= COLD) st.T = 0; }
+       if (!hill.done && stuck(f, hill.at)) hill.done = true;
+       if (!ann.done && st.T === 0 && stuck(f, ann.at)) ann.done = true;
+       publish(ctx, st);
+     },
+
+     draw: function (ctx) {
+       var c = ctx.canvas.main, col = ctx.colors, side = c.w >= SIDE, gap = side ? 24 : 14;
+       var w = side ? (c.w - gap) / 2 : c.w, h = side ? c.h : (c.h - gap) / 2;
+       pane(ctx, 0, 0, w, h, ctx.state.walkers[0], 'Hill climbing', col.s2);
+       pane(ctx, side ? w + gap : 0, side ? 0 : h + gap, w, h, ctx.state.walkers[1], 'Simulated annealing', col.s1);
+     }
+   });
+ })();
+ </script>
+ <!-- KaTeX, lazy-loaded from the CDN and rendered once. Same pattern as the
+      Factorio and differential evolution posts. -->
+ <script>
+ (function () {
+   var el = document.querySelector('.blog-post');
+   if (!el || !/\\[([]/.test(el.textContent)) return;
+   var css = document.createElement('link');
+   css.rel = 'stylesheet';
+   css.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';
+   document.head.appendChild(css);
+   var core = document.createElement('script');
+   core.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';
+   core.onload = function () {
+     var ar = document.createElement('script');
+     ar.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js';
+     ar.onload = function () {
+       window.renderMathInElement(el, {
+         delimiters: [{left: '\\[', right: '\\]', display: true},
+                      {left: '\\(', right: '\\)', display: false}],
+         throwOnError: false
+       });
+       // The jargon pass skips raw TeX, so re-run it now the equations are
+       // real elements and the surrounding prose can take its tooltips.
+       if (typeof applyJargonTooltips === 'function') applyJargonTooltips();
+     };
+     document.head.appendChild(ar);
+   };
+   document.head.appendChild(core);
+ })();
+ </script>
+</body>
+</html>
