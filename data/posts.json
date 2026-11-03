@@ -1,5 +1,23 @@
 [
   {
+    "title": "Baader-Meinhof and Friends",
+    "date": "2026-11-02",
+    "tags": [
+      "philosophy",
+      "science"
+    ],
+    "category": "Ideas",
+    "excerpt": "My absolute favourite oddity of language and psychology is the Baader-Meinhof phenomenon - you learn a word and suddenly you hear it everywhere.",
+    "url": "blog/baader-meinhof-and-friends.html",
+    "image": "img/photography/thumb/177.webp",
+    "series": {
+      "name": "Cognitive Biases",
+      "part": 3
+    },
+    "readMinutes": 7,
+    "words": 1349
+  },
+  {
     "title": "Ann Arbor and Ypsilanti, Frame by Frame",
     "date": "2026-11-02",
     "tags": [

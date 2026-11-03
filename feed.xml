@@ -11,6 +11,107 @@
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Baader-Meinhof and Friends</title>
+      <link>https://www.kenreid.co.uk/blog/baader-meinhof-and-friends.html</link>
+      <guid>https://www.kenreid.co.uk/blog/baader-meinhof-and-friends.html</guid>
+      <pubDate>Mon, 02 Nov 2026 00:00:00 +0000</pubDate>
+      <description>My absolute favourite oddity of language and psychology is the Baader-Meinhof phenomenon - you learn a word and suddenly you hear it everywhere.</description>
+      <category>philosophy</category>
+      <category>science</category>
+      <content:encoded><![CDATA[
+
+ <p>You learn a new word, let's say "defenestration" (an excellent word, by the way), having somehow escaped learning it for decades. Then within 48 hours you hear it on a podcast, spot it in a novel, and a colleague uses it in a meeting. Well, let's hope a colleague doesn't need to use it in a meeting.</p>
+
+ <p>That's the <strong>Baader-Meinhof phenomenon</strong>, also called the frequency illusion, and it's one of my favourite psychological concepts. It's one of many biases our brains come with, and this post is part of my <a href="https://www.kenreid.co.uk/series-cognitive-biases.html">series on, well, biases</a>.</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>Defenestration:</strong> the act of throwing someone (or something) out of a window. Our example word.</li>
+ <li><strong>Mumpsimus:</strong> someone who sticks to a mistake after it's been pointed out, or the mistake itself.</li>
+ <li><strong>Baader-Meinhof phenomenon / frequency illusion:</strong> noticing a thing far more <em>after</em> you first notice it, and mistaking your new attention for a real increase in how often it occurs.</li>
+ <li><strong>Selective attention:</strong> the brain promoting the newly-relevant thing on its list of what to notice.</li>
+ <li><strong>Confirmation bias:</strong> each new sighting counts as evidence, and the thousands of non-sightings don't register at all.</li>
+ <li><strong>Recency / availability:</strong> judging how common something is by how easily examples come to mind, which favours the recent and the vivid over the actually-frequent.</li>
+ <li><strong>Apophenia:</strong> the broader tendency to see meaningful patterns in random noise.</li>
+ <li><strong>Clustering illusion:</strong> reading meaning into random clumps, when true randomness looks streaky, not evenly spread.</li>
+ <li><strong>Recency illusion:</strong> mistaking something you only just noticed for something newly arrived.</li>
+ <li><strong>Survivorship bias:</strong> judging from the winners in front of you while the losers, invisible, leave the sample.</li>
+ <li><strong>Gambler's fallacy / hot hand:</strong> expecting a random streak to reverse ("red is due") or to continue ("she's on fire"), when the odds never changed.</li>
+ <li><strong>Pareidolia:</strong> the face-detector firing on noise: faces in sockets, a man in the moon.</li>
+ </ul>
+ </div>
+
+
+ <h2>What's actually happening</h2>
+
+ <p>The "frequency illusion" comes from Arnold Zwicky, a linguist at Stanford, who wrote about it on Language Log in 2005 and put it down to <strong>selective attention</strong> and <strong><a href="https://www.kenreid.co.uk/blog/confirmation-bias-is-the-mother-bias.html">confirmation bias</a></strong> working together. As soon as something matters to you, your brain adds it to the short list of stuff worth flagging, so you start <em>catching</em> the times it turns up that you'd have sailed past before. The word was always there, but it feels like it's popping up in your life like an etymologically inclined divine being's favourite hobby is improving your vocabulary.</p>
+
+ <p>The Baader-Meinhof name is older, and a lot weirder. In October 1994 the St. Paul Pioneer Press printed a letter in its <a href="https://www.twincities.com/2012/08/15/watch-a-hummingbird-at-the-feeder-fending-off-all-other-hummers-the-rest-of-the-day/" target="_blank" rel="noopener">Bulletin Board column</a> from a reader who had been chatting to a friend about the Baader-Meinhof gang, years after they'd been in the news. The next day the friend phoned him about an article in that day's paper that mentioned the gang. The reader named the whole experience after them: the first time you learn a new word, you'll see it in print again within 24 hours. He also threw in (and I love this) a "Comics Page Corollary", that four or five times a year two comic strips will run the same punchline on the same day, and his example was Mother Goose &amp; Grimm and Garfield both doing dogs drinking out of toilets. I bet you thought Baader and Meinhof were linguists, not a West German terrorist group!</p>
+
+ <h2>The extended family</h2>
+
+ <p>Here are some similar ones I've read about:</p>
+
+ <ul>
+ <li><strong>The clustering illusion.</strong> Random data comes in clumps, and we read meaning into every clump. It's why "cancer clusters" so often turn out to be the statistics behaving normally, and why a shuffled playlist seems to "have favourites."</li>
+ <li><strong>The recency illusion.</strong> Zwicky named this one too: the conviction that something you <em>just</em> noticed must be <em>new</em>. Singular "they" gets called a modern invention, and it has been in regular use since the 14th century. "OMG" first turns up in a letter to Winston Churchill in 1917.</li>
+ <li><strong>Survivorship bias.</strong> Judging from the winners because the losers aren't around to be counted. "Old buildings were built better", no, the badly-built old ones fell down and aren't around to see.</li>
+ <li><strong>The gambler's fallacy and its twin, the hot hand.</strong> "Red is due" after a run of black; "she's on fire, pass her the ball." Each spin of the wheel is independent of the last one. The hot hand is messier, the research has gone back and forth and I'm not going to referee it, but where it's real it's small, and we treat both kinds of streak as signals anyway.</li>
+ <li><strong>Pareidolia.</strong> Faces in plug sockets, a man in the moon. We're so primed to spot faces that we find them in noise.</li>
+ </ul>
+
+ <figure>
+ <img src="https://www.kenreid.co.uk/img/photography/thumb/368.webp" alt="A carpet of yellow and brown autumn leaves, individual leaves catching the light" loading="lazy" class="kr-figure-img" width="400" height="266" srcset="https://www.kenreid.co.uk/img/photography/thumb/368.webp 400w, https://www.kenreid.co.uk/img/photography/thumb/368@2x.webp 800w, https://www.kenreid.co.uk/img/photography/hero/368.webp 1894w" sizes="(min-width: 800px) 760px, 100vw">
+ <figcaption class="figure-note"><span class="figure-copyright">&copy; Ken Reid. All rights reserved.</span> Your brain is already trying to find a pattern in these leaves.</figcaption>
+ </figure>
+
+ <h2>Why we're built this way</h2>
+
+ <p>We naturally err towards seeing a pattern that isn't there, at least for the things above, and it's for good reason! An ancestor who heard a rustle in the grass, decided it was a tiger and ran wasted a bit of energy if it turned out to be the wind. One who <em>missed</em> a pattern that was there, and decided it was the wind when it was a tiger, got eaten. Natural selection only rewards <em>surviving</em> long enough to have children, and a jumpy, over-eager pattern detector does that better than a calibrated one that's right more often. Seeing "defenestration" everywhere for a week is a weird side effect of that. (Our preference for a good story over a true one probably comes from the same place.)</p>
+ 
+ <h2>What to do about it</h2>
+
+ <p>Well, not a lot, because it's just how our brains work. Knowing the names does not stop it. What does help is a few habits for catching it after your brain does it:</p>
+
+ <ul>
+ <li><strong>Ask "where's the denominator?"</strong> Whenever a word you've just learned seems to be following you around, the missing number is how often it turned up <em>before</em> you were counting. Usually: the same.</li>
+ <li><strong>Count the misses, not just the hits.</strong> Nobody writes down the days a word didn't turn up, and those days are most of the data.</li>
+ <li><strong>Distrust vivid over frequent.</strong> If your sense of how common something is comes from how easily an example springs to mind, you're really measuring how memorable it is, and <a href="https://www.kenreid.co.uk/blog/the-availability-heuristic-runs-the-news.html">the news picks its stories for being memorable</a> (e.g. we are great at remembering the car accident we got into, not the thousands of drives where nothing happened).</li>
+ <li><strong>Let randomness be lumpy.</strong> Streaks and clusters are what real randomness looks like, so a pattern in noise needs a lot more than "I noticed it" before I'd believe it.</li>
+ </ul>
+
+ <p>The illusion will still get you the next time you buy a car, though: you'll spend a few weeks convinced that everyone else has bought the same one. Our primate brains are weird, aren't they?</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>If knowing about biases doesn't fix them, what's the point?</summary>
+ <p>It's interesting and you've learned something about your existence, which I think has a lot of merit. And the habits above help you catch it after the fact.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Aren't some patterns real, though?</summary>
+ <p>Sure: the pattern detector is right often enough that we keep trusting it. But our subconscious "Hey, that's weird" is better for "Hey, that guy has been following me for 5 minutes" - definitely trust your gut there, but not for how often "mumpsimus" shows up in the book you're reading and on a podcast you listen to.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Is this why conspiracy theories are so sticky?</summary>
+ <p>Partly. Apophenia supplies the "connections," confirmation bias keeps every hit and forgets every miss, and the frequency illusion makes the theme seem to be "everywhere once you look." None of that needs the believer to be stupid, just to have normal pattern-finding.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Does the name really come from a terrorist group?</summary>
+ <p>Yep, the Baader-Meinhof gang, also known as the Red Army Faction, though only because their name was the one that turned up twice for that reader. Researchers use Zwicky's "frequency illusion" instead.</p>
+ </details>
+ 
+ </div>
+
+        
+ ]]></content:encoded>
+    </item>
+    <item>
       <title>Ann Arbor and Ypsilanti, Frame by Frame</title>
       <link>https://www.kenreid.co.uk/blog/ann-arbor-and-ypsilanti.html</link>
       <guid>https://www.kenreid.co.uk/blog/ann-arbor-and-ypsilanti.html</guid>
@@ -3279,92 +3380,6 @@ fragment.appendChild(abbr);</code></pre>
       <pubDate>Sun, 30 Aug 2026 00:00:00 +0000</pubDate>
       <description>Thirty small habits keep this site accessible: a skip link, screen-reader notes on new-tab links, reduced-motion fallbacks, and an audit that catches the many that I forget along the way.</description>
       <category>technology</category>
-      <content:encoded><![CDATA[
-
- <p>I have <a href="https://www.kenreid.co.uk/blog/accessibility-first-product-design-data-science.html">banged on before</a> about accessibility working best as a starting constraint rather than a retrofit. This site is where I get to practise that habit continually: my core philosophy is that if something is inaccessible to some it may as well be inaccessible to all. I make sure of this with a pile of small habits, and an audit script that catches the bits I inevitably miss. Part of the series on <a href="https://www.kenreid.co.uk/series-how-this-site-is-built.html">how this site is built</a>.</p>
-
- <div class="plain-english-box">
- <h2>Quick jargon guide</h2>
- <ul>
- <li><strong>Screen reader:</strong> software that reads a page aloud (or to a braille display) for blind and low-vision users, navigating by headings, links, and landmarks rather than by looking.</li>
- <li><strong>WCAG:</strong> the Web Content Accessibility Guidelines, the standard everyone measures against. Its techniques have catalogue numbers, like items at IKEA.</li>
- <li><strong>ARIA attributes:</strong> HTML attributes (<code>aria-pressed</code>, <code>aria-label</code>, <code>aria-live</code>) that tell assistive technology what a widget is and what state it's in when the visuals alone can't.</li>
- <li><strong>sr-only:</strong> a CSS class that hides text visually but leaves it for screen readers. The inverse of decoration.</li>
- <li><strong>Skip link:</strong> a link at the very top of the page, visible only when focused, that jumps keyboard users past the navigation to the content.</li>
- <li><strong>Reduced motion:</strong> an operating-system setting (<code>prefers-reduced-motion</code>) that asks websites to calm down with the animations. Vestibular disorders make this a health feature, not a taste.</li>
- <li><strong>Focus trap:</strong> keeping keyboard focus inside an open dialog so Tab doesn't wander off into the page behind it.</li>
- </ul>
- </div>
-
- <h2>The keyboard path</h2>
-
- <p>The first element injected into every page is what is known as a skip link. Press Tab on any page here and "Skip to main content" appears before anything else. In short, this allows you to press Enter and get past any navigation fluff at the top of the page. It's invisible to mouse users, and is an old trick that is often forgotten in 'modern' websites.</p>
-
- <figure class="kr-figure--solo">
-  <img src="https://www.kenreid.co.uk/blog/img/a11y/skip-link.webp" alt="The site header with a Skip to main content button overlaid on the navigation, outlined by a red focus ring" loading="lazy" width="1520" height="214" class="kr-figure-img">
-  <figcaption class="figure-note">Press Tab anywhere on the site and this is the first stop. Mouse users never see it.</figcaption>
- </figure>
-
- <p>The Ctrl+K <a href="https://www.kenreid.co.uk/blog/ctrl-k-for-a-static-site.html">command palette</a> got the full dialog treatment: focus moves into the input when it opens, <jargon key="focus trap">Tab is trapped</jargon> (it moves the selection instead of escaping the dialog), Escape closes it, and results are given to screen readers through an <code>aria-live</code> region. The filter buttons on the blog and gallery use <jargon key="aria attributes"><code>aria-pressed</code></jargon>, so "Photography, toggle button, pressed" comes through instead of a mystery link.</p>
-
- <figure class="kr-figure--solo">
-  <img src="https://www.kenreid.co.uk/blog/img/a11y/command-palette.webp" alt="The Ctrl+K command palette open over a dimmed homepage, with the query accessib typed, six post results listed, the top one highlighted, and footer hints reading navigate, open, esc close" loading="lazy" width="1520" height="1064" class="kr-figure-img">
-  <figcaption class="figure-note">The palette moves focus into the input, traps Tab, closes on Escape, and announces results through an aria-live region.</figcaption>
- </figure>
-
- <figure class="kr-figure--solo">
-  <img src="https://www.kenreid.co.uk/blog/img/a11y/tag-filters.webp" alt="The blog's Filter and Sort buttons above the Topic row: All (68), technology, ai and personal as outlined buttons, the photography tag solid red to show its pressed state, and a +9 more button" loading="lazy" width="1520" height="248" class="kr-figure-img">
-  <figcaption class="figure-note">The pressed filter reads as "photography, toggle button, pressed": the visual state and the aria-pressed state are the same fact.</figcaption>
- </figure>
-
- <p>The theme toggle swaps its label between "Switch to light mode" and "Switch to dark mode", so the button always says what it will do, not what it did. It has no <code>aria-pressed</code>, on purpose: a label that changes plus a pressed state gets read out as "Switch to light mode, toggle button, pressed", which leaves you to work out whether pressed means light or dark.</p>
-
- <h2>The screen reader path</h2>
-
- <p>Links that open a new tab get a <jargon key="sr-only">screen-reader-only</jargon> annotation, WCAG technique G201, applied automatically:</p>
-
-<pre><code class="language-javascript">// Appends screen-reader-only "(opens in new tab)" to target="_blank" links
-var span = document.createElement('span');
-span.className = 'sr-only';
-span.textContent = ' (opens in new tab)';
-link.appendChild(span);</code></pre>
-
- <p>A MutationObserver reapplies it to links injected later (related posts, footers), because on this site half the content arrives after first paint. For a screen reader user, a link that teleports you into a new tab with no warning is awful.</p>
-
- <p>Images carry real alternative text - I imagine not having it feels almost painful for screen-reader users, they likely feel they're missing out on important content and don't know what it is, like missing pages in a book. I aim for a description, not caption: the photo of my dog is "A picture of my puppy, Brutus", and the chart images in data posts describe the actual bars and numbers, so the information is actually useful, instead of "a photo" or "the results shown as an image". The interactive posts give every canvas <code>role="img"</code> and an <code>aria-label</code> saying what the simulation shows. A label is a thin substitute for "here is a live algorithm race you cannot see", so I'm open to suggestions on how to make it a better experience.</p>
-
- <h2>The vestibular path</h2>
-
- <p>Every script that moves something checks <code>prefers-reduced-motion</code> (eight of them at the last count), and the stylesheet has 28 media blocks for it. The section headings that rise into place as you scroll are pure CSS (<code>animation-timeline: view()</code>), and with reduced motion on they just appear, already visible, as does the script fallback for browsers without it. The homepage stats display their final number instead of counting up. The interactive demos mount paused, the carousels start paused, the hover sketches on the blog cards never load, the hero's evolving headline is drawn as plain type, and the theme switch cross-fades instead of washing across the page from the button. The site has to be complete with the animation subtracted, and only then is the animation allowed.</p>
-
- <h2>Checkpoints</h2>
-
- <p>Habits decay, so the <a href="https://www.kenreid.co.uk/blog/my-website-has-a-test-suite.html">audit script</a> checks every page for the a11y basics (alt text, heading structure, link health, metadata) on every push, a contrast test checks every text colour and the focus ring against WCAG AA in both themes, and a headless browser presses Tab for real to make sure the focus ring shows up, measures the contrast on the rendered pages, and checks the demos work from a keyboard without flooding a screen reader. CI fails loudly when a new post shows how bad my memory is at maintaining these standards without a checklist. I love automating stuff, I'd rather put in extra effort early to save effort later.</p>
-
- <figure class="kr-figure--solo">
-  <img src="https://www.kenreid.co.uk/blog/img/a11y/audit-output.webp" alt="Terminal output of the audit script: four INFO lines about long meta descriptions, then a summary reading 86 pages audited, 0 errors, 0 warnings, 29 info, with the zeroes in green" loading="lazy" width="1520" height="449" class="kr-figure-img">
-  <figcaption class="figure-note">The audit summary on a clean tree the week this post went up. It reads 95 pages audited now, still with 0 errors and 0 warnings. CI runs the same script on every push and fails the build on any error or warning.</figcaption>
- </figure>
-
- <p>I'd love to hear from an actual screen reader user. If you use assistive tech and something here fights you, the <a href="https://www.kenreid.co.uk/contact.html">contact page</a> works, and I fix reported things fast.</p>
-
- <div class="faq-section">
- <h2>Common questions</h2>
-
- <details class="faq-item">
- <summary>It's just a blog why do you put in so much effort?</summary>
- <p>Reverse the question: what justifies publishing a public page some readers can't use? The effort is also smaller than it looks. Nearly everything above was under an hour of work, done once, and enforced by automation afterwards. The expensive version of accessibility is the retrofit. </p>
- </details>
-
- <details class="faq-item">
- <summary>Does dark mode count as accessibility?</summary>
- <p>For me, yes. I get headaches and my eyes burn when I look at bright screens. So <a href="https://www.kenreid.co.uk/blog/dark-mode-that-doesnt-flash.html">avoiding the white flash</a> matters most for people like me. For everyone else it's comfort. </p>
- </details>
- </div>
-
-        
-
- ]]></content:encoded>
     </item>
     <item>
       <title>The Availability Heuristic Runs the News</title>

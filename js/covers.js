@@ -1346,6 +1346,51 @@
         };
     });
 
+    // Words stream past; once one is learned it lights up every time, at the same rate as before.
+    def('baader-meinhof-and-friends', function (w, h, rnd) {
+        var words = ['the', 'podcast', 'novel', 'meeting', 'said', 'window', 'news', 'and', 'today', 'book', 'of', 'word'],
+            target = 'defenestration', size = Math.max(7, Math.min(10, h * 0.045)),
+            rows = [], t = 0, n = 0, cycle = 720, learnAt = 150;
+        function chip(x) {
+            var tg = rnd() < 0.09, s = tg ? target : words[(rnd() * words.length) | 0];
+            return { x: x, s: s, tg: tg, wd: s.length * size * 0.6 + 14, seen: false };
+        }
+        for (var r = 0; r < 4; r++) {
+            var row = { y: h * (0.16 + r * 0.17), v: 0.6 + r * 0.18, list: [] }, x = -rnd() * 40;
+            while (x < w + 80) { var c = chip(x); row.list.push(c); x += c.wd; }
+            rows.push(row);
+        }
+        return {
+            step: function () {
+                t++;
+                if (t % cycle === 0) n = 0;
+                var learned = t % cycle > learnAt;
+                rows.forEach(function (row) {
+                    row.list.forEach(function (c) {
+                        c.x -= row.v;
+                        if (learned && c.tg && !c.seen && c.x < w * 0.5) { c.seen = true; n++; }
+                    });
+                    row.list = row.list.filter(function (c) { return c.x + c.wd > -10; });
+                    var last = row.list[row.list.length - 1];
+                    if (last.x + last.wd < w + 40) row.list.push(chip(last.x + last.wd));
+                });
+            },
+            draw: function (ctx) {
+                var learned = t % cycle > learnAt;
+                rows.forEach(function (row) {
+                    row.list.forEach(function (c) {
+                        var lit = learned && c.tg;
+                        text(ctx, c.s, c.x, row.y, size, lit ? C.b : 'rgba(255,255,255,0.3)', lit ? 700 : 400, 'left');
+                        if (lit) line(ctx, c.x, row.y + size * 0.7, c.x + ctx.measureText(c.s).width, row.y + size * 0.7, C.b, 1.5);
+                    });
+                });
+                text(ctx, learned ? 'spotted it ' + n + (n === 1 ? ' time' : ' times') : 'defenestration? never heard of it',
+                    w * 0.5, h * 0.85, 9, learned ? C.ink : C.dim, 600, 'center');
+                if (learned) text(ctx, 'it was always there this often', w * 0.5, h * 0.94, 8, C.dim, 600, 'center');
+            }
+        };
+    });
+
     // The tolerant circle holds only while it pushes back.
     def('the-paradox-of-tolerance', function (w, h, rnd) {
         var t = 0, intr = [], r = h * 0.3;
