@@ -126,6 +126,10 @@
    .wsp-uni { background: var(--viz-s2); }
    .wsp-work { background: var(--viz-s5); }
    .wsp-rest { background: var(--viz-s6); }
+
+   /* On a phone each slider takes a full row; "Starting temperature" is long
+      enough that the track has to give way or the value spills past the edge. */
+   #seating-demo .kr-sliders input[type=range] { min-width: 0; }
  </style>
 </head>
 <body>
@@ -836,10 +840,23 @@ renderFooter('footer-section');</script>
      press = null; dragging = false; pointer = null;
      if (was) viz.draw();
    });
+   // The keyboard cursor moves in steps of 4% and seldom lands on a card, so
+   // Enter takes the card nearest to it. The engine's replayed taps are the
+   // only clicks that are not trusted; a mouse or a finger still has to hit.
+   function nearestGuest(x, y) {
+     if (!view) return -1;
+     var best = -1, bd = Infinity;
+     for (var g = 0; g < N; g++) {
+       var d = Math.hypot(x - view.pos[g].x, y - view.pos[g].y);
+       if (d < bd) { bd = d; best = g; }
+     }
+     return best;
+   }
    cv.addEventListener('click', function (ev) {
      if (eat) { eat = false; return; }
-     var p = local(ev);
-     tap(guestAt(p.x, p.y));
+     var p = local(ev), n = guestAt(p.x, p.y);
+     if (n < 0 && !ev.isTrusted) n = nearestGuest(p.x, p.y);
+     tap(n);
    });
  })();
  </script>
