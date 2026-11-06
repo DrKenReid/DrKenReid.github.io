@@ -11990,8 +11990,11 @@ html.kr-show-open body {
 /* --- Reading Now and the figures ----------------------------------------
    The page opens on what is live: the books in progress from now.json,
    the last one finished and this year's count from books.json. Further
-   down, six figures worked out from the same file. Both are cards on a
-   hairline, no fill, so the photographs and covers carry the colour. */
+   down, the figures worked out from the same file, and after them a few
+   from the export snapshot (data/reading-analysis.json); some carry a
+   small picture (renderFigures, viz*: .kr-figure__viz and its parts are
+   only ever built by script). Both are cards on a hairline, no fill, so
+   the photographs and covers carry the colour. */
 .kr-reading-area {
   padding: 70px 0 20px; }
 
@@ -12126,6 +12129,21 @@ html.kr-show-open body {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px; } }
 
+/* A card left alone on the last row takes the whole row rather than
+   stand in a corner: one past a multiple of four, three or two,
+   whichever the width gives. */
+@media (min-width: 992px) {
+  .kr-figures:has(> :nth-child(7)) > .kr-figure:last-child:nth-child(4n + 1) {
+    grid-column: 1 / -1; } }
+
+@media (min-width: 701px) and (max-width: 991.98px) {
+  .kr-figures > .kr-figure:last-child:nth-child(3n + 1) {
+    grid-column: 1 / -1; } }
+
+@media (max-width: 700px) {
+  .kr-figures > .kr-figure:last-child:nth-child(odd) {
+    grid-column: 1 / -1; } }
+
 .kr-figure {
   margin: 0;
   padding: 20px 22px;
@@ -12162,6 +12180,119 @@ html.kr-show-open body {
 .kr-figure__sub {
   display: block;
   margin-top: 6px; }
+
+/* The picture under a figure: bars (stars, years), a scale (me against
+   Goodreads), a shelf of spines with one tipped over (did not finish) or
+   two rows (read against to read). The highlight is the brand gradient
+   and the rest the hairline, so neither theme needs its own rule. */
+.kr-figure__viz {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 30px;
+  margin-top: 14px; }
+
+.kr-figure__bar {
+  flex: 1 1 0;
+  border-radius: 2px 2px 0 0;
+  background: var(--kr-hairline); }
+
+.kr-figure__viz--scale {
+  position: relative;
+  align-items: center;
+  height: 18px; }
+
+.kr-figure__viz--scale::before {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--kr-hairline); }
+
+.kr-figure__mark {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%; }
+
+.kr-figure__mark--crowd,
+.kr-figure__dot--crowd {
+  border: 2px solid var(--kr-muted); }
+
+/* Each entry (dot and words) holds together; on a narrow card the two
+   entries stack rather than split. */
+.kr-figure__key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: var(--kr-muted); }
+
+.kr-figure__key > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap; }
+
+.kr-figure__dot {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%; }
+
+.kr-figure__viz--spines {
+  gap: 4px; }
+
+.kr-figure__spine {
+  width: 7px;
+  height: 26px;
+  border-radius: 2px;
+  background: var(--kr-hairline); }
+
+.kr-figure__spine--hi {
+  margin-left: 4px;
+  transform: rotate(16deg);
+  transform-origin: bottom left; }
+
+.kr-figure__viz--rows {
+  display: grid;
+  gap: 6px;
+  height: auto; }
+
+.kr-figure__row {
+  display: grid;
+  grid-template-columns: minmax(0, 6.5em) 1fr;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--kr-muted); }
+
+.kr-figure__row > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
+
+.kr-figure__row > span:last-child {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--kr-hairline); }
+
+/* The highlight comes last: each part's plain rule above has the same
+   weight, so the later rule is the one that holds. */
+.kr-figure__bar--hi,
+.kr-figure__spine--hi,
+.kr-figure__row--hi > span:last-child,
+.kr-figure__mark,
+.kr-figure__dot {
+  background: var(--kr-brand-gradient); }
+
+.kr-figure__mark--crowd,
+.kr-figure__dot--crowd {
+  background: transparent; }
 
 /* --- Reading calendar (renderCalendar) ----------------------------------
    One row per ISO year, one cell per ISO week. Magnitude in one hue:

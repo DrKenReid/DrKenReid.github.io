@@ -796,7 +796,117 @@
     /* ---------------------------------------------------------- figures
        Six numbers worked out from books.json, so a Goodreads refresh
        changes them without anyone retyping a figure. */
-    function renderFigures(books) {
+    /* The small pictures under some figures (style.css, "Reading Now and
+       the figures"): bars, a scale, a row of spines, a pair of rows. Each
+       is aria-hidden, since the figure's words and its hover card already
+       say what it shows. Heights and widths are inline: they are the data. */
+    function vizBars(values, hi) {
+        var top = Math.max.apply(null, values) || 1;
+        return '<span class="kr-figure__viz" aria-hidden="true">' + values.map(function (v, i) {
+            return '<span class="kr-figure__bar' + (i === hi ? ' kr-figure__bar--hi' : '') +
+                '" style="height:' + Math.max(6, Math.round(100 * v / top)) + '%"></span>';
+        }).join('') + '</span>';
+    }
+
+    function vizScale(mine, crowd) {
+        var lo = Math.min(mine, crowd) - 0.3, hi = Math.max(mine, crowd) + 0.3;
+        var at = function (x) { return (100 * (x - lo) / (hi - lo)).toFixed(1) + '%'; };
+        return '<span class="kr-figure__viz kr-figure__viz--scale" aria-hidden="true">' +
+            '<span class="kr-figure__mark kr-figure__mark--crowd" style="left:' + at(crowd) + '"></span>' +
+            '<span class="kr-figure__mark" style="left:' + at(mine) + '"></span></span>' +
+            '<span class="kr-figure__key" aria-hidden="true"><span><span class="kr-figure__dot"></span>me ' + mine.toFixed(2) +
+            '</span><span><span class="kr-figure__dot kr-figure__dot--crowd"></span>Goodreads ' + crowd.toFixed(2) + '</span></span>';
+    }
+
+    function vizSpines(n) {   // n books on a shelf, the last one given up on
+        var out = '';
+        for (var i = 0; i < n; i++) out += '<span class="kr-figure__spine' + (i === n - 1 ? ' kr-figure__spine--hi' : '') + '"></span>';
+        return '<span class="kr-figure__viz kr-figure__viz--spines" aria-hidden="true">' + out + '</span>';
+    }
+
+    function vizRows(rows) {  // [[label, value, highlighted]]
+        var top = Math.max.apply(null, rows.map(function (r) { return r[1]; })) || 1;
+        return '<span class="kr-figure__viz kr-figure__viz--rows" aria-hidden="true">' + rows.map(function (r) {
+            return '<span class="kr-figure__row' + (r[2] ? ' kr-figure__row--hi' : '') + '"><span>' + krEscapeHtml(r[0]) +
+                '</span><span style="width:' + Math.max(4, Math.round(100 * r[1] / top)) + '%"></span></span>';
+        }).join('') + '</span>';
+    }
+
+    /* The cards the weekly feed can't give (data/reading-analysis.json):
+       my top genre, how my ratings sit against each book's Goodreads
+       average, and the did-not-finish and to-read shelves. A dated
+       snapshot of an enhanced Goodreads export, written by the
+       GoodReads-Analysis repo's scripts/site_summary.py, so every hover
+       card says when it's from. `ctx`: {finished, pace}, from books.json.
+       Returns {genre, rest}: the genre card goes up with the ratings, the
+       rest at the end; both empty without the file. */
+    function analysisCards(a, ctx) {
+        var out = { genre: null, rest: [] };
+        if (!a) return out;
+        var when = 'As of my Goodreads export of ' +
+            parseDate(a.exported).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) + '.';
+        var stars = function (x) { return (x > 0 ? '+' : x < 0 ? '−' : '') + Math.abs(x).toFixed(2); };
+        var interval = function (lo, hi) { return lo == null ? '' : '95% interval ' + lo.toFixed(2) + ' to ' + hi.toFixed(2) + ', '; };
+        var rows = function (items, label) {
+            return '<ul class="kr-cal__tip-list">' + items.map(function (it) {
+                return '<li><span class="kr-cal__tip-title">' + krEscapeHtml(label(it)) + ': ' + it.mean.toFixed(2) + ' ★</span>' +
+                    '<span class="kr-cal__tip-author">' + interval(it.low, it.high) + it.books + ' books</span></li>';
+            }).join('') + '</ul><p class="kr-cal__tip-more">' + when + '</p>';
+        };
+        if (a.topGenre) {
+            var topGenres = a.genres.slice().sort(function (x, y) { return y.books - x.books; }).slice(0, 3);
+            out.genre = {
+                f: ['Most read genre', a.topGenre.genre, a.topGenre.books + ' of my books' +
+                    (a.topGenre.mean != null ? ', and I give it ' + a.topGenre.mean.toFixed(2) + ' stars on average' : ''),
+                    topGenres.length > 1 ? vizRows(topGenres.map(function (g) { return [g.genre, g.books, g.genre === a.topGenre.genre]; })) : ''],
+                tip: { heading: 'My mean rating by genre', body: a.genres.length ? rows(a.genres, function (g) { return g.genre; }) :
+                    '<p class="kr-cal__tip-more">' + when + '</p>' }
+            };
+        }
+        var c = a.community;
+        if (c) {
+            var d = c.difference, how = Math.abs(d) < 0.25 ? 'a little ' : '';
+            out.rest.push({
+                f: ['Against the crowd', stars(d) + ' stars',
+                    (d < 0 ? 'I rate ' + how + 'harsher than Goodreads' : d > 0 ? 'I rate ' + how + 'kinder than Goodreads' : 'I rate just like Goodreads') +
+                    ', over ' + c.books + ' books', c.myMean != null ? vizScale(c.myMean, c.crowdMean) : ''],
+                tip: { heading: 'The Goodreads average, by my rating', body: rows(c.byStar, function (s) { return s.stars + ' ★'; }) }
+            });
+        }
+        var dnf = a.shelves.didNotFinish, every = dnf ? Math.round(ctx.finished / dnf) : 0;
+        out.rest.push({
+            f: ['Did not finish', String(dnf), every ? 'books I gave up on, about one for every ' + every + ' I finished' : 'books I gave up on',
+                every ? vizSpines(Math.min(every, 11) + 1) : ''],
+            tip: { heading: 'Did not finish', body: '<p class="kr-cal__tip-more">Shelved as did-not-finish on Goodreads. ' + when + '</p>' }
+        });
+        var tbr = a.shelves.toRead, years = ctx.pace ? Math.round(tbr / ctx.pace) : 0;
+        out.rest.push({
+            f: ['Still to read', String(tbr),
+                (tbr > ctx.finished ? 'more than I have read in all' + (years ? ', and ' : '') : '') +
+                (years ? 'about ' + years + ' years of reading at my usual pace' : (tbr > ctx.finished ? '' : 'on the to-read shelf')),
+                vizRows([['Read', ctx.finished, false], ['To read', tbr, true]])],
+            tip: { heading: 'Still to read', body: '<p class="kr-cal__tip-more">My usual pace is the average of my last five full years' +
+                (ctx.pace ? ', ' + ctx.pace + ' books a year' : '') + '. ' + when + '</p>' }
+        });
+        return out;
+    }
+
+    // A hover card of bars, one per year, newest first (the cards for
+    // books a month, pages a day and pages by year).
+    function tipBars(byKey, fmt) {
+        var ks = Object.keys(byKey).sort().reverse().slice(0, 9);
+        var top = Math.max.apply(null, ks.map(function (k) { return byKey[k]; })) || 1;
+        return '<ul class="kr-tip-bars">' + ks.map(function (k) {
+            return '<li><span class="kr-tip-bars__k">' + k + '</span>' +
+                '<span class="kr-tip-bars__bar"><span style="width:' + Math.round(100 * byKey[k] / top) + '%"></span></span>' +
+                '<span class="kr-tip-bars__n">' + fmt(byKey[k]) + '</span></li>';
+        }).join('') + '</ul>';
+    }
+
+    /* The Reading Stats cards. Each card carries its own hover card
+       ({f: [label, figure, words, picture], tip}), so they can't drift
+       apart when cards come and go. */
+    function renderFigures(books, analysis) {
         var host = document.getElementById('kr-figures');
         var rated = books.filter(function (b) { return b.r > 0; });
         var reviews = books.filter(function (b) { return b.v; }).length;
@@ -809,104 +919,116 @@
         if (!host) return;
         var avg = rated.reduce(function (s, b) { return s + b.r; }, 0) / (rated.length || 1);
         var five = rated.filter(function (b) { return b.r === 5; }).length;
-        var byAuthor = {}, byYear = {};
-        var finishes = [];
+        var byYear = {}, finishes = [];
         books.forEach(function (b) {
-            if (b.a) byAuthor[b.a] = (byAuthor[b.a] || 0) + 1;
             sessions(b).forEach(function (s) { if (parseDate(s)) finishes.push(s); });
         });
         finishes.sort();
         finishes.forEach(function (s) { var y = s.slice(0, 4); byYear[y] = (byYear[y] || 0) + 1; });
-        var topAuthor = Object.keys(byAuthor).sort(function (a, b) { return byAuthor[b] - byAuthor[a] || a.localeCompare(b); })[0] || '';
         var topYear = Object.keys(byYear).sort(function (a, b) { return byYear[b] - byYear[a] || b.localeCompare(a); })[0] || '';
-        // Longest run of consecutive ISO weeks with at least one book finished.
-        var weeks = {};
-        finishes.forEach(function (s) {
-            var d = parseDate(s), day = d.getDay() || 7;
-            var mon = new Date(d.getFullYear(), d.getMonth(), d.getDate() - day + 1);
-            weeks[mon.getTime()] = true;
-        });
-        var keys = Object.keys(weeks).map(Number).sort(function (a, b) { return a - b; });
-        var best = 0, run = 0, bestEnd = 0;
-        for (var i = 0; i < keys.length; i++) {
-            run = (i > 0 && keys[i] - keys[i - 1] <= 7 * 86400000 + 3600000) ? run + 1 : 1;
-            if (run > best) { best = run; bestEnd = keys[i]; }
-        }
-        var streakEnd = best ? new Date(bestEnd) : null;
         var first = finishes.length ? parseDate(finishes[0]) : null;
         var rereads = books.reduce(function (n, b) { return n + (b.p || []).length; }, 0);
-        var figures = [
-            ['Books read', String(books.length), (first ? 'on the shelf since ' + first.getFullYear() : '') + (rereads ? ', ' + rereads + ' read again' : '')],
-            ['Five stars', String(five), Math.round(100 * five / (rated.length || 1)) + '% of the ' + rated.length + ' I rated'],
-            ['Average rating', avg.toFixed(2), 'out of 5, across every rating'],
-            ['Most read author', topAuthor, byAuthor[topAuthor] + ' books'],
-            ['Busiest year', topYear, byYear[topYear] + ' books finished'],
-            ['Longest streak', best + (best === 1 ? ' week' : ' weeks'), streakEnd ? 'in a row with a book finished, ending ' + streakEnd.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '']
-        ];
-        // Pages (n, from the feed): the total across every read, re-reads
-        // included, and the longest book. Left out if no book has a count.
+        // Tracking starts in the first year with ten finishes: earlier
+        // dates were added later, not kept as I read. The year bars, the
+        // usual pace and the averages a month and a day all start there.
+        var now = new Date(), thisYear = String(now.getFullYear());
+        var shownYears = Object.keys(byYear).sort().filter(function (y, i, all) {
+            return all.slice(0, i + 1).some(function (z) { return byYear[z] >= 10; });
+        });
+        var startYear = shownYears[0] || thisYear;
+        var start = new Date(+startYear, 0, 1);
+        var fullYears = shownYears.filter(function (y) { return y < thisYear; }).slice(-5);
+        var pace = fullYears.length ? Math.round(fullYears.reduce(function (s, y) { return s + byYear[y]; }, 0) / fullYears.length) : 0;
+        var monthsSince = (now.getFullYear() - start.getFullYear()) * 12 + now.getMonth() +
+            now.getDate() / new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+        var daysSince = (now - start) / 86400000;
+        var startLabel = start.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+        var tracked = finishes.filter(function (s) { return s.slice(0, 4) >= startYear; }).length;
+        var perYearMonth = {};
+        shownYears.forEach(function (y) {
+            perYearMonth[y] = byYear[y] / (y === thisYear ? Math.max(1, monthsSince - (+y - +startYear) * 12) : 12);
+        });
+        // Pages (n, from the feed): every read counts, re-reads included.
         var paged = books.filter(function (b) { return b.n > 0; });
-        var pagesByYear = {};
-        var pageTotal = 0;
+        var pagesByYear = {}, pagesByMonth = {}, booksByMonth = {};
+        var pageTotal = 0, trackedPages = 0;
         paged.forEach(function (b) {
             sessions(b).forEach(function (sd) {
                 if (!parseDate(sd)) return;
+                var y = sd.slice(0, 4), m = y + '-' + sd.slice(5, 7);   // books.json dates may use / or -
                 pageTotal += b.n;
-                pagesByYear[sd.slice(0, 4)] = (pagesByYear[sd.slice(0, 4)] || 0) + b.n;
+                if (y >= startYear) trackedPages += b.n;
+                pagesByYear[y] = (pagesByYear[y] || 0) + b.n;
+                pagesByMonth[m] = (pagesByMonth[m] || 0) + b.n;
+                (booksByMonth[m] = booksByMonth[m] || []).push(b);
             });
         });
         var longest = paged.slice().sort(function (a, b) { return b.n - a.n; });
-        if (pageTotal) {
-            figures.push(['Pages read', pageTotal.toLocaleString('en-GB'), 'across ' + paged.length + ' books with a page count']);
-            figures.push(['Longest book', longest[0].n.toLocaleString('en-GB') + ' pages', krBookTitle(longest[0].t).title]);
-        }
-        host.innerHTML = figures.map(function (f, i) {
-            return '<div class="kr-figure" tabindex="0" data-fig="' + i + '"><dt>' + krEscapeHtml(f[0]) + '</dt><dd><span class="kr-figure__n">' + krEscapeHtml(f[1]) + '</span>' +
-                (f[2] ? '<span class="kr-figure__sub">' + krEscapeHtml(f[2]) + '</span>' : '') + '</dd></div>';
-        }).join('');
+        var bestMonth = Object.keys(pagesByMonth).sort(function (a, b) { return pagesByMonth[b] - pagesByMonth[a] || b.localeCompare(a); })[0];
+        var perDay = daysSince > 0 ? trackedPages / daysSince : 0;
+        var perDayByYear = {};
+        shownYears.forEach(function (y) {
+            var days = y === thisYear ? (now - new Date(+y, 0, 1)) / 86400000 : (+y % 4 === 0 ? 366 : 365);
+            perDayByYear[y] = (pagesByYear[y] || 0) / Math.max(1, days);
+        });
 
-        // What each figure's hover card shows: the books behind it, newest
-        // first, or for the average how the stars fall.
         var byFinish = books.filter(function (b) { return parseDate(firstRead(b)); })
             .sort(function (a, b) { return firstRead(b).localeCompare(firstRead(a)); });
-        var dist = [5, 4, 3, 2, 1].map(function (n) {
-            return [n, rated.filter(function (b) { return b.r === n; }).length];
-        });
-        var most = Math.max.apply(null, dist.map(function (d) { return d[1]; })) || 1;
-        var streakBooks = [];
-        if (streakEnd) {
-            var from = new Date(bestEnd - (best - 1) * 7 * 86400000), to = new Date(bestEnd + 7 * 86400000);
-            streakBooks = byFinish.filter(function (b) {
-                return sessions(b).some(function (s) { var d = parseDate(s); return d && d >= from && d < to; });
-            });
-        }
-        figureTips = [
-            { heading: 'Most recently finished', list: byFinish, count: countLabel(books.length) },
-            { heading: 'Five stars, newest first', list: byFinish.filter(function (b) { return b.r === 5; }), count: countLabel(five) },
-            { heading: 'How the stars fall', body: '<ul class="kr-tip-bars">' + dist.map(function (d) {
-                return '<li><span class="kr-tip-bars__k">' + d[0] + ' ★</span>' +
-                    '<span class="kr-tip-bars__bar"><span style="width:' + Math.round(100 * d[1] / most) + '%"></span></span>' +
-                    '<span class="kr-tip-bars__n">' + d[1] + '</span></li>';
-            }).join('') + '</ul>' },
-            { heading: topAuthor, list: byFinish.filter(function (b) { return b.a === topAuthor; }) },
-            { heading: 'Best of ' + topYear, list: byFinish.filter(function (b) { return firstRead(b).slice(0, 4) === topYear; })
-                .sort(function (a, b) { return (b.r || 0) - (a.r || 0); }) },
-            { heading: 'During the streak', list: streakBooks },
-            { heading: 'Pages by year', body: (function () {
-                var ys = Object.keys(pagesByYear).sort().reverse().slice(0, 8);
-                var top = Math.max.apply(null, ys.map(function (y) { return pagesByYear[y]; })) || 1;
-                return '<ul class="kr-tip-bars">' + ys.map(function (y) {
-                    return '<li><span class="kr-tip-bars__k">' + y + '</span>' +
-                        '<span class="kr-tip-bars__bar"><span style="width:' + Math.round(100 * pagesByYear[y] / top) + '%"></span></span>' +
-                        '<span class="kr-tip-bars__n">' + pagesByYear[y].toLocaleString('en-GB') + '</span></li>';
-                }).join('') + '</ul>';
-            })() },
-            { heading: 'The longest', body: '<ul class="kr-cal__tip-list">' + longest.slice(0, 6).map(function (b) {
-                var name = krBookTitle(b.t);
-                return '<li><span class="kr-cal__tip-title">' + krEscapeHtml(name.title) + '</span>' +
-                    '<span class="kr-cal__tip-author">' + krEscapeHtml(b.a || '') + ', ' + b.n.toLocaleString('en-GB') + ' pages</span></li>';
-            }).join('') + '</ul>' }
+        var starCounts = [1, 2, 3, 4, 5].map(function (n) { return rated.filter(function (b) { return b.r === n; }).length; });
+        var most = Math.max.apply(null, starCounts) || 1;
+        var extra = analysisCards(analysis, { finished: books.length, pace: pace });
+
+        var cards = [
+            { f: ['Books read', String(books.length), (first ? 'on the shelf since ' + first.getFullYear() : '') + (rereads ? ', ' + rereads + ' read again' : '')],
+                tip: { heading: 'Most recently finished', list: byFinish, count: countLabel(books.length) } },
+            { f: ['Five stars', String(five), Math.round(100 * five / (rated.length || 1)) + '% of the ' + rated.length + ' I rated. I am, statistically speaking, a pushover.',
+                vizBars(starCounts, 4)],
+                tip: { heading: 'Five stars, newest first', list: byFinish.filter(function (b) { return b.r === 5; }), count: countLabel(five) } },
+            { f: ['Average rating', avg.toFixed(2), 'out of 5, across every rating'],
+                tip: { heading: 'How the stars fall', body: '<ul class="kr-tip-bars">' + [5, 4, 3, 2, 1].map(function (n) {
+                    return '<li><span class="kr-tip-bars__k">' + n + ' ★</span>' +
+                        '<span class="kr-tip-bars__bar"><span style="width:' + Math.round(100 * starCounts[n - 1] / most) + '%"></span></span>' +
+                        '<span class="kr-tip-bars__n">' + starCounts[n - 1] + '</span></li>';
+                }).join('') + '</ul>' } }
         ];
+        if (extra.genre) cards.push(extra.genre);
+        cards.push({ f: ['Busiest year', topYear, byYear[topYear] + ' books finished, about one every ' + Math.round(365 / byYear[topYear]) + ' days',
+                vizBars(shownYears.map(function (y) { return byYear[y]; }), shownYears.indexOf(topYear))],
+            tip: { heading: 'Best of ' + topYear, list: byFinish.filter(function (b) { return firstRead(b).slice(0, 4) === topYear; })
+                .sort(function (a, b) { return (b.r || 0) - (a.r || 0); }) } });
+        cards.push({ f: ['Books a month', (tracked / Math.max(1, monthsSince)).toFixed(1), 'on average since ' + startLabel + ', re-reads included'],
+            tip: { heading: 'Books a month, by year', body: tipBars(perYearMonth, function (v) { return v.toFixed(1); }) } });
+        if (pageTotal) {
+            cards.push({ f: ['Pages a day', String(Math.round(perDay)), 'on average since ' + startLabel +
+                    (perDay ? '; at that rate my longest book would take ' + Math.round(longest[0].n / perDay) + ' days' : '')],
+                tip: { heading: 'Pages a day, by year', body: tipBars(perDayByYear, function (v) { return String(Math.round(v)); }) } });
+            var bestYear = bestMonth.slice(0, 4);
+            var monthLabel = new Date(+bestYear, +bestMonth.slice(5, 7) - 1, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+            cards.push({ f: ['Most pages in a month', pagesByMonth[bestMonth].toLocaleString('en-GB'),
+                    'in ' + monthLabel + ', across ' + countLabel(booksByMonth[bestMonth].length),
+                    vizBars(['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'].map(function (mm) { return pagesByMonth[bestYear + '-' + mm] || 0; }),
+                        +bestMonth.slice(5, 7) - 1)],
+                tip: { heading: 'Finished in ' + monthLabel, list: booksByMonth[bestMonth].slice().sort(function (a, b) { return b.n - a.n; }) } });
+            // War and Peace at about 1,225 pages, as the analysis repo counts it.
+            cards.push({ f: ['Pages read', pageTotal.toLocaleString('en-GB'), 'about ' + Math.round(pageTotal / 1225) +
+                    ' copies of War and Peace, across ' + paged.length + ' books with a page count'],
+                tip: { heading: 'Pages by year', body: tipBars(pagesByYear, function (v) { return v.toLocaleString('en-GB'); }) } });
+            cards.push({ f: ['Longest book', longest[0].n.toLocaleString('en-GB') + ' pages', krBookTitle(longest[0].t).title],
+                tip: { heading: 'The longest', body: '<ul class="kr-cal__tip-list">' + longest.slice(0, 6).map(function (b) {
+                    var name = krBookTitle(b.t);
+                    return '<li><span class="kr-cal__tip-title">' + krEscapeHtml(name.title) + '</span>' +
+                        '<span class="kr-cal__tip-author">' + krEscapeHtml(b.a || '') + ', ' + b.n.toLocaleString('en-GB') + ' pages</span></li>';
+                }).join('') + '</ul>' } });
+        }
+        cards = cards.concat(extra.rest);
+
+        // f[3], the picture, is built markup (viz*); the rest is escaped.
+        host.innerHTML = cards.map(function (c, i) {
+            var f = c.f;
+            return '<div class="kr-figure" tabindex="0" data-fig="' + i + '"><dt>' + krEscapeHtml(f[0]) + '</dt><dd><span class="kr-figure__n">' + krEscapeHtml(f[1]) + '</span>' +
+                (f[2] ? '<span class="kr-figure__sub">' + krEscapeHtml(f[2]) + '</span>' : '') + (f[3] || '') + '</dd></div>';
+        }).join('');
+        figureTips = cards.map(function (c) { return c.tip; });
         if (!host.hasAttribute('data-tip')) {
             host.setAttribute('data-tip', '');
             initCalendarTip(host, function (fig) { return figureTips[+fig.getAttribute('data-fig')] || { list: [] }; }, '.kr-figure[data-fig]');
@@ -974,6 +1096,9 @@
         // `from`: the section whose Try again was pressed (see "failure").
         function load(from) {
             asking = true;
+            var analysis = document.getElementById('kr-figures') ?
+                krFetchJson('data/reading-analysis.json').then(function (a) { return a && a.shelves ? a : null; }, function () { return null; }) :
+                Promise.resolve(null);
             // Shared with literature.js's reviews, so the page asks for it once.
             krFetchJson('data/books.json').then(function (books) {
                 if (!Array.isArray(books)) throw new Error('data/books.json is not a list');
@@ -982,7 +1107,10 @@
                 render(read);
                 if (calendar) calendar.update(read);
                 renderNow(read);
-                renderFigures(read);
+                // The panel waits for the export snapshot, so its cards
+                // don't arrive late and push the others along; without
+                // the snapshot it goes up from books.json alone.
+                analysis.then(function (a) { renderFigures(read, a); });
                 asking = false;
                 if (from) focusHeading(from);
             }).catch(function () {
