@@ -5373,6 +5373,7 @@ var KR_PHOTO_CATEGORIES = [
     { key: 'architecture', label: 'Architecture' },
     { key: 'abandoned', label: 'Abandoned' },
     { key: 'wildlife', label: 'Wildlife' },
+    { key: 'animals', label: 'Animals', also: 'dogs cats pets' },
     { key: 'nature', label: 'Nature' },
     { key: 'portrait', label: 'Portrait' },
     { key: 'bw', label: 'B&W', also: 'black and white monochrome' },
