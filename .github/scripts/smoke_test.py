@@ -3091,7 +3091,7 @@ SEASONS_UNDER_TEST = {
                "map": False},
     "holi": {"lost": "This Page Has Gone Out to Play Holi", "tag": None, "pill": None,
              "light_fog": "block", "burst": "kr-season-puff kr-season-puff--gulal", "track": "fill", "map": False},
-    "darwin-day": {"lost": "This Page Went Extinct", "tag": "wildlife", "pill": "Wildlife",
+    "darwin-day": {"lost": "This Page Went Extinct", "tag": "animals", "pill": "Animals",
                    "light_fog": "block", "burst": "kr-season-puff kr-season-puff--scatter kr-season-puff--seeds", "track": "bits"},
     "pi-day": {"lost": "This Page Is Irrational", "tag": None, "pill": None,
                "light_fog": "none", "dark_fog": "none", "burst": "kr-season-puff kr-season-puff--digits",

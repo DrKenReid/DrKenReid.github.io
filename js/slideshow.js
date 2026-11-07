@@ -267,6 +267,8 @@
         const s = Object.assign({}, DEFAULTS);
         if (SHOWS.some(o => o.key === q.get('show'))) s.show = q.get('show');
         ['tag', 'place', 'added', 'author'].forEach(k => { if (q.get(k)) s[k] = q.get(k); });
+        // A subject folded into another plays the one that took over.
+        if (typeof KR_PHOTO_TAG_RENAMED !== 'undefined' && KR_PHOTO_TAG_RENAMED[s.tag]) s.tag = KR_PHOTO_TAG_RENAMED[s.tag];
         if (ORDERS.concat(MUSIC_ORDERS).some(o => o.key === q.get('order'))) s.order = q.get('order');
         if (['covers', 'photos', 'plain'].indexOf(q.get('behind')) !== -1) s.behind = q.get('behind');
         if (/^\d{4}$/.test(q.get('year') || '')) s.year = q.get('year');

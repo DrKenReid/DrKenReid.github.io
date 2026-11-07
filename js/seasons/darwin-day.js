@@ -8,8 +8,8 @@
  * and a barnacled stone, HMS Beagle sailing along the foot of the window,
  * a finch favicon and moon, a tree of life that branches along a post's
  * top wherever the reader has passed, a sea mist off the islands, finches
- * on the wildlife places, a 404 page gone extinct, a finch for the
- * pointer. Its own:
+ * on the places with animal photographs, a 404 page gone extinct, a finch
+ * for the pointer. Its own:
  *   - a click on a finch mutates its beak, a little longer or deeper or
  *     more hooked each time, and the beaks are kept for the visit, so the
  *     three drift apart page by page: descent with modification
@@ -455,13 +455,13 @@
         favicon: FINCH_ICON, moonmark: place(FINCH_SHAPE, 0.62, 4.6, 4.8),
         // A twig every 28px of the line, branching once the reader has passed.
         track: { kind: 'phylo', mode: 'bits', every: 28, bit: twig },
-        // A finch over a place with a good share of wildlife frames.
-        map: { tag: 'wildlife', min: 2, share: 0.2, badge: MAP_FINCH },
+        // A finch over a place with a good share of animal frames.
+        map: { tag: 'animals', min: 2, share: 0.2, badge: MAP_FINCH },
         lost: {
             title: 'This Page Went Extinct',
             lede: 'Whatever lived at this address left no fossils. It may have been outcompeted, ' +
                 'or it may only ever have been a missing link.',
-            caption: "While you're here, have one of my wildlife photographs. "
+            caption: "While you're here, have one of my animal photographs. "
         },
         cursor: K.pointer(POINTER, 2, 2, -45),
         extra: function (kit) {

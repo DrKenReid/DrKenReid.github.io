@@ -854,7 +854,7 @@
 
     // The palette types a query and the results filter down.
     def('ctrl-k-for-a-static-site', function (w, h, rnd) {
-        var items = ['Ant Colony, Live', 'About', 'Gallery: wildlife', 'Photo map', 'Simulated Annealing, Live', 'Contact', 'Colophon', 'Tabu Search, Live'], q = 'live', t = 0;
+        var items = ['Ant Colony, Live', 'About', 'Gallery: animals', 'Photo map', 'Simulated Annealing, Live', 'Contact', 'Colophon', 'Tabu Search, Live'], q = 'live', t = 0;
         return {
             step: function () { t = (t + 1) % 220; },
             draw: function (ctx) {

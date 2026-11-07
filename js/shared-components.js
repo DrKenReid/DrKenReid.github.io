@@ -77,7 +77,8 @@
  * Utilities
  *   krEscapeHtml(s), krBookTitle(t), krParsePostDate(s), formatPostDate(s),
  *   krCopyText(t, cb), krIsMac(), krLabelModKeys(scope), krOnScroll(fn),
- *   KR_RELEASE, KR_PHOTO_CATEGORIES, KR_TAGLINE, DEFAULT_POST_IMAGE
+ *   KR_RELEASE, KR_PHOTO_CATEGORIES, KR_PHOTO_TAG_RENAMED, KR_TAGLINE,
+ *   DEFAULT_POST_IMAGE
  *
  * Seasons (below; the decorations are js/season.js)
  *   KR_SEASONS, krSeason(), krSeasonOnDate(d), krSeasonByKey(k),
@@ -281,8 +282,8 @@ var KR_SEASONS = [{
     key: 'darwin-day',
     label: 'Darwin Day',
     windows: [[[2, 12], [2, 12]]],
-    photoTags: ['wildlife'],
-    treat: { title: 'A wild one', sub: 'A random wildlife photograph', also: 'darwin day evolution nature wildlife' },
+    photoTags: ['animals'],
+    treat: { title: 'A wild one', sub: 'A random animal photograph', also: 'darwin day evolution nature wildlife animals' },
     coffee: 'Buy me a coffee, naturally selected',
     heroText: 'Endless forms.',
     heroRamp: [[120, 210, 160], [230, 205, 120]],
@@ -5372,8 +5373,7 @@ var KR_PHOTO_CATEGORIES = [
     { key: 'urban', label: 'Urban' },
     { key: 'architecture', label: 'Architecture' },
     { key: 'abandoned', label: 'Abandoned' },
-    { key: 'wildlife', label: 'Wildlife' },
-    { key: 'animals', label: 'Animals', also: 'dogs cats pets' },
+    { key: 'animals', label: 'Animals', also: 'wildlife birds dogs cats pets' },
     { key: 'nature', label: 'Nature' },
     { key: 'portrait', label: 'Portrait' },
     { key: 'bw', label: 'B&W', also: 'black and white monochrome' },
@@ -5383,6 +5383,10 @@ var KR_PHOTO_CATEGORIES = [
     { key: 'autumn', label: 'Autumn', also: 'fall leaves foliage' },
     { key: 'winter', label: 'Winter' }
 ];
+
+// Subjects folded into another, old key -> new: the ?tag= links already
+// published (slideshow.html?tag=wildlife) open the subject that took over.
+var KR_PHOTO_TAG_RENAMED = { wildlife: 'animals' };
 
 // Earlier names, kept while pages outside the tracked set still call
 // them: the strip stopped being an Instagram feed, and the read time

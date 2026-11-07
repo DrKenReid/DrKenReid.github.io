@@ -123,10 +123,10 @@
 /*
  * shared-components.js is loaded synchronously at the foot of
  * gallery.html and this file is deferred, so its globals (KR_RELEASE,
- * KR_PHOTO_CATEGORIES, krFetchJson, krEscapeHtml) are always defined by
- * the time anything here runs, and are used directly; so are
- * lightbox.js's (krLightboxA11y, krLightboxPreview, krLightboxCaption),
- * which loads before it.
+ * KR_PHOTO_CATEGORIES, KR_PHOTO_TAG_RENAMED, krFetchJson, krEscapeHtml)
+ * are always defined by the time anything here runs, and are used
+ * directly; so are lightbox.js's (krLightboxA11y, krLightboxPreview,
+ * krLightboxCaption), which loads before it.
  */
 var galleryAll = [];
 var galleryView = [];
@@ -380,10 +380,13 @@ function startGallery() {
 
     // ?tag= and ?place= apply their filters before anything is drawn, with
     // no morph: there is nothing on screen yet to morph from.
-    var wanted = readParam('tag');
+    // A subject folded into another (KR_PHOTO_TAG_RENAMED) opens the one
+    // that took over, and the address takes its key.
+    var asked = readParam('tag');
+    var wanted = KR_PHOTO_TAG_RENAMED[asked] || asked;
     var cat = CATEGORIES[wanted] && galleryAll.some(function(f) { return hasTag(f, wanted); }) ? wanted : '*';
     if (cat !== '*' && filterBar) setBarQuietly([cat]);
-    if (wanted && cat === '*') writeUrl({ tag: null });
+    if (asked && cat !== asked) writeUrl({ tag: cat === '*' ? null : cat });
     var wantedPlace = readParam('place');
     activePlace = placeNodes[wantedPlace] ? wantedPlace : '';
     if (wantedPlace && !activePlace) writeUrl({ place: null });
