@@ -1334,6 +1334,51 @@
       "photos": [
         "750"
       ]
+    },
+    {
+      "name": "Guardian Building, Detroit",
+      "path": [
+        "United States",
+        "Michigan",
+        "Detroit",
+        "Guardian Building"
+      ],
+      "lat": 42.3297,
+      "lng": -83.0461,
+      "photos": [
+        "751",
+        "752",
+        "753",
+        "754"
+      ]
+    },
+    {
+      "name": "One Campus Martius, Detroit",
+      "path": [
+        "United States",
+        "Michigan",
+        "Detroit",
+        "One Campus Martius"
+      ],
+      "lat": 42.3318,
+      "lng": -83.0467,
+      "photos": [
+        "755"
+      ]
+    },
+    {
+      "name": "Northern Grind Coffee, Ypsilanti",
+      "path": [
+        "United States",
+        "Michigan",
+        "Ypsilanti",
+        "Northern Grind Coffee"
+      ],
+      "lat": 42.2458,
+      "lng": -83.6196,
+      "photos": [
+        "756"
+      ]
     }
   ]
 }

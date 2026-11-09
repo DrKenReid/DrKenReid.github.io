@@ -7304,6 +7304,11 @@ body.kr-cite-docked .kr-share-tab {
   width: auto;
   max-height: 507px; }
 
+/* A small picture shown at its own size, centred, never stretched to the
+   column: a game animation 300px wide goes soft at 760. */
+.blog-post .kr-figure-img--natural {
+  width: auto; }
+
 /* A light and a dark rendering of one picture in the same figure (a type
    specimen, a screenshot of the map): only the theme's own shows. The
    theme-image rules are single classes, and .blog-post figure img

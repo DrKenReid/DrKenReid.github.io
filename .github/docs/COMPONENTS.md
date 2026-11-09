@@ -201,8 +201,14 @@ accessibility, and what not to do.
   not a `style` attribute, is the opt-out from pairing.
 - **Image classes.** `.kr-figure-img` is the house image (column width,
   8px corners, flush with its caption); `.kr-figure-img--portrait` caps an
-  upright frame at a landscape frame's height; `.kr-figure--center`
-  centres a figure's contents (a table, an equation, a small picture).
+  upright frame at a landscape frame's height; `.kr-figure-img--natural`
+  shows a small picture or animation at its own size, centred, rather
+  than stretched to the column; `.kr-figure--center` centres a figure's
+  contents (a table, an equation, a small picture).
+- **Animations.** A moving picture (a GIF, or an animated WebP where that
+  is lighter) sits in a `<picture>` whose first `<source>` is a
+  still frame for `(prefers-reduced-motion: reduce)`, so a reader who
+  asked for less motion gets the still.
 - **Captions.** `.figure-note` is the house caption. Every photograph of
   Ken's carries the `.figure-copyright` span, with or without a caption
   after it. The cat photographs (kwee, chaos, yoyo and nila) and book
