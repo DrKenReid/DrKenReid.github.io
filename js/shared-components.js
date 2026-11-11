@@ -618,9 +618,9 @@ var KR_NAV_LEGACY = {
  * top-level key: 'about', 'data_science', 'gallery', 'literature',
  * 'music', 'blog', 'contact'; or nothing to underline no item, as on the
  * homepage, whose link is the wordmark, and the 404 page), child (a page
- * in that item's menu: 'map' or 'slideshow' under gallery, 'books' or
- * 'quotes' under literature), blogChild ('series-index', 'lab', or a
- * series page's own key) }. The recent posts and series fill in once
+ * in that item's menu: 'map' or 'slideshow' under gallery, 'lab' under
+ * data_science, 'books' or 'quotes' under literature), blogChild
+ * ('series-index', or a series page's own key) }. The recent posts and series fill in once
  * posts.json arrives; the rest renders synchronously.
  *
  * Built by hand rather than from KR_PAGES: its grouping (Photography and
@@ -692,10 +692,9 @@ function renderHeader(targetId, options) {
         '<ul class="dropdown kr-nav-dd-wide">' +
         '<li class="kr-nav-group-label kr-nav-label-blogs">Recent <a href="' + basePath + 'blog.html">Blogs</a></li>' +
         '<li class="kr-nav-group-label kr-nav-label-series' + (blogChild === 'series-index' ? ' active' : '') + '">Recent <a href="' + basePath + 'series.html"' + (blogChild === 'series-index' ? ' aria-current="page"' : '') + '>Series</a></li>' +
-        '<li class="kr-nav-group-label kr-nav-label-lab' + (blogChild === 'lab' ? ' active' : '') + '">Posts you can run: the <a href="' + basePath + 'lab.html"' + current(blogChild === 'lab') + '>Lab</a></li>' +
         '</ul></li>' +
         navMenu('gallery', 'gallery.html', 'Photography', [['map', 'map.html', 'Photo Map'], ['slideshow', 'slideshow.html', 'Slideshow']]) +
-        navItem('data_science', 'data_science.html', 'Data Science') +
+        navMenu('data_science', 'data_science.html', 'Data Science', [['publications', 'data_science.html#publications', 'Publications'], ['portfolio', 'data_science.html#portfolio', 'Portfolio'], ['lab', 'lab.html', 'Lab']]) +
         navMenu('literature', 'literature.html', 'Literature', [['books', 'books.html', 'Every Book'], ['quotes', 'quotes.html', 'Quote Wall']]) +
         navItem('music', 'music.html', 'Music') +
         navItem('contact', 'contact.html', 'Contact') +
@@ -4604,7 +4603,7 @@ var KR_PAGES = [
     { key: 'blog', label: 'Blog', href: 'blog.html', blurb: 'All posts', inFooter: 'explore', inPalette: true,
         also: 'articles rss feed newsletter substack subscribe' },
     { key: 'series', label: 'Series', href: 'series.html', blurb: 'Posts that run in parts', inFooter: 'explore', inPalette: true },
-    { key: 'lab', label: 'Lab', href: 'lab.html', blurb: 'Every post you can run, sketches playing', inFooter: 'explore', inPalette: true,
+    { key: 'lab', label: 'Lab', href: 'lab.html', blurb: 'Every post you can run, sketches playing', inFooter: 'explore', inPalette: true, parent: 'data_science',
         also: 'interactive demos simulations algorithms live canvas' },
     { key: 'contact', label: 'Contact', href: 'contact.html', blurb: 'Get in touch', inFooter: 'explore', inPalette: true,
         also: 'email message linkedin instagram bluesky' },

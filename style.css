@@ -14821,6 +14821,10 @@ a.ds-text-link:focus-visible {
   line-height: 1.6;
   color: var(--kr-muted); }
 
+/* The way on from a group: under "Things you can run", the Lab. */
+.ds-group-more {
+  margin: 4px 0 40px; }
+
 .ds-project-card {
   display: flex;
   flex-direction: column;

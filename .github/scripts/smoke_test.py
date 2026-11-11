@@ -1616,14 +1616,14 @@ def check_nav_dropdowns(browser, base, rep):
                   wait_until(page, dropdown_is("Blog", False), 1000))
         page.mouse.move(*away)
         wait_until(page, dropdown_is("Blog", False), 1000)
-        page.locator(".classynav > ul > li > a", has_text="Data Science").focus()
+        page.locator(".classynav > ul > li > a", has_text="About").focus()
         page.keyboard.press("Tab")
-        opened = wait_until(page, dropdown_is("Literature", True), 1000)
+        opened = wait_until(page, dropdown_is("Blog", True), 1000)
         page.keyboard.press("Tab")
         page.keyboard.press("Escape")
-        back = wait_until(page, f"{dropdown_is('Literature', False)}"
-                                " && document.activeElement.textContent.trim() === 'Literature'", 1000)
-        rep.check(scope, "Tab opens Literature; Escape inside it shuts it and focuses Literature",
+        back = wait_until(page, f"{dropdown_is('Blog', False)}"
+                                " && document.activeElement.textContent.trim() === 'Blog'", 1000)
+        rep.check(scope, "Tab opens Blog; Escape inside it shuts it and focuses Blog",
                   opened and back, page.evaluate("document.activeElement.textContent.trim()"))
         rep.console_errors(scope, sink)
         page.close()

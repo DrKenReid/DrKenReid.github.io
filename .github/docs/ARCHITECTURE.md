@@ -571,9 +571,9 @@ checks that. (The essay:
    [DESIGN-SYSTEM.md](DESIGN-SYSTEM.md#page-opener)) and section
    headings. In its `renderHeader` call, set `active` to the header's key
    for it (`about`, `data_science`, `gallery`, `literature`, `music`,
-   `blog`, `contact`), with `child` naming a page inside the Photography
-   or Literature menu (`map`, `slideshow`, `books`, `quotes`) or
-   `blogChild` one inside Blog's (`series-index`, `lab`), or leave it
+   `blog`, `contact`), with `child` naming a page inside the Photography,
+   Data Science or Literature menu (`map`, `slideshow`, `lab`, `books`,
+   `quotes`) or `blogChild` one inside Blog's (`series-index`), or leave it
    out for a page that is not in the menu, as `colophon.html` and
    `404.html` do.
 3. Add an entry to `KR_PAGES` in `js/shared-components.js`:
