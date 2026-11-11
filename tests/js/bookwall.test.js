@@ -80,6 +80,9 @@ test('rows OR within, AND across; a book with no value is in no band', () => {
     assert.ok(wall.passes(b, filters({ genres: ['scifi'], ratings: ['5', '4'], periods: ['2020s'], lengths: ['long'] })));
     assert.ok(!wall.passes(b, filters({ genres: ['scifi'], ratings: ['4'] })));
     assert.ok(!wall.passes(b, filters({ reread: true })));
+    // Read again: an earlier finish on file, or a Read Count the dates do not show.
+    assert.ok(wall.passes(Object.assign({}, b, { p: ['2020/01/01'] }), filters({ reread: true })));
+    assert.ok(wall.passes(Object.assign({}, b, { rc: 2 }), filters({ reread: true })));
     const bare = { r: 3, t: 'T', a: 'A', d: '2024/05/01' };
     assert.ok(wall.passes(bare, filters()));
     for (const f of [{ genres: ['fantasy'] }, { periods: ['2020s'] }, { lengths: ['short'] }]) {

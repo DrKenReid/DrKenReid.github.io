@@ -33,7 +33,8 @@
  *   Pages      n, in LENGTHS bands
  *   Author     the authors with AUTHOR_MIN books or more, one at a time;
  *              pressing one is the same as following its ?author= link
- *   Re-read    only the books I have read more than once (p)
+ *   Re-read    only the books I have read more than once: an earlier
+ *              finish (p), or a Read Count of two or more (rc)
  * A book with no year, no page count or no genre is in no band of that
  * row, so it shows only while that row is at All.
  *
@@ -124,6 +125,10 @@
     /* ------------------------------------------------------- pure helpers */
 
     function onTheWall(b) { return !!b.r; }
+
+    /* Read more than once: an earlier finish on file, or Goodreads
+       counting more reads than the dates show (rc, refresh_books.py). */
+    function reread(b) { return !!(b.p && b.p.length) || b.rc >= 2; }
 
     /* An author's name as a key: lower case, without accents, spaces or
        punctuation, so a name in a link finds its books however it was
@@ -249,7 +254,7 @@
         if (f.years.length && !readYears(b).some(function (y) { return f.years.indexOf(y) !== -1; })) return false;
         if (f.periods.length && f.periods.indexOf(periodKey(b.y)) === -1) return false;
         if (f.lengths.length && f.lengths.indexOf(lengthKey(b.n)) === -1) return false;
-        if (f.reread && !(b.p && b.p.length)) return false;
+        if (f.reread && !reread(b)) return false;
         if (f.author) return authorKey(b.a) === f.author;
         return !f.query || (b.t + ' ' + b.a).toLowerCase().indexOf(f.query) !== -1;
     }
@@ -493,7 +498,7 @@
                 }
             });
 
-        var rereads = wall.filter(function (b) { return b.p && b.p.length; }).length;
+        var rereads = wall.filter(reread).length;
         if (rereads) {
             var holder = krFacetRow(panel, 'Re-read', 'Filter books I have read more than once');
             var btn = krFacetButton(holder, krCountLabel('Read more than once', rereads), function () {
@@ -620,7 +625,7 @@
         filters.years = known('read', tally(wall, readYears));
         filters.periods = known('published', tally(wall, function (b) { return [periodKey(b.y)]; }));
         filters.lengths = known('len', tally(wall, function (b) { return [lengthKey(b.n)]; }));
-        filters.reread = params.get('reread') === '1' && wall.some(function (b) { return b.p && b.p.length; });
+        filters.reread = params.get('reread') === '1' && wall.some(reread);
         var sort = krSortFromUrl(params, SORTS);
         sortKey = sort.key;
         sortDir = sort.dir;

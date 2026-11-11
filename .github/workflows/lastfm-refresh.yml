@@ -22,16 +22,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      # The files this workflow owns: validated, then committed, as one list.
+      # The files this workflow writes: validated, then committed, as one
+      # list. Goodreads retired its RSS feeds in October 2026, so the
+      # reading data (books.json, reading.json, the books in progress in
+      # now.json, the covers) comes from my library export instead, by
+      # hand: refresh_books.py --export. books.json is here only for the
+      # years and genres step below.
       FILES: >-
         data/lastfm.json data/now.json data/lastfm-history.json
-        data/topalbums.json data/books.json data/reading.json
+        data/topalbums.json data/books.json
         data/listening.json data/bluesky.json data/book-details.json
-      # Where refresh_books.py and refresh_now.py keep the site's copies
-      # of each book's cover (two JPEGs a book). Committed with FILES, and
-      # not in that list because validate_data.py is handed it and reads
-      # JSON.
-      COVERS: img/covers/shelf
     steps:
       # Shallow is enough: the rebase before the push needs only this
       # commit and whatever landed on top of it since.
@@ -43,16 +43,14 @@ jobs:
         with:
           python-version: "3.12"
 
-      # Scrobble count, recent track and top albums (Last.fm), and the
-      # currently-reading shelf (Goodreads RSS) -> data/lastfm.json,
-      # now.json, lastfm-history.json, topalbums.json. Each source keeps
-      # its old values when its fetch fails, and the script exits 1 after
-      # writing the rest. continue-on-error lets the steps below still
-      # commit what did refresh; the last step turns the failure red.
-      # The cover of each book in progress is kept as a file in COVERS,
-      # and now.json names that file; one that cannot be fetched is left
-      # out, not a failure.
-      - name: Fetch listening and currently-reading
+      # Scrobble count, recent track and top albums (Last.fm) ->
+      # data/lastfm.json, now.json (its track; the books in progress are
+      # kept as the last export left them), lastfm-history.json,
+      # topalbums.json. Each source keeps its old values when its fetch
+      # fails, and the script exits 1 after writing the rest.
+      # continue-on-error lets the steps below still commit what did
+      # refresh; the last step turns the failure red.
+      - name: Fetch listening
         id: now
         continue-on-error: true
         env:
@@ -76,26 +74,14 @@ jobs:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
         run: python .github/scripts/refresh_listening.py
 
-      # The read shelf (Goodreads RSS) -> data/books.json + data/reading.json,
-      # so a book marked read reaches the calendar, shelf and wall on its
-      # own. Writes nothing and exits 1 on a truncated or short feed, or a
-      # merge that would lose a re-read date; books.json is left as it was.
-      # It also downloads the covers of each book the site has no copy of
-      # (a new book's, most weeks) into COVERS and marks the book in
-      # books.json; a cover that cannot be fetched is a warning in the
-      # log and is tried again next week, never a failed step.
-      - name: Refresh the read shelf
-        id: books
-        continue-on-error: true
-        run: python .github/scripts/refresh_books.py
-
       # Each book's first year and genres (y, gn in books.json) for the
-      # filters on books.html. Only the books data/book-details.json has
-      # no entry for are asked about, at Open Library (no key), and what
-      # it says is kept there; data/book-overrides.json corrects by hand.
-      # A lookup that fails is a warning and is tried next week; the
-      # script exits 0 whatever Open Library does. Runs after the shelf
-      # refresh even when that failed, over the books.json on file.
+      # filters on books.html. refresh_books.py --export fills them for
+      # the books an export brings; this asks Open Library (no key) again
+      # about any whose lookup failed then, and is nothing to do most
+      # weeks. What it says is kept in data/book-details.json, and
+      # data/book-overrides.json corrects by hand. A lookup that fails is
+      # a warning and is tried next week; the script exits 0 whatever
+      # Open Library does.
       - name: Fill in years and genres
         id: details
         continue-on-error: true
@@ -125,20 +111,18 @@ jobs:
       # failure elsewhere), but never data that failed validation. The
       # rebase is for a push that landed after checkout (Ken's, or the
       # previous run's): the refresh is replayed on top instead of the
-      # push being rejected. The test for a change is git status, not git
-      # diff: a new cover is an untracked file, which git diff never sees.
+      # push being rejected.
       - name: Commit what refreshed
         if: always() && steps.validate.outcome == 'success'
         run: |
-          if [ -z "$(git status --porcelain -- $FILES "$COVERS")" ]; then
+          if [ -z "$(git status --porcelain -- $FILES)" ]; then
             echo "No change."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -- $FILES
-          if [ -d "$COVERS" ]; then git add -- "$COVERS"; fi
-          git commit -m "Refresh live data (Last.fm, Goodreads)"
+          git commit -m "Refresh live data (Last.fm, Bluesky)"
           git pull --rebase origin "$GITHUB_REF_NAME"
           git push origin "HEAD:$GITHUB_REF_NAME"
 
@@ -150,22 +134,17 @@ jobs:
         env:
           NOW: ${{ steps.now.outcome }}
           LISTENING: ${{ steps.listening.outcome }}
-          BOOKS: ${{ steps.books.outcome }}
           DETAILS: ${{ steps.details.outcome }}
           BLUESKY: ${{ steps.bluesky.outcome }}
           VALID: ${{ steps.validate.outcome }}
         run: |
           status=0
           if [ "$NOW" != success ]; then
-            echo "::error::Last.fm / currently-reading refresh: $NOW (see 'Fetch listening and currently-reading')"
+            echo "::error::Last.fm refresh: $NOW (see 'Fetch listening')"
             status=1
           fi
           if [ "$LISTENING" != success ]; then
             echo "::error::Listening-history refresh: $LISTENING (see 'Refresh the listening history')"
-            status=1
-          fi
-          if [ "$BOOKS" != success ]; then
-            echo "::error::Read-shelf refresh: $BOOKS (see 'Refresh the read shelf')"
             status=1
           fi
           if [ "$DETAILS" != success ]; then

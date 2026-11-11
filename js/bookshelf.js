@@ -133,7 +133,7 @@
 
     /* ------------------------------------------------------------- dates
        A book's finish dates: `d` is the latest (unless it is only the date
-       added, `e`), `p` holds the earlier reads the weekly refresh kept as
+       added, `e`), `p` holds the earlier reads refresh_books.py has kept as
        the date moved on. Each is a session the calendar counts; the shelf
        files the book once, where it was first read. */
     function sessions(b) {
@@ -739,8 +739,8 @@
     }
 
     /* ------------------------------------------------------- reading now
-       The books in progress (now.json, refreshed weekly with the rest of
-       the live data), the last two finished and this year's count
+       The books in progress (now.json, from my last Goodreads export), the
+       last two finished and this year's count
        (books.json). Each book is one link: cover, title, the series on a
        quieter line, then author and date. */
     function coverImg(src, b) {
@@ -766,22 +766,25 @@
         return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
     }
 
-    /* The list ends on the date of the weekly refresh that wrote it, so a
-       stalled refresh shows its age instead of passing for this week. */
+    /* The list ends on the date of the Goodreads export it came from
+       (readingUpdated, written by refresh_books.py --export), so an old
+       export shows its age instead of passing for this week; a file from
+       before that field has only the weekly refresh's date. */
     function renderCurrentlyReading() {
         var grid = document.getElementById('currently-reading-grid');
         if (!grid) return;
         krFetchJson('data/now.json').then(function (now) {
             var reading = now && Array.isArray(now.reading) ? now.reading : [];
-            var asOf = now && now.updated && typeof formatPostDate === 'function'
-                ? '<p class="kr-reading__meta kr-reading__asof">Updated ' + krEscapeHtml(formatPostDate(now.updated)) + '</p>' : '';
+            var when = now && (now.readingUpdated || now.updated);
+            var asOf = when && typeof formatPostDate === 'function'
+                ? '<p class="kr-reading__meta kr-reading__asof">Updated ' + krEscapeHtml(formatPostDate(when)) + '</p>' : '';
             if (!reading.length) {
                 grid.innerHTML = '<p class="kr-reading__meta">Between books.</p>' + asOf;
                 return;
             }
             grid.innerHTML = reading.map(function (r) {
                 var b = { t: r.title, a: r.author };
-                // The small copy the weekly refresh keeps on this site
+                // The small copy refresh_books.py keeps on this site
                 // (siteCover), 240px tall for an 84px slot.
                 var cover = siteCover(r.img);
                 return readingBook(r.link, 'nofollow noopener noreferrer', b,
@@ -860,7 +863,7 @@
         }).join('') + '</span>';
     }
 
-    /* The cards the weekly feed can't give (data/reading-analysis.json):
+    /* The cards books.json can't give (data/reading-analysis.json):
        my top genre, how my ratings sit against each book's Goodreads
        average, and the did-not-finish and to-read shelves. A dated
        snapshot of an enhanced Goodreads export, written by the
@@ -976,7 +979,7 @@
         shownYears.forEach(function (y) {
             perYearMonth[y] = byYear[y] / (y === thisYear ? Math.max(1, monthsSince - (+y - +startYear) * 12) : 12);
         });
-        // Pages (n, from the feed): every read counts, re-reads included.
+        // Pages (n, from the export): every read counts, re-reads included.
         var paged = books.filter(function (b) { return b.n > 0; });
         var pagesByYear = {}, pagesByMonth = {}, booksByMonth = {};
         var pageTotal = 0, trackedPages = 0;

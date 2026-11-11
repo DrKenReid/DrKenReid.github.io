@@ -7,23 +7,24 @@
   },
   "reading": [
     {
-      "title": "The First Step (A Thousand Li, #1)",
-      "author": "Tao Wong",
-      "link": "https://www.goodreads.com/review/show/5173713445?utm_medium=api&utm_source=rss",
-      "img": "/img/covers/shelf/s/44327636.jpg"
+      "title": "Defiance of the Fall (Defiance of the Fall, #1)",
+      "author": "TheFirstDefier",
+      "link": "https://www.goodreads.com/review/show/5840261758",
+      "img": "/img/covers/shelf/s/57866482.jpg"
     },
     {
       "title": "A Boy and His Dog",
       "author": "Harlan Ellison",
-      "link": "https://www.goodreads.com/review/show/6228436685?utm_medium=api&utm_source=rss",
+      "link": "https://www.goodreads.com/book/show/30286680",
       "img": "/img/covers/shelf/s/30286680.jpg"
     },
     {
       "title": "Dungeon Crawler Carl (Dungeon Crawler Carl, #1)",
       "author": "Matt Dinniman",
-      "link": "https://www.goodreads.com/review/show/8833435321?utm_medium=api&utm_source=rss",
+      "link": "https://www.goodreads.com/book/show/211721806",
       "img": "/img/covers/shelf/s/211721806.jpg"
     }
   ],
-  "updated": "2026-11-09"
+  "updated": "2026-11-09",
+  "readingUpdated": "2026-11-06"
 }

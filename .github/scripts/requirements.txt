@@ -28,6 +28,8 @@ brotli>=1.2
 # detect_monochrome.py - reads thumbnail pixels to decide the gallery's
 # B&W tag. generate_photo_colours.py - reads thumbnail pixels for the
 # gallery's colour families (its --check needs no package).
+# refresh_books.py --export shrinks an Open Library cover to the shelf's
+# size with it, and keeps the file as it came where Pillow is missing.
 # generate_photo_dims.py reads WebP headers itself and only
 # falls back to Pillow for an unfamiliar container.
 Pillow>=10

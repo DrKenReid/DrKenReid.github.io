@@ -108,7 +108,9 @@ class Table(unittest.TestCase):
 
     def test_labels_that_are_not_genres_place_nothing(self):
         for label in ("History and criticism", "Young Adult", "Juvenile fiction", "Historical",
-                      "Science Fiction and Fantasy", "Books I Own", "Audible", "Kindle Unlimited"):
+                      "Science Fiction and Fantasy", "Books I Own", "Audible", "Kindle Unlimited",
+                      # Babel's: a novel is never history for a heading about fiction.
+                      "Fiction, alternative history", "Alternate history"):
             self.assertIsNone(rbd.genre_of_label(label)[0], label)
 
     def test_never_more_than_two(self):
@@ -175,7 +177,7 @@ class Apply(unittest.TestCase):
         self.assertEqual(list(out), ["t", "a", "r", "g", "c", "k", "s", "n", "y", "gn", "w", "d", "p"])
 
     def test_it_changes_nothing_else(self):
-        b = book("1", v=1, i="9780000000000", p=["2020/01/01"], m=1)
+        b = book("1", v=1, i="9780000000000", p=["2020/01/01"], rc=3)
         (out,) = rbd.apply([b], {}, {})
         self.assertEqual(out, b)
 

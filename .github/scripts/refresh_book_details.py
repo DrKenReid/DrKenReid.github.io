@@ -7,16 +7,18 @@ genre or two (gn), for the filters and sorts on books.html.
     python .github/scripts/refresh_book_details.py --offline     # no network: apply what is on file
     python .github/scripts/refresh_book_details.py --export FILE # seed from a Goodreads export, no network
 
-It runs weekly in the live-data workflow, after refresh_books.py, so a
-book marked read on Goodreads gets both on its own. Standard library only.
+refresh_books.py --export runs it (refresh()) with the export it has
+just read, so a book an export brings gets both in the same run. The
+live-data workflow runs it weekly as well, to ask again about the books
+a lookup failed for. Standard library only.
 
 Where the two come from, best first:
 
     year   1. data/book-overrides.json, by hand
            2. a Goodreads library export: "Original Publication Year",
-              else the edition's "Year Published" (--export)
-           3. the read-shelf feed's book_published, which refresh_books.py
-              writes as y for a new book (and never over a year on file)
+              else the edition's "Year Published"
+           3. the y refresh_books.py writes for a new book (from the same
+              columns; it never writes over a year on file)
            4. Open Library's first_publish_year for the work
     genre  1. data/book-overrides.json, by hand
            2. the genres readers shelve the book under on Goodreads, with
@@ -28,8 +30,8 @@ What was learned is kept in data/book-details.json, one entry a book by
 Goodreads id: the year and where it came from, the labels (a Goodreads
 genre and its votes, or an Open Library subject counted once) and where
 they came from, and the day Open Library was last asked. That file is the
-cache: a book with an entry is not asked about again, so a normal Monday
-asks only about the week's new books. A book Open Library could not place
+cache: a book with an entry is not asked about again, so a run asks only
+about the books an export has just brought. A book Open Library could not place
 is asked again after RETRY_DAYS. The labels are kept as they arrived, not
 as genres, so a change to the table below reaches every book on the next
 run without asking anyone anything.
@@ -137,8 +139,10 @@ RULES = (
      r"|classic literature|fiction,? (literary|historical|psychological|war).*"
      r"|war( fiction)?|plays|drama|poetry|satire|southern gothic|domestic fiction"
      r"|psychological fiction|booker prize", "literary"),
-    # "Historical" alone is shelved on novels and on histories alike.
-    (r"historical", None),
+    # "Historical" alone is shelved on novels and on histories alike, and
+    # a heading about fiction that the rules above did not place
+    # ("Fiction, alternative history") never makes a novel non-fiction.
+    (r"historical|fiction,? .*|alternat(e|ive) histor(y|ies)", None),
     (r"natural history", "science"),
     # Non-fiction: politics and psychology before science, so "political
     # science" and "cognitive science" land where a reader would look.
@@ -317,7 +321,7 @@ def merge_entries(old: dict[str, dict], new: dict[str, dict]) -> dict[str, dict]
 # --- Open Library ----------------------------------------------------------------
 
 OL_SEARCH = "https://openlibrary.org/search.json?"
-OL_FIELDS = "key,title,author_name,first_publish_year,subject"
+OL_FIELDS = "key,title,author_name,first_publish_year,subject,cover_i"
 # Says what is asking and nothing about who.
 OL_UA = "Mozilla/5.0 (compatible; book-details-lookup)"
 OL_TIMEOUT = 20      # seconds for one answer
@@ -396,23 +400,33 @@ def pick(docs: list[dict], b: dict, by_isbn: bool) -> dict | None:
     return candidates[0] if candidates else None
 
 
-def lookup(b: dict, fetch=None, sleep=time.sleep) -> dict:
-    """What Open Library says of book `b`: {} when it has no such book,
-    else {"year": ..., "labels": [[subject, 1], ...]} with what it has.
-    Raises AskError when it could not be asked."""
+def find_doc(b: dict, fetch=None, sleep=time.sleep, want=None) -> dict | None:
+    """Open Library's search result for book `b`, by its ISBN first, then
+    by title and author (pick), or None. With `want`, a result `want`
+    turns down (one with no cover, for refresh_books.py's covers) sends
+    the search on to the next way of asking. Raises AskError when Open
+    Library could not be asked."""
     fetch = fetch or (lambda url: fetch_json(url, sleep=sleep))
-    doc = None
+    want = want or (lambda doc: True)
     if b.get("i"):
         data = fetch(OL_SEARCH + urllib.parse.urlencode(
             {"isbn": b["i"], "fields": OL_FIELDS, "limit": 1}))
         doc = pick(data.get("docs") or [], b, by_isbn=True)
-        if doc is None:
-            sleep(OL_PAUSE)
-    if doc is None:
-        q = "%s %s" % (plain_title(b.get("t")), b.get("a") or "")
-        data = fetch(OL_SEARCH + urllib.parse.urlencode(
-            {"q": q.strip(), "fields": OL_FIELDS, "limit": 10}))
-        doc = pick(data.get("docs") or [], b, by_isbn=False)
+        if doc is not None and want(doc):
+            return doc
+        sleep(OL_PAUSE)
+    q = "%s %s" % (plain_title(b.get("t")), b.get("a") or "")
+    data = fetch(OL_SEARCH + urllib.parse.urlencode(
+        {"q": q.strip(), "fields": OL_FIELDS, "limit": 10}))
+    doc = pick(data.get("docs") or [], b, by_isbn=False)
+    return doc if doc is not None and want(doc) else None
+
+
+def lookup(b: dict, fetch=None, sleep=time.sleep) -> dict:
+    """What Open Library says of book `b`: {} when it has no such book,
+    else {"year": ..., "labels": [[subject, 1], ...]} with what it has.
+    Raises AskError when it could not be asked."""
+    doc = find_doc(b, fetch=fetch, sleep=sleep)
     if doc is None:
         return {}
     out: dict = {}
@@ -464,7 +478,7 @@ def learn(entry: dict | None, g: str, found: dict, today: date) -> dict:
 
 # A record's keys in the order refresh_books.merge_one() writes them, so
 # a record reads the same whichever of the two scripts wrote it last.
-KEY_ORDER = ("t", "a", "r", "v", "i", "g", "c", "k", "s", "n", "y", "gn", "w", "d", "e", "p", "m")
+KEY_ORDER = ("t", "a", "r", "v", "i", "g", "c", "k", "s", "n", "y", "gn", "w", "d", "e", "p", "rc")
 
 
 def ordered(b: dict) -> dict:
@@ -553,17 +567,12 @@ def coverage(books: list[dict]) -> str:
 
 # --- entry point ---------------------------------------------------------------------
 
-def main(argv: list[str] | None = None) -> int:
-    ap = sitelib.arg_parser(__doc__)
-    ap.add_argument("--dry-run", action="store_true", help="ask, report, write nothing")
-    ap.add_argument("--offline", action="store_true", help="ask no one: apply what is on file")
-    ap.add_argument("--export", type=Path, metavar="CSV",
-                    help="seed data/book-details.json from a Goodreads export (no network)")
-    ap.add_argument("--max", type=int, default=MAX_LOOKUPS, help="books to ask about this run")
-    args = ap.parse_args(argv)
-    if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(errors="backslashreplace")
-
+def refresh(rows=None, ask: bool = True, dry_run: bool = False, max_lookups: int = MAX_LOOKUPS) -> int:
+    """One run over the books.json on file: seed the details from an
+    export's `rows` when given, ask Open Library about the books still
+    due when `ask`, then apply and write. refresh_books.py --export calls
+    it with the export it has just read, so a new book gets its year and
+    genres in the same run."""
     if not BOOKS.exists():
         print("no books.json; nothing to do")
         return 0
@@ -572,18 +581,18 @@ def main(argv: list[str] | None = None) -> int:
     overrides = load_overrides()
     today = date.today()
 
-    if args.export:
-        seeded = from_export(read_export(args.export), books)
+    if rows is not None:
+        seeded = from_export(rows, books)
         details = merge_entries(details, seeded)
         print("export: %d of %d books found, %d with genres"
               % (len(seeded), len(books), sum(1 for e in seeded.values() if e.get("labels"))))
-    elif not args.offline:
+    if ask:
         asked = found = failed_in_a_row = 0
         # A book whose override names its genres and that has a year
         # needs nothing Open Library could add.
         due = [b for b in books if b.get("g") and needs_lookup(details.get(b["g"]), b, today)
                and not ((overrides.get(b["g"]) or {}).get("gn") and (b.get("y") or overrides[b["g"]].get("y")))]
-        for b in due[:max(args.max, 0)]:
+        for b in due[:max(max_lookups, 0)]:
             if failed_in_a_row >= OL_GIVE_UP:
                 print("::warning::Open Library failed %d times in a row; the rest wait for the next run"
                       % OL_GIVE_UP)
@@ -609,7 +618,7 @@ def main(argv: list[str] | None = None) -> int:
 
     new_books = apply(books, details, overrides)
     print(coverage(new_books))
-    if args.dry_run:
+    if dry_run:
         changed = sum(1 for a, b in zip(books, new_books) if a != b)
         print("dry run: %d records would change" % changed)
         return 0
@@ -619,6 +628,20 @@ def main(argv: list[str] | None = None) -> int:
     if new_books != books:
         refresh_books.write_books(new_books)
     return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = sitelib.arg_parser(__doc__)
+    ap.add_argument("--dry-run", action="store_true", help="ask, report, write nothing")
+    ap.add_argument("--offline", action="store_true", help="ask no one: apply what is on file")
+    ap.add_argument("--export", type=Path, metavar="CSV",
+                    help="seed data/book-details.json from a Goodreads export (no network)")
+    ap.add_argument("--max", type=int, default=MAX_LOOKUPS, help="books to ask about this run")
+    args = ap.parse_args(argv)
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(errors="backslashreplace")
+    rows = read_export(args.export) if args.export else None
+    return refresh(rows, ask=not (args.export or args.offline), dry_run=args.dry_run, max_lookups=args.max)
 
 
 if __name__ == "__main__":

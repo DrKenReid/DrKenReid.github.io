@@ -691,7 +691,7 @@
       if (site.quotes > 0) setFigure('quote-count', site.quotes);
     }).catch(function() {});
 
-    // Written weekly from the Goodreads read shelf (refresh_books.py).
+    // Written from my Goodreads library export (refresh_books.py --export).
     krFetchJson('data/reading.json').then(function(rd) {
       if (rd.books > 0) setFigure('books-read-count', (Math.floor(rd.books / 10) * 10) + '+');
       if (rd.reviews > 0) setFigure('book-review-count', rd.reviews);

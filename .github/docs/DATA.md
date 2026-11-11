@@ -11,8 +11,8 @@ do.
 The rule: **never hand-edit a file a script writes.** For most of them,
 the check that compares the file with its script's output fails the
 build. The weekly files are only checked against `data/schema/`, so a
-hand edit passes: the next Monday's run overwrites it (Last.fm, now,
-top albums, reading), or, for `books.json`, keeps it as the record and
+hand edit passes: the next run overwrites it (Last.fm, now, top
+albums, reading), or, for `books.json`, keeps it as the record and
 builds on it, which is why a hand edit there is dangerous.
 
 ## Every file
@@ -20,11 +20,11 @@ builds on it, which is why a hand edit there is dangerous.
 | File | Shape | Written by | Read by | Changes | Checked by | Hand edits |
 |---|---|---|---|---|---|---|
 | `posts.json` | `[{title, date, tags, category, excerpt, url, image, ...}]`, newest first | you, plus `generate_read_times.py` and `generate_post_facets.py` for their fields | nearly everything: the listing and its series band, cards, palette, header, openers, heads, feed, sitemap, share images | every publish | `data-schemas`, `audit`, and every post generator's `--check` | yes, the hand-written fields ([below](#postsjson)) |
-| `books.json` | `[{t, a, r, v, i, g, c, k, s, n, y, gn, w, d, e, p, m}]`, latest finish first (`n` pages, for Reading Stats' pages figures; `y` the year first published and `gn` one or two genres, for the wall's filters; `k` and `s` mark a book whose cover the site has a copy of, full and small) | `refresh_books.py`, weekly; `y` and `gn` by `refresh_book_details.py`, which runs after it | `js/bookshelf.js`, `js/bookwall.js` (the wall's filters and sorts), `js/literature.js`, `js/slideshow.js` (`show=books`: the rated books and their covers, `k` in front and `s` on the wall; `show=quotes`: each quote's book, its cover and year), `js/palette.js` (the author rows, once the reader types) and `js/post-shelf.js` (a book post's From my shelf strip) | weekly | `data-schemas`; `tests/test_refresh_books.py`, `tests/test_reading_parity.py`, `tests/test_refresh_book_details.py` | no ([Reading](#reading)) |
-| `book-details.json` | `{books: [{g, year, yearFrom, labels, labelsFrom, asked}]}`, by Goodreads id: what is known of each book's first year and genres, and where from | `refresh_book_details.py`: weekly from Open Library for new books, and from a Goodreads export with `--export` | `refresh_book_details.py` only, which sets `y` and `gn` in `books.json` from it; no page | weekly | `data-schemas`; `tests/test_refresh_book_details.py` (`books.json` agrees with it) | no ([Years and genres](#years-and-genres)) |
+| `books.json` | `[{t, a, r, v, i, g, c, k, s, n, y, gn, w, d, e, p, rc}]`, latest finish first (`n` pages, for Reading Stats' pages figures; `y` the year first published and `gn` one or two genres, for the wall's filters; `k` and `s` mark a book whose cover the site has a copy of, full and small) | `refresh_books.py --export`, by hand after I download a Goodreads export; `y` and `gn` by `refresh_book_details.py`, which it runs | `js/bookshelf.js`, `js/bookwall.js` (the wall's filters and sorts), `js/literature.js`, `js/slideshow.js` (`show=books`: the rated books and their covers, `k` in front and `s` on the wall; `show=quotes`: each quote's book, its cover and year), `js/palette.js` (the author rows, once the reader types) and `js/post-shelf.js` (a book post's From my shelf strip) | with each export | `data-schemas`; `tests/test_refresh_books.py`, `tests/test_reading_parity.py`, `tests/test_refresh_book_details.py` | no ([Reading](#reading)) |
+| `book-details.json` | `{books: [{g, year, yearFrom, labels, labelsFrom, asked}]}`, by Goodreads id: what is known of each book's first year and genres, and where from | `refresh_book_details.py`, from each Goodreads export (`refresh_books.py --export` runs it) and from Open Library for the books an export brings; weekly too, for a lookup that failed | `refresh_book_details.py` only, which sets `y` and `gn` in `books.json` from it; no page | weekly | `data-schemas`; `tests/test_refresh_book_details.py` (`books.json` agrees with it) | no ([Years and genres](#years-and-genres)) |
 | `book-overrides.json` | `{_help, books: [{g, t, gn?, y?}]}`: hand corrections to a book's genres or year | you (its `_help` field says how) | `refresh_book_details.py` | when a book is placed wrong | `data-schemas`; `tests/test_refresh_book_details.py` (every id on the shelf, every genre known) | yes, then `refresh_book_details.py --offline` |
-| `reading.json` | `{books, reviews, thisYear, rereads, updated}` | `refresh_books.py`, weekly | `index.html` (`books` and `reviews` only) | weekly | `data-schemas`; `tests/test_reading_parity.py` (`thisYear`) | no |
-| `now.json` | `{track: {name, artist, url, nowPlaying}, reading: [{title, author, link, img}], updated}` (`img` a path to the site's small copy of the cover) | `refresh_now.py`, weekly | `renderNowStrip` (homepage), `js/bookshelf.js` (Reading Now, dated by `updated`), `js/literature.js` (review links for a book being re-read) | weekly | `data-schemas` | no |
+| `reading.json` | `{books, reviews, thisYear, rereads, updated}` | `refresh_books.py --export` | `index.html` (`books` and `reviews` only) | with each export | `data-schemas`; `tests/test_reading_parity.py` (`thisYear`) | no |
+| `now.json` | `{track: {name, artist, url, nowPlaying}, reading: [{title, author, link, img}], updated, readingUpdated}` (`img` a path to the site's small copy of the cover) | `refresh_now.py`, weekly (the track and `updated`); `refresh_books.py --export` (the books in progress and `readingUpdated`, the export's date, through `refresh_now.write_reading`) | `renderNowStrip` (homepage), `js/bookshelf.js` (Reading Now, dated by `readingUpdated`), `js/literature.js` (review links for a book being re-read) | weekly, and with each export | `data-schemas`; `tests/test_refresh_books.py` | no |
 | `lastfm.json` | `{scrobbles, user, updated}` | `refresh_now.py`, weekly | `updateLastfmStats` (the homepage figure) | weekly | `data-schemas` | no |
 | `lastfm-history.json` | `[{d, n}]`, the latest 90 refreshes | `refresh_now.py`, weekly | nothing yet; the record of how the count moves | weekly | `data-schemas` | no |
 | `topalbums.json` | `{albums: [{name, artist, url, img, plays}], period, updated}` | `refresh_now.py`, weekly | `js/albums.js` (the crate on `music.html`, dated by `updated`), `js/slideshow.js` (`show=music`) | weekly | `data-schemas` | no |
@@ -47,7 +47,7 @@ builds on it, which is why a hand edit there is dangerous.
 | `quotes.json` | `[{quote, author, book, g?, popularity}]` (`g` as in `quotes-all.json`, for the attribution's link) | as above | `js/literature.js` (the rotating quotation) | rarely | none | yes |
 | `quotes-home.json` | `[{quote, author, book, g?}]` (`g` as above) | you | `index.html` (the homepage quotation) | rarely | none | yes |
 | `reviews.json` | `[{title, author, rating, review, isbn, isbn13}]`: the selected reviews | an export tool kept outside the repository | `js/literature.js` | rarely | none | yes |
-| `reading-analysis.json` | `{exported, shelves, rated, fourOrFive, community, genres, topGenre}`: a dated snapshot of what the feed can't give (my rating against the Goodreads average, genres, the to-read and did-not-finish shelves), with 95% intervals | `scripts/site_summary.py` in [GoodReads-Analysis](https://github.com/DrKenReid/GoodReads-Analysis), from a Goodreads export enhanced with [Enhance-GoodReads-Export](https://github.com/PaulKlinger/Enhance-GoodReads-Export) | `js/bookshelf.js` (the last Reading Stats figures and their hover cards; the panel stands without it) | when I download a new export | `data-schemas` | no: rerun the script |
+| `reading-analysis.json` | `{exported, shelves, rated, fourOrFive, community, genres, topGenre}`: a dated snapshot of what `books.json` can't give (my rating against the Goodreads average, genres, the to-read and did-not-finish shelves), with 95% intervals | `scripts/site_summary.py` in [GoodReads-Analysis](https://github.com/DrKenReid/GoodReads-Analysis), from a Goodreads export enhanced with [Enhance-GoodReads-Export](https://github.com/PaulKlinger/Enhance-GoodReads-Export) | `js/bookshelf.js` (the last Reading Stats figures and their hover cards; the panel stands without it) | when I download a new export | `data-schemas` | no: rerun the script |
 | `invites.json` | `{_help, invites: {"<slug>": {title, line}}}` | you, one entry per post when it is published | `renderNewsletterPopup` (the newsletter pop-up at the end of a post; a post without one gets its category's words) | with every new post | `unit-tests` (`tests/test_invites.py`: every post has one, house style) | yes |
 | `popular.json` | `[{url, views}]`, most viewed first, every post | a tool kept outside the repository: each Analytics export's page views (Engagement overview, "Page title and screen class") matched to posts by title, a browser-translated title counted for its post, and added to the totals on file | `js/blog.js` (the Popularity sort) | occasionally | none | yes |
 | `stories.json` | `[]` | reserved for the short-story section | `renderMoreStories`, `index.html` (the Latest section's writing lane, shown once there is a story) | not yet | none | |
@@ -93,39 +93,35 @@ fields, who writes each and what reads it are in
 ## The weekly files
 
 `.github/workflows/lastfm-refresh.yml` runs every Monday at 06:00 UTC
-(and on demand) and owns nine files, listed once in its `FILES`
+(and on demand) and writes eight files, listed once in its `FILES`
 variable: `lastfm.json`, `now.json`, `lastfm-history.json`,
-`topalbums.json`, `listening.json`, `books.json`, `reading.json`,
-`bluesky.json` and `book-details.json`.
+`topalbums.json`, `listening.json`, `books.json`, `bluesky.json` and
+`book-details.json`. Goodreads retired its RSS feeds in October 2026,
+so the job no longer refreshes the reading data: that comes from my
+Goodreads export, by hand ([Reading](#reading)).
 
-- `refresh_now.py` fetches Last.fm (with the `LASTFM_API_KEY` secret)
-  and the Goodreads currently-reading shelf. A source that fails keeps its
-  previous values; the script exits 1 after writing what did refresh.
+- `refresh_now.py` fetches Last.fm (with the `LASTFM_API_KEY` secret):
+  the scrobbles, the latest track and the top albums. It keeps
+  `now.json`'s books in progress as the last export left them. A source
+  that fails keeps its previous values; the script exits 1 after
+  writing what did refresh.
 - `refresh_listening.py` asks Last.fm (with the same secret) for the
   chart weeks `listening.json` does not have and for the newest two, and
   adds them to the file ([Listening](#listening)). One week that fails
   is skipped and asked for again the next Monday; when nothing could be
   fetched the file is left as it was (with no file yet, one with no
   weeks is written) and the script exits 1.
-- `refresh_books.py` fetches the Goodreads read shelf and merges it into
-  `books.json`, then writes `reading.json`. It writes nothing when the
-  feed looks truncated or short, or when a merge would lose a re-read.
-  It also downloads the cover of each book the site has no copy of yet
-  ([Reading](#reading)), and `refresh_now.py` does the same for the
-  books in progress; the workflow commits that folder, its `COVERS`
-  variable, with the data files.
-- `refresh_book_details.py` runs after it, even when it failed, and gives
-  each book its first year and genres (`y`, `gn`), asking Open Library
-  (no key) about the books `book-details.json` has no entry for
-  ([Years and genres](#years-and-genres)). A lookup that fails is a
-  warning, tried again the next Monday; the script exits 0 whatever Open
-  Library does.
+- `refresh_book_details.py` asks Open Library (no key) again about any
+  book whose year and genres a lookup failed for
+  ([Years and genres](#years-and-genres)); most weeks there is none. A
+  lookup that fails is a warning, tried again the next Monday; the
+  script exits 0 whatever Open Library does.
 - `refresh_bluesky.py` walks my public Bluesky feed (no key) for the
   posts of mine that shared a blog post and merges them into
   `bluesky.json` ([Bluesky shares](#bluesky-shares)). A first page that
   fails writes nothing; a later one still merges the pages that
   arrived, and the script exits 1 either way.
-- `validate_data.py` checks all nine against their schemas. Nothing that
+- `validate_data.py` checks all eight against their schemas. Nothing that
   fails is committed.
 
 Because the workflow commits to `master` on its own, pull before pushing
@@ -209,7 +205,7 @@ with no new share is no change.
 
 ## Reading
 
-`books.json` is every book on the Goodreads read shelf. The keys are
+`books.json` is every book on my Goodreads read shelf. The keys are
 single letters because every reader of the reading pages downloads the
 whole file; `data/schema/books.schema.json` describes each:
 
@@ -219,21 +215,46 @@ whole file; `data/schema/books.schema.json` describes each:
 | `r` | my rating, 0 when unrated |
 | `v` | 1 when I wrote a review |
 | `i` | ISBN, when Goodreads has one; a book with no cover on the site has one looked up at Open Library by it |
-| `g`, `w` | the Goodreads book id and review id; the pages link to `goodreads.com/review/show/<w>` |
-| `c` | the cover Goodreads shows (about 475px tall), as a path under `GR_COVERS`; every book has one, ISBN or not. No page loads it: it is where the site's copy is downloaded from |
+| `g`, `w` | the Goodreads book id and review id; the pages link to `goodreads.com/review/show/<w>`, or to `goodreads.com/book/show/<g>` for a book added since the RSS feed went (the export has no review id) |
+| `c` | where the site's copies of the cover were downloaded from: the cover Goodreads showed, as a path under `GR_COVERS`, for a book the feed brought; Open Library's cover for one an export brought; absent when neither had one. No page loads it |
 | `k` | 1 when the site has its own full copy of that cover, `img/covers/shelf/<g>.jpg`: what a review card and the slideshow's featured book show |
 | `s` | 1 when it has the small copy, `img/covers/shelf/s/<g>.jpg`: what a tile on the wall and a thumbnail show |
 | `d` | the date I last finished it; `e: 1` when that is only the date it was added |
 | `p` | earlier finish dates, one per earlier read |
+| `rc` | times read, when Goodreads' Read Count is more than `d` and `p` show (a re-read whose date was never entered); the wall's Re-read filter counts it |
 | `y` | the year it was first published ([Years and genres](#years-and-genres)) |
 | `gn` | one or two genre keys, the main one first ([Years and genres](#years-and-genres)) |
-| `m` | weekly refreshes in a row that did not see the book |
 
-The feed reports only a book's latest finish, and the full list of
-sessions needs a login, so an earlier finish exists nowhere but in `p`.
-That is why this file is never regenerated from scratch, and why a hand
-edit is dangerous: the merge treats the file as the record.
-`refresh_books.py`'s docstring has the merge rules and
+After downloading the export (Goodreads, My Books, Import and export,
+then Export Library), I run:
+
+```
+python .github/scripts/refresh_books.py --export goodreads_library_export.csv
+```
+
+It reads the export's read shelf, merges it into `books.json` and
+writes `reading.json`; finds a cover for each new book at Open Library
+(by ISBN, then by title and author) and keeps the site's copies; gives
+each new book its year and genres (`refresh_book_details.py`, from the
+same export); and writes `now.json`'s books in progress from the
+currently-reading shelf. `--dry-run` reports what would change and
+writes nothing. The plain export and one enhanced with
+[Enhance-GoodReads-Export](https://github.com/PaulKlinger/Enhance-GoodReads-Export)
+both work; the enhanced one adds every finish of a re-read and the
+genres. Only the public fields are read: the review text, private notes,
+owned copies and other shelves never reach a file. Then commit the data
+files and `img/covers/shelf/`.
+
+The plain export gives one finish date a book (its Date Read, which is
+the first finish of most re-reads), so an earlier finish exists for most
+books nowhere but in `p`. That is why this file is never regenerated
+from scratch, and why a hand edit is dangerous: the merge treats the
+file as the record and takes the union of the dates on file and in the
+export. A book on file keeps its title and author spelling, ISBN, year,
+genres, cover and review id; the export updates the rating and the
+review mark. An export much shorter than the shelf writes nothing, and a
+book Goodreads no longer has as read is dropped with its whole record
+printed. `refresh_books.py`'s docstring has the merge rules and
 `tests/test_refresh_books.py` pins them. The reading calendar, this year's
 count and the streak count every session; the shelf files a book once, at
 its first read. `tests/test_reading_parity.py` checks that
@@ -248,7 +269,7 @@ quotes I saved, the page's own script). The command palette's author
 rows (`js/palette.js`) and the From my shelf strip (`js/post-shelf.js`)
 build those links from `books.json` and `quotes-all.json` in the
 browser; there is no author index to regenerate when `books.json`
-changes on a Monday. The two files do not spell every name alike
+changes. The two files do not spell every name alike
 (`quotes-all.json` has "Ursula K. LeGuin" and names with doubled
 spaces), so all four match a name by one key, `authorKey`: lower case,
 without accents, spaces or punctuation. `tests/js/palette.test.js` fails
@@ -256,31 +277,39 @@ when the four copies of that function differ, and checks every author
 row's count against what its link selects.
 
 The covers on the reading pages are the site's own files, so showing a
-book asks Goodreads for nothing. `refresh_books.py` downloads each cover
-once from the address `c` names, twice over: a full copy about 400px
+book asks no other site for anything. `refresh_books.py` downloads each
+cover once from the address `c` names, twice over: a full copy 400px
 tall at `img/covers/shelf/<g>.jpg`, for a review card and the
 slideshow's featured book, and a small one 240px tall at
 `img/covers/shelf/s/<g>.jpg`, for a tile on the wall, a thumbnail and
-the slideshow's wall, where a screenful is hundreds of covers. It is
-standard library only, so each file is kept as Goodreads sent it. It
+the slideshow's wall, where a screenful is hundreds of covers.
+Goodreads' covers are kept as Goodreads sent them, at the size asked
+for. Open Library's come larger (about 500px and 270px tall) and about
+twice as heavy, so each is shrunk to the shelf's height and saved again
+(`fit_cover`, with Pillow, which the local `.venv` has; without it the
+file is kept as it came). A book an export brings has its cover found at Open
+Library, by ISBN first, then by title and author; with none there it has
+no `c` and no marks, the run names it, and the pages set its cover in
+type. Goodreads' pages are never scraped. It
 sets `k` (full) and `s` (small) on the record once the file is written,
 and the pages ask only for the files a record's marks name (`shelfCover`
 in `js/bookshelf.js` and in `js/slideshow.js`), so a file that is not
 there is never requested. Each use takes the copy that suits its size
 and the other while that one is missing; a book with neither shows Open
-Library's cover for its ISBN, then a cover set in type. The marks go
-when Goodreads changes `c`, and the next run fetches the new cover. A
-cover that cannot be fetched is a warning in the run's log, never a
-failure, and is tried again the next week. `refresh_books.py --covers`
-runs that stage alone, with no feed, writing the marks as it goes so a
-run that is cut short starts again where it stopped.
+Library's cover for its ISBN, then a cover set in type. A cover that
+cannot be fetched is a warning in the run's log, never a failure, and is
+tried again on the next run. `refresh_books.py --covers` runs that stage
+alone, with no export, writing the marks as it goes so a run that is
+cut short starts again where it stopped.
 
-The books in progress are not on the read shelf, so they have no record
-to mark. `refresh_now.py` keeps the small copy of each in the same
-folder (`local_cover` in `refresh_books.py`) and writes its path as the
-book's `img` in `now.json`; a cover it cannot fetch is left out, and
-Reading Now sets that book's cover in type. `refresh_now.py --covers`
-does only this, with no Last.fm key and no feed.
+The books in progress mostly have no record to mark.
+`refresh_books.py --export` gives each the shelf's small copy of its
+cover when the book is on file, or keeps one of its own in the same
+folder (`reading_cover`, Open Library's cover), and writes its path as
+the book's `img` in `now.json`; a book with none is left without, and
+Reading Now sets its cover in type. Reading Now is dated by
+`readingUpdated`, the day the export was downloaded, since the weekly
+run keeps the list as it is.
 
 ### Years and genres
 
@@ -292,13 +321,13 @@ genre, and sorts by the year, so every record carries `y` and `gn`.
 |---|---|---|
 | 1 | `book-overrides.json`, by hand | `book-overrides.json`, by hand |
 | 2 | a Goodreads library export: Original Publication Year, else the edition's Year Published | the genres readers shelve the book under on Goodreads, with their votes, from an export enhanced with [Enhance-GoodReads-Export](https://github.com/PaulKlinger/Enhance-GoodReads-Export) |
-| 3 | the feed's `book_published`, which `refresh_books.py` writes for a new book and never over a year on file | Open Library's subjects for the work |
+| 3 | the year `refresh_books.py --export` writes for a new book (from the same columns; never over a year on file) | Open Library's subjects for the work |
 | 4 | Open Library's `first_publish_year` | |
 
 What the sources said is kept in `book-details.json`, a book an entry:
 the year and the labels (a Goodreads genre and its votes, or an Open
-Library subject) and where each came from. It is the cache, so a
-Monday asks Open Library only about the week's new books, by ISBN where
+Library subject) and where each came from. It is the cache, so a run
+asks Open Library only about the books an export has just brought, by ISBN where
 there is one, else by title and author (the author must be the first
 named on the answer); a book it cannot place is asked again after 90
 days. The labels are kept as they came, so a change to the genre table

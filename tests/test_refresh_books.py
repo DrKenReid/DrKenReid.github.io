@@ -1,20 +1,24 @@
-"""refresh_books.merge(): the weekly Goodreads refresh never loses a read.
+"""refresh_books: the shelf from a Goodreads library export, never losing a read.
 
-Goodreads' feed reports only the latest finish of each book, so the
-earlier finishes (`p`) exist nowhere but in data/books.json: once the
-refresh drops one, the reading calendar, the year counts and the streak
-lose that session for good. These cases pin the rules in the module
-docstring of .github/scripts/refresh_books.py with small hand-built
-records, plus one round trip over the real file.
+Goodreads retired its RSS feeds in October 2026, so data/books.json is
+refreshed from the library export I download. The plain export gives
+one finish date a book, so the earlier finishes (`p`) exist for most
+books nowhere but in books.json: once a run drops one, the reading
+calendar, the year counts and the streak lose that session for good.
+These cases pin the rules in the module docstring of
+.github/scripts/refresh_books.py with small hand-built records and a
+made-up export (tests/fixtures/goodreads_library_export.csv, the real
+column names and no real data), plus one round trip over the real file.
 
 keep_covers(): the reading pages show each book's cover from the site's
 own copies, a full one and a small one for tiles, and ask only for the
 files a record's marks (`k`, `s`) name. A mark with no file behind it is
 a broken picture on the wall, and a cover that cannot be fetched must
-never cost the week's reading data. local_cover() is the same store for
-the books in progress, which refresh_now.py writes into now.json. The
-cover cases run against a temporary folder and a stand-in for the
-network.
+never cost the reading data. A book an export brings has its cover found
+at Open Library (add_cover_sources), and reading_cover() is the same
+store for the books in progress, which refresh_now.write_reading() puts
+in now.json. The cover cases run against a temporary folder and a
+stand-in for the network.
 
 Run from the repo root:
     python -m unittest discover -s tests -v
@@ -28,49 +32,45 @@ import sys
 import tempfile
 import unittest
 import urllib.error
-from datetime import date, datetime
+from datetime import date
 from pathlib import Path
 from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / ".github" / "scripts"))
+import refresh_book_details as rbd  # noqa: E402
 import refresh_books as rb  # noqa: E402
 import refresh_now as rn  # noqa: E402
+import validate_data  # noqa: E402
+
+try:  # fit_cover's cases need Pillow; the rest run without it
+    from PIL import Image
+except ImportError:
+    Image = None
+
+FIXTURE = Path(__file__).resolve().parent / "fixtures" / "goodreads_library_export.csv"
 
 
-def rss_date(d):
-    """'2026/03/19' as the feed writes it: 'Thu, 19 Mar 2026 00:00:00 +0000'."""
-    return datetime.strptime(d, "%Y/%m/%d").strftime("%a, %d %b %Y 00:00:00 +0000")
-
-
-def item(book_id, title="A Book", read="", added="2024/01/01", rating=4,
-         review_id=None, isbn=""):
-    """One feed item, as fetch_items() returns it."""
-    return {
-        "book_id": book_id,
-        "title": title,
-        "author_name": "An Author",
-        "user_rating": str(rating),
-        "user_review": "",
-        "isbn": isbn,
-        "link": "https://www.goodreads.com/review/show/%s?utm_medium=api"
-                % (review_id or "70" + book_id),
-        "user_read_at": rss_date(read) if read else "",
-        "user_date_added": rss_date(added) if added else "",
-    }
+def item(g, title="A Book", author="An Author", rating=4, finishes=(), added="2024/01/01",
+         count=None, shelf="read", **more):
+    """One finished book, as export_items() returns it."""
+    it = {"g": g, "t": title, "a": author, "r": rating, "v": False, "i": "", "n": None, "y": None,
+          "finishes": sorted(finishes), "added": added,
+          "count": len(finishes) if count is None else count, "shelf": shelf}
+    it.update(more)
+    return it
 
 
 def item_for(b):
-    """The feed item that says exactly what record `b` says."""
-    return {
-        "book_id": b["g"], "title": b["t"], "author_name": b["a"],
-        "user_rating": str(b["r"]), "user_review": "A review." if b.get("v") else "",
-        "isbn": b.get("i", ""),
-        "link": "https://www.goodreads.com/review/show/%s" % b["w"],
-        "user_read_at": "" if b.get("e") else rss_date(b["d"]),
-        "user_date_added": rss_date(b["d"]) if b.get("e") else rss_date("2024/01/01"),
-        "book_large_image_url": rb.GR_COVERS + b["c"] if b.get("c") else "",
-        "book_published": str(b["y"]) if b.get("y") else "",
-    }
+    """The export item that says exactly what record `b` says, as an
+    enhanced export (every finish in read_dates) would."""
+    return item(b["g"], b["t"], b["a"], b["r"], finishes=rb.sessions(b),
+                added=b["d"] if b.get("e") else "2024/01/01",
+                count=b.get("rc") or len(rb.sessions(b)), v=bool(b.get("v")), i=b.get("i", ""),
+                n=b.get("n"), y=b.get("y"))
+
+
+def merged(old, items, reading=()):
+    return rb.merge(old, items, reading)[0]
 
 
 def by_id(books):
@@ -88,204 +88,167 @@ def jpeg(height, width=260, pad=0):
 JPEG = jpeg(400)
 
 
-def no_network(url):
-    raise AssertionError("a test reached for the network: %s" % url)
+def no_network(*args, **kwargs):
+    raise AssertionError("a test reached for the network: %s" % (args,))
 
 
-def run_main(old, items, argv=(), cover=no_network):
-    """main() over a books.json in a temporary folder, with `items` for
-    the feed and `cover` for fetch_cover(). Returns its exit status, the
-    books.json it left, whether it wrote reading.json, what it printed
-    and the cover files it wrote ({name: bytes}, a small copy as
-    "s/<name>")."""
-    with tempfile.TemporaryDirectory() as tmp:
-        books = Path(tmp) / "books.json"
-        summary = Path(tmp) / "reading.json"
-        covers = Path(tmp) / "shelf"
-        books.write_text(json.dumps(old), encoding="utf-8")
-        out = io.StringIO()
-        feed = (mock.patch.object(rb, "fetch_items", return_value=items) if items is not None
-                else mock.patch.object(rb, "fetch_items", side_effect=AssertionError("no feed here")))
-        with mock.patch.object(rb, "BOOKS", books), \
-                mock.patch.object(rb, "SUMMARY", summary), \
-                mock.patch.object(rb, "COVERS", covers), \
-                mock.patch.object(rb, "COVER_PAUSE", 0), \
-                mock.patch.object(rb, "fetch_cover", cover), \
-                feed, contextlib.redirect_stdout(out):
-            code = rb.main(list(argv))
-        files = {p.relative_to(covers).as_posix(): p.read_bytes() for p in covers.rglob("*.jpg")}
-        return code, json.loads(books.read_text(encoding="utf-8")), summary.exists(), out.getvalue(), files
+class Export(unittest.TestCase):
+    """read_export() and export_items(): the columns a library export has,
+    the public fields taken from them, and nothing private."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.rows = rb.read_export(FIXTURE)
+        cls.finished, cls.reading = rb.export_items(cls.rows)
+
+    def test_the_finished_books_and_the_books_in_progress(self):
+        # The read shelf, and a book being read again that has a finish.
+        self.assertEqual([i["g"] for i in self.finished], ["101", "102", "103", "104", "105"])
+        # Every book on currently-reading, in the export's order.
+        self.assertEqual([i["g"] for i in self.reading], ["105", "106"])
+
+    def test_the_fields_of_a_row(self):
+        it = self.finished[0]
+        self.assertEqual(
+            {k: it[k] for k in ("g", "t", "a", "r", "v", "i", "n", "y", "finishes", "added", "count")},
+            {"g": "101", "t": "The Lantern Road (The Lantern Cycle, #1)", "a": "Mara Quill", "r": 5, "v": True,
+             "i": "9780441000001", "n": 412, "y": 1998, "finishes": ["2026/03/01"], "added": "2025/12/20",
+             "count": 1})
+        clock = by_id(self.finished)["104"]
+        self.assertEqual((clock["t"], clock["r"]), ("The Clockmaker's Daughter", 0))
+        bare = by_id(self.finished)["102"]
+        self.assertEqual((bare["i"], bare["n"], bare["y"], bare["finishes"]), ("", None, 2021, []))
+
+    def test_nothing_private_leaves_the_rows(self):
+        text = json.dumps([self.finished, self.reading])
+        for private in ("must never reach", "SECRET", "favourites", "Example Press", "Not for me"):
+            self.assertNotIn(private, text)
+
+    def test_the_cells_as_an_export_writes_them(self):
+        self.assertEqual(rb.cell({"ISBN": '="0441013597"'}, "ISBN"), "0441013597")
+        self.assertEqual(rb.export_isbn({"ISBN": '=""', "ISBN13": '=""'}), "")
+        self.assertEqual(rb.export_isbn({"ISBN": '="044101359X"', "ISBN13": '=""'}), "044101359X")
+        self.assertEqual(rb.export_number("765.0"), 765)
+        for empty in ("", "0", "n/a", None):
+            self.assertIsNone(rb.export_number(empty))
+        self.assertEqual(rb.export_date("2026-10-24"), "2026/10/24")
+        self.assertEqual(rb.export_date(""), "")
+
+    def test_an_enhanced_export_gives_every_finish(self):
+        row = dict(self.rows[2], read_dates="2015-01-01,2015-02-01;,2019-06-02;2026-01-01,")
+        self.assertEqual(rb.export_finishes(row), ["2015/02/01", "2019/06/02"])
+
+    def test_a_file_that_is_not_an_export_is_refused(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "other.csv"
+            path.write_text("Title,Author\nA,B\n", encoding="utf-8")
+            with self.assertRaises(rb.ExportError):
+                rb.read_export(path)
+            with self.assertRaises(rb.ExportError):
+                rb.read_export(Path(tmp) / "missing.csv")
 
 
 class FirstRead(unittest.TestCase):
-    def test_a_new_book_with_a_finish_date(self):
-        (b,) = rb.merge([], [item("1", title="Dune", read="2026/03/19", isbn="9780441013593")])
-        self.assertEqual(b, {"t": "Dune", "a": "An Author", "r": 4, "i": "9780441013593",
-                             "g": "1", "w": "701", "d": "2026/03/19"})
+    def test_a_new_book_from_the_export(self):
+        (b,) = merged([], [item("1", title="Dune", finishes=["2026/03/19"], i="9780441013593", n=412, y=1965)])
+        self.assertEqual(b, {"t": "Dune", "a": "An Author", "r": 4, "i": "9780441013593", "g": "1",
+                             "n": 412, "y": 1965, "d": "2026/03/19"})
         self.assertEqual(rb.sessions(b), ["2026/03/19"])
 
 
 class ReRead(unittest.TestCase):
-    def test_a_later_finish_moves_the_old_date_into_p(self):
-        old = rb.merge([], [item("1", read="2021/05/01")])
-        new = by_id(rb.merge(old, [item("1", read="2026/09/01")]))["1"]
-        self.assertEqual(new["d"], "2026/09/01")
-        self.assertEqual(new["p"], ["2021/05/01"])
-        self.assertEqual(sorted(rb.sessions(new)), ["2021/05/01", "2026/09/01"])
+    def test_a_later_finish_moves_the_date_on_file_into_p(self):
+        old = merged([], [item("1", finishes=["2021/05/01"])])
+        new = by_id(merged(old, [item("1", finishes=["2026/09/01"])]))["1"]
+        self.assertEqual((new["d"], new["p"]), ("2026/09/01", ["2021/05/01"]))
 
-    def test_a_third_read_keeps_both_earlier_ones_in_order(self):
-        books = rb.merge([], [item("1", read="2019/01/01")])
-        books = rb.merge(books, [item("1", read="2022/01/01")])
-        books = rb.merge(books, [item("1", read="2026/01/01")])
-        self.assertEqual(by_id(books)["1"]["p"], ["2019/01/01", "2022/01/01"])
-
-    def test_an_earlier_finish_is_a_correction_not_a_read(self):
-        # The latest session was deleted on Goodreads: the date goes back
-        # and nothing is counted twice.
-        old = [{"t": "A Book", "a": "An Author", "r": 4, "g": "1", "w": "701",
-                "d": "2026/09/01", "p": ["2021/05/01"]}]
-        new = by_id(rb.merge(old, [item("1", read="2021/05/01")]))["1"]
-        self.assertEqual(new["d"], "2021/05/01")
-        self.assertNotIn("p", new)
+    def test_an_earlier_date_in_the_export_is_a_read_not_a_correction(self):
+        # The plain export's Date Read is the first finish of most re-reads:
+        # it joins p, and the latest stays d.
+        old = [{"t": "A Book", "a": "An Author", "r": 4, "g": "1", "d": "2026/03/19", "p": ["2023/12/15"]}]
+        new = by_id(merged(old, [item("1", finishes=["2023/12/15"], count=2)]))["1"]
+        self.assertEqual((new["d"], new["p"]), ("2026/03/19", ["2023/12/15"]))
+        self.assertNotIn("rc", new)
         self.assertEqual(rb.lost_history(old, [new]), [])
 
-    def test_pages_come_from_the_feed_and_are_kept_when_it_has_none(self):
-        it = item("1", read="2024/02/01")
-        it["book/num_pages"] = "320"
-        b = rb.merge_one({}, it)
-        self.assertEqual(b["n"], 320)
-        it["book/num_pages"] = ""
-        self.assertEqual(rb.merge_one(b, it)["n"], 320)
-        it["book/num_pages"] = "0"
-        self.assertNotIn("n", rb.merge_one({}, it))
+    def test_an_export_with_no_date_keeps_the_dates_on_file(self):
+        old = [{"t": "A Book", "a": "An Author", "r": 4, "g": "1", "d": "2026/03/25", "p": ["2024/01/01"]}]
+        new = by_id(merged(old, [item("1", finishes=[], count=2)]))["1"]
+        self.assertEqual((new["d"], new["p"]), ("2026/03/25", ["2024/01/01"]))
 
-    def test_the_year_published_comes_from_the_feed_and_is_kept_when_it_has_none(self):
-        it = item("1", read="2024/02/01")
-        it["book_published"] = "1945"
-        b = rb.merge_one({}, it)
-        self.assertEqual(b["y"], 1945)
-        # A week with no year, or something that is not one, keeps the year on file.
-        for week in ("", "unknown", "0"):
-            it["book_published"] = week
-            self.assertEqual(rb.merge_one(b, it)["y"], 1945)
-        self.assertNotIn("y", rb.merge_one({}, it))
+    def test_a_read_count_above_the_dates_is_kept(self):
+        (b,) = merged([], [item("1", finishes=["2022/03/29"], count=2)])
+        self.assertEqual(b["rc"], 2)
+        (b,) = merged([], [item("1", finishes=["2022/03/29", "2024/01/01"], count=2)])
+        self.assertNotIn("rc", b)
 
-    def test_the_year_on_file_wins_over_the_feeds(self):
-        # refresh_book_details.py writes the original year; the feed's may
-        # be the edition's, and must not undo it every Monday.
-        it = item("1", read="2024/02/01")
-        it["book_published"] = "2004"
-        self.assertEqual(rb.merge_one({"y": 1954}, it)["y"], 1954)
-
-    def test_the_genres_stay_with_the_record(self):
-        # The feed carries no genres: a week's merge keeps what
-        # refresh_book_details.py set, in the place it writes them.
-        it = item("1", read="2024/02/01")
-        it["book_published"] = "1954"
-        b = rb.merge_one({"y": 1954, "gn": ["fantasy"], "w": "701"}, it)
-        self.assertEqual(b["gn"], ["fantasy"])
-        self.assertEqual(list(b), ["t", "a", "r", "g", "y", "gn", "w", "d"])
-        self.assertNotIn("gn", rb.merge_one({}, it))
-
-    def test_the_cover_comes_from_the_feed_and_is_kept_when_it_has_none(self):
-        it = item("1", read="2024/02/01")
-        it["book_large_image_url"] = rb.GR_COVERS + "1670752670l/1._SY475_.jpg"
-        b = rb.merge_one({}, it)
-        self.assertEqual(b["c"], "1670752670l/1._SY475_.jpg")
-        # A week with no cover, or Goodreads' placeholder, keeps the one on file.
-        it["book_large_image_url"] = ""
-        self.assertEqual(rb.merge_one(b, it)["c"], "1670752670l/1._SY475_.jpg")
-        it["book_large_image_url"] = "https://s.gr-assets.com/assets/nophoto/book/111x148.png"
-        self.assertEqual(rb.merge_one(b, it)["c"], "1670752670l/1._SY475_.jpg")
-        self.assertNotIn("c", rb.merge_one({}, it))
-        # A cover from anywhere else is kept whole.
-        it["book_large_image_url"] = "https://images.example.org/cover.jpg"
-        self.assertEqual(rb.merge_one({}, it)["c"], "https://images.example.org/cover.jpg")
-
-    def test_the_same_date_again_changes_nothing(self):
-        old = rb.merge([], [item("1", read="2026/09/01")])
-        self.assertEqual(rb.merge(old, [item("1", read="2026/09/01")]), old)
+    def test_the_same_export_again_changes_nothing(self):
+        once = merged([], [item("1", finishes=["2019/01/01", "2026/09/01"], count=3), item("2")])
+        self.assertEqual(merged(once, [item_for(b) for b in once]), once)
 
 
 class DateAddedOnly(unittest.TestCase):
     def test_no_finish_date_uses_the_date_added_and_marks_it(self):
-        (b,) = rb.merge([], [item("1", read="", added="2025/12/31")])
-        self.assertEqual(b["d"], "2025/12/31")
-        self.assertEqual(b["e"], 1)
+        (b,) = merged([], [item("1", added="2025/12/31")])
+        self.assertEqual((b["d"], b["e"]), ("2025/12/31", 1))
         # The calendar and the year count leave a date-added book out.
         self.assertEqual(rb.sessions(b), [])
 
-    def test_a_later_finish_replaces_the_date_added_without_counting_it(self):
-        old = rb.merge([], [item("1", read="", added="2025/12/31")])
-        new = by_id(rb.merge(old, [item("1", read="2026/02/01")]))["1"]
+    def test_a_finish_replaces_the_date_added_without_counting_it(self):
+        old = merged([], [item("1", added="2025/12/31")])
+        new = by_id(merged(old, [item("1", finishes=["2026/02/01"])]))["1"]
         self.assertEqual(new["d"], "2026/02/01")
         self.assertNotIn("e", new)
         self.assertNotIn("p", new)
 
-    def test_a_finish_date_that_disappears_is_kept(self):
-        old = rb.merge([], [item("1", read="2026/02/01")])
-        new = by_id(rb.merge(old, [item("1", read="")]))["1"]
-        self.assertEqual(new["d"], "2026/02/01")
-        self.assertNotIn("e", new)
 
-
-class AbsentForOneRun(unittest.TestCase):
+class WhatTheRecordKeeps(unittest.TestCase):
     def setUp(self):
-        self.old = [{"t": "Kept", "a": "An Author", "r": 5, "g": "1", "w": "701",
-                     "d": "2026/01/01", "p": ["2020/01/01", "2023/01/01"]},
-                    {"t": "Other", "a": "An Author", "r": 3, "g": "2", "w": "702",
-                     "d": "2025/06/01"}]
+        self.on_file = {"t": "The Path of Ascension (The Path of Ascension #1)", "a": "Karen Tang", "r": 3,
+                        "v": 1, "i": "1416562591", "g": "1", "c": "1700000001l/1._SY475_.jpg", "k": 1, "s": 1,
+                        "n": 570, "y": 1998, "gn": ["fantasy"], "w": "701", "d": "2025/01/01"}
 
-    def test_one_missing_week_carries_the_book_and_its_history(self):
-        week1 = by_id(rb.merge(self.old, [item_for(self.old[1])]))
-        kept = week1["1"]
-        self.assertEqual(kept["m"], 1)
-        self.assertEqual(kept["p"], ["2020/01/01", "2023/01/01"])
-        self.assertEqual({k: v for k, v in kept.items() if k != "m"}, self.old[0])
+    def test_the_export_wins_for_what_i_edit_the_record_for_the_rest(self):
+        new = rb.merge_one(self.on_file, item("1", title="The Path of Ascension", author="Dr. Karen Tang MD MPH",
+                                              rating=5, finishes=["2025/01/01"], i="9781416562597", n=440, y=2004,
+                                              v=True))
+        self.assertEqual(new, dict(self.on_file, r=5, n=440))
+        # In the order the record was in: the file reads the same whoever wrote it.
+        self.assertEqual(list(new), list(self.on_file))
+        # A review deleted on Goodreads takes the mark with it.
+        self.assertNotIn("v", rb.merge_one(self.on_file, item("1", finishes=["2025/01/01"])))
 
-    def test_back_the_next_week_the_counter_goes(self):
-        week1 = rb.merge(self.old, [item_for(self.old[1])])
-        week2 = by_id(rb.merge(week1, [item_for(b) for b in self.old]))
-        self.assertNotIn("m", week2["1"])
-        self.assertEqual(week2["1"]["p"], ["2020/01/01", "2023/01/01"])
+    def test_an_edition_change_keeps_the_record_and_its_history(self):
+        old = [dict(self.on_file, p=["2020/01/01"]), {"t": "Other", "a": "An Author", "r": 3, "g": "2",
+                                                      "d": "2024/06/01"}]
+        moved = item("99", title=self.on_file["t"], author="Karen  Tang", finishes=["2025/01/01"])
+        out, dropped = rb.merge(old, [moved, item_for(old[1])])
+        new = by_id(out)["1"]   # its own id: it names the cover files
+        self.assertEqual((new["p"], new["k"], new["s"], dropped), (["2020/01/01"], 1, 1, []))
+        self.assertNotIn("99", by_id(out))
 
-    def test_missing_twice_in_a_row_is_a_removal(self):
-        week1 = rb.merge(self.old, [item_for(self.old[1])])
-        week2 = rb.merge(week1, [item_for(self.old[1])])
-        self.assertEqual(list(by_id(week2)), ["2"])
+    def test_a_book_being_read_again_stays_on_the_shelf(self):
+        old = [self.on_file]
+        out, dropped = rb.merge(old, [], reading=[item("1", shelf="currently-reading")])
+        self.assertEqual((out, dropped), ([self.on_file], []))
 
-    def test_an_edition_change_keeps_the_history_through_the_review_id(self):
-        moved = dict(item_for(self.old[0]), book_id="99")
-        out = by_id(rb.merge(self.old, [moved, item_for(self.old[1])]))
-        self.assertEqual(out["99"]["p"], ["2020/01/01", "2023/01/01"])
-        self.assertNotIn("1", out)
+    def test_a_book_goodreads_no_longer_has_as_read_is_dropped(self):
+        out, dropped = rb.merge([self.on_file], [item("2", finishes=["2026/01/01"])])
+        self.assertEqual([b["g"] for b in out], ["2"])
+        self.assertEqual(dropped, [self.on_file])
 
+    def test_a_row_listed_twice_is_one_book(self):
+        out = merged([], [item("1", finishes=["2026/01/01"]), item("1", finishes=["2020/01/01"])])
+        self.assertEqual((len(out), out[0]["d"]), (1, "2026/01/01"))
 
-class ShrinkingFeed(unittest.TestCase):
-    """main(): a feed with fewer than MIN_FEED_SHARE of the books on file
-    is an outage, not a cull, and nothing is written."""
-
-    def run_main(self, old, items):
-        return run_main(old, items)[:4]
-
-    def shelf(self, n):
-        return [{"t": "Book %d" % i, "a": "An Author", "r": 3, "g": str(i), "w": "7%d" % i,
-                 "d": "2025/01/%02d" % (i % 28 + 1)} for i in range(n)]
-
-    def test_a_short_feed_writes_nothing(self):
-        old = self.shelf(20)
-        code, written, wrote_summary, out = self.run_main(old, [item_for(b) for b in old[:17]])
-        self.assertEqual(code, 1)
-        self.assertEqual(written, old)
-        self.assertFalse(wrote_summary)
-        self.assertIn("leaving books.json alone", out)
-
-    def test_one_book_short_is_carried_not_dropped(self):
-        old = self.shelf(20)
-        code, written, _, _ = self.run_main(old, [item_for(b) for b in old[1:]])
-        self.assertEqual(code, 0)
-        self.assertEqual(len(written), 20)
-        self.assertEqual(by_id(written)["0"]["m"], 1)
+    def test_the_log_says_what_changed(self):
+        old = [dict(self.on_file)]
+        new = merged(old, [item("1", rating=5, finishes=["2025/01/01", "2026/02/02"]),
+                           item("2", title="New One", finishes=["2026/03/03"])])
+        self.assertEqual(rb.changes(old, new), [
+            "added: New One by An Author, 4/5, finished 2026/03/03",
+            "rating: The Path of Ascension (The Path of Ascension #1), 3 -> 5",
+            "finished again: The Path of Ascension (The Path of Ascension #1), 2026/02/02"])
 
 
 class Summary(unittest.TestCase):
@@ -294,40 +257,10 @@ class Summary(unittest.TestCase):
             {"t": "A", "a": "x", "r": 5, "g": "1", "w": "1", "d": "2026/03/01",
              "p": ["2026/01/01", "2020/01/01"]},
             {"t": "B", "a": "x", "r": 4, "v": 1, "g": "2", "w": "2", "d": "2026/02/01", "e": 1},
-            {"t": "C", "a": "x", "r": 3, "g": "3", "w": "3", "d": "2025/12/31"},
+            {"t": "C", "a": "x", "r": 3, "g": "3", "d": "2025/12/31", "rc": 2},
         ]
         self.assertEqual(rb.summarise(books, date(2026, 9, 23)), {
             "books": 3, "reviews": 1, "thisYear": 2, "rereads": 2, "updated": "2026-09-23"})
-
-
-class Paging(unittest.TestCase):
-    """fetch_items(): a short page ends the shelf only when the next is
-    empty. Stopping at a page cut off mid-shelf once lost every book after
-    it."""
-
-    @staticmethod
-    def pages(*sizes):
-        def xml(n, start):
-            items = "".join("<item><book_id>%d</book_id></item>" % (start + i) for i in range(n))
-            return ("<rss><channel>%s</channel></rss>" % items).encode()
-        served = []
-
-        def fetch(url):
-            page = int(url.rsplit("=", 1)[1])
-            served.append(page)
-            n = sizes[page - 1] if page <= len(sizes) else 0
-            return xml(n, sum(sizes[:page - 1]))
-        return fetch, served
-
-    def test_a_short_last_page_is_confirmed_by_an_empty_next_one(self):
-        fetch, served = self.pages(rb.PER_PAGE, rb.PER_PAGE, 1)
-        self.assertEqual(len(rb.fetch_items(fetch)), 2 * rb.PER_PAGE + 1)
-        self.assertEqual(served, [1, 2, 3, 4])
-
-    def test_a_short_page_in_the_middle_is_a_failure(self):
-        fetch, _ = self.pages(rb.PER_PAGE, 150, rb.PER_PAGE, 51)
-        with self.assertRaises(rb.FeedError):
-            rb.fetch_items(fetch)
 
 
 def shelved(g, cover=True, **more):
@@ -400,6 +333,13 @@ class Covers(CoverStore):
         self.assertEqual(rb.cover_source("https://images.example.org/cover.jpg"),
                          "https://images.example.org/cover.jpg")
 
+    def test_open_librarys_large_cover_is_the_full_copy_its_medium_the_small(self):
+        c = rb.OL_COVER % 15270130
+        self.assertEqual(c, "https://covers.openlibrary.org/b/id/15270130-L.jpg")
+        self.assertEqual(rb.cover_source(c), c + "?default=false")
+        self.assertEqual(rb.cover_source(c, rb.COVER_SMALL_HEIGHT),
+                         "https://covers.openlibrary.org/b/id/15270130-M.jpg?default=false")
+
     def test_missing_copies_are_fetched_once_and_the_record_marked(self):
         shelf = [shelved("1"), shelved("2")]
         books, fetched, problems = self.keep(shelf)
@@ -418,8 +358,6 @@ class Covers(CoverStore):
         self.assertEqual((again, fetched, problems, len(self.asked)), (books, 0, [], 4))
 
     def test_only_the_copy_that_is_missing_is_fetched(self):
-        # The store as it stood when the small copy was added: every book
-        # with its full one.
         b = shelved("1", k=1)
         rb.write_whole(self.folder / "1.jpg", JPEG)
         books, fetched, _ = self.keep([b])
@@ -494,26 +432,10 @@ class Covers(CoverStore):
         self.assertIn("%d more left for the next run" % (2 * n - rb.COVER_GIVE_UP), problems[-1])
         self.assertEqual(marks(books), [[None, None]] * n)
 
-    def test_a_cover_goodreads_replaces_loses_its_marks_in_the_merge(self):
+    def test_the_merge_keeps_the_cover_and_its_marks(self):
         on_file = shelved("1", k=1, s=1)
-        # The same cover, or a week with none: the marks stay with it.
         self.assertEqual(marks([rb.merge_one(on_file, item_for(on_file))]), [[1, 1]])
-        self.assertEqual(marks([rb.merge_one(on_file, dict(item_for(on_file), book_large_image_url=""))]),
-                         [[1, 1]])
-        # Another cover: the copies on the site are of the old one.
-        changed = dict(item_for(on_file), book_large_image_url=rb.GR_COVERS + "1800000001l/1.jpg")
-        new = rb.merge_one(on_file, changed)
-        self.assertEqual((new["c"], marks([new])), ("1800000001l/1.jpg", [[None, None]]))
-        # keep_covers() then fetches the new one over the old files.
-        for mark in rb.COVER_MARKS:
-            rb.write_whole(rb.cover_file("1", mark), b"\xff\xd8\xff old")
-        books, fetched, _ = self.keep([new])
-        self.assertEqual((fetched, marks(books)), (2, [[1, 1]]))
-        self.assertEqual([rb.cover_file("1", mark).read_bytes() for mark in rb.COVER_MARKS], [JPEG, JPEG])
-
-    def test_a_book_missing_from_one_feed_keeps_its_marks(self):
-        (carried,) = rb.merge([shelved("1", k=1, s=1)], [])
-        self.assertEqual((marks([carried]), carried["m"]), ([[1, 1]], 1))
+        self.assertEqual(rb.merge_one(on_file, item_for(on_file))["c"], on_file["c"])
 
     def test_a_run_cut_short_has_saved_its_marks_and_the_next_starts_where_it_stopped(self):
         # Six hundred covers take ten minutes: a run stopped near the end
@@ -542,136 +464,223 @@ class Covers(CoverStore):
         self.assertEqual(path.read_bytes(), JPEG + b"more")
         self.assertEqual(self.files(), ["s/9.jpg"])
         # A write that was stopped before its move leaves a .part beside
-        # the cover; the next run clears it, since the workflow commits
-        # the whole folder.
+        # the cover; the next run clears it, since the folder is committed.
         (self.folder / "s" / "8.jpg.part").write_bytes(b"\xff\xd8")
         self.keep([])
         self.assertEqual(self.files(), ["s/9.jpg"])
 
 
-class LocalCover(CoverStore):
-    """local_cover(): the store for a cover with no record on the shelf
-    (the books in progress), by the address Goodreads gives it."""
+class NewBookCovers(CoverStore):
+    """add_cover_sources() and reading_cover(): a book an export brings has
+    Open Library's cover, or none, and is never hotlinked."""
 
-    FEED = rb.GR_COVERS + "1552279563l/44327636._SY75_.jpg"
-    OURS = "/img/covers/shelf/s/44327636.jpg"
+    def test_open_library_by_isbn_then_by_title_and_author(self):
+        asked = []
 
-    def local(self, url, answers=None):
-        return rb.local_cover(url, fetch=self.network(answers))
+        def search(url):
+            asked.append(url)
+            if "isbn=" in url:
+                return {"docs": [{"title": "Babel", "author_name": ["R. F. Kuang"]}]}   # no cover
+            return {"docs": [{"title": "Babel", "author_name": ["R.F. Kuang"], "cover_i": 12468631}]}
+        b = {"t": "Babel", "a": "R.F. Kuang", "i": "9780063021426", "g": "57945316"}
+        self.assertEqual(rb.find_cover(b, fetch=search, sleep=lambda s: None),
+                         "https://covers.openlibrary.org/b/id/12468631-L.jpg")
+        self.assertEqual(len(asked), 2)
+        self.assertIn("isbn=9780063021426", asked[0])
+        nothing = lambda url: {"docs": []}  # noqa: E731
+        self.assertEqual(rb.find_cover(b, fetch=nothing, sleep=lambda s: None), "")
 
-    def test_a_goodreads_address_becomes_the_sites_small_copy(self):
-        self.assertEqual(self.local(self.FEED), self.OURS)
-        self.assertEqual(self.asked, [rb.GR_COVERS + "1552279563l/44327636._SY%d_.jpg" % rb.COVER_SMALL_HEIGHT])
-        self.assertEqual(self.files(), ["s/44327636.jpg"])
-        # The file is there now: no second request.
-        self.assertEqual((self.local(self.FEED), len(self.asked)), (self.OURS, 1))
+    def test_a_book_with_no_cover_anywhere_is_named_and_left_unmarked(self):
+        books = [shelved("1"), shelved("2", cover=False), shelved("3", cover=False)]
 
-    def test_a_path_of_ours_is_kept_while_its_file_is_there(self):
-        self.assertEqual(self.local(self.OURS), "")
-        self.local(self.FEED)
-        self.assertEqual(self.local(self.OURS), self.OURS)
-        self.assertEqual(self.local("/img/covers/shelf/../../index.jpg"), "")
-        self.assertEqual(len(self.asked), 1)
+        def find(b):
+            if b["g"] == "3":
+                raise rbd.AskError("HTTP 503")
+            return ""
+        out, found, missing = rb.add_cover_sources(books, find=find, sleep=lambda s: None)
+        self.assertEqual((found, [b.get("c") for b in out]), (0, [books[0]["c"], None, None]))
+        self.assertEqual(missing, ["Book 2 (2): Open Library has no cover for it; set in type",
+                                   "Book 3 (3): AskError: HTTP 503; set in type"])
+        books, fetched, problems = self.keep(out)
+        self.assertEqual(marks(books), [[1, 1], [None, None], [None, None]])
 
-    def test_no_cover_to_be_had_is_no_address_at_all(self):
-        for url in ("", None, "https://s.gr-assets.com/assets/nophoto/book/111x148.png",
-                    "https://images.example.org/cover.jpg"):
-            self.assertEqual(self.local(url), "")
-        self.assertEqual(self.asked, [])
-        gone = {rb.GR_COVERS + "1552279563l/44327636._SY%d_.jpg" % rb.COVER_SMALL_HEIGHT: rb.CoverError("HTTP 404")}
-        self.assertEqual(self.local(self.FEED, gone), "")
-        self.assertEqual(self.files(), [])
+    def test_a_found_cover_is_kept_like_any_other(self):
+        books = [shelved("2", cover=False)]
+        out, found, missing = rb.add_cover_sources(books, find=lambda b: rb.OL_COVER % 7, sleep=lambda s: None)
+        self.assertEqual((found, missing, list(out[0])), (1, [], ["t", "a", "r", "g", "c", "w", "d"]))
+        books, fetched, _ = self.keep(out)
+        self.assertEqual(self.asked, [rb.cover_source(rb.OL_COVER % 7),
+                                      rb.cover_source(rb.OL_COVER % 7, rb.COVER_SMALL_HEIGHT)])
+        self.assertEqual((fetched, marks(books)), (2, [[1, 1]]))
+
+    def test_the_books_in_progress_show_the_sites_copies(self):
+        ours = "/img/covers/shelf/s/%s.jpg"
+        on_file = shelved("1", k=1, s=1)
+        rb.write_whole(rb.cover_file("1", "s"), JPEG)
+        # On the shelf: its own small copy, asking nothing.
+        self.assertEqual(rb.reading_cover("1", on_file, {}, find=no_network, fetch=no_network), ours % "1")
+        # Not on the shelf: Open Library's, fetched once, then kept.
+        got = rb.reading_cover("2", None, {"t": "x"}, find=lambda b: rb.OL_COVER % 9, fetch=self.network())
+        self.assertEqual((got, self.asked), (ours % "2", [rb.cover_source(rb.OL_COVER % 9, rb.COVER_SMALL_HEIGHT)]))
+        self.assertEqual(rb.reading_cover("2", None, {}, find=no_network, fetch=no_network), ours % "2")
+        # None anywhere, or a host that is down: no picture, never an address elsewhere.
+        self.assertEqual(rb.reading_cover("3", None, {}, find=lambda b: "", fetch=no_network), "")
+        down = {rb.cover_source(rb.OL_COVER % 4, rb.COVER_SMALL_HEIGHT): rb.CoverError("HTTP 503")}
+        self.assertEqual(rb.reading_cover("4", None, {}, find=lambda b: rb.OL_COVER % 4,
+                                          fetch=self.network(down)), "")
+        self.assertEqual(rb.reading_cover("../x", None, {}, find=no_network, fetch=no_network), "")
 
 
-class ReadingNowCovers(CoverStore):
-    """refresh_now.with_local_covers(): now.json's books in progress show
-    the site's copies, and never an address on Goodreads' image host."""
+class ReadingNow(unittest.TestCase):
+    """refresh_now: the weekly run writes the track and keeps the books in
+    progress; an export writes the books in progress and keeps the track.
+    Either way now.json holds to its schema."""
 
-    def reading(self):
-        return [{"title": "The First Step", "author": "Tao Wong", "link": "https://www.goodreads.com/review/show/1",
-                 "img": LocalCover.FEED},
-                {"title": "No Cover", "author": "A. N. Other", "link": "https://www.goodreads.com/review/show/2"}]
+    TRACK = {"name": "A", "artist": "B", "url": "", "nowPlaying": False}
 
-    def test_each_cover_becomes_a_path_on_the_site(self):
-        before = self.reading()
-        after = rn.with_local_covers(before, local=lambda url: rb.local_cover(url, fetch=self.network()))
-        self.assertEqual(after[0], dict(before[0], img=LocalCover.OURS))
-        self.assertEqual(after[1], before[1])
-        self.assertEqual(before[0]["img"], LocalCover.FEED)   # the list handed in is not changed
-        # A second pass (a week the feed failed, so last week's list is kept) changes nothing.
-        again = rn.with_local_covers(after, local=lambda url: rb.local_cover(url, fetch=self.network()))
-        self.assertEqual((again, len(self.asked)), (after, 1))
+    def schema_errors(self, now):
+        schema = json.loads((validate_data.SCHEMAS / "now.schema.json").read_text(encoding="utf-8"))
+        errors = []
+        validate_data.validate(now, schema, "now.json", errors)
+        return errors
 
-    def test_a_cover_that_cannot_be_had_is_left_out_not_hotlinked(self):
-        down = {rb.cover_source("1552279563l/44327636.jpg", rb.COVER_SMALL_HEIGHT): rb.CoverError("HTTP 503")}
-        after = rn.with_local_covers(self.reading(), local=lambda url: rb.local_cover(url, fetch=self.network(down)))
-        self.assertNotIn("img", after[0])
-        self.assertNotIn("gr-assets", json.dumps(after))
-
-    def test_covers_alone_rewrites_now_json_and_nothing_else_in_it(self):
-        now = {"track": {"name": "A", "artist": "B", "url": "", "nowPlaying": False},
-               "reading": self.reading(), "updated": "2026-11-02"}
+    def test_an_export_writes_the_list_and_its_date_and_keeps_the_track(self):
+        before = {"track": self.TRACK, "reading": [], "updated": "2026-11-09"}
+        books = [rn.reading_entry("T%d" % i, "A", "https://www.goodreads.com/book/show/%d" % i,
+                                  "/img/covers/shelf/s/%d.jpg" % i if i % 2 else "") for i in range(5)]
         with tempfile.TemporaryDirectory() as tmp:
-            path = Path(tmp) / "now.json"
-            path.write_text(json.dumps(now), encoding="utf-8")
-            out = io.StringIO()
-            with mock.patch.object(rn, "DATA", Path(tmp)), \
-                    mock.patch.object(rb, "fetch_cover", self.network()), \
-                    mock.patch.object(rn, "get", no_network), contextlib.redirect_stdout(out):
-                code = rn.main(["--covers"])
-            written = json.loads(path.read_text(encoding="utf-8"))
+            (Path(tmp) / "now.json").write_text(json.dumps(before), encoding="utf-8")
+            with mock.patch.object(rn, "DATA", Path(tmp)), contextlib.redirect_stdout(io.StringIO()):
+                rn.write_reading(books, "2026-11-06")
+            now = json.loads((Path(tmp) / "now.json").read_text(encoding="utf-8"))
+        self.assertEqual(now["track"], self.TRACK)
+        self.assertEqual((now["updated"], now["readingUpdated"]), ("2026-11-09", "2026-11-06"))
+        self.assertEqual([b["title"] for b in now["reading"]], ["T0", "T1", "T2"])
+        self.assertNotIn("img", now["reading"][0])
+        self.assertEqual(self.schema_errors(now), [])
+
+    def test_the_weekly_run_keeps_the_list_and_its_date(self):
+        before = {"track": None, "reading": [rn.reading_entry("T", "A", "L")], "updated": "2026-11-02",
+                  "readingUpdated": "2026-11-06"}
+        now = rn.now_with(before, track=self.TRACK, today="2026-11-16")
+        self.assertEqual(now, {"track": self.TRACK, "reading": before["reading"], "updated": "2026-11-16",
+                               "readingUpdated": "2026-11-06"})
+        self.assertEqual(self.schema_errors(now), [])
+
+    def test_the_weekly_run_asks_goodreads_nothing(self):
+        # Last.fm answers; anything else would be a request the run should not make.
+        def lastfm(method, key, **params):
+            return {"user.getinfo": {"user": {"playcount": "10"}},
+                    "user.getrecenttracks": {"recenttracks": {"track": []}},
+                    "user.gettopalbums": {"topalbums": {"album": []}}}[method]
+        before = {"track": None, "reading": [rn.reading_entry("T", "A", "L")], "updated": "2026-11-02"}
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "now.json").write_text(json.dumps(before), encoding="utf-8")
+            with mock.patch.object(rn, "DATA", Path(tmp)), mock.patch.object(rn, "lastfm", lastfm), \
+                    mock.patch.object(rn, "get", no_network), mock.patch.dict("os.environ", {"LASTFM_API_KEY": "k"}), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                code = rn.main([])
+            now = json.loads((Path(tmp) / "now.json").read_text(encoding="utf-8"))
+        self.assertEqual((code, now["reading"]), (0, before["reading"]))
+
+
+def run_main(old, argv, export=FIXTURE, cover=no_network, find=no_network, now=None):
+    """main() over a books.json in a temporary folder, with `cover` for
+    fetch_cover() and `find` for Open Library's covers. The years and
+    genres step is replaced with a stand-in. Returns its exit status, the
+    books.json it left, the reading.json and now.json it wrote (or None),
+    what it printed, the cover files it wrote and the calls the details
+    step had."""
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        books, summary, covers = tmp / "books.json", tmp / "reading.json", tmp / "shelf"
+        books.write_text(json.dumps(old), encoding="utf-8")
+        if now is not None:
+            (tmp / "now.json").write_text(json.dumps(now), encoding="utf-8")
+        args = [a if a != "EXPORT" else str(export) for a in argv]
+        details = mock.Mock(return_value=0)
+        out = io.StringIO()
+        with mock.patch.object(rb, "BOOKS", books), mock.patch.object(rb, "SUMMARY", summary), \
+                mock.patch.object(rb, "COVERS", covers), mock.patch.object(rb, "COVER_PAUSE", 0), \
+                mock.patch.object(rb, "fetch_cover", cover), mock.patch.object(rb, "find_cover", find), \
+                mock.patch.object(rbd, "refresh", details), mock.patch.object(rn, "DATA", tmp), \
+                contextlib.redirect_stdout(out):
+            code = rb.main(args)
+        files = {p.relative_to(covers).as_posix(): p.read_bytes() for p in covers.rglob("*.jpg")}
+
+        def read(path):
+            return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+        return (code, read(books), read(summary), read(tmp / "now.json"), out.getvalue(), files,
+                details.call_args_list)
+
+
+class ExportMain(unittest.TestCase):
+    """main() --export: one run does what the weekly refresh used to."""
+
+    def test_the_export_reaches_every_file(self):
+        old = [shelved("103", t="Second Winter (The Lantern Cycle, #2)", a="Mara Quill", d="2019/06/02",
+                       p=["2012/01/01"], k=1, s=1)]
+        code, books, summary, now, out, files, details = run_main(
+            old, ["--export", "EXPORT"], cover=lambda url: JPEG, find=lambda b: rb.OL_COVER % int(b["g"]),
+            now={"track": None, "reading": [], "updated": "2026-11-09"})
         self.assertEqual(code, 0)
-        self.assertEqual(written["reading"][0]["img"], LocalCover.OURS)
-        self.assertEqual({k: v for k, v in written.items() if k != "reading"},
-                         {k: v for k, v in now.items() if k != "reading"})
+        self.assertEqual([b["g"] for b in books], ["101", "104", "102", "105", "103"])
+        second = by_id(books)["103"]
+        self.assertEqual((second["p"], second["r"], second["c"]), (["2012/01/01"], 4, old[0]["c"]))
+        self.assertEqual(by_id(books)["105"]["rc"], 2)
+        self.assertEqual(summary["books"], 5)
+        # A cover for each new book, and the one on file fetched again only where its files are missing.
+        self.assertEqual(by_id(books)["101"]["c"], rb.OL_COVER % 101)
+        self.assertIn("s/101.jpg", files)
+        # The years and genres from the same export, then the books in progress.
+        self.assertEqual(len(details), 1)
+        self.assertEqual([b["title"] for b in now["reading"]], ["An Atlas of Small Rivers", "Fieldwork for Beginners"])
+        self.assertEqual(now["reading"][1]["link"], "https://www.goodreads.com/book/show/106")
+        self.assertIn("readingUpdated", now)
+        self.assertIn("added: The Lantern Road (The Lantern Cycle, #1) by Mara Quill, 5/5, finished 2026/03/01", out)
+        for private in ("must never reach", "SECRET"):
+            self.assertNotIn(private, json.dumps([books, now]) + out)
 
+    def test_a_cover_that_cannot_be_had_never_costs_the_books(self):
+        code, books, summary, _, out, files, _ = run_main([], ["--export", "EXPORT"], find=lambda b: "")
+        self.assertEqual((code, len(books), files), (0, 5, {}))
+        self.assertIsNotNone(summary)
+        self.assertEqual(marks(books), [[None, None]] * 5)
+        self.assertIn("::warning::cover not found: The Lantern Road", out)
 
-class CoversInMain(unittest.TestCase):
-    """main(): a new book's cover arrives with it, and a cover is never
-    the reason the week's reading is not written."""
-
-    def test_the_weekly_run_writes_a_new_books_covers_and_its_marks_together(self):
+    def test_a_dry_run_writes_nothing_and_asks_no_one(self):
         old = [shelved("1")]
-        new = shelved("2", d="2026/03/01")
-        code, written, wrote_summary, out, files = run_main(
-            old, [item_for(new), item_for(old[0])], cover=lambda url: JPEG)
-        self.assertEqual(code, 0)
-        self.assertTrue(wrote_summary)
-        self.assertEqual({b["g"]: marks([b])[0] for b in written}, {"1": [1, 1], "2": [1, 1]})
-        self.assertEqual(files, {"1.jpg": JPEG, "2.jpg": JPEG, "s/1.jpg": JPEG, "s/2.jpg": JPEG})
-        self.assertIn("covers: of 2 books, 2 have the full copy on the site and 2 the small one (4 files fetched)", out)
+        code, books, summary, now, out, files, details = run_main(old, ["--export", "EXPORT", "--dry-run"])
+        self.assertEqual((code, books, summary, now, files, details), (0, old, None, None, {}, []))
+        self.assertIn("dry run: 5 books (1 dropped)", out)
 
-    def test_a_cover_that_fails_is_a_warning_and_the_books_are_still_written(self):
-        def refused(url):
-            raise rb.CoverError("HTTP 404")
-        old = [shelved("1")]
-        code, written, wrote_summary, out, files = run_main(
-            old, [item_for(shelved("2")), item_for(old[0])], cover=refused)
-        self.assertEqual((code, wrote_summary, files), (0, True, {}))
-        self.assertEqual(sorted(b["g"] for b in written), ["1", "2"])
-        self.assertEqual(marks(written), [[None, None]] * 2)
-        self.assertIn("::warning::cover not fetched: Book 2 (2, %dpx): HTTP 404" % rb.COVER_HEIGHT, out)
+    def test_an_export_much_shorter_than_the_shelf_writes_nothing(self):
+        old = [shelved(str(i)) for i in range(1, 21)]
+        code, books, summary, _, out, _, _ = run_main(old, ["--export", "EXPORT"])
+        self.assertEqual((code, books, summary), (1, old, None))
+        self.assertIn("is it the whole export? writing nothing", out)
 
-    def test_even_a_fault_in_the_cover_stage_leaves_the_books_written(self):
-        def broken(url):
-            raise ValueError("something nobody planned for")
-        code, written, wrote_summary, out, _ = run_main([], [item_for(shelved("2"))], cover=broken)
-        self.assertEqual((code, wrote_summary, len(written)), (0, True, 1))
-        self.assertIn("::warning::covers: ValueError", out)
+    def test_a_file_that_is_not_an_export_writes_nothing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            other = Path(tmp) / "other.csv"
+            other.write_text("a,b\n1,2\n", encoding="utf-8")
+            code, books, _, _, out, _, _ = run_main([shelved("1")], ["--export", "EXPORT"], export=other)
+        self.assertEqual((code, books), (1, [shelved("1")]))
+        self.assertIn("is it a Goodreads library export?", out)
 
-    def test_a_dry_run_fetches_no_cover(self):
-        old = [shelved("1")]
-        code, written, wrote_summary, out, files = run_main(old, [item_for(old[0])], ["--dry-run"])
-        self.assertEqual((code, written, wrote_summary, files), (0, old, False, {}))
-        self.assertIn("2 cover files to fetch", out)
+    def test_without_an_export_there_is_nothing_to_do(self):
+        with self.assertRaises(SystemExit) as stop, contextlib.redirect_stderr(io.StringIO()) as err:
+            rb.main([])
+        self.assertEqual(stop.exception.code, 2)
+        self.assertIn("--export", err.getvalue())
 
-    def test_covers_alone_reads_no_feed_and_writes_only_the_marks(self):
+    def test_covers_alone_reads_no_export_and_writes_only_the_marks(self):
         old = [shelved("1"), shelved("2", cover=False), shelved("3", p=["2019/01/01"])]
-        code, written, wrote_summary, _, files = run_main(old, None, ["--covers"], cover=lambda url: JPEG)
-        self.assertEqual((code, wrote_summary), (0, False))
+        code, books, summary, _, _, files, _ = run_main(old, ["--covers"], cover=lambda url: JPEG)
+        self.assertEqual((code, summary), (0, None))
         self.assertEqual(sorted(files), ["1.jpg", "3.jpg", "s/1.jpg", "s/3.jpg"])
-        self.assertEqual([{k: v for k, v in b.items() if k not in rb.COVER_MARKS} for b in written], old)
-        self.assertEqual(marks(written), [[1, 1], [None, None], [1, 1]])
+        self.assertEqual([{k: v for k, v in b.items() if k not in rb.COVER_MARKS} for b in books], old)
+        self.assertEqual(marks(books), [[1, 1], [None, None], [1, 1]])
 
     def test_covers_alone_writes_the_marks_as_it_goes(self):
         # What books.json holds each time the network is asked: a run
@@ -683,10 +692,10 @@ class CoversInMain(unittest.TestCase):
             on_file.append(sum(1 for b in books for mark in rb.COVER_MARKS if b.get(mark)))
             return JPEG
         with mock.patch.object(rb, "COVER_SAVE_EVERY", 2):
-            code, written, _, _, _ = run_main([shelved("1"), shelved("2"), shelved("3")], None,
-                                              ["--covers"], cover=cover)
+            code, books, _, _, _, _, _ = run_main([shelved("1"), shelved("2"), shelved("3")], ["--covers"],
+                                                  cover=cover)
         self.assertEqual((code, on_file), (0, [0, 0, 2, 2, 4, 4]))
-        self.assertEqual(marks(written), [[1, 1]] * 3)
+        self.assertEqual(marks(books), [[1, 1]] * 3)
 
 
 class Answer:
@@ -710,6 +719,40 @@ class Answer:
 
 def http_error(code):
     return urllib.error.HTTPError("https://covers.example.org/1.jpg", code, "", {}, None)
+
+
+def real_jpeg(width, height):
+    """A JPEG Pillow can decode, of the given size."""
+    buf = io.BytesIO()
+    Image.new("RGB", (width, height), (200, 60, 40)).save(buf, "JPEG", quality=95)
+    return buf.getvalue()
+
+
+class FitCover(CoverStore):
+    """fit_cover(): Open Library's covers come taller than the shelf's
+    copies and about twice their weight, so one taller than asked for is
+    shrunk to the height; anything else is kept byte for byte."""
+
+    @unittest.skipUnless(Image, "Pillow is not installed")
+    def test_open_librarys_covers_are_kept_at_the_shelfs_heights(self):
+        b = shelved("1", c=rb.OL_COVER % 15270130)
+        books, fetched, problems = self.keep([b], {full(b): real_jpeg(314, 500),
+                                                   small(b): real_jpeg(180, 286)})
+        self.assertEqual((fetched, problems, marks(books)), (2, [], [[1, 1]]))
+        for path, size in ((self.folder / "1.jpg", (251, rb.COVER_HEIGHT)),
+                           (self.folder / "s" / "1.jpg", (151, rb.COVER_SMALL_HEIGHT))):
+            with Image.open(path) as im:
+                self.assertEqual((im.format, im.size), ("JPEG", size))
+
+    @unittest.skipUnless(Image, "Pillow is not installed")
+    def test_a_cover_no_taller_than_asked_is_kept_as_it_came(self):
+        data = real_jpeg(156, rb.COVER_SMALL_HEIGHT)
+        self.assertEqual(rb.fit_cover(data, rb.COVER_SMALL_HEIGHT), data)
+
+    def test_what_cannot_be_read_is_kept_as_it_came(self):
+        # A header with no picture behind it, with Pillow or without.
+        for data in (JPEG, jpeg(500, pad=40)):
+            self.assertEqual(rb.fit_cover(data, rb.COVER_SMALL_HEIGHT), data)
 
 
 class FetchCover(unittest.TestCase):
@@ -768,7 +811,7 @@ class FetchCover(unittest.TestCase):
 
 
 class RealShelf(unittest.TestCase):
-    """The committed books.json, fed back as the feed that describes it,
+    """The committed books.json, fed back as the export that describes it,
     merges to itself: whatever the file holds, the rules keep it."""
 
     def test_every_marked_cover_is_a_file_on_the_site(self):
@@ -786,23 +829,18 @@ class RealShelf(unittest.TestCase):
                         self.assertEqual(f.read(3), b"\xff\xd8\xff", (mark, b["g"]))
 
     def test_the_books_in_progress_show_only_files_that_are_there(self):
-        # now.json's img is a path into the same store once the weekly
-        # refresh has run; Reading Now asks for it as it is.
         now = json.loads((rb.ROOT / "data" / "now.json").read_text(encoding="utf-8"))
         for book in now.get("reading") or []:
             img = book.get("img", "")
-            if img.startswith(rb.SITE_COVERS):
-                self.assertEqual(rb.local_cover(img, fetch=no_network), img, book["title"])
+            if img:
+                self.assertTrue(img.startswith(rb.SITE_COVERS + "s/"), book["title"])
+                self.assertTrue((rb.ROOT / img.lstrip("/")).is_file(), book["title"])
 
     def test_round_trip(self):
-        path = rb.BOOKS
-        books = json.loads(path.read_text(encoding="utf-8"))
-        # A book already missing once carries its counter; the feed below
-        # has every book, so the counter would rightly go.
-        settled = [{k: v for k, v in b.items() if k != "m"} for b in books]
-        merged = rb.merge(books, [item_for(b) for b in books])
-        self.assertEqual(merged, settled)
-        self.assertEqual(rb.lost_history(books, merged), [])
+        books = json.loads(rb.BOOKS.read_text(encoding="utf-8"))
+        out, dropped = rb.merge(books, [item_for(b) for b in books])
+        self.assertEqual((out, dropped), (books, []))
+        self.assertEqual(rb.lost_history(books, out), [])
 
 
 if __name__ == "__main__":

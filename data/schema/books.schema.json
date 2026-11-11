@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://www.kenreid.co.uk/data/schema/books.schema.json",
   "title": "data/books.json",
-  "description": "Every book on the Goodreads read shelf, latest finish first. Rewritten weekly by .github/scripts/refresh_books.py from the public read-shelf RSS. Read in the browser by the reading calendar, shelf and figures (js/bookshelf.js), the cover wall on books.html (js/bookwall.js) and the reviews on literature.html. Keys are single letters because the whole file is fetched by every reader of those pages.",
+  "description": "Every book on my Goodreads read shelf, latest finish first. Written by .github/scripts/refresh_books.py --export from the Goodreads library export I download (Goodreads retired its RSS feeds in October 2026), with y and gn from refresh_book_details.py. Read in the browser by the reading calendar, shelf and figures (js/bookshelf.js), the cover wall on books.html (js/bookwall.js) and the reviews on literature.html. Keys are single letters because the whole file is fetched by every reader of those pages.",
   "type": "array",
   "items": {
     "type": "object",
@@ -11,18 +11,17 @@
       "a",
       "r",
       "g",
-      "w",
       "d"
     ],
     "additionalProperties": false,
     "properties": {
       "t": {
         "type": "string",
-        "description": "Title as Goodreads gives it, series in brackets, curly quotes straightened to the house style."
+        "description": "Title as Goodreads gives it, series in brackets, curly quotes straightened to the house style. Kept from the record when an export spells it differently."
       },
       "a": {
         "type": "string",
-        "description": "Author, with runs of spaces collapsed."
+        "description": "Author, with runs of spaces collapsed. Kept from the record when an export spells it differently: posts.json's shelf lists and the quotes match this spelling."
       },
       "r": {
         "type": "integer",
@@ -46,22 +45,22 @@
       "i": {
         "type": "string",
         "pattern": "^[0-9]{9}[0-9X]([0-9]{3})?$",
-        "description": "ISBN-10 or ISBN-13, when Goodreads has one. A book the site has no copy of the cover for (k, s) has its cover looked up at Open Library by it. The value on file is kept in preference to the feed's; those seeded from the Goodreads export are ISBN-13."
+        "description": "ISBN-10 or ISBN-13, when Goodreads has one. A book the site has no copy of the cover for (k, s) has its cover looked up at Open Library by it. The value on file is kept in preference to the export's."
       },
       "g": {
         "type": "string",
         "pattern": "^[0-9]+$",
-        "description": "Goodreads book id. refresh_books.py matches feed items to records by it."
+        "description": "Goodreads book id. refresh_books.py matches an export's rows to records by it, and by title and author when an edition change gives a book a new id (the record keeps its own: it names the cover files)."
       },
       "w": {
         "type": "string",
         "pattern": "^[0-9]+$",
-        "description": "Goodreads review id: goodreads.com/review/show/<w> is my rating and review, where the shelf, the wall, Reading Now and the selected reviews link. Also the fallback match when an edition change gives the same review a new book id."
+        "description": "Goodreads review id: goodreads.com/review/show/<w> is my rating and review, where the shelf, the wall, Reading Now and the selected reviews link. Kept from the years the RSS feed gave it; the export has none, so a book added since has no w and the pages link its Goodreads page (goodreads.com/book/show/<g>)."
       },
       "d": {
         "type": "string",
         "pattern": "^([0-9]{4}/[0-9]{2}/[0-9]{2})?$",
-        "description": "Date I last finished it, YYYY/MM/DD. When e is 1 it is only the date the book was added. Empty only if Goodreads gave neither date."
+        "description": "Date I last finished it, YYYY/MM/DD: the latest of the finishes on file and in the export. When e is 1 it is only the date the book was added. Empty only if Goodreads gave neither date."
       },
       "e": {
         "type": "integer",
@@ -76,24 +75,29 @@
           "type": "string",
           "pattern": "^[0-9]{4}/[0-9]{2}/[0-9]{2}$"
         },
-        "description": "Earlier finish dates, oldest first, one per earlier read. The feed reports only the latest finish and the full session list needs a login, so these exist only here and in this file's git history: refresh_books.py never drops one while the book is on file."
+        "description": "Earlier finish dates, oldest first, one per earlier read. The plain export gives one date a book (the first finish of most re-reads) and only the enhanced one lists every session, so these exist for most books only here and in this file's git history: refresh_books.py takes the union of the dates on file and in the export, and never drops one while the book is on file."
+      },
+      "rc": {
+        "type": "integer",
+        "minimum": 2,
+        "description": "Times I have read it, from the export's Read Count, when that is more than the dated finishes (d unless e, and p) show: Goodreads counts a re-read whose date was never entered. Absent otherwise. The wall's Re-read filter counts it (js/bookwall.js); the calendar and the figures, which need dates, do not."
       },
       "n": {
         "type": "integer",
         "minimum": 1,
-        "description": "Pages, from the feed's book/num_pages (seeded from the Goodreads export). Kept from the record when a week's feed has none. Reading Stats sums and ranks them."
+        "description": "Pages, from the export's Number of Pages. Kept from the record when an export has none. Reading Stats sums and ranks them."
       },
       "c": {
         "type": "string",
         "pattern": "^[^ ]+$",
-        "description": "The cover Goodreads shows for the book, from the feed's book_large_image_url (about 475px tall): the path under https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/ (GR_COVERS in refresh_books.py), or a whole https address for one elsewhere. Kept when a week's feed has none or only a placeholder. Every book has one, ISBN or not. No page loads it: it is where refresh_books.py downloads the site's own copies from (k, s)."
+        "description": "Where the site's copies of the cover (k, s) were downloaded from: for a book the RSS years brought, the cover Goodreads showed, as the path under https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/ (GR_COVERS in refresh_books.py); for one an export brought, Open Library's cover (https://covers.openlibrary.org/b/id/<cover id>-L.jpg), found by ISBN, then by title and author. Absent when neither had one: the pages set that cover in type. No page loads it."
       },
       "k": {
         "type": "integer",
         "enum": [
           1
         ],
-        "description": "Present, as 1, when the site has its own full copy of the cover c names, at img/covers/shelf/<g>.jpg (about 400px tall, as Goodreads sent it). Set by refresh_books.py only once the file is written, and dropped when c changes until the new cover is fetched, so the pages ask for exactly the files that exist. The review cards (js/bookshelf.js) and the slideshow's featured book (js/slideshow.js) show it, and so does a tile whose small copy (s) is missing. A book with neither falls back to Open Library's cover for its ISBN, then to a cover set in type."
+        "description": "Present, as 1, when the site has its own full copy of the cover c names, at img/covers/shelf/<g>.jpg (about 400px tall from Goodreads, 500px from Open Library, as it was sent). Set by refresh_books.py only once the file is written, and dropped when c changes until the new cover is fetched, so the pages ask for exactly the files that exist. The review cards (js/bookshelf.js) and the slideshow's featured book (js/slideshow.js) show it, and so does a tile whose small copy (s) is missing. A book with neither falls back to Open Library's cover for its ISBN, then to a cover set in type."
       },
       "s": {
         "type": "integer",
@@ -106,7 +110,7 @@
         "type": "integer",
         "minimum": 1,
         "maximum": 9999,
-        "description": "The year it was first published, set by .github/scripts/refresh_book_details.py: a hand correction in data/book-overrides.json, else the original publication year from a Goodreads export, else the feed's book_published (which refresh_books.py writes for a new book and never over a year on file), else Open Library's first_publish_year. The quotes slideshow gives it after a quote's book (js/slideshow.js); the wall on books.html filters by its decade and sorts by it (js/bookwall.js)."
+        "description": "The year it was first published, set by .github/scripts/refresh_book_details.py: a hand correction in data/book-overrides.json, else the original publication year from a Goodreads export (else its edition's year), else Open Library's first_publish_year. refresh_books.py writes the export's for a new book and never over a year on file. The quotes slideshow gives it after a quote's book (js/slideshow.js); the wall on books.html filters by its decade and sorts by it (js/bookwall.js)."
       },
       "gn": {
         "type": "array",
@@ -128,11 +132,6 @@
           ]
         },
         "description": "Its genres, one or two keys, the main one first, from GENRES in .github/scripts/refresh_book_details.py: derived there from the genres readers shelve it under on Goodreads or from Open Library's subjects, by that script's table, or set by hand in data/book-overrides.json. Absent when nothing places the book. refresh_books.py carries it forward. The wall on books.html filters by it (js/bookwall.js)."
-      },
-      "m": {
-        "type": "integer",
-        "minimum": 1,
-        "description": "Consecutive weekly refreshes whose feed did not include this book. Absent while the feed carries it. A book missing once is kept unchanged (a short feed is more likely than a removal); refresh_books.py drops it when this would reach 2."
       }
     }
   }

@@ -456,25 +456,26 @@ guards.
 
 ```mermaid
 flowchart TD
-    cron1["Mondays 06:00 UTC<br/>.github/workflows/lastfm-refresh.yml"] --> now["refresh_now.py<br/>Last.fm, currently reading and its covers"]
+    cron1["Mondays 06:00 UTC<br/>.github/workflows/lastfm-refresh.yml"] --> now["refresh_now.py<br/>Last.fm"]
     cron1 --> listening["refresh_listening.py<br/>Last.fm weekly charts"]
-    cron1 --> books["refresh_books.py<br/>Goodreads read shelf, new covers"]
-    books --> details["refresh_book_details.py<br/>years and genres, Open Library"]
+    cron1 --> details["refresh_book_details.py<br/>years and genres a lookup missed"]
     now --> v["validate_data.py on FILES"]
     listening --> v
     details --> v
     cron1 --> bluesky["refresh_bluesky.py<br/>Bluesky posts that shared a post"]
     bluesky --> v
-    v -->|valid| commit["commit and push FILES and COVERS<br/>rebasing onto master"]
+    v -->|valid| commit["commit and push FILES<br/>rebasing onto master"]
     v -->|invalid| stop["nothing committed"]
     cron2["Mondays 07:17 UTC<br/>.github/workflows/links.yml"] --> links["check_external_links.py"]
     links --> issue["one issue: External link report"]
+    export["by hand: a Goodreads library export"] --> books["refresh_books.py --export<br/>books, reading, covers, books in progress"]
+    books --> bdetails["refresh_book_details.py<br/>years and genres"]
 ```
 
 **Live data** (`.github/workflows/lastfm-refresh.yml`). The `FILES` list
-in the workflow is the nine files it owns: `data/lastfm.json`,
+in the workflow is the eight files it writes: `data/lastfm.json`,
 `data/now.json`, `data/lastfm-history.json`, `data/topalbums.json`,
-`listening.json` (in `data/` too), `data/books.json`, `data/reading.json`,
+`listening.json` (in `data/` too), `data/books.json`,
 `data/bluesky.json` and `data/book-details.json`. Each
 source fails on its own:
 a failed fetch keeps that source's old values, the other sources still
@@ -486,14 +487,8 @@ Monday. `listening.json`, the listening history behind the music
 page's calendar, is built up a week at a time: `refresh_listening.py`
 asks only for the chart weeks it does not have and the newest two, and
 never drops a week on file ([DATA.md](DATA.md#listening)).
-With the data it commits the book covers `refresh_books.py` and
-`refresh_now.py` download, a full and a small copy of each in the
-workflow's `COVERS` folder, so the reading pages show covers from the
-site itself
-([DATA.md](DATA.md#reading)). After the shelf, `refresh_book_details.py`
-gives each new book its first year and genres for the filters on
-`books.html`, asking Open Library (no key) only about the books
-`data/book-details.json` has no entry for
+`refresh_book_details.py` asks Open Library (no key) again about any
+book whose year and genres a lookup missed
 ([DATA.md](DATA.md#years-and-genres)). `data/bluesky.json` says which Bluesky
 post shared each blog post, so a post can show the replies to it with
 its comments: `refresh_bluesky.py` reads my public feed with no key,
@@ -502,6 +497,17 @@ Bluesky says its post was deleted
 ([DATA.md](DATA.md#bluesky-shares)). It needs the `LASTFM_API_KEY` repository
 secret. (The essay:
 [Letting Robots Update Your Homepage](https://www.kenreid.co.uk/blog/letting-robots-update-your-homepage.html).)
+
+**Reading data, by hand.** Goodreads retired its RSS feeds in October
+2026, so nothing fetches the shelf on a schedule. After downloading my
+Goodreads library export, `python .github/scripts/refresh_books.py
+--export <file.csv>` merges its read shelf into `data/books.json` and
+writes `data/reading.json`, keeps a cover for each new book (Open
+Library's) in `img/covers/shelf/`, runs `refresh_book_details.py` with
+the same export for the years and genres, and writes `data/now.json`'s
+books in progress through `refresh_now.write_reading()`. Then the data
+files and the covers are committed by hand
+([DATA.md](DATA.md#reading)).
 
 **External links** (`.github/workflows/links.yml`). Every link that leaves
 the site, checked politely (one request at a time per host) and reported

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://www.kenreid.co.uk/data/schema/now.schema.json",
   "title": "data/now.json",
-  "description": "What I am listening to and reading, for the homepage's Now strip and literature.html's Reading Now. Written weekly by .github/scripts/refresh_now.py from Last.fm (recent tracks) and the Goodreads currently-reading RSS. A source that fails keeps its previous value.",
+  "description": "What I am listening to and reading, for the homepage's Now strip and literature.html's Reading Now. The track is written weekly by .github/scripts/refresh_now.py from Last.fm (recent tracks), keeping its previous value when the fetch fails; the books in progress come from my Goodreads library export, written by .github/scripts/refresh_books.py --export through refresh_now.write_reading(), and a weekly run keeps them as they are.",
   "type": "object",
   "required": ["track", "reading", "updated"],
   "additionalProperties": false,
@@ -33,7 +33,7 @@
     },
     "reading": {
       "type": "array",
-      "description": "Books on the currently-reading shelf, at most three, in the feed's order. The Now strip shows the first and a count of the rest.",
+      "description": "Books on the currently-reading shelf of my last Goodreads export, at most three, in the export's order (the most recently touched first). The Now strip shows the first and a count of the rest.",
       "items": {
         "type": "object",
         "required": ["title", "author", "link"],
@@ -41,7 +41,7 @@
         "properties": {
           "title": {
             "type": "string",
-            "description": "Title as the feed gives it, series in brackets."
+            "description": "Title as the export gives it, series in brackets, curly quotes straightened."
           },
           "author": {
             "type": "string",
@@ -49,12 +49,12 @@
           },
           "link": {
             "type": "string",
-            "description": "My Goodreads review page for the book (review/show/<id>), with the feed's tracking parameters."
+            "description": "My Goodreads review page for the book (review/show/<id>) when the shelf knows it, else the book's page (book/show/<id>)."
           },
           "img": {
             "type": "string",
             "pattern": "^/img/covers/shelf/s/[0-9]+\\.jpg$",
-            "description": "The book's cover as a path on this site: the small copy (240px tall) refresh_now.py keeps of it beside the shelf's covers, through refresh_books.local_cover. Absent when the feed has no cover or the copy could not be fetched; never an address on another site, so Reading Now asks Goodreads for no picture."
+            "description": "The book's cover as a path on this site: the small copy (240px tall) of it beside the shelf's covers (refresh_books.reading_cover: the shelf's own copy, or Open Library's cover fetched once). Absent when there is none; never an address on another site, so Reading Now asks no other site for a picture."
           }
         }
       }
@@ -62,7 +62,12 @@
     "updated": {
       "type": "string",
       "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
-      "description": "Date of the refresh that wrote the file, YYYY-MM-DD."
+      "description": "Date of the weekly refresh that wrote the track, YYYY-MM-DD."
+    },
+    "readingUpdated": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "The day the Goodreads export the books in progress came from was downloaded, YYYY-MM-DD. Reading Now dates its list by it (js/bookshelf.js), so a list from an old export shows its age."
     }
   }
 }

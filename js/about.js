@@ -83,15 +83,23 @@
             var books = (now.reading || []).slice(0, 2);
             var el = document.getElementById('now-reading');
             if (el && books.length) {
-                // Each book to its Goodreads page (the weekly refresh's
-                // link, without its tracking query), or a search for it.
+                // Each book to its Goodreads page (the link the library
+                // export gave, without any tracking query), or a search
+                // for it.
                 el.innerHTML = books.map(function (b) {
                     var href = b.link ? String(b.link).split('?')[0] : krGoodreadsHref(b.title, b.author);
                     return cite(bareTitle(b.title), b.author, href);
                 }).join(books.length === 2 ? ', and ' : ', ');
             }
             var when = document.getElementById('about-now-updated');
-            if (when && now.updated) when.textContent = 'From the weekly refresh of ' + formatPostDate(now.updated) + '.';
+            // Listening comes from the weekly refresh (updated); the books
+            // from my last Goodreads export (readingUpdated), which can be
+            // older, so each says its own date.
+            if (when && now.updated) {
+                when.textContent = now.readingUpdated && now.readingUpdated !== now.updated
+                    ? 'Listening as of ' + formatPostDate(now.updated) + '; reading as of ' + formatPostDate(now.readingUpdated) + '.'
+                    : 'From the weekly refresh of ' + formatPostDate(now.updated) + '.';
+            }
         }).catch(function () {});
 
         krFetchJson('data/topalbums.json').then(function (top) {

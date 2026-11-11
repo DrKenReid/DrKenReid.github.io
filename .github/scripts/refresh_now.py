@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Refresh the listening and currently-reading data (runs weekly in CI).
+"""Refresh the listening data (runs weekly in CI), and write the books in
+progress for refresh_books.py.
 
 Writes:
   data/lastfm.json          all-time scrobble count (the homepage figure)
-  data/now.json             most recent track, and the Goodreads
-                            currently-reading shelf (the Now strip and
-                            literature.html's Reading Now)
+  data/now.json             most recent track (the Now strip); its books
+                            in progress (literature.html's Reading Now)
+                            come from my Goodreads export, written by
+                            refresh_books.py --export through
+                            write_reading(), and a weekly run keeps them
   data/lastfm-history.json  the scrobble count at each refresh, one row
                             per date, the latest 90 rows kept; no page
                             reads it yet, it is the record of how the
@@ -14,40 +17,31 @@ Writes:
                             record crate on music.html)
 
 data/schema/ describes every field, and the workflow validates all four
-files (with books.json and reading.json) before it commits.
+files before it commits.
 
 Requires LASTFM_API_KEY in the environment (the workflow passes the
 repository secret; a local run without it falls back to a key file kept
-outside the repository, see main()). Goodreads needs no key (public RSS). The Bluesky
-item in the Now strip is fetched in the browser, so it is not baked here.
+outside the repository, see main()). The Bluesky item in the Now strip
+is fetched in the browser, so it is not baked here.
+
+Goodreads retired its RSS feeds in October 2026, and with them the
+currently-reading feed this used to read, so it asks Goodreads nothing.
 
 Each source fails on its own: a failed fetch keeps that source's previous
 values and never stops the others from updating. The exit status is 1
 when any source failed, after writing what did refresh, so the workflow
 commits the partial refresh and still reports the failure.
 
-The covers of the books in progress are the site's own files, like the
-shelf's: with_local_covers() hands each cover address in the feed to
-refresh_books.local_cover(), which keeps a small copy beside the shelf's
-(img/covers/shelf/s/<id>.jpg, committed by the workflow with its COVERS
-folder) and gives back the path a page asks for it by. now.json's img is
-that path, so Reading Now asks Goodreads for nothing; a cover that
-cannot be had is left out, and the page sets that book's cover in type
-until next week's run.
-
     python .github/scripts/refresh_now.py
-    python .github/scripts/refresh_now.py --covers   # no Last.fm, no feed: only make the
-                                                     # covers in now.json the site's own
 
 Network calls (get, lastfm) are kept apart from the functions that turn
-responses into the files' shapes (track_from, reading_from, albums_from,
-history_with, with_local_covers), which take plain data and can be
-tested without one.
+responses into the files' shapes (track_from, albums_from, history_with,
+reading_entry, now_with), which take plain data and can be tested
+without one.
 """
 
 import json
 import os
-import re
 import sys
 import urllib.parse
 import urllib.request
@@ -56,13 +50,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import sitelib  # noqa: E402
-import refresh_books  # noqa: E402  (the cover store: local_cover)
 
 ROOT = sitelib.ROOT
 DATA = ROOT / "data"
 LASTFM_USER = "GoheX"
 LASTFM_API = "https://ws.audioscrobbler.com/2.0/"
-GOODREADS_RSS = "https://www.goodreads.com/review/list_rss/42371562?shelf=currently-reading"
 UA = "kenreid.co.uk site refresh (ken@kenreid.co.uk)"
 
 HISTORY_ROWS = 90
@@ -102,47 +94,30 @@ def track_from(recent):
     }
 
 
-def reading_from(xml, limit=READING_LIMIT):
-    """The currently-reading RSS text -> now.json's reading list.
-
-    Regular expressions rather than an XML parser: the text arrives
-    decoded with errors="replace", and read this way a feed that is not
-    quite well-formed still yields its titles.
-    """
-    books = []
-    for item in re.findall(r"<item>(.*?)</item>", xml, re.DOTALL):
-        def field(tag):
-            m = re.search(rf"<{tag}>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?</{tag}>", item, re.DOTALL)
-            return m.group(1).strip() if m else ""
-        title = field("title")
-        if not title:
-            continue
-        book = {"title": title, "author": field("author_name"), "link": field("link")}
-        img = field("book_image_url") or field("book_medium_image_url")
-        if img:
-            book["img"] = img
-        books.append(book)
-    return books[:limit]
+def reading_entry(title, author, link, img=""):
+    """One book in progress as now.json holds it. `img` is the site's
+    small copy of its cover (a path refresh_books.reading_cover gives),
+    left out when there is none, so Reading Now asks no other site for a
+    picture."""
+    book = {"title": title, "author": author, "link": link}
+    if img:
+        book["img"] = img
+    return book
 
 
-def with_local_covers(books, local=None):
-    """The reading list with each img the site's own copy of the cover.
-
-    `local` is refresh_books.local_cover unless a test passes another: it
-    takes the address the feed gave (or a path this function wrote last
-    week, when the feed failed and the old list is kept) and returns the
-    path on this site, or '' when there is no copy to be had. Such a book
-    goes without img, never with Goodreads' address: the page asks only
-    for files on this site.
-    """
-    local = local or refresh_books.local_cover
-    out = []
-    for book in books:
-        book = dict(book)
-        img = local(book.pop("img", ""))
-        if img:
-            book["img"] = img
-        out.append(book)
+def now_with(now, track=None, reading=None, as_of=None, today=None):
+    """now.json with a new track (a weekly run, `today` its date) or a new
+    reading list (an export, `as_of` the day it was downloaded); the rest
+    as it was. readingUpdated dates the list, updated the file."""
+    now = dict(now or {})
+    out = {
+        "track": track if today else now.get("track"),
+        "reading": reading if reading is not None else (now.get("reading") or []),
+        "updated": today or now.get("updated") or as_of,
+    }
+    reading_as_of = as_of if reading is not None else now.get("readingUpdated")
+    if reading_as_of:
+        out["readingUpdated"] = reading_as_of
     return out
 
 
@@ -186,29 +161,20 @@ def write_json(path, value, **dump):
     path.write_text(json.dumps(value, **dump) + "\n", encoding="utf-8", newline="\n")
 
 
-def covers_only():
-    """--covers: now.json as it stands, with each book in progress showing
-    the site's copy of its cover. Needs no key and asks only the cover
-    host; nothing else in the file changes, its date included."""
+def write_reading(reading, as_of):
+    """now.json's books in progress, from refresh_books.py --export:
+    `reading` is a list of reading_entry() dicts, `as_of` the export's
+    date. The track and the file's date stay as the weekly run left
+    them."""
     path = DATA / "now.json"
-    now = load_json(path, None)
-    if not isinstance(now, dict):
-        print("::error::data/now.json is missing or unreadable; nothing to do.")
-        return 1
-    reading = with_local_covers(now.get("reading") or [])
-    if reading != now.get("reading"):
-        write_json(path, dict(now, reading=reading), indent=2, ensure_ascii=False)
-    print(f"reading covers: {[b.get('img', 'none') for b in reading]}")
-    return 0
+    now = now_with(load_json(path, {}), reading=list(reading)[:READING_LIMIT], as_of=as_of)
+    write_json(path, now, indent=2, ensure_ascii=False)
+    print(f"reading (as of {as_of}): {[b['title'][:40] for b in now['reading']]}")
 
 
 def main(argv=None):
     # --help (or a stray flag) must not set off a live fetch and a write.
-    ap = sitelib.arg_parser(__doc__)
-    ap.add_argument("--covers", action="store_true",
-                    help="no Last.fm, no feed: only make the covers in now.json the site's own")
-    if ap.parse_args(argv).covers:
-        return covers_only()
+    sitelib.arg_parser(__doc__).parse_args(argv)
     key = os.environ.get("LASTFM_API_KEY")
     if not key:
         keyfile = ROOT / "scripts-local" / "lastfm_api_key.txt"
@@ -235,20 +201,6 @@ def main(argv=None):
         track = prev_now.get("track")
 
     try:
-        books = reading_from(get(GOODREADS_RSS).decode("utf-8", errors="replace"))
-    except Exception as e:
-        failures.append(f"goodreads ({e})")
-        print(f"::warning::Goodreads fetch failed ({e}); keeping the previous reading list")
-        books = prev_now.get("reading") or []
-    # Each cover as a file on this site, or left out (with_local_covers).
-    # A fault here costs the covers, never the list.
-    try:
-        books = with_local_covers(books)
-    except Exception as e:
-        print(f"::warning::reading covers failed ({e}); the list is written without them")
-        books = [{k: v for k, v in b.items() if k != "img"} for b in books]
-
-    try:
         albums = albums_from(lastfm("user.gettopalbums", key,
                                     period=ALBUM_PERIOD, limit=ALBUM_LIMIT))
     except Exception as e:
@@ -256,14 +208,14 @@ def main(argv=None):
         print(f"::warning::Top-albums fetch failed ({e}); keeping the previous file")
         albums = None
 
-    if len(failures) == 3:
+    if len(failures) == 2:
         print("::error::every source failed; leaving all files untouched.")
         return 1
 
     if playcount is not None:
         write_json(DATA / "lastfm.json",
                    {"scrobbles": playcount, "user": LASTFM_USER, "updated": today}, indent=2)
-    write_json(DATA / "now.json", {"track": track, "reading": books, "updated": today},
+    write_json(DATA / "now.json", now_with(prev_now, track=track, today=today),
                indent=2, ensure_ascii=False)
     if albums is not None:
         write_json(DATA / "topalbums.json",
@@ -275,7 +227,6 @@ def main(argv=None):
         print(f"scrobbles: {playcount:,} (history: {len(history)} rows)")
 
     print(f"recent track: {track}")
-    print(f"reading: {[b['title'][:40] for b in books]}")
     print(f"top albums: {len(albums) if albums is not None else 'kept previous'}")
     if failures:
         print(f"::error::partial refresh; failed: {', '.join(failures)}")
