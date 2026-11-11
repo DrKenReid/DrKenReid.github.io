@@ -39,8 +39,10 @@
  *       manner of krLiveCovers.helpers. Change a signature here and change
  *       its callers and tests with it.
  *         goodreadsUrl(book) -> my review, else the book's page, else a search
+ *         shelfCover(book, small) -> the site's copy of its cover (the
+ *                            small one for a tile), '' without one
+ *         siteCover(src)  -> src if it is a picture on this site, else ''
  *         coverUrl(isbn, size) -> Open Library cover, size 'M' or 'L'
- *         goodreadsCover(c, height) -> Goodreads' cover at that height
  *         coverAttrs(book, size) -> a cover <img>'s src and data-cover-next
  *         label(book)     -> "Title (Series #1) by Author, 4/5"
  *         sessions(book)  -> ['YYYY/MM/DD', ...]  every finish the
@@ -71,34 +73,51 @@
         return book.g ? 'https://www.goodreads.com/book/show/' + book.g
                       : 'https://www.goodreads.com/search?q=' + encodeURIComponent(book.t);
     }
+    /* The site's own copies of a book's cover. refresh_books.py downloads
+       them once from Goodreads and marks the book's record in books.json
+       for each, so a page asks only for files that are there and no
+       cover is fetched from Goodreads:
+         k  /img/covers/shelf/<g>.jpg    about 400px tall (24 KB): a
+                                         review card, the slideshow's
+                                         featured book
+         s  /img/covers/shelf/s/<g>.jpg  240px tall (10 KB): a tile on the
+                                         wall, a thumbnail
+       shelfCover(b, small) is the copy for that use, or the other one
+       while it is missing; '' for a book with neither. */
+    var SHELF_COVERS = '/img/covers/shelf/';
+    function shelfCover(b, small) {
+        if (!b || !b.g) return '';
+        var file = encodeURIComponent(b.g) + '.jpg';
+        var full = b.k ? SHELF_COVERS + file : '';
+        var tile = b.s ? SHELF_COVERS + 's/' + file : '';
+        return small ? tile || full : full || tile;
+    }
+    /* A cover address from now.json, if it is a picture on this site:
+       refresh_now.py writes the path of the small copy it keeps of each
+       book in progress. Anything else (another site's address, from a
+       list written before it did) is not asked for, and the book's cover
+       is set in type. */
+    function siteCover(src) {
+        src = String(src || '');
+        return /^\/img\/[^?#]+$/.test(src) ? src : '';
+    }
     /* Open Library's cover for an ISBN, size 'M' (a wall tile, a Reading
-       Now thumbnail) or 'L' (a review card): the fallback after Goodreads'
-       (coverAttrs). default=false: a 404 for an ISBN with no scan, rather
-       than a blank placeholder, so the error listener below can move on. */
+       Now thumbnail) or 'L' (a review card): what a book shows when the
+       site has no copy of its cover (coverAttrs), and it has a scan for
+       only about half of them. default=false: a 404 for an ISBN with no
+       scan, rather than a blank placeholder, so the error listener below
+       can move on. */
     function coverUrl(isbn, size) {
         return 'https://covers.openlibrary.org/b/isbn/' + encodeURIComponent(isbn) + '-' + (size || 'M') + '.jpg?default=false';
     }
-    /* Goodreads' cover for a book: c in books.json, which refresh_books.py
-       keeps for every book, ISBN or not (Open Library has a scan for only
-       about half of them). Goodreads serves another size for a
-       ._SY<height>_ in the file name, and takes one added to a name that
-       has none. 320px tall (about 20 KB) stays sharp on a high-density
-       screen at a wall tile's 150. */
-    var GR_COVERS = 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/';
-    function goodreadsCover(c, height) {
-        if (!c) return '';
-        var url = /^https:/.test(c) ? c : GR_COVERS + c;
-        if (url.indexOf(GR_COVERS) !== 0) return url;
-        var size = '._SY' + (height || 320) + '_';
-        return /\._S[XY]\d+_\.\w+$/.test(url) ? url.replace(/\._S[XY]\d+_\.(\w+)$/, size + '.$1')
-            : url.replace(/\.(\w+)$/, size + '.$1');
-    }
-    /* The attributes of a book's cover <img>: src, Goodreads' cover, and
-       data-cover-next, Open Library's for the ISBN, which the error
-       listener below tries before setting the cover in type. '' for a
-       book with neither, which takes its type cover straight away. */
+    /* The attributes of a book's cover <img>: src, the site's copy (the
+       small one at size 'M', a tile or a thumbnail; the full one at 'L'),
+       and data-cover-next, Open Library's for the ISBN, which the error
+       listener below tries before setting the cover in type. A book the
+       site has no copy of starts at Open Library's. '' for a book with
+       neither, which takes its type cover straight away. */
     function coverAttrs(b, size) {
-        var list = [goodreadsCover(b.c, size === 'L' ? 475 : 320), b.i ? coverUrl(b.i, size) : ''].filter(Boolean);
+        var list = [shelfCover(b, size !== 'L'), b.i ? coverUrl(b.i, size) : ''].filter(Boolean);
         if (!list.length) return '';
         return ' src="' + krEscapeHtml(list[0]) + '"' +
             (list[1] ? ' data-cover-next="' + krEscapeHtml(list[1]) + '"' : '');
@@ -174,8 +193,9 @@
 
     window.krBookshelf = {
         goodreadsUrl: goodreadsUrl,
+        shelfCover: shelfCover,
+        siteCover: siteCover,
         coverUrl: coverUrl,
-        goodreadsCover: goodreadsCover,
         coverAttrs: coverAttrs,
         label: bookLabel,
         sessions: sessions,
@@ -187,8 +207,8 @@
     };
 
     /* ------------------------------------------------- typographic cover
-       The cover a book gets when there is no picture of it: neither
-       Goodreads nor Open Library has one, or it would not load. Title in Lora, the series under it,
+       The cover a book gets when there is no picture of it: the site has
+       no copy and Open Library no scan, or it would not load. Title in Lora, the series under it,
        the author at the foot, and down the left edge the same rating
        colour its spine has on the shelf (the .kr-spine--rN classes, reused
        so the two can never disagree). Built with textContent, so no title
@@ -416,9 +436,10 @@
        cells to a year, at least 22px each (wider than that from 320px up:
        the year and its total move onto a line of their own above the
        cells). A week goes to the month its Thursday falls in, the rule ISO
-       uses to give a week a year, so a row of months adds up to exactly
-       the row of weeks it replaces and the totals never change with the
-       width. The ramp is the same, stepped on books per week (a month of
+       uses to give a week a year, so a row of months holds exactly the
+       books of the row of weeks it replaces. The total at the end of a
+       row is the calendar year's (calendarModel), so it never changes
+       with the width and agrees with every other figure on the page. The ramp is the same, stepped on books per week (a month of
        four books reads as a week of one), and a tap opens the month's
        books in the same card a week uses.
 
@@ -488,11 +509,17 @@
             sessions(b).forEach(function (s) {
                 var d = parseDate(s);
                 if (!d) return;
+                // A row's total is its calendar year's, the figure the
+                // year tile and the numbers below give. Its cells are ISO
+                // weeks, so a book finished on 30 December sits in the
+                // first week of the next row and still counts for its
+                // own year.
+                var cy = +s.slice(0, 4);
+                if (cy >= CAL_FROM) byYear[cy] = (byYear[cy] || 0) + 1;
                 var iw = isoWeek(d);
                 if (iw.year < CAL_FROM) return;
                 add(weeks, iw.year + '-' + iw.week, b);
                 add(months, iw.year + '-' + (isoThursday(d).getUTCMonth() + 1), b);
-                byYear[iw.year] = (byYear[iw.year] || 0) + 1;
             });
         });
         var now = isoWeek(today);
@@ -754,10 +781,11 @@
             }
             grid.innerHTML = reading.map(function (r) {
                 var b = { t: r.title, a: r.author };
-                // The feed's thumbnail is 75px tall; Goodreads has the same
-                // cover large enough for an 84px slot on a high-density screen.
+                // The small copy the weekly refresh keeps on this site
+                // (siteCover), 240px tall for an 84px slot.
+                var cover = siteCover(r.img);
                 return readingBook(r.link, 'nofollow noopener noreferrer', b,
-                    r.img ? coverImg(goodreadsCover(r.img, 240), b) : typeCoverHtml(b), krEscapeHtml(r.author || ''));
+                    cover ? coverImg(cover, b) : typeCoverHtml(b), krEscapeHtml(r.author || ''));
             }).join('') + asOf;
         }).catch(function () {
             grid.innerHTML = '<p class="kr-reading__meta">Could not load this just now.</p>';

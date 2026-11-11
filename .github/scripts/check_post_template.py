@@ -91,8 +91,23 @@ AHEAD = 3
 # well under a second locally.
 READY_MS = 8000
 
-# The end band's slots, in renderPostEnd's order.
+# The end band's slots, in renderPostEnd's order, and the one slot only
+# some posts have: "shelf" (my ratings and saved passages, on a post whose
+# posts.json record has `shelf`), which sits straight after the sign-off.
 SLOTS = ("mark", "signoff", "upnext", "related", "comments")
+OPTIONAL_SLOTS = {"shelf": "signoff"}   # the slot -> the slot it follows
+
+
+def slots_in_order(slots):
+    """True when `slots` is SLOTS, any optional slot straight after its neighbour."""
+    kept = []
+    for i, name in enumerate(slots):
+        if name in OPTIONAL_SLOTS:
+            if i == 0 or slots[i - 1] != OPTIONAL_SLOTS[name]:
+                return False
+            continue
+        kept.append(name)
+    return tuple(kept) == SLOTS
 
 # The reading bar with the end mark fully in view. Not exactly 1: the bar
 # is written on the next animation frame after a scroll, from positions
@@ -103,14 +118,17 @@ PROGRESS_AT_END = 0.98
 # (renderPostToc).
 MIN_TOC_HEADINGS = 4
 
-# The template has finished building: the end band exists, and Up next has
-# its links (or removed itself, which the slot check then reports).
+# The template has finished building: the end band exists, Up next has
+# its links (or removed itself, which the slot check then reports), and a
+# shelf slot has been filled and shown (or removed itself, having nothing
+# to show).
 READY = """() => document.readyState === 'complete'
     && !!document.querySelector('.kr-post-end')
     && (!document.querySelector('.kr-upnext')
         || !!document.querySelector('.kr-upnext .post-pagination a'))
     && (!document.querySelector('.kr-post-end__related')
         || !!document.querySelector('.kr-post-end__related .related-posts'))
+    && !document.querySelector('.kr-post-shelf[hidden]')
     && document.fonts.status === 'loaded'"""
 
 # Everything judge() needs, in one evaluate. The h2 furniture list mirrors
@@ -121,6 +139,7 @@ POST_FACTS = """() => {
     const end = document.querySelectorAll('.kr-post-end');
     const slot = el => el.classList.contains('kr-post-end__mark') ? 'mark'
         : el.classList.contains('kr-signoff') ? 'signoff'
+        : el.classList.contains('kr-post-shelf') ? 'shelf'
         : el.classList.contains('kr-upnext') ? 'upnext'
         : el.classList.contains('kr-post-end__related') ? 'related'
         : el.id === 'giscus-comments' ? 'comments'
@@ -192,7 +211,7 @@ def light_sample(urls, n=LIGHT_SAMPLE):
 def judge(facts, progress, in_view):
     """The failures for one post, as (assertion, detail) pairs."""
     bad = []
-    if facts["ends"] != 1 or tuple(facts["slots"]) != SLOTS:
+    if facts["ends"] != 1 or not slots_in_order(facts["slots"]):
         bad.append(("one end band, slots in order",
                     f"{facts['ends']} bands; slots {facts['slots']}, want {list(SLOTS)}"))
     if facts["backLinks"]:

@@ -11,8 +11,8 @@ The checks, and the regression each one guards:
   CHECKS            Per-page predicates on the pages whose UI is built by
                     script. Content stuck at opacity 0 (the reveal-animation
                     regressions), the related-posts block injected twice,
-                    a hand-coded back link copied into a post, and the hero's
-                    animation class pruned out of style.min.css.
+                    a hand-coded back link copied into a post, and a second
+                    slide or a carousel back in the homepage hero.
   check_sweep       Every tracked top-level page at 360 and 1280 wide in the
                     dark theme, and at 360 in light: nothing runs past the
                     right edge, no console error, uncaught exception or
@@ -89,11 +89,11 @@ without one class), and the pin seen to fail.
                             one folder down); a mistyped post and a retired
                             page name get guesses from their own words (the
                             page offered only the three newest posts).
-  check_nav_dropdowns       At 1440 a click on Hobbies leaves no dropdown
-                            open once the pointer goes, hovering Blog opens
-                            Blog's alone, and Escape shuts a hovered or a
-                            keyboard-opened one (click focus held Hobbies
-                            open under Blog, and Escape did nothing).
+  check_nav_dropdowns       At 1440 hovering Photography opens its menu
+                            and hovering Blog then opens Blog's alone, and
+                            Escape shuts a hovered or a keyboard-opened one
+                            (one menu stayed open under the next, and
+                            Escape did nothing).
   check_back_to_top         At 390 the back-to-top button hides while the
                             reader scrolls down, shows on the way up, and
                             hides under a jargon card (it sat over the text
@@ -102,10 +102,10 @@ without one class), and the pin seen to fail.
   check_data_fetched_once   Each data/*.json requested once per load on the
                             homepage, the listing and a post (the homepage
                             fetched posts.json twice).
-  check_hero_holds          Under reduced motion the hero does not move in
-                            12s and nothing off screen takes focus; on a
-                            touch screen a tap on Pause holds (Owl's touch
-                            handlers restarted autoplay).
+  check_strip_holds         Under reduced motion the photo strip does not
+                            move in 12s and nothing off screen takes
+                            focus; on a touch screen a tap on Pause holds
+                            (Owl's touch handlers restarted autoplay).
   check_theme_toggle        The toggle flips data-theme and theme-color
                             (#faf7f2 in light, not white) and persists, and
                             another open tab follows (it kept the old theme
@@ -334,27 +334,19 @@ CHECKS = [
         ("stats visible", "document.querySelectorAll('.home-stat-value').length >= 4"),
         ("blog cards visible", "Array.from(document.querySelectorAll('.blog-card, .single-post-area')).filter(e => getComputedStyle(e).opacity !== '0').length >= 1"),
         ("footer grid", "!!document.querySelector('.kr-footer-grid')"),
-        # active.js applies an animate.css class named by data-animation
-        # when the hero changes slide. The class appears in no class
-        # attribute, so the CSS pruner dropped the rule that sets
-        # animation-name and the headline landed with no animation for
-        # months without anything failing. Assert the class still
-        # resolves to a real animation.
-        ("hero slide animation survives pruning",
-         "(() => { const d = document.createElement('div');"
-         "  d.className = 'animated bounceInDown';"
-         "  document.body.appendChild(d);"
-         "  const n = getComputedStyle(d).animationName; d.remove();"
-         "  return n === 'bounceInDown'; })()"),
-        # The carousel contract in active.js: slides off screen (and Owl's
-        # loop clones) are inert, so none of their links is a tab stop, and
-        # the hero's arrows are named buttons rather than divs.
+        # The hero is one section with the evolved headline in it, not a
+        # carousel: a second slide or an Owl wrapper here would bring back
+        # the rotation the headline used to wait behind.
+        ("hero is a single static slide",
+         "document.querySelectorAll('.welcome-area .single-welcome-slide').length === 1"
+         " && !document.querySelector('.welcome-area .owl-item')"
+         " && !!document.querySelector('.welcome-area canvas.kr-hero-evolve')"),
+        # The carousel contract in active.js, on the photo strip: slides
+        # off screen (and Owl's loop clones) are inert, so none of their
+        # links is a tab stop.
         ("carousel slides off screen are inert",
          "(() => { const i = [...document.querySelectorAll('.owl-item')];"
          "  return i.length > 0 && i.every(x => x.classList.contains('active') !== x.hasAttribute('inert')); })()"),
-        ("hero arrows are named buttons",
-         "(() => { const b = [...document.querySelectorAll('.welcome-slides .owl-nav > *')];"
-         "  return b.length === 2 && b.every(x => x.tagName === 'BUTTON' && !!x.getAttribute('aria-label')); })()"),
     ]),
     ("blog.html", [
         ("blog tiles visible", "Array.from(document.querySelectorAll('#blog-grid .single-post-area')).filter(e => getComputedStyle(e).opacity !== '0').length >= 3"),
@@ -397,6 +389,19 @@ CHECKS = [
         ("crumbs run Home, Blog, Series",
          "[...document.querySelectorAll('.breadcrumb-item')].map(e => e.textContent.trim()).slice(0, 3).join()"
          " === 'Home,Blog,Series'"),
+    ]),
+    ("lab.html", [
+        ("a card for every demo", "document.querySelectorAll('#lab-grid a.blog-card').length >= 10"),
+        ("a heading for each group, a series' linked to its page",
+         "document.querySelectorAll('#lab-grid .section-heading h2').length >= 2"
+         " && !!document.querySelector('#lab-grid .section-heading h2 a[href^=\"/series-\"]')"),
+        ("part chips", "document.querySelectorAll('#lab-grid .kr-series-chip').length >= 10"),
+        # The grid asks for sketches that play while on screen
+        # (data-live-play, js/live-covers.js), so a cover in view has its
+        # canvas with no pointer anywhere near it.
+        ("a sketch on a cover in view, with no pointer",
+         "[...document.querySelectorAll('#lab-grid canvas.kr-live-cover')].some(c => {"
+         "  const r = c.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; })"),
     ]),
     ("quotes.html", [
         ("quote cards", "document.querySelectorAll('.kr-quote-card').length >= 500"),
@@ -897,11 +902,11 @@ PHOTO_POST = "blog/abandoned-places-i-photograph.html"
 # repository's thumbnails: a frame must have loaded to be zoomed.
 RELEASE_GLOB = "https://github.com/DrKenReid/DrKenReid.github.io/releases/download/photos-v1/*"
 
-# Fixed lengths for the hero checks: longer than the carousel's
-# autoplayTimeout (10s, js/default-assets/active.js), so a rotation the
-# pause failed to stop has had time to happen. Run on Playwright's fake
-# clock, so they cost nothing in real time.
-HERO_WATCH_MS = 12000
+# Fixed length for the photo strip checks: several of the carousel's
+# autoplayTimeout (3s, renderPhotoStrip in js/shared-components.js), so a
+# rotation the pause failed to stop has had time to happen. Run on
+# Playwright's fake clock, so they cost nothing in real time.
+STRIP_WATCH_MS = 12000
 
 # Geometry at a desktop size, the budgets named in the design review:
 # the first post on the blog above 600px, the gallery grid starting on
@@ -1589,24 +1594,22 @@ def dropdown_is(label, want_open):
 
 
 def check_nav_dropdowns(browser, base, rep):
-    """At 1440 a mouse click on Hobbies leaves its dropdown shut once the
-    pointer has gone, so hovering Blog opens Blog's alone; Escape closes a
-    dropdown the pointer holds open, and one keyboard focus opened, with
-    focus handed back to its parent link. Pins: the focus a click leaves
-    on Hobbies (href="#") held its dropdown open under the next one
-    hovered, and Escape closed neither."""
+    """At 1440 hovering Photography opens its dropdown, and hovering Blog
+    then opens Blog's alone; Escape closes a dropdown the pointer holds
+    open, and one keyboard focus opened, with focus handed back to its
+    parent link. Pins: a dropdown that stayed open under the next one
+    hovered, and Escape closing neither kind."""
     context = site_context(browser, base, size=(1440, 900))
     scope = "desktop dropdowns"
     page, sink = open_page(context, base, "about.html", rep, scope,
                            "!!document.querySelector('.kr-palette-hint')")
     if page:
         away = (700, 600)
-        page.locator(".classynav > ul > li > a", has_text="Hobbies").click()
-        page.mouse.move(*away)
-        rep.check(scope, "a click on Hobbies leaves nothing open once the pointer goes",
-                  wait_until(page, dropdown_is("Hobbies", False), 1000))
+        page.locator(".classynav > ul > li > a", has_text="Photography").hover()
+        rep.check(scope, "hovering Photography opens its dropdown",
+                  wait_until(page, dropdown_is("Photography", True), 1000))
         page.locator(".classynav > ul > li > a", has_text="Blog").first.hover()
-        alone = wait_until(page, f"{dropdown_is('Blog', True)} && {dropdown_is('Hobbies', False)}", 1000)
+        alone = wait_until(page, f"{dropdown_is('Blog', True)} && {dropdown_is('Photography', False)}", 1000)
         rep.check(scope, "hovering Blog opens Blog's alone", alone)
         page.keyboard.press("Escape")
         rep.check(scope, "Escape shuts the dropdown the pointer holds open",
@@ -1615,12 +1618,12 @@ def check_nav_dropdowns(browser, base, rep):
         wait_until(page, dropdown_is("Blog", False), 1000)
         page.locator(".classynav > ul > li > a", has_text="Data Science").focus()
         page.keyboard.press("Tab")
-        opened = wait_until(page, dropdown_is("Hobbies", True), 1000)
+        opened = wait_until(page, dropdown_is("Literature", True), 1000)
         page.keyboard.press("Tab")
         page.keyboard.press("Escape")
-        back = wait_until(page, f"{dropdown_is('Hobbies', False)}"
-                                " && document.activeElement.textContent.trim() === 'Hobbies'", 1000)
-        rep.check(scope, "Tab opens Hobbies; Escape inside it shuts it and focuses Hobbies",
+        back = wait_until(page, f"{dropdown_is('Literature', False)}"
+                                " && document.activeElement.textContent.trim() === 'Literature'", 1000)
+        rep.check(scope, "Tab opens Literature; Escape inside it shuts it and focuses Literature",
                   opened and back, page.evaluate("document.activeElement.textContent.trim()"))
         rep.console_errors(scope, sink)
         page.close()
@@ -1734,21 +1737,23 @@ def check_data_fetched_once(browser, base, rep):
     context.close()
 
 
-# The hero's position and its pause button's label.
-HERO_STATE = """() => {
-    const core = window.jQuery && jQuery('.welcome-slides').data('owl.carousel');
-    const btn = document.querySelector('.welcome-area .carousel-pause-btn');
+# The photo strip's position and its pause button's label. The strip is
+# the site's one rotating carousel (the homepage hero was the other until
+# it became a single slide), so the carousel contract is held here.
+STRIP_STATE = """() => {
+    const core = window.jQuery && jQuery('.follow-area .instragram-feed-area').data('owl.carousel');
+    const btn = document.querySelector('.follow-area .carousel-pause-btn');
     return {at: core ? core.current() : null, label: btn && btn.getAttribute('aria-label')};
 }"""
-HERO_READY = ("!!document.querySelector('.welcome-slides.owl-loaded')"
-              " && !!document.querySelector('.welcome-area .carousel-pause-btn')")
+STRIP_READY = ("!!document.querySelector('.follow-area .instragram-feed-area.owl-loaded')"
+               " && !!document.querySelector('.follow-area .carousel-pause-btn')")
 
 # Elements inside slides off screen that can still take focus. Tried for
 # real (focus() and see whether it stuck) rather than inferred from inert
 # or tabindex, which is the mechanism under test.
 FOCUSABLE_OFF_SCREEN = """() => {
     const found = [];
-    for (const el of document.querySelectorAll('.welcome-slides .owl-item:not(.active) *')) {
+    for (const el of document.querySelectorAll('.follow-area .owl-item:not(.active), .follow-area .owl-item:not(.active) *')) {
         if (!el.matches('a[href], button, input, select, textarea, summary, [tabindex]')) continue;
         el.focus({preventScroll: true});
         if (document.activeElement === el) { found.push(el.tagName.toLowerCase()); el.blur(); }
@@ -1757,12 +1762,12 @@ FOCUSABLE_OFF_SCREEN = """() => {
 }"""
 
 
-def check_hero_holds(browser, base, rep):
-    """The homepage slideshow stays put when it has been told to.
+def check_strip_holds(browser, base, rep):
+    """The photo strip stays put when it has been told to.
 
     Under prefers-reduced-motion it starts paused and does not move in
-    HERO_WATCH_MS, and nothing in a slide off screen can take focus. On a
-    touch screen, a tap on Pause holds through a touch on the slide and a
+    STRIP_WATCH_MS, and nothing in a slide off screen can take focus. On a
+    touch screen, a tap on Pause holds through a touch on the strip and a
     tap elsewhere on the page. Pins: Owl restarting autoplay from its
     touch and mouse handlers (touchend without asking whether it was
     rotating), which made the pause a suggestion on phones, and the
@@ -1777,11 +1782,11 @@ def check_hero_holds(browser, base, rep):
     page = context.new_page()
     page.clock.install()
     page.goto(f"{base}/index.html", wait_until="domcontentloaded")
-    if settle(page, scope, rep, HERO_READY, PAGE_BUDGET_MS):
-        before = page.evaluate(HERO_STATE)
-        page.clock.fast_forward(HERO_WATCH_MS)
-        after = page.evaluate(HERO_STATE)
-        rep.check(scope, f"hero does not advance in {HERO_WATCH_MS // 1000}s",
+    if settle(page, scope, rep, STRIP_READY, PAGE_BUDGET_MS):
+        before = page.evaluate(STRIP_STATE)
+        page.clock.fast_forward(STRIP_WATCH_MS)
+        after = page.evaluate(STRIP_STATE)
+        rep.check(scope, f"photo strip does not advance in {STRIP_WATCH_MS // 1000}s",
                   before["at"] is not None and before["at"] == after["at"], f"{before} -> {after}")
         stray = page.evaluate(FOCUSABLE_OFF_SCREEN)
         rep.check(scope, "nothing in a slide off screen takes focus", not stray, stray[:5])
@@ -1793,35 +1798,39 @@ def check_hero_holds(browser, base, rep):
     page = context.new_page()
     page.clock.install()
     page.goto(f"{base}/index.html", wait_until="domcontentloaded")
-    if settle(page, scope, rep, HERO_READY, PAGE_BUDGET_MS):
-        page.tap(".welcome-area .carousel-pause-btn")
-        before = page.evaluate(HERO_STATE)
-        # A touch on the slide (Owl's touchstart and touchend handlers,
+    if settle(page, scope, rep, STRIP_READY, PAGE_BUDGET_MS):
+        # Every frame in the strip is a link into the gallery: the touch
+        # below is on one, and it must not take the page away.
+        page.evaluate("document.querySelector('.follow-area').addEventListener('click',"
+                      " e => { if (e.target.closest('a.single-instagram-item')) e.preventDefault(); }, true)")
+        page.tap(".follow-area .carousel-pause-btn")
+        before = page.evaluate(STRIP_STATE)
+        # A touch on the strip (Owl's touchstart and touchend handlers,
         # plus the mouseover a tap emulates), then a tap on plain page
-        # content outside the hero (the emulated mouseleave).
-        slide = page.evaluate("(() => { const r = document.querySelector('.welcome-slides')"
-                              ".getBoundingClientRect(); return [r.left + 20, r.top + r.height * 0.85]; })()")
-        page.touchscreen.tap(*slide)
-        page.evaluate("window.scrollBy(0, 500)")
+        # content outside it (the emulated mouseleave).
+        frame = page.evaluate("(() => { const r = document.querySelector('.follow-area .instragram-feed-area')"
+                              ".getBoundingClientRect(); return [r.left + 20, r.top + r.height * 0.5]; })()")
+        page.touchscreen.tap(*frame)
+        page.evaluate("window.scrollBy(0, -500)")
         outside = page.evaluate(PLAIN_POINT)
         if outside:
             page.touchscreen.tap(*outside)
-        page.clock.fast_forward(HERO_WATCH_MS)
-        after = page.evaluate(HERO_STATE)
-        rep.check(scope, "a tap on Pause holds the hero",
+        page.clock.fast_forward(STRIP_WATCH_MS)
+        after = page.evaluate(STRIP_STATE)
+        rep.check(scope, "a tap on Pause holds the photo strip",
                   bool(outside) and before["label"] == after["label"] and before["at"] == after["at"]
                   and (before["label"] or "").startswith("Play"), f"{before} -> {after}")
     page.close()
     context.close()
 
 
-# A point on plain page content outside the hero, for a tap that should
+# A point on plain page content outside the carousel, for a tap that should
 # do nothing: no link, control or anything with a handler of its own.
 PLAIN_POINT = """() => {
     for (let y = innerHeight - 40; y > 40; y -= 20)
         for (let x = 30; x < innerWidth - 30; x += 40) {
             const el = document.elementFromPoint(x, y);
-            if (el && !el.closest('.welcome-area, header, a, button, input, select, textarea,'
+            if (el && !el.closest('.welcome-area, .follow-area, header, a, button, input, select, textarea,'
                                   + ' label, summary, [tabindex], [role=button]')) return [x, y];
         }
     return null;
@@ -2106,7 +2115,8 @@ def check_listing_load_failure(browser, base, rep):
     context = site_context(browser, base, "dark", (390, 844))
     context.route("**/data/posts.json", lambda route: route.abort())
     for path, grid, least in (("blog.html", "#blog-grid", 20), ("series.html", "#series-index-grid", 10),
-                              ("series-how-this-site-is-built.html", "#series-grid", 4)):
+                              ("series-how-this-site-is-built.html", "#series-grid", 4),
+                              ("lab.html", "#lab-grid", 10)):
         scope = f"{path} without posts.json"
         page, _sink = open_page(context, base, path, rep, scope,
                                 f"!!document.querySelector('{grid} > .kr-load-failed')")
@@ -3391,9 +3401,9 @@ def check_season(browser, base, rep):
 def check_birthday(browser, base, rep):
     """Party hats on Ken's photographs (js/birthday.js; see the module
     docstring)."""
-    # The hero's own slide (the carousel keeps copies of it either side),
-    # held there; the author photo's hat pokes out of its circle by design.
-    pages = (("index.html", ".owl-item:not(.cloned) .slide-bg--portrait"), ("about.html", ".about-portrait"),
+    # The hero's portrait; the author photo's hat pokes out of its circle
+    # by design.
+    pages = (("index.html", ".welcome-area .slide-bg--portrait"), ("about.html", ".about-portrait"),
              ("blog/from-scotland-to-michigan.html", "img[src*='kilts']"),
              ("blog/from-scotland-to-michigan.html", ".kr-author__photo"))
     for size in ((1440, 900), (390, 844)):
@@ -3404,8 +3414,6 @@ def check_birthday(browser, base, rep):
                                    f"!!document.querySelector('.kr-bday-note') && !!document.querySelector({json.dumps(photo)})")
             if not page:
                 continue
-            if path == "index.html":
-                page.evaluate("jQuery('.welcome-slides').trigger('stop.owl.autoplay').trigger('to.owl.carousel', [0, 0])")
             page.locator(photo).first.scroll_into_view_if_needed()
             page.evaluate("scrollBy(0, -160)")
             page.wait_for_timeout(300)
@@ -3460,7 +3468,7 @@ def run_pins(browser, base, rep):
     check_nav_dropdowns(browser, base, rep)
     check_back_to_top(browser, base, rep)
     check_data_fetched_once(browser, base, rep)
-    check_hero_holds(browser, base, rep)
+    check_strip_holds(browser, base, rep)
     check_theme_toggle(browser, base, rep)
     check_phone_menu(browser, base, rep)
     check_blog_url_state(browser, base, rep)

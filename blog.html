@@ -74,11 +74,19 @@
       <div class="kr-blog-toolbar text-center">
         <button type="button" id="kr-filter-toggle" class="btn gallery-filter-btn" aria-expanded="false" aria-controls="blog-filters">Filter &#9662;</button>
         <button type="button" id="kr-sort-toggle" class="btn gallery-filter-btn" aria-expanded="false" aria-controls="blog-sort">Sort: Date &darr;</button>
+        <!-- Type: Cards (the mosaic, a page at a time) or List (every post
+             the filters leave, a line each), in a panel like Filter's and
+             Sort's. js/blog.js keeps the label and aria-pressed. -->
+        <button type="button" id="kr-type-toggle" class="btn gallery-filter-btn" aria-expanded="false" aria-controls="blog-type">Type: Cards &#9662;</button>
         <!-- A link, not a toggle: it leaves for the series index. -->
         <a href="/series.html" class="btn gallery-filter-btn">Series <span aria-hidden="true">&rarr;</span></a>
       </div>
       <div id="blog-filters" class="gallery-filters kr-filter-panel text-center kr-collapse" hidden></div>
       <div id="blog-sort" class="gallery-filters text-center kr-collapse" hidden></div>
+      <div id="blog-type" class="gallery-filters text-center kr-collapse" role="group" aria-label="Show posts as" hidden>
+        <button type="button" id="kr-view-cards" class="btn gallery-filter-btn active" aria-pressed="true">Cards</button>
+        <button type="button" id="kr-view-list" class="btn gallery-filter-btn" aria-pressed="false">List</button>
+      </div>
       <p id="blog-counter" class="kr-list-counter" role="status" aria-live="polite" aria-atomic="true"></p>
       <!-- Held at about a viewport tall while empty (style.css), so the
            subscribe row and the footer never flash up and jump away. -->
@@ -173,6 +181,40 @@
         </ul>
       </noscript>
       <!-- END listing-fallback -->
+      <!-- Start here: four posts picked by hand for a first visit, under
+           the first page of posts and its pager (above them it pushed the
+           newest post off the first screen), built like the "Read in
+           order" band below it. Each item names its post in data-post and
+           carries its title and why it is here, so the band reads without
+           script as a list; js/blog.js turns the list into the site's post
+           cards, each with its reason on the cover, and hides the band
+           while the list is searched, filtered or past its first page. To
+           change a pick, change its data-post, href, title and reason. -->
+      <section id="start-here" class="kr-start" aria-labelledby="start-here-title">
+        <div class="section-heading section-heading--sm text-center">
+          <span class="section-eyebrow">New here?</span>
+          <h2 id="start-here-title">Start here</h2>
+          <p class="section-heading__lede">Four posts I would hand someone first.</p>
+        </div>
+        <ol class="kr-start__list">
+          <li class="kr-start__item" data-post="blog/fifteen-years-of-silence-rothfuss-doors-of-stone.html">
+            <span class="kr-start__why">Most read</span>
+            <a class="kr-start__link" href="/blog/fifteen-years-of-silence-rothfuss-doors-of-stone.html">Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction</a>
+          </li>
+          <li class="kr-start__item" data-post="blog/evolution-live.html">
+            <span class="kr-start__why">Run it in the page</span>
+            <a class="kr-start__link" href="/blog/evolution-live.html">Evolution, Live</a>
+          </li>
+          <li class="kr-start__item" data-post="blog/no-idea-no-problem-data-science-portfolio.html">
+            <span class="kr-start__why">From the day job</span>
+            <a class="kr-start__link" href="/blog/no-idea-no-problem-data-science-portfolio.html">No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio</a>
+          </li>
+          <li class="kr-start__item" data-post="blog/photographing-strangers.html">
+            <span class="kr-start__why">Behind the camera</span>
+            <a class="kr-start__link" href="/blog/photographing-strangers.html">Photographing Strangers</a>
+          </li>
+        </ol>
+      </section>
       <!-- BEGIN series-band: written by .github/scripts/generate_series_band.py from data/posts.json and the series pages; edits made here are overwritten. -->
       <section id="series-band" class="kr-series-band" aria-labelledby="series-band-title">
         <div class="section-heading section-heading--sm text-center">

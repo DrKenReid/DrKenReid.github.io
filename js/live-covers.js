@@ -21,6 +21,18 @@
  * Touch devices have no hover, and reduced-motion readers asked for
  * stillness; both get the static cover.
  *
+ * Playing in view. A host inside an element marked
+ * data-live-play="view" (the attribute goes on the host or on anything
+ * around it, a whole grid of cards for one) does not wait for a pointer:
+ * its sketch plays while its canvas box is on screen and holds when it
+ * scrolls off, on a phone as on a desktop. At most VIEW_MAX play at
+ * once, fewer if frames start coming late, and the ones over the count
+ * wait on a still frame. A reader who asked for less motion gets that
+ * still frame from every one and nothing moves. Such a page loads the
+ * three files itself (krLoadLiveCovers in shared-components.js), since
+ * the pointer that would have fetched them may never come. lab.html and
+ * the portfolio on data_science.html are the two.
+ *
  * Writing a sketch: .github/docs/COMPONENTS.md, "The hover sketch".
  * Design notes: "Every Card Has a Sketch",
  * https://www.kenreid.co.uk/blog/every-card-has-a-sketch.html
@@ -156,14 +168,16 @@
         return kindFor(hrefOf(card));
     }
 
-    function start(card) {
-        if (runs.has(card) || still()) return;
+    /* One sketch on one card: its canvas, laid in the card's box, and the
+       loop that drives it. Nothing moves until play(). */
+    function mount(card) {
+        if (runs.has(card)) return runs.get(card);
         var host = hostOf(card);
-        if (!host) return;
+        if (!host) return null;
         var box = host.getBoundingClientRect();
-        if (!box.width || !box.height) return;
+        if (!box.width || !box.height) return null;
         var kind = kindOf(card);
-        if (!kind) return;
+        if (!kind) return null;
         var arg = null;
         try { arg = JSON.parse(card.getAttribute('data-live-arg') || 'null'); } catch (e) { arg = null; }
         var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -181,7 +195,8 @@
         // Under-mode hosts become a dark stage while running (the veil
         // stays on whatever the sketch asked) and their text turns light.
         var veil = algo.veil !== false || card.hasAttribute('data-live-under');
-        var run = { raf: 0, stop: false, last: 0, acc: STEP, canvas: c };
+        var run = { raf: 0, on: false, view: false, shown: false, last: 0, acc: STEP, canvas: c,
+                    w: box.width, h: box.height };
         runs.set(card, run);
         card.classList.add('kr-live-on');
 
@@ -189,43 +204,190 @@
             ctx.clearRect(0, 0, box.width, box.height);
             if (veil) { ctx.fillStyle = C.veil; ctx.fillRect(0, 0, box.width, box.height); }
             algo.draw(ctx);
+            run.shown = true;
         }
+        run.paint = paint;
+        run.step = function () { algo.step(); };
         // Fixed-rate stepping: however often the display paints, the
         // sketch advances sixty times a second, a few steps at most per
         // frame so a stalled tab does not fast-forward on return.
-        function frame(ts) {
-            if (run.stop) return;
+        run.frame = function (ts) {
+            if (!run.on) return;
+            if (run.view && pace(ts)) { balance(); if (!run.on) return; }
             if (run.last) run.acc += Math.min(100, ts - run.last);
             run.last = ts;
             var steps = 0;
             while (run.acc >= STEP && steps < MAX_STEPS) { algo.step(); run.acc -= STEP; steps++; }
             if (run.acc > STEP * MAX_STEPS) run.acc = 0;
             if (steps) paint();
-            run.raf = requestAnimationFrame(frame);
-        }
-        run.raf = requestAnimationFrame(frame);
+            run.raf = requestAnimationFrame(run.frame);
+        };
         requestAnimationFrame(function () { c.classList.add('is-on'); });
+        return run;
     }
 
-    function stop(card) {
+    function play(run) {
+        if (run.on) return;
+        run.on = true;
+        run.last = 0;
+        run.raf = requestAnimationFrame(run.frame);
+    }
+
+    function pause(run) {
+        run.on = false;
+        cancelAnimationFrame(run.raf);
+    }
+
+    function unmount(card) {
         var run = runs.get(card);
         if (!run) return;
-        run.stop = true;
-        cancelAnimationFrame(run.raf);
+        pause(run);
         runs.delete(card);
         card.classList.remove('kr-live-on');
         run.canvas.remove();
     }
 
-    function bind(card) {
+    /* Hover and focus: the sketch exists only while the card has one. */
+    function start(card) {
+        if (still()) return;
+        var run = mount(card);
+        if (run) play(run);
+    }
+
+    /* ---------------------------------------------------- playing in view
+       A host inside [data-live-play="view"] plays while its canvas box is
+       on screen (the file header has the contract). */
+    var VIEW = '[data-live-play="view"]';
+    var VIEW_MAX = 9, VIEW_MIN = 3;    // how many may play at once; the fewest pace() leaves
+    var STILL_AT = 120, ROLL_MS = 6;   // the frame a waiting or reduced-motion sketch shows; a slice of the way there
+    var LATE_MS = 40, LATE_RUN = 45;   // a frame this long after the last is late; this many in a row cost a sketch
+    var viewMax = VIEW_MAX;
+    var seen = [];                     // cards on screen, first to arrive first
+    var owners = new WeakMap();        // a canvas box -> its card
+    var watcher = null, sizer = null;
+    var paceAt = 0, late = 0;
+
+    function playsInView(card) {
+        return 'IntersectionObserver' in window && !!(card.closest && card.closest(VIEW));
+    }
+
+    /* Everything on screen plays, up to the count; the rest, and all of
+       them under reduced motion, keep the frame they are on, or are given
+       one if they have never painted. */
+    function balance() {
+        var moving = !still();
+        for (var i = 0; i < seen.length; i++) {
+            var run = runs.get(seen[i]);
+            if (!run) continue;
+            if (moving && i < viewMax) { play(run); continue; }
+            pause(run);
+            if (!run.shown && !run.rolling) roll(run);
+        }
+    }
+
+    /* A sketch that is not going to play is stepped on to STILL_AT and
+       painted once there, so what it shows is a picture and not a blank
+       start. The steps are unseen and taken a few milliseconds at a time:
+       one heavy sketch (the evolving triangles take a tenth of a second
+       to get there) must not hold up the scroll that brought it in. If it
+       gets to play in the meantime, the frame loop takes over. */
+    function roll(run) {
+        var left = STILL_AT;
+        run.rolling = true;
+        (function slice() {
+            var until = Date.now() + ROLL_MS;
+            while (left > 0 && Date.now() < until) { run.step(); left--; }
+            if (run.on || !run.canvas.isConnected) { run.rolling = false; return; }
+            if (left > 0) { setTimeout(slice, 0); return; }
+            run.rolling = false;
+            run.paint();
+        }());
+    }
+
+    /* The sketches in view share each frame with the rest of the page.
+       When frames keep coming late, one fewer may play (never under
+       VIEW_MIN) and the last to arrive goes back to waiting. A gap of a
+       quarter of a second is a tab coming back, not a slow frame. True
+       when the count has just dropped. */
+    function pace(ts) {
+        if (ts === paceAt) return false;   // one reading a frame, however many sketches share it
+        var gap = ts - paceAt;
+        paceAt = ts;
+        late = gap > LATE_MS && gap < 250 ? late + 1 : 0;
+        if (late < LATE_RUN || viewMax <= VIEW_MIN) return false;
+        late = 0;
+        viewMax--;
+        return true;
+    }
+
+    /* On screen: a sketch built for the box as it is now (rebuilt when the
+       box has changed size since, a phone turned on its side). It keeps
+       its canvas when it leaves, so scrolling back finds it where it
+       stopped. balance(), which every caller runs next, plays it or gives
+       it its still frame. */
+    function arrive(card) {
+        var host = hostOf(card), run = runs.get(card);
+        var box = host && host.getBoundingClientRect();
+        if (run && box && (Math.abs(run.w - box.width) > 1 || Math.abs(run.h - box.height) > 1)) {
+            unmount(card);
+            run = null;
+        }
+        if (!run) {
+            run = mount(card);
+            if (!run) return;
+            run.view = true;
+        }
+        if (seen.indexOf(card) < 0) seen.push(card);
+    }
+
+    function depart(card) {
+        var i = seen.indexOf(card);
+        if (i >= 0) seen.splice(i, 1);
+        var run = runs.get(card);
+        if (run) pause(run);
+    }
+
+    function observe(card) {
+        var host = hostOf(card);
+        if (!host) return;
+        if (!watcher) {
+            watcher = new IntersectionObserver(function (entries) {
+                for (var i = 0; i < entries.length; i++) {
+                    var owner = owners.get(entries[i].target);
+                    if (!owner) continue;
+                    if (entries[i].isIntersecting) arrive(owner); else depart(owner);
+                }
+                balance();
+            });
+            if ('ResizeObserver' in window) {
+                sizer = new ResizeObserver(function (entries) {
+                    for (var i = 0; i < entries.length; i++) {
+                        var owner = owners.get(entries[i].target);
+                        if (owner && seen.indexOf(owner) >= 0) arrive(owner);
+                    }
+                    balance();
+                });
+            }
+            var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+            if (calm && calm.addEventListener) calm.addEventListener('change', balance);
+        }
+        owners.set(host, card);
+        watcher.observe(host);
+        if (sizer) sizer.observe(host);
+    }
+
+    function bind(card, hover) {
         if (bound.has(card) || !kindOf(card)) return;
+        var inView = playsInView(card);
+        if (!inView && !hover) return;
         bound.add(card);
         card.classList.add('kr-live-card');
         if (card.hasAttribute('data-live')) card.classList.add('kr-live-host');
+        if (inView) { observe(card); return; }
         card.addEventListener('mouseenter', function () { start(card); });
-        card.addEventListener('mouseleave', function () { stop(card); });
+        card.addEventListener('mouseleave', function () { unmount(card); });
         card.addEventListener('focusin', function () { start(card); });
-        card.addEventListener('focusout', function () { stop(card); });
+        card.addEventListener('focusout', function () { unmount(card); });
         // The sketch files load lazily, on the first pointermove, so a
         // cursor that arrives in one motion can cross into the card and
         // fire mouseenter before this function ever runs; that event is
@@ -235,12 +397,14 @@
         if ((card.matches && card.matches(':hover')) || card === document.activeElement) start(card);
     }
 
-    /** Bind every card and host inside root (root included). */
+    /** Bind every card and host inside root (root included): those that
+        play in view on any device, the rest only where hover can run. */
     function scan(root) {
-        if (!root || !root.querySelectorAll || !canRun()) return;
-        if (root.matches && root.matches(SELECTOR)) bind(root);
+        if (!root || !root.querySelectorAll) return;
+        var hover = canRun();
+        if (root.matches && root.matches(SELECTOR)) bind(root, hover);
         var found = root.querySelectorAll(SELECTOR);
-        for (var i = 0; i < found.length; i++) bind(found[i]);
+        for (var i = 0; i < found.length; i++) bind(found[i], hover);
     }
 
     /* Cards a script renders later bind as they arrive. */

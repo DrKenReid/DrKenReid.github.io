@@ -131,7 +131,8 @@ Lora and the photographs.
 
 Component-scoped tokens stay with their component: the demo palette
 (`--viz-*`, §12), the calendar ramp (`--kr-cal-*`, §14), the header's
-states (`--kr-bar-*`, §04).
+states (`--kr-bar-*`, §04), the gallery's colour swatches (`--kr-hue-*`,
+§09).
 
 ## Type
 
@@ -311,15 +312,29 @@ text read just before the title. Under forced colours it keeps a
 
 Hover sketches outside the post cards run in a stage of their own, so the
 text around them never moves: a strip beneath the homepage's stat tiles
-and Explore links (`.kr-stat-stage`, `.kr-explore-stage`), a corner box on
+(`.kr-stat-stage`), a corner box on
 the About page's hobby cards (`.kr-hobby-stage`), a panel beside each
-publication (`.kr-pub-stage`). The stat, Explore and publication stages
+publication (`.kr-pub-stage`). The stat and publication stages
 take room only where the sketches can run (`(hover: hover)` and no
 reduced-motion preference; the publication stage also from 900px wide),
 which must stay in step with the gate in `initLiveCovers`. The About
 card's corner stage is always there, but it is absolutely placed and
 stays transparent until a sketch runs. A stage darkens while its sketch
 runs and fades slowly (§20).
+
+A sketch can also play without a pointer. Anything inside an element
+marked `data-live-play="view"` plays while its canvas box is on screen
+and holds when it scrolls off, on a phone as on a desktop; at most
+`VIEW_MAX` play at once (`js/live-covers.js`; fewer when frames come
+late) and the rest wait on a still frame, which is also what every one of them shows under reduced motion.
+Two places ask for it: the Lab's grid (`#lab-grid`, where each card's
+cover is the stage) and the portfolio's posters on the Data Science page
+(`.ds-app__poster`, §16), which are a dark stage at rest and carry
+`data-live` themselves. The attribute goes on the host or on any
+ancestor, and the page fetches the sketch files itself
+(`krLoadLiveCovers`), since no pointer may ever come. Use it where the
+moving picture is the content; a card that is one of many on a page that
+is about something else keeps the hover.
 
 ## A page, composed
 
@@ -360,7 +375,8 @@ What every component keeps to (the essay:
   presses Tab for real and checks the ring appears.
 - **Motion.** Everything that moves has a `prefers-reduced-motion`
   answer: the demos mount paused, the carousels start paused, the hover
-  sketches never load, the hero's evolving headline is drawn as type.
+  sketches never load (one set to play in view shows a single still
+  frame), the hero's evolving headline is drawn as type.
 - **Floating UI.** Something that fades or slides away gets
   `.kr-offstage` (§10, "Share rail and share sheet") and toggles
   `.is-visible`; the component supplies the opacity or transform. The

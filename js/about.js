@@ -192,11 +192,28 @@
             var accent = getComputedStyle(document.documentElement).getPropertyValue('--kr-action').trim() || '#c53030';
             var route = arc(stirling, lansing, 9).concat([annArbor]);
             L.polyline(route, { color: accent, weight: 2, dashArray: '6 8', opacity: 0.85, interactive: false }).addTo(map);
+            // The stops are DOM markers (.kr-journey__dot), not vector
+            // circles: Leaflet scales its vector layer while the map flies
+            // between zooms and redraws it only when the move ends, so a
+            // 6px circle or a 2px line drawn at zoom 3 covers the whole
+            // panel by zoom 10. A DOM marker keeps its size, and the route
+            // steps out for the flight (see 'zoomstart' below).
+            var dot = L.divIcon({ className: 'kr-journey__dot', iconSize: [16, 16] });
             [stirling, erskine, lansing, annArbor].forEach(function (p) {
-                L.circleMarker(p, { radius: 6, color: '#ffffff', weight: 2, fillColor: accent, fillOpacity: 1, interactive: false }).addTo(map);
+                L.marker(p, { icon: dot, interactive: false, keyboard: false }).addTo(map);
             });
             var whole = L.latLngBounds(route).pad(0.08);
             map.fitBounds(whole);
+
+            var vectors = map.getPane('overlayPane');
+            map.on('zoomstart', function () {
+                vectors.style.transition = 'none';
+                vectors.style.opacity = '0';
+            });
+            map.on('zoomend', function () {
+                vectors.style.transition = STILL ? 'none' : 'opacity 240ms ease';
+                vectors.style.opacity = '';
+            });
 
             var current = null;
             function show(stop) {

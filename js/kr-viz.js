@@ -6,7 +6,8 @@
  * It owns the chrome: canvas sizing and devicePixelRatio, the palette and
  * its theme rebind, the run loop and speed, controls, stat tiles, charts,
  * and the behaviours no post remembered to write (reduced motion, pausing
- * offscreen, announcing the status line, a handle tests can drive).
+ * offscreen, announcing the status line, a link to a run, full screen, a
+ * handle tests can drive).
  *
  * It does not own the algorithm or the drawing. A post supplies init, step
  * and draw as plain functions, and those stay readable in view-source.
@@ -42,6 +43,12 @@
   // itself; see the observers under "environment".
   var START_SHARE = 0.5;
   var uid = 0;             // for the ids aria-describedby needs
+  // What a link to a run looks like: #run:<mount id>[:<seed>][&<control>=<value>...]
+  var RUN_LINK = /^#run:([^:&]+)(?::(\d{1,10}))?(?:&(.*))?$/;
+  // Outlines for the tool buttons, on a 16px grid: a link, corners out, corners in.
+  var ICON_LINK = 'M6.5 4.5h-2a3.5 3.5 0 0 0 0 7h2M9.5 4.5h2a3.5 3.5 0 0 1 0 7h-2M5.5 8h5';
+  var ICON_FULL = 'M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10';
+  var ICON_BACK = 'M6 2.5V6H2.5M13.5 6H10V2.5M10 13.5V10h3.5M2.5 10H6v3.5';
 
   /* Seeded PRNG. Every demo runs from a seed so a reader who reloads sees
      the same run, and so a test can reproduce one. */
@@ -77,6 +84,7 @@
     var colors = readColors(root);
     var canvases = {};
     var controls = {};
+    var sets = {};           // by control id: take a value out of a link
     var statEls = {};
     var samples = [];
     var maxSamples = cfg.maxSamples || 300;
@@ -185,7 +193,7 @@
              max: s.max || 40, value: s.value || 6, unit: '/s'};
       }
       if (s.type === 'select') {
-        var slab = el('label');
+        var slab = el('label'), vals = [];
         slab.appendChild(document.createTextNode(s.label + ' '));
         var sel = document.createElement('select');
         (s.options || []).forEach(function (o) {
@@ -193,7 +201,11 @@
           opt.value = o.value != null ? o.value : o;
           opt.textContent = o.label != null ? o.label : o;
           sel.appendChild(opt);
+          vals.push(String(opt.value));
         });
+        sets[s.id] = function (raw) {
+          if (vals.indexOf(raw) >= 0) { sel.value = raw; controls[s.id] = raw; }
+        };
         sel.value = s.value != null ? s.value : sel.value;
         slab.appendChild(sel);
         slot.toolbar.appendChild(slab);
@@ -212,6 +224,9 @@
         lab.appendChild(document.createTextNode(' ' + s.label));
         slot.toolbar.appendChild(lab);
         controls[s.id] = !!s.value;
+        sets[s.id] = function (raw) {
+          if (raw === '1' || raw === '0') controls[s.id] = box.checked = raw === '1';
+        };
         box.addEventListener('change', function () {
           controls[s.id] = box.checked;
           if (s.restart) restart(); else redraw();
@@ -242,6 +257,14 @@
       }
       input.addEventListener('input', sync);
       sync();
+      // a plain number only, held to the slider's range and its steps
+      sets[s.id] = function (raw) {
+        if (!/^-?\d+(\.\d+)?$/.test(raw)) return;
+        var lo = +input.min, hi = +input.max, st = +input.step;
+        var v = lo + Math.round((Math.max(lo, Math.min(hi, +raw)) - lo) / st) * st;
+        input.value = +(v > hi ? v - st : v).toFixed(6);
+        sync();
+      };
     }
 
     function addStat(s) {
@@ -261,10 +284,111 @@
 
     (cfg.buttons || []).forEach(addButton);
     (cfg.controls || []).forEach(addControl);
-    // the status sits last: it carries margin-left:auto, so anything appended
-    // after it would be pushed to the far right with it
+    // the status sits last of the post's own chrome: it takes the free
+    // width, so the tools after it sit at the far right
     if (statusEl) slot.toolbar.appendChild(statusEl);
     (cfg.stats || []).forEach(addStat);
+
+    /* ---- a link to this run, and full screen -------------------------- */
+
+    /* Two icon buttons after the status. Copy link to this run is there
+       when the engine has a run to describe (a toolbar it built, an id on
+       the mount, a seed or a control) and writes it into the fragment
+       (RUN_LINK), not the query string, so the page keeps one URL. Full
+       screen is there when the browser can do it for an element (an
+       iPhone cannot); a mount with no toolbar slot gets it at its foot.
+       share: false or fullscreen: false in the options leaves one out. */
+    var tools = el('span', 'kr-tools'), note = el('span', 'kr-tools__note');
+    var noteTimer = null;
+    var shares = !!(cfg.share !== false && root.id && slot.toolbar &&
+                    (cfg.seed != null || Object.keys(sets).length));
+    note.hidden = true;
+    tools.appendChild(note);
+
+    // the label names the action; the drawing is a constant path, no data
+    function face(b, label, d) {
+      b.title = label;
+      b.setAttribute('aria-label', label);
+      b.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="' + d + '"/></svg>';
+    }
+
+    function tool(label, d, onClick) {
+      var b = el('button', 'kr-btn secondary kr-tool');
+      b.type = 'button';
+      face(b, label, d);
+      b.addEventListener('click', onClick);
+      return tools.appendChild(b);
+    }
+
+    function link() {
+      if (!shares) return '';
+      var out = '#run:' + encodeURIComponent(root.id) +
+                (cfg.seed != null || seed !== 1 ? ':' + (seed >>> 0) : '');
+      Object.keys(sets).forEach(function (id) {
+        var v = controls[id];
+        out += '&' + encodeURIComponent(id) + '=' + encodeURIComponent(v === !!v ? +v : v);
+      });
+      return out;
+    }
+
+    /* Take a link addressed to this mount: true when it was one. The
+       fragment is a stranger's text. It must fit RUN_LINK and name this
+       mount; only this demo's controls are looked up, and each checks its
+       own value (a number held to the slider's range and steps, one of a
+       select's options, 0 or 1). The rest is ignored without a word. */
+    function openLink() {
+      var m = RUN_LINK.exec(global.location.hash);
+      if (!shares || !m || m[1] !== encodeURIComponent(root.id) ||
+          !global.URLSearchParams) return false;
+      var q = new global.URLSearchParams(m[3] || '');
+      booting = true;              // the controls record; one restart follows
+      Object.keys(sets).forEach(function (id) { if (q.has(id)) sets[id](q.get(id)); });
+      booting = false;
+      if (m[2]) { seed = m[2] >>> 0; rng = mulberry32(seed); ctx.rng = rng; }
+      return true;
+    }
+
+    function show() { root.scrollIntoView({behavior: 'instant'}); }
+
+    // shown above the buttons for a moment, and spoken through the hidden
+    // region (emptied first, so the same words are spoken a second time)
+    function say(text) {
+      note.textContent = text;
+      note.hidden = false;
+      clearTimeout(noteTimer);
+      noteTimer = setTimeout(function () { note.hidden = true; }, 2500);
+      liveEl.textContent = '';
+      announce(text, true);
+    }
+
+    if (shares) {
+      tool('Copy link to this run', ICON_LINK, function () {
+        var url = global.location.href.split('#')[0] + link();
+        var clip = global.navigator.clipboard;
+        // no clipboard (an insecure page, a refusal): the address bar has it
+        function bar() {
+          global.history.replaceState(global.history.state, '', url);
+          say('Link is in the address bar');
+        }
+        if (clip && clip.writeText) clip.writeText(url).then(function () { say('Link copied'); }, bar);
+        else bar();
+      });
+    }
+
+    if (cfg.fullscreen !== false && root.requestFullscreen && document.fullscreenEnabled) {
+      var fsBtn = tool('Enter fullscreen', ICON_FULL, function () {
+        fsBtn.focus();
+        (document.fullscreenElement === root ? document.exitFullscreen()
+                                             : root.requestFullscreen()).catch(function () {});
+      });
+      // Escape leaves too, so the label follows the event, not the click
+      document.addEventListener('fullscreenchange', function () {
+        var on = document.fullscreenElement === root;
+        face(fsBtn, on ? 'Exit fullscreen' : 'Enter fullscreen', on ? ICON_BACK : ICON_FULL);
+        onResize();
+      });
+    }
+    if (tools.children.length > 1) (slot.toolbar || root).appendChild(tools);
 
     /* ---- canvases ---------------------------------------------------- */
 
@@ -280,6 +404,14 @@
         !!(node && (' ' + node.className + ' ').indexOf(' kr-chart ') >= 0);
       canvases[name] = {node: node, spec: spec, chart: chart, g: null, w: 0, h: 0, dpr: 0};
     });
+
+    // The main canvas is the first one named. The start observer watches
+    // it, and full screen it takes the height the rest of the frame leaves
+    // (.kr-lead in the stylesheet), when it is the mount's own child: one
+    // inside a post's grid of canvases keeps the size of its neighbours.
+    var lead = null, main = null;
+    Object.keys(canvases).some(function (n) { lead = canvases[n].node; return !!lead; });
+    if (lead && lead.parentNode === root) { main = lead; main.className += ' kr-lead'; }
 
     /* ---- keyboard access to a clickable canvas ------------------------ */
 
@@ -385,12 +517,23 @@
        answer at STACK_BELOW (and the short-screen cap changes when a phone
        is turned), and the ratio because dragging the window to a
        monitor with a different density changes the store without changing
-       the box. */
+       the box.
+
+       Full screen goes through here too. The frame is then a column the
+       height of the screen, in which the stylesheet lets the main canvas
+       grow over what the rest leaves. If the frame still overflows and a
+       shorter canvas (SHORT_MIN at least) would make it fit, it gets that
+       height; otherwise it keeps its own and the frame scrolls. So it is
+       measured last, when the others have their heights, and drawn at the
+       height it ended up with. */
     function fit() {
       var dpr = Math.min(global.devicePixelRatio || 1, MAX_DPR);
       var cap = shortCap();
+      var full = document.fullscreenElement === root;
       var changed = false;
-      Object.keys(canvases).forEach(function (name) {
+      var names = Object.keys(canvases);
+      if (full) names.reverse();
+      names.forEach(function (name) {
         var c = canvases[name];
         if (!c.node) return;
         var w = c.node.clientWidth || 600;
@@ -398,8 +541,13 @@
         var h = typeof spec.height === 'function' ? spec.height(w) : spec.height;
         if (!c.chart) h = Math.min(h, cap);
         h = Math.round(h);
-        if (c.g && w === c.w && h === c.h && dpr === c.dpr) return;
         c.node.style.height = h + 'px';
+        if (full && c.node === main) {
+          var over = root.scrollHeight - root.clientHeight;
+          if (over > 0 && h - over >= SHORT_MIN) c.node.style.height = h - over + 'px';
+          h = c.node.clientHeight || h;
+        }
+        if (c.g && w === c.w && h === c.h && dpr === c.dpr) return;
         c.node.width = Math.round(w * dpr);
         c.node.height = Math.round(h * dpr);
         var g = c.node.getContext('2d');
@@ -679,14 +827,15 @@
     // A window drag delivers resize events faster than frames, and each one
     // forces a layout read in fit(); coalesce them to one pass per frame.
     var resizeQueued = false;
-    global.addEventListener('resize', function () {
+    function onResize() {
       if (resizeQueued) return;
       resizeQueued = true;
       global.requestAnimationFrame(function () {
         resizeQueued = false;
         if (fit()) redraw();
       });
-    });
+    }
+    global.addEventListener('resize', onResize);
 
     new MutationObserver(function () {
       colors = readColors(root);
@@ -715,8 +864,6 @@
         if (!visible && running) pause();
       }, {threshold: 0}).observe(root);
 
-      var lead = null;
-      Object.keys(canvases).some(function (n) { lead = canvases[n].node; return !!lead; });
       new global.IntersectionObserver(function (entries) {
         // a hair under the threshold, since a box at a fractional pixel
         // position can report 0.4999 on the entry that crossed it
@@ -737,6 +884,7 @@
       restart: restart,
       draw: redraw,          // for a post that mutates state from its own input handler
       seed: function (n) { seed = n; restart(); },
+      link: link,            // the fragment that reopens this run
       stepTo: function (n) {
         pause();
         if (n < iteration) reset();
@@ -759,6 +907,14 @@
 
     fit();
     Object.keys(canvases).forEach(function (n) { keyboardOperable(canvases[n]); });
+    // A link to a run of this demo: its controls and seed go in before the
+    // first frame, and the page goes to the demo (again once it has loaded,
+    // since what is above may still be growing). From there it is an
+    // ordinary mount: it starts on screen, or waits under reduced motion.
+    if (openLink()) { show(); global.addEventListener('load', show); }
+    global.addEventListener('hashchange', function () {
+      if (openLink()) { restart(); show(); }
+    });
     booting = false;
     ctx.state = cfg.init(ctx);
     redraw();

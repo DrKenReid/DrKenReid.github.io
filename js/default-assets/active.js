@@ -8,8 +8,7 @@
  *
  * This file is only loaded by pages that genuinely need a jQuery plugin out
  * of js/alime.bundle.js:
- *   - owlCarousel  : the homepage welcome slider, and the photo strip
- *                    shared-components.js injects
+ *   - owlCarousel  : the photo strip shared-components.js injects
  * Magnific popups are bound elsewhere: js/lightbox.js binds every link a
  * page's content opens larger (a post's photographs as one set, anything
  * else as a single image), js/gallery.js the gallery grid, and
@@ -31,8 +30,8 @@
     // *********************************
     //
     // Every auto-playing owl carousel goes through addCarouselPauseControl:
-    // the homepage hero below, and the photo strip shared-components.js
-    // injects (renderPhotoStrip). Call it straight after owlCarousel()
+    // today that is the photo strip shared-components.js injects
+    // (renderPhotoStrip). Call it straight after owlCarousel()
     // with the carousel, the element its button sits in, a noun for the
     // label ("slideshow") and the timeout to resume with. The carousel gets:
     //
@@ -157,61 +156,6 @@
 
         container.append(btn);
     };
-
-    // *********************************
-    // :: Welcome slides (index.html)
-    // *********************************
-
-    if ($.fn.owlCarousel) {
-        var welcomeSlider = $('.welcome-slides');
-        welcomeSlider.owlCarousel({
-            items: 1,
-            loop: true,
-            autoplay: true,
-            autoplayHoverPause: true,
-            smartSpeed: 1000,
-            autoplayTimeout: 10000,
-            nav: true,
-            navElement: 'button type="button"',
-            navText: [
-                '<i class="ti-arrow-left" aria-hidden="true"></i>',
-                '<i class="ti-arrow-right" aria-hidden="true"></i>'
-            ],
-            // The theme never styled Owl's dots, so they were invisible
-            // divs; the arrows and the pause button are the controls.
-            dots: false
-        });
-        welcomeSlider.find('.owl-prev').attr('aria-label', 'Previous slide');
-        welcomeSlider.find('.owl-next').attr('aria-label', 'Next slide');
-
-        window.addCarouselPauseControl(welcomeSlider, $('.welcome-area'), 'slideshow', 10000);
-
-        welcomeSlider.on('translate.owl.carousel', function () {
-            var layer = $("[data-animation]");
-            layer.each(function () {
-                var anim_name = $(this).data('animation');
-                $(this).removeClass('animated ' + anim_name).css('opacity', '0');
-            });
-        });
-
-        $("[data-delay]").each(function () {
-            var anim_del = $(this).data('delay');
-            $(this).css('animation-delay', anim_del);
-        });
-
-        $("[data-duration]").each(function () {
-            var anim_dur = $(this).data('duration');
-            $(this).css('animation-duration', anim_dur);
-        });
-
-        welcomeSlider.on('translated.owl.carousel', function () {
-            var layer = welcomeSlider.find('.owl-item.active').find("[data-animation]");
-            layer.each(function () {
-                var anim_name = $(this).data('animation');
-                $(this).addClass('animated ' + anim_name).css('opacity', '1');
-            });
-        });
-    }
 
     // The photo strip is injected (and its carousel initialised) by
     // shared-components.js after this script runs, so no init happens here.

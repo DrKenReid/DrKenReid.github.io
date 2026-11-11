@@ -111,13 +111,15 @@
     //
     // THE DESKTOP DROPDOWNS (breakpoint-off, 992px and up)
     //   Hover opens one (CSS); keyboard focus opens one (below). Focus from
-    //   a mouse click does not: clicking Hobbies (href="#") focuses it, and
-    //   a dropdown opened by that stayed open after the pointer left, under
-    //   the next one hovered. Hovering another top-level item closes a
+    //   a mouse click does not: clicking a placeholder parent (href="#",
+    //   as the old Hobbies item was) focuses it, and a dropdown opened by
+    //   that stayed open after the pointer left, under the next one
+    //   hovered. Hovering another top-level item closes a
     //   focus-opened dropdown. Escape closes either kind: a focus-opened one
     //   hands focus back to its parent link and stays shut until focus
     //   leaves the item or the reader presses ArrowDown (or Enter or Space
-    //   on Hobbies); a hover-opened one gets .kr-dd-dismissed on its item
+    //   on a placeholder parent); a hover-opened one gets .kr-dd-dismissed
+    //   on its item
     //   until the pointer leaves it.
     //
     // THE PHONE MENU'S FOCUS CONTRACT (breakpoint-on, 991px and under)
@@ -140,10 +142,12 @@
     //     focus to the menu button, except crossing to desktop (the button
     //     is hidden there) and a page restored from the back/forward cache
     //     with the menu still open (nothing had focus to return).
-    //   Submenus: at this width the whole Hobbies row opens its submenu
-    //     (its link goes nowhere, href="#") and carries aria-expanded; its
-    //     dd-trigger is only the chevron. Blog's link goes to the blog, so
-    //     its dd-trigger stays the separate, focusable toggle.
+    //   Submenus: at this width a parent whose link goes somewhere
+    //     (Photography, Literature, Blog: every one today) keeps its link,
+    //     and its dd-trigger is the separate, focusable toggle. A
+    //     placeholder parent (href="#"), should one return, opens its
+    //     submenu from the whole row and carries aria-expanded; its
+    //     dd-trigger is only the chevron.
     //
     // window.krNavMenu = { open(), close(opts), isOpen() } for other chrome
     // (the command palette) that must take over from the menu.
@@ -521,7 +525,7 @@
         });
 
         // ArrowDown on a top-level link, or Enter or Space on a placeholder
-        // one (Hobbies), opens its dropdown: the way back in after Escape,
+        // one (href="#"), opens its dropdown: the way back in after Escape,
         // or after a click left focus there without opening it.
         nav.addEventListener('keydown', function (e) {
             if (!isDesktop()) return;

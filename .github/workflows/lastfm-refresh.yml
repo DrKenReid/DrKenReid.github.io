@@ -26,12 +26,18 @@ jobs:
       FILES: >-
         data/lastfm.json data/now.json data/lastfm-history.json
         data/topalbums.json data/books.json data/reading.json
+        data/listening.json data/bluesky.json data/book-details.json
+      # Where refresh_books.py and refresh_now.py keep the site's copies
+      # of each book's cover (two JPEGs a book). Committed with FILES, and
+      # not in that list because validate_data.py is handed it and reads
+      # JSON.
+      COVERS: img/covers/shelf
     steps:
       # Shallow is enough: the rebase before the push needs only this
       # commit and whatever landed on top of it since.
       - uses: actions/checkout@v4
 
-      # Both refresh scripts and the validator are standard library only,
+      # The refresh scripts and the validator are standard library only,
       # so nothing is installed.
       - uses: actions/setup-python@v5
         with:
@@ -43,6 +49,9 @@ jobs:
       # its old values when its fetch fails, and the script exits 1 after
       # writing the rest. continue-on-error lets the steps below still
       # commit what did refresh; the last step turns the failure red.
+      # The cover of each book in progress is kept as a file in COVERS,
+      # and now.json names that file; one that cannot be fetched is left
+      # out, not a failure.
       - name: Fetch listening and currently-reading
         id: now
         continue-on-error: true
@@ -50,14 +59,58 @@ jobs:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
         run: python .github/scripts/refresh_now.py
 
+      # The listening history (Last.fm's weekly charts) -> listening.json,
+      # a record per chart week for the calendar on music.html. A week on
+      # file is kept, so a normal run asks for three things: the chart
+      # list, the new week and the one before it. A file with no weeks
+      # yet is filled from the account's first week on, for at most five
+      # minutes a run, carrying on the week after. One week that fails
+      # is skipped and asked for again next time; the script exits 1 only
+      # when it could fetch nothing, and then leaves the file as it was
+      # (or, with no file yet, one with no weeks: the commit step adds
+      # every file in FILES by name, so there must always be one).
+      - name: Refresh the listening history
+        id: listening
+        continue-on-error: true
+        env:
+          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+        run: python .github/scripts/refresh_listening.py
+
       # The read shelf (Goodreads RSS) -> data/books.json + data/reading.json,
       # so a book marked read reaches the calendar, shelf and wall on its
       # own. Writes nothing and exits 1 on a truncated or short feed, or a
       # merge that would lose a re-read date; books.json is left as it was.
+      # It also downloads the covers of each book the site has no copy of
+      # (a new book's, most weeks) into COVERS and marks the book in
+      # books.json; a cover that cannot be fetched is a warning in the
+      # log and is tried again next week, never a failed step.
       - name: Refresh the read shelf
         id: books
         continue-on-error: true
         run: python .github/scripts/refresh_books.py
+
+      # Each book's first year and genres (y, gn in books.json) for the
+      # filters on books.html. Only the books data/book-details.json has
+      # no entry for are asked about, at Open Library (no key), and what
+      # it says is kept there; data/book-overrides.json corrects by hand.
+      # A lookup that fails is a warning and is tried next week; the
+      # script exits 0 whatever Open Library does. Runs after the shelf
+      # refresh even when that failed, over the books.json on file.
+      - name: Fill in years and genres
+        id: details
+        continue-on-error: true
+        run: python .github/scripts/refresh_book_details.py
+
+      # Which Bluesky post shared each blog post (my public author feed,
+      # no key) -> data/bluesky.json, so a post can show the replies to it
+      # beside its comments. An entry the feed no longer reaches is kept,
+      # and one is dropped only when Bluesky says its post was deleted. A
+      # first page that fails writes nothing; a later one still merges
+      # the pages that arrived, and the script exits 1 either way.
+      - name: Refresh the Bluesky shares
+        id: bluesky
+        continue-on-error: true
+        run: python .github/scripts/refresh_bluesky.py
 
       # Every file against data/schema/ before anything is committed: the
       # pages parse these in the browser with no fallback for a wrong
@@ -72,17 +125,19 @@ jobs:
       # failure elsewhere), but never data that failed validation. The
       # rebase is for a push that landed after checkout (Ken's, or the
       # previous run's): the refresh is replayed on top instead of the
-      # push being rejected.
+      # push being rejected. The test for a change is git status, not git
+      # diff: a new cover is an untracked file, which git diff never sees.
       - name: Commit what refreshed
         if: always() && steps.validate.outcome == 'success'
         run: |
-          if git diff --quiet -- $FILES; then
+          if [ -z "$(git status --porcelain -- $FILES "$COVERS")" ]; then
             echo "No change."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -- $FILES
+          if [ -d "$COVERS" ]; then git add -- "$COVERS"; fi
           git commit -m "Refresh live data (Last.fm, Goodreads)"
           git pull --rebase origin "$GITHUB_REF_NAME"
           git push origin "HEAD:$GITHUB_REF_NAME"
@@ -94,7 +149,10 @@ jobs:
         if: always()
         env:
           NOW: ${{ steps.now.outcome }}
+          LISTENING: ${{ steps.listening.outcome }}
           BOOKS: ${{ steps.books.outcome }}
+          DETAILS: ${{ steps.details.outcome }}
+          BLUESKY: ${{ steps.bluesky.outcome }}
           VALID: ${{ steps.validate.outcome }}
         run: |
           status=0
@@ -102,8 +160,20 @@ jobs:
             echo "::error::Last.fm / currently-reading refresh: $NOW (see 'Fetch listening and currently-reading')"
             status=1
           fi
+          if [ "$LISTENING" != success ]; then
+            echo "::error::Listening-history refresh: $LISTENING (see 'Refresh the listening history')"
+            status=1
+          fi
           if [ "$BOOKS" != success ]; then
             echo "::error::Read-shelf refresh: $BOOKS (see 'Refresh the read shelf')"
+            status=1
+          fi
+          if [ "$DETAILS" != success ]; then
+            echo "::error::Years and genres: $DETAILS (see 'Fill in years and genres')"
+            status=1
+          fi
+          if [ "$BLUESKY" != success ]; then
+            echo "::error::Bluesky shares refresh: $BLUESKY (see 'Refresh the Bluesky shares')"
             status=1
           fi
           if [ "$VALID" != success ]; then

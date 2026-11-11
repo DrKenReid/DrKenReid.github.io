@@ -89,6 +89,8 @@ PAGES: dict[str, tuple[str, tuple[str, ...], str]] = {
                "img/photography/hero/13.webp"),
     "series": ("Series", ("Every blog series in one place",),
                "img/photography/hero/290.webp"),
+    "lab": ("Lab", ("Interactive posts", "Run them in the page"),
+            "img/photography/hero/30.webp"),
     "colophon": ("Colophon", ("How the site is built", "What it weighs"),
                  "img/photography/hero/141.webp"),
     "contact": ("Contact", ("Email", "Social media"),

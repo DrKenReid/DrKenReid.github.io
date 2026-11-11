@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <script>(function(){var d=document.documentElement,t;try{t=localStorage.getItem('kr-theme');}catch(e){}if(!t)t='dark';d.setAttribute('data-theme',t);try{var c=(localStorage.getItem('kr-season-day')||'').split('|'),n=new Date();if(c[0]&&c[3]===n.getFullYear()+'-'+(n.getMonth()+1)+'-'+n.getDate()&&!sessionStorage.getItem('kr-season-preview')&&localStorage.getItem('kr-season')!=='off'){d.setAttribute('data-season',c[0]);[1,2].forEach(function(i){var l=document.createElement('link');l.rel='stylesheet';l.id=i<2?'kr-season-shared-css':'kr-season-css';l.href=c[i];l.setAttribute('blocking','render');document.head.appendChild(l);});}}catch(e){}})();</script>
-  <meta name="description" content="Every book Ken Reid has rated on Goodreads, as covers: search by title or author, filter by rating, click through to the review.">
+  <meta name="description" content="Every book Ken Reid has rated on Goodreads, as covers: search, filter by genre, rating, year read or year published, sort, and click through to the review.">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Every Book - Ken Reid</title>
   <meta property="og:title" content="Every Book - Ken Reid">
-  <meta property="og:description" content="Every book Ken Reid has rated on Goodreads, as covers: search by title or author, filter by rating.">
+  <meta property="og:description" content="Every book Ken Reid has rated on Goodreads, as covers: search, filter by genre, rating, year read or year published, and sort.">
   <meta property="og:image" content="https://www.kenreid.co.uk/img/og/page-books.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Every Book: every book rated on Goodreads, over one of Ken Reid's photographs">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Every Book - Ken Reid">
-  <meta name="twitter:description" content="Every book I have rated, as a wall of covers you can search and filter.">
+  <meta name="twitter:description" content="Every book I have rated, as a wall of covers you can search, filter and sort.">
   <meta name="twitter:image" content="https://www.kenreid.co.uk/img/og/page-books.jpg">
   <meta name="twitter:image:alt" content="Every Book: every book rated on Goodreads, over one of Ken Reid's photographs">
   <meta property="og:url" content="https://www.kenreid.co.uk/books.html">
@@ -66,22 +66,27 @@
     </div>
   </section>
 
-  <!-- The wall: every rated book, searchable (js/bookwall.js). The banner
-       is the page's heading, so the section opens on its lede. The
-       skeleton tiles hold the grid's place from the first paint, and the
-       filter row keeps its height while empty (style.css, "Cover wall"),
-       so nothing moves when books.json arrives. -->
+  <!-- The wall: every rated book, searchable, with a Filter and a Sort
+       panel as the blog listing has (js/bookwall.js fills both). The
+       banner is the page's heading, so the section opens on its lede. The
+       toolbar and the skeleton tiles are here from the first paint, so
+       nothing moves when books.json arrives. -->
   <div class="about-us-area section-padding-80-0 clearfix pt-5" id="bookshelf">
     <div class="container">
-      <p class="kr-reading-lede"><span id="book-wall-total">Rated books</span> from my Goodreads history, filterable by my rating. Click a cover for the review page. The <a href="/literature.html">reading page</a> has the calendar, the shelf and a few reviews.</p>
+      <p class="kr-reading-lede"><span id="book-wall-total">Rated books</span> from my Goodreads history. Filter them by genre, rating, the year I read them, when they came out or length, or sort them. Click a cover for the review page. The <a href="/literature.html">reading page</a> has the calendar, the shelf and a few reviews.</p>
       <div class="text-center mb-3">
         <input type="search" id="book-wall-search" class="kr-quote-search" placeholder="Search titles and authors…" aria-label="Search books">
       </div>
-      <div id="book-wall-filters" class="gallery-filters text-center mb-4"></div>
+      <div class="kr-blog-toolbar book-wall-toolbar text-center">
+        <button type="button" id="kr-filter-toggle" class="btn gallery-filter-btn" aria-expanded="false" aria-controls="book-wall-panel">Filter &#9662;</button>
+        <button type="button" id="kr-sort-toggle" class="btn gallery-filter-btn" aria-expanded="false" aria-controls="book-wall-sort">Sort: Date read &darr;</button>
+      </div>
+      <div id="book-wall-panel" class="gallery-filters kr-filter-panel text-center kr-collapse" hidden></div>
+      <div id="book-wall-sort" class="gallery-filters text-center kr-collapse" role="group" hidden></div>
       <p id="book-wall-count" class="kr-list-counter" role="status" aria-live="polite" aria-atomic="true"></p>
       <div id="book-wall-grid" class="book-wall"><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span><span class="book-wall-item kr-skeleton"></span></div>
       <noscript><p class="text-center kr-muted small">The wall is drawn by a script, so it needs JavaScript. My whole reading history is also on <a href="https://www.goodreads.com/user/show/42371562-ken-reid" target="_blank" rel="noopener noreferrer">Goodreads</a>.</p></noscript>
-      <p class="text-center kr-muted small mt-4">A book Goodreads has no ISBN for (most of the Kindle series) has no cover to look up, so it hangs here set in type.</p>
+      <p class="text-center kr-muted small mt-4">A book whose cover is not on this site yet hangs here set in type.</p>
     </div>
   </div>
 
@@ -100,7 +105,7 @@
   <script src="/js/default-assets/active.js?v=20260923a"></script>
   <script src="/js/shared-components.js?v=20260923a"></script>
   <script>
-    renderHeader('header-section', { basePath: '/', active: 'hobbies', hobbiesChild: 'books' });
+    renderHeader('header-section', { basePath: '/', active: 'literature', child: 'books' });
     renderPhotoStrip('instagram-section');
     renderFooter('footer-section');
   </script>

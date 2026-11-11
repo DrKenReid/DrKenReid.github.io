@@ -46,7 +46,7 @@
       "i": {
         "type": "string",
         "pattern": "^[0-9]{9}[0-9X]([0-9]{3})?$",
-        "description": "ISBN-10 or ISBN-13, when Goodreads has one. The cover wall looks covers up by it and shows only rated books that have one. The value on file is kept in preference to the feed's; those seeded from the Goodreads export are ISBN-13."
+        "description": "ISBN-10 or ISBN-13, when Goodreads has one. A book the site has no copy of the cover for (k, s) has its cover looked up at Open Library by it. The value on file is kept in preference to the feed's; those seeded from the Goodreads export are ISBN-13."
       },
       "g": {
         "type": "string",
@@ -86,13 +86,48 @@
       "c": {
         "type": "string",
         "pattern": "^[^ ]+$",
-        "description": "The cover Goodreads shows for the book, from the feed's book_large_image_url (about 475px tall): the path under https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/ (GR_COVERS in refresh_books.py), or a whole https address for one elsewhere. Kept when a week's feed has none or only a placeholder. The slideshow's books show it (js/slideshow.js), and every book has one, ISBN or not."
+        "description": "The cover Goodreads shows for the book, from the feed's book_large_image_url (about 475px tall): the path under https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/ (GR_COVERS in refresh_books.py), or a whole https address for one elsewhere. Kept when a week's feed has none or only a placeholder. Every book has one, ISBN or not. No page loads it: it is where refresh_books.py downloads the site's own copies from (k, s)."
+      },
+      "k": {
+        "type": "integer",
+        "enum": [
+          1
+        ],
+        "description": "Present, as 1, when the site has its own full copy of the cover c names, at img/covers/shelf/<g>.jpg (about 400px tall, as Goodreads sent it). Set by refresh_books.py only once the file is written, and dropped when c changes until the new cover is fetched, so the pages ask for exactly the files that exist. The review cards (js/bookshelf.js) and the slideshow's featured book (js/slideshow.js) show it, and so does a tile whose small copy (s) is missing. A book with neither falls back to Open Library's cover for its ISBN, then to a cover set in type."
+      },
+      "s": {
+        "type": "integer",
+        "enum": [
+          1
+        ],
+        "description": "Present, as 1, when the site has the small copy of that cover, at img/covers/shelf/s/<g>.jpg (240px tall, about 10 KB): what a tile on the wall of books.html, a Reading Now thumbnail (js/bookshelf.js) and the slideshow's wall (js/slideshow.js) show, so a screenful of covers costs a fraction of the full copies. Kept by refresh_books.py under the same rules as k."
       },
       "y": {
         "type": "integer",
         "minimum": 1,
         "maximum": 9999,
-        "description": "The year it was published, from the feed's book_published. Kept from the record when a week's feed has none. The quotes slideshow gives it after a quote's book (js/slideshow.js)."
+        "description": "The year it was first published, set by .github/scripts/refresh_book_details.py: a hand correction in data/book-overrides.json, else the original publication year from a Goodreads export, else the feed's book_published (which refresh_books.py writes for a new book and never over a year on file), else Open Library's first_publish_year. The quotes slideshow gives it after a quote's book (js/slideshow.js); the wall on books.html filters by its decade and sorts by it (js/bookwall.js)."
+      },
+      "gn": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "fantasy",
+            "litrpg",
+            "scifi",
+            "horror",
+            "crime",
+            "literary",
+            "history",
+            "science",
+            "philosophy",
+            "psychology",
+            "biography",
+            "politics"
+          ]
+        },
+        "description": "Its genres, one or two keys, the main one first, from GENRES in .github/scripts/refresh_book_details.py: derived there from the genres readers shelve it under on Goodreads or from Open Library's subjects, by that script's table, or set by hand in data/book-overrides.json. Absent when nothing places the book. refresh_books.py carries it forward. The wall on books.html filters by it (js/bookwall.js)."
       },
       "m": {
         "type": "integer",

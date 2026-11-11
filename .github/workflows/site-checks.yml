@@ -128,6 +128,14 @@ jobs:
       - name: Photo dimensions are current
         if: ${{ !cancelled() }}
         run: python .github/scripts/generate_photo_dims.py --check
+
+      # The gallery's colour filter shows a frame under its main colour,
+      # from data/photo-colours.json; a photograph added without one would
+      # be under no colour at all. Reads the list, not the pixels, so it
+      # needs no package.
+      - name: Photo colours are current
+        if: ${{ !cancelled() }}
+        run: python .github/scripts/generate_photo_colours.py --check
       # The feed embeds the full body of the twenty newest posts, so editing a
       # post changes it. This was the one generator with no --check, and the
       # feed duly drifted behind a set of class renames without anyone noticing.

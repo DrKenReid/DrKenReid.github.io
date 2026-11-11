@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.kenreid.co.uk/data/schema/book-details.schema.json",
+  "title": "data/book-details.json",
+  "description": "What .github/scripts/refresh_book_details.py has learned about each book on the read shelf, from which it sets the year (y) and genres (gn) in data/books.json. It is that script's cache: a book with an entry is not asked about again. Written by the script (from a Goodreads export with --export, and from Open Library weekly), never by hand; corrections go in data/book-overrides.json. No page reads it.",
+  "type": "object",
+  "required": [
+    "books"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "books": {
+      "type": "array",
+      "description": "One entry a book, by Goodreads id.",
+      "items": {
+        "type": "object",
+        "required": [
+          "g"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "g": {
+            "type": "string",
+            "pattern": "^[0-9]+$",
+            "description": "Goodreads book id, books.json's g."
+          },
+          "year": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9999,
+            "description": "The year it was first published, as the source in yearFrom gives it."
+          },
+          "yearFrom": {
+            "type": "string",
+            "enum": [
+              "export",
+              "openlibrary"
+            ],
+            "description": "Where year came from: a Goodreads export's Original Publication Year (else its Year Published), or Open Library's first_publish_year. An export's year beats the feed's; Open Library's only stands in for a book with no other."
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "integer"
+                ]
+              }
+            },
+            "description": "[label, weight] pairs, as they arrived: a Goodreads genre and the readers who shelved the book under it, most first, or an Open Library subject with weight 1. The script's table turns them into genres on every run."
+          },
+          "labelsFrom": {
+            "type": "string",
+            "enum": [
+              "export",
+              "openlibrary"
+            ],
+            "description": "Where labels came from: the genres column of a Goodreads export enhanced with Enhance-GoodReads-Export, or Open Library's subjects."
+          },
+          "asked": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "description": "The day Open Library was last asked about the book. One it could not place is asked again after RETRY_DAYS."
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 /**
- * hero-evolve.js — the research slide's headline paints itself.
+ * hero-evolve.js: the homepage hero's headline paints itself.
  *
  * A (1+1) evolution strategy: hold one candidate picture made of
  * translucent triangles, mutate a copy, keep the copy only if it matches
@@ -12,9 +12,9 @@
  * Three things keep it cheap enough to sit on the homepage:
  *   - fitness is scored on a 176x48 offscreen canvas, never the display one
  *   - the display canvas is only repainted when a mutation is accepted
- *   - the loop does no work at all while its carousel slide is off screen,
- *     and idles once it stops improving, restarting only when the slide
- *     comes back round
+ *   - the loop does no work at all while the canvas is off screen, and
+ *     idles once it stops improving, restarting only when the canvas
+ *     comes back into view
  *
  * Accessibility: the real heading is in the DOM as visually-hidden text,
  * the canvas is aria-hidden decoration, and prefers-reduced-motion skips
@@ -25,6 +25,12 @@
  * The caption's triangle count is written from SHAPES into every
  * [data-kr-evolve-shapes], so the page cannot state a number the canvas
  * does not draw (it once said a hundred and ten while this drew 78).
+ *
+ * Where the words end. A canvas inside a .kr-hero-title gets that
+ * element's --kr-evolve-end and --kr-evolve-top (percentages of the
+ * canvas) set to the right edge and the top of the drawn words, so the
+ * homepage's small "?" link (.kr-hero-help) sits at the end of the
+ * headline whatever the words are ("Hi, I'm Ken.", or a season's).
  */
 (function () {
     'use strict';
@@ -77,6 +83,7 @@
             size -= 1;
         } while (size > 8);
         x.fillText(TEXT, FIT_W / 2, FIT_H / 2 + 1);
+        var m = x.measureText(TEXT);
 
         var d = x.getImageData(0, 0, FIT_W, FIT_H).data;
         var target = new Float32Array(FIT_W * FIT_H);
@@ -86,7 +93,21 @@
             target[px] = v;
             if (v > 0.5) ink.push([(px % FIT_W) / FIT_W, Math.floor(px / FIT_W) / FIT_H]);
         }
-        return { lum: target, ink: ink };
+        return {
+            lum: target,
+            ink: ink,
+            // The words' right edge and top, as fractions of the canvas.
+            end: (FIT_W / 2 + (m.actualBoundingBoxRight || m.width / 2)) / FIT_W,
+            top: (FIT_H / 2 + 1 - (m.actualBoundingBoxAscent || size * 0.36)) / FIT_H
+        };
+    }
+
+    /** Tells a .kr-hero-title around the canvas where the words end. */
+    function markWords(canvas, end, top) {
+        var holder = canvas.parentElement;
+        if (!holder || !holder.classList.contains('kr-hero-title')) return;
+        holder.style.setProperty('--kr-evolve-end', (Math.min(1, end) * 100).toFixed(1) + '%');
+        holder.style.setProperty('--kr-evolve-top', (Math.max(0, top) * 100).toFixed(1) + '%');
     }
 
     function randomShape(ink) {
@@ -158,6 +179,7 @@
 
         var built = buildTarget();
         var target = built.lum;
+        markWords(canvas, built.end, built.top);
         var genome = [];
 
         function seedGenome() {
@@ -211,6 +233,9 @@
                 size -= 2;
             } while (size > 10);
             view.fillText(TEXT, w / 2, h / 2);
+            var m = view.measureText(TEXT);
+            markWords(canvas, (w / 2 + (m.actualBoundingBoxRight || m.width / 2)) / w,
+                (h / 2 - (m.actualBoundingBoxAscent || size * 0.36)) / h);
         }
 
         sizeView();
@@ -240,9 +265,10 @@
             repaint();
         }
 
-        // Outside the carousel (the post about this script), run only while
-        // the canvas is on screen, so arriving at it builds the headline in
-        // front of the reader, as a slide arriving does.
+        // Run only while the canvas is on screen (the homepage hero, and
+        // the post about this script), so arriving at it builds the
+        // headline in front of the reader. The carousel branch is kept
+        // for a canvas placed inside an Owl slide, as the hero once was.
         var inCarousel = canvas.closest && canvas.closest('.owl-carousel');
         var onScreen = true;
         if (!inCarousel && 'IntersectionObserver' in window) {

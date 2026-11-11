@@ -25,6 +25,9 @@
  *   createBlogCardElement(post, o)  THE post card, stacked or overlay
  *   krMarkNewPost(col, post)        the "New" badge on a card under
  *                                   KR_NEW_POST_DAYS old
+ *   krReadMap(), krHasRead(post),   the posts this reader has finished
+ *   krMarkReadCards(root),          (this browser only), the "Read" mark
+ *   KR_READ_MARK, krForgetRead()    on cards and lists, and forgetting them
  *   renderRelatedPosts(id)          related cards at runtime (drafts only)
  *   renderTopicPosts(el, o)         a page's "writing about X" row; any
  *                                   [data-topic-tags] host starts itself
@@ -601,15 +604,31 @@ var KR_THEME_ICONS =
     '<circle cx="12" cy="12" r="4.2"/>' +
     '<path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.35 5.35l1.55 1.55M17.1 17.1l1.55 1.55M5.35 18.65l1.55-1.55M17.1 6.9l1.55-1.55"/></svg>';
 
+/* Where a page that names itself the old way sits in the header:
+   hobbiesChild -> [active, child]. */
+var KR_NAV_LEGACY = {
+    gallery: ['gallery', ''], map: ['gallery', 'map'],
+    literature: ['literature', ''], books: ['literature', 'books'], quotes: ['literature', 'quotes'],
+    music: ['music', ''],
+    reading: ['literature', 'reading'], writing: ['literature', 'writing']
+};
+
 /**
  * Site header into #targetId. opts: { basePath ('./' or '/'), active (a
- * top-level key, or nothing to underline no item, as on the 404 page),
- * hobbiesChild, blogChild }. The recent posts and series fill in once
+ * top-level key: 'about', 'data_science', 'gallery', 'literature',
+ * 'music', 'blog', 'contact'; or nothing to underline no item, as on the
+ * homepage, whose link is the wordmark, and the 404 page), child (a page
+ * in that item's menu: 'map' or 'slideshow' under gallery, 'books' or
+ * 'quotes' under literature), blogChild ('series-index', 'lab', or a
+ * series page's own key) }. The recent posts and series fill in once
  * posts.json arrives; the rest renders synchronously.
  *
- * Built by hand rather than from KR_PAGES: its grouping (a Hobbies menu
- * with indented children, a Blog menu filled from posts.json) is a
- * design decision about this one component, not a list of pages.
+ * Built by hand rather than from KR_PAGES: its grouping (Photography and
+ * Literature each with the pages under them, a Blog menu filled from
+ * posts.json) is a design decision about this one component, not a list
+ * of pages. Photography, Literature and Music were one "Hobbies" menu
+ * until they were most of the site; a page that still passes
+ * { active: 'hobbies', hobbiesChild } is placed by KR_NAV_LEGACY.
  *
  * Inside the nav, in source order: the wordmark, the menu, the theme
  * toggle, the menu button (palette.js adds a search button, shown at
@@ -627,17 +646,33 @@ function renderHeader(targetId, options) {
     var opts = options || {};
     var basePath = opts.basePath || './';
     var active = opts.active || '';
-    var hobbiesActive = active === 'hobbies';
-    var hobbiesChild = opts.hobbiesChild || '';
+    var child = opts.child || '';
     var blogChild = opts.blogChild || '';
-
-    function navItem(key, href, label) {
-        var isCurrent = active === key;
-        return '<li' + (isCurrent ? ' class="active"' : '') + '><a href="' + href + '"' + (isCurrent ? ' aria-current="page"' : '') + '>' + label + '</a></li>';
+    if (active === 'hobbies') {
+        var legacy = KR_NAV_LEGACY[opts.hobbiesChild] || ['', ''];
+        active = legacy[0];
+        child = legacy[1];
     }
 
-    function isHobbyChildActive(key) {
-        return hobbiesChild === key ? ' class="active"' : '';
+    function current(on) {
+        return on ? ' aria-current="page"' : '';
+    }
+
+    function navItem(key, file, label) {
+        var on = active === key;
+        return '<li' + (on ? ' class="active"' : '') + '><a href="' + basePath + file + '"' + current(on) + '>' + label + '</a></li>';
+    }
+
+    // A top-level item with a menu under it. Its own link is the current
+    // page only when the page is the item's own, not one from its menu;
+    // kids are [key, file, label].
+    function navMenu(key, file, label, kids) {
+        var on = active === key;
+        return '<li' + (on ? ' class="active"' : '') + '><a href="' + basePath + file + '"' + current(on && !child) + '>' + label + '</a>' +
+            '<ul class="dropdown">' + kids.map(function(kid) {
+                var here = on && child === kid[0];
+                return '<li' + (here ? ' class="active"' : '') + '><a href="' + basePath + kid[1] + '"' + current(here) + '>' + kid[2] + '</a></li>';
+            }).join('') + '</ul></li>';
     }
 
     // The label names the action, like theme.js's, and is right from the
@@ -652,24 +687,18 @@ function renderHeader(targetId, options) {
         '<span class="kr-wordmark kr-gradient-text" aria-hidden="true">Ken<span class="kr-wordmark__dot">.</span></span></a>' +
         '<div class="classy-menu">' +
         '<div class="classynav"><ul id="nav">' +
-        navItem('home', basePath + 'index.html', 'Home') +
-        navItem('about', basePath + 'about.html', 'About') +
-        navItem('data_science', basePath + 'data_science.html', 'Data Science') +
-        '<li' + (hobbiesActive ? ' class="active"' : '') + '><a href="#">Hobbies</a>' +
-        '<ul class="dropdown">' +
-        '<li' + isHobbyChildActive('gallery') + '><a href="' + basePath + 'gallery.html"' + (hobbiesChild === 'gallery' ? ' aria-current="page"' : '') + '>Photography</a></li>' +
-        '<li class="kr-nav-sub' + (hobbiesChild === 'map' ? ' active' : '') + '"><a href="' + basePath + 'map.html"' + (hobbiesChild === 'map' ? ' aria-current="page"' : '') + '>Photo Map</a></li>' +
-        '<li' + isHobbyChildActive('music') + '><a href="' + basePath + 'music.html"' + (hobbiesChild === 'music' ? ' aria-current="page"' : '') + '>Music</a></li>' +
-        '<li' + isHobbyChildActive('literature') + '><a href="' + basePath + 'literature.html"' + (hobbiesChild === 'literature' ? ' aria-current="page"' : '') + '>Literature</a></li>' +
-        '<li class="kr-nav-sub' + (hobbiesChild === 'books' ? ' active' : '') + '"><a href="' + basePath + 'books.html"' + (hobbiesChild === 'books' ? ' aria-current="page"' : '') + '>Every Book</a></li>' +
-        '<li class="kr-nav-sub' + (hobbiesChild === 'quotes' ? ' active' : '') + '"><a href="' + basePath + 'quotes.html"' + (hobbiesChild === 'quotes' ? ' aria-current="page"' : '') + '>Quote Wall</a></li>' +
-        '</ul></li>' +
+        navItem('about', 'about.html', 'About') +
         '<li' + (active === 'blog' ? ' class="active"' : '') + '><a href="' + basePath + 'blog.html"' + (active === 'blog' && !blogChild ? ' aria-current="page"' : '') + '>Blog</a>' +
         '<ul class="dropdown kr-nav-dd-wide">' +
         '<li class="kr-nav-group-label kr-nav-label-blogs">Recent <a href="' + basePath + 'blog.html">Blogs</a></li>' +
         '<li class="kr-nav-group-label kr-nav-label-series' + (blogChild === 'series-index' ? ' active' : '') + '">Recent <a href="' + basePath + 'series.html"' + (blogChild === 'series-index' ? ' aria-current="page"' : '') + '>Series</a></li>' +
+        '<li class="kr-nav-group-label kr-nav-label-lab' + (blogChild === 'lab' ? ' active' : '') + '">Posts you can run: the <a href="' + basePath + 'lab.html"' + current(blogChild === 'lab') + '>Lab</a></li>' +
         '</ul></li>' +
-        navItem('contact', basePath + 'contact.html', 'Contact') +
+        navMenu('gallery', 'gallery.html', 'Photography', [['map', 'map.html', 'Photo Map'], ['slideshow', 'slideshow.html', 'Slideshow']]) +
+        navItem('data_science', 'data_science.html', 'Data Science') +
+        navMenu('literature', 'literature.html', 'Literature', [['books', 'books.html', 'Every Book'], ['quotes', 'quotes.html', 'Quote Wall']]) +
+        navItem('music', 'music.html', 'Music') +
+        navItem('contact', 'contact.html', 'Contact') +
         '</ul></div></div>' +
         '<button type="button" id="theme-toggle" class="theme-toggle" aria-label="' + themeLabel + '" title="' + themeLabel + '">' +
         KR_THEME_ICONS + '</button>' +
@@ -1358,6 +1387,7 @@ function createBlogCardElement(post, options) {
 
     krGlowHost(col, imageSrc);
     krArmPostPrerender();
+    krMarkReadCards(col);
 
     // A listener rather than an inline onerror, so no path is ever spliced
     // into a string of script. Once: a missing fallback must not loop.
@@ -1516,6 +1546,104 @@ function krMarkNewPost(col, post) {
     var cover = col.querySelector('.blog-card-img, .post-thumbnail');
     if (!cover || cover.querySelector('.kr-new-badge')) return;
     cover.insertAdjacentHTML('afterbegin', '<span class="kr-new-badge">New</span>');
+}
+
+/* ---- Read marks ----
+   Which posts this reader has finished, so a card, an archive row and a
+   series list can say so, and a series page can offer the next part.
+   Kept in this browser only (localStorage KR_READ_KEY, an object of
+   "<slug>": "YYYY-MM-DD"); nothing is sent anywhere, and privacy.html
+   says so and carries the button that clears it (krForgetRead). A post
+   counts as read once its end mark has been on screen (krWatchPostRead).
+   The mark is the word "Read", never a tick alone, so it is read out. */
+var KR_READ_KEY = 'kr-read';
+
+/** The stored map, or {} when storage is empty, unreadable or not an object. */
+function krReadMap() {
+    try {
+        var map = JSON.parse(localStorage.getItem(KR_READ_KEY) || '{}');
+        return map && typeof map === 'object' && !Array.isArray(map) ? map : {};
+    } catch (e) {
+        return {};
+    }
+}
+
+/**
+ * 'x' for a link to blog/x.html, however it is written (posts.json's
+ * 'blog/x.html', a post's own 'x.html' to a sibling, a full URL): the
+ * href is resolved against this page first. '' for anything else, a
+ * draft preview included.
+ */
+function krPostSlug(href) {
+    var path = String(href || '');
+    try { path = new URL(path, window.location.href).pathname; } catch (e) {}
+    var m = /\/blog\/([A-Za-z0-9_-]+)\.html$/.exec(path);
+    return m ? m[1] : '';
+}
+
+/** True when this reader has finished `post` (a posts.json record). */
+function krHasRead(post, map) {
+    var slug = krPostSlug(post && post.url);
+    return !!slug && !!(map || krReadMap())[slug];
+}
+
+/** Remembers that the post with this slug was finished today. Once per post. */
+function krNoteRead(slug) {
+    if (!slug) return;
+    try {
+        var map = krReadMap();
+        if (map[slug]) return;
+        map[slug] = new Date().toISOString().slice(0, 10);
+        localStorage.setItem(KR_READ_KEY, JSON.stringify(map));
+    } catch (e) {}
+}
+
+/** Forgets every read mark (the button on privacy.html). */
+function krForgetRead() {
+    try { localStorage.removeItem(KR_READ_KEY); } catch (e) {}
+}
+
+/** The mark itself, as markup, for the renderers that build strings. */
+var KR_READ_MARK = '<span class="kr-read-mark">Read</span>';
+
+/**
+ * Adds the mark to every post card under `root` whose post has been
+ * read: after the date of a stacked card (inside its link, so the link's
+ * name says so too) or of an overlay card. createBlogCardElement calls it
+ * on each card it builds, and a post calls it once for the related cards
+ * baked into its markup. Does nothing for a reader with no marks.
+ */
+function krMarkReadCards(root) {
+    var map = krReadMap();
+    if (!root || !Object.keys(map).length) return;
+    Array.prototype.forEach.call(root.querySelectorAll('a.blog-card, .single-post-area'), function(card) {
+        if (card.querySelector('.kr-read-mark')) return;
+        var link = card.matches('a') ? card : card.querySelector('.post-title a');
+        var slug = link ? krPostSlug(link.getAttribute('href')) : '';
+        var line = card.querySelector('.blog-card-date, .post-meta');
+        if (!slug || !map[slug] || !line) return;
+        line.insertAdjacentHTML('beforeend', KR_READ_MARK);
+    });
+}
+
+/**
+ * On a published post: marks it read the first time its end mark (the
+ * ⁂ that opens the end band) is wholly on screen, the same moment the
+ * progress bar reads 100%. A draft preview and a story are not counted.
+ */
+function krWatchPostRead() {
+    var blogPost = document.querySelector('.blog-post');
+    var slug = krPostSlug(window.location.pathname);
+    if (!blogPost || !slug || krReadMap()[slug]) return;
+    var done = false;
+    krOnScroll(function() {
+        if (done) return;
+        var fin = blogPost.querySelector('.kr-post-end .kr-fin');
+        var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        if (!fin || fin.getBoundingClientRect().bottom > viewportHeight) return;
+        done = true;
+        krNoteRead(slug);
+    });
 }
 
 /** A post date as the site shows it everywhere: "20 September 2026". */
@@ -2541,9 +2669,11 @@ function krInviteRemember(key) {
  * the end of a post, the moment the end mark (the ⁂) is wholly on screen
  * and the progress bar reads 100% (a jargon box or FAQ above it has been
  * read too), centred at the foot of the window from 768px and as a
- * sheet along the foot of a phone. It stays while the reader is in the
- * end band and steps down when the footer comes on screen, so it never
- * covers the footer's links, or when they scroll back up into the text.
+ * sheet along the foot of a phone. It stays while the end mark and the
+ * sign-off are passing and steps down when "Up next" (the first thing
+ * after the sign-off) reaches it, so it never covers the next post, the
+ * related cards, the comments or the footer's links; it also steps down
+ * when the reader scrolls back up into the text.
  *
  * It is a labelled region, not a dialog, like the share sheet: it never
  * takes focus or traps it, and the post can be read and scrolled around
@@ -2666,7 +2796,22 @@ function renderNewsletterPopup() {
         var read = fin ? fin.getBoundingClientRect().bottom <= viewportHeight : postMainEndPassed(blogPost);
         var footer = document.getElementById('footer-section');
         var footerOnScreen = !!footer && footer.getBoundingClientRect().top < viewportHeight;
-        var up = read && !footerOnScreen;
+        // The card never sits on what the reader came down here for.
+        // "Up next" (or, on a post with none, the related cards or the
+        // comments) is the first thing after the sign-off: once its top
+        // edge comes up to the card's place, the card steps down and
+        // stays down for everything below. Measured against the card's
+        // box, whose left and right are the same up or down, so the
+        // answer does not depend on where its slide has got to.
+        var after = blogPost.querySelector('.kr-post-end .kr-post-shelf, .kr-post-end .kr-upnext, .kr-post-end .kr-post-end__related, .kr-post-end .giscus-comments');
+        var covering = false;
+        if (after) {
+            var box = el.getBoundingClientRect();
+            var next = after.getBoundingClientRect();
+            var foot = parseFloat(getComputedStyle(el).bottom) || 0;
+            covering = next.top < viewportHeight - foot && next.right > box.left && next.left < box.right;
+        }
+        var up = read && !footerOnScreen && !covering;
         krInviteUp = up;
         return function() {
             setVisible(up);
@@ -2902,6 +3047,9 @@ function renderGiscusComments() {
  *   b. sign-off     .kr-signoff (buildSignOff): who wrote it and three
  *                   routes onward (KR_ROUTES), Subscribe and Coffee, the
  *                   share row (from 1360px), the disclaimer as fine print.
+ *   b+. my shelf    section.kr-post-shelf, only on a post with `shelf` in
+ *                   posts.json: my ratings and saved passages for the
+ *                   authors it names, filled by js/post-shelf.js.
  *   c. up next      nav.kr-upnext: the pager, series-aware (postNeighbours,
  *                   fillUpNext). Each link is a data-live-under sketch host.
  *   d. related      .kr-post-end__related: the post's related-posts block,
@@ -2963,12 +3111,60 @@ function renderPostEnd() {
     comments.classList.add('kr-post-end__slot');
     end.appendChild(comments);
 
+    // The comments' second door: replies to my Bluesky post about this
+    // post (js/bluesky-replies.js), in the comments section over giscus.
+    // data/bluesky.json says which Bluesky post that is, and it is read
+    // only once the comments are within 1250px of the window, the
+    // distance at which Chrome starts giscus's lazy frame. The script,
+    // and its one request to Bluesky, follow only when this post has an
+    // entry, so a post that was never shared asks Bluesky nothing.
+    var bskyNear = function() {
+        var slug = resolveCurrentPostFileName().replace(/\.html$/, '');
+        krFetchJson('data/bluesky.json').then(function(data) {
+            var share = ((data && data.posts) || []).filter(function(p) { return p.slug === slug; })[0];
+            if (!share || comments.querySelector('.kr-bsky-replies')) return;
+            var slot = document.createElement('div');
+            slot.className = 'kr-bsky-replies';
+            slot.setAttribute('data-bsky-uri', share.uri);
+            slot.setAttribute('data-bsky-url', share.url);
+            comments.insertBefore(slot, comments.querySelector('.kr-comments-body'));
+            var sc = document.createElement('script');
+            sc.src = siteRootPrefix() + 'js/bluesky-replies.js?v=20261110a';
+            document.head.appendChild(sc);
+        }).catch(function() {});
+    };
+    if ('IntersectionObserver' in window) {
+        var bskyWatch = new IntersectionObserver(function(entries) {
+            if (!entries.some(function(e) { return e.isIntersecting; })) return;
+            bskyWatch.disconnect();
+            bskyNear();
+        }, { rootMargin: '1250px 0px' });
+        bskyWatch.observe(comments);
+    } else {
+        bskyNear();
+    }
+
     blogPost.appendChild(end);
 
     var neighbours = loadBlogPosts().then(function(posts) {
         var current = postByFile(posts, resolveCurrentPostFileName());
         signOff.setRoutes(postRoutes(current));
         fillUpNext(upNext, posts, current);
+        // From my shelf, between the sign-off and Up next: only a post
+        // whose posts.json record names authors in `shelf` gets the slot
+        // and the script that fills it (js/post-shelf.js, which shows the
+        // slot once it has something in it and removes it otherwise). The
+        // newsletter pop-up steps down for the slot by its class.
+        if (current && current.shelf && current.shelf.length) {
+            var shelf = document.createElement('section');
+            shelf.className = 'kr-post-end__slot kr-post-shelf';
+            shelf.hidden = true;
+            end.insertBefore(shelf, signOff.nextSibling);
+            var shelfScript = document.createElement('script');
+            shelfScript.src = siteRootPrefix() + 'js/post-shelf.js?v=20261110a';
+            shelfScript.onerror = function() { if (shelf.parentNode) shelf.parentNode.removeChild(shelf); };
+            document.head.appendChild(shelfScript);
+        }
     }).catch(function() {
         if (upNext.parentNode) upNext.parentNode.removeChild(upNext);
     });
@@ -3608,7 +3804,10 @@ function seriesParts(posts, name) {
  *
  * #series-count, under the lede, gets the size of the run and, on a line
  * of its own, its newest part as a link ("Latest: Part 18, What a Custom
- * Domain Actually Involves", the word the series index's cards use): a
+ * Domain Actually Involves", the word the series index's cards use), or,
+ * for a reader who has finished some parts but not all (krReadMap), how
+ * many they have read and the first they have not ("Continue: Part 4,
+ * ..."): a
  * reader coming back for the latest part of a long series otherwise
  * scrolled past every earlier card to find it (Part 18 of How This Site
  * Is Built sat 8,000px down on a phone). Newest is by date, the later
@@ -3649,12 +3848,21 @@ function renderSeriesPage() {
         var count = document.getElementById('series-count');
         if (count) {
             var mins = parts.reduce(function(s, p) { return s + (p.readMinutes || 0); }, 0);
-            count.textContent = parts.length + (parts.length === 1 ? ' part · ' : ' parts · ') + mins + (mins === 1 ? ' minute all told' : ' minutes all told');
-            var newest = seriesNewestPart(parts);
+            // A reader part-way through gets their place instead of the
+            // newest part: "3 read" on the count, and the first part they
+            // have not finished on the line under it. Both lines are the
+            // ones every reader gets, so nothing moves for it.
+            var readMap = krReadMap();
+            var unread = parts.filter(function(p) { return !krHasRead(p, readMap); });
+            var readCount = parts.length - unread.length;
+            count.textContent = parts.length + (parts.length === 1 ? ' part · ' : ' parts · ') + mins + (mins === 1 ? ' minute all told' : ' minutes all told') +
+                (readCount ? ' · ' + (unread.length ? readCount + ' read' : 'all read') : '');
+            var midway = readCount > 0 && unread.length > 0;
+            var newest = midway ? unread[0] : seriesNewestPart(parts);
             if (newest) {
                 var line = document.createElement('span');
                 line.className = 'kr-series-count__newest';
-                line.appendChild(document.createTextNode('Latest: Part ' + postSeriesEntry(newest, name).part + ', '));
+                line.appendChild(document.createTextNode((midway ? 'Continue: Part ' : 'Latest: Part ') + postSeriesEntry(newest, name).part + ', '));
                 var a = document.createElement('a');
                 a.href = siteRootPrefix() + (newest.url || '');
                 a.textContent = newest.title;
@@ -3719,10 +3927,11 @@ function renderSeriesNav() {
                 krEscapeHtml(entry.name) + '</a>';
             var dot = ' <span aria-hidden="true">·</span> ';
 
+            var readMap = krReadMap();
             var items = parts.map(function(p) {
                 var isCurrent = p === current;
                 var label = '<span class="kr-series-part-n">Part ' + postSeriesEntry(p, entry.name).part + '</span> ' +
-                    krEscapeHtml(p.title);
+                    krEscapeHtml(p.title) + (!isCurrent && krHasRead(p, readMap) ? ' ' + KR_READ_MARK : '');
                 return isCurrent
                     ? '<li class="current" aria-current="page">' + label + '</li>'
                     : '<li><a href="' + krEscapeHtml(root + (p.url || '')) + '">' + label + '</a></li>';
@@ -3887,6 +4096,8 @@ function renderBlogPostEssentials() {
     renderPostMeta();
     renderPostEnd();
     renderNewsletterPopup();
+    krWatchPostRead();
+    krMarkReadCards(document);
     renderReadingProgress();
     renderPostToc();
     renderHeadingAnchors();
@@ -4351,7 +4562,7 @@ function initCopyQuotes() {
  * is added here and nowhere else to reach the footer and the command
  * palette.
  *
- *   key        stable id; matches renderHeader's `active`/`hobbiesChild`
+ *   key        stable id; matches renderHeader's `active`/`child`
  *              keys where the page has one (series.html is the header's
  *              blogChild 'series-index')
  *   label      the page's name in lists
@@ -4393,6 +4604,8 @@ var KR_PAGES = [
     { key: 'blog', label: 'Blog', href: 'blog.html', blurb: 'All posts', inFooter: 'explore', inPalette: true,
         also: 'articles rss feed newsletter substack subscribe' },
     { key: 'series', label: 'Series', href: 'series.html', blurb: 'Posts that run in parts', inFooter: 'explore', inPalette: true },
+    { key: 'lab', label: 'Lab', href: 'lab.html', blurb: 'Every post you can run, sketches playing', inFooter: 'explore', inPalette: true,
+        also: 'interactive demos simulations algorithms live canvas' },
     { key: 'contact', label: 'Contact', href: 'contact.html', blurb: 'Get in touch', inFooter: 'explore', inPalette: true,
         also: 'email message linkedin instagram bluesky' },
     { key: 'colophon', label: 'Colophon', href: 'colophon.html', blurb: 'How this site is built, measured', inFooter: 'fine', inPalette: true },

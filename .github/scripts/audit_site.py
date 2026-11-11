@@ -26,6 +26,8 @@ Checks:
   feed       feed.xml well-formed, items resolve to real files
   sitemap    sitemap.xml covers all published indexable pages, no ghosts
   posts      posts.json urls/images exist, tags in allowed set, readMinutes
+  shelf      every author a post's `shelf` names has a rated book in
+             data/books.json or a quote in data/quotes-all.json
   scripts    blog post script includes match the canonical set
   head       blog post heads carry the canonical elements (keywords, icons,
              manifest, BlogPosting + BreadcrumbList JSON-LD)
@@ -49,6 +51,7 @@ import fnmatch
 import json
 import re
 import sys
+import unicodedata
 import xml.etree.ElementTree as ET
 from collections import Counter
 from html.parser import HTMLParser
@@ -1356,6 +1359,60 @@ def check_hero_reuse(posts, add, read=None):
             owner.setdefault(k, rel)
 
 
+# --- a post's shelf (ERROR) ----------------------------------------------------
+# posts.json `shelf` names the authors a post about books is about, and the
+# post's end band then shows what the reading pages hold by each of them
+# (js/post-shelf.js: the books I rated, the quotes I saved). A name that
+# matches nothing there shows nothing, and no reader would ever see why, so
+# a misspelt name, or one whose only book has left the shelf, fails here.
+
+SHELF_BOOKS = "data/books.json"
+SHELF_QUOTES = "data/quotes-all.json"
+
+
+def author_key(name):
+    """An author's name as the pages key it (authorKey in js/post-shelf.js):
+    lower case, without accents, spaces or punctuation, so "Ursula K. LeGuin"
+    is "Ursula K. Le Guin"."""
+    plain = "".join(ch for ch in unicodedata.normalize("NFD", str(name or ""))
+                    if not 0x300 <= ord(ch) <= 0x36F).lower()
+    return re.sub(r"[^a-z0-9]+", "", plain) or " ".join(plain.split())
+
+
+def check_post_shelf(posts, add, books=None, quotes=None):
+    """ERROR when a post's `shelf` names an author with no rated book and no
+    saved quote, or names the same author twice.
+
+    `books` and `quotes` are the two reading files as parsed (read from
+    disk by default, and only when some post has a shelf; tests pass their
+    own). A book counts when it has a rating, which is what the strip and
+    Every Book show.
+    """
+    known = None
+    for i, post in enumerate(posts):
+        names = post.get("shelf") or []
+        if names and known is None:
+            if books is None:
+                books = json.loads((ROOT / SHELF_BOOKS).read_text(encoding="utf-8"))
+            if quotes is None:
+                quotes = json.loads((ROOT / SHELF_QUOTES).read_text(encoding="utf-8"))
+            known = ({author_key(b.get("a")) for b in books if b.get("r")}
+                     | {author_key(q.get("a")) for q in quotes})
+        seen = set()
+        for name in names:
+            key = author_key(name)
+            where = f"posts.json[{i}]"
+            if key in seen:
+                add("ERROR", where, 0, "posts-shelf",
+                    f"shelf names {name!r} twice ({post.get('url', '')})")
+            elif key not in known:
+                add("ERROR", where, 0, "posts-shelf",
+                    f"shelf names {name!r}, who has no rated book in {SHELF_BOOKS} and no "
+                    f"quote in {SHELF_QUOTES}: spell the name as books.json does "
+                    f"({post.get('url', '')})")
+            seen.add(key)
+
+
 # --- orphaned assets (INFO) ----------------------------------------------------
 # A picture or script nothing points at still deploys, still counts in the
 # colophon's byte totals, and reads to the next person as something in use.
@@ -1380,6 +1437,17 @@ PATH_RUN = re.compile(r"[\w%./-]{5,}")
 # Photograph thumbnails are addressed by number from data files
 # (thumb/<n>.webp from photography-files.json's "<n>.png"), never by name.
 NUMBERED = re.compile(r"\d+")
+# The reading pages' book covers are addressed the same way, by the
+# Goodreads id of a record in books.json (js/bookshelf.js, shelfCover):
+# the full copy, and the small one in s/ under it.
+SHELF_COVER = re.compile(r"img/covers/shelf/(?:s/)?(\d+)\.jpg")
+
+
+def shelf_cover_id(rel):
+    """The Goodreads id a tracked path is the cover of, in the reading
+    pages' cover store; None for any other path."""
+    m = SHELF_COVER.fullmatch(rel)
+    return m.group(1) if m else None
 
 
 def referenced_names(texts):
@@ -1415,6 +1483,10 @@ def orphan_assets(tracked_rel):
     listing = ROOT / "data" / "photography-files.json"
     if listing.exists():
         photos = {Path(n).stem for n in json.loads(listing.read_text(encoding="utf-8"))}
+    shelf = set()
+    books = ROOT / "data" / "books.json"
+    if books.exists():
+        shelf = {b["g"] for b in json.loads(books.read_text(encoding="utf-8")) if b.get("g")}
     out = []
     for rel in sorted(tracked_rel):
         p = Path(rel)
@@ -1425,6 +1497,9 @@ def orphan_assets(tracked_rel):
         # A listed frame's thumb, and its @2x double (the same tile for
         # high-density screens, which gallery.js names from the stem).
         if p.parent.name == "thumb" and p.stem.removesuffix("@2x") in photos:
+            continue
+        # The cover of a book on the shelf, either copy.
+        if shelf_cover_id(rel) in shelf:
             continue
         if tail in tails or (not NUMBERED.fullmatch(p.stem) and name in names):
             continue
@@ -1670,6 +1745,7 @@ def main(argv=None):
     check_published_markdown(tracked, add)
     check_photo_variants(add)
     check_hero_reuse(posts, add)
+    check_post_shelf(posts, add)
 
     # --- assets nothing references (INFO, never fails) ---
     for rel in orphan_assets(tracked):

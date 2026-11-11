@@ -193,6 +193,9 @@
     "excerpt": "Every Stephen King book I've read, ranked: ten books from The Shining to It, by someone who rates King below his own average but keeps going back.",
     "url": "blog/stephen-king-ranked.html",
     "image": "blog/img/stephen-king/king-house-card.webp",
+    "shelf": [
+      "Stephen King"
+    ],
     "readMinutes": 11,
     "words": 2310
   },
@@ -939,6 +942,9 @@
     "excerpt": "A queer-friendly reading of Frodo and Sam: not a hidden romance, but male friendship deep enough for tears, touch, and total trust. Insisting that tenderness must be romance rebuilds the very wall this story tears down. (Gimli and Legolas, on the other hand...)",
     "url": "blog/frodo-sam-and-love.html",
     "image": "img/bg-img/end-of-the-third-age.jpg",
+    "shelf": [
+      "J.R.R. Tolkien"
+    ],
     "readMinutes": 12,
     "words": 2481
   },
@@ -1034,6 +1040,9 @@
     "excerpt": "Smashing the world requires only a hammer; building a better one requires imagination. A reflection on Iain M. Banks's Culture series and the contrarian act of imagining a future that works.",
     "url": "blog/the-culture-series.html",
     "image": "img/photography/thumb/30.webp",
+    "shelf": [
+      "Iain M. Banks"
+    ],
     "readMinutes": 14,
     "words": 3034
   },
@@ -1225,6 +1234,9 @@
     "url": "blog/dungeon-crawler-carl-litrpg-dignity.html",
     "updated": "2026-10-03",
     "image": "img/photography/thumb/141.webp",
+    "shelf": [
+      "Matt Dinniman"
+    ],
     "readMinutes": 22,
     "words": 4693
   },
@@ -1239,6 +1251,9 @@
     "url": "blog/fifteen-years-of-silence-rothfuss-doors-of-stone.html",
     "updated": "2026-10-03",
     "image": "img/photography/thumb/109.webp",
+    "shelf": [
+      "Patrick Rothfuss"
+    ],
     "readMinutes": 13,
     "words": 2748
   },

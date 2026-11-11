@@ -89,6 +89,8 @@
  *   both build their captions with it. Copy link copies the button's
  *   data-url (by default gallery.html?photo=<n>), handled once here for
  *   every popup, because Magnific rewrites the caption for every frame.
+ *   Given a frame's entry from data/photo-exif.json (o.exif), it also says
+ *   how the frame was taken, in one small grey line; without one, nothing.
  *
  * Swiping
  *   On a touch screen a sideways swipe across a set of two or more pages
@@ -317,7 +319,8 @@
     /**
      * o: { text (plain words), stem (the frame's number), place (links to
      * the photo map), gallery (true: links to the frame in the gallery),
-     * url (what Copy link copies; default gallery.html?photo=<stem>) }.
+     * url (what Copy link copies; default gallery.html?photo=<stem>),
+     * exif (the frame's entry in data/photo-exif.json, if it has one) }.
      * data-caption carries the words for krLightboxA11y. The words and the
      * number are one run of text (kr-lightbox-what), so on a phone the
      * number follows the words' last line instead of taking a row of its
@@ -332,6 +335,8 @@
         var what = '<span class="kr-lightbox-num">#' + esc(stem) + '</span>';
         if (o.text) what = '<span class="kr-lightbox-words" data-caption="' + esc(o.text) + '">' + esc(o.text) + '</span> ' + what;
         var parts = ['<span class="kr-lightbox-what">' + what + '</span>'];
+        var shot = exposure(o.exif);
+        if (shot) parts.push('<span class="kr-lightbox-exif"><span class="kr-sr-only">Taken with </span>' + esc(shot) + '</span>');
         if (o.place) {
             parts.push('<a class="kr-lightbox-link" href="/map.html?region=' + encodeURIComponent(o.place) +
                 '">See this place on the map &rarr;</a>');
@@ -341,6 +346,21 @@
         return parts.join(' ');
     }
 
+    // "EOS 60D · 250mm · f/6.3 · 1/400s · ISO 500" from a frame's entry in
+    // data/photo-exif.json, whichever of its values it has; '' for none.
+    // The lens is left to the gallery's figures, to keep this one line.
+    function exposure(e) {
+        if (!e) return '';
+        return [
+            e.camera && String(e.camera).replace(/^Canon /, ''),
+            e.focal && e.focal + 'mm',
+            e.aperture && 'f/' + e.aperture,
+            e.shutter && e.shutter + 's',
+            e.iso && 'ISO ' + e.iso
+        ].filter(Boolean).join(' · ');
+    }
+
+    krLightboxCaption.exposure = exposure;
     window.krLightboxCaption = krLightboxCaption;
 
     document.addEventListener('click', function (e) {

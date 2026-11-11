@@ -9,7 +9,8 @@ algorithm and its drawing; the engine supplies everything else.
 
 - [Why](#why): what the engine is for, and the behaviours it owns.
 - [Reference](#reference): markup, options, the context, the handle,
-  keyboard, reduced motion, a complete example, and how to check a demo.
+  keyboard, links to a run, full screen, a complete example, and how to
+  check a demo.
 
 ## Why
 
@@ -91,6 +92,17 @@ a drawn cursor. The engine replays the post's own `pointerdown`,
 handling. Before this, eight canvases invited readers to "click or tap"
 with no keyboard path at all, a WCAG 2.1.1 failure.
 
+**A link to a run.** A demo the engine built a toolbar for gets a Copy
+link to this run button. The link carries the demo's id, its seed and the
+value of every control in the URL fragment; opening it sets them before
+the first frame and takes the page to the demo. No post writes anything
+for it ([below](#a-link-to-a-run)).
+
+**Full screen.** A second button puts the whole frame (canvas, controls,
+tiles, chart) full screen where the browser can do that for an element,
+and the main canvas takes the height the rest leaves
+([below](#full-screen)).
+
 **A deterministic handle for tests.** Every mount exposes `el.krViz`
 ([below](#the-handle)): seed a run, step it to an iteration without
 drawing every frame, read the tiles. That is what lets the smoke suite
@@ -156,6 +168,8 @@ their markup differs from the rest.
   the engine appends to each slot without checking, so buttons without a
   `data-kr-toolbar` slot throw at mount. (The status line alone is
   skipped when there is no toolbar.)
+- Give the mount an `id`: a [link to a run](#a-link-to-a-run) names the
+  demo by it.
 - The `height` attributes are a no-JavaScript fallback; the engine sets
   the real height from the width.
 - Every canvas has `role="img"` and an `aria-label` that says what is
@@ -232,6 +246,8 @@ the target is not on the page.
 | `maxStepsPerFrame` | `max(8, ceil(rate / 20))` | cap on steps in one frame, for a demo whose progress should be watchable rather than instant |
 | `maxSamples` | 300 | how many `record()` samples the charts keep |
 | `autostart` | true | `false`: wait for Play (and the visibility observer will not start it either) |
+| `share` | true | `false`: no Copy link to this run button, and links to this demo are ignored |
+| `fullscreen` | true | `false`: no full-screen button |
 | `init(ctx)` | required | build the state from `ctx.controls` and `ctx.rng`; return it |
 | `step(ctx)` | required | advance one iteration of `ctx.state`; call `ctx.record`, `ctx.set` |
 | `draw(ctx)` | required | draw `ctx.state` on the canvases; called on a cleared canvas |
@@ -277,6 +293,7 @@ The object `mount` returns is also on the element as `el.krViz`:
 | `restart()` | re-seed, rebuild the state with `init`, redraw, and play on unless the reader paused it or it is off screen |
 | `draw()` | redraw now, for a post that changes the state from its own input handler |
 | `seed(n)` | set a new seed and restart |
+| `link()` | the fragment that reopens this run (`#run:...`), or `''` for a demo with no link button |
 | `stepTo(n)` | pause, then step synchronously to iteration `n` (going back to iteration 0 first if `n` is behind, stopping early if the run finishes), drawing once; returns the iteration reached and leaves the demo paused |
 | `read()` | `{iteration, finished, stats, controls, status}` |
 | `ctx` | the context above |
@@ -291,6 +308,92 @@ the arrow keys move it (Shift for finer steps); Enter or Space acts at the
 cursor, by replaying the post's pointer events there; Escape hides the
 cursor. Handle `pointerdown`, `pointerup` or `click` in the post and the
 keyboard works with no further code.
+
+### A link to a run
+
+The button is an icon at the right-hand end of the toolbar, after the
+status line, labelled "Copy link to this run". It copies the page's
+address with this fragment:
+
+```
+#run:<mount id>[:<seed>][&<control id>=<value>...]
+#run:pso-demo:20260807&land=bowl&w=72&c1=150&c2=150&n=30
+```
+
+- `<mount id>` is the `id` of the `.kr-viz` element, so each demo on a
+  page has its own link. `<seed>` is the current seed (the one in the
+  options, or the last one passed to `seed(n)`), left out when the mount
+  was given none.
+- Every control follows in the order it was declared: a slider's number,
+  a select's option value, `1` or `0` for a checkbox. The ids and values
+  are percent-encoded.
+- It is a fragment and not a query string so that the page keeps one URL
+  for the service worker, the canonical link and analytics. No heading
+  id holds a colon, so `#run:...` is never a contents link, and any
+  other fragment is left to the browser.
+
+Opening one, on load or when the fragment changes in an open page,
+restores the controls and the seed, scrolls the demo into view, and from
+there it is an ordinary mount: it starts once it is on screen, waits for
+Play under `autostart: false`, and under reduced motion shows its first
+frame with "Paused for reduced motion." On load the values go in before
+the first frame is built; in an open page the demo restarts as Restart
+does.
+
+The fragment is text from a stranger, and is read that way:
+
+- it has to fit the pattern as a whole (a seed is one to ten digits) and
+  name this mount, or the demo ignores it: no change, no scroll, nothing
+  logged;
+- only the controls the demo declared are looked up, so unknown keys are
+  ignored;
+- a slider takes a plain decimal number, clamped to its `min` and `max`
+  and rounded to its `step`, and anything else leaves the slider alone;
+- a select takes one of its own option values, a checkbox `1` or `0`;
+- nothing from it is written into the page as markup.
+
+Not in a link: how far the run had got, and anything a post keeps
+outside the engine (a point the reader added by clicking, an instance
+dealt from a counter of the post's own). A post that wants such a thing
+in its links makes it a control, or reseeds through `seed(n)` as
+Scramble in tabu search does.
+
+The button is built for a mount with an `id`, a `data-kr-toolbar` slot,
+and something to put in a link: a `seed` option or at least one control.
+A calculator with neither has none. A mount with its own layout and no
+toolbar slot has none either, because the engine cannot see the controls
+it would have to describe. `share: false` leaves the button out and
+makes the demo ignore links.
+
+A press is confirmed twice: a note above the button ("Link copied") for
+two and a half seconds, and one announcement through the hidden live
+region. Where the Clipboard API is missing or refuses, the link goes
+into the address bar instead (`history.replaceState`, so nothing reloads
+or restarts) and the note says "Link is in the address bar".
+
+### Full screen
+
+The second button ("Enter fullscreen", then "Exit fullscreen": an action
+label, no `aria-pressed`) puts the mount itself full screen with the
+Fullscreen API, so the controls, tiles and chart come with the canvas.
+Escape leaves as well, and the label follows the `fullscreenchange`
+event. The button is built only where `requestFullscreen` exists and
+`document.fullscreenEnabled` is true, which leaves it out on an iPhone;
+`fullscreen: false` leaves it out anywhere. A mount with no toolbar slot
+gets it at its foot.
+
+Sizing goes through the same `fit()` as a window resize. Full screen,
+the frame is a column as tall as the screen (`.kr-viz:fullscreen`, §12)
+and the main canvas, the first one named, grows over whatever the rest
+of the frame leaves. A drawing therefore has to cope with a canvas
+taller than its `height` function asked for: size a square by
+`Math.min(c.w, c.h)`, lay a map out over the whole rectangle. When the
+frame is a little taller than the screen, the main canvas is shortened
+until it fits, never below `SHORT_MIN`; when nothing would make it fit
+(an upright phone) it keeps its height and the frame scrolls. Charts and
+the other canvases keep their heights, and a main canvas that is not a
+direct child of the mount (one cell in a post's own grid of canvases) is
+not stretched.
 
 ### A complete example
 
@@ -366,6 +469,9 @@ keyboard works with no further code.
   path; the engine's own chart panes already do.
 - Sliders go full width on a phone and the stat tiles reflow, both in
   §12. Do not restate either in the post.
+- [Full screen](#full-screen) gives the main canvas a height its
+  `height` function never returned: draw from `c.w` and `c.h`, not from
+  the numbers that function works with.
 
 ### Checking a demo
 
@@ -389,4 +495,5 @@ keyboard works with no further code.
 - After a change to the engine itself, `node --test tests/js/kr-viz.test.js`
   holds its run rules without a browser: the run button's three labels,
   Restart playing on, Step, starting at half the main canvas, pausing
-  offscreen, and the short-screen cap.
+  offscreen, the short-screen cap, what a link to a run carries and what
+  the engine refuses from one, and the full-screen button and sizes.

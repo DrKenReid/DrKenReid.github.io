@@ -208,7 +208,7 @@ page gains a component by writing HTML.
 | `data-kr-root` | `<html>` | the path back to the site root, for a page served at URLs it does not live at (`404.html`) |
 | `data-kr-toolbar`, `data-kr-sliders`, `data-kr-stats` | children of `.kr-viz` | where the demo engine builds its controls ([VIZ-ENGINE.md](VIZ-ENGINE.md)) |
 | `data-series` | `#series-page` | which series a landing page lists |
-| `data-bg` | a homepage hero slide | its photograph, painted after load |
+| `data-live-play="view"` | a host, or any element around hosts | its sketches play while on screen instead of on hover, on any device, with one still frame under reduced motion (`js/live-covers.js`); the page calls `krLoadLiveCovers()` itself |
 | `data-lit`, `data-colo` | an element holding a placeholder (`&mdash;` on the colophon) or a fallback figure (`literature.html`) | replaced with a figure from data (`js/literature.js`, `colophon.html`); the smoke sweep fails if an em dash placeholder is left in any `[data-colo]`, `[data-lit]` or `[data-count]` |
 
 ## File headers

@@ -236,7 +236,7 @@
     function krWallMoved() { if (location.hash === '#bookshelf') location.replace('/books.html'); }
     krWallMoved();
     window.addEventListener('hashchange', krWallMoved);
-    renderHeader('header-section', { basePath: '/', active: 'hobbies', hobbiesChild: 'literature' });
+    renderHeader('header-section', { basePath: '/', active: 'literature' });
     renderPhotoStrip('instagram-section');
     renderFooter('footer-section');
     // The page's own sections start themselves: the quotations and reviews

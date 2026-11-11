@@ -49,7 +49,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8 kr-prose">
-          <p class="privacy-updated">Last updated: 7 August 2026</p>
+          <p class="privacy-updated">Last updated: 10 November 2026</p>
 
           <p>This is a personal website run by Ken Reid. It has no ads, no paywalls, no user accounts, and nothing to sell. I do not sell, rent, or trade any information about visitors, and I collect as little as the site can get away with. Here is the full picture.</p>
 
@@ -58,11 +58,14 @@
           <p>Google processes this data on its own infrastructure under its <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">privacy policy</a>. If you would rather not be counted, you can block analytics with any content blocker (uBlock Origin works well), use your browser's tracking protection, or install Google's own <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">opt-out browser add-on</a>. The site works identically either way.</p>
 
           <h2>Cookies and local storage</h2>
-          <p>Beyond the Google Analytics cookies above, the site sets no cookies of its own. It does use your browser's local storage for two small preferences:</p>
+          <p>Beyond the Google Analytics cookies above, the site sets no cookies of its own. It does keep a few small things in your browser's local storage:</p>
           <ul>
             <li><code>kr-theme</code> remembers whether you picked dark or light mode.</li>
             <li><code>kr-nerd</code> remembers whether you switched on nerd mode.</li>
+            <li><code>kr-read</code> remembers which posts you have reached the end of, so their cards can say "Read" and a series can offer you the next part.</li>
+            <li>A few more of the same kind, with names starting <code>kr-season</code>, <code>kr-invite</code> and <code>kr-show</code>: whether you turned the seasonal decorations or their sounds off, whether you closed the newsletter invitation, and whether the slideshow has shown you its hint.</li>
           </ul>
+          <p class="kr-forget-read"><button type="button" class="kr-btn kr-btn--ghost kr-btn--sm" id="forget-read">Forget what I have read</button><span class="kr-forget-read__note" id="forget-read-note" role="status"></span></p>
           <p>These never leave your browser and contain nothing about you. Clearing your browser data removes them, and the site falls back to its defaults.</p>
 
           <h2>Comments</h2>
@@ -74,8 +77,9 @@
           <ul>
             <li>The <a href="/map.html">photo map</a> loads map tiles from Esri (ArcGIS Online), built on OpenStreetMap and other map data.</li>
             <li>The <a href="/contact.html">contact page</a> fetches my recent posts from Bluesky's public API.</li>
+            <li>A blog post I have shared on Bluesky fetches the replies to that Bluesky post from Bluesky's public API when you scroll near the comments. That one request shows Bluesky your IP address and which thread was asked for; no cookie is sent or set, and the replies arrive as text, with no pictures or avatars loaded from Bluesky.</li>
             <li>Full-size photographs load from GitHub's servers when you open one in the gallery.</li>
-            <li>Book covers on the <a href="/literature.html">reading pages</a> and in the <a href="/slideshow.html">slideshow</a> load from Goodreads, or Open Library when Goodreads has none; album covers on the <a href="/music.html">music page</a> and in the slideshow load from Last.fm.</li>
+            <li>Book covers on the <a href="/literature.html">reading pages</a> and in the <a href="/slideshow.html">slideshow</a> are served from this site; a book with no copy here loads its cover from Open Library. Album covers on the <a href="/music.html">music page</a> and in the slideshow load from Last.fm.</li>
           </ul>
           <p>Each of those services sees your IP address for that request, the same as visiting any website does. Fonts, scripts, and styles are all served from this site itself, not from third-party CDNs. Links to other sites (social profiles, the "Buy me a coffee" button, and so on) load nothing until you click them; where they lead is governed by each destination's own privacy policy.</p>
 
@@ -100,6 +104,19 @@
   <script>
     renderHeader('header-section', { basePath: '/', active: '' });
     renderFooter('footer-section');
+
+    // The read marks (krReadMap in shared-components.js) live in this
+    // browser alone, so this page is where they can be thrown away.
+    (function() {
+      var btn = document.getElementById('forget-read');
+      var note = document.getElementById('forget-read-note');
+      if (!btn || !note) return;
+      btn.addEventListener('click', function() {
+        var had = Object.keys(krReadMap()).length;
+        krForgetRead();
+        note.textContent = had ? 'Done. No post is marked as read now.' : 'There was nothing to forget.';
+      });
+    })();
   </script>
 </body>
 </html>

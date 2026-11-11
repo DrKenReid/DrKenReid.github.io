@@ -212,6 +212,12 @@
   --kr-action-fill-hover: #a52424;
   /* The type on that fill: white in both themes (the "New" badge, §02). */
   --kr-on-action-fill: #ffffff;
+  /* Help: the one link that is not red. A "?" in a blue circle that
+     explains the thing beside it (the homepage headline's .kr-hero-help,
+     §07). The same in both themes: white on #2b6cb0 is 5.4:1, and on
+     #245a93 7.0:1. */
+  --kr-help-fill: #2b6cb0;
+  --kr-help-fill-hover: #245a93;
   /* Ink: body copy and headings, the colour the reset has always set.
        light #252525  14.34 page, 15.10 card, 15.33 white
        dark  #e2e2e2  13.43 page, 12.72 tint, 11.83 card */
@@ -985,7 +991,7 @@ svg.kr-glyph {
   box-shadow: 0 0 0 6px var(--site-focus-shadow); }
 
 /* --- "New" badge (krIsNewPhoto, krMarkNewPost) --------------------------
-   The hero's "New post" chip in small: red fill, white capitals. It marks
+   The hero's "New blog" chip in small: red fill, white capitals. It marks
    the newest photoset (KR_NEW_PHOTOS, written from data/photosets.json)
    on the homepage's Latest photography frames and the gallery's tiles, and a
    post card's cover while the post is under a week old (krMarkNewPost:
@@ -1016,6 +1022,37 @@ svg.kr-glyph {
 @media (forced-colors: active) {
   .kr-new-badge {
     border: 1px solid CanvasText; } }
+
+/* --- Read mark ---------------------------------------------------------------
+   "Read" after a card's date, an archive row's minutes or a part in a
+   post's series list, for a post this reader has finished (kept in their
+   browser only: krMarkReadCards and KR_READ_MARK in shared-components.js;
+   script adds it). An outlined chip in the colour of the line it sits in,
+   so it takes the muted grey of a date and the white of a date over a
+   photograph without a rule for either. The word, never a tick alone. */
+.kr-read-mark {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 0 7px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-family: 'Poppins', 'Poppins Fallback', sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: 1px; }
+
+/* The forget button on privacy.html, and the line that answers it. */
+.kr-forget-read {
+  margin: 4px 0 18px; }
+
+.kr-forget-read__note {
+  margin-left: 12px;
+  font-size: 14px;
+  color: var(--kr-muted); }
 
 /* --- Spacing helpers -------------------------------------------------------
    The template's spacing classes that pages still use. Unused ones have
@@ -1474,6 +1511,14 @@ svg.kr-glyph {
 @media only screen and (max-width: 1199px) {
   .classy-nav-container .classy-navbar .classynav ul li a {
     font-size: 14px; } }
+
+/* Seven items and the search hint do not fit the 960px container with
+   20px either side of each: between the phone menu's breakpoint
+   (NAV_BREAKPOINT in site.js) and 1199px the top-level links close up,
+   so the hint stays on the bar's one line. */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .classy-nav-container .classy-navbar .classynav > ul > li > a {
+    padding: 0 12px; } }
 
 .breakpoint-off .classy-navbar .classynav > ul > li > a {
   color: var(--kr-bar-ink);
@@ -2706,33 +2751,32 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   max-width: 18ch; }
 
 /* ==== :: §07 Homepage ==== */
-/* index.html, top to bottom: the hero carousel, the intro and its
-   numbers, the latest posts beside the blog promo, Explore, the photo
-   strip, the quotation band, the Now strip and Recent on Bluesky, then the
+/* index.html, top to bottom: the hero, the intro and its numbers, the
+   latest posts beside the blog promo, the photo strip, the quotation
+   band, the Now strip and Recent on Bluesky, then the
    rhythm that spaces them. Two of these are shared: the photo strip
    closes most pages (renderPhotoStrip), and the quotation band is also
    literature.html's (with .kr-home-quote--hold).
 
-   Built by: the hero is Owl Carousel (alime.bundle.js, started in
-   js/default-assets/active.js, which also adds the pause button through
-   addCarouselPauseControl); slides after the first get their photograph
-   from data-bg once the page has loaded (an inline script in index.html);
-   js/hero-evolve.js paints the evolved headline; shared-components.js
-   renders the photo strip, the quotation band (krQuoteRotator) and the
-   Now strip (renderNowStrip).
-   Runtime classes: .owl-loaded and .owl-item.active (Owl),
-   .kr-hero-latest--pending (removed when posts.json arrives),
+   Built by: the hero is markup in index.html; js/hero-evolve.js paints
+   its evolved headline; shared-components.js renders the photo strip (an
+   Owl carousel, with the pause button addCarouselPauseControl in
+   js/default-assets/active.js adds), the quotation band (krQuoteRotator)
+   and the Now strip (renderNowStrip).
+   Runtime classes: .kr-hero-latest--pending (removed when posts.json
+   arrives),
    .kr-home-quote--running and --paused, .kr-home-quote__text--long,
    .kr-eq.is-playing, and the .kr-skeleton placeholders (§02).
    Tokens: --kr-photo-gradient, --kr-photo-to, --kr-eyebrow, --kr-hairline,
    --kr-brand-gradient, --kr-section-y(-tight) and
    --kr-section-heading-gap. */
 
-/* --- Hero carousel ---------------------------------------------------------
-   Full-bleed slides, each a photograph (.slide-bg, so it can drift
-   without moving the text) under a left-to-right scrim, with the words
-   bottom-left. The arrows are Owl's, drawn as buttons by active.js
-   (navElement), and only surface on hover and keyboard focus. */
+/* --- Hero ------------------------------------------------------------------
+   Full bleed: one photograph (.slide-bg, so it can drift without moving
+   the text) under a left-to-right scrim, with the words on the left. It
+   was a carousel of five until the evolved headline became the whole
+   hero; .welcome-slides and .single-welcome-slide keep their template
+   names, which the seasons' layers also look for. */
 .welcome-area {
   position: relative;
   z-index: 1; }
@@ -2741,72 +2785,8 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   position: relative;
   z-index: 1;
   overflow: hidden; }
-  .welcome-slides .owl-prev,
-  .welcome-slides .owl-next {
-    width: 66px;
-    height: 66px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.1);
-    position: absolute;
-    top: 50%;
-    left: 70px;
-    margin-top: -33px;
-    z-index: 10;
-    text-align: center;
-    line-height: 70px;
-    color: #ffffff;
-    font-size: 30px;
-    opacity: 0;
-    transition: opacity 0.3s ease; }
-    .welcome-slides .owl-prev:hover, .welcome-slides .owl-prev:focus,
-    .welcome-slides .owl-next:hover,
-    .welcome-slides .owl-next:focus {
-      background-color: #fc6060; }
-    @media only screen and (min-width: 768px) and (max-width: 991px) {
-      .welcome-slides .owl-prev,
-      .welcome-slides .owl-next {
-        left: 30px; } }
-    @media only screen and (max-width: 767px) {
-      .welcome-slides .owl-prev,
-      .welcome-slides .owl-next {
-        width: 40px;
-        left: 15px;
-        height: 40px;
-        font-size: 18px;
-        line-height: 44px; } }
-  .welcome-slides .owl-next {
-    left: auto;
-    right: 70px; }
-    @media only screen and (min-width: 768px) and (max-width: 991px) {
-      .welcome-slides .owl-next {
-        right: 30px; } }
-    @media only screen and (max-width: 767px) {
-      .welcome-slides .owl-next {
-        right: 15px; } }
-
-.welcome-area:hover .owl-prev,
-.welcome-area:hover .owl-next,
-.welcome-slides .owl-prev:focus,
-.welcome-slides .owl-next:focus {
-  opacity: 1; }
-
-/* Owl 2.2 drew its arrows as divs; they are buttons now, so clear what
-   the browser gives a button. Keyboard focus shows them with the same
-   white ring the pause button wears on the photograph. */
-.welcome-slides .owl-nav button.owl-prev,
-.welcome-slides .owl-nav button.owl-next {
-  border: 0;
-  cursor: pointer; }
-
-.welcome-slides .owl-nav button.owl-prev:focus-visible,
-.welcome-slides .owl-nav button.owl-next:focus-visible {
-  opacity: 1;
-  outline: 2px solid #ffffff;
-  outline-offset: 2px;
-  box-shadow: none; }
-
-/* The slide clips its photograph, which drifts (the Ken Burns zoom
-   below). What shows before a slide's photograph arrives is near-black,
+/* The hero clips its photograph, which drifts (the Ken Burns zoom
+   below). What shows before the photograph arrives is near-black,
    like the photographs' own scrim, rather than a flash of action red. */
 .single-welcome-slide {
   position: relative;
@@ -2883,12 +2863,12 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   height: 100%;
   z-index: -2; }
 
-/* Slide 1 headshot composite: the face sits at 66% x with headroom baked
+/* The headshot composite: the face sits at 66% x with headroom baked
    in, so keep it in frame when cover-cropping (.bg-img forces center). */
 .slide-bg--portrait {
   background-position: 66% 25% !important; }
 
-.owl-item.active .slide-bg {
+.welcome-slides .slide-bg {
   animation: kr-kenburns 14s ease-out forwards; }
 
 @keyframes kr-kenburns {
@@ -2898,21 +2878,8 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
     transform: scale(1.09); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .owl-item.active .slide-bg {
+  .welcome-slides .slide-bg {
     animation: none; } }
-
-/* Before Owl runs. Owl's stylesheet hides a carousel until the script has
-   loaded it, so the hero was 0px tall at first paint and everything under
-   it dropped by 600 to 880px when Owl ran (CLS 0.62 on a warm load).
-   Slide 1 alone is shown until then, at its real height, and Owl wraps
-   that same slide without moving it. The other slides wait; without
-   JavaScript they stay hidden, which leaves a one-slide hero rather than
-   an empty one. */
-.welcome-slides:not(.owl-loaded) {
-  display: block; }
-
-.welcome-slides:not(.owl-loaded) > .single-welcome-slide:not(:first-child) {
-  display: none; }
 
 /* The hero's calls to action are .alime-btn on a photograph, which the
    button component already sets as --on-photo (§03). */
@@ -2942,7 +2909,81 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
     max-width: 100%;
     aspect-ratio: 640 / 165; } }
 
-/* The "New post" chip under the first headline, filled from posts.json.
+/* The headline's "?" (index.html): a small blue help link at the end of
+   the drawn words, to the post that explains them. .kr-hero-title is the
+   canvas's own box, so a percentage of it is a percentage of the
+   canvas; hero-evolve.js sets --kr-evolve-end and --kr-evolve-top to the
+   words' right edge and top (the defaults below fit "Hi, I'm Ken."
+   before it runs, and without script). Colours under the :root lift, as
+   .skip-link's: the dark theme's a:hover is (0,2,1). */
+.kr-hero-title {
+  --kr-evolve-end: 93%;
+  --kr-evolve-top: 22%;
+  position: relative;
+  max-width: 560px;
+  margin: 0 0 6px -6px; }
+
+.kr-hero-title .kr-hero-evolve {
+  max-width: none;
+  margin: 0; }
+
+@media only screen and (max-width: 767px) {
+  .kr-hero-title {
+    max-width: 100%; } }
+
+.kr-hero-help {
+  position: absolute;
+  left: var(--kr-evolve-end);
+  top: var(--kr-evolve-top);
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: var(--kr-help-fill);
+  box-shadow: var(--kr-shadow-1);
+  font-family: 'Poppins', 'Poppins Fallback', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  transform: translateY(-30%);
+  transition: background-color 0.2s ease, transform 0.2s ease; }
+
+:root .kr-hero-help,
+:root .kr-hero-help:is(:hover, :focus) {
+  color: var(--kr-on-action-fill);
+  text-decoration: none; }
+
+.kr-hero-help:hover {
+  background: var(--kr-help-fill-hover); }
+
+.kr-hero-help:focus-visible {
+  outline: 2px solid var(--kr-on-action-fill);
+  outline-offset: 2px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .kr-hero-help:hover {
+    transform: translateY(-30%) scale(1.08); } }
+
+/* Under the headline: who (.kr-hero-line, the hero's paragraph size), then
+   how the headline is drawn (.kr-hero-note, a step smaller, so the hero
+   reads headline, who, how). */
+.single-welcome-slide .welcome-text .kr-hero-line {
+  margin-bottom: 10px; }
+
+.single-welcome-slide .welcome-text .kr-hero-note {
+  max-width: 36em;
+  margin-bottom: 0;
+  font-size: 15px;
+  font-weight: 400; }
+
+@media (max-width: 767px) {
+  .single-welcome-slide .welcome-text .kr-hero-note {
+    font-size: 14px; } }
+
+/* The "New blog" chip under the hero's buttons, filled from posts.json.
    Its room is held from the start: it waits invisible (--pending) rather
    than display: none, which let the centred headline above it jump when
    it arrived. The title never wraps (ellipsis), so the room is exact. */
@@ -3001,6 +3042,94 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   .welcome-text .kr-hero-latest {
     transition: border-color 0.2s ease, background 0.2s ease, opacity 0.6s ease; } }
 
+/* The chip opens downward on hover or keyboard focus (where a pointer
+   can hover; a tap on a phone just follows the link): the pill squares
+   off at the foot and a panel hangs from it with the post's sketch
+   (.kr-hero-latest__stage, a live-covers host the homepage script names
+   with data-live) and its summary (.kr-hero-latest__sum). The panel is
+   positioned, so nothing in the hero moves, and it keeps its size while
+   hidden, so the sketch's canvas has a box to size itself to. It takes
+   the chip's own background, border and blur (inherit), so the two read
+   as one piece. aria-hidden: the link's name stays "New blog" and the
+   title; the summary is the post's own first line. The hero clips what
+   runs past its foot, so where the chip sits too low for the panel (a
+   short window) the homepage script sets .kr-hero-latest--up and it
+   opens upward instead, over the buttons, on a solid ground (§20, with
+   the sketch stages) so they do not show through. Runtime classes:
+   .kr-live-host and .kr-live-on (js/live-covers.js), and
+   .kr-hero-latest--up. A sketch host clips (.kr-live-host, §20); this
+   one must not, or it would clip its own panel. */
+.welcome-text .kr-hero-latest.kr-live-host,
+.kr-hero-latest {
+  position: relative;
+  z-index: 5;
+  overflow: visible; }
+
+.kr-hero-latest__more {
+  position: absolute;
+  top: calc(100% - 1px);
+  left: -1px;
+  z-index: 20;
+  display: block;
+  width: max(calc(100% + 2px), 320px);
+  padding: 10px 12px 14px;
+  border: inherit;
+  border-top: 0;
+  border-radius: 0 0 16px 16px;
+  background: inherit;
+  backdrop-filter: inherit;
+  visibility: hidden;
+  opacity: 0;
+  clip-path: inset(0 0 100% 0);
+  pointer-events: none; }
+
+/* Positioned, so the sketch's canvas (laid inset: 0 over its host) fills
+   the stage and not the whole panel. */
+.kr-hero-latest__stage {
+  position: relative;
+  display: block;
+  height: 120px;
+  border-radius: 10px;
+  overflow: clip; }
+
+.kr-hero-latest__sum {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: normal; }
+
+.kr-hero-latest--up .kr-hero-latest__more {
+  top: auto;
+  bottom: calc(100% - 1px);
+  padding: 14px 12px 10px;
+  border-top: inherit;
+  border-bottom: 0;
+  border-radius: 16px 16px 0 0;
+  clip-path: inset(100% 0 0 0); }
+
+@media (hover: hover) {
+  .welcome-text .kr-hero-latest:is(:hover, :focus-visible):not(.kr-hero-latest--pending) {
+    border-radius: 23px 23px 0 0;
+    border-bottom-color: transparent; }
+  .welcome-text .kr-hero-latest.kr-hero-latest--up:is(:hover, :focus-visible):not(.kr-hero-latest--pending) {
+    border-radius: 0 0 23px 23px;
+    border-bottom-color: inherit;
+    border-top-color: transparent; }
+  .kr-hero-latest:is(:hover, :focus-visible):not(.kr-hero-latest--pending) .kr-hero-latest__more {
+    visibility: visible;
+    opacity: 1;
+    clip-path: inset(0); } }
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .kr-hero-latest__more {
+    transition: clip-path 0.28s ease, opacity 0.2s ease, visibility 0s linear 0.28s; }
+  .kr-hero-latest:is(:hover, :focus-visible) .kr-hero-latest__more {
+    transition: clip-path 0.28s ease, opacity 0.2s ease, visibility 0s; } }
+
 /* The scroll cue at the foot of the hero. */
 .kr-scroll-cue {
   position: absolute;
@@ -3037,8 +3166,8 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   .kr-scroll-cue {
     animation: none; } }
 
-/* The pause button for a rotating carousel (WCAG 2.2.2), on the hero and
-   the photo strip alike: addCarouselPauseControl
+/* The pause button for a rotating carousel (WCAG 2.2.2), which today is
+   the photo strip: addCarouselPauseControl
    (js/default-assets/active.js) adds it
    and labels it with what pressing it does. White ring, since the site's
    red one is hard to see on a photograph. */
@@ -3303,107 +3432,28 @@ html.kr-js.kr-scroll-fallback .section-eyebrow {
   .kr-latest-row--three .kr-latest-list .mb-30 {
     margin-bottom: 12px; } }
 
-/* --- Explore ---------------------------------------------------------------
-   Seven links to the site's parts, each an icon and two lines of text with
-   no box around them until hovered: the card treatment is reserved for
-   things that are actually cards. Each is a live-cover host
-   (data-live="explore:..."), whose sketch runs in a strip under its words
-   (§20). The stage's size is on the row, so the stage and the row's bottom
-   margin (Sketch stages, below) read one number. */
-.kr-explore-row {
-  --kr-explore-stage-h: 56px;
-  --kr-explore-stage-gap: 12px;
-  justify-content: center; }
-
-.kr-explore-link {
-  display: block;
-  height: 100%;
-  padding: 18px 10px;
-  text-align: center;
-  border-radius: var(--kr-radius-md);
-  background: transparent;
-  border: 1px solid transparent;
-  transition: border-color 220ms, transform 220ms; }
-
-.kr-explore-link__icon {
-  display: block;
-  font-size: 26px;
-  margin-bottom: 12px;
-  color: var(--kr-eyebrow); }
-
-.kr-explore-link h3 {
-  font-size: 15px;
-  font-weight: 600;
-  margin: 0 0 4px; }
-
-.kr-explore-link p {
-  font-size: 12.5px;
-  margin: 0;
-  color: #6b6459; }
-
-[data-theme="dark"] .kr-explore-link p {
-  color: #9a9389; }
-
-.kr-explore-link:hover,
-.kr-explore-link:focus-visible {
-  border-color: var(--kr-hairline);
-  transform: translateY(-3px); }
-
-.kr-explore-link:hover .kr-explore-link__icon {
-  color: var(--kr-action); }
-
-/* Sketch stages. The strips under the stat tiles and Explore links hold
+/* --- Sketch stages ---------------------------------------------------------
+   The strip under each stat tile holds
    room for a canvas that only runs where initLiveCovers
    (shared-components.js) loads the sketches: a pointer that can hover,
    and no request for reduced motion. Anywhere else they were an empty 50
    to 70px under every tile (the phone's stats band ran to 541px), so they
-   take room only under the same condition. Keep the two in step. The
-   stages' own look is in §20.
+   take room only under the same condition. The stages' own look is in
+   §20.
    The empty stage was also what spaced the stat rows once they wrap (two
    to a row on a phone), so without it the rows take a gap of their own,
    and give it back where the stage returns. */
-.kr-stat-stage,
-.kr-explore-stage {
+.kr-stat-stage {
   display: none; }
 
 .kr-home .home-stats-bar .row {
   row-gap: 24px; }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .kr-stat-stage,
-  .kr-explore-stage {
+  .kr-stat-stage {
     display: block; }
   .kr-home .home-stats-bar .row {
-    row-gap: 0; }
-  /* The Explore stage sits under the last line of every tile, and the
-     band's own padding came after it: about 200px of empty tint under
-     the text at 1440. The row gives the stage's room back to the padding
-     (its height and gap, --kr-explore-stage-h and -gap on .kr-explore-row),
-     so the band closes the usual distance under the words and a running
-     sketch draws into the padding. */
-  .kr-home .kr-explore-row {
-    margin-bottom: calc(-1 * (var(--kr-explore-stage-h) + var(--kr-explore-stage-gap))); } }
-
-/* Seven Explore tiles, two to a row on a phone, left Contact alone and
-   centred on a fourth row, where it read as left over. The last tile of
-   an odd count takes the whole row instead and sets its icon beside its
-   words, so it reads as the row that closes the set. */
-@media only screen and (max-width: 767px) {
-  .kr-explore-row > :last-child:nth-child(odd) {
-    flex: 0 0 100%;
-    max-width: 100%; }
-  .kr-explore-row > :last-child:nth-child(odd) .kr-explore-link {
-    display: grid;
-    grid-template-columns: auto auto;
-    justify-content: center;
-    align-items: center;
-    column-gap: 14px;
-    text-align: left; }
-  .kr-explore-row > :last-child:nth-child(odd) .kr-explore-link__icon {
-    grid-row: 1 / span 2;
-    margin: 0; }
-  .kr-explore-row > :last-child:nth-child(odd) .kr-explore-stage {
-    grid-column: 1 / -1; } }
+    row-gap: 0; } }
 
 /* --- Photo strip (renderPhotoStrip) -----------------------------------------
    Ten photographs in an Owl row near the foot of most pages. Each frame is
@@ -4019,17 +4069,9 @@ box-shadow: none; }
 /* Bands with edges hold the unit inside both of them, and the open
    section before a band closes with the same space, so the edge sits
    midway between the two blocks of content. */
-.kr-home .kr-explore-area,
 .kr-home .kr-home-quote {
   padding-top: var(--kr-section-y);
   padding-bottom: var(--kr-section-y); }
-
-/* The homepage's quotation band follows the tinted Explore band, so it
-   takes the page's own surface there and keeps its hairlines: the bands
-   still alternate (Now plain, Explore tinted, the quotation plain, then
-   the dark footer). literature.html keeps the tint. */
-.kr-home .kr-home-quote {
-  background: var(--kr-surface-0); }
 
 /* The numbers close the Latest section, and the Now strip follows the
    photographs, so both take the tight unit where they meet the section
@@ -4589,6 +4631,7 @@ a.kr-series-chip--kicker:is(:hover, :focus) {
      .kr-load-failed          a listing with nothing to show, or no data
      .kr-pagination           the pager under the blog grid
      .kr-series-intro         a series page's lede and count
+     #lab-grid                the Lab's grid of interactive posts
      .kr-series-band          "Read in order", three series under the blog grid
      .kr-topic-posts          a few posts on a page's own subject
    Built by: renderFilterBar, krInitTogglePanels, krBuildListSearchBox,
@@ -4646,13 +4689,15 @@ a.kr-series-chip--kicker:is(:hover, :focus) {
    shifted by 0.13 to 0.22 for the same reason, so they hold the same
    room. The first row of cards alone reaches past the fold at 1440x900
    and 412x823, so when the real grid comes out shorter than the hold
-   (a one-part series) the footer moves up only below the fold.
+   (a one-part series) the footer moves up only below the fold. The Lab's
+   grid (#lab-grid, js/lab.js) fills the same way and holds the same room.
    The blog grid is scoped to .kr-listing because writing.html reuses
    the #blog-grid id for a list of its own. */
 @media (scripting: enabled) {
   .kr-listing #blog-grid:empty,
   #series-index-grid:empty,
-  #series-grid:empty {
+  #series-grid:empty,
+  #lab-grid:empty {
     min-height: 100vh; } }
 
 /* --- Empty and failed listings ---------------------------------------------
@@ -4909,8 +4954,8 @@ a.gallery-filter-btn:focus:not(:hover) {
    The top of the gallery is three light layers: the banner (title,
    Slideshow, Photo map, Follow), a one-line .kr-gallery-intro, and the
    filter bar. The bar (.kr-gallery-bar) is a line of pill toggles
-   (Subject, Place, Orientation) in gallery.html, each naming the filter
-   in force, with the number of photographs shown and, while any filter
+   (Subject, Place, Orientation, Colour) in gallery.html, each naming the
+   filter in force, with the number of photographs shown and, while any filter
    is in force, a Reset text button at its end (.kr-gallery-status). A
    toggle opens its row below the line, one row at a time (js/gallery.js,
    openFilterRow); the Subject row ends in a small link to how subjects
@@ -5036,12 +5081,15 @@ a.gallery-filter-btn:focus:not(:hover) {
 /* One word a toggle on a phone: the filter's name until one is set, then
    the value in its place ("Wildlife", in the action colour). The word
    left out is clipped, not removed, so the button's name stays "Subject
-   Wildlife". Three toggles then fit one line; should a long value not,
-   the line scrolls sideways as the pill rows below it do
-   (.gallery-filters--scroll), and a very long value stops at 6em with an
-   ellipsis (its row, once open, names it in full). The padding keeps the
-   focus ring inside the scroller, and the end pills' auto margins centre
-   the line while it fits; the panel gives up its side padding for it. */
+   Wildlife". The four toggles then fit one line from about 430px; below
+   that, or with a long value, the line scrolls sideways as the pill rows
+   below it do (.gallery-filters--scroll), and a very long value stops at
+   6em with an ellipsis (its row, once open, names it in full). The
+   max-width is what lets it scroll: the bar is a wrapping column there,
+   which sizes the line to its content, and a line wider than the screen
+   ran off its edge. The padding keeps the focus ring inside the
+   scroller, and the end pills' auto margins centre the line while it
+   fits; the panel gives up its side padding for it. */
 @media only screen and (max-width: 575px) {
   .kr-gallery-toggle {
     position: relative; }
@@ -5057,6 +5105,7 @@ a.gallery-filter-btn:focus:not(:hover) {
     flex-wrap: nowrap;
     justify-content: flex-start;
     gap: 6px;
+    max-width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
     padding: 7px 6px 9px;
@@ -5127,6 +5176,62 @@ a.gallery-filter-btn:focus:not(:hover) {
     row-gap: 2px; }
   .kr-place-trail ~ .kr-facet-row__btns {
     flex-basis: 100%; } }
+
+/* --- Colour filter (.kr-hue) --------------------------------------------------
+   The gallery's Colour row: renderColourBar (js/gallery.js) draws a pill
+   for each colour family, led by a round swatch, a span.kr-hue with
+   .kr-hue--<family> (red to brown; the class is built by script from
+   the family's key). The swatch is decoration beside the family's name.
+   Its ring is the pill's own text colour, so the yellow swatch keeps an
+   edge on the light page, the blue one on the dark page and the red one
+   on the red of a pressed pill. The nine --kr-hue-* tokens are the
+   swatches' colours, the same in both themes: they stand for the colours
+   of photographs, not of the page. (.kr-swatch is the demos' legend
+   square, §12.) */
+:root {
+  --kr-hue-red: #d5403a;
+  --kr-hue-orange: #ea8a2c;
+  --kr-hue-yellow: #f0c930;
+  --kr-hue-green: #4e9e4b;
+  --kr-hue-teal: #2c9c9a;
+  --kr-hue-blue: #3d7fd6;
+  --kr-hue-purple: #8a5fc7;
+  --kr-hue-pink: #e56fa6;
+  --kr-hue-brown: #8b5c3c; }
+
+.kr-hue {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px currentColor; }
+
+.kr-hue--red {
+  background: var(--kr-hue-red); }
+
+.kr-hue--orange {
+  background: var(--kr-hue-orange); }
+
+.kr-hue--yellow {
+  background: var(--kr-hue-yellow); }
+
+.kr-hue--green {
+  background: var(--kr-hue-green); }
+
+.kr-hue--teal {
+  background: var(--kr-hue-teal); }
+
+.kr-hue--blue {
+  background: var(--kr-hue-blue); }
+
+.kr-hue--purple {
+  background: var(--kr-hue-purple); }
+
+.kr-hue--pink {
+  background: var(--kr-hue-pink); }
+
+.kr-hue--brown {
+  background: var(--kr-hue-brown); }
 
 /* --- Filter panel --------------------------------------------------------------
    The faceted panel on the blog listing and the series index: one
@@ -5409,9 +5514,175 @@ a.gallery-filter-btn:focus:not(:hover) {
 
 /* A new part's "New" badge (§02, krMarkNewPost) sits top right: the part
    chip has the top left. */
-#series-grid .kr-new-badge {
+#series-grid .kr-new-badge,
+#lab-grid .kr-new-badge {
   right: 10px;
   left: auto; }
+
+/* --- The Lab (lab.html, js/lab.js) --------------------------------------------
+   Every interactive post in one grid, #lab-grid: the stacked cards (§08)
+   with their part chips, under a heading for each series. It has no
+   rules of its own beyond the two lists it joins above (the hold on an
+   empty grid, the "New" badge's corner). A heading is the section
+   heading (§05), set left and small, in a full-width column of the
+   grid, so the groups are one row and the hold, the failure note and
+   the no-script list work as the other listings' do; the intro is
+   .kr-series-intro. data-live-play="view" on the grid plays each card's
+   sketch while its cover is on screen (§20). */
+
+/* --- Layout switch and the archive view (js/blog.js) -------------------------
+   The blog toolbar's Type panel (#blog-type, in blog.html: Cards or List,
+   the gallery-filter-btn pills every panel uses) swaps the mosaic for
+   .kr-archive: every post the search and filters
+   leave, a line each, under a heading per year while the sort is by date
+   (.kr-archive--flat when it is not, where each row carries its year).
+   Script builds .kr-archive and everything in it. A row is date, title,
+   then what there is to say in a few words; on a phone the words drop
+   under the title. Titles are ink, like card titles, and turn the action
+   colour on hover; the series link is underlined so it reads as a link
+   while staying muted. */
+.kr-archive {
+  max-width: 880px;
+  margin: 0 auto 8px;
+  text-align: left; }
+
+.kr-archive__year {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 40px 0 4px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--kr-hairline);
+  font-family: 'Lora', 'Lora Fallback', Georgia, serif;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--kr-ink); }
+
+.kr-archive__year:first-child {
+  margin-top: 8px; }
+
+.kr-archive__count {
+  font-family: 'Poppins', 'Poppins Fallback', sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--kr-muted); }
+
+.kr-archive__list {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+
+.kr-archive__row {
+  display: grid;
+  grid-template-columns: 4.25em minmax(0, 1fr) auto;
+  gap: 2px 18px;
+  align-items: baseline;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--kr-hairline); }
+
+.kr-archive--flat .kr-archive__row {
+  grid-template-columns: 7em minmax(0, 1fr) auto; }
+
+.kr-archive__date {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--kr-muted); }
+
+.kr-archive .kr-archive__title {
+  font-family: 'Lora', 'Lora Fallback', Georgia, serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--kr-ink); }
+
+.kr-archive .kr-archive__title:hover,
+.kr-archive .kr-archive__title:focus-visible {
+  color: var(--kr-action); }
+
+.kr-archive__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 2px 14px;
+  font-size: 12.5px;
+  color: var(--kr-muted); }
+
+.kr-archive .kr-archive__series {
+  color: var(--kr-muted);
+  text-decoration: underline;
+  text-decoration-color: var(--kr-hairline);
+  text-underline-offset: 3px; }
+
+.kr-archive .kr-archive__series:hover,
+.kr-archive .kr-archive__series:focus-visible {
+  color: var(--kr-action);
+  text-decoration-color: currentColor; }
+
+.kr-archive__live {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--kr-eyebrow); }
+
+.kr-archive__mins {
+  min-width: 3.6em;
+  text-align: right;
+  font-variant-numeric: tabular-nums; }
+
+@media (max-width: 767.98px) {
+  .kr-archive__row,
+  .kr-archive--flat .kr-archive__row {
+    grid-template-columns: 4.25em minmax(0, 1fr); }
+  .kr-archive--flat .kr-archive__row {
+    grid-template-columns: 6.5em minmax(0, 1fr); }
+  .kr-archive .kr-archive__title {
+    font-size: 17px; }
+  .kr-archive__meta {
+    grid-column: 2;
+    justify-content: flex-start; }
+  .kr-archive__mins {
+    min-width: 0; } }
+
+/* --- Start here (blog.html; built by js/blog.js) -----------------------------
+   Four posts picked by hand for a first visit, under the first page of
+   posts and its pager while the listing is not narrowed (blog.js sets
+   [hidden] otherwise), built like the "Read in order" band under it: the
+   section heading (§05) and a row of post cards (.blog-card, §08), each
+   with its reason as the chip on its cover (.kr-series-chip). The band's
+   spacing is the series band's, below. Without script the picks stay a
+   centred list of reasons and titles (.kr-start__list); script replaces
+   it with the cards. Under, not over, the grid: the newest post starts
+   on the first screen (smoke: check_desktop_geometry). */
+.kr-start__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: center; }
+
+.kr-start__item {
+  margin-bottom: 14px; }
+
+.kr-start__why {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--kr-eyebrow); }
+
+.kr-start .kr-start__link {
+  font-family: 'Lora', 'Lora Fallback', Georgia, serif;
+  font-size: 18px;
+  color: var(--kr-ink); }
+
+.kr-start .kr-start__link:hover,
+.kr-start .kr-start__link:focus-visible {
+  color: var(--kr-action); }
 
 /* --- Series band (generate_series_band.py) -----------------------------------
    "Read in order" under the blog grid: an eyebrow, heading and lede (the
@@ -5424,22 +5695,26 @@ a.gallery-filter-btn:focus:not(:hover) {
    clamp cut every one of them mid-sentence. The cards of a row are
    stretched to one height (.blog-card is height: 100% in a flex row),
    so they stay level however long each summary runs. */
-.kr-series-band {
+.kr-series-band,
+.kr-start {
   margin-top: 56px;
   padding-top: 56px;
   border-top: 1px solid var(--kr-hairline); }
 
-.kr-series-band .section-heading {
+.kr-series-band .section-heading,
+.kr-start .section-heading {
   margin-bottom: 36px; }
 
-.kr-series-band .blog-card-excerpt {
+.kr-series-band .blog-card-excerpt,
+.kr-start .blog-card-excerpt {
   margin-bottom: 0; }
 
 .kr-series-band .kr-btn-row {
   margin-top: 8px; }
 
 @media only screen and (max-width: 767px) {
-  .kr-series-band {
+  .kr-series-band,
+  .kr-start {
     margin-top: 40px;
     padding-top: 40px; } }
 
@@ -7130,6 +7405,254 @@ body.kr-cite-docked .kr-share-tab {
 
 .kr-post-end .kr-comments-body {
   margin-top: 18px; }
+
+/* --- From my shelf (js/post-shelf.js) -----------------------------------
+   The slot between the sign-off and Up next on a post whose posts.json
+   record names authors in `shelf`: renderPostEnd makes the hidden, empty
+   section.kr-post-shelf and loads the script, which builds everything
+   inside it and shows it, so every class here is applied by script alone.
+   One card per author (.kr-post-shelf__author): the name, my books as
+   rows (title and series, my rating, the year read), a saved passage or
+   two, and the links to the Quote Wall and Every Book filtered to that
+   author. The stars are the review column's (.kr-rating__stars, §11), a
+   size down, and decoration: the number beside them is the rating.
+   Divs with list roles and spans rather than li and p, so the post's
+   prose rules ("Links in a post", above) do not reach in. Reads --kr-ink,
+   --kr-muted, --kr-action, --kr-action-hover, --kr-hairline,
+   --kr-surface-card and --kr-radius-lg, so there is no dark twin. Hidden
+   in print with the rest of the band (§23). */
+.kr-post-shelf {
+  font-family: 'Poppins', 'Poppins Fallback', sans-serif;
+  color: var(--kr-ink); }
+
+.kr-post-shelf__author {
+  padding: 22px 28px 18px;
+  border: 1px solid var(--kr-hairline);
+  border-radius: var(--kr-radius-lg);
+  background: var(--kr-surface-card); }
+
+.kr-post-shelf__author + .kr-post-shelf__author {
+  margin-top: 16px; }
+
+/* (0,2,1): level with the dark theme's post-heading colour, and after it. */
+.kr-post-end .kr-post-shelf h3 {
+  margin: 0 0 12px;
+  padding: 0;
+  font-family: 'Lora', 'Lora Fallback', Georgia, serif;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--kr-ink); }
+
+/* A row is the book and its facts side by side; where the two do not fit
+   (a phone, a long title) the facts drop to a line of their own. */
+.kr-post-shelf__book {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 20px;
+  padding: 9px 0;
+  border-top: 1px solid var(--kr-hairline);
+  font-size: 14.5px;
+  line-height: 1.45; }
+
+.kr-post-shelf__what {
+  flex: 1 1 220px;
+  min-width: 0; }
+
+.kr-post-shelf__title {
+  font-weight: 500; }
+
+.kr-post-shelf__series,
+.kr-post-shelf__read,
+.kr-post-shelf__source {
+  font-size: 13px;
+  color: var(--kr-muted); }
+
+.kr-post-shelf__series {
+  margin-left: 4px; }
+
+.kr-post-shelf__facts {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap; }
+
+.kr-post-shelf .kr-rating__stars {
+  font-size: 15px; }
+
+.kr-post-shelf__score {
+  min-width: 1ch;
+  font-weight: 500; }
+
+/* A fixed width, so the stars line up down the rows whether a book was
+   read once ("2022") or again ("2023, re-read 2025"). */
+.kr-post-shelf__read {
+  min-width: 10em;
+  text-align: right; }
+
+.kr-post-shelf__passages {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px 28px;
+  padding: 18px 0 4px;
+  border-top: 1px solid var(--kr-hairline); }
+
+.kr-post-shelf__passage {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 14px;
+  border-left: 2px solid var(--kr-hairline); }
+
+.kr-post-shelf__quote {
+  font-family: 'Lora', 'Lora Fallback', Georgia, serif;
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1.55; }
+
+.kr-post-shelf__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--kr-hairline); }
+
+/* (0,2,1): level with the dark theme's link colour (§02), and after it.
+   The 24px line is also the link's height (WCAG 2.5.8). */
+.kr-post-shelf a.kr-post-shelf__link {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  color: var(--kr-action);
+  text-decoration: none; }
+
+.kr-post-shelf a.kr-post-shelf__link:hover,
+.kr-post-shelf a.kr-post-shelf__link:focus-visible {
+  color: var(--kr-action-hover);
+  text-decoration: underline;
+  text-underline-offset: 3px; }
+
+@media (max-width: 575px) {
+  .kr-post-shelf__author {
+    padding: 20px 18px 14px; }
+
+  /* On a phone a row is the title, then its facts; the series would be a
+     third line on every book, and the strip is meant to be short. */
+  .kr-post-shelf__series {
+    display: none; }
+
+  .kr-post-shelf__read {
+    min-width: 0;
+    text-align: left; } }
+
+/* --- Replies from Bluesky (js/bluesky-replies.js) ------------------------
+   The comments' second door, in the comments section over the giscus
+   frame: an invitation with a "Reply on Bluesky" button (a .kr-btn, §03),
+   a count line (a .kr-label, §02, and the slot's one live region) and
+   the replies to my Bluesky post about this post, as nested role="list"
+   boxes. renderPostEnd adds the empty .kr-bsky-replies only on a post
+   that data/bluesky.json lists, and the script builds everything inside
+   it, so every class here is applied by script alone. Empty, the slot is
+   not displayed: a script that never arrives leaves no gap.
+   Divs rather than p and li, so the post's prose rules ("Links in a
+   post", above) do not reach in. A link inside a reply keeps the post's
+   red underline; the author link is ink until hovered, like the
+   sign-off's name. Reads --kr-ink, --kr-muted, --kr-action and
+   --kr-hairline, so there is no dark twin. Hidden in print with the
+   comments (§23). */
+.kr-bsky-replies {
+  margin-top: 18px;
+  padding-bottom: 26px;
+  border-bottom: 1px solid var(--kr-hairline);
+  color: var(--kr-ink); }
+
+.kr-bsky-replies:empty {
+  display: none; }
+
+.kr-bsky-invite {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px; }
+
+.kr-bsky-invite__text {
+  flex: 1 1 280px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--kr-muted); }
+
+/* Empty until the replies arrive, and then it takes no room: it has to
+   be in the page beforehand for its text to be announced. */
+.kr-bsky-count:not(:empty) {
+  margin: 26px 0 14px; }
+
+.kr-bsky-list,
+.kr-bsky-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 18px; }
+
+/* A reply to a reply steps in behind a rule. */
+.kr-bsky-thread--nested {
+  gap: 14px;
+  margin-top: 14px;
+  padding-left: 16px;
+  border-left: 2px solid var(--kr-hairline); }
+
+/* The 24px line is also the height of the links in it (WCAG 2.5.8). */
+.kr-bsky-reply__head,
+.kr-bsky-reply__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 12px;
+  line-height: 24px; }
+
+.kr-bsky-reply__head {
+  font-size: 14px; }
+
+/* (0,2,1): level with the dark theme's link colour (§02), and after it. */
+.kr-bsky-replies a.kr-bsky-reply__author {
+  display: inline-block;
+  color: var(--kr-ink);
+  text-decoration: none; }
+
+.kr-bsky-replies a.kr-bsky-reply__author:hover,
+.kr-bsky-replies a.kr-bsky-reply__author:focus-visible {
+  color: var(--kr-action);
+  text-decoration: underline;
+  text-underline-offset: 3px; }
+
+.kr-bsky-reply__name {
+  font-weight: 600; }
+
+.kr-bsky-reply__handle,
+.kr-bsky-reply__date,
+.kr-bsky-reply__meta {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--kr-muted); }
+
+/* The words as written: line breaks kept, and a long address broken
+   rather than pushing the column wide on a phone. */
+.kr-bsky-reply__text {
+  margin-top: 2px;
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere; }
+
+.kr-bsky-reply__meta {
+  margin-top: 4px; }
+
+.kr-bsky-more {
+  display: inline-block; }
 
 /* ==== :: §11 Post components ==== */
 
@@ -10260,6 +10783,63 @@ ol.references {
   .kr-toolbar label {
     min-height: 32px; } }
 
+/* --- Run tools ----------------------------------------------------------
+   The icon buttons js/kr-viz.js adds after the status line: Copy link to
+   this run and full screen (.kr-tool, each a .kr-btn.secondary) in a
+   .kr-tools group, with the note that confirms a copy (.kr-tools__note,
+   shown through its hidden attribute). The status takes the toolbar's
+   free width, so the group ends the row, or its own row, on the right.
+   Full screen, the frame is a column as tall as the screen that scrolls
+   when it must, and the main canvas (.kr-lead) takes the height the rest
+   leaves; the script then draws at that height.
+   Classes only script applies: all four. */
+.kr-toolbar .kr-status {
+  flex: 1 1 auto;
+  text-align: right; }
+
+.kr-tools {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-left: auto; }
+
+.kr-viz > .kr-tools {
+  margin-top: 12px; }
+
+.kr-viz .kr-tool {
+  width: 32px;
+  padding: 5px 0; }
+
+.kr-tool svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5; }
+
+.kr-tools__note {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: calc(100% + 6px);
+  padding: 3px 8px;
+  border: 1px solid var(--viz-border);
+  border-radius: var(--kr-radius-sm);
+  background: var(--viz-surface);
+  color: var(--viz-ink);
+  white-space: nowrap; }
+
+.kr-viz:fullscreen {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  scrollbar-gutter: stable;
+  border-radius: 0; }
+
+.kr-viz:fullscreen > .kr-lead {
+  flex-grow: 1; }
+
 /* --- Nerd mode, maths and the values table ------------------------------
    js/nerd-mode.js has been shared for a while; the styling it depends on
    was not, so both Optimizing Your Schedule posts carried an identical
@@ -10623,6 +11203,41 @@ html.nerd-mode-on .non-nerd {
   .single-portfolio-content .kr-tile-edits {
     border: 1px solid CanvasText; } }
 
+/* --- Gallery by the numbers (gallery.js renderShotFigures) --------------
+   Three figures under the grid on how the frames were shot, drawn as the
+   reading page's figures are (.kr-figures and .kr-figure, §14), each over
+   a short list of rows: a label, a bar in the brand gradient as long as
+   the row's share of the largest (its width is set inline, from the
+   data) and the count. One figure to a row on a phone, where two abreast
+   left the bars no room. Script-only classes: .kr-shot, .kr-shot__bar. */
+@media (max-width: 700px) {
+  .kr-figures-area .kr-figures--shot {
+    grid-template-columns: 1fr; } }
+
+.kr-shot {
+  display: grid;
+  gap: 6px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  color: var(--kr-muted); }
+
+.kr-shot li {
+  display: grid;
+  grid-template-columns: minmax(0, 10em) 1fr 2.5em;
+  align-items: center;
+  gap: 8px; }
+
+.kr-shot li > :last-child {
+  text-align: right; }
+
+.kr-shot__bar {
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--kr-brand-gradient); }
+
 /* --- Gallery filter morph (gallery.js krGalleryMorph) -----------------
    During a filter change every tile carries a view-transition-name, so
    the frames that survive slide to their new rows. Scoped to the html
@@ -10868,9 +11483,16 @@ button.mfp-arrow {
     padding-right: 0; }
   .kr-lightbox .kr-lightbox-what {
     flex: 1 0 100%;
-    padding-right: 64px; } }
+    padding-right: 64px; }
+  .kr-lightbox .kr-lightbox-exif {
+    flex: 1 0 100%; } }
 
-.kr-lightbox .mfp-counter {
+/* The counter, and the exposure line a photograph with camera data gets
+   in its caption (.kr-lightbox-exif, krLightboxCaption in lightbox.js):
+   both in the grey of the frame's number, 5.7:1 on the lightbox's
+   ground. On a phone the line takes a row of its own, above. */
+.kr-lightbox .mfp-counter,
+.kr-lightbox .kr-lightbox-exif {
   color: #8a8a8a;
   font-size: 12px; }
 
@@ -12880,9 +13502,25 @@ button.kr-cal__cell {
   color: #fffaf4; }
 
 /* --- Cover wall (books.html, js/bookwall.js) ----------------------------
-   Every rated book as a tile: its Open Library cover, or for a book with
-   no ISBN the typographic cover (below), which fills the tile the same
-   way. The stars show on hover. */
+   Every rated book as a tile: the site's small copy of its cover, or for
+   a book with no picture the typographic cover (below), which fills the
+   tile the same way. The stars show on hover and on keyboard focus, with
+   .book-wall-note under them (the year or the page count) while the wall
+   is sorted by one. Above the wall, the listings' toolbar and panels
+   (§09, "Filter panel"): .book-wall-toolbar is the Filter and Sort
+   toggles, #book-wall-panel the facet rows, #book-wall-sort the sort
+   pills; script fills both panels. krListEmpty's note (§09) takes the
+   grid's whole width here, since the wall is a grid, not a .row. */
+.book-wall-toolbar {
+  margin-bottom: 14px; }
+
+.book-wall > .kr-list-empty {
+  grid-column: 1 / -1; }
+
+/* Its Clear all filters only while the panel is shut, as on the blog. */
+.kr-filter-panel:not([hidden]) ~ .book-wall .kr-list-empty__filters {
+  display: none; }
+
 .book-wall {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
@@ -12923,46 +13561,29 @@ button.kr-cal__cell {
   opacity: 0;
   transition: opacity 0.25s ease; }
 
-.book-wall-item:hover .book-wall-stars {
+.book-wall-item:hover .book-wall-stars,
+.book-wall-item:focus-visible .book-wall-stars {
   opacity: 1; }
 
+.book-wall-note {
+  display: block;
+  margin-top: 1px;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: var(--kr-show-ink); }
+
 /* Holding the wall's place while books.json loads. The skeleton tiles are
-   in books.html itself, so the grid is tall from the first paint; the
-   rating pills are drawn with the data, so their row keeps its height
-   while :empty: three rows up to 373px, two to 991px (the larger pills
-   from 576px make those rows 2px taller), then one; the six pills wrap
-   at those widths. Under (scripting: enabled), as the listings' holds
-   are (§09); without scripts the skeletons would shimmer for ever, so
-   they go. */
-@media (scripting: enabled) {
-  #book-wall-filters:empty {
-    min-height: 136px; } }
-
-@media (scripting: enabled) and (min-width: 374px) {
-  #book-wall-filters:empty {
-    min-height: 88px; } }
-
-@media (scripting: enabled) and (min-width: 576px) {
-  #book-wall-filters:empty {
-    min-height: 90px; } }
-
-@media (scripting: enabled) and (min-width: 992px) {
-  #book-wall-filters:empty {
-    min-height: 41px; } }
-
-/* If books.json fails, bookwall.js empties the grid and no pills come,
-   so the row lets its height go rather than stand over the message. */
-#book-wall-filters:empty:has(~ #book-wall-grid:empty) {
-  min-height: 0; }
-
+   in books.html itself, so the grid is tall from the first paint, and so
+   is the toolbar; the panels open shut, so filling them moves nothing.
+   Without scripts the skeletons would shimmer for ever, so they go. */
 @media (scripting: none) {
   #book-wall-grid .kr-skeleton {
     display: none; } }
 
 /* --- Typographic cover (krTypeCover in bookshelf.js) --------------------
-   What a book shows when there is no picture of it: Open Library has no
-   scan for the ISBN, a hotlinked image has gone, or there was never an
-   ISBN. A cloth-bound front: title in Lora, the series in italic under
+   What a book shows when there is no picture of it: the site has no copy
+   of its cover yet and Open Library no scan for the ISBN, or the image
+   would not load. A cloth-bound front: title in Lora, the series in italic under
    it, the author in small caps at the foot under a short rule, and down
    the left edge the rating colour the book's spine has on the shelf (the
    band carries .kr-spine--rN, so the two cannot drift apart).
@@ -13528,7 +14149,8 @@ button.kr-cal__cell {
 
 /* music.html: the record crate of the most played albums (js/albums.js,
    from data/topalbums.json, sleeve art hotlinked from Last.fm), the Find
-   Me cards and the lastfmstats charts behind a facade.
+   Me cards, the listening history (js/listening.js, from the file
+   refresh_listening.py keeps) and the lastfmstats charts behind a facade.
    Tokens: --kr-sleeve (a sleeve's size), and --i and --kr-n, which
    albums.js sets inline (a sleeve's place in the crate, the crate's
    count). */
@@ -13787,6 +14409,53 @@ button.kr-cal__cell {
 
 [data-theme="dark"] .kr-findme-chips span {
   color: #fc9a9a; }
+
+/* --- Listening history --------------------------------------------------
+   The picture of the listening history that leads Listening Stats on
+   music.html (js/listening.js, from the file refresh_listening.py
+   keeps, a record per week): a line of introduction, the listening
+   calendar and six figures, in a block that stays hidden (the hidden
+   attribute) until the file holds a week with something played. The
+   calendar and the figures are the reading pages' components, built
+   with the same classes (§14: .kr-cal with its rows, cells, legend,
+   table and card; .kr-figures and .kr-figure), so their rules are not
+   restated. What differs is the end of a row. A year of scrobbles runs
+   to five figures where a year of books runs to three, so the total has
+   a wider column, laid out as a grid: the bar's share of its track is
+   the year's share of the busiest year, and the numbers line up on the
+   right.
+   Classes only script applies: every .kr-cal__* and .kr-figure* one. */
+.kr-listening {
+  margin-bottom: 44px; }
+
+.kr-listening__lede {
+  max-width: 62ch;
+  margin: 0 auto 26px;
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--kr-muted); }
+
+.kr-listening__figures {
+  margin-top: 34px; }
+
+.kr-cal--listening .kr-cal__grid--week .kr-cal__row {
+  grid-template-columns: 44px 1fr 116px; }
+
+.kr-cal--listening .kr-cal__total {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto; }
+
+.kr-cal--listening .kr-cal__bar {
+  max-width: none; }
+
+.kr-cal--listening .kr-cal__n {
+  min-width: 6ch;
+  text-align: right; }
+
+@media (max-width: 767px) {
+  .kr-cal--listening .kr-cal__grid--week .kr-cal__row {
+    grid-template-columns: 38px 1fr 86px; } }
 
 /* --- Listening charts ---------------------------------------------------
    lastfmstats charts on music.html. The frame is a third-party page of
@@ -14220,13 +14889,18 @@ a.ds-text-link:focus-visible {
 .ds-stars {
   margin-left: 12px; }
 
-/* The apps and the series (.ds-app): a poster in the card's own colours
-   (--ds-a to --ds-b, set on the card in the markup, the way a language
-   dot's colour is) with its icon, then the title, one line, and a foot:
-   "Open the app", which is the stretched title link's promise, and the
-   source on GitHub, a small link of its own above the stretch. A series
-   card's poster is its hover stage too (data-live, js/covers*.js): the
-   sketch runs over the colours, and they stay where sketches do not. */
+/* The apps and the series (.ds-app): a poster, then the title, one line,
+   and a foot: "Open the app", which is the stretched title link's
+   promise, and the source on GitHub, a small link of its own above the
+   stretch. The poster is a dark stage (its colour is set with the other
+   stages', §20) and a sketch host: data-live on the poster names the
+   sketch (js/covers-site.js, js/covers.js), and data-live-play="view" on
+   the row plays it while the poster is on screen, a still frame under
+   reduced motion. The host is the poster, not the card: a host's
+   children are positioned (§20), which would shrink the title's
+   stretched link to the title. The icon is what a poster shows before
+   the sketch files arrive, and without script; it fades out under
+   .kr-live-on, which the engine sets while a sketch is mounted. */
 .ds-app {
   padding: 0;
   overflow: hidden; }
@@ -14240,22 +14914,25 @@ a.ds-text-link:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 104px;
+  height: 116px;
   margin-bottom: 16px;
   overflow: clip;
-  background: linear-gradient(135deg, var(--ds-a), var(--ds-b));
   color: var(--kr-on-action-fill);
   font-size: 40px;
+  /* A press on the poster is a press on the card's link behind it. */
+  pointer-events: none;
   transition: filter 0.3s ease; }
+
+.ds-app__poster > :not(.kr-live-cover) {
+  transition: opacity 260ms ease; }
+
+.ds-app__poster.kr-live-on > :not(.kr-live-cover) {
+  opacity: 0; }
 
 .ds-app__poster .kr-glyph {
   width: 40px;
   height: 40px;
   color: inherit; }
-
-.ds-app__stage {
-  position: absolute;
-  inset: 0; }
 
 .ds-project-card--link.ds-app:hover .ds-app__poster,
 .ds-project-card--link.ds-app:focus-within .ds-app__poster {
@@ -14312,7 +14989,40 @@ a.ds-text-link:focus-visible {
 /* The code: compact tiles, a top edge in the main language's colour
    (--ds-lang, set in the markup) and the GitHub mark by the name. */
 .ds-repo {
-  border-top: 3px solid var(--ds-lang); }
+  border-top: 3px solid var(--ds-lang);
+  overflow: clip; }
+
+/* A picture from the project at the top of a tile (img/code/<repo>.webp,
+   640 x 360): edge to edge under the language edge like an app's poster
+   above, clipped to the card's corners, with the poster's 16px below it.
+   The negative margins undo the card's 18px 20px padding. It is the first
+   thing in the title's link, so lightbox.js leaves it alone (it wraps
+   only images outside a link) and a press on it is a press on the link.
+   The 16:9 box holds its space before the file arrives (no shift); the
+   tint shows while it loads, and the hairline is a shadow so it stays
+   out of the box's ratio. */
+.ds-repo__shot {
+  display: block;
+  width: calc(100% + 40px);
+  max-width: none;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  margin: -18px -20px 16px;
+  object-fit: cover;
+  background: var(--kr-surface-1);
+  box-shadow: 0 1px 0 var(--kr-hairline); }
+
+/* The link's own ring would wrap the picture and the title together and
+   be cut off at the card's clipped edge, so a tile draws its one ring on
+   the link's stretched ::after instead, just inside the card's edge. */
+.ds-repo h4 a:focus-visible {
+  outline: 0;
+  box-shadow: none; }
+
+.ds-repo h4 a:focus-visible::after {
+  border-radius: calc(var(--kr-radius-md) - 1px);
+  outline: 3px solid var(--site-focus-ring);
+  outline-offset: -3px; }
 
 .ds-repo h4 .kr-glyph {
   margin-right: 4px;
@@ -14809,6 +15519,14 @@ a.ds-text-link:focus-visible {
 @media (max-width: 991.98px) {
   .kr-journey__map {
     height: 280px; } }
+
+/* A stop on the map: a DOM marker (L.divIcon in about.js), which keeps
+   its size while the map flies between zooms. */
+.kr-journey__dot {
+  box-sizing: border-box;
+  border: 2px solid var(--kr-on-action-fill);
+  border-radius: 50%;
+  background: var(--kr-action-fill); }
 
 .kr-journey__credit {
   margin: 8px 0 0;
@@ -15996,12 +16714,16 @@ kbd.kr-palette-kbd,
 /* ==== :: §20 Live covers ==== */
 
 /* The sketches that run on hover: every post card's own (js/covers.js)
-   and the site's (js/covers-site.js: stat tiles, Explore links, About
+   and the site's (js/covers-site.js: stat tiles, About
    hobbies, publications, genres on the book wall, the gallery's globe),
    drawn by the engine in js/live-covers.js. initLiveCovers
    (shared-components.js) loads the three scripts on the first
    pointermove or focusin, and only where (hover: hover) and motion is
    allowed, so the stages below take room under the same condition.
+   A host inside data-live-play="view" (the Lab's grid, the portfolio's
+   posters) plays while it is on screen instead, on any device, and
+   shows one still frame under reduced motion; its page fetches the
+   scripts itself.
    Markup: data-live="<key>" makes an element a host; data-live-host on a
    child makes that child the canvas box; data-live-arg passes JSON to the
    sketch; data-live-under puts the canvas beneath the host's text.
@@ -16066,11 +16788,10 @@ kbd.kr-palette-kbd,
 [data-live-under].kr-live-on {
   border-radius: var(--kr-radius-md); }
 
-/* Stat tiles, Explore links and the About cards keep their type where it
+/* Stat tiles and the About cards keep their type where it
    is; the sketch runs in a stage of its own, a strip beneath the text (a
    corner box on the About cards) that darkens only while running. */
-.kr-stat-stage,
-.kr-explore-stage {
+.kr-stat-stage {
   width: 100%;
   border-radius: 8px;
   overflow: clip;
@@ -16081,10 +16802,6 @@ kbd.kr-palette-kbd,
   min-width: 112px;
   height: 40px;
   margin-top: 10px; }
-
-.kr-explore-stage {
-  height: var(--kr-explore-stage-h);
-  margin-top: var(--kr-explore-stage-gap); }
 
 .kr-live-host > .kr-hobby-stage {
   position: absolute;
@@ -16097,14 +16814,17 @@ kbd.kr-palette-kbd,
   background: transparent;
   transition: background-color 600ms ease; }
 
+/* The portfolio's posters (§16) are the same stage at rest: their
+   sketches play whenever they are on screen. */
 .kr-live-on > .kr-stat-stage,
-.kr-live-on > .kr-explore-stage,
-.kr-live-on > .kr-hobby-stage {
+.kr-live-on > .kr-hobby-stage,
+.kr-hero-latest__stage,
+.kr-hero-latest--up .kr-hero-latest__more,
+.ds-app__poster {
   background: #161616; }
 
 /* The stages fade in slowly, the publication stage slowest. */
 .kr-stat-stage .kr-live-cover,
-.kr-explore-stage .kr-live-cover,
 .kr-hobby-stage .kr-live-cover {
   transition-duration: 600ms; }
 

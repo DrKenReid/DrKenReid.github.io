@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.kenreid.co.uk/data/schema/book-overrides.schema.json",
+  "title": "data/book-overrides.json",
+  "description": "Hand corrections to the year (y) and genres (gn) that .github/scripts/refresh_book_details.py gives a book in data/books.json, for the few its sources get wrong or cannot place. Written by hand; the script applies it on every run.",
+  "type": "object",
+  "required": [
+    "books"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "_help": {
+      "type": "string",
+      "description": "How to edit the file."
+    },
+    "books": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "g"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "g": {
+            "type": "string",
+            "pattern": "^[0-9]+$",
+            "description": "Goodreads book id, books.json's g."
+          },
+          "t": {
+            "type": "string",
+            "description": "The title, for whoever reads the file. Not used."
+          },
+          "gn": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "fantasy",
+                "litrpg",
+                "scifi",
+                "horror",
+                "crime",
+                "literary",
+                "history",
+                "science",
+                "philosophy",
+                "psychology",
+                "biography",
+                "politics"
+              ]
+            },
+            "description": "One or two genre keys, the main one first, in place of what the labels say."
+          },
+          "y": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9999,
+            "description": "The year it was first published, in place of any other."
+          }
+        }
+      }
+    }
+  }
+}

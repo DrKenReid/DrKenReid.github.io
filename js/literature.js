@@ -123,10 +123,11 @@
             var author = krEscapeHtml(r.author);
             var isbn = r.isbn13 || r.isbn || '';
             // Cover and link from bookshelf.js, as the shelf builds them:
-            // the matching book's Goodreads cover, then Open Library's.
+            // the site's full copy of the matching book's cover, then Open
+            // Library's for the review's ISBN.
             var shelf = window.krBookshelf;
             var hit = reviewedBook(r, books || []);
-            var coverAttrs = shelf ? shelf.coverAttrs({ c: hit && hit.c, i: isbn }, 'L') : '';
+            var coverAttrs = shelf ? shelf.coverAttrs({ g: hit && hit.g, k: hit && hit.k, s: hit && hit.s, i: isbn }, 'L') : '';
             var url = hit && shelf ? krEscapeHtml(shelf.goodreadsUrl(hit)) : '';
             var open = url ? '<a href="' + url + '" target="_blank" rel="noopener noreferrer" class="review-link-wrap">' : '';
             var close = url ? '</a>' : '';

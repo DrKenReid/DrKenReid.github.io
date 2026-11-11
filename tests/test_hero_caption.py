@@ -1,6 +1,6 @@
 """The homepage's evolved headline says what it does, in both motion settings.
 
-Slide 2's caption describes the canvas above it: how many triangles
+The hero's caption describes the canvas above it: how many triangles
 js/hero-evolve.js evolves, and, for a reader who asked for reduced
 motion, that the words are drawn as type instead. It once said "a
 hundred and ten" while the script drew 78, and told readers with reduced
@@ -21,9 +21,13 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def slide_two():
+    """The hero from its canvas to the end of the caption under it (the
+    canvas sits in a .kr-hero-title box with the "?" link, so the caption
+    is the first .kr-hero-note after it)."""
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     at = html.index('class="kr-hero-evolve"')
-    return html[at:html.index("</div>", at)]
+    note = html.index('class="kr-hero-note"', at)
+    return html[at:html.index("</p>", note) + len("</p>")]
 
 
 class CaptionMatchesTheCanvas(unittest.TestCase):

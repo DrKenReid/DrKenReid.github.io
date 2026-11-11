@@ -147,23 +147,86 @@ test('yearGroups: the newest year stands alone, and one year is one button', () 
     assert.deepEqual([...shelf.yearGroups([])], []);
 });
 
-/* Covers: Goodreads' (every book has one in books.json) at the size asked
-   for, then Open Library's for the ISBN as the fallback. Only about half
-   the books have an ISBN Open Library has a scan of, so a wall that asked
-   it alone set most of the Kindle series in type. */
-const GR = 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/';
+/* Covers: the site's own copies (two files per Goodreads id, for the
+   books the weekly refresh has marked: k the full copy, s the small one
+   for tiles), then Open Library's for the ISBN as the fallback. Only
+   about half the books have an ISBN Open Library has a scan of, so a
+   wall that asked it alone set most of the Kindle series in type. A
+   book's cover is never asked of Goodreads: the pages used to rebuild
+   its address from c, one request to another site per cover. */
+const FULL = '/img/covers/shelf/250638183.jpg';
+const SMALL = '/img/covers/shelf/s/250638183.jpg';
 
-test('goodreadsCover: resizes a sized name, sizes an unsized one, leaves others alone', () => {
-    assert.equal(shelf.goodreadsCover('1775316794l/250638183._SY475_.jpg', 320), GR + '1775316794l/250638183._SY320_.jpg');
-    assert.equal(shelf.goodreadsCover('1600000000l/12345.jpg', 475), GR + '1600000000l/12345._SY475_.jpg');
-    assert.equal(shelf.goodreadsCover('https://example.com/cover.jpg', 240), 'https://example.com/cover.jpg');
-    assert.equal(shelf.goodreadsCover('', 240), '');
+test('shelfCover: the copy that suits the use, the other one while it is missing', () => {
+    const both = { g: '250638183', k: 1, s: 1 };
+    assert.equal(shelf.shelfCover(both), FULL);
+    assert.equal(shelf.shelfCover(both, true), SMALL);
+    // A tile asked for the full copy of every book cost the wall 5 MB at
+    // load; it is the fallback now, not the choice.
+    assert.equal(shelf.shelfCover({ g: '250638183', k: 1 }, true), FULL);
+    assert.equal(shelf.shelfCover({ g: '250638183', s: 1 }), SMALL);
 });
 
-test('coverAttrs: Goodreads first, Open Library next, nothing without either', () => {
-    const both = shelf.coverAttrs({ c: '1/2._SY475_.jpg', i: '9780063021426' }, 'M');
-    assert.equal(both, ' src="' + GR + '1/2._SY320_.jpg" data-cover-next="' + shelf.coverUrl('9780063021426', 'M') + '"');
-    assert.equal(shelf.coverAttrs({ c: '1/2._SY475_.jpg' }, 'L'), ' src="' + GR + '1/2._SY475_.jpg"');
-    assert.equal(shelf.coverAttrs({ i: '9780063021426' }, 'M'), ' src="' + shelf.coverUrl('9780063021426', 'M') + '"');
+test('shelfCover: nothing for a book with no mark', () => {
+    // Not marked: the file may not be there, and asking would be a 404.
+    assert.equal(shelf.shelfCover({ g: '250638183', c: '1775316794l/250638183._SY475_.jpg' }), '');
+    assert.equal(shelf.shelfCover({ g: '250638183', c: '1775316794l/250638183._SY475_.jpg' }, true), '');
+    assert.equal(shelf.shelfCover({ k: 1, s: 1 }), '');
+    assert.equal(shelf.shelfCover(null, true), '');
+});
+
+test('coverAttrs: a tile takes the small copy, a card the full one, Open Library next', () => {
+    const book = { g: '250638183', k: 1, s: 1, c: '1/2._SY475_.jpg', i: '9780063021426' };
+    assert.equal(shelf.coverAttrs(book, 'M'), ' src="' + SMALL + '" data-cover-next="' + shelf.coverUrl('9780063021426', 'M') + '"');
+    assert.equal(shelf.coverAttrs(book, 'L'), ' src="' + FULL + '" data-cover-next="' + shelf.coverUrl('9780063021426', 'L') + '"');
+    assert.equal(shelf.coverAttrs({ g: '250638183', k: 1 }, 'M'), ' src="' + FULL + '"');
+    assert.equal(shelf.coverAttrs({ i: '9780063021426' }, 'L'), ' src="' + shelf.coverUrl('9780063021426', 'L') + '"');
     assert.equal(shelf.coverAttrs({}, 'M'), '');
+});
+
+test('coverAttrs: a book with no copy on the site never asks Goodreads for its cover', () => {
+    const unmarked = { g: '2', c: '1/2._SY475_.jpg' };
+    assert.equal(shelf.coverAttrs(unmarked, 'M'), '');
+    const withIsbn = shelf.coverAttrs({ ...unmarked, i: '9780063021426' }, 'M');
+    assert.equal(withIsbn, ' src="' + shelf.coverUrl('9780063021426', 'M') + '"');
+    assert.ok(!/gr-assets|goodreads/.test(withIsbn));
+});
+
+/* The books in progress are not on the read shelf. The weekly refresh
+   keeps a small copy of each cover in the same store and writes its path
+   into now.json; Reading Now shows that and nothing from anywhere else. */
+test('siteCover: a picture on this site, and no other address', () => {
+    assert.equal(shelf.siteCover('/img/covers/shelf/s/44327636.jpg'), '/img/covers/shelf/s/44327636.jpg');
+    // A list written before the refresh kept copies: not asked for.
+    assert.equal(shelf.siteCover('https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1552279563l/44327636._SY75_.jpg'), '');
+    assert.equal(shelf.siteCover('//example.com/img/x.jpg'), '');
+    assert.equal(shelf.siteCover('/img/x.jpg?next=https://example.com'), '');
+    assert.equal(shelf.siteCover(''), '');
+    assert.equal(shelf.siteCover(undefined), '');
+});
+
+test('no reading script names Goodreads\' image host', () => {
+    // The wall, Reading Now, the reviews and the slideshow build covers
+    // from the site's copies; an address on that host in one of them is
+    // a hotlink come back.
+    for (const name of ['bookshelf.js', 'bookwall.js', 'literature.js', 'slideshow.js']) {
+        const source = fs.readFileSync(path.join(ROOT, 'js', name), 'utf8');
+        assert.ok(!/gr-assets/.test(source), name);
+    }
+});
+
+test('the slideshow hangs the small copies on its wall and shows the full one in front', () => {
+    // slideshow.js has no helpers to load here; its own shelfCover is
+    // held to this file's by reading it out of the source.
+    const source = fs.readFileSync(path.join(ROOT, 'js', 'slideshow.js'), 'utf8');
+    const body = /const shelfCover = (\(b, small\) => \{[\s\S]*?\n {4}\};)/.exec(source);
+    assert.ok(body, 'shelfCover not found in slideshow.js');
+    const theirs = vm.runInNewContext('(' + body[1].replace(/;$/, '') + ')');
+    for (const book of [{ g: '250638183', k: 1, s: 1 }, { g: '250638183', k: 1 }, { g: '250638183', s: 1 }, { g: '250638183' }, null]) {
+        for (const small of [false, true]) {
+            const ours = shelf.shelfCover(book, small);
+            assert.equal(theirs(book, small), ours ? ours + '?slideshow' : '', JSON.stringify([book, small]));
+        }
+    }
+    assert.equal((source.match(/wallImage: item => item\.tile \|\|/g) || []).length, 2);
 });

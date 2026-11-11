@@ -122,103 +122,47 @@
 
   <h1 class="sr-only">Ken Reid — Data Scientist, photographer, guitarist, and avid reader</h1>
 
-  <!-- Hero Carousel. Slide 1 is laid out before Owl runs (style.css,
-       "Homepage sections"), so the page does not jump when the carousel
-       starts. Only its photograph is in the markup; the other slides
-       name theirs in data-bg, and the script at the foot of this page
-       applies them once the page has loaded. -->
+  <!-- Hero. One photograph, and a headline that is evolved rather than
+       typed (js/hero-evolve.js). The caption has a second wording for
+       reduced motion, where the script draws the words as type
+       (.kr-for-motion / .kr-for-still, style.css §02), and the script
+       writes its own triangle count into data-kr-evolve-shapes. The class
+       names are the template's, from when this was a carousel. -->
   <section class="welcome-area">
-    <div class="welcome-slides owl-carousel">
-
-      <!-- Slide 1 -->
+    <div class="welcome-slides">
       <div class="single-welcome-slide bg-overlay">
         <div class="slide-bg bg-img slide-bg--portrait" style="background-image: url(/img/bg-img/ken-hero.webp);"></div>
         <div class="container h-100">
           <div class="row h-100 align-items-center">
-            <div class="col-12 col-lg-8 col-xl-6">
-              <div class="welcome-text">
-                <h2 data-animation="bounceInDown" data-delay="700ms">Hi, I'm Ken.</h2>
-                <p data-animation="bounceInDown" data-delay="300ms">Data Scientist, photographer, guitarist, and avid reader.</p>
-                <a href="/data_science.html" class="kr-btn kr-btn--on-photo mt-30" data-animation="bounceInDown" data-delay="500ms">See My Work</a>
-                <a class="kr-hero-latest kr-hero-latest--pending" href="/blog.html">
-                  <span class="kr-hero-latest__tag">New post</span>
-                  <span class="kr-hero-latest__title"></span>
-                  <span aria-hidden="true">&rarr;</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Slide 2: the headline is evolved rather than typed (js/hero-evolve.js).
-           Second rather than last: as the fifth slide it only came round
-           after forty seconds in the hero. The caption has a second
-           wording for reduced motion, where the script draws the words as
-           type (.kr-for-motion / .kr-for-still, style.css §02), and the
-           script writes its own triangle count into data-kr-evolve-shapes. -->
-      <div class="single-welcome-slide bg-overlay">
-        <div class="slide-bg bg-img" data-bg="/img/photography/hero/141.webp"></div>
-        <div class="container h-100">
-          <div class="row h-100 align-items-center">
             <div class="col-12 col-lg-8 col-xl-7">
               <div class="welcome-text">
-                <span class="kr-hero-kicker" data-animation="bounceInDown" data-delay="200ms">Researcher &amp; Data Scientist</span>
+                <span class="kr-hero-kicker">Researcher &amp; Data Scientist</span>
                 <h2 class="sr-only">Hi, I'm Ken.</h2>
-                <canvas class="kr-hero-evolve" width="640" height="190" aria-hidden="true"></canvas>
-                <p data-animation="bounceInDown" data-delay="300ms"><span class="kr-for-motion">That headline is not a font. It is <span data-kr-evolve-shapes>78</span> translucent triangles being evolved toward the words, one accepted mutation at a time, in your browser.</span><span class="kr-for-still">With reduced motion on, that headline is drawn as ordinary type. Otherwise it is <span data-kr-evolve-shapes>78</span> translucent triangles being evolved toward the words, one accepted mutation at a time, in your browser.</span></p>
-                <div class="kr-btn-row kr-btn-row--start mt-30" data-animation="bounceInDown" data-delay="500ms">
-                  <a href="/data_science.html" class="kr-btn kr-btn--on-photo">See the research</a>
-                  <a href="/blog/a-headline-that-evolves-itself.html" class="kr-btn kr-btn--on-photo">How it works</a>
+                <!-- The ? sits where the drawn words end: hero-evolve.js
+                     measures them and sets --kr-evolve-end and
+                     --kr-evolve-top on .kr-hero-title. -->
+                <div class="kr-hero-title">
+                  <canvas class="kr-hero-evolve" width="640" height="190" aria-hidden="true"></canvas>
+                  <a class="kr-hero-help" href="/blog/a-headline-that-evolves-itself.html" aria-label="How this headline is drawn" title="How this headline is drawn"><span aria-hidden="true">?</span></a>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Slide 3 -->
-      <div class="single-welcome-slide bg-overlay">
-        <div class="slide-bg bg-img" data-bg="/img/photography/hero/23.webp"></div>
-        <div class="container h-100">
-          <div class="row h-100 align-items-center">
-            <div class="col-12 col-lg-8 col-xl-6">
-              <div class="welcome-text">
-                <h2 data-animation="bounceInDown" data-delay="700ms">Photography</h2>
-                <p data-animation="bounceInDown" data-delay="300ms">A decade of self-taught photography. Mostly landscapes, urban decay, and pets.</p>
-                <a href="/gallery.html" class="kr-btn kr-btn--on-photo mt-30" data-animation="bounceInDown" data-delay="500ms">View Portfolio</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Slide 4 -->
-      <div class="single-welcome-slide bg-overlay">
-        <div class="slide-bg bg-img" data-bg="/img/photography/hero/113.webp"></div>
-        <div class="container h-100">
-          <div class="row h-100 align-items-center">
-            <div class="col-12 col-lg-8 col-xl-6">
-              <div class="welcome-text">
-                <h2 data-animation="bounceInDown" data-delay="700ms">Music</h2>
-                <p data-animation="bounceInDown" data-delay="300ms">Playing guitar since I was 11. Still learning.</p>
-                <a href="/music.html" class="kr-btn kr-btn--on-photo mt-30" data-animation="bounceInDown" data-delay="500ms">Listen</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Slide 5 -->
-      <div class="single-welcome-slide bg-overlay">
-        <div class="slide-bg bg-img" data-bg="/img/photography/hero/97.webp"></div>
-        <div class="container h-100">
-          <div class="row h-100 align-items-center">
-            <div class="col-12 col-lg-8 col-xl-6">
-              <div class="welcome-text">
-                <h2 data-animation="bounceInDown" data-delay="700ms">Blog</h2>
-                <p data-animation="bounceInDown" data-delay="300ms">Writing about books, data, photography, and whatever else I'm thinking about.</p>
-                <a href="/blog.html" class="kr-btn kr-btn--on-photo mt-30" data-animation="bounceInDown" data-delay="500ms">Read</a>
+                <p class="kr-hero-line">Data scientist, photographer, guitarist and avid reader.</p>
+                <p class="kr-hero-note"><span class="kr-for-motion">That headline is not a font. It is <span data-kr-evolve-shapes>78</span> translucent triangles being evolved toward the words, one accepted mutation at a time, in your browser.</span><span class="kr-for-still">With reduced motion on, that headline is drawn as ordinary type. Otherwise it is <span data-kr-evolve-shapes>78</span> translucent triangles being evolved toward the words, one accepted mutation at a time, in your browser.</span></p>
+                <div class="kr-btn-row kr-btn-row--start mt-30">
+                  <a href="/data_science.html" class="kr-btn kr-btn--on-photo">See the research</a>
+                </div>
+                <!-- On hover or keyboard focus the chip opens downward
+                     (.kr-hero-latest__more) to show the post's sketch and
+                     its summary; the script below fills both from
+                     posts.json and makes the chip a sketch host. -->
+                <a class="kr-hero-latest kr-hero-latest--pending" href="/blog.html">
+                  <span class="kr-hero-latest__tag">New blog</span>
+                  <span class="kr-hero-latest__title"></span>
+                  <span aria-hidden="true">&rarr;</span>
+                  <span class="kr-hero-latest__more" aria-hidden="true">
+                    <span class="kr-hero-latest__stage" data-live-host></span>
+                    <span class="kr-hero-latest__sum"></span>
+                  </span>
+                </a>
               </div>
             </div>
           </div>
@@ -238,9 +182,7 @@
             <span class="section-eyebrow">Welcome</span>
             <h2><a class="kr-heading-link" href="/about.html">About Me</a></h2>
           </div>
-          <p class="text-center kr-intro-lede">I'm from Scotland, now living in MI, USA. I solve data problems, optimize stuff, publish research papers, and recently started a master's in Organizational Leadership. I also take photos, play guitar, and read a huge variety of books.</p><br>
-
-          <p class="text-center kr-intro-lede">Thanks for checking out my site.</p>
+          <p class="text-center kr-intro-lede">I'm a Scottish data scientist with a Ph.D. in AI, living in Michigan. By day I'm a Senior Data Scientist at Rocket Mortgage, I publish research when I can, and I'm taking an MA in Organizational Leadership. The rest of the time I take photographs, play guitar and read, and most of it ends up here: <a href="/blog.html">essays</a>, <a href="/lab.html">explainers you can run in the page</a>, <a href="/gallery.html">the photographs</a> and <a href="/literature.html">the books</a>.</p>
         </div>
       </div>
     </div>
@@ -358,74 +300,6 @@
   <section class="kr-now-area">
     <div class="container">
       <div id="now-strip" class="text-center"></div>
-    </div>
-  </section>
-
-  <!-- Quick Links -->
-  <section class="about-us-area kr-explore-area clearfix bg-tint">
-    <div class="container">
-      <div class="section-heading text-center">
-        <span class="section-eyebrow">Around the site</span>
-        <h2>Explore</h2>
-      </div>
-      <div class="row kr-explore-row">
-        <div class="col-6 col-md-3 col-lg">
-          <a href="/data_science.html" class="kr-explore-link" data-live="explore:data-science">
-            <i class="ti-stats-up kr-explore-link__icon" aria-hidden="true"></i>
-            <h3>Data Science</h3>
-            <p>Projects &amp; publications</p>
-            <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
-          </a>
-        </div>
-        <div class="col-6 col-md-3 col-lg">
-          <a href="/gallery.html" class="kr-explore-link" data-live="explore:photography">
-            <i class="ti-camera kr-explore-link__icon" aria-hidden="true"></i>
-            <h3>Photography</h3>
-            <p><span id="explore-photo-count">500+</span> photos</p>
-            <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
-          </a>
-        </div>
-        <div class="col-6 col-md-3 col-lg">
-          <a href="/music.html" class="kr-explore-link" data-live="explore:hobbies">
-            <i class="ti-music-alt kr-explore-link__icon" aria-hidden="true"></i>
-            <h3>Music</h3>
-            <p>Guitar &amp; listening</p>
-            <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
-          </a>
-        </div>
-        <div class="col-6 col-md-3 col-lg">
-          <a href="/literature.html" class="kr-explore-link" data-live="explore:literature">
-            <i class="ti-book kr-explore-link__icon" aria-hidden="true"></i>
-            <h3>Literature</h3>
-            <p>Reviews &amp; stats</p>
-            <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
-          </a>
-        </div>
-        <div class="col-6 col-md-3 col-lg">
-          <a href="/blog.html" class="kr-explore-link" data-live="explore:blog">
-            <i class="ti-write kr-explore-link__icon" aria-hidden="true"></i>
-            <h3>Blog</h3>
-            <p>Writing &amp; thoughts</p>
-            <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
-          </a>
-        </div>
-        <div class="col-6 col-md-3 col-lg">
-          <a href="/series.html" class="kr-explore-link" data-live="explore:series">
-            <i class="ti-layers kr-explore-link__icon" aria-hidden="true"></i>
-            <h3>Series</h3>
-            <p><span id="explore-series-count">7</span> collections</p>
-            <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
-          </a>
-        </div>
-        <div class="col-6 col-md-3 col-lg">
-          <a href="/contact.html" class="kr-explore-link" data-live="explore:about">
-            <i class="ti-email kr-explore-link__icon" aria-hidden="true"></i>
-            <h3>Contact</h3>
-            <p>Get in touch</p>
-            <span class="kr-explore-stage" data-live-host aria-hidden="true"></span>
-          </a>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -739,34 +613,6 @@
       });
     }
 
-    /* Hero photographs for slides 2 to 5, named in data-bg. They are
-       applied after the load event, once the browser is idle (or after
-       IDLE_MS where requestIdleCallback is missing), which keeps four
-       large images out of the critical window and still has them in well
-       before the first advance at ten seconds. Owl has cloned slides for
-       its loop by then, and the clones carry data-bg too, so every copy is
-       filled; clones Owl makes later copy the painted style. A reader who
-       moves the carousel before then gets the photographs at once. */
-    (function() {
-      var IDLE_MS = 2000;
-      var painted = false;
-      function paintSlides() {
-        if (painted) return;
-        painted = true;
-        document.querySelectorAll('.welcome-slides [data-bg]').forEach(function(el) {
-          el.style.backgroundImage = 'url("' + el.getAttribute('data-bg') + '")';
-          el.removeAttribute('data-bg');
-        });
-      }
-      function whenIdle() {
-        if ('requestIdleCallback' in window) requestIdleCallback(paintSlides, { timeout: IDLE_MS });
-        else setTimeout(paintSlides, IDLE_MS);
-      }
-      if (document.readyState === 'complete') whenIdle();
-      else window.addEventListener('load', whenIdle, { once: true });
-      if (window.jQuery) jQuery('.welcome-slides').one('translate.owl.carousel', paintSlides);
-    })();
-
     /* The quotations rotate (krQuoteRotator in shared-components.js, the
        same code as the literature page's band), starting from a random
        one so the homepage does not always open on the same line. */
@@ -776,7 +622,7 @@
         { start: Math.floor(Math.random() * quotes.length) });
     }).catch(function() {});
 
-    /* posts.json: the three latest posts as cards, the hero's "New post"
+    /* posts.json: the three latest posts as cards, the hero's "New blog"
        chip, and the post and word counts. krFetchJson hands every reader
        the same array, so it is copied before sorting; the file is already
        newest first, and the sort only guards against a hand edit. */
@@ -789,13 +635,33 @@
       var words = posts.reduce(function(sum, p) { return sum + (p.words || 0); }, 0);
       if (words >= 1000) setFigure('word-count', Math.floor(words / 1000) + 'K+');
 
-      // Owl clones slide 1 for its loop, so every copy of the chip is
-      // filled. Its room is held while it waits (style.css), so showing
-      // it moves nothing.
+      // The hero's "New blog" chip. Its room is held while it waits
+      // (style.css), so showing it moves nothing. It opens on hover or
+      // focus to the post's sketch and summary: data-live names the
+      // sketch (js/covers.js keys them by slug), and attach() binds it if
+      // the sketch engine has already loaded (otherwise it finds the chip
+      // when it does).
       document.querySelectorAll('.kr-hero-latest').forEach(function(chip) {
         chip.href = '/' + (posts[0].url || 'blog.html');
         chip.querySelector('.kr-hero-latest__title').textContent = posts[0].title;
+        var sum = chip.querySelector('.kr-hero-latest__sum');
+        if (sum) sum.textContent = posts[0].excerpt || '';
+        var slug = (posts[0].url || '').replace(/^blog\//, '').replace(/\.html$/, '');
+        if (slug) chip.setAttribute('data-live', slug);
         chip.classList.remove('kr-hero-latest--pending');
+        if (window.krLiveCovers && slug) window.krLiveCovers.attach(chip);
+        // Down if the panel fits above the hero's foot, else up (the hero
+        // clips what runs past it). Decided as the chip is reached, so it
+        // follows the window's height.
+        var more = chip.querySelector('.kr-hero-latest__more');
+        var hero = chip.closest('.single-welcome-slide');
+        function aim() {
+          if (!more || !hero) return;
+          var room = hero.getBoundingClientRect().bottom - chip.getBoundingClientRect().bottom;
+          chip.classList.toggle('kr-hero-latest--up', room < more.offsetHeight + 8);
+        }
+        chip.addEventListener('pointerenter', aim);
+        chip.addEventListener('focus', aim);
       });
 
       // The cards bind their posts' hover sketches by themselves
@@ -821,9 +687,8 @@
        photograph and quotation counts come from it rather than from
        downloading both lists to take their length. */
     krFetchJson('data/colophon.json').then(function(site) {
-      if (site.photos > 0) setFigure(['photo-count', 'explore-photo-count'], site.photos);
+      if (site.photos > 0) setFigure('photo-count', site.photos);
       if (site.quotes > 0) setFigure('quote-count', site.quotes);
-      if (site.series > 0) setFigure('explore-series-count', site.series);
     }).catch(function() {});
 
     // Written weekly from the Goodreads read shelf (refresh_books.py).

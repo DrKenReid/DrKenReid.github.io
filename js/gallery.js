@@ -10,6 +10,9 @@
  *                           layout and the orientation filter)
  *   photo-variants.json     groups of frames that are one photograph
  *   photo-credits.json      stem -> a line naming someone else's work in the frame
+ *   photo-colours.json      colour family -> its frames (the colour filter)
+ *   photo-exif.json         how the frames that kept their camera data
+ *                           were taken (the lightbox line, the figures)
  *
  * Layout
  *   Justified rows (packRows, layoutJustified): every row fills the width
@@ -61,10 +64,12 @@
  *   opens its group showing that edit.
  *
  * Filters
- *   Three filters narrow the grid together: Subject (the CLIP tags),
+ *   Four filters narrow the grid together: Subject (the CLIP tags),
  *   Place (country, state in the US, town, place within a town; see
- *   "Places" below) and Orientation (landscape, portrait or square, from
- *   photo-dims.json). Their rows start closed behind a line of toggles,
+ *   "Places" below), Orientation (landscape, portrait or square, from
+ *   photo-dims.json) and Colour (each frame's main colour, worked out
+ *   from its pixels into photo-colours.json; see "Colour" below). Their
+ *   rows start closed behind a line of toggles,
  *   each naming the filter in force (see "Filter toggles"), beside the
  *   number of photographs shown and, while any filter is in force, a
  *   Reset button that turns every one off. The bar stays pinned under
@@ -76,8 +81,9 @@
  *   Halloween is every abandoned or silhouette frame.
  *
  * Deep links
- *   ?tag=<subject>, ?place=<place key> and ?shape=<orientation> open with
- *   those filters; ?photo=<stem> opens that frame in the lightbox,
+ *   ?tag=<subject>, ?place=<place key>, ?shape=<orientation> and
+ *   ?colour=<family> open with those filters; ?photo=<stem> opens that
+ *   frame in the lightbox,
  *   loading batches until it is in the grid. All are written back while
  *   browsing (a filter change, each frame viewed, the lightbox closing),
  *   so the address bar can always be shared, and the lightbox has a Copy
@@ -105,6 +111,14 @@
  *   filters change, so it opens in a new tab as it is. A plain click
  *   instead opens the slideshow over the gallery, full screen, on the
  *   same photographs (krOpenSlideshow in shared-components.js).
+ *
+ * By the numbers
+ *   Under the grid, three figures on how the frames were shot (focal
+ *   length, aperture, lens), counted from photo-exif.json on every load
+ *   (renderShotFigures). Only the frames whose files kept their camera
+ *   data are in it, and the section says how many that is; it stays
+ *   hidden when the file does not arrive. The same entry is the small
+ *   line under a photograph in the lightbox (krLightboxCaption).
  *
  * A failed load
  *   When neither the file list nor the tags arrive there is nothing to
@@ -151,6 +165,9 @@ var photoTags = {};
 var photoPlaces = {};
 var photoCoords = {};        // stem -> [lat, lng], for the tile's globe badge
 var photoCredits = {};       // stem -> credit line, from data/photo-credits.json
+var photoColour = {};        // stem -> colour family, from data/photo-colours.json
+var photoExif = {};          // stem -> how it was taken, from data/photo-exif.json
+var frameCount = 0;          // every frame listed, edits counted one by one
 var editsOf = {};            // the shown stem of a group -> every stem in it, shown first
 var groupOf = {};            // any stem in a group -> the group's shown stem
 // A hovered tile shows its next edit after EDIT_FIRST_MS, then every
@@ -165,6 +182,7 @@ var placeNodes = {};         // node key ('scotland.stirling') -> node
 var placeKeyOf = {};         // stem -> the key of its region's node
 var activePlace = '';        // '' anywhere, else a node key
 var activeShape = '';        // '' any, else a key of SHAPES
+var activeColour = '';       // '' any, else a key of COLOURS
 // Each filter row (subject, place) shows this many pills, the largest
 // first, and keeps the rest behind "+N more", so the two rows stay a line
 // each on a desktop screen.
@@ -215,15 +233,20 @@ function editsFor(stem) {
 }
 
 /** The edit a tile shows: under a subject filter, the first edit that has
-    the subject; otherwise the group's own first. */
+    the subject; under a colour filter, the first edit of that colour;
+    with both on, an edit that is both before one that only has the
+    subject; otherwise the group's own first. */
 function faceOf(stem) {
     var edits = editsFor(stem);
-    if (activeCat !== '*') {
-        for (var i = 0; i < edits.length; i++) {
-            if ((photoTags[edits[i]] || []).indexOf(activeCat) !== -1) return edits[i];
-        }
+    var best = edits[0], bestScore = 0;
+    if (edits.length > 1 && (activeCat !== '*' || activeColour)) {
+        edits.forEach(function(e) {
+            var score = (activeCat !== '*' && (photoTags[e] || []).indexOf(activeCat) !== -1 ? 2 : 0) +
+                (activeColour && photoColour[e] === activeColour ? 1 : 0);
+            if (score > bestScore) { best = e; bestScore = score; }
+        });
     }
-    return edits[0];
+    return best;
 }
 
 /** A view entry's aspect ratio: the ratio of the edit its tile shows. */
@@ -277,8 +300,10 @@ function writeUrl(changes) {
 /**
  * Each file fails on its own. Without tags there are no filters or
  * captions, without places no place names, without dims every frame is
- * laid out as 3:2; without the file list, the tagged stems are the next
- * best inventory (the originals in the release are all N.png). Only
+ * laid out as 3:2, without colours there is no Colour toggle, without the
+ * camera data no exposure line and no figures; without the file list,
+ * the tagged stems are the next best inventory (the originals in the
+ * release are all N.png). Only
  * when both of those are missing is there nothing to show, and the grid
  * says so (showLoadFailure).
  */
@@ -298,11 +323,22 @@ function loadGallery() {
         soft('data/photo-locations.json'),
         soft('data/photo-dims.json'),
         soft('data/photo-variants.json'),
-        soft('data/photo-credits.json')
+        soft('data/photo-credits.json'),
+        soft('data/photo-colours.json'),
+        soft('data/photo-exif.json')
     ]).then(function(results) {
         photoTags = results[0] || {};
         photoDims = results[3] || {};
         photoCredits = (results[5] || {}).credits || {};
+        // Both files list frames by number; the rest of the page knows a
+        // frame by its stem, a string. "none" (no colour to speak of) is
+        // not a family the filter offers.
+        photoColour = {};
+        Object.keys(results[6] || {}).forEach(function(family) {
+            if (COLOURS[family]) results[6][family].forEach(function(n) { photoColour[n] = family; });
+        });
+        photoExif = {};
+        ((results[7] || {}).frames || []).forEach(function(f) { photoExif[f.n] = f; });
         // krFetchJson hands every caller the same parsed value, so the
         // list is copied before it is sorted.
         var files = Array.isArray(results[1]) ? results[1].slice()
@@ -311,6 +347,7 @@ function loadGallery() {
             showLoadFailure();
             return;
         }
+        frameCount = files.length;
         // One tile per photograph: a group's other edits leave the view
         // and travel with its first (see "Edits" at the top).
         editsOf = {};
@@ -393,11 +430,17 @@ function startGallery() {
     var wantedShape = readParam('shape');
     activeShape = SHAPES[wantedShape] ? wantedShape : '';
     if (wantedShape && !activeShape) writeUrl({ shape: null });
+    var wantedColour = readParam('colour');
+    activeColour = COLOURS[wantedColour] && galleryAll.some(function(f) { return inColour(f, wantedColour); }) ? wantedColour : '';
+    if (wantedColour && !activeColour) writeUrl({ colour: null });
     var placeToggle = document.querySelector('#gallery-filter-toggles button[aria-controls="gallery-places"]');
     if (placeToggle) placeToggle.hidden = !placeTree || !placeTree.children.length;
+    var colourToggle = document.querySelector('#gallery-filter-toggles button[aria-controls="gallery-colour-row"]');
+    if (colourToggle) colourToggle.hidden = !Object.keys(photoColour).length;
     bindFilterToggles();
     bindResetButton();
     applyFilter(cat);
+    renderShotFigures();
 
     openFromUrl();
 }
@@ -463,13 +506,14 @@ function hasTag(filename, cat) {
 
 /**
  * Whether a tile passes the filters, leaving one out when asked: each row
- * counts what the other two leave, so its counts are what a click on it
+ * counts what the others leave, so its counts are what a click on it
  * would show.
  */
 function passes(filename, skip) {
     return (skip === 'cat' || activeCat === '*' || hasTag(filename, activeCat)) &&
         (skip === 'place' || inPlace(filename, activePlace)) &&
-        (skip === 'shape' || inShape(filename, activeShape));
+        (skip === 'shape' || inShape(filename, activeShape)) &&
+        (skip === 'colour' || inColour(filename, activeColour));
 }
 
 /** A fresh copy of a filter row, since renderFilterBar binds its clicks
@@ -568,9 +612,9 @@ function filterGallery(cat) {
 }
 
 /* Rebuild the grid from the filtered list, batched: no force-loading the
-   whole archive to hide most of it. The subject, the place and the
-   orientation narrow it together, and every row is drawn again with
-   counts for the new view. */
+   whole archive to hide most of it. The subject, the place, the
+   orientation and the colour narrow it together, and every row is drawn
+   again with counts for the new view. */
 function applyFilter(cat) {
     activeCat = cat;
     galleryView = galleryAll.filter(function(filename) { return passes(filename); });
@@ -582,6 +626,7 @@ function applyFilter(cat) {
     filterBar = buildFilterButtons();
     renderPlaceBar();
     renderShapeBar();
+    renderColourBar();
     syncFilterToggles();
     loadMoreImages();
 }
@@ -591,8 +636,8 @@ function applyFilter(cat) {
 // ----------------------------------------------------------------------
 
 /*
- * The rows start closed: a line of toggles (Subject, Place, Orientation),
- * each naming the filter in force, opens its row below it. One row is
+ * The rows start closed: a line of toggles (Subject, Place, Orientation,
+ * Colour), each naming the filter in force, opens its row below it. One row is
  * open at a time, so the panel is never more than two lines; a click on
  * the open row's toggle closes it. A filter stays in force with its row
  * closed (a ?tag= link arrives that way), and its toggle says so.
@@ -631,8 +676,9 @@ function syncFilterToggles() {
     setToggle('gallery-subject-row', activeCat === '*' ? 'All' : labelOf(activeCat), activeCat !== '*');
     setToggle('gallery-places', place && place !== placeTree ? place.name : 'Anywhere', !!activePlace);
     setToggle('gallery-shape-row', shape ? shape.label : 'Any', !!shape);
+    setToggle('gallery-colour-row', COLOURS[activeColour] || 'Any', !!activeColour);
     var reset = document.getElementById('gallery-reset-filters');
-    if (reset) reset.hidden = activeCat === '*' && !activePlace && !shape;
+    if (reset) reset.hidden = activeCat === '*' && !activePlace && !shape && !activeColour;
     // The count beside the toggles is for the eye; the live counter under
     // the grid is the one a screen reader hears.
     var shown = document.getElementById('gallery-shown-count');
@@ -653,7 +699,8 @@ function bindResetButton() {
         var hadFocus = document.activeElement === btn;
         activePlace = '';
         activeShape = '';
-        writeUrl({ tag: null, place: null, shape: null, photo: null });
+        activeColour = '';
+        writeUrl({ tag: null, place: null, shape: null, colour: null, photo: null });
         var container = document.getElementById('gallery-grid');
         krGalleryMorph(container, function() { applyFilter('*'); });
         if (hadFocus) {
@@ -669,6 +716,14 @@ function setToggle(rowId, value, isSet) {
     var out = btn.querySelector('.kr-gallery-toggle__value');
     if (out) out.textContent = value;
     btn.classList.toggle('is-set', isSet);
+    if (!isSet) return;
+    // On a phone the toggles' line can be wider than the screen and
+    // scrolls sideways (style.css §09): a toggle that is set stays in
+    // view. The line's own scroll, never the page's.
+    var line = btn.parentNode.getBoundingClientRect(), r = btn.getBoundingClientRect();
+    if (r.width && (r.right > line.right || r.left < line.left)) {
+        btn.parentNode.scrollLeft += r.right > line.right ? r.right - line.right + 8 : r.left - line.left - 8;
+    }
 }
 
 // ----------------------------------------------------------------------
@@ -733,6 +788,72 @@ function renderShapeBar() {
 function filterByShape(key) {
     activeShape = SHAPES[key] ? key : '';
     writeUrl({ shape: activeShape || null, photo: null });
+    var container = document.getElementById('gallery-grid');
+    krGalleryMorph(container, function() { applyFilter(activeCat); });
+}
+
+// ----------------------------------------------------------------------
+// Colour
+// ----------------------------------------------------------------------
+
+// The colour families of data/photo-colours.json, in its order (round the
+// hue circle, then brown), each with the name its pill carries. A frame
+// has one family, its main colour by its pixels
+// (.github/scripts/generate_photo_colours.py), or none: the black and
+// white frames, which the B&W subject finds, and the nearly grey. A group
+// is in a family when any of its edits is, and shows that edit (faceOf).
+var COLOURS = {
+    red: 'Red', orange: 'Orange', yellow: 'Yellow', green: 'Green', teal: 'Teal',
+    blue: 'Blue', purple: 'Purple', pink: 'Pink', brown: 'Brown'
+};
+
+function inColour(filename, colour) {
+    if (!colour) return true;
+    return editsFor(stemOf(filename)).some(function(stem) { return photoColour[stem] === colour; });
+}
+
+/** The colour row: a pill for each family the other filters leave any
+    photograph of, with its swatch and its name. The swatch is decoration
+    (.kr-hue, style.css §09); the name is the button's text, so
+    nothing is said by colour alone. No count in the pill, unlike the
+    other rows: with one the nine took two lines. */
+function renderColourBar() {
+    var hadFocus = focusIn('gallery-colours');
+    var row = freshRow('gallery-colours');
+    if (!row || typeof renderFilterBar !== 'function') return;
+    var left = {};
+    galleryAll.forEach(function(filename) {
+        if (!passes(filename, 'colour')) return;
+        editsFor(stemOf(filename)).forEach(function(stem) { left[photoColour[stem]] = true; });
+    });
+    var items = Object.keys(COLOURS)
+        .filter(function(key) { return left[key] || key === activeColour; })
+        .map(function(key) {
+            return {
+                key: key,
+                label: '<span class="kr-hue kr-hue--' + key + '" aria-hidden="true"></span>' + COLOURS[key]
+            };
+        });
+    row.setAttribute('aria-label', 'Filter photos by main colour');
+    var bar = renderFilterBar(row, items, {
+        multi: false,
+        allLabel: 'Any',
+        onChange: function(keys) {
+            if (quietFilter) return;
+            filterByColour(keys.length ? keys[0] : '');
+        }
+    });
+    if (activeColour) {
+        quietFilter = true;
+        try { bar.setActive([activeColour]); } finally { quietFilter = false; }
+    }
+    refocusRow(row, hadFocus);
+}
+
+/** A reader's colour change. */
+function filterByColour(key) {
+    activeColour = COLOURS[key] ? key : '';
+    writeUrl({ colour: activeColour || null, photo: null });
     var container = document.getElementById('gallery-grid');
     krGalleryMorph(container, function() { applyFilter(activeCat); });
 }
@@ -916,6 +1037,80 @@ function krGalleryMorph(container, rebuild) {
     vt.finished.then(done, done);
 }
 
+// ----------------------------------------------------------------------
+// By the numbers (see "By the numbers" at the top)
+// ----------------------------------------------------------------------
+
+// The bands a focal length (as marked on the lens, in mm) and an f-number
+// are counted in: [label, the value a band stops short of].
+var FOCAL_BANDS = [['Under 35mm', 35], ['35 to 70mm', 71], ['71 to 135mm', 136], ['Over 135mm', Infinity]];
+var APERTURE_BANDS = [['Up to f/2.8', 2.9], ['f/3.2 to f/5.6', 5.7], ['f/6.3 to f/11', 11.1], ['f/13 and up', Infinity]];
+var LENSES_SHOWN = 5;
+
+/** [[label, count]] of `values` over `bands`. */
+function countBands(values, bands) {
+    return bands.map(function(band, i) {
+        return [band[0], values.filter(function(v) {
+            return v < band[1] && (!i || v >= bands[i - 1][1]);
+        }).length];
+    });
+}
+
+/** [[value, count]] of `values`, the most frequent first. */
+function countValues(values) {
+    var counts = {};
+    values.forEach(function(v) { counts[v] = (counts[v] || 0) + 1; });
+    return Object.keys(counts).map(function(k) { return [k, counts[k]]; })
+        .sort(function(a, b) { return b[1] - a[1] || a[0].localeCompare(b[0]); });
+}
+
+/** Rows of [label, count] as a list, each with a bar as long as its share
+    of the largest. The bar is decoration; the count is in the words. */
+function shotRows(rows) {
+    var top = Math.max.apply(null, rows.map(function(r) { return r[1]; })) || 1;
+    return '<ul class="kr-shot">' + rows.map(function(r) {
+        return '<li><span>' + krEscapeHtml(r[0]) + '</span><span aria-hidden="true"><span class="kr-shot__bar" style="width:' +
+            (r[1] ? Math.max(3, Math.round(100 * r[1] / top)) : 0) + '%"></span></span><span>' + r[1] +
+            '<span class="kr-sr-only">' + (r[1] === 1 ? ' frame' : ' frames') + '</span></span></li>';
+    }).join('') + '</ul>';
+}
+
+/**
+ * The three figures, as the reading page draws its own (.kr-figure, a
+ * label, a figure, a line of words), each over a short bar list. Bar
+ * widths are inline: they are the data.
+ */
+function renderShotFigures() {
+    var section = document.getElementById('numbers');
+    var host = document.getElementById('gallery-figures');
+    if (!section || !host) return;
+    var shots = Object.keys(photoExif).map(function(n) { return photoExif[n]; });
+    section.hidden = !shots.length;
+    if (!shots.length) return;
+    function all(field) {
+        return shots.map(function(s) { return s[field]; }).filter(Boolean);
+    }
+    function figure(label, n, sub, rows) {
+        return '<div class="kr-figure"><dt>' + label + '</dt><dd><span class="kr-figure__n">' + krEscapeHtml(n) +
+            '</span><span class="kr-figure__sub">' + krEscapeHtml(sub) + '</span>' + shotRows(rows) + '</dd></div>';
+    }
+    var focal = all('focal').sort(function(a, b) { return a - b; });
+    var stops = countValues(all('aperture'));
+    var lenses = countValues(all('lens'));
+    var cover = document.getElementById('gallery-exif-cover');
+    if (cover) cover.textContent = shots.length + ' of ' + frameCount;
+    host.innerHTML =
+        (focal.length ? figure('Focal length', focal[Math.floor(focal.length / 2)] + 'mm',
+            'the median, from ' + focal[0] + 'mm to ' + focal[focal.length - 1] + 'mm',
+            countBands(focal, FOCAL_BANDS)) : '') +
+        (stops.length ? figure('Aperture', 'f/' + stops[0][0],
+            'the most used, on ' + stops[0][1] + (stops[0][1] === 1 ? ' frame' : ' frames'),
+            countBands(all('aperture'), APERTURE_BANDS)) : '') +
+        (lenses.length ? figure(lenses.length === 1 ? 'Lens' : 'Lenses', String(lenses.length),
+            lenses.length === 1 ? 'lens behind these frames' : 'lenses behind these frames',
+            lenses.slice(0, LENSES_SHOWN)) : '');
+}
+
 function updateCounter() {
     var counter = document.getElementById('gallery-counter');
     if (!counter) return;
@@ -923,6 +1118,7 @@ function updateCounter() {
     var place = placeNodes[activePlace];
     if (place && place !== placeTree) noun += ' from ' + placeName(place);
     if (SHAPES[activeShape]) noun += ', ' + SHAPES[activeShape].label.toLowerCase() + ' format';
+    if (COLOURS[activeColour]) noun += ', mostly ' + COLOURS[activeColour].toLowerCase();
     counter.textContent = 'Showing ' + galleryIndex + ' of ' + galleryView.length + ' ' + noun;
 }
 
@@ -1430,7 +1626,10 @@ function bindGalleryLightbox() {
                     text: item.el.attr('data-caption') || '',
                     stem: stem,
                     place: item.el.attr('data-place') || '',
-                    url: galleryHref({ photo: stem })
+                    url: galleryHref({ photo: stem }),
+                    // The edit on screen, so each edit of a photograph
+                    // gives its own exposure, or none.
+                    exif: photoExif[stem]
                 }) + editButtons(stem);
             }
         },
@@ -1510,11 +1709,12 @@ function openFromUrl() {
         return -1;
     }
     var at = indexIn(galleryView);
-    if (at === -1 && (activeCat !== '*' || activePlace || activeShape) && indexIn(galleryAll) !== -1) {
+    if (at === -1 && (activeCat !== '*' || activePlace || activeShape || activeColour) && indexIn(galleryAll) !== -1) {
         if (filterBar) setBarQuietly([]);
         activePlace = '';
         activeShape = '';
-        writeUrl({ tag: null, place: null, shape: null });
+        activeColour = '';
+        writeUrl({ tag: null, place: null, shape: null, colour: null });
         applyFilter('*');
         at = indexIn(galleryView);
     }

@@ -1,0 +1,18 @@
+{
+  "_help": "Hand corrections to the year (y) and genres (gn) refresh_book_details.py gives a book in books.json. One entry a book, by Goodreads id (g, books.json's g); t is the title, for whoever reads this file, and is not used. gn is one or two of the genre keys in GENRES in that script (fantasy, litrpg, scifi, horror, crime, literary, history, science, philosophy, psychology, biography, politics), the main one first, and replaces what the labels say; y replaces any other year. Give only what is wrong. Then run python .github/scripts/refresh_book_details.py --offline.",
+  "books": [
+    {"g": "57866482", "t": "Defiance of the Fall", "gn": ["litrpg", "fantasy"]},
+    {"g": "214352255", "t": "Nuthouse: A Memoir", "gn": ["biography", "psychology"]},
+    {"g": "45153552", "t": "My Sh*t Therapist", "gn": ["psychology", "biography"]},
+    {"g": "41015038", "t": "My Best Friend's Exorcism", "gn": ["horror"]},
+    {"g": "6690798", "t": "The Passage", "gn": ["horror", "scifi"]},
+    {"g": "38447", "t": "The Handmaid's Tale", "gn": ["scifi", "literary"]},
+    {"g": "5470", "t": "1984", "gn": ["scifi"]},
+    {"g": "170448", "t": "Animal Farm", "gn": ["literary"]},
+    {"g": "7613", "t": "Animal Farm", "gn": ["literary"]},
+    {"g": "2998", "t": "The Secret Garden", "gn": ["literary"]},
+    {"g": "25905786", "t": "Primer to Analysis of Genomic Data Using R", "gn": ["science"]},
+    {"g": "1103489", "t": "Concurrent Systems", "gn": ["science"]},
+    {"g": "6712930", "t": "The FastTrack to Human-Computer Interaction", "gn": ["science"]}
+  ]
+}

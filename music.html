@@ -139,7 +139,12 @@
     </div>
   </div>
 
-  <!-- Last.fm Stats -->
+  <!-- Last.fm Stats. The listening history leads (js/listening.js, from
+       data/listening.json, which the lastfm-refresh workflow keeps up): a
+       calendar of scrobbles, a cell a week or a month on a phone, and six
+       figures. Its block is hidden until that file holds a week with
+       something played; the lastfmstats charts wait behind their facade
+       under it, and are the whole section without it. -->
   <div class="about-us-area section-padding-80 clearfix" id="lastfm">
     <div class="container">
       <div class="section-heading section-heading--snug text-center">
@@ -149,6 +154,13 @@
           Tracking my listening habits on <a href="https://www.last.fm/user/gohex" target="_blank" rel="noopener noreferrer">Last.fm</a> as <a href="https://www.last.fm/user/gohex" target="_blank" rel="noopener noreferrer">@gohex</a> since 2014.
           Eclectic is an understatement: Ludovico Einaudi, Alkaline Trio, Jeremy Soule, Rammstein, Andy McKee, and quite a lot more.
         </p>
+      </div>
+      <!-- Below 576px the calendar draws months, not weeks (js/listening.js,
+           MONTH_VIEW); the intro swaps phrasings at the same width. -->
+      <div class="kr-listening" id="kr-listening" hidden>
+        <p class="kr-listening__lede">Everything I have scrobbled since <span id="kr-listening-since"></span>, one cell per <span class="kr-cal-say--wide">week</span><span class="kr-cal-say--narrow">month</span>, from my Last.fm weekly charts<span id="kr-listening-asof"></span>. Darker means more scrobbles; the bar at the end of each row is the year's total. <span class="kr-cal-say--wide">Hover a cell for the artist I played most that week.</span><span class="kr-cal-say--narrow">Tap a month for the artists I played most in it.</span></p>
+        <div id="kr-listening-calendar" class="kr-cal kr-cal--listening"></div>
+        <dl class="kr-figures kr-listening__figures" id="kr-listening-figures"></dl>
       </div>
       <div class="row justify-content-center">
         <div class="col-12 col-lg-10">
@@ -234,8 +246,9 @@
   <script src="/js/default-assets/active.js?v=20260923a"></script>
   <script src="/js/shared-components.js?v=20260923a"></script>
   <script src="/js/albums.js?v=20260923a"></script>
+  <script src="/js/listening.js?v=20260923a"></script>
   <script>
-    renderHeader('header-section', { basePath: '/', active: 'hobbies', hobbiesChild: 'music' });
+    renderHeader('header-section', { basePath: '/', active: 'music' });
     renderPhotoStrip('instagram-section');
     renderFooter('footer-section');
   </script>

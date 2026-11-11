@@ -172,6 +172,7 @@ defines it (`additionalProperties: false`, so a misspelt key fails the
 | `url` | you | `blog/<slug>.html` |
 | `image` | you | the card picture: a gallery thumbnail (never its hero, which is several times the bytes), a `blog/img/` file, or a full URL; a photograph no other post opens on (the audit's `hero-reuse` rule) |
 | `series` | you, optional | `{"name": "...", "part": n}`, or a list of them for a post in two series; each name needs a landing page ([ARCHITECTURE.md](ARCHITECTURE.md#adding-a-series)) |
+| `shelf` | you, optional | the authors a post about books is about, each as `data/books.json` spells the name (`["Patrick Rothfuss"]`); the end band then carries the From my shelf strip ([below](#the-end-band)). Every name needs a rated book or a saved quote (the audit's `posts-shelf` rule) |
 | `readMinutes`, `words` | `generate_read_times.py` | `words` is every word in the article (the JSON-LD `wordCount`, the homepage total); `readMinutes` is 220 words a minute, rounded up, without the code in a folded listing (`details.code-example` with no `open`) |
 | `interactive`, `code` | `generate_post_facets.py` | present, as `true`, when the post mounts a demo (`KRViz.mount`) or has a `<pre><code>` block; the blog filter's Format row, the series index and the colophon read them |
 
@@ -758,7 +759,8 @@ none of it should be: a hand-written copy would be a second one.
 | top of the window | the reading-progress bar, which reaches 100% when the end mark is in view; with `data-progress` on `.blog-post`, a dressed bar (`div.kr-progress-dress`) under the header instead | `renderReadingProgress` |
 | beside the post, 992 to 1359px | the share rail, in the document just before the end band so Tab reaches it; on a phone, a share sheet over the sign-off that goes down when Up next comes on screen, and stays down for the session once dismissed; the sheet waits while the newsletter pop-up is up | `renderFloatingBlogShare` |
 | the right edge of the window, below 992px, on every page | the share tab: the device's share sheet (Web Share) with the page's title and canonical address, or Copy link where there is none; always there, and slim for it, except while a sheet holds the foot of the screen | `renderShareButton` |
-| over the page, from the end of the text | the newsletter pop-up: a card centred at the foot of the window from 768px, a sheet on a phone, rising when the end mark is wholly on screen (the progress bar at 100%) and going down when the footer arrives. Its words are the post's own, from `data/invites.json`, with its category's (`KR_INVITES`) as the fallback for a draft; a How This Site Is Built part offers RSS first, since that series is not emailed. A labelled region that never takes focus, in the document just before the end band. Closed (button or Escape), it rests 30 days; followed, it does not come back (`kr-invite-closed`, `kr-invite-followed` in localStorage). The Substack link carries `utm_` parameters naming the post; analytics gets `newsletter_invite_shown` and `newsletter_invite` | `renderNewsletterPopup` |
+| over the page, from the end of the text | the newsletter pop-up: a card centred at the foot of the window from 768px, a sheet on a phone, rising when the end mark is wholly on screen (the progress bar at 100%) and going down when "Up next" (the first thing after the sign-off) reaches it, so it never covers the next post, the related cards, the comments or the footer. Its words are the post's own, from `data/invites.json`, with its category's (`KR_INVITES`) as the fallback for a draft; a How This Site Is Built part offers RSS first, since that series is not emailed. A labelled region that never takes focus, in the document just before the end band. Closed (button or Escape), it rests 30 days; followed, it does not come back (`kr-invite-closed`, `kr-invite-followed` in localStorage). The Substack link carries `utm_` parameters naming the post; analytics gets `newsletter_invite_shown` and `newsletter_invite` | `renderNewsletterPopup` |
+| nowhere on the post itself | a read mark: the first time the end mark is wholly on screen, the post is remembered as read in the reader's own browser (`kr-read` in localStorage, slug to date; nothing is sent). Post cards, the blog's list layout and a post's series list then say "Read" for it, and its series page counts it and offers the first unread part ("Continue: Part 4, ..."). `privacy.html` describes it and has the button that forgets it | `krWatchPostRead`, `krMarkReadCards`, `krReadMap` |
 | the first paragraph | the drop cap (`p.drop-cap`, three lines or more) and a small-caps lead-in (`span.lead-in`) | `initDropCap` |
 | prose | `<abbr title>` on the first use of each glossary term per section, the post's own terms and the site-wide `GLOBAL_JARGON` | `applyJargonTooltips` |
 | the first glossary box | folded into a closed `<details>` | `autoCollapseTopJargonBox` |
@@ -785,21 +787,52 @@ created together, in this order, before any data arrives:
 |---|---|---|
 | a. end mark | `div.kr-post-end__slot.kr-post-end__mark > .kr-fin` | the ⁂, in the brand gradient; the progress bar measures to it |
 | b. sign-off | `div.kr-post-end__slot.kr-signoff` (`buildSignOff`) | portrait, name and one line about the author (`KR_TAGLINE`), three routes onward chosen by the post's category (`KR_ROUTES`), led by the post's own series page when it is in one (`postRoutes`), the Subscribe and Coffee buttons, the share row (from 1360px only, where the rail has gone), and the disclaimer as fine print |
+| from my shelf, only on a post with `shelf` | `section.kr-post-end__slot.kr-post-shelf` (`js/post-shelf.js`) | one card per author the post's `shelf` names: my books by them (at most six, my highest rated first, each with its stars, the rating as a number and the year I finished it, a re-read noted), one or two passages I saved (the shortest that read whole, the same on every visit), and links to `quotes.html?author=` and `books.html?author=`; an author with nothing on the reading pages is left out |
 | c. up next | `nav.kr-post-end__slot.kr-upnext` (`fillUpNext`) | the pager: the previous and next part when the post is in a series, otherwise the older and newer post (`postNeighbours`), labelled "Newer, outside the series" when the fallback leaves the post's series; each link runs its post's sketch under its text on hover |
 | d. related | `div.kr-post-end__slot.kr-post-end__related` | the baked `.related-posts` block, moved in; a draft's is rendered here at runtime |
 | e. comments | `section#giscus-comments.kr-post-end__slot` (`buildGiscusSection`) | giscus, backed by GitHub Discussions, with a Refresh button; its theme follows the site's |
+| replies from Bluesky, inside the comments, only on a post `data/bluesky.json` lists | `div.kr-bsky-replies` (`js/bluesky-replies.js`), between the Comments heading and the giscus frame | one line of invitation with a "Reply on Bluesky" button, then the replies to my Bluesky post about this post as a threaded list (name and handle, date, the words, likes), two levels deep with a link on to Bluesky past that |
 
 Why this order: from the post outward. The mark closes the piece; the
 sign-off belongs to it (who wrote it, how to follow, how to pass it on);
 then the one obvious next read, then a wider choice, and last the
 conversation, which is open-ended and can be long, so nothing useful sits
-below it. A slot with nothing to show removes itself. The related cards
+below it. A slot with nothing to show removes itself. The shelf slot is
+the one that is not made up front: `renderPostEnd` adds it, hidden, once
+`posts.json` shows the post has a `shelf`, and loads `js/post-shelf.js`
+with it, so a post without the field fetches neither the script nor the
+two reading files; the script shows the slot when it has filled it. It
+sits after the sign-off because it is still about this post's subject,
+and before Up next, which leads away from it. The related cards
 leave out the two posts the pager already offers
 (`generate_related_posts.py` mirrors `postNeighbours`). The comments need
 the giscus app installed on the repository and Discussions enabled; the
 essay [Free Comments via GitHub Discussions](https://www.kenreid.co.uk/blog/free-comments-via-github-discussions.html)
 covers the setup. `check_post_template.py` checks every post for exactly
 one band with the slots in this order.
+
+The comments have a second door, for a reader with no GitHub account:
+replies on Bluesky. `refresh_bluesky.py` records, weekly, which Bluesky
+post shared each blog post (`data/bluesky.json`,
+[DATA.md](DATA.md#bluesky-shares)). When the comments come within
+1250px of the window, about where a browser starts giscus's lazy frame,
+`renderPostEnd` reads that file, and on a post it lists adds
+`div.kr-bsky-replies` inside the comments section, above the giscus
+frame, and loads `js/bluesky-replies.js`. The script makes one request
+to Bluesky's public API (`app.bsky.feed.getPostThread`: no key, no
+cookies, no referrer) and draws the replies as nested `role="list"`
+boxes under a count line, the slot's one live region. It shows words
+only: no avatars, pictures or link cards, so nothing more is fetched
+from anyone; a reply that has one links to itself on Bluesky. Left on
+Bluesky: a reply the API marks blocked or not found, one carrying any
+moderation label (its own or its author's), and one I have hidden from
+the thread there. Every string from the API goes into the page as
+text, and a link inside a reply is kept only when its address is http
+or https (`tests/js/bluesky-replies.test.js`). A post with no entry gets
+no slot and asks Bluesky nothing; one with no replies, or whose request
+failed, shows only the invitation. The Refresh button asks Bluesky again
+as it remounts giscus. The slot is inside the comments section, so the
+band's slots and their order are as the table has them.
 
 ## The hover sketch
 
@@ -850,7 +883,7 @@ def('<slug>', function (w, h, rnd) {
 
 Sketches elsewhere on the site (the homepage's stat tiles, the About
 cards, the publications, the book wall, the gallery's globe) are in
-`js/covers-site.js`, keyed by a prefix (`stat:`, `explore:`, `hobby:`,
+`js/covers-site.js`, keyed by a prefix (`stat:`, `hobby:`, `app:`,
 `pub:`, `genre:`, `gallery:globe`), and any element becomes a host with
 `data-live="<key>"` ([CONVENTIONS.md](CONVENTIONS.md#data--hosts)).
 
@@ -871,6 +904,7 @@ show the markup to use instead.
 | `jargon-marker` | ERROR | a `<jargon key>` that names no term in the box, so its tooltip is lost |
 | `figure-in-list` | ERROR | a `<figure>` directly inside a `ul` or `ol` |
 | `script-drift` | WARN | a post whose scripts differ from the others' |
+| `posts-shelf` | ERROR | an author in a post's `shelf` (`data/posts.json`) with no rated book in `data/books.json` and no quote in `data/quotes-all.json`, or named twice; names are compared without case, accents, spaces or punctuation |
 | `banned-word` | WARN (fails with `--strict`) | a word from `BANNED_PROSE` in `audit_site.py` in the prose, on posts and top-level pages |
 | `curly-quote` | WARN (fails with `--strict`) | curly quotes or apostrophes in the prose or the meta description; use straight `'` and `"` |
 | `em-dash` | WARN (fails with `--strict`) | an em dash in a post's prose (posts only) |

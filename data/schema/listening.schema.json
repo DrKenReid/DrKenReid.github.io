@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.kenreid.co.uk/data/schema/listening.schema.json",
+  "title": "data/listening.json",
+  "description": "Scrobbles per week over the whole Last.fm account, for the listening calendar and its figures on music.html (js/listening.js). Written weekly by .github/scripts/refresh_listening.py from Last.fm's weekly artist charts: a week on file is kept, and a run asks only for the weeks it does not have and the newest two. With no weeks in it the page shows no calendar.",
+  "type": "object",
+  "required": ["user", "weeks"],
+  "additionalProperties": false,
+  "properties": {
+    "user": {
+      "type": "string",
+      "description": "The Last.fm account the charts belong to."
+    },
+    "registered": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "The day the account opened, YYYY-MM-DD, from user.getinfo on the first run. No week that ended before it is asked for. Absent until that run."
+    },
+    "updated": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Date of the refresh that last wrote the file, YYYY-MM-DD. Absent until the first one."
+    },
+    "weeks": {
+      "type": "array",
+      "description": "One record per Last.fm chart week, oldest first. A week the script could not fetch has no record and is asked for again on the next run; a week with nothing played has one, with n at 0.",
+      "items": {
+        "type": "object",
+        "required": ["d", "n"],
+        "additionalProperties": false,
+        "properties": {
+          "d": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+            "description": "The day the chart week starts, YYYY-MM-DD in UTC. Last.fm's weeks run from noon on a Sunday; the calendar files each under the ISO week most of it falls in."
+          },
+          "n": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Scrobbles that week: the plays of every artist in the week's chart, added up."
+          },
+          "a": {
+            "type": "string",
+            "description": "The week's most played artist. Left out of a week with nothing played."
+          },
+          "p": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "That artist's plays that week. Present whenever a is."
+          }
+        }
+      }
+    }
+  }
+}

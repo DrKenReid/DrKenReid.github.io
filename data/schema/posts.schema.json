@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://www.kenreid.co.uk/data/schema/posts.schema.json",
   "title": "data/posts.json",
-  "description": "Every published post, newest first. The blog listing, the cards, the palette, the opener, the feed, the sitemap, the share images and each post's head are all built from it. Title, date, updated, tags, category, excerpt, url, image and series are written by hand; readMinutes and words come from generate_read_times.py, code and interactive from generate_post_facets.py. What a schema cannot say is checked elsewhere: tags against the allowed set and that url and image exist (audit_site.py), and that updated is not before date (generate_post_head.py).",
+  "description": "Every published post, newest first. The blog listing, the cards, the palette, the opener, the feed, the sitemap, the share images and each post's head are all built from it. Title, date, updated, tags, category, excerpt, url, image, series and shelf are written by hand; readMinutes and words come from generate_read_times.py, code and interactive from generate_post_facets.py. What a schema cannot say is checked elsewhere: tags against the allowed set and that url and image exist (audit_site.py), and that updated is not before date (generate_post_head.py).",
   "type": "array",
   "items": {
     "type": "object",
@@ -67,6 +67,11 @@
             "part": {"type": "integer", "minimum": 1}
           }
         }
+      },
+      "shelf": {
+        "type": "array",
+        "items": {"type": "string", "pattern": "\\S"},
+        "description": "Optional. The authors a post about books is about, each spelled as data/books.json spells the name. The post's end band then shows the From my shelf strip (js/post-shelf.js): my books by each author, a saved passage or two, and links to the Quote Wall and Every Book filtered to them. Every name must match a book or a saved quote (the audit's posts-shelf rule)."
       },
       "readMinutes": {
         "type": "integer",

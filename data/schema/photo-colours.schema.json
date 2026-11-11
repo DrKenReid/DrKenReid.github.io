@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.kenreid.co.uk/data/schema/photo-colours.schema.json",
+  "title": "data/photo-colours.json",
+  "description": "Each photograph's main colour, as the frame numbers in each colour family, written by generate_photo_colours.py from the thumbnails' pixels. A frame is in one list: a family, or \"none\" when it has too little colour to have one (every black and white frame). The gallery's colour filter reads it.",
+  "type": "object",
+  "required": [
+    "red",
+    "orange",
+    "yellow",
+    "green",
+    "teal",
+    "blue",
+    "purple",
+    "pink",
+    "brown",
+    "none"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "red": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "orange": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "yellow": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "green": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "teal": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "blue": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "purple": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "pink": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "brown": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "none": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "description": "Frames with too little colour to have a family; the colour filter never shows them."
+    }
+  }
+}

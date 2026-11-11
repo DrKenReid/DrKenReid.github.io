@@ -110,7 +110,7 @@ NOISE = (
     "googletagmanager", "google-analytics", "fonts.g", "gstatic",
     "instagram", "bsky", "giscus", "arcgisonline", "openlibrary",
     "lastfm", "audioscrobbler", "wikimedia", "youtube", "tiktok",
-    "goodreads", "gr-assets", "github.com", "githubassets",
+    "goodreads", "github.com", "githubassets",
 )
 
 # Where serve() listens. A response from any other host is a third party's.

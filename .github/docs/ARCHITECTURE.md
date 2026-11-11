@@ -56,7 +56,7 @@ flowchart TD
     C --> D["js/lightbox.js<br/>content images open in Magnific"]
     D --> E["js/default-assets/active.js<br/>starts the carousels"]
     E --> F["js/shared-components.js<br/>chrome, cards, post furniture"]
-    F --> H["page script, if any<br/>js/blog.js, js/series-index.js, js/albums.js, Leaflet"]
+    F --> H["page script, if any<br/>js/blog.js, js/series-index.js, js/lab.js, js/albums.js, Leaflet"]
     H --> G["inline script:<br/>renderHeader, renderFooter, page renders"]
 ```
 
@@ -66,12 +66,12 @@ line of its own between the two). `gallery.html` is the one page that
 differs: its inline `initGallery` listener sits between `js/lightbox.js`
 and `js/default-assets/active.js`.
 
-Two stacks use that order. Pages with a carousel (the homepage hero, the
-photo strip) or a Magnific lightbox load all of it, and so do posts,
+Two stacks use that order. Pages with a carousel (the photo strip) or a
+Magnific lightbox load all of it, and so do posts,
 whose photographs open in the lightbox. Pages with neither load only
 `js/site.js` and `js/shared-components.js`: `404.html`, `privacy.html`,
-`colophon.html`, `quotes.html`, `series.html` and the series landing
-pages. jQuery is loaded only for Owl Carousel and Magnific Popup, the two
+`colophon.html`, `quotes.html`, `series.html`, `lab.html` and the series
+landing pages. jQuery is loaded only for Owl Carousel and Magnific Popup, the two
 plugins in `js/alime.bundle.js`. The only first-party code that touches
 it is the code driving those plugins: `js/default-assets/active.js`,
 `js/lightbox.js`, the lightbox in `js/gallery.js`, and `renderPhotoStrip`
@@ -85,9 +85,10 @@ use it.
 | Blog listing | `blog.html` | `js/blog.js` after `js/shared-components.js`, then `initBlog()` |
 | Series index | `series.html` | `js/series-index.js` after the shared scripts, then `initSeriesIndex()` |
 | Series landing | `series-feedback.html` | `renderSeriesPage()` in the inline script |
+| Lab | `lab.html` | `js/lab.js` after the shared scripts, then `initLab()`: every post marked `interactive` in `posts.json` as a card, under a heading for each series that is at least half interactive, in part order, then the rest as "One-offs". Its grid carries `data-live-play="view"`, so each card's sketch plays while its cover is on screen, and the script fetches the sketch files itself |
 | Gallery | `gallery.html` | `js/gallery.js` deferred in the head; `initGallery()` on DOMContentLoaded |
-| Reading pages | `literature.html`, `books.html` | `js/literature.js`, `js/bookshelf.js`, `js/bookwall.js`, deferred in the head |
-| Music | `music.html` | `js/albums.js` after the shared scripts |
+| Reading pages | `literature.html`, `books.html` | `js/literature.js`, `js/bookshelf.js`, `js/bookwall.js`, deferred in the head. `books.html` is the cover wall with the listings' Filter and Sort panels (genre, rating, year read, year published, length, author, re-reads), its state in the query string as the blog's is |
+| Music | `music.html` | `js/albums.js` and `js/listening.js` after the shared scripts |
 | Slideshow | `slideshow.html` | `js/shared-components.js` then `js/slideshow.js`, which starts itself on a page marked `<html data-slideshow-page>`; no header or footer, every setting in the address. `show=` picks what it shows: photographs (the default), a tour of the places, quotes, books or albums. The Slideshow link under the title of the gallery, `map.html`, `quotes.html`, `books.html` and `music.html` (`.kr-opener-play`) loads the same script and opens that page's kind over the page (`krOpenSlideshow` in `js/shared-components.js`) |
 | Photo map | `map.html` | `js/vendor/leaflet/leaflet.css` in the head, `js/vendor/leaflet/leaflet.js` after the shared scripts |
 | Post | `blog/rating-systems.html` | nothing of its own; the post furniture starts by itself (below) |
@@ -206,14 +207,15 @@ menu and its focus handling, `window.krNavMenu`, the sticky state);
 | Piece | When | Where |
 |---|---|---|
 | Google Analytics | after `load`, at the next idle moment | `js/analytics.js` |
-| Hover sketches | first `pointermove` or `focusin`, only with `(hover: hover)` and motion allowed; phones never fetch them | `krLoadLiveCovers` in `js/shared-components.js` loads `js/live-covers.js`, `js/covers.js`, `js/covers-site.js` |
+| Hover sketches | first `pointermove` or `focusin`, only with `(hover: hover)` and motion allowed; phones never fetch them. A page whose sketches play in view (`data-live-play="view"`) calls `krLoadLiveCovers` itself, on any device: `lab.html` once its cards are drawn, `data_science.html` as its portfolio nears the screen | `krLoadLiveCovers` in `js/shared-components.js` loads `js/live-covers.js`, `js/covers.js`, `js/covers-site.js` |
 | Syntax highlighting | a post with `pre code[class*="language-"]` | `initCodeHighlighting` loads `js/prism-loader.js`, which loads Prism from jsDelivr |
 | Saving a diagram as a PNG | the first press of a diagram's Save as PNG button | `initDiagramExport` loads `js/kr-export.js` |
 | Comments | the end band is built at parse; giscus loads its frame lazily | `buildGiscusSection` |
+| Replies from Bluesky | the comments within 1250px of the window (about where a browser starts giscus's lazy frame), and only on a post `data/bluesky.json` lists | `renderPostEnd` reads `data/bluesky.json` then, and loads `js/bluesky-replies.js`, which makes one request to Bluesky's public API |
 | Video and other embeds | a click on the facade | `initEmbedFacades` swaps in the iframe |
-| Homepage hero photographs | slides after the first, after load and idle | the inline painter in `index.html`, from `data-bg` |
 | Prerendered posts | about 200ms of hover on a post card, desktop only, never under Save-Data | `krArmPostPrerender` and `KR_PRERENDER_RULES` |
-| The palette's data | first open | `js/palette.js` |
+| The palette's data | posts and places at the first open; the reading data behind the author rows (`data/books.json`, `data/quotes-all.json`) at the first character typed | `js/palette.js` |
+| From my shelf | a post whose `posts.json` record has `shelf` | `renderPostEnd` loads `js/post-shelf.js`, which reads `data/books.json` and `data/quotes-all.json` |
 | Gallery tiles | a batch at a time as the reader scrolls | `js/gallery.js` |
 | Seasonal decorations | only while a season is on (see "Seasons") | `js/shared-components.js` loads `js/season.js` |
 | Birthday hats | 12 October only (see "The birthday") | `js/shared-components.js` loads `js/birthday.js` |
@@ -417,7 +419,8 @@ flowchart LR
     og --> related["generate_related_posts.py"]
     related --> renditions["generate_photo_renditions.py"]
     renditions --> dims["generate_photo_dims.py --stamp-img"]
-    dims --> feed["generate_feed.py"]
+    dims --> colours["generate_photo_colours.py"]
+    colours --> feed["generate_feed.py"]
     feed --> photofeed["generate_photo_feed.py"]
     photofeed --> quotes["generate_quote_wall.py"]
     quotes --> pubs["generate_publications.py"]
@@ -453,26 +456,50 @@ guards.
 
 ```mermaid
 flowchart TD
-    cron1["Mondays 06:00 UTC<br/>.github/workflows/lastfm-refresh.yml"] --> now["refresh_now.py<br/>Last.fm, currently reading"]
-    cron1 --> books["refresh_books.py<br/>Goodreads read shelf"]
+    cron1["Mondays 06:00 UTC<br/>.github/workflows/lastfm-refresh.yml"] --> now["refresh_now.py<br/>Last.fm, currently reading and its covers"]
+    cron1 --> listening["refresh_listening.py<br/>Last.fm weekly charts"]
+    cron1 --> books["refresh_books.py<br/>Goodreads read shelf, new covers"]
+    books --> details["refresh_book_details.py<br/>years and genres, Open Library"]
     now --> v["validate_data.py on FILES"]
-    books --> v
-    v -->|valid| commit["commit and push FILES<br/>rebasing onto master"]
+    listening --> v
+    details --> v
+    cron1 --> bluesky["refresh_bluesky.py<br/>Bluesky posts that shared a post"]
+    bluesky --> v
+    v -->|valid| commit["commit and push FILES and COVERS<br/>rebasing onto master"]
     v -->|invalid| stop["nothing committed"]
     cron2["Mondays 07:17 UTC<br/>.github/workflows/links.yml"] --> links["check_external_links.py"]
     links --> issue["one issue: External link report"]
 ```
 
 **Live data** (`.github/workflows/lastfm-refresh.yml`). The `FILES` list
-in the workflow is the six files it owns: `data/lastfm.json`,
+in the workflow is the nine files it owns: `data/lastfm.json`,
 `data/now.json`, `data/lastfm-history.json`, `data/topalbums.json`,
-`data/books.json` and `data/reading.json`. Each source fails on its own:
+`listening.json` (in `data/` too), `data/books.json`, `data/reading.json`,
+`data/bluesky.json` and `data/book-details.json`. Each
+source fails on its own:
 a failed fetch keeps that source's old values, the other sources still
 update, whatever refreshed is validated against `data/schema/` and
 committed, and a last step turns the run red if any source failed. It is
 the only workflow that writes to the repository (`links.yml` can write
 issues only), and it commits on its own, so pull before you push on a
-Monday. It needs the `LASTFM_API_KEY` repository
+Monday. `listening.json`, the listening history behind the music
+page's calendar, is built up a week at a time: `refresh_listening.py`
+asks only for the chart weeks it does not have and the newest two, and
+never drops a week on file ([DATA.md](DATA.md#listening)).
+With the data it commits the book covers `refresh_books.py` and
+`refresh_now.py` download, a full and a small copy of each in the
+workflow's `COVERS` folder, so the reading pages show covers from the
+site itself
+([DATA.md](DATA.md#reading)). After the shelf, `refresh_book_details.py`
+gives each new book its first year and genres for the filters on
+`books.html`, asking Open Library (no key) only about the books
+`data/book-details.json` has no entry for
+([DATA.md](DATA.md#years-and-genres)). `data/bluesky.json` says which Bluesky
+post shared each blog post, so a post can show the replies to it with
+its comments: `refresh_bluesky.py` reads my public feed with no key,
+keeps every entry the feed no longer reaches, and drops one only when
+Bluesky says its post was deleted
+([DATA.md](DATA.md#bluesky-shares)). It needs the `LASTFM_API_KEY` repository
 secret. (The essay:
 [Letting Robots Update Your Homepage](https://www.kenreid.co.uk/blog/letting-robots-update-your-homepage.html).)
 
@@ -506,22 +533,28 @@ checks that. (The essay:
 |---|---|---|
 | Header, nav, recent posts in the menu | `renderHeader` in `js/shared-components.js`; the phone menu's behaviour in `js/site.js` | smoke suite |
 | Footer, or which pages it lists | `KR_PAGES` and `renderFooter` in `js/shared-components.js` | audit, `js-tests` |
-| The Ctrl+K palette | `js/palette.js` (pages come from `KR_PAGES`) | smoke suite |
+| The Ctrl+K palette | `js/palette.js` (pages come from `KR_PAGES`, authors from the reading data) | `js-tests`, smoke suite |
 | Any colour, size or spacing | a token in `style.css` §01, or the component's section | `minify_css.py`, `check_css.py --check` |
 | A post card | `createBlogCardElement` in `js/shared-components.js` and the baked copy in `generate_related_posts.py`, together | `generate_related_posts.py`, `tests/test_generate_related_posts.py` |
 | The end of every post | `renderPostEnd` and its helpers in `js/shared-components.js`; CSS in §10 | `check_post_template.py` |
+| Replies from Bluesky under a post | `js/bluesky-replies.js` (what is shown), `refresh_bluesky.py` (which Bluesky post belongs to which post), the hook in `renderPostEnd`; CSS in §10 | `js-tests`, `unit-tests`, a browser |
+| From my shelf on a book post | `shelf` in `data/posts.json` (which posts, which authors); `js/post-shelf.js`; CSS in §10 | `audit` (`posts-shelf`), a browser |
 | The post opener | `apply_post_opener.py`, CSS in §06 | `apply_post_opener.py` |
 | The post head template | `generate_post_head.py` | `generate_post_head.py --fix` |
 | Share images | `generate_og_images.py` (bump `RENDERER`) | `generate_og_images.py` |
-| Blog filters, search, sort | `js/blog.js`; the shared panel parts in `js/shared-components.js` | smoke suite |
+| Blog filters, search, sort, the Cards / List layouts (`?view=list` is the archive: every post a line) and the "Start here" band (four hand-picked posts, in `blog.html`'s markup) | `js/blog.js`; the shared panel parts in `js/shared-components.js` | smoke suite |
 | Gallery layout or lightbox | `js/gallery.js`, `js/lightbox.js`, CSS in §13 | smoke suite |
+| The gallery's colour filter | `generate_photo_colours.py` (which family a frame's pixels put it in), `COLOURS` and `renderColourBar` in `js/gallery.js`, the swatches in `style.css` §09 ("Colour filter") | `colours`, `unit-tests`, a browser |
+| The exposure line in the lightbox and the gallery's "By the numbers" | `generate_photo_exif.py` (what is read from an original, and what never is; run by hand against a folder of originals), `krLightboxCaption` in `js/lightbox.js`, `renderShotFigures` in `js/gallery.js`, CSS in §13 | `data-schemas`, `unit-tests`, `js-tests`, a browser |
 | The slideshow and its sounds | `js/slideshow.js` (the header lists its address settings; `MODES` holds each kind of slideshow, `SHOWS` their menu; `SOUNDS` lists each sound's file, loop length and credit), `slideshow.html`, CSS in §13 ("Slideshow"), the loops in `sounds/` (recordings under free licences, credited on the colophon under `#colo-sounds`), the Lively wallpaper package `wallpaper/kenreid-slideshow-lively.zip` (`build_lively_package.py`) | a browser: the smoke sweep only loads the page |
 | The photo map | `map.html` (its script and styles are inline), `data/photo-locations.json` | smoke suite |
 | Reading pages | `js/bookshelf.js`, `js/literature.js`, `js/bookwall.js`, CSS in §14 | `js-tests`, smoke suite |
 | The music crate | `js/albums.js`, CSS in §15 | smoke suite |
+| The listening calendar and its figures | `js/listening.js` (the page), `refresh_listening.py` (the data); CSS in §14, shared with the reading calendar, and §15 | `js-tests`, `unit-tests` |
 | Publications on Data Science | `data/publications.json` | `generate_publications.py` |
 | The quote wall | `data/quotes-all.json` | `generate_quote_wall.py` |
-| Hover sketches | `js/covers.js` (posts), `js/covers-site.js` (elsewhere) | `check_live_covers.py --check`, smoke suite |
+| Hover sketches | `js/covers.js` (posts), `js/covers-site.js` (elsewhere); how they play, on hover or in view, `js/live-covers.js` | `check_live_covers.py --check`, smoke suite |
+| The Lab | `js/lab.js` (which posts, in which groups) and `lab_groups` in `generate_listing_fallback.py`, together | `generate_listing_fallback.py`, smoke suite |
 | The interactive demo engine | `js/kr-viz.js`, CSS in §12 | `viz_verify.py`, smoke suite |
 | Offline behaviour | `sw.js` (bump `VERSION` when caching changes) | `perf_budget.py` (the offline scenario) |
 | Theme toggle | `js/theme.js`, the inline head script on every page | smoke suite |
@@ -537,8 +570,10 @@ checks that. (The essay:
 2. Give it the page opener (`.breadcrumb-area`, markup in
    [DESIGN-SYSTEM.md](DESIGN-SYSTEM.md#page-opener)) and section
    headings. In its `renderHeader` call, set `active` to the header's key
-   for it (`home`, `about`, `data_science`, `blog`, `contact`, or
-   `'hobbies'` with `hobbiesChild` naming the hobby page), or leave it
+   for it (`about`, `data_science`, `gallery`, `literature`, `music`,
+   `blog`, `contact`), with `child` naming a page inside the Photography
+   or Literature menu (`map`, `slideshow`, `books`, `quotes`) or
+   `blogChild` one inside Blog's (`series-index`, `lab`), or leave it
    out for a page that is not in the menu, as `colophon.html` and
    `404.html` do.
 3. Add an entry to `KR_PAGES` in `js/shared-components.js`:
@@ -558,6 +593,13 @@ checks that. (The essay:
 5. `git add -N` the new file (the stylesheet pruner reads only tracked
    files), then `python .github/scripts/run_checks.py --fix`. The sitemap
    and the colophon pick the page up.
+6. A page that draws a list of posts from `posts.json` also gets the
+   list for readers without scripts: put the `listing-fallback` marker
+   pair after its grid and add the page to `targets` in
+   `generate_listing_fallback.py`. `lab.html` is the model: its grid,
+   `#lab-grid`, also joins the rule that holds an empty grid's height
+   (`style.css` §09) and the listings in the smoke suite's
+   `check_listing_load_failure`.
 
 ## Adding a series
 

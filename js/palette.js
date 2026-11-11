@@ -8,6 +8,10 @@
  *   - every series, named in those same posts       (data/posts.json)
  *   - the gallery's photo tags, as filtered views   (KR_PHOTO_CATEGORIES -> gallery.html?tag=)
  *   - the photo map's places                        (data/photo-locations.json -> map.html?region=)
+ *   - the authors I have read or saved quotes from, each as up to two
+ *     filtered views: their quotes on the Quote Wall and their books on
+ *     Every Book                                    (data/quotes-all.json -> quotes.html?author=,
+ *                                                    data/books.json -> books.html?author=)
  *
  * WHAT IT DOES NOT, ON PURPOSE
  *   No text from inside posts, no individual quotes, no individual photographs.
@@ -16,7 +20,9 @@
  *   the thing I half remember". The argument is made in
  *   blog/ctrl-k-for-a-static-site.html (https://kenreid.co.uk/blog/ctrl-k-for-a-static-site.html).
  *   A new source should be a destination (a page, a filtered view, a place),
- *   never a paragraph.
+ *   never a paragraph. The authors keep to that: a name leads to a page
+ *   filtered to that author, the row's second line counts what is there,
+ *   and the words of the quotes and the titles of the books are not searched.
  *
  * LOADED BY
  *   A deferred <script> in the <head> of every page, the 404 page included
@@ -24,7 +30,9 @@
  *   worker's no-network page, has nothing to search and goes without.
  *   Beyond its two buttons in the header (the Search pill, and the phone
  *   bar's search button) it builds no DOM and fetches nothing until the
- *   first open, because most visitors never press the key.
+ *   first open, because most visitors never press the key. The reading
+ *   data behind the author rows, far larger than everything else it
+ *   reads, waits longer: for the first character typed (loadAuthors).
  *
  * RANKING (match(), below)
  *   Where the query sits in a field decides the score, each field's weight
@@ -42,6 +50,9 @@
  *   an entry is tried again as a singular, at a small discount
  *   (singular()), and a page can carry `also` words in KR_PAGES for what
  *   people type that its name does not say ("cv", "email", "rss").
+ *   An author's name is a title held to the word-start rule (a field
+ *   flagged `tight`): there are hundreds of names, and inside a word "art"
+ *   is in Stuart, Martin and Bartlett, enough rows to push the posts out.
  *
  * PATHS
  *   Every href goes through siteRootPrefix() and every fetch through
@@ -62,11 +73,14 @@
  *   top-level reference would throw there and take Ctrl+K with it.
  *
  * PUBLIC
- *   window.krPalette = { open(query?), close(), isOpen(), ready(), search(query) }
+ *   window.krPalette = { open(query?), close(), isOpen(), ready(), authorsReady(), search(query) }
  *   open/close for any other control that wants to summon it (open with
  *   a query starts the search on those words); ready()
- *   resolves once the JSON sources have loaded; search() returns the ranked
- *   results as data, which is what tests should assert on.
+ *   resolves once the JSON sources every open fetches have loaded (posts
+ *   and places; the 404 page calls it on load, so it must stay light);
+ *   authorsReady() fetches the reading data as the first typed character
+ *   does and resolves once the author rows are in; search() returns the
+ *   ranked results as data, which is what tests should assert on.
  */
 (() => {
     'use strict';
@@ -132,8 +146,10 @@
     let posts = null;
     let series = [];
     let places = null;
+    let authors = null;
     let entries = null;
     let indexReady = null;
+    let authorsLoading = null;
     let returnFocus = null;
 
     // Looked up when called, not when this file is parsed (see SHARED
@@ -151,6 +167,79 @@
 
     function plural(n, word) {
         return `${n} ${word}${n === 1 ? '' : 's'}`;
+    }
+
+    /* ------------------------------------------------------------------ *
+     * Authors
+     * ------------------------------------------------------------------ */
+
+    // An author's name as a key, so one author is one row however the name
+    // was written down: lower case, without accents, spaces or punctuation
+    // ("Ursula K. LeGuin" is "Ursula K. Le Guin", and "Scott  Meyer" with
+    // two spaces is Scott Meyer). The pages the rows lead to read the name
+    // back with the same function: js/bookwall.js, the script in
+    // quotes.html and js/post-shelf.js each carry a copy, written the same
+    // way to the letter, and tests/js/palette.test.js fails when one
+    // differs.
+    function authorKey(name) {
+        var s = String(name || '');
+        if (s.normalize) s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        return s.toLowerCase().replace(/[^a-z0-9]+/g, '') || s.toLowerCase().replace(/\s+/g, ' ').trim();
+    }
+
+    const tidy = (name) => String(name || '').replace(/\s+/g, ' ').trim();
+
+    // One record per author across the two reading files:
+    //   { name, books, quotes, spellings }
+    // `books` counts what Every Book shows (the books I rated, as
+    // js/bookwall.js does) and `quotes` what the Quote Wall holds, so the
+    // number in a row is the number the link lands on. The name is spelled
+    // as books.json has it, else as most of the author's quotes do. Most
+    // read and quoted first: when a query ties ("john" starts several
+    // names) the fuller shelves take the rows.
+    function authorIndex(books, quotes) {
+        const by = new Map();
+        const note = (name, onShelf) => {
+            const spelling = tidy(name);
+            if (!spelling) return null;
+            const key = authorKey(spelling);
+            if (!by.has(key)) by.set(key, { name: '', books: 0, quotes: 0, spellings: new Map() });
+            const a = by.get(key);
+            a.spellings.set(spelling, (a.spellings.get(spelling) || 0) + 1);
+            if (onShelf && !a.name) a.name = spelling;
+            return a;
+        };
+        for (const b of books) {
+            const a = note(b && b.a, true);
+            if (a && b.r) a.books++;
+        }
+        for (const q of quotes) {
+            const a = note(q && q.a, false);
+            if (a) a.quotes++;
+        }
+        const out = [];
+        for (const a of by.values()) {
+            if (!a.books && !a.quotes) continue;
+            const spellings = [...a.spellings].sort((x, y) => y[1] - x[1]).map((s) => s[0]);
+            out.push({ name: a.name || spellings[0], books: a.books, quotes: a.quotes, spellings });
+        }
+        return out.sort((x, y) => (y.books + y.quotes) - (x.books + x.quotes));
+    }
+
+    // What an author's rows are found by: the name, at word starts only
+    // (`tight`, see RANKING), and every other way it may be typed: the
+    // spellings saved with the quotes ("Ursula K. LeGuin") and the name
+    // without its accents and full stops ("China Mieville", "JRR Tolkien").
+    function authorFields(a) {
+        const plain = a.name.normalize ? a.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : a.name;
+        const fields = [{ text: a.name, weight: WEIGHT.name, title: true, tight: true }];
+        const seen = new Set([a.name.toLowerCase()]);
+        for (const text of [...a.spellings, plain, tidy(plain.replace(/\./g, ''))]) {
+            if (seen.has(text.toLowerCase())) continue;
+            seen.add(text.toLowerCase());
+            fields.push({ text, weight: WEIGHT.name });
+        }
+        return fields;
     }
 
     /* ------------------------------------------------------------------ *
@@ -246,10 +335,12 @@
 
     /* ------------------------------------------------------------------ *
      * The catalogue: everything the palette can find, in one shape.
-     *   { id, kind, title, sub, href, fields: [{ text, weight, title?, excerpt? }] }
+     *   { id, kind, title, sub, href, fields: [{ text, weight, title?, tight?, excerpt? }] }
      * A field flagged `title` gets the looser title matching and its hits
-     * highlight the title; one flagged `excerpt` shows its hit in place of
-     * the subtitle, so a result found by its excerpt says why it is there.
+     * highlight the title (`tight` with it keeps the highlight and takes
+     * the looser matching away); one flagged `excerpt` shows its hit in
+     * place of the subtitle, so a result found by its excerpt says why it
+     * is there.
      * ------------------------------------------------------------------ */
 
     function catalogue() {
@@ -301,6 +392,23 @@
                 ]);
         }
         seasonEntries(add, out);
+        // Authors last, so a post or a page of the same name comes first
+        // on a tie. Up to two rows each, one per page that has something
+        // of theirs, the quotes first: the Quote Wall is there to be
+        // read, and a wall of covers says less. The kind says which page;
+        // the second line counts what the link will show.
+        for (const a of authors || []) {
+            const fields = authorFields(a);
+            const to = `?${new URLSearchParams({ author: a.name })}`;
+            if (a.quotes) {
+                add('Quotes', a.name, `${plural(a.quotes, 'quote')} saved, on the Quote Wall`,
+                    `quotes.html${to}`, fields);
+            }
+            if (a.books) {
+                add('Books', a.name, `${plural(a.books, 'book')} read, on Every Book`,
+                    `books.html${to}`, fields);
+            }
+        }
         entries = out;
         return out;
     }
@@ -402,7 +510,7 @@
     function best(e, q, factor) {
         let top = null;
         for (const f of e.fields) {
-            const m = match(q, f.text, f.title);
+            const m = match(q, f.text, f.title && !f.tight);
             const score = m ? m.score * f.weight * factor : 0;
             if (m && (!top || score > top.score)) top = { score, hits: m.hits, field: f };
         }
@@ -429,7 +537,7 @@
             if (top && top.score >= MIN_SCORE) results.push({ entry: e, ...top });
         }
         // Array sort is stable, so equal scores keep catalogue order:
-        // pages, series, posts newest first, photo tags, places.
+        // pages, series, posts newest first, photo tags, places, authors.
         return results.sort((a, b) => b.score - a.score).slice(0, MAX_RESULTS);
     }
 
@@ -539,7 +647,7 @@
             'aria-label="Search the site" role="combobox" aria-expanded="false" aria-controls="kr-palette-list" ' +
             'aria-autocomplete="list" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go">' +
             '<div class="kr-palette-list" id="kr-palette-list" role="listbox" aria-label="Results"></div>' +
-            '<p class="kr-palette-empty" hidden>No matches. Try a post title, page, series, photo tag, or place.</p>' +
+            '<p class="kr-palette-empty" hidden>No matches. Try a post title, page, series, author, photo tag, or place.</p>' +
             '<div class="kr-palette-live sr-only" aria-live="polite"></div>' +
             '<div class="kr-palette-foot">' +
             '<span class="kr-palette-key" aria-hidden="true">&uarr;&darr; navigate</span>' +
@@ -557,7 +665,10 @@
             if (e.target === overlay) close();
         });
         overlay.querySelector('.kr-palette-close').addEventListener('click', close);
-        input.addEventListener('input', () => render(false));
+        input.addEventListener('input', () => {
+            if (input.value.trim()) loadAuthors();
+            render(false);
+        });
         input.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowDown') { e.preventDefault(); setActive(active + 1); }
             else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(active - 1); }
@@ -612,6 +723,34 @@
         return indexReady;
     }
 
+    // The author rows' data: every book and every saved quote, two files
+    // several times the size of the posts list. So they wait for the first
+    // character typed (or a query handed to open()): a palette opened and
+    // closed, or used as a menu of pages, downloads neither, and a page
+    // that never opens it downloads nothing. Through krFetchJson, so the
+    // reading pages, which fetch books.json for themselves, ask once.
+    //
+    // The authors are worked out here on purpose, not read from an index
+    // built ahead of time: books.json changes every week, and a second
+    // file would need a generator, a schema, a staleness check and a step
+    // in the weekly job to stay in step with it, all to save a download
+    // that only a reader who types in the palette ever makes.
+    //
+    // A file that fails counts as empty and the other still gives its rows.
+    function loadAuthors() {
+        if (authorsLoading) return authorsLoading;
+        const read = (path) => krFetchJson(path)
+            .then((data) => (Array.isArray(data) ? data : []))
+            .catch(() => []);
+        authorsLoading = Promise.all([read('data/books.json'), read('data/quotes-all.json')])
+            .then(([books, quotes]) => {
+                authors = authorIndex(books, quotes);
+                entries = null;
+                if (isOpen()) render(true);
+            });
+        return authorsLoading;
+    }
+
     const isOpen = () => Boolean(overlay) && overlay.classList.contains('is-open');
 
     // `query`, when a caller passes one, is typed into the box: an empty
@@ -639,6 +778,7 @@
         overlay.classList.add('is-open');
         document.body.classList.add('kr-palette-open');
         input.value = typeof query === 'string' ? query : '';
+        if (input.value.trim()) loadAuthors();
         render(false);
         // Focus synchronously: mobile browsers only raise the soft keyboard
         // when focus happens inside the user gesture. The retry covers the
@@ -742,6 +882,7 @@
         close,
         isOpen,
         ready: loadIndex,
+        authorsReady: loadAuthors,
         search: (query) => search(query).map((r) => ({
             kind: r.entry.kind,
             title: r.entry.title,

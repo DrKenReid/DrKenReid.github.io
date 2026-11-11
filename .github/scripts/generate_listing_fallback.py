@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """The post listings as plain HTML, for readers without JavaScript.
 
-blog.html, series.html and the series landing pages (series-*.html) build
-their listings in the browser from data/posts.json: js/blog.js,
-js/series-index.js and renderSeriesPage() in js/shared-components.js.
+blog.html, series.html, lab.html and the series landing pages
+(series-*.html) build their listings in the browser from data/posts.json:
+js/blog.js, js/series-index.js, js/lab.js and renderSeriesPage() in
+js/shared-components.js.
 With scripting off, or when a script fails to load, those pages showed a
 search box over an empty grid. This script writes the same posts into
 each page as a <noscript> list, between two marker comments:
@@ -18,13 +19,17 @@ each page as a <noscript> list, between two marker comments:
                       that page is tracked
   series-<slug>.html  that page's series (its data-series attribute), in
                       part order
+  lab.html            the interactive posts in the page's own groups
+                      (lab_groups, the rule labGroups in js/lab.js draws
+                      by): each series of demos in part order, then the
+                      rest, newest first
 
 Why <noscript>. A browser with scripting on does not render its content
 (the parser keeps it as text), so the lists cost a script reader
 nothing: no layout shift under the grid, no second copy of every title
 for a screen reader, no extra DOM. The markers sit after each grid, never
-inside it: an element inside #blog-grid, #series-index-grid or
-#series-grid would defeat the :empty rule that holds the grid's height
+inside it: an element inside #blog-grid, #series-index-grid, #series-grid
+or #lab-grid would defeat the :empty rule that holds the grid's height
 open while posts.json loads (style.css §09, "Listing body").
 
 The markers are placed by hand, once, where a list belongs, and this
@@ -133,6 +138,45 @@ def series_page_lines(posts: list[dict], name: str) -> list[str]:
     return ["<ol>", *("  " + post_item(p) for p in parts), "</ol>"]
 
 
+def lab_groups(posts: list[dict]) -> list[tuple[str | None, list[dict]]]:
+    """lab.html's groups, in page order, as (series name, posts): labGroups
+    in js/lab.js is the same rule, so change both. A series is a group
+    when at least half its parts are interactive (most demos first, then
+    by name; its interactive parts in part order). The interactive posts
+    left over, in no such series, close the list under None, newest
+    first."""
+    demos = [p for p in posts if p.get("interactive")]
+    names = {e["name"] for p in demos for e in sitelib.series_list(p) if e.get("name")}
+    groups = []
+    for name in names:
+        parts = sitelib.series_parts(posts, name)
+        live = [p for p in parts if p.get("interactive")]
+        if len(live) * 2 >= len(parts):
+            groups.append((name, live))
+    groups.sort(key=lambda g: (-len(g[1]), g[0]))
+    placed = {p["url"] for _, live in groups for p in live}
+    rest = sorted((p for p in demos if p["url"] not in placed),
+                  key=lambda p: p["date"], reverse=True)
+    return groups + ([(None, rest)] if rest else [])
+
+
+def lab_lines(posts: list[dict], linkable: set[str]) -> list[str]:
+    lines: list[str] = []
+    for name, group in lab_groups(posts):
+        if name is None:
+            label = "One-offs"
+        else:
+            page = sitelib.series_page(name)
+            label = ('<a class="kr-accent-link" href="/%s">%s</a>' % (attr(page), text(name))
+                     if page in linkable else text(name))
+        # The same heading the series index's list uses, for the same reasons.
+        lines.append('<h2 class="h5">%s</h2>' % label)
+        lines.append("<ol>" if name else "<ul>")
+        lines.extend("  " + post_item(p) for p in group)
+        lines.append("</ol>" if name else "</ul>")
+    return lines
+
+
 def wrap(lines: list[str]) -> list[str]:
     return ["<noscript>", *("  " + ln for ln in lines), "</noscript>"]
 
@@ -146,6 +190,7 @@ def targets(posts: list[dict]) -> dict[Path, list[str]]:
     wanted = {
         ROOT / "blog.html": blog_lines(posts),
         ROOT / "series.html": series_index_lines(posts, linkable),
+        ROOT / "lab.html": lab_lines(posts, linkable),
     }
     for page in series_pages:
         if page.parent != ROOT:

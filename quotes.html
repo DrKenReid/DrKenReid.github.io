@@ -670,7 +670,7 @@
   <script src="/js/site.js?v=20260923a"></script>
   <script src="/js/shared-components.js?v=20260923a"></script>
   <script>
-    renderHeader('header-section', { basePath: '/', active: 'hobbies', hobbiesChild: 'quotes' });
+    renderHeader('header-section', { basePath: '/', active: 'literature', child: 'quotes' });
     renderFooter('footer-section');
 
     /* The wall's controls. The cards are baked into the page
@@ -680,8 +680,15 @@
        The address bar carries the search (?q=) and the author (?author=,
        a pill's key: the name in lower case), read on load and rewritten
        as they change, with replaceState as on the blog listing, so a
-       narrowed wall can be shared or reloaded. An author no pill offers
-       is dropped rather than obeyed. */
+       narrowed wall can be shared or reloaded.
+       ?author= takes any author on the wall, however the name is written
+       (authorKey): the command palette's author rows (js/palette.js) and
+       a post's "From my shelf" strip (js/post-shelf.js) link here with
+       the name as the bookshelf spells it. The pills are the twelve most
+       quoted; an author a link names gets a pill of their own after
+       those, so the filter in force is always a pressed button the reader
+       can let go of. An author with no quote here is dropped rather than
+       obeyed. */
     (function () {
       var wall = document.getElementById('quote-wall');
       var input = document.getElementById('quote-search');
@@ -698,6 +705,47 @@
       var authorKeys = [];
       // Cache each card's search text once
       cards.forEach(function (c) { c._kr = c.textContent.toLowerCase(); });
+
+      /* An author's name as a key: lower case, without accents, spaces or
+         punctuation, so a name in a link finds its quotes however it was
+         typed. js/palette.js builds the links and has the original; the
+         copies are held to it by tests/js/palette.test.js. */
+      function authorKey(name) {
+        var s = String(name || '');
+        if (s.normalize) s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        return s.toLowerCase().replace(/[^a-z0-9]+/g, '') || s.toLowerCase().replace(/\s+/g, ' ').trim();
+      }
+
+      /* The author as a card prints the name: the text that opens its
+         footer, between the dash and the comma, single-spaced. The card's
+         data-a (the name in lower case) when the footer has another
+         shape. */
+      function authorName(c) {
+        var f = c.querySelector('footer');
+        var lead = f && f.firstChild && f.firstChild.nodeType === 3 ? f.firstChild.nodeValue : '';
+        var name = lead.replace(/^[\s\u2014-]+/, '').replace(/[\s,]+$/, '').replace(/\s+/g, ' ');
+        return name || (c.getAttribute('data-a') || '').replace(/\s+/g, ' ').trim();
+      }
+
+      /* Who wrote each card. One author is saved more than one way
+         ("Scott  Meyer" with two spaces, "Ursula K. LeGuin"), so the
+         cards are grouped by authorKey, each card keeping its key (_a):
+         authors[key] = { n, label, pill }, the count, the most used
+         spelling, and that spelling in lower case, which is the pill's
+         key and the ?author= value. */
+      var authors = {};
+      cards.forEach(function (c) {
+        var name = authorName(c);
+        c._a = authorKey(name);
+        var a = authors[c._a] || (authors[c._a] = { n: 0, spellings: {} });
+        a.n++;
+        a.spellings[name] = (a.spellings[name] || 0) + 1;
+      });
+      Object.keys(authors).forEach(function (key) {
+        var a = authors[key];
+        a.label = Object.keys(a.spellings).sort(function (x, y) { return a.spellings[y] - a.spellings[x]; })[0];
+        a.pill = a.label.toLowerCase();
+      });
       // The lede gives the whole collection; the count under the filters
       // (#quote-wall-count) says what a search or filter leaves.
       if (countEl) countEl.textContent = String(total);
@@ -715,9 +763,10 @@
 
       function applyFilters() {
         var shown = 0;
+        var by = activeAuthor ? authorKey(activeAuthor) : '';
         cards.forEach(function (c) {
           var ok = (!query || c._kr.indexOf(query) !== -1) &&
-                   (!activeAuthor || c.getAttribute('data-a') === activeAuthor);
+                   (!by || c._a === by);
           c.hidden = !ok;
           if (ok) shown++;
         });
@@ -729,15 +778,12 @@
       /* Author facet (review 1e), via the shared filter bar */
       var facetEl = document.getElementById('quote-filters');
       if (facetEl && typeof renderFilterBar === 'function') {
-        var counts = {};
-        cards.forEach(function (c) {
-          var a = c.getAttribute('data-a');
-          counts[a] = (counts[a] || 0) + 1;
-        });
-        authorKeys = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; }).slice(0, 12);
-        authorBar = renderFilterBar(facetEl, authorKeys.map(function (a) {
-          var label = a.replace(/\b\w/g, function (ch) { return ch.toUpperCase(); });
-          return { key: a, label: krEscapeHtml(label), count: counts[a] };
+        authorKeys = Object.keys(authors).sort(function (a, b) { return authors[b].n - authors[a].n; }).slice(0, 12);
+        // The author a link names, when the twelve do not include them.
+        var linked = authorKey(new URLSearchParams(location.search).get('author'));
+        if (authors[linked] && authorKeys.indexOf(linked) === -1) authorKeys.push(linked);
+        authorBar = renderFilterBar(facetEl, authorKeys.map(function (key) {
+          return { key: authors[key].pill, label: krEscapeHtml(authors[key].label), count: authors[key].n };
         }), {
           multi: false,
           onChange: function (keys) {
@@ -857,12 +903,12 @@
       // has its final shape to land in.
       var params = new URLSearchParams(location.search);
       var presetQuery = (params.get('q') || '').trim();
-      var presetAuthor = (params.get('author') || '').trim().toLowerCase();
+      var presetAuthor = authorKey(params.get('author'));
       if (presetQuery || presetAuthor) {
         typed = presetQuery;
         query = typed.toLowerCase();
         if (input) input.value = presetQuery;
-        if (authorBar && authorKeys.indexOf(presetAuthor) !== -1) authorBar.setActive([presetAuthor]);
+        if (authorBar && authorKeys.indexOf(presetAuthor) !== -1) authorBar.setActive([authors[presetAuthor].pill]);
         else applyFilters();
       }
 

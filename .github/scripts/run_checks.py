@@ -175,6 +175,13 @@ CHECKS: list[Check] = [
           script("generate_photo_dims.py", "--check"),
           script("generate_photo_dims.py", "--stamp-img"), fast=True),
 
+    # data/photo-colours.json, each frame's main colour for the gallery's
+    # colour filter: every thumbnail in one family. The check reads the
+    # list, not the pixels; the fixer reads the pixels and needs Pillow.
+    Check("colours", "every thumbnail has its colour family",
+          script("generate_photo_colours.py", "--check"),
+          script("generate_photo_colours.py"), fast=True),
+
     # feed.xml carries the full body of the twenty newest posts, so it
     # comes after every generator that writes into a post.
     Check("feed", "feed.xml matches posts.json and the posts",

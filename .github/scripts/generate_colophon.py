@@ -52,6 +52,22 @@ def total(paths):
     return sum(size(f) for f in paths)
 
 
+def photograph_count():
+    """Frames in the gallery, less the alternates folded into another tile.
+
+    photography-files.json lists every frame; photo-variants.json groups
+    the frames that are one photograph, and the gallery shows each group
+    as one tile (its first stem).
+    """
+    data = ROOT / "data"
+    frames = len(json.loads((data / "photography-files.json").read_text(encoding="utf-8")))
+    try:
+        groups = json.loads((data / "photo-variants.json").read_text(encoding="utf-8")).get("groups", [])
+    except (OSError, ValueError):
+        groups = []
+    return frames - sum(len(g) - 1 for g in groups if len(g) > 1)
+
+
 def css_input_bytes():
     """style.css plus every file it @imports.
 
@@ -160,7 +176,14 @@ def main(argv=None):
     css_min = size("style.min.css")
     css_authored = [ROOT / "style.css"] + sitelib.tracked(*SEASON_SHEETS)
 
-    images = sitelib.tracked("img/**/*.webp", "img/**/*.png", "img/**/*.jpg", "img/**/*.svg")
+    # The site's pictures, less the book covers the weekly refresh keeps
+    # (img/covers/shelf/<g>.jpg and the small copies under it): that
+    # workflow commits a new book's covers without running this script,
+    # so counted here they would leave imageCount and imageBytes stale
+    # every week a book is finished.
+    shelf_covers = ROOT / "img" / "covers" / "shelf"
+    images = [f for f in sitelib.tracked("img/**/*.webp", "img/**/*.png", "img/**/*.jpg", "img/**/*.svg")
+              if shelf_covers not in f.parents]
     web_fonts = sitelib.tracked("fonts/vendor/*.woff2")
     # The files the pages read. A git pathspec's * crosses directories,
     # so without the parent test data/schema/*.schema.json (validation
@@ -197,8 +220,10 @@ def main(argv=None):
         "codePosts": sum(1 for p in posts if p.get("code")),
         "series": len({s["name"] for p in posts
                        for s in sitelib.series_list(p) if s.get("name")}),
-        "photos": len(json.loads(
-            (ROOT / "data" / "photography-files.json").read_text(encoding="utf-8"))),
+        # Photographs as the gallery counts them: a group of re-edits in
+        # photo-variants.json is one tile there, so it is one photograph
+        # here, and every page gives the same figure.
+        "photos": photograph_count(),
         # The homepage's quote count, read from here so the page does not
         # download all of quotes-all.json to learn its length.
         "quotes": len(json.loads(

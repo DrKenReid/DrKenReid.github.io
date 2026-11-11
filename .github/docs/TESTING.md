@@ -53,9 +53,9 @@ and JavaScript unit tests and the browser suites.
 
 **Setting up.** The static checks need Python 3.12 or later (CI runs
 3.12) and git, and the JavaScript tests need Node 21 or later. The browser
-suites, the monochrome check and three generators (the share cards, the
-icon font subsets, the monochrome tags) need the packages in
-`.github/scripts/requirements.txt`:
+suites, the monochrome check and four generators (the share cards, the
+icon font subsets, the monochrome tags, the photo colours) need the
+packages in `.github/scripts/requirements.txt`:
 
 ```sh
 python -m venv .venv
@@ -79,6 +79,7 @@ In registry order. "Fixer" is what `--fix` runs when the check fails.
 | `related` | `generate_related_posts.py --check` | the script | The related-post cards baked into each post fall behind: publishing a post changes what its neighbours should recommend. Fast. |
 | `photo-dims` | `generate_photo_dims.py --check` | `--stamp-img` | A new photograph has no recorded size (the gallery lays it out at 3:2 and the row jumps), or a post image has no `width` and `height` and shifts the page as it loads. Fast. A post photo that is a gallery frame must also carry the srcset of its tracked double and hero, with sizes for its layout; a hand-written sizes is kept. After `renditions`. |
 | `renditions` | `generate_photo_renditions.py --check` | the script (fetches originals from the release) | A photograph has no `@2x` thumb, so its gallery tile is soft on a high-density screen, or a frame has no hero (or one smaller than its original allows), so its banner, share image, in-post copy or slideshow slide is a stretched thumbnail. Offline. Fast. |
+| `colours` | `generate_photo_colours.py --check` | the script (needs Pillow) | A photograph added without its colour family, so the gallery's Colour filter shows it under no colour: every thumbnail must be in one family of `data/photo-colours.json`, or under `none`. Reads the list, not the pixels, so a thumbnail replaced in place keeps its old family until the script is rerun. Fast. |
 | `feed` | `generate_feed.py --check` | the script | `feed.xml` carries the full body of the twenty newest posts, so any post edit makes it stale. Fast. |
 | `photo-feed` | `generate_photo_feed.py --check` | the script | `feed-photos.xml` and the `KR_NEW_PHOTOS` line both come from `data/photosets.json`; it also fails when frames were added past the newest set without an entry. Fast. |
 | `lively` | `build_lively_package.py --check` | the script | `wallpaper/kenreid-slideshow-lively.zip`, the slideshow as a Lively wallpaper, lists what it can show, the subjects, places and sounds in its Customise menu: a new kind of slideshow, place, subject or sound leaves the menu without it. Fast. |
@@ -159,7 +160,7 @@ real files in a `vm` (`tests/js/runtime.js` is the shared loader).
 
 | Module | Pins |
 |---|---|
-| `test_audit_rules.py` | the audit's structural rules on small inputs |
+| `test_audit_rules.py` | the audit's structural rules on small inputs, and that a book's cover on the shelf is not reported as an orphan |
 | `test_prose_rules.py` | the audit's house-style rules, by example |
 | `test_check_css.py` | each stylesheet rule on something it must catch and something it must pass |
 | `test_check_docs.py` | which words in the docs and comments count as paths, and what may never be named |
@@ -175,19 +176,27 @@ real files in a `vm` (`tests/js/runtime.js` is the shared loader).
 | `test_generate_series_band.py` | which series the blog's "Read in order" band shows (three parts or more, most recently updated, ties by name), its escaped card, and the refusal of a series with no tracked page or no description |
 | `test_invites.py` | every post has its own newsletter pop-up words in `data/invites.json`, short enough for a phone and within the house rules |
 | `test_jargon_rule.py` | the jargon rule: what counts as a use of a box term, the stray `<jargon>` marker, the grandfathered list; its label cases (`tests/jargon_aliases.json`) also run against the tooltips' `krJargonAliases` in `tests/js/jargon.test.js` |
+| `test_photo_colours.py` | which colour family painted frames land in (a sky over a field, a grey street with one red coat, wood and skin as brown, olive with the greens), and what the `colours` check refuses |
 | `test_photo_dims.py` | the image header readers and the `--stamp-img` scanner |
+| `test_photo_exif.py` | the camera data read from stand-in originals (a PNG chunk, a JPEG named as a PNG, a TIFF, a raw profile, XMP; a new set read from its own files with `--first`), that a position, a serial number, a name and a date in the same block never reach the entry, the merge that keeps what the folder cannot speak for, and `data/photo-exif.json` as committed |
 | `test_photo_renditions.py` | the hero size (never enlarged), the edge a small original allows, the thumb list that leaves out the `@2x` doubles, and `--check` on a stand-in tree |
 | `test_post_body.py` | finding a post's article in its HTML |
 | `test_post_components.py` | each markup transform, and the audit rules that hold them |
 | `test_reading_parity.py` | `refresh_books.py` (`reading.json`'s `thisYear`) and `js/bookshelf.js` (the reading page's "this year" and calendar) count reading sessions the same way (needs Node) |
-| `test_refresh_books.py` | the weekly Goodreads merge never loses a re-read |
+| `test_refresh_books.py` | the weekly Goodreads merge never loses a re-read, and keeps the year and genres on file; the site's copies of the covers (fetched once, a mark only where the file is, never a failed run, a run cut short picked up again), and the books in progress in `now.json` showing them too |
+| `test_refresh_book_details.py` | each book's first year and genres: the genre table (narrow rules first, LitRPG under fantasy votes, weak labels, never more than two), an export's original year over the edition's, the sources in order, Open Library asked once a book and given up on when down, with the network replaced; and the real files agreeing (`books.json` says what the details and overrides say, the page's genre list and the schemas' are the script's) |
+| `test_refresh_listening.py` | the weekly listening history, with the network mocked: one bad week is skipped and asked for again, a run that fetched nothing writes nothing, a week on file is never dropped or emptied, and a run cut short keeps what it had fetched |
+| `test_refresh_bluesky.py` | the weekly Bluesky shares, with the network replaced: which of my posts count as sharing a blog post, the most recent share winning, an entry out of the feed's reach kept, a failed run writing nothing, and an entry dropped only when Bluesky says its post is gone |
 | `test_run_checks.py` | the registry's order and the parity parser |
 | `test_sitelib.py` | the shared helpers, on the cases their old copies disagreed on |
 | `test_structured_data.py` | the homepage and Data Science describe the same person |
 | `test_external_links.py` | what the weekly link report counts as gone, a redirect that never arrives or stops at a sign-in page included |
-| `tests/js/bookshelf.test.js` | ISO weeks and reading sessions on the calendar; how the shelf's year buttons group the years |
-| `tests/js/kr-viz.test.js` | the demo engine's run button (Run again once finished), Restart playing on, Step, starting at half the main canvas, and the short-screen height cap |
-| `tests/js/lightbox.test.js` | the photographs' lightbox caption markup, and which thumbnail stands in while a full frame loads |
+| `tests/js/bookshelf.test.js` | ISO weeks and reading sessions on the calendar; how the shelf's year buttons group the years; which copy of a cover each use shows, and that none is asked of Goodreads |
+| `tests/js/bookwall.test.js` | the cover wall's filters and sorts: a re-read in each year it was read, the publication and length bands, rows OR within and AND across, an author matched whole, titles without articles and authors by surname, and a book with no year or page count last both ways |
+| `tests/js/listening.test.js` | the listening calendar: which ISO week a Last.fm chart week is drawn in, months adding up to the weeks they replace, the shades, and the figures (streaks, the busiest year and week, who led most weeks) |
+| `tests/js/bluesky-replies.test.js` | the Bluesky replies under a post: which are shown (none blocked, labelled or hidden), two levels and the links on, links cut by UTF-8 bytes, and that an answer of any shape cannot become markup, a script address or an exception |
+| `tests/js/kr-viz.test.js` | the demo engine's run button (Run again once finished), Restart playing on, Step, starting at half the main canvas, the short-screen height cap, what a link to a run carries and what the engine refuses from one, and the full-screen button and sizes |
+| `tests/js/lightbox.test.js` | the photographs' lightbox caption markup, its exposure line (and none for a frame with no camera data), and which thumbnail stands in while a full frame loads |
 | `tests/js/post-runtime.test.js` | the end band's routes and neighbours (and the pager saying when it leaves the series), related cards' series chips, lead-ins, sidenote references |
 | `tests/js/site-chrome.test.js` | `KR_PAGES`, the pager's page list, topic rows, the prerender rules, `krThumbSrcset` |
 

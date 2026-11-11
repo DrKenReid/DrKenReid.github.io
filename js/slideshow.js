@@ -25,9 +25,10 @@
  *             published (both found in data/books.json);
  *             a long quote stays up long enough to read
  *   books     every book I have rated in data/books.json, its cover (the
- *             one Goodreads shows, c; Open Library's by ISBN if that
- *             fails; one set in type if both do) in front of a drifting
- *             wall of covers, with the rating and when I read it
+ *             site's own copy for a book marked k; Open Library's by
+ *             ISBN without one; one set in type failing both) in front
+ *             of a drifting wall of covers (the small copies, s), with
+ *             the rating and when I read it
  *   music     the albums I have played most lately (data/topalbums.json,
  *             refreshed weekly), the same way, on a wall of sleeves
  *   Everything else (sound, sleep, clock, dimming, the details, the
@@ -234,8 +235,8 @@
     const SWIPED_KEY = 'kr-show-swiped';
     // A photograph that has not arrived by now is skipped.
     const LOAD_WAIT_MS = 20000;
-    // A book's or a record's cover from another site that has not arrived
-    // by now gives way to one set in type, rather than hold up its slide.
+    // A book's or a record's cover that has not arrived by now gives way
+    // to one set in type, rather than hold up its slide.
     const COVER_WAIT_MS = 5000;
 
     const DATA = ['data/photography-files.json', 'data/photo-tags.json', 'data/photo-locations.json',
@@ -769,10 +770,7 @@
                 const book = x.b || x.g ? findBook(x.b, x.a, x.g) : null;
                 return { id: 'q' + i, text: text, author: String(x.a).trim(), book: bareTitle(x.b),
                     words: text.split(/\s+/).length,
-                    // The size books.json names, which Goodreads' own pages
-                    // use and so has ready; a resized copy is made on the
-                    // first request, which can outlast COVER_WAIT_MS.
-                    cover: book && book.c ? grCover(book.c) : '', isbn: book && book.i || '',
+                    cover: shelfCover(book), tile: shelfCover(book, true), isbn: book && book.i || '',
                     year: book && book.y || '' };
             });
             return { items: items, photos: photos };
@@ -822,7 +820,7 @@
             '<p>' + outLink('/quotes.html', 'The quote wall') + '</p>',
         count: deck => plural(deck.length, 'quote', 'quotes'),
         home: () => ['/quotes.html', 'Back to the quote wall'],
-        wallImage: item => item.cover ? wallCover(item.cover) : item.isbn ? bookCover(item.isbn, 'M') : '',
+        wallImage: item => item.tile || (item.isbn ? bookCover(item.isbn, 'M') : ''),
         fields: (s, lib) => {
             const counts = {};
             lib.items.forEach(x => { counts[x.author] = (counts[x.author] || 0) + 1; });
@@ -838,22 +836,26 @@
 
     // --- books: every book I have rated, one in front of a wall of covers
 
-    // A book's cover is the one Goodreads shows (c in data/books.json, kept
-    // by refresh_books.py: every book has one, ISBN or not, about 475px
-    // tall), or failing that Open Library's for its ISBN (as
-    // krBookshelf.coverUrl, js/bookshelf.js). The wall behind asks Goodreads
-    // for a smaller copy (WALL_SIZE) of the same cover.
-    const GR_COVERS = 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/';
-    const WALL_SIZE = '._SY240_';
+    // A book's cover is the site's own copy of the one Goodreads shows,
+    // which refresh_books.py downloads once and marks in data/books.json,
+    // ISBN or not, so only files that are there are asked for and nothing
+    // comes from Goodreads (as krBookshelf.shelfCover, js/bookshelf.js):
+    // the full copy (k, /img/covers/shelf/<g>.jpg, about 400px tall) in
+    // front, the small one (s, /img/covers/shelf/s/<g>.jpg, 240px, about
+    // 10 KB) on the wall behind, and either where the other is missing.
+    // A book with neither shows Open Library's for its ISBN
+    // (krBookshelf.coverUrl). ?slideshow keeps them out of the service
+    // worker's image cache, as it does the photographs ("Photographs" at
+    // the top).
+    const shelfCover = (b, small) => {
+        if (!b || !b.g) return '';
+        const file = encodeURIComponent(b.g) + '.jpg?slideshow';
+        const full = b.k ? '/img/covers/shelf/' + file : '';
+        const tile = b.s ? '/img/covers/shelf/s/' + file : '';
+        return small ? tile || full : full || tile;
+    };
     const bookCover = (isbn, size) =>
         'https://covers.openlibrary.org/b/isbn/' + encodeURIComponent(isbn) + '-' + size + '.jpg?default=false';
-    const grCover = c => c ? (/^https:/.test(c) ? c : GR_COVERS + c) : '';
-    // Goodreads gives a cover at another size for a size in its name, and
-    // takes one added to a name that has none (about 7 KB at 240px, where
-    // some unsized originals are 150 KB).
-    const wallCover = url => url.indexOf(GR_COVERS) !== 0 ? url
-        : /\._S[XY]\d+_\.\w+$/.test(url) ? url.replace(/\._S[XY]\d+_\.(\w+)$/, WALL_SIZE + '.$1')
-        : url.replace(/\.(\w+)$/, WALL_SIZE + '.$1');
 
     function stars(n) {
         return '<span aria-hidden="true">' + '★'.repeat(n) + '☆'.repeat(5 - n) + '</span>' +
@@ -872,7 +874,8 @@
                 const series = m && m[2].toLowerCase() !== m[1].toLowerCase() ? m[2] + ', book ' + m[3] : '';
                 return { id: 'b' + (b.g || i), title: m ? m[1] : b.t, series: series,
                     author: b.a || '', rating: +b.r, isbn: b.i || '', year: d ? d[1] : '', month: d ? +d[2] : 0,
-                    sort: b.d || '', review: b.w || '', g: b.g || '', cover: grCover(b.c) };
+                    sort: b.d || '', review: b.w || '', g: b.g || '', cover: shelfCover(b),
+                    tile: shelfCover(b, true) };
             });
             return { items: items };
         },
@@ -912,7 +915,7 @@
                 item.review ? 'My review on Goodreads' : 'On Goodreads') + '</p>',
         count: deck => plural(deck.length, 'book', 'books'),
         home: () => ['/books.html', 'Back to every book'],
-        wallImage: item => item.cover ? wallCover(item.cover) : item.isbn ? bookCover(item.isbn, 'M') : '',
+        wallImage: item => item.tile || (item.isbn ? bookCover(item.isbn, 'M') : ''),
         fields: (s, lib) => {
             const years = {};
             lib.items.forEach(b => { if (b.year) years[b.year] = (years[b.year] || 0) + 1; });

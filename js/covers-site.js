@@ -2,11 +2,13 @@
  * covers-site.js — hover sketches for the rest of the site.
  *
  * The same engine as the blog cards (js/live-covers.js) runs these over
- * anything carrying data-live="<key>": the homepage stat tiles and
- * Explore links, the About page's hobby cards, the publications on the
+ * anything carrying data-live="<key>": the homepage stat tiles, the
+ * About page's cards, the publications and the portfolio's apps on the
  * data science page, the book wall (by genre) and the gallery tiles'
  * globe badge. Keys are grouped by prefix; a host names
  * its sketch in markup, so adding one is an attribute, not a script.
+ * The apps' sketches play while on screen (the engine's header says
+ * how a host asks for that); the rest run on hover or focus.
  */
 (function () {
     'use strict';
@@ -175,8 +177,10 @@
         };
     });
 
+    /* The next two run on About page cards (Blogging, This website). */
+
     // A cursor types justified lines of dashes, occasionally backspaces a word, then the page scrolls.
-    def('explore:blog', function (w, h, rnd) {
+    def('hobby:blogging', function (w, h, rnd) {
         var t = 0, marginX = w * 0.1, lineW = w * 0.8, lineH = h * 0.11, top = h * 0.12;
         var lines = [[]], deleteAt = 0;
         function segW() { return lineW * (0.06 + rnd() * 0.14); }
@@ -210,100 +214,8 @@
         };
     });
 
-    // A viewfinder's focus brackets hunt, then lock gold on a spot with a shutter flash.
-    def('explore:photography', function (w, h, rnd) {
-        var t = 0, CYCLE = 160, cx = w * 0.5, cy = h * 0.5, tx = w * 0.5, ty = h * 0.5, flash = 0;
-        function pick() { tx = w * (0.22 + rnd() * 0.56); ty = h * (0.22 + rnd() * 0.56); }
-        pick();
-        return {
-            step: function () {
-                t = (t + 1) % CYCLE;
-                if (t === 0) pick();
-                cx += (tx - cx) * 0.08;
-                cy += (ty - cy) * 0.08;
-                if (t === 120) flash = 14;
-                if (flash > 0) flash--;
-            },
-            draw: function (ctx) {
-                var locked = t > 100 && t < 140, s = Math.min(w, h) * 0.24, arm = s * 0.32;
-                ctx.strokeStyle = locked ? C.b : C.ink; ctx.lineWidth = 2;
-                var pts = [[-1, -1], [1, -1], [-1, 1], [1, 1]];
-                for (var i = 0; i < pts.length; i++) {
-                    var dx = pts[i][0], dy = pts[i][1], x0 = cx + dx * s, y0 = cy + dy * s;
-                    ctx.beginPath();
-                    ctx.moveTo(x0, y0 - dy * arm); ctx.lineTo(x0, y0); ctx.lineTo(x0 - dx * arm, y0);
-                    ctx.stroke();
-                }
-                if (locked) rect(ctx, cx - s * 0.45, cy - s * 0.45, s * 0.9, s * 0.9, 'rgba(255,232,158,0.14)');
-                if (flash) rect(ctx, 0, 0, w, h, 'rgba(255,255,255,' + ((flash / 14) * 0.6).toFixed(2) + ')');
-            }
-        };
-    });
-
-    // Scatter points appear one by one, a regression line rotates into fit, then residuals drop.
-    def('explore:data-science', function (w, h, rnd) {
-        var n = 30, pts = [], t = 0, CYCLE = 260;
-        var mx = w * 0.1, my = h * 0.1, pw = w * 0.8, ph = h * 0.7;
-        var i, sx = 0, sy = 0, sxy = 0, sxx = 0;
-        for (i = 0; i < n; i++) {
-            var x = rnd();
-            var y = Math.max(0, Math.min(1, 0.75 - 0.5 * x + (rnd() - 0.5) * 0.3));
-            pts.push({ x: x, y: y });
-        }
-        for (i = 0; i < n; i++) { sx += pts[i].x; sy += pts[i].y; sxy += pts[i].x * pts[i].y; sxx += pts[i].x * pts[i].x; }
-        var slope = (n * sxy - sx * sy) / (n * sxx - sx * sx), inter = (sy - slope * sx) / n;
-        return {
-            step: function () { t = (t + 1) % CYCLE; },
-            draw: function (ctx) {
-                var shown = Math.min(n, Math.floor((t / 90) * n)), k;
-                for (k = 0; k < shown; k++) {
-                    dot(ctx, mx + pts[k].x * pw, my + (1 - pts[k].y) * ph, 3, C.a);
-                }
-                if (t > 100) {
-                    var lp = Math.max(0, Math.min(1, (t - 100) / 40));
-                    var s2 = slope * ease(lp);
-                    var y0 = my + (1 - inter) * ph, y1 = my + (1 - (inter + s2)) * ph;
-                    line(ctx, mx, y0, mx + pw, y1, C.b, 2);
-                    if (t > 160) {
-                        var rp = Math.max(0, Math.min(1, (t - 160) / 60));
-                        for (k = 0; k < n; k++) {
-                            var px2 = mx + pts[k].x * pw, py2 = my + (1 - pts[k].y) * ph;
-                            var lineY = my + (1 - (inter + slope * pts[k].x)) * ph;
-                            line(ctx, px2, py2, px2, py2 + (lineY - py2) * rp, 'rgba(255,255,255,0.3)', 1);
-                        }
-                    }
-                }
-            }
-        };
-    });
-
-    // A vinyl record spins under a tone arm, grooves turning, a note drifting up now and then.
-    def('explore:hobbies', function (w, h, rnd) {
-        var cx = w * 0.42, cy = h * 0.55, R = Math.min(w, h) * 0.34, t = 0, notes = [];
-        return {
-            step: function () {
-                t++;
-                if (t % 70 === 0) notes.push({ x: cx + R * 0.6, y: cy, life: 60 });
-                for (var i = notes.length - 1; i >= 0; i--) { notes[i].y -= 0.6; notes[i].x += 0.15; notes[i].life--; if (notes[i].life <= 0) notes.splice(i, 1); }
-            },
-            draw: function (ctx) {
-                var ang = (t * 0.05) % TAU;
-                ctx.save(); ctx.translate(cx, cy); ctx.rotate(ang);
-                ctx.strokeStyle = C.dim;
-                for (var r = R * 0.35; r < R; r += R * 0.09) { ctx.beginPath(); ctx.arc(0, 0, r, 0, TAU); ctx.lineWidth = 1; ctx.stroke(); }
-                dot(ctx, 0, 0, R * 0.28, C.b);
-                dot(ctx, 0, 0, R * 0.04, 'rgba(20,20,20,0.8)');
-                ctx.restore();
-                var armX = w * 0.86, armY = h * 0.12, tipX = cx + R * 0.5, tipY = cy - R * 0.1;
-                line(ctx, armX, armY, tipX, tipY, C.ink, 3);
-                dot(ctx, armX, armY, 4, C.ink);
-                for (var i = 0; i < notes.length; i++) text(ctx, '♪', notes[i].x, notes[i].y, 12, 'rgba(255,255,255,' + (notes[i].life / 60).toFixed(2) + ')', 400, 'left');
-            }
-        };
-    });
-
     // A dot travels station to station along a six-stop line, filling each gold as it passes.
-    def('explore:series', function (w, h, rnd) {
+    def('hobby:website', function (w, h, rnd) {
         var n = 6, t = 0, CYCLE = n * 40, stations = [];
         for (var i = 0; i < n; i++) stations.push({ x: w * (0.12 + i * (0.76 / (n - 1))), y: h * 0.5 });
         return {
@@ -320,141 +232,6 @@
                     ctx.beginPath(); ctx.arc(stations[s].x, stations[s].y, 6, 0, TAU); ctx.stroke();
                 }
                 dot(ctx, dx, dy, 5, C.a);
-            }
-        };
-    });
-
-    /* Literature: books are shelved one at a time, each sliding in from
-       the right to stand beside the last, with a height and thickness of
-       its own. Spines take the colours the shelf on literature.html gives
-       a rating (the .kr-spine--r* rules): the rose-to-gold gradient for
-       five stars, then warm stone darkening to grey. When the next book
-       will not fit upright it leans on its neighbour instead (if it is too
-       short to reach, the row simply ends); the full shelf holds, fades
-       and starts again. Every duration is a count of steps, so the
-       engine's fixed sixty a second sets the pace on any display. The
-       stage is wide and short (about 110 by 56 on the homepage), so books
-       are sized from its height. */
-    def('explore:literature', function (w, h, rnd) {
-        var SLIDE = 22, TIP = 16, HOLD = 80, FADE = 30, LEAN = 0.3;
-        var shelfY = h * 0.86, left = w * 0.08, right = w * 0.92, gap = Math.max(1, w * 0.008);
-        var books, flying, state, t;
-
-        // Rating shades from style.css, lowest first; five stars is null
-        // and drawn as the gradient.
-        var SHADES = ['#57534d', '#6f6961', '#8f857a', '#b8a58f', null];
-        var ODDS = [0.06, 0.16, 0.4, 0.72, 1];   // cumulative: 1 to 5 stars
-        function makeBook(x) {
-            var roll = rnd(), r = 0;
-            while (roll > ODDS[r]) r++;
-            return {
-                x: x,
-                bw: Math.max(4, h * (0.09 + rnd() * 0.07)),
-                bh: h * (0.46 + rnd() * 0.28),
-                shade: SHADES[r],
-                lean: 0
-            };
-        }
-        /* Where a book has to stand so that, tipped left by LEAN about its
-           bottom left corner (as a real one tips), its left edge comes to
-           rest on the top corner of `prev`. A point s up that edge ends at
-           (-s sin, -s cos) from the corner, so the contact is at
-           s = prev.bh / cos, and the corner stands prev.bh * tan clear of
-           the neighbour. No lean if the book is too short to reach, or
-           would stand past the end of the shelf. */
-        function leanOn(book, prev) {
-            var reach = prev.bh / Math.cos(LEAN);
-            var x = prev.x + prev.bw + prev.bh * Math.tan(LEAN);
-            if (reach > book.bh * 0.92 || x + book.bw > (right + w) / 2) return false;
-            book.x = x;
-            book.leans = true;
-            return true;
-        }
-        function next() {
-            var last = books[books.length - 1];
-            var book = makeBook(last ? last.x + last.bw + gap : left);
-            if (book.x + book.bw <= right) return book;
-            return last && leanOn(book, last) ? book : null;
-        }
-        function reset() { books = []; state = 'shelve'; t = 0; flying = next(); }
-        reset();
-
-        function drawBook(ctx, b, slide) {
-            ctx.save();
-            ctx.translate(b.x + slide, shelfY);   // the bottom left corner, the pivot
-            if (b.lean) ctx.rotate(-b.lean);
-            var fill = b.shade;
-            if (!fill) {
-                fill = ctx.createLinearGradient(0, -b.bh, 0, 0);
-                fill.addColorStop(0, C.a);
-                fill.addColorStop(1, C.b);
-            }
-            rect(ctx, 0, -b.bh, b.bw, b.bh, fill);
-            // A band across the spine near the top, where a title would sit.
-            rect(ctx, 0, -b.bh * 0.84, b.bw, Math.max(1, h * 0.025), 'rgba(0,0,0,0.28)');
-            ctx.restore();
-        }
-
-        return {
-            step: function () {
-                t++;
-                if (state === 'shelve') {
-                    var landed = SLIDE + (flying.leans ? TIP : 0);
-                    if (flying.leans) flying.lean = LEAN * ease((t - SLIDE) / TIP);
-                    if (t < landed) return;
-                    books.push(flying);
-                    t = 0;
-                    flying = flying.leans ? null : next();
-                    if (!flying) state = 'hold';
-                } else if (state === 'hold' && t >= HOLD) {
-                    state = 'fade'; t = 0;
-                } else if (state === 'fade' && t >= FADE) {
-                    reset();
-                }
-            },
-            draw: function (ctx) {
-                ctx.globalAlpha = state === 'fade' ? 1 - t / FADE : 1;
-                line(ctx, left - w * 0.04, shelfY + 1, right + w * 0.04, shelfY + 1, C.dim, 2);
-                for (var i = 0; i < books.length; i++) drawBook(ctx, books[i], 0);
-                if (state === 'shelve' && flying) {
-                    // In from beyond the right edge, easing to a stop.
-                    var travel = (w - flying.x) + w * 0.1;
-                    drawBook(ctx, flying, travel * (1 - ease(Math.min(1, t / SLIDE))));
-                }
-                ctx.globalAlpha = 1;
-            }
-        };
-    });
-
-    // A map pin drops onto a spot, then a second, then a dashed line joins them; repeats.
-    def('explore:about', function (w, h, rnd) {
-        var t = 0, CYCLE = 200;
-        var p1 = { x: w * 0.28, y: h * 0.3 }, p2 = { x: w * 0.72, y: h * 0.62 };
-        function pinY(dropT, target) {
-            var p = Math.max(0, Math.min(1, dropT / 25));
-            return -h * 0.3 + (target + h * 0.3) * ease(p);
-        }
-        return {
-            step: function () { t = (t + 1) % CYCLE; },
-            draw: function (ctx) {
-                if (t > 10) {
-                    var y1 = pinY(t - 10, p1.y);
-                    dot(ctx, p1.x, y1, 6, C.red);
-                    line(ctx, p1.x, y1 - 6, p1.x, y1 - 16, C.red, 2);
-                }
-                if (t > 70) {
-                    var y2 = pinY(t - 70, p2.y);
-                    dot(ctx, p2.x, y2, 6, C.red);
-                    line(ctx, p2.x, y2 - 6, p2.x, y2 - 16, C.red, 2);
-                }
-                if (t > 130) {
-                    var lp = Math.max(0, Math.min(1, (t - 130) / 30));
-                    ctx.setLineDash([4, 4]);
-                    ctx.strokeStyle = C.ink; ctx.lineWidth = 1.5;
-                    ctx.beginPath(); ctx.moveTo(p1.x, p1.y);
-                    ctx.lineTo(p1.x + (p2.x - p1.x) * lp, p1.y + (p2.y - p1.y) * lp);
-                    ctx.stroke(); ctx.setLineDash([]);
-                }
             }
         };
     });
@@ -860,6 +637,148 @@
                 ctx.stroke();
                 var bw = w / bars.length;
                 for (var j = 0; j < bars.length; j++) rect(ctx, j * bw, h - bars[j] * h * 0.4, bw - 1, bars[j] * h * 0.4, C.blue);
+            }
+        };
+    });
+
+    /* The portfolio's apps on the data science page (app:*), each a small
+       picture of what the app shows its user. They play while on screen
+       (data-live-play on the section), in a poster about 104px tall and
+       two to four times as wide, so everything is placed by fractions
+       and the type stays at 8 to 9px. */
+
+    // Steam Stats Visualized: hours by game, one bar running away from the rest, the tally counting up.
+    def('app:steam', function (w, h, rnd) {
+        var GROW = 150, CYCLE = 290, t = 0, rows = [], top = 600 + Math.floor(rnd() * 1800);
+        var shares = [1, 0.46, 0.27, 0.15, 0.07];
+        for (var i = 0; i < shares.length; i++) rows.push(shares[i] * (i ? 0.8 + rnd() * 0.4 : 1));
+        return {
+            step: function () { t = (t + 1) % CYCLE; },
+            draw: function (ctx) {
+                var x0 = w * 0.08, full = w * 0.6, gap = h * 0.7 / rows.length, bh = Math.max(4, gap * 0.56);
+                var out = t > CYCLE - 30 ? (CYCLE - t) / 30 : 1;
+                ctx.globalAlpha = out;
+                line(ctx, x0 - 1, h * 0.13, x0 - 1, h * 0.87, C.dim, 1);
+                for (var i = 0; i < rows.length; i++) {
+                    var p = ease((t - i * 16) / (GROW - 64)), y = h * 0.17 + i * gap;
+                    rect(ctx, x0, y, Math.max(1, full * rows[i] * p), bh, i ? (i < 3 ? C.a : C.dim) : C.b);
+                    if (i < 2 && p > 0) {
+                        text(ctx, Math.round(top * rows[i] * p) + ' h', x0 + full * rows[i] * p + 6, y + bh / 2,
+                            Math.max(8, Math.min(10, h * 0.085)), i ? C.dim : C.ink, 600, 'left');
+                    }
+                }
+                ctx.globalAlpha = 1;
+            }
+        };
+    });
+
+    // GoodReads Reading Stats: books drop into five columns by star rating and the piles grow.
+    def('app:goodreads', function (w, h, rnd) {
+        var ODDS = [0.04, 0.12, 0.36, 0.74, 1];   // cumulative: one to five stars
+        var piles, falling, t, hold;
+        function reset() { piles = [0, 0, 0, 0, 0]; falling = null; t = 0; hold = 0; }
+        reset();
+        var base = h * 0.76, bh = Math.max(3, h * 0.05), cw = w * 0.12, room = Math.floor((h * 0.62) / (bh + 1));
+        function colX(i) { return w * (0.11 + i * 0.165); }
+        return {
+            step: function () {
+                t++;
+                if (hold) { if (++hold > 70) reset(); return; }
+                if (!falling && t % 5 === 0) {
+                    var roll = rnd(), s = 0;
+                    while (roll > ODDS[s]) s++;
+                    falling = { s: s, y: -bh };
+                }
+                if (falling) {
+                    falling.y += h * 0.07;
+                    var rest = base - (piles[falling.s] + 1) * (bh + 1);
+                    if (falling.y >= rest) {
+                        piles[falling.s]++;
+                        if (piles[falling.s] >= room) hold = 1;
+                        falling = null;
+                    }
+                }
+            },
+            draw: function (ctx) {
+                var fs = Math.max(8, Math.min(10, h * 0.085));
+                ctx.globalAlpha = hold > 50 ? 1 - (hold - 50) / 20 : 1;
+                line(ctx, w * 0.07, base + 1, w * 0.93, base + 1, C.dim, 1);
+                for (var i = 0; i < 5; i++) {
+                    var fill = i === 4 ? C.b : i === 3 ? C.a : 'rgba(255,255,255,0.45)';
+                    for (var k = 0; k < piles[i]; k++) rect(ctx, colX(i), base - (k + 1) * (bh + 1), cw, bh, fill);
+                    text(ctx, (i + 1) + '★', colX(i) + cw / 2, base + (h - base) * 0.5, fs, i === 4 ? C.b : C.dim, 600, 'center');
+                }
+                if (falling) rect(ctx, colX(falling.s), falling.y, cw, bh, C.ink);
+                ctx.globalAlpha = 1;
+            }
+        };
+    });
+
+    // Debt Payoff Simulator: two balances fall to nothing; avalanche gets there first, snowball clears a debt first.
+    def('app:debt', function (w, h, rnd) {
+        var DRAW = 115, CYCLE = 260, t = 0;
+        var x0 = w * 0.08, x1 = w * 0.92, y0 = h * 0.16, y1 = h * 0.8;
+        // [debt-free at, curve, first debt cleared at, colour, name]
+        var plans = [[0.74, 1.15, 0.34, C.b, 'avalanche'], [0.9, 1.4, 0.17, C.a, 'snowball']];
+        function owed(plan, x) { return x >= plan[0] ? 0 : 1 - Math.pow(x / plan[0], plan[1]); }
+        function px(x) { return x0 + (x1 - x0) * x; }
+        function py(v) { return y1 - (y1 - y0) * v; }
+        return {
+            step: function () { t = (t + 1) % CYCLE; },
+            draw: function (ctx) {
+                var pen = Math.min(1, t / DRAW), fs = Math.max(8, Math.min(10, h * 0.085));
+                ctx.globalAlpha = t > CYCLE - 30 ? (CYCLE - t) / 30 : 1;
+                line(ctx, x0, y1, x1, y1, C.dim, 1);
+                line(ctx, x0, y0 - 4, x0, y1, C.dim, 1);
+                plans.forEach(function (plan, k) {
+                    var end = Math.min(pen, plan[0]);
+                    ctx.strokeStyle = plan[3]; ctx.lineWidth = 2; ctx.beginPath();
+                    for (var i = 0; i <= 40; i++) {
+                        var x = end * i / 40;
+                        if (i) ctx.lineTo(px(x), py(owed(plan, x))); else ctx.moveTo(px(x), py(owed(plan, x)));
+                    }
+                    ctx.stroke();
+                    if (pen >= plan[2]) dot(ctx, px(plan[2]), py(owed(plan, plan[2])), 3, plan[3]);
+                    if (pen >= plan[0]) dot(ctx, px(plan[0]), y1, 3.5, plan[3]);
+                    // Each name waits under the axis where its line will land, and lights when it does.
+                    text(ctx, plan[4], k ? x1 : px(plan[0]), y1 + (h - y1) * 0.55, fs,
+                        pen >= plan[0] ? plan[3] : H.alpha(plan[3], 0.45), 600, 'right');
+                });
+                ctx.globalAlpha = 1;
+            }
+        };
+    });
+
+    // Letterboxd Roasted: each film a dot, the crowd's rating across and yours up; the strays from the diagonal fill the contrarian meter.
+    def('app:letterboxd', function (w, h, rnd) {
+        var N = 22, SHOW = 70, CYCLE = 260, t = 0, films = [], stray = 0;
+        for (var i = 0; i < N; i++) {
+            var crowd = 0.12 + rnd() * 0.76, off = (rnd() - 0.5) * (rnd() < 0.3 ? 0.9 : 0.22);
+            var mine = Math.max(0.04, Math.min(0.96, crowd + off));
+            films.push({ crowd: crowd, mine: mine, far: Math.abs(mine - crowd) > 0.2 });
+            stray += Math.abs(mine - crowd);
+        }
+        var score = Math.min(1, stray / N / 0.3);
+        var x0 = w * 0.08, x1 = w * 0.7, y0 = h * 0.12, y1 = h * 0.84;
+        function px(v) { return x0 + (x1 - x0) * v; }
+        function py(v) { return y1 - (y1 - y0) * v; }
+        return {
+            step: function () { t = (t + 1) % CYCLE; },
+            draw: function (ctx) {
+                var shown = Math.min(N, Math.floor(t / SHOW * N)), pull = ease((t - SHOW) / 40), fill = ease((t - SHOW - 10) / 40);
+                var fs = Math.max(8, Math.min(10, h * 0.085));
+                ctx.globalAlpha = t > CYCLE - 30 ? (CYCLE - t) / 30 : 1;
+                line(ctx, px(0), py(0), px(1), py(1), C.dim, 1);
+                for (var i = 0; i < shown; i++) {
+                    var f = films[i], x = px(f.crowd), y = py(f.mine);
+                    if (f.far && pull > 0) line(ctx, x, y, x, y + (py(f.crowd) - y) * pull, C.b, 1);
+                    dot(ctx, x, y, f.far ? 3 : 2.2, f.far && pull > 0 ? C.b : C.a);
+                }
+                var mx = w * 0.82, mw = Math.max(8, w * 0.045);
+                rect(ctx, mx, y0, mw, y1 - y0, 'rgba(255,255,255,0.12)');
+                rect(ctx, mx, y1 - (y1 - y0) * score * fill, mw, (y1 - y0) * score * fill, C.b);
+                text(ctx, 'contrarian', mx + mw / 2, y1 + (h - y1) * 0.55, fs, C.dim, 600, 'center');
+                ctx.globalAlpha = 1;
             }
         };
     });

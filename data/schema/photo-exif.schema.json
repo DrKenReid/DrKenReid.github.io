@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.kenreid.co.uk/data/schema/photo-exif.schema.json",
+  "title": "data/photo-exif.json",
+  "description": "How each photograph was taken, for the frames whose originals kept their camera data, by frame number. Written by generate_photo_exif.py from a folder of the originals; the gallery draws the lightbox's exposure line and its figures from it. additionalProperties is false on every level on purpose: nothing else a file's metadata holds (a position, a serial number, an owner's name, the software, a date) may be published here.",
+  "type": "object",
+  "required": [
+    "frames"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "frames": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "n"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "n": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "The frame's number, as in photography-files.json."
+          },
+          "camera": {
+            "type": "string",
+            "pattern": "\\S",
+            "description": "The camera, maker and model as one name: \"Canon EOS 60D\"."
+          },
+          "lens": {
+            "type": "string",
+            "pattern": "\\S",
+            "description": "The lens model: \"EF-S 55-250mm f/4-5.6 IS STM\"."
+          },
+          "focal": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 2000,
+            "description": "The focal length in millimetres, as marked on the lens."
+          },
+          "aperture": {
+            "type": "number",
+            "minimum": 0.7,
+            "maximum": 64,
+            "description": "The f-number: 6.3 is f/6.3."
+          },
+          "shutter": {
+            "type": "string",
+            "pattern": "^(1/[1-9]\\d*|[1-9]\\d*(\\.\\d)?|0\\.[1-9])$",
+            "description": "The shutter speed in seconds, as a camera shows it: \"1/400\" for a fraction, \"0.5\" or \"30\" from 0.3 seconds up."
+          },
+          "iso": {
+            "type": "integer",
+            "minimum": 25,
+            "maximum": 409600,
+            "description": "The ISO setting."
+          }
+        }
+      }
+    }
+  }
+}

@@ -9,18 +9,21 @@ so adding a schema is all it takes to put a file under validation. Exit
 status: 0 when every file matches, 1 when any does not (each problem is
 printed with its path, like `books.json[12].d`), 2 when a file or its
 schema is missing or a schema uses a keyword this validator does not
-enforce.
+enforce. A file in MAY_BE_ABSENT is the exception: missing, it is passed
+over, since its script has not written it yet.
 
-Why it exists. The weekly live-data workflow rewrites six files that the
-homepage, the Now strip, the music crate and the reading pages parse in
-the browser with no fallback for a wrong shape. A fetch that half
+Why it exists. The weekly live-data workflow rewrites seven files that
+the homepage, the Now strip, the music crate, the listening calendar and
+the reading pages parse in the browser with no fallback for a wrong
+shape. A fetch that half
 succeeds, or an upstream API that changes a field, would otherwise be
 committed and served until someone noticed a blank panel. The workflow
 runs this before it commits, and site-checks runs it on every push, so a
 hand edit is held to the same shape. posts.json (typed in, with fields
 the post generators add) and publications.json (typed in) have schemas
 for the same reason: every listing and the publications list read them
-with no fallback either.
+with no fallback either. bluesky.json, the workflow's eighth file, has
+one so that a post never asks Bluesky for a thread that is not its own.
 
 Why not the jsonschema package. CI's audit job installs nothing, and the
 schemas need only a small part of JSON Schema. This implements that part
@@ -70,6 +73,13 @@ TYPES = {
 # Enough to find the fault without drowning the log when a whole array
 # is the wrong shape.
 MAX_ERRORS = 25
+
+# Files that a script writes on its first run and no one writes by hand,
+# so a checkout may not have one yet: the listening history
+# (refresh_listening.py). Missing, one of these is passed over, in a full
+# run or when named; once it is there it is held to its schema like any
+# other. The page that reads it draws nothing until it arrives.
+MAY_BE_ABSENT = {"listening.json"}
 
 
 class SchemaError(Exception):
@@ -174,6 +184,9 @@ def main(argv: list[str] | None = None) -> int:
 
     status = 0
     for f in files:
+        if f.name in MAY_BE_ABSENT and not f.exists():
+            print("%s: not written yet, nothing to validate" % f.name)
+            continue
         try:
             errors = validate_file(f.resolve())
         except (SchemaError, FileNotFoundError, json.JSONDecodeError) as e:

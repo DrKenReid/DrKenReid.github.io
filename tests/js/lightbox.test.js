@@ -51,6 +51,31 @@ test('krLightboxCaption: the map asks for a gallery link; a given url is what Co
     assert.ok(!html.includes('map.html'), html);
 });
 
+test('krLightboxCaption: a frame with camera data says how it was taken, in one line', () => {
+    const exif = { n: 335, camera: 'Canon EOS 60D', lens: 'EF-S 55-250mm f/4-5.6 IS STM', focal: 250, aperture: 6.3, shutter: '1/400', iso: 500 };
+    assert.equal(caption.exposure(exif), 'EOS 60D · 250mm · f/6.3 · 1/400s · ISO 500');
+    const html = caption({ text: 'Animals', stem: '335', exif });
+    // After the words and the number, before Copy link, with a lead-in only a screen reader hears.
+    assert.match(html, /#335<\/span><\/span> <span class="kr-lightbox-exif"><span class="kr-sr-only">Taken with <\/span>EOS 60D · 250mm · f\/6\.3 · 1\/400s · ISO 500<\/span> <button/);
+    assert.ok(!html.includes('EF-S'), 'the lens is left to the figures');
+});
+
+test('krLightboxCaption: no camera data, no line', () => {
+    assert.equal(caption.exposure(undefined), '');
+    assert.equal(caption.exposure({ n: 7 }), '');
+    for (const o of [{ stem: '7' }, { stem: '7', exif: undefined }, { stem: '7', exif: { n: 7 } }]) {
+        assert.ok(!caption(o).includes('kr-lightbox-exif'), JSON.stringify(o));
+    }
+});
+
+test('krLightboxCaption.exposure: whichever values the frame kept, escaped in the caption', () => {
+    assert.equal(caption.exposure({ focal: 18, shutter: '2.5' }), '18mm · 2.5s');
+    assert.equal(caption.exposure({ camera: 'Motorola Nexus 6', iso: 100 }), 'Motorola Nexus 6 · ISO 100');
+    const html = caption({ stem: '1', exif: { camera: '<b>X</b>', focal: 50 } });
+    assert.ok(!html.includes('<b>'), html);
+    assert.match(html, /&lt;b&gt;X&lt;\/b&gt; · 50mm/);
+});
+
 test('krLightboxPreview.source: the thumbnail the reader clicked', () => {
     const src = rt.KR_RELEASE + '12.png';
     assert.equal(source({ src, el: link('https://www.kenreid.co.uk/img/photography/thumb/12.webp') }),

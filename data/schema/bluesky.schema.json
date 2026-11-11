@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.kenreid.co.uk/data/schema/bluesky.schema.json",
+  "title": "data/bluesky.json",
+  "description": "The Bluesky post each blog post was shared in, so a post can show the replies to it beside its comments (js/bluesky-replies.js). Written weekly by .github/scripts/refresh_bluesky.py from my public author feed. An entry the feed no longer reaches is kept; one whose Bluesky post has been deleted is dropped.",
+  "type": "object",
+  "required": ["posts"],
+  "additionalProperties": false,
+  "properties": {
+    "posts": {
+      "type": "array",
+      "description": "One entry per blog post that has been shared, the newest share first. A post shared more than once keeps its most recent share.",
+      "items": {
+        "type": "object",
+        "required": ["slug", "uri", "url", "posted"],
+        "additionalProperties": false,
+        "properties": {
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "description": "The blog post: its file name without .html (blog/<slug>.html)."
+          },
+          "uri": {
+            "type": "string",
+            "pattern": "^at://did:[a-z]+:[A-Za-z0-9._:%-]+/app\\.bsky\\.feed\\.post/[A-Za-z0-9._~:-]+$",
+            "description": "The Bluesky post's at:// URI, which the browser hands to app.bsky.feed.getPostThread."
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https://bsky\\.app/profile/[A-Za-z0-9._:%-]+/post/[A-Za-z0-9._~:-]+$",
+            "description": "The same post's page on bsky.app, where a reader replies."
+          },
+          "posted": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$",
+            "description": "When the Bluesky post was made, UTC. Decides which share is the most recent."
+          }
+        }
+      }
+    }
+  }
+}

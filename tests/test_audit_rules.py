@@ -4,7 +4,9 @@ Each rule is checked against small inputs here (the attribute-name rule,
 a link the parser splits in two, the service worker's install list, the
 retired preloader and analytics snippet, title and description lengths,
 series pages and their slug, KR_PAGES, what Jekyll would publish, the
-orphan scan's reading of a mention), so a change to a parser or to the
+authors a post's shelf names, the orphan scan's reading of a mention
+and of a book's cover),
+so a change to a parser or to the
 shape of a source file fails in one obvious place instead of as a silent
 pass over the site.
 
@@ -409,6 +411,66 @@ class HeroReuse(unittest.TestCase):
         self.assertEqual(out, [])
 
 
+class PostShelf(unittest.TestCase):
+    """check_post_shelf: every author a post's shelf names is in the reading
+    data, as a rated book or a saved quote."""
+
+    BOOKS = [{"t": "The Name of the Wind", "a": "Patrick Rothfuss", "r": 5},
+             {"t": "Perdido Street Station", "a": "China Miéville", "r": 4},
+             {"t": "Precious Bane", "a": "Mary Webb", "r": 0}]
+    QUOTES = [{"q": "A saved line.", "a": "Ursula K.  LeGuin", "b": "The Dispossessed"}]
+
+    def found(self, *shelves):
+        out = []
+        add = lambda s, f, l, code, m: out.append((f, code, m))  # noqa: E731
+        posts = [{"url": f"blog/{i}.html", "shelf": list(shelf)} for i, shelf in enumerate(shelves)]
+        audit_site.check_post_shelf(posts, add, self.BOOKS, self.QUOTES)
+        return out
+
+    def test_a_book_or_a_quote_is_enough(self):
+        self.assertEqual(self.found(["Patrick Rothfuss"], ["Ursula K. Le Guin"]), [])
+
+    def test_the_name_is_matched_as_the_pages_match_it(self):
+        # Case, accents, full stops and spacing do not count.
+        self.assertEqual(self.found(["patrick  rothfuss", "China Mieville", "Ursula K LeGuin"]), [])
+        self.assertEqual(audit_site.author_key("J.R.R. Tolkien"), "jrrtolkien")
+        self.assertEqual(audit_site.author_key("Domagoj Kurmaić"), "domagojkurmaic")
+
+    def test_an_unknown_name_is_an_error(self):
+        (where, code, message), = self.found(["Patrick Rothfuss"], ["Patrick Rothfus"])
+        self.assertEqual((where, code), ("posts.json[1]", "posts-shelf"))
+        self.assertIn("'Patrick Rothfus'", message)
+        self.assertIn("blog/1.html", message)
+
+    def test_an_unrated_book_alone_is_not_enough(self):
+        # The strip and Every Book show rated books: nothing would appear.
+        self.assertEqual([code for _f, code, _m in self.found(["Mary Webb"])], ["posts-shelf"])
+
+    def test_a_name_twice_is_an_error(self):
+        (_where, _code, message), = self.found(["Patrick Rothfuss", "patrick rothfuss"])
+        self.assertIn("twice", message)
+
+    def test_a_post_without_a_shelf_passes(self):
+        out = []
+        audit_site.check_post_shelf([{"url": "blog/a.html"}], lambda *a: out.append(a), [], [])
+        self.assertEqual(out, [])
+
+    def test_the_key_is_the_one_the_pages_use(self):
+        # authorKey in the browser, read out of js/post-shelf.js: the same
+        # two steps, in the same order, on the same characters.
+        source = (audit_site.ROOT / "js" / "post-shelf.js").read_text(encoding="utf-8")
+        body = re.search(r"function authorKey\(name\) \{(.*?)\n    \}", source, re.S).group(1)
+        self.assertIn(r"normalize('NFD').replace(/[\u0300-\u036f]/g, '')", body)
+        self.assertIn(r"toLowerCase().replace(/[^a-z0-9]+/g, '')", body)
+
+    def test_the_tracked_posts_pass(self):
+        out = []
+        posts = json.loads((audit_site.ROOT / "data" / "posts.json").read_text(encoding="utf-8"))
+        audit_site.check_post_shelf(posts, lambda s, f, l, code, m: out.append(m))
+        self.assertEqual(out, [])
+        self.assertTrue(any(p.get("shelf") for p in posts), "no post has a shelf: the rule is untested")
+
+
 class PublishedMarkdown(unittest.TestCase):
     """jekyll_publishes: which tracked files Pages would serve."""
 
@@ -458,6 +520,31 @@ class OrphanNames(unittest.TestCase):
             '"hero": "img/photography/hero/12.webp", "x": "fonts/v.woff2?v=3"'])
         self.assertTrue({"a.webp", "b.png", "12.webp", "v.woff2"} <= names)
         self.assertIn("hero/12.webp", tails)
+
+
+class OrphanShelfCovers(unittest.TestCase):
+    """orphan_assets: a book's cover is in use when the book is on the
+    shelf. The pages build its address from the id in books.json, so no
+    file names it, and a numbered file is never matched by name alone:
+    without this every cover on the wall was reported as an orphan."""
+
+    def test_the_id_a_path_is_the_cover_of(self):
+        self.assertEqual(audit_site.shelf_cover_id("img/covers/shelf/250638183.jpg"), "250638183")
+        self.assertEqual(audit_site.shelf_cover_id("img/covers/shelf/s/250638183.jpg"), "250638183")
+        # The covers posts use sit beside the store, not in it.
+        for rel in ("img/covers/9780060837020.webp", "img/covers/gr-10534.webp",
+                    "img/covers/shelf/s/notes.jpg", "img/covers/shelf/x/1.jpg",
+                    "img/photography/thumb/12.webp", "blog/img/covers/shelf/12.jpg"):
+            self.assertIsNone(audit_site.shelf_cover_id(rel), rel)
+
+    def test_a_cover_is_an_orphan_only_when_its_book_has_left_the_shelf(self):
+        books = json.loads((audit_site.ROOT / "data" / "books.json").read_text(encoding="utf-8"))
+        on_shelf = books[0]["g"]
+        gone = "9" * 15
+        self.assertNotIn(gone, {b["g"] for b in books})
+        rels = ["img/covers/shelf/%s.jpg" % on_shelf, "img/covers/shelf/s/%s.jpg" % on_shelf,
+                "img/covers/shelf/%s.jpg" % gone, "img/covers/shelf/s/%s.jpg" % gone]
+        self.assertEqual(audit_site.orphan_assets(rels), sorted(rels[2:]))
 
 
 if __name__ == "__main__":

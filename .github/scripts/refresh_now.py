@@ -26,11 +26,23 @@ values and never stops the others from updating. The exit status is 1
 when any source failed, after writing what did refresh, so the workflow
 commits the partial refresh and still reports the failure.
 
+The covers of the books in progress are the site's own files, like the
+shelf's: with_local_covers() hands each cover address in the feed to
+refresh_books.local_cover(), which keeps a small copy beside the shelf's
+(img/covers/shelf/s/<id>.jpg, committed by the workflow with its COVERS
+folder) and gives back the path a page asks for it by. now.json's img is
+that path, so Reading Now asks Goodreads for nothing; a cover that
+cannot be had is left out, and the page sets that book's cover in type
+until next week's run.
+
     python .github/scripts/refresh_now.py
+    python .github/scripts/refresh_now.py --covers   # no Last.fm, no feed: only make the
+                                                     # covers in now.json the site's own
 
 Network calls (get, lastfm) are kept apart from the functions that turn
 responses into the files' shapes (track_from, reading_from, albums_from,
-history_with), which take plain data and can be tested without one.
+history_with, with_local_covers), which take plain data and can be
+tested without one.
 """
 
 import json
@@ -44,6 +56,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import sitelib  # noqa: E402
+import refresh_books  # noqa: E402  (the cover store: local_cover)
 
 ROOT = sitelib.ROOT
 DATA = ROOT / "data"
@@ -112,6 +125,27 @@ def reading_from(xml, limit=READING_LIMIT):
     return books[:limit]
 
 
+def with_local_covers(books, local=None):
+    """The reading list with each img the site's own copy of the cover.
+
+    `local` is refresh_books.local_cover unless a test passes another: it
+    takes the address the feed gave (or a path this function wrote last
+    week, when the feed failed and the old list is kept) and returns the
+    path on this site, or '' when there is no copy to be had. Such a book
+    goes without img, never with Goodreads' address: the page asks only
+    for files on this site.
+    """
+    local = local or refresh_books.local_cover
+    out = []
+    for book in books:
+        book = dict(book)
+        img = local(book.pop("img", ""))
+        if img:
+            book["img"] = img
+        out.append(book)
+    return out
+
+
 def albums_from(data):
     """user.gettopalbums -> topalbums.json's albums. An album with no
     sleeve art is left out: the crate is made of sleeves."""
@@ -152,10 +186,29 @@ def write_json(path, value, **dump):
     path.write_text(json.dumps(value, **dump) + "\n", encoding="utf-8", newline="\n")
 
 
+def covers_only():
+    """--covers: now.json as it stands, with each book in progress showing
+    the site's copy of its cover. Needs no key and asks only the cover
+    host; nothing else in the file changes, its date included."""
+    path = DATA / "now.json"
+    now = load_json(path, None)
+    if not isinstance(now, dict):
+        print("::error::data/now.json is missing or unreadable; nothing to do.")
+        return 1
+    reading = with_local_covers(now.get("reading") or [])
+    if reading != now.get("reading"):
+        write_json(path, dict(now, reading=reading), indent=2, ensure_ascii=False)
+    print(f"reading covers: {[b.get('img', 'none') for b in reading]}")
+    return 0
+
+
 def main(argv=None):
-    # It takes no options, but --help (or a stray flag) must not set off a
-    # live fetch and a write.
-    sitelib.arg_parser(__doc__).parse_args(argv)
+    # --help (or a stray flag) must not set off a live fetch and a write.
+    ap = sitelib.arg_parser(__doc__)
+    ap.add_argument("--covers", action="store_true",
+                    help="no Last.fm, no feed: only make the covers in now.json the site's own")
+    if ap.parse_args(argv).covers:
+        return covers_only()
     key = os.environ.get("LASTFM_API_KEY")
     if not key:
         keyfile = ROOT / "scripts-local" / "lastfm_api_key.txt"
@@ -187,6 +240,13 @@ def main(argv=None):
         failures.append(f"goodreads ({e})")
         print(f"::warning::Goodreads fetch failed ({e}); keeping the previous reading list")
         books = prev_now.get("reading") or []
+    # Each cover as a file on this site, or left out (with_local_covers).
+    # A fault here costs the covers, never the list.
+    try:
+        books = with_local_covers(books)
+    except Exception as e:
+        print(f"::warning::reading covers failed ({e}); the list is written without them")
+        books = [{k: v for k, v in b.items() if k != "img"} for b in books]
 
     try:
         albums = albums_from(lastfm("user.gettopalbums", key,

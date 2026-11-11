@@ -90,15 +90,6 @@ class RuntimeTokens(unittest.TestCase):
             with self.subTest(rating=n):
                 self.assertTrue(self.corpus.has_class("kr-spine--r%d" % n))
 
-    def test_the_real_corpus_keeps_the_hero_animation(self):
-        # active.js adds each slide's data-animation value as a class.
-        index = (css_prune.ROOT / "index.html").read_text(encoding="utf-8")
-        names = set(re.findall(r'data-animation="([^"]+)"', index))
-        self.assertTrue(names, "no data-animation on the homepage slides")
-        for name in names:
-            with self.subTest(animation=name):
-                self.assertTrue(self.corpus.has_class(name))
-
 
 class SelfTest(unittest.TestCase):
     """css_prune.py --selftest, so its fixtures run with the rest."""

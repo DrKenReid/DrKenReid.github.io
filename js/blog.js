@@ -1,11 +1,12 @@
 /**
- * Blog listing (blog.html): search, a faceted filter panel, sorting and
- * pagination, all over data/posts.json.
+ * Blog listing (blog.html): search, a faceted filter panel, sorting,
+ * two layouts (cards a page at a time, or every post as a list) and the
+ * "Start here" band, all over data/posts.json.
  *
  * STATE MODEL
  *   Everything a reader can change is one of the variables at the top of
  *   the closure below: searchQuery, activeTags, activeLengths, facetStates,
- *   seriesMode, sortKey/sortDir and currentPage. Controls never keep
+ *   seriesMode, sortKey/sortDir, view and currentPage. Controls never keep
  *   state of their own that the list reads back; each click changes a
  *   variable, then the same three steps follow: resync the controls that
  *   depend on it, syncUrl(), renderPosts(). renderPosts()
@@ -49,6 +50,25 @@
  *   who has scrolled past a page of posts. The Filter panel keeps "In a
  *   series" and "Standalone".
  *
+ * LAYOUTS
+ *   Cards is the mosaic, POSTS_PER_PAGE to a page. List is the archive:
+ *   every post the search and filters leave, one line each (date, title,
+ *   its series and part, "Live" for a post with a demo, minutes, and
+ *   "Read" for one this reader has finished: krHasRead), with a heading
+ *   per year while the sort is by date. It has no pages: the
+ *   point of it is to see the whole run at once, and a line is cheap. The
+ *   toolbar's "Type: Cards" toggle opens a panel holding the Cards / List
+ *   pair (fixed labels with aria-pressed), and names the one in force.
+ *
+ * START HERE
+ *   Four posts chosen by hand, in blog.html's own markup (under the
+ *   grid and its pager) so they read without script, as a list.
+ *   fillStartHere() replaces the list with the site's post cards
+ *   (createBlogCardElement), each with its reason as the chip on its
+ *   cover, and drops a pick whose post is gone. Like the series band
+ *   under it, the band is about the blog as a whole, so it shows only
+ *   on the first page of the unfiltered listing.
+ *
  * URL KEYS (syncUrl writes them, readStateFromUrl reads them back)
  *   q       search text                     ?q=annealing
  *   tag     topics, comma-separated         ?tag=books,ai
@@ -61,6 +81,7 @@
  *           (forwardSeriesLink)
  *   sort    SORT_OPTIONS key                ?sort=title
  *   dir     'asc' or 'desc'                 ?dir=asc
+ *   view    'list' for the archive layout   ?view=list
  *   page    1-based page number             ?page=3
  *   A key at its default is left out, so the unfiltered listing is plain
  *   /blog.html. series.html uses tag, has, sort and dir the same way.
@@ -103,7 +124,8 @@
  *   postSeriesList, postSeriesEntry, seriesPageHref, krListMatches,
  *   krPostSearchTexts, krListEmpty, krLoadFailed, krNoscriptMarkup, and
  *   the panel parts krFacetRow, krFacetButton,
- *   krCountLabel, krSetPressed, krClearRow, krTagFacetRow, krSortPanel,
+ *   krCountLabel, krSetPressed, krEscapeHtml, krReadMap, krHasRead,
+ *   KR_READ_MARK, krClearRow, krTagFacetRow, krSortPanel,
  *   krSortOption, krSortFromUrl, krSortToUrl, krToolbarLabels,
  *   krRevealPressed and krUrlList, which series-index.js shares.
  */
@@ -119,6 +141,7 @@
 	var sortDir = -1;
 	var popularViews = {};
 	var searchQuery = '';
+	var view = 'cards';         // 'cards' | 'list'
 	var currentPage = 1;
 	var POSTS_PER_PAGE = 9;
 	var tagFilterBar = null;
@@ -205,6 +228,8 @@
 				buildFilterPanel();
 				buildSortPanel();
 				initToolbar();
+				initViewToggle();
+				fillStartHere();
 				// Building the panels fires their own change handlers, which
 				// reset the page, so a deep-linked page is applied afterwards.
 				currentPage = startPage;
@@ -267,7 +292,8 @@
 		if (seriesMode) params.set('in', seriesMode);
 
 		krSortToUrl(params, SORT_OPTIONS, sortKey, sortDir);
-		if (currentPage > 1) params.set('page', String(currentPage));
+		if (view === 'list') params.set('view', 'list');
+		if (currentPage > 1 && view !== 'list') params.set('page', String(currentPage));
 
 		var qs = params.toString();
 		window.history.replaceState(null, '', qs ? '?' + qs : window.location.pathname);
@@ -307,8 +333,10 @@
 		sortKey = sort.key;
 		sortDir = sort.dir;
 
+		view = params.get('view') === 'list' ? 'list' : 'cards';
+
 		var page = parseInt(params.get('page'), 10);
-		return page > 1 ? page : 1;
+		return page > 1 && view !== 'list' ? page : 1;
 	}
 
 	/* ---------------------------------------------------- old series links */
@@ -542,9 +570,138 @@
 	function initToolbar() {
 		toolbar = krInitTogglePanels([
 			['kr-filter-toggle', 'blog-filters'],
-			['kr-sort-toggle', 'blog-sort']
+			['kr-sort-toggle', 'blog-sort'],
+			['kr-type-toggle', 'blog-type']
 		]);
 		updateToolbarLabels();
+	}
+
+	/* ------------------------------------------------------------ layout */
+
+	/**
+	 * The Cards / List pair in the Type panel: fixed labels, the pressed
+	 * one is the layout, and the toolbar toggle names it ("Type: List").
+	 */
+	function initViewToggle() {
+		var cards = document.getElementById('kr-view-cards');
+		var list = document.getElementById('kr-view-list');
+		var toggle = document.getElementById('kr-type-toggle');
+		if (!cards || !list) return;
+		function sync() {
+			krSetPressed(cards, view === 'cards');
+			krSetPressed(list, view === 'list');
+			if (toggle) toggle.textContent = 'Type: ' + (view === 'list' ? 'List' : 'Cards') + ' ▾';
+		}
+		function choose(next) {
+			if (view === next) return;
+			view = next;
+			currentPage = 1;
+			sync();
+			syncUrl();
+			renderPosts();
+		}
+		cards.addEventListener('click', function() { choose('cards'); });
+		list.addEventListener('click', function() { choose('list'); });
+		sync();
+	}
+
+	/**
+	 * The archive: `posts` as one list, or a section per year (heading and
+	 * count, then its list) while they are sorted by date. A row is the
+	 * date, the title, and what there is to say about it in a few words:
+	 * its series and part (a link to the series page), "Live" for a post
+	 * with a demo, and its reading time.
+	 */
+	function renderArchive(container, posts) {
+		var byYear = sortKey === 'date';
+		var root = siteRootPrefix() || '';
+		var readMap = krReadMap();
+		var html = '<div class="col-12"><div class="kr-archive' + (byYear ? '' : ' kr-archive--flat') + '">';
+		var open = null;
+
+		function row(post) {
+			var when = krParsePostDate(post.date);
+			var shown = when.toLocaleDateString('en-GB', byYear
+				? { day: 'numeric', month: 'short' }
+				: { day: 'numeric', month: 'short', year: 'numeric' });
+			var entry = postSeriesList(post)[0];
+			var meta = '';
+			if (entry && entry.name) {
+				meta += '<a class="kr-archive__series" href="' + krEscapeHtml(seriesPageHref(entry.name)) + '">Part ' +
+					krEscapeHtml(String(entry.part)) + ' · ' + krEscapeHtml(entry.name) + '</a>';
+			}
+			if (post.interactive) meta += '<span class="kr-archive__live">Live</span>';
+			if (post.readMinutes) meta += '<span class="kr-archive__mins">' + krEscapeHtml(String(post.readMinutes)) + ' min</span>';
+			if (krHasRead(post, readMap)) meta += KR_READ_MARK;
+			return '<li class="kr-archive__row">' +
+				'<time class="kr-archive__date" datetime="' + krEscapeHtml(String(post.date || '')) + '">' + krEscapeHtml(shown) + '</time>' +
+				'<a class="kr-archive__title" href="' + krEscapeHtml(root + (post.url || 'blog.html')) + '">' + krEscapeHtml(post.title || '') + '</a>' +
+				(meta ? '<span class="kr-archive__meta">' + meta + '</span>' : '') + '</li>';
+		}
+
+		if (!byYear) {
+			html += '<ol class="kr-archive__list">' + posts.map(row).join('') + '</ol>';
+		} else {
+			var counts = {};
+			posts.forEach(function(p) {
+				var y = krParsePostDate(p.date).getFullYear();
+				counts[y] = (counts[y] || 0) + 1;
+			});
+			posts.forEach(function(p) {
+				var y = krParsePostDate(p.date).getFullYear();
+				if (y !== open) {
+					if (open !== null) html += '</ol>';
+					// The cards' titles are h2s under the page's h1, and so are the years.
+					html += '<h2 class="kr-archive__year">' + y + ' <span class="kr-archive__count">' +
+						counts[y] + (counts[y] === 1 ? ' post' : ' posts') + '</span></h2><ol class="kr-archive__list">';
+					open = y;
+				}
+				html += row(p);
+			});
+			if (open !== null) html += '</ol>';
+		}
+		container.innerHTML = html + '</div></div>';
+	}
+
+	/**
+	 * Start here: each item in blog.html names its post (data-post) and
+	 * its reason (.kr-start__why). The list becomes a row of post cards,
+	 * the reason on each cover where a series card has its part count;
+	 * a pick whose post is no longer in posts.json is dropped, and the
+	 * band with it if none is left.
+	 */
+	function fillStartHere() {
+		var band = document.getElementById('start-here');
+		var list = band && band.querySelector('.kr-start__list');
+		if (!band || !list) return;
+		var row = document.createElement('div');
+		row.className = 'row justify-content-center';
+		Array.prototype.forEach.call(list.querySelectorAll('.kr-start__item'), function(item) {
+			var url = item.getAttribute('data-post');
+			var post = allPosts.filter(function(p) { return p.url === url; })[0];
+			if (!post) return;
+			var col = createBlogCardElement(post, { colClass: 'col-12 col-md-6 col-lg-3 mb-30', headingLevel: 3 });
+			var why = item.querySelector('.kr-start__why');
+			var cover = col.querySelector('.blog-card-img');
+			if (why && cover) {
+				var chip = document.createElement('span');
+				chip.className = 'kr-series-chip';
+				chip.textContent = why.textContent;
+				cover.appendChild(chip);
+			}
+			row.appendChild(col);
+		});
+		if (!row.children.length) {
+			band.parentNode.removeChild(band);
+			return;
+		}
+		list.parentNode.replaceChild(row, list);
+	}
+
+	/** Shown on the first page of the unfiltered listing only (see START HERE). */
+	function syncStartHere() {
+		var band = document.getElementById('start-here');
+		if (band) band.hidden = !isUnfiltered() || currentPage > 1;
 	}
 
 	/* ------------------------------------------------------------ render */
@@ -584,8 +741,9 @@
 
 		var filtered = getFilteredPosts();
 		syncSeriesBand();
-		var totalPages = Math.ceil(filtered.length / POSTS_PER_PAGE);
+		var totalPages = view === 'list' ? 1 : Math.ceil(filtered.length / POSTS_PER_PAGE);
 		if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
+		syncStartHere();
 
 		var start = (currentPage - 1) * POSTS_PER_PAGE;
 		var pagePosts = filtered.slice(start, start + POSTS_PER_PAGE);
@@ -601,6 +759,13 @@
 			// the empty list's own length left the search box reading
 			// "0 of 0 posts" when filters alone emptied it.
 			updateBlogCounter(0, allPosts.length);
+			return;
+		}
+
+		if (view === 'list') {
+			renderArchive(container, filtered);
+			updateBlogCounter(filtered.length, allPosts.length);
+			krRenderListPagination(0, 0, setBlogPage);
 			return;
 		}
 
