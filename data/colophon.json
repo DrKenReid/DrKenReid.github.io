@@ -2,8 +2,8 @@
   "pages": 116,
   "posts": 84,
   "postPages": 85,
-  "words": 203701,
-  "readMinutes": 896,
+  "words": 203956,
+  "readMinutes": 899,
   "interactivePosts": 15,
   "codePosts": 26,
   "series": 10,
@@ -20,9 +20,9 @@
   "ciChecks": 33,
   "dependencies": 0,
   "buildStep": false,
-  "htmlBytes": 4004738,
+  "htmlBytes": 4007484,
   "imageCount": 2499,
-  "imageBytes": 183715204,
+  "imageBytes": 183715214,
   "webFontCount": 9,
   "webFontBytes": 133264,
   "cssFiles": 25,
@@ -33,14 +33,14 @@
   "firstPost": "2026-04-10",
   "latestPost": "2026-11-04",
   "postsPerMonth": 10.5,
-  "longestPostWords": 8990,
+  "longestPostWords": 9003,
   "longestPostTitle": "Accessibility-First Design in Data Science",
   "longestPostUrl": "blog/accessibility-first-product-design-data-science.html",
   "shortestPostWords": 800,
   "shortestPostTitle": "Every Card Has a Sketch",
   "shortestPostUrl": "blog/every-card-has-a-sketch.html",
-  "averagePostWords": 2425,
-  "commits": 757,
+  "averagePostWords": 2428,
+  "commits": 758,
   "commitsByMonth": [
     [
       "2019-12",
@@ -376,7 +376,7 @@
     ],
     [
       "2026-11",
-      22
+      23
     ]
   ],
   "repoStart": "2019-12"

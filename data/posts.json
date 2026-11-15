@@ -1060,8 +1060,8 @@
       "name": "Everyday Ethics",
       "part": 3
     },
-    "readMinutes": 12,
-    "words": 2640
+    "readMinutes": 13,
+    "words": 2645
   },
   {
     "title": "Advice to My Younger Self",
@@ -1155,7 +1155,7 @@
       "part": 1
     },
     "readMinutes": 18,
-    "words": 3919
+    "words": 3926
   },
   {
     "title": "ISO 8601 and the Date Cult I Happily Joined",
@@ -1181,7 +1181,7 @@
     "url": "blog/accessibility-first-product-design-data-science.html",
     "image": "img/photography/thumb/21.webp",
     "readMinutes": 26,
-    "words": 8990,
+    "words": 9003,
     "code": true
   },
   {
@@ -1220,8 +1220,8 @@
     "excerpt": "An AI researcher's unvarnished take on LLM ethics: the energy numbers, the cobalt hypocrisy, the Jevons paradox, and why telling people not to use AI on environmental grounds is a privilege position.",
     "url": "blog/ethics-of-llm-use-not-llms.html",
     "image": "img/photography/thumb/280.webp",
-    "readMinutes": 32,
-    "words": 6987
+    "readMinutes": 33,
+    "words": 7137
   },
   {
     "title": "Dungeon Crawler Carl and the Strange Dignity of LitRPG",
@@ -1280,8 +1280,8 @@
     "excerpt": "Evolutionary Computation is having an identity crisis in the GenAI era, despite delivering major real-world wins in engineering, logistics, and constrained optimization.",
     "url": "blog/evolutionary-computation-identity-crisis.html",
     "image": "img/photography/thumb/208.webp",
-    "readMinutes": 11,
-    "words": 2402
+    "readMinutes": 12,
+    "words": 2482
   },
   {
     "title": "In Defense of Audiobooks",
