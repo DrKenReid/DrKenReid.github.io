@@ -210,5 +210,12 @@
 {"n": 760, "camera": "Canon EOS R", "lens": "RF 24-105mm F4-7.1 IS STM", "focal": 105, "aperture": 7.1, "shutter": "1/20", "iso": 3200},
 {"n": 761, "camera": "Canon EOS R", "lens": "RF 24-105mm F4-7.1 IS STM", "focal": 82, "aperture": 7.1, "shutter": "1/20", "iso": 3200},
 {"n": 762, "camera": "Canon EOS R", "lens": "RF 24-105mm F4-7.1 IS STM", "focal": 82, "aperture": 7.1, "shutter": "1/20", "iso": 3200},
-{"n": 763, "camera": "Canon EOS R", "lens": "RF 24-105mm F4-7.1 IS STM", "focal": 105, "aperture": 7.1, "shutter": "1/20", "iso": 3200}
+{"n": 763, "camera": "Canon EOS R", "lens": "RF 24-105mm F4-7.1 IS STM", "focal": 105, "aperture": 7.1, "shutter": "1/20", "iso": 3200},
+{"n": 764, "camera": "Canon EOS R", "lens": "RF 24-105mm F4-7.1 IS STM", "focal": 90, "aperture": 7.1, "shutter": "1/30", "iso": 6400},
+{"n": 765, "camera": "Canon EOS R", "lens": "RF 24-105mm F4-7.1 IS STM", "focal": 35, "aperture": 5, "shutter": "1/400", "iso": 500},
+{"n": 766, "camera": "Canon EOS R", "lens": "RF 24-105mm F4-7.1 IS STM", "focal": 35, "aperture": 8, "shutter": "1/60", "iso": 100},
+{"n": 767, "camera": "Canon EOS R", "lens": "RF 24-105mm F4-7.1 IS STM", "focal": 73, "aperture": 18, "shutter": "1/60", "iso": 100},
+{"n": 768, "camera": "Canon EOS R", "lens": "RF 24-105mm F4-7.1 IS STM", "focal": 24, "aperture": 4, "shutter": "1/800", "iso": 6400},
+{"n": 769, "camera": "Canon EOS R", "lens": "RF 24-105mm F4-7.1 IS STM", "focal": 24, "aperture": 4.5, "shutter": "1/800", "iso": 500},
+{"n": 770, "camera": "Canon EOS R", "lens": "RF 24-105mm F4-7.1 IS STM", "focal": 24, "aperture": 4, "shutter": "1/30", "iso": 3200}
 ]}
