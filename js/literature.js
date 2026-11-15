@@ -62,7 +62,7 @@
 
     /* --------------------------------------------------------- reviews */
     function initReviews() {
-        // reviews.json is the hand-picked dozen; books.json (the weekly
+        // reviews.json is the hand-picked ten; books.json (the weekly
         // Goodreads refresh) knows each book's review id, so the card can
         // link to the review itself rather than to the book.
         // A book being read again is on currently-reading, not the read

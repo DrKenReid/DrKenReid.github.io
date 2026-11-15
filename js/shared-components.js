@@ -2402,7 +2402,7 @@ function initTopicPosts() {
 }
 
 /* The one line about Ken, shared by the footer and a post's sign-off. */
-var KR_TAGLINE = 'Data scientist, photographer, guitarist, and avid reader. Scottish-built, Michigan-based.';
+var KR_TAGLINE = 'Data scientist, photographer, writer and avid reader. Scottish-built, Michigan-based.';
 
 /**
  * KR_ROUTES: the three onward links in a post's sign-off, keyed by the

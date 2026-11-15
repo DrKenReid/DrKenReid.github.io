@@ -81,7 +81,7 @@
    ],
    "inLanguage": "en-GB",
    "articleSection": "Data & AI",
-   "wordCount": 1821,
+   "wordCount": 1826,
    "timeRequired": "PT9M",
    "keywords": ["genetic programming", "symbolic regression", "evolutionary computation", "interactive", "optimization"]
  }
@@ -151,7 +151,7 @@
  <span class="blog-tag">ai</span>
  </div>
 
- <p>Genetic programming evolves programs. What gets bred is the program itself rather than the settings of a program: a working formula nobody wrote, assembled out of worse ones. I've published with this one: the belt-laying search in <a href="factorio-live.html">the Factorio post</a> is a genetic programming system, and it came out ahead of both other methods in the paper.</p>
+ <p>Genetic programming evolves programs. What gets bred is the program itself rather than the settings of a program: a working formula nobody wrote, assembled out of worse ones. I've published with this one: the belt-laying search in <a href="factorio-live.html">the Factorio post</a> is a genetic programming system, and it came out ahead of the other methods on all but one of the paper's instances.</p>
 
  <p>This is part eight of the series. So far:</p>
  <ul>
@@ -172,7 +172,7 @@
  <h2>Quick jargon guide</h2>
  <ul>
  <li><strong>Genetic programming (GP):</strong> an evolutionary algorithm whose individuals are programs (here, mathematical expressions) rather than fixed-length strings of parameters. Selection, crossover, and mutation operate on the program's tree.</li>
- <li><strong>Expression tree:</strong> a program written as a tree, with operators at the branches and variables or constants at the leaves. sin(x)*(x+1.7) is a seven-node tree.</li>
+ <li><strong>Expression tree:</strong> a program written as a tree, with operators at the branches and variables or constants at the leaves. sin(x)*(x+1.7) is a six-node tree.</li>
  <li><strong>Symbolic regression:</strong> searching for a formula that fits data, where the formula itself is the unknown, not just the coefficients of a formula you chose in advance.</li>
  <li><strong>Crossover:</strong> in GP, snipping a random subtree out of one parent and grafting in a random subtree from another. Children can be bigger than both parents or smaller than either.</li>
  <li><strong>Bloat:</strong> trees growing larger generation after generation without getting any fitter - famous disease of GP.</li>

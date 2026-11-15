@@ -82,7 +82,7 @@
    ],
    "inLanguage": "en-GB",
    "articleSection": "Data & AI",
-   "wordCount": 1358,
+   "wordCount": 1356,
    "timeRequired": "PT7M",
    "keywords": ["CMA-ES", "evolution strategy", "covariance matrix adaptation", "interactive", "optimization"]
  }
@@ -235,7 +235,7 @@
 
  <h2>A memory of directions</h2>
 
- <p>What I like most about CMA-ES is where it keeps what it has learned. The ants kept their knowledge in the world, as scent on edges. The genetic algorithm kept it in a population, spread implicitly across genomes: variety, but no geometry. Simulated annealing had one knob, a step size, and its step size only goes down.</p>
+ <p>What I like most about CMA-ES is where it keeps what it has learned. The ants kept their knowledge in the world, as scent on edges. The genetic algorithm kept it in a population, spread implicitly across genomes: variety, but no geometry. Simulated annealing had one knob, a temperature, and its temperature only goes down.</p>
 
  <p>CMA-ES keeps a small, dense summary: one point for "where", one number for "how far", and one matrix for "which way". The matrix is the difference. It is a running record of the directions that recently succeeded, updated every generation, and it turns a search that happens <em>in</em> the landscape into one that builds a model <em>of</em> the landscape's local shape.</p>
 

@@ -211,7 +211,7 @@
     "isPartOf": { "@id": "https://www.kenreid.co.uk/#website" },
     "inLanguage": "en-GB",
     "articleSection": "Data & AI",
-    "wordCount": 9003,
+    "wordCount": 9066,
     "timeRequired": "PT26M",
     "keywords": ["data-science"]
   }
@@ -393,7 +393,7 @@ SIGMA = 0.7
 
 # Okabe & Ito (2008): the de-facto standard CVD-safe categorical palette.
 # Distinguishable under protanopia, deuteranopia, and tritanopia,
-# and retains separation when converted to greyscale for print.
+# though orange and sky blue print as almost the same grey: the markers cover that.
 OKABE_ITO = ["#E69F00", "#56B4E9", "#009E73"]  # orange, sky-blue, teal
 
 # Three independent visual channels carry group membership:
@@ -891,7 +891,7 @@ plt.close(fig)
 
         <h3>2. Bubble charts</h3>
 
-        <p>Humans estimate area poorly. Perception of bubble size scales sub-linearly with actual area: a bubble worth four times the value typically appears roughly twice as large. Overlaps compound this: small bubbles vanish behind larger ones, and hover tooltips lock out keyboard and motor-impaired users. The accessible version caps bubble count around 15, strokes every bubble with a high-contrast outline so boundaries remain visible through overlaps, and labels critical points directly on the canvas.</p>
+        <p>Humans estimate area poorly. Perception of bubble size scales sub-linearly with actual area: a bubble worth four times the value typically looks only about three times as large.<sup><a href="#ref-10" class="cite-ref">[10]</a></sup> Overlaps compound this: small bubbles vanish behind larger ones, and hover tooltips lock out keyboard and motor-impaired users. The accessible version caps bubble count around 15, strokes every bubble with a high-contrast outline so boundaries remain visible through overlaps, and labels critical points directly on the canvas.</p>
 
         <div class="plot-compare">
           <div class="plot-compare__panel">
@@ -1092,7 +1092,7 @@ plt.close(fig)
 
         <h3>4. Box plots vs violin plots</h3>
 
-        <p>Box plots compress a distribution to five summary statistics, and that compression is lossy in a way most readers do not realise: a strongly bimodal distribution and a unimodal distribution with the same quartiles produce identical box plots. Violin plots show the kernel density estimate directly, which means the reader does not have to know what an interquartile range is to see that the data has two peaks. For non-statistician audiences, including product managers, clinicians, and executives, the violin plot consistently beats the box plot on speed and accuracy of interpretation because shape is a more readable encoding than abstract summary statistics.</p>
+        <p>Box plots compress a distribution to five summary statistics, and that compression is lossy in a way most readers do not realise: a strongly bimodal distribution and a unimodal distribution with the same quartiles produce identical box plots. Violin plots show the kernel density estimate directly, which means the reader does not have to know what an interquartile range is to see that the data has two peaks. For non-statistician audiences, including product managers, clinicians, and executives, that gives the violin plot a real advantage over the box plot, because shape is a more readable encoding than abstract summary statistics.</p>
 
         <div class="plot-compare">
           <div class="plot-compare__panel">
@@ -1424,7 +1424,7 @@ plt.close(fig)
 
         <h3>7. Fitness landscapes and 3D surfaces</h3>
 
-        <p>Three-dimensional surface plots, used when visualising objective functions in metaheuristics or evolutionary algorithms, fail in two ways. They almost always encode elevation with a continuous colour gradient (jet, hsv, or matplotlib's old default) that is not perceptually uniform and not CVD-safe, making relative peak heights ambiguous. Static perspective also occludes peaks behind foreground features. The accessible version uses a perceptually uniform colourmap engineered for every form of CVD (cividis), overlays contour lines so geometry is encoded by line position as well as colour, and annotates the global optimum in text so the takeaway survives rendering failures.</p>
+        <p>Three-dimensional surface plots, used when visualising objective functions in metaheuristics or evolutionary algorithms, fail in two ways. They almost always encode elevation with a continuous colour gradient (jet, hsv, or matplotlib's old default) that is not perceptually uniform and not CVD-safe, making relative peak heights ambiguous. Static perspective also occludes peaks behind foreground features. The accessible version uses a perceptually uniform colourmap engineered for red-green colour vision deficiency (cividis),<sup><a href="#ref-11" class="cite-ref">[11]</a></sup> overlays contour lines so geometry is encoded by line position as well as colour, and annotates the global optimum in text so the takeaway survives rendering failures.</p>
 
         <div class="plot-compare">
           <div class="plot-compare__panel">
@@ -1502,7 +1502,7 @@ OI_VERM = "#D55E00"
 fig = plt.figure(figsize=(8.8, 5.2), layout="constrained")
 ax = fig.add_subplot(111, projection="3d")
 
-# Cividis: perceptually uniform and engineered for every common form of CVD.
+# Cividis: perceptually uniform and engineered for red-green CVD.
 # Maps identically when converted to greyscale -- safe for print.
 surf = ax.plot_surface(
     X, Y, Z, cmap="cividis",
@@ -1664,6 +1664,12 @@ plt.close(fig)
           <li id="ref-9">
             Sharpe, L. T., Stockman, A., J&auml;gle, H., &amp; Nathans, J. (1999). Opsin genes, cone photopigments, color vision, and color blindness. In K. R. Gegenfurtner &amp; L. T. Sharpe (Eds.), <em>Color Vision: From Genes to Perception</em> (pp. 3&ndash;51). Cambridge University Press.
           </li>
+          <li id="ref-10">
+            Flannery, J. J. (1971). The Relative Effectiveness of Some Common Graduated Point Symbols in the Presentation of Quantitative Data. <em>The Canadian Cartographer</em>, 8(2), 96&ndash;109. <a href="https://doi.org/10.3138/J647-1776-745H-3667" target="_blank" rel="noopener">https://doi.org/10.3138/J647-1776-745H-3667</a>
+          </li>
+          <li id="ref-11">
+            Nu&ntilde;ez, J. R., Anderton, C. R., &amp; Renslow, R. S. (2018). Optimizing colormaps with consideration for color vision deficiency to enable accurate interpretation of scientific data. <em>PLOS ONE</em>, 13(7), e0199239. <a href="https://doi.org/10.1371/journal.pone.0199239" target="_blank" rel="noopener">https://doi.org/10.1371/journal.pone.0199239</a>
+          </li>
         </ol>
 
         <p>PS making this blog post prompted me to improve accessibility across my blogs and website generally, I hope it does the same for you, too.</p>
@@ -1671,18 +1677,6 @@ plt.close(fig)
         <div class="related-posts">
           <h2>Related posts</h2>
           <div class="row related-posts-grid">
-            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/19.webp')">
-              <a href="no-idea-no-problem-data-science-portfolio.html" class="blog-card kr-lit">
-                <span class="kr-lit__ring" aria-hidden="true"></span>
-                <div class="blog-card-img"><img src="../img/photography/thumb/19.webp" srcset="../img/photography/thumb/19.webp 1x, ../img/photography/thumb/19@2x.webp 2x" alt="" loading="lazy"></div>
-                <div class="blog-card-body">
-                  <div class="blog-card-date">20 April 2026 · 10 min read</div>
-                  <h3 class="blog-card-title">No Idea? No Problem: A Beginner&#x27;s Guide to Building Your Data Science Portfolio</h3>
-                  <p class="blog-card-excerpt">A practical guide to building a data science portfolio when you have no idea where to start. Covers project types, documentation, novelty, collaboration, and working in the GenAI era.</p>
-                  <div class="blog-card-tags"><span class="blog-tag">data science</span></div>
-                </div>
-              </a>
-            </div>
             <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/367.webp')">
               <a href="making-this-website-accessible.html" class="blog-card kr-lit">
                 <span class="kr-lit__ring" aria-hidden="true"></span>
@@ -1692,6 +1686,18 @@ plt.close(fig)
                   <h3 class="blog-card-title">Making This Website Accessible</h3>
                   <p class="blog-card-excerpt">Thirty small habits keep this site accessible: a skip link, screen-reader notes on new-tab links, reduced-motion fallbacks, and an audit that catches the many that I forget along the way.</p>
                   <div class="blog-card-tags"><span class="blog-tag">technology</span></div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-30 kr-glow-host" style="--kr-cover: url('/img/photography/thumb/19.webp')">
+              <a href="no-idea-no-problem-data-science-portfolio.html" class="blog-card kr-lit">
+                <span class="kr-lit__ring" aria-hidden="true"></span>
+                <div class="blog-card-img"><img src="../img/photography/thumb/19.webp" srcset="../img/photography/thumb/19.webp 1x, ../img/photography/thumb/19@2x.webp 2x" alt="" loading="lazy"></div>
+                <div class="blog-card-body">
+                  <div class="blog-card-date">20 April 2026 · 10 min read</div>
+                  <h3 class="blog-card-title">No Idea? No Problem: A Beginner&#x27;s Guide to Building Your Data Science Portfolio</h3>
+                  <p class="blog-card-excerpt">A practical guide to building a data science portfolio when you have no idea where to start. Covers project types, documentation, novelty, collaboration, and working in the GenAI era.</p>
+                  <div class="blog-card-tags"><span class="blog-tag">data science</span></div>
                 </div>
               </a>
             </div>

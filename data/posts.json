@@ -33,7 +33,7 @@
       "part": 3
     },
     "readMinutes": 7,
-    "words": 1349
+    "words": 1327
   },
   {
     "title": "Ann Arbor and Ypsilanti, Frame by Frame",
@@ -153,7 +153,7 @@
     "url": "blog/photographing-other-peoples-art.html",
     "image": "img/photography/thumb/686.webp",
     "readMinutes": 10,
-    "words": 2190
+    "words": 2193
   },
   {
     "title": "Open Access Still Charges the Wrong People",
@@ -350,7 +350,7 @@
       "part": 1
     },
     "readMinutes": 15,
-    "words": 3167
+    "words": 3164
   },
   {
     "title": "Making This Website Accessible",
@@ -439,7 +439,7 @@
       "part": 8
     },
     "readMinutes": 9,
-    "words": 1821,
+    "words": 1826,
     "interactive": true
   },
   {
@@ -475,7 +475,7 @@
       "part": 6
     },
     "readMinutes": 7,
-    "words": 1358,
+    "words": 1356,
     "interactive": true
   },
   {
@@ -493,7 +493,7 @@
       "part": 2
     },
     "readMinutes": 12,
-    "words": 2511,
+    "words": 2521,
     "interactive": true
   },
   {
@@ -621,7 +621,7 @@
       "part": 3
     },
     "readMinutes": 10,
-    "words": 5966,
+    "words": 5971,
     "interactive": true,
     "code": true
   },
@@ -696,7 +696,7 @@
       "part": 4
     },
     "readMinutes": 14,
-    "words": 2874
+    "words": 2883
   },
   {
     "title": "The Fermi Paradox - Why are we alone in space?",
@@ -928,7 +928,7 @@
     "url": "blog/why-you-arent-a-visual-learner.html",
     "image": "img/photography/thumb/196.webp",
     "readMinutes": 8,
-    "words": 1657
+    "words": 1689
   },
   {
     "title": "Frodo, Sam, and love.",
@@ -946,7 +946,7 @@
       "J.R.R. Tolkien"
     ],
     "readMinutes": 12,
-    "words": 2481
+    "words": 2485
   },
   {
     "title": "Optimizing Your Schedule II (or: When Hours Aren't the Thing You Run Out Of)",
@@ -965,7 +965,7 @@
       "name": "Optimizing Your Schedule",
       "part": 2
     },
-    "words": 3461,
+    "words": 3467,
     "code": true
   },
   {
@@ -1028,7 +1028,7 @@
     "url": "blog/mash-modern-perspective.html",
     "image": "https://commons.wikimedia.org/wiki/Special:FilePath/MASH_cast_1972.JPG",
     "readMinutes": 15,
-    "words": 3117
+    "words": 3123
   },
   {
     "title": "Iain M. Banks and The Culture",
@@ -1044,7 +1044,7 @@
       "Iain M. Banks"
     ],
     "readMinutes": 14,
-    "words": 3034
+    "words": 3043
   },
   {
     "title": "The Individualization of Responsibility",
@@ -1061,7 +1061,7 @@
       "part": 3
     },
     "readMinutes": 13,
-    "words": 2645
+    "words": 2663
   },
   {
     "title": "Advice to My Younger Self",
@@ -1087,7 +1087,7 @@
     "url": "blog/books-i-recommend-to-friends.html",
     "image": "img/photography/thumb/430.webp",
     "readMinutes": 14,
-    "words": 2969
+    "words": 2973
   },
   {
     "title": "Why Nobody Thanks the Person Who Stopped the Disaster",
@@ -1104,7 +1104,7 @@
       "part": 2
     },
     "readMinutes": 14,
-    "words": 2876
+    "words": 2987
   },
   {
     "title": "When I Ended Up in Italy Because of Mistaken Identity",
@@ -1155,7 +1155,7 @@
       "part": 1
     },
     "readMinutes": 18,
-    "words": 3926
+    "words": 3953
   },
   {
     "title": "ISO 8601 and the Date Cult I Happily Joined",
@@ -1168,7 +1168,7 @@
     "url": "blog/iso-8601-date-cult.html",
     "image": "img/photography/thumb/100.webp",
     "readMinutes": 8,
-    "words": 1602
+    "words": 1603
   },
   {
     "title": "Accessibility-First Design in Data Science",
@@ -1181,7 +1181,7 @@
     "url": "blog/accessibility-first-product-design-data-science.html",
     "image": "img/photography/thumb/21.webp",
     "readMinutes": 26,
-    "words": 9003,
+    "words": 9066,
     "code": true
   },
   {
@@ -1220,8 +1220,8 @@
     "excerpt": "An AI researcher's unvarnished take on LLM ethics: the energy numbers, the cobalt hypocrisy, the Jevons paradox, and why telling people not to use AI on environmental grounds is a privilege position.",
     "url": "blog/ethics-of-llm-use-not-llms.html",
     "image": "img/photography/thumb/280.webp",
-    "readMinutes": 33,
-    "words": 7137
+    "readMinutes": 34,
+    "words": 7381
   },
   {
     "title": "Dungeon Crawler Carl and the Strange Dignity of LitRPG",
@@ -1238,7 +1238,7 @@
       "Matt Dinniman"
     ],
     "readMinutes": 22,
-    "words": 4693
+    "words": 4695
   },
   {
     "title": "Fifteen Years of Silence: Patrick Rothfuss, The Doors of Stone, and the Architecture of Creative Friction",
@@ -1255,7 +1255,7 @@
       "Patrick Rothfuss"
     ],
     "readMinutes": 13,
-    "words": 2748
+    "words": 2760
   },
   {
     "title": "No Idea? No Problem: A Beginner's Guide to Building Your Data Science Portfolio",
@@ -1281,7 +1281,7 @@
     "url": "blog/evolutionary-computation-identity-crisis.html",
     "image": "img/photography/thumb/208.webp",
     "readMinutes": 12,
-    "words": 2482
+    "words": 2558
   },
   {
     "title": "In Defense of Audiobooks",
@@ -1293,8 +1293,8 @@
     "excerpt": "The stigma against audiobooks is rooted in bad assumptions about learning, intelligence, and what counts as reading. The research doesn't support any of it.",
     "url": "blog/in-defense-of-audiobooks.html",
     "image": "img/photography/thumb/366.webp",
-    "readMinutes": 11,
-    "words": 2406
+    "readMinutes": 12,
+    "words": 2435
   },
   {
     "title": "Why It Still Matters to Learn to Code in the Age of AI",
@@ -1349,7 +1349,7 @@
     "updated": "2026-10-03",
     "image": "blog/img/rating_distribution.png",
     "readMinutes": 12,
-    "words": 2894
+    "words": 2900
   },
   {
     "title": "Why Most Self-Help Books Are Trash (And Which Ones Aren't)",
@@ -1362,7 +1362,7 @@
     "url": "blog/self-help-books.html",
     "image": "img/photography/thumb/97.webp",
     "readMinutes": 9,
-    "words": 1941
+    "words": 1954
   },
   {
     "title": "Building a Photo Tagging System with CLIP",

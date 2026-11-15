@@ -82,7 +82,7 @@
    ],
    "inLanguage": "en-GB",
    "articleSection": "Data Science",
-   "wordCount": 2511,
+   "wordCount": 2521,
    "timeRequired": "PT12M",
    "keywords": ["data science", "operational research", "factorio", "optimisation", "interactive"]
  }
@@ -202,7 +202,7 @@
 
  <p>We defined the logistic transport belt problem formally, as an integer program with hard constraints on what can occupy a cell and how underground pairs must line up, and two soft constraints to be maximised: items delivered to the receiver, and items accepted from the chest. Then we built the 'Factorio Optimizer Interface', which uses the game's Lua modding hooks and the RCON protocol to place a candidate layout in a running Factorio server and read back how many items the input inserter took and how many reached the output chest. Because it talks over a socket and reads matrices from disk, the optimiser can be written in anything: ours were in Java, Python and C++. The evaluation function is the game itself.</p>
 
- <p>Three optimisers were compared on six instances, being three grid sizes at three by three, six by six and twelve by twelve, each with and without obstacles. Parallel simulated annealing, a genetic programming system whose operators place and connect belt runs rather than editing cells, and an evolutionary reinforcement learning approach. The small instances are solvable by anything. The twelve by twelve with obstacles is where things really got interesting.</p>
+ <p>Three optimisers were compared on six instances, being three grid sizes at three by three, six by six and twelve by twelve, each with and without obstacles. Parallel simulated annealing, a genetic programming system whose operators place and connect belt runs rather than editing cells, and an evolutionary reinforcement learning approach (run on the three by three grids only). The small instances are solvable by anything. The twelve by twelve with obstacles is where things really got interesting.</p>
 
  <p>Genetic programming did well here because its operators fit the problem: laying a run of belts and connecting two points are single moves, so one step of the search covers ground that costs annealing a long chain of individually pointless edits. </p>
 
@@ -286,7 +286,7 @@
 
  <details class="faq-item">
  <summary>Why not just solve it outright?</summary>
- <p>You can, up to a point. The small grids are well within reach of an exact solver, and where an exact answer is available it is the right thing to use, because it comes with a proof. The difficulty is that the search space grows with both the grid area and the number of things each cell could be, and the underground pairing constraint links cells that are not adjacent. Past a certain size you are choosing between a guaranteed answer you will not receive today and a good answer you can have in seconds, which is the situation metaheuristics exist for.</p>
+ <p>You can, up to a point. The small grids are well within reach of a solver that proves optimality, and where an optimal answer is available it is the right thing to use, because it comes with a proof. The difficulty is that the search space grows with both the grid area and the number of things each cell could be, and the underground pairing constraint links cells that are not adjacent. Past a certain size you are choosing between a guaranteed answer you will not receive today and a good answer you can have in seconds, which is the situation metaheuristics exist for.</p>
  </details>
 
  <details class="faq-item">
