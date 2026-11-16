@@ -1,18 +1,18 @@
 {
   "albums": [
     {
+      "name": "you never really cared",
+      "artist": "Anna Marx",
+      "url": "https://www.last.fm/music/Anna+Marx/you+never+really+cared",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/4ae1dc741318f9fb4a3ce5dcd72ec251.jpg",
+      "plays": 5
+    },
+    {
       "name": "White Flag",
       "artist": "Dido",
       "url": "https://www.last.fm/music/Dido/White+Flag",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/eb0101b8308ecbef4b77bdc696817d8f.png",
       "plays": 5
-    },
-    {
-      "name": "you never really cared",
-      "artist": "Anna Marx",
-      "url": "https://www.last.fm/music/Anna+Marx/you+never+really+cared",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/4ae1dc741318f9fb4a3ce5dcd72ec251.jpg",
-      "plays": 4
     },
     {
       "name": "Colors Collide",
@@ -43,6 +43,13 @@
       "plays": 4
     },
     {
+      "name": "Punk Goes Pop",
+      "artist": "Yellowcard",
+      "url": "https://www.last.fm/music/Yellowcard/Punk+Goes+Pop",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/ccf9a5cffc2822d0136c167a43b56847.jpg",
+      "plays": 4
+    },
+    {
       "name": "Planet Her",
       "artist": "Doja Cat",
       "url": "https://www.last.fm/music/Doja+Cat/Planet+Her",
@@ -50,10 +57,24 @@
       "plays": 3
     },
     {
+      "name": "Unethical",
+      "artist": "Faouzia",
+      "url": "https://www.last.fm/music/Faouzia/Unethical",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/ca42388269f5ebcc69ad3f85474a3697.jpg",
+      "plays": 3
+    },
+    {
       "name": "High Valley Demos",
       "artist": "Fey Fili",
       "url": "https://www.last.fm/music/Fey+Fili/High+Valley+Demos",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/01d34ed523f8706f4e2bb3270294dc62.jpg",
+      "plays": 3
+    },
+    {
+      "name": "Heavy Foot",
+      "artist": "Mon Rovîa",
+      "url": "https://www.last.fm/music/Mon+Rov%C3%AEa/Heavy+Foot",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/c154e8808c2cdef2319e0b096f10f144.jpg",
       "plays": 3
     },
     {
@@ -85,11 +106,18 @@
       "plays": 3
     },
     {
-      "name": "Punk Goes Pop",
+      "name": "Deep Cuts",
       "artist": "Yellowcard",
-      "url": "https://www.last.fm/music/Yellowcard/Punk+Goes+Pop",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/ccf9a5cffc2822d0136c167a43b56847.jpg",
+      "url": "https://www.last.fm/music/Yellowcard/Deep+Cuts",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/1c4d47f840974743c786b8e65efa79a6.png",
       "plays": 3
+    },
+    {
+      "name": "General Error EP",
+      "artist": "047",
+      "url": "https://www.last.fm/music/047/General+Error+EP",
+      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/5aab8fd0729adeb23e2a8f05859ad4c1.jpg",
+      "plays": 2
     },
     {
       "name": "The Battle",
@@ -125,29 +153,8 @@
       "url": "https://www.last.fm/music/Cheryl+Cole/3+Words",
       "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/afac2028b2ea47a6970bfc4864ead4c5.png",
       "plays": 2
-    },
-    {
-      "name": "Thank You (Not So Bad)",
-      "artist": "Dimitri Vegas",
-      "url": "https://www.last.fm/music/Dimitri+Vegas/Thank+You+(Not+So+Bad)",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/7fff78e51ec8e1572fa08d9a1655e301.jpg",
-      "plays": 2
-    },
-    {
-      "name": "Immortalized (Deluxe Edition)",
-      "artist": "Disturbed",
-      "url": "https://www.last.fm/music/Disturbed/Immortalized+(Deluxe+Edition)",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/e8ba53e4eb981b3dec8e72574248560f.jpg",
-      "plays": 2
-    },
-    {
-      "name": "The Sickness",
-      "artist": "Disturbed",
-      "url": "https://www.last.fm/music/Disturbed/The+Sickness",
-      "img": "https://lastfm-img.freetls.fastly.net/i/u/300x300/61b929a6ca07482ba86ee85bd6fbe4a6.png",
-      "plays": 2
     }
   ],
   "period": "3month",
-  "updated": "2026-11-09"
+  "updated": "2026-11-16"
 }

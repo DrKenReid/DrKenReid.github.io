@@ -1,8 +1,8 @@
 {
   "track": {
-    "name": "Suzy & Sam",
-    "artist": "Fey Fili",
-    "url": "https://www.last.fm/music/Fey+Fili/_/Suzy+&+Sam",
+    "name": "Different Approaches to Simplifying Mechanics",
+    "artist": "Razbuten",
+    "url": "https://www.last.fm/music/Razbuten/_/Different+Approaches+to+Simplifying+Mechanics",
     "nowPlaying": false
   },
   "reading": [
@@ -25,6 +25,6 @@
       "img": "/img/covers/shelf/s/211721806.jpg"
     }
   ],
-  "updated": "2026-11-09",
+  "updated": "2026-11-16",
   "readingUpdated": "2026-11-06"
 }
