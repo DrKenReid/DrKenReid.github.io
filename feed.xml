@@ -5,11 +5,83 @@
     <link>https://www.kenreid.co.uk/blog.html</link>
     <description>Data science, photography, books, and everything in between.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 04 Nov 2026 00:00:00 +0000</lastBuildDate>
-    <pubDate>Wed, 04 Nov 2026 00:00:00 +0000</pubDate>
+    <lastBuildDate>Fri, 20 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <pubDate>Fri, 20 Nov 2026 00:00:00 +0000</pubDate>
     <docs>https://www.rssboard.org/rss-specification</docs>
     <generator>Ken Reid static site feed</generator>
     <atom:link href="https://www.kenreid.co.uk/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Voyager Is Still Talking</title>
+      <link>https://www.kenreid.co.uk/blog/voyager-is-still-talking.html</link>
+      <guid>https://www.kenreid.co.uk/blog/voyager-is-still-talking.html</guid>
+      <pubDate>Fri, 20 Nov 2026 00:00:00 +0000</pubDate>
+      <description>Voyager 1 reached one light-day from Earth on 18 November 2026, 49 years after launch, and it&#x27;s still calling home.</description>
+      <category>science</category>
+      <category>technology</category>
+      <content:encoded><![CDATA[
+
+ <p>On Wednesday 18 November 2026 at 05:16 EST (10:16 UTC), Voyager 1 became the first human-made object one light-day from Earth, 16.09 billion miles (25.90 billion km) away, so a radio signal takes 24 hours to reach it and another 24 hours to come back. It's a bit mind-boggling, these figures: our short-term memory generally can only handle about 4 things at once, and 16 billion miles are many more than that. It launched in 1977 on a mission that was meant to last five years and crossed out of the Sun's wind into <jargon key="Interstellar medium">interstellar space</jargon> in 2012. It's still calling home, from a radio powered by the heat off a lump of decaying plutonium, and by the time that signal reaches the <jargon key="Deep Space Network">Deep Space Network</jargon> dishes on Earth it's less than a billionth of a billionth of a watt (!).</p>
+
+ <p>It's the furthest we've ever sent anything out there into the deep dark nothing, and, crazily, it was built before almost anyone had a computer at home, and it's still talking to us. Old Star Trek vibes, right?</p>
+
+ <div class="plain-english-box">
+ <h2>Quick jargon guide</h2>
+ <ul>
+ <li><strong>RTG (radioisotope thermoelectric generator):</strong> Voyager's power source, which turns the heat of decaying plutonium into electricity. No sunlight needed, and it fades slowly and predictably.</li>
+ <li><strong>Interstellar medium:</strong> the space between stars, beyond the bubble of the Sun's influence (the heliosphere). Voyager 1 crossed into it in 2012.</li>
+ <li><strong>Deep Space Network:</strong> the array of giant radio dishes on Earth that still hears Voyager.</li>
+ <li><strong>The Golden Record:</strong> the phonograph record bolted to each Voyager, carrying sounds and images of Earth for any finder.</li>
+ <li><strong>Light-day:</strong> the distance light travels in a day, about 25.9 billion kilometres. From 18 November 2026, Voyager 1's signal takes a full day to reach us.</li>
+ </ul>
+ </div>
+
+ <h2>Four watts a year</h2>
+
+ <p>The Voyagers were built to last five years, long enough to get past Jupiter and Saturn, and they have been running for nearly <i>fifty</i>, which sounds a lot like the little huts my high school built to last something like 5 years then used for 25 (shoutout Glenrothes High School!). Their <jargon key="RTG">generators</jargon> made about 470 watts at launch and lose about 4 watts every year as the plutonium decays. The team at JPL has spent decades switching things off one at a time, heaters and then whole instruments, to keep the essential systems running on what's left<sup><a href="https://www.kenreid.co.uk/blog/voyager-is-still-talking.html#ref-1" class="cite-ref">[1]</a></sup>. Voyager 1's cosmic ray instrument went off in February 2025, and its low-energy charged particle instrument in April 2026.</p>
+
+ <p>The six computers on each probe have just under 70KB of memory between them, which is much less than a photo taken on an average iPhone or Android device. They are programmed in languages the current team sometimes has to learn from retired engineers and the original paper manuals (Voyager-specific assembly language). When something breaks more than 25 billion kilometres away, the fix gets radioed out and takes a day to arrive, and then it's another day before anyone on Earth finds out whether it worked.</p>
+
+ <p>It's still alive because of various interesting reasons. 1. Somebody in the 1970s built in big safety margins, kept the design simple and put in a spare for nearly everything. 2. Due to the hardware of the time being more physical, it's less vulnerable to radiation and bit flips than our current technology is in space, and 3. it was put together carefully, because a huge amount of effort and funding had to be found for a project like this, so everything was checked and tested dozens of times as individual components and in integrated fashion before, during and after launch. After it goes silent it will keep drifting, intact, for longer than our species has existed and probably will exist.</p>
+
+ <h2>The message bolted to the side</h2>
+
+ <p>Each Voyager also carries the <jargon key="The Golden Record">Golden Record</jargon>, a gold-plated phonograph record put together by a committee chaired by Carl Sagan: greetings in fifty-five languages, rain, a heartbeat, a kiss, whale song, more than a hundred pictures of ordinary life on Earth, and music from Bach to Chuck Berry. It's one of the most beautiful things we will <a href="https://www.kenreid.co.uk/blog/what-we-leave-behind.html">leave behind</a>.</p>
+
+ <p>As engineering, the record was close to pointless. The chances of anyone finding either probe round to zero, judging by how empty the universe appears to be, and neither will come near another star for tens of thousands of years.</p>
+
+ <p>I think the record was always for us more than for anyone out there. In 1977 (which was in the middle of the Cold War), with both sides pointing thousands of nukes at each other, a group of people sat down, decided on some of the most human sounds and sights there are and blasted them off into space to last forever.</p>
+
+ <p>It's a lovely sentiment, though it reads a fair bit differently if you think of it with the <a href="https://www.kenreid.co.uk/blog/the-fermi-paradox-and-the-great-silence.html">Fermi paradox</a> in mind. The dark forest idea (that any civilisation which announces itself gets wiped out by a more careful one) has unsettled, well, anyone who knows of it. Some serious people think we'd have been wiser to stay silent, but ultimately, we already broadcast ourselves via light, radio, and many other ways which we haven't taken any steps to prevent. So I think this can be left as a time capsule for another species to find, and who knows, maybe we'll be their first contact.</p>
+
+ <div class="faq-section">
+ <h2>Common questions</h2>
+
+ <details class="faq-item">
+ <summary>How much longer will the Voyagers keep working?</summary>
+ <p>Not much longer. The generators lose about 4 watts a year and the team keeps switching instruments off to stretch what's left, so the end of useful science is somewhere around the late 2020s to early 2030s (NASA thinks the Deep Space Network can hear them until about 2036), and after that they go silent and just coast on forever (or till gravity pulls them somewhere they will burn up and cease to be).</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Will the Golden Record actually last, physically?</summary>
+ <p>Yes. With almost nothing out there to erode them apart from the odd micrometeorite and slow cosmic-ray damage, the gold-plated records should stay readable for hundreds of millions of years, possibly more than a billion, by which time we'll be long gone.</p>
+ </details>
+
+ <details class="faq-item">
+ <summary>Given the dark forest worry, was broadcasting our location a mistake?</summary>
+ <p>Probably not, in practice. The record does carry a map to Earth (via pulsar positions), but two slow, passive probes are far harder to spot than the radio and radar we leak into space every day, so I see it as a symbolic act more than a security decision.</p>
+ </details>
+ </div>
+
+ <h2 class="section-heading" id="references">References</h2>
+ <ol class="references">
+          <li id="ref-1">
+            NASA Jet Propulsion Laboratory. <em>Voyager mission status and updates</em>. <a href="https://voyager.jpl.nasa.gov/" target="_blank" rel="noopener">https://voyager.jpl.nasa.gov/</a> (check for current power levels, active instruments, and distance, which change over time).
+          </li>
+        </ol>
+
+        
+ ]]></content:encoded>
+    </item>
     <item>
       <title>The Wedding Seating Plan, Live</title>
       <link>https://www.kenreid.co.uk/blog/wedding-seating-plan-live.html</link>
@@ -3207,114 +3279,6 @@ fragment.appendChild(abbr);</code></pre>
       <pubDate>Sun, 13 Sep 2026 00:00:00 +0000</pubDate>
       <description>Most search algorithms improve a solution by nudging it. Ruin and recreate demolishes part of it and rebuilds, which works better on rosters. The method behind my 2018 rostering paper, running in your browser.</description>
       <category>data science</category>
-      <content:encoded><![CDATA[<p><em>This post includes an interactive demo that runs live in the browser. <a href="https://www.kenreid.co.uk/blog/ruin-and-recreate-live.html">View it on the site</a> to play with it.</em></p>
-
- <p>I started my Ph.D. in 2015 under Dr. Jingpeng Li, a kindly and intelligent man who was very patient with me going down the wrong roads and floundering over fairly fundamental and basic math. He had some interesting ideas on how to modify existing algorithms to improve their capabilities, and let me toy with them to begin to understand some of that fundamental math, as well as get a feel for how search algorithms, at their core, actually function.</p>
-
-<p>Most search algorithms take a working solution, <jargon key="local search">change one thing, and keep the change if it helped</jargon>. That works until the solution is tangled, at which point every single change makes things worse and the search sits there, surrounded by improvements it cannot reach because each one requires three simultaneous moves.</p>
-
- <p>Ruin and recreate knocks a hole in the solution and rebuilds the solution. This is the method behind <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:Se3iqnhoufwC" target="_blank" rel="noopener">a rostering paper I wrote in 2018</a><sup><a href="https://www.kenreid.co.uk/blog/ruin-and-recreate-live.html#ref-1" class="cite-ref">[1]</a></sup> with colleagues at Stirling, York and BT, using a variant of Jingpeng's own algorithm: Evolutionary Ruin and Stochastic Recreate<sup><a href="https://www.kenreid.co.uk/blog/ruin-and-recreate-live.html#ref-2" class="cite-ref">[2]</a></sup>, where the wrecking ball is aimed by fitness rather than swung blindly. The demo below is that method on a simple roster. Part of the series on <a href="https://www.kenreid.co.uk/series-research-live.html">research, live</a>.</p>
-
- <div class="plain-english-box">
- <h2>Quick jargon guide</h2>
- <ul>
- <li><strong>Roster:</strong> who works which shift on which day. Here, twelve staff over fourteen days, each on an early, late, or night shift, or off.</li>
- <li><strong>Fitness:</strong> one number saying how good a roster is, out of 100. Following the paper, hard constraints (covering demand, legal rest) are 95% of the score and soft ones (fair shares, no long runs) are the last 5%.</li>
- <li><strong>Local search:</strong> repeatedly make a small change and keep it if the fitness rises.</li>
- <li><strong>Local optimum:</strong> a solution where every small change makes things worse, which does not mean it is any good.</li>
- <li><strong>Large neighbourhood search:</strong> the family this belongs to<sup><a href="https://www.kenreid.co.uk/blog/ruin-and-recreate-live.html#ref-3" class="cite-ref">[3]</a></sup>. Instead of small changes, make one enormous change and repair the damage intelligently.</li>
- <li><strong>Evolutionary ruin:</strong> the paper's twist. Every allocation gets its own fitness score, and the weaker an allocation, the more likely the ruin phase is to demolish it.</li>
- </ul>
- </div>
-
- <h2>The demo</h2>
-
- <p>Each row is a person, each column a day. Cells are the shift they are working. The rows under the grid are the demand check: for each day and shift, how many staff over or under the requirement, so -2 on the night row means two short and +1 means one spare. A working cell carries the same figure when its shift is out of balance, which marks the allocations that are surplus and the ones holding up a short day. The panel under the stats scores each constraint separately: the two hard ones, which have to hold, and the two soft ones the last five per cent of the fitness is spent on.</p>
-
- <p>One step is one full ruin and recreate, under the same simulated annealing control the paper uses. The ruined cells flash before they are refilled, so you can see the size and shape of the hole. The default strategy is the paper's: score every allocation, then demolish the probabilistically weakest. Switch to the blind strategies to see what the aiming is worth: scattered cells, a person's whole fortnight, or everybody's Tuesday.</p>
-
- 
-
- <h2>Why breaking it on purpose works</h2>
-
- <p>A roster is full of constraints that interlock. Moving one person off Tuesday night leaves Tuesday night short, so the move is rejected, so the person stays. Every individual change is bad, and yet the roster as a whole is nowhere near as good as it could be. That is a local optimum with high walls (you try to climb them and only fall right back down, you need to jump out of there entirely).</p>
-
- <p>Removing thirty assignments at once does not have to be an improvement, because the recreate step is not obliged to put them back where they were. It rebuilds greedily against the fitness function, which means it can discover an arrangement that no sequence of single moves would have reached, because each intermediate step in that sequence would have been rejected.</p>
-
- <p>You can see this in action in the demo: small ruins converge smoothly and stall early. Large ruins jump around and take longer per step, because there is more to rebuild. The paper's answer is this: if you know which allocations are weak, a small, well-aimed ruin can do the work of a large blind one.</p>
-
- <h2>Aim the wrecking ball, or swing it harder</h2>
-
- <p>I measured all four strategies on this instance. The score is the median number of steps to first reach a fitness of 99.5, over five seeds, with a 200-step cap; "never" means the median run did not get there at all. Lower is faster:</p>
-
- <table class="values-grid">
- <thead><tr><th>Ruin size</th><th class="score">Scattered</th><th class="score">Whole people</th><th class="score">Whole days</th><th class="score">Weakest (the paper)</th></tr></thead>
- <tbody>
- <tr><td>8 cells</td><td class="score">22</td><td class="score">never</td><td class="score">31</td><td class="score">10</td></tr>
- <tr><td>16 cells</td><td class="score">9</td><td class="score">never</td><td class="score">31</td><td class="score">8</td></tr>
- <tr><td>32 cells</td><td class="score">10</td><td class="score">23</td><td class="score">17</td><td class="score">16</td></tr>
- <tr><td>56 cells</td><td class="score">6</td><td class="score">20</td><td class="score">12</td><td class="score">16</td></tr>
- <tr><td>80 cells</td><td class="score">7</td><td class="score">10</td><td class="score">5</td><td class="score">17</td></tr>
- </tbody>
- </table>
-
- <p>The fitness-guided ruin is fastest when the holes are small, eight or ten steps with a demolition of only eight cells, and gets no benefit from swinging harder, because it was never relying on volume in the first place. The blind strategies are the mirror image: they need size. Scattered cells come good from sixteen cells up; ruining everybody's Tuesday is the single fastest setting in the table at eighty cells, seven whole columns of the roster at a time.</p>
-
- <p>Whole-people ruin at small sizes is the table's disaster zone, and the reason generalises. Eight or sixteen cells is one person's fortnight: freeing a single row while the other eleven stay fixed leaves the recreate step boxed in by everything it did not touch. Structured damage only pays when the structure being suspended is big enough to rearrange.</p>
-
- <p>So the destroy operator and its size are not two parameters, they are one decision: aim, or swing big. The paper's selection operator decides, and its reward is reaching the same quality with a fraction of the demolition, which matters when every ruined cell costs rebuild time. Blind volume gets there too, eventually, by suspending so many constraints at once that the rebuild has room to rearrange everything.</p>
-
- <h2>What the demo is not</h2>
-
- <p>The real problem had a great deal more to it: engineers with different skills and a first-skill preference, shift rules dictating lengths, start-time windows and shift counts, alternating week patterns, UK working-time law, and two consecutive rest days per week as a soft target. The instances ran to around 200 employees, drawn from a domain of roughly 25,000 field engineers. The fitness function works with eight hard constraints and four soft ones, weighted 95 to 5.</p>
-
- <p>What survives compression is the shape of the method, which is the part that transfers. Score it, break the weak parts, rebuild, and let the temperature decide what to keep.</p>
-
- <div class="faq-section">
- <h2>Common questions</h2>
-
- <details class="faq-item">
- <summary>What makes it "evolutionary"?</summary>
- <p>The ruin phase runs on component fitness, in two mini-phases the paper calls selection and mutation. Selection scores every allocation and demolishes the probabilistically weakest, so bad genes die faster than good ones. Mutation then removes a few allocations at random, regardless of fitness, which keeps the search exploring even when every component looks healthy.</p>
- </details>
-
- <details class="faq-item">
- <summary>Is this just simulated annealing with extra steps?</summary>
- <p>SA is in there, but it doesn't do the searching. The engine is the ruin and rebuild; annealing referees, deciding whether the rebuilt roster replaces the current one, with energy modelled as inverse fitness, and its falling temperature is what stops the destruction of a nearly finished schedule late in the run. </p>
- </details>
-
- <details class="faq-item">
- <summary>Why greedy repair rather than an optimal one?</summary>
- <p>Because optimal repair of a thirty-cell hole is itself a hard problem, and you need to do it thousands of times. Greedy is fast, which buys iterations, and iterations buy quality. Where the repair can be made optimal cheaply, doing so is usually worth it: that variant is called large neighbourhood search with an optimal repair.</p>
- </details>
-
- <details class="faq-item">
- <summary>How big should the ruin be?</summary>
- <p>The amount of demolition emerges from the selection and mutation probabilities, which were tuned with a Taguchi design of experiments, and it falls naturally over the run: as the schedule improves, component fitness rises and protects good allocations from selection, while the falling temperature damps disruption late on. The table above shows why that self-regulation is the right instinct.</p>
- </details>
-
- <details class="faq-item">
- <summary>Does this beat a solver?</summary>
- <p>Not on a small clean instance. A solver hands you an answer with a proof attached, and this hands you an answer. The demo can announce a perfect roster only because the score in this toy stops at 100, so hitting the ceiling is the proof. Give it a real objective with no ceiling and the search has no way of knowing whether it is done. It wins when the instance is large, the constraints are awkward to express in a solver's language, and you need a good answer in seconds rather than a perfect one overnight. Most operational researchers care more about a good enough solution in time over a perfect solution a week late.</p>
- </details>
- </div>
-
- <h2 class="section-heading" id="references">References</h2>
-
- <ol class="references">
-          <li id="ref-1">
-            Reid, K. N., Li, J., Veerapen, N., Swan, J., McCormick, A., Kern, M., &amp; Owusu, G. (2018). Shift Scheduling and Employee Rostering: An Evolutionary Ruin &amp; Stochastic Recreate Solution. In <em>2018 10th Computer Science and Electronic Engineering (CEEC)</em>, 19&ndash;23. IEEE. <a href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=bwl2u00AAAAJ&amp;citation_for_view=bwl2u00AAAAJ:Se3iqnhoufwC" target="_blank" rel="noopener">Google Scholar</a>
-          </li>
-          <li id="ref-2">
-            Li, J., Bai, R., Shen, Y., &amp; Qu, R. (2015). Search with evolutionary ruin and stochastic rebuild: A theoretic framework and a case study on exam timetabling. <em>European Journal of Operational Research</em>, 242(3), 798&ndash;806.
-          </li>
-          <li id="ref-3">
-            Schrimpf, G., Schneider, J., Stamm-Wilbrandt, H., &amp; Dueck, G. (2000). Record Breaking Optimization Results Using the Ruin and Recreate Principle. <em>Journal of Computational Physics</em>, 159(2), 139&ndash;171. <a href="https://doi.org/10.1006/jcph.1999.6413" target="_blank" rel="noopener">https://doi.org/10.1006/jcph.1999.6413</a>
-          </li>
-        </ol>
-
-        
- ]]></content:encoded>
     </item>
     <item>
       <title>Leading a Horse to Water</title>

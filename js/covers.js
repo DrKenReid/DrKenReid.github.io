@@ -1477,6 +1477,32 @@
         };
     });
 
+    // A command leaves Earth, takes a day to reach Voyager 1, and the reply takes a day to come back.
+    def('voyager-is-still-talking', function (w, h, rnd) {
+        var stars = [], t = 0, cycle = 480, half = cycle / 2;
+        for (var i = 0; i < 80; i++) stars.push([rnd() * w, rnd() * h, 0.4 + rnd()]);
+        return {
+            step: function () { t = (t + 1) % cycle; },
+            draw: function (ctx) {
+                stars.forEach(function (s) { dot(ctx, s[0], s[1], s[2], 'rgba(255,255,255,0.35)'); });
+                var ex = w * 0.1, vx = w * 0.84, y = h * 0.52, out = t < half, p = (t % half) / half;
+                for (var d = ex + 14; d < vx - 14; d += 9) dot(ctx, d, y, 0.9, C.dim);
+                dot(ctx, ex, y, 9, C.blue);
+                ctx.save(); ctx.translate(vx, y); ctx.strokeStyle = C.ink; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.arc(-8, 0, 13, -1.1, 1.1); ctx.stroke(); ctx.restore();
+                line(ctx, vx + 4, y, vx + w * 0.09, y, C.ink, 2);
+                line(ctx, vx + w * 0.04, y, vx + w * 0.07, y - h * 0.1, C.dim, 1.5);
+                var x = out ? ex + (vx - ex) * p : vx - (vx - ex) * p, dir = out ? 0 : Math.PI;
+                for (var k = 0; k < 3; k++) {
+                    ctx.strokeStyle = alpha(out ? C.b : C.a, 0.9 - k * 0.25); ctx.lineWidth = 2;
+                    ctx.beginPath(); ctx.arc(x - (out ? k : -k) * 7, y, 9 + k * 5, dir - 0.7, dir + 0.7); ctx.stroke();
+                }
+                text(ctx, (out ? 'to Voyager 1: ' : 'back to Earth: ') + Math.floor(p * 24) + ' h', w * 0.5, h * 0.22, 10, C.ink, 700, 'center');
+                text(ctx, 'one light-day', w * 0.5, h * 0.86, 9, C.dim, 600, 'center');
+            }
+        };
+    });
+
     // A dam holds. Nothing happens. A counter of nothing-happening climbs.
     def('prevention-of-failure-is-unseen', function (w, h, rnd) {
         var t = 0, level = 0.7;
